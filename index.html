@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENS | Wellness & Massage Experience</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <meta name="description"
+        content="La experiencia suprema de la trilogía en casa. Un viaje a través de la Mente, Cuerpo y Movimiento diseñado para personas de alto rendimiento.">
+</head>
+
+<body>
+    <!-- Background Gradient (simplified and elegant) -->
+    <div class="bg-gradient"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="img/logo.png" alt="SENS Logo" class="logo-img">
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link" data-i18n="nav-home">Home</a>
+            <a href="#trilogy" class="nav-link" data-i18n="nav-trilogy">Trilogy</a>
+            <a href="#booking-experience" class="nav-link" data-i18n="nav-book">Book & Price</a>
+        </div>
+
+        <div class="nav-actions-desktop">
+            <div class="lang-switcher">
+                <span class="lang-btn" data-lang="es">ES</span>
+                <span class="lang-btn" data-lang="en">EN</span>
+                <span class="lang-btn" data-lang="pt">PT</span>
+
+            </div>
+            <a href="https://wa.me/5491136329846?text=Hola!%20Tengo%20una%20consulta%20sobre%20SENS" class="help-link"
+                target="_blank">
+                <span class="agent-status-dot"></span><span data-i18n="help-text">¿Necesitas ayuda?</span>
+            </a>
+            <a href="#booking-experience" class="cta-nav" data-i18n="btn-reserve">Reservar Sesión</a>
+        </div>
+
+        <div class="nav-actions-mobile">
+            <div class="lang-switcher">
+                <span class="lang-btn" data-lang="es">ES</span>
+                <span class="lang-btn" data-lang="en">EN</span>
+                <span class="lang-btn" data-lang="pt">PT</span>
+
+            </div>
+            <a href="https://wa.me/5491136329846?text=Hola!%20Tengo%20una%20consulta%20sobre%20SENS"
+                class="help-link-mobile-header" target="_blank">
+                <span class="agent-status-dot"></span><span data-i18n="help-text">¿Ayuda?</span>
+            </a>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="vid/hero-bg.mp4" type="video/mp4">
+            <!-- Alternative CDN link if local file is missing: https://assets.mixkit.co/videos/preview/mixkit-slow-motion-of-a-woman-receiving-a-massage-40453-large.mp4 -->
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title" data-i18n="hero-title">M O V E.<br>S T O P.<br>B R E A T H E.<br><span
+                    class="hero-highlight">S E N S.</span></h1>
+            <p class="hero-subtitle" data-i18n="hero-subtitle">SENS integra 3 pilares fundamentales:
+                <br>
+                <br>
+                YOGA | MASAJES | MEDITACIÓN
+            </p>
+            <div class="hero-actions">
+                <a href="#trilogy" class="cta-secondary" data-i18n="btn-discover">Descubrir SENS</a>
+                <a href="#booking-experience" class="cta-main" data-i18n="btn-reserve-hero">Reservar Sesión</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Trilogy System -->
+    <section class="trilogy-section" id="trilogy">
+        <div class="section-header reveal">
+            <h2 class="section-title" data-i18n="trilogy-title">T R I L O G Y</h2>
+            <p class="section-description" data-i18n="trilogy-desc">Sesiones de 90 min (aprox.) en tu hogar.</p>
+            <span class="interaction-hint" data-i18n="interaction-hint">Descubre cada carta interactuando</span>
+        </div>
+        <div class="trilogy-grid">
+            <!-- Card 1: SOUL -->
+            <div class="flip-card reveal delay-1">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front"
+                        style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%), url('img/yoga.png');">
+                        <div class="explore-icon">+</div>
+                        <div class="card-overlay">
+                            <span class="step-number" data-i18n="step-1-header">STEP 01. 15 MIN (aprox.)</span>
+                            <h3 data-i18n="move-title">MOVE</h3>
+                        </div>
+                    </div>
+                    <div class="flip-card-back glass-panel">
+                        <span class="step-number" data-i18n="step-1-label">STEP 01. </span>
+                        <h3 data-i18n="move-title">MOVE</h3>
+                        <p data-i18n="move-detail">15 minutos aprox. de Yoga pasivo.<br> <br>Activa el flujo energético
+                            y libera tensiones
+                            articulares
+                            para preparar el cuerpo.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 2: BODY -->
+            <div class="flip-card reveal delay-2">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front"
+                        style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%), url('img/masajes.png');">
+                        <div class="explore-icon">+</div>
+                        <div class="card-overlay">
+                            <span class="step-number" data-i18n="step-2-header">STEP 02. 60 MIN (aprox.)</span>
+                            <h3 data-i18n="body-title">BODY</h3>
+                        </div>
+                    </div>
+                    <div class="flip-card-back glass-panel">
+                        <span class="step-number" data-i18n="step-2-label">STEP 02.</span>
+                        <h3 data-i18n="body-title">BODY</h3>
+                        <p data-i18n="body-detail">60 minutos aprox. de masaje de tejido profundo. <br><br>Liberación
+                            miofascial profunda
+                            utilizando
+                            óleos botánicos destilados premium.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 3: MIND -->
+            <div class="flip-card reveal delay-3">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front"
+                        style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%), url('img/meditacion.png');">
+                        <div class="explore-icon">+</div>
+                        <div class="card-overlay">
+                            <span class="step-number" data-i18n="step-3-header">STEP 03. 15 MIN (aprox.)</span>
+                            <h3 data-i18n="mind-title">MIND</h3>
+                        </div>
+                    </div>
+                    <div class="flip-card-back glass-panel">
+                        <span class="step-number" data-i18n="step-3-label">STEP 03.</span>
+                        <h3 data-i18n="mind-title">MIND</h3>
+                        <p data-i18n="mind-detail">15 minutos aprox. de meditación guiada y neuro-acústica.<br> <br>
+                            Silencia el ruido interno y
+                            reinicia tu sistema nervioso hacia una relajación final.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section-actions reveal" style="text-align: center; margin-top: 4rem;">
+            <a href="#booking-experience" class="cta-main" data-i18n="btn-reserve-all">Reservar Sesión Integral</a>
+        </div>
+    </section>
+
+    <!-- Video Experience Showcase (Isolated) -->
+    <section class="video-reel-section">
+        <div class="reel-layout-container reveal">
+            <div class="reel-text-side">
+                <span class="reel-badge" data-i18n="reel-badge">AT HOME EXPERIENCE</span>
+                <h2 class="reel-header-title" data-i18n="reel-title">SENS EXPERIENCE</h2>
+                <p class="reel-description-text" data-i18n="reel-desc">Sumergite en la atmósfera SENS: un viaje
+                    sensorial diseñado para resetear tu sistema nervioso sin salir de casa.</p>
+                <div class="reel-benefits">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">✓</span>
+                        <span data-i18n="benefit-1">Terapeutas especializados</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">✓</span>
+                        <span data-i18n="benefit-2">Equipamiento premium incluido</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">✓</span>
+                        <span data-i18n="benefit-3">Experiencia 100% personalizada</span>
+                    </div>
+                </div>
+            </div>
+            <div class="reel-video-side">
+                <div class="reel-frame glass-panel">
+                    <!-- Controls added, muted removed for sound, playsinline for mobile -->
+                    <video loop playsinline class="reel-video-player" id="promoReel" controls>
+                        <source src="vid/promo-reel.mp4" type="video/mp4">
+                    </video>
+                    <div class="reel-interaction-layer">
+                        <span class="mute-hint" data-i18n="mute-hint">Tap to unmute</span>
+                    </div>
+                    <div class="reel-visual-glow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section">
+        <video autoplay muted loop playsinline class="pricing-video">
+            <source src="vid/pricing-bg.mp4" type="video/mp4">
+            <!-- https://assets.mixkit.co/videos/preview/mixkit-spa-massage-therapy-ambient-shot-44445-large.mp4 -->
+        </video>
+        <div class="pricing-overlay"></div>
+        <div class="pricing-container">
+            <div class="section-header reveal">
+                <h2 class="section-title" data-i18n="pricing-title">B O O K <BR>E X P E R I E N C E</h2>
+                <p class="section-description" data-i18n="pricing-subtitle">Llevamos la experiencia SENS a tu hogar.
+                    Sesiones exclusivas a domicilio.</p>
+            </div>
+            <div class="pricing-grid">
+                <!-- Card 1: Masaje Recovery -->
+                <div class="pricing-card glass-panel">
+                    <div class="pricing-header">
+                        <h3 data-i18n="card-massage-title">Masaje Recovery</h3>
+                        <div class="pricing-options-grid" style="display: flex; justify-content: center; border: none;">
+                            <div class="option-box">
+                                <span class="pricing-price consult-style" data-i18n="consult-price">60 / 90 MIN - A
+                                    CONSULTAR</span>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><strong data-i18n="feature-home">Sesión a domicilio</strong></li>
+                        <li data-i18n="feature-deep">Masaje de tejido profundo</li>
+                        <li data-i18n="feature-recovery">Recuperación muscular avanzada</li>
+                    </ul>
+                    <a href="https://wa.me/5491136329846?text=Hola!%20Quiero%20reservar%20una%20Sesión%20de%20Masaje%20Recovery"
+                        class="cta-secondary block" style="text-align:center" data-i18n="btn-reserve">Agendar Sesión</a>
+                </div>
+
+                <!-- Card 2: Trilogy Experience (Featured) -->
+                <div class="pricing-card featured glass-panel" id="booking-experience">
+                    <div class="featured-badge">RECOMENDADO</div>
+                    <div class="pricing-header">
+                        <h3 data-i18n="card-trilogy-title">Trilogy Experience</h3>
+                        <div class="pricing-price consult-style" data-i18n="trilogy-price">A CONSULTAR</div>
+                        <div class="pricing-duration">90 MIN</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><strong data-i18n="feature-home">Sesión a domicilio</strong></li>
+                        <li data-i18n="feature-trilogy-1">Yoga + Masajes + Meditación</li>
+                        <li data-i18n="feature-trilogy-2">Trilogy Experience completa</li>
+                    </ul>
+                    <a href="https://wa.me/5491136329846?text=Hola!%20Quiero%20reservar%20una%20Trilogy%20Experience"
+                        class="cta-main block" style="text-align:center" data-i18n="btn-reserve">Agendar Experiencia</a>
+                </div>
+
+                <!-- Card 3: Personal Train o Yoga -->
+                <div class="pricing-card glass-panel">
+                    <div class="pricing-header">
+                        <h3 data-i18n="card-personal-title">Personal Train o Yoga</h3>
+                        <div class="pricing-options-grid" style="display: flex; justify-content: center; border: none;">
+                            <div class="option-box">
+                                <span class="pricing-price consult-style" data-i18n="consult-price">A CONSULTAR</span>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="pricing-features" style="margin-top: 1.5rem;">
+                        <li><strong data-i18n="feature-personal-1">A domicilio / Gym / Online</strong></li>
+                        <li data-i18n="feature-personal-2">Entrenamiento O Yoga Personalizado</li>
+                    </ul>
+                    <a href="https://wa.me/5491136329846?text=Hola!%20Quiero%20info%20sobre%20Personal%20Train%20o%20Yoga"
+                        class="cta-secondary block" style="text-align:center; margin-top: auto;"
+                        data-i18n="consult-plan">Consultar Plan</a>
+                </div>
+            </div>
+
+            <div class="pricing-footer reveal">
+                <div class="exclusivity-highlight">
+                    <p data-i18n="coverage-location">📍 <b data-i18n="coverage-title">ZONA DE COBERTURA
+                            EXCLUSIVA:</b><br>CABA (Palermo, Recoleta, Belgrano, Colegiales, Chacarita y Villa
+                        Crespo)<br>LA PLATA</p>
+                </div>
+                <p style="margin-top: 1rem; opacity: 0.7; font-size: 0.8rem;" data-i18n="coverage-desc">Sesiones premium
+                    realizadas exclusivamente
+                    en la comodidad de tu domicilio.</p>
+
+                <div class="form-cta reveal"
+                    style="margin-top: 3rem; text-align: center; padding: 2rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; background: rgba(255,255,255,0.03);">
+                    <h3 style="margin-bottom: 1rem; font-weight: 300; letter-spacing: 2px;" data-i18n="already-booked">
+                        ¿YA RESERVASTE?</h3>
+                    <p style="margin-bottom: 2rem; opacity: 0.8; max-width: 500px; margin-inline: auto;"
+                        data-i18n="form-cta-desc">Para que
+                        podamos adaptar la sesión a tus necesidades (presión, foco, tipo de yoga), por favor completá el
+                        siguiente formulario.</p>
+                    <a href="formulario.html" class="cta-secondary" data-i18n="btn-complete-form">Completar
+                        Formulario</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <img src="img/logo.png" alt="SENS Logo" class="logo-img-footer">
+        </div>
+        <p data-i18n="footer-wellness">Wellness & Massage Experience</p>
+        <div class="footer-social" style="margin: 1.5rem 0; display: flex; justify-content: center; gap: 1.5rem;">
+            <a href="https://www.instagram.com/sens.wellness.ba/" target="_blank"
+                style="color: var(--accent); text-decoration: none; font-size: 0.9rem; letter-spacing: 1px;">@sens.wellness.ba</a>
+        </div>
+        <p class="copyright" data-i18n="copyright">&copy; 2026 SENS Wellness. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <div class="floating-social">
+        <a href="https://wa.me/5491136329846" class="social-btn whatsapp" target="_blank" title="WhatsApp">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+        </a>
+        <a href="https://www.instagram.com/sens.wellness.ba/" class="social-btn instagram" target="_blank"
+            title="Instagram">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.558.217.957.477 1.377.896.419.42.679.819.896 1.377.163.422.358 1.057.412 2.227.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.412 2.227-.217.558-.477.957-.896 1.377-.42.419-.819.679-1.377.896-.422.163-1.057.358-2.227.412-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.558-.217-.957-.477-1.377-.896-.419-.42-.679-.819-.896-1.377-.163-.422-.358-1.057-.412-2.227-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.558.477-.957.896-1.377.42-.419.819-.679 1.377-.896.422-.163 1.057-.358 2.227-.412 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 5.775.131 4.903.334 4.148.628c-.78.302-1.442.706-2.102 1.366C1.385 2.654.981 3.315.68 4.094.385 4.85.181 5.722.123 7.001.064 8.281.05 8.688.05 12s.014 3.719.072 4.999c.058 1.279.262 2.151.557 2.906.302.779.706 1.441 1.366 2.101.659.66 1.321 1.064 2.101 1.365.755.295 1.627.499 2.906.558 1.279.058 1.688.072 4.999.072s3.718-.014 4.998-.072c1.279-.059 2.151-.263 2.906-.558.779-.301 1.441-.705 2.101-1.365.66-.66 1.064-1.322 1.366-2.101.295-.755.499-1.627.558-2.906.058-1.279.072-1.688.072-4.999s-.014-3.719-.072-4.999c-.058-1.279-.263-2.151-.558-2.906-.301-.779-.705-1.441-1.365-2.101-.661-.66-1.322-1.064-2.101-1.366-.755-.294-1.627-.498-2.906-.557C15.682.014 15.274 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+            </svg>
+        </a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENS | Health & Wellness Form</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .radio-group {
+            margin-bottom: 2rem;
+        }
+
+        .radio-options {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-options label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .radio-options input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+        }
+
+        input:invalid,
+        textarea:invalid {
+            border-color: rgba(255, 0, 0, 0.3);
+        }
+
+        input:focus:invalid,
+        textarea:focus:invalid {
+            border-color: #ff4444;
+        }
+
+        .error-hint {
+            color: #ff4444;
+            font-size: 0.8rem;
+            margin-top: -1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 0.3;
+        }
+
+        /* Smooth appearance for conditional fields */
+        #cirugia_detail,
+        #alergia_detail,
+        #presion_detail {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+    <meta name="description" content="Formulario de salud SENS para personalizar tu experiencia de bienestar.">
+</head>
+
+<body>
+    <!-- Background Gradient -->
+    <div class="bg-gradient"></div>
+
+    <video autoplay muted loop playsinline class="hero-video"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.3;">
+        <source src="vid/pricing-bg.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 100%); z-index: -1;">
+    </div>
+
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html"><img src="img/logo.png" alt="SENS Logo" class="logo-img"></a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link" data-i18n="nav-home">Home</a>
+            <a href="index.html#trilogy" class="nav-link" data-i18n="nav-trilogy">Trilogy</a>
+            <a href="index.html#booking-experience" class="nav-link" data-i18n="nav-book">Book & Price</a>
+        </div>
+
+        <div class="nav-actions-desktop">
+            <div class="lang-switcher">
+                <span class="lang-btn" data-lang="es">ES</span>
+                <span class="lang-btn" data-lang="en">EN</span>
+                <span class="lang-btn" data-lang="pt">PT</span>
+
+            </div>
+            <a href="https://wa.me/5491136329846?text=Hola!%20Tengo%20una%20consulta%20sobre%20el%20formulario"
+                class="help-link" target="_blank">
+                <span class="agent-status-dot"></span><span data-i18n="help-text">¿Necesitas ayuda?</span>
+            </a>
+            <a href="index.html#booking-experience" class="cta-nav" data-i18n="btn-reserve">Reservar Sesión</a>
+        </div>
+
+        <div class="nav-actions-mobile">
+            <div class="lang-switcher">
+                <span class="lang-btn" data-lang="es">ES</span>
+                <span class="lang-btn" data-lang="en">EN</span>
+                <span class="lang-btn" data-lang="pt">PT</span>
+
+            </div>
+            <a href="https://wa.me/5491136329846?text=Hola!%20Tengo%20una%20consulta%20sobre%20el%20formulario"
+                class="help-link-mobile-header" target="_blank">
+                <span class="agent-status-dot"></span><span data-i18n="help-text">¿Ayuda?</span>
+            </a>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <div class="form-container glass-panel reveal">
+            <div class="form-header">
+                <h2 data-i18n="form-title">PERSONALIZÁ TU SESIÓN</h2>
+                <p data-i18n="form-subtitle">Completá este formulario para que podamos adaptar las técnicas a tus
+                    necesidades específicas.</p>
+            </div>
+
+            <form id="wellnessForm">
+                <!-- Group A: DATOS PERSONALES -->
+                <div class="form-group">
+                    <h3 data-i18n="group-a">A. DATOS PERSONALES</h3>
+
+                    <label for="nombre" data-i18n="label-name">Nombre y Apellido:</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
+
+                    <label for="edad" data-i18n="label-age">Edad:</label>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                        <input type="number" id="edad" name="edad" placeholder="30" min="15" max="100" required
+                            style="width: 100px; margin-bottom: 0; text-align: center;">
+                        <span style="color: var(--accent-gray); font-size: 0.9rem;"
+                            data-i18n="label-age-unit">años</span>
+                    </div>
+
+                    <div class="radio-group">
+                        <label data-i18n="label-activity">¿Realizás actividad física?</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="actividad_status" value="No" checked
+                                    onclick="toggleDetail('actividad_detail', false)"> <span
+                                    data-i18n="label-no">No</span></label>
+                            <label><input type="radio" name="actividad_status" value="Sí"
+                                    onclick="toggleDetail('actividad_detail', true)"> <span
+                                    data-i18n="label-yes">Sí</span></label>
+                        </div>
+                        <textarea id="actividad_detail" name="actividad" placeholder="¿Qué y cuántas veces por semana?"
+                            data-i18n="placeholder-activity" style="display:none; margin-top: 1rem;"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3 data-i18n="group-b">B. SALUD Y BIOMECÁNICA</h3>
+
+                    <div class="radio-group">
+                        <label data-i18n="label-lesion">¿Tenés alguna lesión actual o crónica? (Ej: hernias, dolores
+                            lumbares,
+                            cervicales)</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="lesion_status" value="No" checked
+                                    onclick="toggleDetail('lesion_detail', false)"> <span
+                                    data-i18n="label-no">No</span></label>
+                            <label><input type="radio" name="lesion_status" value="Sí"
+                                    onclick="toggleDetail('lesion_detail', true)"> <span
+                                    data-i18n="label-yes">Sí</span></label>
+                        </div>
+                        <textarea id="lesion_detail" name="lesion"
+                            placeholder="Describí brevemente cualquier molestia o lesión" data-i18n="placeholder-lesion"
+                            style="display:none; margin-top: 1rem;"></textarea>
+                    </div>
+
+                    <div class="radio-group" style="margin-top: 2rem;">
+                        <label data-i18n="label-surgery">¿Tuviste alguna cirugía en el último año?</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="cirugia_status" value="No" checked
+                                    onclick="toggleDetail('cirugia_detail', false)"> <span
+                                    data-i18n="label-no">No</span></label>
+                            <label><input type="radio" name="cirugia_status" value="Sí"
+                                    onclick="toggleDetail('cirugia_detail', true)"> <span
+                                    data-i18n="label-yes">Sí</span></label>
+                        </div>
+                        <textarea id="cirugia_detail" name="cirugia" placeholder="¿Cuál y hace cuánto?"
+                            data-i18n="placeholder-surgery" style="display:none; margin-top: 1rem;"></textarea>
+                    </div>
+
+                    <div class="radio-group">
+                        <label data-i18n="label-allergy">¿Sos alérgico/a a algún aroma o aceite? (Ej: almendras, coco,
+                            lavanda)</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="alergia_status" value="No" checked
+                                    onclick="toggleDetail('alergia_detail', false)"> <span
+                                    data-i18n="label-no">No</span></label>
+                            <label><input type="radio" name="alergia_status" value="Sí"
+                                    onclick="toggleDetail('alergia_detail', true)"> <span
+                                    data-i18n="label-yes">Sí</span></label>
+                        </div>
+                        <input type="text" id="alergia_detail" name="alergia" placeholder="¿A qué?"
+                            data-i18n="placeholder-allergy" style="display:none; margin-top: 1rem;">
+                    </div>
+
+                    <div class="radio-group">
+                        <label data-i18n="label-pressure">¿Tenés presión alta, problemas circulatorios o estás cursando
+                            un embarazo?</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="presion_status" value="No" checked
+                                    onclick="toggleDetail('presion_detail', false)"> <span
+                                    data-i18n="label-no">No</span></label>
+                            <label><input type="radio" name="presion_status" value="Sí"
+                                    onclick="toggleDetail('presion_detail', true)"> <span
+                                    data-i18n="label-yes">Sí</span></label>
+                        </div>
+                        <input type="text" id="presion_detail" name="presion" placeholder="Especificar condición"
+                            data-i18n="placeholder-pressure" style="display:none; margin-top: 1rem;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3 data-i18n="group-c">C. ESTILO DE VIDA Y TRABAJO</h3>
+
+                    <label for="profesion" data-i18n="label-profession">¿A qué te dedicás? (Esto me ayuda a entender tu
+                        postura diaria):</label>
+                    <input type="text" id="profesion" name="profesion" placeholder="Ej: Arquitecto, Programador"
+                        required>
+
+                    <div class="radio-group">
+                        <label data-i18n="label-screens">¿Pasás muchas horas frente a pantallas o sentado/a?</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="pantallas_status" value="No" checked
+                                    onclick="toggleDetail('pantallas_detail_container', false)"> <span
+                                    data-i18n="label-no">No</span></label>
+                            <label><input type="radio" name="pantallas_status" value="Sí"
+                                    onclick="toggleDetail('pantallas_detail_container', true)"> <span
+                                    data-i18n="label-yes">Sí</span></label>
+                        </div>
+                        <div id="pantallas_detail_container"
+                            style="display:none; margin-top: 1.5rem; border-left: 2px solid var(--accent); padding-left: 1.5rem;">
+                            <label for="pantallas_detail" style="font-size: 0.8rem; opacity: 0.8;"
+                                data-i18n="label-screens-unit-q">¿Cuántas horas
+                                diarias aprox.?</label>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <input type="number" id="pantallas_detail" name="pantallas" placeholder="8" min="1"
+                                    max="24" style="width: 80px; margin-bottom: 0; text-align: center;">
+                                <span style="color: var(--accent-gray); font-size: 0.8rem;"
+                                    data-i18n="label-screens-unit">horas al día</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label for="estres" data-i18n="label-stress">Nivel de estrés actual (1 al 10):</label>
+                    <input type="range" id="estres" name="estres" min="1" max="10" step="1" value="5">
+                    <div id="estresVal">5</div>
+
+                    <div class="radio-group" style="margin-top: 2rem;">
+                        <label data-i18n="label-tension">¿Sentís tensión en zonas específicas por el trabajo? (Ej:
+                            mandíbula, cuello,
+                            hombros)</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="tension_status" value="No" checked
+                                    onclick="toggleDetail('tension_detail', false)"> <span
+                                    data-i18n="label-no">No</span></label>
+                            <label><input type="radio" name="tension_status" value="Sí"
+                                    onclick="toggleDetail('tension_detail', true)"> <span
+                                    data-i18n="label-yes">Sí</span></label>
+                        </div>
+                        <textarea id="tension_detail" name="tension"
+                            placeholder="Ej: Siento mucha carga en el cuello y hombros al final del día"
+                            style="display:none; margin-top: 1rem;"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3 data-i18n="group-d">D. OBJETIVO DE HOY</h3>
+
+                    <label for="objetivo" data-i18n="label-objective">¿Qué buscás principalmente con la sesión?</label>
+                    <select id="objetivo" name="objetivo" required
+                        style="background-color: #111; color: #FFF; border: 1px solid var(--accent);">
+                        <option value="" disabled selected style="background-color: #111;" data-i18n="opt-select">
+                            Seleccione su objetivo
+                            principal</option>
+                        <option value="Relajación" style="background-color: #111;" data-i18n="opt-relax">Relajación
+                        </option>
+                        <option value="Recuperación deportiva" style="background-color: #111;" data-i18n="opt-recovery">
+                            Recuperación deportiva
+                        </option>
+                        <option value="Alivio de un dolor puntual" style="background-color: #111;" data-i18n="opt-pain">
+                            Alivio de un dolor
+                            puntual</option>
+                    </select>
+
+                    <div class="radio-group" style="margin-top: 2rem;">
+                        <label data-i18n="label-others">¿Algo más que quieras agregar? (Otros comentarios)</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="comentarios_status" value="No" checked
+                                    onclick="toggleDetail('comentarios_detail', false)"> <span
+                                    data-i18n="label-no">No</span></label>
+                            <label><input type="radio" name="comentarios_status" value="Sí"
+                                    onclick="toggleDetail('comentarios_detail', true)"> <span
+                                    data-i18n="label-yes">Sí</span></label>
+                        </div>
+                        <textarea id="comentarios_detail" name="comentarios"
+                            placeholder="Ej: Me gustaría enfocarme más en la zona lumbar..."
+                            style="display:none; margin-top: 1rem;"></textarea>
+                    </div>
+                </div>
+
+                <p class="confidential-note" data-i18n="confidential-note">Toda la información proporcionada es
+                    estrictamente confidencial y se
+                    utiliza exclusivamente para adaptar las técnicas de SENS a tus necesidades.</p>
+
+                <div class="form-actions">
+                    <button type="submit" class="cta-main" data-i18n="btn-send">Enviar Formulario</button>
+                </div>
+            </form>
+
+            <div id="successMessage" style="display: none; text-align: center; padding: 4rem 0;">
+                <h2 style="color: var(--accent); margin-bottom: 2rem;" data-i18n="success-thanks">¡GRACIAS POR COMPLETAR
+                    EL FORMULARIO!</h2>
+                <p style="margin-bottom: 3rem; opacity: 0.8;" data-i18n="success-desc">Hemos recibido tu información. La
+                    utilizaremos para que tu
+                    próxima experiencia SENS sea perfecta.</p>
+                <a href="index.html" class="cta-secondary" data-i18n="btn-back">Volver al Inicio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <img src="img/logo.png" alt="SENS Logo" class="logo-img-footer">
+        </div>
+        <p data-i18n="footer-wellness">Wellness & Massage Experience</p>
+        <div class="footer-social" style="margin: 1.5rem 0; display: flex; justify-content: center; gap: 1.5rem;">
+            <a href="https://www.instagram.com/sens.wellness.ba/" target="_blank"
+                style="color: var(--accent); text-decoration: none; font-size: 0.9rem; letter-spacing: 1px;">@sens.wellness.ba</a>
+        </div>
+        <p class="copyright" data-i18n="copyright">&copy; 2026 SENS Wellness. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Stress slider value update
+        const estresInput = document.getElementById('estres');
+        const estresVal = document.getElementById('estresVal');
+
+        if (estresInput && estresVal) {
+            estresInput.addEventListener('input', () => {
+                estresVal.textContent = estresInput.value;
+            });
+        }
+
+        // Form Toggle Logic
+        function toggleDetail(id, show) {
+            const container = document.getElementById(id);
+            // Support both direct input and container div
+            const input = container.tagName === 'DIV' ? container.querySelector('input, textarea') : container;
+
+            if (show) {
+                container.style.display = 'block';
+                if (input) {
+                    input.required = true;
+                    input.focus();
+                }
+            } else {
+                container.style.display = 'none';
+                if (input) {
+                    input.required = false;
+                    input.value = '';
+                }
+            }
+        }
+
+        // Form submission
+        const form = document.getElementById('wellnessForm');
+        const successMessage = document.getElementById('successMessage');
+        const submitBtn = form?.querySelector('button[type="submit"]');
+
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Client-side validation
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Enviando...';
+                }
+
+                // Prepare data for Google Sheets
+                const formData = new FormData(form);
+                const params = new URLSearchParams();
+
+                // Fields that have status radios
+                const statusFields = ['actividad', 'lesion', 'cirugia', 'alergia', 'presion', 'pantallas', 'tension', 'comentarios'];
+
+                formData.forEach((value, key) => {
+                    // Skip technical status fields in parameters
+                    if (!key.endsWith('_status')) {
+                        params.append(key, value);
+                    }
+                });
+
+                // Final check to ensure Sheet gets 'No' if radios were 'No'
+                statusFields.forEach(field => {
+                    const statusVal = form.querySelector(`input[name="${field}_status"]:checked`)?.value;
+                    if (statusVal === 'No') {
+                        params.set(field, 'No');
+                    }
+                });
+
+                // Add timestamp
+                params.append('timestamp', new Date().toLocaleString());
+
+                try {
+                    const scriptURL = 'https://script.google.com/macros/s/AKfycbwFSHkDS7ZeUYZzuuuyoqluP-6e6eUWAVHLoIpdfeAO-5KI71FUXqrC6tlTR8IXfT2hiQ/exec';
+
+                    await fetch(scriptURL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: params
+                    });
+
+                    // Success state
+                    form.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                } catch (error) {
+                    console.error('Error!', error.message);
+                    alert('Hubo un error al enviar el formulario. Por favor, intenta de nuevo o contáctanos por WhatsApp.');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Enviar Formulario';
+                    }
+                }
+            });
+        }
+    </script>
+    <div class="floating-social">
+        <a href="https://wa.me/5491136329846" class="social-btn whatsapp" target="_blank" title="WhatsApp">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+        </a>
+        <a href="https://www.instagram.com/sens.wellness.ba/" class="social-btn instagram" target="_blank"
+            title="Instagram">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.558.217.957.477 1.377.896.419.42.679.819.896 1.377.163.422.358 1.057.412 2.227.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.412 2.227-.217.558-.477.957-.896 1.377-.42.419-.819.679-1.377.896-.422.163-1.057.358-2.227.412-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.558-.217-.957-.477-1.377-.896-.419-.42-.679-.819-.896-1.377-.163-.422-.358-1.057-.412-2.227-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.558.477-.957.896-1.377.42-.419.819-.679 1.377-.896.422-.163 1.057-.358 2.227-.412 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 5.775.131 4.903.334 4.148.628c-.78.302-1.442.706-2.102 1.366C1.385 2.654.981 3.315.68 4.094.385 4.85.181 5.722.123 7.001.064 8.281.05 8.688.05 12s.014 3.719.072 4.999c.058 1.279.262 2.151.557 2.906.302.779.706 1.441 1.366 2.101.659.66 1.321 1.064 2.101 1.365.755.295 1.627.499 2.906.558 1.279.058 1.688.072 4.999.072s3.718-.014 4.998-.072c1.279-.059 2.151-.263 2.906-.558.779-.301 1.441-.705 2.101-1.365.66-.66 1.064-1.322 1.366-2.101.295-.755.499-1.627.558-2.906.058-1.279.072-1.688.072-4.999s-.014-3.719-.072-4.999c-.058-1.279-.263-2.151-.558-2.906-.301-.779-.705-1.441-1.365-2.101-.661-.66-1.322-1.064-2.101-1.366-.755-.294-1.627-.498-2.906-.557C15.682.014 15.274 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+            </svg>
+        </a>
+    </div>
+</body>
+
+</html>
