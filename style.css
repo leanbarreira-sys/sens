@@ -2620,6 +2620,49 @@ a.hero-btn-apple-dark:active {
 }
 
 @media (max-width: 768px) {
+    /* Ajuste Hero Mobile: Tipografía y Espaciado Compacto (Evita desbordes y wraps excesivos) */
+    .sens-train-hero {
+        padding: 95px 4% 75px !important;
+        min-height: 100vh;
+        min-height: 100svh;
+    }
+    .hero-train-content {
+        max-width: 380px !important;
+    }
+    .hero-apple-eyebrow {
+        font-size: 0.82rem !important;
+        letter-spacing: 3.5px !important;
+        margin-bottom: 4px !important;
+    }
+    .hero-apple-highlight {
+        font-size: clamp(1.7rem, 7.2vw, 2.25rem) !important;
+        line-height: 1.12 !important;
+        letter-spacing: -0.02em !important;
+        margin-bottom: 8px !important;
+    }
+    .hero-description-train {
+        font-size: 0.84rem !important;
+        line-height: 1.45 !important;
+        margin: 0 auto 1.35rem !important;
+        max-width: 350px !important;
+        color: #D8D8DC !important;
+    }
+    .hero-btn-apple-dark {
+        padding: 13px 30px !important;
+        font-size: 11.5px !important;
+        letter-spacing: 1.5px !important;
+    }
+    .hero-credentials-bar {
+        margin-top: 16px !important;
+        gap: 8px 12px !important;
+        font-size: 9.5px !important;
+        letter-spacing: 1.2px !important;
+        line-height: 1.5 !important;
+        max-width: 320px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
     .section-sens {
         padding: 44px 4%;
     }
