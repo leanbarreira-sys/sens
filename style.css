@@ -2911,8 +2911,10 @@ footer p {
     width: 100% !important;
     max-width: 440px !important;
     min-width: 0 !important;
-    min-height: 540px;
+    min-height: 560px;
     margin: 0 auto !important;
+    position: relative !important;
+    overflow: hidden !important;
     display: flex;
     flex-direction: column;
 }
@@ -2930,25 +2932,42 @@ footer p {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 28% 12%;
-    transform: scale(1.12) translate(4%, -1%);
+    object-position: 28% 10%;
+    transform: scale(1.1) translate(4%, -1%);
     transform-origin: center center;
     filter: saturate(0.96);
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+    z-index: 1;
 }
 
 .nico-editorial-card:hover .nico-portrait-img {
-    transform: scale(1.15) translate(4%, -1%);
+    transform: scale(1.14) translate(4%, -1%);
 }
 
 .nico-editorial-card .grad-bottom {
-    height: 52%;
-    background: linear-gradient(to top, rgba(8, 8, 9, 0.98) 26%, rgba(8, 8, 9, 0.72) 72%, transparent 100%);
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 65% !important;
+    background: linear-gradient(to top, rgba(8, 8, 9, 1) 0%, rgba(8, 8, 9, 0.94) 42%, rgba(8, 8, 9, 0.6) 78%, transparent 100%) !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
 }
 
 .nico-editorial-card .ig-content {
-    justify-content: flex-end;
-    padding: 22px 20px;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 24px 20px 22px !important;
+    box-sizing: border-box !important;
+    z-index: 3 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
 }
 
 .pillars-carousel .carousel-slide .ig-post {
@@ -4139,11 +4158,24 @@ footer p {
         max-width: 100% !important;
         min-height: 520px !important;
         margin: 0 auto !important;
+        position: relative !important;
     }
     .nico-editorial-card .ig-img,
     .nico-portrait-img {
-        object-position: 28% 12% !important;
+        object-position: 28% 10% !important;
         transform: scale(1.1) translate(4%, -1%) !important;
+    }
+    .nico-editorial-card .grad-bottom {
+        height: 65% !important;
+    }
+    .nico-editorial-card .ig-content {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 20px 18px 18px !important;
     }
     .wellness-editorial-card {
         padding: 0;
