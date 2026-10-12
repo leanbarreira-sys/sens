@@ -2663,9 +2663,205 @@ a.hero-btn-apple-dark:active {
         margin-right: auto !important;
     }
 
+    /* =========================================================================
+       DEFINICIÓN GLOBAL DE TIPOGRAFÍA Y ESPACIADO COMPACTO PARA MOBILE
+       (Asegura proporción armónica, evita desbordes y wraps excesivos en toda la web)
+       ========================================================================= */
     .section-sens {
-        padding: 44px 4%;
+        padding: 44px 4% !important;
     }
+    .section-head {
+        margin: 0 auto 28px !important;
+        max-width: 100% !important;
+    }
+    .section-eyebrow {
+        font-size: 0.72rem !important;
+        letter-spacing: 2.5px !important;
+        margin-bottom: 6px !important;
+    }
+    .section-main-title {
+        font-size: clamp(1.4rem, 5.8vw, 1.85rem) !important;
+        letter-spacing: 1.2px !important;
+        line-height: 1.18 !important;
+        margin-bottom: 10px !important;
+    }
+    .section-lead {
+        font-size: 0.85rem !important;
+        line-height: 1.48 !important;
+        max-width: 380px !important;
+        margin: 0 auto !important;
+        color: #D1D1D5 !important;
+    }
+
+    /* Carrusel de Pilares - Tipografía Compacta */
+    .pillars-carousel .ig-bold {
+        font-size: 19px !important;
+        line-height: 1.2 !important;
+    }
+    .pillars-carousel .ig-light {
+        font-size: 11.5px !important;
+        letter-spacing: 1px !important;
+    }
+    .pillars-carousel .ig-body {
+        font-size: 11.5px !important;
+        line-height: 1.4 !important;
+        margin-top: 6px !important;
+    }
+    .pillars-carousel .ig-badge-tag {
+        font-size: 8.5px !important;
+        padding: 2px 7px !important;
+        margin-bottom: 6px !important;
+    }
+
+    /* Sección Método & Nico */
+    .method-features-list {
+        gap: 14px !important;
+        margin-top: 18px !important;
+    }
+    .method-feature-item {
+        gap: 12px !important;
+    }
+    .method-feature-item h4 {
+        font-size: 0.95rem !important;
+        margin-bottom: 2px !important;
+    }
+    .method-feature-item p {
+        font-size: 0.82rem !important;
+        line-height: 1.42 !important;
+    }
+    .method-feature-icon {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 10.5px !important;
+    }
+    .nico-editorial-card {
+        min-height: 480px !important;
+    }
+    .nico-editorial-card .ig-content {
+        padding: 18px 16px !important;
+    }
+    .nico-editorial-card .ig-bold {
+        font-size: 20px !important;
+        line-height: 1.15 !important;
+    }
+    .nico-editorial-card .ig-body {
+        font-size: 11.5px !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Sección Planes y Precios */
+    .pricing-selector-container {
+        margin: 0 auto 24px !important;
+        gap: 10px !important;
+    }
+    .pricing-main-nav {
+        padding: 3px !important;
+        gap: 3px !important;
+        border-radius: 20px !important;
+    }
+    .pricing-main-btn {
+        padding: 9px 12px !important;
+        font-size: 11px !important;
+        min-height: 38px !important;
+        letter-spacing: 0.5px !important;
+    }
+    .pricing-main-btn .btn-badge {
+        font-size: 8.5px !important;
+        padding: 2px 5px !important;
+    }
+    .pricing-sub-nav {
+        padding: 2px !important;
+        gap: 3px !important;
+    }
+    .pricing-sub-btn {
+        padding: 6px 12px !important;
+        font-size: 10.5px !important;
+        min-height: 32px !important;
+    }
+    .train-plan-card {
+        padding: 18px 15px !important;
+    }
+    .plan-purpose-tag {
+        font-size: 8.5px !important;
+        margin-bottom: 3px !important;
+    }
+    .train-plan-badge {
+        font-size: 8.5px !important;
+        padding: 2px 8px !important;
+    }
+    .plan-title {
+        font-size: 1.12rem !important;
+        letter-spacing: 0.6px !important;
+        margin-bottom: 3px !important;
+    }
+    .plan-concept-tagline {
+        font-size: 0.78rem !important;
+        line-height: 1.35 !important;
+        min-height: auto !important;
+        margin-bottom: 10px !important;
+    }
+    .plan-price-wrap {
+        margin-bottom: 10px !important;
+        padding-bottom: 8px !important;
+    }
+    .plan-amount {
+        font-size: 1.65rem !important;
+    }
+    .plan-period {
+        font-size: 0.72rem !important;
+    }
+    .plan-features-list {
+        gap: 6px !important;
+        margin-bottom: 14px !important;
+    }
+    .plan-feature-row {
+        font-size: 11px !important;
+        line-height: 1.32 !important;
+        gap: 6px !important;
+    }
+    .pricing-compact-note {
+        font-size: 0.75rem !important;
+        line-height: 1.38 !important;
+        padding: 6px 12px !important;
+        margin-top: 14px !important;
+    }
+
+    /* Sección Wellness & Trilogy */
+    .wellness-editorial-content {
+        padding: 28px 18px 22px !important;
+    }
+    .wellness-editorial-title {
+        font-size: clamp(1.35rem, 5.2vw, 1.7rem) !important;
+        line-height: 1.2 !important;
+        margin-bottom: 8px !important;
+        letter-spacing: 1px !important;
+    }
+    .wellness-editorial-desc {
+        font-size: 0.82rem !important;
+        line-height: 1.45 !important;
+        margin-bottom: 18px !important;
+        max-width: 350px !important;
+    }
+
+    /* Botones y Badges Generales en Mobile */
+    .btn {
+        padding: 12px 20px !important;
+        font-size: 11px !important;
+        letter-spacing: 1.3px !important;
+    }
+    .btn-sm {
+        padding: 8px 14px !important;
+        font-size: 10px !important;
+    }
+    .pill {
+        font-size: 9px !important;
+        padding: 3px 8px !important;
+    }
+    .mobile-quick-bar .btn {
+        padding: 10px 12px !important;
+        font-size: 10.5px !important;
+    }
+
     .touch-carousel-wrap {
         position: relative;
         width: 100%;
