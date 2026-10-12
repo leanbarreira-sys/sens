@@ -2040,17 +2040,42 @@ footer p {
     line-height: 1;
 }
 
-.btn-primary {
+/* Botones Brandbook con Fondo Champagne - Máximo Contraste con Negro Onyx (#080809) */
+.btn-primary,
+a.btn-primary,
+button.btn-primary,
+a.btn-primary:link,
+a.btn-primary:visited,
+button.btn-primary:visited,
+.btn-primary * {
     background: var(--accent-primary);
-    color: #080809;
+    color: #080809 !important;
+    -webkit-text-fill-color: #080809 !important;
+    font-weight: 700 !important;
     box-shadow: 0 4px 20px var(--accent-glow);
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+a.btn-primary:hover,
+button.btn-primary:hover,
+a.btn-primary:visited:hover,
+button.btn-primary:visited:hover,
+.btn-primary:hover * {
     background: var(--accent-hover);
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(229, 203, 167, 0.35);
-    color: #080809;
+    color: #080809 !important;
+    -webkit-text-fill-color: #080809 !important;
+}
+
+.btn-primary:active,
+a.btn-primary:active,
+button.btn-primary:active,
+.btn-primary:focus,
+a.btn-primary:focus,
+button.btn-primary:focus {
+    color: #080809 !important;
+    -webkit-text-fill-color: #080809 !important;
 }
 
 .btn-outline {
@@ -2404,17 +2429,29 @@ footer p {
     flex-wrap: wrap;
 }
 
-.hero-btn-apple-primary {
+.hero-btn-apple-primary,
+a.hero-btn-apple-primary,
+a.hero-btn-apple-primary:visited,
+.hero-btn-apple-primary * {
     border-radius: 40px !important;
     padding: 16px 36px !important;
     font-weight: 700 !important;
     letter-spacing: 1.5px !important;
     box-shadow: 0 6px 24px var(--accent-glow) !important;
+    background: var(--accent-primary) !important;
+    color: #080809 !important;
+    -webkit-text-fill-color: #080809 !important;
 }
 
-.hero-btn-apple-primary:hover {
+.hero-btn-apple-primary:hover,
+a.hero-btn-apple-primary:hover,
+a.hero-btn-apple-primary:visited:hover,
+.hero-btn-apple-primary:hover * {
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 30px rgba(229, 203, 167, 0.4) !important;
+    background: var(--accent-hover) !important;
+    color: #080809 !important;
+    -webkit-text-fill-color: #080809 !important;
 }
 
 .hero-btn-apple-outline {
@@ -2431,6 +2468,48 @@ footer p {
     background: rgba(229, 203, 167, 0.12) !important;
     border-color: var(--accent-primary) !important;
     transform: translateY(-2px);
+}
+
+/* Hero CTA Principal con Fondo Negro Onyx Brandbook (#080809) */
+.hero-btn-apple-dark,
+a.hero-btn-apple-dark,
+a.hero-btn-apple-dark:link,
+a.hero-btn-apple-dark:visited {
+    border-radius: 40px !important;
+    padding: 16px 38px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    letter-spacing: 1.8px !important;
+    text-transform: uppercase !important;
+    background: #080809 !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+    -webkit-text-fill-color: var(--accent-primary) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75), 0 0 16px rgba(229, 203, 167, 0.16) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.hero-btn-apple-dark:hover,
+a.hero-btn-apple-dark:hover,
+a.hero-btn-apple-dark:visited:hover {
+    background: rgba(229, 203, 167, 0.14) !important;
+    border-color: var(--accent-hover) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.9), 0 0 24px rgba(229, 203, 167, 0.28) !important;
+}
+
+.hero-btn-apple-dark:active,
+a.hero-btn-apple-dark:active {
+    transform: translateY(0) scale(0.99) !important;
 }
 
 .hero-credentials-bar {
@@ -2550,21 +2629,52 @@ footer p {
         overflow: hidden;
     }
     .touch-carousel {
-        padding: 12px 14px 18px;
-        margin: 0 -14px;
-        width: calc(100% + 28px);
-        gap: 14px;
-        scroll-padding: 0 14px;
+        padding: 12px 16px 20px;
+        margin: 0 -16px;
+        width: calc(100% + 32px);
+        gap: 18px;
+        scroll-padding: 0 16px;
         touch-action: pan-y pinch-zoom;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior-x: contain;
     }
-    .pillars-carousel .carousel-slide,
-    .pricing-carousel .carousel-slide {
-        flex: 0 0 84% !important;
+    /* Aire y separación entre cards de Pilares - Cero Solapamiento */
+    .pillars-carousel {
+        display: flex !important;
+        gap: 24px !important;
+        padding: 14px 18px 24px !important;
+        margin: 0 -18px !important;
+        width: calc(100% + 36px) !important;
+        scroll-padding: 0 18px !important;
+        overflow-x: auto !important;
+    }
+    .pillars-carousel .carousel-slide {
+        flex: 0 0 78% !important;
         flex-shrink: 0 !important;
-        width: 84% !important;
-        max-width: 320px !important;
+        width: 78% !important;
+        max-width: 300px !important;
+        min-width: 250px !important;
+        scroll-snap-align: start !important;
+        scroll-snap-stop: normal !important;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+    .pillars-carousel .carousel-slide .ig-post {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        aspect-ratio: auto !important;
+        height: 440px !important;
+        min-height: 440px !important;
+    }
+    .pricing-carousel .carousel-slide {
+        flex: 0 0 82% !important;
+        flex-shrink: 0 !important;
+        width: 82% !important;
+        max-width: 310px !important;
         min-width: 260px !important;
         scroll-snap-align: start !important;
         scroll-snap-stop: normal !important;
@@ -2733,6 +2843,9 @@ footer p {
 }
 
 .ig-post {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     aspect-ratio: 4 / 5;
     background: var(--bg-surface);
     border-radius: 12px;
@@ -2984,6 +3097,10 @@ footer p {
 }
 
 .pillars-carousel .carousel-slide .ig-post {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
     height: 100%;
     min-height: 430px;
 }
@@ -3055,18 +3172,21 @@ footer p {
     background: rgba(255, 255, 255, 0.05);
 }
 
-.pricing-main-btn.active {
+.pricing-main-btn.active,
+.pricing-main-btn.active * {
     background: var(--accent-primary);
-    color: #080809;
+    color: #080809 !important;
+    -webkit-text-fill-color: #080809 !important;
     border-color: var(--accent-primary);
-    font-weight: 800;
+    font-weight: 800 !important;
     box-shadow: 0 4px 18px rgba(229, 203, 167, 0.35);
 }
 
 .pricing-main-btn.active .btn-badge {
-    background: rgba(8, 8, 9, 0.15);
-    color: #080809;
-    font-weight: 800;
+    background: rgba(8, 8, 9, 0.15) !important;
+    color: #080809 !important;
+    -webkit-text-fill-color: #080809 !important;
+    font-weight: 800 !important;
 }
 
 /* Nivel 2: Sub-selector de Presencial (Individual vs Grupos) */
