@@ -2499,13 +2499,13 @@ footer p {
 
 .touch-carousel {
     display: flex;
-    gap: 20px;
+    gap: 16px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x pan-y;
-    padding-top: 20px;
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior-x: contain;
+    padding-top: 16px;
     padding-bottom: 16px;
     scrollbar-width: none;
     width: 100%;
@@ -2545,8 +2545,9 @@ footer p {
         padding: 44px 4%;
     }
     .touch-carousel-wrap {
+        position: relative;
         width: 100%;
-        overflow: visible;
+        overflow: hidden;
     }
     .touch-carousel {
         padding: 12px 14px 18px;
@@ -2554,26 +2555,21 @@ footer p {
         width: calc(100% + 28px);
         gap: 14px;
         scroll-padding: 0 14px;
-        touch-action: pan-x pan-y;
+        touch-action: pan-y pinch-zoom;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
     }
-    .pillars-carousel .carousel-slide {
-        flex: 0 0 82%;
-        width: 82%;
-        max-width: 320px;
-        min-width: 260px;
-        scroll-snap-align: start;
-        margin-right: 0;
-        box-sizing: border-box;
-    }
+    .pillars-carousel .carousel-slide,
     .pricing-carousel .carousel-slide {
-        flex: 0 0 85%;
-        width: 85%;
-        max-width: 320px;
-        min-width: 260px;
-        scroll-snap-align: start;
-        margin-right: 0;
-        box-sizing: border-box;
+        flex: 0 0 84% !important;
+        flex-shrink: 0 !important;
+        width: 84% !important;
+        max-width: 320px !important;
+        min-width: 260px !important;
+        scroll-snap-align: start !important;
+        scroll-snap-stop: normal !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
     }
 }
 

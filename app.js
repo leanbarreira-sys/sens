@@ -354,6 +354,64 @@ function setupCarouselSwipe(carouselId, dotsContainerId) {
             }
         });
     });
+
+    // Soporte robusto de deslizamiento táctil (Swipe) para Android e iOS
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let hasTouchMoved = false;
+
+    carousel.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            hasTouchMoved = false;
+        }
+    }, { passive: true });
+
+    carousel.addEventListener('touchmove', (e) => {
+        hasTouchMoved = true;
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', (e) => {
+        if (!hasTouchMoved || !e.changedTouches || e.changedTouches.length === 0) return;
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaX = touchStartX - touchEndX;
+        const deltaY = touchStartY - touchEndY;
+
+        // Deslizamiento predominantemente horizontal con umbral de 35px
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 35) {
+            const scrollLeft = carousel.scrollLeft;
+            let currentIndex = 0;
+            let minDiff = Infinity;
+
+            slides.forEach((slide, index) => {
+                const slideLeft = slide.offsetLeft - carousel.offsetLeft;
+                const diff = Math.abs(scrollLeft - slideLeft);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    currentIndex = index;
+                }
+            });
+
+            let targetIndex = currentIndex;
+            if (deltaX > 0 && currentIndex < slides.length - 1) {
+                // Deslizó hacia la izquierda -> avanzar a la derecha
+                targetIndex = currentIndex + 1;
+            } else if (deltaX < 0 && currentIndex > 0) {
+                // Deslizó hacia la derecha -> retroceder
+                targetIndex = currentIndex - 1;
+            }
+
+            if (slides[targetIndex]) {
+                const targetLeft = slides[targetIndex].offsetLeft - carousel.offsetLeft;
+                carousel.scrollTo({
+                    left: targetLeft,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, { passive: true });
 }
 
 function initPricingTabs() {
@@ -374,7 +432,9 @@ function initPricingTabs() {
             if (onlineTab) {
                 onlineTab.style.display = 'block';
                 const innerCarousel = onlineTab.querySelector('.pricing-carousel');
-                if (innerCarousel) innerCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+                if (innerCarousel) innerCarousel.scrollLeft = 0;
+                const dots = document.querySelectorAll('#onlineDots .carousel-dot');
+                dots.forEach((dot, idx) => dot.classList.toggle('active', idx === 0));
             }
         } else {
             // Modo Presencial
@@ -384,7 +444,10 @@ function initPricingTabs() {
             if (targetEl) {
                 targetEl.style.display = 'block';
                 const innerCarousel = targetEl.querySelector('.pricing-carousel');
-                if (innerCarousel) innerCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+                if (innerCarousel) innerCarousel.scrollLeft = 0;
+                const activeDotsId = currentSub === 'presencial-ind' ? '#pricingDots' : '#groupsDots';
+                const dots = document.querySelectorAll(activeDotsId + ' .carousel-dot');
+                dots.forEach((dot, idx) => dot.classList.toggle('active', idx === 0));
             }
         }
     }
