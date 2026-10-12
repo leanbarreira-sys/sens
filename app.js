@@ -313,35 +313,42 @@ function setupCarouselSwipe(carouselId, dotsContainerId) {
     const dots = dotsContainer.querySelectorAll('.carousel-dot');
     const slides = carousel.querySelectorAll('.carousel-slide');
 
-    // Sincronizar dots al deslizar/scrollear
-    carousel.addEventListener('scroll', () => {
+    // Sincronizar dots al deslizar/scrollear de forma fluida
+    let scrollTicking = false;
+    function updateActiveDot() {
         const scrollLeft = carousel.scrollLeft;
-        const totalWidth = carousel.scrollWidth - carousel.clientWidth;
-        if (totalWidth <= 0 || slides.length === 0) return;
-
         let activeIndex = 0;
+        let minDiff = Infinity;
+
         slides.forEach((slide, index) => {
             const slideLeft = slide.offsetLeft - carousel.offsetLeft;
-            if (scrollLeft >= slideLeft - (slide.clientWidth / 2)) {
+            const diff = Math.abs(scrollLeft - slideLeft);
+            if (diff < minDiff) {
+                minDiff = diff;
                 activeIndex = index;
             }
         });
 
         dots.forEach((dot, idx) => {
-            if (idx === activeIndex) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
+            dot.classList.toggle('active', idx === activeIndex);
         });
+        scrollTicking = false;
+    }
+
+    carousel.addEventListener('scroll', () => {
+        if (!scrollTicking) {
+            window.requestAnimationFrame(updateActiveDot);
+            scrollTicking = true;
+        }
     }, { passive: true });
 
     // Tap en un dot para navegar al slide correspondiente
     dots.forEach((dot, index) => {
         dot.addEventListener('click', () => {
             if (slides[index]) {
+                const targetLeft = slides[index].offsetLeft - carousel.offsetLeft;
                 carousel.scrollTo({
-                    left: slides[index].offsetLeft - carousel.offsetLeft,
+                    left: targetLeft,
                     behavior: 'smooth'
                 });
             }
