@@ -3,329 +3,1313 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENS | Wellness & Massage Experience</title>
-    <!-- Fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SENS TRAIN & WELLNESS | Sentite mejor en tu cuerpo</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="SENS Train & Wellness con Nico. Entrenamiento de fuerza personalizado y hábitos diseñado alrededor de tu vida real. Sentite mejor en tu cuerpo.">
+    
+    <!-- Google Fonts: Raleway (Brandbook SENS) - Preconnect & Preload to prevent FOUT -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-    <!-- Styles -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap">
+    
+    <!-- Estilos -->
     <link rel="stylesheet" href="style.css">
-    <meta name="description"
-        content="La experiencia suprema de la trilogía en casa. Un viaje a través de la Mente, Cuerpo y Movimiento diseñado para personas de alto rendimiento.">
+
+    <!-- CDN Libraries: Chart.js & Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
-    <!-- Background Gradient (simplified and elegant) -->
+    <!-- Background Gradient (Brandbook Onyx & Deep Atmosphere) -->
     <div class="bg-gradient"></div>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="logo">
-            <img src="img/logo.webp" alt="SENS Logo" class="logo-img">
-        </div>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link" data-i18n="nav-home">Home</a>
-            <a href="#trilogy" class="nav-link" data-i18n="nav-trilogy">Trilogy</a>
-            <a href="#booking-experience" class="nav-link" data-i18n="nav-book">Book & Price</a>
-        </div>
-
-        <div class="nav-actions-desktop">
-            <div class="lang-switcher">
-                <span class="lang-btn" data-lang="es">ES</span>
-                <span class="lang-btn" data-lang="en">EN</span>
-                <span class="lang-btn" data-lang="pt">PT</span>
-
-            </div>
-            <a href="https://wa.me/5491136329846?text=Hola!%20Tengo%20una%20consulta%20sobre%20SENS" class="help-link"
-                target="_blank">
-                <span class="agent-status-dot"></span><span data-i18n="help-text">¿Necesitas ayuda?</span>
+    <!-- =========================================================================
+         MÓDULO 1: NAVEGACIÓN Y NAVBAR GLOBAL
+         ========================================================================= -->
+    <header>
+        <nav class="navbar" id="globalNavbar">
+            <a href="index.html" class="brand-logo-wrap" id="headerLogoLink" aria-label="SENS TRAIN & WELLNESS">
+                <img src="img/logo-blanco.png" alt="SENS TRAIN & WELLNESS" class="brand-logo-img" id="headerBrandLogo">
             </a>
-            <a href="#booking-experience" class="cta-nav" data-i18n="btn-reserve">Reservar Sesión</a>
-        </div>
 
-        <div class="nav-actions-mobile">
-            <div class="lang-switcher">
-                <span class="lang-btn" data-lang="es">ES</span>
-                <span class="lang-btn" data-lang="en">EN</span>
-                <span class="lang-btn" data-lang="pt">PT</span>
-
+            <div class="nav-links">
+                <a href="#pilares" class="nav-link">Pilares</a>
+                <a href="#metodo" class="nav-link">Método</a>
+                <a href="#planes" class="nav-link">Planes</a>
+                <a href="#wellness" class="nav-link">Trilogy (Wellness)</a>
             </div>
-            <a href="https://wa.me/5491136329846?text=Hola!%20Tengo%20una%20consulta%20sobre%20SENS"
-                class="help-link-mobile-header" target="_blank">
-                <span class="agent-status-dot"></span><span data-i18n="help-text">¿Ayuda?</span>
-            </a>
-            <button class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <video autoplay muted loop playsinline class="hero-video">
-            <source src="vid/hero-bg-opt.mp4" type="video/mp4">
-            <!-- Alternative CDN link if local file is missing: https://assets.mixkit.co/videos/preview/mixkit-slow-motion-of-a-woman-receiving-a-massage-40453-large.mp4 -->
-        </video>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title" data-i18n="hero-title">M O V E.<br>S T O P.<br>B R E A T H E.<br><span
-                    class="hero-highlight">S E N S.</span></h1>
-            <p class="hero-subtitle" data-i18n="hero-subtitle">SENS integra 3 pilares fundamentales:
-                <br>
-                <br>
-                YOGA | MASAJES | MEDITACIÓN
+            <div class="nav-actions-desktop">
+                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Tengo%20una%20consulta%20sobre%20SENS%20TRAIN."
+                    class="help-link" target="_blank" rel="noopener">
+                    <span class="agent-status-dot"></span><span>WhatsApp Nico</span>
+                </a>
+                <button class="btn btn-outline btn-sm" id="navClientAccessBtn">Acceso Clientes</button>
+            </div>
+
+            <div class="nav-actions-mobile">
+                <button class="btn btn-primary btn-sm" id="navClientAccessBtnMobile">Acceso</button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Abrir Menú">
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Menú Móvil Desplegable -->
+    <div class="mobile-menu-overlay" id="mobileMenu" style="display:none; position:fixed; inset:0; background:rgba(8,8,9,0.98); z-index:1600; padding:35px 25px 40px; flex-direction:column; gap:20px; text-align:center; backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); overflow-y:auto; -webkit-overflow-scrolling:touch;">
+        <!-- Botón de Cruz para Cerrar Menú Móvil -->
+        <button class="mobile-menu-close" id="mobileMenuCloseBtn" aria-label="Cerrar Menú" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); color:#FFFFFF; font-size:22px; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:1610; transition:all 0.3s ease;">
+            ✕
+        </button>
+        <img src="img/logo-blanco.png" alt="SENS Logo" style="height:44px; width:auto; max-width:180px; margin:20px auto 10px; display:block;">
+        <a href="#pilares" class="nav-link mobile-nav-link" style="font-size:1.15rem; min-height:44px; display:flex; align-items:center; justify-content:center;">Pilares SENS</a>
+        <a href="#metodo" class="nav-link mobile-nav-link" style="font-size:1.15rem; min-height:44px; display:flex; align-items:center; justify-content:center;">El Método &amp; Nico</a>
+        <a href="#planes" class="nav-link mobile-nav-link" style="font-size:1.15rem; min-height:44px; display:flex; align-items:center; justify-content:center;">Planes &amp; Frecuencia</a>
+        <a href="#wellness" class="nav-link mobile-nav-link" style="font-size:1.15rem; min-height:44px; display:flex; align-items:center; justify-content:center;">Trilogy (Wellness)</a>
+        <div style="margin-top:auto; display:flex; flex-direction:column; gap:12px; padding-top:20px;">
+            <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20agendar%20una%20Evaluaci%C3%B3n%20Inicial." target="_blank" rel="noopener" class="btn btn-primary btn-full" style="min-height:48px;">
+                Agendar Evaluación Inicial
+            </a>
+            <button class="btn btn-outline btn-full" id="mobileMenuClientAccessBtn" style="min-height:48px;">Acceso Portal Clientes</button>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MÓDULO 2: PÁGINA PÚBLICA (LANDING PAGE SENS TRAIN)
+         ========================================================================= -->
+    <main id="publicLanding">
+        <!-- Hero Section (Apple-Grade Premium Presentation) -->
+        <section class="sens-train-hero">
+            <!-- Fallback Image: Visible instantáneamente mientras carga el video -->
+            <div class="hero-bg-fallback" id="heroBgFallback" style="position:absolute; inset:0; background: url('img/hero-bg-opt.png') center/cover no-repeat; z-index:1; filter: saturate(0.95); transition: opacity 0.6s ease;"></div>
+            <!-- Video Hero: Se reproduce nítido y se desvanece la imagen de fondo ni bien arranca -->
+            <video autoplay muted loop playsinline poster="img/hero-bg-opt.png" class="hero-video" id="heroVideo" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2; opacity:0; transition: opacity 0.6s ease;">
+                <source src="vid/hero-bg-opt.mp4" type="video/mp4">
+            </video>
+            <!-- Overlay Brandbook: Nítido arriba (transparente) y degradado concentrado abajo para ubicar los textos -->
+            <div class="hero-overlay" style="position:absolute; inset:0; background: linear-gradient(to top, rgba(8,8,9,0.98) 18%, rgba(8,8,9,0.82) 42%, rgba(8,8,9,0.2) 70%, transparent 100%); z-index:3; pointer-events:none;"></div>
+            
+            <div class="hero-train-content" style="z-index:4;">
+                <h1 class="hero-main-heading">
+                    <span class="hero-apple-eyebrow">ENTRENAMIENTO CON</span>
+                    <span class="hero-apple-highlight">FUERZA Y CRITERIO</span>
+                </h1>
+                <p class="hero-description-train">
+                    Sentite mejor en tu cuerpo. Un proceso personalizado de entrenamiento de fuerza y hábitos diseñado alrededor de tu vida real, sin improvisación.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20agendar%20una%20Evaluaci%C3%B3n%20Inicial%20en%20SENS%20TRAIN."
+                        target="_blank" rel="noopener" class="btn btn-primary hero-btn-apple-primary">
+                        Agendar Evaluación Inicial
+                    </a>
+                    <button class="btn btn-outline hero-btn-apple-outline" id="heroLoginBtn">
+                        Acceso Miembros
+                    </button>
+                </div>
+
+                <!-- Credenciales Rápidas en Hero -->
+                <div class="hero-credentials-bar">
+                    <span>📍 Palermo y alrededores</span>
+                    <span class="dot-separator">•</span>
+                    <span>100% Personalizado 1 a 1</span>
+                    <span class="dot-separator">•</span>
+                    <span>Cupos Limitados</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pilares SENS TRAIN (Diseño Editorial Brandbook con Gradientes y Fotografía Full-Bleed) -->
+        <section class="section-sens" id="pilares">
+            <div class="section-head">
+                <span class="section-eyebrow">La Esencia del Método</span>
+                <h2 class="section-main-title">PILARES <span class="text-champagne">SENS TRAIN</span></h2>
+                <p class="section-lead">
+                    No vendemos sesiones aisladas ni rutinas genéricas de gimnasio. Construimos una práctica física progresiva, eficiente y adaptable para transformar cómo te ves y cómo te sentís.
+                </p>
+                <span class="pill pill-dark" style="margin-top:12px; font-size:10px;">Deslizá para explorar cada pilar →</span>
+            </div>
+
+            <!-- Carrusel de Pilares con Fotografía Editorial y Gradientes Brandbook -->
+            <div class="touch-carousel-wrap">
+                <div class="touch-carousel pillars-carousel" id="pillarsCarousel">
+                    <!-- Pilar 1: Fuerza -->
+                    <div class="carousel-slide">
+                        <div class="ig-post">
+                            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80" alt="Fuerza como Base SENS" class="ig-img" loading="lazy">
+                            <div class="grad-bottom"></div>
+                            <div class="ig-content pos-bottom">
+                                <span class="ig-badge-tag">PILAR 01</span>
+                                <div class="ig-light" style="font-size:13px;">La Base Fundamental</div>
+                                <div class="ig-bold" style="font-size:24px;">Fuerza como Base</div>
+                                <div class="ig-body" style="font-size:12.5px; line-height:1.45; color:rgba(255,255,255,0.88); margin-top:8px;">
+                                    La fuerza es la capacidad fundamental humana y la columna vertebral de nuestra propuesta. Es el vehículo principal para mejorar tu composición corporal, densidad y vitalidad.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pilar 2: Eficiencia & Criterio -->
+                    <div class="carousel-slide">
+                        <div class="ig-post">
+                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80" alt="Eficiencia y Criterio SENS" class="ig-img" loading="lazy">
+                            <div class="grad-bottom"></div>
+                            <div class="ig-content pos-bottom">
+                                <span class="ig-badge-tag">PILAR 02</span>
+                                <div class="ig-light" style="font-size:13px;">Biomecánica Inteligente</div>
+                                <div class="ig-bold" style="font-size:24px; color:var(--accent-primary);">Eficiencia &amp; Criterio</div>
+                                <div class="ig-body" style="font-size:12.5px; line-height:1.45; color:rgba(255,255,255,0.88); margin-top:8px;">
+                                    Aprovechamos cada minuto de tu tiempo. Sin ejercicios de relleno ni riesgos innecesarios. Entrenamos con biomecánica inteligente adaptada a tu anatomía y contexto.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pilar 3: Movilidad & Conciencia -->
+                    <div class="carousel-slide">
+                        <div class="ig-post">
+                            <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" alt="Movilidad y Conciencia SENS" class="ig-img" loading="lazy">
+                            <div class="grad-bottom"></div>
+                            <div class="ig-content pos-bottom">
+                                <span class="ig-badge-tag">PILAR 03</span>
+                                <div class="ig-light" style="font-size:13px;">Libertad de Movimiento</div>
+                                <div class="ig-bold" style="font-size:24px;">Movilidad &amp; Conciencia</div>
+                                <div class="ig-body" style="font-size:12.5px; line-height:1.45; color:rgba(255,255,255,0.88); margin-top:8px;">
+                                    Integración profunda de movilidad articular, respiración y conciencia corporal. Te movés mejor en el gimnasio y vivís con mayor libertad y sin rigidez en el día a día.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pilar 4: Adherencia Sostenible -->
+                    <div class="carousel-slide">
+                        <div class="ig-post">
+                            <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80" alt="Adherencia Sostenible SENS" class="ig-img" loading="lazy">
+                            <div class="grad-bottom"></div>
+                            <div class="ig-content pos-bottom">
+                                <span class="ig-badge-tag">PILAR 04</span>
+                                <div class="ig-light" style="font-size:13px;">Diseñado para tu Vida</div>
+                                <div class="ig-bold" style="font-size:24px; color:var(--accent-primary);">Adherencia Real</div>
+                                <div class="ig-body" style="font-size:12.5px; line-height:1.45; color:rgba(255,255,255,0.88); margin-top:8px;">
+                                    Un sistema que encaja en tu vida real, sin dogmas extremos ni incompatibilidad con tu rutina. Primero consideramos a la persona; después seleccionamos la progresión.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Indicadores de Paginación de Pilares -->
+                <div class="carousel-dots" id="pillarsDots">
+                    <div class="carousel-dot active" data-index="0"></div>
+                    <div class="carousel-dot" data-index="1"></div>
+                    <div class="carousel-dot" data-index="2"></div>
+                    <div class="carousel-dot" data-index="3"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Método & Quién es Nico -->
+        <section class="section-sens" id="metodo" style="background: rgba(18, 18, 20, 0.45); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div class="method-layout">
+                <div>
+                    <span class="section-eyebrow">Fuerza Tranquila</span>
+                    <h2 class="section-main-title">EL MÉTODO DETRÁS DE <span class="text-champagne">TU TRANSFORMACIÓN</span></h2>
+                    <p class="section-lead">
+                        Una transformación que se nota por fuera y se siente por dentro. El entrenamiento construye el cuerpo; la conciencia y los hábitos amplían la experiencia de bienestar.
+                    </p>
+
+                    <div class="method-features-list">
+                        <div class="method-feature-item">
+                            <div class="method-feature-icon">✓</div>
+                            <div>
+                                <h4 class="font-semibold" style="margin-bottom: 4px; color: var(--text-primary); font-size: 1.05rem;">Evaluación Integral de Punto de Partida</h4>
+                                <p style="font-size: 0.92rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">Relevamiento de nivel, historial de movimiento, lesiones y contexto de vida para diseñar tu plan a medida.</p>
+                            </div>
+                        </div>
+
+                        <div class="method-feature-item">
+                            <div class="method-feature-icon">✓</div>
+                            <div>
+                                <h4 class="font-semibold" style="margin-bottom: 4px; color: var(--text-primary); font-size: 1.05rem;">Progresión sin Intimidación</h4>
+                                <p style="font-size: 0.92rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">Sin gritos ni agresividad. Un acompañamiento con criterio, seguridad y comunicación honesta entre sesiones.</p>
+                            </div>
+                        </div>
+
+                        <div class="method-feature-item">
+                            <div class="method-feature-icon">✓</div>
+                            <div>
+                                <h4 class="font-semibold" style="margin-bottom: 4px; color: var(--text-primary); font-size: 1.05rem;">Hábitos y Nutrición Práctica</h4>
+                                <p style="font-size: 0.92rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">Metas diarias de pasos, hidratación y aporte proteico sin dietas restrictivas ni complicaciones innecesarias.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparación Antes vs Después -->
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-top:28px;">
+                        <div style="background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:8px; padding:18px;">
+                            <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Antes de SENS</span>
+                            <p style="font-size:0.88rem; color:var(--text-secondary); margin:0; line-height:1.45;">Sentirse fuera de forma, incómodo en el gimnasio o sin constancia por falta de un rumbo claro.</p>
+                        </div>
+                        <div style="background:rgba(229,203,167,0.06); border:1px solid var(--border-strong); border-radius:8px; padding:18px;">
+                            <span style="font-size:10px; font-weight:800; color:var(--accent-primary); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Después con SENS</span>
+                            <p style="font-size:0.88rem; color:var(--text-primary); margin:0; line-height:1.45;">Cuerpo más fuerte, postura alineada, técnica precisa y una rutina que disfrutas sostener.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Editorial de Nico (Brandbook Style: Foto Centrada y Rostro Despejado) -->
+                <div class="ig-post nico-editorial-card">
+                    <img src="img/img-nico.png" alt="Nico Entrenador Principal SENS" class="ig-img nico-portrait-img" loading="lazy">
+                    <div class="grad-bottom" style="height: 52%; background: linear-gradient(to top, rgba(8,8,9,0.98) 28%, rgba(8,8,9,0.75) 75%, transparent 100%);"></div>
+                    <div class="ig-content pos-bottom" style="padding: 22px 20px;">
+                        <span class="ig-badge-tag" style="margin-bottom: 6px; font-size: 8.5px;">ENTRENADOR PRINCIPAL</span>
+                        <div class="ig-bold" style="font-size: 28px; color: var(--accent-primary); margin: 2px 0 4px; line-height: 1;">NICO</div>
+                        <div class="ig-light" style="font-size: 11px; margin-bottom: 8px; letter-spacing: 1.2px; line-height: 1.35; text-transform: uppercase;">Entrenador personal, instructor de yoga y masajista profesional</div>
+                        <p class="ig-body" style="font-size: 12px; line-height: 1.45; color: rgba(255,255,255,0.9); margin-top: 0; margin-bottom: 12px;">
+                            "Integro fuerza, yoga y biomecánica para ofrecerte un espacio seguro, preciso y desafiante. Mi compromiso es que te sientas en control de tu cuerpo."
+                        </p>
+                        <div class="pill-container" style="margin-bottom: 14px; gap: 6px;">
+                            <span class="pill pill-dark" style="font-size: 10px; padding: 4px 10px;">📍 Palermo y alrededores</span>
+                            <span class="pill pill-champagne" style="font-size: 10px; padding: 4px 10px;">Cupos Limitados</span>
+                        </div>
+                        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20conocer%20m%C3%A1s%20sobre%20el%20entrenamiento%20en%20SENS." target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="width: 100%; text-align: center; padding: 10px 14px; font-size: 11px;">
+                            Escribir a Nico por WhatsApp →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Precios & Modalidades (Con Diferencial Real por Frecuencia & Sin Costo Gym) -->
+        <section class="section-sens" id="planes">
+            <div class="section-head">
+                <span class="section-eyebrow">Inversión & Modalidades</span>
+                <h2 class="section-main-title">ELEGÍ TU MODALIDAD <span class="text-champagne">SENS TRAIN</span></h2>
+                <p class="section-lead">
+                    El servicio incluye la misma excelencia técnica y dedicación de Nico en todos los planes. <strong>El diferencial es la frecuencia semanal</strong> y para qué objetivo de vida está pensada cada una.
+                </p>
+                <span class="pill pill-dark" style="margin-top:12px; font-size:10px;">Deslizá entre opciones para comparar →</span>
+            </div>
+
+            <!-- Selector Segmentado de Modalidades (Estilo Apple / Brandbook) -->
+            <!-- Selector Segmentado de Modalidades (Nivel 1: Online vs Presencial + Nivel 2: Sub-selector Presencial) -->
+            <div class="pricing-selector-container">
+                <div class="pricing-main-nav" role="tablist" aria-label="Modalidad Principal">
+                    <button class="pricing-main-btn active" data-mode="online" role="tab" aria-selected="true" id="btnModeOnline">
+                        <span class="btn-icon">💻</span>
+                        <span class="btn-text">Online Asesorado</span>
+                        <span class="btn-badge">A tu ritmo</span>
+                    </button>
+                    <button class="pricing-main-btn" data-mode="presencial" role="tab" aria-selected="false" id="btnModePresencial">
+                        <span class="btn-icon">📍</span>
+                        <span class="btn-text">Presencial (CABA)</span>
+                        <span class="btn-badge">1 a 1 o Grupos</span>
+                    </button>
+                </div>
+
+                <!-- Selector Nivel 2: Sub-selector exclusivo cuando se activa Presencial -->
+                <div class="presencial-sub-selector-container" id="presencialSubSelector" style="display: none;">
+                    <div class="pricing-sub-nav" role="tablist" aria-label="Tipo de Presencial">
+                        <button class="pricing-sub-btn active" data-sub="presencial-ind" role="tab" aria-selected="true" id="btnSubInd">
+                            Personalizado Individual (1 a 1)
+                        </button>
+                        <button class="pricing-sub-btn" data-sub="presencial-grupos" role="tab" aria-selected="false" id="btnSubGrupos">
+                            Grupos Reducidos (Dúos y Tríos)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- VISTA 1: ONLINE ASESORADO (MÁXIMA RELEVANCIA Y VISIBILIDAD)  -->
+            <!-- ============================================================ -->
+            <div class="pricing-tab-content active" id="tab-online">
+                <!-- Banner de Valor y Explicación Clara del Online -->
+                <div class="online-value-banner">
+                    <div class="online-value-pill">MODALIDAD 100% PERSONALIZADA A DISTANCIA</div>
+                    <h3 class="online-value-title">Entrená con la metodología y criterio de Nico desde cualquier lugar</h3>
+                    <p class="online-value-desc">
+                        Pensado para profesionales y personas autónomas que entrenan en su propio gimnasio, en el SUM del edificio o en casa. Recibís una planificación biomecánica individualizada, calibración técnica continua y soporte directo para progresar con seguridad y resultados medibles.
+                    </p>
+                    <div class="online-value-badges">
+                        <span class="online-badge-tag"><span class="badge-icon">🎯</span> Rutinas adaptadas a tu equipamiento</span>
+                        <span class="online-badge-tag"><span class="badge-icon">📲</span> Soporte y corrección real por WhatsApp</span>
+                        <span class="online-badge-tag"><span class="badge-icon">📊</span> Registro de cargas y métricas en WebApp</span>
+                    </div>
+                </div>
+
+                <!-- Grilla / Carrusel de Planes Online -->
+                <div class="touch-carousel-wrap">
+                    <div class="touch-carousel pricing-carousel online-carousel-grid" id="onlineCarousel">
+                        <!-- Online Básico -->
+                        <div class="carousel-slide online-slide">
+                            <div class="train-plan-card">
+                                <span class="plan-purpose-tag">AUTÓNOMOS A DISTANCIA</span>
+                                <h3 class="plan-title">Online Básico</h3>
+                                <div class="plan-frequency-subtitle">Planificación &amp; Autonomía</div>
+                                <p class="plan-target-audience">Para personas autónomas que entrenan en su gimnasio habitual o edificio y buscan orden, progresión y pautas claras de sobrecarga.</p>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$40.000</span>
+                                    <span class="plan-period">/ mes</span>
+                                </div>
+                                <div class="plan-differential-box">
+                                    <div class="plan-differential-title">Cómo funciona este plan:</div>
+                                    <div class="plan-differential-desc">
+                                        Cuestionario inicial y armado de rutina 100% a medida. Te indicamos series, repeticiones y kilajes de partida. Consultas y ajustes semanales vía WhatsApp.
+                                    </div>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Cuestionario y análisis de historial físico</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Plan mensual adaptado a tus máquinas o mancuernas</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Series, repeticiones, descansos y progresión</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Ajustes y resolución de dudas por WhatsApp</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Acceso a la WebApp de seguimiento</span></li>
+                                </ul>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Me%20interesa%20el%20Plan%20Online%20B%C3%A1sico."
+                                    target="_blank" rel="noopener" class="btn btn-outline btn-full">Comenzar Online Básico</a>
+                            </div>
+                        </div>
+
+                        <!-- Online Premium -->
+                        <div class="carousel-slide online-slide">
+                            <div class="train-plan-card highlight">
+                                <span class="train-plan-badge">MÁXIMO 2 CUPOS</span>
+                                <span class="plan-purpose-tag">ACOMPAÑAMIENTO CON VIDEOLLAMADA</span>
+                                <h3 class="plan-title">Online Premium</h3>
+                                <div class="plan-frequency-subtitle">Supervisión Cercana VIP</div>
+                                <p class="plan-target-audience">Para quienes entrenan a distancia pero requieren supervisión cercana, corrección técnica de video y videollamada semanal.</p>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$90.000</span>
+                                    <span class="plan-period">/ mes</span>
+                                </div>
+                                <div class="plan-differential-box" style="background:rgba(229,203,167,0.08); border-color:var(--border-strong);">
+                                    <div class="plan-differential-title">Cómo funciona este plan:</div>
+                                    <div class="plan-differential-desc">
+                                        Videollamada inicial de 45-60 min + seguimiento semanal de 30 min. Enviás videos de tus ejecuciones y Nico calibra tu biomecánica punto a punto.
+                                    </div>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Todo lo incluido</strong> en Online Básico</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Llamada inicial por video</strong> de 45 a 60 min</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Videollamada semanal</strong> de seguimiento (30 min)</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Corrección técnica en video</strong> punto a punto</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Prioridad de comunicación</strong> directa con Nico</span></li>
+                                </ul>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20consultar%20por%20un%20cupo%20en%20Online%20Premium."
+                                    target="_blank" rel="noopener" class="btn btn-primary btn-full">Postularme a Premium</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Indicadores de Paginación Mobile para Online -->
+                    <div class="carousel-dots" id="onlineDots">
+                        <div class="carousel-dot active" data-index="0"></div>
+                        <div class="carousel-dot" data-index="1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- VISTA 2A: PRESENCIAL INDIVIDUAL (1 a 1 CON NICO)             -->
+            <!-- ============================================================ -->
+            <div class="pricing-tab-content" id="tab-presencial-ind" style="display:none;">
+                <div class="touch-carousel-wrap">
+                    <div class="touch-carousel pricing-carousel" id="pricingCarousel">
+                        <!-- Plan Plata (1x Semana) -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card">
+                                <span class="plan-purpose-tag">EL ANCLA SEMANAL / COMPLEMENTO</span>
+                                <h3 class="plan-title">Plan Plata</h3>
+                                <div class="plan-frequency-subtitle">1 Vez / Semana</div>
+                                <p class="plan-target-audience">
+                                    Para personas activas (runners, tenistas, yoguis) o agendas intensas que necesitan <strong>supervisión técnica y calibración biomecánica</strong>.
+                                </p>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$130.000</span>
+                                    <span class="plan-period">/ mes (4 sesiones de 60 min)</span>
+                                </div>
+
+                                <div class="plan-differential-box">
+                                    <div class="plan-differential-title">Propósito de esta frecuencia</div>
+                                    <div class="plan-differential-desc">
+                                        Calibración técnica semanal: aprendés los patrones biomecánicos esenciales para entrenar seguro y te llevás la pauta precisa para tus días autónomos o como ancla de fuerza a tu deporte habitual.
+                                    </div>
+                                </div>
+
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>1 sesión presencial</strong> 1 a 1 de 60 min por semana con Nico</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Sobrecarga progresiva</strong> y ajuste de kilajes sesión a sesión</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Recomposición física:</strong> tono muscular, postura erguida y densidad</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Seguimiento integral:</strong> pautas de fuerza y hábitos en WebApp</span></li>
+                                </ul>
+
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Me%20interesa%20el%20Plan%20Plata%20(1x%20Semana)%20de%20SENS%20TRAIN."
+                                    target="_blank" rel="noopener" class="btn btn-outline btn-full">Consultar Cupos Plan Plata (1x)</a>
+                                <p class="plan-transparent-note">*Honorario profesional. Acceso a gimnasio sede no incluido.</p>
+                            </div>
+                        </div>
+
+                        <!-- Plan Oro (2x Semana - MÁS ELEGIDO / ESTÁNDAR SENS) -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card highlight">
+                                <span class="train-plan-badge">MÁS ELEGIDO</span>
+                                <span class="plan-purpose-tag">ESTÁNDAR DORADO DE RECOMPOSICIÓN</span>
+                                <h3 class="plan-title">Plan Oro</h3>
+                                <div class="plan-frequency-subtitle">2 Veces / Semana</div>
+                                <p class="plan-target-audience">
+                                    Para ejecutivos y profesionales de 40 a 59 años que buscan <strong>recomposición muscular, postura erguida y vitalidad</strong> con la máxima eficiencia.
+                                </p>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$200.000</span>
+                                    <span class="plan-period">/ mes (8 sesiones de 60 min)</span>
+                                </div>
+
+                                <div class="plan-differential-box" style="background:rgba(229,203,167,0.08); border-color:var(--border-strong);">
+                                    <div class="plan-differential-title">Propósito de esta frecuencia</div>
+                                    <div class="plan-differential-desc">
+                                        Frecuencia con mayor respaldo científico: división óptima Tren Superior / Tren Inferior con 72h de recuperación. Máxima masa muscular y vitalidad sin sobreentrenar.
+                                    </div>
+                                </div>
+
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>2 sesiones presenciales</strong> 1 a 1 de 60 min por semana con Nico</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Sobrecarga progresiva</strong> y ajuste de kilajes sesión a sesión</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Recomposición física:</strong> tono muscular, postura erguida y densidad</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Seguimiento integral:</strong> pautas de fuerza y hábitos en WebApp</span></li>
+                                </ul>
+
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20comenzar%20el%20Plan%20Oro%20(2x%20Semana)%20de%20SENS%20TRAIN."
+                                    target="_blank" rel="noopener" class="btn btn-primary btn-full">Comenzar Plan Oro (2x)</a>
+                                <p class="plan-transparent-note">*Honorario profesional. Acceso a gimnasio sede no incluido.</p>
+                            </div>
+                        </div>
+
+                        <!-- Plan Diamante (3x Semana) -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card">
+                                <span class="plan-purpose-tag">MÁXIMA TRANSFORMACIÓN Y RITMO</span>
+                                <h3 class="plan-title">Plan Diamante</h3>
+                                <div class="plan-frequency-subtitle">3 Veces / Semana</div>
+                                <p class="plan-target-audience">
+                                    Para quienes buscan un <strong>cambio físico profundo y continuo</strong> y priorizan tener acompañamiento presencial en cada sesión sin entrenar solos jamás.
+                                </p>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$260.000</span>
+                                    <span class="plan-period">/ mes (12 sesiones de 60 min)</span>
+                                </div>
+
+                                <div class="plan-differential-box">
+                                    <div class="plan-differential-title">Propósito de esta frecuencia</div>
+                                    <div class="plan-differential-desc">
+                                        Ciclo semanal guiado de 3 días (Empuje, Tirón, Cadera/Pierna + Conciencia motora). Máximo volumen supervisado para acelerar resultados de tono y fuerza sin margen de error.
+                                    </div>
+                                </div>
+
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>3 sesiones presenciales</strong> 1 a 1 de 60 min por semana con Nico</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Sobrecarga progresiva</strong> y ajuste de kilajes sesión a sesión</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Recomposición física:</strong> tono muscular, postura erguida y densidad</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span><strong>Seguimiento integral:</strong> pautas de fuerza y hábitos en WebApp</span></li>
+                                </ul>
+
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Me%20interesa%20el%20Plan%20Diamante%20(3x%20Semana)%20de%20SENS%20TRAIN."
+                                    target="_blank" rel="noopener" class="btn btn-outline btn-full">Consultar Cupos Plan Diamante (3x)</a>
+                                <p class="plan-transparent-note">*Honorario profesional. Acceso a gimnasio sede no incluido.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Indicadores de Paginación de Precios -->
+                    <div class="carousel-dots" id="pricingDots">
+                        <div class="carousel-dot" data-index="0"></div>
+                        <div class="carousel-dot active" data-index="1"></div>
+                        <div class="carousel-dot" data-index="2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- VISTA 2B: PRESENCIAL GRUPOS (DÚOS Y TRÍOS)                   -->
+            <!-- ============================================================ -->
+            <div class="pricing-tab-content" id="tab-presencial-grupos" style="display:none;">
+                <div class="touch-carousel-wrap">
+                    <div class="touch-carousel pricing-carousel" id="groupsCarousel">
+                        <!-- Tríos -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card">
+                                <span class="train-plan-badge">DESDE $85.000</span>
+                                <span class="plan-purpose-tag">GRUPOS DE HASTA 3 PERSONAS</span>
+                                <h3 class="plan-title">Modalidad Trío</h3>
+                                <p class="plan-target-audience">
+                                    Experiencia semi-personalizada con máximo 3 personas por sesión. Misma técnica y programación a un valor mensual más accesible.
+                                </p>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$85k - $170k</span>
+                                    <span class="plan-period">/ persona / mes</span>
+                                </div>
+                                <div class="plan-differential-box">
+                                    <div class="plan-differential-title">Tarifas según Frecuencia (por persona):</div>
+                                    <div style="font-size:12.5px; color:var(--text-secondary); margin-top:6px; line-height:1.6;">
+                                        • <strong>1x/semana (4 ses):</strong> $85.000 / mes<br>
+                                        • <strong>2x/semana (8 ses):</strong> $130.000 / mes<br>
+                                        • <strong>3x/semana (12 ses):</strong> $170.000 / mes
+                                    </div>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Atención técnica y corrección de Nico</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Entorno motivador y dinámico</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Seguimiento individual en WebApp</span></li>
+                                </ul>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20info%20para%20sumarme%20a%20un%20Tr%C3%ADo%20en%20SENS."
+                                    target="_blank" rel="noopener" class="btn btn-outline btn-full">Consultar Horarios Trío</a>
+                                <p class="plan-transparent-note">*Acceso a gimnasio sede no incluido.</p>
+                            </div>
+                        </div>
+
+                        <!-- Dúos -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card highlight">
+                                <span class="train-plan-badge">PAREJAS / AMIGOS</span>
+                                <span class="plan-purpose-tag">EXCLUSIVO 2 PERSONAS</span>
+                                <h3 class="plan-title">Modalidad Dúo</h3>
+                                <p class="plan-target-audience">
+                                    Entrená con tu pareja, amigo o colega. Mantén un foco casi 1 a 1 compartiendo el proceso de transformación.
+                                </p>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$100k - $195k</span>
+                                    <span class="plan-period">/ persona / mes</span>
+                                </div>
+                                <div class="plan-differential-box" style="background:rgba(229,203,167,0.08); border-color:var(--border-strong);">
+                                    <div class="plan-differential-title">Tarifas según Frecuencia (por persona):</div>
+                                    <div style="font-size:12.5px; color:var(--text-secondary); margin-top:6px; line-height:1.6;">
+                                        • <strong>1x/semana (4 ses):</strong> $100.000 / mes<br>
+                                        • <strong>2x/semana (8 ses):</strong> $150.000 / mes<br>
+                                        • <strong>3x/semana (12 ses):</strong> $195.000 / mes
+                                    </div>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>2 personas por sesión</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Adaptación a las necesidades de cada uno</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Ahorro significativo respecto a individual</span></li>
+                                </ul>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Queremos%20sumarnos%20a%20la%20Modalidad%20D%C3%BAo%20en%20SENS."
+                                    target="_blank" rel="noopener" class="btn btn-primary btn-full">Reservar Dúo</a>
+                                <p class="plan-transparent-note">*Acceso a gimnasio sede no incluido.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Indicadores de Paginación Mobile para Grupos -->
+                    <div class="carousel-dots" id="groupsDots">
+                        <div class="carousel-dot active" data-index="0"></div>
+                        <div class="carousel-dot" data-index="1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nota de Transparencia de Negocio -->
+            <div style="max-width: 680px; margin: 30px auto 0; text-align: center; padding: 18px 24px; border: 1px dashed var(--border-subtle); border-radius: 8px; background: rgba(18, 18, 20, 0.4);">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5;">
+                    💡 <strong>Transparencia comercial:</strong> Las tarifas contemplan la planificación, corrección biomecánica y acompañamiento personalizado de Nico. El acceso o cuota del gimnasio sede donde se realicen las sesiones presenciales es independiente y se abona según el espacio elegido en CABA.
+                </p>
+            </div>
+
+            <!-- Banner SENS Wellness & Trilogy (Diseño Editorial Brandbook con Imagen Full-Bleed y Degradado) -->
+            <div class="wellness-editorial-card" id="wellness">
+                <img src="img/balance.webp" alt="SENS Trilogy Wellness Experience" class="wellness-editorial-img" loading="lazy">
+                <div class="wellness-editorial-overlay"></div>
+                <div class="wellness-editorial-content">
+                    <span class="pill pill-champagne" style="margin-bottom: 14px; font-size: 10px;">SENS WELLNESS &amp; TRILOGY</span>
+                    <h3 class="wellness-editorial-title">
+                        Bienestar y Recuperación <span class="text-champagne font-black">a Domicilio</span>
+                    </h3>
+                    <p class="wellness-editorial-desc">
+                        ¿Buscás recuperación profunda y relajación integral? Llevamos el método <strong>Trilogy</strong> a la comodidad de tu hogar: <strong>MOVE</strong> (Yoga pasivo asistido) + <strong>BODY</strong> (Masaje de tejido profundo) + <strong>MIND</strong> (Meditación neuro-acústica).
+                    </p>
+                    <div class="hero-cta-group" style="justify-content: flex-start; gap: 14px;">
+                        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20consultar%20por%20la%20experiencia%20Trilogy%20a%20domicilio."
+                            target="_blank" rel="noopener" class="btn btn-primary" style="box-shadow: 0 4px 20px var(--accent-glow);">
+                            Consultar Trilogy a Domicilio
+                        </a>
+                        <a href="formulario.html" class="btn btn-outline" style="background: rgba(8,8,9,0.7); backdrop-filter: blur(8px);">
+                            Completar Formulario de Salud
+                        </a>
+                    </div>
+                    <div class="pill-container" style="margin-top: 22px; margin-bottom: 0; gap: 8px;">
+                        <span class="pill pill-dark">MOVE • Yoga Pasivo</span>
+                        <span class="pill pill-dark">BODY • Deep Tissue</span>
+                        <span class="pill pill-dark">MIND • Sound Bath</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="padding: 60px 6% 90px; border-top: 1px solid var(--border-subtle); text-align: center; background: var(--bg-surface);">
+            <div style="margin-bottom: 20px;">
+                <img src="img/logo-blanco.png" alt="SENS TRAIN & WELLNESS" class="brand-logo-img-footer">
+                <p style="font-size: 0.8rem; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-top: 4px;">Entrenamiento y Bienestar | con Nico</p>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 24px;">
+                "Sentite mejor en tu cuerpo. Una transformación que se nota por fuera y se siente por dentro."
             </p>
-            <div class="hero-actions">
-                <a href="#trilogy" class="cta-secondary" data-i18n="btn-discover">Descubrir SENS</a>
-                <a href="#booking-experience" class="cta-main" data-i18n="btn-reserve-hero">Reservar Sesión</a>
+            <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 24px;">
+                <a href="https://www.instagram.com/sens.wellness.ba/" target="_blank" rel="noopener" style="color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; letter-spacing: 1px;">@sens.wellness.ba</a>
+                <span style="color: var(--text-muted);">•</span>
+                <a href="https://wa.me/5491136329846" target="_blank" rel="noopener" style="color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; letter-spacing: 1px;">WhatsApp Directo</a>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">&copy; 2026 SENS Train & Wellness. Todos los derechos reservados. CABA, Argentina.</p>
+        </footer>
+    </main>
+
+    <!-- Barra Rápida Flotante en Móviles -->
+    <div class="mobile-quick-bar">
+        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20agendar%20una%20Evaluaci%C3%B3n%20Inicial%20en%20SENS%20TRAIN."
+            target="_blank" rel="noopener" class="btn btn-primary mobile-quick-main-cta">
+            Agendar Evaluación
+        </a>
+        <button class="btn btn-outline" id="mobileQuickAccessBtn">
+            Acceso
+        </button>
+    </div>
+
+    <!-- =========================================================================
+         MÓDULO 3: MODAL DE AUTENTICACIÓN (SUPABASE AUTH)
+         ========================================================================= -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="closeAuthModalBtn" aria-label="Cerrar">&times;</button>
+            <img src="img/logo-blanco.png" alt="SENS TRAIN & WELLNESS" class="brand-logo-img-modal">
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-primary); letter-spacing: 2px;">PORTAL DE ATLETAS</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Acceso exclusivo para miembros y alumnos</p>
+
+            <!-- Selector de Pestañas -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabLoginBtn">Iniciar Sesión</button>
+                <button class="auth-tab" id="tabRegisterBtn">Registrarme</button>
+            </div>
+
+            <!-- Alerta de Feedback -->
+            <div class="auth-alert" id="authAlertBox"></div>
+
+            <!-- Vista 1: Login Form -->
+            <form class="auth-pane active" id="loginForm">
+                <div class="input-group">
+                    <label class="input-label" for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="input-control" placeholder="tu@email.com" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" class="input-control" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="submitLoginBtn">Ingresar a mi Portal</button>
+                <p style="margin-top: 16px; font-size: 11px; color: var(--text-muted);">
+                    ¿Primer día? Seleccioná <strong>Registrarme</strong> para configurar tu perfil.
+                </p>
+            </form>
+
+            <!-- Vista 2: Register Form -->
+            <form class="auth-pane" id="registerForm">
+                <div class="input-group">
+                    <label class="input-label" for="regFullName">Nombre y Apellido</label>
+                    <input type="text" id="regFullName" class="input-control" placeholder="Tu nombre" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="regEmail">Email</label>
+                    <input type="email" id="regEmail" class="input-control" placeholder="tu@email.com" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="regPassword">Contraseña</label>
+                    <input type="password" id="regPassword" class="input-control" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="submitRegBtn">Crear Cuenta & Comenzar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         ESTRUCTURA CONTENEDORA OCULTA DEL PORTAL DE USUARIO (#app-container)
+         ========================================================================= -->
+    <div id="app-container">
+        <!-- Barra Superior del Portal -->
+        <div class="portal-topbar">
+            <div class="portal-brand">
+                <img src="img/logo-blanco.png" alt="SENS" class="brand-logo-img-portal">
+                <span class="pill pill-champagne" id="portalPlanBadge">Plan Personalizado SENS TRAIN</span>
+            </div>
+            <div class="portal-user-badge">
+                <span style="font-size: 13px; color: var(--text-secondary);" id="portalUserEmail">usuario@sens.com</span>
+                <button class="btn btn-outline btn-sm" id="logoutBtn">Cerrar Sesión</button>
             </div>
         </div>
-    </section>
 
-    <!-- The Trilogy System -->
-    <section class="trilogy-section" id="trilogy">
-        <div class="section-header reveal">
-            <h2 class="section-title" data-i18n="trilogy-title">T R I L O G Y</h2>
-            <p class="section-description" data-i18n="trilogy-desc">Sesiones de 90 min (aprox.) en tu hogar.</p>
-            <span class="interaction-hint" data-i18n="interaction-hint">Descubre cada carta interactuando</span>
-        </div>
-        <div class="trilogy-grid">
-            <!-- Card 1: SOUL -->
-            <div class="flip-card reveal delay-1">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front"
-                        style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%), url('img/yoga.webp');">
-                        <div class="explore-icon">+</div>
-                        <div class="card-overlay">
-                            <span class="step-number" data-i18n="step-1-header">STEP 01. 15 MIN (aprox.)</span>
-                            <h3 data-i18n="move-title">MOVE</h3>
+        <!-- Barra de Navegación del Portal -->
+        <nav class="portal-nav-bar" id="portalSubNav">
+            <button class="portal-nav-item active" data-portal-tab="dashView">Dashboard</button>
+            <button class="portal-nav-item" data-portal-tab="workoutView">Mi Entrenamiento</button>
+            <button class="portal-nav-item" data-portal-tab="nutritionView">Nutrición & Hábitos</button>
+            <button class="portal-nav-item" data-portal-tab="trackingView">Seguimiento Diario</button>
+            <button class="portal-nav-item" id="btnBackToLanding" style="margin-left:auto; color:var(--accent-primary);">← Volver a Web Pública</button>
+        </nav>
+
+        <div class="portal-body">
+            <!-- =====================================================================
+                 MÓDULO 4: ONBOARDING INTERACTIVO (WIZARD DE 3 PASOS)
+                 ===================================================================== -->
+            <section class="portal-view" id="onboardingSection">
+                <div class="onboarding-card">
+                    <div style="text-align: center; margin-bottom: 24px;">
+                        <span class="pill pill-champagne">Bienvenido a SENS</span>
+                        <h2 style="font-size: 1.8rem; font-weight: 800; text-transform: uppercase; margin-top: 10px;">Configurá tu Perfil</h2>
+                        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">
+                            Completá estos 3 pasos para adaptar las cargas, objetivos y hábitos a tu vida real.
+                        </p>
+                    </div>
+
+                    <!-- Indicador visual de pasos -->
+                    <div class="wizard-steps-header">
+                        <div class="wizard-progress-line"><div class="wizard-progress-bar-fill" id="wizardProgressBar"></div></div>
+                        <div class="step-node active" id="stepNode1">
+                            <div class="step-circle">1</div>
+                            <span class="step-title">Biometría</span>
+                        </div>
+                        <div class="step-node" id="stepNode2">
+                            <div class="step-circle">2</div>
+                            <span class="step-title">Objetivos</span>
+                        </div>
+                        <div class="step-node" id="stepNode3">
+                            <div class="step-circle">3</div>
+                            <span class="step-title">Hábitos</span>
                         </div>
                     </div>
-                    <div class="flip-card-back glass-panel">
-                        <span class="step-number" data-i18n="step-1-label">STEP 01. </span>
-                        <h3 data-i18n="move-title">MOVE</h3>
-                        <p data-i18n="move-detail">15 minutos aprox. de Yoga pasivo.<br> <br>Activa el flujo energético
-                            y libera tensiones
-                            articulares
-                            para preparar el cuerpo.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Card 2: BODY -->
-            <div class="flip-card reveal delay-2">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front"
-                        style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%), url('img/masajes.webp');">
-                        <div class="explore-icon">+</div>
-                        <div class="card-overlay">
-                            <span class="step-number" data-i18n="step-2-header">STEP 02. 60 MIN (aprox.)</span>
-                            <h3 data-i18n="body-title">BODY</h3>
-                        </div>
-                    </div>
-                    <div class="flip-card-back glass-panel">
-                        <span class="step-number" data-i18n="step-2-label">STEP 02.</span>
-                        <h3 data-i18n="body-title">BODY</h3>
-                        <p data-i18n="body-detail">60 minutos aprox. de masaje de tejido profundo. <br><br>Liberación
-                            miofascial profunda
-                            utilizando
-                            óleos botánicos destilados premium.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Card 3: MIND -->
-            <div class="flip-card reveal delay-3">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front"
-                        style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%), url('img/meditacion.webp');">
-                        <div class="explore-icon">+</div>
-                        <div class="card-overlay">
-                            <span class="step-number" data-i18n="step-3-header">STEP 03. 15 MIN (aprox.)</span>
-                            <h3 data-i18n="mind-title">MIND</h3>
-                        </div>
-                    </div>
-                    <div class="flip-card-back glass-panel">
-                        <span class="step-number" data-i18n="step-3-label">STEP 03.</span>
-                        <h3 data-i18n="mind-title">MIND</h3>
-                        <p data-i18n="mind-detail">15 minutos aprox. de meditación guiada y neuro-acústica.<br> <br>
-                            Silencia el ruido interno y
-                            reinicia tu sistema nervioso hacia una relajación final.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="section-actions reveal" style="text-align: center; margin-top: 4rem;">
-            <a href="#booking-experience" class="cta-main" data-i18n="btn-reserve-all">Reservar Sesión Integral</a>
-        </div>
-    </section>
 
-    <!-- Video Experience Showcase (Isolated) -->
-    <section class="video-reel-section">
-        <div class="reel-layout-container reveal">
-            <div class="reel-text-side">
-                <span class="reel-badge" data-i18n="reel-badge">AT HOME EXPERIENCE</span>
-                <h2 class="reel-header-title" data-i18n="reel-title">SENS EXPERIENCE</h2>
-                <p class="reel-description-text" data-i18n="reel-desc">Sumergite en la atmósfera SENS: un viaje
-                    sensorial diseñado para resetear tu sistema nervioso sin salir de casa.</p>
-                <div class="reel-benefits">
-                    <div class="benefit-item">
-                        <span class="benefit-icon">✓</span>
-                        <span data-i18n="benefit-1">Terapeutas especializados</span>
-                    </div>
-                    <div class="benefit-item">
-                        <span class="benefit-icon">✓</span>
-                        <span data-i18n="benefit-2">Equipamiento premium incluido</span>
-                    </div>
-                    <div class="benefit-item">
-                        <span class="benefit-icon">✓</span>
-                        <span data-i18n="benefit-3">Experiencia 100% personalizada</span>
-                    </div>
-                </div>
-            </div>
-            <div class="reel-video-side">
-                <div class="reel-frame glass-panel">
-                    <!-- Controls added, muted removed for sound, playsinline for mobile -->
-                    <video loop playsinline class="reel-video-player" id="promoReel" controls preload="none">
-                        <source src="vid/promo-reel-opt.mp4" type="video/mp4">
-                    </video>
-                    <div class="reel-interaction-layer">
-                        <span class="mute-hint" data-i18n="mute-hint">Tap to unmute</span>
-                    </div>
-                    <div class="reel-visual-glow"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="pricing-section">
-        <video autoplay muted loop playsinline class="pricing-video">
-            <source src="vid/pricing-bg-opt.mp4" type="video/mp4">
-            <!-- https://assets.mixkit.co/videos/preview/mixkit-spa-massage-therapy-ambient-shot-44445-large.mp4 -->
-        </video>
-        <div class="pricing-overlay"></div>
-        <div class="pricing-container">
-            <div class="section-header reveal">
-                <h2 class="section-title" data-i18n="pricing-title">B O O K <BR>E X P E R I E N C E</h2>
-                <p class="section-description" data-i18n="pricing-subtitle">Llevamos la experiencia SENS a tu hogar.
-                    Sesiones exclusivas a domicilio.</p>
-            </div>
-            <div class="pricing-grid">
-                <!-- Card 1: Masaje Recovery -->
-                <div class="pricing-card glass-panel">
-                    <div class="pricing-header">
-                        <h3 data-i18n="card-massage-title">Masaje Recovery</h3>
-                        <div class="pricing-options-grid" style="display: flex; justify-content: center; border: none;">
-                            <div class="option-box">
-                                <span class="pricing-price consult-style" data-i18n="consult-price">60 / 90 MIN - A
-                                    CONSULTAR</span>
+                    <form id="onboardingWizardForm">
+                        <!-- PASO 1: Biometría -->
+                        <div class="wizard-step-pane active" id="wizardStep1">
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="input-label" for="obFullName">Nombre Completo</label>
+                                    <input type="text" id="obFullName" class="input-control" placeholder="Tu nombre" required>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label" for="obAge">Edad (años)</label>
+                                    <input type="number" id="obAge" class="input-control" placeholder="Ej: 42" min="15" max="100" required>
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="input-label" for="obWeight">Peso Actual (kg)</label>
+                                    <input type="number" step="0.1" id="obWeight" class="input-control" placeholder="Ej: 78.5" required>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label" for="obHeight">Altura (cm)</label>
+                                    <input type="number" id="obHeight" class="input-control" placeholder="Ej: 176" required>
+                                </div>
+                            </div>
+                            <div style="text-align: right; margin-top: 20px;">
+                                <button type="button" class="btn btn-primary" id="wizardNext1">Siguiente: Objetivos →</button>
                             </div>
                         </div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><strong data-i18n="feature-home">Sesión a domicilio</strong></li>
-                        <li data-i18n="feature-deep">Masaje de tejido profundo</li>
-                        <li data-i18n="feature-recovery">Recuperación muscular avanzada</li>
-                    </ul>
-                    <a href="https://wa.me/5491136329846?text=Hola!%20Quiero%20reservar%20una%20Sesión%20de%20Masaje%20Recovery"
-                        class="cta-secondary block" style="text-align:center" data-i18n="btn-reserve">Agendar Sesión</a>
-                </div>
 
-                <!-- Card 2: Trilogy Experience (Featured) -->
-                <div class="pricing-card featured glass-panel" id="booking-experience">
-                    <div class="featured-badge">RECOMENDADO</div>
-                    <div class="pricing-header">
-                        <h3 data-i18n="card-trilogy-title">Trilogy Experience</h3>
-                        <div class="pricing-price consult-style" data-i18n="trilogy-price">A CONSULTAR</div>
-                        <div class="pricing-duration">90 MIN</div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><strong data-i18n="feature-home">Sesión a domicilio</strong></li>
-                        <li data-i18n="feature-trilogy-1">Yoga + Masajes + Meditación</li>
-                        <li data-i18n="feature-trilogy-2">Trilogy Experience completa</li>
-                    </ul>
-                    <a href="https://wa.me/5491136329846?text=Hola!%20Quiero%20reservar%20una%20Trilogy%20Experience"
-                        class="cta-main block" style="text-align:center" data-i18n="btn-reserve">Agendar Experiencia</a>
-                </div>
+                        <!-- PASO 2: Objetivos & Lesiones -->
+                        <div class="wizard-step-pane" id="wizardStep2">
+                            <div style="margin-bottom: 24px;">
+                                <label class="input-label" style="margin-bottom: 12px;">Objetivo Principal de Entrenamiento (Única opción)</label>
+                                <div class="selection-group">
+                                    <label class="selection-item">
+                                        <input type="radio" name="obGoal" value="fuerza" checked>
+                                        <div class="custom-circle"></div>
+                                        <span class="selection-label"><strong>Fuerza como Base</strong> — Aumentar fuerza funcional, densidad y capacidad general</span>
+                                    </label>
+                                    <label class="selection-item">
+                                        <input type="radio" name="obGoal" value="hipertrofia">
+                                        <div class="custom-circle"></div>
+                                        <span class="selection-label"><strong>Hipertrofia & Composición</strong> — Ganancia muscular visible y reducción de grasa</span>
+                                    </label>
+                                    <label class="selection-item">
+                                        <input type="radio" name="obGoal" value="movilidad">
+                                        <div class="custom-circle"></div>
+                                        <span class="selection-label"><strong>Movilidad & Salud Postural</strong> — Descomprimir columna, ganar flexibilidad y moverme sin dolor</span>
+                                    </label>
+                                    <label class="selection-item">
+                                        <input type="radio" name="obGoal" value="recomposicion">
+                                        <div class="custom-circle"></div>
+                                        <span class="selection-label"><strong>Recomposición Sostenible</strong> — Hábitos de actividad para mi rutina laboral exigente</span>
+                                    </label>
+                                </div>
+                            </div>
 
-                <!-- Card 3: Personal Train o Yoga -->
-                <div class="pricing-card glass-panel">
-                    <div class="pricing-header">
-                        <h3 data-i18n="card-personal-title">Personal Train o Yoga</h3>
-                        <div class="pricing-options-grid" style="display: flex; justify-content: center; border: none;">
-                            <div class="option-box">
-                                <span class="pricing-price consult-style" data-i18n="consult-price">A CONSULTAR</span>
+                            <div style="margin-bottom: 24px;">
+                                <label class="input-label" style="margin-bottom: 12px;">Contexto / Molestias o Lesiones previas (Múltiples opciones)</label>
+                                <div class="selection-group">
+                                    <label class="selection-item">
+                                        <input type="checkbox" name="obInjuries" value="lumbar">
+                                        <div class="custom-box"></div>
+                                        <span class="selection-label">Dolor lumbar crónico o hernias de disco</span>
+                                    </label>
+                                    <label class="selection-item">
+                                        <input type="checkbox" name="obInjuries" value="cervical">
+                                        <div class="custom-box"></div>
+                                        <span class="selection-label">Tensión cervical / hombros por horas de pantalla</span>
+                                    </label>
+                                    <label class="selection-item">
+                                        <input type="checkbox" name="obInjuries" value="rodillas">
+                                        <div class="custom-box"></div>
+                                        <span class="selection-label">Molestias en rodillas o meniscos</span>
+                                    </label>
+                                    <label class="selection-item">
+                                        <input type="checkbox" name="obInjuries" value="cirugia">
+                                        <div class="custom-box"></div>
+                                        <span class="selection-label">Cirugía en los últimos 12 meses</span>
+                                    </label>
+                                    <label class="selection-item">
+                                        <input type="checkbox" name="obInjuries" value="ninguna">
+                                        <div class="custom-box"></div>
+                                        <span class="selection-label">Sin molestias ni lesiones diagnosticadas</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                                <button type="button" class="btn btn-secondary" id="wizardPrev2">← Volver</button>
+                                <button type="button" class="btn btn-primary" id="wizardNext2">Siguiente: Hábitos →</button>
                             </div>
                         </div>
+
+                        <!-- PASO 3: Hábitos -->
+                        <div class="wizard-step-pane" id="wizardStep3">
+                            <div class="input-group">
+                                <label class="input-label">Nivel de Estrés Diario (Escala 1 al 10)</label>
+                                <div class="range-display-wrap">
+                                    <input type="range" id="obStressRange" min="1" max="10" value="6" class="range-slider">
+                                    <span class="range-value-badge" id="obStressVal">6</span>
+                                </div>
+                                <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block;">1 = Muy relajado, 10 = Estrés extremo / sobrecarga</span>
+                            </div>
+
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="input-label" for="obSleepHours">Horas de Sueño Promedio</label>
+                                    <input type="number" step="0.5" id="obSleepHours" class="input-control" placeholder="Ej: 7" value="7" required>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label" for="obStepTarget">Objetivo Diario de Pasos</label>
+                                    <input type="number" id="obStepTarget" class="input-control" value="10000" required>
+                                    <span style="font-size: 11px; color: var(--accent-primary); margin-top: 4px; display: block;">Recomendado por defecto: 10.000 pasos</span>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+                                <button type="button" class="btn btn-secondary" id="wizardPrev3">← Volver</button>
+                                <button type="submit" class="btn btn-primary" id="submitOnboardingBtn">Guardar Perfil y Comenzar →</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- =====================================================================
+                 MÓDULO 5: DASHBOARD DE BIENVENIDA
+                 ===================================================================== -->
+            <section class="portal-view active" id="dashView">
+                <div class="dash-welcome-card">
+                    <div>
+                        <span class="pill pill-champagne" style="margin-bottom: 8px;">Portal del Atleta</span>
+                        <h2 class="dash-heading">Hola <span id="dashUserName">Atleta</span>. <strong>Sentite mejor en tu cuerpo hoy.</strong></h2>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px;">
+                            Tu constancia construye el cambio. Repasá tus números de la semana y arrancá el entrenamiento del día.
+                        </p>
                     </div>
-                    <ul class="pricing-features" style="margin-top: 1.5rem;">
-                        <li><strong data-i18n="feature-personal-1">A domicilio / Gym / Online</strong></li>
-                        <li data-i18n="feature-personal-2">Entrenamiento O Yoga Personalizado</li>
-                    </ul>
-                    <a href="https://wa.me/5491136329846?text=Hola!%20Quiero%20info%20sobre%20Personal%20Train%20o%20Yoga"
-                        class="cta-secondary block" style="text-align:center; margin-top: auto;"
-                        data-i18n="consult-plan">Consultar Plan</a>
+                    <div>
+                        <button class="btn btn-primary" id="dashQuickWorkoutBtn">Comenzar Entrenamiento de Hoy →</button>
+                    </div>
                 </div>
+
+                <!-- Métricas KPIs de la semana -->
+                <div class="kpi-metrics-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Días Entrenados (Semana)</div>
+                        <div class="kpi-value" id="kpiWorkoutsWeek">3 / 3</div>
+                        <div class="kpi-sub">Objetivo semanal completado</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Evolución de Peso</div>
+                        <div class="kpi-value" id="kpiCurrentWeight">78.2 <span style="font-size:1rem; font-weight:400;">kg</span></div>
+                        <div class="kpi-sub text-champagne">-0.8 kg este mes</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Pasos Diarios Promedio</div>
+                        <div class="kpi-value" id="kpiAvgSteps">10.420</div>
+                        <div class="kpi-sub">Meta activa: 10.000 pasos</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Nivel de Recuperación</div>
+                        <div class="kpi-value" style="color: var(--success);">Óptimo</div>
+                        <div class="kpi-sub">7.5h de sueño promedio</div>
+                    </div>
+                </div>
+
+                <!-- Card Destacada de Acción -->
+                <div class="action-hero-card">
+                    <div>
+                        <span class="pill pill-dark" style="margin-bottom: 8px;">Sesión Asignada</span>
+                        <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+                            DÍA 1: FUERZA TREN SUPERIOR (Empuje / Tirón)
+                        </h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                            4 ejercicios principales • Tiempo estimado: 50 minutos • Enfoque: Fuerza & Estabilidad escápulo-humeral
+                        </p>
+                    </div>
+                    <button class="btn btn-outline" id="dashGoWorkoutDetailBtn">Ver Rutina y Registrar Sets</button>
+                </div>
+            </section>
+
+            <!-- =====================================================================
+                 MÓDULO 6: GESTOR DE RUTINAS Y ENTRENAMIENTO
+                 ===================================================================== -->
+            <section class="portal-view" id="workoutView">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; font-weight: 800; text-transform: uppercase;">GESTOR DE RUTINAS</h2>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Registrá tus pesos y repeticiones táctilmente. El timer de descanso se activará automáticamente al marcar cada set.</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnFinishWorkoutSession">✓ Finalizar Rutina de Hoy</button>
+                </div>
+
+                <!-- Selector de días -->
+                <div class="workout-days-nav">
+                    <button class="day-tab-btn active" data-day="day1">Día 1: Tren Superior (Empuje / Tirón)</button>
+                    <button class="day-tab-btn" data-day="day2">Día 2: Tren Inferior (Fuerza & Cadera)</button>
+                    <button class="day-tab-btn" data-day="day3">Día 3: Full Body & Conciencia Postural</button>
+                </div>
+
+                <!-- Lista de ejercicios dinámica -->
+                <div id="exercisesContainer">
+                    <!-- Ejercicio 1 -->
+                    <div class="exercise-item-card" data-exercise-id="ex-1">
+                        <div class="exercise-header-row">
+                            <div>
+                                <h3 class="exercise-title">1. Peso Muerto Rumano con Mancuernas</h3>
+                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Foco en bisagra de cadera y activación de isquiosurales y glúteos.</div>
+                            </div>
+                            <div class="exercise-meta-pills">
+                                <span class="pill pill-dark">4 Series</span>
+                                <span class="pill pill-dark">8-10 Reps</span>
+                                <span class="pill pill-champagne">Descanso: 90s</span>
+                                <button class="btn btn-outline btn-sm btn-video-demo" data-video-title="Técnica: Peso Muerto Rumano">Video Técnica</button>
+                            </div>
+                        </div>
+
+                        <div class="sets-table-wrap">
+                            <table class="sets-tracker-table">
+                                <thead>
+                                    <tr>
+                                        <th>Set</th>
+                                        <th>Reps Sugeridas</th>
+                                        <th>Peso Utilizado (kg)</th>
+                                        <th>Reps Logradas</th>
+                                        <th>Completado (Timer)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Set 1</strong></td>
+                                        <td>8 - 10</td>
+                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="22.5" value="22.5"></td>
+                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="10" value="10"></td>
+                                        <td>
+                                            <label class="selection-item" style="justify-content: center;">
+                                                <input type="checkbox" class="set-completed-chk" data-rest="90">
+                                                <div class="custom-box"></div>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Set 2</strong></td>
+                                        <td>8 - 10</td>
+                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="24" value="24"></td>
+                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="10" value="9"></td>
+                                        <td>
+                                            <label class="selection-item" style="justify-content: center;">
+                                                <input type="checkbox" class="set-completed-chk" data-rest="90">
+                                                <div class="custom-box"></div>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Set 3</strong></td>
+                                        <td>8 - 10</td>
+                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="24" value="24"></td>
+                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="8" value="8"></td>
+                                        <td>
+                                            <label class="selection-item" style="justify-content: center;">
+                                                <input type="checkbox" class="set-completed-chk" data-rest="90">
+                                                <div class="custom-box"></div>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 2 -->
+                    <div class="exercise-item-card" data-exercise-id="ex-2">
+                        <div class="exercise-header-row">
+                            <div>
+                                <h3 class="exercise-title">2. Press Plano con Mancuernas en Banco</h3>
+                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Empuje horizontal controlado con retracción escapular activa.</div>
+                            </div>
+                            <div class="exercise-meta-pills">
+                                <span class="pill pill-dark">3 Series</span>
+                                <span class="pill pill-dark">10-12 Reps</span>
+                                <span class="pill pill-champagne">Descanso: 75s</span>
+                                <button class="btn btn-outline btn-sm btn-video-demo" data-video-title="Técnica: Press con Mancuernas">Video Técnica</button>
+                            </div>
+                        </div>
+
+                        <div class="sets-table-wrap">
+                            <table class="sets-tracker-table">
+                                <thead>
+                                    <tr>
+                                        <th>Set</th>
+                                        <th>Reps Sugeridas</th>
+                                        <th>Peso Utilizado (kg)</th>
+                                        <th>Reps Logradas</th>
+                                        <th>Completado (Timer)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Set 1</strong></td>
+                                        <td>10 - 12</td>
+                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="18" value="18"></td>
+                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="12" value="12"></td>
+                                        <td>
+                                            <label class="selection-item" style="justify-content: center;">
+                                                <input type="checkbox" class="set-completed-chk" data-rest="75">
+                                                <div class="custom-box"></div>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Set 2</strong></td>
+                                        <td>10 - 12</td>
+                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="18" value="18"></td>
+                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="11" value="11"></td>
+                                        <td>
+                                            <label class="selection-item" style="justify-content: center;">
+                                                <input type="checkbox" class="set-completed-chk" data-rest="75">
+                                                <div class="custom-box"></div>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================================
+                 MÓDULO 7: NUTRICIÓN Y SEGUIMIENTO INTEGRAL
+                 ===================================================================== -->
+            <!-- Sub-vista 1: Nutrición & Hábitos -->
+            <section class="portal-view" id="nutritionView">
+                <div class="section-head" style="text-align: left; margin-bottom: 30px;">
+                    <span class="section-eyebrow">Lineamientos & Hábitos</span>
+                    <h2 class="section-main-title">NUTRICIÓN <span class="text-champagne">Y HÁBITOS SALUDABLES</span></h2>
+                    <p class="section-lead">Estructura sin dogmas. Mantener un aporte proteico regular e hidratación óptima es el 80% de tus resultados físicos.</p>
+                </div>
+
+                <div class="nutrition-grid">
+                    <!-- Targets Calóricos y Macros -->
+                    <div class="card-panel">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="pill pill-champagne">Meta Diaria</span>
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Recomposición Activa</span>
+                        </div>
+                        <div style="margin: 20px 0;">
+                            <div style="font-size: 2.8rem; font-weight: 800; color: var(--accent-primary); line-height: 1;">
+                                2.250 <span style="font-size: 1.2rem; font-weight: 400; color: var(--text-secondary);">kcal</span>
+                            </div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Target calórico diario estimado</div>
+                        </div>
+
+                        <!-- Distribución de Macros -->
+                        <div class="macros-card-grid">
+                            <div class="macro-box">
+                                <span class="macro-box-title">Proteínas</span>
+                                <div class="macro-box-grams">155g</div>
+                                <span class="macro-box-cal">28% (620 kcal)</span>
+                            </div>
+                            <div class="macro-box">
+                                <span class="macro-box-title">Carbohidratos</span>
+                                <div class="macro-box-grams">235g</div>
+                                <span class="macro-box-cal">42% (940 kcal)</span>
+                            </div>
+                            <div class="macro-box">
+                                <span class="macro-box-title">Grasas</span>
+                                <div class="macro-box-grams">75g</div>
+                                <span class="macro-box-cal">30% (675 kcal)</span>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                            *Ajustado según tu nivel de actividad y días de fuerza. Consumir carbohidratos complejos antes y después del entrenamiento.
+                        </p>
+                    </div>
+
+                    <!-- Checklist de Hábitos -->
+                    <div class="card-panel">
+                        <span class="pill pill-dark" style="margin-bottom: 16px;">Checklist Diario</span>
+                        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; color: var(--text-primary);">Hábitos Esenciales SENS</h3>
+                        
+                        <div class="selection-group">
+                            <label class="selection-item">
+                                <input type="checkbox" id="habitProtein" checked>
+                                <div class="custom-box"></div>
+                                <span class="selection-label"><strong>Proteína en cada comida:</strong> Mínimo 30g por ingesta principal</span>
+                            </label>
+                            <label class="selection-item">
+                                <input type="checkbox" id="habitWater" checked>
+                                <div class="custom-box"></div>
+                                <span class="selection-label"><strong>Hidratación consciente:</strong> Al menos 2.5 litros de agua al día</span>
+                            </label>
+                            <label class="selection-item">
+                                <input type="checkbox" id="habitPreWorkout">
+                                <div class="custom-box"></div>
+                                <span class="selection-label"><strong>Comida pre-entreno:</strong> Carbohidrato ligero 60-90 min antes de la sesión</span>
+                            </label>
+                            <label class="selection-item">
+                                <input type="checkbox" id="habitSleep">
+                                <div class="custom-box"></div>
+                                <span class="selection-label"><strong>Higiene de sueño:</strong> Apagar pantallas 30 min antes de dormir</span>
+                            </label>
+                        </div>
+                        <button class="btn btn-outline btn-full btn-sm" id="btnSaveHabits">Guardar Hábitos de Hoy</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sub-vista 2: Seguimiento Diario & Gráficos -->
+            <section class="portal-view" id="trackingView">
+                <div class="section-head" style="text-align: left; margin-bottom: 30px;">
+                    <span class="section-eyebrow">Registro & Progreso</span>
+                    <h2 class="section-main-title">DAILY LOG <span class="text-champagne">& EVOLUCIÓN</span></h2>
+                    <p class="section-lead">Cargá tus datos de hoy para visualizar la tendencia de peso y pasos a lo largo del tiempo.</p>
+                </div>
+
+                <!-- Formulario Daily Log -->
+                <div class="card-panel" style="margin-bottom: 30px;">
+                    <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: var(--accent-primary);">Registro Diario de Hoy</h3>
+                    <form id="dailyLogForm">
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label class="input-label" for="logWeight">Peso de Hoy (kg)</label>
+                                <input type="number" step="0.1" id="logWeight" class="input-control" placeholder="Ej: 78.2" required>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="logSteps">Pasos Caminados Hoy</label>
+                                <input type="number" id="logSteps" class="input-control" placeholder="Ej: 10450" required>
+                            </div>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label class="input-label" for="logCalories">Calorías Consumidas (Aprox)</label>
+                                <input type="number" id="logCalories" class="input-control" placeholder="Ej: 2200">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="logNotes">Sensaciones / Dolores / Observaciones</label>
+                                <input type="text" id="logNotes" class="input-control" placeholder="Ej: Muy buena energía en sentadillas">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Registrar Métrica Diaria</button>
+                    </form>
+                </div>
+
+                <!-- Gráficos Interactivos (Chart.js) -->
+                <div class="charts-wrapper-grid">
+                    <!-- Gráfico 1: Peso -->
+                    <div class="chart-container-card">
+                        <div class="chart-header">
+                            <div>
+                                <h4 style="font-size: 1.1rem; font-weight: 700;">Evolución de Peso</h4>
+                                <span style="font-size: 11px; color: var(--text-muted);">Últimos 14 registros (kg)</span>
+                            </div>
+                            <span class="pill pill-champagne" id="chartWeightDiff">-1.2 kg</span>
+                        </div>
+                        <div class="chart-canvas-box">
+                            <canvas id="weightChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico 2: Pasos Diarios -->
+                    <div class="chart-container-card">
+                        <div class="chart-header">
+                            <div>
+                                <h4 style="font-size: 1.1rem; font-weight: 700;">Pasos Diarios</h4>
+                                <span style="font-size: 11px; color: var(--text-muted);">Objetivo constante: 10.000 pasos</span>
+                            </div>
+                            <span class="pill pill-success">Meta Cumplida</span>
+                        </div>
+                        <div class="chart-canvas-box">
+                            <canvas id="stepsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         TIMER DE DESCANSO FLOTANTE (MÓDULO 6)
+         ========================================================================= -->
+    <div class="floating-timer-widget" id="floatingRestTimer">
+        <div>
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted);">Descanso Activo</div>
+            <div class="timer-countdown-display" id="timerDisplay">01:30</div>
+        </div>
+        <div class="timer-actions">
+            <button class="btn btn-secondary btn-sm" id="timerAdd15Btn">+15s</button>
+            <button class="btn btn-outline btn-sm" id="timerSkipBtn">Omitir</button>
+        </div>
+    </div>
+
+    <!-- Modal de Video Demostrativo -->
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal-card" style="max-width: 600px;">
+            <button class="modal-close-btn" id="closeVideoModalBtn">&times;</button>
+            <h3 id="videoModalTitle" style="font-size: 1.3rem; margin-bottom: 16px; color: var(--accent-primary);">Demostración Técnica</h3>
+            <div style="aspect-ratio: 16/9; background: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-subtle);">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">[ Video demostrativo de ejecución biomecánica con Nico ]</p>
             </div>
-
-            <div class="pricing-footer reveal">
-                <div class="exclusivity-highlight">
-                    <p data-i18n="coverage-location">📍 <b data-i18n="coverage-title">ZONA DE COBERTURA
-                            EXCLUSIVA:</b><br>CABA (Palermo, Recoleta, Belgrano, Colegiales, Chacarita y Villa
-                        Crespo)<br>LA PLATA</p>
-                </div>
-                <p style="margin-top: 1rem; opacity: 0.7; font-size: 0.8rem;" data-i18n="coverage-desc">Sesiones premium
-                    realizadas exclusivamente
-                    en la comodidad de tu domicilio.</p>
-
-                <div class="form-cta reveal"
-                    style="margin-top: 3rem; text-align: center; padding: 2rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; background: rgba(255,255,255,0.03);">
-                    <h3 style="margin-bottom: 1rem; font-weight: 300; letter-spacing: 2px;" data-i18n="already-booked">
-                        ¿YA RESERVASTE?</h3>
-                    <p style="margin-bottom: 2rem; opacity: 0.8; max-width: 500px; margin-inline: auto;"
-                        data-i18n="form-cta-desc">Para que
-                        podamos adaptar la sesión a tus necesidades (presión, foco, tipo de yoga), por favor completá el
-                        siguiente formulario.</p>
-                    <a href="formulario.html" class="cta-secondary" data-i18n="btn-complete-form">Completar
-                        Formulario</a>
-                </div>
-            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 14px; text-align: left;">
+                Mantené la columna neutra, inhalá antes de iniciar el descenso y exhalá al completar la fase concéntrica de máxima fuerza.
+            </p>
         </div>
-    </section>
+    </div>
 
-
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-logo">
-            <img src="img/logo.webp" alt="SENS Logo" class="logo-img-footer">
-        </div>
-        <p data-i18n="footer-wellness">Wellness & Massage Experience</p>
-        <div class="footer-social" style="margin: 1.5rem 0; display: flex; justify-content: center; gap: 1.5rem;">
-            <a href="https://www.instagram.com/sens.wellness.ba/" target="_blank"
-                style="color: var(--accent); text-decoration: none; font-size: 0.9rem; letter-spacing: 1px;">@sens.wellness.ba</a>
-        </div>
-        <p class="copyright" data-i18n="copyright">&copy; 2026 SENS Wellness. Todos los derechos reservados.</p>
-    </footer>
-
-    <script src="script.js"></script>
-    <div class="floating-social">
-        <a href="https://wa.me/5491136329846" class="social-btn whatsapp" target="_blank" title="WhatsApp">
-            <svg viewBox="0 0 24 24">
-                <path
-                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    <!-- Botones Flotantes de Acceso Rápido: WhatsApp y Redes Sociales -->
+    <div class="floating-social" id="homeFloatingSocial">
+        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Tengo%20una%20consulta%20sobre%20SENS%20TRAIN." class="social-btn whatsapp" target="_blank" rel="noopener" title="WhatsApp con Nico" aria-label="WhatsApp Nico">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
             </svg>
         </a>
-        <a href="https://www.instagram.com/sens.wellness.ba/" class="social-btn instagram" target="_blank"
-            title="Instagram">
-            <svg viewBox="0 0 24 24">
-                <path
-                    d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.558.217.957.477 1.377.896.419.42.679.819.896 1.377.163.422.358 1.057.412 2.227.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.412 2.227-.217.558-.477.957-.896 1.377-.42.419-.819.679-1.377.896-.422.163-1.057.358-2.227.412-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.558-.217-.957-.477-1.377-.896-.419-.42-.679-.819-.896-1.377-.163-.422-.358-1.057-.412-2.227-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.558.477-.957.896-1.377.42-.419.819-.679 1.377-.896.422-.163 1.057-.358 2.227-.412 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 5.775.131 4.903.334 4.148.628c-.78.302-1.442.706-2.102 1.366C1.385 2.654.981 3.315.68 4.094.385 4.85.181 5.722.123 7.001.064 8.281.05 8.688.05 12s.014 3.719.072 4.999c.058 1.279.262 2.151.557 2.906.302.779.706 1.441 1.366 2.101.659.66 1.321 1.064 2.101 1.365.755.295 1.627.499 2.906.558 1.279.058 1.688.072 4.999.072s3.718-.014 4.998-.072c1.279-.059 2.151-.263 2.906-.558.779-.301 1.441-.705 2.101-1.365.66-.66 1.064-1.322 1.366-2.101.295-.755.499-1.627.558-2.906.058-1.279.072-1.688.072-4.999s-.014-3.719-.072-4.999c-.058-1.279-.263-2.151-.558-2.906-.301-.779-.705-1.441-1.365-2.101-.661-.66-1.322-1.064-2.101-1.366-.755-.294-1.627-.498-2.906-.557C15.682.014 15.274 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+        <a href="https://www.instagram.com/sens.wellness.ba/" class="social-btn instagram" target="_blank" rel="noopener" title="Instagram SENS" aria-label="Instagram SENS">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.412.558.217.957.477 1.377.896.419.42.679.819.896 1.377.163.422.358 1.057.412 2.227.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.412 2.227-.217.558-.477.957-.896 1.377-.42.419-.819.679-1.377.896-.422.163-1.057.358-2.227.412-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.412-.558-.217-.957-.477-1.377-.896-.419-.42-.679-.819-.896-1.377-.163-.422-.358-1.057-.412-2.227-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.412-2.227.217-.558.477-.957.896-1.377.42-.419.819-.679 1.377-.896.422-.163 1.057-.358 2.227-.412 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 5.775.131 4.903.334 4.148.628c-.78.302-1.442.706-2.102 1.366C1.385 2.654.981 3.315.68 4.094.385 4.85.181 5.722.123 7.001.064 8.281.05 8.688.05 12s.014 3.719.072 4.999c.058 1.279.262 2.151.557 2.906.302.779.706 1.441 1.366 2.101.659.66 1.321 1.064 2.101 1.365.755.295 1.627.499 2.906.558 1.279.058 1.688.072 4.999.072s3.718-.014 4.998-.072c1.279-.059 2.151-.263 2.906-.558.779-.301 1.441-.705 2.101-1.365.66-.66 1.064-1.322 1.366-2.101.295-.755.499-1.627.558-2.906.058-1.279.072-1.688.072-4.999s-.014-3.719-.072-4.999c-.058-1.279-.263-2.151-.558-2.906-.301-.779-.705-1.441-1.365-2.101-.661-.66-1.322-1.064-2.101-1.366-.755-.294-1.627-.498-2.906-.557C15.682.014 15.274 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
             </svg>
         </a>
     </div>
+
+    <!-- Script Principal de la Aplicación -->
+    <script src="app.js"></script>
 </body>
 
 </html>
