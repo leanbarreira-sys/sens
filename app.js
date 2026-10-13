@@ -63,7 +63,6 @@ async function sendCoachEmailAlert({ type, athleteName, athleteEmail, athletePho
             _subject: `🔔 [SENS ALERTA] ${type}: ${athleteName || 'Nuevo Atleta'}`,
             _template: 'table',
             _captcha: 'false',
-            _cc: 'lean.barreira@gmail.com',
             tipo_evento: type,
             atleta_nombre: athleteName || 'No especificado',
             atleta_email: athleteEmail || 'No especificado',
@@ -74,15 +73,17 @@ async function sendCoachEmailAlert({ type, athleteName, athleteEmail, athletePho
             fecha_registro: new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })
         };
 
-        await fetch('https://formsubmit.co/ajax/nicomaralle@gmail.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-        console.log('[SENS] Alerta enviada a nicomaralle@gmail.com y lean.barreira@gmail.com');
+        const targets = ['nicomaralle@gmail.com', 'lean.barreira@gmail.com'];
+        await Promise.allSettled(targets.map(targetEmail => 
+            fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            }).then(r => r.json()).then(res => console.log(`[SENS] Alerta para ${targetEmail}:`, res))
+        ));
     } catch (err) {
         console.warn('[SENS] Error despachando alerta por correo al coach:', err);
     }
