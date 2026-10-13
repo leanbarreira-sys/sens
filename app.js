@@ -55,6 +55,40 @@ function isCurrentUserAdmin() {
 }
 
 // -----------------------------------------------------------------------------
+// NOTIFICACIONES AUTOMÁTICAS POR EMAIL A NICO & LEAN
+// -----------------------------------------------------------------------------
+async function sendCoachEmailAlert({ type, athleteName, athleteEmail, athletePhone, goal, modality, details }) {
+    try {
+        const payload = {
+            _subject: `🔔 [SENS ALERTA] ${type}: ${athleteName || 'Nuevo Atleta'}`,
+            _template: 'table',
+            _captcha: 'false',
+            _cc: 'lean.barreira@gmail.com',
+            tipo_evento: type,
+            atleta_nombre: athleteName || 'No especificado',
+            atleta_email: athleteEmail || 'No especificado',
+            atleta_telefono: athletePhone || 'No especificado',
+            objetivo_fitness: goal || 'No especificado',
+            modalidad_plan: modality || 'Plan SENS',
+            detalles_ficha: details || 'Sin detalles adicionales',
+            fecha_registro: new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })
+        };
+
+        await fetch('https://formsubmit.co/ajax/nicomaralle@gmail.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        console.log('[SENS] Alerta enviada a nicomaralle@gmail.com y lean.barreira@gmail.com');
+    } catch (err) {
+        console.warn('[SENS] Error despachando alerta por correo al coach:', err);
+    }
+}
+
+// -----------------------------------------------------------------------------
 // PERFILES MOCK DE MULTI-USUARIO (Soporte para roles de Supabase)
 // -----------------------------------------------------------------------------
 const MOCK_USER_PROFILES = {
@@ -537,6 +571,16 @@ function initLeadCapture() {
             // Mensaje preconfigurado para WhatsApp de Nico
             const waText = encodeURIComponent(`Hola Nico! Me gustaría agendar una Evaluación Inicial en SENS.\nMi nombre es: ${fullName}\nModalidad de interés: ${modality}\nMi objetivo: ${goal}`);
             const waUrl = `https://wa.me/5491136329846?text=${waText}`;
+
+            // Enviar alerta inmediata a los mails de Nico y Lean
+            sendCoachEmailAlert({
+                type: 'Evaluación Inicial Solicitada (Lead Web)',
+                athleteName: fullName,
+                athletePhone: phone,
+                modality: modality,
+                goal: goal,
+                details: 'El prospecto completó el formulario en la web y se le abrió el chat de WhatsApp.'
+            }).catch(() => {});
 
             // Abrir WhatsApp
             window.open(waUrl, '_blank');
@@ -1284,6 +1328,14 @@ function initAuthModal() {
             };
             localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
         }
+
+        // Enviar alerta inmediata a los mails de Nico y Lean
+        sendCoachEmailAlert({
+            type: 'Nueva Cuenta Creada (Atleta Registrado)',
+            athleteName: fullName,
+            athleteEmail: email,
+            details: 'El usuario se acaba de registrar en el portal. Su estado inicial es: PENDIENTE DE ACTIVACIÓN.'
+        }).catch(() => {});
 
         showAuthAlert('¡Cuenta creada con éxito! Ingresando a tu cuenta...', 'success');
         updateAuthNavButtons();
@@ -2441,6 +2493,16 @@ async function processDiagnosisSubmission() {
             console.error('[SENS] Error sincronizando diagnóstico con Supabase:', err);
         }
     }
+
+    // Enviar alerta completa a Nico y Lean con el expediente terminado
+    sendCoachEmailAlert({
+        type: 'Diagnóstico Biomecánico & Fuerza Completado',
+        athleteName: fullName,
+        athleteEmail: (AppState.user && AppState.user.email) ? AppState.user.email : 'N/A',
+        goal: goal,
+        modality: cleanProfilePayload.active_plan_name,
+        details: `Edad: ${age || '-'} años | Peso: ${weight || '-'}kg | Altura: ${height || '-'}cm | Pasos diarios recomendados: ${calculatedStepTarget} | Frecuencia: ${weeklyFrequency}x/sem | Micro-hábitos y expediente listos para calibración.`
+    }).catch(() => {});
 
     // Avanzar a la pantalla de felicitaciones (Paso 9)
     window.diagWizardGoStep(9, '¡Diagnóstico completado con éxito!');
