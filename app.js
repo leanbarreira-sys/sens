@@ -1263,9 +1263,18 @@ function initAuthModal() {
             AppState.profile = { 
                 id: data.user.id, 
                 full_name: fullName, 
+                email: email,
+                role: 'user_normal',
+                user_type: 'client_presencial_vip',
                 subscription_status: 'pending_activation',
+                billing_provider: 'manual',
                 onboarding_completed: false 
             };
+            try {
+                await supabaseClient.from('profiles').upsert(AppState.profile);
+            } catch (err) {
+                console.warn('[SENS] Error al guardar perfil inicial en registro:', err);
+            }
         } else {
             AppState.user = { id: 'local-user-' + Date.now(), email };
             AppState.profile = { 
@@ -1340,7 +1349,33 @@ async function loadProfileFromSupabase(userId) {
                 }
             }
         } else {
-            AppState.profile = null;
+            // Perfil aún no creado en la tabla (ej: usuario creado desde dashboard o antes del trigger)
+            const fallbackEmail = (AppState.user && AppState.user.email) ? AppState.user.email : '';
+            const fallbackName = (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) 
+                || (fallbackEmail ? fallbackEmail.split('@')[0] : 'Atleta SENS');
+
+            const initialProfile = {
+                id: userId,
+                full_name: fallbackName,
+                email: fallbackEmail,
+                role: 'user_normal',
+                user_type: 'client_presencial_vip',
+                subscription_status: 'pending_activation',
+                billing_provider: 'manual',
+                onboarding_completed: false
+            };
+
+            try {
+                const { data: created, error: createErr } = await supabaseClient
+                    .from('profiles')
+                    .upsert(initialProfile)
+                    .select()
+                    .maybeSingle();
+
+                AppState.profile = (created && !createErr) ? created : initialProfile;
+            } catch (err) {
+                AppState.profile = initialProfile;
+            }
         }
 
         const { data: anamData } = await supabaseClient
@@ -2373,8 +2408,11 @@ async function processDiagnosisSubmission() {
         try {
             const { error: profError } = await supabaseClient
                 .from('profiles')
-                .update(cleanProfilePayload)
-                .eq('id', AppState.user.id);
+                .upsert({
+                    id: AppState.user.id,
+                    email: AppState.user.email,
+                    ...cleanProfilePayload
+                });
             if (profError) {
                 console.error('[SENS] Error al actualizar perfil en Supabase:', profError);
             } else {
