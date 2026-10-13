@@ -623,6 +623,18 @@ function initAuthModal() {
             openUserPortal(true); // Redirige a Diagnóstico inicial (Módulo 4)
         }, 800);
     });
+
+    // Botón de prueba directa sin registrarse (Modo Demo)
+    const demoBtn = document.getElementById('demoDiagnosisBtn');
+    if (demoBtn) {
+        demoBtn.addEventListener('click', () => {
+            AppState.user = { id: 'demo-user-' + Date.now(), email: 'demo@sens.com' };
+            AppState.profile = { full_name: 'Atleta Demo', onboarding_completed: false };
+            localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
+            showAuthModal(false);
+            openUserPortal(true);
+        });
+    }
 }
 
 function showAuthModal(show) {
