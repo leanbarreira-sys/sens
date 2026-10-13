@@ -43,6 +43,17 @@ const AppState = {
     selectedMuscleFilter: 'all'
 };
 
+function isCurrentUserAdmin() {
+    const profile = AppState.profile || {};
+    const user = AppState.user || {};
+    return Boolean(
+        profile.user_type === 'admin' ||
+        profile.role === 'admin' ||
+        user.user_type === 'admin' ||
+        (user.user_metadata && user.user_metadata.role === 'admin')
+    );
+}
+
 // -----------------------------------------------------------------------------
 // PERFILES MOCK DE MULTI-USUARIO (Soporte para roles de Supabase)
 // -----------------------------------------------------------------------------
@@ -659,9 +670,8 @@ function renderExerciseLibraryList() {
         core_mobility: 'Core & Conciencia Postural'
     };
 
-    let html = '';
+    const isAdmin = isCurrentUserAdmin();
     filtered.forEach(ex => {
-        const isAdmin = AppState.user && AppState.user.user_type === 'admin';
         html += `
             <div style="background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:8px; padding:16px; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;">
                 <div style="flex:1; min-width:260px;">
@@ -1559,7 +1569,7 @@ function openUserPortal(forceOnboarding = false) {
         planBadgeEl.textContent = profile.active_plan_name || 'Presencial 1 a 1 VIP (CABA)';
     }
 
-    const isAdmin = Boolean(profile.user_type === 'admin' || profile.role === 'admin' || user.user_type === 'admin');
+    const isAdmin = isCurrentUserAdmin();
 
     // Visibilidad del Panel de Control de Coach (Solo para Nico)
     if (coachBar) {
@@ -1998,7 +2008,7 @@ function initDiagnosisWizard() {
     const enterDashBtn = document.getElementById('btnDiagEnterDashboard');
     if (enterDashBtn) {
         enterDashBtn.addEventListener('click', () => {
-            const isAdmin = Boolean(AppState.profile && (AppState.profile.user_type === 'admin' || AppState.profile.role === 'admin'));
+            const isAdmin = isCurrentUserAdmin();
             const isSubActive = isAdmin || (AppState.profile && AppState.profile.subscription_status === 'active');
             if (!isSubActive) {
                 openUserPortal(false);
@@ -3001,7 +3011,7 @@ function renderWorkoutDay(dayKey) {
     const container = document.getElementById('exercisesContainer');
     if (!dayData || !container) return;
 
-    const isAdmin = AppState.user && AppState.user.user_type === 'admin';
+    const isAdmin = isCurrentUserAdmin();
     const filterGroup = AppState.selectedMuscleFilter || 'all';
 
     // Filtrar ejercicios si el usuario seleccionó un filtro muscular
