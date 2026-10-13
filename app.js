@@ -1155,7 +1155,7 @@ function initDiagnosisWizard() {
             AppState.diagnosisDraft = AppState.diagnosisDraft || {};
             AppState.diagnosisDraft.mobilitySkipped = true;
             saveDiagnosisDraft();
-            window.diagWizardGoStep(7, 'Pruebas omitidas por ahora');
+            window.diagWizardGoStep(8, 'Pruebas omitidas por ahora');
         });
     }
 
@@ -1277,16 +1277,17 @@ window.diagWizardGoStep = function(targetStep, toastMsg) {
     const progressText = document.getElementById('progressText');
     const stepLabel = document.getElementById('diagStepLabel');
 
-    const progressPercentages = [0, 15, 30, 45, 60, 75, 88, 96, 100];
+    const progressPercentages = [0, 12, 25, 37, 50, 62, 75, 87, 95, 100];
     const stepNames = [
-        'Paso 0 de 7: Consentimiento Legal',
-        'Paso 1 de 7: Cuestionario de Salud',
-        'Paso 2 de 7: Topografía de Dolor & Lesiones',
-        'Paso 3 de 7: Contexto Deportivo & Logística',
-        'Paso 4 de 7: Carga Alostática & Estilo de Vida',
-        'Paso 5 de 7: Barrera de Adherencia',
-        'Paso 6 de 7: Pruebas Funcionales de Movilidad',
-        'Paso 7 de 7: Métricas Corporales & Fotos',
+        'Paso 0 de 8: Consentimiento Legal',
+        'Paso 1 de 8: Perfil & Objetivo SENS',
+        'Paso 2 de 8: Cuestionario de Salud',
+        'Paso 3 de 8: Topografía de Dolor & Lesiones',
+        'Paso 4 de 8: Contexto Deportivo & Logística',
+        'Paso 5 de 8: Carga Alostática & Estilo de Vida',
+        'Paso 6 de 8: Barrera de Adherencia',
+        'Paso 7 de 8: Pruebas Funcionales de Movilidad',
+        'Paso 8 de 8: Registro Postural & Medidas',
         'Expediente Completado'
     ];
 
@@ -1299,7 +1300,7 @@ window.diagWizardGoStep = function(targetStep, toastMsg) {
         showDiagnosisToast(toastMsg);
     }
 
-    if (targetStep === 8) {
+    if (targetStep === 9) {
         const p = AppState.profile || {};
         const a = AppState.anamnesis || {};
         const gender = p.gender || a.gender || document.querySelector('input[name="diagGender"]:checked')?.value || 'male';
@@ -1551,8 +1552,8 @@ async function processDiagnosisSubmission() {
         }
     }
 
-    // Avanzar a la pantalla de felicitaciones (Paso 8)
-    window.diagWizardGoStep(8, '¡Diagnóstico completado con éxito!');
+    // Avanzar a la pantalla de felicitaciones (Paso 9)
+    window.diagWizardGoStep(9, '¡Diagnóstico completado con éxito!');
 }
 
 // Temporizador regresivo (deprecado en favor de compromiso estático de Nico en 24h)

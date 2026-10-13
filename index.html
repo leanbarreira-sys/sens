@@ -872,10 +872,110 @@
                             </div>
                         </div>
 
-                        <!-- PASO 1: CUESTIONARIO DE SALUD -->
+                        <!-- PASO 1: PERFIL BIOMÉTRICO Y OBJETIVO SENS -->
                         <div class="wizard-step-card" id="diagStep1">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 1 de 7 • Cuestionario de Salud</div>
+                                <div class="step-tag-pill">Paso 1 de 8 • Perfil &amp; Objetivo</div>
+                                <h2 class="step-title">Tu Perfil &amp; <strong>Objetivo SENS</strong></h2>
+                                <p class="step-desc">
+                                    Tus datos biológicos reales y meta principal para calibrar tu programación personalizada.
+                                </p>
+
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label class="input-label" for="diagFullName">Nombre Completo</label>
+                                        <input type="text" id="diagFullName" class="input-control" placeholder="Tu nombre" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label">Sexo Biológico</label>
+                                        <div class="gender-toggle-group">
+                                            <label class="gender-btn-pill">
+                                                <input type="radio" name="diagGender" value="male" checked>
+                                                <div class="gender-btn-content">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="10" cy="14" r="5"/><line x1="19" y1="5" x2="13.5" y2="10.5"/><polyline points="15 5 19 5 19 9"/>
+                                                    </svg>
+                                                    <span>Hombre</span>
+                                                </div>
+                                            </label>
+                                            <label class="gender-btn-pill">
+                                                <input type="radio" name="diagGender" value="female">
+                                                <div class="gender-btn-content">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="12" cy="9" r="5"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/>
+                                                    </svg>
+                                                    <span>Mujer</span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-row-three">
+                                    <div class="input-group">
+                                        <label class="input-label" for="diagAge">Edad (años)</label>
+                                        <input type="number" id="diagAge" class="input-control" placeholder="Ej: 46" min="16" max="99" value="45" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label" for="diagWeight">Peso Actual (kg)</label>
+                                        <input type="number" step="0.1" id="diagWeight" class="input-control" placeholder="Ej: 78.5" value="78.0" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label" for="diagHeight">Altura (cm)</label>
+                                        <input type="number" id="diagHeight" class="input-control" placeholder="Ej: 176" value="175" required>
+                                    </div>
+                                </div>
+
+                                <!-- Selección de Objetivo Prioritario -->
+                                <div class="goal-selection-section">
+                                    <label class="input-label" style="margin-bottom: 10px;">¿Cuál es tu objetivo prioritario con SENS?</label>
+                                    <div class="goal-options-grid">
+                                        <label class="touch-card goal-card-touch">
+                                            <input type="radio" name="diagGoal" value="fat_loss" checked>
+                                            <div class="custom-circle"></div>
+                                            <div class="card-content">
+                                                <strong>Definición &amp; Pérdida de Grasa</strong>
+                                                <span class="card-sub">Reducir porcentaje graso preservando masa muscular y energía.</span>
+                                            </div>
+                                        </label>
+                                        <label class="touch-card goal-card-touch">
+                                            <input type="radio" name="diagGoal" value="muscle_gain">
+                                            <div class="custom-circle"></div>
+                                            <div class="card-content">
+                                                <strong>Fuerza &amp; Masa Muscular</strong>
+                                                <span class="card-sub">Construir masa magra, densidad muscular y fuerza real.</span>
+                                            </div>
+                                        </label>
+                                        <label class="touch-card goal-card-touch">
+                                            <input type="radio" name="diagGoal" value="recomp">
+                                            <div class="custom-circle"></div>
+                                            <div class="card-content">
+                                                <strong>Recomposición Corporal</strong>
+                                                <span class="card-sub">Tonificar, reducir cintura y ganar firmeza muscular a la vez.</span>
+                                            </div>
+                                        </label>
+                                        <label class="touch-card goal-card-touch">
+                                            <input type="radio" name="diagGoal" value="posture_health">
+                                            <div class="custom-circle"></div>
+                                            <div class="card-content">
+                                                <strong>Salud, Postura &amp; Vitalidad</strong>
+                                                <span class="card-sub">Aliviar dolores articulares, mejorar alineación y sentirte ágil.</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wizard-footer-actions">
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(0)">← Volver</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(2, '¡Perfil registrado!')">Continuar →</button>
+                            </div>
+                        </div>
+
+                        <!-- PASO 2: CUESTIONARIO DE SALUD -->
+                        <div class="wizard-step-card" id="diagStep2">
+                            <div class="step-content-body">
+                                <div class="step-tag-pill">Paso 2 de 8 • Cuestionario de Salud</div>
                                 <h2 class="step-title">Cuestionario de <strong>Salud</strong></h2>
                                 <p class="step-desc">
                                     Preguntas breves para conocer tu estado general antes de entrenar. Si no aplica, dejalas en NO.
@@ -980,15 +1080,15 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(0)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(2, '¡Excelente primer paso!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(1)">← Volver</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(3, '¡Avanzamos muy bien!')">Continuar →</button>
                             </div>
                         </div>
 
-                        <!-- PASO 2: TOPOGRAFÍA DE DOLOR Y LESIONES (EVA 1-10) -->
-                        <div class="wizard-step-card" id="diagStep2">
+                        <!-- PASO 3: TOPOGRAFÍA DE DOLOR Y LESIONES (EVA 1-10) -->
+                        <div class="wizard-step-card" id="diagStep3">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 2 de 7 • Mapa Articular</div>
+                                <div class="step-tag-pill">Paso 3 de 8 • Mapa Articular</div>
                                 <h2 class="step-title">Topografía de <strong>Dolor &amp; Lesiones</strong></h2>
                                 <p class="step-desc">
                                     Seleccioná las zonas con molestias activas para adaptar tu entrenamiento y proteger tus articulaciones y zonas vulnerables.
@@ -1151,15 +1251,15 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(1)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(3, '¡Avanzamos muy rápido!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(2)">← Volver</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(4, '¡Avanzamos muy rápido!')">Continuar →</button>
                             </div>
                         </div>
 
-                        <!-- PASO 3: CONTEXTO DEPORTIVO Y LOGÍSTICO -->
-                        <div class="wizard-step-card" id="diagStep3">
+                        <!-- PASO 4: CONTEXTO DEPORTIVO Y LOGÍSTICO -->
+                        <div class="wizard-step-card" id="diagStep4">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 3 de 7 • Logística &amp; Equipamiento</div>
+                                <div class="step-tag-pill">Paso 4 de 8 • Logística &amp; Equipamiento</div>
                                 <h2 class="step-title">Contexto <strong>Deportivo</strong></h2>
                                 <p class="step-desc">
                                     Para calibrar el volumen semanal y adaptar la rutina al equipamiento real con el que contás.
@@ -1252,15 +1352,15 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(2)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(4, '¡Ya estás en la mitad!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(3)">← Volver</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(5, '¡Ya estás en la mitad!')">Continuar →</button>
                             </div>
                         </div>
 
-                        <!-- PASO 4: CARGA ALOSTÁTICA Y ESTILO DE VIDA -->
-                        <div class="wizard-step-card" id="diagStep4">
+                        <!-- PASO 5: CARGA ALOSTÁTICA Y ESTILO DE VIDA -->
+                        <div class="wizard-step-card" id="diagStep5">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 4 de 7 • Carga Alostática</div>
+                                <div class="step-tag-pill">Paso 5 de 8 • Carga Alostática</div>
                                 <h2 class="step-title">Estilo de Vida &amp; <strong>Recuperación</strong></h2>
                                 <p class="step-desc">
                                     El entrenamiento solo construye músculo y fuerza si tu cuerpo tiene capacidad biológica de asimilarlo.
@@ -1335,15 +1435,15 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(3)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(5, '¡Ya casi terminamos!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(4)">← Volver</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(6, '¡Casi listos!')">Continuar →</button>
                             </div>
                         </div>
 
-                        <!-- PASO 5: BARRERA PSICOLÓGICA DE ADHERENCIA -->
-                        <div class="wizard-step-card" id="diagStep5">
+                        <!-- PASO 6: BARRERA PSICOLÓGICA DE ADHERENCIA -->
+                        <div class="wizard-step-card" id="diagStep6">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 5 de 7 • Hábitos &amp; Continuidad</div>
+                                <div class="step-tag-pill">Paso 6 de 8 • Hábitos &amp; Continuidad</div>
                                 <h2 class="step-title">Barrera Histórica de <strong>Adherencia</strong></h2>
                                 <p class="step-desc">
                                     ¿Cuál ha sido tu mayor obstáculo en el pasado? Permite a Nico diseñar una estrategia para que no abandones a los 30 días.
@@ -1393,15 +1493,15 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(4)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(6, '¡Solo 2 pasos más!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(5)">← Volver</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(7, '¡Solo 2 pasos más!')">Continuar →</button>
                             </div>
                         </div>
 
-                        <!-- PASO 6: PRUEBAS FUNCIONALES RÁPIDAS -->
-                        <div class="wizard-step-card" id="diagStep6">
+                        <!-- PASO 7: PRUEBAS FUNCIONALES RÁPIDAS -->
+                        <div class="wizard-step-card" id="diagStep7">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 6 de 7 • Evaluación Funcional</div>
+                                <div class="step-tag-pill">Paso 7 de 8 • Evaluación Funcional</div>
                                 <h2 class="step-title">Pruebas Rápidas de <strong>Movilidad</strong></h2>
                                 <p class="step-desc">
                                     Hacelas de pie ahora mismo en 30 segundos, o podés omitirlas por ahora si preferís dejarlas para más tarde.
@@ -1479,106 +1579,22 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(5)">← Volver</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(6)">← Volver</button>
                                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                                     <button type="button" class="btn btn-outline" id="btnSkipMobility">Omitir pruebas por ahora</button>
-                                    <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(7, '¡Último paso!')">Continuar →</button>
+                                    <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(8, '¡Último paso!')">Continuar →</button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- PASO 7: EVALUACIÓN POSTURAL Y MÉTRICAS CORPORALES -->
-                        <div class="wizard-step-card" id="diagStep7">
+                        <!-- PASO 8: EVALUACIÓN POSTURAL Y MEDIDAS CORPORALES -->
+                        <div class="wizard-step-card" id="diagStep8">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 7 de 7 • Datos Finales</div>
-                                <h2 class="step-title">Métricas Corporales &amp; <strong>Fotos</strong></h2>
+                                <div class="step-tag-pill">Paso 8 de 8 • Registro Postural &amp; Medidas</div>
+                                <h2 class="step-title">Evaluación Postural &amp; <strong>Medidas</strong></h2>
                                 <p class="step-desc">
-                                    Tus datos biológicos reales para contrastar tu evolución en fuerza y composición corporal cada 4 semanas.
+                                    Fotos y referencias corporales opcionales para que Nico evalúe tu alineación y monitorear tu progreso real.
                                 </p>
-
-                                <div class="input-row">
-                                    <div class="input-group">
-                                        <label class="input-label" for="diagFullName">Nombre Completo</label>
-                                        <input type="text" id="diagFullName" class="input-control" placeholder="Tu nombre" required>
-                                    </div>
-                                    <div class="input-group">
-                                        <label class="input-label">Sexo Biológico</label>
-                                        <div class="gender-toggle-group">
-                                            <label class="gender-btn-pill">
-                                                <input type="radio" name="diagGender" value="male" checked>
-                                                <div class="gender-btn-content">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                        <circle cx="10" cy="14" r="5"/><line x1="19" y1="5" x2="13.5" y2="10.5"/><polyline points="15 5 19 5 19 9"/>
-                                                    </svg>
-                                                    <span>Hombre</span>
-                                                </div>
-                                            </label>
-                                            <label class="gender-btn-pill">
-                                                <input type="radio" name="diagGender" value="female">
-                                                <div class="gender-btn-content">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                        <circle cx="12" cy="9" r="5"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/>
-                                                    </svg>
-                                                    <span>Mujer</span>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="input-row-three">
-                                    <div class="input-group">
-                                        <label class="input-label" for="diagAge">Edad (años)</label>
-                                        <input type="number" id="diagAge" class="input-control" placeholder="Ej: 46" min="16" max="99" value="45" required>
-                                    </div>
-                                    <div class="input-group">
-                                        <label class="input-label" for="diagWeight">Peso Actual (kg)</label>
-                                        <input type="number" step="0.1" id="diagWeight" class="input-control" placeholder="Ej: 78.5" value="78.0" required>
-                                    </div>
-                                    <div class="input-group">
-                                        <label class="input-label" for="diagHeight">Altura (cm)</label>
-                                        <input type="number" id="diagHeight" class="input-control" placeholder="Ej: 176" value="175" required>
-                                    </div>
-                                </div>
-
-                                <!-- Selección de Objetivo Prioritario -->
-                                <div class="goal-selection-section">
-                                    <label class="input-label" style="margin-bottom: 10px;">¿Cuál es tu objetivo prioritario con SENS?</label>
-                                    <div class="goal-options-grid">
-                                        <label class="touch-card goal-card-touch">
-                                            <input type="radio" name="diagGoal" value="fat_loss" checked>
-                                            <div class="custom-circle"></div>
-                                            <div class="card-content">
-                                                <strong>Definición &amp; Pérdida de Grasa</strong>
-                                                <span class="card-sub">Reducir porcentaje graso preservando masa muscular y energía.</span>
-                                            </div>
-                                        </label>
-                                        <label class="touch-card goal-card-touch">
-                                            <input type="radio" name="diagGoal" value="muscle_gain">
-                                            <div class="custom-circle"></div>
-                                            <div class="card-content">
-                                                <strong>Fuerza &amp; Masa Muscular</strong>
-                                                <span class="card-sub">Construir masa magra, densidad muscular y fuerza real.</span>
-                                            </div>
-                                        </label>
-                                        <label class="touch-card goal-card-touch">
-                                            <input type="radio" name="diagGoal" value="recomp">
-                                            <div class="custom-circle"></div>
-                                            <div class="card-content">
-                                                <strong>Recomposición Corporal</strong>
-                                                <span class="card-sub">Tonificar, reducir cintura y ganar firmeza muscular a la vez.</span>
-                                            </div>
-                                        </label>
-                                        <label class="touch-card goal-card-touch">
-                                            <input type="radio" name="diagGoal" value="posture_health">
-                                            <div class="custom-circle"></div>
-                                            <div class="card-content">
-                                                <strong>Salud, Postura &amp; Vitalidad</strong>
-                                                <span class="card-sub">Aliviar dolores articulares, mejorar alineación y sentirte ágil.</span>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
 
                                 <!-- Registro Fotográfico Postural (Frontal y Perfil - Opcionales) -->
                                 <div class="photo-eval-section">
@@ -1694,13 +1710,13 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(6)">← Volver</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(7)">← Volver</button>
                                 <button type="button" class="btn btn-primary" id="btnFinishDiagnosis">Finalizar y Guardar →</button>
                             </div>
                         </div>
 
-                        <!-- PASO 8: EXPEDIENTE COMPLETADO (EXPERIENCIA PREMIUM SENS) -->
-                        <div class="wizard-step-card" id="diagStep8">
+                        <!-- PASO 9: EXPEDIENTE COMPLETADO (EXPERIENCIA PREMIUM SENS) -->
+                        <div class="wizard-step-card" id="diagStep9">
                             <div class="step-content-body" style="text-align: center;">
                                 <div class="congrats-icon-wrap">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
