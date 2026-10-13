@@ -2096,12 +2096,15 @@ button.btn-primary:focus {
     background: transparent;
     border: 1px solid var(--accent-primary);
     color: var(--accent-primary);
+    touch-action: manipulation;
 }
 
-.btn-outline:hover {
-    background: rgba(229, 203, 167, 0.1);
-    transform: translateY(-2px);
-    color: var(--accent-hover);
+@media (hover: hover) and (pointer: fine) {
+    .btn-outline:hover {
+        background: rgba(229, 203, 167, 0.1);
+        transform: translateY(-2px);
+        color: var(--accent-hover);
+    }
 }
 
 .btn-secondary {
@@ -3698,8 +3701,10 @@ a.hero-btn-apple-dark:active {
 .train-plan-card .btn {
     touch-action: manipulation;
     position: relative;
-    z-index: 5;
+    z-index: 10;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .btn-logged-in {

@@ -410,25 +410,79 @@ document.addEventListener('DOMContentLoaded', () => {
 // NUEVO: CAPTACIÓN ABIERTA DE PROSPECTOS (SECCIÓN SUMATE & CTAs DE PLANES)
 // =============================================================================
 function initLeadCapture() {
-    // 1. Botones de Planes ("Agendar Evaluación Inicial" o "Elegir Plan")
+    // 1. Botones de Planes ("Agendar Evaluación Inicial" o "Elegir Plan") - 1-Click Instant Navigation
     const planButtons = document.querySelectorAll('.plan-select-btn');
+    
+    function scrollToSumateWithPlan(btn, e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        const planName = btn.getAttribute('data-plan') || '';
+        const sumateSection = document.getElementById('sumate');
+        if (sumateSection) {
+            // Preseleccionar radio button correspondiente
+            const radioPresencial = document.querySelector('input[name="leadModality"][value="Presencial 1 a 1 (CABA)"]');
+            const radioGrupo = document.querySelector('input[name="leadModality"][value="Presencial Grupal (Dúo o Trío)"]');
+            const radioOnline = document.querySelector('input[name="leadModality"][value="Online Asesorado"]');
+            
+            if (planName.includes('Grupo') || planName.includes('Dúo') || planName.includes('Trío')) {
+                if (radioGrupo) radioGrupo.checked = true;
+            } else if (planName.includes('Online')) {
+                if (radioOnline) radioOnline.checked = true;
+            } else {
+                if (radioPresencial) radioPresencial.checked = true;
+            }
+
+            // Pre-cargar la opción elegida en el campo de objetivo para que Nico sepa exactamente qué plan tocó
+            const goalInput = document.getElementById('leadGoal');
+            if (goalInput && planName) {
+                goalInput.value = `Interés en: ${planName}`;
+            }
+
+            // Desplazamiento suave directo al primer click con compensación de barra fija (Navbar)
+            const yOffset = -75;
+            const y = sumateSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+
+            // Foco accesible al campo de nombre
+            setTimeout(() => {
+                const nameInput = document.getElementById('leadFullName');
+                if (nameInput) nameInput.focus({ preventScroll: true });
+            }, 350);
+        }
+    }
+
     planButtons.forEach(btn => {
+        let isPointerHandled = false;
+
+        btn.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch' || e.button === 0) {
+                isPointerHandled = true;
+                scrollToSumateWithPlan(btn, e);
+                setTimeout(() => { isPointerHandled = false; }, 400);
+            }
+        });
+
         btn.addEventListener('click', (e) => {
-            const planName = btn.getAttribute('data-plan') || '';
+            if (isPointerHandled) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+            scrollToSumateWithPlan(btn, e);
+        });
+    });
+
+    // Enlaces globales que apuntan a #sumate (Hero, Navbar, Barra Móvil)
+    document.querySelectorAll('a[href="#sumate"]:not(.plan-select-btn)').forEach(link => {
+        link.addEventListener('click', (e) => {
             const sumateSection = document.getElementById('sumate');
             if (sumateSection) {
-                // Preseleccionar radio button correspondiente
-                const radioPresencial = document.querySelector('input[name="leadModality"][value="Presencial 1 a 1 (CABA)"]');
-                const radioGrupo = document.querySelector('input[name="leadModality"][value="Presencial Grupal (Dúo o Trío)"]');
-                const radioOnline = document.querySelector('input[name="leadModality"][value="Online Asesorado"]');
-                
-                if (planName.includes('Grupo') || planName.includes('Dúo') || planName.includes('Trío')) {
-                    if (radioGrupo) radioGrupo.checked = true;
-                } else if (planName.includes('Online')) {
-                    if (radioOnline) radioOnline.checked = true;
-                } else {
-                    if (radioPresencial) radioPresencial.checked = true;
-                }
+                e.preventDefault();
+                const yOffset = -75;
+                const y = sumateSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
             }
         });
     });
