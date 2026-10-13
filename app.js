@@ -90,6 +90,41 @@ async function sendCoachEmailAlert({ type, athleteName, athleteEmail, athletePho
 }
 
 // -----------------------------------------------------------------------------
+// TOASTS DE LUJO Y ANIMACIONES HÁPTICAS (SR-DIRECTOR-UX-WELLNESS)
+// -----------------------------------------------------------------------------
+function showSensToast(message, type = 'champagne', duration = 3400) {
+    let toast = document.getElementById('sensGlobalToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'sensGlobalToast';
+        document.body.appendChild(toast);
+    }
+    toast.innerHTML = message;
+    toast.className = `sens-luxury-toast sens-toast-${type} show`;
+    if (window.__sensToastTimeout) clearTimeout(window.__sensToastTimeout);
+    window.__sensToastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+    }, duration);
+}
+
+function animateNumber(element, targetValue, duration = 900, suffix = '', decimals = 0) {
+    if (!element) return;
+    const startValue = 0;
+    const startTime = performance.now();
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = startValue + (targetValue - startValue) * easeOut;
+        element.innerHTML = `${decimals > 0 ? current.toFixed(decimals) : Math.round(current).toLocaleString('es-AR')}${suffix}`;
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    requestAnimationFrame(update);
+}
+
+// -----------------------------------------------------------------------------
 // PERFILES MOCK DE MULTI-USUARIO (Soporte para roles de Supabase)
 // -----------------------------------------------------------------------------
 const MOCK_USER_PROFILES = {
@@ -547,7 +582,7 @@ function initLeadCapture() {
             const goal = document.getElementById('leadGoal') ? document.getElementById('leadGoal').value : 'Fuerza y recomposición física';
 
             if (!fullName || !phone) {
-                alert('Por favor completá tu nombre y WhatsApp para poder coordinar la evaluación inicial.');
+                showSensToast('Por favor completá tu nombre y WhatsApp para poder coordinar tu evaluación.', 'alert');
                 return;
             }
 
@@ -776,7 +811,7 @@ function renderExerciseLibraryList() {
                     defaultWeight: 15,
                     defaultReps: 10
                 });
-                alert(`¡${exName} asignado correctamente a ${currentDay.toUpperCase()} para el alumno!`);
+                showSensToast(`✓ ${exName} asignado correctamente a ${currentDay.toUpperCase()}.`, 'champagne');
                 renderWorkoutDay(currentDay);
                 const modal = document.getElementById('exerciseLibraryModal');
                 if (modal) modal.classList.remove('active');
@@ -1566,7 +1601,7 @@ function initPortalNavigation() {
             if (AppState.profile && AppState.profile.subscription_status === 'active') {
                 openUserPortal(false);
             } else {
-                alert('Tu abono continúa en proceso de validación por Nico. Podés avisarle directamente por WhatsApp.');
+                showSensToast('Tu abono continúa en proceso de validación. Podés avisarle a Nico por WhatsApp.', 'alert');
             }
         });
     }
@@ -1596,7 +1631,7 @@ function initPortalNavigation() {
                 coachSubBadge.style.borderColor = isNowActive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
                 coachSubBadge.style.background = isNowActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
             }
-            alert(`Membresía del atleta actualizada a: ${newStatus === 'active' ? 'ACTIVA (Acceso completo)' : 'PENDIENTE (Bloqueado por validación)'}`);
+            showSensToast(`Membresía del atleta: ${newStatus === 'active' ? 'ACTIVA (Acceso completo)' : 'PENDIENTE (En validación)'}`, 'champagne');
         });
     }
 }
@@ -1739,7 +1774,12 @@ function renderDashboardData() {
         planBadgeEl.textContent = profile.active_plan_name;
     }
     if (profile.current_weight && weightKpi) {
-        weightKpi.innerHTML = `${profile.current_weight} <span style="font-size:1rem; font-weight:400;">kg</span>`;
+        animateNumber(weightKpi, parseFloat(profile.current_weight) || 78.2, 800, ' <span style="font-size:1rem; font-weight:400;">kg</span>', 1);
+    }
+    const stepsKpi = document.getElementById('kpiAvgSteps');
+    if (stepsKpi) {
+        const targetSteps = parseInt(anamnesis.daily_step_target || profile.daily_step_target || 10420, 10);
+        animateNumber(stepsKpi, targetSteps, 850);
     }
 
     // Actualizar Card de Diagnóstico en el Dashboard
@@ -1804,10 +1844,6 @@ function renderDashboardData() {
     const workoutsKpi = document.getElementById('kpiWorkoutsWeek');
     if (workoutsKpi && anamnesis.weekly_frequency) {
         workoutsKpi.textContent = `0 / ${anamnesis.weekly_frequency}`;
-    }
-    const stepsKpi = document.getElementById('kpiAvgSteps');
-    if (stepsKpi && anamnesis.daily_step_target) {
-        stepsKpi.textContent = Number(anamnesis.daily_step_target).toLocaleString('es-AR');
     }
 
     // Ocultar sección de métricas y workout asignado hasta completar el diagnóstico final
@@ -3077,7 +3113,7 @@ function initWorkoutManager() {
     const finishBtn = document.getElementById('btnFinishWorkoutSession');
     if (finishBtn) {
         finishBtn.addEventListener('click', async () => {
-            alert('¡Excelente trabajo! Rutina registrada con éxito en tu historial de entrenamiento.');
+            showSensToast('✨ ¡Excelente trabajo! Rutina registrada con éxito en tu historial.', 'success', 3600);
             // Guardar log en Supabase
             if (supabaseClient && AppState.user) {
                 try {
@@ -3207,7 +3243,7 @@ function startRestTimer(seconds) {
         if (AppState.remainingSeconds <= 0) {
             stopRestTimer();
             playBeep(880, 0.4); // tono agudo de fin de descanso
-            alert('¡Descanso completado! Preparate para el próximo set.');
+            showSensToast('⏱️ ¡Descanso completado! Preparate para el próximo set.', 'champagne', 3400);
         } else {
             updateTimerDisplay();
         }
@@ -3307,7 +3343,12 @@ function initNutritionHabits() {
                 }
             }
 
-            alert('¡Hábitos diarios actualizados y guardados correctamente en tu historial!');
+            const habitContainer = document.querySelector('#nutritionView .selection-group');
+            if (habitContainer) {
+                habitContainer.classList.add('habit-checked-anim');
+                setTimeout(() => habitContainer.classList.remove('habit-checked-anim'), 500);
+            }
+            showSensToast('🌿 ¡Hábitos diarios guardados! Tu constancia construye el cambio.', 'success', 3500);
         });
     }
 }
@@ -3351,7 +3392,7 @@ function initDailyTracking() {
             const notes = document.getElementById('logNotes').value.trim();
 
             if (isNaN(weight) || isNaN(steps)) {
-                alert('Por favor completá al menos el peso y los pasos de hoy.');
+                showSensToast('Por favor completá al menos el peso y los pasos de hoy.', 'alert');
                 return;
             }
 
@@ -3379,7 +3420,7 @@ function initDailyTracking() {
             document.getElementById('kpiCurrentWeight').innerHTML = `${weight} <span style="font-size:1rem; font-weight:400;">kg</span>`;
             document.getElementById('kpiAvgSteps').textContent = steps.toLocaleString('es-AR');
 
-            alert('¡Registro diario guardado con éxito! Tus gráficos se han actualizado.');
+            showSensToast('📈 ¡Registro diario guardado con éxito! Métricas y gráficos actualizados.', 'champagne', 3500);
             logForm.reset();
             updateCharts();
         });
