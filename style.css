@@ -4102,123 +4102,918 @@ a.hero-btn-apple-dark:active {
 }
 
 /* ==========================================================================
-   7. MÓDULO 4: ONBOARDING INTERACTIVO (WIZARD DE 3 PASOS)
+   7. MÓDULO 4: ONBOARDING, ANAMNESIS DIGITAL & DIAGNÓSTICO CLÍNICO (8 PASOS)
    ========================================================================== */
-.onboarding-card {
+.wizard-container {
+    width: 100%;
     max-width: 680px;
-    margin: 30px auto;
+    margin: 20px auto 40px;
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: var(--shadow-card);
-    text-align: left;
+    border-radius: 20px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
-.wizard-steps-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 30px;
+@media (max-width: 768px) {
+    .wizard-container {
+        margin: 10px auto 20px;
+        border-radius: 16px;
+        border-left: none;
+        border-right: none;
+    }
+}
+
+/* Encabezado del Wizard */
+.wizard-header {
+    padding: 24px 30px 16px;
+    background: rgba(18, 18, 20, 0.95);
+    border-bottom: 1px solid var(--border-subtle);
     position: relative;
 }
 
-.step-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    z-index: 2;
+@media (max-width: 768px) {
+    .wizard-header {
+        padding: 18px 18px 14px;
+    }
 }
 
-.step-circle {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: var(--bg-elevated);
-    border: 1.5px solid var(--text-muted);
+.wizard-top-bar {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.wizard-brand {
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 300;
+    letter-spacing: 3px;
     color: var(--text-muted);
-    transition: var(--transition);
 }
 
-.step-node.active .step-circle {
-    background: var(--accent-primary);
-    border-color: var(--accent-primary);
-    color: #080809;
-}
-
-.step-node.done .step-circle {
-    background: var(--bg-elevated);
-    border-color: var(--accent-primary);
+.wizard-brand strong {
+    font-weight: 800;
     color: var(--accent-primary);
 }
 
-.step-title {
+.wizard-exit-btn {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--accent-primary);
+    font-family: var(--font-main);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.wizard-exit-btn:hover {
+    background: rgba(229, 203, 167, 0.1);
+    border-color: var(--accent-primary);
+}
+
+.wizard-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+.wizard-progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-elevated);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.wizard-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-hover));
+    border-radius: 6px;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wizard-progress-percent {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-primary);
+    min-width: 38px;
+    text-align: right;
+    letter-spacing: 0.5px;
+}
+
+.wizard-step-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wizard-step-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+}
+
+.wizard-mode-badge {
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--text-muted);
-}
-
-.step-node.active .step-title {
+    padding: 2px 10px;
+    border-radius: 12px;
+    background: rgba(229, 203, 167, 0.12);
     color: var(--accent-primary);
+    border: 1px solid rgba(229, 203, 167, 0.25);
 }
 
-.wizard-progress-line {
+/* Toast de micro-dopamina */
+.feedback-toast {
     position: absolute;
-    top: 17px;
-    left: 40px;
-    right: 40px;
-    height: 2px;
-    background: var(--border-subtle);
-    z-index: 1;
-}
-
-.wizard-progress-bar-fill {
-    height: 100%;
-    width: 0%;
+    top: -45px;
+    left: 50%;
+    transform: translateX(-50%);
     background: var(--accent-primary);
-    transition: var(--transition);
+    color: #080809;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
 }
 
-.wizard-step-pane {
+.feedback-toast.show {
+    top: 14px;
+    opacity: 1;
+}
+
+/* Contenedor de Pasos */
+.wizard-steps-carousel {
+    padding: 28px 30px 32px;
+}
+
+@media (max-width: 768px) {
+    .wizard-steps-carousel {
+        padding: 20px 18px 24px;
+    }
+}
+
+.wizard-step-card {
     display: none;
 }
 
-.wizard-step-pane.active {
+.wizard-step-card.active {
     display: block;
+    animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.range-display-wrap {
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step-content-body {
+    text-align: left;
+}
+
+.step-tag-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-primary);
+    margin-bottom: 8px;
+}
+
+.step-title {
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1.25;
+}
+
+.step-title strong {
+    font-weight: 800;
+    color: var(--accent-primary);
+}
+
+.step-desc {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 24px;
+}
+
+/* Cuadro Legal Ley 25.326 */
+.legal-notice-box {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: rgba(229, 203, 167, 0.04);
+    border-left: 3px solid var(--accent-primary);
+    padding: 16px;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 24px;
+}
+
+.legal-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.legal-text {
+    font-size: 13px;
+    color: #B5B5BC;
+    line-height: 1.5;
+}
+
+.legal-text strong {
+    color: var(--text-primary);
+}
+
+/* Touch Cards (Gamified Ergonomics - Mínimo 44x44px target) */
+.selection-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.touch-card {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-top: 10px;
-}
-
-.range-slider {
-    flex: 1;
-    accent-color: var(--accent-primary);
-    height: 6px;
+    padding: 16px 20px;
+    min-height: 56px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
     cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+    position: relative;
 }
 
-.range-value-badge {
-    font-size: 1.3rem;
+.touch-card:hover {
+    border-color: rgba(229, 203, 167, 0.35);
+    background: rgba(26, 26, 29, 0.95);
+    transform: translateY(-2px);
+}
+
+.touch-card:active {
+    transform: scale(0.985);
+}
+
+.touch-card input {
+    display: none;
+}
+
+/* Radio Button estrictamente CIRCULAR */
+.custom-circle {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--text-muted);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.touch-card input[type="radio"]:checked + .custom-circle {
+    border-color: var(--accent-primary);
+}
+
+.touch-card input[type="radio"]:checked + .custom-circle::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    display: block;
+}
+
+/* Checkbox estrictamente CUADRADO */
+.custom-box {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--text-muted);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition);
+    background: transparent;
+}
+
+.custom-box svg {
+    width: 12px;
+    height: 10px;
+    display: none;
+}
+
+.touch-card input[type="checkbox"]:checked + .custom-box,
+.pill-card input[type="checkbox"]:checked + .custom-box {
+    border-color: var(--accent-primary);
+    background: var(--accent-primary);
+}
+
+.touch-card input[type="checkbox"]:checked + .custom-box svg,
+.pill-card input[type="checkbox"]:checked + .custom-box svg {
+    display: block;
+}
+
+.touch-card input:checked ~ .card-content {
+    color: var(--text-primary);
+}
+
+.touch-card input:checked ~ .card-content strong {
+    color: var(--accent-primary);
+}
+
+.card-content {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    line-height: 1.35;
+    flex: 1;
+}
+
+.card-sub {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 3px;
+    line-height: 1.3;
+}
+
+/* Consent Touch Card */
+.touch-card-consent {
+    background: rgba(229, 203, 167, 0.03);
+    border-color: rgba(229, 203, 167, 0.2);
+    padding: 18px 20px;
+}
+
+/* Triaje Clínico PAR-Q+ 2025 */
+.binary-triage-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.triage-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    min-height: 58px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    transition: var(--transition);
+}
+
+.triage-question {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    flex: 1;
+}
+
+.triage-toggle-group {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.triage-btn {
+    min-width: 54px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.triage-btn.active[data-val="no"] {
+    background: rgba(229, 203, 167, 0.12);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.triage-btn.active[data-val="si"] {
+    background: rgba(217, 93, 80, 0.18);
+    border-color: #D95D50;
+    color: #F87171;
+}
+
+.medical-flag-alert {
+    background: rgba(217, 93, 80, 0.1);
+    border-left: 3px solid #D95D50;
+    padding: 14px 18px;
+    border-radius: 0 10px 10px 0;
+    color: #FCA5A5;
+    font-size: 13px;
+    line-height: 1.45;
+    margin-top: 14px;
+}
+
+/* Grilla de Pills (Topografía y Equipamiento) */
+.pill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 540px) {
+    .pill-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pill-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    padding: 14px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+}
+
+.pill-card input {
+    display: none;
+}
+
+.pill-card:hover {
+    border-color: rgba(229, 203, 167, 0.3);
+}
+
+.pill-card.selected {
+    background: rgba(229, 203, 167, 0.08);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+/* Escala Visual Analógica EVA (1 al 10) */
+.eva-slider-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 18px;
+}
+
+.eva-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.eva-badge {
+    font-size: 1.25rem;
     font-weight: 800;
     color: var(--accent-primary);
-    width: 40px;
+}
+
+.eva-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+/* Selectores de frecuencia y agua */
+.section-subblock {
+    margin-bottom: 22px;
+}
+
+.subblock-title {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.freq-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+@media (max-width: 480px) {
+    .freq-selector-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.freq-btn, .water-btn {
+    height: 48px;
+    border-radius: 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.freq-btn:hover, .water-btn:hover {
+    border-color: rgba(229, 203, 167, 0.35);
+}
+
+.freq-btn.active, .water-btn.active {
+    background: rgba(229, 203, 167, 0.12);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+/* Sliders de Métrica (Sueño y Estrés) */
+.metric-slider-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+}
+
+.metric-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.metric-slider-badge {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--accent-primary);
+}
+
+.metric-sublabel {
+    display: block;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* Pruebas de Movilidad */
+.mobility-test-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 20px;
+}
+
+.mobility-test-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-primary);
+    margin-bottom: 6px;
+}
+
+.mobility-test-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.mobility-instruction {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin-bottom: 14px;
+}
+
+/* Sección de Fotos Posturales */
+.photo-eval-section {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 18px;
+}
+
+.photo-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 16px;
+}
+
+@media (max-width: 580px) {
+    .photo-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.photo-box {
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+
+.photo-box:hover {
+    border-color: var(--accent-primary);
+}
+
+.photo-preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.silhouette-svg {
+    width: 44px;
+    height: 80px;
+}
+
+.photo-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+}
+
+.photo-preview-img {
+    width: 100%;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.photo-peace-of-mind {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 14px;
+}
+
+/* Congrats Page (Paso 8) */
+.congrats-icon-wrap {
+    width: 64px;
+    height: 64px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 0 24px rgba(229, 203, 167, 0.35);
+}
+
+.congrats-icon-wrap svg {
+    width: 32px;
+    height: 32px;
+}
+
+.congrats-habits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.habit-value-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.habit-icon {
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.habit-title {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.habit-metric {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--accent-primary);
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.habit-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.countdown-audit-card {
+    background: rgba(229, 203, 167, 0.04);
+    border: 1px solid rgba(229, 203, 167, 0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
     text-align: center;
 }
 
+.countdown-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-primary);
+    margin-bottom: 8px;
+}
+
+.countdown-timer-display {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    margin-bottom: 8px;
+}
+
+.countdown-note {
+    font-size: 13px;
+    color: var(--text-secondary);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.45;
+}
+
+/* Botones de acción del Wizard */
+.wizard-footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 480px) {
+    .wizard-footer-actions {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+    .wizard-footer-actions .btn {
+        width: 100%;
+    }
+}
+
 /* ==========================================================================
-   8. MÓDULO 5: DASHBOARD DE BIENVENIDA
+   8. CARD DE DIAGNÓSTICO EN DASHBOARD (#dashDiagnosisCard)
+   ========================================================================== */
+.diagnosis-summary-card {
+    background: linear-gradient(135deg, rgba(18, 18, 20, 0.98), rgba(26, 26, 29, 0.95));
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    text-align: left;
+    transition: var(--transition);
+}
+
+@media (max-width: 768px) {
+    .diagnosis-summary-card {
+        padding: 20px 20px;
+    }
+}
+
+.diagnosis-summary-card:hover {
+    border-color: rgba(229, 203, 167, 0.4);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.diagnosis-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.diagnosis-card-badges {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.diagnosis-updated-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.diagnosis-card-title {
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.diagnosis-card-title strong {
+    font-weight: 800;
+    color: var(--accent-primary);
+}
+
+.diagnosis-card-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+    max-width: 720px;
+}
+
+.diagnosis-quick-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.diag-tag {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    letter-spacing: 0.3px;
+}
+
+.diag-tag.highlight {
+    background: rgba(229, 203, 167, 0.1);
+    border-color: rgba(229, 203, 167, 0.3);
+    color: var(--accent-primary);
+}
+
+/* ==========================================================================
+   9. MÓDULO 5: DASHBOARD DE BIENVENIDA
    ========================================================================== */
 .dash-welcome-card {
     background: linear-gradient(135deg, rgba(18, 18, 20, 0.95), rgba(26, 26, 29, 0.95));

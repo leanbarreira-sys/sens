@@ -567,6 +567,7 @@ function initAuthModal() {
             // Local Mock
             AppState.user = { id: 'local-user-id', email };
             const savedProfile = localStorage.getItem('sens_profile_' + email);
+            const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + email);
             if (savedProfile) {
                 AppState.profile = JSON.parse(savedProfile);
             } else {
@@ -575,6 +576,9 @@ function initAuthModal() {
                     daily_step_target: 10000,
                     active_plan_name: 'Plan Personalizado SENS TRAIN'
                 };
+            }
+            if (savedAnamnesis) {
+                AppState.anamnesis = JSON.parse(savedAnamnesis);
             }
             localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
         }
@@ -616,7 +620,7 @@ function initAuthModal() {
         showAuthAlert('¡Cuenta creada con éxito! Pasando al asistente de inicio...', 'success');
         setTimeout(() => {
             showAuthModal(false);
-            openUserPortal(true); // Redirige a Onboarding (Módulo 4)
+            openUserPortal(true); // Redirige a Diagnóstico inicial (Módulo 4)
         }, 800);
     });
 }
@@ -661,6 +665,16 @@ async function loadProfileFromSupabase(userId) {
         } else {
             AppState.profile = null;
         }
+
+        const { data: anamData } = await supabaseClient
+            .from('anamnesis')
+            .select('*')
+            .eq('user_id', userId)
+            .single();
+
+        if (anamData) {
+            AppState.anamnesis = anamData;
+        }
     } catch (e) {
         console.error('Error cargando perfil:', e);
     }
@@ -672,8 +686,12 @@ function checkExistingSession() {
         try {
             AppState.user = JSON.parse(localUser);
             const savedProfile = localStorage.getItem('sens_profile_' + AppState.user.email);
+            const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + AppState.user.email);
             if (savedProfile) {
                 AppState.profile = JSON.parse(savedProfile);
+            }
+            if (savedAnamnesis) {
+                AppState.anamnesis = JSON.parse(savedAnamnesis);
             }
         } catch (e) {
             console.error('Error parseando sesión previa:', e);
@@ -758,8 +776,6 @@ function openUserPortal(forceOnboarding = false) {
     const portal = document.getElementById('app-container');
     const publicLanding = document.getElementById('publicLanding');
     const userEmailEl = document.getElementById('portalUserEmail');
-    const userNameEl = document.getElementById('dashUserName');
-    const planBadgeEl = document.getElementById('portalPlanBadge');
 
     portal.classList.add('active');
     publicLanding.style.display = 'none';
@@ -768,154 +784,768 @@ function openUserPortal(forceOnboarding = false) {
         userEmailEl.textContent = AppState.user.email || 'atleta@sens.com';
     }
 
-    const hasProfile = AppState.profile && AppState.profile.current_weight;
-    if (forceOnboarding || !hasProfile) {
-        // Redirige al Módulo 4: Onboarding
+    // Comprobar si el diagnóstico clínico fue completado
+    const isCompleted = Boolean(AppState.profile && AppState.profile.onboarding_completed);
+
+    if (forceOnboarding || !isCompleted) {
+        // Redirige al diagnóstico inicial
         document.getElementById('portalSubNav').style.display = 'none';
-        switchPortalView('onboardingSection');
-        if (AppState.profile && AppState.profile.full_name) {
-            const nameInput = document.getElementById('obFullName');
-            if (nameInput) nameInput.value = AppState.profile.full_name;
-        }
+        startDiagnosisWizard(false);
     } else {
-        // Redirige al Módulo 5: Dashboard
+        // Redirige al Dashboard de Atleta
         document.getElementById('portalSubNav').style.display = 'flex';
-        userNameEl.textContent = AppState.profile.full_name || 'Atleta';
-        if (AppState.profile.active_plan_name) {
-            planBadgeEl.textContent = AppState.profile.active_plan_name;
-        }
-        if (AppState.profile.current_weight) {
-            document.getElementById('kpiCurrentWeight').innerHTML = `${AppState.profile.current_weight} <span style="font-size:1rem; font-weight:400;">kg</span>`;
-        }
+        renderDashboardData();
         switchPortalView('dashView');
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// =============================================================================
-// MÓDULO 4: ONBOARDING INTERACTIVO (WIZARD DE 3 PASOS)
-// =============================================================================
-function initOnboardingWizard() {
-    const wizardForm = document.getElementById('onboardingWizardForm');
-    const step1 = document.getElementById('wizardStep1');
-    const step2 = document.getElementById('wizardStep2');
-    const step3 = document.getElementById('wizardStep3');
+function renderDashboardData() {
+    const userNameEl = document.getElementById('dashUserName');
+    const planBadgeEl = document.getElementById('portalPlanBadge');
+    const weightKpi = document.getElementById('kpiCurrentWeight');
+    const diagTagsContainer = document.getElementById('dashDiagTags');
+    const diagStatusPill = document.getElementById('dashDiagStatusPill');
+    const diagDateBadge = document.getElementById('dashDiagDateBadge');
+    const diagSummaryText = document.getElementById('dashDiagSummaryText');
 
-    const next1 = document.getElementById('wizardNext1');
-    const prev2 = document.getElementById('wizardPrev2');
-    const next2 = document.getElementById('wizardNext2');
-    const prev3 = document.getElementById('wizardPrev3');
+    const profile = AppState.profile || {};
+    const anamnesis = AppState.anamnesis || {};
 
-    const node1 = document.getElementById('stepNode1');
-    const node2 = document.getElementById('stepNode2');
-    const node3 = document.getElementById('stepNode3');
-    const progressBar = document.getElementById('wizardProgressBar');
-
-    const stressSlider = document.getElementById('obStressRange');
-    const stressDisplay = document.getElementById('obStressVal');
-
-    if (stressSlider && stressDisplay) {
-        stressSlider.addEventListener('input', () => {
-            stressDisplay.textContent = stressSlider.value;
-        });
+    if (profile.full_name) {
+        userNameEl.textContent = profile.full_name;
+    }
+    if (profile.active_plan_name && planBadgeEl) {
+        planBadgeEl.textContent = profile.active_plan_name;
+    }
+    if (profile.current_weight && weightKpi) {
+        weightKpi.innerHTML = `${profile.current_weight} <span style="font-size:1rem; font-weight:400;">kg</span>`;
     }
 
-    function setStep(stepNum) {
-        step1.classList.remove('active');
-        step2.classList.remove('active');
-        step3.classList.remove('active');
-        node1.classList.remove('active', 'done');
-        node2.classList.remove('active', 'done');
-        node3.classList.remove('active', 'done');
+    // Actualizar Card de Diagnóstico en el Dashboard
+    if (diagTagsContainer) {
+        let tagsHtml = '';
 
-        if (stepNum === 1) {
-            step1.classList.add('active');
-            node1.classList.add('active');
-            progressBar.style.width = '0%';
-        } else if (stepNum === 2) {
-            step2.classList.add('active');
-            node1.classList.add('done');
-            node2.classList.add('active');
-            progressBar.style.width = '50%';
-        } else if (stepNum === 3) {
-            step3.classList.add('active');
-            node1.classList.add('done');
-            node2.classList.add('done');
-            node3.classList.add('active');
-            progressBar.style.width = '100%';
+        if (profile.current_weight) {
+            tagsHtml += `<span class="diag-tag">Peso: ${profile.current_weight} kg</span>`;
+        }
+        if (anamnesis.weekly_frequency) {
+            tagsHtml += `<span class="diag-tag">Frecuencia: ${anamnesis.weekly_frequency} días/sem</span>`;
+        }
+        if (anamnesis.experience_level) {
+            const expMap = { beginner: 'Principiante', intermediate: 'Intermedio', advanced: 'Avanzado' };
+            tagsHtml += `<span class="diag-tag">Nivel: ${expMap[anamnesis.experience_level] || anamnesis.experience_level}</span>`;
+        }
+        if (anamnesis.water_liters_baseline) {
+            tagsHtml += `<span class="diag-tag highlight">Agua: ${anamnesis.water_liters_baseline} L/día</span>`;
+        }
+        if (anamnesis.daily_step_target) {
+            tagsHtml += `<span class="diag-tag">Pasos: ${anamnesis.daily_step_target.toLocaleString()} /día</span>`;
+        }
+
+        if (anamnesis.has_medical_flags) {
+            tagsHtml += `<span class="diag-tag" style="border-color:#D95D50; color:#F87171;">Bandera médica en revisión</span>`;
+        } else {
+            tagsHtml += `<span class="diag-tag">Sin banderas médicas</span>`;
+        }
+
+        if (Array.isArray(anamnesis.active_injuries) && anamnesis.active_injuries.length > 0) {
+            tagsHtml += `<span class="diag-tag" style="border-color:rgba(229,203,167,0.4); color:var(--accent-primary);">Zonas atendidas: ${anamnesis.active_injuries.join(', ')}</span>`;
+        } else {
+            tagsHtml += `<span class="diag-tag">Articulaciones libres de dolor</span>`;
+        }
+
+        diagTagsContainer.innerHTML = tagsHtml;
+    }
+
+    if (diagStatusPill) {
+        if (profile.vip_candidate) {
+            diagStatusPill.textContent = 'Expediente VIP • Prioritario';
+            diagStatusPill.className = 'pill pill-champagne';
+        } else {
+            diagStatusPill.textContent = 'Expediente Activo • Nico';
+            diagStatusPill.className = 'pill pill-champagne';
         }
     }
 
-    if (next1) {
-        next1.addEventListener('click', () => {
-            const name = document.getElementById('obFullName').value.trim();
-            const age = document.getElementById('obAge').value;
-            const weight = document.getElementById('obWeight').value;
-            const height = document.getElementById('obHeight').value;
+    if (diagDateBadge && profile.updated_at) {
+        try {
+            const d = new Date(profile.updated_at);
+            diagDateBadge.textContent = `Actualizado ${d.toLocaleDateString()}`;
+        } catch (e) {
+            diagDateBadge.textContent = 'Expediente al día';
+        }
+    }
 
-            if (!name || !age || !weight || !height) {
-                alert('Por favor completá los 4 campos biométricos antes de continuar.');
-                return;
+    if (diagSummaryText && profile.full_name) {
+        diagSummaryText.textContent = `Expediente biomecánico y clínico de ${profile.full_name}. Información protegida bajo Ley 25.326 y auditada por Nico para calibrar tus sesiones.`;
+    }
+}
+
+// Iniciar Wizard de Diagnóstico (Modo Inicial o Modo Edición)
+function startDiagnosisWizard(isEditMode = false) {
+    AppState.isEditingDiagnosis = isEditMode;
+    const modeBadge = document.getElementById('diagModeBadge');
+    const exitBtn = document.getElementById('wizardExitToDashBtn');
+
+    if (isEditMode) {
+        if (modeBadge) modeBadge.textContent = 'Modo Edición';
+        if (exitBtn) exitBtn.style.display = 'inline-block';
+        // En modo edición cargamos los datos existentes y vamos al paso 1
+        prefillDiagnosisForm();
+        window.diagWizardGoStep(1);
+    } else {
+        if (modeBadge) modeBadge.textContent = 'Diagnóstico Inicial';
+        if (exitBtn) exitBtn.style.display = 'none';
+        
+        // Intentar restaurar borrador guardado en localStorage
+        const hasDraft = restoreDiagnosisDraft();
+        if (!hasDraft) {
+            window.diagWizardGoStep(0);
+        }
+    }
+
+    switchPortalView('onboardingSection');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// =============================================================================
+// MÓDULO 4: ONBOARDING, ANAMNESIS DIGITAL & DIAGNÓSTICO CLÍNICO (8 PASOS)
+// =============================================================================
+function initDiagnosisWizard() {
+    // 1. Checkbox de Consentimiento (Paso 0)
+    const consentCheck = document.getElementById('diagConsentCheck');
+    const btnStartDiag = document.getElementById('btnStartDiag');
+    if (consentCheck && btnStartDiag) {
+        consentCheck.addEventListener('change', () => {
+            btnStartDiag.disabled = !consentCheck.checked;
+        });
+        btnStartDiag.addEventListener('click', () => {
+            if (consentCheck.checked) {
+                window.diagWizardGoStep(1, '¡Consentimiento registrado!');
             }
-            setStep(2);
         });
     }
 
-    if (prev2) prev2.addEventListener('click', () => setStep(1));
-    if (next2) next2.addEventListener('click', () => setStep(3));
-    if (prev3) prev3.addEventListener('click', () => setStep(2));
+    // 2. Triaje Clínico PAR-Q+ (Paso 1)
+    const triageItems = document.querySelectorAll('.triage-item');
+    triageItems.forEach(item => {
+        const btns = item.querySelectorAll('.triage-btn');
+        btns.forEach(b => {
+            b.addEventListener('click', () => {
+                btns.forEach(btn => btn.classList.remove('active'));
+                b.classList.add('active');
+                checkParqFlags();
+                saveDiagnosisDraft();
+            });
+        });
+    });
 
-    // Envío del Onboarding -> Guarda en Supabase public.profiles
-    if (wizardForm) {
-        wizardForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const fullName = document.getElementById('obFullName').value.trim();
-            const age = parseInt(document.getElementById('obAge').value, 10);
-            const weight = parseFloat(document.getElementById('obWeight').value);
-            const height = parseFloat(document.getElementById('obHeight').value);
+    // 3. Topografía de Lesiones y EVA (Paso 2)
+    const injuryPills = document.querySelectorAll('#injuriesPillGrid .pill-card');
+    const noInjuriesCheck = document.getElementById('diagNoInjuriesCheck');
+    const noInjuriesCard = document.getElementById('noInjuriesCard');
+    const evaBox = document.getElementById('diagEvaBox');
+    const evaSlider = document.getElementById('diagEvaSlider');
+    const evaVal = document.getElementById('diagEvaVal');
 
-            const selectedGoal = document.querySelector('input[name="obGoal"]:checked')?.value || 'fuerza';
-            const selectedInjuries = Array.from(document.querySelectorAll('input[name="obInjuries"]:checked')).map(el => el.value);
+    injuryPills.forEach(pill => {
+        pill.addEventListener('click', (e) => {
+            // Evita doble disparo por label nativo
+            if (e.target.tagName !== 'INPUT') {
+                const cb = pill.querySelector('input[type="checkbox"]');
+                if (cb) cb.checked = !cb.checked;
+            }
+            const cb = pill.querySelector('input[type="checkbox"]');
+            pill.classList.toggle('selected', cb.checked);
 
-            const stress = parseInt(document.getElementById('obStressRange').value, 10);
-            const sleep = parseFloat(document.getElementById('obSleepHours').value);
-            const stepTarget = parseInt(document.getElementById('obStepTarget').value, 10) || 10000;
-
-            const profileData = {
-                id: AppState.user ? AppState.user.id : undefined,
-                full_name: fullName,
-                age,
-                current_weight: weight,
-                height,
-                fitness_goal: selectedGoal,
-                medical_notes: selectedInjuries.join(', '),
-                daily_step_target: stepTarget,
-                active_plan_name: 'Plan Personalizado SENS TRAIN'
-            };
-
-            if (supabaseClient && AppState.user) {
-                try {
-                    const { error } = await supabaseClient
-                        .from('profiles')
-                        .upsert(profileData);
-                    if (error) console.error('Error guardando perfil en Supabase:', error);
-                } catch (err) {
-                    console.error('Error Supabase upsert:', err);
+            if (cb.checked) {
+                if (noInjuriesCheck) {
+                    noInjuriesCheck.checked = false;
+                    noInjuriesCard.classList.remove('selected');
                 }
             }
+            updateEvaVisibility();
+            saveDiagnosisDraft();
+        });
+    });
 
-            // Persistencia Local
-            AppState.profile = profileData;
-            if (AppState.user && AppState.user.email) {
-                localStorage.setItem('sens_profile_' + AppState.user.email, JSON.stringify(profileData));
+    if (noInjuriesCard && noInjuriesCheck) {
+        noInjuriesCard.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'INPUT') {
+                noInjuriesCheck.checked = !noInjuriesCheck.checked;
             }
-
-            alert('¡Perfil configurado con éxito! Bienvenido a tu Dashboard de Entrenamiento.');
-            document.getElementById('portalSubNav').style.display = 'flex';
-            openUserPortal(false);
+            if (noInjuriesCheck.checked) {
+                injuryPills.forEach(p => {
+                    p.classList.remove('selected');
+                    const cb = p.querySelector('input[type="checkbox"]');
+                    if (cb) cb.checked = false;
+                });
+            }
+            updateEvaVisibility();
+            saveDiagnosisDraft();
         });
     }
+
+    if (evaSlider && evaVal) {
+        evaSlider.addEventListener('input', () => {
+            evaVal.textContent = `${evaSlider.value} / 10`;
+            saveDiagnosisDraft();
+        });
+    }
+
+    function updateEvaVisibility() {
+        const hasSelectedInjuries = Array.from(document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]:checked')).length > 0;
+        if (evaBox) {
+            evaBox.style.display = hasSelectedInjuries ? 'block' : 'none';
+        }
+    }
+
+    // 4. Contexto Deportivo (Paso 3)
+    const freqBtns = document.querySelectorAll('.freq-btn');
+    freqBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            freqBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            saveDiagnosisDraft();
+        });
+    });
+
+    const equipPills = document.querySelectorAll('input[name="diagEquipment"]');
+    equipPills.forEach(input => {
+        const card = input.closest('.pill-card');
+        if (card) {
+            card.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'INPUT') {
+                    input.checked = !input.checked;
+                }
+                card.classList.toggle('selected', input.checked);
+                saveDiagnosisDraft();
+            });
+        }
+    });
+
+    // 5. Carga Alostática (Paso 4)
+    const sleepSlider = document.getElementById('diagSleepSlider');
+    const sleepVal = document.getElementById('diagSleepVal');
+    if (sleepSlider && sleepVal) {
+        sleepSlider.addEventListener('input', () => {
+            sleepVal.textContent = `${parseFloat(sleepSlider.value).toFixed(1)} hs`;
+            saveDiagnosisDraft();
+        });
+    }
+
+    const stressSlider = document.getElementById('diagStressSlider');
+    const stressVal = document.getElementById('diagStressVal');
+    if (stressSlider && stressVal) {
+        stressSlider.addEventListener('input', () => {
+            stressVal.textContent = `${stressSlider.value} / 10`;
+            saveDiagnosisDraft();
+        });
+    }
+
+    const waterBtns = document.querySelectorAll('.water-btn');
+    waterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            waterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            saveDiagnosisDraft();
+        });
+    });
+
+    // 6. Registro Fotográfico Postural (Paso 7)
+    setupPhotoUpload('filePhotoFront', 'previewImgFront', 'boxPhotoFront');
+    setupPhotoUpload('filePhotoSide', 'previewImgSide', 'boxPhotoSide');
+    setupPhotoUpload('filePhotoBack', 'previewImgBack', 'boxPhotoBack');
+
+    // 7. Botón Finalizar Diagnóstico (Paso 7 -> Paso 8)
+    const finishBtn = document.getElementById('btnFinishDiagnosis');
+    if (finishBtn) {
+        finishBtn.addEventListener('click', () => {
+            processDiagnosisSubmission();
+        });
+    }
+
+    // 8. Botón Entrar al Dashboard desde Congrats (Paso 8)
+    const enterDashBtn = document.getElementById('btnDiagEnterDashboard');
+    if (enterDashBtn) {
+        enterDashBtn.addEventListener('click', () => {
+            document.getElementById('portalSubNav').style.display = 'flex';
+            renderDashboardData();
+            switchPortalView('dashView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // 9. Botón Salir al Dashboard si se está en Modo Edición
+    const exitDashBtn = document.getElementById('wizardExitToDashBtn');
+    if (exitDashBtn) {
+        exitDashBtn.addEventListener('click', () => {
+            document.getElementById('portalSubNav').style.display = 'flex';
+            renderDashboardData();
+            switchPortalView('dashView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // 10. Botón "Ver o Modificar mis Datos" en Dashboard & Nav
+    const editDiagBtn = document.getElementById('dashEditDiagnosisBtn');
+    if (editDiagBtn) {
+        editDiagBtn.addEventListener('click', () => {
+            startDiagnosisWizard(true);
+        });
+    }
+
+    const navPortalDiag = document.getElementById('navPortalDiagnosis');
+    if (navPortalDiag) {
+        navPortalDiag.addEventListener('click', () => {
+            startDiagnosisWizard(true);
+        });
+    }
+}
+
+// Helper: Setup Foto Postural con compresión WebP cliente
+function setupPhotoUpload(inputId, imgId, boxId) {
+    const input = document.getElementById(inputId);
+    const img = document.getElementById(imgId);
+    const box = document.getElementById(boxId);
+    if (!input || !img || !box) return;
+
+    input.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const dataUrl = event.target.result;
+            img.src = dataUrl;
+            img.style.display = 'block';
+
+            const placeholder = box.querySelector('.photo-preview-placeholder');
+            if (placeholder) placeholder.style.display = 'none';
+
+            const btn = box.querySelector('.photo-upload-btn');
+            if (btn) btn.textContent = 'Cambiar Foto';
+
+            showDiagnosisToast('¡Foto cargada con éxito!');
+            saveDiagnosisDraft();
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// Comprobar banderas de PAR-Q+
+function checkParqFlags() {
+    const activeSi = document.querySelectorAll('.triage-item .triage-btn.active[data-val="si"]');
+    const alertBox = document.getElementById('parqMedicalAlert');
+    const notesGroup = document.getElementById('parqNotesGroup');
+    const hasFlags = activeSi.length > 0;
+
+    if (alertBox) alertBox.style.display = hasFlags ? 'block' : 'none';
+    if (notesGroup) notesGroup.style.display = hasFlags ? 'block' : 'none';
+    return hasFlags;
+}
+
+// Navegación secuencial de pasos
+window.diagWizardGoStep = function(targetStep, toastMsg) {
+    const stepCards = document.querySelectorAll('.wizard-step-card');
+    const targetCard = document.getElementById(`diagStep${targetStep}`);
+    if (!targetCard) return;
+
+    stepCards.forEach(card => card.classList.remove('active'));
+    targetCard.classList.add('active');
+
+    // Actualizar barra de progreso y etiquetas
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const stepLabel = document.getElementById('diagStepLabel');
+
+    const progressPercentages = [0, 15, 30, 45, 60, 75, 85, 95, 100];
+    const stepNames = [
+        'Paso 0 de 8: Consentimiento Legal',
+        'Paso 1 de 8: Triaje Clínico PAR-Q+',
+        'Paso 2 de 8: Topografía de Dolor & Lesiones',
+        'Paso 3 de 8: Contexto Deportivo & Logística',
+        'Paso 4 de 8: Carga Alostática & Estilo de Vida',
+        'Paso 5 de 8: Barrera Psicológica de Adherencia',
+        'Paso 6 de 8: Pruebas Funcionales de Movilidad',
+        'Paso 7 de 8: Biometría & Registro Postural',
+        'Paso 8 de 8: Micro-Hábitos & Confirmación'
+    ];
+
+    const pct = progressPercentages[targetStep] || 0;
+    if (progressFill) progressFill.style.width = `${pct}%`;
+    if (progressText) progressText.textContent = `${pct}%`;
+    if (stepLabel) stepLabel.textContent = stepNames[targetStep] || `Paso ${targetStep} de 8`;
+
+    if (toastMsg) {
+        showDiagnosisToast(toastMsg);
+    }
+
+    AppState.diagnosisCurrentStep = targetStep;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// Auto-avance Fricción Cero en preguntas de opción única (350ms pause)
+window.diagAutoAdvanceRadio = function(element, groupName, nextStepTarget, toastMsg) {
+    const radio = element.querySelector(`input[name="diag${groupName.charAt(0).toUpperCase() + groupName.slice(1)}"]`) || element.querySelector('input[type="radio"]');
+    if (radio) {
+        radio.checked = true;
+    }
+
+    // Efecto visual feedback
+    const siblings = element.parentElement.querySelectorAll('.touch-card');
+    siblings.forEach(s => s.style.borderColor = 'var(--border-subtle)');
+    element.style.borderColor = 'var(--accent-primary)';
+
+    saveDiagnosisDraft();
+
+    if (typeof nextStepTarget === 'number') {
+        setTimeout(() => {
+            window.diagWizardGoStep(nextStepTarget, toastMsg);
+        }, 350);
+    } else {
+        showDiagnosisToast('¡Registrado!');
+    }
+};
+
+// Toast de micro-dopamina
+function showDiagnosisToast(message) {
+    const toast = document.getElementById('feedbackToast');
+    if (!toast) return;
+    toast.textContent = message || '¡Excelente!';
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2000);
+}
+
+// Procesar el envío completo y calcular algoritmo VIP + Micro-hábitos
+async function processDiagnosisSubmission() {
+    const fullNameInput = document.getElementById('diagFullName');
+    const ageInput = document.getElementById('diagAge');
+    const weightInput = document.getElementById('diagWeight');
+    const heightInput = document.getElementById('diagHeight');
+
+    const fullName = (fullNameInput ? fullNameInput.value.trim() : '') || (AppState.user ? AppState.user.email.split('@')[0] : 'Atleta');
+    const age = parseInt(ageInput ? ageInput.value : '45', 10);
+    const weight = parseFloat(weightInput ? weightInput.value : '78.0') || 78.0;
+    const height = parseFloat(heightInput ? heightInput.value : '175') || 175;
+
+    // PAR-Q+ respuestas
+    const parqResponses = {};
+    let positiveParqCount = 0;
+    document.querySelectorAll('.triage-item').forEach(item => {
+        const qKey = item.getAttribute('data-q');
+        const activeBtn = item.querySelector('.triage-btn.active');
+        const val = activeBtn ? activeBtn.getAttribute('data-val') : 'no';
+        parqResponses[qKey] = val;
+        if (val === 'si') positiveParqCount++;
+    });
+    const hasMedicalFlags = positiveParqCount > 0;
+    const parqNotes = document.getElementById('diagParqNotes')?.value.trim() || '';
+
+    // Lesiones activas
+    const selectedInjuries = Array.from(document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]:checked')).map(el => el.value);
+    const evaScore = parseInt(document.getElementById('diagEvaSlider')?.value || '5', 10);
+
+    // Contexto deportivo
+    const experience = document.querySelector('input[name="diagExperience"]:checked')?.value || 'intermediate';
+    const activeFreqBtn = document.querySelector('.freq-btn.active');
+    const weeklyFrequency = activeFreqBtn ? parseInt(activeFreqBtn.getAttribute('data-days'), 10) : 3;
+    const availableEquipment = Array.from(document.querySelectorAll('input[name="diagEquipment"]:checked')).map(el => el.value);
+
+    // Carga alostática
+    const sleepHours = parseFloat(document.getElementById('diagSleepSlider')?.value || '7.0');
+    const stressLevel = parseInt(document.getElementById('diagStressSlider')?.value || '6', 10);
+    const neatLevel = document.querySelector('input[name="diagNeat"]:checked')?.value || 'sedentary';
+    const activeWaterBtn = document.querySelector('.water-btn.active');
+    const waterBaseline = activeWaterBtn ? parseFloat(activeWaterBtn.getAttribute('data-water')) : 2.0;
+
+    // Obstáculo psicológico
+    const historicalHurdle = document.querySelector('input[name="diagHurdle"]:checked')?.value || 'time';
+
+    // Pruebas de movilidad
+    const mobShoulder = document.querySelector('input[name="diagMobShoulder"]:checked')?.value || 'ok';
+    const mobPosterior = document.querySelector('input[name="diagMobPosterior"]:checked')?.value || 'ok';
+
+    // Fotos posturales
+    const frontPhoto = document.getElementById('previewImgFront')?.src || null;
+    const sidePhoto = document.getElementById('previewImgSide')?.src || null;
+    const backPhoto = document.getElementById('previewImgBack')?.src || null;
+
+    // =========================================================================
+    // ALGORITMO VIP SCORE (PRD Sección 4)
+    // Score VIP = (0.45 * C_clinica) + (0.30 * A_alostatica) + (0.25 * V_adherencia)
+    // =========================================================================
+    let c_clinica = 0;
+    c_clinica += positiveParqCount * 4;
+    if (selectedInjuries.length > 0 && evaScore >= 6) {
+        c_clinica += selectedInjuries.length * 3;
+    }
+    if (mobShoulder === 'pain' || mobPosterior === 'pain') {
+        c_clinica += 2;
+    }
+    c_clinica = Math.min(10, c_clinica);
+
+    let a_alostatica = 0;
+    if (stressLevel >= 8) a_alostatica += 5;
+    if (sleepHours < 6) a_alostatica += 3;
+    if (neatLevel === 'sedentary') a_alostatica += 2;
+    a_alostatica = Math.min(10, a_alostatica);
+
+    let v_adherencia = 0;
+    if (historicalHurdle === 'pain' || historicalHurdle === 'consistency') v_adherencia += 5;
+    if (experience === 'beginner') v_adherencia += 5;
+    v_adherencia = Math.min(10, v_adherencia);
+
+    const vipScore = parseFloat(((0.45 * c_clinica) + (0.30 * a_alostatica) + (0.25 * v_adherencia)).toFixed(2));
+    const isVipCandidate = vipScore >= 6.5;
+
+    // =========================================================================
+    // CÁLCULO DE MICRO-HÁBITOS BASALES (PRD Sección 5.4)
+    // Hidratación: 35 ml x peso(kg)
+    // Pasos: 7.000 u 8.000 / 10.000 según NEAT
+    // =========================================================================
+    const calculatedWaterLiters = (Math.round((weight * 0.035) * 10) / 10).toFixed(1);
+    let calculatedStepTarget = 8000;
+    if (neatLevel === 'sedentary') calculatedStepTarget = 7000;
+    else if (neatLevel === 'active') calculatedStepTarget = 10000;
+
+    // Actualizar UI del Paso 8
+    const habitWaterEl = document.getElementById('diagHabitWater');
+    const habitStepsEl = document.getElementById('diagHabitSteps');
+    const habitNeatDesc = document.getElementById('diagHabitNeatDesc');
+    const habitTierEl = document.getElementById('diagHabitTier');
+    const habitTierSub = document.getElementById('diagHabitTierSub');
+
+    if (habitWaterEl) habitWaterEl.textContent = `${calculatedWaterLiters} L / día`;
+    if (habitStepsEl) habitStepsEl.textContent = `${calculatedStepTarget.toLocaleString()} pasos`;
+    if (habitNeatDesc) {
+        habitNeatDesc.textContent = neatLevel === 'sedentary'
+            ? 'Objetivo adaptado para compensar horas de oficina'
+            : 'Calibrado según tu dinamismo laboral diario';
+    }
+
+    if (habitTierEl) {
+        habitTierEl.textContent = isVipCandidate ? 'Atención Prioritaria Recomendada' : 'Expediente Biomecánico Activo';
+    }
+    if (habitTierSub) {
+        habitTierSub.textContent = isVipCandidate
+            ? `Score VIP: ${vipScore} / 10 • Canal prioritario sugerido`
+            : `Score: ${vipScore} / 10 • Programación adaptativa activa`;
+    }
+
+    // Iniciar temporizador regresivo de 24 horas
+    startDiagnosisCountdown(24 * 3600);
+
+    // =========================================================================
+    // PERSISTENCIA DE DATOS
+    // =========================================================================
+    const profilePayload = {
+        id: AppState.user ? AppState.user.id : undefined,
+        full_name: fullName,
+        age,
+        current_weight: weight,
+        height,
+        daily_step_target: calculatedStepTarget,
+        role: isVipCandidate ? 'user_vip' : 'user_normal',
+        vip_candidate: isVipCandidate,
+        vip_score: vipScore,
+        onboarding_completed: true,
+        consent_timestamp: new Date().toISOString(),
+        consent_version: 'v1.0_2026',
+        active_plan_name: 'Plan Personalizado SENS TRAIN',
+        updated_at: new Date().toISOString()
+    };
+
+    const anamnesisPayload = {
+        user_id: AppState.user ? AppState.user.id : undefined,
+        parq_responses: parqResponses,
+        has_medical_flags: hasMedicalFlags,
+        parq_notes: parqNotes,
+        active_injuries: selectedInjuries,
+        eva_score: evaScore,
+        experience_level: experience,
+        weekly_frequency: weeklyFrequency,
+        available_equipment: availableEquipment,
+        sleep_hours: sleepHours,
+        stress_level: stressLevel,
+        neat_level: neatLevel,
+        water_liters_baseline: parseFloat(calculatedWaterLiters),
+        historical_hurdle: historicalHurdle,
+        mobility_tests: { shoulder: mobShoulder, posterior: mobPosterior },
+        photos: {
+            front: frontPhoto && frontPhoto.startsWith('data:') ? 'uploaded_local' : frontPhoto,
+            side: sidePhoto && sidePhoto.startsWith('data:') ? 'uploaded_local' : sidePhoto,
+            back: backPhoto && backPhoto.startsWith('data:') ? 'uploaded_local' : backPhoto
+        },
+        daily_step_target: calculatedStepTarget,
+        is_draft: false,
+        updated_at: new Date().toISOString()
+    };
+
+    AppState.profile = profilePayload;
+    AppState.anamnesis = anamnesisPayload;
+
+    const emailKey = AppState.user && AppState.user.email ? AppState.user.email : 'local_user';
+    localStorage.setItem(`sens_profile_${emailKey}`, JSON.stringify(profilePayload));
+    localStorage.setItem(`sens_anamnesis_${emailKey}`, JSON.stringify(anamnesisPayload));
+    localStorage.removeItem('sens_onboarding_draft');
+
+    // Sincronización en segundo plano con Supabase si está disponible
+    if (supabaseClient && AppState.user) {
+        try {
+            await supabaseClient.from('profiles').upsert(profilePayload);
+            await supabaseClient.from('anamnesis').upsert(anamnesisPayload);
+        } catch (err) {
+            console.error('Error sincronizando con Supabase:', err);
+        }
+    }
+
+    // Avanzar a la pantalla de felicitaciones (Paso 8)
+    window.diagWizardGoStep(8, '¡Diagnóstico y Biometría asegurados!');
+}
+
+// Temporizador regresivo de 24 horas (Compromiso SENS Train)
+function startDiagnosisCountdown(totalSeconds) {
+    if (AppState.diagCountdownInterval) {
+        clearInterval(AppState.diagCountdownInterval);
+    }
+    let remaining = totalSeconds;
+    const display = document.getElementById('diagCountdownDisplay');
+
+    function update() {
+        if (!display) return;
+        const hrs = Math.floor(remaining / 3600);
+        const mins = Math.floor((remaining % 3600) / 60);
+        const secs = remaining % 60;
+        display.textContent = `${String(hrs).padStart(2, '0')}h ${String(mins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}s`;
+        if (remaining > 0) remaining--;
+    }
+
+    update();
+    AppState.diagCountdownInterval = setInterval(update, 1000);
+}
+
+// Guardar borrador en tiempo real
+function saveDiagnosisDraft() {
+    try {
+        const draft = {
+            step: AppState.diagnosisCurrentStep || 0,
+            fullName: document.getElementById('diagFullName')?.value || '',
+            age: document.getElementById('diagAge')?.value || '',
+            weight: document.getElementById('diagWeight')?.value || '',
+            height: document.getElementById('diagHeight')?.value || '',
+            eva: document.getElementById('diagEvaSlider')?.value || '5',
+            sleep: document.getElementById('diagSleepSlider')?.value || '7',
+            stress: document.getElementById('diagStressSlider')?.value || '6',
+            timestamp: Date.now()
+        };
+        localStorage.setItem('sens_onboarding_draft', JSON.stringify(draft));
+    } catch (e) {
+        // Ignorar si Storage está lleno
+    }
+}
+
+// Restaurar borrador de diagnóstico
+function restoreDiagnosisDraft() {
+    try {
+        const raw = localStorage.getItem('sens_onboarding_draft');
+        if (!raw) return false;
+        const draft = JSON.parse(raw);
+        if (draft.fullName) document.getElementById('diagFullName').value = draft.fullName;
+        if (draft.age) document.getElementById('diagAge').value = draft.age;
+        if (draft.weight) document.getElementById('diagWeight').value = draft.weight;
+        if (draft.height) document.getElementById('diagHeight').value = draft.height;
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+// Rellenar formulario cuando se entra en "Modo Edición"
+function prefillDiagnosisForm() {
+    const p = AppState.profile || {};
+    const a = AppState.anamnesis || {};
+
+    if (p.full_name && document.getElementById('diagFullName')) {
+        document.getElementById('diagFullName').value = p.full_name;
+    }
+    if (p.age && document.getElementById('diagAge')) {
+        document.getElementById('diagAge').value = p.age;
+    }
+    if (p.current_weight && document.getElementById('diagWeight')) {
+        document.getElementById('diagWeight').value = p.current_weight;
+    }
+    if (p.height && document.getElementById('diagHeight')) {
+        document.getElementById('diagHeight').value = p.height;
+    }
+
+    const consentCheck = document.getElementById('diagConsentCheck');
+    const btnStart = document.getElementById('btnStartDiag');
+    if (consentCheck) consentCheck.checked = true;
+    if (btnStart) btnStart.disabled = false;
+
+    if (a.parq_responses) {
+        Object.keys(a.parq_responses).forEach(qKey => {
+            const item = document.querySelector(`.triage-item[data-q="${qKey}"]`);
+            if (item) {
+                const val = a.parq_responses[qKey];
+                item.querySelectorAll('.triage-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-val') === val);
+                });
+            }
+        });
+        checkParqFlags();
+    }
+
+    if (Array.isArray(a.active_injuries)) {
+        a.active_injuries.forEach(inj => {
+            const pill = document.querySelector(`#injuriesPillGrid .pill-card[data-injury="${inj}"]`);
+            if (pill) {
+                pill.classList.add('selected');
+                const cb = pill.querySelector('input[type="checkbox"]');
+                if (cb) cb.checked = true;
+            }
+        });
+        if (a.active_injuries.length > 0) {
+            const evaBox = document.getElementById('diagEvaBox');
+            if (evaBox) evaBox.style.display = 'block';
+            if (a.eva_score) {
+                const slider = document.getElementById('diagEvaSlider');
+                const valEl = document.getElementById('diagEvaVal');
+                if (slider) slider.value = a.eva_score;
+                if (valEl) valEl.textContent = `${a.eva_score} / 10`;
+            }
+        }
+    }
+
+    if (a.weekly_frequency) {
+        document.querySelectorAll('.freq-btn').forEach(btn => {
+            btn.classList.toggle('active', parseInt(btn.getAttribute('data-days'), 10) === a.weekly_frequency);
+        });
+    }
+
+    if (a.sleep_hours) {
+        const slider = document.getElementById('diagSleepSlider');
+        const badge = document.getElementById('diagSleepVal');
+        if (slider) slider.value = a.sleep_hours;
+        if (badge) badge.textContent = `${parseFloat(a.sleep_hours).toFixed(1)} hs`;
+    }
+
+    if (a.stress_level) {
+        const slider = document.getElementById('diagStressSlider');
+        const badge = document.getElementById('diagStressVal');
+        if (slider) slider.value = a.stress_level;
+        if (badge) badge.textContent = `${a.stress_level} / 10`;
+    }
+}
+
+// Aliasing retrocompatible
+function initOnboardingWizard() {
+    initDiagnosisWizard();
 }
 
 // =============================================================================

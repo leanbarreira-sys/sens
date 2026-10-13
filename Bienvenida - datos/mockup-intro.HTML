@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENS Train | Diagnóstico y Onboarding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* =========================================
+           1. DESIGN TOKENS (Onyx & Champagne)
+           ========================================= */
+        :root {
+            --bg-base: #080809;
+            --bg-surface: #121214;
+            --bg-elevated: #1A1A1D;
+            
+            --accent-primary: #E5CBA7;
+            --accent-hover: #F2DEBE;
+            
+            --text-primary: #FFFFFF;
+            --text-secondary: #D1D1D5;
+            --text-muted: #7A7A80;
+            
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            
+            --font-main: 'Raleway', sans-serif;
+            --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .wizard-container {
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .wizard-container {
+                height: 80vh;
+                background: var(--bg-surface);
+                border: 1px solid var(--border-subtle);
+                border-radius: 24px;
+                box-shadow: 0 24px 64px rgba(0,0,0,0.8);
+            }
+        }
+
+        /* HEADER & PROGRESS */
+        header { padding: 30px 30px 15px; z-index: 10; text-align: center; }
+        .brand-logo { font-size: 14px; font-weight: 300; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 20px; }
+        .brand-logo strong { font-weight: 800; color: var(--accent-primary); }
+        
+        .progress-wrapper {
+            display: flex; align-items: center; justify-content: space-between; gap: 15px;
+            opacity: 0; transition: opacity 0.5s ease;
+        }
+        .progress-text { font-size: 12px; font-weight: 600; color: var(--accent-primary); letter-spacing: 1px; }
+        .progress-bar-container {
+            flex: 1; height: 4px; background: var(--bg-elevated); border-radius: 4px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: var(--accent-primary); width: 0%;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* WIZARD STEPS */
+        .step-wrapper { flex: 1; position: relative; overflow: hidden; }
+        .step {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 10px 30px 40px; display: flex; flex-direction: column;
+            opacity: 0; transform: translateX(40px); pointer-events: none;
+            transition: var(--transition-fast); overflow-y: auto;
+        }
+        .step.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        .step.exit-left { opacity: 0; transform: translateX(-40px); pointer-events: none; }
+        
+        /* TYPOGRAPHY */
+        h1 { font-weight: 300; font-size: 2rem; text-transform: uppercase; letter-spacing: 1px; line-height: 1.1; margin-bottom: 10px; text-align: center; }
+        h1 strong { font-weight: 800; color: var(--accent-primary); display: block; }
+        h2 { font-weight: 400; font-size: 1.4rem; margin-bottom: 10px; color: var(--text-primary); line-height: 1.3; }
+        p.desc { color: var(--text-secondary); font-size: 15px; margin-bottom: 25px; }
+
+        /* TOUCH CARDS (GAMIFIED UX) */
+        .selection-group { display: flex; flex-direction: column; gap: 12px; }
+        .touch-card {
+            display: flex; align-items: center; gap: 16px; padding: 20px;
+            background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+            border-radius: 16px; cursor: pointer; transition: var(--transition-fast);
+            position: relative; overflow: hidden;
+        }
+        .touch-card:hover { border-color: rgba(229, 203, 167, 0.4); background: rgba(26, 26, 29, 0.9); transform: translateY(-2px); }
+        .touch-card:active { transform: scale(0.98); }
+        .touch-card input { display: none; }
+        
+        .custom-circle {
+            width: 22px; height: 22px; border: 2px solid var(--text-muted); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; transition: var(--transition-fast); flex-shrink: 0;
+        }
+        .touch-card input[type="radio"]:checked + .custom-circle { border-color: var(--accent-primary); }
+        .touch-card input[type="radio"]:checked + .custom-circle::after { content: ''; width: 10px; height: 10px; background: var(--accent-primary); border-radius: 50%; }
+        .touch-card input:checked ~ .card-content { color: var(--accent-primary); font-weight: 600; }
+        
+        .card-content { font-size: 16px; color: var(--text-secondary); transition: var(--transition-fast); }
+        .card-sub { display: block; font-size: 12px; color: var(--text-muted); font-weight: 400; margin-top: 4px; }
+
+        /* MULTIPLE SELECTION GRID (Pills) */
+        .pill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
+        .pill-card {
+            background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+            padding: 16px; border-radius: 12px; text-align: center; cursor: pointer;
+            transition: var(--transition-fast); font-size: 14px; font-weight: 500; color: var(--text-secondary);
+        }
+        .pill-card input { display: none; }
+        .pill-card.selected { background: rgba(229, 203, 167, 0.1); border-color: var(--accent-primary); color: var(--accent-primary); }
+
+        /* BUTTONS */
+        .footer-actions { margin-top: auto; padding-top: 20px; }
+        .btn {
+            display: flex; align-items: center; justify-content: center; width: 100%; padding: 18px;
+            font-family: var(--font-main); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;
+            border-radius: 12px; cursor: pointer; border: none; transition: var(--transition-fast);
+        }
+        .btn-primary { background: var(--accent-primary); color: #080809; }
+        .btn-primary:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-2px); }
+        .btn-primary:disabled { background: var(--bg-elevated); color: var(--text-muted); cursor: not-allowed; }
+
+        /* LEGAL BOX */
+        .legal-box {
+            background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--accent-primary);
+            padding: 15px; border-radius: 0 8px 8px 0; font-size: 13px; color: var(--text-muted); margin-bottom: 30px;
+        }
+
+        /* GAMIFICATION FEEDBACK */
+        .feedback-toast {
+            position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+            background: var(--accent-primary); color: #000; padding: 6px 16px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            opacity: 0; transition: all 0.3s ease;
+        }
+        .feedback-toast.show { top: 20px; opacity: 1; }
+
+    </style>
+</head>
+<body>
+
+    <div class="wizard-container">
+        
+        <header>
+            <div class="brand-logo">SENS <strong>TRAIN</strong></div>
+            <div class="progress-wrapper" id="progressWrapper">
+                <div class="progress-bar-container">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+            <div class="feedback-toast" id="feedbackToast">¡Excelente!</div>
+        </header>
+
+        <div class="step-wrapper">
+            
+            <!-- PASO 0: Consentimiento -->
+            <div class="step active" id="step0">
+                <div style="margin: auto 0;">
+                    <h1>Diagnóstico <strong>Inicial</strong></h1>
+                    <p class="desc" style="text-align: center;">Personalización basada en tu anatomía, no en suposiciones. Nos tomará solo 2 minutos.</p>
+                    
+                    <div class="legal-box">
+                        Para diseñar tu plan, analizaremos tu contexto deportivo y métricas. Tus datos están protegidos y encriptados.
+                    </div>
+
+                    <label class="touch-card" style="margin-bottom: 20px;" onclick="toggleConsent()">
+                        <input type="checkbox" id="consentCheck">
+                        <div class="custom-circle" style="border-radius: 6px;"></div>
+                        <span class="card-content" style="font-size: 14px;">Entiendo y acepto comenzar el diagnóstico.</span>
+                    </label>
+                </div>
+                <div class="footer-actions">
+                    <button class="btn btn-primary" id="btnStart" disabled onclick="nextStep(0, 1, 33)">Empezar</button>
+                </div>
+            </div>
+
+            <!-- PASO 1: Experiencia (AUTO-AVANCE) -->
+            <div class="step" id="step1">
+                <h2>¿Cuál es tu relación actual con el entrenamiento?</h2>
+                <p class="desc">Para calibrar la intensidad de tu primera semana.</p>
+
+                <div class="selection-group">
+                    <label class="touch-card">
+                        <input type="radio" name="experience" onclick="autoAdvance(1, 2, 66)">
+                        <div class="custom-circle"></div>
+                        <div class="card-content">
+                            Principiante / Retomando
+                            <span class="card-sub">Hace mucho que no entreno con constancia.</span>
+                        </div>
+                    </label>
+                    <label class="touch-card">
+                        <input type="radio" name="experience" onclick="autoAdvance(1, 2, 66)">
+                        <div class="custom-circle"></div>
+                        <div class="card-content">
+                            Intermedio
+                            <span class="card-sub">Entreno a veces, pero me cuesta mantener el ritmo.</span>
+                        </div>
+                    </label>
+                    <label class="touch-card">
+                        <input type="radio" name="experience" onclick="autoAdvance(1, 2, 66)">
+                        <div class="custom-circle"></div>
+                        <div class="card-content">
+                            Avanzado / Activo
+                            <span class="card-sub">Entreno fuerza regularmente todas las semanas.</span>
+                        </div>
+                    </label>
+                </div>
+                <!-- Nota: No hay botón "Continuar" aquí. Flujo fricción cero. -->
+            </div>
+
+            <!-- PASO 2: Lesiones (Múltiple + Botón) -->
+            <div class="step" id="step2">
+                <h2>¿Tenés alguna dolencia o lesión activa?</h2>
+                <p class="desc">Podés seleccionar varias. Esto adaptará los ejercicios permitidos.</p>
+
+                <div class="pill-grid">
+                    <label class="pill-card" onclick="togglePill(this)">
+                        <input type="checkbox" name="lesion"> Lumbar / Espalda
+                    </label>
+                    <label class="pill-card" onclick="togglePill(this)">
+                        <input type="checkbox" name="lesion"> Rodillas
+                    </label>
+                    <label class="pill-card" onclick="togglePill(this)">
+                        <input type="checkbox" name="lesion"> Hombros
+                    </label>
+                    <label class="pill-card" onclick="togglePill(this)">
+                        <input type="checkbox" name="lesion"> Cervical
+                    </label>
+                </div>
+                
+                <label class="touch-card" onclick="uncheckPills()">
+                    <input type="radio" name="lesion_none" id="noLesions">
+                    <div class="custom-circle"></div>
+                    <span class="card-content">Ninguna, estoy perfecto/a.</span>
+                </label>
+
+                <div class="footer-actions">
+                    <button class="btn btn-primary" onclick="nextStep(2, 3, 90, '¡Ya casi terminamos!')">Continuar</button>
+                </div>
+            </div>
+
+            <!-- PASO 3: Fin Demostrativo -->
+            <div class="step" id="step3">
+                <div style="margin: auto 0; text-align: center;">
+                    <div style="width: 60px; height: 60px; background: var(--accent-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h2>Perfil Biomecánico Listo</h2>
+                    <p class="desc">Has completado la parte clínica. El siguiente paso en la app real sería la evaluación fotográfica postural.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // LÓGICA DE UI Y MICROINTERACCIONES
+        
+        function toggleConsent() {
+            const check = document.getElementById('consentCheck');
+            const btn = document.getElementById('btnStart');
+            btn.disabled = !check.checked;
+            
+            // Cambiar el checkbox circular visualmente
+            const circle = check.nextElementSibling;
+            if(check.checked) {
+                circle.style.borderColor = 'var(--accent-primary)';
+                circle.style.background = 'var(--accent-primary)';
+            } else {
+                circle.style.borderColor = 'var(--text-muted)';
+                circle.style.background = 'transparent';
+            }
+        }
+
+        function togglePill(element) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            if(checkbox.checked) {
+                element.classList.add('selected');
+                document.getElementById('noLesions').checked = false;
+                document.getElementById('noLesions').parentElement.querySelector('.custom-circle').style.borderColor = 'var(--text-muted)';
+            } else {
+                element.classList.remove('selected');
+            }
+        }
+
+        function uncheckPills() {
+            document.querySelectorAll('.pill-card').forEach(card => {
+                card.classList.remove('selected');
+                card.querySelector('input').checked = false;
+            });
+        }
+
+        // Show toast notification for dopamine hit
+        function showToast(message) {
+            const toast = document.getElementById('feedbackToast');
+            toast.innerText = message || "¡Excelente!";
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2000);
+        }
+
+        // Auto avance Fricción Cero
+        function autoAdvance(currentIdx, nextIdx, progress) {
+            setTimeout(() => {
+                nextStep(currentIdx, nextIdx, progress);
+            }, 350); // Pequeña pausa para que el usuario vea que se seleccionó su opción
+        }
+
+        function nextStep(currentIdx, nextIdx, progressNum, toastMsg) {
+            // Animación de salida
+            const currentStep = document.getElementById('step' + currentIdx);
+            currentStep.classList.remove('active');
+            currentStep.classList.add('exit-left');
+            
+            // UI Barra de progreso
+            if(currentIdx === 0) {
+                document.getElementById('progressWrapper').style.opacity = '1';
+            }
+            document.getElementById('progressFill').style.width = progressNum + '%';
+            document.getElementById('progressText').innerText = progressNum + '%';
+
+            // Dopamine hit
+            if(currentIdx > 0 && currentIdx < 3) showToast(toastMsg);
+
+            // Animación de entrada
+            setTimeout(() => {
+                const nextStepDiv = document.getElementById('step' + nextIdx);
+                nextStepDiv.classList.remove('exit-left'); // por si acaso
+                nextStepDiv.classList.add('active');
+            }, 250); // Sincronizado con CSS transition
+        }
+    </script>
+</body>
+</html>
