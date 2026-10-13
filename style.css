@@ -1831,19 +1831,19 @@ body.in-portal #homeFloatingSocial,
 
 @media (max-width: 768px) {
     .floating-social {
-        bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-        right: 18px;
-        gap: 12px;
+        bottom: calc(75px + env(safe-area-inset-bottom, 0px));
+        right: 12px;
+        gap: 8px;
     }
 
     .social-btn {
-        width: 48px;
-        height: 48px;
+        width: 42px;
+        height: 42px;
     }
 
     .social-btn svg {
-        width: 26px;
-        height: 26px;
+        width: 22px;
+        height: 22px;
     }
 }
 
@@ -2637,37 +2637,89 @@ a.hero-btn-apple-dark:active {
 }
 
 @media (max-width: 768px) {
-    /* Ajuste Hero Mobile: Tipografía y Espaciado Compacto (Evita desbordes y wraps excesivos) */
+    /* Ajuste Hero Mobile: Tipografía y Espaciado Compacto (Apple-Style Minimal & Despejado) */
     .sens-train-hero {
-        padding: 95px 4% 75px !important;
-        min-height: 100vh;
-        min-height: 100svh;
+        padding: 105px 5% calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+        min-height: 100vh !important;
+        min-height: 100svh !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        text-align: center !important;
     }
     .hero-train-content {
-        max-width: 380px !important;
+        max-width: 325px !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
     .hero-apple-eyebrow {
-        font-size: 0.82rem !important;
-        letter-spacing: 3.5px !important;
+        font-size: 0.74rem !important;
+        letter-spacing: 2.8px !important;
         margin-bottom: 4px !important;
+        opacity: 0.85;
     }
     .hero-apple-highlight {
-        font-size: clamp(1.7rem, 7.2vw, 2.25rem) !important;
-        line-height: 1.12 !important;
+        font-size: clamp(1.65rem, 6.8vw, 2.05rem) !important;
+        line-height: 1.1 !important;
         letter-spacing: -0.02em !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 6px !important;
+    }
+    .hero-lead-highlight {
+        font-size: 0.95rem !important;
+        margin: 2px 0 14px !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.01em !important;
+        line-height: 1.3 !important;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+    }
+    /* Ocultar el párrafo largo en mobile para dar respiro editorial y visibilidad a Nico */
+    .hero-desc-extended {
+        display: none !important;
     }
     .hero-description-train {
         font-size: 0.84rem !important;
         line-height: 1.45 !important;
-        margin: 0 auto 1.35rem !important;
-        max-width: 350px !important;
-        color: #D8D8DC !important;
+        margin: 0 auto 14px !important;
+        max-width: 320px !important;
+    }
+    .hero-cta-group {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+        max-width: 270px !important;
+        margin: 0 auto !important;
     }
     .hero-btn-apple-dark {
-        padding: 13px 30px !important;
+        width: 100% !important;
+        max-width: 270px !important;
+        padding: 13px 20px !important;
+        font-size: 11px !important;
+        letter-spacing: 1.2px !important;
+        border-radius: 28px !important;
+    }
+    .hero-btn-secondary {
+        background: transparent !important;
+        border: none !important;
+        color: var(--accent-primary) !important;
         font-size: 11.5px !important;
-        letter-spacing: 1.5px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1.2px !important;
+        padding: 5px 12px !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+    .hero-btn-secondary:hover {
+        background: transparent !important;
+        color: #FFFFFF !important;
+        box-shadow: none !important;
+        transform: none !important;
     }
     .hero-credentials-bar {
         margin-top: 16px !important;
@@ -6662,7 +6714,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     letter-spacing: -0.01em;
 }
 
-/* En Desktop (>= 992px): Video a la izquierda (vertical nítido) y difuminación a la derecha */
+/* En Desktop (>= 992px): Video a la izquierda (vertical nítido) y contenido centrado en la mitad derecha */
 @media (min-width: 992px) {
     .sens-train-hero {
         min-height: 100vh !important;
@@ -6670,8 +6722,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
         flex-direction: row !important;
         justify-content: flex-end !important;
         align-items: center !important;
-        padding: 120px 8% 80px !important;
-        text-align: left !important;
+        padding: 100px 5% 60px !important;
         position: relative !important;
         overflow: hidden !important;
     }
@@ -6683,8 +6734,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
         left: 0 !important;
         bottom: 0 !important;
         right: auto !important;
-        width: 48vw !important;
-        max-width: 720px !important;
+        width: 44vw !important;
+        max-width: 680px !important;
         height: 100% !important;
         object-fit: cover !important;
         object-position: center 15% !important;
@@ -6695,33 +6746,68 @@ input[type="range"]::-webkit-slider-thumb:hover {
         position: absolute !important;
         inset: 0 !important;
         background: 
-            linear-gradient(to right, rgba(8, 8, 9, 0) 0%, rgba(8, 8, 9, 0.2) 20%, rgba(8, 8, 9, 0.85) 44%, #080809 60%, #080809 100%),
+            linear-gradient(to right, rgba(8, 8, 9, 0) 0%, rgba(8, 8, 9, 0.15) 18%, rgba(8, 8, 9, 0.85) 38%, #080809 50%, #080809 100%),
             linear-gradient(to top, rgba(8, 8, 9, 0.95) 0%, transparent 15%),
             linear-gradient(to bottom, rgba(8, 8, 9, 0.85) 0%, transparent 15%) !important;
         z-index: 2 !important;
         pointer-events: none !important;
     }
 
+    /* El contenedor ocupa el sector derecho y centra armoniosamente todo el bloque de texto */
     .hero-train-content {
-        max-width: 580px !important;
-        width: 100% !important;
+        width: 56vw !important;
+        max-width: 680px !important;
         margin: 0 0 0 auto !important;
-        text-align: left !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
         z-index: 10 !important;
-        padding-left: 24px !important;
+        padding: 0 30px !important;
     }
 
+    .hero-main-heading,
     .hero-apple-eyebrow,
     .hero-apple-highlight,
+    .hero-lead-highlight,
+    .hero-desc-extended,
     .hero-description-train {
-        text-align: left !important;
+        text-align: center !important;
+    }
+
+    .hero-apple-eyebrow {
+        margin: 0 auto 6px !important;
+    }
+
+    .hero-apple-highlight {
+        margin: 0 auto 10px !important;
+    }
+
+    .hero-lead-highlight {
+        margin: 0 auto 8px !important;
     }
 
     .hero-description-train {
-        margin: 0 0 28px 0 !important;
+        margin: 0 auto 28px !important;
+        max-width: 520px !important;
+        text-align: center !important;
     }
 
     .hero-cta-group {
-        justify-content: flex-start !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 16px !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+
+    .hero-btn-apple-dark,
+    .hero-btn-secondary {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
     }
 }
