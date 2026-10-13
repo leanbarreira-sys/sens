@@ -555,7 +555,9 @@ function applyUserProfile(userTypeKey) {
         full_name: mock.full_name,
         active_plan_name: mock.active_plan_name,
         current_weight: mock.current_weight,
-        goal: mock.goal_text
+        goal: mock.goal_text,
+        subscription_status: mock.subscription_status || 'active',
+        onboarding_completed: true
     };
 
     // Actualizar elementos visuales del Portal
@@ -564,10 +566,19 @@ function applyUserProfile(userTypeKey) {
     const roleContextBadge = document.getElementById('roleContextBadge');
     const adminIndicatorBadge = document.getElementById('adminIndicatorBadge');
     const adminAddBtn = document.getElementById('btnAdminAddExercise');
+    const coachSubBadge = document.getElementById('coachSubStatusBadge');
 
     if (planBadgeEl) planBadgeEl.textContent = mock.active_plan_name;
     if (userEmailEl) userEmailEl.textContent = mock.email;
     if (roleContextBadge) roleContextBadge.textContent = mock.plan_badge_text;
+
+    if (coachSubBadge) {
+        const isActive = (AppState.profile.subscription_status === 'active');
+        coachSubBadge.textContent = isActive ? 'MEMBRESÍA ACTIVA' : 'PENDIENTE DE PAGO';
+        coachSubBadge.style.color = isActive ? '#10B981' : '#F59E0B';
+        coachSubBadge.style.borderColor = isActive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
+        coachSubBadge.style.background = isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
+    }
 
     if (mock.user_type === 'admin') {
         if (adminIndicatorBadge) adminIndicatorBadge.style.display = 'block';
@@ -1415,6 +1426,50 @@ function initPortalNavigation() {
     if (goWorkoutDetailBtn) {
         goWorkoutDetailBtn.addEventListener('click', () => switchPortalView('workoutView'));
     }
+
+    // Botón de re-verificación de membresía en Paywall
+    const refreshActivationBtn = document.getElementById('btnRefreshActivationStatus');
+    if (refreshActivationBtn) {
+        refreshActivationBtn.addEventListener('click', async () => {
+            if (supabaseClient && AppState.user) {
+                await loadProfileFromSupabase(AppState.user.id);
+            }
+            if (AppState.profile && AppState.profile.subscription_status === 'active') {
+                openUserPortal(false);
+            } else {
+                alert('Tu abono continúa en proceso de validación por Nico. Podés avisarle directamente por WhatsApp.');
+            }
+        });
+    }
+
+    // Botón de alternar membresía en barra de Coach (Nico)
+    const toggleSubBtn = document.getElementById('btnCoachToggleSubStatus');
+    if (toggleSubBtn) {
+        toggleSubBtn.addEventListener('click', async () => {
+            if (!AppState.profile) return;
+            const currentStatus = AppState.profile.subscription_status || 'active';
+            const newStatus = (currentStatus === 'active') ? 'pending_activation' : 'active';
+            AppState.profile.subscription_status = newStatus;
+
+            if (supabaseClient && AppState.user && AppState.user.id) {
+                try {
+                    await supabaseClient.from('profiles').update({ subscription_status: newStatus }).eq('id', AppState.user.id);
+                } catch (e) {
+                    console.warn('Error al actualizar membresía en Supabase:', e);
+                }
+            }
+
+            const coachSubBadge = document.getElementById('coachSubStatusBadge');
+            if (coachSubBadge) {
+                const isNowActive = (newStatus === 'active');
+                coachSubBadge.textContent = isNowActive ? 'MEMBRESÍA ACTIVA' : 'PENDIENTE DE PAGO';
+                coachSubBadge.style.color = isNowActive ? '#10B981' : '#F59E0B';
+                coachSubBadge.style.borderColor = isNowActive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
+                coachSubBadge.style.background = isNowActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
+            }
+            alert(`Membresía del atleta actualizada a: ${newStatus === 'active' ? 'ACTIVA (Acceso completo)' : 'PENDIENTE (Bloqueado por validación)'}`);
+        });
+    }
 }
 
 function switchPortalView(viewId) {
@@ -1484,6 +1539,35 @@ function openUserPortal(forceOnboarding = false) {
     const adminAddBtn = document.getElementById('btnAdminAddExercise');
     if (adminIndicatorBadge) adminIndicatorBadge.style.display = isAdmin ? 'block' : 'none';
     if (adminAddBtn) adminAddBtn.style.display = isAdmin ? 'inline-block' : 'none';
+
+    // -------------------------------------------------------------------------
+    // CONTROL DE MEMBRESÍA & PAGOS (MVP CON NICO / EG CON PASARELA DE PAGO)
+    // -------------------------------------------------------------------------
+    const subStatus = profile.subscription_status || 'active';
+    const isSubActive = isAdmin || subStatus === 'active';
+
+    if (!isSubActive) {
+        // Redirige al Paywall de Activación
+        document.getElementById('portalSubNav').style.display = 'none';
+
+        const pendingNameEl = document.getElementById('pendingUserName');
+        const pendingPlanEl = document.getElementById('pendingPlanName');
+        const notifyWaBtn = document.getElementById('btnNotifyPaymentWA');
+
+        if (pendingNameEl) pendingNameEl.textContent = profile.full_name || 'Atleta';
+        if (pendingPlanEl) pendingPlanEl.textContent = profile.active_plan_name || 'Presencial 1 a 1 VIP (CABA)';
+
+        if (notifyWaBtn) {
+            const athleteName = encodeURIComponent(profile.full_name || 'Nuevo Atleta');
+            const athleteEmail = encodeURIComponent(user.email || '');
+            const athletePlan = encodeURIComponent(profile.active_plan_name || 'Plan SENS');
+            notifyWaBtn.href = `https://wa.me/5491136329846?text=Hola%20Nico!%20Cre%C3%A9%20mi%20cuenta%20en%20SENS%20(${athleteName}%20-%20${athleteEmail}).%20Te%20aviso%20para%20confirmar%20mi%20abono%20del%20plan%20${athletePlan}%20y%20activar%20mi%20acceso.`;
+        }
+
+        switchPortalView('activationPendingView');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
 
     // Regla de Enrutamiento Onboarding:
     // 1. Admin (Nico): va directo al dashboard de coach. Nunca se le piden preguntas iniciales de atleta.

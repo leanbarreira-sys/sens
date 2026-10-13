@@ -900,9 +900,10 @@
                     <option value="admin">Mi Perfil Coach (Nico)</option>
                 </select>
             </div>
-            <div id="roleContextIndicator">
-                <span class="pill pill-champagne" id="roleContextBadge" style="font-size: 10px;">Presencial 1 a 1 • 8
-                    Sesiones/mes</span>
+            <div id="roleContextIndicator" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span class="pill pill-champagne" id="roleContextBadge" style="font-size: 10px;">Presencial 1 a 1 • 8 Sesiones/mes</span>
+                <span class="pill pill-champagne" id="coachSubStatusBadge" style="font-size: 10px; background: rgba(16, 185, 129, 0.2); color: #10B981; border-color: rgba(16, 185, 129, 0.4);">MEMBRESÍA ACTIVA</span>
+                <button type="button" class="btn btn-outline btn-sm" id="btnCoachToggleSubStatus" style="font-size: 10px; padding: 3px 8px; border-color: rgba(229, 203, 167, 0.5);">Pausar / Activar</button>
             </div>
         </div>
 
@@ -2147,6 +2148,46 @@
                         </div>
 
                     </div>
+                </div>
+            </section>
+
+            <!-- =====================================================================
+                 VISTA DE ACTIVACIÓN / PAYWALL DE MEMBRESÍA (#activationPendingView)
+                 ===================================================================== -->
+            <section class="portal-view" id="activationPendingView">
+                <div class="dash-welcome-card" style="text-align: center; max-width: 680px; margin: 40px auto; padding: 42px 30px; border: 1px solid rgba(229, 203, 167, 0.35); box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+                    <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+                        <span class="pill pill-champagne" style="font-size: 11px; letter-spacing: 1.5px; font-weight: 700;">ACCESO EN VALIDACIÓN</span>
+                    </div>
+                    <h2 class="dash-heading" style="font-size: 1.8rem; margin-bottom: 14px;">
+                        Hola <span id="pendingUserName">Atleta</span>. <strong>Tu cuenta está en proceso de activación.</strong>
+                    </h2>
+                    <p class="dash-sub" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 24px;">
+                        Para calibrar tu entrenamiento de fuerza y darte acceso completo al portal y seguimiento personalizado de Nico, confirmamos la activación de tu abono mensual.
+                    </p>
+
+                    <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 22px; text-align: left; margin-bottom: 28px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-primary); font-weight: 700;">Plan Seleccionado</span>
+                            <span class="pill pill-dark" id="pendingPlanName">Presencial 1 a 1 VIP (CABA)</span>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                            Incluye sesiones 1 a 1 en CABA (Palermo/Belgrano), programación adaptada a tu biomecánica, pautas de hábitos basales y seguimiento continuo con Nico.
+                        </p>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <a href="#" id="btnNotifyPaymentWA" class="btn btn-primary btn-full" target="_blank" rel="noopener" style="padding: 14px 20px; font-size: 14px;">
+                            Confirmar Abono con Nico por WhatsApp →
+                        </a>
+                        <button type="button" class="btn btn-outline btn-full" id="btnRefreshActivationStatus" style="font-size: 12px;">
+                            Ya aboné / Verificar activación de cuenta ↻
+                        </button>
+                    </div>
+
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 20px; line-height: 1.5;">
+                        ¿Tenés dudas o necesitás coordinar días y horarios de entrenamiento? Nico responde directamente en WhatsApp.
+                    </p>
                 </div>
             </section>
 

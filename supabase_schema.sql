@@ -35,6 +35,15 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     daily_water_ml INT DEFAULT 2500,
     active_plan_name TEXT DEFAULT 'Presencial Personalizado 1 a 1 (CABA)',
     onboarding_completed BOOLEAN DEFAULT FALSE,
+    -- Facturación, Pagos y Estado de Membresía (Soporta validación manual de Nico y Pasarelas MercadoPago/Stripe)
+    subscription_status TEXT NOT NULL DEFAULT 'pending_activation' 
+        CHECK (subscription_status IN ('active', 'pending_activation', 'past_due', 'canceled', 'trial')),
+    subscription_tier TEXT DEFAULT 'presencial_vip' 
+        CHECK (subscription_tier IN ('presencial_vip', 'presencial_duo', 'presencial_trio', 'online_premium', 'online_basic', 'none')),
+    billing_provider TEXT NOT NULL DEFAULT 'manual' 
+        CHECK (billing_provider IN ('manual', 'mercadopago', 'stripe')),
+    subscription_expires_at TIMESTAMPTZ,
+    external_subscription_id TEXT,
     consent_timestamp TIMESTAMPTZ,
     consent_version TEXT DEFAULT 'v3.0_2026',
     created_at TIMESTAMPTZ DEFAULT TIMEZONE('utc', NOW()),
@@ -259,6 +268,51 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Helper Function: Verificar Membresía Activa o Admin (Blindaje para planes y workouts)
+CREATE OR REPLACE FUNCTION public.has_active_subscription() RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM public.profiles 
+        WHERE id = auth.uid() 
+          AND (subscription_status = 'active' OR role = 'admin' OR user_type = 'admin')
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger Automático: Crear perfil al registrarse en auth.users
+CREATE OR REPLACE FUNCTION public.handle_new_user() 
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.profiles (
+        id, 
+        full_name, 
+        email, 
+        user_type, 
+        role, 
+        subscription_status, 
+        billing_provider,
+        onboarding_completed
+    )
+    VALUES (
+        NEW.id,
+        COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
+        NEW.email,
+        COALESCE(NEW.raw_user_meta_data->>'user_type', 'client_presencial_vip'),
+        'user_normal',
+        'pending_activation',
+        'manual',
+        FALSE
+    )
+    ON CONFLICT (id) DO NOTHING;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- Políticas Profiles
 CREATE POLICY "Profiles: lectura por propietario o admin"
