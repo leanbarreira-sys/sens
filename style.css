@@ -3183,6 +3183,11 @@ a.hero-btn-apple-dark:active {
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+video.ig-img {
+    pointer-events: none;
+    background: #000;
+}
+
 .ig-post:hover .ig-img {
     transform: scale(1.05);
 }

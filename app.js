@@ -1197,6 +1197,26 @@ function setupCarouselSwipe(carouselId, dotsContainerId) {
             }
         }
     }, { passive: true });
+
+    // Auto-reproducción inteligente y optimizada para videos dentro del carrusel
+    if ('IntersectionObserver' in window) {
+        const carouselVideos = carousel.querySelectorAll('video');
+        if (carouselVideos.length > 0) {
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const vid = entry.target;
+                    if (entry.isIntersecting) {
+                        const p = vid.play();
+                        if (p !== undefined) p.catch(() => {});
+                    } else {
+                        vid.pause();
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            carouselVideos.forEach(v => videoObserver.observe(v));
+        }
+    }
 }
 
 function initPricingTabs() {
