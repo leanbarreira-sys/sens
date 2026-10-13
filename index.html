@@ -5,9 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>SENS TRAIN & WELLNESS | Sentite mejor en tu cuerpo</title>
-    <!-- SEO Meta Tags -->
+    <!-- SEO Meta Tags & Generative Engine Optimization (GEO) -->
     <meta name="description"
-        content="SENS Train & Wellness con Nico. Entrenamiento de fuerza personalizado y hábitos diseñado alrededor de tu vida real. Sentite mejor en tu cuerpo.">
+        content="SENS con Nico. Entrenamiento de fuerza personalizado y bienestar para adultos y profesionales en CABA (Palermo y Belgrano). Sentite mejor en tu cuerpo.">
+    <link rel="canonical" href="https://senswellness.com.ar/">
+
+    <!-- Open Graph / Meta Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SENS — Entrenamiento y Bienestar | con Nico">
+    <meta property="og:description"
+        content="Sentite mejor en tu cuerpo. Una transformación que se nota por fuera y se siente por dentro. Entrenamiento de fuerza personalizado en CABA.">
+    <meta property="og:image" content="img/hero-bg-opt.png">
+
+    <!-- Schema.org Structured Data (GEO para Gemini, ChatGPT, Claude, Perplexity) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["SportsClub", "HealthAndBeautyBusiness"],
+      "name": "SENS — Entrenamiento y Bienestar",
+      "alternateName": "SENS TRAIN",
+      "description": "Entrenamiento de fuerza personalizado y hábitos para adultos y ejecutivos de 40 a 59 años. Fuerza tranquila, movilidad y recomposición física.",
+      "url": "https://senswellness.com.ar",
+      "telephone": "+5491136329846",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Buenos Aires",
+        "addressRegion": "CABA",
+        "addressCountry": "AR"
+      },
+      "areaServed": [
+        {"@type": "AdministrativeArea", "name": "Palermo, CABA"},
+        {"@type": "AdministrativeArea", "name": "Belgrano, CABA"}
+      ],
+      "founder": {
+        "@type": "Person",
+        "name": "Nico",
+        "jobTitle": "Entrenador y Profesor de Yoga",
+        "description": "Especialista en entrenamiento de fuerza, movilidad, conciencia corporal y hábitos sostenibles."
+      },
+      "priceRange": "$$$",
+      "knowsAbout": ["Entrenamiento de Fuerza", "Hipertrofia", "Movilidad Articular", "Conciencia Corporal", "Hábitos Sostenibles"]
+    }
+    </script>
 
     <!-- Google Fonts: Raleway (Brandbook SENS) - Preconnect & Preload to prevent FOUT -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,12 +80,13 @@
             <div class="nav-links">
                 <a href="#pilares" class="nav-link">Pilares</a>
                 <a href="#metodo" class="nav-link">Método</a>
-                <a href="#planes" class="nav-link">Planes</a>
-                <a href="#wellness" class="nav-link">Trilogy (Wellness)</a>
+                <a href="#planes" class="nav-link">Planes &amp; Precios</a>
+                <a href="#sumate" class="nav-link" style="color: var(--accent-primary); font-weight: 600;">Cómo
+                    Sumarte</a>
             </div>
 
             <div class="nav-actions-desktop">
-                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Tengo%20una%20consulta%20sobre%20SENS%20TRAIN."
+                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Tengo%20una%20consulta%20sobre%20SENS."
                     class="help-link" target="_blank" rel="noopener">
                     <span class="agent-status-dot"></span><span>WhatsApp Nico</span>
                 </a>
@@ -82,12 +122,11 @@
         <a href="#planes" class="nav-link mobile-nav-link"
             style="font-size:1.15rem; min-height:44px; display:flex; align-items:center; justify-content:center;">Planes
             &amp; Frecuencia</a>
-        <a href="#wellness" class="nav-link mobile-nav-link"
-            style="font-size:1.15rem; min-height:44px; display:flex; align-items:center; justify-content:center;">Trilogy
-            (Wellness)</a>
+        <a href="#sumate" class="nav-link mobile-nav-link"
+            style="font-size:1.15rem; min-height:44px; display:flex; align-items:center; justify-content:center; color: var(--accent-primary); font-weight:600;">Cómo
+            Sumarte</a>
         <div style="margin-top:auto; display:flex; flex-direction:column; gap:12px; padding-top:20px;">
-            <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20agendar%20una%20Evaluaci%C3%B3n%20Inicial."
-                target="_blank" rel="noopener" class="btn btn-primary btn-full" style="min-height:48px;">
+            <a href="#sumate" class="btn btn-primary btn-full mobile-nav-close-link" style="min-height:48px;">
                 Agendar Evaluación Inicial
             </a>
             <button class="btn btn-outline btn-full" id="mobileMenuClientAccessBtn" style="min-height:48px;">Acceso
@@ -117,26 +156,21 @@
 
             <div class="hero-train-content" style="z-index:4;">
                 <h1 class="hero-main-heading">
-                    <span class="hero-apple-eyebrow">TRANSFORMÁ TU CUERPO.</span>
-                    <span class="hero-apple-highlight">SE VE POR FUERA.<BR> SE SIENTE DENTRO.</span>
+                    <span class="hero-apple-eyebrow">SENTITE MEJOR EN TU CUERPO</span>
+                    <span class="hero-apple-highlight">TRANSFORMACIÓN</span>
                 </h1>
-                <p class="hero-description-train">
-                    Proceso personalizado: Entrenamiento + hábitos.
+                <p class="hero-description-train" style="max-width: 640px; margin: 0 auto 24px;">
+                    Una transformación que se nota por fuera y se siente por dentro. Entrenamiento de fuerza
+                    personalizado y hábitos diseñados para tu vida real con Nico.
                 </p>
                 <div class="hero-cta-group">
-                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20agendar%20una%20Evaluaci%C3%B3n%20Inicial%20en%20SENS%20TRAIN."
-                        target="_blank" rel="noopener" class="btn hero-btn-apple-dark">
+                    <a href="#sumate" class="btn hero-btn-apple-dark">
                         Agendar Evaluación Inicial
                     </a>
-                </div>
-
-                <!-- Credenciales Rápidas en Hero -->
-                <div class="hero-credentials-bar">
-                    <span>Palermo y alrededores</span>
-                    <span class="dot-separator">•</span>
-                    <span>100% Personalizado 1 a 1</span>
-                    <span class="dot-separator">•</span>
-                    <span>Online o Presencial</span>
+                    <a href="#planes" class="btn btn-outline"
+                        style="border-color: rgba(255,255,255,0.22); color: #FFFFFF;">
+                        Ver Planes &amp; Aranceles
+                    </a>
                 </div>
             </div>
         </section>
@@ -368,20 +402,20 @@
             <!-- Selector Segmentado de Modalidades (Estilo Apple / Brandbook) -->
             <div class="pricing-selector-container" style="margin-bottom: 22px;">
                 <div class="pricing-main-nav" role="tablist" aria-label="Modalidad Principal">
-                    <button class="pricing-main-btn active" data-mode="online" role="tab" aria-selected="true"
-                        id="btnModeOnline">
-                        <span class="btn-text">Online Asesorado</span>
-                        <span class="btn-badge">A tu ritmo</span>
-                    </button>
-                    <button class="pricing-main-btn" data-mode="presencial" role="tab" aria-selected="false"
+                    <button class="pricing-main-btn active" data-mode="presencial" role="tab" aria-selected="true"
                         id="btnModePresencial">
                         <span class="btn-text">Presencial (CABA)</span>
                         <span class="btn-badge">1 a 1 o Grupos</span>
                     </button>
+                    <button class="pricing-main-btn" data-mode="online" role="tab" aria-selected="false"
+                        id="btnModeOnline">
+                        <span class="btn-text">Online Asesorado</span>
+                        <span class="btn-badge">A tu ritmo</span>
+                    </button>
                 </div>
 
-                <!-- Selector Nivel 2: Sub-selector Presencial -->
-                <div class="presencial-sub-selector-container" id="presencialSubSelector" style="display: none;">
+                <!-- Selector Nivel 2: Sub-selector Presencial (Visible por defecto) -->
+                <div class="presencial-sub-selector-container" id="presencialSubSelector" style="display: flex;">
                     <div class="pricing-sub-nav" role="tablist" aria-label="Tipo de Presencial">
                         <button class="pricing-sub-btn active" data-sub="presencial-ind" role="tab" aria-selected="true"
                             id="btnSubInd">
@@ -389,163 +423,88 @@
                         </button>
                         <button class="pricing-sub-btn" data-sub="presencial-grupos" role="tab" aria-selected="false"
                             id="btnSubGrupos">
-                            Grupos Reducidos
+                            Grupos Reducidos (Dúos / Tríos)
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- ============================================================ -->
-            <!-- VISTA 1: ONLINE ASESORADO (COMPACTO Y DIRECTO)              -->
+            <!-- VISTA 2A: PRESENCIAL INDIVIDUAL (ACTIVA POR DEFECTO)         -->
             <!-- ============================================================ -->
-            <div class="pricing-tab-content active" id="tab-online">
-                <div class="touch-carousel-wrap">
-                    <div class="touch-carousel pricing-carousel" id="onlineCarousel">
-                        <!-- 1. Online Premium (OPCIÓN DESTACADA AL FRENTE) -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">MÁXIMO 2 CUPOS</span>
-                                <span class="plan-purpose-tag">SUPERVISIÓN VIP</span>
-                                <h3 class="plan-title">Online Premium</h3>
-                                <div class="plan-concept-tagline">Acompañamiento cercano con videollamadas.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$90.000</span>
-                                    <span class="plan-period">/ mes</span>
-                                </div>
-                                <ul class="plan-features-list">
-
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Videollamada semanal
-                                            de seguimiento (30 min)</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Corrección técnica en
-                                            video </span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Plan individual
-                                            nutricional</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Plan de entrenamiento
-                                            personalizado
-                                        </span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Ajustes por WhatsApp
-                                            y acceso a la WebApp</span></li>
-
-                                </ul>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20consultar%20por%20un%20cupo%20en%20Online%20Premium."
-                                    target="_blank" rel="noopener" class="btn btn-primary btn-full">Postularme a
-                                    Premium</a>
-                            </div>
-                        </div>
-
-                        <!-- 2. Online Básico -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <span class="plan-purpose-tag">A TU PROPIO RITMO</span>
-                                <h3 class="plan-title">Online Básico</h3>
-                                <div class="plan-concept-tagline">Planificación a medida para entrenar con orden y
-                                    criterio en tu gimnasio o casa.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$40.000</span>
-                                    <span class="plan-period">/ mes</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Plan individual
-                                            nutricional</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Plan de entrenamiento
-                                            personalizado
-                                        </span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Ajustes por WhatsApp
-                                            y acceso a la WebApp</span></li>
-                                </ul>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Me%20interesa%20el%20Plan%20Online%20B%C3%A1sico."
-                                    target="_blank" rel="noopener" class="btn btn-outline btn-full">Comenzar Online
-                                    Básico</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-dots" id="onlineDots">
-                        <div class="carousel-dot active" data-index="0"></div>
-                        <div class="carousel-dot" data-index="1"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================================ -->
-            <!-- VISTA 2A: PRESENCIAL INDIVIDUAL (1 a 1 CON NICO)             -->
-            <!-- ============================================================ -->
-            <div class="pricing-tab-content" id="tab-presencial-ind" style="display:none;">
+            <div class="pricing-tab-content active" id="tab-presencial-ind" style="display:block;">
                 <div class="touch-carousel-wrap">
                     <div class="touch-carousel pricing-carousel" id="pricingCarousel">
-                        <!-- 1. Plan Oro (OPCIÓN DESTACADA AL FRENTE - MÁS ELEGIDO) -->
+                        <!-- 1. 2x por Semana (OPCIÓN DESTACADA AL FRENTE - MÁS ELEGIDO) -->
                         <div class="carousel-slide">
                             <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">MÁS ELEGIDO</span>
-                                <span class="plan-purpose-tag">VITALIDAD ÓPTIMA • 2X / SEMANA</span>
-                                <h3 class="plan-title">Plan Oro</h3>
-                                <div class="plan-concept-tagline">Frecuencia ideal para vitalidad, recomposición
-                                    corporal y postura erguida.</div>
+                                <span class="train-plan-badge">MÁS ELEGIDO • RECOMENDADO</span>
+                                <span class="plan-purpose-tag">HÁBITO &amp; RECOMPOSICIÓN</span>
+                                <h3 class="plan-title">2x por Semana</h3>
+                                <div class="plan-concept-tagline">Frecuencia ideal para construir fuerza real, mejorar
+                                    tu composición corporal y sostener el proceso en tu vida.</div>
                                 <div class="plan-price-wrap">
                                     <span class="plan-amount">$200.000</span>
                                     <span class="plan-period">/ mes (8 sesiones)</span>
                                 </div>
                                 <ul class="plan-features-list">
                                     <li class="plan-feature-row"><span class="check">✓</span><span>2 sesiones semanales
-                                            1 a 1 de 60 min con Nico</span></li>
+                                            1 a 1 de 60 min con Nico en CABA</span></li>
                                     <li class="plan-feature-row"><span class="check">✓</span><span>Estímulo muscular
-                                            óptimo con 72h de recuperación</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Recomposición física,
-                                            movilidad y hábitos</span></li>
+                                            óptimo con descanso y sobrecarga progresiva</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Seguimiento continuo
+                                            en Portal Web y lineamientos de hábitos</span></li>
                                 </ul>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20comenzar%20el%20Plan%20Oro%20(2x%20Semana)%20de%20SENS%20TRAIN."
-                                    target="_blank" rel="noopener" class="btn btn-primary btn-full">Comenzar Plan Oro
-                                    (2x)</a>
+                                <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
+                                    data-plan="Presencial 1a1 - 2x/Semana ($200.000)">Agendar Evaluación Inicial</a>
                             </div>
                         </div>
 
-                        <!-- 2. Plan Plata (1x / Semana) -->
+                        <!-- 2. 1x por Semana -->
                         <div class="carousel-slide">
                             <div class="train-plan-card">
-                                <span class="plan-purpose-tag">ANCLA TÉCNICA • 1X / SEMANA</span>
-                                <h3 class="plan-title">Plan Plata</h3>
-                                <div class="plan-concept-tagline">Ideal para complementar running, yoga o tenis con
-                                    técnica y prevención.</div>
+                                <span class="plan-purpose-tag">ANCLA TÉCNICA &amp; COMPLEMENTO</span>
+                                <h3 class="plan-title">1x por Semana</h3>
+                                <div class="plan-concept-tagline">Ideal como ancla técnica de fuerza para complementar
+                                    running, tenis o yoga con criterio y sin lesiones.</div>
                                 <div class="plan-price-wrap">
                                     <span class="plan-amount">$130.000</span>
                                     <span class="plan-period">/ mes (4 sesiones)</span>
                                 </div>
                                 <ul class="plan-features-list">
                                     <li class="plan-feature-row"><span class="check">✓</span><span>1 sesión semanal 1 a
-                                            1 de 60 min con Nico</span></li>
+                                            1 de 60 min con Nico en CABA</span></li>
                                     <li class="plan-feature-row"><span class="check">✓</span><span>Calibración
-                                            biomecánica y sobrecarga segura</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Pautas para tus días
-                                            libres y WebApp</span></li>
+                                            biomecánica y corrección postural</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Pautas personalizadas
+                                            para tus días de práctica autónoma</span></li>
                                 </ul>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Me%20interesa%20el%20Plan%20Plata%20(1x%20Semana)%20de%20SENS%20TRAIN."
-                                    target="_blank" rel="noopener" class="btn btn-outline btn-full">Elegir Plan Plata
-                                    (1x)</a>
+                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
+                                    data-plan="Presencial 1a1 - 1x/Semana ($130.000)">Elegir 1x por Semana</a>
                             </div>
                         </div>
 
-                        <!-- 3. Plan Diamante (3x / Semana) -->
+                        <!-- 3. 3x por Semana -->
                         <div class="carousel-slide">
                             <div class="train-plan-card">
-                                <span class="plan-purpose-tag">TRANSFORMACIÓN TOTAL • 3X / SEMANA</span>
-                                <h3 class="plan-title">Plan Diamante</h3>
-                                <div class="plan-concept-tagline">Acompañamiento guiado en cada entrenamiento sin
-                                    entrenar solo jamás.</div>
+                                <span class="plan-purpose-tag">TRANSFORMACIÓN TOTAL</span>
+                                <h3 class="plan-title">3x por Semana</h3>
+                                <div class="plan-concept-tagline">Acompañamiento guiado en cada entrenamiento para
+                                    máxima evolución física sin entrenar solo jamás.</div>
                                 <div class="plan-price-wrap">
                                     <span class="plan-amount">$260.000</span>
                                     <span class="plan-period">/ mes (12 sesiones)</span>
                                 </div>
                                 <ul class="plan-features-list">
                                     <li class="plan-feature-row"><span class="check">✓</span><span>3 sesiones semanales
-                                            1 a 1 de 60 min con Nico</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Máxima progresión de
-                                            fuerza, tono y movilidad</span></li>
+                                            1 a 1 de 60 min con Nico en CABA</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Máxima progresión en
+                                            fuerza, movilidad y recomposición física</span></li>
                                     <li class="plan-feature-row"><span class="check">✓</span><span>Acompañamiento
-                                            presencial y seguimiento integral</span></li>
+                                            cercano en cada etapa del proceso</span></li>
                                 </ul>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Me%20interesa%20el%20Plan%20Diamante%20(3x%20Semana)%20de%20SENS%20TRAIN."
-                                    target="_blank" rel="noopener" class="btn btn-outline btn-full">Elegir Plan Diamante
-                                    (3x)</a>
+                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
+                                    data-plan="Presencial 1a1 - 3x/Semana ($260.000)">Elegir 3x por Semana</a>
                             </div>
                         </div>
                     </div>
@@ -567,25 +526,25 @@
                         <!-- 1. Dúos (OPCIÓN DESTACADA AL FRENTE) -->
                         <div class="carousel-slide">
                             <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">PAREJAS / AMIGOS</span>
+                                <span class="train-plan-badge">PAREJAS / COLEGAS</span>
                                 <span class="plan-purpose-tag">EXCLUSIVO 2 PERSONAS</span>
                                 <h3 class="plan-title">Modalidad Dúo</h3>
-                                <div class="plan-concept-tagline">Entrená con alguien cercano manteniendo un enfoque
-                                    casi 1 a 1.</div>
+                                <div class="plan-concept-tagline">Entrená con alguien cercano manteniendo la atención
+                                    personalizada y corrección técnica de Nico.</div>
                                 <div class="plan-price-wrap">
                                     <span class="plan-amount">$100k - $195k</span>
-                                    <span class="plan-period">/ pers / mes</span>
+                                    <span class="plan-period">/ persona / mes</span>
                                 </div>
                                 <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>1x ($100k) • 2x
-                                            ($150k) • 3x ($195k) por persona</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Exclusivo para 2
-                                            personas con adaptación técnica</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Acompañamiento
-                                            cercano y seguimiento en WebApp</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>1x/sem ($100k) •
+                                            2x/sem ($150k) • 3x/sem ($195k) por persona</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Cupo cerrado de solo
+                                            2 personas con adaptación técnica individual</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Seguimiento del
+                                            proceso en Portal Web SENS</span></li>
                                 </ul>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Queremos%20sumarnos%20a%20la%20Modalidad%20D%C3%BAo%20en%20SENS."
-                                    target="_blank" rel="noopener" class="btn btn-primary btn-full">Reservar Dúo</a>
+                                <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
+                                    data-plan="Presencial Grupo - Dúo">Consultar Dúo</a>
                             </div>
                         </div>
 
@@ -593,25 +552,24 @@
                         <div class="carousel-slide">
                             <div class="train-plan-card">
                                 <span class="train-plan-badge">DESDE $85.000</span>
-                                <span class="plan-purpose-tag">HASTA 3 PERSONAS</span>
+                                <span class="plan-purpose-tag">MÁXIMO 3 PERSONAS</span>
                                 <h3 class="plan-title">Modalidad Trío</h3>
-                                <div class="plan-concept-tagline">Atención semi-personalizada con la misma técnica a un
-                                    arancel accesible.</div>
+                                <div class="plan-concept-tagline">Atención semi-personalizada con la misma técnica y
+                                    cuidado a un arancel accesible.</div>
                                 <div class="plan-price-wrap">
                                     <span class="plan-amount">$85k - $170k</span>
-                                    <span class="plan-period">/ pers / mes</span>
+                                    <span class="plan-period">/ persona / mes</span>
                                 </div>
                                 <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>1x ($85k) • 2x
-                                            ($130k) • 3x ($170k) por persona</span></li>
-                                    <li class="plan-feature-row"><span class="check">✓</span><span>Corrección técnica de
-                                            Nico y clima dinámico</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>1x/sem ($85k) •
+                                            2x/sem ($130k) • 3x/sem ($170k) por persona</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Corrección constante
+                                            de Nico en grupo reducido y dinámico</span></li>
                                     <li class="plan-feature-row"><span class="check">✓</span><span>Plan individualizado
-                                            y seguimiento en WebApp</span></li>
+                                            para cada alumno</span></li>
                                 </ul>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20info%20para%20sumarme%20a%20un%20Tr%C3%ADo%20en%20SENS."
-                                    target="_blank" rel="noopener" class="btn btn-outline btn-full">Consultar Horarios
-                                    Trío</a>
+                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
+                                    data-plan="Presencial Grupo - Trío">Consultar Trío</a>
                             </div>
                         </div>
                     </div>
@@ -623,43 +581,187 @@
                 </div>
             </div>
 
-            <!-- Nota de Transparencia Compacta (1 sola línea limpia) -->
-            <div class="pricing-compact-note">
-                <strong>Transparencia comercial:</strong> Honorarios profesionales en CABA. El acceso o cuota
-                del gimnasio sede se abona por separado según el espacio elegido.
+            <!-- ============================================================ -->
+            <!-- VISTA 1: ONLINE ASESORADO (SECUNDARIO)                       -->
+            <!-- ============================================================ -->
+            <div class="pricing-tab-content" id="tab-online" style="display:none;">
+                <div class="touch-carousel-wrap">
+                    <div class="touch-carousel pricing-carousel" id="onlineCarousel">
+                        <!-- 1. Online Premium -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card highlight">
+                                <span class="train-plan-badge">MÁXIMO 2 CUPOS</span>
+                                <span class="plan-purpose-tag">SEGUIMIENTO CERCANO</span>
+                                <h3 class="plan-title">Online Premium</h3>
+                                <div class="plan-concept-tagline">Acompañamiento cercano con videollamada inicial de 60
+                                    min y llamadas semanales de 30 min.</div>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$90.000</span>
+                                    <span class="plan-period">/ mes</span>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Videollamada inicial
+                                            (45-60 min) + llamada semanal de 30 min</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Corrección técnica en
+                                            video y feedback de progresión</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Plan de fuerza
+                                            personalizado y lineamientos de hábitos</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Ajustes directos por
+                                            WhatsApp y acceso al Portal Web</span></li>
+                                </ul>
+                                <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
+                                    data-plan="Online Premium ($90.000)">Postularme a Premium</a>
+                            </div>
+                        </div>
+
+                        <!-- 2. Online Básico -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card">
+                                <span class="plan-purpose-tag">ESTRUCTURA &amp; PLANIFICACIÓN</span>
+                                <h3 class="plan-title">Online Básico</h3>
+                                <div class="plan-concept-tagline">Para personas autónomas que necesitan orden, método y
+                                    progresión real sin improvisar.</div>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$40.000</span>
+                                    <span class="plan-period">/ mes</span>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Cuestionario de
+                                            inicio, objetivos e historia previa</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Plan de entrenamiento
+                                            estructurado con series, reps y descansos</span></li>
+                                    <li class="plan-feature-row"><span class="check">✓</span><span>Lineamientos de
+                                            hábitos diarios y soporte por WhatsApp</span></li>
+                                </ul>
+                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
+                                    data-plan="Online Básico ($40.000)">Elegir Online Básico</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-dots" id="onlineDots">
+                        <div class="carousel-dot active" data-index="0"></div>
+                        <div class="carousel-dot" data-index="1"></div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Banner SENS Wellness & Trilogy (Diseño Editorial Brandbook con Imagen Full-Bleed y Degradado) -->
-            <div class="wellness-editorial-card" id="wellness">
+            <!-- Nota de Transparencia Comercial (Conforme a Documento Maestro) -->
+            <div class="pricing-compact-note">
+                <strong>Transparencia comercial:</strong> En el entrenamiento presencial en CABA, el costo operativo del
+                gimnasio sede se encuentra absorbido dentro del arancel mensual publicado por SENS, garantizando total
+                previsibilidad y evitando cobros sorpresa.
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             NUEVA SECCIÓN: CÓMO SUMARTE A SENS (CAPTACIÓN ABIERTA / EVALUACIÓN INICIAL)
+             ===================================================================== -->
+        <section class="section-sens" id="sumate"
+            style="background: rgba(18, 18, 20, 0.45); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); padding-top: 70px; padding-bottom: 80px;">
+            <div class="section-head" style="margin-bottom: 30px;">
+                <span class="section-eyebrow">Punto de Partida</span>
+                <h2 class="section-main-title">CÓMO <span class="text-champagne">SUMARTE</span></h2>
+                <p class="section-lead">
+                    No cobramos a ciegas. Coordinamos una evaluación inicial para comprender tu punto de partida,
+                    historia previa y disponibilidad, y definir la frecuencia adecuada para vos.
+                </p>
+            </div>
+
+            <div class="lead-intake-card"
+                style="max-width: 680px; margin: 0 auto; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 36px 30px; box-shadow: var(--shadow-card);">
+                <form id="publicLeadForm" onsubmit="return false;">
+                    <div style="margin-bottom: 22px;">
+                        <label class="input-label"
+                            style="display: block; margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px;">1.
+                            Modalidad que te interesa:</label>
+                        <div class="selection-group" style="gap: 10px;">
+                            <label class="selection-item"
+                                style="padding: 10px 14px; background: var(--bg-elevated); border-radius: 8px; border: 1px solid var(--border-subtle);">
+                                <input type="radio" name="leadModality" value="Presencial 1 a 1 (CABA)" checked>
+                                <div class="custom-circle"></div>
+                                <span class="selection-label"><strong>Presencial 1 a 1</strong> — Palermo / Belgrano
+                                    (Recomendado)</span>
+                            </label>
+                            <label class="selection-item"
+                                style="padding: 10px 14px; background: var(--bg-elevated); border-radius: 8px; border: 1px solid var(--border-subtle);">
+                                <input type="radio" name="leadModality" value="Presencial Grupal (Dúo o Trío)">
+                                <div class="custom-circle"></div>
+                                <span class="selection-label"><strong>Presencial Grupal</strong> — Dúo o Trío
+                                    reducido</span>
+                            </label>
+                            <label class="selection-item"
+                                style="padding: 10px 14px; background: var(--bg-elevated); border-radius: 8px; border: 1px solid var(--border-subtle);">
+                                <input type="radio" name="leadModality" value="Online Asesorado">
+                                <div class="custom-circle"></div>
+                                <span class="selection-label"><strong>Online Asesorado</strong> — A distancia con
+                                    videollamadas</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-bottom: 16px; gap: 16px;">
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label class="input-label" for="leadFullName">Tu Nombre y Apellido *</label>
+                            <input type="text" id="leadFullName" class="input-control" placeholder="Ej: Roberto Gomez"
+                                required>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label class="input-label" for="leadPhone">Tu WhatsApp *</label>
+                            <input type="tel" id="leadPhone" class="input-control" placeholder="Ej: +54 9 11 1234 5678"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 24px;">
+                        <label class="input-label" for="leadGoal">¿Cuál es tu principal objetivo o situación
+                            actual?</label>
+                        <select id="leadGoal" class="input-control">
+                            <option value="Quiero ganar fuerza y mejorar composición corporal">Ganar fuerza y mejorar
+                                composición corporal</option>
+                            <option value="Paso muchas horas sentado / Dolores posturales">Paso muchas horas sentado /
+                                Aliviar dolores y rigidez</option>
+                            <option value="Quiero empezar o retomar después de mucho tiempo">Retomar el entrenamiento de
+                                manera segura y sin lesiones</option>
+                            <option value="Complemento para otro deporte (running, tenis, etc.)">Complemento de fuerza
+                                para otro deporte</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="btnSubmitLead" class="btn btn-primary btn-full"
+                        style="padding: 16px 20px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; box-shadow: 0 4px 20px var(--accent-glow);">
+                        Solicitar Evaluación Inicial con Nico →
+                    </button>
+
+                    <p
+                        style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 14px; margin-bottom: 0;">
+                        Sin compromiso comercial directo. Coordinamos tu punto de partida directamente por WhatsApp.
+                    </p>
+                </form>
+            </div>
+
+            <!-- Banner SENS Wellness & Trilogy (Servicio Boutique Complementario a Domicilio) -->
+            <div class="wellness-editorial-card" id="wellness" style="max-width: 900px; margin: 60px auto 0;">
                 <img src="img/balance.webp" alt="SENS Trilogy Wellness Experience" class="wellness-editorial-img"
                     loading="lazy">
                 <div class="wellness-editorial-overlay"></div>
                 <div class="wellness-editorial-content">
-                    <span class="pill pill-champagne" style="margin-bottom: 14px; font-size: 10px;">SENS WELLNESS &amp;
-                        TRILOGY</span>
+                    <span class="pill pill-champagne" style="margin-bottom: 14px; font-size: 10px;">SERVICIO
+                        COMPLEMENTARIO BOUTIQUE</span>
                     <h3 class="wellness-editorial-title">
-                        Bienestar y Recuperación <span class="text-champagne font-black"></span>
+                        Bienestar &amp; Recuperación <span class="text-champagne font-black">Trilogy</span>
                     </h3>
                     <p class="wellness-editorial-desc">
-                        ¿Buscás recuperación profunda y relajación integral? Llevamos el método <strong>Trilogy</strong>
-                        a la comodidad de tu hogar: <strong>MOVE</strong> (Yoga pasivo asistido) + <strong>BODY</strong>
-                        (Masaje de tejido profundo) + <strong>MIND</strong> (Meditación neuro-acústica).
+                        Como complemento a tu práctica de entrenamiento o para días de recuperación profunda: llevamos
+                        el método <strong>Trilogy</strong> a la comodidad de tu hogar: <strong>MOVE</strong> (Yoga
+                        pasivo) + <strong>BODY</strong> (Masaje profundo) + <strong>MIND</strong> (Meditación).
                     </p>
                     <div class="hero-cta-group" style="justify-content: flex-start; gap: 14px;">
                         <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20consultar%20por%20la%20experiencia%20Trilogy%20a%20domicilio."
-                            target="_blank" rel="noopener" class="btn btn-primary"
-                            style="box-shadow: 0 4px 20px var(--accent-glow);">
-                            Consultar Trilogy a Domicilio
-                        </a>
-                        <a href="formulario.html" class="btn btn-outline"
+                            target="_blank" rel="noopener" class="btn btn-outline"
                             style="background: rgba(8,8,9,0.7); backdrop-filter: blur(8px);">
-                            Completar Formulario de Salud
+                            Consultar Trilogy a Domicilio por WhatsApp
                         </a>
-                    </div>
-                    <div class="pill-container" style="margin-top: 22px; margin-bottom: 0; gap: 8px;">
-                        <span class="pill pill-dark">MOVE • Yoga Pasivo</span>
-                        <span class="pill pill-dark">BODY • Deep Tissue</span>
-                        <span class="pill pill-dark">MIND • Sound Bath</span>
                     </div>
                 </div>
             </div>
@@ -761,8 +863,10 @@
             </form>
 
             <!-- Acceso Rápido de Prueba (Demo) sin registrarse -->
-            <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle); text-align: center;">
-                <button type="button" class="btn btn-outline btn-full" id="demoDiagnosisBtn" style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary); font-size: 12px; letter-spacing: 1px;">
+            <div
+                style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle); text-align: center;">
+                <button type="button" class="btn btn-outline btn-full" id="demoDiagnosisBtn"
+                    style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary); font-size: 12px; letter-spacing: 1px;">
                     ⚡ Probar Diagnóstico sin registrarme (Modo Demo)
                 </button>
             </div>
@@ -777,19 +881,43 @@
         <div class="portal-topbar">
             <div class="portal-brand">
                 <img src="img/logo-blanco.png" alt="SENS" class="brand-logo-img-portal">
-                <span class="pill pill-champagne" id="portalPlanBadge">Plan Personalizado SENS TRAIN</span>
+                <span class="pill pill-champagne" id="portalPlanBadge">Presencial 1 a 1 VIP (CABA)</span>
             </div>
             <div class="portal-user-badge">
                 <span style="font-size: 13px; color: var(--text-secondary);"
-                    id="portalUserEmail">usuario@sens.com</span>
+                    id="portalUserEmail">roberto.gomez@sens.com</span>
                 <button class="btn btn-outline btn-sm" id="logoutBtn">Cerrar Sesión</button>
+            </div>
+        </div>
+
+        <!-- Barra de Roles y Perfiles de Usuario (Supabase Roles & Multi-User Support) -->
+        <div class="portal-role-bar"
+            style="background: var(--bg-elevated); border-bottom: 1px solid var(--border-subtle); padding: 8px 5%; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span
+                    style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-primary); font-weight: 700;">Simular
+                    Tipo de Usuario:</span>
+                <select id="userRoleSelector" class="input-control"
+                    style="width: auto; padding: 6px 12px; font-size: 12px; height: 34px; background: var(--bg-surface); border: 1px solid var(--border-strong); cursor: pointer;">
+                    <option value="client_presencial_vip" selected>Presencial 1 a 1 VIP (Roberto Gomez — 2x/sem CABA)
+                    </option>
+                    <option value="client_presencial_group">Presencial Grupo Dúo (Laura &amp; Marcos — CABA)</option>
+                    <option value="client_online_premium">Online Asesorado Premium (Esteban Bianchi)</option>
+                    <option value="client_online_basic">Online Asesorado Básico (Carla Méndez)</option>
+                    <option value="admin">⚡ Modo Coach &amp; Admin (Nico)</option>
+                </select>
+            </div>
+            <div id="roleContextIndicator">
+                <span class="pill pill-champagne" id="roleContextBadge" style="font-size: 10px;">Presencial 1 a 1 • 8
+                    Sesiones/mes</span>
             </div>
         </div>
 
         <!-- Barra de Navegación del Portal -->
         <nav class="portal-nav-bar" id="portalSubNav">
             <button class="portal-nav-item active" data-portal-tab="dashView">Dashboard</button>
-            <button class="portal-nav-item" data-portal-tab="onboardingSection" id="navPortalDiagnosis">Diagnóstico &amp; Datos</button>
+            <button class="portal-nav-item" data-portal-tab="onboardingSection" id="navPortalDiagnosis">Evaluación
+                Inicial &amp; Perfil</button>
             <button class="portal-nav-item" data-portal-tab="workoutView">Mi Entrenamiento</button>
             <button class="portal-nav-item" data-portal-tab="nutritionView">Nutrición &amp; Hábitos</button>
             <button class="portal-nav-item" data-portal-tab="trackingView">Seguimiento Diario</button>
@@ -803,7 +931,7 @@
                  ===================================================================== -->
             <section class="portal-view" id="onboardingSection">
                 <div class="wizard-container" id="diagnosisWizardContainer">
-                    
+
                     <!-- ENCABEZADO DEL WIZARD: BRANDING, PROGRESO Y RETROALIMENTACIÓN -->
                     <header class="wizard-header">
                         <div class="wizard-top-bar">
@@ -812,7 +940,7 @@
                                 ← Volver al Dashboard
                             </button>
                         </div>
-                        
+
                         <div class="wizard-progress-wrap" id="progressWrapper">
                             <div class="wizard-progress-track">
                                 <div class="wizard-progress-fill" id="progressFill"></div>
@@ -831,35 +959,45 @@
 
                     <!-- CONTENEDOR DE PASOS SECUENCIALES -->
                     <div class="wizard-steps-carousel" id="wizardStepsWrapper">
-                        
+
                         <!-- PASO 0: CONSENTIMIENTO INFORMADO (LEY 25.326 ARGENTINA) -->
                         <div class="wizard-step-card active" id="diagStep0">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 0 • Confidencialidad Médica</div>
-                                <h2 class="step-title">Diagnóstico <strong>Inicial</strong></h2>
+                                <div class="step-tag-pill">Paso 0 • Confidencialidad &amp; Seguridad de Datos</div>
+                                <h2 class="step-title">Evaluación <strong>Inicial</strong></h2>
                                 <p class="step-desc">
-                                    Personalización de tu programación basada en tu anatomía, no en suposiciones. Nos tomará solo 2 minutos.
+                                    Personalización de tu programación basada en tu biomecánica y hábitos, no en
+                                    suposiciones. Nos tomará solo 2 minutos.
                                 </p>
 
                                 <div class="legal-notice-box">
                                     <div class="legal-icon">
-                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                            stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                                         </svg>
                                     </div>
                                     <div class="legal-text">
                                         <strong>Ley Nacional 25.326 de Protección de Datos Personales.</strong><br>
-                                        Para diseñar tu plan de fuerza y movilidad, analizaremos tu contexto clínico y métricas biométricas. Tus datos están estrictamente encriptados, son confidenciales y solo serán auditados por Nico para tu prescripción personalizada.
+                                        Para diseñar tu plan de fuerza y movilidad, analizaremos tu punto de partida
+                                        físico y hábitos de vida. Tus datos están estrictamente encriptados, son
+                                        confidenciales y solo serán analizados por Nico para calibrar tus sesiones
+                                        personalizadas.
                                     </div>
                                 </div>
 
                                 <label class="touch-card touch-card-consent" for="diagConsentCheck">
                                     <input type="checkbox" id="diagConsentCheck">
                                     <div class="custom-box">
-                                        <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        <svg viewBox="0 0 12 10" fill="none">
+                                            <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
                                     </div>
                                     <div class="card-content">
-                                        Entiendo y acepto el tratamiento confidencial de mis datos clínicos y evaluación corporal.
+                                        Entiendo y acepto el tratamiento confidencial de mis datos personales y
+                                        evaluación física.
                                     </div>
                                 </label>
                             </div>
@@ -878,13 +1016,15 @@
                                 <div class="step-tag-pill">Paso 1 de 8 • Perfil &amp; Objetivo</div>
                                 <h2 class="step-title">Tu Perfil &amp; <strong>Objetivo SENS</strong></h2>
                                 <p class="step-desc">
-                                    Tus datos biológicos reales y meta principal para calibrar tu programación personalizada.
+                                    Tus datos biológicos reales y meta principal para calibrar tu programación
+                                    personalizada.
                                 </p>
 
                                 <div class="input-row">
                                     <div class="input-group">
                                         <label class="input-label" for="diagFullName">Nombre Completo</label>
-                                        <input type="text" id="diagFullName" class="input-control" placeholder="Tu nombre" required>
+                                        <input type="text" id="diagFullName" class="input-control"
+                                            placeholder="Tu nombre" required>
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label">Sexo Biológico</label>
@@ -892,8 +1032,12 @@
                                             <label class="gender-btn-pill">
                                                 <input type="radio" name="diagGender" value="male" checked>
                                                 <div class="gender-btn-content">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                        <circle cx="10" cy="14" r="5"/><line x1="19" y1="5" x2="13.5" y2="10.5"/><polyline points="15 5 19 5 19 9"/>
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <circle cx="10" cy="14" r="5" />
+                                                        <line x1="19" y1="5" x2="13.5" y2="10.5" />
+                                                        <polyline points="15 5 19 5 19 9" />
                                                     </svg>
                                                     <span>Hombre</span>
                                                 </div>
@@ -901,8 +1045,12 @@
                                             <label class="gender-btn-pill">
                                                 <input type="radio" name="diagGender" value="female">
                                                 <div class="gender-btn-content">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                        <circle cx="12" cy="9" r="5"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/>
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <circle cx="12" cy="9" r="5" />
+                                                        <line x1="12" y1="14" x2="12" y2="21" />
+                                                        <line x1="9" y1="18" x2="15" y2="18" />
                                                     </svg>
                                                     <span>Mujer</span>
                                                 </div>
@@ -914,28 +1062,33 @@
                                 <div class="input-row-three">
                                     <div class="input-group">
                                         <label class="input-label" for="diagAge">Edad (años)</label>
-                                        <input type="number" id="diagAge" class="input-control" placeholder="Ej: 46" min="16" max="99" value="45" required>
+                                        <input type="number" id="diagAge" class="input-control" placeholder="Ej: 46"
+                                            min="16" max="99" value="45" required>
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="diagWeight">Peso Actual (kg)</label>
-                                        <input type="number" step="0.1" id="diagWeight" class="input-control" placeholder="Ej: 78.5" value="78.0" required>
+                                        <input type="number" step="0.1" id="diagWeight" class="input-control"
+                                            placeholder="Ej: 78.5" value="78.0" required>
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="diagHeight">Altura (cm)</label>
-                                        <input type="number" id="diagHeight" class="input-control" placeholder="Ej: 176" value="175" required>
+                                        <input type="number" id="diagHeight" class="input-control" placeholder="Ej: 176"
+                                            value="175" required>
                                     </div>
                                 </div>
 
                                 <!-- Selección de Objetivo Prioritario -->
                                 <div class="goal-selection-section">
-                                    <label class="input-label" style="margin-bottom: 10px;">¿Cuál es tu objetivo prioritario con SENS?</label>
+                                    <label class="input-label" style="margin-bottom: 10px;">¿Cuál es tu objetivo
+                                        prioritario con SENS?</label>
                                     <div class="goal-options-grid">
                                         <label class="touch-card goal-card-touch">
                                             <input type="radio" name="diagGoal" value="fat_loss" checked>
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 <strong>Definición &amp; Pérdida de Grasa</strong>
-                                                <span class="card-sub">Reducir porcentaje graso preservando masa muscular y energía.</span>
+                                                <span class="card-sub">Reducir porcentaje graso preservando masa
+                                                    muscular y energía.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card goal-card-touch">
@@ -943,7 +1096,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 <strong>Fuerza &amp; Masa Muscular</strong>
-                                                <span class="card-sub">Construir masa magra, densidad muscular y fuerza real.</span>
+                                                <span class="card-sub">Construir masa magra, densidad muscular y fuerza
+                                                    real.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card goal-card-touch">
@@ -951,7 +1105,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 <strong>Recomposición Corporal</strong>
-                                                <span class="card-sub">Tonificar, reducir cintura y ganar firmeza muscular a la vez.</span>
+                                                <span class="card-sub">Tonificar, reducir cintura y ganar firmeza
+                                                    muscular a la vez.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card goal-card-touch">
@@ -959,7 +1114,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 <strong>Salud, Postura &amp; Vitalidad</strong>
-                                                <span class="card-sub">Aliviar dolores articulares, mejorar alineación y sentirte ágil.</span>
+                                                <span class="card-sub">Aliviar dolores articulares, mejorar alineación y
+                                                    sentirte ágil.</span>
                                             </div>
                                         </label>
                                     </div>
@@ -967,8 +1123,10 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(0)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(2, '¡Perfil registrado!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(0)">←
+                                    Volver</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="diagWizardGoStep(2, '¡Perfil registrado!')">Continuar →</button>
                             </div>
                         </div>
 
@@ -978,7 +1136,8 @@
                                 <div class="step-tag-pill">Paso 2 de 8 • Cuestionario de Salud</div>
                                 <h2 class="step-title">Cuestionario de <strong>Salud</strong></h2>
                                 <p class="step-desc">
-                                    Preguntas breves para conocer tu estado general antes de entrenar. Si no aplica, dejalas en NO.
+                                    Preguntas breves para conocer tu estado general antes de entrenar. Si no aplica,
+                                    dejalas en NO.
                                 </p>
 
                                 <div class="health-switch-list">
@@ -986,18 +1145,22 @@
                                     <div class="health-switch-item" data-q="parq_heart">
                                         <div class="health-switch-header">
                                             <label class="health-switch-label" for="switch_parq_heart">
-                                                ¿Alguna vez un médico te diagnosticó hipertensión o una afección cardiovascular?
+                                                ¿Alguna vez un médico te diagnosticó hipertensión o una afección
+                                                cardiovascular?
                                             </label>
                                             <div class="switch-control-wrap">
                                                 <span class="switch-status-tag" id="status_parq_heart">NO</span>
                                                 <label class="toggle-switch">
-                                                    <input type="checkbox" id="switch_parq_heart" class="health-toggle-input" data-q="parq_heart">
+                                                    <input type="checkbox" id="switch_parq_heart"
+                                                        class="health-toggle-input" data-q="parq_heart">
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_heart" style="display: none;">
-                                            <input type="text" class="input-control health-detail-input" data-for="parq_heart" placeholder="¿Podés detallar brevemente? (opcional)">
+                                            <input type="text" class="input-control health-detail-input"
+                                                data-for="parq_heart"
+                                                placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
 
@@ -1005,18 +1168,22 @@
                                     <div class="health-switch-item" data-q="parq_chest">
                                         <div class="health-switch-header">
                                             <label class="health-switch-label" for="switch_parq_chest">
-                                                ¿Sentís dolor o presión en el pecho al realizar esfuerzo o en momentos de reposo?
+                                                ¿Sentís dolor o presión en el pecho al realizar esfuerzo o en momentos
+                                                de reposo?
                                             </label>
                                             <div class="switch-control-wrap">
                                                 <span class="switch-status-tag" id="status_parq_chest">NO</span>
                                                 <label class="toggle-switch">
-                                                    <input type="checkbox" id="switch_parq_chest" class="health-toggle-input" data-q="parq_chest">
+                                                    <input type="checkbox" id="switch_parq_chest"
+                                                        class="health-toggle-input" data-q="parq_chest">
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_chest" style="display: none;">
-                                            <input type="text" class="input-control health-detail-input" data-for="parq_chest" placeholder="¿Podés detallar brevemente? (opcional)">
+                                            <input type="text" class="input-control health-detail-input"
+                                                data-for="parq_chest"
+                                                placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
 
@@ -1024,18 +1191,23 @@
                                     <div class="health-switch-item" data-q="parq_balance">
                                         <div class="health-switch-header">
                                             <label class="health-switch-label" for="switch_parq_balance">
-                                                ¿Has tenido mareos frecuentes, pérdida de equilibrio o desmayos en el último año?
+                                                ¿Has tenido mareos frecuentes, pérdida de equilibrio o desmayos en el
+                                                último año?
                                             </label>
                                             <div class="switch-control-wrap">
                                                 <span class="switch-status-tag" id="status_parq_balance">NO</span>
                                                 <label class="toggle-switch">
-                                                    <input type="checkbox" id="switch_parq_balance" class="health-toggle-input" data-q="parq_balance">
+                                                    <input type="checkbox" id="switch_parq_balance"
+                                                        class="health-toggle-input" data-q="parq_balance">
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="health-switch-detail" id="detail_parq_balance" style="display: none;">
-                                            <input type="text" class="input-control health-detail-input" data-for="parq_balance" placeholder="¿Podés detallar brevemente? (opcional)">
+                                        <div class="health-switch-detail" id="detail_parq_balance"
+                                            style="display: none;">
+                                            <input type="text" class="input-control health-detail-input"
+                                                data-for="parq_balance"
+                                                placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
 
@@ -1048,13 +1220,16 @@
                                             <div class="switch-control-wrap">
                                                 <span class="switch-status-tag" id="status_parq_meds">NO</span>
                                                 <label class="toggle-switch">
-                                                    <input type="checkbox" id="switch_parq_meds" class="health-toggle-input" data-q="parq_meds">
+                                                    <input type="checkbox" id="switch_parq_meds"
+                                                        class="health-toggle-input" data-q="parq_meds">
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_meds" style="display: none;">
-                                            <input type="text" class="input-control health-detail-input" data-for="parq_meds" placeholder="¿Podés detallar brevemente? (opcional)">
+                                            <input type="text" class="input-control health-detail-input"
+                                                data-for="parq_meds"
+                                                placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
 
@@ -1062,26 +1237,32 @@
                                     <div class="health-switch-item" data-q="parq_other">
                                         <div class="health-switch-header">
                                             <label class="health-switch-label" for="switch_parq_other">
-                                                ¿Tenés algún otro motivo médico por el que no debas realizar ejercicio físico?
+                                                ¿Tenés algún otro motivo médico por el que no debas realizar ejercicio
+                                                físico?
                                             </label>
                                             <div class="switch-control-wrap">
                                                 <span class="switch-status-tag" id="status_parq_other">NO</span>
                                                 <label class="toggle-switch">
-                                                    <input type="checkbox" id="switch_parq_other" class="health-toggle-input" data-q="parq_other">
+                                                    <input type="checkbox" id="switch_parq_other"
+                                                        class="health-toggle-input" data-q="parq_other">
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_other" style="display: none;">
-                                            <input type="text" class="input-control health-detail-input" data-for="parq_other" placeholder="¿Podés detallar brevemente? (opcional)">
+                                            <input type="text" class="input-control health-detail-input"
+                                                data-for="parq_other"
+                                                placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(1)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(3, '¡Avanzamos muy bien!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(1)">←
+                                    Volver</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="diagWizardGoStep(3, '¡Avanzamos muy bien!')">Continuar →</button>
                             </div>
                         </div>
 
@@ -1091,7 +1272,8 @@
                                 <div class="step-tag-pill">Paso 3 de 8 • Mapa Articular</div>
                                 <h2 class="step-title">Topografía de <strong>Dolor &amp; Lesiones</strong></h2>
                                 <p class="step-desc">
-                                    Seleccioná las zonas con molestias activas para adaptar tu entrenamiento y proteger tus articulaciones y zonas vulnerables.
+                                    Seleccioná las zonas con molestias activas para adaptar tu entrenamiento y proteger
+                                    tus articulaciones y zonas vulnerables.
                                 </p>
 
                                 <div class="injuries-list-container" id="injuriesPillGrid">
@@ -1100,16 +1282,22 @@
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagInjuries" value="lumbar">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Lumbar / Espalda Baja</span>
                                         </label>
                                         <div class="injury-intensity-row" id="intensity_lumbar" style="display: none;">
                                             <span class="intensity-label">Intensidad en esta zona:</span>
                                             <div class="intensity-pill-group">
-                                                <button type="button" class="intensity-btn" data-injury="lumbar" data-level="leve">Leve</button>
-                                                <button type="button" class="intensity-btn active" data-injury="lumbar" data-level="moderada">Moderada</button>
-                                                <button type="button" class="intensity-btn" data-injury="lumbar" data-level="aguda">Aguda</button>
+                                                <button type="button" class="intensity-btn" data-injury="lumbar"
+                                                    data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="lumbar"
+                                                    data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="lumbar"
+                                                    data-level="aguda">Aguda</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1119,16 +1307,23 @@
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagInjuries" value="cervical">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Cervical / Cuello</span>
                                         </label>
-                                        <div class="injury-intensity-row" id="intensity_cervical" style="display: none;">
+                                        <div class="injury-intensity-row" id="intensity_cervical"
+                                            style="display: none;">
                                             <span class="intensity-label">Intensidad en esta zona:</span>
                                             <div class="intensity-pill-group">
-                                                <button type="button" class="intensity-btn" data-injury="cervical" data-level="leve">Leve</button>
-                                                <button type="button" class="intensity-btn active" data-injury="cervical" data-level="moderada">Moderada</button>
-                                                <button type="button" class="intensity-btn" data-injury="cervical" data-level="aguda">Aguda</button>
+                                                <button type="button" class="intensity-btn" data-injury="cervical"
+                                                    data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active"
+                                                    data-injury="cervical" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="cervical"
+                                                    data-level="aguda">Aguda</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1138,16 +1333,22 @@
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagInjuries" value="hombros">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Hombros / Manguito Rotador</span>
                                         </label>
                                         <div class="injury-intensity-row" id="intensity_hombros" style="display: none;">
                                             <span class="intensity-label">Intensidad en esta zona:</span>
                                             <div class="intensity-pill-group">
-                                                <button type="button" class="intensity-btn" data-injury="hombros" data-level="leve">Leve</button>
-                                                <button type="button" class="intensity-btn active" data-injury="hombros" data-level="moderada">Moderada</button>
-                                                <button type="button" class="intensity-btn" data-injury="hombros" data-level="aguda">Aguda</button>
+                                                <button type="button" class="intensity-btn" data-injury="hombros"
+                                                    data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="hombros"
+                                                    data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="hombros"
+                                                    data-level="aguda">Aguda</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1157,16 +1358,23 @@
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagInjuries" value="rodillas">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Rodillas / Meniscos</span>
                                         </label>
-                                        <div class="injury-intensity-row" id="intensity_rodillas" style="display: none;">
+                                        <div class="injury-intensity-row" id="intensity_rodillas"
+                                            style="display: none;">
                                             <span class="intensity-label">Intensidad en esta zona:</span>
                                             <div class="intensity-pill-group">
-                                                <button type="button" class="intensity-btn" data-injury="rodillas" data-level="leve">Leve</button>
-                                                <button type="button" class="intensity-btn active" data-injury="rodillas" data-level="moderada">Moderada</button>
-                                                <button type="button" class="intensity-btn" data-injury="rodillas" data-level="aguda">Aguda</button>
+                                                <button type="button" class="intensity-btn" data-injury="rodillas"
+                                                    data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active"
+                                                    data-injury="rodillas" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="rodillas"
+                                                    data-level="aguda">Aguda</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1176,16 +1384,22 @@
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagInjuries" value="caderas">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Caderas / Pubalgia</span>
                                         </label>
                                         <div class="injury-intensity-row" id="intensity_caderas" style="display: none;">
                                             <span class="intensity-label">Intensidad en esta zona:</span>
                                             <div class="intensity-pill-group">
-                                                <button type="button" class="intensity-btn" data-injury="caderas" data-level="leve">Leve</button>
-                                                <button type="button" class="intensity-btn active" data-injury="caderas" data-level="moderada">Moderada</button>
-                                                <button type="button" class="intensity-btn" data-injury="caderas" data-level="aguda">Aguda</button>
+                                                <button type="button" class="intensity-btn" data-injury="caderas"
+                                                    data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="caderas"
+                                                    data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="caderas"
+                                                    data-level="aguda">Aguda</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1195,16 +1409,23 @@
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagInjuries" value="tobillos">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Tobillos / Tendón Aquiles</span>
                                         </label>
-                                        <div class="injury-intensity-row" id="intensity_tobillos" style="display: none;">
+                                        <div class="injury-intensity-row" id="intensity_tobillos"
+                                            style="display: none;">
                                             <span class="intensity-label">Intensidad en esta zona:</span>
                                             <div class="intensity-pill-group">
-                                                <button type="button" class="intensity-btn" data-injury="tobillos" data-level="leve">Leve</button>
-                                                <button type="button" class="intensity-btn active" data-injury="tobillos" data-level="moderada">Moderada</button>
-                                                <button type="button" class="intensity-btn" data-injury="tobillos" data-level="aguda">Aguda</button>
+                                                <button type="button" class="intensity-btn" data-injury="tobillos"
+                                                    data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active"
+                                                    data-injury="tobillos" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="tobillos"
+                                                    data-level="aguda">Aguda</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1213,19 +1434,26 @@
                                 <label class="touch-card" id="noInjuriesCard" style="margin-top: 14px;">
                                     <input type="checkbox" id="diagNoInjuriesCheck">
                                     <div class="custom-box">
-                                        <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        <svg viewBox="0 0 12 10" fill="none">
+                                            <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
                                     </div>
                                     <div class="card-content">
                                         <strong>Sin dolores ni molestias activas</strong>
-                                        <span class="card-sub">Me muevo sin molestias articulares significativas en la actualidad.</span>
+                                        <span class="card-sub">Me muevo sin molestias articulares significativas en la
+                                            actualidad.</span>
                                     </div>
                                 </label>
 
                                 <!-- SECCIÓN B: CIRUGÍAS O INTERVENCIONES QUIRÚRGICAS -->
-                                <div class="surgery-section-block" style="margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
-                                    <label class="subblock-title" style="margin-bottom: 6px;">B. Cirugías o Intervenciones Quirúrgicas:</label>
+                                <div class="surgery-section-block"
+                                    style="margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
+                                    <label class="subblock-title" style="margin-bottom: 6px;">B. Cirugías o
+                                        Intervenciones Quirúrgicas:</label>
                                     <p class="step-desc" style="margin-bottom: 12px; font-size: 13px;">
-                                        Indicanos si pasaste por alguna cirugía para adaptar rangos articulares y cargas axiales.
+                                        Indicanos si pasaste por alguna cirugía para adaptar rangos articulares y cargas
+                                        axiales.
                                     </p>
                                     <div class="health-switch-item" id="surgerySwitchItem">
                                         <div class="health-switch-header">
@@ -1235,24 +1463,30 @@
                                             <div class="switch-control-wrap">
                                                 <span class="switch-status-tag" id="status_surgery">NO</span>
                                                 <label class="toggle-switch">
-                                                    <input type="checkbox" id="switchSurgeryCheck" class="health-toggle-input">
+                                                    <input type="checkbox" id="switchSurgeryCheck"
+                                                        class="health-toggle-input">
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="health-switch-detail" id="detail_surgery" style="display: none; margin-top: 12px;">
-                                            <label class="input-label" for="diagSurgeryDetail" style="margin-bottom: 6px; font-size: 12.5px;">
+                                        <div class="health-switch-detail" id="detail_surgery"
+                                            style="display: none; margin-top: 12px;">
+                                            <label class="input-label" for="diagSurgeryDetail"
+                                                style="margin-bottom: 6px; font-size: 12.5px;">
                                                 ¿Cirugía de qué zona o procedimiento, y hace cuánto tiempo aprox.?
                                             </label>
-                                            <input type="text" id="diagSurgeryDetail" class="input-control" placeholder="Ej: Meniscos rodilla izquierda (2022), Hernia discal L5 (2020)...">
+                                            <input type="text" id="diagSurgeryDetail" class="input-control"
+                                                placeholder="Ej: Meniscos rodilla izquierda (2022), Hernia discal L5 (2020)...">
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(2)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(4, '¡Avanzamos muy rápido!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(2)">←
+                                    Volver</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="diagWizardGoStep(4, '¡Avanzamos muy rápido!')">Continuar →</button>
                             </div>
                         </div>
 
@@ -1262,7 +1496,8 @@
                                 <div class="step-tag-pill">Paso 4 de 8 • Logística &amp; Equipamiento</div>
                                 <h2 class="step-title">Contexto <strong>Deportivo</strong></h2>
                                 <p class="step-desc">
-                                    Para calibrar el volumen semanal y adaptar la rutina al equipamiento real con el que contás.
+                                    Para calibrar el volumen semanal y adaptar la rutina al equipamiento real con el que
+                                    contás.
                                 </p>
 
                                 <div class="section-subblock">
@@ -1273,7 +1508,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Principiante / Retomando
-                                                <span class="card-sub">Hace más de 6 meses que no entreno con constancia.</span>
+                                                <span class="card-sub">Hace más de 6 meses que no entreno con
+                                                    constancia.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card" onclick="diagAutoAdvanceRadio(this, 'experience')">
@@ -1281,7 +1517,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Intermedio
-                                                <span class="card-sub">Entreno 1-2 veces por semana pero me cuesta la técnica o continuidad.</span>
+                                                <span class="card-sub">Entreno 1-2 veces por semana pero me cuesta la
+                                                    técnica o continuidad.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card" onclick="diagAutoAdvanceRadio(this, 'experience')">
@@ -1289,7 +1526,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Avanzado / Activo
-                                                <span class="card-sub">Entreno fuerza con regularidad (3 o más días por semana).</span>
+                                                <span class="card-sub">Entreno fuerza con regularidad (3 o más días por
+                                                    semana).</span>
                                             </div>
                                         </label>
                                     </div>
@@ -1298,11 +1536,14 @@
                                 <div class="section-subblock">
                                     <div class="freq-slider-container">
                                         <div class="freq-slider-header">
-                                            <label class="subblock-title" style="margin-bottom:0;" for="diagFreqSlider">B. Frecuencia semanal que querés dedicar:</label>
-                                            <span class="freq-slider-badge" id="diagFreqDisplay">3 días por semana</span>
+                                            <label class="subblock-title" style="margin-bottom:0;"
+                                                for="diagFreqSlider">B. Frecuencia semanal que querés dedicar:</label>
+                                            <span class="freq-slider-badge" id="diagFreqDisplay">3 días por
+                                                semana</span>
                                         </div>
                                         <div class="freq-slider-wrapper">
-                                            <input type="range" min="1" max="7" step="1" value="3" id="diagFreqSlider" class="range-slider">
+                                            <input type="range" min="1" max="7" step="1" value="3" id="diagFreqSlider"
+                                                class="range-slider">
                                             <div class="freq-slider-scale">
                                                 <span class="scale-tick" data-val="1">1</span>
                                                 <span class="scale-tick" data-val="2">2</span>
@@ -1317,33 +1558,46 @@
                                 </div>
 
                                 <div class="section-subblock">
-                                    <label class="subblock-title">C. Equipamiento disponible (podés marcar varios):</label>
+                                    <label class="subblock-title">C. Equipamiento disponible (podés marcar
+                                        varios):</label>
                                     <div class="pill-grid">
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagEquipment" value="gym">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Gimnasio Comercial Completo</span>
                                         </label>
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagEquipment" value="dumbbells">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Mancuernas / Pesas en Casa</span>
                                         </label>
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagEquipment" value="bands">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Bandas Elásticas</span>
                                         </label>
                                         <label class="pill-card">
                                             <input type="checkbox" name="diagEquipment" value="bodyweight">
                                             <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg viewBox="0 0 12 10" fill="none">
+                                                    <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
                                             </div>
                                             <span>Peso Corporal / Sin Material</span>
                                         </label>
@@ -1352,8 +1606,10 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(3)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(5, '¡Ya estás en la mitad!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(3)">←
+                                    Volver</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="diagWizardGoStep(5, '¡Ya estás en la mitad!')">Continuar →</button>
                             </div>
                         </div>
 
@@ -1363,7 +1619,8 @@
                                 <div class="step-tag-pill">Paso 5 de 8 • Carga Alostática</div>
                                 <h2 class="step-title">Estilo de Vida &amp; <strong>Recuperación</strong></h2>
                                 <p class="step-desc">
-                                    El entrenamiento solo construye músculo y fuerza si tu cuerpo tiene capacidad biológica de asimilarlo.
+                                    El entrenamiento solo construye músculo y fuerza si tu cuerpo tiene capacidad
+                                    biológica de asimilarlo.
                                 </p>
 
                                 <div class="input-card-group">
@@ -1373,8 +1630,10 @@
                                             <label class="input-label">Horas de Sueño Diarias Promedio</label>
                                             <div class="metric-slider-badge" id="diagSleepVal">7.0 hs</div>
                                         </div>
-                                        <input type="range" min="4" max="10" step="0.5" value="7" class="range-slider" id="diagSleepSlider">
-                                        <span class="metric-sublabel">La reparación muscular y la desinflamación ocurren durante el sueño profundo.</span>
+                                        <input type="range" min="4" max="10" step="0.5" value="7" class="range-slider"
+                                            id="diagSleepSlider">
+                                        <span class="metric-sublabel">La reparación muscular y la desinflamación ocurren
+                                            durante el sueño profundo.</span>
                                     </div>
 
                                     <!-- Nivel de estrés -->
@@ -1383,7 +1642,8 @@
                                             <label class="input-label">Nivel de Estrés Percibido (1 al 10)</label>
                                             <div class="metric-slider-badge" id="diagStressVal">6 / 10</div>
                                         </div>
-                                        <input type="range" min="1" max="10" value="6" class="range-slider" id="diagStressSlider">
+                                        <input type="range" min="1" max="10" value="6" class="range-slider"
+                                            id="diagStressSlider">
                                         <div class="eva-legend">
                                             <span>1 = Muy relajado</span>
                                             <span>6 = Moderado / Laboral</span>
@@ -1400,7 +1660,8 @@
                                                 <div class="custom-circle"></div>
                                                 <div class="card-content">
                                                     Sedentario
-                                                    <span class="card-sub">&gt;8 horas sentado frente a pantalla (oficina / home office).</span>
+                                                    <span class="card-sub">&gt;8 horas sentado frente a pantalla
+                                                        (oficina / home office).</span>
                                                 </div>
                                             </label>
                                             <label class="touch-card">
@@ -1408,7 +1669,8 @@
                                                 <div class="custom-circle"></div>
                                                 <div class="card-content">
                                                     Mixto
-                                                    <span class="card-sub">De pie o caminando moderadamente durante el día.</span>
+                                                    <span class="card-sub">De pie o caminando moderadamente durante el
+                                                        día.</span>
                                                 </div>
                                             </label>
                                             <label class="touch-card">
@@ -1416,7 +1678,8 @@
                                                 <div class="custom-circle"></div>
                                                 <div class="card-content">
                                                     Activo
-                                                    <span class="card-sub">En constante movimiento o trabajo físico demandante.</span>
+                                                    <span class="card-sub">En constante movimiento o trabajo físico
+                                                        demandante.</span>
                                                 </div>
                                             </label>
                                         </div>
@@ -1426,17 +1689,22 @@
                                     <div class="section-subblock">
                                         <label class="subblock-title">Ingesta actual de agua diaria:</label>
                                         <div class="freq-selector-grid">
-                                            <button type="button" class="water-btn" data-water="1.0">&lt; 1.5 Litros</button>
-                                            <button type="button" class="water-btn active" data-water="2.0">1.5 a 2.5 Litros</button>
-                                            <button type="button" class="water-btn" data-water="3.0">&gt; 2.5 Litros</button>
+                                            <button type="button" class="water-btn" data-water="1.0">&lt; 1.5
+                                                Litros</button>
+                                            <button type="button" class="water-btn active" data-water="2.0">1.5 a 2.5
+                                                Litros</button>
+                                            <button type="button" class="water-btn" data-water="3.0">&gt; 2.5
+                                                Litros</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(4)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(6, '¡Casi listos!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(4)">←
+                                    Volver</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="diagWizardGoStep(6, '¡Casi listos!')">Continuar →</button>
                             </div>
                         </div>
 
@@ -1446,7 +1714,8 @@
                                 <div class="step-tag-pill">Paso 6 de 8 • Hábitos &amp; Continuidad</div>
                                 <h2 class="step-title">Barrera Histórica de <strong>Adherencia</strong></h2>
                                 <p class="step-desc">
-                                    ¿Cuál ha sido tu mayor obstáculo en el pasado? Permite a Nico diseñar una estrategia para que no abandones a los 30 días.
+                                    ¿Cuál ha sido tu mayor obstáculo en el pasado? Permite a Nico diseñar una estrategia
+                                    para que no abandones a los 30 días.
                                 </p>
 
                                 <div class="selection-group">
@@ -1455,7 +1724,8 @@
                                         <div class="custom-circle"></div>
                                         <div class="card-content">
                                             Falta de tiempo
-                                            <span class="card-sub">Rutinas kilométricas incompatibles con mi agenda laboral o familiar.</span>
+                                            <span class="card-sub">Rutinas kilométricas incompatibles con mi agenda
+                                                laboral o familiar.</span>
                                         </div>
                                     </label>
                                     <label class="touch-card">
@@ -1463,7 +1733,8 @@
                                         <div class="custom-circle"></div>
                                         <div class="card-content">
                                             Falta de constancia / Desmotivación
-                                            <span class="card-sub">Arranco motivado pero pierdo el hábito al cabo de un mes.</span>
+                                            <span class="card-sub">Arranco motivado pero pierdo el hábito al cabo de un
+                                                mes.</span>
                                         </div>
                                     </label>
                                     <label class="touch-card">
@@ -1471,7 +1742,8 @@
                                         <div class="custom-circle"></div>
                                         <div class="card-content">
                                             Dolores o lesiones recurrentes
-                                            <span class="card-sub">Me entusiasmaba pero empezaban molestias y tenía que frenar.</span>
+                                            <span class="card-sub">Me entusiasmaba pero empezaban molestias y tenía que
+                                                frenar.</span>
                                         </div>
                                     </label>
                                     <label class="touch-card">
@@ -1479,7 +1751,8 @@
                                         <div class="custom-circle"></div>
                                         <div class="card-content">
                                             Falta de guía técnica clara
-                                            <span class="card-sub">No sé si estoy haciendo bien los movimientos ni con qué cargas progresar.</span>
+                                            <span class="card-sub">No sé si estoy haciendo bien los movimientos ni con
+                                                qué cargas progresar.</span>
                                         </div>
                                     </label>
                                 </div>
@@ -1488,13 +1761,17 @@
                                     <label class="input-label" for="diagHurdleDetail" style="margin-bottom: 6px;">
                                         ¿Querés profundizar sobre tu obstáculo o experiencia previa? (Opcional)
                                     </label>
-                                    <textarea id="diagHurdleDetail" class="input-control" rows="2" style="resize: vertical; min-height: 54px;" placeholder="Ej: Me cuesta sostener la constancia cuando viajo por trabajo..."></textarea>
+                                    <textarea id="diagHurdleDetail" class="input-control" rows="2"
+                                        style="resize: vertical; min-height: 54px;"
+                                        placeholder="Ej: Me cuesta sostener la constancia cuando viajo por trabajo..."></textarea>
                                 </div>
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(5)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(7, '¡Solo 2 pasos más!')">Continuar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(5)">←
+                                    Volver</button>
+                                <button type="button" class="btn btn-primary"
+                                    onclick="diagWizardGoStep(7, '¡Solo 2 pasos más!')">Continuar →</button>
                             </div>
                         </div>
 
@@ -1504,7 +1781,8 @@
                                 <div class="step-tag-pill">Paso 7 de 8 • Evaluación Funcional</div>
                                 <h2 class="step-title">Pruebas Rápidas de <strong>Movilidad</strong></h2>
                                 <p class="step-desc">
-                                    Hacelas de pie ahora mismo en 30 segundos, o podés omitirlas por ahora si preferís dejarlas para más tarde.
+                                    Hacelas de pie ahora mismo en 30 segundos, o podés omitirlas por ahora si preferís
+                                    dejarlas para más tarde.
                                 </p>
 
                                 <!-- Test 1: Movilidad de Hombros -->
@@ -1512,7 +1790,8 @@
                                     <div class="mobility-test-badge">Prueba 1 de 2</div>
                                     <h4 class="mobility-test-name">Movilidad de Hombro &amp; Extensión Torácica</h4>
                                     <p class="mobility-instruction">
-                                        De pie con el abdomen firme, elevá ambos brazos rectos hacia el techo sin arquear la espalda lumbar ni flexionar los codos.
+                                        De pie con el abdomen firme, elevá ambos brazos rectos hacia el techo sin
+                                        arquear la espalda lumbar ni flexionar los codos.
                                     </p>
                                     <div class="selection-group">
                                         <label class="touch-card">
@@ -1520,7 +1799,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Completado sin molestia
-                                                <span class="card-sub">Brazos alineados verticalmente con las orejas sin esfuerzo.</span>
+                                                <span class="card-sub">Brazos alineados verticalmente con las orejas sin
+                                                    esfuerzo.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card">
@@ -1528,7 +1808,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Con limitación o tirantez
-                                                <span class="card-sub">No llego a la vertical completa o siento tirantez dorsal.</span>
+                                                <span class="card-sub">No llego a la vertical completa o siento tirantez
+                                                    dorsal.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card">
@@ -1536,7 +1817,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Con dolor o pinzamiento articular
-                                                <span class="card-sub">Molestia punzante al elevar los brazos por encima de hombros.</span>
+                                                <span class="card-sub">Molestia punzante al elevar los brazos por encima
+                                                    de hombros.</span>
                                             </div>
                                         </label>
                                     </div>
@@ -1547,7 +1829,8 @@
                                     <div class="mobility-test-badge">Prueba 2 de 2</div>
                                     <h4 class="mobility-test-name">Cadena Posterior &amp; Flexión de Cadera</h4>
                                     <p class="mobility-instruction">
-                                        Con piernas juntas y rectas (sin doblar rodillas), flexioná el tronco hacia adelante buscando tocar los pies.
+                                        Con piernas juntas y rectas (sin doblar rodillas), flexioná el tronco hacia
+                                        adelante buscando tocar los pies.
                                     </p>
                                     <div class="selection-group">
                                         <label class="touch-card">
@@ -1555,7 +1838,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Toco pies o tobillos cómodamente
-                                                <span class="card-sub">Buena flexibilidad de isquiotibiales y columna lumbar.</span>
+                                                <span class="card-sub">Buena flexibilidad de isquiotibiales y columna
+                                                    lumbar.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card">
@@ -1563,7 +1847,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Llego a media tibia / con mucha tensión
-                                                <span class="card-sub">Acortamiento marcado en la cadena posterior.</span>
+                                                <span class="card-sub">Acortamiento marcado en la cadena
+                                                    posterior.</span>
                                             </div>
                                         </label>
                                         <label class="touch-card">
@@ -1571,7 +1856,8 @@
                                             <div class="custom-circle"></div>
                                             <div class="card-content">
                                                 Siento tirantez lumbar o molestia
-                                                <span class="card-sub">Presión o dolor en zona lumbar al doblar el tronco.</span>
+                                                <span class="card-sub">Presión o dolor en zona lumbar al doblar el
+                                                    tronco.</span>
                                             </div>
                                         </label>
                                     </div>
@@ -1579,10 +1865,13 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(6)">← Volver</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(6)">←
+                                    Volver</button>
                                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                    <button type="button" class="btn btn-outline" id="btnSkipMobility">Omitir pruebas por ahora</button>
-                                    <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(8, '¡Último paso!')">Continuar →</button>
+                                    <button type="button" class="btn btn-outline" id="btnSkipMobility">Omitir pruebas
+                                        por ahora</button>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="diagWizardGoStep(8, '¡Último paso!')">Continuar →</button>
                                 </div>
                             </div>
                         </div>
@@ -1593,16 +1882,19 @@
                                 <div class="step-tag-pill">Paso 8 de 8 • Registro Postural &amp; Medidas</div>
                                 <h2 class="step-title">Evaluación Postural &amp; <strong>Medidas</strong></h2>
                                 <p class="step-desc">
-                                    Fotos y referencias corporales opcionales para que Nico evalúe tu alineación y monitorear tu progreso real.
+                                    Fotos y referencias corporales opcionales para que Nico evalúe tu alineación y
+                                    monitorear tu progreso real.
                                 </p>
 
                                 <!-- Registro Fotográfico Postural (Frontal y Perfil - Opcionales) -->
                                 <div class="photo-eval-section">
                                     <div class="photo-eval-header">
                                         <div>
-                                            <h4 style="font-size: 1rem; font-weight: 600; color: var(--text-primary);">Evaluación Fotográfica Postural (Opcional)</h4>
+                                            <h4 style="font-size: 1rem; font-weight: 600; color: var(--text-primary);">
+                                                Evaluación Fotográfica Postural (Opcional)</h4>
                                             <span style="font-size: 12px; color: var(--text-muted);">
-                                                Permite a Nico evaluar alineación corporal, apoyos e inclinaciones. Encriptadas bajo Ley 25.326.
+                                                Permite a Nico evaluar alineación corporal, apoyos e inclinaciones.
+                                                Encriptadas bajo Ley 25.326.
                                             </span>
                                         </div>
                                     </div>
@@ -1612,14 +1904,20 @@
                                         <div class="photo-box" id="boxPhotoFront">
                                             <div class="photo-preview-placeholder">
                                                 <svg class="silhouette-svg" viewBox="0 0 100 200" fill="none">
-                                                    <circle cx="50" cy="30" r="16" stroke="rgba(229, 203, 167, 0.4)" stroke-width="2"/>
-                                                    <path d="M25 65 C25 50, 75 50, 75 65 L70 120 L62 190 M30 120 L38 190" stroke="rgba(229, 203, 167, 0.3)" stroke-width="2"/>
+                                                    <circle cx="50" cy="30" r="16" stroke="rgba(229, 203, 167, 0.4)"
+                                                        stroke-width="2" />
+                                                    <path
+                                                        d="M25 65 C25 50, 75 50, 75 65 L70 120 L62 190 M30 120 L38 190"
+                                                        stroke="rgba(229, 203, 167, 0.3)" stroke-width="2" />
                                                 </svg>
                                                 <span class="photo-label">Plano Frontal (Opcional)</span>
                                             </div>
-                                            <img class="photo-preview-img" id="previewImgFront" style="display: none;" alt="Foto Frontal">
-                                            <input type="file" id="filePhotoFront" accept="image/*" capture="environment" style="display: none;">
-                                            <button type="button" class="btn btn-outline btn-sm photo-upload-btn" onclick="document.getElementById('filePhotoFront').click()">
+                                            <img class="photo-preview-img" id="previewImgFront" style="display: none;"
+                                                alt="Foto Frontal">
+                                            <input type="file" id="filePhotoFront" accept="image/*"
+                                                capture="environment" style="display: none;">
+                                            <button type="button" class="btn btn-outline btn-sm photo-upload-btn"
+                                                onclick="document.getElementById('filePhotoFront').click()">
                                                 Subir / Tomar
                                             </button>
                                         </div>
@@ -1628,21 +1926,33 @@
                                         <div class="photo-box" id="boxPhotoSide">
                                             <div class="photo-preview-placeholder">
                                                 <svg class="silhouette-svg" viewBox="0 0 100 200" fill="none">
-                                                    <circle cx="50" cy="30" r="16" stroke="rgba(229, 203, 167, 0.4)" stroke-width="2"/>
-                                                    <path d="M45 65 C40 85, 60 110, 50 140 L50 190" stroke="rgba(229, 203, 167, 0.3)" stroke-width="2"/>
+                                                    <circle cx="50" cy="30" r="16" stroke="rgba(229, 203, 167, 0.4)"
+                                                        stroke-width="2" />
+                                                    <path d="M45 65 C40 85, 60 110, 50 140 L50 190"
+                                                        stroke="rgba(229, 203, 167, 0.3)" stroke-width="2" />
                                                 </svg>
                                                 <span class="photo-label">Plano Perfil (Opcional)</span>
                                             </div>
-                                            <img class="photo-preview-img" id="previewImgSide" style="display: none;" alt="Foto Lateral">
-                                            <input type="file" id="filePhotoSide" accept="image/*" capture="environment" style="display: none;">
-                                            <button type="button" class="btn btn-outline btn-sm photo-upload-btn" onclick="document.getElementById('filePhotoSide').click()">
+                                            <img class="photo-preview-img" id="previewImgSide" style="display: none;"
+                                                alt="Foto Lateral">
+                                            <input type="file" id="filePhotoSide" accept="image/*" capture="environment"
+                                                style="display: none;">
+                                            <button type="button" class="btn btn-outline btn-sm photo-upload-btn"
+                                                onclick="document.getElementById('filePhotoSide').click()">
                                                 Subir / Tomar
                                             </button>
                                         </div>
                                     </div>
                                     <div class="photo-peace-of-mind">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                                        <em>Podés adjuntar tus fotos ahora o dejarlas para más adelante desde tu perfil.</em>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="12" y1="16" x2="12" y2="12" />
+                                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                                        </svg>
+                                        <em>Podés adjuntar tus fotos ahora o dejarlas para más adelante desde tu
+                                            perfil.</em>
                                     </div>
                                 </div>
 
@@ -1650,9 +1960,12 @@
                                 <div class="tape-measurements-section">
                                     <div class="tape-header">
                                         <div class="tape-header-content">
-                                            <h4 style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Medidas con Cinta Métrica (Opcional)</h4>
+                                            <h4
+                                                style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">
+                                                Medidas con Cinta Métrica (Opcional)</h4>
                                             <span style="font-size: 12px; color: var(--text-muted);">
-                                                Referencias anatómicas para monitorear tu progreso real sin depender solo de la balanza.
+                                                Referencias anatómicas para monitorear tu progreso real sin depender
+                                                solo de la balanza.
                                             </span>
                                         </div>
                                     </div>
@@ -1662,10 +1975,12 @@
                                         <div class="tape-input-card">
                                             <div class="tape-card-info">
                                                 <label class="tape-card-label" for="diagTapeWaist">Cintura</label>
-                                                <span class="tape-card-guide">A la altura del ombligo, relajando el abdomen sin meter la panza.</span>
+                                                <span class="tape-card-guide">A la altura del ombligo, relajando el
+                                                    abdomen sin meter la panza.</span>
                                             </div>
                                             <div class="tape-card-input-wrap">
-                                                <input type="number" step="0.5" id="diagTapeWaist" class="tape-input-control" placeholder="Ej: 84">
+                                                <input type="number" step="0.5" id="diagTapeWaist"
+                                                    class="tape-input-control" placeholder="Ej: 84">
                                                 <span class="tape-unit">cm</span>
                                             </div>
                                         </div>
@@ -1674,10 +1989,12 @@
                                         <div class="tape-input-card">
                                             <div class="tape-card-info">
                                                 <label class="tape-card-label" for="diagTapeHip">Cadera</label>
-                                                <span class="tape-card-guide">En la zona de mayor contorno de los glúteos, pies juntos.</span>
+                                                <span class="tape-card-guide">En la zona de mayor contorno de los
+                                                    glúteos, pies juntos.</span>
                                             </div>
                                             <div class="tape-card-input-wrap">
-                                                <input type="number" step="0.5" id="diagTapeHip" class="tape-input-control" placeholder="Ej: 98">
+                                                <input type="number" step="0.5" id="diagTapeHip"
+                                                    class="tape-input-control" placeholder="Ej: 98">
                                                 <span class="tape-unit">cm</span>
                                             </div>
                                         </div>
@@ -1686,10 +2003,12 @@
                                         <div class="tape-input-card">
                                             <div class="tape-card-info">
                                                 <label class="tape-card-label" for="diagTapeArm">Brazo relajado</label>
-                                                <span class="tape-card-guide">En el punto medio entre hombro y codo, con el brazo suelto al costado.</span>
+                                                <span class="tape-card-guide">En el punto medio entre hombro y codo, con
+                                                    el brazo suelto al costado.</span>
                                             </div>
                                             <div class="tape-card-input-wrap">
-                                                <input type="number" step="0.5" id="diagTapeArm" class="tape-input-control" placeholder="Ej: 32">
+                                                <input type="number" step="0.5" id="diagTapeArm"
+                                                    class="tape-input-control" placeholder="Ej: 32">
                                                 <span class="tape-unit">cm</span>
                                             </div>
                                         </div>
@@ -1698,10 +2017,12 @@
                                         <div class="tape-input-card">
                                             <div class="tape-card-info">
                                                 <label class="tape-card-label" for="diagTapeThigh">Muslo medio</label>
-                                                <span class="tape-card-guide">En el punto medio entre el pliegue de la ingle y la parte superior de la rodilla.</span>
+                                                <span class="tape-card-guide">En el punto medio entre el pliegue de la
+                                                    ingle y la parte superior de la rodilla.</span>
                                             </div>
                                             <div class="tape-card-input-wrap">
-                                                <input type="number" step="0.5" id="diagTapeThigh" class="tape-input-control" placeholder="Ej: 56">
+                                                <input type="number" step="0.5" id="diagTapeThigh"
+                                                    class="tape-input-control" placeholder="Ej: 56">
                                                 <span class="tape-unit">cm</span>
                                             </div>
                                         </div>
@@ -1710,8 +2031,10 @@
                             </div>
 
                             <div class="wizard-footer-actions">
-                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(7)">← Volver</button>
-                                <button type="button" class="btn btn-primary" id="btnFinishDiagnosis">Finalizar y Guardar →</button>
+                                <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(7)">←
+                                    Volver</button>
+                                <button type="button" class="btn btn-primary" id="btnFinishDiagnosis">Finalizar y
+                                    Guardar →</button>
                             </div>
                         </div>
 
@@ -1719,20 +2042,25 @@
                         <div class="wizard-step-card" id="diagStep9">
                             <div class="step-content-body" style="text-align: center;">
                                 <div class="congrats-icon-wrap">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
                                 </div>
 
                                 <div class="step-tag-pill" style="margin: 0 auto 12px;">Expediente Registrado</div>
-                                <h2 class="step-title" style="text-align: center;">Diagnóstico <strong>Completado</strong></h2>
+                                <h2 class="step-title" style="text-align: center;">Diagnóstico
+                                    <strong>Completado</strong>
+                                </h2>
                                 <!-- Evaluación Biomecánica Visual (Siluetas Dinámicas: Punto de Partida vs Objetivo) -->
                                 <div class="biometric-assessment-card" id="diagBiometricVisualCard">
                                     <div class="biometric-card-header">
                                         <span class="biometric-eval-badge">Evaluación Morfométrica Inicial</span>
-                                        <h3 class="biometric-eval-title">Tu Perfil Físico &amp; <strong>Proyección SENS</strong></h3>
+                                        <h3 class="biometric-eval-title">Tu Perfil Físico &amp; <strong>Proyección
+                                                SENS</strong></h3>
                                         <p class="biometric-eval-sub">
-                                            Modelado biomecánico basado en tu altura, peso, índice de masa corporal y sexo biológico:
+                                            Modelado biomecánico basado en tu altura, peso, índice de masa corporal y
+                                            sexo biológico:
                                         </p>
                                     </div>
 
@@ -1746,16 +2074,21 @@
                                                 <!-- SVG dinámico inyectado por app.js -->
                                             </div>
                                             <div class="silhouette-athlete-footer">
-                                                <div class="athlete-name-display" id="diagAthleteNameDisplay">Atleta</div>
-                                                <div class="athlete-metrics-tag" id="diagAthleteMetricsTag">-- kg • -- cm</div>
-                                                <div class="athlete-status-badge" id="diagAthleteStatusBadge">Evaluando datos...</div>
+                                                <div class="athlete-name-display" id="diagAthleteNameDisplay">Atleta
+                                                </div>
+                                                <div class="athlete-metrics-tag" id="diagAthleteMetricsTag">-- kg • --
+                                                    cm</div>
+                                                <div class="athlete-status-badge" id="diagAthleteStatusBadge">Evaluando
+                                                    datos...</div>
                                             </div>
                                         </div>
 
                                         <!-- Divisor y Flecha de Transformación -->
                                         <div class="silhouette-transition-col">
                                             <div class="transition-arrow-wrap">
-                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                                    stroke="var(--accent-primary)" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
                                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                                     <polyline points="12 5 19 12 12 19"></polyline>
                                                 </svg>
@@ -1772,9 +2105,12 @@
                                                 <!-- SVG dinámico objetivo con resplandor Champagne -->
                                             </div>
                                             <div class="silhouette-athlete-footer">
-                                                <div class="athlete-goal-display" id="diagAthleteGoalDisplay">Tu Meta</div>
-                                                <div class="athlete-metrics-tag" id="diagAthleteGoalSubTag">Planificación Adaptativa</div>
-                                                <div class="athlete-status-badge target-badge">Calibración con Nico</div>
+                                                <div class="athlete-goal-display" id="diagAthleteGoalDisplay">Tu Meta
+                                                </div>
+                                                <div class="athlete-metrics-tag" id="diagAthleteGoalSubTag">
+                                                    Planificación Adaptativa</div>
+                                                <div class="athlete-status-badge target-badge">Calibración con Nico
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1784,7 +2120,9 @@
                                 <div class="coach-feedback-card">
                                     <div class="coach-feedback-header">
                                         <div class="coach-avatar-badge">
-                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                                stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
                                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                 <circle cx="12" cy="7" r="4"></circle>
                                             </svg>
@@ -1795,7 +2133,9 @@
                                         </div>
                                     </div>
                                     <p class="coach-feedback-desc">
-                                        En las próximas <strong>24 horas</strong> recibirás feedback directo de Nico para la <strong>creación personalizada de tu rutina de entrenamiento y plan de nutrición</strong>, adaptados a tus métricas y objetivo.
+                                        En las próximas <strong>24 horas</strong> recibirás feedback directo de Nico
+                                        para la <strong>creación personalizada de tu rutina de entrenamiento y plan de
+                                            nutrición</strong>, adaptados a tus métricas y objetivo.
                                     </p>
                                     <div class="coach-feedback-footer">
                                         <span class="coach-feedback-channel">
@@ -1806,7 +2146,8 @@
                             </div>
 
                             <div class="wizard-footer-actions" style="justify-content: center; margin-top: 30px;">
-                                <button type="button" class="btn btn-primary btn-lg" id="btnDiagEnterDashboard" style="max-width: 380px;">
+                                <button type="button" class="btn btn-primary btn-lg" id="btnDiagEnterDashboard"
+                                    style="max-width: 380px;">
                                     Entrar a mi Dashboard →
                                 </button>
                             </div>
@@ -1836,27 +2177,29 @@
                     </div>
                 </div>
 
-                <!-- CARD DESTACADA: DIAGNÓSTICO CLÍNICO & MIS DATOS (ACCESO Y MODIFICACIÓN) -->
+                <!-- CARD DESTACADA: EVALUACIÓN INICIAL & MIS DATOS (ACCESO Y MODIFICACIÓN) -->
                 <div class="diagnosis-summary-card" id="dashDiagnosisCard">
                     <div class="diagnosis-card-header">
                         <div class="diagnosis-card-badges">
-                            <span class="pill pill-champagne" id="dashDiagStatusPill">Diagnóstico Clínico</span>
-                            <span class="diagnosis-updated-badge" id="dashDiagDateBadge">Expediente al día</span>
+                            <span class="pill pill-champagne" id="dashDiagStatusPill">Evaluación Inicial de
+                                Fuerza</span>
+                            <span class="diagnosis-updated-badge" id="dashDiagDateBadge">Perfil Físico al día</span>
                         </div>
                         <button type="button" class="btn btn-outline btn-sm" id="dashEditDiagnosisBtn">
                             Ver o Modificar mis Datos ✎
                         </button>
                     </div>
                     <div class="diagnosis-card-body">
-                        <h3 class="diagnosis-card-title">Mis Datos Biométricos &amp; <strong>Anamnesis</strong></h3>
+                        <h3 class="diagnosis-card-title">Mis Datos Biométricos &amp; <strong>Evaluación</strong></h3>
                         <p class="diagnosis-card-desc" id="dashDiagSummaryText">
-                            Tu historial clínico, articulaciones protegidas, nivel de estrés y métricas de peso registradas para la programación 1 a 1 de Nico.
+                            Tu historial físico, articulaciones atendidas, nivel de energía y métricas de peso
+                            registradas para la programación 1 a 1 de Nico.
                         </p>
                         <div class="diagnosis-quick-tags" id="dashDiagTags">
                             <!-- Inyectado dinámicamente por app.js -->
                             <span class="diag-tag">Peso: 78 kg</span>
                             <span class="diag-tag">Frecuencia: 3 días/sem</span>
-                            <span class="diag-tag">Sin banderas médicas</span>
+                            <span class="diag-tag">Apto para entrenamiento</span>
                             <span class="diag-tag">Agua: 2.7 L/día</span>
                         </div>
                     </div>
@@ -1923,8 +2266,40 @@
                 <!-- Selector de días -->
                 <div class="workout-days-nav">
                     <button class="day-tab-btn active" data-day="day1">Día 1: Tren Superior (Empuje / Tirón)</button>
-                    <button class="day-tab-btn" data-day="day2">Día 2: Tren Inferior (Fuerza & Cadera)</button>
-                    <button class="day-tab-btn" data-day="day3">Día 3: Full Body & Conciencia Postural</button>
+                    <button class="day-tab-btn" data-day="day2">Día 2: Tren Inferior (Fuerza &amp; Cadera)</button>
+                    <button class="day-tab-btn" data-day="day3">Día 3: Full Body &amp; Conciencia Postural</button>
+                </div>
+
+                <!-- Barra de Herramientas de Rutina & Acceso al Catálogo Maestro -->
+                <div class="workout-toolbar"
+                    style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 12px 18px; border-radius: 10px;">
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                        <span
+                            style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 600;">Filtrar
+                            Grupo:</span>
+                        <button type="button" class="pill pill-champagne muscle-filter-btn" data-group="all"
+                            style="cursor: pointer; border: none;">Todos</button>
+                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="quadriceps"
+                            style="cursor: pointer; border: none;">Cuádriceps</button>
+                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="hamstrings_glutes"
+                            style="cursor: pointer; border: none;">Isquios / Glúteo</button>
+                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="push"
+                            style="cursor: pointer; border: none;">Empuje</button>
+                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="pull"
+                            style="cursor: pointer; border: none;">Tracción</button>
+                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="core_mobility"
+                            style="cursor: pointer; border: none;">Core &amp; Movilidad</button>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnOpenExerciseLibraryModal"
+                            style="width: auto; margin-bottom: 0;">
+                            📖 Biblioteca de 50 Ejercicios
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnAdminAddExercise"
+                            style="width: auto; margin-bottom: 0; display: none;">
+                            + Asignar a este Día (Nico)
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Lista de ejercicios dinámica -->
@@ -2160,6 +2535,38 @@
                             Hoy</button>
                     </div>
                 </div>
+
+                <!-- Banco de Alimentos Base Curados por Nico -->
+                <div class="card-panel" style="margin-top: 30px;">
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <span class="pill pill-champagne" style="font-size: 10px;">BANCO DE ALIMENTOS BASE</span>
+                            <h3
+                                style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-top: 6px;">
+                                Opciones Recomendadas para tu Práctica de Fuerza</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; margin-bottom: 0;">
+                                Selección de alimentos limpios para estructurar tus comidas sin caer en planes
+                                restrictivos insostenibles.</p>
+                        </div>
+                        <div class="pill-container" id="foodCategoryFilters" style="margin-bottom: 0; gap: 6px;">
+                            <button type="button" class="pill pill-champagne food-filter-btn" data-cat="all"
+                                style="cursor: pointer; border: none;">Todos</button>
+                            <button type="button" class="pill pill-dark food-filter-btn" data-cat="protein"
+                                style="cursor: pointer; border: none;">Proteínas</button>
+                            <button type="button" class="pill pill-dark food-filter-btn" data-cat="carbs"
+                                style="cursor: pointer; border: none;">Carbohidratos</button>
+                            <button type="button" class="pill pill-dark food-filter-btn" data-cat="healthy_fats"
+                                style="cursor: pointer; border: none;">Grasas</button>
+                            <button type="button" class="pill pill-dark food-filter-btn" data-cat="hydration_veg"
+                                style="cursor: pointer; border: none;">Hidratación</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-3" id="foodCatalogGrid" style="gap: 16px; margin-bottom: 0;">
+                        <!-- Contenido dinámico inyectado por app.js -->
+                    </div>
+                </div>
             </section>
 
             <!-- Sub-vista 2: Seguimiento Diario & Gráficos -->
@@ -2270,6 +2677,42 @@
                 Mantené la columna neutra, inhalá antes de iniciar el descenso y exhalá al completar la fase concéntrica
                 de máxima fuerza.
             </p>
+        </div>
+    </div>
+
+    <!-- Modal de Biblioteca Maestra de Ejercicios SENS (50 Ejercicios) -->
+    <div class="modal-overlay" id="exerciseLibraryModal">
+        <div class="modal-card" style="max-width: 880px; max-height: 90vh; display: flex; flex-direction: column;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 14px;">
+                <div>
+                    <span class="pill pill-champagne" style="font-size: 10px;">BIBLIOTECA COMPLETA SENS</span>
+                    <h3 style="font-size: 1.3rem; margin-top: 4px; color: var(--text-primary);">Catálogo de 50
+                        Ejercicios Curados</h3>
+                </div>
+                <button class="modal-close-btn" id="closeLibraryModalBtn"
+                    style="position: static; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+                <input type="text" id="libSearchInput" class="input-control"
+                    placeholder="Buscar por nombre o patrón (ej. Sentadilla, Press, Bisagra)..."
+                    style="flex: 1; min-width: 220px; padding: 10px 14px; font-size: 13px;">
+                <select id="libGroupFilter" class="input-control"
+                    style="width: auto; min-width: 170px; padding: 10px 14px; font-size: 13px;">
+                    <option value="all">Todos los Grupos</option>
+                    <option value="quadriceps">Dominante Rodilla (Cuádriceps)</option>
+                    <option value="hamstrings_glutes">Dominante Cadera (Isquios/Glúteos)</option>
+                    <option value="push">Empuje Tren Superior</option>
+                    <option value="pull">Tracción Tren Superior</option>
+                    <option value="core_mobility">Core &amp; Movilidad</option>
+                </select>
+            </div>
+
+            <div id="libraryExercisesList"
+                style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 6px;">
+                <!-- Rellenado dinámico por JS -->
+            </div>
         </div>
     </div>
 

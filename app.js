@@ -40,8 +40,190 @@ const AppState = {
     activeTimerInterval: null,
     remainingSeconds: 0,
     weightChart: null,
-    stepsChart: null
+    stepsChart: null,
+    selectedMuscleFilter: 'all'
 };
+
+// -----------------------------------------------------------------------------
+// PERFILES MOCK DE MULTI-USUARIO (Soporte para roles de Supabase)
+// -----------------------------------------------------------------------------
+const MOCK_USER_PROFILES = {
+    client_presencial_vip: {
+        id: 'usr-vip-001',
+        full_name: 'Roberto Gómez',
+        email: 'roberto.gomez@sens.com',
+        user_type: 'client_presencial_vip',
+        role: 'user_vip',
+        active_plan_name: 'Presencial 1 a 1 VIP (CABA)',
+        plan_badge_text: 'Presencial 1 a 1 • 2x/Semana',
+        sessions_week: '2 / 2',
+        current_weight: 78.2,
+        weight_diff: '-1.2 kg',
+        avg_steps: '10.420',
+        goal_text: 'Fuerza & Recomposición Corporal',
+        coach_message: 'Excelente consistencia en sobrecarga progresiva esta semana, Roberto. Cuidar la pausa excéntrica en sentadillas.'
+    },
+    client_presencial_group: {
+        id: 'usr-grp-002',
+        full_name: 'Laura & Marcos',
+        email: 'laura.marcos@sens.com',
+        user_type: 'client_presencial_group',
+        role: 'user_normal',
+        active_plan_name: 'Presencial Semi-Personalizado (Dúo)',
+        plan_badge_text: 'Modalidad Dúo • 8 Sesiones/mes',
+        sessions_week: '2 / 2',
+        current_weight: 66.4,
+        weight_diff: '-0.8 kg',
+        avg_steps: '9.350',
+        goal_text: 'Fuerza Compartida & Hábitos',
+        coach_message: 'Muy buen ritmo en el dúo de ayer. Marcos enfocar en el empuje de talones en peso muerto.'
+    },
+    client_online_premium: {
+        id: 'usr-onl-003',
+        full_name: 'Esteban Bianchi',
+        email: 'esteban.b@sens.com',
+        user_type: 'client_online_premium',
+        role: 'user_vip',
+        active_plan_name: 'Online Asesorado Premium',
+        plan_badge_text: 'Online Premium • Videollamadas',
+        sessions_week: '3 / 3',
+        current_weight: 81.5,
+        weight_diff: '-2.4 kg',
+        avg_steps: '11.800',
+        goal_text: 'Hipertrofia & Alivio Lumbar',
+        coach_message: 'Revisé tus videos enviados el martes: la técnica en remo mejoró notablemente. Mantener RIR 2.'
+    },
+    client_online_basic: {
+        id: 'usr-onl-004',
+        full_name: 'Carla Méndez',
+        email: 'carla.m@sens.com',
+        user_type: 'client_online_basic',
+        role: 'user_normal',
+        active_plan_name: 'Online Asesorado Básico',
+        plan_badge_text: 'Online Básico • Plan Mensual',
+        sessions_week: '2 / 3',
+        current_weight: 58.2,
+        weight_diff: '-0.4 kg',
+        avg_steps: '8.400',
+        goal_text: 'Movilidad & Tonificación',
+        coach_message: 'Plan de rutina al día. Recordar marcar las series en la web para chequear los descansos.'
+    },
+    admin: {
+        id: 'usr-adm-nico',
+        full_name: 'Nico (Coach & Admin)',
+        email: 'nico@sens.com',
+        user_type: 'admin',
+        role: 'admin',
+        active_plan_name: 'Panel Administrador SENS',
+        plan_badge_text: '⚡ Coach / Admin Nico',
+        sessions_week: 'Coach Activo',
+        current_weight: 75.0,
+        weight_diff: 'Óptimo',
+        avg_steps: '12.500',
+        goal_text: 'Gestión Integral de Alumnos',
+        coach_message: 'Modo Administrador Activo: Tenés control total para asignar ejercicios, modificar cargas y auditar alumnos.'
+    }
+};
+
+// -----------------------------------------------------------------------------
+// CATÁLOGO MAESTRO: 52 EJERCICIOS CURADOS POR NICO (5 GRUPOS MUSCULARES)
+// -----------------------------------------------------------------------------
+const EXERCISE_CATALOG = [
+    // 1. Dominante de Rodilla (Cuádriceps)
+    { id: 'ex-q1', name: 'Sentadilla Goblet con Mancuerna', muscle_group: 'quadriceps', pattern: 'Squat', rest: 90, cue: 'Codos cerrados pegados al torso, bajada en 3 segundos buscando profundidad cómoda sin redondear lumbares.', video: 'https://www.youtube.com/watch?v=MeIiIdhvXT4' },
+    { id: 'ex-q2', name: 'Sentadilla Trasera con Barra', muscle_group: 'quadriceps', pattern: 'Squat', rest: 120, cue: 'Barra apoyada firme en trapecios, pies al ancho de hombros, empuje uniforme desde el centro del pie.', video: 'https://www.youtube.com/watch?v=bEv6CCg2BC8' },
+    { id: 'ex-q3', name: 'Sentadilla Frontal con Barra', muscle_group: 'quadriceps', pattern: 'Squat', rest: 120, cue: 'Codos altos y pecho orgulloso para mantener el torso vertical durante todo el recorrido.', video: 'https://www.youtube.com/watch?v=uYumuL_G_V0' },
+    { id: 'ex-q4', name: 'Prensa 45°', muscle_group: 'quadriceps', pattern: 'Leg Press', rest: 90, cue: 'Pies a media plataforma, descender hasta 90° sin despegar el sacro del respaldo.', video: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ' },
+    { id: 'ex-q5', name: 'Estocadas Búlgaras con Mancuernas', muscle_group: 'quadriceps', pattern: 'Lunge', rest: 90, cue: 'Pie trasero elevado en banco, ligera inclinación del torso hacia adelante para cargar cuádriceps y glúteo.', video: 'https://www.youtube.com/watch?v=2C-uNgKwPLE' },
+    { id: 'ex-q6', name: 'Step-up en Cajón Controlado', muscle_group: 'quadriceps', pattern: 'Single Leg Step', rest: 75, cue: 'Todo el peso en la pierna de arriba, evitar impulsarse con la punta del pie en el suelo.', video: 'https://www.youtube.com/watch?dQqApCGd5Ss' },
+    { id: 'ex-q7', name: 'Sentadilla Hack en Máquina', muscle_group: 'quadriceps', pattern: 'Hack Squat', rest: 90, cue: 'Espalda totalmente apoyada, control excéntrico en 3 segundos para máximo estímulo de vastos.', video: 'https://www.youtube.com/watch?v=0tn5K9NlCfo' },
+    { id: 'ex-q8', name: 'Extensión de Cuádriceps en Máquina', muscle_group: 'quadriceps', pattern: 'Isolation', rest: 60, cue: 'Pausa isométrica de 1 segundo arriba, bajar sin golpear las placas.', video: 'https://www.youtube.com/watch?v=YyvSfVjQeL0' },
+    { id: 'ex-q9', name: 'Sentadilla Cosaca (Cossack Squat)', muscle_group: 'quadriceps', pattern: 'Mobility Squat', rest: 75, cue: 'Talón del pie flexionado en el suelo, excelente para apertura de cadera y fuerza unilateral.', video: 'https://www.youtube.com/watch?v=tpvgtrbp8ik' },
+    { id: 'ex-q10', name: 'Zancadas Caminando con Mancuernas', muscle_group: 'quadriceps', pattern: 'Lunge', rest: 90, cue: 'Paso amplio, rodilla trasera roza suavemente el suelo con control.', video: 'https://www.youtube.com/watch?v=L8fvypPrzzs' },
+
+    // 2. Dominante de Cadera (Isquiosurales & Glúteos)
+    { id: 'ex-h1', name: 'Peso Muerto Rumano con Mancuernas', muscle_group: 'hamstrings_glutes', pattern: 'Hinge', rest: 90, cue: 'Empujar las caderas hacia atrás como si quisieras tocar la pared con los glúteos. Espalda neutra.', video: 'https://www.youtube.com/watch?v=JCXUYuzwNrM' },
+    { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', muscle_group: 'hamstrings_glutes', pattern: 'Glute Bridge', rest: 90, cue: 'Mentón pegado al pecho, extender la cadera hasta alinear rodillas y hombros apretando glúteos 2 segundos.', video: 'https://www.youtube.com/watch?v=SEdqd1n0cvg' },
+    { id: 'ex-h3', name: 'Peso Muerto Convencional con Barra', muscle_group: 'hamstrings_glutes', pattern: 'Deadlift', rest: 150, cue: 'Barra pegada a las tibias, dorsales activos antes de despegar el peso del suelo.', video: 'https://www.youtube.com/watch?v=op9kVnSso6Q' },
+    { id: 'ex-h4', name: 'Curl Femoral Acostado en Máquina', muscle_group: 'hamstrings_glutes', pattern: 'Leg Curl', rest: 75, cue: 'Caderas firmes contra el banco, no arquear la columna lumbar al flexionar.', video: 'https://www.youtube.com/watch?v=1Tq3QdYUuHs' },
+    { id: 'ex-h5', name: 'Curl Femoral Sentado en Máquina', muscle_group: 'hamstrings_glutes', pattern: 'Leg Curl', rest: 75, cue: 'Excelente estímulo en rango de estiramiento del isquiosural. Bajar lento en 3 segundos.', video: 'https://www.youtube.com/watch?v=Orxowest56U' },
+    { id: 'ex-h6', name: 'Buenos Días con Barra Ligera', muscle_group: 'hamstrings_glutes', pattern: 'Hinge', rest: 90, cue: 'Ligera flexión de rodilla, bisagra pura de cadera para fortalecer erectores espinales e isquios.', video: 'https://www.youtube.com/watch?v=YA-h3n9L4YU' },
+    { id: 'ex-h7', name: 'Peso Muerto Rumano a Una Pierna', muscle_group: 'hamstrings_glutes', pattern: 'Single Leg Hinge', rest: 75, cue: 'Cadera cuadrada mirando hacia el piso, enfoque en equilibrio y propiocepción.', video: 'https://www.youtube.com/watch?v=18ZkMeqwMaw' },
+    { id: 'ex-h8', name: 'Kettlebell Swing Estilo Ruso', muscle_group: 'hamstrings_glutes', pattern: 'Ballistic Hinge', rest: 60, cue: 'Potencia explosiva desde los glúteos, los brazos solo acompañan la trayectoria de la pesa.', video: 'https://www.youtube.com/watch?v=YSxHifyI6s8' },
+    { id: 'ex-h9', name: 'Hiperextensiones a 45°', muscle_group: 'hamstrings_glutes', pattern: 'Back Extension', rest: 75, cue: 'Redondear ligeramente la zona dorsal alta para enfocar el esfuerzo en glúteos e isquios.', video: 'https://www.youtube.com/watch?v=ph3pddpKzzw' },
+    { id: 'ex-h10', name: 'Puente de Glúteos Unilateral en Suelo', muscle_group: 'hamstrings_glutes', pattern: 'Glute Bridge', rest: 60, cue: 'Excelente ejercicio de activación previa o rehabilitación de cadera.', video: 'https://www.youtube.com/watch?v=AVox3Vpw44U' },
+
+    // 3. Empuje Tren Superior (Pecho, Deltoides & Tríceps)
+    { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', muscle_group: 'push', pattern: 'Horizontal Push', rest: 90, cue: 'Escápulas retraídas y deprimidas, recorrido completo con los codos a 45-60 grados del torso.', video: 'https://www.youtube.com/watch?v=VmB1G1K7v94' },
+    { id: 'ex-p2', name: 'Press de Banca con Barra', muscle_group: 'push', pattern: 'Horizontal Push', rest: 120, cue: 'Pies firmes clavados en el suelo, arco lumbar natural, descenso controlado al esternón.', video: 'https://www.youtube.com/watch?v=rT7DgCr-3pg' },
+    { id: 'ex-p3', name: 'Press Militar de Pie con Barra', muscle_group: 'push', pattern: 'Vertical Push', rest: 120, cue: 'Glúteos y abdomen activos para proteger la zona lumbar, barra pasa cerca de la nariz.', video: 'https://www.youtube.com/watch?v=2yjwXTZQDDI' },
+    { id: 'ex-p4', name: 'Press Militar Sentado con Mancuernas', muscle_group: 'push', pattern: 'Vertical Push', rest: 90, cue: 'Respaldo a 75-80°, empujar hacia arriba sin juntar ni chocar las mancuernas en el tope.', video: 'https://www.youtube.com/watch?v=qEwKCR5JCog' },
+    { id: 'ex-p5', name: 'Fondos en Paralelas Asistidos / Libres', muscle_group: 'push', pattern: 'Vertical Push', rest: 90, cue: 'Ligera inclinación del pecho hacia adelante para enfocar fibras pectorales inferiores.', video: 'https://www.youtube.com/watch?v=2z8JmcrW-As' },
+    { id: 'ex-p6', name: 'Flexiones de Brazos (Push-ups) con Pausa', muscle_group: 'push', pattern: 'Horizontal Push', rest: 75, cue: 'Cuerpo como una tabla sólida, pausa de 1 segundo con el pecho a 2 cm del suelo.', video: 'https://www.youtube.com/watch?v=IODxDxX7oi4' },
+    { id: 'ex-p7', name: 'Press Inclinado con Mancuernas (30°)', muscle_group: 'push', pattern: 'Incline Push', rest: 90, cue: 'Inclinación sutil de 30° para priorizar haz clavicular del pectoral sin sobrecargar el hombro.', video: 'https://www.youtube.com/watch?v=8iPEnn-ltC8' },
+    { id: 'ex-p8', name: 'Aperturas en Polea (Crossover)', muscle_group: 'push', pattern: 'Flye', rest: 60, cue: 'Movimiento de abrazo semicircular con contracción máxima de 1 segundo en el centro.', video: 'https://www.youtube.com/watch?v=taI4XduLpBe' },
+    { id: 'ex-p9', name: 'Elevaciones Laterales en Polea a Una Mano', muscle_group: 'push', pattern: 'Lateral Raise', rest: 60, cue: 'Polea a la altura de la rodilla, elevar el codo alineado en el plano escapular.', video: 'https://www.youtube.com/watch?v=PPrzBWZDOhA' },
+    { id: 'ex-p10', name: 'Elevaciones Laterales con Mancuerna', muscle_group: 'push', pattern: 'Lateral Raise', rest: 60, cue: 'Codos ligeramente flexionados, guiar el movimiento con los codos sin encoger hombros.', video: 'https://www.youtube.com/watch?v=3VcKaXpzqRo' },
+    { id: 'ex-p11', name: 'Extensión de Tríceps en Polea con Cuerda', muscle_group: 'push', pattern: 'Triceps Extension', rest: 60, cue: 'Codos pegados a los costados, separar la cuerda al final de la extensión.', video: 'https://www.youtube.com/watch?v=vB5OHsJ3EME' },
+    { id: 'ex-p12', name: 'Press Francés con Mancuernas en Banco Plano', muscle_group: 'push', pattern: 'Triceps Extension', rest: 75, cue: 'Bajar mancuernas a los costados de las orejas sintiendo el estiramiento de la porción larga.', video: 'https://www.youtube.com/watch?v=d_KZxkY_0cM' },
+
+    // 4. Tracción Tren Superior (Espalda, Romboides & Bíceps)
+    { id: 'ex-t1', name: 'Dominadas Asistidas en Máquina o Banda', muscle_group: 'pull', pattern: 'Vertical Pull', rest: 90, cue: 'Pecho hacia la barra, iniciar el tirón deprimiendo las escápulas antes de flexionar los brazos.', video: 'https://www.youtube.com/watch?v=y3JaVUf0G_s' },
+    { id: 'ex-t2', name: 'Jalón al Pecho en Polea (Agarre Neutro)', muscle_group: 'pull', pattern: 'Vertical Pull', rest: 90, cue: 'Tirar los codos hacia abajo y hacia los bolsillos traseros, manteniendo el pecho abierto.', video: 'https://www.youtube.com/watch?v=CAwf7n6Luuc' },
+    { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano en Banco', muscle_group: 'pull', pattern: 'Horizontal Pull', rest: 75, cue: 'Espalda paralela al piso, tirar la mancuerna hacia la cadera evitando rotar el tronco.', video: 'https://www.youtube.com/watch?v=pYcpY20QaE8' },
+    { id: 'ex-t4', name: 'Remo con Barra Inclinado (Agarre Prono)', muscle_group: 'pull', pattern: 'Horizontal Pull', rest: 90, cue: 'Torso a 45 grados, barra viaja rozando los muslos hacia el ombligo.', video: 'https://www.youtube.com/watch?v=G8l_8chR5BE' },
+    { id: 'ex-t5', name: 'Remo en Polea Baja con Agarre Estrecho', muscle_group: 'pull', pattern: 'Horizontal Pull', rest: 75, cue: 'Espalda erguida, extender dorsales al frente y traccionar juntando escápulas.', video: 'https://www.youtube.com/watch?v=GZbfZ033f74' },
+    { id: 'ex-t6', name: 'Face Pull en Polea con Cuerda a la Frente', muscle_group: 'pull', pattern: 'Posture / Rear Delt', rest: 60, cue: 'Traccionar hacia la altura de los ojos rotando externamente los hombros. Clave postural.', video: 'https://www.youtube.com/watch?v=rep-qVOkqgk' },
+    { id: 'ex-t7', name: 'Remo Apoyado en Banco Inclinado', muscle_group: 'pull', pattern: 'Chest Supported Row', rest: 75, cue: 'Elimina toda compensación lumbar, puro aislamiento de la espalda media.', video: 'https://www.youtube.com/watch?v=H75im9fAUMc' },
+    { id: 'ex-t8', name: 'Pullover en Polea Alta con Barra Recta', muscle_group: 'pull', pattern: 'Lat Isolation', rest: 60, cue: 'Brazos casi extendidos, llevar la barra hacia los muslos comprimiendo los dorsales.', video: 'https://www.youtube.com/watch?v=fA4hQYk7C9w' },
+    { id: 'ex-t9', name: 'Curl de Bíceps con Mancuernas Supinadas', muscle_group: 'pull', pattern: 'Biceps Curl', rest: 60, cue: 'Rotar la muñeca hacia afuera en la subida para máxima activación del bíceps braquial.', video: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo' },
+    { id: 'ex-t10', name: 'Curl Martillo con Mancuernas o Cuerda', muscle_group: 'pull', pattern: 'Brachialis', rest: 60, cue: 'Palmas mirándose entre sí todo el recorrido, fortalece braquial y antebrazo.', video: 'https://www.youtube.com/watch?v=zC3nLlEvin4' },
+    { id: 'ex-t11', name: 'Curl en Banco Inclinado a 45°', muscle_group: 'pull', pattern: 'Biceps Curl', rest: 75, cue: 'Mancuernas cuelgan por detrás del torso para enfatizar la cabeza larga del bíceps.', video: 'https://www.youtube.com/watch?v=soxrZlIl35U' },
+
+    // 5. Core & Conciencia Postural
+    { id: 'ex-c1', name: 'Plancha Frontal con Retroversión Pélvica', muscle_group: 'core_mobility', pattern: 'Isometric Core', rest: 60, cue: 'Apretar glúteos y cuádriceps, tirar los codos hacia las rodillas isométricamente (20-30s).', video: 'https://www.youtube.com/watch?v=6TKq62P_4gE' },
+    { id: 'ex-c2', name: 'Deadbug con Control Lumbar y Respiración', muscle_group: 'core_mobility', pattern: 'Anti-Extension', rest: 60, cue: 'Espalda baja en contacto continuo con el suelo. Exhalar al extender brazo y pierna contraria.', video: 'https://www.youtube.com/watch?v=g_BYB0R-4Ws' },
+    { id: 'ex-c3', name: 'Press Pallof con Banda o Polea', muscle_group: 'core_mobility', pattern: 'Anti-Rotation', rest: 60, cue: 'Extender los brazos al frente resistiendo la rotación del tronco, mantener 2 segundos.', video: 'https://www.youtube.com/watch?v=AH_QZLm_0-s' },
+    { id: 'ex-c4', name: 'Bird-Dog Dinámico Controlado', muscle_group: 'core_mobility', pattern: 'Cross-Body Stability', rest: 60, cue: 'Extender brazo y pierna opuesta sin arquear la zona lumbar ni balancear la pelvis.', video: 'https://www.youtube.com/watch?v=wiFNA3sqjCA' },
+    { id: 'ex-c5', name: 'Paseo del Granjero con Mancuernas', muscle_group: 'core_mobility', pattern: 'Loaded Carry', rest: 60, cue: 'Caminar erguido con pasos firmes y cadencia controlada manteniendo los hombros neutros.', video: 'https://www.youtube.com/watch?v=Fkzk_RqlYig' },
+    { id: 'ex-c6', name: 'Rueda Abdominal con Rango Seguro', muscle_group: 'core_mobility', pattern: 'Anti-Extension', rest: 75, cue: 'Mantener pelvis en retroversión, rodar hacia adelante hasta donde se mantenga el control.', video: 'https://www.youtube.com/watch?v=rqiTPdK1cjg' },
+    { id: 'ex-c7', name: 'Hollow Body Hold Isométrico', muscle_group: 'core_mobility', pattern: 'Gymnastic Core', rest: 60, cue: 'Curva corporal cóncava con zona lumbar sellada al piso y brazos extendidos atrás.', video: 'https://www.youtube.com/watch?v=44ScXWFaVBs' },
+    { id: 'ex-c8', name: 'Movilidad Gato-Vaca y Descompresión', muscle_group: 'core_mobility', pattern: 'Spinal Mobility', rest: 45, cue: 'Sincronizar inhalación en extensión y exhalación en flexión dorsal completa.', video: 'https://www.youtube.com/watch?v=W_X0R3V3X2Y' },
+    { id: 'ex-c9', name: 'Rotaciones Torácicas Cuadrúpedas', muscle_group: 'core_mobility', pattern: 'Thoracic Mobility', rest: 45, cue: 'Mano en la nuca, abrir el codo hacia el techo buscando rotar la columna dorsal.', video: 'https://www.youtube.com/watch?v=2T_LpL_3c2s' }
+];
+
+// -----------------------------------------------------------------------------
+// CATÁLOGO DE ALIMENTOS BASE & HÁBITOS (Curados por Nico)
+// -----------------------------------------------------------------------------
+const FOOD_CATALOG = [
+    // Proteínas
+    { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', cat: 'protein', portion: '150 - 200g cocido', note: 'Proteína magra de altísimo valor biológico, digestión ágil y nula grasa saturada agregada.' },
+    { id: 'fd-p2', name: 'Huevos de Campo Enteros', cat: 'protein', portion: '2 a 4 unidades diarias', note: 'Aporte completo de aminoácidos esenciales, colina para la función cerebral y grasas saludables.' },
+    { id: 'fd-p3', name: 'Carne Vacuna Magra (Lomo, Cuadril)', cat: 'protein', portion: '150 - 200g (2-3x sem)', note: 'Rica en hierro hemínico, zinc y creatina natural para soporte de fuerza y masa muscular.' },
+    { id: 'fd-p4', name: 'Atún al Natural / Salmón Blanco', cat: 'protein', portion: '1 lata o 150 - 180g filete', note: 'Proteína de fácil absorción y ácidos grasos que favorecen la recuperación tisular.' },
+    { id: 'fd-p5', name: 'Yogur Griego Natural (Sin Azúcar)', cat: 'protein', portion: '150 - 200g', note: 'Rico en caseína de digestión lenta y probióticos para la salud de la microbiota intestinal.' },
+    { id: 'fd-p6', name: 'Tofu Firme Orgánico', cat: 'protein', portion: '180 - 220g salteado', note: 'Excelente fuente de proteína vegetal completa para opciones basadas en plantas.' },
+    { id: 'fd-p7', name: 'Proteína de Suero (Whey Isolate)', cat: 'protein', portion: '1 scoop (25-30g)', note: 'Practicidad óptima para alcanzar los gramos diarios de proteína sin sumar grasas extras.' },
+
+    // Carbohidratos
+    { id: 'fd-c1', name: 'Arroz Integral o Basmati al Vapor', cat: 'carbs', portion: '1 taza cocida (150-180g)', note: 'Energía limpia y sostenida para reponer glucógeno muscular post-entrenamiento.' },
+    { id: 'fd-c2', name: 'Papa y Batata Horneadas con Piel', cat: 'carbs', portion: '1 unidad mediana (180g)', note: 'Ricas en potasio, almidón resistente y gran poder de saciedad sin pesadez digestiva.' },
+    { id: 'fd-c3', name: 'Avena Arrollada Tradicional', cat: 'carbs', portion: '40 - 60g en porridge', note: 'Fibra betaglucano que estabiliza la glucemia y brinda saciedad prolongada.' },
+    { id: 'fd-c4', name: 'Quinoa Cocida', cat: 'carbs', portion: '1 taza cocida', note: 'Pseudocereal con perfil balanceado de carbohidratos complejos y micronutrientes.' },
+    { id: 'fd-c5', name: 'Frutas Enteras (Banana, Arándanos)', cat: 'carbs', portion: '1 a 2 porciones al día', note: 'Antioxidantes naturales, vitaminas y fructosa natural para energía previa a la sesión.' },
+    { id: 'fd-c6', name: 'Pan de Masa Madre Genuino', cat: 'carbs', portion: '1 a 2 rebanadas tostadas', note: 'Fermentación lenta que degrada antinutrientes facilitando la asimilación digestiva.' },
+
+    // Grasas Saludables
+    { id: 'fd-g1', name: 'Palta (Aguacate)', cat: 'healthy_fats', portion: '1/2 unidad al día', note: 'Ácidos grasos monoinsaturados que apoyan la salud cardiovascular y hormonal.' },
+    { id: 'fd-g2', name: 'Aceite de Oliva Extra Virgen (Crudo)', cat: 'healthy_fats', portion: '1 cucharada sopera', note: 'Polifenoles y grasas antiinflamatorias esenciales para articulaciones.' },
+    { id: 'fd-g3', name: 'Frutos Secos (Nueces, Almendras)', cat: 'healthy_fats', portion: '1 puñado cerrado (30g)', note: 'Densidad energética y magnesio para relajar el sistema neuromuscular.' },
+    { id: 'fd-g4', name: 'Semillas de Chía y Lino Molidas', cat: 'healthy_fats', portion: '1 cucharadita en yogur', note: 'Ácido alfa-linolénico (Omega 3 vegetal) y fibra soluble reguladora.' },
+
+    // Hidratación y Vegetales
+    { id: 'fd-h1', name: 'Agua Mineral / Filtrada', cat: 'hydration_veg', portion: '35ml/kg (2.5L a 3.5L/día)', note: 'El medio fundamental para el rendimiento muscular y la eliminación de fatiga.' },
+    { id: 'fd-h2', name: 'Vegetales de Hoja Verde (Espinaca, Rúcula)', cat: 'hydration_veg', portion: 'Libre en almuerzo y cena', note: 'Nitratos naturales para vasodilatación y micronutrientes sin calorías vacías.' },
+    { id: 'fd-h3', name: 'Brócoli y Espárragos al Vapor', cat: 'hydration_veg', portion: '1 taza colmada', note: 'Crucíferas con componentes antioxidantes y soporte a la digestión.' }
+];
 
 // Rutinas Preconfiguradas para SENS TRAIN
 const WORKOUT_DAYS_DATA = {
@@ -211,6 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavbarScroll();
     initHeroVideo();
     initPricingTabs();
+    initLeadCapture();
+    initRoleSwitcher();
+    initExerciseCatalogModal();
     initCarousels();
     initAuthModal();
     initPortalNavigation();
@@ -221,6 +406,265 @@ document.addEventListener('DOMContentLoaded', () => {
     initCharts();
     checkExistingSession();
 });
+
+// =============================================================================
+// NUEVO: CAPTACIÓN ABIERTA DE PROSPECTOS (SECCIÓN SUMATE & CTAs DE PLANES)
+// =============================================================================
+function initLeadCapture() {
+    // 1. Botones de Planes ("Agendar Evaluación Inicial" o "Elegir Plan")
+    const planButtons = document.querySelectorAll('.plan-select-btn');
+    planButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const planName = btn.getAttribute('data-plan') || '';
+            const sumateSection = document.getElementById('sumate');
+            if (sumateSection) {
+                // Preseleccionar radio button correspondiente
+                const radioPresencial = document.querySelector('input[name="leadModality"][value="Presencial 1 a 1 (CABA)"]');
+                const radioGrupo = document.querySelector('input[name="leadModality"][value="Presencial Grupal (Dúo o Trío)"]');
+                const radioOnline = document.querySelector('input[name="leadModality"][value="Online Asesorado"]');
+                
+                if (planName.includes('Grupo') || planName.includes('Dúo') || planName.includes('Trío')) {
+                    if (radioGrupo) radioGrupo.checked = true;
+                } else if (planName.includes('Online')) {
+                    if (radioOnline) radioOnline.checked = true;
+                } else {
+                    if (radioPresencial) radioPresencial.checked = true;
+                }
+            }
+        });
+    });
+
+    // 2. Envío de Formulario Lead Intake
+    const btnSubmitLead = document.getElementById('btnSubmitLead');
+    if (btnSubmitLead) {
+        btnSubmitLead.addEventListener('click', async () => {
+            const fullName = document.getElementById('leadFullName') ? document.getElementById('leadFullName').value.trim() : '';
+            const phone = document.getElementById('leadPhone') ? document.getElementById('leadPhone').value.trim() : '';
+            const selectedModalityRadio = document.querySelector('input[name="leadModality"]:checked');
+            const modality = selectedModalityRadio ? selectedModalityRadio.value : 'Presencial 1 a 1 (CABA)';
+            const goal = document.getElementById('leadGoal') ? document.getElementById('leadGoal').value : 'Fuerza y recomposición física';
+
+            if (!fullName || !phone) {
+                alert('Por favor completá tu nombre y WhatsApp para poder coordinar la evaluación inicial.');
+                return;
+            }
+
+            // Guardar lead en Supabase si está disponible, o en localStorage
+            const leadData = {
+                full_name: fullName,
+                phone: phone,
+                preferred_modality: modality.includes('Grupo') ? 'presencial_grupo' : (modality.includes('Online') ? 'online_premium' : 'presencial_caba'),
+                fitness_goal: goal,
+                created_at: new Date().toISOString()
+            };
+
+            if (supabaseClient) {
+                try {
+                    await supabaseClient.from('leads').insert([leadData]);
+                } catch (err) {
+                    console.log('[SENS] Guardado local de lead');
+                }
+            }
+            localStorage.setItem('sens_last_lead', JSON.stringify(leadData));
+
+            // Mensaje preconfigurado para WhatsApp de Nico
+            const waText = encodeURIComponent(`Hola Nico! Me gustaría agendar una Evaluación Inicial en SENS.\nMi nombre es: ${fullName}\nModalidad de interés: ${modality}\nMi objetivo: ${goal}`);
+            const waUrl = `https://wa.me/5491136329846?text=${waText}`;
+
+            // Abrir WhatsApp
+            window.open(waUrl, '_blank');
+        });
+    }
+}
+
+// =============================================================================
+// NUEVO: GESTOR DE MULTI-USUARIOS Y ROLES (SUPABASE ROLES & DEMO SWITCHER)
+// =============================================================================
+function initRoleSwitcher() {
+    const roleSelector = document.getElementById('userRoleSelector');
+    if (!roleSelector) return;
+
+    // Aplicar perfil por defecto
+    applyUserProfile('client_presencial_vip');
+
+    roleSelector.addEventListener('change', (e) => {
+        const selectedType = e.target.value;
+        applyUserProfile(selectedType);
+    });
+}
+
+function applyUserProfile(userTypeKey) {
+    const mock = MOCK_USER_PROFILES[userTypeKey] || MOCK_USER_PROFILES['client_presencial_vip'];
+    AppState.user = {
+        id: mock.id,
+        email: mock.email,
+        user_type: mock.user_type,
+        role: mock.role
+    };
+    AppState.profile = {
+        full_name: mock.full_name,
+        active_plan_name: mock.active_plan_name,
+        current_weight: mock.current_weight,
+        goal: mock.goal_text
+    };
+
+    // Actualizar elementos visuales del Portal
+    const planBadgeEl = document.getElementById('portalPlanBadge');
+    const userEmailEl = document.getElementById('portalUserEmail');
+    const roleContextBadge = document.getElementById('roleContextBadge');
+    const adminIndicatorBadge = document.getElementById('adminIndicatorBadge');
+    const adminAddBtn = document.getElementById('btnAdminAddExercise');
+
+    if (planBadgeEl) planBadgeEl.textContent = mock.active_plan_name;
+    if (userEmailEl) userEmailEl.textContent = mock.email;
+    if (roleContextBadge) roleContextBadge.textContent = mock.plan_badge_text;
+
+    if (mock.user_type === 'admin') {
+        if (adminIndicatorBadge) adminIndicatorBadge.style.display = 'block';
+        if (adminAddBtn) adminAddBtn.style.display = 'inline-block';
+    } else {
+        if (adminIndicatorBadge) adminIndicatorBadge.style.display = 'none';
+        if (adminAddBtn) adminAddBtn.style.display = 'none';
+    }
+
+    // Re-renderizar Dashboard y Rutinas
+    renderDashboardData();
+    renderWorkoutDay(AppState.currentDay || 'day1');
+}
+
+// =============================================================================
+// NUEVO: MODAL DE BIBLIOTECA MAESTRA (50 EJERCICIOS) & BÚSQUEDA
+// =============================================================================
+function initExerciseCatalogModal() {
+    const modal = document.getElementById('exerciseLibraryModal');
+    const openBtn = document.getElementById('btnOpenExerciseLibraryModal');
+    const closeBtn = document.getElementById('closeLibraryModalBtn');
+    const searchInput = document.getElementById('libSearchInput');
+    const groupFilter = document.getElementById('libGroupFilter');
+
+    if (openBtn) {
+        openBtn.addEventListener('click', () => {
+            if (modal) {
+                modal.classList.add('active');
+                renderExerciseLibraryList();
+            }
+        });
+    }
+
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => renderExerciseLibraryList());
+    }
+
+    if (groupFilter) {
+        groupFilter.addEventListener('change', () => renderExerciseLibraryList());
+    }
+}
+
+function renderExerciseLibraryList() {
+    const listContainer = document.getElementById('libraryExercisesList');
+    const searchInput = document.getElementById('libSearchInput');
+    const groupFilter = document.getElementById('libGroupFilter');
+    if (!listContainer) return;
+
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const selectedGroup = groupFilter ? groupFilter.value : 'all';
+
+    const filtered = EXERCISE_CATALOG.filter(ex => {
+        const matchGroup = selectedGroup === 'all' || ex.muscle_group === selectedGroup;
+        const matchQuery = !query || ex.name.toLowerCase().includes(query) || ex.pattern.toLowerCase().includes(query) || ex.cue.toLowerCase().includes(query);
+        return matchGroup && matchQuery;
+    });
+
+    if (filtered.length === 0) {
+        listContainer.innerHTML = '<p style="color:var(--text-muted); padding:20px; text-align:center;">No se encontraron ejercicios con ese criterio.</p>';
+        return;
+    }
+
+    const groupNames = {
+        quadriceps: 'Dominante Rodilla (Cuádriceps)',
+        hamstrings_glutes: 'Dominante Cadera (Isquios/Glúteo)',
+        push: 'Empuje Tren Superior',
+        pull: 'Tracción Tren Superior',
+        core_mobility: 'Core & Conciencia Postural'
+    };
+
+    let html = '';
+    filtered.forEach(ex => {
+        const isAdmin = AppState.user && AppState.user.user_type === 'admin';
+        html += `
+            <div style="background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:8px; padding:16px; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div style="flex:1; min-width:260px;">
+                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
+                        <span class="pill pill-dark" style="font-size:9px; padding:3px 8px;">${groupNames[ex.muscle_group] || ex.muscle_group}</span>
+                        <span class="pill pill-champagne" style="font-size:9px; padding:3px 8px;">${ex.pattern}</span>
+                        <span style="font-size:11px; color:var(--text-muted);">Descanso: ${ex.rest}s</span>
+                    </div>
+                    <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-primary); margin-bottom:4px;">${ex.name}</h4>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); margin:0; line-height:1.4;">
+                        <strong>Consejo de Nico:</strong> ${ex.cue}
+                    </p>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <button type="button" class="btn btn-outline btn-sm btn-lib-video" data-video-title="Técnica: ${ex.name}" data-video-cue="${ex.cue}" style="width:auto; margin:0; font-size:11px;">
+                        ▶ Video Técnica
+                    </button>
+                    ${isAdmin ? `
+                        <button type="button" class="btn btn-primary btn-sm btn-lib-assign" data-ex-id="${ex.id}" data-ex-name="${ex.name}" style="width:auto; margin:0; font-size:11px;">
+                            + Asignar a Rutina
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    });
+
+    listContainer.innerHTML = html;
+
+    // Conectar botones de video dentro del modal de catálogo
+    listContainer.querySelectorAll('.btn-lib-video').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const title = btn.getAttribute('data-video-title');
+            const cue = btn.getAttribute('data-video-cue');
+            openVideoModal(title, cue);
+        });
+    });
+
+    // Conectar botones de asignación para Nico/Admin
+    listContainer.querySelectorAll('.btn-lib-assign').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const exId = btn.getAttribute('data-ex-id');
+            const exName = btn.getAttribute('data-ex-name');
+            const targetEx = EXERCISE_CATALOG.find(e => e.id === exId);
+            if (targetEx) {
+                const currentDay = AppState.currentDay || 'day1';
+                if (!WORKOUT_DAYS_DATA[currentDay]) {
+                    WORKOUT_DAYS_DATA[currentDay] = { title: `Día: ${currentDay}`, exercises: [] };
+                }
+                WORKOUT_DAYS_DATA[currentDay].exercises.push({
+                    id: targetEx.id,
+                    name: targetEx.name,
+                    notes: targetEx.cue,
+                    sets: 3,
+                    reps: '8-12',
+                    rest: targetEx.rest,
+                    defaultWeight: 15,
+                    defaultReps: 10
+                });
+                alert(`¡${exName} asignado correctamente a ${currentDay.toUpperCase()} para el alumno!`);
+                renderWorkoutDay(currentDay);
+                const modal = document.getElementById('exerciseLibraryModal');
+                if (modal) modal.classList.remove('active');
+            }
+        });
+    });
+}
 
 // Sincronización del Video de Hero y Desvanecimiento de Imagen Fallback
 function initHeroVideo() {
@@ -452,7 +896,7 @@ function initPricingTabs() {
     const subBtns = document.querySelectorAll('.pricing-sub-btn');
     const tabContents = document.querySelectorAll('.pricing-tab-content');
 
-    let currentMode = 'online';
+    let currentMode = 'presencial';
     let currentSub = 'presencial-ind';
 
     function renderActivePricingView() {
@@ -497,7 +941,7 @@ function initPricingTabs() {
         });
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
-        currentMode = btn.getAttribute('data-mode') || 'online';
+        currentMode = btn.getAttribute('data-mode') || 'presencial';
         renderActivePricingView();
     }
 
@@ -998,9 +1442,9 @@ function renderDashboardData() {
         }
 
         if (anamnesis.has_medical_flags) {
-            tagsHtml += `<span class="diag-tag" style="border-color:#D95D50; color:#F87171;">Bandera médica en revisión</span>`;
+            tagsHtml += `<span class="diag-tag" style="border-color:#D95D50; color:#F87171;">Revisión de salud requerida</span>`;
         } else {
-            tagsHtml += `<span class="diag-tag">Sin banderas médicas</span>`;
+            tagsHtml += `<span class="diag-tag">Apto para entrenamiento</span>`;
         }
 
         if (Array.isArray(anamnesis.active_injuries) && anamnesis.active_injuries.length > 0) {
@@ -1014,10 +1458,10 @@ function renderDashboardData() {
 
     if (diagStatusPill) {
         if (profile.vip_candidate) {
-            diagStatusPill.textContent = 'Expediente VIP • Prioritario';
+            diagStatusPill.textContent = 'Perfil VIP • Prioritario';
             diagStatusPill.className = 'pill pill-champagne';
         } else {
-            diagStatusPill.textContent = 'Expediente Activo • Nico';
+            diagStatusPill.textContent = 'Perfil Activo • Nico';
             diagStatusPill.className = 'pill pill-champagne';
         }
     }
@@ -1027,12 +1471,21 @@ function renderDashboardData() {
             const d = new Date(profile.updated_at);
             diagDateBadge.textContent = `Actualizado ${d.toLocaleDateString()}`;
         } catch (e) {
-            diagDateBadge.textContent = 'Expediente al día';
+            diagDateBadge.textContent = 'Perfil al día';
         }
     }
 
     if (diagSummaryText && profile.full_name) {
-        diagSummaryText.textContent = `Expediente biomecánico y clínico de ${profile.full_name}. Información protegida bajo Ley 25.326 y auditada por Nico para calibrar tus sesiones.`;
+        diagSummaryText.textContent = `Perfil biomecánico y de hábitos de ${profile.full_name}. Información protegida bajo Ley 25.326 y auditada por Nico para calibrar tus sesiones.`;
+    }
+
+    const workoutsKpi = document.getElementById('kpiWorkoutsWeek');
+    if (workoutsKpi && anamnesis.weekly_frequency) {
+        workoutsKpi.textContent = `0 / ${anamnesis.weekly_frequency}`;
+    }
+    const stepsKpi = document.getElementById('kpiAvgSteps');
+    if (stepsKpi && anamnesis.daily_step_target) {
+        stepsKpi.textContent = Number(anamnesis.daily_step_target).toLocaleString('es-AR');
     }
 
     // Ocultar sección de métricas y workout asignado hasta completar el diagnóstico final
@@ -2137,6 +2590,9 @@ function initOnboardingWizard() {
 // =============================================================================
 // MÓDULO 6: GESTOR DE RUTINAS, MARCADOR TÁCTIL Y TIMER DE DESCANSO
 // =============================================================================
+// =============================================================================
+// MÓDULO 6: GESTOR DE RUTINAS, MARCADOR TÁCTIL Y TIMER DE DESCANSO
+// =============================================================================
 function initWorkoutManager() {
     const dayButtons = document.querySelectorAll('.day-tab-btn');
     dayButtons.forEach(btn => {
@@ -2148,15 +2604,68 @@ function initWorkoutManager() {
         });
     });
 
+    // Filtros de Grupo Muscular
+    const muscleFilterBtns = document.querySelectorAll('.muscle-filter-btn');
+    muscleFilterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            muscleFilterBtns.forEach(b => {
+                b.classList.remove('pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('pill-champagne');
+            AppState.selectedMuscleFilter = btn.getAttribute('data-group') || 'all';
+            renderWorkoutDay(AppState.currentDay || 'day1');
+        });
+    });
+
+    // Botón de Admin: Asignar Ejercicio a este Día
+    const btnAdminAdd = document.getElementById('btnAdminAddExercise');
+    if (btnAdminAdd) {
+        btnAdminAdd.addEventListener('click', () => {
+            const modal = document.getElementById('exerciseLibraryModal');
+            if (modal) {
+                modal.classList.add('active');
+                renderExerciseLibraryList();
+            }
+        });
+    }
+
     // Delegación de eventos para checkboxes táctiles y video
     const container = document.getElementById('exercisesContainer');
     if (container) {
-        container.addEventListener('change', (e) => {
+        container.addEventListener('change', async (e) => {
             if (e.target && e.target.classList.contains('set-completed-chk')) {
                 if (e.target.checked) {
                     const restSeconds = parseInt(e.target.getAttribute('data-rest'), 10) || 90;
                     startRestTimer(restSeconds);
                     playBeep(440, 0.1); // feedback sonoro suave
+
+                    // Guardar log del set completado
+                    const card = e.target.closest('.exercise-item-card');
+                    const exId = card ? card.getAttribute('data-exercise-id') : 'ex-unknown';
+                    const row = e.target.closest('tr');
+                    const weightVal = row && row.querySelector('.set-weight') ? parseFloat(row.querySelector('.set-weight').value) : 0;
+                    const repsVal = row && row.querySelector('.set-reps') ? parseInt(row.querySelector('.set-reps').value, 10) : 0;
+
+                    const setLog = {
+                        user_id: AppState.user ? AppState.user.id : 'demo-user',
+                        exercise_id: exId,
+                        weight_kg: weightVal,
+                        reps_completed: repsVal,
+                        completed_at: new Date().toISOString()
+                    };
+
+                    if (supabaseClient && AppState.user) {
+                        try {
+                            await supabaseClient.from('workout_logs').insert([setLog]);
+                        } catch (err) {
+                            console.log('Set logged locally');
+                        }
+                    }
+                    const localLogs = JSON.parse(localStorage.getItem('sens_workout_logs') || '[]');
+                    localLogs.push(setLog);
+                    localStorage.setItem('sens_workout_logs', JSON.stringify(localLogs));
                 }
             }
         });
@@ -2164,7 +2673,16 @@ function initWorkoutManager() {
         container.addEventListener('click', (e) => {
             if (e.target && e.target.classList.contains('btn-video-demo')) {
                 const title = e.target.getAttribute('data-video-title');
-                openVideoModal(title);
+                const cue = e.target.getAttribute('data-video-cue');
+                openVideoModal(title, cue);
+            }
+            if (e.target && e.target.classList.contains('btn-remove-exercise-admin')) {
+                const exId = e.target.getAttribute('data-ex-id');
+                const currentDay = AppState.currentDay || 'day1';
+                if (WORKOUT_DAYS_DATA[currentDay]) {
+                    WORKOUT_DAYS_DATA[currentDay].exercises = WORKOUT_DAYS_DATA[currentDay].exercises.filter(x => x.id !== exId);
+                    renderWorkoutDay(currentDay);
+                }
             }
         });
     }
@@ -2225,8 +2743,30 @@ function renderWorkoutDay(dayKey) {
     const container = document.getElementById('exercisesContainer');
     if (!dayData || !container) return;
 
+    const isAdmin = AppState.user && AppState.user.user_type === 'admin';
+    const filterGroup = AppState.selectedMuscleFilter || 'all';
+
+    // Filtrar ejercicios si el usuario seleccionó un filtro muscular
+    let exercisesToShow = dayData.exercises;
+    if (filterGroup !== 'all') {
+        exercisesToShow = exercisesToShow.filter(ex => {
+            const catalogMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase());
+            return catalogMatch ? catalogMatch.muscle_group === filterGroup : true;
+        });
+    }
+
+    if (exercisesToShow.length === 0) {
+        container.innerHTML = `
+            <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:10px; padding:30px; text-align:center;">
+                <p style="color:var(--text-muted); margin-bottom:12px;">No hay ejercicios de este grupo asignados para ${dayData.title}.</p>
+                ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()">Asignar ejercicios desde el catálogo</button>` : ''}
+            </div>
+        `;
+        return;
+    }
+
     let html = '';
-    dayData.exercises.forEach(ex => {
+    exercisesToShow.forEach(ex => {
         let setsRows = '';
         for (let i = 1; i <= ex.sets; i++) {
             setsRows += `
@@ -2250,13 +2790,14 @@ function renderWorkoutDay(dayKey) {
                 <div class="exercise-header-row">
                     <div>
                         <h3 class="exercise-title">${ex.name}</h3>
-                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">${ex.notes}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;"><strong>Pauta biomecánica:</strong> ${ex.notes}</div>
                     </div>
                     <div class="exercise-meta-pills">
                         <span class="pill pill-dark">${ex.sets} Series</span>
                         <span class="pill pill-dark">${ex.reps} Reps</span>
                         <span class="pill pill-champagne">Descanso: ${ex.rest}s</span>
-                        <button class="btn btn-outline btn-sm btn-video-demo" data-video-title="Técnica: ${ex.name}">Video Técnica</button>
+                        <button class="btn btn-outline btn-sm btn-video-demo" data-video-title="Técnica: ${ex.name}" data-video-cue="${ex.notes}">Video Técnica</button>
+                        ${isAdmin ? `<button class="btn btn-outline btn-sm btn-remove-exercise-admin" data-ex-id="${ex.id}" style="border-color:var(--danger); color:var(--danger);">Quitar</button>` : ''}
                     </div>
                 </div>
 
@@ -2321,11 +2862,15 @@ function updateTimerDisplay() {
     display.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
-function openVideoModal(title) {
+function openVideoModal(title, cue) {
     const modal = document.getElementById('videoModal');
     const modalTitle = document.getElementById('videoModalTitle');
     if (modal && modalTitle) {
         modalTitle.textContent = title || 'Demostración Técnica';
+        const cueParagraph = modal.querySelector('p:last-of-type');
+        if (cueParagraph && cue) {
+            cueParagraph.innerHTML = `<strong>Consejo de Nico:</strong> ${cue}`;
+        }
         modal.classList.add('active');
     }
 }
@@ -2353,12 +2898,77 @@ function playBeep(freq = 440, duration = 0.2) {
 // MÓDULO 7: NUTRICIÓN, HÁBITOS, DAILY LOG Y GRÁFICOS INTERACTIVOS
 // =============================================================================
 function initNutritionHabits() {
+    renderFoodCatalog('all');
+
+    const foodFilterBtns = document.querySelectorAll('.food-filter-btn');
+    foodFilterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            foodFilterBtns.forEach(b => {
+                b.classList.remove('pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('pill-champagne');
+            const cat = btn.getAttribute('data-cat') || 'all';
+            renderFoodCatalog(cat);
+        });
+    });
+
     const btnSaveHabits = document.getElementById('btnSaveHabits');
     if (btnSaveHabits) {
-        btnSaveHabits.addEventListener('click', () => {
-            alert('¡Hábitos del día actualizados y registrados correctamente!');
+        btnSaveHabits.addEventListener('click', async () => {
+            const habits = {
+                protein: document.getElementById('habitProtein') ? document.getElementById('habitProtein').checked : false,
+                water: document.getElementById('habitWater') ? document.getElementById('habitWater').checked : false,
+                preWorkout: document.getElementById('habitPreWorkout') ? document.getElementById('habitPreWorkout').checked : false,
+                sleep: document.getElementById('habitSleep') ? document.getElementById('habitSleep').checked : false,
+                savedAt: new Date().toISOString()
+            };
+            localStorage.setItem('sens_daily_habits', JSON.stringify(habits));
+
+            if (supabaseClient && AppState.user) {
+                try {
+                    await supabaseClient.from('daily_logs').upsert({
+                        user_id: AppState.user.id,
+                        log_date: new Date().toISOString().split('T')[0],
+                        habits_completed: habits
+                    }, { onConflict: 'user_id,log_date' });
+                } catch (e) {
+                    console.log('Habit log synced locally');
+                }
+            }
+
+            alert('¡Hábitos diarios actualizados y guardados correctamente en tu historial!');
         });
     }
+}
+
+function renderFoodCatalog(category = 'all') {
+    const container = document.getElementById('foodCatalogGrid');
+    if (!container) return;
+
+    const filtered = FOOD_CATALOG.filter(f => category === 'all' || f.cat === category);
+    const catLabels = {
+        protein: 'Proteína de Calidad',
+        carbs: 'Carbohidrato Complejo',
+        healthy_fats: 'Grasa Saludable',
+        hydration_veg: 'Hidratación & Vegetales'
+    };
+
+    let html = '';
+    filtered.forEach(f => {
+        html += `
+            <div style="background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:10px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                <div>
+                    <span class="pill pill-dark" style="font-size:9px; margin-bottom:8px; display:inline-block;">${catLabels[f.cat] || f.cat}</span>
+                    <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-primary); margin-bottom:6px;">${f.name}</h4>
+                    <div style="font-size:0.8rem; color:var(--accent-primary); font-weight:600; margin-bottom:8px;">Porción sugerida: ${f.portion}</div>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.4; margin:0;">${f.note}</p>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
 }
 
 function initDailyTracking() {
