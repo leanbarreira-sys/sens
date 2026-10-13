@@ -6714,15 +6714,62 @@ input[type="range"]::-webkit-slider-thumb:hover {
     letter-spacing: -0.01em;
 }
 
-/* En Desktop (>= 992px): Video a la izquierda (vertical nítido) y contenido centrado en la mitad derecha */
+/* ==========================================================================
+   ANIMACIONES DE ENTRADA DE LUJO & CINEMATIC REVEAL (BRANDBOOK SENS 2.0)
+   ========================================================================== */
+@keyframes sensLuxuryEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(24px);
+        filter: blur(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* Staggered Cinematic Entrance en el Hero */
+.hero-apple-eyebrow {
+    animation: sensLuxuryEntrance 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+.hero-apple-highlight {
+    animation: sensLuxuryEntrance 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.hero-description-train {
+    animation: sensLuxuryEntrance 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+}
+
+.hero-cta-group {
+    animation: sensLuxuryEntrance 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
+}
+
+/* Transiciones Suaves al Scrollear por Secciones (Luxury Fade & Float) */
+.sens-reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(4px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform, filter;
+}
+
+.sens-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    filter: blur(0) !important;
+}
+
+/* En Desktop (>= 992px): Video a la izquierda y Contenido Matematicamente Centrado en el Bloque Negro */
 @media (min-width: 992px) {
     .sens-train-hero {
         min-height: 100vh !important;
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: flex-end !important;
+        display: grid !important;
+        grid-template-columns: min(44vw, 680px) 1fr !important;
         align-items: center !important;
-        padding: 100px 5% 60px !important;
+        padding: 100px 0 60px !important;
         position: relative !important;
         overflow: hidden !important;
     }
@@ -6734,8 +6781,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
         left: 0 !important;
         bottom: 0 !important;
         right: auto !important;
-        width: 44vw !important;
-        max-width: 680px !important;
+        width: min(44vw, 680px) !important;
         height: 100% !important;
         object-fit: cover !important;
         object-position: center 15% !important;
@@ -6746,25 +6792,26 @@ input[type="range"]::-webkit-slider-thumb:hover {
         position: absolute !important;
         inset: 0 !important;
         background: 
-            linear-gradient(to right, rgba(8, 8, 9, 0) 0%, rgba(8, 8, 9, 0.15) 18%, rgba(8, 8, 9, 0.85) 38%, #080809 50%, #080809 100%),
+            linear-gradient(to right, rgba(8, 8, 9, 0) 0%, rgba(8, 8, 9, 0.15) 15%, rgba(8, 8, 9, 0.85) 32%, #080809 45%, #080809 100%),
             linear-gradient(to top, rgba(8, 8, 9, 0.95) 0%, transparent 15%),
             linear-gradient(to bottom, rgba(8, 8, 9, 0.85) 0%, transparent 15%) !important;
         z-index: 2 !important;
         pointer-events: none !important;
     }
 
-    /* El contenedor ocupa el sector derecho y centra armoniosamente todo el bloque de texto */
+    /* El contenedor vive en la Columna 2 (el espacio negro) y se centra exactamente en ella */
     .hero-train-content {
-        width: 56vw !important;
-        max-width: 680px !important;
-        margin: 0 0 0 auto !important;
+        grid-column: 2 !important;
+        width: 100% !important;
+        max-width: 640px !important;
+        margin: 0 auto !important; /* Centrado milimétrico en el espacio negro */
         text-align: center !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
         z-index: 10 !important;
-        padding: 0 30px !important;
+        padding: 0 40px !important;
     }
 
     .hero-main-heading,

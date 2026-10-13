@@ -476,6 +476,7 @@ const DEMO_METRICS = {
 document.addEventListener('DOMContentLoaded', () => {
     initNavbarScroll();
     initHeroVideo();
+    initLuxuryScrollReveals();
     initPricingTabs();
     initLeadCapture();
     initRoleSwitcher();
@@ -966,6 +967,38 @@ function initHeroVideo() {
             fallback.style.opacity = '1';
         });
     }
+}
+
+// =============================================================================
+// TRANSICIONES CINEMÁTICAS & SCROLL REVEALS (SR-DIRECTOR-UX-WELLNESS)
+// =============================================================================
+function initLuxuryScrollReveals() {
+    const targets = document.querySelectorAll(
+        '.section-head, .carousel-slide, .method-step, .price-card-landing, .guarantee-card, .faq-item, .transformation-preview-card, .about-coach-card, .card-panel'
+    );
+    if (!targets.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+        targets.forEach(el => el.classList.add('is-revealed'));
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-revealed');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -30px 0px'
+    });
+
+    targets.forEach(el => {
+        el.classList.add('sens-reveal');
+        observer.observe(el);
+    });
 }
 
 // =============================================================================
