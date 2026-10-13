@@ -893,6 +893,14 @@ function renderDashboardData() {
     if (diagSummaryText && profile.full_name) {
         diagSummaryText.textContent = `Expediente biomecánico y clínico de ${profile.full_name}. Información protegida bajo Ley 25.326 y auditada por Nico para calibrar tus sesiones.`;
     }
+
+    // Ocultar sección de métricas y workout asignado hasta completar el diagnóstico final
+    const kpiGrid = document.getElementById('dashKpiMetricsGrid');
+    const heroCard = document.getElementById('dashActionHeroCard');
+    const isOnboardingDone = Boolean(profile.onboarding_completed);
+
+    if (kpiGrid) kpiGrid.style.display = isOnboardingDone ? 'grid' : 'none';
+    if (heroCard) heroCard.style.display = isOnboardingDone ? 'flex' : 'none';
 }
 
 // Iniciar Wizard de Diagnóstico (Modo Inicial o Modo Edición)
@@ -935,65 +943,56 @@ function initDiagnosisWizard() {
         });
         btnStartDiag.addEventListener('click', () => {
             if (consentCheck.checked) {
-                window.diagWizardGoStep(1, '¡Consentimiento registrado!');
+                window.diagWizardGoStep(1, '¡Comenzamos!');
             }
         });
     }
 
-    // 2. Triaje Clínico PAR-Q+ (Paso 1)
-    const triageItems = document.querySelectorAll('.triage-item');
-    triageItems.forEach(item => {
-        const btns = item.querySelectorAll('.triage-btn');
-        btns.forEach(b => {
-            b.addEventListener('click', () => {
-                btns.forEach(btn => btn.classList.remove('active'));
-                b.classList.add('active');
-                checkParqFlags();
-                saveDiagnosisDraft();
-            });
+    // 2. Cuestionario de Salud con Switch Toggles (Paso 1)
+    const healthToggles = document.querySelectorAll('.health-toggle-input');
+    healthToggles.forEach(toggle => {
+        toggle.addEventListener('change', () => {
+            const qKey = toggle.getAttribute('data-q');
+            const detailEl = document.getElementById(`detail_${qKey}`);
+            const item = toggle.closest('.health-switch-item');
+            if (toggle.checked) {
+                if (detailEl) detailEl.style.display = 'block';
+                if (item) item.classList.add('has-detail');
+            } else {
+                if (detailEl) detailEl.style.display = 'none';
+                if (item) item.classList.remove('has-detail');
+            }
+            saveDiagnosisDraft();
+        });
+    });
+
+    document.querySelectorAll('.health-detail-input').forEach(input => {
+        input.addEventListener('input', () => {
+            saveDiagnosisDraft();
         });
     });
 
     // 3. Topografía de Lesiones y EVA (Paso 2)
-    const injuryPills = document.querySelectorAll('#injuriesPillGrid .pill-card');
+    const injuryCheckboxes = document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]');
     const noInjuriesCheck = document.getElementById('diagNoInjuriesCheck');
-    const noInjuriesCard = document.getElementById('noInjuriesCard');
     const evaBox = document.getElementById('diagEvaBox');
     const evaSlider = document.getElementById('diagEvaSlider');
     const evaVal = document.getElementById('diagEvaVal');
 
-    injuryPills.forEach(pill => {
-        pill.addEventListener('click', (e) => {
-            // Evita doble disparo por label nativo
-            if (e.target.tagName !== 'INPUT') {
-                const cb = pill.querySelector('input[type="checkbox"]');
-                if (cb) cb.checked = !cb.checked;
-            }
-            const cb = pill.querySelector('input[type="checkbox"]');
-            pill.classList.toggle('selected', cb.checked);
-
-            if (cb.checked) {
-                if (noInjuriesCheck) {
-                    noInjuriesCheck.checked = false;
-                    noInjuriesCard.classList.remove('selected');
-                }
+    injuryCheckboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+            if (cb.checked && noInjuriesCheck) {
+                noInjuriesCheck.checked = false;
             }
             updateEvaVisibility();
             saveDiagnosisDraft();
         });
     });
 
-    if (noInjuriesCard && noInjuriesCheck) {
-        noInjuriesCard.addEventListener('click', (e) => {
-            if (e.target.tagName !== 'INPUT') {
-                noInjuriesCheck.checked = !noInjuriesCheck.checked;
-            }
+    if (noInjuriesCheck) {
+        noInjuriesCheck.addEventListener('change', () => {
             if (noInjuriesCheck.checked) {
-                injuryPills.forEach(p => {
-                    p.classList.remove('selected');
-                    const cb = p.querySelector('input[type="checkbox"]');
-                    if (cb) cb.checked = false;
-                });
+                injuryCheckboxes.forEach(cb => { cb.checked = false; });
             }
             updateEvaVisibility();
             saveDiagnosisDraft();
@@ -1015,27 +1014,46 @@ function initDiagnosisWizard() {
     }
 
     // 4. Contexto Deportivo (Paso 3)
-    const freqBtns = document.querySelectorAll('.freq-btn');
-    freqBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            freqBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    document.querySelectorAll('input[name="diagExperience"]').forEach(r => {
+        r.addEventListener('change', () => saveDiagnosisDraft());
+    });
+
+    // Slider de frecuencia de 1 a 7
+    const freqSlider = document.getElementById('diagFreqSlider');
+    const freqDisplay = document.getElementById('diagFreqDisplay');
+    const scaleTicks = document.querySelectorAll('.scale-tick');
+
+    function updateFreqDisplay(val) {
+        const num = parseInt(val, 10);
+        if (freqDisplay) {
+            freqDisplay.textContent = num === 1 ? '1 día por semana' : `${num} días por semana`;
+        }
+        scaleTicks.forEach(tick => {
+            tick.classList.toggle('active', parseInt(tick.getAttribute('data-val'), 10) === num);
+        });
+    }
+
+    if (freqSlider) {
+        freqSlider.addEventListener('input', () => {
+            updateFreqDisplay(freqSlider.value);
             saveDiagnosisDraft();
+        });
+    }
+
+    scaleTicks.forEach(tick => {
+        tick.addEventListener('click', () => {
+            const v = tick.getAttribute('data-val');
+            if (freqSlider) {
+                freqSlider.value = v;
+                updateFreqDisplay(v);
+                saveDiagnosisDraft();
+            }
         });
     });
 
-    const equipPills = document.querySelectorAll('input[name="diagEquipment"]');
-    equipPills.forEach(input => {
-        const card = input.closest('.pill-card');
-        if (card) {
-            card.addEventListener('click', (e) => {
-                if (e.target.tagName !== 'INPUT') {
-                    input.checked = !input.checked;
-                }
-                card.classList.toggle('selected', input.checked);
-                saveDiagnosisDraft();
-            });
-        }
+    // Checkboxes de Equipamiento
+    document.querySelectorAll('input[name="diagEquipment"]').forEach(cb => {
+        cb.addEventListener('change', () => saveDiagnosisDraft());
     });
 
     // 5. Carga Alostática (Paso 4)
@@ -1066,12 +1084,32 @@ function initDiagnosisWizard() {
         });
     });
 
-    // 6. Registro Fotográfico Postural (Paso 7)
+    document.querySelectorAll('input[name="diagNeat"]').forEach(r => {
+        r.addEventListener('change', () => saveDiagnosisDraft());
+    });
+
+    // 6. Barrera de Adherencia (Paso 5)
+    document.querySelectorAll('input[name="diagHurdle"]').forEach(r => {
+        r.addEventListener('change', () => saveDiagnosisDraft());
+    });
+
+    // 7. Pruebas de Movilidad (Paso 6) & Opción Omitir
+    const skipMobilityBtn = document.getElementById('btnSkipMobility');
+    if (skipMobilityBtn) {
+        skipMobilityBtn.addEventListener('click', () => {
+            AppState.diagnosisDraft = AppState.diagnosisDraft || {};
+            AppState.diagnosisDraft.mobilitySkipped = true;
+            saveDiagnosisDraft();
+            window.diagWizardGoStep(7, 'Pruebas omitidas por ahora');
+        });
+    }
+
+    // 8. Registro Fotográfico Postural (Paso 7)
     setupPhotoUpload('filePhotoFront', 'previewImgFront', 'boxPhotoFront');
     setupPhotoUpload('filePhotoSide', 'previewImgSide', 'boxPhotoSide');
     setupPhotoUpload('filePhotoBack', 'previewImgBack', 'boxPhotoBack');
 
-    // 7. Botón Finalizar Diagnóstico (Paso 7 -> Paso 8)
+    // 9. Botón Finalizar Diagnóstico (Paso 7 -> Paso 8)
     const finishBtn = document.getElementById('btnFinishDiagnosis');
     if (finishBtn) {
         finishBtn.addEventListener('click', () => {
@@ -1079,7 +1117,7 @@ function initDiagnosisWizard() {
         });
     }
 
-    // 8. Botón Entrar al Dashboard desde Congrats (Paso 8)
+    // 10. Botón Entrar al Dashboard desde Congrats (Paso 8)
     const enterDashBtn = document.getElementById('btnDiagEnterDashboard');
     if (enterDashBtn) {
         enterDashBtn.addEventListener('click', () => {
@@ -1090,7 +1128,7 @@ function initDiagnosisWizard() {
         });
     }
 
-    // 9. Botón Salir al Dashboard si se está en Modo Edición
+    // 11. Botón Salir al Dashboard si se está en Modo Edición
     const exitDashBtn = document.getElementById('wizardExitToDashBtn');
     if (exitDashBtn) {
         exitDashBtn.addEventListener('click', () => {
@@ -1101,7 +1139,7 @@ function initDiagnosisWizard() {
         });
     }
 
-    // 10. Botón "Ver o Modificar mis Datos" en Dashboard & Nav
+    // 12. Botón "Ver o Modificar mis Datos" en Dashboard & Nav
     const editDiagBtn = document.getElementById('dashEditDiagnosisBtn');
     if (editDiagBtn) {
         editDiagBtn.addEventListener('click', () => {
@@ -1147,25 +1185,22 @@ function setupPhotoUpload(inputId, imgId, boxId) {
     });
 }
 
-// Comprobar banderas de PAR-Q+
-function checkParqFlags() {
-    const activeSi = document.querySelectorAll('.triage-item .triage-btn.active[data-val="si"]');
-    const alertBox = document.getElementById('parqMedicalAlert');
-    const notesGroup = document.getElementById('parqNotesGroup');
-    const hasFlags = activeSi.length > 0;
-
-    if (alertBox) alertBox.style.display = hasFlags ? 'block' : 'none';
-    if (notesGroup) notesGroup.style.display = hasFlags ? 'block' : 'none';
-    return hasFlags;
-}
-
-// Navegación secuencial de pasos
+// Navegación secuencial de pasos con animación suave
 window.diagWizardGoStep = function(targetStep, toastMsg) {
     const stepCards = document.querySelectorAll('.wizard-step-card');
     const targetCard = document.getElementById(`diagStep${targetStep}`);
     if (!targetCard) return;
 
-    stepCards.forEach(card => card.classList.remove('active'));
+    const currentStep = AppState.diagnosisCurrentStep || 0;
+    const isMovingBack = targetStep < currentStep;
+
+    stepCards.forEach(card => {
+        card.classList.remove('active', 'slide-back');
+    });
+
+    if (isMovingBack) {
+        targetCard.classList.add('slide-back');
+    }
     targetCard.classList.add('active');
 
     // Actualizar barra de progreso y etiquetas
@@ -1173,23 +1208,23 @@ window.diagWizardGoStep = function(targetStep, toastMsg) {
     const progressText = document.getElementById('progressText');
     const stepLabel = document.getElementById('diagStepLabel');
 
-    const progressPercentages = [0, 15, 30, 45, 60, 75, 85, 95, 100];
+    const progressPercentages = [0, 15, 30, 45, 60, 75, 88, 96, 100];
     const stepNames = [
-        'Paso 0 de 8: Consentimiento Legal',
-        'Paso 1 de 8: Triaje Clínico PAR-Q+',
-        'Paso 2 de 8: Topografía de Dolor & Lesiones',
-        'Paso 3 de 8: Contexto Deportivo & Logística',
-        'Paso 4 de 8: Carga Alostática & Estilo de Vida',
-        'Paso 5 de 8: Barrera Psicológica de Adherencia',
-        'Paso 6 de 8: Pruebas Funcionales de Movilidad',
-        'Paso 7 de 8: Biometría & Registro Postural',
-        'Paso 8 de 8: Micro-Hábitos & Confirmación'
+        'Paso 0 de 7: Consentimiento Legal',
+        'Paso 1 de 7: Cuestionario de Salud',
+        'Paso 2 de 7: Topografía de Dolor & Lesiones',
+        'Paso 3 de 7: Contexto Deportivo & Logística',
+        'Paso 4 de 7: Carga Alostática & Estilo de Vida',
+        'Paso 5 de 7: Barrera de Adherencia',
+        'Paso 6 de 7: Pruebas Funcionales de Movilidad',
+        'Paso 7 de 7: Métricas Corporales & Fotos',
+        'Expediente Completado'
     ];
 
     const pct = progressPercentages[targetStep] || 0;
     if (progressFill) progressFill.style.width = `${pct}%`;
     if (progressText) progressText.textContent = `${pct}%`;
-    if (stepLabel) stepLabel.textContent = stepNames[targetStep] || `Paso ${targetStep} de 8`;
+    if (stepLabel) stepLabel.textContent = stepNames[targetStep] || `Paso ${targetStep}`;
 
     if (toastMsg) {
         showDiagnosisToast(toastMsg);
@@ -1205,11 +1240,6 @@ window.diagAutoAdvanceRadio = function(element, groupName, nextStepTarget, toast
     if (radio) {
         radio.checked = true;
     }
-
-    // Efecto visual feedback
-    const siblings = element.parentElement.querySelectorAll('.touch-card');
-    siblings.forEach(s => s.style.borderColor = 'var(--border-subtle)');
-    element.style.borderColor = 'var(--accent-primary)';
 
     saveDiagnosisDraft();
 
@@ -1230,7 +1260,7 @@ function showDiagnosisToast(message) {
     toast.classList.add('show');
     setTimeout(() => {
         toast.classList.remove('show');
-    }, 2000);
+    }, 2200);
 }
 
 // Procesar el envío completo y calcular algoritmo VIP + Micro-hábitos
@@ -1245,18 +1275,25 @@ async function processDiagnosisSubmission() {
     const weight = parseFloat(weightInput ? weightInput.value : '78.0') || 78.0;
     const height = parseFloat(heightInput ? heightInput.value : '175') || 175;
 
-    // PAR-Q+ respuestas
+    // Respuestas del Cuestionario de Salud (Switches)
     const parqResponses = {};
     let positiveParqCount = 0;
-    document.querySelectorAll('.triage-item').forEach(item => {
-        const qKey = item.getAttribute('data-q');
-        const activeBtn = item.querySelector('.triage-btn.active');
-        const val = activeBtn ? activeBtn.getAttribute('data-val') : 'no';
-        parqResponses[qKey] = val;
-        if (val === 'si') positiveParqCount++;
+    let parqNotes = '';
+
+    document.querySelectorAll('.health-toggle-input').forEach(toggle => {
+        const qKey = toggle.getAttribute('data-q');
+        const isPos = toggle.checked;
+        parqResponses[qKey] = isPos ? 'si' : 'no';
+        if (isPos) {
+            positiveParqCount++;
+            const detailInput = document.querySelector(`.health-detail-input[data-for="${qKey}"]`);
+            const note = detailInput ? detailInput.value.trim() : '';
+            if (note) {
+                parqNotes += (parqNotes ? ' | ' : '') + `${qKey}: ${note}`;
+            }
+        }
     });
     const hasMedicalFlags = positiveParqCount > 0;
-    const parqNotes = document.getElementById('diagParqNotes')?.value.trim() || '';
 
     // Lesiones activas
     const selectedInjuries = Array.from(document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]:checked')).map(el => el.value);
@@ -1264,8 +1301,8 @@ async function processDiagnosisSubmission() {
 
     // Contexto deportivo
     const experience = document.querySelector('input[name="diagExperience"]:checked')?.value || 'intermediate';
-    const activeFreqBtn = document.querySelector('.freq-btn.active');
-    const weeklyFrequency = activeFreqBtn ? parseInt(activeFreqBtn.getAttribute('data-days'), 10) : 3;
+    const freqSlider = document.getElementById('diagFreqSlider');
+    const weeklyFrequency = freqSlider ? parseInt(freqSlider.value, 10) : 3;
     const availableEquipment = Array.from(document.querySelectorAll('input[name="diagEquipment"]:checked')).map(el => el.value);
 
     // Carga alostática
@@ -1275,12 +1312,13 @@ async function processDiagnosisSubmission() {
     const activeWaterBtn = document.querySelector('.water-btn.active');
     const waterBaseline = activeWaterBtn ? parseFloat(activeWaterBtn.getAttribute('data-water')) : 2.0;
 
-    // Obstáculo psicológico
+    // Obstáculo de adherencia
     const historicalHurdle = document.querySelector('input[name="diagHurdle"]:checked')?.value || 'time';
 
     // Pruebas de movilidad
-    const mobShoulder = document.querySelector('input[name="diagMobShoulder"]:checked')?.value || 'ok';
-    const mobPosterior = document.querySelector('input[name="diagMobPosterior"]:checked')?.value || 'ok';
+    const isMobilitySkipped = AppState.diagnosisDraft?.mobilitySkipped || false;
+    const mobShoulder = isMobilitySkipped ? 'skipped' : (document.querySelector('input[name="diagMobShoulder"]:checked')?.value || 'ok');
+    const mobPosterior = isMobilitySkipped ? 'skipped' : (document.querySelector('input[name="diagMobPosterior"]:checked')?.value || 'ok');
 
     // Fotos posturales
     const frontPhoto = document.getElementById('previewImgFront')?.src || null;
@@ -1417,7 +1455,7 @@ async function processDiagnosisSubmission() {
     }
 
     // Avanzar a la pantalla de felicitaciones (Paso 8)
-    window.diagWizardGoStep(8, '¡Diagnóstico y Biometría asegurados!');
+    window.diagWizardGoStep(8, '¡Diagnóstico completado con éxito!');
 }
 
 // Temporizador regresivo de 24 horas (Compromiso SENS Train)
@@ -1450,11 +1488,14 @@ function saveDiagnosisDraft() {
             age: document.getElementById('diagAge')?.value || '',
             weight: document.getElementById('diagWeight')?.value || '',
             height: document.getElementById('diagHeight')?.value || '',
+            frequency: document.getElementById('diagFreqSlider')?.value || '3',
             eva: document.getElementById('diagEvaSlider')?.value || '5',
             sleep: document.getElementById('diagSleepSlider')?.value || '7',
             stress: document.getElementById('diagStressSlider')?.value || '6',
+            mobilitySkipped: AppState.diagnosisDraft?.mobilitySkipped || false,
             timestamp: Date.now()
         };
+        AppState.diagnosisDraft = draft;
         localStorage.setItem('sens_onboarding_draft', JSON.stringify(draft));
     } catch (e) {
         // Ignorar si Storage está lleno
@@ -1467,10 +1508,17 @@ function restoreDiagnosisDraft() {
         const raw = localStorage.getItem('sens_onboarding_draft');
         if (!raw) return false;
         const draft = JSON.parse(raw);
+        AppState.diagnosisDraft = draft;
         if (draft.fullName) document.getElementById('diagFullName').value = draft.fullName;
         if (draft.age) document.getElementById('diagAge').value = draft.age;
         if (draft.weight) document.getElementById('diagWeight').value = draft.weight;
         if (draft.height) document.getElementById('diagHeight').value = draft.height;
+        if (draft.frequency) {
+            const freqSlider = document.getElementById('diagFreqSlider');
+            const freqDisplay = document.getElementById('diagFreqDisplay');
+            if (freqSlider) freqSlider.value = draft.frequency;
+            if (freqDisplay) freqDisplay.textContent = `${draft.frequency} días por semana`;
+        }
         return true;
     } catch (e) {
         return false;
@@ -1502,24 +1550,25 @@ function prefillDiagnosisForm() {
 
     if (a.parq_responses) {
         Object.keys(a.parq_responses).forEach(qKey => {
-            const item = document.querySelector(`.triage-item[data-q="${qKey}"]`);
-            if (item) {
-                const val = a.parq_responses[qKey];
-                item.querySelectorAll('.triage-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.getAttribute('data-val') === val);
-                });
+            const toggle = document.querySelector(`.health-toggle-input[data-q="${qKey}"]`);
+            if (toggle) {
+                const isPos = a.parq_responses[qKey] === 'si';
+                toggle.checked = isPos;
+                const detailEl = document.getElementById(`detail_${qKey}`);
+                const item = toggle.closest('.health-switch-item');
+                if (detailEl) detailEl.style.display = isPos ? 'block' : 'none';
+                if (item) item.classList.toggle('has-detail', isPos);
             }
         });
-        checkParqFlags();
     }
 
     if (Array.isArray(a.active_injuries)) {
         a.active_injuries.forEach(inj => {
-            const pill = document.querySelector(`#injuriesPillGrid .pill-card[data-injury="${inj}"]`);
-            if (pill) {
-                pill.classList.add('selected');
-                const cb = pill.querySelector('input[type="checkbox"]');
-                if (cb) cb.checked = true;
+            const cb = document.querySelector(`#injuriesPillGrid input[name="diagInjuries"][value="${inj}"]`);
+            if (cb) {
+                cb.checked = true;
+                const pill = cb.closest('.pill-card');
+                if (pill) pill.classList.add('selected');
             }
         });
         if (a.active_injuries.length > 0) {
@@ -1535,9 +1584,15 @@ function prefillDiagnosisForm() {
     }
 
     if (a.weekly_frequency) {
-        document.querySelectorAll('.freq-btn').forEach(btn => {
-            btn.classList.toggle('active', parseInt(btn.getAttribute('data-days'), 10) === a.weekly_frequency);
-        });
+        const freqSlider = document.getElementById('diagFreqSlider');
+        const freqDisplay = document.getElementById('diagFreqDisplay');
+        if (freqSlider) {
+            freqSlider.value = a.weekly_frequency;
+            if (freqDisplay) freqDisplay.textContent = `${a.weekly_frequency} días por semana`;
+            document.querySelectorAll('.scale-tick').forEach(tick => {
+                tick.classList.toggle('active', parseInt(tick.getAttribute('data-val'), 10) === a.weekly_frequency);
+            });
+        }
     }
 
     if (a.sleep_hours) {

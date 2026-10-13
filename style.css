@@ -4198,7 +4198,7 @@ a.hero-btn-apple-dark:active {
     width: 0%;
     background: linear-gradient(90deg, var(--accent-primary), var(--accent-hover));
     border-radius: 6px;
-    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: width 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .wizard-progress-percent {
@@ -4274,21 +4274,41 @@ a.hero-btn-apple-dark:active {
 
 .wizard-step-card {
     display: none;
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .wizard-step-card.active {
     display: block;
-    animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+    transform: translateX(0);
+    animation: slideInFromRight 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes slideUpFade {
+.wizard-step-card.slide-back {
+    animation: slideInFromLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInFromRight {
     from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateX(24px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
@@ -4479,75 +4499,108 @@ a.hero-btn-apple-dark:active {
     padding: 18px 20px;
 }
 
-/* Triaje Clínico PAR-Q+ 2025 */
-.binary-triage-list {
+/* Cuestionario de Salud con Switch Toggles */
+.health-switch-list {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
-.triage-item {
+.health-switch-item {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 16px 20px;
+    transition: var(--transition);
+}
+
+.health-switch-item:hover {
+    border-color: rgba(229, 203, 167, 0.25);
+}
+
+.health-switch-item.has-detail {
+    border-color: rgba(229, 203, 167, 0.4);
+    background: rgba(26, 26, 29, 0.95);
+}
+
+.health-switch-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 16px 20px;
-    min-height: 58px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: 14px;
-    transition: var(--transition);
 }
 
-.triage-question {
+.health-switch-label {
     font-size: 14px;
     color: var(--text-secondary);
     line-height: 1.4;
+    cursor: pointer;
     flex: 1;
 }
 
-.triage-toggle-group {
-    display: flex;
-    gap: 8px;
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
     flex-shrink: 0;
-}
-
-.triage-btn {
-    min-width: 54px;
-    height: 44px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-muted);
-    font-family: var(--font-main);
-    font-size: 13px;
-    font-weight: 700;
     cursor: pointer;
-    transition: var(--transition);
 }
 
-.triage-btn.active[data-val="no"] {
-    background: rgba(229, 203, 167, 0.12);
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-subtle);
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 26px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #8E8E93;
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: var(--accent-primary);
     border-color: var(--accent-primary);
-    color: var(--accent-primary);
 }
 
-.triage-btn.active[data-val="si"] {
-    background: rgba(217, 93, 80, 0.18);
-    border-color: #D95D50;
-    color: #F87171;
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(22px);
+    background-color: #080809;
 }
 
-.medical-flag-alert {
-    background: rgba(217, 93, 80, 0.1);
-    border-left: 3px solid #D95D50;
-    padding: 14px 18px;
-    border-radius: 0 10px 10px 0;
-    color: #FCA5A5;
-    font-size: 13px;
-    line-height: 1.45;
+.health-switch-detail {
     margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+    animation: fadeIn 0.25s ease;
+}
+
+.health-switch-detail input {
+    font-size: 13.5px;
+    padding: 10px 14px;
+    background: rgba(8, 8, 9, 0.6);
 }
 
 /* Grilla de Pills (Topografía y Equipamiento) */
@@ -4576,20 +4629,37 @@ a.hero-btn-apple-dark:active {
     user-select: none;
     font-size: 13.5px;
     color: var(--text-secondary);
+    position: relative;
 }
 
 .pill-card input {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
 }
 
 .pill-card:hover {
     border-color: rgba(229, 203, 167, 0.3);
 }
 
+.pill-card:has(input:checked),
 .pill-card.selected {
-    background: rgba(229, 203, 167, 0.08);
+    background: rgba(229, 203, 167, 0.1);
     border-color: var(--accent-primary);
-    color: var(--text-primary);
+    color: var(--accent-primary);
+}
+
+.pill-card:has(input:checked) .custom-box,
+.pill-card.selected .custom-box {
+    border-color: var(--accent-primary);
+    background: var(--accent-primary);
+}
+
+.pill-card:has(input:checked) .custom-box svg,
+.pill-card.selected .custom-box svg {
+    display: block;
 }
 
 /* Escala Visual Analógica EVA (1 al 10) */
@@ -4622,7 +4692,7 @@ a.hero-btn-apple-dark:active {
     margin-top: 8px;
 }
 
-/* Selectores de frecuencia y agua */
+/* Selectores de frecuencia con Range Slider 1 a 7 */
 .section-subblock {
     margin-bottom: 22px;
 }
@@ -4633,6 +4703,61 @@ a.hero-btn-apple-dark:active {
     font-weight: 600;
     color: var(--text-secondary);
     margin-bottom: 10px;
+}
+
+.freq-slider-container {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: var(--transition);
+}
+
+.freq-slider-container:hover {
+    border-color: rgba(229, 203, 167, 0.25);
+}
+
+.freq-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.freq-slider-badge {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.freq-slider-wrapper {
+    position: relative;
+    padding: 6px 0;
+}
+
+.freq-slider-scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 0 4px;
+}
+
+.scale-tick {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.scale-tick:hover,
+.scale-tick.active {
+    color: var(--accent-primary);
+    font-weight: 800;
 }
 
 .freq-selector-grid {

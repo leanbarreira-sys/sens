@@ -838,7 +838,7 @@
                                 <div class="step-tag-pill">Paso 0 • Confidencialidad Médica</div>
                                 <h2 class="step-title">Diagnóstico <strong>Inicial</strong></h2>
                                 <p class="step-desc">
-                                    Personalización de tu programación basada en tu anatomía, no en suposiciones. Nos tomará solo 3 minutos.
+                                    Personalización de tu programación basada en tu anatomía, no en suposiciones. Nos tomará solo 2 minutos.
                                 </p>
 
                                 <div class="legal-notice-box">
@@ -863,99 +863,114 @@
                             <div class="wizard-footer-actions">
                                 <div></div>
                                 <button type="button" class="btn btn-primary" id="btnStartDiag" disabled>
-                                    Comenzar Diagnóstico →
+                                    Empezar →
                                 </button>
                             </div>
                         </div>
 
-                        <!-- PASO 1: TRIAJE CLÍNICO (PAR-Q+ 2025) -->
+                        <!-- PASO 1: CUESTIONARIO DE SALUD -->
                         <div class="wizard-step-card" id="diagStep1">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 1 • Seguridad Médica</div>
-                                <h2 class="step-title">Triaje Clínico <strong>PAR-Q+</strong></h2>
+                                <div class="step-tag-pill">Paso 1 de 7 • Cuestionario de Salud</div>
+                                <h2 class="step-title">Cuestionario de <strong>Salud</strong></h2>
                                 <p class="step-desc">
-                                    Cuestionario de seguridad internacional. Tu salud e integridad son la prioridad absoluta antes de cargar peso.
+                                    Preguntas breves para conocer tu estado general antes de entrenar.
                                 </p>
 
-                                <div class="binary-triage-list">
+                                <div class="health-switch-list">
                                     <!-- Pregunta 1 -->
-                                    <div class="triage-item" data-q="parq_heart">
-                                        <div class="triage-question">
-                                            ¿Alguna vez un médico te diagnosticó hipertensión o una afección cardiovascular?
+                                    <div class="health-switch-item" data-q="parq_heart">
+                                        <div class="health-switch-header">
+                                            <label class="health-switch-label" for="switch_parq_heart">
+                                                ¿Alguna vez un médico te diagnosticó hipertensión o una afección cardiovascular?
+                                            </label>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="switch_parq_heart" class="health-toggle-input" data-q="parq_heart">
+                                                <span class="toggle-slider"></span>
+                                            </label>
                                         </div>
-                                        <div class="triage-toggle-group">
-                                            <button type="button" class="triage-btn active" data-val="no">No</button>
-                                            <button type="button" class="triage-btn" data-val="si">Sí</button>
+                                        <div class="health-switch-detail" id="detail_parq_heart" style="display: none;">
+                                            <input type="text" class="input-control health-detail-input" data-for="parq_heart" placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
 
                                     <!-- Pregunta 2 -->
-                                    <div class="triage-item" data-q="parq_chest">
-                                        <div class="triage-question">
-                                            ¿Sentís dolor o presión en el pecho al realizar esfuerzo o en momentos de reposo?
+                                    <div class="health-switch-item" data-q="parq_chest">
+                                        <div class="health-switch-header">
+                                            <label class="health-switch-label" for="switch_parq_chest">
+                                                ¿Sentís dolor o presión en el pecho al realizar esfuerzo o en momentos de reposo?
+                                            </label>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="switch_parq_chest" class="health-toggle-input" data-q="parq_chest">
+                                                <span class="toggle-slider"></span>
+                                            </label>
                                         </div>
-                                        <div class="triage-toggle-group">
-                                            <button type="button" class="triage-btn active" data-val="no">No</button>
-                                            <button type="button" class="triage-btn" data-val="si">Sí</button>
+                                        <div class="health-switch-detail" id="detail_parq_chest" style="display: none;">
+                                            <input type="text" class="input-control health-detail-input" data-for="parq_chest" placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
 
                                     <!-- Pregunta 3 -->
-                                    <div class="triage-item" data-q="parq_balance">
-                                        <div class="triage-question">
-                                            ¿Has tenido mareos frecuentes, pérdida de equilibrio o desmayos en el último año?
+                                    <div class="health-switch-item" data-q="parq_balance">
+                                        <div class="health-switch-header">
+                                            <label class="health-switch-label" for="switch_parq_balance">
+                                                ¿Has tenido mareos frecuentes, pérdida de equilibrio o desmayos en el último año?
+                                            </label>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="switch_parq_balance" class="health-toggle-input" data-q="parq_balance">
+                                                <span class="toggle-slider"></span>
+                                            </label>
                                         </div>
-                                        <div class="triage-toggle-group">
-                                            <button type="button" class="triage-btn active" data-val="no">No</button>
-                                            <button type="button" class="triage-btn" data-val="si">Sí</button>
+                                        <div class="health-switch-detail" id="detail_parq_balance" style="display: none;">
+                                            <input type="text" class="input-control health-detail-input" data-for="parq_balance" placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
 
                                     <!-- Pregunta 4 -->
-                                    <div class="triage-item" data-q="parq_meds">
-                                        <div class="triage-question">
-                                            ¿Tomás medicación recetada para la presión arterial o el corazón?
+                                    <div class="health-switch-item" data-q="parq_meds">
+                                        <div class="health-switch-header">
+                                            <label class="health-switch-label" for="switch_parq_meds">
+                                                ¿Tomás medicación recetada para la presión arterial o el corazón?
+                                            </label>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="switch_parq_meds" class="health-toggle-input" data-q="parq_meds">
+                                                <span class="toggle-slider"></span>
+                                            </label>
                                         </div>
-                                        <div class="triage-toggle-group">
-                                            <button type="button" class="triage-btn active" data-val="no">No</button>
-                                            <button type="button" class="triage-btn" data-val="si">Sí</button>
+                                        <div class="health-switch-detail" id="detail_parq_meds" style="display: none;">
+                                            <input type="text" class="input-control health-detail-input" data-for="parq_meds" placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
 
                                     <!-- Pregunta 5 -->
-                                    <div class="triage-item" data-q="parq_other">
-                                        <div class="triage-question">
-                                            ¿Tenés algún otro motivo médico por el que no debas realizar ejercicio físico?
+                                    <div class="health-switch-item" data-q="parq_other">
+                                        <div class="health-switch-header">
+                                            <label class="health-switch-label" for="switch_parq_other">
+                                                ¿Tenés algún otro motivo médico por el que no debas realizar ejercicio físico?
+                                            </label>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="switch_parq_other" class="health-toggle-input" data-q="parq_other">
+                                                <span class="toggle-slider"></span>
+                                            </label>
                                         </div>
-                                        <div class="triage-toggle-group">
-                                            <button type="button" class="triage-btn active" data-val="no">No</button>
-                                            <button type="button" class="triage-btn" data-val="si">Sí</button>
+                                        <div class="health-switch-detail" id="detail_parq_other" style="display: none;">
+                                            <input type="text" class="input-control health-detail-input" data-for="parq_other" placeholder="¿Podés detallar brevemente? (opcional)">
                                         </div>
                                     </div>
-                                </div>
-
-                                <!-- Alerta condicional de banderas médicas -->
-                                <div class="medical-flag-alert" id="parqMedicalAlert" style="display: none;">
-                                    <strong>Bandera médica preventiva registrada:</strong> Podrás continuar completando tus datos. Nico evaluará este punto de forma prioritaria para coordinar el apto médico antes de iniciar.
-                                </div>
-
-                                <div class="input-group" id="parqNotesGroup" style="display: none; margin-top: 16px;">
-                                    <label class="input-label" for="diagParqNotes">Detalle o indicación médica (opcional):</label>
-                                    <textarea id="diagParqNotes" class="input-control" rows="2" placeholder="Ej: Hipertensión controlada con medicación matutina..."></textarea>
                                 </div>
                             </div>
 
                             <div class="wizard-footer-actions">
                                 <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(0)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(2, '¡Seguridad verificada!')">Continuar →</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(2, '¡Excelente primer paso!')">Continuar →</button>
                             </div>
                         </div>
 
                         <!-- PASO 2: TOPOGRAFÍA DE DOLOR Y LESIONES (EVA 1-10) -->
                         <div class="wizard-step-card" id="diagStep2">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 2 • Anatomía &amp; Articulaciones</div>
-                                <h2 class="step-title">Topografía de <strong>Dolor</strong></h2>
+                                <div class="step-tag-pill">Paso 2 de 7 • Mapa Articular</div>
+                                <h2 class="step-title">Topografía de <strong>Dolor &amp; Lesiones</strong></h2>
                                 <p class="step-desc">
                                     Seleccioná las zonas con molestias activas o cirugías para adaptar ejercicios y proteger tu espalda.
                                 </p>
@@ -1040,14 +1055,14 @@
 
                             <div class="wizard-footer-actions">
                                 <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(1)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(3, '¡Mapa biomecánico guardado!')">Continuar →</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(3, '¡Avanzamos muy rápido!')">Continuar →</button>
                             </div>
                         </div>
 
                         <!-- PASO 3: CONTEXTO DEPORTIVO Y LOGÍSTICO -->
                         <div class="wizard-step-card" id="diagStep3">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 3 • Logística &amp; Equipamiento</div>
+                                <div class="step-tag-pill">Paso 3 de 7 • Logística &amp; Equipamiento</div>
                                 <h2 class="step-title">Contexto <strong>Deportivo</strong></h2>
                                 <p class="step-desc">
                                     Para calibrar el volumen semanal y adaptar la rutina al equipamiento real con el que contás.
@@ -1084,11 +1099,23 @@
                                 </div>
 
                                 <div class="section-subblock">
-                                    <label class="subblock-title">B. Frecuencia semanal deseada:</label>
-                                    <div class="freq-selector-grid">
-                                        <button type="button" class="freq-btn" data-days="2">2 Días / sem</button>
-                                        <button type="button" class="freq-btn active" data-days="3">3 Días / sem (Recomendado)</button>
-                                        <button type="button" class="freq-btn" data-days="4">4+ Días / sem</button>
+                                    <div class="freq-slider-container">
+                                        <div class="freq-slider-header">
+                                            <label class="subblock-title" style="margin-bottom:0;" for="diagFreqSlider">B. Frecuencia semanal que querés dedicar:</label>
+                                            <span class="freq-slider-badge" id="diagFreqDisplay">3 días por semana</span>
+                                        </div>
+                                        <div class="freq-slider-wrapper">
+                                            <input type="range" min="1" max="7" step="1" value="3" id="diagFreqSlider" class="range-slider">
+                                            <div class="freq-slider-scale">
+                                                <span class="scale-tick" data-val="1">1</span>
+                                                <span class="scale-tick" data-val="2">2</span>
+                                                <span class="scale-tick active" data-val="3">3</span>
+                                                <span class="scale-tick" data-val="4">4</span>
+                                                <span class="scale-tick" data-val="5">5</span>
+                                                <span class="scale-tick" data-val="6">6</span>
+                                                <span class="scale-tick" data-val="7">7</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1129,14 +1156,14 @@
 
                             <div class="wizard-footer-actions">
                                 <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(2)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(4, '¡Entorno calibrado!')">Continuar →</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(4, '¡Ya estás en la mitad!')">Continuar →</button>
                             </div>
                         </div>
 
                         <!-- PASO 4: CARGA ALOSTÁTICA Y ESTILO DE VIDA -->
                         <div class="wizard-step-card" id="diagStep4">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 4 • Carga Alostática</div>
+                                <div class="step-tag-pill">Paso 4 de 7 • Carga Alostática</div>
                                 <h2 class="step-title">Estilo de Vida &amp; <strong>Recuperación</strong></h2>
                                 <p class="step-desc">
                                     El entrenamiento solo construye músculo y fuerza si tu cuerpo tiene capacidad biológica de asimilarlo.
@@ -1212,29 +1239,29 @@
 
                             <div class="wizard-footer-actions">
                                 <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(3)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(5, '¡Factores de fatiga registrados!')">Continuar →</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(5, '¡Ya casi terminamos!')">Continuar →</button>
                             </div>
                         </div>
 
                         <!-- PASO 5: BARRERA PSICOLÓGICA DE ADHERENCIA -->
                         <div class="wizard-step-card" id="diagStep5">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 5 • Psicometría &amp; Retención</div>
+                                <div class="step-tag-pill">Paso 5 de 7 • Hábitos &amp; Continuidad</div>
                                 <h2 class="step-title">Barrera Histórica de <strong>Adherencia</strong></h2>
                                 <p class="step-desc">
                                     ¿Cuál ha sido tu mayor obstáculo en el pasado? Permite a Nico diseñar una estrategia para que no abandones a los 30 días.
                                 </p>
 
                                 <div class="selection-group">
-                                    <label class="touch-card" onclick="diagAutoAdvanceRadio(this, 'hurdle', 6, '¡Punto ciego identificado!')">
-                                        <input type="radio" name="diagHurdle" value="time" checked>
+                                    <label class="touch-card">
+                                        <input type="radio" name="diagHurdle" value="time">
                                         <div class="custom-circle"></div>
                                         <div class="card-content">
                                             Falta de tiempo
                                             <span class="card-sub">Rutinas kilométricas incompatibles con mi agenda laboral o familiar.</span>
                                         </div>
                                     </label>
-                                    <label class="touch-card" onclick="diagAutoAdvanceRadio(this, 'hurdle', 6, '¡Punto ciego identificado!')">
+                                    <label class="touch-card">
                                         <input type="radio" name="diagHurdle" value="consistency">
                                         <div class="custom-circle"></div>
                                         <div class="card-content">
@@ -1242,7 +1269,7 @@
                                             <span class="card-sub">Arranco motivado pero pierdo el hábito al cabo de un mes.</span>
                                         </div>
                                     </label>
-                                    <label class="touch-card" onclick="diagAutoAdvanceRadio(this, 'hurdle', 6, '¡Punto ciego identificado!')">
+                                    <label class="touch-card">
                                         <input type="radio" name="diagHurdle" value="pain">
                                         <div class="custom-circle"></div>
                                         <div class="card-content">
@@ -1250,7 +1277,7 @@
                                             <span class="card-sub">Me entusiasmaba pero empezaban molestias y tenía que frenar.</span>
                                         </div>
                                     </label>
-                                    <label class="touch-card" onclick="diagAutoAdvanceRadio(this, 'hurdle', 6, '¡Punto ciego identificado!')">
+                                    <label class="touch-card">
                                         <input type="radio" name="diagHurdle" value="guidance">
                                         <div class="custom-circle"></div>
                                         <div class="card-content">
@@ -1263,17 +1290,17 @@
 
                             <div class="wizard-footer-actions">
                                 <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(4)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(6, '¡Punto ciego identificado!')">Continuar →</button>
+                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(6, '¡Solo 2 pasos más!')">Continuar →</button>
                             </div>
                         </div>
 
                         <!-- PASO 6: PRUEBAS FUNCIONALES RÁPIDAS -->
                         <div class="wizard-step-card" id="diagStep6">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 6 • Evaluación Funcional</div>
+                                <div class="step-tag-pill">Paso 6 de 7 • Evaluación Funcional</div>
                                 <h2 class="step-title">Pruebas Rápidas de <strong>Movilidad</strong></h2>
                                 <p class="step-desc">
-                                    Hacelas de pie ahora mismo en 30 segundos. Determinan si podemos programar empujes verticales o bisagras pesadas.
+                                    Hacelas de pie ahora mismo en 30 segundos, o podés omitirlas por ahora si preferís dejarlas para más tarde.
                                 </p>
 
                                 <!-- Test 1: Movilidad de Hombros -->
@@ -1349,14 +1376,17 @@
 
                             <div class="wizard-footer-actions">
                                 <button type="button" class="btn btn-secondary" onclick="diagWizardGoStep(5)">← Volver</button>
-                                <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(7, '¡Rangos funcionales calibrados!')">Continuar →</button>
+                                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                    <button type="button" class="btn btn-outline" id="btnSkipMobility">Omitir pruebas por ahora</button>
+                                    <button type="button" class="btn btn-primary" onclick="diagWizardGoStep(7, '¡Último paso!')">Continuar →</button>
+                                </div>
                             </div>
                         </div>
 
                         <!-- PASO 7: EVALUACIÓN POSTURAL Y MÉTRICAS CORPORALES -->
                         <div class="wizard-step-card" id="diagStep7">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 7 • Biometría &amp; Registro Postural</div>
+                                <div class="step-tag-pill">Paso 7 de 7 • Datos Finales</div>
                                 <h2 class="step-title">Métricas Corporales &amp; <strong>Fotos</strong></h2>
                                 <p class="step-desc">
                                     Tus datos biológicos reales para contrastar tu evolución en fuerza y composición corporal cada 4 semanas.
@@ -1569,7 +1599,7 @@
                 </div>
 
                 <!-- Métricas KPIs de la semana -->
-                <div class="kpi-metrics-grid">
+                <div class="kpi-metrics-grid" id="dashKpiMetricsGrid">
                     <div class="kpi-card">
                         <div class="kpi-label">Días Entrenados (Semana)</div>
                         <div class="kpi-value" id="kpiWorkoutsWeek">3 / 3</div>
@@ -1594,7 +1624,7 @@
                 </div>
 
                 <!-- Card Destacada de Acción -->
-                <div class="action-hero-card">
+                <div class="action-hero-card" id="dashActionHeroCard">
                     <div>
                         <span class="pill pill-dark" style="margin-bottom: 8px;">Sesión Asignada</span>
                         <h3
@@ -1610,47 +1640,6 @@
                 </div>
             </section>
 
-                <!-- Métricas KPIs de la semana -->
-                <div class="kpi-metrics-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-label">Días Entrenados (Semana)</div>
-                        <div class="kpi-value" id="kpiWorkoutsWeek">3 / 3</div>
-                        <div class="kpi-sub">Objetivo semanal completado</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Evolución de Peso</div>
-                        <div class="kpi-value" id="kpiCurrentWeight">78.2 <span
-                                style="font-size:1rem; font-weight:400;">kg</span></div>
-                        <div class="kpi-sub text-champagne">-0.8 kg este mes</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Pasos Diarios Promedio</div>
-                        <div class="kpi-value" id="kpiAvgSteps">10.420</div>
-                        <div class="kpi-sub">Meta activa: 10.000 pasos</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Nivel de Recuperación</div>
-                        <div class="kpi-value" style="color: var(--success);">Óptimo</div>
-                        <div class="kpi-sub">7.5h de sueño promedio</div>
-                    </div>
-                </div>
-
-                <!-- Card Destacada de Acción -->
-                <div class="action-hero-card">
-                    <div>
-                        <span class="pill pill-dark" style="margin-bottom: 8px;">Sesión Asignada</span>
-                        <h3
-                            style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
-                            DÍA 1: FUERZA TREN SUPERIOR (Empuje / Tirón)
-                        </h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                            4 ejercicios principales • Tiempo estimado: 50 minutos • Enfoque: Fuerza & Estabilidad
-                            escápulo-humeral
-                        </p>
-                    </div>
-                    <button class="btn btn-outline" id="dashGoWorkoutDetailBtn">Ver Rutina y Registrar Sets</button>
-                </div>
-            </section>
 
             <!-- =====================================================================
                  MÓDULO 6: GESTOR DE RUTINAS Y ENTRENAMIENTO
