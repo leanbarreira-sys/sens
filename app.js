@@ -955,6 +955,13 @@ function initDiagnosisWizard() {
             const qKey = toggle.getAttribute('data-q');
             const detailEl = document.getElementById(`detail_${qKey}`);
             const item = toggle.closest('.health-switch-item');
+            const statusTag = document.getElementById(`status_${qKey}`);
+
+            if (statusTag) {
+                statusTag.textContent = toggle.checked ? 'SÍ' : 'NO';
+                statusTag.classList.toggle('is-yes', toggle.checked);
+            }
+
             if (toggle.checked) {
                 if (detailEl) detailEl.style.display = 'block';
                 if (item) item.classList.add('has-detail');
@@ -972,19 +979,21 @@ function initDiagnosisWizard() {
         });
     });
 
-    // 3. Topografía de Lesiones y EVA (Paso 2)
+    // 3. Topografía de Lesiones con Intensidad Localizada (Paso 2)
     const injuryCheckboxes = document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]');
     const noInjuriesCheck = document.getElementById('diagNoInjuriesCheck');
-    const evaBox = document.getElementById('diagEvaBox');
-    const evaSlider = document.getElementById('diagEvaSlider');
-    const evaVal = document.getElementById('diagEvaVal');
 
     injuryCheckboxes.forEach(cb => {
         cb.addEventListener('change', () => {
-            if (cb.checked && noInjuriesCheck) {
-                noInjuriesCheck.checked = false;
+            const injuryKey = cb.value;
+            const intensityRow = document.getElementById(`intensity_${injuryKey}`);
+            
+            if (cb.checked) {
+                if (noInjuriesCheck) noInjuriesCheck.checked = false;
+                if (intensityRow) intensityRow.style.display = 'flex';
+            } else {
+                if (intensityRow) intensityRow.style.display = 'none';
             }
-            updateEvaVisibility();
             saveDiagnosisDraft();
         });
     });
@@ -992,26 +1001,28 @@ function initDiagnosisWizard() {
     if (noInjuriesCheck) {
         noInjuriesCheck.addEventListener('change', () => {
             if (noInjuriesCheck.checked) {
-                injuryCheckboxes.forEach(cb => { cb.checked = false; });
+                injuryCheckboxes.forEach(cb => {
+                    cb.checked = false;
+                    const intensityRow = document.getElementById(`intensity_${cb.value}`);
+                    if (intensityRow) intensityRow.style.display = 'none';
+                });
             }
-            updateEvaVisibility();
             saveDiagnosisDraft();
         });
     }
 
-    if (evaSlider && evaVal) {
-        evaSlider.addEventListener('input', () => {
-            evaVal.textContent = `${evaSlider.value} / 10`;
+    // Botones de intensidad por zona seleccionada (Leve | Moderada | Aguda)
+    document.querySelectorAll('.intensity-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const group = btn.closest('.intensity-pill-group');
+            if (group) {
+                group.querySelectorAll('.intensity-btn').forEach(b => b.classList.remove('active'));
+            }
+            btn.classList.add('active');
             saveDiagnosisDraft();
         });
-    }
-
-    function updateEvaVisibility() {
-        const hasSelectedInjuries = Array.from(document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]:checked')).length > 0;
-        if (evaBox) {
-            evaBox.style.display = hasSelectedInjuries ? 'block' : 'none';
-        }
-    }
+    });
 
     // 4. Contexto Deportivo (Paso 3)
     document.querySelectorAll('input[name="diagExperience"]').forEach(r => {
@@ -1295,9 +1306,27 @@ async function processDiagnosisSubmission() {
     });
     const hasMedicalFlags = positiveParqCount > 0;
 
-    // Lesiones activas
-    const selectedInjuries = Array.from(document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]:checked')).map(el => el.value);
-    const evaScore = parseInt(document.getElementById('diagEvaSlider')?.value || '5', 10);
+    // Lesiones activas con intensidad localizada
+    const selectedInjuries = [];
+    const injuryIntensities = {};
+    let hasAguda = false;
+    let hasModerada = false;
+
+    document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]:checked').forEach(cb => {
+        const k = cb.value;
+        selectedInjuries.push(k);
+        const activeBtn = document.querySelector(`.intensity-btn[data-injury="${k}"].active`);
+        const lvl = activeBtn ? activeBtn.getAttribute('data-level') : 'moderada';
+        injuryIntensities[k] = lvl;
+        if (lvl === 'aguda') hasAguda = true;
+        if (lvl === 'moderada') hasModerada = true;
+    });
+
+    // Medidas con cinta métrica (Opcionales)
+    const tapeWaist = parseFloat(document.getElementById('diagTapeWaist')?.value) || null;
+    const tapeHip = parseFloat(document.getElementById('diagTapeHip')?.value) || null;
+    const tapeArm = parseFloat(document.getElementById('diagTapeArm')?.value) || null;
+    const tapeThigh = parseFloat(document.getElementById('diagTapeThigh')?.value) || null;
 
     // Contexto deportivo
     const experience = document.querySelector('input[name="diagExperience"]:checked')?.value || 'intermediate';
@@ -1320,10 +1349,9 @@ async function processDiagnosisSubmission() {
     const mobShoulder = isMobilitySkipped ? 'skipped' : (document.querySelector('input[name="diagMobShoulder"]:checked')?.value || 'ok');
     const mobPosterior = isMobilitySkipped ? 'skipped' : (document.querySelector('input[name="diagMobPosterior"]:checked')?.value || 'ok');
 
-    // Fotos posturales
+    // Fotos posturales (Frontal y Perfil)
     const frontPhoto = document.getElementById('previewImgFront')?.src || null;
     const sidePhoto = document.getElementById('previewImgSide')?.src || null;
-    const backPhoto = document.getElementById('previewImgBack')?.src || null;
 
     // =========================================================================
     // ALGORITMO VIP SCORE (PRD Sección 4)
@@ -1331,8 +1359,10 @@ async function processDiagnosisSubmission() {
     // =========================================================================
     let c_clinica = 0;
     c_clinica += positiveParqCount * 4;
-    if (selectedInjuries.length > 0 && evaScore >= 6) {
-        c_clinica += selectedInjuries.length * 3;
+    if (selectedInjuries.length > 0) {
+        c_clinica += selectedInjuries.length * 2;
+        if (hasAguda) c_clinica += 3;
+        else if (hasModerada) c_clinica += 1.5;
     }
     if (mobShoulder === 'pain' || mobPosterior === 'pain') {
         c_clinica += 2;
@@ -1363,31 +1393,20 @@ async function processDiagnosisSubmission() {
     if (neatLevel === 'sedentary') calculatedStepTarget = 7000;
     else if (neatLevel === 'active') calculatedStepTarget = 10000;
 
-    // Actualizar UI del Paso 8
+    // Actualizar UI del Paso 8 (Objetivos Basales)
     const habitWaterEl = document.getElementById('diagHabitWater');
     const habitStepsEl = document.getElementById('diagHabitSteps');
     const habitNeatDesc = document.getElementById('diagHabitNeatDesc');
-    const habitTierEl = document.getElementById('diagHabitTier');
-    const habitTierSub = document.getElementById('diagHabitTierSub');
 
     if (habitWaterEl) habitWaterEl.textContent = `${calculatedWaterLiters} L / día`;
     if (habitStepsEl) habitStepsEl.textContent = `${calculatedStepTarget.toLocaleString()} pasos`;
     if (habitNeatDesc) {
         habitNeatDesc.textContent = neatLevel === 'sedentary'
             ? 'Objetivo adaptado para compensar horas de oficina'
-            : 'Calibrado según tu dinamismo laboral diario';
+            : 'Calibrado según tu dinamismo diario';
     }
 
-    if (habitTierEl) {
-        habitTierEl.textContent = isVipCandidate ? 'Atención Prioritaria Recomendada' : 'Expediente Biomecánico Activo';
-    }
-    if (habitTierSub) {
-        habitTierSub.textContent = isVipCandidate
-            ? `Score VIP: ${vipScore} / 10 • Canal prioritario sugerido`
-            : `Score: ${vipScore} / 10 • Programación adaptativa activa`;
-    }
-
-    // Iniciar temporizador regresivo de 24 horas
+    // Iniciar temporizador de compromiso SENS (24 horas)
     startDiagnosisCountdown(24 * 3600);
 
     // =========================================================================
@@ -1416,7 +1435,13 @@ async function processDiagnosisSubmission() {
         has_medical_flags: hasMedicalFlags,
         parq_notes: parqNotes,
         active_injuries: selectedInjuries,
-        eva_score: evaScore,
+        injury_intensities: injuryIntensities,
+        tape_measurements: {
+            waist: tapeWaist,
+            hip: tapeHip,
+            arm: tapeArm,
+            thigh: tapeThigh
+        },
         experience_level: experience,
         weekly_frequency: weeklyFrequency,
         available_equipment: availableEquipment,
@@ -1428,8 +1453,7 @@ async function processDiagnosisSubmission() {
         mobility_tests: { shoulder: mobShoulder, posterior: mobPosterior },
         photos: {
             front: frontPhoto && frontPhoto.startsWith('data:') ? 'uploaded_local' : frontPhoto,
-            side: sidePhoto && sidePhoto.startsWith('data:') ? 'uploaded_local' : sidePhoto,
-            back: backPhoto && backPhoto.startsWith('data:') ? 'uploaded_local' : backPhoto
+            side: sidePhoto && sidePhoto.startsWith('data:') ? 'uploaded_local' : sidePhoto
         },
         daily_step_target: calculatedStepTarget,
         is_draft: false,
@@ -1482,14 +1506,25 @@ function startDiagnosisCountdown(totalSeconds) {
 // Guardar borrador en tiempo real
 function saveDiagnosisDraft() {
     try {
+        const injuriesDraft = [];
+        document.querySelectorAll('#injuriesPillGrid input[name="diagInjuries"]:checked').forEach(cb => {
+            const k = cb.value;
+            const actBtn = document.querySelector(`.intensity-btn[data-injury="${k}"].active`);
+            injuriesDraft.push({ key: k, level: actBtn ? actBtn.getAttribute('data-level') : 'moderada' });
+        });
+
         const draft = {
             step: AppState.diagnosisCurrentStep || 0,
             fullName: document.getElementById('diagFullName')?.value || '',
             age: document.getElementById('diagAge')?.value || '',
             weight: document.getElementById('diagWeight')?.value || '',
             height: document.getElementById('diagHeight')?.value || '',
+            tapeWaist: document.getElementById('diagTapeWaist')?.value || '',
+            tapeHip: document.getElementById('diagTapeHip')?.value || '',
+            tapeArm: document.getElementById('diagTapeArm')?.value || '',
+            tapeThigh: document.getElementById('diagTapeThigh')?.value || '',
+            injuries: injuriesDraft,
             frequency: document.getElementById('diagFreqSlider')?.value || '3',
-            eva: document.getElementById('diagEvaSlider')?.value || '5',
             sleep: document.getElementById('diagSleepSlider')?.value || '7',
             stress: document.getElementById('diagStressSlider')?.value || '6',
             mobilitySkipped: AppState.diagnosisDraft?.mobilitySkipped || false,
@@ -1509,15 +1544,44 @@ function restoreDiagnosisDraft() {
         if (!raw) return false;
         const draft = JSON.parse(raw);
         AppState.diagnosisDraft = draft;
-        if (draft.fullName) document.getElementById('diagFullName').value = draft.fullName;
-        if (draft.age) document.getElementById('diagAge').value = draft.age;
-        if (draft.weight) document.getElementById('diagWeight').value = draft.weight;
-        if (draft.height) document.getElementById('diagHeight').value = draft.height;
+
+        if (draft.fullName && document.getElementById('diagFullName')) document.getElementById('diagFullName').value = draft.fullName;
+        if (draft.age && document.getElementById('diagAge')) document.getElementById('diagAge').value = draft.age;
+        if (draft.weight && document.getElementById('diagWeight')) document.getElementById('diagWeight').value = draft.weight;
+        if (draft.height && document.getElementById('diagHeight')) document.getElementById('diagHeight').value = draft.height;
+
+        if (draft.tapeWaist && document.getElementById('diagTapeWaist')) document.getElementById('diagTapeWaist').value = draft.tapeWaist;
+        if (draft.tapeHip && document.getElementById('diagTapeHip')) document.getElementById('diagTapeHip').value = draft.tapeHip;
+        if (draft.tapeArm && document.getElementById('diagTapeArm')) document.getElementById('diagTapeArm').value = draft.tapeArm;
+        if (draft.tapeThigh && document.getElementById('diagTapeThigh')) document.getElementById('diagTapeThigh').value = draft.tapeThigh;
+
+        if (Array.isArray(draft.injuries)) {
+            draft.injuries.forEach(item => {
+                const cb = document.querySelector(`#injuriesPillGrid input[name="diagInjuries"][value="${item.key}"]`);
+                if (cb) {
+                    cb.checked = true;
+                    const row = document.getElementById(`intensity_${item.key}`);
+                    if (row) row.style.display = 'flex';
+                    if (item.level) {
+                        const btn = document.querySelector(`.intensity-btn[data-injury="${item.key}"][data-level="${item.level}"]`);
+                        if (btn) {
+                            const group = btn.closest('.intensity-pill-group');
+                            if (group) group.querySelectorAll('.intensity-btn').forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                        }
+                    }
+                }
+            });
+        }
+
         if (draft.frequency) {
             const freqSlider = document.getElementById('diagFreqSlider');
             const freqDisplay = document.getElementById('diagFreqDisplay');
             if (freqSlider) freqSlider.value = draft.frequency;
             if (freqDisplay) freqDisplay.textContent = `${draft.frequency} días por semana`;
+            document.querySelectorAll('.scale-tick').forEach(tick => {
+                tick.classList.toggle('active', parseInt(tick.getAttribute('data-val'), 10) === parseInt(draft.frequency, 10));
+            });
         }
         return true;
     } catch (e) {
@@ -1543,6 +1607,21 @@ function prefillDiagnosisForm() {
         document.getElementById('diagHeight').value = p.height;
     }
 
+    if (a.tape_measurements) {
+        if (a.tape_measurements.waist && document.getElementById('diagTapeWaist')) {
+            document.getElementById('diagTapeWaist').value = a.tape_measurements.waist;
+        }
+        if (a.tape_measurements.hip && document.getElementById('diagTapeHip')) {
+            document.getElementById('diagTapeHip').value = a.tape_measurements.hip;
+        }
+        if (a.tape_measurements.arm && document.getElementById('diagTapeArm')) {
+            document.getElementById('diagTapeArm').value = a.tape_measurements.arm;
+        }
+        if (a.tape_measurements.thigh && document.getElementById('diagTapeThigh')) {
+            document.getElementById('diagTapeThigh').value = a.tape_measurements.thigh;
+        }
+    }
+
     const consentCheck = document.getElementById('diagConsentCheck');
     const btnStart = document.getElementById('btnStartDiag');
     if (consentCheck) consentCheck.checked = true;
@@ -1554,6 +1633,11 @@ function prefillDiagnosisForm() {
             if (toggle) {
                 const isPos = a.parq_responses[qKey] === 'si';
                 toggle.checked = isPos;
+                const statusTag = document.getElementById(`status_${qKey}`);
+                if (statusTag) {
+                    statusTag.textContent = isPos ? 'SÍ' : 'NO';
+                    statusTag.classList.toggle('is-yes', isPos);
+                }
                 const detailEl = document.getElementById(`detail_${qKey}`);
                 const item = toggle.closest('.health-switch-item');
                 if (detailEl) detailEl.style.display = isPos ? 'block' : 'none';
@@ -1567,20 +1651,18 @@ function prefillDiagnosisForm() {
             const cb = document.querySelector(`#injuriesPillGrid input[name="diagInjuries"][value="${inj}"]`);
             if (cb) {
                 cb.checked = true;
-                const pill = cb.closest('.pill-card');
-                if (pill) pill.classList.add('selected');
+                const row = document.getElementById(`intensity_${inj}`);
+                if (row) row.style.display = 'flex';
+                if (a.injury_intensities && a.injury_intensities[inj]) {
+                    const btn = document.querySelector(`.intensity-btn[data-injury="${inj}"][data-level="${a.injury_intensities[inj]}"]`);
+                    if (btn) {
+                        const group = btn.closest('.intensity-pill-group');
+                        if (group) group.querySelectorAll('.intensity-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                    }
+                }
             }
         });
-        if (a.active_injuries.length > 0) {
-            const evaBox = document.getElementById('diagEvaBox');
-            if (evaBox) evaBox.style.display = 'block';
-            if (a.eva_score) {
-                const slider = document.getElementById('diagEvaSlider');
-                const valEl = document.getElementById('diagEvaVal');
-                if (slider) slider.value = a.eva_score;
-                if (valEl) valEl.textContent = `${a.eva_score} / 10`;
-            }
-        }
     }
 
     if (a.weekly_frequency) {

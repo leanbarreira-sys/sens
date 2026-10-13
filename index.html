@@ -842,7 +842,11 @@
                                 </p>
 
                                 <div class="legal-notice-box">
-                                    <div class="legal-icon">⚖️</div>
+                                    <div class="legal-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                        </svg>
+                                    </div>
                                     <div class="legal-text">
                                         <strong>Ley Nacional 25.326 de Protección de Datos Personales.</strong><br>
                                         Para diseñar tu plan de fuerza y movilidad, analizaremos tu contexto clínico y métricas biométricas. Tus datos están estrictamente encriptados, son confidenciales y solo serán auditados por Nico para tu prescripción personalizada.
@@ -874,7 +878,7 @@
                                 <div class="step-tag-pill">Paso 1 de 7 • Cuestionario de Salud</div>
                                 <h2 class="step-title">Cuestionario de <strong>Salud</strong></h2>
                                 <p class="step-desc">
-                                    Preguntas breves para conocer tu estado general antes de entrenar.
+                                    Preguntas breves para conocer tu estado general antes de entrenar. Si no aplica, dejalas en NO.
                                 </p>
 
                                 <div class="health-switch-list">
@@ -884,10 +888,13 @@
                                             <label class="health-switch-label" for="switch_parq_heart">
                                                 ¿Alguna vez un médico te diagnosticó hipertensión o una afección cardiovascular?
                                             </label>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="switch_parq_heart" class="health-toggle-input" data-q="parq_heart">
-                                                <span class="toggle-slider"></span>
-                                            </label>
+                                            <div class="switch-control-wrap">
+                                                <span class="switch-status-tag" id="status_parq_heart">NO</span>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="switch_parq_heart" class="health-toggle-input" data-q="parq_heart">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_heart" style="display: none;">
                                             <input type="text" class="input-control health-detail-input" data-for="parq_heart" placeholder="¿Podés detallar brevemente? (opcional)">
@@ -900,10 +907,13 @@
                                             <label class="health-switch-label" for="switch_parq_chest">
                                                 ¿Sentís dolor o presión en el pecho al realizar esfuerzo o en momentos de reposo?
                                             </label>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="switch_parq_chest" class="health-toggle-input" data-q="parq_chest">
-                                                <span class="toggle-slider"></span>
-                                            </label>
+                                            <div class="switch-control-wrap">
+                                                <span class="switch-status-tag" id="status_parq_chest">NO</span>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="switch_parq_chest" class="health-toggle-input" data-q="parq_chest">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_chest" style="display: none;">
                                             <input type="text" class="input-control health-detail-input" data-for="parq_chest" placeholder="¿Podés detallar brevemente? (opcional)">
@@ -916,10 +926,13 @@
                                             <label class="health-switch-label" for="switch_parq_balance">
                                                 ¿Has tenido mareos frecuentes, pérdida de equilibrio o desmayos en el último año?
                                             </label>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="switch_parq_balance" class="health-toggle-input" data-q="parq_balance">
-                                                <span class="toggle-slider"></span>
-                                            </label>
+                                            <div class="switch-control-wrap">
+                                                <span class="switch-status-tag" id="status_parq_balance">NO</span>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="switch_parq_balance" class="health-toggle-input" data-q="parq_balance">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_balance" style="display: none;">
                                             <input type="text" class="input-control health-detail-input" data-for="parq_balance" placeholder="¿Podés detallar brevemente? (opcional)">
@@ -932,10 +945,13 @@
                                             <label class="health-switch-label" for="switch_parq_meds">
                                                 ¿Tomás medicación recetada para la presión arterial o el corazón?
                                             </label>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="switch_parq_meds" class="health-toggle-input" data-q="parq_meds">
-                                                <span class="toggle-slider"></span>
-                                            </label>
+                                            <div class="switch-control-wrap">
+                                                <span class="switch-status-tag" id="status_parq_meds">NO</span>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="switch_parq_meds" class="health-toggle-input" data-q="parq_meds">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_meds" style="display: none;">
                                             <input type="text" class="input-control health-detail-input" data-for="parq_meds" placeholder="¿Podés detallar brevemente? (opcional)">
@@ -948,10 +964,13 @@
                                             <label class="health-switch-label" for="switch_parq_other">
                                                 ¿Tenés algún otro motivo médico por el que no debas realizar ejercicio físico?
                                             </label>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="switch_parq_other" class="health-toggle-input" data-q="parq_other">
-                                                <span class="toggle-slider"></span>
-                                            </label>
+                                            <div class="switch-control-wrap">
+                                                <span class="switch-status-tag" id="status_parq_other">NO</span>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="switch_parq_other" class="health-toggle-input" data-q="parq_other">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="health-switch-detail" id="detail_parq_other" style="display: none;">
                                             <input type="text" class="input-control health-detail-input" data-for="parq_other" placeholder="¿Podés detallar brevemente? (opcional)">
@@ -975,56 +994,139 @@
                                     Seleccioná las zonas con molestias activas o cirugías para adaptar ejercicios y proteger tu espalda.
                                 </p>
 
-                                <div class="pill-grid" id="injuriesPillGrid">
-                                    <label class="pill-card" data-injury="lumbar">
-                                        <input type="checkbox" name="diagInjuries" value="lumbar">
-                                        <div class="custom-box">
-                                            <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div class="injuries-list-container" id="injuriesPillGrid">
+                                    <!-- Lumbar -->
+                                    <div class="injury-card-wrapper" data-injury="lumbar">
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagInjuries" value="lumbar">
+                                            <div class="custom-box">
+                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </div>
+                                            <span>Lumbar / Espalda Baja</span>
+                                        </label>
+                                        <div class="injury-intensity-row" id="intensity_lumbar" style="display: none;">
+                                            <span class="intensity-label">Intensidad en esta zona:</span>
+                                            <div class="intensity-pill-group">
+                                                <button type="button" class="intensity-btn" data-injury="lumbar" data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="lumbar" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="lumbar" data-level="aguda">Aguda</button>
+                                            </div>
                                         </div>
-                                        <span>Lumbar / Espalda Baja</span>
-                                    </label>
-                                    <label class="pill-card" data-injury="cervical">
-                                        <input type="checkbox" name="diagInjuries" value="cervical">
-                                        <div class="custom-box">
-                                            <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </div>
+
+                                    <!-- Cervical -->
+                                    <div class="injury-card-wrapper" data-injury="cervical">
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagInjuries" value="cervical">
+                                            <div class="custom-box">
+                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </div>
+                                            <span>Cervical / Cuello</span>
+                                        </label>
+                                        <div class="injury-intensity-row" id="intensity_cervical" style="display: none;">
+                                            <span class="intensity-label">Intensidad en esta zona:</span>
+                                            <div class="intensity-pill-group">
+                                                <button type="button" class="intensity-btn" data-injury="cervical" data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="cervical" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="cervical" data-level="aguda">Aguda</button>
+                                            </div>
                                         </div>
-                                        <span>Cervical / Cuello</span>
-                                    </label>
-                                    <label class="pill-card" data-injury="hombros">
-                                        <input type="checkbox" name="diagInjuries" value="hombros">
-                                        <div class="custom-box">
-                                            <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </div>
+
+                                    <!-- Hombros -->
+                                    <div class="injury-card-wrapper" data-injury="hombros">
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagInjuries" value="hombros">
+                                            <div class="custom-box">
+                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </div>
+                                            <span>Hombros / Manguito</span>
+                                        </label>
+                                        <div class="injury-intensity-row" id="intensity_hombros" style="display: none;">
+                                            <span class="intensity-label">Intensidad en esta zona:</span>
+                                            <div class="intensity-pill-group">
+                                                <button type="button" class="intensity-btn" data-injury="hombros" data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="hombros" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="hombros" data-level="aguda">Aguda</button>
+                                            </div>
                                         </div>
-                                        <span>Hombros / Manguito</span>
-                                    </label>
-                                    <label class="pill-card" data-injury="rodillas">
-                                        <input type="checkbox" name="diagInjuries" value="rodillas">
-                                        <div class="custom-box">
-                                            <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </div>
+
+                                    <!-- Rodillas -->
+                                    <div class="injury-card-wrapper" data-injury="rodillas">
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagInjuries" value="rodillas">
+                                            <div class="custom-box">
+                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </div>
+                                            <span>Rodillas / Meniscos</span>
+                                        </label>
+                                        <div class="injury-intensity-row" id="intensity_rodillas" style="display: none;">
+                                            <span class="intensity-label">Intensidad en esta zona:</span>
+                                            <div class="intensity-pill-group">
+                                                <button type="button" class="intensity-btn" data-injury="rodillas" data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="rodillas" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="rodillas" data-level="aguda">Aguda</button>
+                                            </div>
                                         </div>
-                                        <span>Rodillas / Meniscos</span>
-                                    </label>
-                                    <label class="pill-card" data-injury="caderas">
-                                        <input type="checkbox" name="diagInjuries" value="caderas">
-                                        <div class="custom-box">
-                                            <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </div>
+
+                                    <!-- Caderas -->
+                                    <div class="injury-card-wrapper" data-injury="caderas">
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagInjuries" value="caderas">
+                                            <div class="custom-box">
+                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </div>
+                                            <span>Caderas / Pubalgia</span>
+                                        </label>
+                                        <div class="injury-intensity-row" id="intensity_caderas" style="display: none;">
+                                            <span class="intensity-label">Intensidad en esta zona:</span>
+                                            <div class="intensity-pill-group">
+                                                <button type="button" class="intensity-btn" data-injury="caderas" data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="caderas" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="caderas" data-level="aguda">Aguda</button>
+                                            </div>
                                         </div>
-                                        <span>Caderas / Pubalgia</span>
-                                    </label>
-                                    <label class="pill-card" data-injury="tobillos">
-                                        <input type="checkbox" name="diagInjuries" value="tobillos">
-                                        <div class="custom-box">
-                                            <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </div>
+
+                                    <!-- Tobillos -->
+                                    <div class="injury-card-wrapper" data-injury="tobillos">
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagInjuries" value="tobillos">
+                                            <div class="custom-box">
+                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </div>
+                                            <span>Tobillos / Tendón Aquiles</span>
+                                        </label>
+                                        <div class="injury-intensity-row" id="intensity_tobillos" style="display: none;">
+                                            <span class="intensity-label">Intensidad en esta zona:</span>
+                                            <div class="intensity-pill-group">
+                                                <button type="button" class="intensity-btn" data-injury="tobillos" data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="tobillos" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="tobillos" data-level="aguda">Aguda</button>
+                                            </div>
                                         </div>
-                                        <span>Tobillos / Tendón Aquiles</span>
-                                    </label>
-                                    <label class="pill-card" data-injury="cirugia">
-                                        <input type="checkbox" name="diagInjuries" value="cirugia">
-                                        <div class="custom-box">
-                                            <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </div>
+
+                                    <!-- Cirugía -->
+                                    <div class="injury-card-wrapper" data-injury="cirugia">
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagInjuries" value="cirugia">
+                                            <div class="custom-box">
+                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </div>
+                                            <span>Cirugía en últimos 12 meses</span>
+                                        </label>
+                                        <div class="injury-intensity-row" id="intensity_cirugia" style="display: none;">
+                                            <span class="intensity-label">Intensidad en esta zona:</span>
+                                            <div class="intensity-pill-group">
+                                                <button type="button" class="intensity-btn" data-injury="cirugia" data-level="leve">Leve</button>
+                                                <button type="button" class="intensity-btn active" data-injury="cirugia" data-level="moderada">Moderada</button>
+                                                <button type="button" class="intensity-btn" data-injury="cirugia" data-level="aguda">Aguda</button>
+                                            </div>
                                         </div>
-                                        <span>Cirugía en últimos 12 meses</span>
-                                    </label>
+                                    </div>
                                 </div>
 
                                 <label class="touch-card" id="noInjuriesCard" style="margin-top: 14px;">
@@ -1037,20 +1139,6 @@
                                         <span class="card-sub">Me muevo sin molestias articulares significativas.</span>
                                     </div>
                                 </label>
-
-                                <!-- Escala EVA (Escala Visual Analógica 1 a 10) -->
-                                <div class="eva-slider-box" id="diagEvaBox" style="display: none;">
-                                    <div class="eva-header">
-                                        <label class="input-label">Intensidad Máxima Percibida de Dolor (EVA 1 al 10)</label>
-                                        <div class="eva-badge" id="diagEvaVal">5 / 10</div>
-                                    </div>
-                                    <input type="range" min="1" max="10" value="5" class="range-slider" id="diagEvaSlider">
-                                    <div class="eva-legend">
-                                        <span>1 = Molestia leve</span>
-                                        <span>5 = Molesto al entrenar</span>
-                                        <span>10 = Agudo e invalidante</span>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="wizard-footer-actions">
@@ -1414,18 +1502,18 @@
                                     </div>
                                 </div>
 
-                                <!-- Registro Fotográfico Postural (Frontal, Lateral, Posterior) -->
+                                <!-- Registro Fotográfico Postural (Frontal y Perfil - Opcionales) -->
                                 <div class="photo-eval-section">
                                     <div class="photo-eval-header">
                                         <div>
                                             <h4 style="font-size: 1rem; font-weight: 600; color: var(--text-primary);">Evaluación Fotográfica Postural (Opcional)</h4>
                                             <span style="font-size: 12px; color: var(--text-muted);">
-                                                Permite a Nico evaluar inclinación pélvica, rotación escapular y apoyos. Encriptadas bajo Ley 25.326.
+                                                Permite a Nico evaluar alineación corporal, apoyos e inclinaciones. Encriptadas bajo Ley 25.326.
                                             </span>
                                         </div>
                                     </div>
 
-                                    <div class="photo-cards-grid">
+                                    <div class="photo-cards-grid photo-two-cols">
                                         <!-- Plano Frontal -->
                                         <div class="photo-box" id="boxPhotoFront">
                                             <div class="photo-preview-placeholder">
@@ -1433,7 +1521,7 @@
                                                     <circle cx="50" cy="30" r="16" stroke="rgba(229, 203, 167, 0.4)" stroke-width="2"/>
                                                     <path d="M25 65 C25 50, 75 50, 75 65 L70 120 L62 190 M30 120 L38 190" stroke="rgba(229, 203, 167, 0.3)" stroke-width="2"/>
                                                 </svg>
-                                                <span class="photo-label">Plano Frontal</span>
+                                                <span class="photo-label">Plano Frontal (Opcional)</span>
                                             </div>
                                             <img class="photo-preview-img" id="previewImgFront" style="display: none;" alt="Foto Frontal">
                                             <input type="file" id="filePhotoFront" accept="image/*" capture="environment" style="display: none;">
@@ -1442,14 +1530,14 @@
                                             </button>
                                         </div>
 
-                                        <!-- Plano Lateral -->
+                                        <!-- Plano Perfil / Lateral -->
                                         <div class="photo-box" id="boxPhotoSide">
                                             <div class="photo-preview-placeholder">
                                                 <svg class="silhouette-svg" viewBox="0 0 100 200" fill="none">
                                                     <circle cx="50" cy="30" r="16" stroke="rgba(229, 203, 167, 0.4)" stroke-width="2"/>
                                                     <path d="M45 65 C40 85, 60 110, 50 140 L50 190" stroke="rgba(229, 203, 167, 0.3)" stroke-width="2"/>
                                                 </svg>
-                                                <span class="photo-label">Plano Lateral</span>
+                                                <span class="photo-label">Plano Perfil (Opcional)</span>
                                             </div>
                                             <img class="photo-preview-img" id="previewImgSide" style="display: none;" alt="Foto Lateral">
                                             <input type="file" id="filePhotoSide" accept="image/*" capture="environment" style="display: none;">
@@ -1457,25 +1545,72 @@
                                                 Subir / Tomar
                                             </button>
                                         </div>
-
-                                        <!-- Plano Posterior -->
-                                        <div class="photo-box" id="boxPhotoBack">
-                                            <div class="photo-preview-placeholder">
-                                                <svg class="silhouette-svg" viewBox="0 0 100 200" fill="none">
-                                                    <circle cx="50" cy="30" r="16" stroke="rgba(229, 203, 167, 0.4)" stroke-width="2"/>
-                                                    <path d="M25 65 C25 50, 75 50, 75 65 L70 120 L62 190 M30 120 L38 190" stroke="rgba(229, 203, 167, 0.3)" stroke-width="2"/>
-                                                </svg>
-                                                <span class="photo-label">Plano Posterior</span>
-                                            </div>
-                                            <img class="photo-preview-img" id="previewImgBack" style="display: none;" alt="Foto Posterior">
-                                            <input type="file" id="filePhotoBack" accept="image/*" capture="environment" style="display: none;">
-                                            <button type="button" class="btn btn-outline btn-sm photo-upload-btn" onclick="document.getElementById('filePhotoBack').click()">
-                                                Subir / Tomar
-                                            </button>
-                                        </div>
                                     </div>
                                     <div class="photo-peace-of-mind">
-                                        💡 <em>Podés completar tus fotos ahora o dejarlas para más adelante desde la sección de datos.</em>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                        <em>Podés adjuntar tus fotos ahora o dejarlas para más adelante desde tu perfil.</em>
+                                    </div>
+                                </div>
+
+                                <!-- Medidas Corporales con Cinta Métrica (Opcional) -->
+                                <div class="tape-measurements-section">
+                                    <div class="tape-header">
+                                        <div class="tape-header-content">
+                                            <h4 style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Medidas con Cinta Métrica (Opcional)</h4>
+                                            <span style="font-size: 12px; color: var(--text-muted);">
+                                                Referencias anatómicas para monitorear tu progreso real sin depender solo de la balanza.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="tape-grid">
+                                        <!-- Cintura -->
+                                        <div class="tape-input-card">
+                                            <div class="tape-card-info">
+                                                <label class="tape-card-label" for="diagTapeWaist">Cintura</label>
+                                                <span class="tape-card-guide">A la altura del ombligo, relajando el abdomen sin meter la panza.</span>
+                                            </div>
+                                            <div class="tape-card-input-wrap">
+                                                <input type="number" step="0.5" id="diagTapeWaist" class="tape-input-control" placeholder="Ej: 84">
+                                                <span class="tape-unit">cm</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cadera -->
+                                        <div class="tape-input-card">
+                                            <div class="tape-card-info">
+                                                <label class="tape-card-label" for="diagTapeHip">Cadera</label>
+                                                <span class="tape-card-guide">En la zona de mayor contorno de los glúteos, pies juntos.</span>
+                                            </div>
+                                            <div class="tape-card-input-wrap">
+                                                <input type="number" step="0.5" id="diagTapeHip" class="tape-input-control" placeholder="Ej: 98">
+                                                <span class="tape-unit">cm</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Brazo relajado -->
+                                        <div class="tape-input-card">
+                                            <div class="tape-card-info">
+                                                <label class="tape-card-label" for="diagTapeArm">Brazo relajado</label>
+                                                <span class="tape-card-guide">En el punto medio entre hombro y codo, con el brazo suelto al costado.</span>
+                                            </div>
+                                            <div class="tape-card-input-wrap">
+                                                <input type="number" step="0.5" id="diagTapeArm" class="tape-input-control" placeholder="Ej: 32">
+                                                <span class="tape-unit">cm</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Muslo medio -->
+                                        <div class="tape-input-card">
+                                            <div class="tape-card-info">
+                                                <label class="tape-card-label" for="diagTapeThigh">Muslo medio</label>
+                                                <span class="tape-card-guide">En el punto medio entre el pliegue de la ingle y la parte superior de la rodilla.</span>
+                                            </div>
+                                            <div class="tape-card-input-wrap">
+                                                <input type="number" step="0.5" id="diagTapeThigh" class="tape-input-control" placeholder="Ej: 56">
+                                                <span class="tape-unit">cm</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1486,25 +1621,30 @@
                             </div>
                         </div>
 
-                        <!-- PASO 8: CONGRATS PAGE & TIME-TO-VALUE (ENTREGA INMEDIATA DE VALOR) -->
+                        <!-- PASO 8: EXPEDIENTE COMPLETADO (EXPERIENCIA PREMIUM SENS) -->
                         <div class="wizard-step-card" id="diagStep8">
                             <div class="step-content-body" style="text-align: center;">
                                 <div class="congrats-icon-wrap">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
                                 </div>
 
-                                <div class="step-tag-pill" style="margin: 0 auto 12px;">¡Expediente Listo!</div>
+                                <div class="step-tag-pill" style="margin: 0 auto 12px;">Expediente Registrado</div>
                                 <h2 class="step-title" style="text-align: center;">Diagnóstico <strong>Completado</strong></h2>
                                 <p class="step-desc" style="text-align: center; max-width: 520px; margin: 0 auto 28px;">
-                                    Tu perfil biomecánico y clínico ha sido asegurado. Calculamos tus dos primeros micro-hábitos biológicos para que comiences hoy mismo:
+                                    Tus datos fueron asegurados con éxito. Para comenzar a construir constancia hoy mismo, estos son tus dos objetivos basales:
                                 </p>
 
-                                <!-- Grid de Time-to-Value (Micro-hábitos Basales) -->
-                                <div class="congrats-habits-grid">
+                                <!-- Grid de Objetivos Basales (Diseño Limpio, Iconos SVG Profesionales) -->
+                                <div class="congrats-habits-grid congrats-two-cols">
+                                    <!-- Hidratación -->
                                     <div class="habit-value-card">
-                                        <div class="habit-icon">💧</div>
+                                        <div class="habit-icon-svg">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                                            </svg>
+                                        </div>
                                         <div class="habit-content">
                                             <div class="habit-title">Meta de Hidratación</div>
                                             <div class="habit-metric" id="diagHabitWater">2.7 L / día</div>
@@ -1512,31 +1652,27 @@
                                         </div>
                                     </div>
 
+                                    <!-- Pasos -->
                                     <div class="habit-value-card">
-                                        <div class="habit-icon">🚶</div>
+                                        <div class="habit-icon-svg">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                            </svg>
+                                        </div>
                                         <div class="habit-content">
                                             <div class="habit-title">Meta Diaria de Pasos</div>
                                             <div class="habit-metric" id="diagHabitSteps">8.000 pasos</div>
-                                            <div class="habit-sub" id="diagHabitNeatDesc">Calibrado según tu nivel de actividad laboral</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="habit-value-card" id="diagTierCard">
-                                        <div class="habit-icon">🛡️</div>
-                                        <div class="habit-content">
-                                            <div class="habit-title">Expediente Asignado</div>
-                                            <div class="habit-metric" id="diagHabitTier">Nivel Personalizado</div>
-                                            <div class="habit-sub" id="diagHabitTierSub">Supervisión biomecánica estándar</div>
+                                            <div class="habit-sub" id="diagHabitNeatDesc">Calibrado según tu nivel de actividad diaria</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Temporizador regresivo de 24 horas -->
+                                <!-- Temporizador de Revisión de Nico -->
                                 <div class="countdown-audit-card">
-                                    <div class="countdown-badge">Compromiso SENS Train</div>
+                                    <div class="countdown-badge">Compromiso Personal SENS</div>
                                     <div class="countdown-timer-display" id="diagCountdownDisplay">23h 59m 59s</div>
                                     <p class="countdown-note">
-                                        Nico está auditando tu expediente para adaptar las cargas de tu primera semana y calibrar tus ejercicios prioritarios.
+                                        Nico ya recibió tus respuestas para confeccionar tu plan de entrenamiento adaptado a tu biomecánica. Te escribirá por WhatsApp en cuanto tu programación esté lista.
                                     </p>
                                 </div>
                             </div>
