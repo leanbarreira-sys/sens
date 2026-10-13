@@ -991,7 +991,7 @@
                                 <div class="step-tag-pill">Paso 2 de 7 • Mapa Articular</div>
                                 <h2 class="step-title">Topografía de <strong>Dolor &amp; Lesiones</strong></h2>
                                 <p class="step-desc">
-                                    Seleccioná las zonas con molestias activas o cirugías para adaptar ejercicios y proteger tu espalda.
+                                    Seleccioná las zonas con molestias activas para adaptar tu entrenamiento y proteger tus articulaciones y zonas vulnerables.
                                 </p>
 
                                 <div class="injuries-list-container" id="injuriesPillGrid">
@@ -1040,7 +1040,7 @@
                                             <div class="custom-box">
                                                 <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                             </div>
-                                            <span>Hombros / Manguito</span>
+                                            <span>Hombros / Manguito Rotador</span>
                                         </label>
                                         <div class="injury-intensity-row" id="intensity_hombros" style="display: none;">
                                             <span class="intensity-label">Intensidad en esta zona:</span>
@@ -1108,25 +1108,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Cirugía -->
-                                    <div class="injury-card-wrapper" data-injury="cirugia">
-                                        <label class="pill-card">
-                                            <input type="checkbox" name="diagInjuries" value="cirugia">
-                                            <div class="custom-box">
-                                                <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                            </div>
-                                            <span>Cirugía en últimos 12 meses</span>
-                                        </label>
-                                        <div class="injury-intensity-row" id="intensity_cirugia" style="display: none;">
-                                            <span class="intensity-label">Intensidad en esta zona:</span>
-                                            <div class="intensity-pill-group">
-                                                <button type="button" class="intensity-btn" data-injury="cirugia" data-level="leve">Leve</button>
-                                                <button type="button" class="intensity-btn active" data-injury="cirugia" data-level="moderada">Moderada</button>
-                                                <button type="button" class="intensity-btn" data-injury="cirugia" data-level="aguda">Aguda</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <label class="touch-card" id="noInjuriesCard" style="margin-top: 14px;">
@@ -1135,10 +1116,38 @@
                                         <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </div>
                                     <div class="card-content">
-                                        <strong>Sin dolores ni lesiones activas</strong>
-                                        <span class="card-sub">Me muevo sin molestias articulares significativas.</span>
+                                        <strong>Sin dolores ni molestias activas</strong>
+                                        <span class="card-sub">Me muevo sin molestias articulares significativas en la actualidad.</span>
                                     </div>
                                 </label>
+
+                                <!-- SECCIÓN B: CIRUGÍAS O INTERVENCIONES QUIRÚRGICAS -->
+                                <div class="surgery-section-block" style="margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
+                                    <label class="subblock-title" style="margin-bottom: 6px;">B. Cirugías o Intervenciones Quirúrgicas:</label>
+                                    <p class="step-desc" style="margin-bottom: 12px; font-size: 13px;">
+                                        Indicanos si pasaste por alguna cirugía para adaptar rangos articulares y cargas axiales.
+                                    </p>
+                                    <div class="health-switch-item" id="surgerySwitchItem">
+                                        <div class="health-switch-header">
+                                            <label class="health-switch-label" for="switchSurgeryCheck">
+                                                ¿Tuviste alguna intervención quirúrgica o cirugía previa?
+                                            </label>
+                                            <div class="switch-control-wrap">
+                                                <span class="switch-status-tag" id="status_surgery">NO</span>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="switchSurgeryCheck" class="health-toggle-input">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="health-switch-detail" id="detail_surgery" style="display: none; margin-top: 12px;">
+                                            <label class="input-label" for="diagSurgeryDetail" style="margin-bottom: 6px; font-size: 12.5px;">
+                                                ¿Cirugía de qué zona o procedimiento, y hace cuánto tiempo aprox.?
+                                            </label>
+                                            <input type="text" id="diagSurgeryDetail" class="input-control" placeholder="Ej: Meniscos rodilla izquierda (2022), Hernia discal L5 (2020)...">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="wizard-footer-actions">
@@ -1210,15 +1219,15 @@
                                 <div class="section-subblock">
                                     <label class="subblock-title">C. Equipamiento disponible (podés marcar varios):</label>
                                     <div class="pill-grid">
-                                        <label class="pill-card selected">
-                                            <input type="checkbox" name="diagEquipment" value="gym" checked>
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagEquipment" value="gym">
                                             <div class="custom-box">
                                                 <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                             </div>
                                             <span>Gimnasio Comercial Completo</span>
                                         </label>
-                                        <label class="pill-card selected">
-                                            <input type="checkbox" name="diagEquipment" value="dumbbells" checked>
+                                        <label class="pill-card">
+                                            <input type="checkbox" name="diagEquipment" value="dumbbells">
                                             <div class="custom-box">
                                                 <svg viewBox="0 0 12 10" fill="none"><path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                             </div>
@@ -1373,6 +1382,13 @@
                                             <span class="card-sub">No sé si estoy haciendo bien los movimientos ni con qué cargas progresar.</span>
                                         </div>
                                     </label>
+                                </div>
+
+                                <div class="form-group-sens" style="margin-top: 16px;">
+                                    <label class="input-label" for="diagHurdleDetail" style="margin-bottom: 6px;">
+                                        ¿Querés profundizar sobre tu obstáculo o experiencia previa? (Opcional)
+                                    </label>
+                                    <textarea id="diagHurdleDetail" class="input-control" rows="2" style="resize: vertical; min-height: 54px;" placeholder="Ej: Me cuesta sostener la constancia cuando viajo por trabajo..."></textarea>
                                 </div>
                             </div>
 
@@ -1744,37 +1760,6 @@
                                                 <div class="athlete-metrics-tag" id="diagAthleteGoalSubTag">Planificación Adaptativa</div>
                                                 <div class="athlete-status-badge target-badge">Calibración con Nico</div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Grid de Objetivos Basales (Diseño Limpio, Iconos SVG Profesionales) -->
-                                <div class="congrats-habits-grid congrats-two-cols">
-                                    <!-- Hidratación -->
-                                    <div class="habit-value-card">
-                                        <div class="habit-icon-svg">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-                                            </svg>
-                                        </div>
-                                        <div class="habit-content">
-                                            <div class="habit-title">Meta de Hidratación</div>
-                                            <div class="habit-metric" id="diagHabitWater">2.7 L / día</div>
-                                            <div class="habit-sub">Fórmula basal: 35 ml × tu peso corporal</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Pasos -->
-                                    <div class="habit-value-card">
-                                        <div class="habit-icon-svg">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                            </svg>
-                                        </div>
-                                        <div class="habit-content">
-                                            <div class="habit-title">Meta Diaria de Pasos</div>
-                                            <div class="habit-metric" id="diagHabitSteps">8.000 pasos</div>
-                                            <div class="habit-sub" id="diagHabitNeatDesc">Calibrado según tu dinamismo diario</div>
                                         </div>
                                     </div>
                                 </div>

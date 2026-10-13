@@ -733,6 +733,9 @@ function initPortalNavigation() {
             localStorage.removeItem('sens_active_user');
             AppState.user = null;
             AppState.profile = null;
+            document.body.classList.remove('in-portal');
+            const floatSocial = document.getElementById('homeFloatingSocial');
+            if (floatSocial) floatSocial.style.display = 'flex';
             document.getElementById('app-container').classList.remove('active');
             document.getElementById('publicLanding').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -741,6 +744,9 @@ function initPortalNavigation() {
 
     if (backLandingBtn) {
         backLandingBtn.addEventListener('click', () => {
+            document.body.classList.remove('in-portal');
+            const floatSocial = document.getElementById('homeFloatingSocial');
+            if (floatSocial) floatSocial.style.display = 'flex';
             document.getElementById('app-container').classList.remove('active');
             document.getElementById('publicLanding').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -788,6 +794,10 @@ function openUserPortal(forceOnboarding = false) {
     const portal = document.getElementById('app-container');
     const publicLanding = document.getElementById('publicLanding');
     const userEmailEl = document.getElementById('portalUserEmail');
+
+    document.body.classList.add('in-portal');
+    const floatSocial = document.getElementById('homeFloatingSocial');
+    if (floatSocial) floatSocial.style.display = 'none';
 
     portal.classList.add('active');
     publicLanding.style.display = 'none';
@@ -1024,6 +1034,30 @@ function initDiagnosisWizard() {
         });
     });
 
+    // Switch de Cirugías Previas (Paso 2)
+    const surgerySwitch = document.getElementById('switchSurgeryCheck');
+    const surgeryDetailBox = document.getElementById('detail_surgery');
+    const surgeryStatusTag = document.getElementById('status_surgery');
+    const surgeryInput = document.getElementById('diagSurgeryDetail');
+
+    if (surgerySwitch) {
+        surgerySwitch.addEventListener('change', () => {
+            const isChecked = surgerySwitch.checked;
+            if (surgeryStatusTag) {
+                surgeryStatusTag.textContent = isChecked ? 'SÍ' : 'NO';
+                surgeryStatusTag.classList.toggle('is-yes', isChecked);
+            }
+            if (surgeryDetailBox) {
+                surgeryDetailBox.style.display = isChecked ? 'block' : 'none';
+            }
+            saveDiagnosisDraft();
+        });
+    }
+
+    if (surgeryInput) {
+        surgeryInput.addEventListener('input', () => saveDiagnosisDraft());
+    }
+
     // 4. Contexto Deportivo (Paso 3)
     document.querySelectorAll('input[name="diagExperience"]').forEach(r => {
         r.addEventListener('change', () => saveDiagnosisDraft());
@@ -1062,9 +1096,15 @@ function initDiagnosisWizard() {
         });
     });
 
-    // Checkboxes de Equipamiento
+    // Checkboxes de Equipamiento (Paso 3)
     document.querySelectorAll('input[name="diagEquipment"]').forEach(cb => {
-        cb.addEventListener('change', () => saveDiagnosisDraft());
+        cb.addEventListener('change', () => {
+            const card = cb.closest('.pill-card');
+            if (card) {
+                card.classList.toggle('selected', cb.checked);
+            }
+            saveDiagnosisDraft();
+        });
     });
 
     // 5. Carga Alostática (Paso 4)
@@ -1103,6 +1143,10 @@ function initDiagnosisWizard() {
     document.querySelectorAll('input[name="diagHurdle"]').forEach(r => {
         r.addEventListener('change', () => saveDiagnosisDraft());
     });
+    const hurdleDetailInput = document.getElementById('diagHurdleDetail');
+    if (hurdleDetailInput) {
+        hurdleDetailInput.addEventListener('input', () => saveDiagnosisDraft());
+    }
 
     // 7. Pruebas de Movilidad (Paso 6) & Opción Omitir
     const skipMobilityBtn = document.getElementById('btnSkipMobility');
@@ -1370,8 +1414,13 @@ async function processDiagnosisSubmission() {
     const activeWaterBtn = document.querySelector('.water-btn.active');
     const waterBaseline = activeWaterBtn ? parseFloat(activeWaterBtn.getAttribute('data-water')) : 2.0;
 
-    // Obstáculo de adherencia
+    // Cirugías previas
+    const hasSurgery = Boolean(document.getElementById('switchSurgeryCheck')?.checked);
+    const surgeryDetail = document.getElementById('diagSurgeryDetail')?.value.trim() || '';
+
+    // Obstáculo de adherencia y detalle opcional
     const historicalHurdle = document.querySelector('input[name="diagHurdle"]:checked')?.value || 'time';
+    const hurdleDetail = document.getElementById('diagHurdleDetail')?.value.trim() || '';
 
     // Pruebas de movilidad
     const isMobilitySkipped = AppState.diagnosisDraft?.mobilitySkipped || false;
@@ -1392,6 +1441,9 @@ async function processDiagnosisSubmission() {
         c_clinica += selectedInjuries.length * 2;
         if (hasAguda) c_clinica += 3;
         else if (hasModerada) c_clinica += 1.5;
+    }
+    if (hasSurgery) {
+        c_clinica += 2;
     }
     if (mobShoulder === 'pain' || mobPosterior === 'pain') {
         c_clinica += 2;
@@ -1414,26 +1466,11 @@ async function processDiagnosisSubmission() {
 
     // =========================================================================
     // CÁLCULO DE MICRO-HÁBITOS BASALES (PRD Sección 5.4)
-    // Hidratación: 35 ml x peso(kg)
-    // Pasos: 7.000 u 8.000 / 10.000 según NEAT
     // =========================================================================
     const calculatedWaterLiters = (Math.round((weight * 0.035) * 10) / 10).toFixed(1);
     let calculatedStepTarget = 8000;
     if (neatLevel === 'sedentary') calculatedStepTarget = 7000;
     else if (neatLevel === 'active') calculatedStepTarget = 10000;
-
-    // Actualizar UI del Paso 8 (Objetivos Basales)
-    const habitWaterEl = document.getElementById('diagHabitWater');
-    const habitStepsEl = document.getElementById('diagHabitSteps');
-    const habitNeatDesc = document.getElementById('diagHabitNeatDesc');
-
-    if (habitWaterEl) habitWaterEl.textContent = `${calculatedWaterLiters} L / día`;
-    if (habitStepsEl) habitStepsEl.textContent = `${calculatedStepTarget.toLocaleString()} pasos`;
-    if (habitNeatDesc) {
-        habitNeatDesc.textContent = neatLevel === 'sedentary'
-            ? 'Objetivo adaptado para compensar horas de oficina'
-            : 'Calibrado según tu dinamismo diario';
-    }
 
     // Renderizar siluetas biométricas y objetivo personalizado SENS
     renderBiometricSilhouettes(gender, weight, height, goal, fullName);
@@ -1469,6 +1506,8 @@ async function processDiagnosisSubmission() {
         parq_notes: parqNotes,
         active_injuries: selectedInjuries,
         injury_intensities: injuryIntensities,
+        has_surgery: hasSurgery,
+        surgery_detail: surgeryDetail,
         tape_measurements: {
             waist: tapeWaist,
             hip: tapeHip,
@@ -1483,6 +1522,7 @@ async function processDiagnosisSubmission() {
         neat_level: neatLevel,
         water_liters_baseline: parseFloat(calculatedWaterLiters),
         historical_hurdle: historicalHurdle,
+        historical_hurdle_detail: hurdleDetail,
         mobility_tests: { shoulder: mobShoulder, posterior: mobPosterior },
         photos: {
             front: frontPhoto && frontPhoto.startsWith('data:') ? 'uploaded_local' : frontPhoto,
@@ -1699,6 +1739,11 @@ function saveDiagnosisDraft() {
             tapeArm: document.getElementById('diagTapeArm')?.value || '',
             tapeThigh: document.getElementById('diagTapeThigh')?.value || '',
             injuries: injuriesDraft,
+            hasSurgery: Boolean(document.getElementById('switchSurgeryCheck')?.checked),
+            surgeryDetail: document.getElementById('diagSurgeryDetail')?.value || '',
+            equipment: Array.from(document.querySelectorAll('input[name="diagEquipment"]:checked')).map(el => el.value),
+            hurdle: document.querySelector('input[name="diagHurdle"]:checked')?.value || 'time',
+            hurdleDetail: document.getElementById('diagHurdleDetail')?.value || '',
             frequency: document.getElementById('diagFreqSlider')?.value || '3',
             sleep: document.getElementById('diagSleepSlider')?.value || '7',
             stress: document.getElementById('diagStressSlider')?.value || '6',
@@ -1737,6 +1782,41 @@ function restoreDiagnosisDraft() {
         if (draft.tapeHip && document.getElementById('diagTapeHip')) document.getElementById('diagTapeHip').value = draft.tapeHip;
         if (draft.tapeArm && document.getElementById('diagTapeArm')) document.getElementById('diagTapeArm').value = draft.tapeArm;
         if (draft.tapeThigh && document.getElementById('diagTapeThigh')) document.getElementById('diagTapeThigh').value = draft.tapeThigh;
+
+        // Cirugía
+        if (typeof draft.hasSurgery === 'boolean') {
+            const surgSwitch = document.getElementById('switchSurgeryCheck');
+            const surgBox = document.getElementById('detail_surgery');
+            const surgTag = document.getElementById('status_surgery');
+            if (surgSwitch) surgSwitch.checked = draft.hasSurgery;
+            if (surgTag) {
+                surgTag.textContent = draft.hasSurgery ? 'SÍ' : 'NO';
+                surgTag.classList.toggle('is-yes', draft.hasSurgery);
+            }
+            if (surgBox) surgBox.style.display = draft.hasSurgery ? 'block' : 'none';
+        }
+        if (draft.surgeryDetail && document.getElementById('diagSurgeryDetail')) {
+            document.getElementById('diagSurgeryDetail').value = draft.surgeryDetail;
+        }
+
+        // Equipamiento
+        if (Array.isArray(draft.equipment)) {
+            document.querySelectorAll('input[name="diagEquipment"]').forEach(cb => {
+                const isChecked = draft.equipment.includes(cb.value);
+                cb.checked = isChecked;
+                const card = cb.closest('.pill-card');
+                if (card) card.classList.toggle('selected', isChecked);
+            });
+        }
+
+        // Obstáculo y Detalle
+        if (draft.hurdle) {
+            const hurdleRadio = document.querySelector(`input[name="diagHurdle"][value="${draft.hurdle}"]`);
+            if (hurdleRadio) hurdleRadio.checked = true;
+        }
+        if (draft.hurdleDetail && document.getElementById('diagHurdleDetail')) {
+            document.getElementById('diagHurdleDetail').value = draft.hurdleDetail;
+        }
 
         if (Array.isArray(draft.injuries)) {
             draft.injuries.forEach(item => {
@@ -1811,6 +1891,40 @@ function prefillDiagnosisForm() {
         if (a.tape_measurements.thigh && document.getElementById('diagTapeThigh')) {
             document.getElementById('diagTapeThigh').value = a.tape_measurements.thigh;
         }
+    }
+
+    // Cirugía
+    if (typeof a.has_surgery === 'boolean') {
+        const surgSwitch = document.getElementById('switchSurgeryCheck');
+        const surgBox = document.getElementById('detail_surgery');
+        const surgTag = document.getElementById('status_surgery');
+        if (surgSwitch) surgSwitch.checked = a.has_surgery;
+        if (surgTag) {
+            surgTag.textContent = a.has_surgery ? 'SÍ' : 'NO';
+            surgTag.classList.toggle('is-yes', a.has_surgery);
+        }
+        if (surgBox) surgBox.style.display = a.has_surgery ? 'block' : 'none';
+    }
+    if (a.surgery_detail && document.getElementById('diagSurgeryDetail')) {
+        document.getElementById('diagSurgeryDetail').value = a.surgery_detail;
+    }
+
+    // Obstáculo y Detalle
+    if (a.historical_hurdle) {
+        const hRadio = document.querySelector(`input[name="diagHurdle"][value="${a.historical_hurdle}"]`);
+        if (hRadio) hRadio.checked = true;
+    }
+    if (a.historical_hurdle_detail && document.getElementById('diagHurdleDetail')) {
+        document.getElementById('diagHurdleDetail').value = a.historical_hurdle_detail;
+    }
+
+    if (Array.isArray(a.available_equipment)) {
+        document.querySelectorAll('input[name="diagEquipment"]').forEach(cb => {
+            const isChecked = a.available_equipment.includes(cb.value);
+            cb.checked = isChecked;
+            const card = cb.closest('.pill-card');
+            if (card) card.classList.toggle('selected', isChecked);
+        });
     }
 
     const consentCheck = document.getElementById('diagConsentCheck');
