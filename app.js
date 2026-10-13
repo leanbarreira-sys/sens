@@ -1245,14 +1245,23 @@ function initAuthModal() {
             }
 
             AppState.user = data.user;
-            AppState.profile = { id: data.user.id, full_name: fullName, onboarding_completed: false };
+            AppState.profile = { 
+                id: data.user.id, 
+                full_name: fullName, 
+                subscription_status: 'pending_activation',
+                onboarding_completed: false 
+            };
         } else {
             AppState.user = { id: 'local-user-' + Date.now(), email };
-            AppState.profile = { full_name: fullName, onboarding_completed: false };
+            AppState.profile = { 
+                full_name: fullName, 
+                subscription_status: 'pending_activation',
+                onboarding_completed: false 
+            };
             localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
         }
 
-        showAuthAlert('¡Cuenta creada con éxito! Iniciando tu Evaluación Inicial...', 'success');
+        showAuthAlert('¡Cuenta creada con éxito! Ingresando a tu cuenta...', 'success');
         updateAuthNavButtons();
         setTimeout(() => {
             showAuthModal(false);
@@ -1543,7 +1552,8 @@ function openUserPortal(forceOnboarding = false) {
     // -------------------------------------------------------------------------
     // CONTROL DE MEMBRESÍA & PAGOS (MVP CON NICO / EG CON PASARELA DE PAGO)
     // -------------------------------------------------------------------------
-    const subStatus = profile.subscription_status || 'active';
+    // Todo nuevo usuario nace BLOQUEADO ('pending_activation') y requiere aprobación/check de Nico
+    const subStatus = profile.subscription_status || (isAdmin ? 'active' : 'pending_activation');
     const isSubActive = isAdmin || subStatus === 'active';
 
     if (!isSubActive) {
