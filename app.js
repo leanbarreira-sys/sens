@@ -46,11 +46,15 @@ const AppState = {
 function isCurrentUserAdmin() {
     const profile = AppState.profile || {};
     const user = AppState.user || {};
+    const email = (user.email || profile.email || '').toLowerCase();
     return Boolean(
         profile.user_type === 'admin' ||
         profile.role === 'admin' ||
         user.user_type === 'admin' ||
-        (user.user_metadata && user.user_metadata.role === 'admin')
+        (user.user_metadata && user.user_metadata.role === 'admin') ||
+        email === 'nico@sens.com' ||
+        email === 'nicomaralle@gmail.com' ||
+        email === 'lean.barreira@gmail.com'
     );
 }
 
@@ -627,14 +631,137 @@ function initLeadCapture() {
 // =============================================================================
 // GESTOR DE ROLES Y ATLETAS PARA PANEL DE COACH (NICO)
 // =============================================================================
-function initRoleSwitcher() {
+async function loadCoachAthletesList() {
     const roleSelector = document.getElementById('userRoleSelector');
     if (!roleSelector) return;
 
+    let dbAthletes = [];
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (!error && data) {
+                dbAthletes = data;
+            }
+        } catch (e) {
+            console.warn('Error al cargar atletas de Supabase para coach:', e);
+        }
+    }
+
+    window.__coachAthletesCache = dbAthletes;
+
+    let html = '';
+    if (dbAthletes.length > 0) {
+        html += '<optgroup label="📋 Alumnos Registrados (Supabase)">';
+        dbAthletes.forEach(ath => {
+            const isAct = (ath.subscription_status === 'active');
+            const statusPrefix = isAct ? '✓ ACTIVO' : '⚠️ PENDIENTE';
+            const name = ath.full_name || ath.email || (ath.id ? ath.id.slice(0, 8) : 'Atleta');
+            const plan = ath.active_plan_name || 'Plan SENS';
+            html += `<option value="db_${ath.id}">[${statusPrefix}] ${name} — ${plan}</option>`;
+        });
+        html += '</optgroup>';
+    }
+
+    html += '<optgroup label="🧪 Perfiles Demo / Mock">';
+    html += '<option value="client_presencial_vip">Roberto Gómez — Presencial 1 a 1 VIP (2x/sem CABA)</option>';
+    html += '<option value="client_presencial_group">Laura &amp; Marcos — Presencial Dúo (CABA)</option>';
+    html += '<option value="client_online_premium">Esteban Bianchi — Online Premium</option>';
+    html += '<option value="client_online_basic">Carla Méndez — Online Básico</option>';
+    html += '<option value="admin">Mi Perfil Coach (Nico)</option>';
+    html += '</optgroup>';
+
+    roleSelector.innerHTML = html;
+}
+
+function initRoleSwitcher() {
+    const roleSelector = document.getElementById('userRoleSelector');
+    const refreshBtn = document.getElementById('btnRefreshCoachAthletes');
+    if (!roleSelector) return;
+
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', async () => {
+            await loadCoachAthletesList();
+            showSensToast('🔄 Lista de alumnos actualizada desde Supabase.', 'champagne');
+        });
+    }
+
     roleSelector.addEventListener('change', (e) => {
-        const selectedType = e.target.value;
-        applyUserProfile(selectedType);
+        const val = e.target.value;
+        if (val.startsWith('db_')) {
+            const athleteId = val.replace('db_', '');
+            const athletes = window.__coachAthletesCache || [];
+            const athlete = athletes.find(a => a.id === athleteId);
+            if (athlete) {
+                applyDatabaseAthlete(athlete);
+            }
+        } else {
+            applyUserProfile(val);
+        }
     });
+}
+
+function applyDatabaseAthlete(athlete) {
+    AppState.activeAthleteId = athlete.id;
+    AppState.profile = {
+        id: athlete.id,
+        full_name: athlete.full_name || 'Atleta SENS',
+        active_plan_name: athlete.active_plan_name || 'Plan Personalizado',
+        current_weight: athlete.current_weight || 75,
+        goal: athlete.goal || 'Fuerza & Vitalidad',
+        subscription_status: athlete.subscription_status || 'pending_activation',
+        onboarding_completed: Boolean(athlete.onboarding_completed),
+        daily_step_target: athlete.daily_step_target || 10000
+    };
+    AppState.user = {
+        id: athlete.id,
+        email: athlete.email || `${athlete.id.slice(0, 8)}@sens.com`,
+        role: 'user_normal'
+    };
+
+    updateCoachSubBadgeAndButton(athlete.subscription_status);
+
+    const planBadgeEl = document.getElementById('portalPlanBadge');
+    const userEmailEl = document.getElementById('portalUserEmail');
+    const roleContextBadge = document.getElementById('roleContextBadge');
+    if (planBadgeEl) planBadgeEl.textContent = athlete.active_plan_name || 'Plan SENS';
+    if (userEmailEl) userEmailEl.textContent = athlete.email || athlete.full_name;
+    if (roleContextBadge) roleContextBadge.textContent = `${athlete.active_plan_name || 'Plan'} • Alumno Real`;
+
+    renderDashboardData();
+    renderWorkoutDay(AppState.currentDay || 'day1');
+    showSensToast(`Gestionando al alumno ${athlete.full_name || 'Atleta'}.`, 'champagne');
+}
+
+function updateCoachSubBadgeAndButton(status) {
+    const coachSubBadge = document.getElementById('coachSubStatusBadge');
+    const toggleSubBtn = document.getElementById('btnCoachToggleSubStatus');
+    const isActive = (status === 'active');
+
+    if (coachSubBadge) {
+        coachSubBadge.textContent = isActive ? 'MEMBRESÍA ACTIVA' : 'PENDIENTE DE ACTIVACIÓN';
+        coachSubBadge.style.color = isActive ? '#10B981' : '#F59E0B';
+        coachSubBadge.style.borderColor = isActive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
+        coachSubBadge.style.background = isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
+    }
+
+    if (toggleSubBtn) {
+        if (isActive) {
+            toggleSubBtn.textContent = '⏸ Pausar Acceso';
+            toggleSubBtn.className = 'btn btn-outline btn-sm';
+            toggleSubBtn.style.color = '#F59E0B';
+            toggleSubBtn.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+            toggleSubBtn.style.backgroundColor = 'transparent';
+        } else {
+            toggleSubBtn.textContent = '✓ Aprobar & Activar Acceso';
+            toggleSubBtn.className = 'btn btn-primary btn-sm';
+            toggleSubBtn.style.color = '#080809';
+            toggleSubBtn.style.backgroundColor = 'var(--accent-primary)';
+            toggleSubBtn.style.borderColor = 'var(--accent-primary)';
+        }
+    }
 }
 
 function applyUserProfile(userTypeKey) {
@@ -660,19 +787,12 @@ function applyUserProfile(userTypeKey) {
     const roleContextBadge = document.getElementById('roleContextBadge');
     const adminIndicatorBadge = document.getElementById('adminIndicatorBadge');
     const adminAddBtn = document.getElementById('btnAdminAddExercise');
-    const coachSubBadge = document.getElementById('coachSubStatusBadge');
 
     if (planBadgeEl) planBadgeEl.textContent = mock.active_plan_name;
     if (userEmailEl) userEmailEl.textContent = mock.email;
     if (roleContextBadge) roleContextBadge.textContent = mock.plan_badge_text;
 
-    if (coachSubBadge) {
-        const isActive = (AppState.profile.subscription_status === 'active');
-        coachSubBadge.textContent = isActive ? 'MEMBRESÍA ACTIVA' : 'PENDIENTE DE PAGO';
-        coachSubBadge.style.color = isActive ? '#10B981' : '#F59E0B';
-        coachSubBadge.style.borderColor = isActive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
-        coachSubBadge.style.background = isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
-    }
+    updateCoachSubBadgeAndButton(AppState.profile.subscription_status);
 
     if (mock.user_type === 'admin') {
         if (adminIndicatorBadge) adminIndicatorBadge.style.display = 'block';
@@ -1557,26 +1677,27 @@ function initPortalNavigation() {
             if (mobileQuickBar) mobileQuickBar.style.display = '';
             const floatSocial = document.getElementById('homeFloatingSocial');
             if (floatSocial) floatSocial.style.display = 'flex';
-            document.getElementById('app-container').classList.remove('active');
-            document.getElementById('publicLanding').style.display = 'block';
-            updateAuthNavButtons();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            returnToPublicLanding();
         });
     }
 
     if (backLandingBtn) {
         backLandingBtn.addEventListener('click', () => {
-            document.body.classList.remove('in-portal');
-            const globalHeader = document.querySelector('header');
-            const mobileQuickBar = document.querySelector('.mobile-quick-bar');
-            if (globalHeader) globalHeader.style.display = '';
-            if (mobileQuickBar) mobileQuickBar.style.display = '';
-            const floatSocial = document.getElementById('homeFloatingSocial');
-            if (floatSocial) floatSocial.style.display = 'flex';
-            document.getElementById('app-container').classList.remove('active');
-            document.getElementById('publicLanding').style.display = 'block';
-            updateAuthNavButtons();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            returnToPublicLanding();
+        });
+    }
+
+    const topbarBackHomeBtn = document.getElementById('btnTopbarBackHome');
+    if (topbarBackHomeBtn) {
+        topbarBackHomeBtn.addEventListener('click', () => {
+            returnToPublicLanding();
+        });
+    }
+
+    const brandLogoWrap = document.getElementById('portalBrandLogoWrap');
+    if (brandLogoWrap) {
+        brandLogoWrap.addEventListener('click', () => {
+            returnToPublicLanding();
         });
     }
 
@@ -1611,29 +1732,49 @@ function initPortalNavigation() {
     if (toggleSubBtn) {
         toggleSubBtn.addEventListener('click', async () => {
             if (!AppState.profile) return;
-            const currentStatus = AppState.profile.subscription_status || 'active';
+            const currentStatus = AppState.profile.subscription_status || 'pending_activation';
             const newStatus = (currentStatus === 'active') ? 'pending_activation' : 'active';
             AppState.profile.subscription_status = newStatus;
 
-            if (supabaseClient && AppState.user && AppState.user.id) {
+            const targetId = AppState.profile.id || (AppState.user && AppState.user.id);
+            if (supabaseClient && targetId && !targetId.startsWith('usr-')) {
                 try {
-                    await supabaseClient.from('profiles').update({ subscription_status: newStatus }).eq('id', AppState.user.id);
+                    await supabaseClient.from('profiles').update({ subscription_status: newStatus }).eq('id', targetId);
+                    if (window.__coachAthletesCache) {
+                        const cached = window.__coachAthletesCache.find(a => a.id === targetId);
+                        if (cached) cached.subscription_status = newStatus;
+                    }
+                    await loadCoachAthletesList();
                 } catch (e) {
                     console.warn('Error al actualizar membresía en Supabase:', e);
                 }
             }
 
-            const coachSubBadge = document.getElementById('coachSubStatusBadge');
-            if (coachSubBadge) {
-                const isNowActive = (newStatus === 'active');
-                coachSubBadge.textContent = isNowActive ? 'MEMBRESÍA ACTIVA' : 'PENDIENTE DE PAGO';
-                coachSubBadge.style.color = isNowActive ? '#10B981' : '#F59E0B';
-                coachSubBadge.style.borderColor = isNowActive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
-                coachSubBadge.style.background = isNowActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
-            }
-            showSensToast(`Membresía del atleta: ${newStatus === 'active' ? 'ACTIVA (Acceso completo)' : 'PENDIENTE (En validación)'}`, 'champagne');
+            updateCoachSubBadgeAndButton(newStatus);
+            showSensToast(
+                newStatus === 'active' 
+                    ? '✓ ¡Atleta aprobado con éxito! Acceso y entrenamientos habilitados.' 
+                    : 'Membresía pausada.', 
+                'champagne'
+            );
         });
     }
+
+    initProfileSettings();
+}
+
+function returnToPublicLanding() {
+    document.body.classList.remove('in-portal');
+    const globalHeader = document.querySelector('header');
+    const mobileQuickBar = document.querySelector('.mobile-quick-bar');
+    if (globalHeader) globalHeader.style.display = '';
+    if (mobileQuickBar) mobileQuickBar.style.display = '';
+    const floatSocial = document.getElementById('homeFloatingSocial');
+    if (floatSocial) floatSocial.style.display = 'flex';
+    document.getElementById('app-container').classList.remove('active');
+    document.getElementById('publicLanding').style.display = 'block';
+    updateAuthNavButtons();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function switchPortalView(viewId) {
@@ -1659,7 +1800,11 @@ function switchPortalView(viewId) {
     if (viewId === 'trackingView') {
         setTimeout(initCharts, 100);
     }
+    if (viewId === 'profileSettingsView') {
+        renderProfileSettingsData();
+    }
 }
+
 
 function openUserPortal(forceOnboarding = false) {
     const portal = document.getElementById('app-container');
@@ -1697,6 +1842,9 @@ function openUserPortal(forceOnboarding = false) {
     // Visibilidad del Panel de Control de Coach (Solo para Nico)
     if (coachBar) {
         coachBar.style.display = isAdmin ? 'flex' : 'none';
+        if (isAdmin) {
+            loadCoachAthletesList();
+        }
     }
 
     const adminIndicatorBadge = document.getElementById('adminIndicatorBadge');
@@ -3519,5 +3667,103 @@ function updateCharts() {
         AppState.stepsChart.data.labels = DEMO_METRICS.steps.map(d => d.date);
         AppState.stepsChart.data.datasets[0].data = DEMO_METRICS.steps.map(d => d.val);
         AppState.stepsChart.update();
+    }
+}
+
+// =============================================================================
+// GESTIÓN DE PERFIL & CONFIGURACIÓN DE CUENTA (MÓDULO AJUSTES)
+// =============================================================================
+function initProfileSettings() {
+    const editDiagBtn = document.getElementById('btnSettingsEditDiag');
+    if (editDiagBtn) {
+        editDiagBtn.addEventListener('click', () => {
+            startDiagnosisWizard(true);
+        });
+    }
+
+    const passwordForm = document.getElementById('formUpdatePassword');
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newPass = document.getElementById('settingsNewPassword').value;
+            const confirmPass = document.getElementById('settingsConfirmPassword').value;
+
+            if (!newPass || newPass.length < 6) {
+                showSensToast('La contraseña debe contener al menos 6 caracteres.', 'alert');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                showSensToast('Las contraseñas no coinciden. Por favor verificalas.', 'alert');
+                return;
+            }
+
+            if (supabaseClient && AppState.user && !AppState.user.id.startsWith('usr-')) {
+                try {
+                    const { error } = await supabaseClient.auth.updateUser({ password: newPass });
+                    if (error) {
+                        showSensToast(`Error al actualizar: ${error.message}`, 'alert');
+                        return;
+                    }
+                    showSensToast('✓ Contraseña actualizada correctamente.', 'champagne');
+                    passwordForm.reset();
+                } catch (err) {
+                    showSensToast('Error de red al actualizar contraseña.', 'alert');
+                }
+            } else {
+                showSensToast('✓ Contraseña actualizada correctamente en tu sesión.', 'champagne');
+                passwordForm.reset();
+            }
+        });
+    }
+}
+
+function renderProfileSettingsData() {
+    const profile = AppState.profile || {};
+    const user = AppState.user || {};
+    const anamnesis = AppState.anamnesis || {};
+
+    const nameEl = document.getElementById('settingsProfileName');
+    const emailEl = document.getElementById('settingsProfileEmail');
+    const planEl = document.getElementById('settingsProfilePlan');
+    const subBadge = document.getElementById('settingsSubBadge');
+    const diagTagsContainer = document.getElementById('settingsDiagTags');
+
+    if (nameEl) nameEl.textContent = profile.full_name || 'Atleta SENS';
+    if (emailEl) emailEl.textContent = user.email || profile.email || 'atleta@sens.com';
+    if (planEl) planEl.textContent = profile.active_plan_name || 'Presencial 1 a 1 VIP (CABA)';
+
+    if (subBadge) {
+        const isAct = (profile.subscription_status === 'active' || isCurrentUserAdmin());
+        subBadge.textContent = isAct ? 'Membresía Activa' : 'Validación Pendiente';
+        subBadge.style.background = isAct ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
+        subBadge.style.color = isAct ? '#10B981' : '#F59E0B';
+        subBadge.style.borderColor = isAct ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
+    }
+
+    if (diagTagsContainer) {
+        let tagsHtml = '';
+        if (profile.current_weight) {
+            tagsHtml += `<span class="diag-tag">Peso: ${profile.current_weight} kg</span>`;
+        }
+        if (anamnesis.weekly_frequency) {
+            tagsHtml += `<span class="diag-tag">Frecuencia: ${anamnesis.weekly_frequency} días/sem</span>`;
+        }
+        if (anamnesis.experience_level) {
+            const expMap = { beginner: 'Principiante', intermediate: 'Intermedio', advanced: 'Avanzado' };
+            tagsHtml += `<span class="diag-tag">Nivel: ${expMap[anamnesis.experience_level] || anamnesis.experience_level}</span>`;
+        }
+        if (anamnesis.daily_step_target) {
+            tagsHtml += `<span class="diag-tag highlight">Meta Pasos: ${Number(anamnesis.daily_step_target).toLocaleString('es-AR')}</span>`;
+        }
+        if (anamnesis.pains_injuries && Array.isArray(anamnesis.pains_injuries) && anamnesis.pains_injuries.length) {
+            tagsHtml += `<span class="diag-tag" style="border-color: rgba(245, 158, 11, 0.4); color: #F59E0B;">Atención: ${anamnesis.pains_injuries.join(', ')}</span>`;
+        }
+        if (anamnesis.primary_goal) {
+            tagsHtml += `<span class="diag-tag highlight">Meta: ${anamnesis.primary_goal}</span>`;
+        }
+        if (!tagsHtml) {
+            tagsHtml = '<span class="diag-tag">Ficha Biomecánica al día</span>';
+        }
+        diagTagsContainer.innerHTML = tagsHtml;
     }
 }

@@ -141,26 +141,22 @@
         <!-- Hero Section (Apple-Grade Premium Presentation) -->
         <section class="sens-train-hero">
             <!-- Fallback Image: Visible instantáneamente mientras carga el video -->
-            <div class="hero-bg-fallback" id="heroBgFallback"
-                style="position:absolute; inset:0; background: url('img/hero-bg-opt.png') center/cover no-repeat; z-index:1; filter: saturate(0.95); transition: opacity 0.6s ease;">
-            </div>
-            <!-- Video Hero: Se reproduce nítido y se desvanece la imagen de fondo ni bien arranca -->
-            <video autoplay muted loop playsinline poster="img/hero-bg-opt.png" class="hero-video" id="heroVideo"
-                style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2; opacity:0; transition: opacity 0.6s ease;">
+            <div class="hero-bg-fallback" id="heroBgFallback"></div>
+            <!-- Video Hero: Se reproduce nítido en loop -->
+            <video autoplay muted loop playsinline poster="img/hero-bg-opt.png" class="hero-video" id="heroVideo">
                 <source src="vid/hero-bg-opt.mp4" type="video/mp4">
             </video>
-            <!-- Overlay Brandbook: Nítido arriba (transparente) y degradado concentrado abajo para ubicar los textos -->
-            <div class="hero-overlay"
-                style="position:absolute; inset:0; background: linear-gradient(to top, rgba(8,8,9,0.98) 18%, rgba(8,8,9,0.82) 42%, rgba(8,8,9,0.2) 70%, transparent 100%); z-index:3; pointer-events:none;">
-            </div>
+            <!-- Overlay Brandbook: Gradiente responsivo (fade abajo en mobile, fade izquierda a derecha en desktop) -->
+            <div class="hero-overlay"></div>
 
-            <div class="hero-train-content" style="z-index:4;">
+            <div class="hero-train-content">
                 <h1 class="hero-main-heading">
-                    <span class="hero-apple-eyebrow">SENTITE BIEN.</span>
-                    <span class="hero-apple-highlight">ES TU CUERPO.</span>
+                    <span class="hero-apple-eyebrow">BIENESTAR INTEGRAL</span>
+                    <span class="hero-apple-highlight">SENTITE BIEN EN TU CUERPO.</span>
                 </h1>
-                <p class="hero-description-train" style="max-width: 640px; margin: 0 auto 24px;">
-                    Una transformación que se nota por fuera y se siente por dentro.
+                <p class="hero-description-train">
+                    <strong class="hero-lead-highlight">Se ve por fuera. Se siente por dentro.</strong>
+                    Un método personalizado de entrenamiento y hábitos para transformar tu vitalidad, postura y energía diaria sin extremos.
                 </p>
                 <div class="hero-cta-group">
                     <a href="#sumate" class="btn hero-btn-apple-dark">
@@ -872,11 +868,12 @@
     <div id="app-container">
         <!-- Barra Superior del Portal -->
         <div class="portal-topbar">
-            <div class="portal-brand">
+            <div class="portal-brand" id="portalBrandLogoWrap" style="cursor: pointer;" title="Volver a Web Pública">
                 <img src="img/logo-blanco.png" alt="SENS" class="brand-logo-img-portal">
                 <span class="pill pill-champagne" id="portalPlanBadge">Presencial 1 a 1 VIP (CABA)</span>
             </div>
             <div class="portal-user-badge">
+                <button type="button" class="btn btn-outline btn-sm" id="btnTopbarBackHome" style="font-size: 11px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">← Inicio Web</button>
                 <span style="font-size: 13px; color: var(--text-secondary);" id="portalUserEmail">atleta@sens.com</span>
                 <button class="btn btn-outline btn-sm" id="logoutBtn">Cerrar Sesión</button>
             </div>
@@ -891,32 +888,32 @@
                     style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); font-weight: 700;">Gestionar
                     Atleta:</span>
                 <select id="userRoleSelector" class="input-control"
-                    style="width: auto; padding: 6px 12px; font-size: 12px; height: 34px; background: var(--bg-surface); border: 1px solid var(--border-strong); cursor: pointer;">
-                    <option value="client_presencial_vip" selected>Roberto Gómez — Presencial 1 a 1 VIP (2x/sem CABA)
-                    </option>
+                    style="width: auto; min-width: 250px; padding: 6px 12px; font-size: 12px; height: 34px; background: var(--bg-surface); border: 1px solid var(--border-strong); cursor: pointer;">
+                    <!-- Se rellena dinámicamente con alumnos reales de Supabase + Mocks -->
+                    <option value="client_presencial_vip" selected>Roberto Gómez — Presencial 1 a 1 VIP (2x/sem CABA)</option>
                     <option value="client_presencial_group">Laura &amp; Marcos — Presencial Dúo (CABA)</option>
                     <option value="client_online_premium">Esteban Bianchi — Online Premium</option>
                     <option value="client_online_basic">Carla Méndez — Online Básico</option>
                     <option value="admin">Mi Perfil Coach (Nico)</option>
                 </select>
+                <button type="button" class="btn btn-outline btn-sm" id="btnRefreshCoachAthletes" title="Recargar lista de alumnos" style="font-size: 11px; padding: 4px 8px;">🔄</button>
             </div>
             <div id="roleContextIndicator" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <span class="pill pill-champagne" id="roleContextBadge" style="font-size: 10px;">Presencial 1 a 1 • 8 Sesiones/mes</span>
                 <span class="pill pill-champagne" id="coachSubStatusBadge" style="font-size: 10px; background: rgba(16, 185, 129, 0.2); color: #10B981; border-color: rgba(16, 185, 129, 0.4);">MEMBRESÍA ACTIVA</span>
-                <button type="button" class="btn btn-outline btn-sm" id="btnCoachToggleSubStatus" style="font-size: 10px; padding: 3px 8px; border-color: rgba(229, 203, 167, 0.5);">Pausar / Activar</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnCoachToggleSubStatus" style="font-size: 11px; padding: 4px 10px; font-weight: 700;">✓ Aprobar &amp; Activar</button>
             </div>
         </div>
 
         <!-- Barra de Navegación del Portal -->
         <nav class="portal-nav-bar" id="portalSubNav">
             <button class="portal-nav-item active" data-portal-tab="dashView">Dashboard</button>
-            <button class="portal-nav-item" data-portal-tab="onboardingSection" id="navPortalDiagnosis">Evaluación
-                Inicial &amp; Perfil</button>
             <button class="portal-nav-item" data-portal-tab="workoutView">Mi Entrenamiento</button>
             <button class="portal-nav-item" data-portal-tab="nutritionView">Nutrición &amp; Hábitos</button>
             <button class="portal-nav-item" data-portal-tab="trackingView">Seguimiento Diario</button>
+            <button class="portal-nav-item" data-portal-tab="profileSettingsView" id="navPortalProfile">Mi Perfil &amp; Ajustes</button>
             <button class="portal-nav-item" id="btnBackToLanding"
-                style="margin-left:auto; color:var(--accent-primary);">← Volver a Web Pública</button>
+                style="margin-left:auto; color:var(--accent-primary);">← Volver a Web</button>
         </nav>
 
         <div class="portal-body">
@@ -2674,6 +2671,81 @@
                         <div class="chart-canvas-box">
                             <canvas id="stepsChart"></canvas>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================================
+                 MÓDULO: MI PERFIL, AJUSTES DE CUENTA & FICHA BIOMECÁNICA
+                 ===================================================================== -->
+            <section class="portal-view" id="profileSettingsView">
+                <div class="view-header" style="margin-bottom: 24px;">
+                    <span class="pill pill-champagne" style="font-size: 10px;">AJUSTES DE CUENTA</span>
+                    <h2 class="view-title" style="margin-top: 6px;">Mi Perfil &amp; <strong>Configuración</strong></h2>
+                    <p class="view-subtitle">Gestioná tus datos personales, credenciales y tu ficha biomecánica con Nico.</p>
+                </div>
+
+                <div class="profile-settings-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+                    <!-- Tarjeta 1: Mi Cuenta & Membresía -->
+                    <div class="card-panel" style="padding: 26px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                            <h3 style="font-size: 1.15rem; color: #FFFFFF; font-weight: 700;">Datos de Cuenta</h3>
+                            <span class="pill pill-champagne" id="settingsSubBadge">Activa</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div>
+                                <label style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); display: block; margin-bottom: 4px;">Nombre Completo</label>
+                                <div id="settingsProfileName" style="font-size: 15px; color: #FFFFFF; font-weight: 600;">—</div>
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); display: block; margin-bottom: 4px;">Email de Acceso</label>
+                                <div id="settingsProfileEmail" style="font-size: 15px; color: #FFFFFF;">—</div>
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); display: block; margin-bottom: 4px;">Plan Contratado</label>
+                                <div id="settingsProfilePlan" style="font-size: 14px; color: var(--accent-primary); font-weight: 600;">—</div>
+                            </div>
+                            <div style="margin-top: 10px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS." target="_blank" rel="noopener" class="btn btn-outline btn-full btn-sm" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    💬 Contactar a Nico por WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 2: Seguridad & Contraseña -->
+                    <div class="card-panel" style="padding: 26px;">
+                        <h3 style="font-size: 1.15rem; color: #FFFFFF; font-weight: 700; margin-bottom: 18px;">Seguridad &amp; Acceso</h3>
+                        <form id="formUpdatePassword" style="display: flex; flex-direction: column; gap: 14px;">
+                            <div class="input-group">
+                                <label class="input-label" for="settingsNewPassword">Nueva Contraseña</label>
+                                <input type="password" id="settingsNewPassword" class="input-control" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="settingsConfirmPassword">Confirmar Contraseña</label>
+                                <input type="password" id="settingsConfirmPassword" class="input-control" placeholder="Repetí tu nueva contraseña" minlength="6" required autocomplete="new-password">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full" id="btnSubmitNewPassword" style="margin-top: 6px;">
+                                Guardar Nueva Contraseña
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tarjeta 3: Ficha Biomecánica & Diagnóstico -->
+                    <div class="card-panel" style="padding: 26px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                            <h3 style="font-size: 1.15rem; color: #FFFFFF; font-weight: 700;">Ficha Biomecánica</h3>
+                            <span class="pill pill-dark" style="font-size: 10px;">Auditada por Nico</span>
+                        </div>
+                        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+                            Tus respuestas de la evaluación inicial calibran tus rutinas y cargas asignadas por Nico.
+                        </p>
+                        <div id="settingsDiagTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                            <span class="diag-tag">Cargando ficha...</span>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-full" id="btnSettingsEditDiag" style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">
+                            ✏️ Re-evaluar / Editar Diagnóstico
+                        </button>
                     </div>
                 </div>
             </section>
