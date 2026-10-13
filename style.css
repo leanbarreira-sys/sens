@@ -1783,7 +1783,15 @@ footer p {
     z-index: 9999;
 }
 
+/* Ocultar elementos de landing pública (header, barra rápida inferior, social) en Portal y Diagnóstico */
+body.in-portal header,
+body.in-portal .navbar,
+body.in-portal #globalNavbar,
+body.in-portal .mobile-quick-bar,
+body.in-portal .mobile-menu-overlay,
 body.in-portal .floating-social,
+body.in-portal #homeFloatingSocial,
+#app-container.active ~ .mobile-quick-bar,
 #app-container.active ~ .floating-social,
 #app-container.active ~ #homeFloatingSocial {
     display: none !important;
@@ -2586,7 +2594,7 @@ a.hero-btn-apple-dark:active {
     display: flex;
     gap: 16px;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y pinch-zoom;
     overscroll-behavior-x: contain;
@@ -3394,6 +3402,13 @@ a.hero-btn-apple-dark:active {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.pricing-main-btn * {
+    pointer-events: none;
 }
 
 .pricing-main-btn .btn-icon {
@@ -3412,9 +3427,11 @@ a.hero-btn-apple-dark:active {
     transition: all 0.25s ease;
 }
 
-.pricing-main-btn:hover {
-    color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.05);
+@media (hover: hover) and (pointer: fine) {
+    .pricing-main-btn:hover {
+        color: #FFFFFF;
+        background: rgba(255, 255, 255, 0.05);
+    }
 }
 
 .pricing-main-btn.active,
@@ -3481,11 +3498,20 @@ a.hero-btn-apple-dark:active {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
-.pricing-sub-btn:hover {
-    color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.05);
+.pricing-sub-btn * {
+    pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .pricing-sub-btn:hover {
+        color: #FFFFFF;
+        background: rgba(255, 255, 255, 0.05);
+    }
 }
 
 .pricing-sub-btn.active {
@@ -3666,6 +3692,20 @@ a.hero-btn-apple-dark:active {
     text-align: left;
     height: 100%;
     box-sizing: border-box;
+    touch-action: manipulation;
+}
+
+.train-plan-card .btn {
+    touch-action: manipulation;
+    position: relative;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.btn-logged-in {
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+    font-weight: 700 !important;
 }
 
 .train-plan-card.highlight {

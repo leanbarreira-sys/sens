@@ -342,11 +342,43 @@ function setupCarouselSwipe(carouselId, dotsContainerId) {
         }
     }, { passive: true });
 
-    // Tap en un dot para navegar al slide correspondiente
+    // Navegación instantánea por dots (soporta touch y click en el primer intento)
     dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
+        let dotHandled = false;
+        const goToDotSlide = () => {
             if (slides[index]) {
                 const targetLeft = slides[index].offsetLeft - carousel.offsetLeft;
+                carousel.scrollTo({
+                    left: targetLeft,
+                    behavior: 'smooth'
+                });
+                dots.forEach((d, idx) => d.classList.toggle('active', idx === index));
+            }
+        };
+
+        dot.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch' || e.button === 0) {
+                dotHandled = true;
+                goToDotSlide();
+                setTimeout(() => { dotHandled = false; }, 350);
+            }
+        });
+
+        dot.addEventListener('click', (e) => {
+            if (dotHandled) {
+                e.preventDefault();
+                return;
+            }
+            goToDotSlide();
+        });
+    });
+
+    // Permitir click/tap en un slide para alinearlo al frente si no está centrado (sin interferir con botones o links)
+    slides.forEach((slide, index) => {
+        slide.addEventListener('click', (e) => {
+            if (e.target.closest('a, button, input, select, textarea, label')) return;
+            const targetLeft = slide.offsetLeft - carousel.offsetLeft;
+            if (Math.abs(carousel.scrollLeft - targetLeft) > 30) {
                 carousel.scrollTo({
                     left: targetLeft,
                     behavior: 'smooth'
@@ -424,13 +456,17 @@ function initPricingTabs() {
     let currentSub = 'presencial-ind';
 
     function renderActivePricingView() {
-        tabContents.forEach(c => c.style.display = 'none');
+        tabContents.forEach(c => {
+            c.style.display = 'none';
+            c.classList.remove('active');
+        });
 
         if (currentMode === 'online') {
             if (subSelector) subSelector.style.display = 'none';
             const onlineTab = document.getElementById('tab-online');
             if (onlineTab) {
                 onlineTab.style.display = 'block';
+                onlineTab.classList.add('active');
                 const innerCarousel = onlineTab.querySelector('.pricing-carousel');
                 if (innerCarousel) innerCarousel.scrollLeft = 0;
                 const dots = document.querySelectorAll('#onlineDots .carousel-dot');
@@ -443,6 +479,7 @@ function initPricingTabs() {
             const targetEl = document.getElementById(targetId);
             if (targetEl) {
                 targetEl.style.display = 'block';
+                targetEl.classList.add('active');
                 const innerCarousel = targetEl.querySelector('.pricing-carousel');
                 if (innerCarousel) innerCarousel.scrollLeft = 0;
                 const activeDotsId = currentSub === 'presencial-ind' ? '#pricingDots' : '#groupsDots';
@@ -452,29 +489,64 @@ function initPricingTabs() {
         }
     }
 
+    function selectMode(btn) {
+        if (!btn || btn.classList.contains('active')) return;
+        mainBtns.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        currentMode = btn.getAttribute('data-mode') || 'online';
+        renderActivePricingView();
+    }
+
+    function selectSub(btn) {
+        if (!btn || btn.classList.contains('active')) return;
+        subBtns.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        currentSub = btn.getAttribute('data-sub') || 'presencial-ind';
+        renderActivePricingView();
+    }
+
+    // Activación instantánea en el primer click o touch (sin demoras ni trampas de hover)
     mainBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            mainBtns.forEach(b => {
-                b.classList.remove('active');
-                b.setAttribute('aria-selected', 'false');
-            });
-            btn.classList.add('active');
-            btn.setAttribute('aria-selected', 'true');
-            currentMode = btn.getAttribute('data-mode') || 'online';
-            renderActivePricingView();
+        let handled = false;
+        btn.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch' || e.button === 0) {
+                handled = true;
+                selectMode(btn);
+                setTimeout(() => { handled = false; }, 350);
+            }
+        });
+        btn.addEventListener('click', (e) => {
+            if (handled) {
+                e.preventDefault();
+                return;
+            }
+            selectMode(btn);
         });
     });
 
     subBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            subBtns.forEach(b => {
-                b.classList.remove('active');
-                b.setAttribute('aria-selected', 'false');
-            });
-            btn.classList.add('active');
-            btn.setAttribute('aria-selected', 'true');
-            currentSub = btn.getAttribute('data-sub') || 'presencial-ind';
-            renderActivePricingView();
+        let handled = false;
+        btn.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch' || e.button === 0) {
+                handled = true;
+                selectSub(btn);
+                setTimeout(() => { handled = false; }, 350);
+            }
+        });
+        btn.addEventListener('click', (e) => {
+            if (handled) {
+                e.preventDefault();
+                return;
+            }
+            selectSub(btn);
         });
     });
 
@@ -483,10 +555,16 @@ function initPricingTabs() {
     legacyTabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             legacyTabBtns.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(c => c.style.display = 'none');
+            tabContents.forEach(c => {
+                c.style.display = 'none';
+                c.classList.remove('active');
+            });
             btn.classList.add('active');
             const targetEl = document.getElementById(btn.getAttribute('data-target'));
-            if (targetEl) targetEl.style.display = 'block';
+            if (targetEl) {
+                targetEl.style.display = 'block';
+                targetEl.classList.add('active');
+            }
         });
     });
 }
@@ -494,6 +572,31 @@ function initPricingTabs() {
 // =============================================================================
 // MÓDULO 3: AUTENTICACIÓN (SUPABASE AUTH / LOCAL FALLBACK)
 // =============================================================================
+function updateAuthNavButtons() {
+    const isLoggedIn = Boolean(AppState.user);
+    const navBtn = document.getElementById('navClientAccessBtn');
+    const navBtnMobile = document.getElementById('navClientAccessBtnMobile');
+    const quickBtn = document.getElementById('mobileQuickAccessBtn');
+    const menuBtn = document.getElementById('mobileMenuClientAccessBtn');
+
+    if (navBtn) {
+        navBtn.textContent = isLoggedIn ? 'Mi Portal' : 'Acceso Clientes';
+        navBtn.classList.toggle('btn-logged-in', isLoggedIn);
+    }
+    if (navBtnMobile) {
+        navBtnMobile.textContent = isLoggedIn ? 'Mi Portal' : 'Acceso';
+        navBtnMobile.classList.toggle('btn-logged-in', isLoggedIn);
+    }
+    if (quickBtn) {
+        quickBtn.textContent = isLoggedIn ? 'Mi Portal' : 'Acceso';
+        quickBtn.classList.toggle('btn-logged-in', isLoggedIn);
+    }
+    if (menuBtn) {
+        menuBtn.textContent = isLoggedIn ? 'Mi Portal' : 'Acceso Clientes';
+        menuBtn.classList.toggle('btn-logged-in', isLoggedIn);
+    }
+}
+
 function initAuthModal() {
     const modal = document.getElementById('authModal');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -509,11 +612,18 @@ function initAuthModal() {
     openBtns.forEach(btn => {
         if (btn) {
             btn.addEventListener('click', () => {
+                if (AppState.user) {
+                    if (mobileMenu) mobileMenu.style.display = 'none';
+                    openUserPortal(false);
+                    return;
+                }
                 if (mobileMenu) mobileMenu.style.display = 'none';
                 showAuthModal(true);
             });
         }
     });
+
+    updateAuthNavButtons();
 
     if (closeBtn) {
         closeBtn.addEventListener('click', () => showAuthModal(false));
@@ -584,6 +694,7 @@ function initAuthModal() {
         }
 
         showAuthAlert('¡Acceso correcto! Ingresando al portal...', 'success');
+        updateAuthNavButtons();
         setTimeout(() => {
             showAuthModal(false);
             openUserPortal(false);
@@ -618,6 +729,7 @@ function initAuthModal() {
         }
 
         showAuthAlert('¡Cuenta creada con éxito! Pasando al asistente de inicio...', 'success');
+        updateAuthNavButtons();
         setTimeout(() => {
             showAuthModal(false);
             openUserPortal(true); // Redirige a Diagnóstico inicial (Módulo 4)
@@ -631,6 +743,7 @@ function initAuthModal() {
             AppState.user = { id: 'demo-user-' + Date.now(), email: 'demo@sens.com' };
             AppState.profile = { full_name: 'Atleta Demo', onboarding_completed: false };
             localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
+            updateAuthNavButtons();
             showAuthModal(false);
             openUserPortal(true);
         });
@@ -709,6 +822,7 @@ function checkExistingSession() {
             console.error('Error parseando sesión previa:', e);
         }
     }
+    updateAuthNavButtons();
 }
 
 // =============================================================================
@@ -734,10 +848,15 @@ function initPortalNavigation() {
             AppState.user = null;
             AppState.profile = null;
             document.body.classList.remove('in-portal');
+            const globalHeader = document.querySelector('header');
+            const mobileQuickBar = document.querySelector('.mobile-quick-bar');
+            if (globalHeader) globalHeader.style.display = '';
+            if (mobileQuickBar) mobileQuickBar.style.display = '';
             const floatSocial = document.getElementById('homeFloatingSocial');
             if (floatSocial) floatSocial.style.display = 'flex';
             document.getElementById('app-container').classList.remove('active');
             document.getElementById('publicLanding').style.display = 'block';
+            updateAuthNavButtons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
@@ -745,10 +864,15 @@ function initPortalNavigation() {
     if (backLandingBtn) {
         backLandingBtn.addEventListener('click', () => {
             document.body.classList.remove('in-portal');
+            const globalHeader = document.querySelector('header');
+            const mobileQuickBar = document.querySelector('.mobile-quick-bar');
+            if (globalHeader) globalHeader.style.display = '';
+            if (mobileQuickBar) mobileQuickBar.style.display = '';
             const floatSocial = document.getElementById('homeFloatingSocial');
             if (floatSocial) floatSocial.style.display = 'flex';
             document.getElementById('app-container').classList.remove('active');
             document.getElementById('publicLanding').style.display = 'block';
+            updateAuthNavButtons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
@@ -794,8 +918,15 @@ function openUserPortal(forceOnboarding = false) {
     const portal = document.getElementById('app-container');
     const publicLanding = document.getElementById('publicLanding');
     const userEmailEl = document.getElementById('portalUserEmail');
+    const globalHeader = document.querySelector('header');
+    const mobileQuickBar = document.querySelector('.mobile-quick-bar');
+    const mobileMenu = document.getElementById('mobileMenu');
 
     document.body.classList.add('in-portal');
+    if (globalHeader) globalHeader.style.display = 'none';
+    if (mobileQuickBar) mobileQuickBar.style.display = 'none';
+    if (mobileMenu) mobileMenu.style.display = 'none';
+
     const floatSocial = document.getElementById('homeFloatingSocial');
     if (floatSocial) floatSocial.style.display = 'none';
 
