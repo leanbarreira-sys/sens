@@ -7,9 +7,8 @@
 // 0. CONFIGURACIÓN DE SUPABASE & ESTADO GLOBAL
 // =============================================================================
 const SUPABASE_CONFIG = {
-    // Para conectar tu base de datos de producción, reemplazá estas variables:
-    url: window.__SUPABASE_URL__ || 'https://YOUR_SUPABASE_PROJECT.supabase.co',
-    anonKey: window.__SUPABASE_ANON_KEY__ || 'YOUR_SUPABASE_ANON_KEY'
+    url: window.__SUPABASE_URL__ || 'https://pqzbkkxiljuccegbipkp.supabase.co',
+    anonKey: window.__SUPABASE_ANON_KEY__ || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxemJra3hpbGp1Y2NlZ2JpcGtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3OTk5MzYsImV4cCI6MjEwNzM3NTkzNn0.UOhfid8S09kdfMqIPRkZiLySKGXYQ2Mb3m_YhCLYgs4'
 };
 
 const isSupabaseConfigured = Boolean(
