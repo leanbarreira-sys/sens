@@ -1120,6 +1120,20 @@ function initDiagnosisWizard() {
     setupPhotoUpload('filePhotoSide', 'previewImgSide', 'boxPhotoSide');
     setupPhotoUpload('filePhotoBack', 'previewImgBack', 'boxPhotoBack');
 
+    // Monitoreo de campos biométricos y objetivo (Paso 7)
+    ['diagFullName', 'diagAge', 'diagWeight', 'diagHeight', 'diagTapeWaist', 'diagTapeHip', 'diagTapeArm', 'diagTapeThigh'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', () => saveDiagnosisDraft());
+    });
+
+    document.querySelectorAll('input[name="diagGender"]').forEach(r => {
+        r.addEventListener('change', () => saveDiagnosisDraft());
+    });
+
+    document.querySelectorAll('input[name="diagGoal"]').forEach(r => {
+        r.addEventListener('change', () => saveDiagnosisDraft());
+    });
+
     // 9. Botón Finalizar Diagnóstico (Paso 7 -> Paso 8)
     const finishBtn = document.getElementById('btnFinishDiagnosis');
     if (finishBtn) {
@@ -1241,6 +1255,17 @@ window.diagWizardGoStep = function(targetStep, toastMsg) {
         showDiagnosisToast(toastMsg);
     }
 
+    if (targetStep === 8) {
+        const p = AppState.profile || {};
+        const a = AppState.anamnesis || {};
+        const gender = p.gender || a.gender || document.querySelector('input[name="diagGender"]:checked')?.value || 'male';
+        const weight = parseFloat(p.current_weight || document.getElementById('diagWeight')?.value || '78.0');
+        const height = parseFloat(p.height || document.getElementById('diagHeight')?.value || '175');
+        const goal = p.goal || a.goal || document.querySelector('input[name="diagGoal"]:checked')?.value || 'fat_loss';
+        const fullName = p.full_name || document.getElementById('diagFullName')?.value || (AppState.user ? AppState.user.email.split('@')[0] : 'Atleta SENS');
+        renderBiometricSilhouettes(gender, weight, height, goal, fullName);
+    }
+
     AppState.diagnosisCurrentStep = targetStep;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -1280,8 +1305,12 @@ async function processDiagnosisSubmission() {
     const ageInput = document.getElementById('diagAge');
     const weightInput = document.getElementById('diagWeight');
     const heightInput = document.getElementById('diagHeight');
+    const genderInput = document.querySelector('input[name="diagGender"]:checked');
+    const goalInput = document.querySelector('input[name="diagGoal"]:checked');
 
-    const fullName = (fullNameInput ? fullNameInput.value.trim() : '') || (AppState.user ? AppState.user.email.split('@')[0] : 'Atleta');
+    const fullName = (fullNameInput ? fullNameInput.value.trim() : '') || (AppState.user ? AppState.user.email.split('@')[0] : 'Atleta SENS');
+    const gender = genderInput ? genderInput.value : 'male';
+    const goal = goalInput ? goalInput.value : 'fat_loss';
     const age = parseInt(ageInput ? ageInput.value : '45', 10);
     const weight = parseFloat(weightInput ? weightInput.value : '78.0') || 78.0;
     const height = parseFloat(heightInput ? heightInput.value : '175') || 175;
@@ -1406,8 +1435,8 @@ async function processDiagnosisSubmission() {
             : 'Calibrado según tu dinamismo diario';
     }
 
-    // Iniciar temporizador de compromiso SENS (24 horas)
-    startDiagnosisCountdown(24 * 3600);
+    // Renderizar siluetas biométricas y objetivo personalizado SENS
+    renderBiometricSilhouettes(gender, weight, height, goal, fullName);
 
     // =========================================================================
     // PERSISTENCIA DE DATOS
@@ -1415,6 +1444,8 @@ async function processDiagnosisSubmission() {
     const profilePayload = {
         id: AppState.user ? AppState.user.id : undefined,
         full_name: fullName,
+        gender,
+        goal,
         age,
         current_weight: weight,
         height,
@@ -1431,6 +1462,8 @@ async function processDiagnosisSubmission() {
 
     const anamnesisPayload = {
         user_id: AppState.user ? AppState.user.id : undefined,
+        gender,
+        goal,
         parq_responses: parqResponses,
         has_medical_flags: hasMedicalFlags,
         parq_notes: parqNotes,
@@ -1482,25 +1515,165 @@ async function processDiagnosisSubmission() {
     window.diagWizardGoStep(8, '¡Diagnóstico completado con éxito!');
 }
 
-// Temporizador regresivo de 24 horas (Compromiso SENS Train)
-function startDiagnosisCountdown(totalSeconds) {
+// Temporizador regresivo (deprecado en favor de compromiso estático de Nico en 24h)
+function startDiagnosisCountdown() {
     if (AppState.diagCountdownInterval) {
         clearInterval(AppState.diagCountdownInterval);
+        AppState.diagCountdownInterval = null;
     }
-    let remaining = totalSeconds;
-    const display = document.getElementById('diagCountdownDisplay');
+}
 
-    function update() {
-        if (!display) return;
-        const hrs = Math.floor(remaining / 3600);
-        const mins = Math.floor((remaining % 3600) / 60);
-        const secs = remaining % 60;
-        display.textContent = `${String(hrs).padStart(2, '0')}h ${String(mins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}s`;
-        if (remaining > 0) remaining--;
+// Renderizado de Siluetas Biométricas Dinámicas (Punto de Partida vs Objetivo SENS)
+function renderBiometricSilhouettes(gender, weight, height, goal, fullName) {
+    const currentContainer = document.getElementById('silhouetteRenderCurrent');
+    const goalContainer = document.getElementById('silhouetteRenderGoal');
+    const nameDisplay = document.getElementById('diagAthleteNameDisplay');
+    const metricsTag = document.getElementById('diagAthleteMetricsTag');
+    const statusBadge = document.getElementById('diagAthleteStatusBadge');
+    const goalDisplay = document.getElementById('diagAthleteGoalDisplay');
+    const goalSubTag = document.getElementById('diagAthleteGoalSubTag');
+
+    const safeWeight = parseFloat(weight) || 78.0;
+    const safeHeight = parseFloat(height) || 175.0;
+    const heightM = safeHeight / 100;
+    const bmi = parseFloat((safeWeight / (heightM * heightM)).toFixed(1));
+
+    // Factor de altura en relación a la media poblacional deportiva
+    const refHeight = gender === 'female' ? 164 : 175;
+    const heightFactor = Math.min(1.15, Math.max(0.85, safeHeight / refHeight));
+
+    // Factor de corpulencia / anchura basado en el IMC
+    const widthFactor = Math.min(1.28, Math.max(0.78, Math.pow(bmi / 22.5, 0.72)));
+
+    // Categorización cualitativa personalizada
+    let heightDesc = 'Estatura Media';
+    if (gender === 'female') {
+        if (safeHeight >= 170) heightDesc = 'Estatura Alta';
+        else if (safeHeight <= 158) heightDesc = 'Estatura Compacta';
+    } else {
+        if (safeHeight >= 182) heightDesc = 'Estatura Alta';
+        else if (safeHeight <= 168) heightDesc = 'Estatura Compacta';
     }
 
-    update();
-    AppState.diagCountdownInterval = setInterval(update, 1000);
+    let corpDesc = 'Complexión Proporcional';
+    if (bmi < 19.5) corpDesc = 'Complexión Esbelta / Ectomorfa';
+    else if (bmi >= 19.5 && bmi < 24.5) corpDesc = 'Complexión Atlética';
+    else if (bmi >= 24.5 && bmi < 28.5) corpDesc = 'Complexión Fuerte / Corpulenta';
+    else corpDesc = 'Complexión Robusta';
+
+    // Adaptación morfológica proyectada según objetivo
+    let targetWidth = 1.0;
+    let targetHeight = heightFactor * 1.02;
+    let goalTitle = 'Definición & Pérdida de Grasa';
+    let goalSub = 'Proyección SENS: Reducción Adiposa & Definición';
+
+    if (goal === 'fat_loss') {
+        targetWidth = Math.max(0.80, widthFactor * 0.86);
+        goalTitle = 'Definición & Pérdida de Grasa';
+        goalSub = 'Proyección SENS: Cintura Definida & Tono Muscular';
+    } else if (goal === 'muscle_gain') {
+        targetWidth = Math.min(1.18, Math.max(1.04, widthFactor * 1.08));
+        goalTitle = 'Fuerza & Masa Muscular';
+        goalSub = 'Proyección SENS: V-Taper, Expansión & Mayor Densidad';
+    } else if (goal === 'recomp') {
+        targetWidth = Math.min(1.04, Math.max(0.92, widthFactor * 0.94));
+        goalTitle = 'Recomposición Corporal';
+        goalSub = 'Proyección SENS: Densidad Magra & Cintura Estilizada';
+    } else if (goal === 'posture_health') {
+        targetWidth = Math.min(1.02, Math.max(0.90, widthFactor * 0.95));
+        targetHeight = heightFactor * 1.04;
+        goalTitle = 'Salud, Postura & Vitalidad';
+        goalSub = 'Proyección SENS: Alineación Biomecánica & Simetría';
+    }
+
+    function buildSilhouetteSvg(isTarget, wFactor, hFactor) {
+        const strokeColor = isTarget ? "#E5CBA7" : "rgba(229, 203, 167, 0.45)";
+        const fillColor = isTarget ? "rgba(229, 203, 167, 0.16)" : "rgba(255, 255, 255, 0.04)";
+        const glow = isTarget ? "filter: drop-shadow(0 0 12px rgba(229, 203, 167, 0.42));" : "";
+
+        const malePath = `
+            M 45 34
+            C 40 35, 33 40, 24 46
+            C 18 50, 15 62, 17 80
+            L 14 115
+            C 13 125, 16 128, 19 125
+            L 23 96
+            C 25 82, 32 78, 33 90
+            L 34 105
+            C 33 115, 30 126, 28 144
+            C 27 156, 31 165, 31 175
+            L 34 194
+            L 42 194
+            L 42 178
+            C 42 165, 45 140, 48 122
+            L 52 122
+            C 55 140, 58 165, 58 178
+            L 58 194
+            L 66 194
+            L 69 175
+            C 69 165, 73 156, 72 144
+            C 70 126, 67 115, 66 105
+            L 67 90
+            C 68 78, 75 82, 77 96
+            L 81 125
+            C 84 128, 87 125, 86 115
+            L 83 80
+            C 85 62, 82 50, 76 46
+            C 67 40, 60 35, 55 34
+            Z
+        `;
+
+        const femalePath = `
+            M 46 34
+            C 42 36, 35 41, 28 47
+            C 22 52, 19 64, 20 80
+            L 18 115
+            C 17 124, 20 126, 22 123
+            L 25 96
+            C 27 80, 34 76, 35 88
+            C 35 98, 29 108, 28 122
+            C 27 136, 28 148, 29 160
+            C 30 170, 33 178, 34 194
+            L 41 194
+            L 42 178
+            C 42 165, 45 142, 48 123
+            L 52 123
+            C 55 142, 58 165, 58 178
+            L 59 194
+            L 66 194
+            C 67 178, 70 170, 71 160
+            C 72 148, 73 136, 72 122
+            C 71 108, 65 98, 65 88
+            C 66 76, 73 80, 75 96
+            L 78 123
+            C 80 126, 83 124, 82 115
+            L 80 80
+            C 81 64, 78 52, 72 47
+            C 65 41, 58 36, 54 34
+            Z
+        `;
+
+        const bodyPath = gender === 'female' ? femalePath : malePath;
+        const headRadiusX = gender === 'female' ? 8 : 9;
+        const headRadiusY = gender === 'female' ? 11 : 12;
+
+        return `
+        <svg viewBox="0 0 100 210" style="width: 100%; height: 210px; max-height: 230px; ${glow}" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(50, 105) scale(${wFactor.toFixed(3)}, ${hFactor.toFixed(3)}) translate(-50, -105)">
+                <ellipse cx="50" cy="20" rx="${headRadiusX}" ry="${headRadiusY}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="2"/>
+                <path d="${bodyPath.trim()}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="2" stroke-linejoin="round"/>
+            </g>
+        </svg>`;
+    }
+
+    if (currentContainer) currentContainer.innerHTML = buildSilhouetteSvg(false, widthFactor, heightFactor);
+    if (goalContainer) goalContainer.innerHTML = buildSilhouetteSvg(true, targetWidth, targetHeight);
+
+    if (nameDisplay) nameDisplay.textContent = fullName || 'Atleta SENS';
+    if (metricsTag) metricsTag.textContent = `${safeHeight} cm • ${safeWeight.toFixed(1)} kg • IMC ${bmi}`;
+    if (statusBadge) statusBadge.textContent = `${heightDesc} • ${corpDesc}`;
+    if (goalDisplay) goalDisplay.textContent = goalTitle;
+    if (goalSubTag) goalSubTag.textContent = goalSub;
 }
 
 // Guardar borrador en tiempo real
@@ -1516,6 +1689,8 @@ function saveDiagnosisDraft() {
         const draft = {
             step: AppState.diagnosisCurrentStep || 0,
             fullName: document.getElementById('diagFullName')?.value || '',
+            gender: document.querySelector('input[name="diagGender"]:checked')?.value || 'male',
+            goal: document.querySelector('input[name="diagGoal"]:checked')?.value || 'fat_loss',
             age: document.getElementById('diagAge')?.value || '',
             weight: document.getElementById('diagWeight')?.value || '',
             height: document.getElementById('diagHeight')?.value || '',
@@ -1546,6 +1721,14 @@ function restoreDiagnosisDraft() {
         AppState.diagnosisDraft = draft;
 
         if (draft.fullName && document.getElementById('diagFullName')) document.getElementById('diagFullName').value = draft.fullName;
+        if (draft.gender) {
+            const gRadio = document.querySelector(`input[name="diagGender"][value="${draft.gender}"]`);
+            if (gRadio) gRadio.checked = true;
+        }
+        if (draft.goal) {
+            const goalRadio = document.querySelector(`input[name="diagGoal"][value="${draft.goal}"]`);
+            if (goalRadio) goalRadio.checked = true;
+        }
         if (draft.age && document.getElementById('diagAge')) document.getElementById('diagAge').value = draft.age;
         if (draft.weight && document.getElementById('diagWeight')) document.getElementById('diagWeight').value = draft.weight;
         if (draft.height && document.getElementById('diagHeight')) document.getElementById('diagHeight').value = draft.height;
@@ -1597,6 +1780,14 @@ function prefillDiagnosisForm() {
     if (p.full_name && document.getElementById('diagFullName')) {
         document.getElementById('diagFullName').value = p.full_name;
     }
+    const userGender = p.gender || a.gender || 'male';
+    const gRadio = document.querySelector(`input[name="diagGender"][value="${userGender}"]`);
+    if (gRadio) gRadio.checked = true;
+
+    const userGoal = p.goal || a.goal || 'fat_loss';
+    const goalRadio = document.querySelector(`input[name="diagGoal"][value="${userGoal}"]`);
+    if (goalRadio) goalRadio.checked = true;
+
     if (p.age && document.getElementById('diagAge')) {
         document.getElementById('diagAge').value = p.age;
     }

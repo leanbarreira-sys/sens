@@ -12,6 +12,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     full_name TEXT NOT NULL,
+    gender TEXT CHECK (gender IN ('male', 'female')),
+    goal TEXT CHECK (goal IN ('fat_loss', 'muscle_gain', 'recomp', 'posture_health')),
     phone TEXT,
     age INT,
     current_weight NUMERIC(5,2),
@@ -34,10 +36,14 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 CREATE TABLE IF NOT EXISTS public.anamnesis (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    gender TEXT,
+    goal TEXT,
     parq_responses JSONB NOT NULL DEFAULT '{}'::jsonb,
     has_medical_flags BOOLEAN DEFAULT FALSE,
     parq_notes TEXT,
     active_injuries JSONB NOT NULL DEFAULT '[]'::jsonb,
+    injury_intensities JSONB NOT NULL DEFAULT '{}'::jsonb,
+    tape_measurements JSONB NOT NULL DEFAULT '{}'::jsonb,
     eva_score INT CHECK (eva_score BETWEEN 1 AND 10),
     experience_level TEXT CHECK (experience_level IN ('beginner', 'intermediate', 'advanced')),
     weekly_frequency INT CHECK (weekly_frequency BETWEEN 1 AND 7),

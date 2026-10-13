@@ -5152,6 +5152,274 @@ input[type="range"]::-moz-range-track {
     color: var(--text-muted);
 }
 
+/* Selector de Sexo Biológico (Pills Táctiles) */
+.gender-toggle-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.gender-btn-pill {
+    flex: 1;
+    cursor: pointer;
+    user-select: none;
+}
+
+.gender-btn-pill input {
+    display: none;
+}
+
+.gender-btn-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.gender-btn-pill:hover .gender-btn-content {
+    border-color: rgba(229, 203, 167, 0.35);
+    color: var(--text-primary);
+}
+
+.gender-btn-pill input:checked + .gender-btn-content {
+    background: rgba(229, 203, 167, 0.12);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    box-shadow: 0 0 12px rgba(229, 203, 167, 0.25);
+}
+
+/* Fila de 3 inputs numéricos (Edad, Peso, Altura) */
+.input-row-three {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .input-row-three {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Selección de Objetivo Prioritario */
+.goal-selection-section {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 22px;
+}
+
+.goal-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+}
+
+.goal-card-touch {
+    margin-bottom: 0;
+    padding: 14px 16px;
+    min-height: 72px;
+}
+
+/* Módulo de Evaluación Biomecánica & Siluetas (Paso 8) */
+.biometric-assessment-card {
+    background: var(--bg-elevated);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    border-radius: 18px;
+    padding: 24px 20px;
+    margin-bottom: 24px;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+.biometric-card-header {
+    margin-bottom: 18px;
+}
+
+.biometric-eval-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-primary);
+    background: rgba(229, 203, 167, 0.1);
+    padding: 3px 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+.biometric-eval-title {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.biometric-eval-title strong {
+    font-weight: 800;
+    color: var(--accent-primary);
+}
+
+.biometric-eval-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.4;
+}
+
+.silhouettes-comparator-grid {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-top: 18px;
+}
+
+@media (max-width: 600px) {
+    .silhouettes-comparator-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+.silhouette-column {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 16px 14px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    transition: var(--transition);
+}
+
+.silhouette-column.current-state-col {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.silhouette-column.target-state-col {
+    border-color: rgba(229, 203, 167, 0.35);
+    background: linear-gradient(180deg, rgba(229, 203, 167, 0.04) 0%, rgba(8, 8, 9, 0.6) 100%);
+    box-shadow: 0 4px 20px rgba(229, 203, 167, 0.08);
+}
+
+.silhouette-col-header {
+    margin-bottom: 10px;
+}
+
+.silhouette-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 2px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.silhouette-tag.target-tag {
+    color: var(--accent-primary);
+    background: rgba(229, 203, 167, 0.12);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+}
+
+.silhouette-render-wrap {
+    width: 100%;
+    min-height: 215px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0;
+}
+
+.silhouette-athlete-footer {
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.athlete-name-display {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.25;
+}
+
+.athlete-goal-display {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--accent-primary);
+    line-height: 1.25;
+}
+
+.athlete-metrics-tag {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 4px 0;
+}
+
+.athlete-status-badge {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #A0A0A8;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 3px 10px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+.athlete-status-badge.target-badge {
+    color: #080809;
+    background: var(--accent-primary);
+    font-weight: 800;
+}
+
+.silhouette-transition-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.transition-arrow-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(229, 203, 167, 0.08);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transition-caption {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+}
+
 /* Congrats Page (Paso 8 - Rediseño Profesional SENS) */
 .congrats-icon-wrap {
     width: 64px;
@@ -5174,7 +5442,7 @@ input[type="range"]::-moz-range-track {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 14px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     text-align: left;
 }
 
@@ -5232,38 +5500,91 @@ input[type="range"]::-moz-range-track {
     color: var(--text-secondary);
 }
 
-.countdown-audit-card {
+/* Tarjeta de Compromiso Personal de Nico (Sin Reloj) */
+.coach-feedback-card {
     background: rgba(229, 203, 167, 0.04);
-    border: 1px solid rgba(229, 203, 167, 0.2);
+    border: 1px solid rgba(229, 203, 167, 0.25);
     border-radius: 16px;
     padding: 22px 24px;
-    text-align: center;
+    text-align: left;
+    margin-top: 14px;
 }
 
-.countdown-badge {
+.coach-feedback-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.coach-avatar-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(229, 203, 167, 0.1);
+    border: 1.5px solid var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.coach-feedback-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.coach-feedback-tag {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     color: var(--accent-primary);
-    margin-bottom: 8px;
 }
 
-.countdown-timer-display {
-    font-size: clamp(1.8rem, 4vw, 2.4rem);
-    font-weight: 800;
-    letter-spacing: 2px;
+.coach-feedback-title {
+    font-size: 1.1rem;
+    font-weight: 700;
     color: var(--text-primary);
-    font-family: var(--font-main);
-    margin-bottom: 8px;
+    margin: 0;
 }
 
-.countdown-note {
-    font-size: 13px;
+.coach-feedback-desc {
+    font-size: 13.5px;
     color: var(--text-secondary);
-    max-width: 480px;
-    margin: 0 auto;
-    line-height: 1.45;
+    line-height: 1.5;
+    margin-bottom: 14px;
+}
+
+.coach-feedback-desc strong {
+    color: var(--text-primary);
+}
+
+.coach-feedback-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.coach-feedback-channel {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-primary);
+}
+
+.live-status-dot {
+    width: 8px;
+    height: 8px;
+    background: #34C759;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(52, 199, 89, 0.6);
+    display: inline-block;
 }
 
 /* Botones de acción del Wizard */

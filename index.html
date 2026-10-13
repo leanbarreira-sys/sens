@@ -1486,12 +1486,35 @@
                                         <input type="text" id="diagFullName" class="input-control" placeholder="Tu nombre" required>
                                     </div>
                                     <div class="input-group">
-                                        <label class="input-label" for="diagAge">Edad (años)</label>
-                                        <input type="number" id="diagAge" class="input-control" placeholder="Ej: 46" min="16" max="99" value="45" required>
+                                        <label class="input-label">Sexo Biológico</label>
+                                        <div class="gender-toggle-group">
+                                            <label class="gender-btn-pill">
+                                                <input type="radio" name="diagGender" value="male" checked>
+                                                <div class="gender-btn-content">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="10" cy="14" r="5"/><line x1="19" y1="5" x2="13.5" y2="10.5"/><polyline points="15 5 19 5 19 9"/>
+                                                    </svg>
+                                                    <span>Hombre</span>
+                                                </div>
+                                            </label>
+                                            <label class="gender-btn-pill">
+                                                <input type="radio" name="diagGender" value="female">
+                                                <div class="gender-btn-content">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="12" cy="9" r="5"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/>
+                                                    </svg>
+                                                    <span>Mujer</span>
+                                                </div>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="input-row">
+                                <div class="input-row-three">
+                                    <div class="input-group">
+                                        <label class="input-label" for="diagAge">Edad (años)</label>
+                                        <input type="number" id="diagAge" class="input-control" placeholder="Ej: 46" min="16" max="99" value="45" required>
+                                    </div>
                                     <div class="input-group">
                                         <label class="input-label" for="diagWeight">Peso Actual (kg)</label>
                                         <input type="number" step="0.1" id="diagWeight" class="input-control" placeholder="Ej: 78.5" value="78.0" required>
@@ -1499,6 +1522,45 @@
                                     <div class="input-group">
                                         <label class="input-label" for="diagHeight">Altura (cm)</label>
                                         <input type="number" id="diagHeight" class="input-control" placeholder="Ej: 176" value="175" required>
+                                    </div>
+                                </div>
+
+                                <!-- Selección de Objetivo Prioritario -->
+                                <div class="goal-selection-section">
+                                    <label class="input-label" style="margin-bottom: 10px;">¿Cuál es tu objetivo prioritario con SENS?</label>
+                                    <div class="goal-options-grid">
+                                        <label class="touch-card goal-card-touch">
+                                            <input type="radio" name="diagGoal" value="fat_loss" checked>
+                                            <div class="custom-circle"></div>
+                                            <div class="card-content">
+                                                <strong>Definición &amp; Pérdida de Grasa</strong>
+                                                <span class="card-sub">Reducir porcentaje graso preservando masa muscular y energía.</span>
+                                            </div>
+                                        </label>
+                                        <label class="touch-card goal-card-touch">
+                                            <input type="radio" name="diagGoal" value="muscle_gain">
+                                            <div class="custom-circle"></div>
+                                            <div class="card-content">
+                                                <strong>Fuerza &amp; Masa Muscular</strong>
+                                                <span class="card-sub">Construir masa magra, densidad muscular y fuerza real.</span>
+                                            </div>
+                                        </label>
+                                        <label class="touch-card goal-card-touch">
+                                            <input type="radio" name="diagGoal" value="recomp">
+                                            <div class="custom-circle"></div>
+                                            <div class="card-content">
+                                                <strong>Recomposición Corporal</strong>
+                                                <span class="card-sub">Tonificar, reducir cintura y ganar firmeza muscular a la vez.</span>
+                                            </div>
+                                        </label>
+                                        <label class="touch-card goal-card-touch">
+                                            <input type="radio" name="diagGoal" value="posture_health">
+                                            <div class="custom-circle"></div>
+                                            <div class="card-content">
+                                                <strong>Salud, Postura &amp; Vitalidad</strong>
+                                                <span class="card-sub">Aliviar dolores articulares, mejorar alineación y sentirte ágil.</span>
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
 
@@ -1632,9 +1694,59 @@
 
                                 <div class="step-tag-pill" style="margin: 0 auto 12px;">Expediente Registrado</div>
                                 <h2 class="step-title" style="text-align: center;">Diagnóstico <strong>Completado</strong></h2>
-                                <p class="step-desc" style="text-align: center; max-width: 520px; margin: 0 auto 28px;">
-                                    Tus datos fueron asegurados con éxito. Para comenzar a construir constancia hoy mismo, estos son tus dos objetivos basales:
-                                </p>
+                                <!-- Evaluación Biomecánica Visual (Siluetas Dinámicas: Punto de Partida vs Objetivo) -->
+                                <div class="biometric-assessment-card" id="diagBiometricVisualCard">
+                                    <div class="biometric-card-header">
+                                        <span class="biometric-eval-badge">Evaluación Morfométrica Inicial</span>
+                                        <h3 class="biometric-eval-title">Tu Perfil Físico &amp; <strong>Proyección SENS</strong></h3>
+                                        <p class="biometric-eval-sub">
+                                            Modelado biomecánico basado en tu altura, peso, índice de masa corporal y sexo biológico:
+                                        </p>
+                                    </div>
+
+                                    <div class="silhouettes-comparator-grid">
+                                        <!-- Silueta 1: Punto de Partida -->
+                                        <div class="silhouette-column current-state-col">
+                                            <div class="silhouette-col-header">
+                                                <span class="silhouette-tag">Punto de Partida</span>
+                                            </div>
+                                            <div class="silhouette-render-wrap" id="silhouetteRenderCurrent">
+                                                <!-- SVG dinámico inyectado por app.js -->
+                                            </div>
+                                            <div class="silhouette-athlete-footer">
+                                                <div class="athlete-name-display" id="diagAthleteNameDisplay">Atleta</div>
+                                                <div class="athlete-metrics-tag" id="diagAthleteMetricsTag">-- kg • -- cm</div>
+                                                <div class="athlete-status-badge" id="diagAthleteStatusBadge">Evaluando datos...</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Divisor y Flecha de Transformación -->
+                                        <div class="silhouette-transition-col">
+                                            <div class="transition-arrow-wrap">
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                                </svg>
+                                            </div>
+                                            <span class="transition-caption">Transformación Guiada</span>
+                                        </div>
+
+                                        <!-- Silueta 2: Objetivo Proyectado -->
+                                        <div class="silhouette-column target-state-col">
+                                            <div class="silhouette-col-header">
+                                                <span class="silhouette-tag target-tag">Objetivo SENS</span>
+                                            </div>
+                                            <div class="silhouette-render-wrap" id="silhouetteRenderGoal">
+                                                <!-- SVG dinámico objetivo con resplandor Champagne -->
+                                            </div>
+                                            <div class="silhouette-athlete-footer">
+                                                <div class="athlete-goal-display" id="diagAthleteGoalDisplay">Tu Meta</div>
+                                                <div class="athlete-metrics-tag" id="diagAthleteGoalSubTag">Planificación Adaptativa</div>
+                                                <div class="athlete-status-badge target-badge">Calibración con Nico</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Grid de Objetivos Basales (Diseño Limpio, Iconos SVG Profesionales) -->
                                 <div class="congrats-habits-grid congrats-two-cols">
@@ -1662,18 +1774,33 @@
                                         <div class="habit-content">
                                             <div class="habit-title">Meta Diaria de Pasos</div>
                                             <div class="habit-metric" id="diagHabitSteps">8.000 pasos</div>
-                                            <div class="habit-sub" id="diagHabitNeatDesc">Calibrado según tu nivel de actividad diaria</div>
+                                            <div class="habit-sub" id="diagHabitNeatDesc">Calibrado según tu dinamismo diario</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Temporizador de Revisión de Nico -->
-                                <div class="countdown-audit-card">
-                                    <div class="countdown-badge">Compromiso Personal SENS</div>
-                                    <div class="countdown-timer-display" id="diagCountdownDisplay">23h 59m 59s</div>
-                                    <p class="countdown-note">
-                                        Nico ya recibió tus respuestas para confeccionar tu plan de entrenamiento adaptado a tu biomecánica. Te escribirá por WhatsApp en cuanto tu programación esté lista.
+                                <!-- Compromiso Personal de Nico (Sin reloj) -->
+                                <div class="coach-feedback-card">
+                                    <div class="coach-feedback-header">
+                                        <div class="coach-avatar-badge">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="12" cy="7" r="4"></circle>
+                                            </svg>
+                                        </div>
+                                        <div class="coach-feedback-titles">
+                                            <span class="coach-feedback-tag">Auditoría Biomecánica en Proceso</span>
+                                            <h4 class="coach-feedback-title">Compromiso Personal de Nico</h4>
+                                        </div>
+                                    </div>
+                                    <p class="coach-feedback-desc">
+                                        En las próximas <strong>24 horas</strong> recibirás feedback directo de Nico para la <strong>creación personalizada de tu rutina de entrenamiento y plan de nutrición</strong>, adaptados a tus métricas y objetivo.
                                     </p>
+                                    <div class="coach-feedback-footer">
+                                        <span class="coach-feedback-channel">
+                                            <span class="live-status-dot"></span> Contacto directo vía WhatsApp
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
