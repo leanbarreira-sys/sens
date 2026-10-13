@@ -474,9 +474,12 @@ function initLeadCapture() {
         });
     });
 
-    // Enlaces globales que apuntan a #sumate (Hero, Navbar, Barra Móvil)
+    // Enlaces globales que apuntan a #sumate (Hero, Navbar, Barra Móvil, Menú Hamburguesa)
     document.querySelectorAll('a[href="#sumate"]:not(.plan-select-btn)').forEach(link => {
         link.addEventListener('click', (e) => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) mobileMenu.style.display = 'none';
+
             const sumateSection = document.getElementById('sumate');
             if (sumateSection) {
                 e.preventDefault();
@@ -794,10 +797,12 @@ function initNavbarScroll() {
             });
         }
 
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.style.display = 'none';
-            });
+        mobileMenu.querySelectorAll('a, button').forEach(el => {
+            if (el !== mobileMenuCloseBtn) {
+                el.addEventListener('click', () => {
+                    mobileMenu.style.display = 'none';
+                });
+            }
         });
     }
 }
@@ -1303,10 +1308,27 @@ async function loadProfileFromSupabase(userId) {
             .from('profiles')
             .select('*')
             .eq('id', userId)
-            .single();
+            .maybeSingle();
 
         if (data && !error) {
             AppState.profile = data;
+            const emailKey = (AppState.user && AppState.user.email) ? AppState.user.email : '';
+            if (emailKey) {
+                const localSaved = localStorage.getItem('sens_profile_' + emailKey);
+                if (localSaved) {
+                    try {
+                        const parsed = JSON.parse(localSaved);
+                        if (parsed.onboarding_completed && !data.onboarding_completed) {
+                            AppState.profile.onboarding_completed = true;
+                            supabaseClient
+                                .from('profiles')
+                                .update({ onboarding_completed: true })
+                                .eq('id', userId)
+                                .then();
+                        }
+                    } catch (e) {}
+                }
+            }
         } else {
             AppState.profile = null;
         }
@@ -1315,7 +1337,7 @@ async function loadProfileFromSupabase(userId) {
             .from('anamnesis')
             .select('*')
             .eq('user_id', userId)
-            .single();
+            .maybeSingle();
 
         if (anamData) {
             AppState.anamnesis = anamData;
@@ -1972,14 +1994,21 @@ function initDiagnosisWizard() {
         });
     }
 
-    // 10. Botón Entrar al Dashboard desde Congrats (Paso 8)
+    // 10. Botón Entrar al Dashboard desde Congrats (Paso 9)
     const enterDashBtn = document.getElementById('btnDiagEnterDashboard');
     if (enterDashBtn) {
         enterDashBtn.addEventListener('click', () => {
-            document.getElementById('portalSubNav').style.display = 'flex';
-            renderDashboardData();
-            switchPortalView('dashView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const isAdmin = Boolean(AppState.profile && (AppState.profile.user_type === 'admin' || AppState.profile.role === 'admin'));
+            const isSubActive = isAdmin || (AppState.profile && AppState.profile.subscription_status === 'active');
+            if (!isSubActive) {
+                openUserPortal(false);
+            } else {
+                document.getElementById('portalSubNav').style.display = 'flex';
+                renderDashboardData();
+                renderWorkoutDay(AppState.currentDay || 'day1');
+                switchPortalView('dashView');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         });
     }
 
@@ -2263,78 +2292,105 @@ async function processDiagnosisSubmission() {
     renderBiometricSilhouettes(gender, weight, height, goal, fullName);
 
     // =========================================================================
-    // PERSISTENCIA DE DATOS
+    // PERSISTENCIA DE DATOS (ESQUEMA EXACTO POSTGRESQL SUPABASE)
     // =========================================================================
-    const profilePayload = {
-        id: AppState.user ? AppState.user.id : undefined,
+    const cleanProfilePayload = {
         full_name: fullName,
-        gender,
-        goal,
-        age,
-        current_weight: weight,
-        height,
-        daily_step_target: calculatedStepTarget,
+        gender: gender || 'other',
+        goal: goal || 'general_vitality',
+        age: parseInt(age, 10) || null,
+        current_weight: parseFloat(weight) || null,
+        height: parseFloat(height) || null,
+        daily_step_target: calculatedStepTarget || 8000,
         role: isVipCandidate ? 'user_vip' : 'user_normal',
-        vip_candidate: isVipCandidate,
-        vip_score: vipScore,
         onboarding_completed: true,
         consent_timestamp: new Date().toISOString(),
-        consent_version: 'v1.0_2026',
+        consent_version: 'v3.0_2026',
         active_plan_name: 'Plan Personalizado SENS TRAIN',
         updated_at: new Date().toISOString()
     };
 
-    const anamnesisPayload = {
+    const cleanAnamnesisPayload = {
         user_id: AppState.user ? AppState.user.id : undefined,
-        gender,
-        goal,
-        parq_responses: parqResponses,
-        has_medical_flags: hasMedicalFlags,
-        parq_notes: parqNotes,
-        active_injuries: selectedInjuries,
-        injury_intensities: injuryIntensities,
-        has_surgery: hasSurgery,
-        surgery_detail: surgeryDetail,
+        gender: gender || 'other',
+        goal: goal || 'general_vitality',
+        parq_responses: parqResponses || {},
+        has_medical_flags: Boolean(hasMedicalFlags),
+        parq_notes: parqNotes || '',
+        active_injuries: Array.isArray(selectedInjuries) ? selectedInjuries : [],
+        injury_intensities: injuryIntensities || {},
+        has_surgery: Boolean(hasSurgery),
+        surgery_detail: surgeryDetail || '',
         tape_measurements: {
             waist: tapeWaist,
             hip: tapeHip,
             arm: tapeArm,
             thigh: tapeThigh
         },
-        experience_level: experience,
-        weekly_frequency: weeklyFrequency,
-        available_equipment: availableEquipment,
-        sleep_hours: sleepHours,
-        stress_level: stressLevel,
-        neat_level: neatLevel,
-        water_liters_baseline: parseFloat(calculatedWaterLiters),
-        historical_hurdle: historicalHurdle,
-        historical_hurdle_detail: hurdleDetail,
+        experience_level: experience || 'beginner',
+        weekly_frequency: parseInt(weeklyFrequency, 10) || 3,
+        available_equipment: Array.isArray(availableEquipment) ? availableEquipment : [availableEquipment || 'gym_complete'],
+        sleep_hours: parseFloat(sleepHours) || 7,
+        stress_level: parseInt(stressLevel, 10) || 5,
+        neat_level: neatLevel || 'moderate',
+        water_liters_baseline: parseFloat(calculatedWaterLiters) || 2.5,
+        historical_hurdle: historicalHurdle || '',
+        historical_hurdle_detail: hurdleDetail || '',
         mobility_tests: { shoulder: mobShoulder, posterior: mobPosterior },
         photos: {
             front: frontPhoto && frontPhoto.startsWith('data:') ? 'uploaded_local' : frontPhoto,
             side: sidePhoto && sidePhoto.startsWith('data:') ? 'uploaded_local' : sidePhoto
         },
-        daily_step_target: calculatedStepTarget,
         is_draft: false,
         updated_at: new Date().toISOString()
     };
 
-    AppState.profile = profilePayload;
-    AppState.anamnesis = anamnesisPayload;
+    AppState.profile = {
+        ...(AppState.profile || {}),
+        ...cleanProfilePayload,
+        vip_candidate: isVipCandidate,
+        vip_score: vipScore
+    };
+    AppState.anamnesis = cleanAnamnesisPayload;
 
     const emailKey = AppState.user && AppState.user.email ? AppState.user.email : 'local_user';
-    localStorage.setItem(`sens_profile_${emailKey}`, JSON.stringify(profilePayload));
-    localStorage.setItem(`sens_anamnesis_${emailKey}`, JSON.stringify(anamnesisPayload));
+    localStorage.setItem(`sens_profile_${emailKey}`, JSON.stringify(AppState.profile));
+    localStorage.setItem(`sens_anamnesis_${emailKey}`, JSON.stringify(cleanAnamnesisPayload));
     localStorage.removeItem('sens_onboarding_draft');
 
-    // Sincronización en segundo plano con Supabase si está disponible
-    if (supabaseClient && AppState.user) {
+    // Sincronización robusta con Supabase (actualiza profiles y hace upsert/insert de anamnesis)
+    if (supabaseClient && AppState.user && AppState.user.id) {
         try {
-            await supabaseClient.from('profiles').upsert(profilePayload);
-            await supabaseClient.from('anamnesis').upsert(anamnesisPayload);
+            const { error: profError } = await supabaseClient
+                .from('profiles')
+                .update(cleanProfilePayload)
+                .eq('id', AppState.user.id);
+            if (profError) {
+                console.error('[SENS] Error al actualizar perfil en Supabase:', profError);
+            } else {
+                console.log('[SENS] Perfil y onboarding completado guardados con éxito en Supabase.');
+            }
+
+            const { data: existingAnam } = await supabaseClient
+                .from('anamnesis')
+                .select('id')
+                .eq('user_id', AppState.user.id)
+                .maybeSingle();
+
+            if (existingAnam && existingAnam.id) {
+                const { error: anamErr } = await supabaseClient
+                    .from('anamnesis')
+                    .update(cleanAnamnesisPayload)
+                    .eq('id', existingAnam.id);
+                if (anamErr) console.error('[SENS] Error actualizando anamnesis:', anamErr);
+            } else {
+                const { error: anamErr } = await supabaseClient
+                    .from('anamnesis')
+                    .insert(cleanAnamnesisPayload);
+                if (anamErr) console.error('[SENS] Error insertando anamnesis:', anamErr);
+            }
         } catch (err) {
-            console.error('Error sincronizando con Supabase:', err);
+            console.error('[SENS] Error sincronizando diagnóstico con Supabase:', err);
         }
     }
 
