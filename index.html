@@ -858,18 +858,11 @@
                     <input type="password" id="regPassword" class="input-control" placeholder="Mínimo 6 caracteres"
                         minlength="6" required autocomplete="new-password">
                 </div>
-                <button type="submit" class="btn btn-primary btn-full" id="submitRegBtn">Crear Cuenta &
-                    Comenzar</button>
+                <button type="submit" class="btn btn-primary btn-full" id="submitRegBtn">Crear Cuenta &amp; Comenzar</button>
+                <p style="margin-top: 14px; font-size: 11px; color: var(--text-muted); text-align: center;">
+                    Al registrarte iniciarás tu <strong>Evaluación Inicial de Fuerza &amp; Hábitos</strong> con Nico.
+                </p>
             </form>
-
-            <!-- Acceso Rápido de Prueba (Demo) sin registrarse -->
-            <div
-                style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle); text-align: center;">
-                <button type="button" class="btn btn-outline btn-full" id="demoDiagnosisBtn"
-                    style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary); font-size: 12px; letter-spacing: 1px;">
-                    ⚡ Probar Diagnóstico sin registrarme (Modo Demo)
-                </button>
-            </div>
         </div>
     </div>
 
@@ -885,31 +878,29 @@
             </div>
             <div class="portal-user-badge">
                 <span style="font-size: 13px; color: var(--text-secondary);"
-                    id="portalUserEmail">roberto.gomez@sens.com</span>
+                    id="portalUserEmail">atleta@sens.com</span>
                 <button class="btn btn-outline btn-sm" id="logoutBtn">Cerrar Sesión</button>
             </div>
         </div>
 
-        <!-- Barra de Roles y Perfiles de Usuario (Supabase Roles & Multi-User Support) -->
-        <div class="portal-role-bar"
-            style="background: var(--bg-elevated); border-bottom: 1px solid var(--border-subtle); padding: 8px 5%; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+        <!-- Barra de Gestión de Atletas para el Entrenador (Solo visible para Nico / Admin) -->
+        <div class="portal-role-bar" id="coachAthleteBar"
+            style="background: var(--bg-elevated); border-bottom: 1px solid var(--border-subtle); padding: 8px 5%; display: none; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">⚡ PANEL DE COACH</span>
                 <span
-                    style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-primary); font-weight: 700;">Simular
-                    Tipo de Usuario:</span>
+                    style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); font-weight: 700;">Gestionar Atleta:</span>
                 <select id="userRoleSelector" class="input-control"
                     style="width: auto; padding: 6px 12px; font-size: 12px; height: 34px; background: var(--bg-surface); border: 1px solid var(--border-strong); cursor: pointer;">
-                    <option value="client_presencial_vip" selected>Presencial 1 a 1 VIP (Roberto Gomez — 2x/sem CABA)
-                    </option>
-                    <option value="client_presencial_group">Presencial Grupo Dúo (Laura &amp; Marcos — CABA)</option>
-                    <option value="client_online_premium">Online Asesorado Premium (Esteban Bianchi)</option>
-                    <option value="client_online_basic">Online Asesorado Básico (Carla Méndez)</option>
-                    <option value="admin">⚡ Modo Coach &amp; Admin (Nico)</option>
+                    <option value="client_presencial_vip" selected>Roberto Gómez — Presencial 1 a 1 VIP (2x/sem CABA)</option>
+                    <option value="client_presencial_group">Laura &amp; Marcos — Presencial Dúo (CABA)</option>
+                    <option value="client_online_premium">Esteban Bianchi — Online Premium</option>
+                    <option value="client_online_basic">Carla Méndez — Online Básico</option>
+                    <option value="admin">Mi Perfil Coach (Nico)</option>
                 </select>
             </div>
             <div id="roleContextIndicator">
-                <span class="pill pill-champagne" id="roleContextBadge" style="font-size: 10px;">Presencial 1 a 1 • 8
-                    Sesiones/mes</span>
+                <span class="pill pill-champagne" id="roleContextBadge" style="font-size: 10px;">Presencial 1 a 1 • 8 Sesiones/mes</span>
             </div>
         </div>
 

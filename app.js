@@ -477,14 +477,11 @@ function initLeadCapture() {
 }
 
 // =============================================================================
-// NUEVO: GESTOR DE MULTI-USUARIOS Y ROLES (SUPABASE ROLES & DEMO SWITCHER)
+// GESTOR DE ROLES Y ATLETAS PARA PANEL DE COACH (NICO)
 // =============================================================================
 function initRoleSwitcher() {
     const roleSelector = document.getElementById('userRoleSelector');
     if (!roleSelector) return;
-
-    // Aplicar perfil por defecto
-    applyUserProfile('client_presencial_vip');
 
     roleSelector.addEventListener('change', (e) => {
         const selectedType = e.target.value;
@@ -1100,24 +1097,35 @@ function initAuthModal() {
         clearAuthAlert();
     });
 
+    // Helper de traducción de errores de Supabase Auth
+    function formatAuthErrorMessage(errorMsg) {
+        if (!errorMsg) return 'Ocurrió un error al procesar tu solicitud.';
+        const msg = errorMsg.toLowerCase();
+        if (msg.includes('invalid login credentials')) return 'Email o contraseña incorrectos. Verificá tus datos.';
+        if (msg.includes('user already registered') || msg.includes('already registered')) return 'Ya existe una cuenta con este correo. Iniciá sesión con tu contraseña.';
+        if (msg.includes('password should be at least')) return 'La contraseña debe tener al menos 6 caracteres.';
+        if (msg.includes('email not confirmed')) return 'Por favor confirmá tu correo electrónico mediante el enlace que te enviamos.';
+        if (msg.includes('rate limit')) return 'Demasiados intentos seguidos. Por favor aguardá unos minutos.';
+        return errorMsg;
+    }
+
     // Formulario Iniciar Sesión
     paneLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
 
-        showAuthAlert('Autenticando...', 'info');
+        showAuthAlert('Autenticando acceso...', 'info');
 
         if (supabaseClient) {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) {
-                showAuthAlert(error.message, 'error');
+                showAuthAlert(formatAuthErrorMessage(error.message), 'error');
                 return;
             }
             AppState.user = data.user;
             await loadProfileFromSupabase(data.user.id);
         } else {
-            // Local Mock
             AppState.user = { id: 'local-user-id', email };
             const savedProfile = localStorage.getItem('sens_profile_' + email);
             const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + email);
@@ -1127,7 +1135,8 @@ function initAuthModal() {
                 AppState.profile = {
                     full_name: email.split('@')[0],
                     daily_step_target: 10000,
-                    active_plan_name: 'Plan Personalizado SENS TRAIN'
+                    active_plan_name: 'Plan Personalizado SENS TRAIN',
+                    onboarding_completed: false
                 };
             }
             if (savedAnamnesis) {
@@ -1136,12 +1145,12 @@ function initAuthModal() {
             localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
         }
 
-        showAuthAlert('¡Acceso correcto! Ingresando al portal...', 'success');
+        showAuthAlert('¡Acceso concedido! Entrando a tu portal...', 'success');
         updateAuthNavButtons();
         setTimeout(() => {
             showAuthModal(false);
             openUserPortal(false);
-        }, 700);
+        }, 600);
     });
 
     // Formulario Registro
@@ -1151,7 +1160,7 @@ function initAuthModal() {
         const email = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPassword').value;
 
-        showAuthAlert('Registrando cuenta...', 'info');
+        showAuthAlert('Creando tu cuenta...', 'info');
 
         if (supabaseClient) {
             const { data, error } = await supabaseClient.auth.signUp({
@@ -1160,37 +1169,31 @@ function initAuthModal() {
                 options: { data: { full_name: fullName } }
             });
             if (error) {
-                showAuthAlert(error.message, 'error');
+                showAuthAlert(formatAuthErrorMessage(error.message), 'error');
                 return;
             }
+
+            // Si Supabase requiere confirmación de email y no retorna sesión inmediata:
+            if (data.user && !data.session) {
+                showAuthAlert('¡Cuenta creada con éxito! Te enviamos un correo de confirmación a tu email para activar tu acceso. Por favor revisá tu bandeja de entrada o spam.', 'success');
+                return;
+            }
+
             AppState.user = data.user;
-            AppState.profile = { full_name: fullName };
+            AppState.profile = { id: data.user.id, full_name: fullName, onboarding_completed: false };
         } else {
             AppState.user = { id: 'local-user-' + Date.now(), email };
-            AppState.profile = { full_name: fullName };
+            AppState.profile = { full_name: fullName, onboarding_completed: false };
             localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
         }
 
-        showAuthAlert('¡Cuenta creada con éxito! Pasando al asistente de inicio...', 'success');
+        showAuthAlert('¡Cuenta creada con éxito! Iniciando tu Evaluación Inicial...', 'success');
         updateAuthNavButtons();
         setTimeout(() => {
             showAuthModal(false);
-            openUserPortal(true); // Redirige a Diagnóstico inicial (Módulo 4)
-        }, 800);
+            openUserPortal(true); // Redirige a Evaluación inicial para nuevos atletas
+        }, 700);
     });
-
-    // Botón de prueba directa sin registrarse (Modo Demo)
-    const demoBtn = document.getElementById('demoDiagnosisBtn');
-    if (demoBtn) {
-        demoBtn.addEventListener('click', () => {
-            AppState.user = { id: 'demo-user-' + Date.now(), email: 'demo@sens.com' };
-            AppState.profile = { full_name: 'Atleta Demo', onboarding_completed: false };
-            localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
-            updateAuthNavButtons();
-            showAuthModal(false);
-            openUserPortal(true);
-        });
-    }
 }
 
 function showAuthModal(show) {
@@ -1248,24 +1251,52 @@ async function loadProfileFromSupabase(userId) {
     }
 }
 
-function checkExistingSession() {
-    const localUser = localStorage.getItem('sens_active_user');
-    if (localUser) {
+async function checkExistingSession() {
+    if (supabaseClient) {
         try {
-            AppState.user = JSON.parse(localUser);
-            const savedProfile = localStorage.getItem('sens_profile_' + AppState.user.email);
-            const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + AppState.user.email);
-            if (savedProfile) {
-                AppState.profile = JSON.parse(savedProfile);
-            }
-            if (savedAnamnesis) {
-                AppState.anamnesis = JSON.parse(savedAnamnesis);
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            if (session && session.user) {
+                AppState.user = session.user;
+                await loadProfileFromSupabase(session.user.id);
+                updateAuthNavButtons();
+                console.log('[SENS] Sesión activa de Supabase detectada:', session.user.email);
             }
         } catch (e) {
-            console.error('Error parseando sesión previa:', e);
+            console.warn('[SENS] Error al restaurar sesión previa:', e);
         }
+
+        // Suscripción reactiva a cambios de sesión (login, logout, refresh de token)
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_IN' && session && session.user) {
+                AppState.user = session.user;
+                await loadProfileFromSupabase(session.user.id);
+                updateAuthNavButtons();
+            } else if (event === 'SIGNED_OUT') {
+                AppState.user = null;
+                AppState.profile = null;
+                AppState.anamnesis = null;
+                updateAuthNavButtons();
+            }
+        });
+    } else {
+        const localUser = localStorage.getItem('sens_active_user');
+        if (localUser) {
+            try {
+                AppState.user = JSON.parse(localUser);
+                const savedProfile = localStorage.getItem('sens_profile_' + AppState.user.email);
+                const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + AppState.user.email);
+                if (savedProfile) {
+                    AppState.profile = JSON.parse(savedProfile);
+                }
+                if (savedAnamnesis) {
+                    AppState.anamnesis = JSON.parse(savedAnamnesis);
+                }
+            } catch (e) {
+                console.error('Error parseando sesión previa:', e);
+            }
+        }
+        updateAuthNavButtons();
     }
-    updateAuthNavButtons();
 }
 
 // =============================================================================
@@ -1361,6 +1392,8 @@ function openUserPortal(forceOnboarding = false) {
     const portal = document.getElementById('app-container');
     const publicLanding = document.getElementById('publicLanding');
     const userEmailEl = document.getElementById('portalUserEmail');
+    const planBadgeEl = document.getElementById('portalPlanBadge');
+    const coachBar = document.getElementById('coachAthleteBar');
     const globalHeader = document.querySelector('header');
     const mobileQuickBar = document.querySelector('.mobile-quick-bar');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -1376,21 +1409,43 @@ function openUserPortal(forceOnboarding = false) {
     portal.classList.add('active');
     publicLanding.style.display = 'none';
 
-    if (AppState.user) {
-        userEmailEl.textContent = AppState.user.email || 'atleta@sens.com';
+    const profile = AppState.profile || {};
+    const user = AppState.user || {};
+
+    if (userEmailEl) {
+        userEmailEl.textContent = user.email || 'atleta@sens.com';
+    }
+    if (planBadgeEl) {
+        planBadgeEl.textContent = profile.active_plan_name || 'Presencial 1 a 1 VIP (CABA)';
     }
 
-    // Comprobar si el diagnóstico clínico fue completado
-    const isCompleted = Boolean(AppState.profile && AppState.profile.onboarding_completed);
+    const isAdmin = Boolean(profile.user_type === 'admin' || profile.role === 'admin' || user.user_type === 'admin');
 
-    if (forceOnboarding || !isCompleted) {
-        // Redirige al diagnóstico inicial
+    // Visibilidad del Panel de Control de Coach (Solo para Nico)
+    if (coachBar) {
+        coachBar.style.display = isAdmin ? 'flex' : 'none';
+    }
+
+    const adminIndicatorBadge = document.getElementById('adminIndicatorBadge');
+    const adminAddBtn = document.getElementById('btnAdminAddExercise');
+    if (adminIndicatorBadge) adminIndicatorBadge.style.display = isAdmin ? 'block' : 'none';
+    if (adminAddBtn) adminAddBtn.style.display = isAdmin ? 'inline-block' : 'none';
+
+    // Regla de Enrutamiento Onboarding:
+    // 1. Admin (Nico): va directo al dashboard de coach. Nunca se le piden preguntas iniciales de atleta.
+    // 2. Atleta con onboarding completado: va directo al Dashboard con sus rutinas y métricas (NO repite preguntas).
+    // 3. Atleta nuevo o que no finalizó su evaluación: entra a la Evaluación Inicial de Fuerza & Hábitos.
+    const isCompleted = isAdmin || Boolean(profile.onboarding_completed);
+
+    if (!isAdmin && (forceOnboarding || !isCompleted)) {
+        // Redirige a la Evaluación Inicial
         document.getElementById('portalSubNav').style.display = 'none';
         startDiagnosisWizard(false);
     } else {
         // Redirige al Dashboard de Atleta
         document.getElementById('portalSubNav').style.display = 'flex';
         renderDashboardData();
+        renderWorkoutDay(AppState.currentDay || 'day1');
         switchPortalView('dashView');
     }
 
