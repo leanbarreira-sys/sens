@@ -991,6 +991,11 @@
                     <input type="password" id="loginPassword" class="input-control" placeholder="••••••••" required
                         autocomplete="current-password">
                 </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: -6px; margin-bottom: 14px;">
+                    <button type="button" id="btnForgotPass" class="btn-link-forgot" style="background: none; border: none; color: var(--accent-primary); font-size: 11.5px; cursor: pointer; text-decoration: underline; padding: 0;">
+                        ¿Olvidaste tu contraseña?
+                    </button>
+                </div>
                 <button type="submit" class="btn btn-primary btn-full" id="submitLoginBtn">Ingresar a mi Portal</button>
                 <p style="margin-top: 16px; font-size: 11px; color: var(--text-muted);">
                     ¿Primer día? Seleccioná <strong>Registrarme</strong> para configurar tu perfil.
@@ -1018,6 +1023,26 @@
                 <p style="margin-top: 14px; font-size: 11px; color: var(--text-muted); text-align: center;">
                     Al registrarte iniciarás tu <strong>Evaluación Inicial de Fuerza &amp; Hábitos</strong> con Nico.
                 </p>
+            </form>
+
+            <!-- Vista 3: Forgot Password Form -->
+            <form class="auth-pane" id="forgotPassForm">
+                <div style="margin-bottom: 16px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                    Ingresá el email de tu cuenta y te enviaremos un enlace seguro para restablecer tu contraseña.
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="forgotEmail">Email Registrado</label>
+                    <input type="email" id="forgotEmail" class="input-control" placeholder="tu@email.com" required autocomplete="username">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="submitForgotBtn">Enviar Enlace de Recuperación</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 11.5px;">
+                    <button type="button" id="btnBackToLoginFromForgot" style="background: none; border: none; color: var(--text-muted); font-size: 11.5px; cursor: pointer; padding: 0;">
+                        ← Volver a Iniciar Sesión
+                    </button>
+                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Olvid%C3%A9%20mi%20contrase%C3%B1a%20en%20SENS%20y%20necesito%20acceder." target="_blank" rel="noopener" style="color: var(--accent-primary); text-decoration: none;">
+                        Ayuda por WhatsApp →
+                    </a>
+                </div>
             </form>
         </div>
     </div>
@@ -2588,71 +2613,175 @@
                     </div>
                 </div>
 
-                <!-- 1. Strip Calendar Semanal (Estilo BIGG) -->
-                <div class="sens-week-strip-wrap" id="portalWeekStrip">
-                    <button type="button" class="sens-week-day-pill" data-day-idx="0">
-                        <span class="sens-week-day-name">Lun</span>
-                        <span class="sens-week-day-num">12</span>
+                <!-- 1. Navegador de Semanas & Strip Calendar Semanal (Dinámico Pasado y Futuro) -->
+                <div class="sens-week-nav-bar">
+                    <button type="button" class="sens-week-arrow-btn" id="btnWeekPrev" aria-label="Semana anterior" title="Semana anterior">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
                     </button>
-                    <button type="button" class="sens-week-day-pill active" data-day-idx="1">
-                        <span class="sens-week-day-name">Mar</span>
-                        <span class="sens-week-day-num">13</span>
-                    </button>
-                    <button type="button" class="sens-week-day-pill" data-day-idx="2">
-                        <span class="sens-week-day-name">Mié</span>
-                        <span class="sens-week-day-num">14</span>
-                    </button>
-                    <button type="button" class="sens-week-day-pill" data-day-idx="3">
-                        <span class="sens-week-day-name">Jue</span>
-                        <span class="sens-week-day-num">15</span>
-                    </button>
-                    <button type="button" class="sens-week-day-pill" data-day-idx="4">
-                        <span class="sens-week-day-name">Vie</span>
-                        <span class="sens-week-day-num">16</span>
-                    </button>
-                    <button type="button" class="sens-week-day-pill" data-day-idx="5">
-                        <span class="sens-week-day-name">Sáb</span>
-                        <span class="sens-week-day-num">17</span>
-                    </button>
-                    <button type="button" class="sens-week-day-pill" data-day-idx="6">
-                        <span class="sens-week-day-name">Dom</span>
-                        <span class="sens-week-day-num">18</span>
+                    <div class="sens-week-title-wrap">
+                        <span class="sens-week-range-text" id="sensWeekRangeLabel">Cargando semana...</span>
+                        <button type="button" class="sens-pill-today" id="btnJumpToToday">Hoy</button>
+                    </div>
+                    <button type="button" class="sens-week-arrow-btn" id="btnWeekNext" aria-label="Semana siguiente" title="Semana siguiente">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                     </button>
                 </div>
 
-                <!-- 2. Tarjeta Editorial de Directiva de Nico (Estilo BIGG) -->
-                <div class="sens-coach-directive-card">
-                    <div class="sens-coach-card-upper">
-                        <div class="sens-coach-card-header">
-                            <h3 class="sens-coach-card-title">Tu entrenamiento</h3>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="9 18 15 12 9 6" />
-                            </svg>
-                        </div>
-                        <p class="sens-coach-card-note" id="dashNicoMessage">
-                            Cargando tu planificación personalizada...
-                        </p>
-                    </div>
-                    <div class="sens-coach-card-lower">
-                        <div class="sens-location-pill-wrap">
-                            <span class="sens-location-label">¿Dónde entrenás hoy?</span>
-                            <div class="sens-location-selector-btn" id="dashLocationTrigger">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                </svg>
-                                <span id="dashLocationName">Presencial Palermo</span>
-                                <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-                                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
+                <div class="sens-week-strip-wrap" id="portalWeekStrip">
+                    <!-- Inyectado dinámicamente por app.js con fechas reales (14/10, etc.) -->
+                </div>
+
+                <!-- 2. Card de Entrenamiento Dinámica con Video & Foco Muscular Automático -->
+                <div class="sens-training-video-card" id="dashTrainingVideoCard">
+                    <!-- Estado A: Con Entrenamiento Programado para el Día Seleccionado -->
+                    <div class="sens-training-card-active" id="dashWorkoutActivePane">
+                        <div class="sens-video-preview-box">
+                            <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline autoplay poster="img/pilar-1-tecnica.jpg">
+                                <source id="dashWorkoutVideoSource" src="vid/pilar-1-tecnica.mp4" type="video/mp4">
+                            </video>
+                            <div class="sens-video-overlay-gradient"></div>
+                            <div class="sens-video-top-badges">
+                                <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial con Nico</span>
+                                <span class="sens-duration-pill" id="dashWorkoutDurationPill">5 ejercicios • ~45 min</span>
                             </div>
                         </div>
-                        <button type="button" class="sens-btn-start-workout" id="dashQuickWorkoutBtn">
-                            Ir a entrenamiento →
-                        </button>
+                        <div class="sens-training-card-body">
+                            <div class="sens-training-info-left">
+                                <span class="sens-training-eyebrow" id="dashWorkoutDayDateLabel">Hoy entrenás</span>
+                                <h3 class="sens-training-focus-title" id="dashWorkoutFocusTitle">Pecho, Hombros y Tríceps</h3>
+                                <p class="sens-training-first-ex-note" id="dashFirstExerciseName">Primer ejercicio: Press de Banca Plano con Barra</p>
+                            </div>
+                            <button type="button" class="sens-btn-circle-arrow" id="dashStartWorkoutBtn" aria-label="Ir al entrenamiento de hoy" title="Comenzar entrenamiento">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Estado B: Día de Descanso (¿Hoy Descansamos? MAKE SENS.) -->
+                    <div class="sens-training-card-rest" id="dashWorkoutRestPane" style="display: none;">
+                        <div class="sens-rest-card-inner">
+                            <div class="sens-rest-badge">Recuperación Activa</div>
+                            <h3 class="sens-rest-title">¿Hoy Descansamos? MAKE SENS.</h3>
+                            <p class="sens-rest-desc">
+                                Día de descanso celular y adaptación del sistema nervioso. Hidratate bien, caminá suave y recargá energía para tu próximo estímulo de fuerza con Nico.
+                            </p>
+                            <div class="sens-rest-actions">
+                                <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches" style="font-size: 11.5px;">
+                                    Ver estiramientos de movilidad →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Card Nutricional con Video de Almuerzo & Desglose de Calorías -->
+                <div class="sens-nutri-summary-card" id="dashNutriSummaryCard" style="cursor: pointer;">
+                    <div class="sens-nutri-card-header">
+                        <div class="sens-nutri-header-left">
+                            <span class="sens-nutri-eyebrow">Nutrición &amp; Hábitos del Día</span>
+                            <h3 class="sens-nutri-card-title">Almuerzo sugerido por Nico</h3>
+                        </div>
+                        <span class="sens-nutri-goal-badge" id="dashNutriTargetBadge">1,950 kcal meta</span>
+                    </div>
+                    <div class="sens-nutri-media-row">
+                        <div class="sens-nutri-video-wrap">
+                            <video class="sens-nutri-video-player" muted loop playsinline autoplay poster="img/pilar-4-adherencia.jpg">
+                                <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
+                            </video>
+                            <span class="sens-dish-tag">Almuerzo</span>
+                        </div>
+                        <div class="sens-nutri-details-col">
+                            <p class="sens-nutri-recipe-note" id="dashNutriMealDesc">
+                                Bowl de salmón sellado o pechuga grillada con quinoa tibia, palta y vegetales salteados. Aporte proteico para síntesis muscular.
+                            </p>
+                            <div class="sens-meal-cals-grid">
+                                <div class="sens-meal-cal-pill">
+                                    <span class="meal-name">Desayuno</span>
+                                    <strong class="meal-val" id="calMealDesayuno">420 kcal</strong>
+                                </div>
+                                <div class="sens-meal-cal-pill highlight">
+                                    <span class="meal-name">Almuerzo</span>
+                                    <strong class="meal-val" id="calMealAlmuerzo">680 kcal</strong>
+                                </div>
+                                <div class="sens-meal-cal-pill">
+                                    <span class="meal-name">Merienda</span>
+                                    <strong class="meal-val" id="calMealMerienda">310 kcal</strong>
+                                </div>
+                                <div class="sens-meal-cal-pill">
+                                    <span class="meal-name">Cena</span>
+                                    <strong class="meal-val" id="calMealCena">540 kcal</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sens-nutri-card-footer">
+                        <span>Toca para ver el detalle en nutrición y registrar tus comidas</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+                </div>
+
+                <!-- 4. Card de Objetivo: Balance Calórico, Déficit, Peso, Grasa y Entrenos -->
+                <div class="sens-objective-card" id="dashObjectiveCard" style="cursor: pointer;">
+                    <div class="sens-objective-header">
+                        <div>
+                            <span class="sens-objective-eyebrow">Tu Objetivo de Longevidad</span>
+                            <h3 class="sens-objective-title">Balance Energético &amp; Evolución</h3>
+                        </div>
+                        <span class="sens-objective-status-pill" id="dashObjectiveGoalPill">Déficit Definición</span>
+                    </div>
+
+                    <div class="sens-objective-grid">
+                        <!-- Balance Calórico / Déficit -->
+                        <div class="sens-obj-box highlight-box">
+                            <div class="sens-obj-box-label">Balance Neto Diario</div>
+                            <div class="sens-obj-box-val text-success" id="dashNetDeficitVal">-380 <span class="unit">kcal</span></div>
+                            <div class="sens-obj-box-desc">
+                                Gasto TDEE: <span id="dashTdeeNum">2,330</span> kcal • Ingesta: <span id="dashIngestaNum">1,950</span> kcal
+                            </div>
+                        </div>
+
+                        <!-- Progresión de Peso -->
+                        <div class="sens-obj-box">
+                            <div class="sens-obj-box-label">Progresión de Peso</div>
+                            <div class="sens-obj-box-val" id="dashWeightProgVal">76.0 <span class="unit">kg</span></div>
+                            <div class="sens-obj-box-trend positive" id="dashWeightTrendTag">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+                                -0.4 kg vs semana anterior
+                            </div>
+                        </div>
+
+                        <!-- Progresión de Grasa -->
+                        <div class="sens-obj-box">
+                            <div class="sens-obj-box-label">Grasa Corporal</div>
+                            <div class="sens-obj-box-val" id="dashFatProgVal">14.2 <span class="unit">%</span></div>
+                            <div class="sens-obj-box-trend positive" id="dashFatTrendTag">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+                                -0.6% vs inicio
+                            </div>
+                        </div>
+
+                        <!-- Entrenamientos en la Semana -->
+                        <div class="sens-obj-box">
+                            <div class="sens-obj-box-label">Entrenamientos Semanales</div>
+                            <div class="sens-obj-box-val" id="dashWorkoutsCountVal">3 <span class="unit">/ 4 días</span></div>
+                            <div class="sens-obj-box-chips" id="dashWorkoutsMiniChips">
+                                <span class="mini-chip done" title="Lunes completado">L</span>
+                                <span class="mini-chip done" title="Miércoles completado">M</span>
+                                <span class="mini-chip done" title="Viernes completado">V</span>
+                                <span class="mini-chip pending" title="Domingo pendiente">D</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sens-objective-footer-bar">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div class="sens-score-dot"></div>
+                            <span style="font-size: 12px; font-weight: 600;" id="dashConsistencyScoreText">Índice de Consistencia: 92% • Rango Óptimo</span>
+                        </div>
+                        <span style="font-size: 11px; color: var(--text-muted);">Ver desglose biométrico →</span>
                     </div>
                 </div>
 
@@ -3048,18 +3177,9 @@
                     </div>
                 </div>
 
-                <!-- 2. Navegador de Días de Entrenamiento (1 a 6 Días Programables por Nico) -->
+                <!-- 2. Navegador de Días de Entrenamiento (Fechas reales DD/MM con default hoy) -->
                 <div class="workout-days-nav" id="workoutDaysNav">
-                    <button type="button" class="day-tab-btn active" data-day="day1">Día 1: Piernas &amp;
-                        Glúteos</button>
-                    <button type="button" class="day-tab-btn" data-day="day2">Día 2: Tren Superior (Empuje /
-                        Tirón)</button>
-                    <button type="button" class="day-tab-btn" data-day="day3">Día 3: Full Body &amp; Postura</button>
-                    <button type="button" class="day-tab-btn" data-day="day4">Día 4: Core &amp; Movilidad</button>
-                    <button type="button" class="day-tab-btn" data-day="day5">Día 5: Fuerza &amp;
-                        Acondicionamiento</button>
-                    <button type="button" class="day-tab-btn" data-day="day6">Día 6: Recuperación &amp; Cardio Zona
-                        2</button>
+                    <!-- Inyectado dinámicamente con fechas reales 14/10, 15/10... por app.js -->
                 </div>
 
                 <!-- 3. Filtros Rápidos de Grupo Muscular (Músculo a Trabajar) -->
@@ -4188,7 +4308,27 @@
                         <div style="margin-bottom: 18px;">
                             <label class="input-label" for="coachDayTitleInput">Título / Enfoque del Día</label>
                             <input type="text" id="coachDayTitleInput" class="input-control"
-                                value="Día 1: Tren Superior (Empuje / Tirón)" style="max-width: 500px;">
+                                value="Tren Superior (Empuje / Tirón)" style="max-width: 500px;">
+                        </div>
+
+                        <!-- Configuración de Modalidad y Asistencia (Presencial vs Online por Nico) -->
+                        <div class="coach-session-modality-card"
+                            style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
+                            <div>
+                                <label class="input-label" style="margin-bottom: 6px;">Modalidad asignada por Nico:</label>
+                                <div class="coach-modality-selector" id="coachModalityButtonsWrap" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button type="button" class="pill pill-champagne coach-modality-btn active" data-modality="presencial">Presencial Nico</button>
+                                    <button type="button" class="pill pill-dark coach-modality-btn" data-modality="online">Online Nico</button>
+                                    <button type="button" class="pill pill-dark coach-modality-btn" data-modality="autonomo">Autónomo</button>
+                                    <button type="button" class="pill pill-dark coach-modality-btn" data-modality="descanso">Descanso</button>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #FFFFFF;">
+                                    <input type="checkbox" id="coachDayCompletedCheck" style="accent-color: #10B981; width: 17px; height: 17px; cursor: pointer;">
+                                    <span style="font-weight: 600;">Sesión Realizada / Asistió</span>
+                                </label>
+                            </div>
                         </div>
 
                         <!-- Lista de Ejercicios Asignados a este Día -->

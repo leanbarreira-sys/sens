@@ -31,11 +31,59 @@ if (isSupabaseConfigured) {
     console.log('[SENS] Modo Demo Activo (LocalStorage). La aplicación funciona al 100% de manera autónoma.');
 }
 
+// Helpers de fechas para navegación de calendario (pasado y futuro)
+function getMonday(d) {
+    const date = new Date(d);
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+    date.setDate(diff);
+    date.setHours(0, 0, 0, 0);
+    return date;
+}
+
+function formatDateDDMM(d) {
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    return `${day}/${month}`;
+}
+
+function formatDateKey(d) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function isSameDay(d1, d2) {
+    if (!d1 || !d2) return false;
+    return d1.getFullYear() === d2.getFullYear() &&
+           d1.getMonth() === d2.getMonth() &&
+           d1.getDate() === d2.getDate();
+}
+
+function getDayKeyFromDate(d) {
+    const day = d.getDay();
+    const map = { 1: 'day1', 2: 'day2', 3: 'day3', 4: 'day4', 5: 'day5', 6: 'day6', 0: 'day7' };
+    return map[day] || 'day1';
+}
+
+function getWeekRangeLabel(monday) {
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    if (monday.getMonth() === sunday.getMonth()) {
+        return `${monday.getDate()} – ${sunday.getDate()} ${months[monday.getMonth()]} ${sunday.getFullYear()}`;
+    }
+    return `${monday.getDate()} ${months[monday.getMonth()]} – ${sunday.getDate()} ${months[sunday.getMonth()]} ${sunday.getFullYear()}`;
+}
+
 // Estado en memoria
 const AppState = {
     user: null,
     profile: null,
     currentDay: 'day1',
+    selectedDate: new Date(),
+    activeWeekStart: getMonday(new Date()),
     activeTimerInterval: null,
     remainingSeconds: 0,
     weightChart: null,
@@ -315,6 +363,8 @@ const FOOD_CATALOG = [
 const WORKOUT_DAYS_DATA = {
     day1: {
         title: 'Día 1: Tren Superior (Empuje / Tirón)',
+        modality: 'presencial',
+        completed: true,
         exercises: [
             {
                 id: 'ex-101',
@@ -360,6 +410,8 @@ const WORKOUT_DAYS_DATA = {
     },
     day2: {
         title: 'Día 2: Tren Inferior (Fuerza & Cadera)',
+        modality: 'online',
+        completed: true,
         exercises: [
             {
                 id: 'ex-201',
@@ -405,6 +457,8 @@ const WORKOUT_DAYS_DATA = {
     },
     day3: {
         title: 'Día 3: Full Body & Conciencia Postural',
+        modality: 'presencial',
+        completed: true,
         exercises: [
             {
                 id: 'ex-301',
@@ -450,6 +504,8 @@ const WORKOUT_DAYS_DATA = {
     },
     day4: {
         title: 'Día 4: Core & Movilidad (Casa / Edificio)',
+        modality: 'online',
+        completed: false,
         exercises: [
             {
                 id: 'ex-401',
@@ -485,6 +541,8 @@ const WORKOUT_DAYS_DATA = {
     },
     day5: {
         title: 'Día 5: Fuerza & Potencia Funcional',
+        modality: 'autonomo',
+        completed: false,
         exercises: [
             {
                 id: 'ex-501',
@@ -520,6 +578,8 @@ const WORKOUT_DAYS_DATA = {
     },
     day6: {
         title: 'Día 6: Cardio Zona 2 & Recuperación',
+        modality: 'descanso',
+        completed: false,
         exercises: [
             {
                 id: 'ex-601',
@@ -542,6 +602,12 @@ const WORKOUT_DAYS_DATA = {
                 defaultReps: 35
             }
         ]
+    },
+    day7: {
+        title: 'Día 7: Descanso Celular & Regeneración',
+        modality: 'descanso',
+        completed: false,
+        exercises: []
     }
 };
 
@@ -1580,27 +1646,54 @@ function initAuthModal() {
         });
     }
 
-    // Pestañas Iniciar Sesión / Registrarme
+    // Pestañas Iniciar Sesión / Registrarme / Recuperar Contraseña
     const tabLogin = document.getElementById('tabLoginBtn');
     const tabRegister = document.getElementById('tabRegisterBtn');
     const paneLogin = document.getElementById('loginForm');
     const paneRegister = document.getElementById('registerForm');
+    const paneForgot = document.getElementById('forgotPassForm');
+    const btnForgotPass = document.getElementById('btnForgotPass');
+    const btnBackToLogin = document.getElementById('btnBackToLoginFromForgot');
 
     tabLogin.addEventListener('click', () => {
         tabLogin.classList.add('active');
         tabRegister.classList.remove('active');
-        paneLogin.classList.add('active');
-        paneRegister.classList.remove('active');
+        if (paneLogin) paneLogin.classList.add('active');
+        if (paneRegister) paneRegister.classList.remove('active');
+        if (paneForgot) paneForgot.classList.remove('active');
         clearAuthAlert();
     });
 
     tabRegister.addEventListener('click', () => {
         tabRegister.classList.add('active');
         tabLogin.classList.remove('active');
-        paneRegister.classList.add('active');
-        paneLogin.classList.remove('active');
+        if (paneRegister) paneRegister.classList.add('active');
+        if (paneLogin) paneLogin.classList.remove('active');
+        if (paneForgot) paneForgot.classList.remove('active');
         clearAuthAlert();
     });
+
+    if (btnForgotPass && paneForgot) {
+        btnForgotPass.addEventListener('click', () => {
+            tabLogin.classList.remove('active');
+            tabRegister.classList.remove('active');
+            if (paneLogin) paneLogin.classList.remove('active');
+            if (paneRegister) paneRegister.classList.remove('active');
+            paneForgot.classList.add('active');
+            clearAuthAlert();
+        });
+    }
+
+    if (btnBackToLogin && paneLogin) {
+        btnBackToLogin.addEventListener('click', () => {
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            paneLogin.classList.add('active');
+            if (paneForgot) paneForgot.classList.remove('active');
+            if (paneRegister) paneRegister.classList.remove('active');
+            clearAuthAlert();
+        });
+    }
 
     // Helper de traducción de errores de Supabase Auth
     function formatAuthErrorMessage(errorMsg) {
@@ -1753,6 +1846,37 @@ function initAuthModal() {
             openUserPortal(true);
         }, 700);
     });
+
+    // Formulario Recuperar Contraseña
+    if (paneForgot) {
+        paneForgot.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = (document.getElementById('forgotEmail')?.value || '').trim();
+            if (!email) {
+                showAuthAlert('Por favor ingresá tu email registrado.', 'error');
+                return;
+            }
+            showAuthAlert('Enviando enlace seguro de recuperación...', 'info');
+
+            if (supabaseClient) {
+                try {
+                    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                        redirectTo: window.location.origin
+                    });
+                    if (error) {
+                        showAuthAlert(formatAuthErrorMessage(error.message), 'error');
+                        return;
+                    }
+                    showAuthAlert(`¡Enlace enviado a ${email}! Verificá tu bandeja de entrada o spam.`, 'success');
+                } catch (err) {
+                    showAuthAlert('Ocurrió un error al enviar el correo. Por favor contactá a Nico por WhatsApp.', 'error');
+                }
+            } else {
+                // Modo local
+                showAuthAlert(`¡Enlace enviado a ${email}! Si necesitás asistencia inmediata, contactá a Nico por WhatsApp.`, 'success');
+            }
+        });
+    }
 }
 
 function showAuthModal(show) {
@@ -2031,6 +2155,28 @@ function returnToPublicLanding() {
 }
 
 function switchPortalView(viewId) {
+    const isAdmin = isCurrentUserAdmin();
+    const profile = AppState.profile || {};
+    const subStatus = profile.subscription_status || (isAdmin ? 'active' : 'pending_activation');
+    const isSubActive = isAdmin || subStatus === 'active';
+
+    // Bloqueo estricto para usuarios no activados por Nico
+    if (!isSubActive) {
+        viewId = 'activationPendingView';
+        const subNav = document.getElementById('portalSubNav');
+        if (subNav) subNav.style.display = 'none';
+        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+            dock.style.display = 'none';
+        });
+    } else {
+        const subNav = document.getElementById('portalSubNav');
+        const isExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection');
+        if (subNav) subNav.style.display = isExcluded ? 'none' : 'flex';
+        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+            dock.style.display = isExcluded ? 'none' : 'flex';
+        });
+    }
+
     const navItems = document.querySelectorAll('.portal-nav-item[data-portal-tab]');
     const views = document.querySelectorAll('.portal-view');
 
@@ -2067,6 +2213,13 @@ function switchPortalView(viewId) {
     }
     if (viewId === 'coachHubView') {
         if (typeof syncCoachMasterCard === 'function') syncCoachMasterCard();
+    }
+    if (viewId === 'workoutView') {
+        if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
+    }
+    if (viewId === 'dashView') {
+        if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
+        if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
     }
 }
 
@@ -2140,8 +2293,12 @@ function openUserPortal(forceOnboarding = false) {
     const isSubActive = isAdmin || subStatus === 'active';
 
     if (!isSubActive) {
-        // Redirige al Paywall de Activación
-        document.getElementById('portalSubNav').style.display = 'none';
+        // Redirige al Paywall de Activación y oculta menús y dock
+        const subNav = document.getElementById('portalSubNav');
+        if (subNav) subNav.style.display = 'none';
+        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+            dock.style.display = 'none';
+        });
 
         const pendingNameEl = document.getElementById('pendingUserName');
         const pendingPlanEl = document.getElementById('pendingPlanName');
@@ -2171,10 +2328,16 @@ function openUserPortal(forceOnboarding = false) {
     if (!isAdmin && (forceOnboarding || !isCompleted)) {
         // Redirige a la Evaluación Inicial
         document.getElementById('portalSubNav').style.display = 'none';
+        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+            dock.style.display = 'none';
+        });
         startDiagnosisWizard(false);
     } else {
         // Redirige al Dashboard de Atleta
         document.getElementById('portalSubNav').style.display = 'flex';
+        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+            dock.style.display = 'flex';
+        });
         renderDashboardData();
         renderWorkoutDay(AppState.currentDay || 'day1');
         switchPortalView('dashView');
@@ -2208,13 +2371,21 @@ function renderDashboardData() {
     if (profile.active_plan_name && planBadgeEl) {
         planBadgeEl.textContent = profile.active_plan_name;
     }
-    if (profile.current_weight && weightKpi) {
-        animateNumber(weightKpi, parseFloat(profile.current_weight) || 78.2, 800, ' <span style="font-size:1rem; font-weight:400;">kg</span>', 1);
+    if (weightKpi) {
+        if (profile.current_weight) {
+            animateNumber(weightKpi, parseFloat(profile.current_weight), 800, ' <span style="font-size:1rem; font-weight:400;">kg</span>', 1);
+        } else {
+            weightKpi.innerHTML = '-- <span style="font-size:1rem; font-weight:400;">kg</span>';
+        }
     }
     const stepsKpi = document.getElementById('kpiAvgSteps');
     if (stepsKpi) {
-        const targetSteps = parseInt(anamnesis.daily_step_target || profile.daily_step_target || 10420, 10);
-        animateNumber(stepsKpi, targetSteps, 850);
+        if (anamnesis.daily_step_target || profile.daily_step_target) {
+            const targetSteps = parseInt(anamnesis.daily_step_target || profile.daily_step_target, 10);
+            animateNumber(stepsKpi, targetSteps, 850);
+        } else {
+            stepsKpi.textContent = '--';
+        }
     }
 
     // Actualizar Card de Diagnóstico en el Dashboard
@@ -2240,13 +2411,13 @@ function renderDashboardData() {
 
         if (anamnesis.has_medical_flags) {
             tagsHtml += `<span class="diag-tag" style="border-color:#D95D50; color:#F87171;">Revisión de salud requerida</span>`;
-        } else {
+        } else if (profile.full_name) {
             tagsHtml += `<span class="diag-tag">Apto para entrenamiento</span>`;
         }
 
         if (Array.isArray(anamnesis.active_injuries) && anamnesis.active_injuries.length > 0) {
             tagsHtml += `<span class="diag-tag" style="border-color:rgba(229,203,167,0.4); color:var(--accent-primary);">Zonas atendidas: ${anamnesis.active_injuries.join(', ')}</span>`;
-        } else {
+        } else if (profile.full_name) {
             tagsHtml += `<span class="diag-tag">Articulaciones libres de dolor</span>`;
         }
 
@@ -2277,8 +2448,8 @@ function renderDashboardData() {
     }
 
     const workoutsKpi = document.getElementById('kpiWorkoutsWeek');
-    if (workoutsKpi && anamnesis.weekly_frequency) {
-        workoutsKpi.textContent = `0 / ${anamnesis.weekly_frequency}`;
+    if (workoutsKpi) {
+        workoutsKpi.textContent = anamnesis.weekly_frequency ? `0 / ${anamnesis.weekly_frequency}` : '-- / --';
     }
 
     // Ocultar sección de métricas y workout asignado hasta completar el diagnóstico final
@@ -2289,8 +2460,17 @@ function renderDashboardData() {
     if (kpiGrid) kpiGrid.style.display = isOnboardingDone ? 'grid' : 'none';
     if (heroCard) heroCard.style.display = isOnboardingDone ? 'flex' : 'none';
 
-    if (typeof window.updateDashboardWorkoutDirective === 'function') {
-        window.updateDashboardWorkoutDirective();
+    if (typeof updateDynamicTrainingCard === 'function') {
+        updateDynamicTrainingCard(AppState.selectedDate);
+    }
+    if (typeof updateNutriSummaryCardData === 'function') {
+        updateNutriSummaryCardData();
+    }
+    if (typeof updateObjectiveCardData === 'function') {
+        updateObjectiveCardData();
+    }
+    if (typeof renderDynamicWeekStrip === 'function') {
+        renderDynamicWeekStrip();
     }
 }
 
@@ -3685,16 +3865,12 @@ function athleteHasAssignedRoutine(athId) {
     if (raw) {
         try {
             const data = JSON.parse(raw);
-            const hasEx = Object.values(data).some(d => d.exercises && d.exercises.length > 0);
+            const hasEx = Object.values(data).some(d => d && Array.isArray(d.exercises) && d.exercises.length > 0);
             if (hasEx) return true;
         } catch (e) {}
     }
     // Perfiles demostrativos preasignados
     if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
-        return true;
-    }
-    // Si es un usuario nuevo en Supabase pero completó onboarding y fue aprobado
-    if (AppState.profile && AppState.profile.id === athId && AppState.profile.subscription_status === 'active') {
         return true;
     }
     return false;
@@ -6185,6 +6361,19 @@ function initCoachWorkoutsPrescription() {
         });
     });
 
+    // Selector de Modalidad (Presencial / Online / Autónomo / Descanso)
+    const modalityBtns = document.querySelectorAll('#coachModalityButtonsWrap .coach-modality-btn');
+    modalityBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modalityBtns.forEach(b => {
+                b.classList.remove('active', 'pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('active', 'pill-champagne');
+        });
+    });
+
     if (addLibBtn) {
         addLibBtn.addEventListener('click', () => {
             const modal = document.getElementById('exerciseLibraryModal');
@@ -6214,7 +6403,20 @@ function getCoachAthleteWorkoutData(athId) {
     if (raw) {
         try { return JSON.parse(raw); } catch (e) {}
     }
-    return JSON.parse(JSON.stringify(WORKOUT_DAYS_DATA));
+    // Solo perfiles demostrativos heredan la rutina completa preconfigurada
+    if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
+        return JSON.parse(JSON.stringify(WORKOUT_DAYS_DATA));
+    }
+    // Alumno real sin rutina cargada por Nico todavía
+    return {
+        day1: { title: 'Lunes', exercises: [], modality: 'presencial', completed: false },
+        day2: { title: 'Martes', exercises: [], modality: 'online', completed: false },
+        day3: { title: 'Miércoles', exercises: [], modality: 'descanso', completed: false },
+        day4: { title: 'Jueves', exercises: [], modality: 'presencial', completed: false },
+        day5: { title: 'Viernes', exercises: [], modality: 'autonomo', completed: false },
+        day6: { title: 'Sábado', exercises: [], modality: 'descanso', completed: false },
+        day7: { title: 'Domingo', exercises: [], modality: 'descanso', completed: false }
+    };
 }
 
 function renderCoachAssignedExercises() {
@@ -6226,6 +6428,22 @@ function renderCoachAssignedExercises() {
     const day = data[coachWorkoutState.activeDay] || { title: `Día: ${coachWorkoutState.activeDay}`, exercises: [] };
 
     if (titleInput) titleInput.value = day.title;
+
+    // Sincronizar botones de modalidad asignada por Nico
+    const assignedModality = day.modality || 'presencial';
+    const modalityBtns = document.querySelectorAll('#coachModalityButtonsWrap .coach-modality-btn');
+    modalityBtns.forEach(b => {
+        const isMatch = (b.getAttribute('data-modality') === assignedModality);
+        b.classList.toggle('active', isMatch);
+        b.classList.toggle('pill-champagne', isMatch);
+        b.classList.toggle('pill-dark', !isMatch);
+    });
+
+    // Sincronizar checkbox de sesión realizada / asistencia
+    const completedCheck = document.getElementById('coachDayCompletedCheck');
+    if (completedCheck) {
+        completedCheck.checked = Boolean(day.completed);
+    }
 
     if (!day.exercises || day.exercises.length === 0) {
         container.innerHTML = `
@@ -6300,6 +6518,14 @@ function saveCurrentCoachWorkoutDay() {
 
     if (titleInput) data[dayKey].title = titleInput.value.trim() || `Día: ${dayKey}`;
 
+    // Guardar modalidad
+    const activeModBtn = document.querySelector('#coachModalityButtonsWrap .coach-modality-btn.active');
+    data[dayKey].modality = activeModBtn ? activeModBtn.getAttribute('data-modality') : 'presencial';
+
+    // Guardar asistencia/completado
+    const completedCheck = document.getElementById('coachDayCompletedCheck');
+    data[dayKey].completed = Boolean(completedCheck && completedCheck.checked);
+
     const cards = container ? container.querySelectorAll('.coach-ex-card') : [];
     cards.forEach(c => {
         const exId = c.getAttribute('data-ex-id');
@@ -6324,6 +6550,12 @@ function saveCurrentCoachWorkoutDay() {
         renderWorkoutDay(AppState.currentDay || 'day1');
         renderMonthlyCalendar();
     }
+
+    // Actualizar reactivamente todas las tarjetas del portal
+    if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+    if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
+    if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
 
     showSensToast(`Rutina de ${data[dayKey].title} guardada con éxito.`, 'champagne');
 }
@@ -6998,182 +7230,101 @@ function initWorkoutBlockAccordions() {
         });
     });
 
-    // 7. Day Tabs en Workout View (Día 1 a Día 6)
-    const dayTabs = document.querySelectorAll('#workoutDaysNav .day-tab-btn');
-    dayTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            dayTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            const dayKey = tab.getAttribute('data-day') || 'day1';
-            AppState.currentDay = dayKey;
-
-            const blockTitle = document.querySelector('#blockCombinedStrength .sens-block-title');
-            if (blockTitle) {
-                const titles = {
-                    day1: 'Combined Strength — Tren Superior (Empuje / Tirón)',
-                    day2: 'Tren Inferior (Fuerza & Cadera)',
-                    day3: 'Full Body & Postura',
-                    day4: 'Core & Movilidad (Casa)',
-                    day5: 'Fuerza & Acondicionamiento',
-                    day6: 'Cardio Zona 2 & Recuperación'
-                };
-                blockTitle.textContent = titles[dayKey] || 'Fuerza Principal';
-            }
-            showSensToast(`Cargando rutina: ${tab.textContent.split(':')[0]}`, 'champagne', 1800);
-        });
-    });
+    // Render de tabs inicial en workout view si está en el DOM
+    if (typeof renderWorkoutDaysNav === 'function') {
+        renderWorkoutDaysNav();
+    }
 }
 
 /**
- * MÓDULO C: Week Strip Calendar (7 Días BIGG) & Directivas de Nico
+ * MÓDULO C: Week Strip Calendar Dinámico (Pasado y Futuro), Video Training Card, Nutri Card & Objective Card
  */
 function initWeekStripCalendar() {
-    const dayPills = document.querySelectorAll('.sens-week-day-pill');
-    const msgEl = document.getElementById('dashNicoMessage');
-    const locTrigger = document.getElementById('dashLocationTrigger');
-    const locName = document.getElementById('dashLocationName');
-    const quickWorkoutBtn = document.getElementById('dashQuickWorkoutBtn');
+    const btnPrev = document.getElementById('btnWeekPrev');
+    const btnNext = document.getElementById('btnWeekNext');
+    const btnToday = document.getElementById('btnJumpToToday');
 
-    function updateDashboardWorkoutDirective(selectedDayIdx = 1) {
-        if (!msgEl) return;
-        const athId = getActiveAthleteId();
-        const hasRoutine = athleteHasAssignedRoutine(athId);
-
-        const headerTitle = document.getElementById('dashWorkoutTitle');
-        const badgeEl = document.getElementById('dashWorkoutBadge');
-
-        if (!hasRoutine) {
-            if (headerTitle) headerTitle.textContent = 'Tu entrenamiento';
-            if (badgeEl) {
-                badgeEl.textContent = 'Plan en preparación';
-                badgeEl.className = 'pill pill-dark';
-                badgeEl.style.color = '#F59E0B';
-                badgeEl.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+    if (btnPrev) {
+        btnPrev.addEventListener('click', () => {
+            if (!AppState.activeWeekStart) AppState.activeWeekStart = getMonday(new Date());
+            const newMonday = new Date(AppState.activeWeekStart);
+            newMonday.setDate(newMonday.getDate() - 7);
+            const minDate = new Date();
+            minDate.setDate(minDate.getDate() - 730); // Límite: 2 años atrás
+            if (newMonday >= minDate) {
+                AppState.activeWeekStart = newMonday;
+                renderDynamicWeekStrip();
+                renderWorkoutDaysNav();
+            } else {
+                showSensToast('Límite del historial alcanzado (2 años)', 'info', 1800);
             }
-            msgEl.innerHTML = `
-                <div style="font-size: 13.5px; color: #FFFFFF; font-weight: 700; margin-bottom: 2px;">
-                    Nico está trabajando en un plan personalizado para vos.
-                </div>
-                <div style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">
-                    En base a tu diagnóstico inicial, mapa de dolores articulares y objetivos, Nico está programando tus ejercicios y descansos cronometrados.
-                </div>
-            `;
-            if (quickWorkoutBtn) {
-                quickWorkoutBtn.textContent = 'Ver diagnóstico inicial →';
-                quickWorkoutBtn.onclick = () => {
-                    switchPortalView('onboardingSection');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                };
-            }
-            return;
-        }
-
-        if (headerTitle) headerTitle.textContent = 'Tu entrenamiento';
-        if (badgeEl) {
-            badgeEl.textContent = 'Programado';
-            badgeEl.className = 'pill pill-champagne';
-            badgeEl.style.color = '';
-            badgeEl.style.borderColor = '';
-        }
-
-        const data = getCoachAthleteWorkoutData(athId);
-        const dayKeys = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
-        const currentKey = dayKeys[selectedDayIdx] || 'day1';
-        const dayData = data[currentKey];
-
-        if (dayData && dayData.exercises && dayData.exercises.length > 0) {
-            msgEl.innerHTML = `
-                <div style="font-size: 14.5px; color: #FFFFFF; font-weight: 800; margin-bottom: 3px;">
-                    ${dayData.title}
-                </div>
-                <div style="font-size: 12px; color: var(--text-muted);">
-                    ${dayData.exercises.length} Ejercicios asignados • Foco en control excéntrico y sobrecarga progresiva sin dolor articular.
-                </div>
-            `;
-            if (quickWorkoutBtn) {
-                quickWorkoutBtn.textContent = 'Ir a entrenamiento de hoy →';
-                quickWorkoutBtn.onclick = () => {
-                    AppState.currentDay = currentKey;
-                    switchPortalView('workoutView');
-                    renderWorkoutDay(currentKey);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                };
-            }
-        } else {
-            // Buscar próximo día programado
-            let nextDayLabel = 'Mañana';
-            for (let i = 1; i <= 6; i++) {
-                const nextIdx = (selectedDayIdx + i) % 7;
-                const nextKey = dayKeys[nextIdx];
-                if (data[nextKey] && data[nextKey].exercises && data[nextKey].exercises.length > 0) {
-                    const daysEsp = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-                    nextDayLabel = `${daysEsp[nextIdx]} • ${data[nextKey].title}`;
-                    break;
-                }
-            }
-
-            msgEl.innerHTML = `
-                <div style="font-size: 14px; color: #FFFFFF; font-weight: 700; margin-bottom: 2px;">
-                    Hoy: Recuperación activa &amp; movilidad.
-                </div>
-                <div style="font-size: 12px; color: var(--text-muted);">
-                    Próximo entrenamiento programado: <strong style="color: var(--accent-primary);">${nextDayLabel}</strong>.
-                </div>
-            `;
-            if (quickWorkoutBtn) {
-                quickWorkoutBtn.textContent = 'Ver rutina de la semana →';
-                quickWorkoutBtn.onclick = () => {
-                    switchPortalView('workoutView');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                };
-            }
-        }
-    }
-
-    // Exponer globalmente para reactividad inmediata al cambiar de alumno
-    window.updateDashboardWorkoutDirective = updateDashboardWorkoutDirective;
-
-    // Inicializar directiva para el día activo (por defecto Martes / 1)
-    updateDashboardWorkoutDirective(1);
-
-    dayPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-            dayPills.forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-
-            const idx = parseInt(pill.getAttribute('data-day-idx'), 10) || 0;
-            updateDashboardWorkoutDirective(idx);
-
-            if (locName) {
-                locName.textContent = (idx % 2 === 0) ? 'Presencial Palermo' : 'Online / En Casa';
-            }
-
-            // Sincronizar nodo de racha de hábitos
-            const habitNodes = document.querySelectorAll('.sens-habit-nodes-row .sens-habit-node .sens-habit-circle');
-            habitNodes.forEach((node, nIdx) => {
-                node.classList.remove('active');
-                if (nIdx === idx) {
-                    node.classList.add('active');
-                }
-            });
-        });
-    });
-
-    // Selector de Ubicación (Palermo / Puerto Madero / Online)
-    if (locTrigger && locName) {
-        const locations = ['Presencial Palermo', 'Presencial Puerto Madero', 'Online / En Casa'];
-        let locIdx = 0;
-        locTrigger.addEventListener('click', () => {
-            locIdx = (locIdx + 1) % locations.length;
-            locName.textContent = locations[locIdx];
-            showSensToast(`Sede de entreno: ${locations[locIdx]}`, 'champagne', 2200);
         });
     }
 
-    // Botón directo a entrenamiento
-    if (quickWorkoutBtn) {
-        quickWorkoutBtn.addEventListener('click', () => {
+    if (btnNext) {
+        btnNext.addEventListener('click', () => {
+            if (!AppState.activeWeekStart) AppState.activeWeekStart = getMonday(new Date());
+            const newMonday = new Date(AppState.activeWeekStart);
+            newMonday.setDate(newMonday.getDate() + 7);
+            const maxDate = new Date();
+            maxDate.setDate(maxDate.getDate() + 365); // Límite: 1 año adelante
+            if (newMonday <= maxDate) {
+                AppState.activeWeekStart = newMonday;
+                renderDynamicWeekStrip();
+                renderWorkoutDaysNav();
+            } else {
+                showSensToast('Límite de planificación alcanzado (1 año)', 'info', 1800);
+            }
+        });
+    }
+
+    if (btnToday) {
+        btnToday.addEventListener('click', () => {
+            AppState.selectedDate = new Date();
+            AppState.activeWeekStart = getMonday(new Date());
+            AppState.currentDay = getDayKeyFromDate(new Date());
+            renderDynamicWeekStrip();
+            renderWorkoutDaysNav();
+            updateDynamicTrainingCard(AppState.selectedDate);
+            showSensToast('Semana actual', 'champagne', 1500);
+        });
+    }
+
+    // Botón de Inicio Rápido de Entrenamiento (flecha circular)
+    const startWorkoutBtn = document.getElementById('dashStartWorkoutBtn');
+    if (startWorkoutBtn) {
+        startWorkoutBtn.addEventListener('click', () => {
+            const dayKey = getDayKeyFromDate(AppState.selectedDate || new Date());
+            AppState.currentDay = dayKey;
             switchPortalView('workoutView');
+            renderWorkoutDay(dayKey);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Botón de Estiramientos en Card de Descanso
+    const btnRestSeeStretches = document.getElementById('btnRestSeeStretches');
+    if (btnRestSeeStretches) {
+        btnRestSeeStretches.addEventListener('click', () => {
+            AppState.selectedMuscleFilter = 'core_movilidad';
+            switchPortalView('workoutView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Clicks en Card Nutricional y Card de Objetivo para ir a sus vistas
+    const nutriCard = document.getElementById('dashNutriSummaryCard');
+    if (nutriCard) {
+        nutriCard.addEventListener('click', () => {
+            switchPortalView('nutritionView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    const objCard = document.getElementById('dashObjectiveCard');
+    if (objCard) {
+        objCard.addEventListener('click', () => {
+            switchPortalView('trackingView');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
@@ -7194,6 +7345,409 @@ function initWeekStripCalendar() {
             updateDashboardRings();
             showSensToast(`+250ml agua registrados (Total: ${(current/1000).toFixed(2)} L)`, 'success', 2200);
         });
+    }
+
+    // Inicializar renders dinámicos
+    renderDynamicWeekStrip();
+    renderWorkoutDaysNav();
+    updateDynamicTrainingCard(AppState.selectedDate || new Date());
+    updateNutriSummaryCardData();
+    updateObjectiveCardData();
+}
+
+/**
+ * Renderiza los 7 días de la semana activa en formato DD/MM con modalidad y asistencia
+ */
+function renderDynamicWeekStrip() {
+    const stripContainer = document.getElementById('portalWeekStrip');
+    const rangeLabel = document.getElementById('sensWeekRangeLabel');
+    if (!stripContainer) return;
+
+    if (!AppState.activeWeekStart) {
+        AppState.activeWeekStart = getMonday(new Date());
+    }
+
+    if (rangeLabel) {
+        rangeLabel.textContent = getWeekRangeLabel(AppState.activeWeekStart);
+    }
+
+    const athId = getActiveAthleteId();
+    const data = getCoachAthleteWorkoutData(athId);
+    const dayNames = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
+    let html = '';
+
+    for (let i = 0; i < 7; i++) {
+        const dayDate = new Date(AppState.activeWeekStart);
+        dayDate.setDate(AppState.activeWeekStart.getDate() + i);
+
+        const isToday = isSameDay(dayDate, new Date());
+        const isSelected = isSameDay(dayDate, AppState.selectedDate || new Date());
+        const dayKey = 'day' + (i + 1);
+        const dayData = data[dayKey] || {};
+        const hasEx = Boolean(dayData.exercises && dayData.exercises.length > 0);
+        const modality = dayData.modality || (hasEx ? 'presencial' : 'descanso');
+        const isCompleted = Boolean(dayData.completed);
+
+        let statusBadge = '';
+        if (isCompleted) {
+            statusBadge = `<span class="sens-day-status done" title="Entrenamiento completado">✓</span>`;
+        } else if (hasEx && modality === 'presencial') {
+            statusBadge = `<span class="sens-day-status presencial" title="Presencial con Nico">P</span>`;
+        } else if (hasEx && modality === 'online') {
+            statusBadge = `<span class="sens-day-status online" title="Online con Nico">O</span>`;
+        } else if (hasEx && modality === 'autonomo') {
+            statusBadge = `<span class="sens-day-status auto" title="Sesión autónoma">A</span>`;
+        } else {
+            statusBadge = `<span class="sens-day-status rest" title="Recuperación / Descanso">-</span>`;
+        }
+
+        html += `
+            <button type="button" class="sens-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
+                <span class="sens-day-name">${dayNames[i]}</span>
+                <span class="sens-day-num">${formatDateDDMM(dayDate)}</span>
+                <div class="sens-day-modality-indicator">${statusBadge}</div>
+            </button>
+        `;
+    }
+
+    stripContainer.innerHTML = html;
+
+    // Listeners de selección de día
+    stripContainer.querySelectorAll('.sens-week-day-pill').forEach((pill, idx) => {
+        pill.addEventListener('click', () => {
+            stripContainer.querySelectorAll('.sens-week-day-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+
+            const dayDate = new Date(AppState.activeWeekStart);
+            dayDate.setDate(AppState.activeWeekStart.getDate() + idx);
+            AppState.selectedDate = dayDate;
+            AppState.currentDay = 'day' + (idx + 1);
+
+            updateDynamicTrainingCard(dayDate, 'day' + (idx + 1));
+            renderWorkoutDaysNav();
+        });
+    });
+}
+
+/**
+ * Renderiza las pestañas de fecha real (14/10, 15/10...) en la vista de Entrenamiento
+ */
+function renderWorkoutDaysNav() {
+    const container = document.getElementById('workoutDaysNav');
+    if (!container) return;
+
+    if (!AppState.activeWeekStart) {
+        AppState.activeWeekStart = getMonday(new Date());
+    }
+
+    const athId = getActiveAthleteId();
+    const data = getCoachAthleteWorkoutData(athId);
+    let html = '';
+
+    for (let i = 0; i < 7; i++) {
+        const dayDate = new Date(AppState.activeWeekStart);
+        dayDate.setDate(AppState.activeWeekStart.getDate() + i);
+
+        const isToday = isSameDay(dayDate, new Date());
+        const isSelected = isSameDay(dayDate, AppState.selectedDate || new Date());
+        const dayKey = 'day' + (i + 1);
+        const dayData = data[dayKey] || {};
+        const rawTitle = dayData.title || `Día ${i + 1}`;
+        const cleanTitle = rawTitle.replace(/^Día\s*\d+:\s*/i, '');
+        const dateStr = formatDateDDMM(dayDate);
+
+        html += `
+            <button type="button" class="sens-workout-day-tab ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}">
+                <span class="tab-date-num">${dateStr}</span>
+                <span class="tab-title-sub">${cleanTitle}</span>
+            </button>
+        `;
+    }
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.sens-workout-day-tab').forEach((tab, idx) => {
+        tab.addEventListener('click', () => {
+            container.querySelectorAll('.sens-workout-day-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            const dayDate = new Date(AppState.activeWeekStart);
+            dayDate.setDate(AppState.activeWeekStart.getDate() + idx);
+            AppState.selectedDate = dayDate;
+            const dayKey = 'day' + (idx + 1);
+            AppState.currentDay = dayKey;
+
+            renderWorkoutDay(dayKey);
+            renderDynamicWeekStrip();
+        });
+    });
+}
+
+/**
+ * Actualiza la Card de Entrenamiento del Dashboard con video del primer ejercicio y grupos musculares automáticos
+ */
+function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
+    if (!dayKey) {
+        dayKey = getDayKeyFromDate(selectedDate);
+    }
+
+    const activePane = document.getElementById('dashWorkoutActivePane');
+    const restPane = document.getElementById('dashWorkoutRestPane');
+    const videoPlayer = document.getElementById('dashWorkoutVideoPlayer');
+    const videoSource = document.getElementById('dashWorkoutVideoSource');
+    const modalityPill = document.getElementById('dashWorkoutModalityPill');
+    const durationPill = document.getElementById('dashWorkoutDurationPill');
+    const dayDateLabel = document.getElementById('dashWorkoutDayDateLabel');
+    const focusTitle = document.getElementById('dashWorkoutFocusTitle');
+    const firstExName = document.getElementById('dashFirstExerciseName');
+
+    const athId = getActiveAthleteId();
+    const hasRoutine = athleteHasAssignedRoutine(athId);
+    const data = getCoachAthleteWorkoutData(athId);
+    const dayData = (data && data[dayKey]) ? data[dayKey] : null;
+    const exercises = (dayData && Array.isArray(dayData.exercises)) ? dayData.exercises : [];
+    const isToday = isSameDay(selectedDate, new Date());
+
+    // Label de fecha superior
+    if (dayDateLabel) {
+        dayDateLabel.textContent = isToday ? 'Hoy entrenás' : `Entrenamiento del ${formatDateDDMM(selectedDate)}`;
+    }
+
+    // Caso A: Descanso o sin ejercicios asignados
+    if (!hasRoutine || exercises.length === 0 || dayData?.modality === 'descanso') {
+        if (activePane) activePane.style.display = 'none';
+        if (restPane) restPane.style.display = 'block';
+        return;
+    }
+
+    // Caso B: Con entrenamiento programado
+    if (activePane) activePane.style.display = 'block';
+    if (restPane) restPane.style.display = 'none';
+
+    // 1. Deducir grupos musculares automáticamente de los ejercicios
+    const muscleSet = new Set();
+    exercises.forEach(ex => {
+        const catMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase());
+        const mg = catMatch ? catMatch.muscle_group : (ex.muscle_group || 'push');
+        muscleSet.add(mg);
+    });
+
+    let autoMuscleTitle = 'Fuerza & Acondicionamiento';
+    if (muscleSet.has('push') && muscleSet.has('pull')) {
+        autoMuscleTitle = 'Pecho, Espalda y Brazos';
+    } else if (muscleSet.has('push')) {
+        autoMuscleTitle = 'Pecho, Hombros y Tríceps';
+    } else if (muscleSet.has('pull')) {
+        autoMuscleTitle = 'Espalda y Bíceps';
+    } else if (muscleSet.has('quadriceps') || muscleSet.has('hamstrings_glutes')) {
+        autoMuscleTitle = 'Piernas y Glúteos';
+    } else if (muscleSet.has('core_mobility')) {
+        autoMuscleTitle = 'Core y Movilidad Articular';
+    } else if (dayData.title) {
+        autoMuscleTitle = dayData.title.replace(/^Día\s*\d+:\s*/i, '');
+    }
+
+    if (focusTitle) {
+        focusTitle.textContent = autoMuscleTitle;
+    }
+
+    // 2. Primer ejercicio del día
+    const firstEx = exercises[0];
+    if (firstExName && firstEx) {
+        firstExName.textContent = `Primer ejercicio: ${firstEx.name}`;
+    }
+
+    // 3. Modality Pill
+    const modality = dayData.modality || 'presencial';
+    if (modalityPill) {
+        if (modality === 'presencial') {
+            modalityPill.textContent = 'Presencial con Nico';
+            modalityPill.className = 'sens-modality-pill';
+        } else if (modality === 'online') {
+            modalityPill.textContent = 'Online con Nico';
+            modalityPill.className = 'sens-modality-pill online';
+        } else {
+            modalityPill.textContent = 'Sesión Autónoma';
+            modalityPill.className = 'sens-modality-pill auto';
+        }
+    }
+
+    if (durationPill) {
+        durationPill.textContent = `${exercises.length} ejercicios • ~${exercises.length * 9} min`;
+    }
+
+    // 4. Video demostrativo según primer ejercicio o grupo muscular
+    let targetVideo = 'vid/pilar-1-tecnica.mp4';
+    let targetPoster = 'img/pilar-1-tecnica.jpg';
+
+    if (firstEx && firstEx.video_url) {
+        targetVideo = firstEx.video_url;
+    } else if (muscleSet.has('push')) {
+        targetVideo = 'vid/pilar-1-tecnica.mp4';
+        targetPoster = 'img/pilar-1-tecnica.jpg';
+    } else if (muscleSet.has('pull')) {
+        targetVideo = 'vid/pilar-2-vitalidad.mp4';
+        targetPoster = 'img/pilar-2-vitalidad.jpg';
+    } else if (muscleSet.has('quadriceps') || muscleSet.has('hamstrings_glutes')) {
+        targetVideo = 'vid/pilar-3-movilidad.mp4';
+        targetPoster = 'img/pilar-3-movilidad.jpg';
+    } else {
+        targetVideo = 'vid/pilar-4-adherencia.mp4';
+        targetPoster = 'img/pilar-4-adherencia.jpg';
+    }
+
+    if (videoPlayer && videoSource) {
+        const currentSrc = videoSource.getAttribute('src');
+        if (currentSrc !== targetVideo) {
+            videoSource.setAttribute('src', targetVideo);
+            videoPlayer.setAttribute('poster', targetPoster);
+            videoPlayer.load();
+            videoPlayer.play().catch(() => {});
+        }
+    }
+}
+
+// Exponer alias global para compatibilidad
+window.updateDashboardWorkoutDirective = updateDynamicTrainingCard;
+
+/**
+ * Actualiza la Card Nutricional con calorías por comida
+ */
+function updateNutriSummaryCardData() {
+    const targetBadge = document.getElementById('dashNutriTargetBadge');
+    const calDesayuno = document.getElementById('calMealDesayuno');
+    const calAlmuerzo = document.getElementById('calMealAlmuerzo');
+    const calMerienda = document.getElementById('calMealMerienda');
+    const calCena = document.getElementById('calMealCena');
+
+    const profile = AppState.profile || {};
+    const anamnesis = AppState.anamnesis || {};
+    const targetKcal = parseInt(profile.daily_calories || anamnesis.daily_calories || 1950, 10);
+
+    if (targetBadge) {
+        targetBadge.textContent = `${targetKcal.toLocaleString('es-AR')} kcal meta`;
+    }
+
+    if (calDesayuno) calDesayuno.textContent = `${Math.round(targetKcal * 0.22)} kcal`;
+    if (calAlmuerzo) calAlmuerzo.textContent = `${Math.round(targetKcal * 0.35)} kcal`;
+    if (calMerienda) calMerienda.textContent = `${Math.round(targetKcal * 0.18)} kcal`;
+    if (calCena) calCena.textContent = `${Math.round(targetKcal * 0.25)} kcal`;
+}
+
+/**
+ * Actualiza la Card de Objetivo: balance neto, déficit, progresión de peso y entrenos
+ */
+function updateObjectiveCardData() {
+    const goalPill = document.getElementById('dashObjectiveGoalPill');
+    const netDeficitVal = document.getElementById('dashNetDeficitVal');
+    const tdeeNum = document.getElementById('dashTdeeNum');
+    const ingestaNum = document.getElementById('dashIngestaNum');
+    const weightProgVal = document.getElementById('dashWeightProgVal');
+    const weightTrendTag = document.getElementById('dashWeightTrendTag');
+    const fatProgVal = document.getElementById('dashFatProgVal');
+    const fatTrendTag = document.getElementById('dashFatTrendTag');
+    const workoutsCountVal = document.getElementById('dashWorkoutsCountVal');
+    const miniChips = document.getElementById('dashWorkoutsMiniChips');
+    const consistencyText = document.getElementById('dashConsistencyScoreText');
+
+    const athId = getActiveAthleteId();
+    const isDemo = (athId === 'usr-vip-001' || athId === 'mock_vip');
+    const profile = AppState.profile || {};
+    const anamnesis = AppState.anamnesis || {};
+
+    const userGoal = profile.goal || anamnesis.goal || 'fat_loss';
+    if (goalPill) {
+        const goalMap = {
+            fat_loss: 'Déficit Definición',
+            muscle_gain: 'Superávit Hipertrofia',
+            recomp: 'Recomposición Corporal',
+            posture_health: 'Normocalórico Salud'
+        };
+        goalPill.textContent = goalMap[userGoal] || 'Vitalidad & Longevidad';
+    }
+
+    // Para usuarios reales sin datos biológicos cargados
+    if (!isDemo && !profile.current_weight) {
+        if (netDeficitVal) netDeficitVal.innerHTML = `-- <span class="unit">kcal</span>`;
+        if (tdeeNum) tdeeNum.textContent = '--';
+        if (ingestaNum) ingestaNum.textContent = '--';
+        if (weightProgVal) weightProgVal.innerHTML = `-- <span class="unit">kg</span>`;
+        if (weightTrendTag) weightTrendTag.innerHTML = `Pendiente de primer pesaje`;
+        if (fatProgVal) fatProgVal.innerHTML = `-- <span class="unit">%</span>`;
+        if (fatTrendTag) fatTrendTag.innerHTML = `Pendiente de evaluación`;
+        if (workoutsCountVal) workoutsCountVal.innerHTML = `0 <span class="unit">/ 4 días</span>`;
+        if (consistencyText) consistencyText.textContent = `Índice de Consistencia: Calibrando`;
+        return;
+    }
+
+    // Cálculo dinámico para perfiles activos / demo
+    const weight = parseFloat(profile.current_weight) || 76.0;
+    const bmr = Math.round(weight * 22);
+    const activeCals = 650;
+    const tdee = bmr + activeCals;
+
+    let targetIntake = tdee - 380;
+    if (userGoal === 'muscle_gain') targetIntake = tdee + 300;
+    else if (userGoal === 'recomp') targetIntake = tdee - 150;
+    else if (userGoal === 'posture_health') targetIntake = tdee;
+
+    const netBalance = targetIntake - tdee;
+
+    if (netDeficitVal) {
+        const sign = netBalance > 0 ? '+' : '';
+        netDeficitVal.innerHTML = `${sign}${netBalance} <span class="unit">kcal</span>`;
+        netDeficitVal.className = `sens-obj-box-val ${netBalance <= 0 ? 'text-success' : 'text-champagne'}`;
+    }
+    if (tdeeNum) tdeeNum.textContent = tdee.toLocaleString('es-AR');
+    if (ingestaNum) ingestaNum.textContent = targetIntake.toLocaleString('es-AR');
+
+    if (weightProgVal) {
+        weightProgVal.innerHTML = `${weight.toFixed(1)} <span class="unit">kg</span>`;
+    }
+    if (weightTrendTag) {
+        weightTrendTag.innerHTML = `
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+            -0.4 kg vs semana anterior
+        `;
+    }
+
+    if (fatProgVal) {
+        fatProgVal.innerHTML = `14.2 <span class="unit">%</span>`;
+    }
+    if (fatTrendTag) {
+        fatTrendTag.innerHTML = `
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+            -0.6% vs inicio
+        `;
+    }
+
+    // Mini chips de la semana
+    const data = getCoachAthleteWorkoutData(athId);
+    let doneCount = 0;
+    let scheduledCount = 0;
+    const chipsLetters = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+    let chipsHtml = '';
+
+    for (let i = 1; i <= 7; i++) {
+        const dayData = data['day' + i];
+        const isDone = Boolean(dayData && dayData.completed);
+        const hasEx = Boolean(dayData && dayData.exercises && dayData.exercises.length > 0);
+        if (hasEx) scheduledCount++;
+        if (isDone) doneCount++;
+
+        chipsHtml += `<span class="mini-chip ${isDone ? 'done' : 'pending'}" title="${chipsLetters[i-1]}: ${isDone ? 'Completado' : 'Pendiente'}">${chipsLetters[i-1]}</span>`;
+    }
+
+    if (workoutsCountVal) {
+        workoutsCountVal.innerHTML = `${doneCount} <span class="unit">/ ${Math.max(scheduledCount, 3)} días</span>`;
+    }
+    if (miniChips) {
+        miniChips.innerHTML = chipsHtml;
+    }
+
+    if (consistencyText) {
+        const consistencyPct = Math.min(100, Math.round(((doneCount + 1) / Math.max(scheduledCount, 3)) * 85));
+        consistencyText.textContent = `Índice de Consistencia: ${consistencyPct}% • Rango Óptimo`;
     }
 }
 

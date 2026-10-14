@@ -10532,5 +10532,822 @@ input[type="range"]::-webkit-slider-thumb:hover {
     }
 }
 
+/* =============================================================================
+   MÓDULO DE EXPERIENCIA USUARIO LIGHT LUXURY & FLUID ANIMATIONS (APPLE HEALTH / OURA GRADE)
+   ============================================================================= */
+
+/* 1. Base Portal en Blanco y Colores Claros de Brandbook */
+body.in-portal {
+    background-color: #F8F9FA !important;
+    color: #09090B !important;
+}
+
+body.in-portal #app-container {
+    background-color: #F8F9FA !important;
+    color: #09090B !important;
+}
+
+body.in-portal .portal-topbar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
+    backdrop-filter: blur(20px);
+}
+
+body.in-portal .portal-topbar .portal-logo {
+    color: #09090B !important;
+}
+
+body.in-portal .portal-nav-bar {
+    background: #FFFFFF !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
+}
+
+body.in-portal .portal-nav-item {
+    color: #71717A !important;
+}
+
+body.in-portal .portal-nav-item:hover,
+body.in-portal .portal-nav-item.active {
+    color: #9E7D4B !important;
+    border-bottom-color: #9E7D4B !important;
+}
+
+/* Tarjetas y Contenedores en Blanco Clínico Puro */
+body.in-portal .card-panel,
+body.in-portal .dash-welcome-card,
+body.in-portal .sens-coach-directive-card,
+body.in-portal .sens-training-video-card,
+body.in-portal .sens-nutri-summary-card,
+body.in-portal .sens-objective-card,
+body.in-portal .sens-rings-card,
+body.in-portal .sens-habit-track-card,
+body.in-portal .sens-biometrics-summary-card,
+body.in-portal .sens-weekly-workouts-card,
+body.in-portal .sens-nutri-target-hero-card,
+body.in-portal .sens-meal-card,
+body.in-portal .exercise-card,
+body.in-portal .sens-store-banner-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    border-radius: 20px;
+    color: #09090B !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+body.in-portal .card-panel:hover,
+body.in-portal .sens-training-video-card:hover,
+body.in-portal .sens-nutri-summary-card:hover,
+body.in-portal .sens-objective-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07) !important;
+}
+
+/* Tipografía de Encabezados en Modo Claro */
+body.in-portal h1,
+body.in-portal h2,
+body.in-portal h3,
+body.in-portal h4,
+body.in-portal .dash-heading,
+body.in-portal .portal-section-title,
+body.in-portal .sens-training-focus-title,
+body.in-portal .sens-nutri-card-title,
+body.in-portal .sens-objective-title {
+    color: #09090B !important;
+}
+
+body.in-portal .sens-dash-welcome-question {
+    color: #3F3F46 !important;
+}
+
+body.in-portal .sens-dash-welcome-athlete {
+    color: #09090B !important;
+}
+
+body.in-portal .sens-dash-welcome-slogan {
+    color: #B89360 !important;
+}
+
+/* Textos secundarios y metadatos */
+body.in-portal p,
+body.in-portal .dash-sub,
+body.in-portal .sens-training-eyebrow,
+body.in-portal .sens-nutri-eyebrow,
+body.in-portal .sens-objective-eyebrow {
+    color: #71717A !important;
+}
+
+/* =============================================================================
+   2. NAVEGADOR DE SEMANAS (PASADO & FUTURO)
+   ============================================================================= */
+.sens-week-nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 4px 6px;
+}
+
+.sens-week-arrow-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #09090B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.sens-week-arrow-btn:hover {
+    background: #09090B;
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
+
+.sens-week-arrow-btn:active {
+    transform: scale(0.95);
+}
+
+.sens-week-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sens-week-range-text {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #09090B;
+    letter-spacing: 0.3px;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-pill-today {
+    background: rgba(197, 168, 128, 0.16);
+    color: #9E7D4B;
+    border: 1px solid rgba(197, 168, 128, 0.35);
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 10.5px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: all 0.2s ease;
+}
+
+.sens-pill-today:hover {
+    background: #9E7D4B;
+    color: #FFFFFF;
+}
+
+/* Strip Semanal Dinámico */
+body.in-portal .sens-week-strip-wrap {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.in-portal .sens-week-day-pill {
+    background: transparent !important;
+    color: #71717A !important;
+}
+
+body.in-portal .sens-week-day-pill:hover {
+    background: rgba(0, 0, 0, 0.03) !important;
+    color: #09090B !important;
+}
+
+body.in-portal .sens-week-day-name {
+    color: #71717A !important;
+}
+
+body.in-portal .sens-week-day-num {
+    background: #F4F4F6 !important;
+    color: #27272A !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-week-day-pill.is-today .sens-week-day-name {
+    color: #9E7D4B !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-week-day-num {
+    background: #09090B !important;
+    color: #E5CBA7 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-week-day-name {
+    color: #09090B !important;
+    font-weight: 800 !important;
+}
+
+/* Micro-pills de modalidad en calendario */
+.sens-day-modality-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 3px;
+    display: inline-block;
+}
+.sens-day-modality-dot.presencial { background: #9E7D4B; }
+.sens-day-modality-dot.online     { background: #0284C7; }
+.sens-day-modality-dot.completed  { background: #10B981; }
+
+/* =============================================================================
+   3. CARD DE ENTRENAMIENTO CON VIDEO
+   ============================================================================= */
+.sens-training-video-card {
+    overflow: hidden;
+    margin-bottom: 22px;
+}
+
+.sens-video-preview-box {
+    position: relative;
+    width: 100%;
+    height: 190px;
+    overflow: hidden;
+    background: #09090B;
+}
+
+.sens-video-loop-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.sens-video-overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.65) 100%);
+    pointer-events: none;
+}
+
+.sens-video-top-badges {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+}
+
+.sens-modality-pill {
+    background: rgba(229, 203, 167, 0.95);
+    color: #09090B;
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.sens-duration-pill {
+    background: rgba(0, 0, 0, 0.6);
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+}
+
+.sens-training-card-body {
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.sens-training-eyebrow {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #71717A;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.sens-training-focus-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #09090B;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.sens-training-first-ex-note {
+    font-size: 12.5px;
+    color: #71717A;
+    margin: 0;
+}
+
+.sens-btn-circle-arrow {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #09090B;
+    color: #E5CBA7;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.sens-btn-circle-arrow:hover {
+    transform: scale(1.08) translateX(2px);
+    background: #9E7D4B;
+    color: #FFFFFF;
+}
+
+.sens-btn-circle-arrow:active {
+    transform: scale(0.96);
+}
+
+/* Estado Descanso */
+.sens-training-card-rest {
+    padding: 28px 24px;
+    text-align: center;
+}
+
+.sens-rest-badge {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.sens-rest-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #09090B;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+}
+
+.sens-rest-desc {
+    font-size: 13px;
+    color: #71717A;
+    max-width: 520px;
+    margin: 0 auto 16px;
+    line-height: 1.6;
+}
+
+/* =============================================================================
+   4. CARD NUTRICIONAL CON VIDEO DE ALMUERZO & DESGLOSE
+   ============================================================================= */
+.sens-nutri-summary-card {
+    padding: 20px 22px;
+    margin-bottom: 22px;
+}
+
+.sens-nutri-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.sens-nutri-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: #71717A;
+    display: block;
+}
+
+.sens-nutri-card-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #09090B;
+    margin-top: 2px;
+}
+
+.sens-nutri-goal-badge {
+    background: rgba(197, 168, 128, 0.16);
+    color: #9E7D4B;
+    border: 1px solid rgba(197, 168, 128, 0.35);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.sens-nutri-media-row {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    .sens-nutri-media-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.sens-nutri-video-wrap {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    background: #09090B;
+}
+
+@media (max-width: 600px) {
+    .sens-nutri-video-wrap {
+        width: 100%;
+        height: 150px;
+    }
+}
+
+.sens-nutri-video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sens-dish-tag {
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #FFFFFF;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+}
+
+.sens-nutri-details-col {
+    flex: 1;
+}
+
+.sens-nutri-recipe-note {
+    font-size: 12.5px;
+    color: #52525B;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.sens-meal-cals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+@media (max-width: 480px) {
+    .sens-meal-cals-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.sens-meal-cal-pill {
+    background: #F4F4F6;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.sens-meal-cal-pill.highlight {
+    background: rgba(197, 168, 128, 0.16);
+    border-color: rgba(197, 168, 128, 0.35);
+}
+
+.sens-meal-cal-pill .meal-name {
+    display: block;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #71717A;
+    margin-bottom: 2px;
+}
+
+.sens-meal-cal-pill .meal-val {
+    font-size: 12px;
+    font-weight: 800;
+    color: #09090B;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-nutri-card-footer {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    color: #9E7D4B;
+    font-weight: 600;
+}
+
+/* =============================================================================
+   5. CARD DE OBJETIVO & PROGRESIÓN (CALORÍAS, DÉFICIT, PESO, GRASA)
+   ============================================================================= */
+.sens-objective-card {
+    padding: 22px;
+    margin-bottom: 22px;
+}
+
+.sens-objective-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+}
+
+.sens-objective-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: #71717A;
+    display: block;
+}
+
+.sens-objective-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #09090B;
+    margin-top: 2px;
+}
+
+.sens-objective-status-pill {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.sens-objective-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.sens-obj-box {
+    background: #F8F9FA;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.sens-obj-box.highlight-box {
+    background: rgba(16, 185, 129, 0.06);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.sens-obj-box-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #71717A;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.sens-obj-box-val {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #09090B;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+}
+
+.sens-obj-box-val.text-success {
+    color: #059669;
+}
+
+.sens-obj-box-val .unit {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #71717A;
+}
+
+.sens-obj-box-desc {
+    font-size: 11px;
+    color: #71717A;
+    margin-top: 6px;
+}
+
+.sens-obj-box-trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+.sens-obj-box-trend.positive {
+    color: #059669;
+}
+
+.sens-obj-box-chips {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.mini-chip {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9.5px;
+    font-weight: 700;
+}
+
+.mini-chip.done {
+    background: #09090B;
+    color: #E5CBA7;
+}
+
+.mini-chip.pending {
+    background: #E4E4E7;
+    color: #71717A;
+}
+
+.sens-objective-footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.sens-score-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10B981;
+}
+
+/* Floating Dock en Blanco */
+body.in-portal .sens-floating-dock {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.in-portal .sens-dock-item {
+    color: #71717A !important;
+}
+
+body.in-portal .sens-dock-item.active {
+    background: rgba(0, 0, 0, 0.06) !important;
+    color: #09090B !important;
+}
+
+/* Tabs Dinámicas de Entrenamiento con Fechas Reales (DD/MM) */
+.sens-workout-day-tab {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    min-width: 95px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: inherit;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.sens-workout-day-tab .tab-date-num {
+    font-size: 14px;
+    font-weight: 700;
+    color: #09090B;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.2px;
+}
+
+.sens-workout-day-tab .tab-title-sub {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #71717A;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+.sens-workout-day-tab:hover {
+    border-color: rgba(158, 125, 75, 0.4);
+    transform: translateY(-1px);
+}
+
+.sens-workout-day-tab.active {
+    background: #09090B;
+    border-color: #09090B;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.sens-workout-day-tab.active .tab-date-num {
+    color: #E5CBA7;
+}
+
+.sens-workout-day-tab.active .tab-title-sub {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.sens-workout-day-tab.is-today:not(.active) {
+    border-color: #9E7D4B;
+    background: rgba(158, 125, 75, 0.05);
+}
+
+.sens-workout-day-tab.is-today .tab-date-num {
+    color: #9E7D4B;
+}
+
+/* Indicadores de Modalidad y Asistencia en el Strip Calendar Semanal */
+.sens-day-modality-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4px;
+    height: 16px;
+}
+
+.sens-day-status {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.sens-day-status.done {
+    background: #10B981;
+    color: #FFFFFF;
+}
+
+.sens-day-status.presencial {
+    background: #9E7D4B;
+    color: #FFFFFF;
+}
+
+.sens-day-status.online {
+    background: #2563EB;
+    color: #FFFFFF;
+}
+
+.sens-day-status.auto {
+    background: #64748B;
+    color: #FFFFFF;
+}
+
+.sens-day-status.rest {
+    color: #A1A1AA;
+    font-size: 11px;
+}
+
 
 
