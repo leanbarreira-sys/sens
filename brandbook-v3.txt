@@ -6,7 +6,7 @@
     <title>SENS TRAIN & WELLNESS | Design System & Brandbook Master v7.0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         /* =========================================
            1. DESIGN TOKENS CORE (Onyx & Champagne)
@@ -31,7 +31,7 @@
             --success: #4CAF50;
             --danger: #F44336;
             
-            --font-main: 'Raleway', sans-serif;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
             --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             --shadow-card: 0 14px 36px rgba(0,0,0,0.65);
@@ -250,8 +250,8 @@
 
         <!-- 2. TOKENS -->
         <section id="tokens">
-            <h2>2. Tokens de Color & Jerarquía Tipográfica</h2>
-            <p>La paleta evoluciona del marrón hacia <strong>Negro Onyx Profundo & Champagne Gold</strong> para lograr un impacto visual limpio, moderno y de alto nivel.</p>
+            <h2>2. Tokens de Color & Jerarquía Tipográfica Oficial (Plus Jakarta Sans)</h2>
+            <p>La paleta evoluciona del marrón hacia <strong>Negro Onyx Profundo & Champagne Gold</strong> para lograr un impacto visual limpio, moderno y de alto nivel. La tipografía oficial es <strong>Plus Jakarta Sans</strong>, una sans-serif geométrica moderna (Swiss Neogrotesque) de alta legibilidad, elegancia clínica y precisión numérica.</p>
             
             <div class="grid-3" style="margin-bottom: 30px;">
                 <div class="panel" style="border-top: 4px solid var(--bg-base);">
@@ -268,35 +268,61 @@
                 </div>
             </div>
 
+            <!-- Principio de Precisión Numérica (Lining Figures) -->
+            <div class="panel" style="margin-bottom: 25px; border-left: 4px solid var(--accent-primary);">
+                <h3>Estándar de Números: Lining Figures & Tabular Nums (Cero Cifras Desalineadas)</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                    Se descartan definitivamente las cifras de imprenta antigua (<em>Oldstyle Figures</em> de Raleway donde 3, 4, 5 y 7 caían por debajo de la base). Con <strong>Plus Jakarta Sans</strong>, todos los dígitos del <strong>0 al 9 descansan sobre la misma línea base</strong> y comparten la misma altura de caja. Se exige <code>font-variant-numeric: tabular-nums</code> en todas las métricas de peso (<code>76.4 kg</code>), cronómetros (<code>04:45</code>), repeticiones y precios para garantizar estabilidad visual y rigor biomédico.
+                </p>
+            </div>
+
             <div class="panel">
-                <h3>Reglas Tipográficas (Raleway)</h3>
+                <h3>Reglas Tipográficas & Arquitectura de Pesos (Quiet Luxury)</h3>
                 <table class="specs-table">
                     <thead>
                         <tr>
-                            <th>Nivel</th>
-                            <th>Peso & Formato</th>
-                            <th>Tamaño (Web / Canva 1080px)</th>
-                            <th>Regla Estricta</th>
+                            <th>Nivel / Función</th>
+                            <th>Peso (Weight)</th>
+                            <th>Aplicación Web & UI</th>
+                            <th>Composición Canva (1080px)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>Titular Contexto</strong></td>
-                            <td>Light (300) MAYÚSCULAS</td>
-                            <td>72px - 80px (Feed Canva)</td>
-                            <td>Máx. 4 palabras. Tracking +120. Da contexto a la idea.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Palabra Clave</strong></td>
+                            <td><strong>Slogan & Cifras Maestras</strong></td>
                             <td>ExtraBold (800) MAYÚSCULAS</td>
-                            <td>96px - 124px (Feed Canva)</td>
-                            <td><strong>Una sola palabra clave por pieza</strong> (máx. 12 letras). Alto impacto.</td>
+                            <td><code>MAKE SENS.</code>, métricas grandes (<code>10,649</code>, <code>76.4</code>), precios VIP.</td>
+                            <td>96px - 124px. Palabra clave central en Champagne o Blanco.</td>
                         </tr>
                         <tr>
-                            <td><strong>Subtexto / Bajada</strong></td>
+                            <td><strong>Títulos de Módulo & Cards</strong></td>
+                            <td>Bold (700)</td>
+                            <td>Títulos de tarjetas, encabezados de sección, nombres de atletas.</td>
+                            <td>48px - 64px. Encabezados de carrusel educativo.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Controles & Tabs</strong></td>
+                            <td>SemiBold (600)</td>
+                            <td>Tabs secundarios, selector de sede presencial, pills de filtro.</td>
+                            <td>32px - 38px. Botones de llamada a la acción en stories.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lectura & Bajadas</strong></td>
                             <td>Regular (400)</td>
-                            <td>16px Web / 42px en Canva</td>
-                            <td>Máximo 3 líneas de 8 palabras. Nunca usar textos largos en imágenes.</td>
+                            <td>Párrafos informativos, modales de términos, FAQs.</td>
+                            <td>16px Web / 42px Canva. Máx. 3 líneas de 8 palabras.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quiet Luxury (Respiro Zen)</strong></td>
+                            <td>Light (300)</td>
+                            <td>Preguntas dialógicas (<em>"Lean, ¿entrenamos juntos?"</em>), notas de Nico en dashboard (line-height 1.65), unidades de métricas (<code>kg</code>, <code>min</code>, <code>pasos</code>), días de calendar strip (<code>Lun, Mar</code>).</td>
+                            <td>72px - 80px. Frase de contexto previa al hook. Tracking +120.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Micro-Acentos</strong></td>
+                            <td>ExtraLight (200)</td>
+                            <td>Micro-superíndices y líneas decorativas etéreas.</td>
+                            <td>24px. Detalles de marca o pie de página.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -396,7 +422,7 @@
                 <ol style="margin-left: 20px; color: var(--text-secondary); line-height: 2;">
                     <li><strong>Capa 1 (Foto Real):</strong> Fotografía de Nico o de sesión en gimnasio. Ajustes en Canva: <em>Brillo -5, Contraste +12, Saturación -18, Calidez -5</em>.</li>
                     <li><strong>Capa 2 (Gradiente de Lectura):</strong> Buscar en Elementos <em>"Gradient fade to black"</em>. Cuadrado que va de negro (<code>#080809</code>) a 100% transparente. Altura mínima: 55% del lienzo.</li>
-                    <li><strong>Capa 3 (Texto):</strong> Caja 1 (Contexto en Raleway Light, blanco) + Caja 2 (Palabra Clave en Raleway ExtraBold, blanco o Champagne). <strong>Nunca colocar texto sobre el rostro de Nico</strong>.</li>
+                    <li><strong>Capa 3 (Texto):</strong> Caja 1 (Contexto en Plus Jakarta Sans Light 300, blanco) + Caja 2 (Palabra Clave en Plus Jakarta Sans ExtraBold 800, blanco o Champagne). <strong>Nunca colocar texto sobre el rostro de Nico</strong>.</li>
                     <li><strong>Capa 4 (Logo):</strong> Logo blanco `SENS TRAIN & WELLNESS` ubicado con márgenes de seguridad.</li>
                 </ol>
             </div>

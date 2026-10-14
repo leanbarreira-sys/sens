@@ -4501,11 +4501,11 @@ function initCharts() {
                 scales: {
                     x: {
                         grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#7A7A80', font: { family: 'Raleway' } }
+                        ticks: { color: '#7A7A80', font: { family: 'Plus Jakarta Sans' } }
                     },
                     y: {
                         grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#7A7A80', font: { family: 'Raleway' } }
+                        ticks: { color: '#7A7A80', font: { family: 'Plus Jakarta Sans' } }
                     }
                 }
             }
@@ -4536,11 +4536,11 @@ function initCharts() {
                 scales: {
                     x: {
                         grid: { display: false },
-                        ticks: { color: '#7A7A80', font: { family: 'Raleway' } }
+                        ticks: { color: '#7A7A80', font: { family: 'Plus Jakarta Sans' } }
                     },
                     y: {
                         grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#7A7A80', font: { family: 'Raleway' } },
+                        ticks: { color: '#7A7A80', font: { family: 'Plus Jakarta Sans' } },
                         suggestedMax: 13000
                     }
                 }
