@@ -64,7 +64,7 @@ function isCurrentUserAdmin() {
 async function sendCoachEmailAlert({ type, athleteName, athleteEmail, athletePhone, goal, modality, details }) {
     try {
         const payload = {
-            _subject: `🔔 [SENS ALERTA] ${type}: ${athleteName || 'Nuevo Atleta'}`,
+            _subject: `[SENS ALERTA] ${type}: ${athleteName || 'Nuevo Atleta'}`,
             _template: 'table',
             _captcha: 'false',
             tipo_evento: type,
@@ -199,7 +199,7 @@ const MOCK_USER_PROFILES = {
         user_type: 'admin',
         role: 'admin',
         active_plan_name: 'Panel Administrador SENS',
-        plan_badge_text: '⚡ Coach / Admin Nico',
+        plan_badge_text: 'Coach / Admin Nico',
         sessions_week: 'Coach Activo',
         current_weight: 75.0,
         weight_diff: 'Óptimo',
@@ -736,9 +736,6 @@ function initLeadCapture() {
 // GESTOR DE ROLES Y ATLETAS PARA PANEL DE COACH (NICO)
 // =============================================================================
 async function loadCoachAthletesList() {
-    const roleSelector = document.getElementById('userRoleSelector');
-    if (!roleSelector) return;
-
     let dbAthletes = [];
     if (supabaseClient) {
         try {
@@ -756,55 +753,63 @@ async function loadCoachAthletesList() {
 
     window.__coachAthletesCache = dbAthletes;
 
-    let html = '';
-    if (dbAthletes.length > 0) {
-        html += '<optgroup label="📋 Alumnos Registrados (Supabase)">';
-        dbAthletes.forEach(ath => {
-            const isAct = (ath.subscription_status === 'active');
-            const statusPrefix = isAct ? '✓ ACTIVO' : '⚠️ PENDIENTE';
-            const name = ath.full_name || ath.email || (ath.id ? ath.id.slice(0, 8) : 'Atleta');
-            const plan = ath.active_plan_name || 'Plan SENS';
-            html += `<option value="db_${ath.id}">[${statusPrefix}] ${name} — ${plan}</option>`;
-        });
-        html += '</optgroup>';
+    // Sincronizar Bottom Sheet Nativo
+    renderAthleteBottomSheetList();
+
+    // Sincronizar selectores del Hub de Coach
+    const roster = getConsolidatedCoachAthletes();
+    ['coachNutritionAthleteSelector', 'coachWorkoutAthleteSelector', 'coachDashNoteAthleteSelector'].forEach(selId => {
+        const sel = document.getElementById(selId);
+        if (sel) {
+            let html = '';
+            roster.forEach(ath => {
+                html += `<option value="${ath.id}">${ath.full_name} (${ath.active_plan_name})</option>`;
+            });
+            sel.innerHTML = html;
+        }
+    });
+
+    // Actualizar nombre y plan en la barra nativa ejecutiva si corresponde
+    const currentNameEl = document.getElementById('coachCurrentAthleteName');
+    if (currentNameEl && roster.length > 0) {
+        const activeAth = roster.find(a => a.id === AppState.activeAthleteId) || roster[0];
+        currentNameEl.textContent = activeAth.full_name;
+        
+        const planEl = document.getElementById('coachCurrentAthletePlan');
+        if (planEl) {
+            let tag = 'PLAN';
+            const pLower = (activeAth.active_plan_name || '').toLowerCase();
+            if (pLower.includes('vip')) tag = 'VIP';
+            else if (pLower.includes('dúo') || pLower.includes('duo')) tag = 'DÚO';
+            else if (pLower.includes('premium')) tag = 'ONLINE PRO';
+            else if (pLower.includes('básico') || pLower.includes('basico')) tag = 'ONLINE';
+            else tag = 'PRESENCIAL';
+            planEl.textContent = tag;
+        }
+
+        const dotEl = document.getElementById('coachTopStatusDot');
+        if (dotEl) {
+            const s = activeAth.subscription_status || 'active';
+            dotEl.className = 'status-dot ' + (s === 'active' ? 'status-dot-active' : s === 'paused' ? 'status-dot-paused' : 'status-dot-pending');
+        }
+
+        const waLink = document.getElementById('btnCoachWhatsApp');
+        if (waLink) {
+            const msg = encodeURIComponent(`Hola ${activeAth.full_name}! Te escribo de SENS para revisar tu progreso y coordinar los entrenamientos.`);
+            waLink.href = `https://wa.me/?text=${msg}`;
+        }
     }
-
-    html += '<optgroup label="🧪 Perfiles Demo / Mock">';
-    html += '<option value="client_presencial_vip">Roberto Gómez — Presencial 1 a 1 VIP (2x/sem CABA)</option>';
-    html += '<option value="client_presencial_group">Laura &amp; Marcos — Presencial Dúo (CABA)</option>';
-    html += '<option value="client_online_premium">Esteban Bianchi — Online Premium</option>';
-    html += '<option value="client_online_basic">Carla Méndez — Online Básico</option>';
-    html += '<option value="admin">Mi Perfil Coach (Nico)</option>';
-    html += '</optgroup>';
-
-    roleSelector.innerHTML = html;
 }
 
 function initRoleSwitcher() {
-    const roleSelector = document.getElementById('userRoleSelector');
     const refreshBtn = document.getElementById('btnRefreshCoachAthletes');
-    if (!roleSelector) return;
-
     if (refreshBtn) {
         refreshBtn.addEventListener('click', async () => {
             await loadCoachAthletesList();
-            showSensToast('🔄 Lista de alumnos actualizada desde Supabase.', 'champagne');
+            renderCoachAthletesHub();
+            showSensToast('Lista de alumnos actualizada desde Supabase.', 'champagne');
         });
     }
-
-    roleSelector.addEventListener('change', (e) => {
-        const val = e.target.value;
-        if (val.startsWith('db_')) {
-            const athleteId = val.replace('db_', '');
-            const athletes = window.__coachAthletesCache || [];
-            const athlete = athletes.find(a => a.id === athleteId);
-            if (athlete) {
-                applyDatabaseAthlete(athlete);
-            }
-        } else {
-            applyUserProfile(val);
-        }
-    });
 }
 
 function applyDatabaseAthlete(athlete) {
@@ -853,13 +858,13 @@ function updateCoachSubBadgeAndButton(status) {
 
     if (toggleSubBtn) {
         if (isActive) {
-            toggleSubBtn.textContent = '⏸ Pausar Acceso';
+            toggleSubBtn.textContent = 'Pausar Acceso';
             toggleSubBtn.className = 'btn btn-outline btn-sm';
             toggleSubBtn.style.color = '#F59E0B';
             toggleSubBtn.style.borderColor = 'rgba(245, 158, 11, 0.4)';
             toggleSubBtn.style.backgroundColor = 'transparent';
         } else {
-            toggleSubBtn.textContent = '✓ Aprobar & Activar Acceso';
+            toggleSubBtn.textContent = 'Aprobar & Activar Acceso';
             toggleSubBtn.className = 'btn btn-primary btn-sm';
             toggleSubBtn.style.color = '#080809';
             toggleSubBtn.style.backgroundColor = 'var(--accent-primary)';
@@ -1035,7 +1040,7 @@ function renderExerciseLibraryList() {
                     defaultWeight: 15,
                     defaultReps: 10
                 });
-                showSensToast(`✓ ${exName} asignado correctamente a ${currentDay.toUpperCase()}.`, 'champagne');
+                showSensToast(`${exName} asignado correctamente a ${currentDay.toUpperCase()}.`, 'champagne');
                 renderWorkoutDay(currentDay);
                 const modal = document.getElementById('exerciseLibraryModal');
                 if (modal) modal.classList.remove('active');
@@ -1909,7 +1914,7 @@ function initPortalNavigation() {
             updateCoachSubBadgeAndButton(newStatus);
             showSensToast(
                 newStatus === 'active' 
-                    ? '✓ ¡Atleta aprobado con éxito! Acceso y entrenamientos habilitados.' 
+                    ? 'Atleta aprobado con éxito! Acceso y entrenamientos habilitados.' 
                     : 'Membresía pausada.', 
                 'champagne'
             );
@@ -3423,7 +3428,7 @@ function initWorkoutManager() {
     const finishBtn = document.getElementById('btnFinishWorkoutSession');
     if (finishBtn) {
         finishBtn.addEventListener('click', async () => {
-            showSensToast('✨ ¡Excelente trabajo! Rutina registrada con éxito en tu historial.', 'success', 3600);
+            showSensToast('Excelente trabajo. Rutina registrada con éxito en tu historial.', 'success', 3600);
             // Guardar log en Supabase
             if (supabaseClient && AppState.user) {
                 try {
@@ -3515,7 +3520,7 @@ function renderWorkoutDay(dayKey) {
                         </div>
                         <h3 class="exercise-title" style="margin-top: 4px;">${ex.name}</h3>
                         <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 11.5px; color: var(--accent-primary);">
-                            💡 <strong>¿Para qué sirve?</strong> ${ex.notes || 'Fortalecimiento biomecánico y postura funcional'}
+                            <strong>¿Para qué sirve?</strong> ${ex.notes || 'Fortalecimiento biomecánico y postura funcional'}
                         </div>
                     </div>
                     <div class="exercise-meta-pills">
@@ -3564,7 +3569,7 @@ function startRestTimer(seconds) {
         if (AppState.remainingSeconds <= 0) {
             stopRestTimer();
             playBeep(880, 0.4); // tono agudo de fin de descanso
-            showSensToast('⏱️ ¡Descanso completado! Preparate para el próximo set.', 'champagne', 3400);
+            showSensToast('Descanso completado. Preparate para el próximo set.', 'champagne', 3400);
         } else {
             updateTimerDisplay();
         }
@@ -3669,7 +3674,7 @@ function initNutritionHabits() {
                 habitContainer.classList.add('habit-checked-anim');
                 setTimeout(() => habitContainer.classList.remove('habit-checked-anim'), 500);
             }
-            showSensToast('🌿 ¡Hábitos diarios guardados! Tu constancia construye el cambio.', 'success', 3500);
+            showSensToast('Hábitos diarios guardados. Tu constancia construye el cambio.', 'success', 3500);
         });
     }
 }
@@ -3795,7 +3800,7 @@ function attachFoodCalcListeners(container) {
 
                 localStorage.setItem('sens_daily_nutrition', JSON.stringify(AppState.dailyNutrition));
                 updateDashboardRings();
-                showSensToast(`🥗 ¡${food.name} (${grams}g) sumado! +${cal} kcal, +${prot}g proteína.`, 'success', 3200);
+                showSensToast(`${food.name} (${grams}g) sumado! +${cal} kcal, +${prot}g proteína.`, 'success', 3200);
             }
         });
     });
@@ -3861,7 +3866,7 @@ function initDailyTracking() {
             document.getElementById('kpiCurrentWeight').innerHTML = `${weight} <span style="font-size:1rem; font-weight:400;">kg</span>`;
             document.getElementById('kpiAvgSteps').textContent = steps.toLocaleString('es-AR');
 
-            showSensToast('📈 ¡Registro diario guardado con éxito! Métricas y gráficos actualizados.', 'champagne', 3500);
+            showSensToast('Registro diario guardado con éxito! Métricas y gráficos actualizados.', 'champagne', 3500);
             logForm.reset();
             updateCharts();
         });
@@ -3997,13 +4002,13 @@ function initProfileSettings() {
                         showSensToast(`Error al actualizar: ${error.message}`, 'alert');
                         return;
                     }
-                    showSensToast('✓ Contraseña actualizada correctamente.', 'champagne');
+                    showSensToast('Contraseña actualizada correctamente.', 'champagne');
                     passwordForm.reset();
                 } catch (err) {
                     showSensToast('Error de red al actualizar contraseña.', 'alert');
                 }
             } else {
-                showSensToast('✓ Contraseña actualizada correctamente en tu sesión.', 'champagne');
+                showSensToast('Contraseña actualizada correctamente en tu sesión.', 'champagne');
                 passwordForm.reset();
             }
         });
@@ -4085,7 +4090,7 @@ function updateDashboardRings() {
         workoutCirc.style.strokeDashoffset = hasTrainedToday ? '0' : '45';
     }
     if (workoutText) {
-        workoutText.textContent = hasTrainedToday ? '¡Completado! ✓' : 'En Progreso';
+        workoutText.textContent = hasTrainedToday ? 'Completado' : 'En Progreso';
         workoutText.style.color = hasTrainedToday ? '#10B981' : 'var(--accent-primary)';
     }
 
@@ -4172,7 +4177,7 @@ function renderMonthlyCalendar() {
     calGrid.querySelectorAll('.month-cal-cell[data-cal-day]').forEach(cell => {
         cell.addEventListener('click', () => {
             const d = cell.getAttribute('data-cal-day');
-            showSensToast(`📅 Visualizando registro del ${d} de ${monthNames[currentMonth]}`, 'champagne', 2200);
+            showSensToast(`Visualizando registro del ${d} de ${monthNames[currentMonth]}`, 'champagne', 2200);
         });
     });
 }
@@ -4276,41 +4281,89 @@ function initTopbarAvatar() {
 function initCoachOS() {
     const viewBtn = document.getElementById('btnCoachViewMode');
     const editBtn = document.getElementById('btnCoachEditMode');
-    const roleSelector = document.getElementById('userRoleSelector');
-    const waLink = document.getElementById('btnCoachWhatsApp');
 
     if (viewBtn && editBtn) {
         viewBtn.addEventListener('click', () => {
             viewBtn.classList.add('active');
+            viewBtn.setAttribute('aria-checked', 'true');
             editBtn.classList.remove('active');
+            editBtn.setAttribute('aria-checked', 'false');
             AppState.coachEditMode = false;
             document.body.classList.remove('coach-editing-mode');
             const adminAddBtn = document.getElementById('btnAdminAddExercise');
             if (adminAddBtn) adminAddBtn.style.display = 'none';
-            showSensToast('👁 Modo Inspección activo: viendo datos tal como los ve el alumno.', 'info', 2500);
+            showSensToast('Modo Inspección activo: viendo datos tal como los ve el alumno.', 'info', 2500);
         });
 
         editBtn.addEventListener('click', () => {
             editBtn.classList.add('active');
+            editBtn.setAttribute('aria-checked', 'true');
             viewBtn.classList.remove('active');
+            viewBtn.setAttribute('aria-checked', 'false');
             AppState.coachEditMode = true;
             document.body.classList.add('coach-editing-mode');
             const adminAddBtn = document.getElementById('btnAdminAddExercise');
             if (adminAddBtn) adminAddBtn.style.display = 'inline-block';
-            showSensToast('✏ Modo Edición activo: podés modificar rutinas, series y asignar ejercicios.', 'success', 3000);
+            showSensToast('Modo Edición activo: podés modificar rutinas, series y asignar ejercicios.', 'success', 3000);
         });
     }
 
-    if (roleSelector && waLink) {
-        function updateWhatsAppLink() {
-            const selectedText = roleSelector.options[roleSelector.selectedIndex].text;
-            const athleteName = selectedText.split('—')[0].replace(/[🟢🟡🔴⭐]/g, '').trim();
-            const msg = encodeURIComponent(`Hola ${athleteName}! Te escribo de SENS para ver tu progreso y ajustar las cargas de esta semana.`);
-            waLink.href = `https://wa.me/?text=${msg}`;
-        }
-        roleSelector.addEventListener('change', updateWhatsAppLink);
-        updateWhatsAppLink();
+    // Wiring del Bottom Sheet Nativo de Selección de Alumnos (Estilo Apple / Equinox)
+    const btnOpenSheet = document.getElementById('btnOpenAthleteSheet');
+    const sheetBackdrop = document.getElementById('athleteSheetBackdrop');
+    const bottomSheet = document.getElementById('athletePickerBottomSheet');
+    const btnCloseSheet = document.getElementById('btnCloseAthleteSheet');
+    const sheetSearchInput = document.getElementById('sheetAthleteSearchInput');
+    const sheetFilterPills = document.querySelectorAll('.sheet-filter-pill');
+    const btnSheetOpenHub = document.getElementById('btnSheetOpenCoachHub');
+
+    function openAthleteSheet() {
+        if (!bottomSheet || !sheetBackdrop) return;
+        bottomSheet.classList.add('active');
+        sheetBackdrop.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (btnOpenSheet) btnOpenSheet.setAttribute('aria-expanded', 'true');
+        renderAthleteBottomSheetList();
     }
+
+    function closeAthleteSheet() {
+        if (!bottomSheet || !sheetBackdrop) return;
+        bottomSheet.classList.remove('active');
+        sheetBackdrop.classList.remove('active');
+        document.body.style.overflow = '';
+        if (btnOpenSheet) btnOpenSheet.setAttribute('aria-expanded', 'false');
+    }
+
+    if (btnOpenSheet) btnOpenSheet.addEventListener('click', openAthleteSheet);
+    if (btnCloseSheet) btnCloseSheet.addEventListener('click', closeAthleteSheet);
+    if (sheetBackdrop) sheetBackdrop.addEventListener('click', closeAthleteSheet);
+
+    if (btnSheetOpenHub) {
+        btnSheetOpenHub.addEventListener('click', () => {
+            closeAthleteSheet();
+            switchPortalView('coachHubView');
+            renderCoachAthletesHub();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    if (sheetSearchInput) {
+        sheetSearchInput.addEventListener('input', () => {
+            const query = sheetSearchInput.value.trim().toLowerCase();
+            const activeFilter = document.querySelector('.sheet-filter-pill.active')?.getAttribute('data-filter') || 'all';
+            renderAthleteBottomSheetList(activeFilter, query);
+        });
+    }
+
+    sheetFilterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            sheetFilterPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            const filter = pill.getAttribute('data-filter') || 'all';
+            const query = sheetSearchInput ? sheetSearchInput.value.trim().toLowerCase() : '';
+            renderAthleteBottomSheetList(filter, query);
+        });
+    });
 
     // Botón de Apertura de Hub desde la barra superior de coach
     const btnOpenHub = document.getElementById('btnOpenCoachHub');
@@ -4328,7 +4381,7 @@ function initCoachOS() {
         refreshTableBtn.addEventListener('click', async () => {
             await loadCoachAthletesList();
             renderCoachAthletesHub();
-            showSensToast('🔄 Lista de atletas sincronizada con éxito.', 'champagne');
+            showSensToast('Lista de atletas sincronizada con éxito.', 'champagne');
         });
     }
 
@@ -4360,6 +4413,149 @@ function initCoachOS() {
     initCoachWorkoutsPrescription();
     initCoachDashboardNote();
     initMemberClarityActions();
+}
+
+function renderAthleteBottomSheetList(filter = 'all', searchQuery = '') {
+    const container = document.getElementById('sheetAthletesList');
+    if (!container) return;
+
+    const roster = getConsolidatedCoachAthletes();
+    let filtered = roster;
+
+    // Filtro por pestañas segmentadas
+    if (filter === 'pending_activation') {
+        filtered = filtered.filter(a => a.subscription_status === 'pending_activation');
+    } else if (filter === 'presencial') {
+        filtered = filtered.filter(a => (a.user_type || '').includes('presencial') || (a.active_plan_name || '').toLowerCase().includes('presencial'));
+    } else if (filter === 'online') {
+        filtered = filtered.filter(a => (a.user_type || '').includes('online') || (a.active_plan_name || '').toLowerCase().includes('online'));
+    }
+
+    // Filtro por búsqueda de texto
+    if (searchQuery) {
+        filtered = filtered.filter(a =>
+            (a.full_name && a.full_name.toLowerCase().includes(searchQuery)) ||
+            (a.email && a.email.toLowerCase().includes(searchQuery)) ||
+            (a.active_plan_name && a.active_plan_name.toLowerCase().includes(searchQuery))
+        );
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 36px 16px; color: var(--text-muted); font-size: 13px;">
+                No se encontraron alumnos coincidentes.
+            </div>
+        `;
+        return;
+    }
+
+    const currentActiveId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
+
+    let html = '';
+    filtered.forEach(ath => {
+        const parts = (ath.full_name || 'Atleta').trim().split(' ');
+        let initials = parts[0] ? parts[0][0].toUpperCase() : 'S';
+        if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0].toUpperCase();
+
+        const isSelected = (currentActiveId === ath.id);
+        const status = ath.subscription_status || 'active';
+        let statusClass = 'active';
+        let statusLabel = 'Activo';
+
+        if (status === 'pending_activation') {
+            statusClass = 'pending';
+            statusLabel = 'Pendiente';
+        } else if (status === 'paused') {
+            statusClass = 'paused';
+            statusLabel = 'Pausado';
+        }
+
+        html += `
+            <div class="sheet-athlete-item ${isSelected ? 'is-selected' : ''}" data-athlete-id="${ath.id}">
+                <div class="sheet-athlete-left">
+                    <div class="sheet-athlete-avatar">${initials}</div>
+                    <div class="sheet-athlete-info">
+                        <span class="sheet-athlete-name">${ath.full_name}</span>
+                        <span class="sheet-athlete-sub">${ath.active_plan_name || 'Plan SENS'} • ${ath.email}</span>
+                    </div>
+                </div>
+                <div class="sheet-athlete-status">
+                    <span class="status-dot status-dot-${statusClass}"></span>
+                    <span>${statusLabel}</span>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.sheet-athlete-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const athId = item.getAttribute('data-athlete-id');
+            selectAthleteFromSheet(athId);
+        });
+    });
+}
+
+function selectAthleteFromSheet(athId) {
+    const roster = getConsolidatedCoachAthletes();
+    const athlete = roster.find(a => a.id === athId);
+    if (!athlete) return;
+
+    // Actualizar elementos de la barra ejecutiva nativa
+    const nameEl = document.getElementById('coachCurrentAthleteName');
+    const planEl = document.getElementById('coachCurrentAthletePlan');
+    const statusDotEl = document.getElementById('coachTopStatusDot');
+    const waLink = document.getElementById('btnCoachWhatsApp');
+
+    if (nameEl) nameEl.textContent = athlete.full_name;
+    if (planEl) {
+        let tag = 'PLAN';
+        const pLower = (athlete.active_plan_name || '').toLowerCase();
+        if (pLower.includes('vip')) tag = 'VIP';
+        else if (pLower.includes('dúo') || pLower.includes('duo')) tag = 'DÚO';
+        else if (pLower.includes('premium')) tag = 'ONLINE PRO';
+        else if (pLower.includes('básico') || pLower.includes('basico')) tag = 'ONLINE';
+        else tag = 'PRESENCIAL';
+        planEl.textContent = tag;
+    }
+    if (statusDotEl) {
+        const s = athlete.subscription_status || 'active';
+        statusDotEl.className = 'status-dot ' + (s === 'active' ? 'status-dot-active' : s === 'paused' ? 'status-dot-paused' : 'status-dot-pending');
+    }
+    if (waLink) {
+        const msg = encodeURIComponent(`Hola ${athlete.full_name}! Te escribo de SENS para revisar tu progreso y coordinar los entrenamientos.`);
+        waLink.href = `https://wa.me/?text=${msg}`;
+    }
+
+    if (athlete.isDb) {
+        applyDatabaseAthlete(athlete);
+    } else {
+        const keyMap = {
+            mock_vip: 'client_presencial_vip',
+            mock_duo: 'client_presencial_group',
+            mock_online_prem: 'client_online_premium',
+            mock_online_basic: 'client_online_basic'
+        };
+        applyUserProfile(keyMap[athlete.id] || athlete.user_type || 'client_presencial_vip');
+    }
+
+    // Sincronizar selectores en subpaneles del Hub
+    ['coachNutritionAthleteSelector', 'coachWorkoutAthleteSelector', 'coachDashNoteAthleteSelector'].forEach(selId => {
+        const el = document.getElementById(selId);
+        if (el) el.value = athId;
+    });
+
+    // Cerrar bottom sheet con animación fluida
+    const bottomSheet = document.getElementById('athletePickerBottomSheet');
+    const sheetBackdrop = document.getElementById('athleteSheetBackdrop');
+    const btnOpenSheet = document.getElementById('btnOpenAthleteSheet');
+    if (bottomSheet) bottomSheet.classList.remove('active');
+    if (sheetBackdrop) sheetBackdrop.classList.remove('active');
+    document.body.style.overflow = '';
+    if (btnOpenSheet) btnOpenSheet.setAttribute('aria-expanded', 'false');
+
+    showSensToast(`Alumno activo: ${athlete.full_name}`, 'champagne');
 }
 
 // -----------------------------------------------------------------------------
@@ -4531,16 +4727,16 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
 
         let statusBadgeHtml = '';
         if (isAct) {
-            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #10B981; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.15);">🟢 ACTIVO</span>';
+            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #10B981; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.15);"><span class="status-dot status-dot-active" style="display:inline-block; margin-right:5px;"></span>Activo</span>';
         } else if (isPend) {
-            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #F59E0B; border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.15);">⚠️ PENDIENTE ACTIVACIÓN</span>';
+            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #F59E0B; border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.15);"><span class="status-dot status-dot-pending" style="display:inline-block; margin-right:5px;"></span>Pendiente</span>';
         } else {
-            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #EF4444; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15);">⏸ PAUSADO</span>';
+            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #EF4444; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15);"><span class="status-dot status-dot-paused" style="display:inline-block; margin-right:5px;"></span>Pausado</span>';
         }
 
         const toggleBtnHtml = isAct
-            ? `<button type="button" class="btn btn-outline btn-sm btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="active" style="font-size: 11px; padding: 5px 12px; color: #F59E0B; border-color: rgba(245, 158, 11, 0.4);">⏸ Pausar</button>`
-            : `<button type="button" class="btn btn-primary btn-sm btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="${ath.subscription_status}" style="font-size: 11px; padding: 5px 12px; font-weight: 800;">✓ Aprobar Acceso</button>`;
+            ? `<button type="button" class="btn btn-outline btn-sm btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="active" style="font-size: 11px; padding: 5px 12px; color: #F59E0B; border-color: rgba(245, 158, 11, 0.4);">Pausar Acceso</button>`
+            : `<button type="button" class="btn btn-primary btn-sm btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="${ath.subscription_status}" style="font-size: 11px; padding: 5px 12px; font-weight: 800;">Aprobar Acceso</button>`;
 
         const planKey = ath.user_type || 'client_presencial_vip';
 
@@ -4567,10 +4763,10 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
                 </div>
                 <div class="coach-athlete-actions">
                     ${toggleBtnHtml}
-                    <button type="button" class="btn btn-outline btn-sm btn-hub-prescribe-nutri" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px;">🥑 Prescribir Nutrición</button>
-                    <button type="button" class="btn btn-outline btn-sm btn-hub-prescribe-workout" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px;">🏋️ Prescribir Rutina</button>
-                    <button type="button" class="btn btn-outline btn-sm btn-hub-inspect-student" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">👁 Ver como Alumno</button>
-                    <a href="https://wa.me/?text=${encodeURIComponent(`Hola ${ath.full_name}, te escribo de SENS para coordinar tu plan.`)}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="font-size: 11px; padding: 5px 10px; color: #25D366; border-color: rgba(37, 211, 102, 0.4);">💬 WA</a>
+                    <button type="button" class="btn btn-outline btn-sm btn-hub-prescribe-nutri" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px;">Prescribir Nutrición</button>
+                    <button type="button" class="btn btn-outline btn-sm btn-hub-prescribe-workout" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px;">Prescribir Rutina</button>
+                    <button type="button" class="btn btn-outline btn-sm btn-hub-inspect-student" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">Ver como Alumno</button>
+                    <a href="https://wa.me/?text=${encodeURIComponent(`Hola ${ath.full_name}, te escribo de SENS para coordinar tu plan.`)}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="font-size: 11px; padding: 5px 10px; color: #25D366; border-color: rgba(37, 211, 102, 0.4);">WhatsApp</a>
                 </div>
             </div>
         `;
@@ -4641,8 +4837,8 @@ async function updateAthleteSubscriptionStatus(athId, newStatus) {
     loadCoachAthletesList();
     showSensToast(
         newStatus === 'active' 
-            ? '✓ ¡Atleta aprobado con éxito! Acceso y entrenamientos habilitados.' 
-            : '⏸ Membresía pausada.', 
+            ? 'Atleta aprobado con éxito! Acceso y entrenamientos habilitados.' 
+            : 'Membresía pausada.', 
         'champagne'
     );
 }
@@ -4682,7 +4878,7 @@ async function updateAthletePlanType(athId, newPlanKey) {
     }
 
     loadCoachAthletesList();
-    showSensToast(`✓ Plan actualizado a: ${newPlanName}`, 'champagne');
+    showSensToast(`Plan actualizado a: ${newPlanName}`, 'champagne');
 }
 
 function selectAthleteForPrescription(type, athId) {
@@ -4725,7 +4921,7 @@ function inspectAthleteAsCoach(athId) {
 
     switchPortalView('dashView');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    showSensToast(`👁 Inspeccionando vista de ${target.full_name}.`, 'champagne');
+    showSensToast(`Inspeccionando vista de ${target.full_name}.`, 'champagne');
 }
 
 // -----------------------------------------------------------------------------
@@ -4862,7 +5058,7 @@ function initCoachNutritionPrescription() {
             }
 
             syncMemberNutritionPrescription(athId, prescriptionData);
-            showSensToast(`💾 Prescripción nutricional guardada con éxito para el alumno.`, 'champagne');
+            showSensToast(`Prescripción nutricional guardada con éxito para el alumno.`, 'champagne');
         });
     }
 
@@ -5124,7 +5320,7 @@ function renderCoachAssignedExercises() {
                         <label style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Descanso (s):</label>
                         <input type="number" class="input-control coach-ex-rest" value="${ex.rest || 75}" step="15" style="width: 60px; padding: 2px 6px; height: 28px; margin-bottom: 0;">
                     </div>
-                    <button type="button" class="btn btn-outline btn-sm btn-coach-remove-ex" data-ex-id="${ex.id}" style="border-color: var(--danger); color: var(--danger); padding: 4px 8px; font-size: 11px;">✕</button>
+                    <button type="button" class="btn btn-outline btn-sm btn-coach-remove-ex" data-ex-id="${ex.id}" style="border-color: var(--danger); color: var(--danger); padding: 4px 8px; font-size: 11px;">&times;</button>
                 </div>
             </div>
         `;
@@ -5182,7 +5378,7 @@ function saveCurrentCoachWorkoutDay() {
         renderMonthlyCalendar();
     }
 
-    showSensToast(`💾 Rutina de ${data[dayKey].title} guardada con éxito.`, 'champagne');
+    showSensToast(`Rutina de ${data[dayKey].title} guardada con éxito.`, 'champagne');
 }
 
 function applyCoachWorkoutTemplate(templateKey) {
@@ -5232,7 +5428,7 @@ function applyCoachWorkoutTemplate(templateKey) {
 
     localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
     renderCoachAssignedExercises();
-    showSensToast('⚡ Plantilla de entrenamiento aplicada.', 'champagne');
+    showSensToast('Plantilla de entrenamiento aplicada.', 'champagne');
 }
 
 // -----------------------------------------------------------------------------
@@ -5273,7 +5469,7 @@ function initCoachDashboardNote() {
             const dashWeeklyNote = document.getElementById('dashCoachWeeklyNote');
             if (dashWeeklyNote && body) dashWeeklyNote.textContent = body;
 
-            showSensToast('💾 Mensaje de Nico publicado en el Dashboard del alumno.', 'champagne');
+            showSensToast('Mensaje de Nico publicado en el Dashboard del alumno.', 'champagne');
         });
     }
 
@@ -5307,7 +5503,7 @@ function initMemberClarityActions() {
     const handleGoWorkout = () => {
         switchPortalView('workoutView');
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        showSensToast('🏋️ Abriendo tu sesión pautada para hoy.', 'champagne', 2500);
+        showSensToast('Abriendo tu sesión pautada para hoy.', 'champagne', 2500);
     };
 
     if (btnDashGoWorkout) btnDashGoWorkout.addEventListener('click', handleGoWorkout);
@@ -5325,7 +5521,7 @@ function initMemberClarityActions() {
                 exContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
             playBeep(520, 0.15);
-            showSensToast('⏱️ ¡Sesión de entrenamiento iniciada! Registrá tus pesos y descansos.', 'success', 3500);
+            showSensToast('Sesión de entrenamiento iniciada! Registrá tus pesos y descansos.', 'success', 3500);
         });
     }
 
@@ -5391,7 +5587,7 @@ function syncMemberNutritionPrescription(athId, forcedData = null) {
                         AppState.dailyNutrition.protein += prot;
                         localStorage.setItem('sens_daily_nutrition', JSON.stringify(AppState.dailyNutrition));
                         updateDashboardRings();
-                        showSensToast(`🥗 ${food.name} (${grams}g) sumado a tu total de hoy (+${cal} kcal).`, 'success', 3000);
+                        showSensToast(`${food.name} (${grams}g) sumado a tu total de hoy (+${cal} kcal).`, 'success', 3000);
                     }
                 });
             });
@@ -5409,7 +5605,7 @@ function initQuickActionButtons() {
             if (fuelText) {
                 fuelText.textContent = `${AppState.dailyWater.toFixed(1)} / 2.5 L`;
             }
-            showSensToast(`💧 +500ml agua registrados (Total: ${AppState.dailyWater.toFixed(1)} L)`, 'success', 2500);
+            showSensToast(`+500ml agua registrados (Total: ${AppState.dailyWater.toFixed(1)} L)`, 'success', 2500);
         });
     }
 

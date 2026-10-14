@@ -2215,10 +2215,13 @@ button.btn-primary:focus {
 }
 
 .selection-item input[type="checkbox"]:checked + .custom-box::after {
-    content: '✓';
-    color: #080809;
-    font-size: 13px;
-    font-weight: 900;
+    content: '';
+    width: 5px;
+    height: 9px;
+    border: solid #080809;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
 }
 
 .custom-circle {
@@ -7121,10 +7124,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .month-cal-cell.completed::after {
-    content: "✓";
-    font-size: 9px;
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #10B981;
     position: absolute;
-    bottom: 2px;
+    bottom: 4px;
 }
 
 .month-cal-cell.rest-day {
@@ -7576,4 +7582,444 @@ input[type="range"]::-webkit-slider-thumb:hover {
     gap: 10px;
     flex-wrap: wrap;
 }
+
+/* =========================================================================
+   NATIVE-FEEL SENS COACH BAR & NATIVE BOTTOM SHEET (APPLE / EQUINOX LOOK)
+   ========================================================================= */
+
+/* 1. Barra Ejecutiva de Coach (1 Sola Fila Compacta en Mobile y Desktop) */
+.coach-native-bar {
+    background: rgba(14, 14, 18, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 4%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    position: sticky;
+    top: 60px;
+    z-index: 900;
+}
+
+.coach-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.coach-tag-brand {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    background: rgba(229, 203, 167, 0.1);
+    padding: 3px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* Pill Disparador del Bottom Sheet Nativo */
+.coach-athlete-pill-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 5px 12px;
+    border-radius: 24px;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    max-width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.coach-athlete-pill-trigger:hover,
+.coach-athlete-pill-trigger:active {
+    background: rgba(229, 203, 167, 0.1);
+    border-color: rgba(229, 203, 167, 0.4);
+}
+
+.pill-athlete-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pill-plan-tag {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--accent-primary);
+    background: rgba(229, 203, 167, 0.15);
+    padding: 1px 6px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.pill-chevron {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.coach-athlete-pill-trigger[aria-expanded="true"] .pill-chevron {
+    transform: rotate(180deg);
+}
+
+.coach-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Segmented Switch Nativo */
+.coach-segmented-switch {
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2px;
+}
+
+.segmented-option {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.segmented-option.active {
+    background: var(--accent-primary);
+    color: #080809;
+    font-weight: 700;
+}
+
+.btn-coach-manage-pill {
+    background: rgba(229, 203, 167, 0.15);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    color: var(--accent-primary);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-coach-manage-pill:hover {
+    background: var(--accent-primary);
+    color: #080809;
+}
+
+.btn-coach-wa-pill {
+    background: rgba(37, 211, 102, 0.12);
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    color: #25D366;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-coach-wa-pill:hover {
+    background: #25D366;
+    color: #080809;
+}
+
+/* 2. Puntos de Estado Puros CSS (Sin Emoticones) */
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.status-dot-active {
+    background: #10B981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
+}
+
+.status-dot-pending {
+    background: #F59E0B;
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.7);
+}
+
+.status-dot-paused {
+    background: #6B7280;
+}
+
+/* 3. Bottom Sheet Nativo de Selección de Atleta (Estilo Apple / Equinox) */
+.native-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 9999;
+}
+
+.native-sheet-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.native-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 105%);
+    width: 100%;
+    max-width: 520px;
+    max-height: 82vh;
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: none;
+    border-radius: 22px 22px 0 0;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.85);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    overscroll-behavior: contain;
+}
+
+.native-bottom-sheet.active {
+    transform: translate(-50%, 0);
+}
+
+.sheet-drag-handle-wrap {
+    padding: 10px 0 4px;
+    display: flex;
+    justify-content: center;
+}
+
+.sheet-drag-handle {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.sheet-header {
+    padding: 8px 20px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sheet-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-primary);
+    font-weight: 700;
+    display: block;
+}
+
+.sheet-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 2px 0 0;
+}
+
+.sheet-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #FFFFFF;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.sheet-close-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.sheet-search-wrap {
+    padding: 14px 20px 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.sheet-search-icon {
+    position: absolute;
+    left: 32px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.sheet-search-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 14px 10px 38px;
+    font-size: 13px;
+    color: #FFFFFF;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.sheet-search-input:focus {
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.sheet-segmented-filters {
+    padding: 0 20px 12px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.sheet-segmented-filters::-webkit-scrollbar {
+    display: none;
+}
+
+.sheet-filter-pill {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 16px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.sheet-filter-pill.active {
+    background: var(--accent-primary);
+    color: #080809;
+    border-color: var(--accent-primary);
+    font-weight: 700;
+}
+
+.sheet-athletes-scroll {
+    padding: 0 16px;
+    overflow-y: auto;
+    flex: 1;
+    max-height: 50vh;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sheet-athlete-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    margin-bottom: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.sheet-athlete-item:hover,
+.sheet-athlete-item:active {
+    background: rgba(229, 203, 167, 0.08);
+    border-color: rgba(229, 203, 167, 0.25);
+}
+
+.sheet-athlete-item.is-selected {
+    background: rgba(229, 203, 167, 0.12);
+    border-color: var(--accent-primary);
+}
+
+.sheet-athlete-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sheet-athlete-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    color: #080809;
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sheet-athlete-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.sheet-athlete-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sheet-athlete-sub {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sheet-athlete-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.sheet-footer {
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: #121216;
+}
+
 
