@@ -869,10 +869,32 @@
                 <img src="img/logo-blanco.png" alt="SENS" class="brand-logo-img-portal">
                 <span class="pill pill-champagne" id="portalPlanBadge">Presencial 1 a 1 VIP (CABA)</span>
             </div>
-            <div class="portal-user-badge">
+            <div class="portal-user-badge" style="display: flex; align-items: center; gap: 12px;">
                 <button type="button" class="btn btn-outline btn-sm" id="btnTopbarBackHome" style="font-size: 11px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">← Inicio Web</button>
-                <span style="font-size: 13px; color: var(--text-secondary);" id="portalUserEmail">atleta@sens.com</span>
-                <button class="btn btn-outline btn-sm" id="logoutBtn">Cerrar Sesión</button>
+                <div class="user-avatar-wrap" id="userAvatarWrap">
+                    <button type="button" class="user-avatar-btn" id="userAvatarBtn" aria-label="Abrir Menú de Perfil" title="Mi Cuenta SENS">
+                        <span id="userAvatarInitials">LB</span>
+                    </button>
+                    <!-- Dropdown flotante estilo Apple -->
+                    <div class="user-avatar-dropdown" id="userAvatarDropdown">
+                        <div class="avatar-dropdown-header">
+                            <strong id="dropdownUserName">Lean Barreira</strong>
+                            <span id="dropdownUserEmail" style="word-break: break-all;">atleta@sens.com</span>
+                            <span class="pill pill-champagne" id="dropdownUserPlan" style="margin-top: 6px; font-size: 10px; width: fit-content;">Presencial 1 a 1 VIP</span>
+                        </div>
+                        <div class="avatar-dropdown-divider"></div>
+                        <button type="button" class="avatar-dropdown-item" id="dropdownGoProfile">
+                            <span>👤</span> Mi Perfil &amp; Ajustes
+                        </button>
+                        <button type="button" class="avatar-dropdown-item" id="dropdownGoDiagnosis">
+                            <span>📋</span> Mi Diagnóstico Físico
+                        </button>
+                        <div class="avatar-dropdown-divider"></div>
+                        <button type="button" class="avatar-dropdown-item text-danger" id="logoutBtn">
+                            <span>🚪</span> Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -880,22 +902,26 @@
         <div class="portal-role-bar" id="coachAthleteBar"
             style="background: var(--bg-elevated); border-bottom: 1px solid var(--border-subtle); padding: 8px 5%; display: none; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">⚡ PANEL DE COACH</span>
-                <span
-                    style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); font-weight: 700;">Gestionar
-                    Atleta:</span>
+                <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">⚡ SENS COACH OS</span>
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); font-weight: 700;">Atleta:</span>
                 <select id="userRoleSelector" class="input-control"
-                    style="width: auto; min-width: 250px; padding: 6px 12px; font-size: 12px; height: 34px; background: var(--bg-surface); border: 1px solid var(--border-strong); cursor: pointer;">
-                    <!-- Se rellena dinámicamente con alumnos reales de Supabase + Mocks -->
-                    <option value="client_presencial_vip" selected>Roberto Gómez — Presencial 1 a 1 VIP (2x/sem CABA)</option>
-                    <option value="client_presencial_group">Laura &amp; Marcos — Presencial Dúo (CABA)</option>
-                    <option value="client_online_premium">Esteban Bianchi — Online Premium</option>
-                    <option value="client_online_basic">Carla Méndez — Online Básico</option>
-                    <option value="admin">Mi Perfil Coach (Nico)</option>
+                    style="width: auto; min-width: 260px; padding: 6px 12px; font-size: 12px; height: 34px; background: var(--bg-surface); border: 1px solid var(--border-strong); cursor: pointer;">
+                    <option value="client_presencial_vip" selected>🟢 Roberto Gómez — Presencial VIP (Al día)</option>
+                    <option value="client_presencial_group">🟡 Laura &amp; Marcos — Dúo (Inactivo 3d)</option>
+                    <option value="client_online_premium">🔴 Esteban Bianchi — Online (Nuevo / Sin rutina)</option>
+                    <option value="client_online_basic">🟢 Carla Méndez — Online Básico (Al día)</option>
+                    <option value="admin">⭐ Mi Perfil Coach (Nico)</option>
                 </select>
                 <button type="button" class="btn btn-outline btn-sm" id="btnRefreshCoachAthletes" title="Recargar lista de alumnos" style="font-size: 11px; padding: 4px 8px;">🔄</button>
+                <div class="coach-mode-toggle" id="coachModeToggle">
+                    <button type="button" class="coach-mode-btn active" id="btnCoachViewMode" data-mode="view">👁 Ver como Alumno</button>
+                    <button type="button" class="coach-mode-btn" id="btnCoachEditMode" data-mode="edit">✏ Modo Editar</button>
+                </div>
             </div>
             <div id="roleContextIndicator" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <a href="https://wa.me/?text=Hola%2C%20te%20escribo%20de%20SENS%20para%20ver%20tu%20progreso%20de%20esta%20semana" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" id="btnCoachWhatsApp" style="font-size: 11px; padding: 4px 10px; border-color: rgba(37, 211, 102, 0.4); color: #25D366;">
+                    💬 WhatsApp
+                </a>
                 <span class="pill pill-champagne" id="roleContextBadge" style="font-size: 10px;">Presencial 1 a 1 • 8 Sesiones/mes</span>
                 <span class="pill pill-champagne" id="coachSubStatusBadge" style="font-size: 10px; background: rgba(16, 185, 129, 0.2); color: #10B981; border-color: rgba(16, 185, 129, 0.4);">MEMBRESÍA ACTIVA</span>
                 <button type="button" class="btn btn-primary btn-sm" id="btnCoachToggleSubStatus" style="font-size: 11px; padding: 4px 10px; font-weight: 700;">✓ Aprobar &amp; Activar</button>
@@ -905,10 +931,11 @@
         <!-- Barra de Navegación del Portal -->
         <nav class="portal-nav-bar" id="portalSubNav">
             <button class="portal-nav-item active" data-portal-tab="dashView">Dashboard</button>
-            <button class="portal-nav-item" data-portal-tab="workoutView">Mi Entrenamiento</button>
+            <button class="portal-nav-item" data-portal-tab="workoutView">Ejercicios &amp; Rutina</button>
             <button class="portal-nav-item" data-portal-tab="nutritionView">Nutrición &amp; Hábitos</button>
-            <button class="portal-nav-item" data-portal-tab="trackingView">Seguimiento Diario</button>
-            <button class="portal-nav-item" data-portal-tab="profileSettingsView" id="navPortalProfile">Mi Perfil &amp; Ajustes</button>
+            <button class="portal-nav-item" data-portal-tab="trackingView">Progreso &amp; Déficit</button>
+            <button class="portal-nav-item" data-portal-tab="storeView" id="navPortalStore">Equipamiento MeLi</button>
+            <button class="portal-nav-item" data-portal-tab="profileSettingsView" id="navPortalProfile">Mi Perfil</button>
             <button class="portal-nav-item" id="btnBackToLanding"
                 style="margin-left:auto; color:var(--accent-primary);">← Volver a Web</button>
         </nav>
@@ -2192,17 +2219,95 @@
                 <div class="dash-welcome-card">
                     <div>
                         <span class="pill pill-champagne" style="margin-bottom: 8px;">Portal del Atleta</span>
-                        <h2 class="dash-heading">Hola <span id="dashUserName">Atleta</span>. <strong>Sentite mejor en tu
-                                cuerpo hoy.</strong></h2>
+                        <h2 class="dash-heading">Hola <span id="dashUserName">Atleta</span>. <strong>Sentite mejor en tu cuerpo hoy.</strong></h2>
                         <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px;">
-                            Tu constancia construye el cambio. Repasá tus números de la semana y arrancá el
-                            entrenamiento del día.
+                            Tu constancia construye el cambio. Repasá tus números de la semana y arrancá el entrenamiento del día.
                         </p>
                     </div>
                     <div>
-                        <button class="btn btn-primary" id="dashQuickWorkoutBtn">Comenzar Entrenamiento de Hoy
-                            →</button>
+                        <button class="btn btn-primary" id="dashQuickWorkoutBtn">Comenzar Entrenamiento de Hoy →</button>
                     </div>
+                </div>
+
+                <!-- ANILLOS DE HÁBITOS DIARIOS (ESTILO APPLE / WHOOP) -->
+                <div class="dash-rings-grid">
+                    <!-- Anillo 1: Entrenamiento -->
+                    <div class="habit-ring-card">
+                        <div class="habit-ring-visual">
+                            <svg class="habit-ring-svg" viewBox="0 0 58 58">
+                                <circle class="habit-ring-bg" cx="29" cy="29" r="24"></circle>
+                                <circle class="habit-ring-prog" id="ringWorkoutCircle" cx="29" cy="29" r="24" stroke="var(--accent-primary)" stroke-dasharray="150.8" stroke-dashoffset="45"></circle>
+                            </svg>
+                            <span class="habit-ring-icon">🏋️</span>
+                        </div>
+                        <div>
+                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Entrenamiento</div>
+                            <div style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin-top: 2px;" id="ringWorkoutText">En Progreso</div>
+                            <div style="font-size: 11px; color: var(--text-secondary);">Día 1: Tren Superior</div>
+                        </div>
+                    </div>
+
+                    <!-- Anillo 2: Pasos Diarios -->
+                    <div class="habit-ring-card">
+                        <div class="habit-ring-visual">
+                            <svg class="habit-ring-svg" viewBox="0 0 58 58">
+                                <circle class="habit-ring-bg" cx="29" cy="29" r="24"></circle>
+                                <circle class="habit-ring-prog" id="ringStepsCircle" cx="29" cy="29" r="24" stroke="#10B981" stroke-dasharray="150.8" stroke-dashoffset="38"></circle>
+                            </svg>
+                            <span class="habit-ring-icon">👟</span>
+                        </div>
+                        <div>
+                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Pasos Diarios</div>
+                            <div style="font-size: 17px; font-weight: 800; color: #10B981; margin-top: 2px;" id="ringStepsText">7.450 / 10k</div>
+                            <div style="font-size: 11px; color: var(--text-secondary);">75% completado</div>
+                        </div>
+                    </div>
+
+                    <!-- Anillo 3: Nutrición & Agua -->
+                    <div class="habit-ring-card">
+                        <div class="habit-ring-visual">
+                            <svg class="habit-ring-svg" viewBox="0 0 58 58">
+                                <circle class="habit-ring-bg" cx="29" cy="29" r="24"></circle>
+                                <circle class="habit-ring-prog" id="ringFuelCircle" cx="29" cy="29" r="24" stroke="#3B82F6" stroke-dasharray="150.8" stroke-dashoffset="30"></circle>
+                            </svg>
+                            <span class="habit-ring-icon">💧</span>
+                        </div>
+                        <div>
+                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Hidratación &amp; Fuel</div>
+                            <div style="font-size: 17px; font-weight: 800; color: #3B82F6; margin-top: 2px;" id="ringFuelText">2.0 / 2.5 L</div>
+                            <div style="font-size: 11px; color: var(--text-secondary);">1.650 / 2.100 kcal</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CÁPSULA EDITORIAL: MENSAJE DIRECTO DE NICO -->
+                <div class="dash-nico-card">
+                    <img src="img/nico-portrait.png" alt="Nico Coach SENS" class="dash-nico-avatar" onerror="this.src='img/logo-blanco.png'">
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">MENSAJE DE NICO PARA HOY</span>
+                            <span style="font-size: 11px; color: var(--text-muted);">Semana de Progresión</span>
+                        </div>
+                        <p style="font-size: 13.5px; line-height: 1.5; color: var(--text-primary); margin: 6px 0 0;" id="dashNicoMessage">
+                            "Lean, hoy priorizamos técnica estricta en el remo y pausa de 1 segundo en contracción. Si sentís buena energía, subí 2.5kg en la última serie. ¡A meterle!"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ACCIONES RÁPIDAS (1-TAP QUICK ACTIONS) -->
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px;">
+                    <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogWater" style="border-color: rgba(59, 130, 246, 0.4); color: #60A5FA;">
+                        💧 +500ml Agua
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogWeight" style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">
+                        ⚖ Registrar Peso
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogMeal" style="border-color: rgba(16, 185, 129, 0.4); color: #34D399;">
+                        🥗 Cargar Comida
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm" id="btnQuickGoStore" style="border-color: rgba(255, 230, 0, 0.3); color: #FFE600;">
+                        ⚡ Equipamiento MeLi
+                    </button>
                 </div>
 
                 <!-- CARD DESTACADA: EVALUACIÓN INICIAL & MIS DATOS (ACCESO Y MODIFICACIÓN) -->
@@ -2281,21 +2386,58 @@
                  ===================================================================== -->
             <section class="portal-view" id="workoutView">
                 <div
-                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
                     <div>
-                        <h2 style="font-size: 1.8rem; font-weight: 800; text-transform: uppercase;">GESTOR DE RUTINAS
-                        </h2>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Registrá tus pesos y repeticiones
-                            táctilmente. El timer de descanso se activará automáticamente al marcar cada set.</p>
+                        <h2 style="font-size: 1.8rem; font-weight: 800; text-transform: uppercase;">WORKOUT STUDIO &amp; RUTINAS</h2>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">
+                            Registrá tus pesos, repeticiones y descansos táctilmente. Programación flexible de 1 a 6 días por semana según prescripción de Nico.
+                        </p>
                     </div>
-                    <button class="btn btn-primary" id="btnFinishWorkoutSession">✓ Finalizar Rutina de Hoy</button>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <!-- Widget de Cronómetro / Stopwatch de Sesión -->
+                        <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 30px; padding: 6px 14px; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 13px;">⏱</span>
+                            <span id="workoutStopwatchDisplay" style="font-size: 14px; font-weight: 800; color: var(--accent-primary); font-variant-numeric: tabular-nums;">00:00</span>
+                            <button type="button" class="btn btn-outline btn-sm" id="btnToggleStopwatch" style="font-size: 10px; padding: 2px 8px; border-radius: 20px;">Iniciar</button>
+                        </div>
+                        <button class="btn btn-primary" id="btnFinishWorkoutSession">✓ Finalizar Rutina de Hoy</button>
+                    </div>
                 </div>
 
-                <!-- Selector de días -->
-                <div class="workout-days-nav">
+                <!-- CALENDARIO MENSUAL DE ENTRENAMIENTO -->
+                <div class="month-calendar-widget" id="workoutMonthCalendar">
+                    <div class="month-cal-header">
+                        <div>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">CALENDARIO MENSUAL</span>
+                            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;" id="monthCalendarTitle">Octubre 2026</h3>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--text-secondary);">
+                            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="color: #10B981;">●</span> Entrenado</span>
+                            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="color: var(--accent-primary);">●</span> Hoy</span>
+                            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="opacity: 0.4;">●</span> Descanso</span>
+                        </div>
+                    </div>
+                    <div class="month-cal-grid" id="monthCalGrid">
+                        <!-- Rótulos de días -->
+                        <div class="month-cal-day-label">L</div>
+                        <div class="month-cal-day-label">M</div>
+                        <div class="month-cal-day-label">M</div>
+                        <div class="month-cal-day-label">J</div>
+                        <div class="month-cal-day-label">V</div>
+                        <div class="month-cal-day-label">S</div>
+                        <div class="month-cal-day-label">D</div>
+                        <!-- Celdas inyectadas y sincronizadas por app.js -->
+                    </div>
+                </div>
+
+                <!-- Selector de días de entrenamiento (1 a 6 Días Programables) -->
+                <div class="workout-days-nav" id="workoutDaysNav">
                     <button class="day-tab-btn active" data-day="day1">Día 1: Tren Superior (Empuje / Tirón)</button>
                     <button class="day-tab-btn" data-day="day2">Día 2: Tren Inferior (Fuerza &amp; Cadera)</button>
-                    <button class="day-tab-btn" data-day="day3">Día 3: Full Body &amp; Conciencia Postural</button>
+                    <button class="day-tab-btn" data-day="day3">Día 3: Full Body &amp; Postura</button>
+                    <button class="day-tab-btn" data-day="day4">Día 4: Core &amp; Movilidad (Casa)</button>
+                    <button class="day-tab-btn" data-day="day5">Día 5: Fuerza &amp; Acondicionamiento</button>
+                    <button class="day-tab-btn" data-day="day6">Día 6: Cardio Zona 2 &amp; Recuperación</button>
                 </div>
 
                 <!-- Barra de Herramientas de Rutina & Acceso al Catálogo Maestro -->
@@ -2638,6 +2780,43 @@
                     </form>
                 </div>
 
+                <!-- ECUACIÓN METABÓLICA CIENTÍFICA (BMR + ACTIVIDAD = DÉFICIT REAL) -->
+                <div class="metabolic-equation-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                        <div>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">BALANCE ENERGÉTICO CIENTÍFICO</span>
+                            <h3 style="font-size: 1.15rem; font-weight: 700; color: #FFF; margin-top: 4px;">Tu Ecuación de Gasto &amp; Déficit Calórico Real</h3>
+                        </div>
+                        <span style="font-size: 11px; color: var(--text-muted);">Fórmula Harris-Benedict &amp; TDEE</span>
+                    </div>
+                    <div class="equation-steps-row">
+                        <div class="eq-step">
+                            <div class="eq-num" id="calcBmrNum">1.720</div>
+                            <div class="eq-lbl">BMR (Metabolismo Basal en Reposo)</div>
+                        </div>
+                        <div class="eq-operator">+</div>
+                        <div class="eq-step">
+                            <div class="eq-num" style="color: #10B981;" id="calcActiveBurnNum">540</div>
+                            <div class="eq-lbl">Gasto Activo (Pasos + Ejercicio)</div>
+                        </div>
+                        <div class="eq-operator">=</div>
+                        <div class="eq-step">
+                            <div class="eq-num" style="color: #60A5FA;" id="calcTdeeNum">2.260</div>
+                            <div class="eq-lbl">TDEE (Gasto Energético Diario)</div>
+                        </div>
+                        <div class="eq-operator">-</div>
+                        <div class="eq-step">
+                            <div class="eq-num" style="color: #F59E0B;" id="calcIntakeNum">1.820</div>
+                            <div class="eq-lbl">Calorías Ingeridas</div>
+                        </div>
+                        <div class="eq-operator">=</div>
+                        <div class="eq-step">
+                            <div class="eq-num" style="color: #10B981;" id="calcDeficitNum">-440 kcal</div>
+                            <div class="eq-lbl">Déficit Real (~440g grasa/semana)</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Gráficos Interactivos (Chart.js) -->
                 <div class="charts-wrapper-grid">
                     <!-- Gráfico 1: Peso -->
@@ -2668,6 +2847,115 @@
                         <div class="chart-canvas-box">
                             <canvas id="stepsChart"></canvas>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================================
+                 MÓDULO: EQUIPAMIENTO & AFILIADOS MERCADOLIBRE (SENS STORE)
+                 ===================================================================== -->
+            <section class="portal-view" id="storeView">
+                <div class="section-head" style="text-align: left; margin-bottom: 24px;">
+                    <span class="pill pill-champagne" style="font-size: 10px;">EQUIPAMIENTO &amp; HERRAMIENTAS</span>
+                    <h2 class="section-main-title">PRODUCTOS RECOMENDADOS <span class="text-champagne">POR NICO</span></h2>
+                    <p class="section-lead">Selección oficial de herramientas de alta precisión para medir tu comida, tu peso corporal y entrenar con el mejor equipamiento en casa o de viaje.</p>
+                </div>
+
+                <div class="meli-store-grid" id="meliStoreGrid">
+                    <!-- Producto 1: Balanza Inteligente Bioimpedancia -->
+                    <div class="meli-card">
+                        <div>
+                            <div class="meli-badge">⚡ MERCADOLIBRE OFICIAL</div>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; margin-bottom: 8px;">Top Recomendado</span>
+                            <h3 style="font-size: 1.15rem; color: #FFF; font-weight: 700; margin-top: 6px;">Balanza Corporal Inteligente Bioimpedancia</h3>
+                            <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px; line-height: 1.45;">
+                                Mide peso exacto, % de grasa corporal, masa muscular y agua por Bluetooth. Fundamental para calibrar el progreso en SENS.
+                            </p>
+                            <div class="meli-price">$38.990 <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">ARS</span></div>
+                        </div>
+                        <a href="https://listado.mercadolibre.com.ar/balanza-inteligente-bioimpedancia" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full btn-sm" style="margin-top: 14px;">
+                            Ver en MercadoLibre ↗
+                        </a>
+                    </div>
+
+                    <!-- Producto 2: Balanza Digital de Cocina -->
+                    <div class="meli-card">
+                        <div>
+                            <div class="meli-badge">⚡ MERCADOLIBRE OFICIAL</div>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; margin-bottom: 8px;">Nutrición de Precisión</span>
+                            <h3 style="font-size: 1.15rem; color: #FFF; font-weight: 700; margin-top: 6px;">Balanza Digital de Cocina (1g a 5kg)</h3>
+                            <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px; line-height: 1.45;">
+                                Permite ajustar los gramajes de tus fuentes de proteína y carbohidratos en segundos para no subestimar tus macros.
+                            </p>
+                            <div class="meli-price">$14.500 <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">ARS</span></div>
+                        </div>
+                        <a href="https://listado.mercadolibre.com.ar/balanza-digital-cocina-gramera" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full btn-sm" style="margin-top: 14px;">
+                            Ver en MercadoLibre ↗
+                        </a>
+                    </div>
+
+                    <!-- Producto 3: Bandas Circulares Loop Bands -->
+                    <div class="meli-card">
+                        <div>
+                            <div class="meli-badge">⚡ MERCADOLIBRE OFICIAL</div>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; margin-bottom: 8px;">Movilidad &amp; Cadera</span>
+                            <h3 style="font-size: 1.15rem; color: #FFF; font-weight: 700; margin-top: 6px;">Kit de Bandas Circulares de Resistencia (x5)</h3>
+                            <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px; line-height: 1.45;">
+                                Para activación de glúteo medio, calentamiento articular y entrenamientos de tren inferior en viajes o en casa.
+                            </p>
+                            <div class="meli-price">$12.900 <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">ARS</span></div>
+                        </div>
+                        <a href="https://listado.mercadolibre.com.ar/bandas-elasticas-resistencia-loop" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full btn-sm" style="margin-top: 14px;">
+                            Ver en MercadoLibre ↗
+                        </a>
+                    </div>
+
+                    <!-- Producto 4: Mancuernas Ajustables / Hexagonales -->
+                    <div class="meli-card">
+                        <div>
+                            <div class="meli-badge">⚡ MERCADOLIBRE OFICIAL</div>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; margin-bottom: 8px;">Fuerza en Casa</span>
+                            <h3 style="font-size: 1.15rem; color: #FFF; font-weight: 700; margin-top: 6px;">Par de Mancuernas Hexagonales de Goma</h3>
+                            <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px; line-height: 1.45;">
+                                Calidad profesional de gimnasio para tus días de tren superior y bisagras de cadera fuera de las sesiones presenciales.
+                            </p>
+                            <div class="meli-price">$48.000 <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">ARS</span></div>
+                        </div>
+                        <a href="https://listado.mercadolibre.com.ar/mancuernas-hexagonales-goma" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full btn-sm" style="margin-top: 14px;">
+                            Ver en MercadoLibre ↗
+                        </a>
+                    </div>
+
+                    <!-- Producto 5: Mat de Entrenamiento Alta Densidad -->
+                    <div class="meli-card">
+                        <div>
+                            <div class="meli-badge">⚡ MERCADOLIBRE OFICIAL</div>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; margin-bottom: 8px;">Columna &amp; Postura</span>
+                            <h3 style="font-size: 1.15rem; color: #FFF; font-weight: 700; margin-top: 6px;">Mat de Entrenamiento Alta Densidad (10mm)</h3>
+                            <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px; line-height: 1.45;">
+                                Amortiguación óptima para proteger rodillas, codos y columna durante ejercicios de core y descompresión.
+                            </p>
+                            <div class="meli-price">$18.900 <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">ARS</span></div>
+                        </div>
+                        <a href="https://listado.mercadolibre.com.ar/colchoneta-mat-yoga-alta-densidad-10mm" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full btn-sm" style="margin-top: 14px;">
+                            Ver en MercadoLibre ↗
+                        </a>
+                    </div>
+
+                    <!-- Producto 6: Magnesio Bisglicinato & Creatina -->
+                    <div class="meli-card">
+                        <div>
+                            <div class="meli-badge">⚡ MERCADOLIBRE OFICIAL</div>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; margin-bottom: 8px;">Recuperación &amp; Sueño</span>
+                            <h3 style="font-size: 1.15rem; color: #FFF; font-weight: 700; margin-top: 6px;">Magnesio Bisglicinato Puro + Creatina Creapure</h3>
+                            <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px; line-height: 1.45;">
+                                Suplementación de grado clínico para optimizar la relajación neuromuscular nocturna y la fuerza en el gimnasio.
+                            </p>
+                            <div class="meli-price">$26.500 <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">ARS</span></div>
+                        </div>
+                        <a href="https://listado.mercadolibre.com.ar/magnesio-bisglicinato-creapure" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full btn-sm" style="margin-top: 14px;">
+                            Ver en MercadoLibre ↗
+                        </a>
                     </div>
                 </div>
             </section>

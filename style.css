@@ -6863,3 +6863,478 @@ input[type="range"]::-webkit-slider-thumb:hover {
         text-align: center !important;
     }
 }
+
+/* =========================================================================
+   MEMBER EXPERIENCE 2.0: APPLE-GRADE SUITE (AVATAR, RINGS, CALENDAR, COACH OS)
+   ========================================================================= */
+
+/* 1. TOPBAR AVATAR & DROPDOWN */
+.user-avatar-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.user-avatar-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.25), rgba(20, 20, 22, 0.9));
+    border: 1.5px solid var(--accent-primary);
+    color: var(--accent-primary);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.user-avatar-btn:hover {
+    transform: scale(1.06);
+    border-color: #FFFFFF;
+    box-shadow: 0 0 16px rgba(229, 203, 167, 0.4);
+}
+
+.user-avatar-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 260px;
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 12px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    z-index: 2000;
+    display: none;
+    animation: sensPopDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.user-avatar-dropdown.active {
+    display: block;
+}
+
+@keyframes sensPopDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.avatar-dropdown-header {
+    padding: 8px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.avatar-dropdown-header strong {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.avatar-dropdown-header span {
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+.avatar-dropdown-divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 6px 0;
+}
+
+.avatar-dropdown-item {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 13px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+
+.avatar-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+}
+
+.avatar-dropdown-item.text-danger:hover {
+    background: rgba(239, 68, 68, 0.12);
+    color: #EF4444;
+}
+
+/* 2. DASHBOARD: HABIT RINGS & NICO MESSAGE CARD */
+.dash-rings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.habit-ring-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.habit-ring-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+}
+
+.habit-ring-visual {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.habit-ring-svg {
+    transform: rotate(-90deg);
+    width: 58px;
+    height: 58px;
+}
+
+.habit-ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-width: 4.5;
+}
+
+.habit-ring-prog {
+    fill: none;
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.habit-ring-icon {
+    position: absolute;
+    font-size: 17px;
+}
+
+.dash-nico-card {
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.08) 0%, rgba(20, 20, 22, 0.85) 100%);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.dash-nico-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid var(--accent-primary);
+    flex-shrink: 0;
+}
+
+/* 3. WORKOUT: MONTHLY CALENDAR & 1-6 DAYS */
+.month-calendar-widget {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+}
+
+.month-cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.month-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    text-align: center;
+}
+
+.month-cal-day-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 700;
+    padding-bottom: 4px;
+}
+
+.month-cal-cell {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    position: relative;
+    cursor: default;
+    transition: all 0.2s ease;
+}
+
+.month-cal-cell.today {
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.2);
+}
+
+.month-cal-cell.completed {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #10B981;
+    font-weight: 700;
+}
+
+.month-cal-cell.completed::after {
+    content: "✓";
+    font-size: 9px;
+    position: absolute;
+    bottom: 2px;
+}
+
+.month-cal-cell.rest-day {
+    opacity: 0.4;
+}
+
+/* 4. WORKOUT TIMER & FLOATING REST COUNTER */
+.rest-timer-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: rgba(18, 18, 20, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--accent-primary);
+    border-radius: 40px;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(229, 203, 167, 0.25);
+    z-index: 1500;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rest-timer-bar.active {
+    transform: translateX(-50%) translateY(0);
+}
+
+.rest-timer-digits {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent-primary);
+    letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 5. NUTRITION: DYNAMIC GRAM CALCULATOR */
+.food-calc-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.25s ease;
+}
+
+.food-calc-card:hover {
+    border-color: var(--border-strong);
+}
+
+.food-gram-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.food-gram-input {
+    width: 80px;
+    padding: 6px 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    color: var(--text-primary);
+    border-radius: 8px;
+}
+
+.food-macros-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 8px 6px;
+}
+
+.food-macro-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.food-macro-lbl {
+    font-size: 9.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 6. METABOLIC EQUATION & DEFICIT CARD */
+.metabolic-equation-card {
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.06), rgba(18, 18, 20, 0.95));
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 24px;
+}
+
+.equation-steps-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.eq-step {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+}
+
+.eq-num {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--accent-primary);
+}
+
+.eq-lbl {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.eq-operator {
+    font-size: 20px;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+/* 7. MERCADOLIBRE CURATED STORE */
+.meli-store-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.meli-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.meli-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+.meli-badge {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #FFE600;
+    background: rgba(255, 230, 0, 0.12);
+    padding: 3px 8px;
+    border-radius: 6px;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+.meli-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 8px 0;
+}
+
+/* 8. SENS COACH OS BAR */
+.coach-mode-toggle {
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-strong);
+    border-radius: 30px;
+    padding: 3px;
+    gap: 4px;
+}
+
+.coach-mode-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.coach-mode-btn.active {
+    background: var(--accent-primary);
+    color: #000;
+    font-weight: 700;
+}

@@ -281,35 +281,35 @@ const EXERCISE_CATALOG = [
 // -----------------------------------------------------------------------------
 const FOOD_CATALOG = [
     // Proteínas
-    { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', cat: 'protein', portion: '150 - 200g cocido', note: 'Proteína magra de altísimo valor biológico, digestión ágil y nula grasa saturada agregada.' },
-    { id: 'fd-p2', name: 'Huevos de Campo Enteros', cat: 'protein', portion: '2 a 4 unidades diarias', note: 'Aporte completo de aminoácidos esenciales, colina para la función cerebral y grasas saludables.' },
-    { id: 'fd-p3', name: 'Carne Vacuna Magra (Lomo, Cuadril)', cat: 'protein', portion: '150 - 200g (2-3x sem)', note: 'Rica en hierro hemínico, zinc y creatina natural para soporte de fuerza y masa muscular.' },
-    { id: 'fd-p4', name: 'Atún al Natural / Salmón Blanco', cat: 'protein', portion: '1 lata o 150 - 180g filete', note: 'Proteína de fácil absorción y ácidos grasos que favorecen la recuperación tisular.' },
-    { id: 'fd-p5', name: 'Yogur Griego Natural (Sin Azúcar)', cat: 'protein', portion: '150 - 200g', note: 'Rico en caseína de digestión lenta y probióticos para la salud de la microbiota intestinal.' },
-    { id: 'fd-p6', name: 'Tofu Firme Orgánico', cat: 'protein', portion: '180 - 220g salteado', note: 'Excelente fuente de proteína vegetal completa para opciones basadas en plantas.' },
-    { id: 'fd-p7', name: 'Proteína de Suero (Whey Isolate)', cat: 'protein', portion: '1 scoop (25-30g)', note: 'Practicidad óptima para alcanzar los gramos diarios de proteína sin sumar grasas extras.' },
+    { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', cat: 'protein', baseGrams: 100, calPer100: 165, protPer100: 31, carbsPer100: 0, fatsPer100: 3.6, defaultGrams: 180, portion: '150 - 200g cocido', note: 'Proteína magra de altísimo valor biológico, digestión ágil y nula grasa saturada agregada.' },
+    { id: 'fd-p2', name: 'Huevos de Campo Enteros', cat: 'protein', baseGrams: 100, calPer100: 143, protPer100: 12.6, carbsPer100: 0.8, fatsPer100: 9.5, defaultGrams: 120, portion: '2 a 4 unidades diarias', note: 'Aporte completo de aminoácidos esenciales, colina para la función cerebral y grasas saludables.' },
+    { id: 'fd-p3', name: 'Carne Vacuna Magra (Lomo, Cuadril)', cat: 'protein', baseGrams: 100, calPer100: 195, protPer100: 28, carbsPer100: 0, fatsPer100: 8.5, defaultGrams: 180, portion: '150 - 200g (2-3x sem)', note: 'Rica en hierro hemínico, zinc y creatina natural para soporte de fuerza y masa muscular.' },
+    { id: 'fd-p4', name: 'Atún al Natural / Salmón Blanco', cat: 'protein', baseGrams: 100, calPer100: 130, protPer100: 28, carbsPer100: 0, fatsPer100: 1.5, defaultGrams: 150, portion: '1 lata o 150 - 180g filete', note: 'Proteína de fácil absorción y ácidos grasos que favorecen la recuperación tisular.' },
+    { id: 'fd-p5', name: 'Yogur Griego Natural (Sin Azúcar)', cat: 'protein', baseGrams: 100, calPer100: 97, protPer100: 10, carbsPer100: 3.8, fatsPer100: 5, defaultGrams: 170, portion: '150 - 200g', note: 'Rico en caseína de digestión lenta y probióticos para la salud de la microbiota intestinal.' },
+    { id: 'fd-p6', name: 'Tofu Firme Orgánico', cat: 'protein', baseGrams: 100, calPer100: 144, protPer100: 15.5, carbsPer100: 2.8, fatsPer100: 8.5, defaultGrams: 200, portion: '180 - 220g salteado', note: 'Excelente fuente de proteína vegetal completa para opciones basadas en plantas.' },
+    { id: 'fd-p7', name: 'Proteína de Suero (Whey Isolate)', cat: 'protein', baseGrams: 30, calPer100: 380, protPer100: 85, carbsPer100: 3, fatsPer100: 1.5, defaultGrams: 30, portion: '1 scoop (25-30g)', note: 'Practicidad óptima para alcanzar los gramos diarios de proteína sin sumar grasas extras.' },
 
     // Carbohidratos
-    { id: 'fd-c1', name: 'Arroz Integral o Basmati al Vapor', cat: 'carbs', portion: '1 taza cocida (150-180g)', note: 'Energía limpia y sostenida para reponer glucógeno muscular post-entrenamiento.' },
-    { id: 'fd-c2', name: 'Papa y Batata Horneadas con Piel', cat: 'carbs', portion: '1 unidad mediana (180g)', note: 'Ricas en potasio, almidón resistente y gran poder de saciedad sin pesadez digestiva.' },
-    { id: 'fd-c3', name: 'Avena Arrollada Tradicional', cat: 'carbs', portion: '40 - 60g en porridge', note: 'Fibra betaglucano que estabiliza la glucemia y brinda saciedad prolongada.' },
-    { id: 'fd-c4', name: 'Quinoa Cocida', cat: 'carbs', portion: '1 taza cocida', note: 'Pseudocereal con perfil balanceado de carbohidratos complejos y micronutrientes.' },
-    { id: 'fd-c5', name: 'Frutas Enteras (Banana, Arándanos)', cat: 'carbs', portion: '1 a 2 porciones al día', note: 'Antioxidantes naturales, vitaminas y fructosa natural para energía previa a la sesión.' },
-    { id: 'fd-c6', name: 'Pan de Masa Madre Genuino', cat: 'carbs', portion: '1 a 2 rebanadas tostadas', note: 'Fermentación lenta que degrada antinutrientes facilitando la asimilación digestiva.' },
+    { id: 'fd-c1', name: 'Arroz Integral o Basmati al Vapor', cat: 'carbs', baseGrams: 100, calPer100: 130, protPer100: 2.7, carbsPer100: 28, fatsPer100: 0.3, defaultGrams: 160, portion: '1 taza cocida (150-180g)', note: 'Energía limpia y sostenida para reponer glucógeno muscular post-entrenamiento.' },
+    { id: 'fd-c2', name: 'Papa y Batata Horneadas con Piel', cat: 'carbs', baseGrams: 100, calPer100: 86, protPer100: 1.6, carbsPer100: 20, fatsPer100: 0.1, defaultGrams: 180, portion: '1 unidad mediana (180g)', note: 'Ricas en potasio, almidón resistente y gran poder de saciedad sin pesadez digestiva.' },
+    { id: 'fd-c3', name: 'Avena Arrollada Tradicional', cat: 'carbs', baseGrams: 100, calPer100: 379, protPer100: 13.5, carbsPer100: 67, fatsPer100: 6.5, defaultGrams: 50, portion: '40 - 60g en porridge', note: 'Fibra betaglucano que estabiliza la glucemia y brinda saciedad prolongada.' },
+    { id: 'fd-c4', name: 'Quinoa Cocida', cat: 'carbs', baseGrams: 100, calPer100: 120, protPer100: 4.4, carbsPer100: 21.3, fatsPer100: 1.9, defaultGrams: 150, portion: '1 taza cocida', note: 'Pseudocereal con perfil balanceado de carbohidratos complejos y micronutrientes.' },
+    { id: 'fd-c5', name: 'Frutas Enteras (Banana, Arándanos)', cat: 'carbs', baseGrams: 100, calPer100: 89, protPer100: 1.1, carbsPer100: 22.8, fatsPer100: 0.3, defaultGrams: 150, portion: '1 a 2 porciones al día', note: 'Antioxidantes naturales, vitaminas y fructosa natural para energía previa a la sesión.' },
+    { id: 'fd-c6', name: 'Pan de Masa Madre Genuino', cat: 'carbs', baseGrams: 100, calPer100: 245, protPer100: 8.5, carbsPer100: 48, fatsPer100: 1.2, defaultGrams: 70, portion: '1 a 2 rebanadas tostadas', note: 'Fermentación lenta que degrada antinutrientes facilitando la asimilación digestiva.' },
 
     // Grasas Saludables
-    { id: 'fd-g1', name: 'Palta (Aguacate)', cat: 'healthy_fats', portion: '1/2 unidad al día', note: 'Ácidos grasos monoinsaturados que apoyan la salud cardiovascular y hormonal.' },
-    { id: 'fd-g2', name: 'Aceite de Oliva Extra Virgen (Crudo)', cat: 'healthy_fats', portion: '1 cucharada sopera', note: 'Polifenoles y grasas antiinflamatorias esenciales para articulaciones.' },
-    { id: 'fd-g3', name: 'Frutos Secos (Nueces, Almendras)', cat: 'healthy_fats', portion: '1 puñado cerrado (30g)', note: 'Densidad energética y magnesio para relajar el sistema neuromuscular.' },
-    { id: 'fd-g4', name: 'Semillas de Chía y Lino Molidas', cat: 'healthy_fats', portion: '1 cucharadita en yogur', note: 'Ácido alfa-linolénico (Omega 3 vegetal) y fibra soluble reguladora.' },
+    { id: 'fd-g1', name: 'Palta (Aguacate)', cat: 'healthy_fats', baseGrams: 100, calPer100: 160, protPer100: 2, carbsPer100: 8.5, fatsPer100: 14.7, defaultGrams: 80, portion: '1/2 unidad al día', note: 'Ácidos grasos monoinsaturados que apoyan la salud cardiovascular y hormonal.' },
+    { id: 'fd-g2', name: 'Aceite de Oliva Extra Virgen (Crudo)', cat: 'healthy_fats', baseGrams: 15, calPer100: 884, protPer100: 0, carbsPer100: 0, fatsPer100: 100, defaultGrams: 15, portion: '1 cucharada sopera (15ml)', note: 'Polifenoles y grasas antiinflamatorias esenciales para articulaciones.' },
+    { id: 'fd-g3', name: 'Frutos Secos (Nueces, Almendras)', cat: 'healthy_fats', baseGrams: 100, calPer100: 607, protPer100: 20, carbsPer100: 16, fatsPer100: 54, defaultGrams: 30, portion: '1 puñado cerrado (30g)', note: 'Densidad energética y magnesio para relajar el sistema neuromuscular.' },
+    { id: 'fd-g4', name: 'Semillas de Chía y Lino Molidas', cat: 'healthy_fats', baseGrams: 100, calPer100: 486, protPer100: 16.5, carbsPer100: 42, fatsPer100: 30.7, defaultGrams: 15, portion: '1 cucharadita en yogur', note: 'Ácido alfa-linolénico (Omega 3 vegetal) y fibra soluble reguladora.' },
 
     // Hidratación y Vegetales
-    { id: 'fd-h1', name: 'Agua Mineral / Filtrada', cat: 'hydration_veg', portion: '35ml/kg (2.5L a 3.5L/día)', note: 'El medio fundamental para el rendimiento muscular y la eliminación de fatiga.' },
-    { id: 'fd-h2', name: 'Vegetales de Hoja Verde (Espinaca, Rúcula)', cat: 'hydration_veg', portion: 'Libre en almuerzo y cena', note: 'Nitratos naturales para vasodilatación y micronutrientes sin calorías vacías.' },
-    { id: 'fd-h3', name: 'Brócoli y Espárragos al Vapor', cat: 'hydration_veg', portion: '1 taza colmada', note: 'Crucíferas con componentes antioxidantes y soporte a la digestión.' }
+    { id: 'fd-h1', name: 'Agua Mineral / Filtrada', cat: 'hydration_veg', baseGrams: 100, calPer100: 0, protPer100: 0, carbsPer100: 0, fatsPer100: 0, defaultGrams: 500, portion: '35ml/kg (2.5L a 3.5L/día)', note: 'El medio fundamental para el rendimiento muscular y la eliminación de fatiga.' },
+    { id: 'fd-h2', name: 'Vegetales de Hoja Verde (Espinaca, Rúcula)', cat: 'hydration_veg', baseGrams: 100, calPer100: 23, protPer100: 2.9, carbsPer100: 3.6, fatsPer100: 0.4, defaultGrams: 120, portion: 'Libre en almuerzo y cena', note: 'Nitratos naturales para vasodilatación y micronutrientes sin calorías vacías.' },
+    { id: 'fd-h3', name: 'Brócoli y Espárragos al Vapor', cat: 'hydration_veg', baseGrams: 100, calPer100: 34, protPer100: 2.8, carbsPer100: 6.6, fatsPer100: 0.4, defaultGrams: 150, portion: '1 taza colmada', note: 'Crucíferas con componentes antioxidantes y soporte a la digestión.' }
 ];
 
-// Rutinas Preconfiguradas para SENS TRAIN
+// Rutinas Preconfiguradas para SENS TRAIN (1 a 6 Días Programables)
 const WORKOUT_DAYS_DATA = {
     day1: {
         title: 'Día 1: Tren Superior (Empuje / Tirón)',
@@ -445,6 +445,101 @@ const WORKOUT_DAYS_DATA = {
                 defaultReps: 5
             }
         ]
+    },
+    day4: {
+        title: 'Día 4: Core & Movilidad (Casa / Edificio)',
+        exercises: [
+            {
+                id: 'ex-401',
+                name: '1. Deadbug con Control Lumbar y Respiración',
+                notes: 'Espalda baja sellada al suelo. 10 repeticiones lentas por pierna.',
+                sets: 3,
+                reps: '10 p/lado',
+                rest: 45,
+                defaultWeight: 0,
+                defaultReps: 10
+            },
+            {
+                id: 'ex-402',
+                name: '2. Bird-Dog Dinámico Controlado',
+                notes: 'Extender brazo y pierna opuesta sin arquear la zona lumbar.',
+                sets: 3,
+                reps: '12 p/lado',
+                rest: 45,
+                defaultWeight: 0,
+                defaultReps: 12
+            },
+            {
+                id: 'ex-403',
+                name: '3. Rotaciones Torácicas Cuadrúpedas',
+                notes: 'Mano en nuca, abrir codo hacia el techo buscando rotar columna dorsal.',
+                sets: 3,
+                reps: '10 p/lado',
+                rest: 45,
+                defaultWeight: 0,
+                defaultReps: 10
+            }
+        ]
+    },
+    day5: {
+        title: 'Día 5: Fuerza & Potencia Funcional',
+        exercises: [
+            {
+                id: 'ex-501',
+                name: '1. Trap Bar / Mancuernas Farmer Carry',
+                notes: 'Paseo del granjero: pasos firmes y postura erguida impecable.',
+                sets: 4,
+                reps: '40 metros',
+                rest: 75,
+                defaultWeight: 24,
+                defaultReps: 40
+            },
+            {
+                id: 'ex-502',
+                name: '2. Sentadilla Búlgara con Mancuernas',
+                notes: 'Torso ligeramente inclinado al frente para mayor activación glútea.',
+                sets: 3,
+                reps: '8-10 p/pierna',
+                rest: 90,
+                defaultWeight: 14,
+                defaultReps: 9
+            },
+            {
+                id: 'ex-503',
+                name: '3. Jalón al Pecho con Banda o Polea',
+                notes: 'Tracción vertical llevando la barra a la clavícula, pecho abierto.',
+                sets: 3,
+                reps: '10-12',
+                rest: 60,
+                defaultWeight: 45,
+                defaultReps: 10
+            }
+        ]
+    },
+    day6: {
+        title: 'Día 6: Cardio Zona 2 & Recuperación',
+        exercises: [
+            {
+                id: 'ex-601',
+                name: '1. Caminata Inclinada o Trote Regenerativo',
+                notes: 'Ritmo conversacional (Zona 2 cardíaca) durante 35-45 minutos.',
+                sets: 1,
+                reps: '40 min',
+                rest: 0,
+                defaultWeight: 0,
+                defaultReps: 40
+            },
+            {
+                id: 'ex-602',
+                name: '2. Descompresión Espinal y Colgadas en Barra',
+                notes: 'Colgada pasiva en barra (3 series de 30 a 45 segundos) para traccionar vértebras.',
+                sets: 3,
+                reps: '35 seg',
+                rest: 60,
+                defaultWeight: 0,
+                defaultReps: 35
+            }
+        ]
     }
 };
 
@@ -490,6 +585,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initDailyTracking();
     initCharts();
     checkExistingSession();
+    // SUITE 2.0 WORLD-CLASS:
+    initTopbarAvatar();
+    initCoachOS();
+    initQuickActionButtons();
+    renderMonthlyCalendar();
+    initWorkoutStopwatch();
+    updateDashboardRings();
+    updateMetabolicEquation();
 });
 
 // =============================================================================
@@ -3568,18 +3671,138 @@ function renderFoodCatalog(category = 'all') {
 
     let html = '';
     filtered.forEach(f => {
+        const grams = f.defaultGrams || 100;
+        const cal = Math.round((grams * (f.calPer100 || 0)) / 100);
+        const prot = Math.round(((grams * (f.protPer100 || 0)) / 100) * 10) / 10;
+        const carbs = Math.round(((grams * (f.carbsPer100 || 0)) / 100) * 10) / 10;
+        const fats = Math.round(((grams * (f.fatsPer100 || 0)) / 100) * 10) / 10;
+
         html += `
-            <div style="background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:10px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+            <div class="food-calc-card" data-food-id="${f.id}">
                 <div>
                     <span class="pill pill-dark" style="font-size:9px; margin-bottom:8px; display:inline-block;">${catLabels[f.cat] || f.cat}</span>
-                    <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-primary); margin-bottom:6px;">${f.name}</h4>
-                    <div style="font-size:0.8rem; color:var(--accent-primary); font-weight:600; margin-bottom:8px;">Porción sugerida: ${f.portion}</div>
-                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.4; margin:0;">${f.note}</p>
+                    <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-primary); margin-bottom:4px;">${f.name}</h4>
+                    <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.35; margin:0 0 10px;">${f.note}</p>
                 </div>
+
+                <!-- Control de Gramaje Dinámico (Regla de 3 Simple) -->
+                <div class="food-gram-row">
+                    <span style="font-size:11.5px; color:var(--text-secondary); font-weight:600;">Porción:</span>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <button type="button" class="btn btn-outline btn-sm btn-gram-step" data-food-id="${f.id}" data-step="-25" style="padding:2px 8px; font-size:12px; height:28px;">-</button>
+                        <input type="number" class="food-gram-input" value="${grams}" min="5" max="1000" step="5" data-food-id="${f.id}">
+                        <span style="font-size:11px; color:var(--text-muted);">g</span>
+                        <button type="button" class="btn btn-outline btn-sm btn-gram-step" data-food-id="${f.id}" data-step="25" style="padding:2px 8px; font-size:12px; height:28px;">+</button>
+                    </div>
+                </div>
+
+                <!-- Macros Proporcionales Recalculados -->
+                <div class="food-macros-strip">
+                    <div>
+                        <div class="food-macro-val macro-cal" style="color:var(--accent-primary);">${cal}</div>
+                        <div class="food-macro-lbl">kcal</div>
+                    </div>
+                    <div>
+                        <div class="food-macro-val macro-prot" style="color:#10B981;">${prot}g</div>
+                        <div class="food-macro-lbl">Prot</div>
+                    </div>
+                    <div>
+                        <div class="food-macro-val macro-carbs" style="color:#60A5FA;">${carbs}g</div>
+                        <div class="food-macro-lbl">Carb</div>
+                    </div>
+                    <div>
+                        <div class="food-macro-val macro-fats" style="color:#F59E0B;">${fats}g</div>
+                        <div class="food-macro-lbl">Grasa</div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-outline btn-full btn-sm btn-add-food-daily" data-food-id="${f.id}" style="margin-top:4px; font-size:11.5px; border-color:rgba(229,203,167,0.3); color:var(--accent-primary);">
+                    + Sumar al Total de Hoy
+                </button>
             </div>
         `;
     });
+
     container.innerHTML = html;
+    attachFoodCalcListeners(container);
+}
+
+function attachFoodCalcListeners(container) {
+    if (!container) return;
+
+    // Steppers +/-
+    container.querySelectorAll('.btn-gram-step').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const foodId = btn.getAttribute('data-food-id');
+            const step = parseInt(btn.getAttribute('data-step'), 10);
+            const input = container.querySelector(`.food-gram-input[data-food-id="${foodId}"]`);
+            if (input) {
+                let currentVal = parseInt(input.value, 10) || 100;
+                let newVal = Math.max(10, currentVal + step);
+                input.value = newVal;
+                recalcFoodCard(foodId, newVal);
+            }
+        });
+    });
+
+    // Input directo de gramos
+    container.querySelectorAll('.food-gram-input').forEach(input => {
+        input.addEventListener('input', () => {
+            const foodId = input.getAttribute('data-food-id');
+            const grams = parseInt(input.value, 10) || 0;
+            recalcFoodCard(foodId, grams);
+        });
+    });
+
+    // Botón Sumar al total de hoy
+    container.querySelectorAll('.btn-add-food-daily').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const foodId = btn.getAttribute('data-food-id');
+            const food = FOOD_CATALOG.find(f => f.id === foodId);
+            const input = container.querySelector(`.food-gram-input[data-food-id="${foodId}"]`);
+            const grams = input ? parseInt(input.value, 10) || 100 : 100;
+
+            if (food) {
+                const cal = Math.round((grams * (food.calPer100 || 0)) / 100);
+                const prot = Math.round(((grams * (food.protPer100 || 0)) / 100) * 10) / 10;
+                const carbs = Math.round(((grams * (food.carbsPer100 || 0)) / 100) * 10) / 10;
+                const fats = Math.round(((grams * (food.fatsPer100 || 0)) / 100) * 10) / 10;
+
+                if (!AppState.dailyNutrition) {
+                    AppState.dailyNutrition = { calories: 0, protein: 0, carbs: 0, fats: 0 };
+                }
+                AppState.dailyNutrition.calories += cal;
+                AppState.dailyNutrition.protein += prot;
+                AppState.dailyNutrition.carbs += carbs;
+                AppState.dailyNutrition.fats += fats;
+
+                localStorage.setItem('sens_daily_nutrition', JSON.stringify(AppState.dailyNutrition));
+                updateDashboardRings();
+                showSensToast(`🥗 ¡${food.name} (${grams}g) sumado! +${cal} kcal, +${prot}g proteína.`, 'success', 3200);
+            }
+        });
+    });
+}
+
+function recalcFoodCard(foodId, grams) {
+    const card = document.querySelector(`.food-calc-card[data-food-id="${foodId}"]`);
+    const food = FOOD_CATALOG.find(f => f.id === foodId);
+    if (!card || !food) return;
+
+    const cal = Math.round((grams * (food.calPer100 || 0)) / 100);
+    const prot = Math.round(((grams * (food.protPer100 || 0)) / 100) * 10) / 10;
+    const carbs = Math.round(((grams * (food.carbsPer100 || 0)) / 100) * 10) / 10;
+    const fats = Math.round(((grams * (food.fatsPer100 || 0)) / 100) * 10) / 10;
+
+    const calEl = card.querySelector('.macro-cal');
+    const protEl = card.querySelector('.macro-prot');
+    const carbsEl = card.querySelector('.macro-carbs');
+    const fatsEl = card.querySelector('.macro-fats');
+
+    if (calEl) calEl.textContent = cal;
+    if (protEl) protEl.textContent = `${prot}g`;
+    if (carbsEl) carbsEl.textContent = `${carbs}g`;
+    if (fatsEl) fatsEl.textContent = `${fats}g`;
 }
 
 function initDailyTracking() {
@@ -3818,5 +4041,319 @@ function renderProfileSettingsData() {
             tagsHtml = '<span class="diag-tag">Ficha Biomecánica al día</span>';
         }
         diagTagsContainer.innerHTML = tagsHtml;
+    }
+}
+
+// =============================================================================
+// SUITE 2.0: APPLE-GRADE MEMBER EXPERIENCE & COACH OS (WORLD-CLASS SUITE)
+// =============================================================================
+
+function updateDashboardRings() {
+    const workoutCirc = document.getElementById('ringWorkoutCircle');
+    const stepsCirc = document.getElementById('ringStepsCircle');
+    const fuelCirc = document.getElementById('ringFuelCircle');
+
+    const workoutText = document.getElementById('ringWorkoutText');
+    const stepsText = document.getElementById('ringStepsText');
+    const fuelText = document.getElementById('ringFuelText');
+
+    const circumference = 150.8; // 2 * PI * 24
+
+    // 1. Anillo de Entrenamiento (0% o 100%)
+    const completedWorkouts = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
+    const todayNum = new Date().getDate();
+    const hasTrainedToday = completedWorkouts.includes(todayNum);
+
+    if (workoutCirc) {
+        workoutCirc.style.strokeDashoffset = hasTrainedToday ? '0' : '45';
+    }
+    if (workoutText) {
+        workoutText.textContent = hasTrainedToday ? '¡Completado! ✓' : 'En Progreso';
+        workoutText.style.color = hasTrainedToday ? '#10B981' : 'var(--accent-primary)';
+    }
+
+    // 2. Anillo de Pasos (meta: 10.000)
+    const currentSteps = 7450;
+    const stepTarget = 10000;
+    const stepRatio = Math.min(1, currentSteps / stepTarget);
+    if (stepsCirc) {
+        stepsCirc.style.strokeDashoffset = String(circumference * (1 - stepRatio));
+    }
+    if (stepsText) {
+        stepsText.textContent = `${currentSteps.toLocaleString('es-AR')} / 10k`;
+    }
+
+    // 3. Anillo de Fuel & Agua (kcal y litros)
+    const nutrition = AppState.dailyNutrition || JSON.parse(localStorage.getItem('sens_daily_nutrition') || '{"calories":1650,"protein":125,"carbs":170,"fats":48}');
+    const water = AppState.dailyWater || 2.0;
+    const calTarget = 2100;
+    const fuelRatio = Math.min(1, (nutrition.calories || 1650) / calTarget);
+    if (fuelCirc) {
+        fuelCirc.style.strokeDashoffset = String(circumference * (1 - fuelRatio));
+    }
+    if (fuelText) {
+        fuelText.textContent = `${water.toFixed(1)} / 2.5 L`;
+    }
+}
+
+function renderMonthlyCalendar() {
+    const calGrid = document.getElementById('monthCalGrid');
+    const titleEl = document.getElementById('monthCalendarTitle');
+    if (!calGrid) return;
+
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const todayDate = now.getDate();
+
+    const monthNames = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+
+    if (titleEl) {
+        titleEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+
+    const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+    const startOffset = (firstDayIndex + 6) % 7; // Lunes = 0
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    const savedWorkouts = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
+    const defaultTrained = [2, 5, 7, 9, 12];
+
+    let cellsHtml = `
+        <div class="month-cal-day-label">L</div>
+        <div class="month-cal-day-label">M</div>
+        <div class="month-cal-day-label">M</div>
+        <div class="month-cal-day-label">J</div>
+        <div class="month-cal-day-label">V</div>
+        <div class="month-cal-day-label">S</div>
+        <div class="month-cal-day-label">D</div>
+    `;
+
+    for (let i = 0; i < startOffset; i++) {
+        cellsHtml += `<div class="month-cal-cell rest-day" style="opacity: 0.15;"></div>`;
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = (d === todayDate);
+        const isCompleted = savedWorkouts.includes(d) || defaultTrained.includes(d);
+        const classes = ['month-cal-cell'];
+        if (isToday) classes.push('today');
+        if (isCompleted) classes.push('completed');
+
+        cellsHtml += `
+            <div class="${classes.join(' ')}" data-cal-day="${d}" title="${isCompleted ? 'Día Entrenado' : (isToday ? 'Hoy' : 'Día de Descanso')}" style="cursor:pointer;">
+                <span>${d}</span>
+            </div>
+        `;
+    }
+
+    calGrid.innerHTML = cellsHtml;
+
+    calGrid.querySelectorAll('.month-cal-cell[data-cal-day]').forEach(cell => {
+        cell.addEventListener('click', () => {
+            const d = cell.getAttribute('data-cal-day');
+            showSensToast(`📅 Visualizando registro del ${d} de ${monthNames[currentMonth]}`, 'champagne', 2200);
+        });
+    });
+}
+
+let stopwatchInterval = null;
+let stopwatchSeconds = 0;
+let stopwatchRunning = false;
+
+function initWorkoutStopwatch() {
+    const display = document.getElementById('workoutStopwatchDisplay');
+    const toggleBtn = document.getElementById('btnToggleStopwatch');
+    if (!display || !toggleBtn) return;
+
+    toggleBtn.addEventListener('click', () => {
+        if (!stopwatchRunning) {
+            stopwatchRunning = true;
+            toggleBtn.textContent = 'Pausar';
+            toggleBtn.style.color = '#EF4444';
+            stopwatchInterval = setInterval(() => {
+                stopwatchSeconds++;
+                const mins = String(Math.floor(stopwatchSeconds / 60)).padStart(2, '0');
+                const secs = String(stopwatchSeconds % 60).padStart(2, '0');
+                display.textContent = `${mins}:${secs}`;
+            }, 1000);
+        } else {
+            stopwatchRunning = false;
+            clearInterval(stopwatchInterval);
+            toggleBtn.textContent = 'Reanudar';
+            toggleBtn.style.color = 'var(--accent-primary)';
+        }
+    });
+
+    display.addEventListener('dblclick', () => {
+        clearInterval(stopwatchInterval);
+        stopwatchSeconds = 0;
+        stopwatchRunning = false;
+        display.textContent = '00:00';
+        toggleBtn.textContent = 'Iniciar';
+        toggleBtn.style.color = '';
+    });
+}
+
+function initTopbarAvatar() {
+    const avatarBtn = document.getElementById('userAvatarBtn');
+    const dropdown = document.getElementById('userAvatarDropdown');
+    const initialsEl = document.getElementById('userAvatarInitials');
+    const nameEl = document.getElementById('dropdownUserName');
+    const emailEl = document.getElementById('dropdownUserEmail');
+    const planEl = document.getElementById('dropdownUserPlan');
+
+    if (!avatarBtn || !dropdown) return;
+
+    avatarBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target) && e.target !== avatarBtn) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    const goProfile = document.getElementById('dropdownGoProfile');
+    if (goProfile) {
+        goProfile.addEventListener('click', () => {
+            dropdown.classList.remove('active');
+            switchPortalView('profileSettingsView');
+        });
+    }
+
+    const goDiag = document.getElementById('dropdownGoDiagnosis');
+    if (goDiag) {
+        goDiag.addEventListener('click', () => {
+            dropdown.classList.remove('active');
+            switchPortalView('onboardingSection');
+        });
+    }
+
+    function syncAvatarData() {
+        const fullName = (AppState.profile && AppState.profile.full_name) || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || 'Lean Barreira';
+        const email = (AppState.user && AppState.user.email) || 'atleta@sens.com';
+        const plan = (AppState.profile && AppState.profile.active_plan_name) || 'Presencial 1 a 1 VIP';
+
+        const parts = fullName.trim().split(' ');
+        let initials = parts[0] ? parts[0][0].toUpperCase() : 'S';
+        if (parts.length > 1 && parts[parts.length - 1]) {
+            initials += parts[parts.length - 1][0].toUpperCase();
+        }
+
+        if (initialsEl) initialsEl.textContent = initials;
+        if (nameEl) nameEl.textContent = fullName;
+        if (emailEl) emailEl.textContent = email;
+        if (planEl) planEl.textContent = plan;
+    }
+
+    syncAvatarData();
+    window.__syncAvatarData = syncAvatarData;
+}
+
+function initCoachOS() {
+    const viewBtn = document.getElementById('btnCoachViewMode');
+    const editBtn = document.getElementById('btnCoachEditMode');
+    const roleSelector = document.getElementById('userRoleSelector');
+    const waLink = document.getElementById('btnCoachWhatsApp');
+
+    if (viewBtn && editBtn) {
+        viewBtn.addEventListener('click', () => {
+            viewBtn.classList.add('active');
+            editBtn.classList.remove('active');
+            AppState.coachEditMode = false;
+            document.body.classList.remove('coach-editing-mode');
+            const adminAddBtn = document.getElementById('btnAdminAddExercise');
+            if (adminAddBtn) adminAddBtn.style.display = 'none';
+            showSensToast('👁 Modo Inspección activo: viendo datos tal como los ve el alumno.', 'info', 2500);
+        });
+
+        editBtn.addEventListener('click', () => {
+            editBtn.classList.add('active');
+            viewBtn.classList.remove('active');
+            AppState.coachEditMode = true;
+            document.body.classList.add('coach-editing-mode');
+            const adminAddBtn = document.getElementById('btnAdminAddExercise');
+            if (adminAddBtn) adminAddBtn.style.display = 'inline-block';
+            showSensToast('✏ Modo Edición activo: podés modificar rutinas, series y asignar ejercicios.', 'success', 3000);
+        });
+    }
+
+    if (roleSelector && waLink) {
+        function updateWhatsAppLink() {
+            const selectedText = roleSelector.options[roleSelector.selectedIndex].text;
+            const athleteName = selectedText.split('—')[0].replace(/[🟢🟡🔴⭐]/g, '').trim();
+            const msg = encodeURIComponent(`Hola ${athleteName}! Te escribo de SENS para ver tu progreso y ajustar las cargas de esta semana.`);
+            waLink.href = `https://wa.me/?text=${msg}`;
+        }
+        roleSelector.addEventListener('change', updateWhatsAppLink);
+        updateWhatsAppLink();
+    }
+}
+
+function initQuickActionButtons() {
+    const btnWater = document.getElementById('btnQuickLogWater');
+    if (btnWater) {
+        btnWater.addEventListener('click', () => {
+            AppState.dailyWater = (AppState.dailyWater || 2.0) + 0.5;
+            const fuelText = document.getElementById('ringFuelText');
+            if (fuelText) {
+                fuelText.textContent = `${AppState.dailyWater.toFixed(1)} / 2.5 L`;
+            }
+            showSensToast(`💧 +500ml agua registrados (Total: ${AppState.dailyWater.toFixed(1)} L)`, 'success', 2500);
+        });
+    }
+
+    const btnWeight = document.getElementById('btnQuickLogWeight');
+    if (btnWeight) {
+        btnWeight.addEventListener('click', () => {
+            switchPortalView('trackingView');
+            setTimeout(() => {
+                const input = document.getElementById('logWeight');
+                if (input) input.focus();
+            }, 200);
+        });
+    }
+
+    const btnMeal = document.getElementById('btnQuickLogMeal');
+    if (btnMeal) {
+        btnMeal.addEventListener('click', () => {
+            switchPortalView('nutritionView');
+        });
+    }
+
+    const btnStore = document.getElementById('btnQuickGoStore');
+    if (btnStore) {
+        btnStore.addEventListener('click', () => {
+            switchPortalView('storeView');
+        });
+    }
+}
+
+function updateMetabolicEquation(weight = 78.2, steps = 10450, intake = 1820) {
+    // Fórmula Harris-Benedict (Mifflin-St Jeor): 10*peso + 6.25*175 - 5*33 + 5
+    const bmr = Math.round(10 * weight + 6.25 * 175 - 5 * 33 + 5);
+    const activeBurn = Math.round((steps * 0.04) + 120);
+    const tdee = bmr + activeBurn;
+    const deficit = intake - tdee;
+
+    const bmrEl = document.getElementById('calcBmrNum');
+    const actEl = document.getElementById('calcActiveBurnNum');
+    const tdeeEl = document.getElementById('calcTdeeNum');
+    const intakeEl = document.getElementById('calcIntakeNum');
+    const defEl = document.getElementById('calcDeficitNum');
+
+    if (bmrEl) bmrEl.textContent = bmr.toLocaleString('es-AR');
+    if (actEl) actEl.textContent = activeBurn.toLocaleString('es-AR');
+    if (tdeeEl) tdeeEl.textContent = tdee.toLocaleString('es-AR');
+    if (intakeEl) intakeEl.textContent = intake.toLocaleString('es-AR');
+    if (defEl) {
+        defEl.textContent = `${deficit > 0 ? '+' : ''}${deficit} kcal`;
+        defEl.style.color = deficit <= 0 ? '#10B981' : '#F59E0B';
     }
 }
