@@ -8121,17 +8121,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 /* 1. Strip Calendar Semanal (Estilo BIGG) */
 .sens-week-strip-wrap {
-    margin-bottom: 22px;
+    margin-bottom: 8px;
     background: #0E0E11;
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 20px;
-    padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    padding: 10px 4px 8px 4px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
     font-family: var(--font-main);
 }
 
@@ -8140,21 +8137,20 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .sens-week-day-pill {
-    flex: 1;
-    min-width: 44px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 4px;
-    border-radius: 16px;
+    gap: 2px;
+    padding: 8px 2px 6px 2px;
+    border-radius: 14px;
     background: transparent;
-    border: none;
+    border: 1.5px solid transparent;
     color: var(--text-muted);
     cursor: pointer;
     font-family: var(--font-main);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    min-width: 0;
 }
 
 .sens-week-day-pill:hover {
@@ -8162,29 +8158,31 @@ input[type="range"]::-webkit-slider-thumb:hover {
     color: #FFFFFF;
 }
 
-.sens-week-day-name {
+.sens-week-day-name,
+.sens-day-name {
     font-family: var(--font-main);
     font-size: 10px;
-    font-weight: 300;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 0.5px;
+    line-height: 1;
 }
 
-.sens-week-day-num {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
+.sens-day-hero-num,
+.sens-week-day-num,
+.sens-day-num {
+    font-family: var(--font-heading);
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.15;
+    margin: 3px 0 4px 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-heading);
-    font-variant-numeric: tabular-nums;
-    font-size: 14px;
-    font-weight: 600;
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text-secondary);
-    transition: all 0.2s ease;
 }
+
 
 .sens-week-day-pill.active .sens-week-day-num {
     background: var(--accent-primary);
@@ -10711,56 +10709,92 @@ body.in-portal .sens-week-strip-wrap {
     background: #FFFFFF !important;
     border: 1px solid rgba(0, 0, 0, 0.06) !important;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03) !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 4px !important;
+    padding: 10px 4px 8px 4px !important;
+    margin-bottom: 6px !important;
+    border-radius: 20px !important;
+    overflow-x: hidden !important;
 }
 
 body.in-portal .sens-week-day-pill {
     background: transparent !important;
-    color: #71717A !important;
+    border: 1.5px solid transparent !important;
+    border-radius: 14px !important;
+    padding: 8px 2px 6px 2px !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 body.in-portal .sens-week-day-pill:hover {
-    background: rgba(0, 0, 0, 0.03) !important;
-    color: #09090B !important;
-}
-
-body.in-portal .sens-week-day-name {
-    color: #71717A !important;
-}
-
-body.in-portal .sens-week-day-num {
     background: #F4F4F6 !important;
-    color: #27272A !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
 }
 
-body.in-portal .sens-week-day-pill.is-today .sens-week-day-name {
+body.in-portal .sens-week-day-name,
+body.in-portal .sens-day-name {
+    font-family: var(--font-main) !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    color: #71717A !important;
+    line-height: 1 !important;
+}
+
+body.in-portal .sens-day-hero-num,
+body.in-portal .sens-week-day-num,
+body.in-portal .sens-day-num {
+    font-family: var(--font-heading) !important;
+    font-variant-numeric: tabular-nums lining-nums !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #09090B !important;
+    line-height: 1.15 !important;
+    margin: 3px 0 4px 0 !important;
+    background: transparent !important;
+    width: auto !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.in-portal .sens-week-day-pill.is-today {
+    border-color: rgba(158, 125, 75, 0.4) !important;
+    background: #FCFBF9 !important;
+}
+
+body.in-portal .sens-week-day-pill.is-today .sens-week-day-name,
+body.in-portal .sens-week-day-pill.is-today .sens-day-name {
     color: #9E7D4B !important;
     font-weight: 700 !important;
 }
 
-body.in-portal .sens-week-day-pill.active .sens-week-day-num {
+body.in-portal .sens-week-day-pill.active {
     background: #09090B !important;
-    color: #E5CBA7 !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-color: #09090B !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
 }
 
-body.in-portal .sens-week-day-pill.active .sens-week-day-name {
-    color: #09090B !important;
-    font-weight: 800 !important;
+body.in-portal .sens-week-day-pill.active .sens-week-day-name,
+body.in-portal .sens-week-day-pill.active .sens-day-name {
+    color: rgba(255, 255, 255, 0.65) !important;
 }
 
-/* Micro-pills de modalidad en calendario */
-.sens-day-modality-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    margin-top: 3px;
-    display: inline-block;
+body.in-portal .sens-week-day-pill.active .sens-day-hero-num,
+body.in-portal .sens-week-day-pill.active .sens-week-day-num,
+body.in-portal .sens-week-day-pill.active .sens-day-num {
+    color: #FFFFFF !important;
 }
-.sens-day-modality-dot.presencial { background: #9E7D4B; }
-.sens-day-modality-dot.online     { background: #0284C7; }
-.sens-day-modality-dot.completed  { background: #10B981; }
+
 
 /* =============================================================================
    3. CARD DE ENTRENAMIENTO CON VIDEO
@@ -11182,29 +11216,36 @@ body.in-portal .sens-week-day-pill.active .sens-week-day-name {
 
 .sens-obj-box-chips {
     display: flex;
-    gap: 4px;
+    gap: 5px;
     margin-top: 8px;
+    flex-wrap: wrap;
 }
 
 .mini-chip {
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 9.5px;
+    font-size: 10px;
     font-weight: 700;
 }
 
 .mini-chip.done {
-    background: #09090B;
-    color: #E5CBA7;
+    background: #10B981;
+    color: #FFFFFF;
 }
 
 .mini-chip.pending {
-    background: #E4E4E7;
-    color: #71717A;
+    background: #FDF4E7;
+    color: #9E7D4B;
+    border: 1px solid rgba(158, 125, 75, 0.3);
+}
+
+.mini-chip.rest {
+    background: #F4F4F6;
+    color: #A1A1AA;
 }
 
 .sens-objective-footer-bar {
@@ -11308,46 +11349,144 @@ body.in-portal .sens-dock-item.active {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 4px;
-    height: 16px;
+    height: 18px;
+    width: 100%;
 }
 
-.sens-day-status {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
+.sens-day-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 8px;
-    font-weight: 800;
+    font-size: 8.5px;
+    font-weight: 700;
     line-height: 1;
+    letter-spacing: 0.3px;
+    padding: 2.5px 4.5px;
+    border-radius: 5px;
+    max-width: 100%;
+    white-space: nowrap;
 }
 
-.sens-day-status.done {
-    background: #10B981;
-    color: #FFFFFF;
+.sens-day-badge.presencial {
+    background: #FDF4E7;
+    color: #9E7D4B;
+    border: 1px solid rgba(158, 125, 75, 0.3);
 }
 
-.sens-day-status.presencial {
-    background: #9E7D4B;
-    color: #FFFFFF;
+.sens-day-badge.online {
+    background: #EFF6FF;
+    color: #2563EB;
+    border: 1px solid rgba(37, 99, 235, 0.25);
 }
 
-.sens-day-status.online {
-    background: #2563EB;
-    color: #FFFFFF;
+.sens-day-badge.auto {
+    background: #F1F5F9;
+    color: #475569;
+    border: 1px solid rgba(71, 85, 105, 0.2);
 }
 
-.sens-day-status.auto {
-    background: #64748B;
-    color: #FFFFFF;
+.sens-day-badge.done {
+    background: #ECFDF5;
+    color: #059669;
+    border: 1px solid rgba(5, 150, 105, 0.25);
+    padding: 2.5px 6px;
+    font-size: 9px;
 }
 
-.sens-day-status.rest {
+.sens-day-badge.rest {
     color: #A1A1AA;
     font-size: 11px;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    padding: 0;
 }
+
+/* Active pill variations */
+body.in-portal .sens-week-day-pill.active .sens-day-badge.presencial {
+    background: #9E7D4B !important;
+    color: #FFFFFF !important;
+    border-color: #9E7D4B !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.online {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+    border-color: #2563EB !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.auto {
+    background: #475569 !important;
+    color: #FFFFFF !important;
+    border-color: #475569 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.done {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border-color: #10B981 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.rest {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Leyenda de Modalidades debajo del Calendario */
+.sens-week-legend-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 16px;
+    padding: 2px 6px 14px 6px;
+    margin-bottom: 12px;
+}
+
+.sens-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #71717A;
+}
+
+.sens-legend-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8.5px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.3px;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+.sens-legend-badge.presencial {
+    background: #FDF4E7;
+    color: #9E7D4B;
+    border: 1px solid rgba(158, 125, 75, 0.3);
+}
+
+.sens-legend-badge.online {
+    background: #EFF6FF;
+    color: #2563EB;
+    border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.sens-legend-badge.done {
+    background: #ECFDF5;
+    color: #059669;
+    border: 1px solid rgba(5, 150, 105, 0.25);
+}
+
+.sens-legend-badge.rest {
+    color: #A1A1AA;
+    font-size: 11px;
+    font-weight: 700;
+}
+
 
 
 

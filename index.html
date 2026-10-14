@@ -2628,7 +2628,27 @@
                 </div>
 
                 <div class="sens-week-strip-wrap" id="portalWeekStrip">
-                    <!-- Inyectado dinámicamente por app.js con fechas reales (14/10, etc.) -->
+                    <!-- Inyectado dinámicamente por app.js con fechas reales y hero number -->
+                </div>
+
+                <!-- Leyenda de Modalidades de Entrenamiento Semanal -->
+                <div class="sens-week-legend-bar" id="sensWeekLegendBar">
+                    <div class="sens-legend-item">
+                        <span class="sens-legend-badge presencial">Pres.</span>
+                        <span class="sens-legend-text">Presencial con Nico</span>
+                    </div>
+                    <div class="sens-legend-item">
+                        <span class="sens-legend-badge online">Online</span>
+                        <span class="sens-legend-text">Online con Nico</span>
+                    </div>
+                    <div class="sens-legend-item">
+                        <span class="sens-legend-badge done">✓</span>
+                        <span class="sens-legend-text">Completado</span>
+                    </div>
+                    <div class="sens-legend-item">
+                        <span class="sens-legend-badge rest">–</span>
+                        <span class="sens-legend-text">Descanso</span>
+                    </div>
                 </div>
 
                 <!-- 2. Card de Entrenamiento Dinámica con Video & Foco Muscular Automático -->
@@ -2684,7 +2704,7 @@
                             <span class="sens-nutri-eyebrow">Nutrición &amp; Hábitos del Día</span>
                             <h3 class="sens-nutri-card-title">Almuerzo sugerido por Nico</h3>
                         </div>
-                        <span class="sens-nutri-goal-badge" id="dashNutriTargetBadge">1,950 kcal meta</span>
+                        <span class="sens-nutri-goal-badge" id="dashNutriTargetBadge">-</span>
                     </div>
                     <div class="sens-nutri-media-row">
                         <div class="sens-nutri-video-wrap">
@@ -2700,19 +2720,19 @@
                             <div class="sens-meal-cals-grid">
                                 <div class="sens-meal-cal-pill">
                                     <span class="meal-name">Desayuno</span>
-                                    <strong class="meal-val" id="calMealDesayuno">420 kcal</strong>
+                                    <strong class="meal-val" id="calMealDesayuno">-</strong>
                                 </div>
                                 <div class="sens-meal-cal-pill highlight">
                                     <span class="meal-name">Almuerzo</span>
-                                    <strong class="meal-val" id="calMealAlmuerzo">680 kcal</strong>
+                                    <strong class="meal-val" id="calMealAlmuerzo">-</strong>
                                 </div>
                                 <div class="sens-meal-cal-pill">
                                     <span class="meal-name">Merienda</span>
-                                    <strong class="meal-val" id="calMealMerienda">310 kcal</strong>
+                                    <strong class="meal-val" id="calMealMerienda">-</strong>
                                 </div>
                                 <div class="sens-meal-cal-pill">
                                     <span class="meal-name">Cena</span>
-                                    <strong class="meal-val" id="calMealCena">540 kcal</strong>
+                                    <strong class="meal-val" id="calMealCena">-</strong>
                                 </div>
                             </div>
                         </div>
@@ -2730,48 +2750,39 @@
                             <span class="sens-objective-eyebrow">Tu Objetivo de Longevidad</span>
                             <h3 class="sens-objective-title">Balance Energético &amp; Evolución</h3>
                         </div>
-                        <span class="sens-objective-status-pill" id="dashObjectiveGoalPill">Déficit Definición</span>
+                        <span class="sens-objective-status-pill" id="dashObjectiveGoalPill">-</span>
                     </div>
 
                     <div class="sens-objective-grid">
                         <!-- Balance Calórico / Déficit -->
                         <div class="sens-obj-box highlight-box">
                             <div class="sens-obj-box-label">Balance Neto Diario</div>
-                            <div class="sens-obj-box-val text-success" id="dashNetDeficitVal">-380 <span class="unit">kcal</span></div>
+                            <div class="sens-obj-box-val text-success" id="dashNetDeficitVal">- <span class="unit">kcal</span></div>
                             <div class="sens-obj-box-desc">
-                                Gasto TDEE: <span id="dashTdeeNum">2,330</span> kcal • Ingesta: <span id="dashIngestaNum">1,950</span> kcal
+                                Gasto TDEE: <span id="dashTdeeNum">-</span> kcal • Ingesta: <span id="dashIngestaNum">-</span> kcal
                             </div>
                         </div>
 
                         <!-- Progresión de Peso -->
                         <div class="sens-obj-box">
                             <div class="sens-obj-box-label">Progresión de Peso</div>
-                            <div class="sens-obj-box-val" id="dashWeightProgVal">76.0 <span class="unit">kg</span></div>
-                            <div class="sens-obj-box-trend positive" id="dashWeightTrendTag">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
-                                -0.4 kg vs semana anterior
-                            </div>
+                            <div class="sens-obj-box-val" id="dashWeightProgVal">- <span class="unit">kg</span></div>
+                            <div class="sens-obj-box-trend positive" id="dashWeightTrendTag">-</div>
                         </div>
 
                         <!-- Progresión de Grasa -->
                         <div class="sens-obj-box">
                             <div class="sens-obj-box-label">Grasa Corporal</div>
-                            <div class="sens-obj-box-val" id="dashFatProgVal">14.2 <span class="unit">%</span></div>
-                            <div class="sens-obj-box-trend positive" id="dashFatTrendTag">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
-                                -0.6% vs inicio
-                            </div>
+                            <div class="sens-obj-box-val" id="dashFatProgVal">- <span class="unit">%</span></div>
+                            <div class="sens-obj-box-trend positive" id="dashFatTrendTag">-</div>
                         </div>
 
                         <!-- Entrenamientos en la Semana -->
                         <div class="sens-obj-box">
                             <div class="sens-obj-box-label">Entrenamientos Semanales</div>
-                            <div class="sens-obj-box-val" id="dashWorkoutsCountVal">3 <span class="unit">/ 4 días</span></div>
+                            <div class="sens-obj-box-val" id="dashWorkoutsCountVal">- <span class="unit">/ - días</span></div>
                             <div class="sens-obj-box-chips" id="dashWorkoutsMiniChips">
-                                <span class="mini-chip done" title="Lunes completado">L</span>
-                                <span class="mini-chip done" title="Miércoles completado">M</span>
-                                <span class="mini-chip done" title="Viernes completado">V</span>
-                                <span class="mini-chip pending" title="Domingo pendiente">D</span>
+                                <!-- Generado dinámicamente con los 7 días de la semana -->
                             </div>
                         </div>
                     </div>
@@ -2779,7 +2790,7 @@
                     <div class="sens-objective-footer-bar">
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <div class="sens-score-dot"></div>
-                            <span style="font-size: 12px; font-weight: 600;" id="dashConsistencyScoreText">Índice de Consistencia: 92% • Rango Óptimo</span>
+                            <span style="font-size: 12px; font-weight: 600;" id="dashConsistencyScoreText">Índice de Consistencia: -</span>
                         </div>
                         <span style="font-size: 11px; color: var(--text-muted);">Ver desglose biométrico →</span>
                     </div>
@@ -2795,21 +2806,21 @@
                         <div class="sens-ring-metric-row">
                             <span class="sens-ring-dot steps"></span>
                             <div>
-                                <span class="sens-ring-metric-val" id="dashStepsMetricVal">10,649</span>
+                                <span class="sens-ring-metric-val" id="dashStepsMetricVal">-</span>
                                 <span class="sens-ring-metric-unit">pasos</span>
                             </div>
                         </div>
                         <div class="sens-ring-metric-row">
                             <span class="sens-ring-dot time"></span>
                             <div>
-                                <span class="sens-ring-metric-val" id="dashTimeMetricVal">114</span>
+                                <span class="sens-ring-metric-val" id="dashTimeMetricVal">-</span>
                                 <span class="sens-ring-metric-unit">min</span>
                             </div>
                         </div>
                         <div class="sens-ring-metric-row">
                             <span class="sens-ring-dot calories"></span>
                             <div>
-                                <span class="sens-ring-metric-val" id="dashCalMetricVal">586</span>
+                                <span class="sens-ring-metric-val" id="dashCalMetricVal">-</span>
                                 <span class="sens-ring-metric-unit">kcal</span>
                             </div>
                         </div>
@@ -2820,209 +2831,21 @@
                             <!-- Anillo Pasos (Verde #10B981) r=48 -->
                             <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="48" stroke-width="9"></circle>
                             <circle class="sens-concentric-ring-fg" id="svgConcentricSteps" cx="60" cy="60" r="48"
-                                stroke="#10B981" stroke-width="9" stroke-dasharray="301.6" stroke-dashoffset="60">
+                                stroke="#10B981" stroke-width="9" stroke-dasharray="301.6" stroke-dashoffset="301.6">
                             </circle>
 
                             <!-- Anillo Tiempo (Celeste #38BDF8) r=36 -->
                             <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="36" stroke-width="9"></circle>
                             <circle class="sens-concentric-ring-fg" id="svgConcentricTime" cx="60" cy="60" r="36"
-                                stroke="#38BDF8" stroke-width="9" stroke-dasharray="226.2" stroke-dashoffset="45">
+                                stroke="#38BDF8" stroke-width="9" stroke-dasharray="226.2" stroke-dashoffset="226.2">
                             </circle>
 
                             <!-- Anillo Calorías (Champagne #E5CBA7) r=24 -->
                             <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="24" stroke-width="9"></circle>
                             <circle class="sens-concentric-ring-fg" id="svgConcentricCals" cx="60" cy="60" r="24"
-                                stroke="#E5CBA7" stroke-width="9" stroke-dasharray="150.8" stroke-dashoffset="30">
+                                stroke="#E5CBA7" stroke-width="9" stroke-dasharray="150.8" stroke-dashoffset="150.8">
                             </circle>
                         </svg>
-                    </div>
-                </div>
-
-                <!-- 4. Racha Semanal & Hábitos (Estilo BIGG) -->
-                <div class="sens-habit-track-card">
-                    <div class="sens-habit-track-header">
-                        <span style="font-size: 15px; font-weight: 800; color: #FFFFFF;" id="dashHabitTitle">Te faltan 3
-                            días</span>
-                        <span class="sens-habit-streak-badge" id="dashHabitStreak">0 semanas</span>
-                    </div>
-
-                    <div class="sens-habit-nodes-row">
-                        <div class="sens-habit-track-line"></div>
-                        <div class="sens-habit-node">
-                            <div class="sens-habit-circle completed"></div>
-                            <span class="sens-habit-day-lbl">L</span>
-                        </div>
-                        <div class="sens-habit-node">
-                            <div class="sens-habit-circle active"></div>
-                            <span class="sens-habit-day-lbl" style="color: #FFFFFF;">M</span>
-                        </div>
-                        <div class="sens-habit-node">
-                            <div class="sens-habit-circle"></div>
-                            <span class="sens-habit-day-lbl">M</span>
-                        </div>
-                        <div class="sens-habit-node">
-                            <div class="sens-habit-circle"></div>
-                            <span class="sens-habit-day-lbl">J</span>
-                        </div>
-                        <div class="sens-habit-node">
-                            <div class="sens-habit-circle"></div>
-                            <span class="sens-habit-day-lbl">V</span>
-                        </div>
-                        <div class="sens-habit-node">
-                            <div class="sens-habit-circle"></div>
-                            <span class="sens-habit-day-lbl">S</span>
-                        </div>
-                        <div class="sens-habit-node">
-                            <div class="sens-habit-circle"></div>
-                            <span class="sens-habit-day-lbl">D</span>
-                        </div>
-                    </div>
-
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); margin-top: 14px;">
-                        <span>Objetivo semanal</span>
-                        <strong style="color: var(--accent-primary);" id="dashWeeklyGoalText">0 / 3 días →</strong>
-                    </div>
-                </div>
-
-                <!-- 5. Composición Corporal & Deltas (Estilo Samsung Health) -->
-                <div class="sens-biometrics-summary-card">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                        <span
-                            style="font-size: 14px; font-weight: 700; letter-spacing: 0.5px; color: #FFFFFF;">Composición
-                            corporal</span>
-                        <span class="status-dot status-dot-active" style="width: 7px; height: 7px;"></span>
-                    </div>
-
-                    <!-- Fila 1: Peso -->
-                    <div class="sens-biometric-row">
-                        <div class="sens-biometric-left">
-                            <div class="sens-biometric-icon-wrap">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="sens-biometric-value" id="dashWeightVal">76.0</span>
-                                <span style="font-size: 11px; color: var(--text-muted);">kg</span>
-                                <span class="sens-biometric-delta negative" id="dashWeightDelta">-0.4</span>
-                            </div>
-                        </div>
-                        <div class="sens-tri-range-bar">
-                            <div class="sens-tri-range-zone low"></div>
-                            <div class="sens-tri-range-zone normal"></div>
-                            <div class="sens-tri-range-zone high"></div>
-                            <div class="sens-tri-range-pin" style="left: 48%;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Fila 2: Masa Muscular -->
-                    <div class="sens-biometric-row">
-                        <div class="sens-biometric-left">
-                            <div class="sens-biometric-icon-wrap">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12" />
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="sens-biometric-value" id="dashMuscleVal">31.0</span>
-                                <span style="font-size: 11px; color: var(--text-muted);">kg</span>
-                                <span class="sens-biometric-delta negative" id="dashMuscleDelta">-1.2</span>
-                            </div>
-                        </div>
-                        <div class="sens-tri-range-bar">
-                            <div class="sens-tri-range-zone low"></div>
-                            <div class="sens-tri-range-zone normal"></div>
-                            <div class="sens-tri-range-zone high"></div>
-                            <div class="sens-tri-range-pin" style="left: 55%;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Fila 3: Grasa Corporal -->
-                    <div class="sens-biometric-row">
-                        <div class="sens-biometric-left">
-                            <div class="sens-biometric-icon-wrap">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path d="M12 6v6l4 2" />
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="sens-biometric-value" id="dashFatVal">24.7</span>
-                                <span style="font-size: 11px; color: var(--text-muted);">%</span>
-                                <span class="sens-biometric-delta positive" id="dashFatDelta">+1.9</span>
-                            </div>
-                        </div>
-                        <div class="sens-tri-range-bar">
-                            <div class="sens-tri-range-zone low"></div>
-                            <div class="sens-tri-range-zone normal"></div>
-                            <div class="sens-tri-range-zone high"></div>
-                            <div class="sens-tri-range-pin" style="left: 65%;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6. Entrenos esta semana (Gráfico D L M X J V S) -->
-                <div class="sens-weekly-workouts-card">
-                    <div>
-                        <span style="font-size: 14px; font-weight: 800; color: #FFFFFF;">Entrenos esta semana</span>
-                        <div style="font-size: 2.2rem; font-weight: 800; color: #FFFFFF; line-height: 1.1; margin-top: 6px;"
-                            id="dashWeeklyTimeNum">
-                            5:01:36
-                        </div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;"
-                            id="dashWeeklySessionsCal">
-                            15 sesiones • 1,879 kcal
-                        </div>
-                    </div>
-
-                    <div class="sens-weekly-chart-cols">
-                        <div class="sens-weekly-col">
-                            <div class="sens-weekly-bar-track">
-                                <div class="sens-weekly-bar-fill highlight" style="height: 80%;"></div>
-                            </div>
-                            <span class="sens-weekly-day-tag active">D</span>
-                        </div>
-                        <div class="sens-weekly-col">
-                            <div class="sens-weekly-bar-track">
-                                <div class="sens-weekly-bar-fill" style="height: 30%;"></div>
-                            </div>
-                            <span class="sens-weekly-day-tag">L</span>
-                        </div>
-                        <div class="sens-weekly-col">
-                            <div class="sens-weekly-bar-track">
-                                <div class="sens-weekly-bar-fill" style="height: 60%;"></div>
-                            </div>
-                            <span class="sens-weekly-day-tag">M</span>
-                        </div>
-                        <div class="sens-weekly-col">
-                            <div class="sens-weekly-bar-track">
-                                <div class="sens-weekly-bar-fill" style="height: 0%;"></div>
-                            </div>
-                            <span class="sens-weekly-day-tag">X</span>
-                        </div>
-                        <div class="sens-weekly-col">
-                            <div class="sens-weekly-bar-track">
-                                <div class="sens-weekly-bar-fill" style="height: 0%;"></div>
-                            </div>
-                            <span class="sens-weekly-day-tag">J</span>
-                        </div>
-                        <div class="sens-weekly-col">
-                            <div class="sens-weekly-bar-track">
-                                <div class="sens-weekly-bar-fill" style="height: 0%;"></div>
-                            </div>
-                            <span class="sens-weekly-day-tag">V</span>
-                        </div>
-                        <div class="sens-weekly-col">
-                            <div class="sens-weekly-bar-track">
-                                <div class="sens-weekly-bar-fill" style="height: 0%;"></div>
-                            </div>
-                            <span class="sens-weekly-day-tag">S</span>
-                        </div>
                     </div>
                 </div>
 
@@ -3037,19 +2860,13 @@
                             style="display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 12px;">
                             <div>
                                 <span style="font-size: 2rem; font-weight: 800; color: #FFFFFF;"
-                                    id="dashWaterConsumed">1,250</span>
+                                    id="dashWaterConsumed">-</span>
                                 <span style="font-size: 12px; color: var(--text-muted);">/ 2,000 ml</span>
                             </div>
                             <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogWater"
                                 style="border-radius: 20px; font-weight: 700; border-color: rgba(56, 189, 248, 0.4); color: #38BDF8;">
                                 + 250 ml
                             </button>
-                        </div>
-                        <!-- 7 day mini dots -->
-                        <div
-                            style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.04); padding-top: 8px;">
-                            <span>7</span><span
-                                style="color: #38BDF8; font-weight: 800;">8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
                         </div>
                     </div>
 
@@ -3061,19 +2878,13 @@
                             style="display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 12px;">
                             <div>
                                 <span style="font-size: 2rem; font-weight: 800; color: #FFFFFF;"
-                                    id="dashFoodConsumed">1,290</span>
+                                    id="dashFoodConsumed">-</span>
                                 <span style="font-size: 12px; color: var(--text-muted);">/ 1,800 kcal</span>
                             </div>
                             <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogMeal"
                                 style="border-radius: 20px; font-weight: 700; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">
                                 + Cargar
                             </button>
-                        </div>
-                        <!-- 7 day mini dots -->
-                        <div
-                            style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.04); padding-top: 8px;">
-                            <span>7</span><span>8</span><span
-                                style="color: #10B981; font-weight: 800;">9</span><span>10</span><span>11</span><span>12</span><span>13</span>
                         </div>
                     </div>
                 </div>
