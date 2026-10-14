@@ -2000,7 +2000,13 @@ function openUserPortal(forceOnboarding = false) {
         coachBar.style.display = isAdmin ? 'flex' : 'none';
         if (isAdmin) {
             loadCoachAthletesList();
+            renderCoachAthletesHub();
         }
+    }
+
+    const navCoachHub = document.getElementById('navCoachHub');
+    if (navCoachHub) {
+        navCoachHub.style.display = isAdmin ? 'inline-block' : 'none';
     }
 
     const adminIndicatorBadge = document.getElementById('adminIndicatorBadge');
@@ -3474,8 +3480,14 @@ function renderWorkoutDay(dayKey) {
         return;
     }
 
+    // Sincronizar Hero Card de Sesión de Hoy
+    const heroTitle = document.getElementById('heroWorkoutTitle');
+    const heroSub = document.getElementById('heroWorkoutSubtitle');
+    if (heroTitle) heroTitle.textContent = dayData.title || `Día: ${dayKey}`;
+    if (heroSub) heroSub.textContent = `${exercisesToShow.length} Ejercicios asignados • ~${Math.max(30, exercisesToShow.length * 12)} min estimadas • Descanso cronometrado por serie`;
+
     let html = '';
-    exercisesToShow.forEach(ex => {
+    exercisesToShow.forEach((ex, idx) => {
         let setsRows = '';
         for (let i = 1; i <= ex.sets; i++) {
             setsRows += `
@@ -3498,8 +3510,13 @@ function renderWorkoutDay(dayKey) {
             <div class="exercise-item-card" data-exercise-id="${ex.id}">
                 <div class="exercise-header-row">
                     <div>
-                        <h3 class="exercise-title">${ex.name}</h3>
-                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;"><strong>Pauta biomecánica:</strong> ${ex.notes}</div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px; font-weight: 700;">Ejercicio ${idx + 1} de ${exercisesToShow.length}</span>
+                        </div>
+                        <h3 class="exercise-title" style="margin-top: 4px;">${ex.name}</h3>
+                        <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 11.5px; color: var(--accent-primary);">
+                            💡 <strong>¿Para qué sirve?</strong> ${ex.notes || 'Fortalecimiento biomecánico y postura funcional'}
+                        </div>
                     </div>
                     <div class="exercise-meta-pills">
                         <span class="pill pill-dark">${ex.sets} Series</span>
@@ -4294,7 +4311,1094 @@ function initCoachOS() {
         roleSelector.addEventListener('change', updateWhatsAppLink);
         updateWhatsAppLink();
     }
+
+    // Botón de Apertura de Hub desde la barra superior de coach
+    const btnOpenHub = document.getElementById('btnOpenCoachHub');
+    if (btnOpenHub) {
+        btnOpenHub.addEventListener('click', () => {
+            switchPortalView('coachHubView');
+            renderCoachAthletesHub();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Botón de Actualizar en Coach Hub
+    const refreshTableBtn = document.getElementById('btnCoachHubRefreshTable');
+    if (refreshTableBtn) {
+        refreshTableBtn.addEventListener('click', async () => {
+            await loadCoachAthletesList();
+            renderCoachAthletesHub();
+            showSensToast('🔄 Lista de atletas sincronizada con éxito.', 'champagne');
+        });
+    }
+
+    // Botón Ver como Alumno desde Header del Hub
+    const viewStudentBtn = document.getElementById('btnCoachHubViewActiveStudent');
+    if (viewStudentBtn) {
+        viewStudentBtn.addEventListener('click', () => {
+            switchPortalView('dashView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Navegación de Sub-Tabs dentro de Coach Hub
+    const subnavBtns = document.querySelectorAll('#coachHubSubnav .coach-subnav-btn');
+    subnavBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            subnavBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const targetPaneId = btn.getAttribute('data-subtab');
+            document.querySelectorAll('#coachHubView .coach-subpane').forEach(p => p.classList.remove('active'));
+            const targetPane = document.getElementById(targetPaneId);
+            if (targetPane) targetPane.classList.add('active');
+        });
+    });
+
+    // Inicializar submódulos del Hub
+    initCoachAthletesHub();
+    initCoachNutritionPrescription();
+    initCoachWorkoutsPrescription();
+    initCoachDashboardNote();
+    initMemberClarityActions();
 }
+
+// -----------------------------------------------------------------------------
+// SUB-MÓDULO 1: GESTIÓN DE ATLETAS & APROBACIONES
+// -----------------------------------------------------------------------------
+function getConsolidatedCoachAthletes() {
+    const dbAthletes = window.__coachAthletesCache || [];
+    const roster = [];
+    const seenIds = new Set();
+
+    dbAthletes.forEach(ath => {
+        seenIds.add(ath.id);
+        roster.push({
+            id: ath.id,
+            isDb: true,
+            full_name: ath.full_name || ath.email || 'Atleta SENS',
+            email: ath.email || `${ath.id.slice(0, 8)}@sens.com`,
+            user_type: ath.user_type || 'client_presencial_vip',
+            active_plan_name: ath.active_plan_name || 'Presencial 1 a 1 VIP (CABA)',
+            subscription_status: ath.subscription_status || 'pending_activation',
+            current_weight: ath.current_weight || 75,
+            created_at: ath.created_at || new Date().toISOString()
+        });
+    });
+
+    const mockList = [
+        {
+            id: 'mock_vip',
+            isDb: false,
+            full_name: 'Roberto Gómez',
+            email: 'roberto.gomez@gmail.com',
+            user_type: 'client_presencial_vip',
+            active_plan_name: 'Presencial 1 a 1 VIP (CABA)',
+            subscription_status: 'active',
+            current_weight: 78.5,
+            created_at: '2026-09-15T10:00:00Z'
+        },
+        {
+            id: 'mock_duo',
+            isDb: false,
+            full_name: 'Laura & Marcos',
+            email: 'laura.marcos@duo.com',
+            user_type: 'client_presencial_group',
+            active_plan_name: 'Presencial Dúo / Grupo (CABA)',
+            subscription_status: 'active',
+            current_weight: 71.0,
+            created_at: '2026-09-20T14:30:00Z'
+        },
+        {
+            id: 'mock_online_prem',
+            isDb: false,
+            full_name: 'Esteban Bianchi',
+            email: 'esteban.bianchi@tech.com',
+            user_type: 'client_online_premium',
+            active_plan_name: 'Online Premium (Seguimiento Diario)',
+            subscription_status: 'pending_activation',
+            current_weight: 84.2,
+            created_at: '2026-10-12T09:15:00Z'
+        },
+        {
+            id: 'mock_online_basic',
+            isDb: false,
+            full_name: 'Carla Méndez',
+            email: 'carla.mendez@wellness.com',
+            user_type: 'client_online_basic',
+            active_plan_name: 'Online Básico',
+            subscription_status: 'active',
+            current_weight: 63.5,
+            created_at: '2026-10-01T11:20:00Z'
+        }
+    ];
+
+    mockList.forEach(m => {
+        if (!seenIds.has(m.id)) {
+            const overrideStr = localStorage.getItem(`sens_athlete_override_${m.id}`);
+            if (overrideStr) {
+                try { Object.assign(m, JSON.parse(overrideStr)); } catch (e) {}
+            }
+            roster.push(m);
+        }
+    });
+
+    return roster;
+}
+
+function initCoachAthletesHub() {
+    const searchInput = document.getElementById('coachSearchAthleteInput');
+    const filterBtns = document.querySelectorAll('.coach-filter-status');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const term = searchInput.value.trim().toLowerCase();
+            const activeFilter = document.querySelector('.coach-filter-status.pill-champagne')?.getAttribute('data-status') || 'all';
+            renderCoachAthletesHub(activeFilter, term);
+        });
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => {
+                b.classList.remove('pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('pill-champagne');
+            const status = btn.getAttribute('data-status') || 'all';
+            const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            renderCoachAthletesHub(status, term);
+        });
+    });
+}
+
+function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
+    const container = document.getElementById('coachAthletesListContainer');
+    if (!container) return;
+
+    const allAthletes = getConsolidatedCoachAthletes();
+
+    // KPIs & Badges
+    const totalCount = allAthletes.length;
+    const pendingCount = allAthletes.filter(a => a.subscription_status === 'pending_activation').length;
+    const activeCount = allAthletes.filter(a => a.subscription_status === 'active').length;
+    const presencialCount = allAthletes.filter(a => (a.user_type || '').includes('presencial')).length;
+    const onlineCount = allAthletes.filter(a => (a.user_type || '').includes('online')).length;
+
+    const kpiTotal = document.getElementById('kpiCoachTotalAthletes');
+    const kpiPending = document.getElementById('kpiCoachPendingAthletes');
+    const kpiActive = document.getElementById('kpiCoachActiveAthletes');
+    const kpiRatio = document.getElementById('kpiCoachPresencialVsOnline');
+    const badgePending = document.getElementById('coachPendingCountBadge');
+    const badgeActive = document.getElementById('coachActiveCountBadge');
+
+    if (kpiTotal) kpiTotal.textContent = totalCount;
+    if (kpiPending) kpiPending.textContent = pendingCount;
+    if (kpiActive) kpiActive.textContent = activeCount;
+    if (kpiRatio) kpiRatio.textContent = `${presencialCount} Presenc. / ${onlineCount} Online`;
+    if (badgePending) badgePending.textContent = `${pendingCount} Pendiente${pendingCount === 1 ? '' : 's'}`;
+    if (badgeActive) badgeActive.textContent = `${activeCount} Activo${activeCount === 1 ? '' : 's'}`;
+
+    // Filter
+    let filtered = allAthletes;
+    if (statusFilter !== 'all') {
+        filtered = filtered.filter(a => a.subscription_status === statusFilter);
+    }
+    if (searchTerm) {
+        filtered = filtered.filter(a => 
+            a.full_name.toLowerCase().includes(searchTerm) || 
+            a.email.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+                <p>No se encontraron alumnos con los filtros seleccionados.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    filtered.forEach(ath => {
+        const parts = ath.full_name.trim().split(' ');
+        let initials = parts[0] ? parts[0][0].toUpperCase() : 'S';
+        if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0].toUpperCase();
+
+        const isAct = (ath.subscription_status === 'active');
+        const isPend = (ath.subscription_status === 'pending_activation');
+
+        let statusBadgeHtml = '';
+        if (isAct) {
+            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #10B981; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.15);">🟢 ACTIVO</span>';
+        } else if (isPend) {
+            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #F59E0B; border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.15);">⚠️ PENDIENTE ACTIVACIÓN</span>';
+        } else {
+            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #EF4444; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15);">⏸ PAUSADO</span>';
+        }
+
+        const toggleBtnHtml = isAct
+            ? `<button type="button" class="btn btn-outline btn-sm btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="active" style="font-size: 11px; padding: 5px 12px; color: #F59E0B; border-color: rgba(245, 158, 11, 0.4);">⏸ Pausar</button>`
+            : `<button type="button" class="btn btn-primary btn-sm btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="${ath.subscription_status}" style="font-size: 11px; padding: 5px 12px; font-weight: 800;">✓ Aprobar Acceso</button>`;
+
+        const planKey = ath.user_type || 'client_presencial_vip';
+
+        html += `
+            <div class="coach-athlete-card ${isPend ? 'is-pending' : ''}">
+                <div class="coach-athlete-info">
+                    <div class="coach-athlete-avatar">${initials}</div>
+                    <div class="coach-athlete-meta">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="coach-athlete-name">${ath.full_name}</span>
+                            ${statusBadgeHtml}
+                        </div>
+                        <span class="coach-athlete-email">${ath.email}</span>
+                        <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
+                            <label style="font-size: 10.5px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Plan:</label>
+                            <select class="input-control coach-athlete-plan-select" data-athlete-id="${ath.id}" style="width: auto; min-width: 210px; padding: 2px 8px; font-size: 11px; height: 26px; margin-bottom: 0; background: var(--bg-surface);">
+                                <option value="client_presencial_vip" ${planKey === 'client_presencial_vip' ? 'selected' : ''}>Presencial 1 a 1 VIP (CABA)</option>
+                                <option value="client_presencial_group" ${planKey === 'client_presencial_group' ? 'selected' : ''}>Presencial Dúo / Grupo</option>
+                                <option value="client_online_premium" ${planKey === 'client_online_premium' ? 'selected' : ''}>Online Premium (Diario)</option>
+                                <option value="client_online_basic" ${planKey === 'client_online_basic' ? 'selected' : ''}>Online Básico</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="coach-athlete-actions">
+                    ${toggleBtnHtml}
+                    <button type="button" class="btn btn-outline btn-sm btn-hub-prescribe-nutri" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px;">🥑 Prescribir Nutrición</button>
+                    <button type="button" class="btn btn-outline btn-sm btn-hub-prescribe-workout" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px;">🏋️ Prescribir Rutina</button>
+                    <button type="button" class="btn btn-outline btn-sm btn-hub-inspect-student" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">👁 Ver como Alumno</button>
+                    <a href="https://wa.me/?text=${encodeURIComponent(`Hola ${ath.full_name}, te escribo de SENS para coordinar tu plan.`)}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="font-size: 11px; padding: 5px 10px; color: #25D366; border-color: rgba(37, 211, 102, 0.4);">💬 WA</a>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    // Delegación de eventos en las tarjetas de atletas
+    container.querySelectorAll('.btn-hub-toggle-status').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const athId = btn.getAttribute('data-athlete-id');
+            const currentStatus = btn.getAttribute('data-current-status');
+            const newStatus = (currentStatus === 'active') ? 'paused' : 'active';
+            await updateAthleteSubscriptionStatus(athId, newStatus);
+        });
+    });
+
+    container.querySelectorAll('.coach-athlete-plan-select').forEach(sel => {
+        sel.addEventListener('change', async (e) => {
+            const athId = sel.getAttribute('data-athlete-id');
+            const newPlanKey = e.target.value;
+            await updateAthletePlanType(athId, newPlanKey);
+        });
+    });
+
+    container.querySelectorAll('.btn-hub-prescribe-nutri').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const athId = btn.getAttribute('data-athlete-id');
+            selectAthleteForPrescription('nutri', athId);
+        });
+    });
+
+    container.querySelectorAll('.btn-hub-prescribe-workout').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const athId = btn.getAttribute('data-athlete-id');
+            selectAthleteForPrescription('workout', athId);
+        });
+    });
+
+    container.querySelectorAll('.btn-hub-inspect-student').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const athId = btn.getAttribute('data-athlete-id');
+            inspectAthleteAsCoach(athId);
+        });
+    });
+}
+
+async function updateAthleteSubscriptionStatus(athId, newStatus) {
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            await supabaseClient.from('profiles').update({ subscription_status: newStatus }).eq('id', athId);
+        } catch (e) {
+            console.warn('Error al actualizar membresía en Supabase:', e);
+        }
+    }
+
+    if (window.__coachAthletesCache) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached) cached.subscription_status = newStatus;
+    }
+    if (athId.startsWith('mock_')) {
+        const stored = JSON.parse(localStorage.getItem(`sens_athlete_override_${athId}`) || '{}');
+        stored.subscription_status = newStatus;
+        localStorage.setItem(`sens_athlete_override_${athId}`, JSON.stringify(stored));
+    }
+
+    renderCoachAthletesHub();
+    loadCoachAthletesList();
+    showSensToast(
+        newStatus === 'active' 
+            ? '✓ ¡Atleta aprobado con éxito! Acceso y entrenamientos habilitados.' 
+            : '⏸ Membresía pausada.', 
+        'champagne'
+    );
+}
+
+async function updateAthletePlanType(athId, newPlanKey) {
+    const planNames = {
+        client_presencial_vip: 'Presencial 1 a 1 VIP (CABA)',
+        client_presencial_group: 'Presencial Dúo / Grupo (CABA)',
+        client_online_premium: 'Online Premium (Seguimiento Diario)',
+        client_online_basic: 'Online Básico'
+    };
+    const newPlanName = planNames[newPlanKey] || 'Plan SENS';
+
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            await supabaseClient.from('profiles').update({
+                user_type: newPlanKey,
+                active_plan_name: newPlanName
+            }).eq('id', athId);
+        } catch (e) {
+            console.warn('Error al actualizar plan en Supabase:', e);
+        }
+    }
+
+    if (window.__coachAthletesCache) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached) {
+            cached.user_type = newPlanKey;
+            cached.active_plan_name = newPlanName;
+        }
+    }
+    if (athId.startsWith('mock_')) {
+        const stored = JSON.parse(localStorage.getItem(`sens_athlete_override_${athId}`) || '{}');
+        stored.user_type = newPlanKey;
+        stored.active_plan_name = newPlanName;
+        localStorage.setItem(`sens_athlete_override_${athId}`, JSON.stringify(stored));
+    }
+
+    loadCoachAthletesList();
+    showSensToast(`✓ Plan actualizado a: ${newPlanName}`, 'champagne');
+}
+
+function selectAthleteForPrescription(type, athId) {
+    if (type === 'nutri') {
+        const subnavBtn = document.querySelector('#coachHubSubnav [data-subtab="paneNutrition"]');
+        if (subnavBtn) subnavBtn.click();
+        const selector = document.getElementById('coachNutritionAthleteSelector');
+        if (selector) {
+            selector.value = athId;
+            loadCoachAthleteNutrition(athId);
+        }
+    } else {
+        const subnavBtn = document.querySelector('#coachHubSubnav [data-subtab="paneWorkouts"]');
+        if (subnavBtn) subnavBtn.click();
+        const selector = document.getElementById('coachWorkoutAthleteSelector');
+        if (selector) {
+            selector.value = athId;
+            loadCoachAthleteWorkouts(athId);
+        }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function inspectAthleteAsCoach(athId) {
+    const athletes = getConsolidatedCoachAthletes();
+    const target = athletes.find(a => a.id === athId);
+    if (!target) return;
+
+    if (athId.startsWith('mock_')) {
+        const keyMap = {
+            mock_vip: 'client_presencial_vip',
+            mock_duo: 'client_presencial_group',
+            mock_online_prem: 'client_online_premium',
+            mock_online_basic: 'client_online_basic'
+        };
+        applyUserProfile(keyMap[athId] || 'client_presencial_vip');
+    } else {
+        applyDatabaseAthlete(target);
+    }
+
+    switchPortalView('dashView');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showSensToast(`👁 Inspeccionando vista de ${target.full_name}.`, 'champagne');
+}
+
+// -----------------------------------------------------------------------------
+// SUB-MÓDULO 2: PRESCRIPCIÓN DE NUTRICIÓN, CALORÍAS Y ALIMENTOS (REGLA DE 3)
+// -----------------------------------------------------------------------------
+function initCoachNutritionPrescription() {
+    const athleteSel = document.getElementById('coachNutritionAthleteSelector');
+    const kcalInput = document.getElementById('coachTargetKcalInput');
+    const protInput = document.getElementById('coachTargetProtInput');
+    const carbsInput = document.getElementById('coachTargetCarbsInput');
+    const fatsInput = document.getElementById('coachTargetFatsInput');
+    const waterInput = document.getElementById('coachTargetWaterInput');
+    const noteInput = document.getElementById('coachNutritionDirectiveInput');
+    const saveBtn = document.getElementById('btnSaveCoachNutritionPrescription');
+
+    function populateSelector() {
+        if (!athleteSel) return;
+        const roster = getConsolidatedCoachAthletes();
+        let html = '';
+        roster.forEach(ath => {
+            html += `<option value="${ath.id}">${ath.full_name} (${ath.active_plan_name})</option>`;
+        });
+        athleteSel.innerHTML = html;
+    }
+    populateSelector();
+
+    if (athleteSel) {
+        athleteSel.addEventListener('change', () => {
+            loadCoachAthleteNutrition(athleteSel.value);
+        });
+    }
+
+    // Presets calóricos
+    document.querySelectorAll('.coach-preset-kcal').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const kcal = parseInt(btn.getAttribute('data-kcal'), 10);
+            if (kcalInput) kcalInput.value = kcal;
+            if (kcal === 1800) {
+                if (protInput) protInput.value = 160;
+                if (carbsInput) carbsInput.value = 150;
+                if (fatsInput) fatsInput.value = 60;
+            } else if (kcal === 2100) {
+                if (protInput) protInput.value = 160;
+                if (carbsInput) carbsInput.value = 220;
+                if (fatsInput) fatsInput.value = 65;
+            } else if (kcal === 2400) {
+                if (protInput) protInput.value = 165;
+                if (carbsInput) carbsInput.value = 280;
+                if (fatsInput) fatsInput.value = 70;
+            } else if (kcal === 2700) {
+                if (protInput) protInput.value = 175;
+                if (carbsInput) carbsInput.value = 330;
+                if (fatsInput) fatsInput.value = 75;
+            }
+            updateMacroPercentageIndicators();
+        });
+    });
+
+    [kcalInput, protInput, carbsInput, fatsInput].forEach(inp => {
+        if (inp) inp.addEventListener('input', updateMacroPercentageIndicators);
+    });
+
+    function updateMacroPercentageIndicators() {
+        const kcal = parseFloat(kcalInput ? kcalInput.value : 2200) || 2200;
+        const p = parseFloat(protInput ? protInput.value : 160) || 160;
+        const c = parseFloat(carbsInput ? carbsInput.value : 220) || 220;
+        const f = parseFloat(fatsInput ? fatsInput.value : 70) || 70;
+
+        const pPct = Math.round((p * 4 / kcal) * 100);
+        const cPct = Math.round((c * 4 / kcal) * 100);
+        const fPct = Math.round((f * 9 / kcal) * 100);
+
+        const pBadge = document.getElementById('coachProtPctBadge');
+        const cBadge = document.getElementById('coachCarbsPctBadge');
+        const fBadge = document.getElementById('coachFatsPctBadge');
+
+        if (pBadge) pBadge.textContent = `${pPct}% (${p * 4} kcal)`;
+        if (cBadge) cBadge.textContent = `${cPct}% (${c * 4} kcal)`;
+        if (fBadge) fBadge.textContent = `${fPct}% (${f * 9} kcal)`;
+    }
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            const athId = athleteSel ? athleteSel.value : 'mock_vip';
+            const kcal = parseInt(kcalInput.value, 10) || 2200;
+            const prot = parseInt(protInput.value, 10) || 160;
+            const carbs = parseInt(carbsInput.value, 10) || 220;
+            const fats = parseInt(fatsInput.value, 10) || 70;
+            const water = parseFloat(waterInput ? waterInput.value : 2.5) || 2.5;
+            const directive = noteInput ? noteInput.value.trim() : '';
+
+            // Alimentos seleccionados con regla de 3 simple
+            const prescribedFoods = [];
+            document.querySelectorAll('#coachFoodSelectionGrid .coach-food-cb:checked').forEach(cb => {
+                const foodId = cb.getAttribute('data-food-id');
+                const food = FOOD_CATALOG.find(f => f.id === foodId);
+                const gramInput = document.querySelector(`.coach-food-grams[data-food-id="${foodId}"]`);
+                const grams = gramInput ? parseInt(gramInput.value, 10) || 100 : 100;
+                if (food) {
+                    prescribedFoods.push({
+                        id: food.id,
+                        name: food.name,
+                        cat: food.cat,
+                        grams: grams,
+                        cal: Math.round((grams * (food.calPer100 || 0)) / 100),
+                        protein: Math.round(((grams * (food.protPer100 || 0)) / 100) * 10) / 10,
+                        carbs: Math.round(((grams * (food.carbsPer100 || 0)) / 100) * 10) / 10,
+                        fats: Math.round(((grams * (food.fatsPer100 || 0)) / 100) * 10) / 10
+                    });
+                }
+            });
+
+            const prescriptionData = {
+                target_calories: kcal,
+                target_protein: prot,
+                target_carbs: carbs,
+                target_fats: fats,
+                target_water: water,
+                directive_note: directive,
+                prescribed_foods: prescribedFoods,
+                updated_at: new Date().toISOString()
+            };
+
+            localStorage.setItem(`sens_prescribed_nutrition_${athId}`, JSON.stringify(prescriptionData));
+
+            if (supabaseClient && !athId.startsWith('mock_')) {
+                try {
+                    await supabaseClient.from('profiles').update({
+                        prescribed_nutrition: prescriptionData
+                    }).eq('id', athId);
+                } catch (e) {
+                    console.warn('Error al guardar nutrición en Supabase:', e);
+                }
+            }
+
+            syncMemberNutritionPrescription(athId, prescriptionData);
+            showSensToast(`💾 Prescripción nutricional guardada con éxito para el alumno.`, 'champagne');
+        });
+    }
+
+    renderCoachFoodSelectionGrid();
+    updateMacroPercentageIndicators();
+}
+
+function loadCoachAthleteNutrition(athId) {
+    const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`);
+    let data = {
+        target_calories: 2200,
+        target_protein: 160,
+        target_carbs: 220,
+        target_fats: 70,
+        target_water: 2.5,
+        directive_note: 'Priorizá llegar a tu meta de proteína diaria repartida en las comidas principales y mantener hidratación constante antes de entrenar.',
+        prescribed_foods: []
+    };
+
+    if (raw) {
+        try { Object.assign(data, JSON.parse(raw)); } catch (e) {}
+    }
+
+    const kcalInput = document.getElementById('coachTargetKcalInput');
+    const protInput = document.getElementById('coachTargetProtInput');
+    const carbsInput = document.getElementById('coachTargetCarbsInput');
+    const fatsInput = document.getElementById('coachTargetFatsInput');
+    const waterInput = document.getElementById('coachTargetWaterInput');
+    const noteInput = document.getElementById('coachNutritionDirectiveInput');
+
+    if (kcalInput) kcalInput.value = data.target_calories;
+    if (protInput) protInput.value = data.target_protein;
+    if (carbsInput) carbsInput.value = data.target_carbs;
+    if (fatsInput) fatsInput.value = data.target_fats;
+    if (waterInput) waterInput.value = data.target_water;
+    if (noteInput) noteInput.value = data.directive_note;
+
+    renderCoachFoodSelectionGrid(data.prescribed_foods);
+    const pBadge = document.getElementById('coachProtPctBadge');
+    if (pBadge) {
+        const kcal = data.target_calories || 2200;
+        const pPct = Math.round((data.target_protein * 4 / kcal) * 100);
+        pBadge.textContent = `${pPct}% (${data.target_protein * 4} kcal)`;
+    }
+}
+
+function renderCoachFoodSelectionGrid(prescribedList = []) {
+    const container = document.getElementById('coachFoodSelectionGrid');
+    if (!container) return;
+
+    const prescribedMap = new Map();
+    prescribedList.forEach(p => prescribedMap.set(p.id, p.grams));
+
+    const foods = FOOD_CATALOG.slice(0, 14);
+
+    let html = '';
+    foods.forEach(f => {
+        const isChecked = prescribedMap.has(f.id);
+        const grams = isChecked ? prescribedMap.get(f.id) : (f.defaultGrams || 100);
+        const cal = Math.round((grams * (f.calPer100 || 0)) / 100);
+        const prot = Math.round(((grams * (f.protPer100 || 0)) / 100) * 10) / 10;
+
+        html += `
+            <div class="coach-food-item" style="background: ${isChecked ? 'rgba(229, 203, 167, 0.08)' : 'var(--bg-surface)'}; border-color: ${isChecked ? 'rgba(229, 203, 167, 0.4)' : 'var(--border-subtle)'};">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" class="coach-food-cb" data-food-id="${f.id}" ${isChecked ? 'checked' : ''} style="cursor: pointer; width: 18px; height: 18px;">
+                    <div>
+                        <strong style="font-size: 13px; color: #FFFFFF; display: block;">${f.name}</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);"><span class="coach-food-cal-display" data-food-id="${f.id}">${cal}</span> kcal • <span class="coach-food-prot-display" data-food-id="${f.id}">${prot}g</span> prot</span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                    <button type="button" class="btn btn-outline btn-sm btn-coach-stepper" data-food-id="${f.id}" data-delta="-20" style="padding: 2px 6px; font-size: 11px; height: 26px;">-</button>
+                    <input type="number" class="input-control coach-food-grams" data-food-id="${f.id}" value="${grams}" step="10" min="20" max="600" style="width: 60px; text-align: center; padding: 2px 4px; font-size: 12px; height: 26px; margin-bottom: 0;">
+                    <span style="font-size: 11px; color: var(--text-muted);">g</span>
+                    <button type="button" class="btn btn-outline btn-sm btn-coach-stepper" data-food-id="${f.id}" data-delta="20" style="padding: 2px 6px; font-size: 11px; height: 26px;">+</button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.btn-coach-stepper').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const foodId = btn.getAttribute('data-food-id');
+            const delta = parseInt(btn.getAttribute('data-delta'), 10);
+            const input = container.querySelector(`.coach-food-grams[data-food-id="${foodId}"]`);
+            if (input) {
+                let current = parseInt(input.value, 10) || 100;
+                current = Math.max(20, current + delta);
+                input.value = current;
+                recalcCoachFoodItem(foodId, current);
+            }
+        });
+    });
+
+    container.querySelectorAll('.coach-food-grams').forEach(inp => {
+        inp.addEventListener('input', () => {
+            const foodId = inp.getAttribute('data-food-id');
+            const grams = parseInt(inp.value, 10) || 0;
+            recalcCoachFoodItem(foodId, grams);
+        });
+    });
+
+    container.querySelectorAll('.coach-food-cb').forEach(cb => {
+        cb.addEventListener('change', () => {
+            const item = cb.closest('.coach-food-item');
+            if (item) {
+                item.style.background = cb.checked ? 'rgba(229, 203, 167, 0.08)' : 'var(--bg-surface)';
+                item.style.borderColor = cb.checked ? 'rgba(229, 203, 167, 0.4)' : 'var(--border-subtle)';
+            }
+        });
+    });
+}
+
+function recalcCoachFoodItem(foodId, grams) {
+    const food = FOOD_CATALOG.find(f => f.id === foodId);
+    if (!food) return;
+
+    const calDisplay = document.querySelector(`.coach-food-cal-display[data-food-id="${foodId}"]`);
+    const protDisplay = document.querySelector(`.coach-food-prot-display[data-food-id="${foodId}"]`);
+
+    const cal = Math.round((grams * (food.calPer100 || 0)) / 100);
+    const prot = Math.round(((grams * (food.protPer100 || 0)) / 100) * 10) / 10;
+
+    if (calDisplay) calDisplay.textContent = cal;
+    if (protDisplay) protDisplay.textContent = `${prot}g`;
+}
+
+// -----------------------------------------------------------------------------
+// SUB-MÓDULO 3: PRESCRIPCIÓN DE RUTINAS Y EJERCICIOS (1 A 6 DÍAS)
+// -----------------------------------------------------------------------------
+let coachWorkoutState = {
+    activeAthleteId: 'mock_vip',
+    activeDay: 'day1'
+};
+
+function initCoachWorkoutsPrescription() {
+    const athleteSel = document.getElementById('coachWorkoutAthleteSelector');
+    const dayBtns = document.querySelectorAll('#coachDaySelectorBar .coach-day-btn');
+    const dayTitleInput = document.getElementById('coachDayTitleInput');
+    const addLibBtn = document.getElementById('btnCoachAddExerciseFromLib');
+    const saveDayBtn = document.getElementById('btnSaveCoachWorkoutDay');
+
+    function populateSelector() {
+        if (!athleteSel) return;
+        const roster = getConsolidatedCoachAthletes();
+        let html = '';
+        roster.forEach(ath => {
+            html += `<option value="${ath.id}">${ath.full_name} (${ath.active_plan_name})</option>`;
+        });
+        athleteSel.innerHTML = html;
+    }
+    populateSelector();
+
+    if (athleteSel) {
+        athleteSel.addEventListener('change', () => {
+            coachWorkoutState.activeAthleteId = athleteSel.value;
+            loadCoachAthleteWorkouts(athleteSel.value);
+        });
+    }
+
+    dayBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            dayBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            coachWorkoutState.activeDay = btn.getAttribute('data-day') || 'day1';
+            renderCoachAssignedExercises();
+        });
+    });
+
+    document.querySelectorAll('.coach-apply-template').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const template = btn.getAttribute('data-template');
+            applyCoachWorkoutTemplate(template);
+        });
+    });
+
+    if (addLibBtn) {
+        addLibBtn.addEventListener('click', () => {
+            const modal = document.getElementById('exerciseLibraryModal');
+            if (modal) {
+                modal.classList.add('active');
+                renderExerciseLibraryList();
+            }
+        });
+    }
+
+    if (saveDayBtn) {
+        saveDayBtn.addEventListener('click', () => {
+            saveCurrentCoachWorkoutDay();
+        });
+    }
+
+    renderCoachAssignedExercises();
+}
+
+function loadCoachAthleteWorkouts(athId) {
+    coachWorkoutState.activeAthleteId = athId;
+    renderCoachAssignedExercises();
+}
+
+function getCoachAthleteWorkoutData(athId) {
+    const raw = localStorage.getItem(`sens_prescribed_workouts_${athId}`);
+    if (raw) {
+        try { return JSON.parse(raw); } catch (e) {}
+    }
+    return JSON.parse(JSON.stringify(WORKOUT_DAYS_DATA));
+}
+
+function renderCoachAssignedExercises() {
+    const container = document.getElementById('coachAssignedExercisesContainer');
+    const titleInput = document.getElementById('coachDayTitleInput');
+    if (!container) return;
+
+    const data = getCoachAthleteWorkoutData(coachWorkoutState.activeAthleteId);
+    const day = data[coachWorkoutState.activeDay] || { title: `Día: ${coachWorkoutState.activeDay}`, exercises: [] };
+
+    if (titleInput) titleInput.value = day.title;
+
+    if (!day.exercises || day.exercises.length === 0) {
+        container.innerHTML = `
+            <div style="background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: 10px; padding: 26px; text-align: center; color: var(--text-muted);">
+                <p style="margin-bottom: 12px;">No hay ejercicios asignados a este día todavía.</p>
+                <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('btnCoachAddExerciseFromLib').click()">
+                    + Agregar desde Biblioteca (50 Ejercicios)
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    day.exercises.forEach((ex, idx) => {
+        html += `
+            <div class="coach-ex-card" data-ex-id="${ex.id}">
+                <div style="flex: 1; min-width: 220px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">#${idx + 1}</span>
+                        <strong style="font-size: 14px; color: #FFFFFF;">${ex.name}</strong>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">${ex.notes || 'Pauta biomecánica asignada'}</div>
+                </div>
+                <div class="coach-ex-inputs">
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <label style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Series:</label>
+                        <input type="number" class="input-control coach-ex-sets" value="${ex.sets || 3}" min="1" max="10" style="width: 50px; padding: 2px 6px; height: 28px; margin-bottom: 0;">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <label style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Reps:</label>
+                        <input type="text" class="input-control coach-ex-reps" value="${ex.reps || '10'}" style="width: 60px; padding: 2px 6px; height: 28px; margin-bottom: 0;">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <label style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Peso (kg):</label>
+                        <input type="number" class="input-control coach-ex-weight" value="${ex.defaultWeight || 15}" step="0.5" style="width: 65px; padding: 2px 6px; height: 28px; margin-bottom: 0;">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <label style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Descanso (s):</label>
+                        <input type="number" class="input-control coach-ex-rest" value="${ex.rest || 75}" step="15" style="width: 60px; padding: 2px 6px; height: 28px; margin-bottom: 0;">
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm btn-coach-remove-ex" data-ex-id="${ex.id}" style="border-color: var(--danger); color: var(--danger); padding: 4px 8px; font-size: 11px;">✕</button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.btn-coach-remove-ex').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const exId = btn.getAttribute('data-ex-id');
+            const data = getCoachAthleteWorkoutData(coachWorkoutState.activeAthleteId);
+            if (data[coachWorkoutState.activeDay]) {
+                data[coachWorkoutState.activeDay].exercises = data[coachWorkoutState.activeDay].exercises.filter(x => x.id !== exId);
+                localStorage.setItem(`sens_prescribed_workouts_${coachWorkoutState.activeAthleteId}`, JSON.stringify(data));
+                renderCoachAssignedExercises();
+                showSensToast('Ejercicio removido de la rutina.', 'info');
+            }
+        });
+    });
+}
+
+function saveCurrentCoachWorkoutDay() {
+    const athId = coachWorkoutState.activeAthleteId;
+    const dayKey = coachWorkoutState.activeDay;
+    const titleInput = document.getElementById('coachDayTitleInput');
+    const container = document.getElementById('coachAssignedExercisesContainer');
+
+    const data = getCoachAthleteWorkoutData(athId);
+    if (!data[dayKey]) data[dayKey] = { title: `Día: ${dayKey}`, exercises: [] };
+
+    if (titleInput) data[dayKey].title = titleInput.value.trim() || `Día: ${dayKey}`;
+
+    const cards = container ? container.querySelectorAll('.coach-ex-card') : [];
+    cards.forEach(c => {
+        const exId = c.getAttribute('data-ex-id');
+        const exObj = data[dayKey].exercises.find(x => x.id === exId);
+        if (exObj) {
+            const setsInp = c.querySelector('.coach-ex-sets');
+            const repsInp = c.querySelector('.coach-ex-reps');
+            const weightInp = c.querySelector('.coach-ex-weight');
+            const restInp = c.querySelector('.coach-ex-rest');
+
+            if (setsInp) exObj.sets = parseInt(setsInp.value, 10) || 3;
+            if (repsInp) exObj.reps = repsInp.value.trim() || '10';
+            if (weightInp) exObj.defaultWeight = parseFloat(weightInp.value) || 15;
+            if (restInp) exObj.rest = parseInt(restInp.value, 10) || 75;
+        }
+    });
+
+    localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
+
+    if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
+        Object.assign(WORKOUT_DAYS_DATA, data);
+        renderWorkoutDay(AppState.currentDay || 'day1');
+        renderMonthlyCalendar();
+    }
+
+    showSensToast(`💾 Rutina de ${data[dayKey].title} guardada con éxito.`, 'champagne');
+}
+
+function applyCoachWorkoutTemplate(templateKey) {
+    const athId = coachWorkoutState.activeAthleteId;
+    const data = getCoachAthleteWorkoutData(athId);
+
+    if (templateKey === 'fuerza3d') {
+        data.day1 = {
+            title: 'Día 1: Tren Superior (Empuje / Tirón)',
+            exercises: [
+                { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', sets: 4, reps: '8-10', rest: 90, defaultWeight: 22, notes: 'Escápulas retraídas' },
+                { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano en Banco', sets: 4, reps: '10-12', rest: 75, defaultWeight: 18, notes: 'Sin rotar tronco' },
+                { id: 'ex-p4', name: 'Press Militar Sentado con Mancuernas', sets: 3, reps: '10', rest: 75, defaultWeight: 14, notes: 'Pecho alto' }
+            ]
+        };
+        data.day2 = {
+            title: 'Día 2: Tren Inferior (Fuerza & Cadera)',
+            exercises: [
+                { id: 'ex-q1', name: 'Sentadilla Goblet con Mancuerna', sets: 4, reps: '10-12', rest: 90, defaultWeight: 24, notes: 'Profundidad cómoda' },
+                { id: 'ex-h1', name: 'Peso Muerto Rumano con Mancuernas', sets: 4, reps: '8-10', rest: 90, defaultWeight: 26, notes: 'Bisagra de cadera' },
+                { id: 'ex-q5', name: 'Estocadas Búlgaras con Mancuernas', sets: 3, reps: '10', rest: 75, defaultWeight: 12, notes: 'Control excéntrico' }
+            ]
+        };
+        data.day3 = {
+            title: 'Día 3: Full Body & Cadena Posterior',
+            exercises: [
+                { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: 4, reps: '10-12', rest: 90, defaultWeight: 45, notes: 'Pausa 2s arriba' },
+                { id: 'ex-t2', name: 'Jalón al Pecho en Polea', sets: 4, reps: '10-12', rest: 75, defaultWeight: 40, notes: 'Dorsales activos' },
+                { id: 'ex-p6', name: 'Flexiones con Pausa', sets: 3, reps: '12-15', rest: 60, defaultWeight: 0, notes: 'Core sólido' }
+            ]
+        };
+    } else if (templateKey === 'hipertrofia4d') {
+        data.day1.title = 'Día 1: Torso Hipertrofia (A)';
+        data.day2.title = 'Día 2: Piernas & Core (A)';
+        data.day3.title = 'Día 3: Torso Hipertrofia (B)';
+        data.day4 = {
+            title: 'Día 4: Piernas Enfoque Glúteos/Isquios (B)',
+            exercises: [
+                { id: 'ex-h1', name: 'Peso Muerto Rumano', sets: 4, reps: '10', rest: 90, defaultWeight: 24, notes: 'Tensión constante' },
+                { id: 'ex-q4', name: 'Prensa 45°', sets: 4, reps: '12', rest: 90, defaultWeight: 90, notes: 'Rango profundo' }
+            ]
+        };
+    } else if (templateKey === 'movilidad2d') {
+        data.day1.title = 'Día 1: Fuerza Funcional & Postura';
+        data.day2.title = 'Día 2: Movilidad, Cadera & Zona 2';
+    }
+
+    localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
+    renderCoachAssignedExercises();
+    showSensToast('⚡ Plantilla de entrenamiento aplicada.', 'champagne');
+}
+
+// -----------------------------------------------------------------------------
+// SUB-MÓDULO 4: MENSAJE & NOTA DE NICO EN DASHBOARD
+// -----------------------------------------------------------------------------
+function initCoachDashboardNote() {
+    const athleteSel = document.getElementById('coachDashNoteAthleteSelector');
+    const titleInp = document.getElementById('coachDashNoteTitleInput');
+    const bodyInp = document.getElementById('coachDashNoteBodyInput');
+    const saveBtn = document.getElementById('btnSaveCoachDashNote');
+
+    function populateSelector() {
+        if (!athleteSel) return;
+        const roster = getConsolidatedCoachAthletes();
+        let html = '';
+        roster.forEach(ath => {
+            html += `<option value="${ath.id}">${ath.full_name} (${ath.active_plan_name})</option>`;
+        });
+        athleteSel.innerHTML = html;
+    }
+    populateSelector();
+
+    if (athleteSel) {
+        athleteSel.addEventListener('change', () => {
+            loadCoachAthleteDashNote(athleteSel.value);
+        });
+    }
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            const athId = athleteSel ? athleteSel.value : 'mock_vip';
+            const title = titleInp ? titleInp.value.trim() : 'Foco de la Semana';
+            const body = bodyInp ? bodyInp.value.trim() : '';
+
+            const noteData = { title, body, updated_at: new Date().toISOString() };
+            localStorage.setItem(`sens_coach_dash_note_${athId}`, JSON.stringify(noteData));
+
+            const dashWeeklyNote = document.getElementById('dashCoachWeeklyNote');
+            if (dashWeeklyNote && body) dashWeeklyNote.textContent = body;
+
+            showSensToast('💾 Mensaje de Nico publicado en el Dashboard del alumno.', 'champagne');
+        });
+    }
+
+    loadCoachAthleteDashNote('mock_vip');
+}
+
+function loadCoachAthleteDashNote(athId) {
+    const raw = localStorage.getItem(`sens_coach_dash_note_${athId}`);
+    const titleInp = document.getElementById('coachDashNoteTitleInput');
+    const bodyInp = document.getElementById('coachDashNoteBodyInput');
+
+    if (raw) {
+        try {
+            const parsed = JSON.parse(raw);
+            if (titleInp) titleInp.value = parsed.title || '';
+            if (bodyInp) bodyInp.value = parsed.body || '';
+            return;
+        } catch (e) {}
+    }
+
+    if (titleInp) titleInp.value = 'Foco de la Semana: Precisión Biomecánica & Adherencia';
+    if (bodyInp) bodyInp.value = 'Excelente ritmo en tus sesiones. Esta semana mantené el foco en descansar los 75-90 segundos pautados y alcanzar tus 160g de proteína sin saltear comidas.';
+}
+
+// -----------------------------------------------------------------------------
+// MEJORAS DE USABILIDAD Y CLARIDAD PARA EL ALUMNO (SUITE 2.5)
+// -----------------------------------------------------------------------------
+function initMemberClarityActions() {
+    const btnDashGoWorkout = document.getElementById('btnDashGoWorkoutNow');
+    const dashQuickWorkoutBtn = document.getElementById('dashQuickWorkoutBtn');
+    const handleGoWorkout = () => {
+        switchPortalView('workoutView');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showSensToast('🏋️ Abriendo tu sesión pautada para hoy.', 'champagne', 2500);
+    };
+
+    if (btnDashGoWorkout) btnDashGoWorkout.addEventListener('click', handleGoWorkout);
+    if (dashQuickWorkoutBtn) dashQuickWorkoutBtn.addEventListener('click', handleGoWorkout);
+
+    const btnStartToday = document.getElementById('btnStartTodaySession');
+    if (btnStartToday) {
+        btnStartToday.addEventListener('click', () => {
+            if (!AppState.workoutStopwatchInterval) {
+                const btnToggleStopwatch = document.getElementById('btnToggleStopwatch');
+                if (btnToggleStopwatch) btnToggleStopwatch.click();
+            }
+            const exContainer = document.getElementById('exercisesContainer');
+            if (exContainer) {
+                exContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            playBeep(520, 0.15);
+            showSensToast('⏱️ ¡Sesión de entrenamiento iniciada! Registrá tus pesos y descansos.', 'success', 3500);
+        });
+    }
+
+    const currentAthId = (AppState.user && AppState.user.id) || 'mock_vip';
+    syncMemberNutritionPrescription(currentAthId);
+}
+
+function syncMemberNutritionPrescription(athId, forcedData = null) {
+    let data = forcedData;
+    if (!data) {
+        const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`);
+        if (raw) {
+            try { data = JSON.parse(raw); } catch (e) {}
+        }
+    }
+
+    if (!data) {
+        data = {
+            target_calories: 2200,
+            directive_note: 'Priorizá llegar a tu meta de proteína diaria repartida en las comidas principales y mantener hidratación constante antes de entrenar.',
+            prescribed_foods: [
+                { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', grams: 200, cal: 330, protein: 62 },
+                { id: 'fd-p2', name: 'Huevos de Campo Enteros', grams: 120, cal: 172, protein: 15 },
+                { id: 'fd-c1', name: 'Avena Tradicional Arrollada', grams: 80, cal: 311, protein: 11 },
+                { id: 'fd-c2', name: 'Arroz Yamani / Integral', grams: 150, cal: 168, protein: 3.9 }
+            ]
+        };
+    }
+
+    const kcalEl = document.getElementById('nutriPrescribedKcal');
+    const noteEl = document.getElementById('nutriPrescribedCoachNote');
+    const foodsGrid = document.getElementById('nutriPrescribedFoodsGrid');
+
+    if (kcalEl) kcalEl.innerHTML = `${(data.target_calories || 2200).toLocaleString('es-AR')} <span style="font-size: 1.1rem; color: var(--text-secondary); font-weight: 400;">kcal / día</span>`;
+    if (noteEl && data.directive_note) noteEl.textContent = `"${data.directive_note}"`;
+
+    if (foodsGrid && Array.isArray(data.prescribed_foods)) {
+        if (data.prescribed_foods.length === 0) {
+            foodsGrid.innerHTML = '<span style="font-size: 12px; color: var(--text-muted);">Estructurá tus comidas con los alimentos del banco base más abajo.</span>';
+        } else {
+            let html = '';
+            data.prescribed_foods.forEach(f => {
+                html += `
+                    <div style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.3); border-radius: 8px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 12.5px; font-weight: 700; color: #FFFFFF;">${f.name}</span>
+                        <span class="pill pill-champagne" style="font-size: 10px; padding: 2px 6px;">${f.grams}g (${f.cal} kcal)</span>
+                        <button type="button" class="btn btn-outline btn-sm btn-quick-add-prescribed" data-food-id="${f.id}" data-grams="${f.grams}" style="padding: 2px 6px; font-size: 10px; border-color: rgba(255,255,255,0.2);">+ Sumar hoy</button>
+                    </div>
+                `;
+            });
+            foodsGrid.innerHTML = html;
+
+            foodsGrid.querySelectorAll('.btn-quick-add-prescribed').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const foodId = btn.getAttribute('data-food-id');
+                    const grams = parseInt(btn.getAttribute('data-grams'), 10) || 100;
+                    const food = FOOD_CATALOG.find(x => x.id === foodId);
+                    if (food) {
+                        const cal = Math.round((grams * (food.calPer100 || 0)) / 100);
+                        const prot = Math.round(((grams * (food.protPer100 || 0)) / 100) * 10) / 10;
+                        if (!AppState.dailyNutrition) AppState.dailyNutrition = { calories: 0, protein: 0, carbs: 0, fats: 0 };
+                        AppState.dailyNutrition.calories += cal;
+                        AppState.dailyNutrition.protein += prot;
+                        localStorage.setItem('sens_daily_nutrition', JSON.stringify(AppState.dailyNutrition));
+                        updateDashboardRings();
+                        showSensToast(`🥗 ${food.name} (${grams}g) sumado a tu total de hoy (+${cal} kcal).`, 'success', 3000);
+                    }
+                });
+            });
+        }
+    }
+}
+
 
 function initQuickActionButtons() {
     const btnWater = document.getElementById('btnQuickLogWater');

@@ -7337,4 +7337,243 @@ input[type="range"]::-webkit-slider-thumb:hover {
     background: var(--accent-primary);
     color: #000;
     font-weight: 700;
-}
+}
+
+/* =========================================================================
+   SENS COACH OS & HUB STYLES (SUITE 2.5)
+   ========================================================================= */
+.coach-hub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.coach-subnav-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 12px;
+}
+
+.coach-subnav-btn {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.coach-subnav-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-primary);
+}
+
+.coach-subnav-btn.active {
+    background: var(--accent-primary);
+    color: #080809;
+    border-color: var(--accent-primary);
+    font-weight: 700;
+}
+
+.coach-subpane {
+    display: none;
+    animation: fadeInCoach 0.25s ease-out;
+}
+
+.coach-subpane.active {
+    display: block;
+}
+
+@keyframes fadeInCoach {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.coach-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.coach-stat-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.coach-stat-card.highlight-pending {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.05);
+}
+
+.coach-stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.coach-stat-val {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.coach-stat-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: block;
+    margin-top: 4px;
+}
+
+.coach-athlete-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.coach-athlete-card:hover {
+    border-color: rgba(229, 203, 167, 0.4);
+}
+
+.coach-athlete-card.is-pending {
+    border-color: rgba(245, 158, 11, 0.5);
+    background: rgba(245, 158, 11, 0.03);
+}
+
+.coach-athlete-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 240px;
+}
+
+.coach-athlete-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    color: #080809;
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.coach-athlete-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.coach-athlete-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.coach-athlete-email {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.coach-athlete-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.coach-food-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+}
+
+.coach-food-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.coach-day-selector {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.coach-day-btn {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.coach-day-btn:hover {
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.coach-day-btn.active {
+    background: var(--accent-primary);
+    color: #080809;
+    border-color: var(--accent-primary);
+}
+
+.coach-ex-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.coach-ex-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
