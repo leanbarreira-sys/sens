@@ -590,6 +590,43 @@
                 </div>
             </div>
 
+            <!-- 6.2 Regla Innegociable: Fórmula Dialógica "¿Entrenamos juntos? MAKE SENS." -->
+            <div class="panel" style="margin: 24px 0; border: 1px solid rgba(229,203,167,0.35); background: rgba(229,203,167,0.03);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">REGLA DE MARCA INNEGOCIABLE</span>
+                </div>
+                <h3 style="font-size: 1.15rem; color: #FFFFFF; margin-top: 0;">6.2 Fórmula Dialógica Exclusiva: "¿Entrenamos juntos? MAKE SENS."</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 16px;">
+                    El llamado a la acción y la identidad de marca deben mantenerse <strong>a rajatabla</strong> sin variaciones casuales. Queda expresamente prohibido alterar la fórmula a <em>"¿Entrenamos hoy?"</em>, <em>"¿Entrenamos?"</em> o <em>"Entrená con Nico"</em>. La complicidad nace de la palabra <strong>"juntos"</strong> y el remate contundente <strong>"MAKE SENS."</strong>
+                </p>
+
+                <div class="grid-2" style="gap: 16px;">
+                    <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 10px; padding: 16px;">
+                        <span style="color: #F87171; font-weight: 800; font-size: 11px; letter-spacing: 1px; display: block; margin-bottom: 8px;">PROHIBIDO (DILUYE LA MARCA):</span>
+                        <ul style="margin: 0 0 0 18px; font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.6;">
+                            <li>"¿Entrenamos hoy?" (cotidiano, informal, pierde la propuesta de valor)</li>
+                            <li>"¿Entrenamos?" (seco, transaccional, parece gimnasio masivo)</li>
+                            <li>"Entrená con Nico" (antiguo descriptor funcional)</li>
+                            <li>"Sentite bien hoy" (vago, genérico)</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 16px;">
+                        <span style="color: #34D399; font-weight: 800; font-size: 11px; letter-spacing: 1px; display: block; margin-bottom: 8px;">OBLIGATORIO A RAJATABLA:</span>
+                        <ul style="margin: 0 0 0 18px; font-size: 12px; color: #FFFFFF; line-height: 1.6;">
+                            <li><strong>Vistas Públicas / Hero / Precios / Auth:</strong><br>
+                                <span style="color: rgba(255,255,255,0.9);">¿Entrenamos juntos?</span><br>
+                                <strong style="color: var(--accent-primary); letter-spacing: 1.5px;">MAKE SENS.</strong>
+                            </li>
+                            <li style="margin-top: 8px;"><strong>Dashboard del Alumno (Bienvenida Personalizada):</strong><br>
+                                <span style="color: rgba(255,255,255,0.9);"><span style="color: var(--accent-primary); font-weight: 700;">[Nombre]</span>, ¿entrenamos juntos?</span><br>
+                                <strong style="color: var(--accent-primary); letter-spacing: 1.5px;">MAKE SENS.</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div class="panel">
                 <h3>Prompt Base para Generar Fondos Abstractos de IA</h3>
                 <pre><code>Ultra-premium editorial photography, low-key lighting, deep onyx black and soft warm dark tones, soft directional side light, matte textures, subtle film grain, shallow depth of field, minimal composition with large empty negative space in the upper third and lower third, vertical 4:5, no text, no logos, no people.</code></pre>
