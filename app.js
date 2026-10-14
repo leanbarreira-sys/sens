@@ -2346,8 +2346,16 @@ function initDiagnosisWizard() {
 
     // Switch de Cirugías Previas (Paso 2)
     const surgerySwitch = document.getElementById('switchSurgeryCheck');
+    if (surgerySwitch) surgerySwitch.checked = false;
     const surgeryDetailBox = document.getElementById('detail_surgery');
     const surgeryStatusTag = document.getElementById('status_surgery');
+    if (surgeryStatusTag) {
+        surgeryStatusTag.textContent = 'NO';
+        surgeryStatusTag.classList.remove('is-yes');
+    }
+    if (surgeryDetailBox) {
+        surgeryDetailBox.style.display = 'none';
+    }
     const surgeryInput = document.getElementById('diagSurgeryDetail');
 
     if (surgerySwitch) {
@@ -2367,6 +2375,38 @@ function initDiagnosisWizard() {
     if (surgeryInput) {
         surgeryInput.addEventListener('input', () => saveDiagnosisDraft());
     }
+
+    // Tooltips interactivos y función de copia para prompts IA de medición (Paso 8)
+    window.copyTapePrompt = function(btn) {
+        const box = btn.closest('.tooltip-prompt-box');
+        const textEl = box ? box.querySelector('.prompt-text-display') : null;
+        if (!textEl) return;
+        const text = textEl.textContent.trim();
+        navigator.clipboard.writeText(text).then(() => {
+            const orig = btn.textContent;
+            btn.textContent = '¡Copiado!';
+            setTimeout(() => { btn.textContent = orig; }, 2000);
+            showSensToast('Prompt copiado al portapapeles', 'champagne', 2400);
+        }).catch(() => {
+            showSensToast('Seleccioná el texto para copiar', 'dark', 2000);
+        });
+    };
+
+    document.addEventListener('click', (e) => {
+        const tooltipBtn = e.target.closest('.sens-tooltip-btn');
+        if (tooltipBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const wrap = tooltipBtn.closest('.sens-tooltip-wrap');
+            const isActive = wrap.classList.contains('active');
+            document.querySelectorAll('.sens-tooltip-wrap.active').forEach(w => w.classList.remove('active'));
+            if (!isActive) wrap.classList.add('active');
+            return;
+        }
+        if (!e.target.closest('.sens-tooltip-popover')) {
+            document.querySelectorAll('.sens-tooltip-wrap.active').forEach(w => w.classList.remove('active'));
+        }
+    });
 
     // 4. Contexto Deportivo (Paso 3)
     document.querySelectorAll('input[name="diagExperience"]').forEach(r => {
@@ -3510,96 +3550,256 @@ function initWorkoutManager() {
     }
 }
 
+// -----------------------------------------------------------------------------
+// GESTOR DE ENTRENAMIENTO VIDEO-FIRST & ALTO IMPACTO (ESTILO PILARES SENS)
+// -----------------------------------------------------------------------------
+const SENS_EXERCISE_VIDEOS = [
+    'vid/pilar-1-tecnica.mp4',
+    'vid/pilar-2-vitalidad.mp4',
+    'vid/pilar-3-movilidad.mp4',
+    'vid/pilar-4-adherencia.mp4',
+    'vid/PILARES/1.mp4',
+    'vid/PILARES/2.mp4',
+    'vid/PILARES/3.mp4',
+    'vid/PILARES/4.mp4'
+];
+
+function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+    }
+    return Math.abs(hash);
+}
+
+function formatMuscleGroup(key) {
+    switch (key) {
+        case 'quadriceps':
+        case 'piernas':
+            return 'Piernas & Glúteos';
+        case 'hamstrings_glutes':
+            return 'Isquios & Cadera';
+        case 'push':
+        case 'pecho_espalda':
+            return 'Empuje & Pecho';
+        case 'pull':
+            return 'Tracción & Espalda';
+        case 'core_mobility':
+        case 'core_movilidad':
+            return 'Core & Movilidad';
+        default:
+            return 'Fuerza Funcional';
+    }
+}
+
+function athleteHasAssignedRoutine(athId) {
+    if (!athId) return false;
+    // Si Coach guardó una prescripción en localStorage para este alumno
+    const raw = localStorage.getItem(`sens_prescribed_workouts_${athId}`);
+    if (raw) {
+        try {
+            const data = JSON.parse(raw);
+            const hasEx = Object.values(data).some(d => d.exercises && d.exercises.length > 0);
+            if (hasEx) return true;
+        } catch (e) {}
+    }
+    // Perfiles demostrativos preasignados
+    if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
+        return true;
+    }
+    // Si es un usuario nuevo en Supabase pero completó onboarding y fue aprobado
+    if (AppState.profile && AppState.profile.id === athId && AppState.profile.subscription_status === 'active') {
+        return true;
+    }
+    return false;
+}
+
+function getActiveAthleteId() {
+    if (coachWorkoutState && coachWorkoutState.activeAthleteId) {
+        return coachWorkoutState.activeAthleteId;
+    }
+    if (AppState.user && AppState.user.id) {
+        return AppState.user.id;
+    }
+    if (AppState.profile && AppState.profile.id) {
+        return AppState.profile.id;
+    }
+    return 'usr-vip-001';
+}
+
+function getAthleteExerciseLogs(athId, exId) {
+    try {
+        const raw = localStorage.getItem(`sens_set_logs_${athId}_${exId}`);
+        return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+async function logCompletedSetToDb(athId, exId, setNumber, weightKg, repsCompleted) {
+    const setLog = {
+        user_id: athId,
+        exercise_id: exId,
+        set_number: setNumber,
+        weight_kg: Number(weightKg) || 0,
+        reps_completed: Number(repsCompleted) || 0,
+        completed_at: new Date().toISOString()
+    };
+
+    // Cache local
+    try {
+        const current = getAthleteExerciseLogs(athId, exId);
+        const existingIdx = current.findIndex(s => s.set_number === setNumber);
+        if (existingIdx >= 0) {
+            current[existingIdx] = setLog;
+        } else {
+            current.push(setLog);
+        }
+        localStorage.setItem(`sens_set_logs_${athId}_${exId}`, JSON.stringify(current));
+    } catch (e) {}
+
+    // Supabase
+    if (supabaseClient && AppState.user) {
+        try {
+            await supabaseClient.from('workout_logs').insert([setLog]);
+        } catch (err) {
+            console.log('Set logged locally offline');
+        }
+    }
+}
+
+// Sesión interactiva en Modal de Ejercicio
+let modalExerciseState = {
+    exId: null,
+    dayKey: null,
+    setsData: [],
+    tutSeconds: 0,
+    tutInterval: null,
+    isTutRunning: false,
+    restSeconds: 90,
+    restInterval: null,
+    isRestRunning: false
+};
+
 function renderWorkoutDay(dayKey) {
     AppState.currentDay = dayKey;
-    const dayData = WORKOUT_DAYS_DATA[dayKey];
+    const athId = getActiveAthleteId();
+    const hasRoutine = athleteHasAssignedRoutine(athId);
     const container = document.getElementById('exercisesContainer');
-    if (!dayData || !container) return;
+    const heroTitle = document.getElementById('heroWorkoutTitle');
+    const heroSub = document.getElementById('heroWorkoutSubtitle');
+    const goalPill = document.getElementById('workoutGoalPill');
+    const muscleFocusName = document.getElementById('workoutFocusMuscleName');
+    const muscleFocusCue = document.getElementById('workoutFocusMuscleCue');
+    const adminBar = document.getElementById('workoutAdminActionsBar');
+
+    if (!container) return;
 
     const isAdmin = isCurrentUserAdmin();
-    const filterGroup = AppState.selectedMuscleFilter || 'all';
-
-    // Filtrar ejercicios si el usuario seleccionó un filtro muscular
-    let exercisesToShow = dayData.exercises;
-    if (filterGroup !== 'all') {
-        exercisesToShow = exercisesToShow.filter(ex => {
-            const catalogMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase());
-            return catalogMatch ? catalogMatch.muscle_group === filterGroup : true;
-        });
+    if (adminBar) {
+        adminBar.style.display = isAdmin ? 'flex' : 'none';
     }
 
-    if (exercisesToShow.length === 0) {
+    // Sincronizar badge de objetivo general arriba
+    const userGoal = AppState.profile?.goal || 'fat_loss';
+    if (goalPill) {
+        switch (userGoal) {
+            case 'fat_loss': goalPill.textContent = 'OBJETIVO: PÉRDIDA DE GRASA & DEFINICIÓN'; break;
+            case 'muscle_gain': goalPill.textContent = 'OBJETIVO: HIPERTROFIA & FUERZA BASE'; break;
+            case 'recomp': goalPill.textContent = 'OBJETIVO: RECOMPOSICIÓN CORPORAL'; break;
+            case 'posture_health': goalPill.textContent = 'OBJETIVO: POSTURA & SALUD ARTICULAR'; break;
+            default: goalPill.textContent = 'OBJETIVO: VITALIDAD & RENDIMIENTO'; break;
+        }
+    }
+
+    // Caso 1: Usuario nuevo sin rutina asignada por Nico
+    if (!hasRoutine) {
+        if (heroTitle) heroTitle.textContent = 'Plan en Preparación';
+        if (heroSub) heroSub.textContent = 'Nico está evaluando tu mapa articular y objetivos.';
+        if (muscleFocusName) muscleFocusName.textContent = 'Asignación Pendiente';
+        if (muscleFocusCue) muscleFocusCue.textContent = 'Rutina personalizada en confección clínica';
+
         container.innerHTML = `
-            <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:10px; padding:30px; text-align:center;">
-                <p style="color:var(--text-muted); margin-bottom:12px;">No hay ejercicios de este grupo asignados para ${dayData.title}.</p>
-                ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()">Asignar ejercicios desde el catálogo</button>` : ''}
+            <div class="sens-empty-state-card" style="grid-column: 1 / -1;">
+                <div class="sens-empty-state-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <h3 class="sens-empty-state-title">Nico está trabajando en tu plan personalizado</h3>
+                <p class="sens-empty-state-desc">
+                    Estamos analizando tu diagnóstico inicial, mapa de dolores articulares y requerimientos de movimiento para diseñar tu rutina con videos demostrativos y prescripción de cargas seguras.<br><br>
+                    Apenas Nico apruebe tu plan, vas a tener disponible aquí cada ejercicio con sus videos en bucle y descansos cronometrados.
+                </p>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Complet%C3%A9%20mi%20diagn%C3%B3stico%20en%20SENS%20y%20aguardo%20mi%20rutina." target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="font-size: 12px; font-weight: 700;">
+                        Consultar a Nico por WhatsApp →
+                    </a>
+                    ${isAdmin ? `<button type="button" class="btn btn-outline btn-sm" onclick="applyCoachWorkoutTemplate('fuerza3d')">Asignar Plantilla Base (Nico)</button>` : ''}
+                </div>
             </div>
         `;
         return;
     }
 
-    // Sincronizar Hero Card de Sesión de Hoy
-    const heroTitle = document.getElementById('heroWorkoutTitle');
-    const heroSub = document.getElementById('heroWorkoutSubtitle');
+    // Caso 2: Atleta con rutina asignada
+    const data = getCoachAthleteWorkoutData(athId);
+    const dayData = (data && data[dayKey]) ? data[dayKey] : { title: `Día: ${dayKey}`, exercises: [] };
+    const filterGroup = AppState.selectedMuscleFilter || 'all';
+
+    let exercisesToShow = dayData.exercises || [];
+    if (filterGroup !== 'all') {
+        exercisesToShow = exercisesToShow.filter(ex => {
+            const catalogMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase());
+            const mg = catalogMatch ? catalogMatch.muscle_group : (ex.muscle_group || 'quadriceps');
+            if (filterGroup === 'piernas') return mg === 'quadriceps' || mg === 'hamstrings_glutes';
+            if (filterGroup === 'pecho_espalda') return mg === 'push' || mg === 'pull';
+            if (filterGroup === 'brazos_hombros') return mg === 'push' || mg === 'pull';
+            if (filterGroup === 'core_movilidad') return mg === 'core_mobility';
+            return true;
+        });
+    }
+
     if (heroTitle) heroTitle.textContent = dayData.title || `Día: ${dayKey}`;
-    if (heroSub) heroSub.textContent = `${exercisesToShow.length} Ejercicios asignados • ~${Math.max(30, exercisesToShow.length * 12)} min estimadas • Descanso cronometrado por serie`;
+    if (heroSub) heroSub.textContent = `${exercisesToShow.length} Ejercicios asignados • ~${Math.max(30, exercisesToShow.length * 12)} min estimadas • Descanso cronometrado`;
+    if (muscleFocusName) muscleFocusName.textContent = dayData.title || 'Músculo Principal';
+    if (muscleFocusCue) muscleFocusCue.textContent = 'Enfoque biomecánico en cadencia 3-0-1-0 y rango completo sin dolor articular';
+
+    if (exercisesToShow.length === 0) {
+        container.innerHTML = `
+            <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:14px; padding:32px 20px; text-align:center; grid-column: 1 / -1;">
+                <p style="color:var(--text-muted); margin-bottom:12px;">No hay ejercicios de este grupo asignados para ${dayData.title}.</p>
+                ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()">+ Asignar ejercicios desde el catálogo (Nico)</button>` : ''}
+            </div>
+        `;
+        return;
+    }
 
     let html = '';
     exercisesToShow.forEach((ex, idx) => {
-        let setsRows = '';
-        for (let i = 1; i <= ex.sets; i++) {
-            setsRows += `
-                <tr>
-                    <td><strong>Set ${i}</strong></td>
-                    <td>${ex.reps}</td>
-                    <td><input type="number" class="set-input-tactile set-weight" value="${ex.defaultWeight}" step="0.5"></td>
-                    <td><input type="number" class="set-input-tactile set-reps" value="${ex.defaultReps}"></td>
-                    <td>
-                        <label class="selection-item" style="justify-content: center;">
-                            <input type="checkbox" class="set-completed-chk" data-rest="${ex.rest}">
-                            <div class="custom-box"></div>
-                        </label>
-                    </td>
-                </tr>
-            `;
-        }
+        const catalogMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || {};
+        const muscleTag = catalogMatch.muscle_group ? formatMuscleGroup(catalogMatch.muscle_group) : 'Fuerza';
+        const videoIdx = Math.abs(hashCode(ex.name)) % SENS_EXERCISE_VIDEOS.length;
+        const videoSrc = SENS_EXERCISE_VIDEOS[videoIdx];
+        const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Peso Corporal';
 
         html += `
-            <div class="exercise-item-card" data-exercise-id="${ex.id}">
-                <div class="exercise-header-row">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px; font-weight: 700;">Ejercicio ${idx + 1} de ${exercisesToShow.length}</span>
-                        </div>
-                        <h3 class="exercise-title" style="margin-top: 4px;">${ex.name}</h3>
-                        <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 11.5px; color: var(--accent-primary);">
-                            <strong>¿Para qué sirve?</strong> ${ex.notes || 'Fortalecimiento biomecánico y postura funcional'}
-                        </div>
-                    </div>
-                    <div class="exercise-meta-pills">
-                        <span class="pill pill-dark">${ex.sets} Series</span>
-                        <span class="pill pill-dark">${ex.reps} Reps</span>
-                        <span class="pill pill-champagne">Descanso: ${ex.rest}s</span>
-                        <button class="btn btn-outline btn-sm btn-video-demo" data-video-title="Técnica: ${ex.name}" data-video-cue="${ex.notes}">Video Técnica</button>
-                        ${isAdmin ? `<button class="btn btn-outline btn-sm btn-remove-exercise-admin" data-ex-id="${ex.id}" style="border-color:var(--danger); color:var(--danger);">Quitar</button>` : ''}
-                    </div>
+            <div class="sens-exercise-video-card" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}')">
+                <video autoplay muted loop playsinline class="sens-exercise-video-bg">
+                    <source src="${videoSrc}" type="video/mp4">
+                </video>
+                <div class="sens-exercise-card-gradient"></div>
+                <div class="sens-exercise-top-pills">
+                    <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">${muscleTag}</span>
+                    <span class="pill pill-dark" style="font-size: 9.5px; font-weight: 700;">${ex.sets || 3} Series × ${ex.reps || 10}</span>
                 </div>
-
-                <div class="sets-table-wrap">
-                    <table class="sets-tracker-table">
-                        <thead>
-                            <tr>
-                                <th>Set</th>
-                                <th>Reps Sugeridas</th>
-                                <th>Peso Utilizado (kg)</th>
-                                <th>Reps Logradas</th>
-                                <th>Completado (Timer)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${setsRows}
-                        </tbody>
-                    </table>
+                <div class="sens-exercise-card-content">
+                    <h3 class="sens-exercise-card-title">${ex.name}</h3>
+                    <div class="sens-exercise-card-meta">
+                        <span>Descanso: ${ex.rest || 90}s</span> • <span>Sugerido: ${weightLabel}</span>
+                    </div>
+                    <div class="sens-exercise-card-cta">
+                        Tocar para iniciar serie &amp; técnica →
+                    </div>
                 </div>
             </div>
         `;
@@ -3607,6 +3807,257 @@ function renderWorkoutDay(dayKey) {
 
     container.innerHTML = html;
 }
+
+window.openExerciseExecutionModal = function(exId, dayKey) {
+    const athId = getActiveAthleteId();
+    const data = getCoachAthleteWorkoutData(athId);
+    const day = (data && data[dayKey]) ? data[dayKey] : (WORKOUT_DAYS_DATA[dayKey] || { exercises: [] });
+    const ex = day.exercises.find(e => e.id === exId);
+    if (!ex) return;
+
+    modalExerciseState.exId = exId;
+    modalExerciseState.dayKey = dayKey;
+    modalExerciseState.tutSeconds = 0;
+    modalExerciseState.isTutRunning = false;
+    clearInterval(modalExerciseState.tutInterval);
+    clearInterval(modalExerciseState.restInterval);
+
+    const catalogMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || {};
+    const muscleName = catalogMatch.muscle_group 
+        ? formatMuscleGroup(catalogMatch.muscle_group)
+        : 'Piernas & Glúteos';
+    const cueTechnical = ex.notes || catalogMatch.cue || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
+
+    const videoIdx = Math.abs(hashCode(ex.name)) % SENS_EXERCISE_VIDEOS.length;
+    const videoSrc = SENS_EXERCISE_VIDEOS[videoIdx];
+
+    const backdrop = document.getElementById('sensExerciseModalBackdrop');
+    const modalName = document.getElementById('modalExName');
+    const modalMuscle = document.getElementById('modalExMuscleGroup');
+    const modalSetsReps = document.getElementById('modalExTargetSetsReps');
+    const modalVideo = document.getElementById('modalExVideo');
+    const modalCue = document.getElementById('modalExCueText');
+    const modalNotes = document.getElementById('modalExNotesBody');
+    const tutDisplay = document.getElementById('modalExTutDisplay');
+    const restDisplay = document.getElementById('modalExRestDisplay');
+    const btnTut = document.getElementById('btnModalToggleTut');
+
+    if (modalName) modalName.textContent = ex.name;
+    if (modalMuscle) modalMuscle.textContent = muscleName;
+    if (modalSetsReps) modalSetsReps.textContent = `${ex.sets || 4} Series • ${ex.reps || '10-12'} Reps`;
+    if (modalVideo) {
+        modalVideo.src = videoSrc;
+        modalVideo.play().catch(() => {});
+    }
+    if (modalCue) modalCue.textContent = cueTechnical;
+    if (modalNotes) modalNotes.textContent = `Recomendación de Nico: Mantener el pecho erguido, control respiratorio y 1 segundo de pausa isométrica en el punto de máxima contracción. Detener la serie en RIR 2 sin llegar al fallo lesivo.`;
+    if (tutDisplay) tutDisplay.textContent = '00:00';
+    if (btnTut) btnTut.textContent = 'Iniciar Serie';
+
+    // Rest seconds
+    modalExerciseState.restSeconds = ex.rest || catalogMatch.rest || 90;
+    if (restDisplay) {
+        const m = Math.floor(modalExerciseState.restSeconds / 60);
+        const s = modalExerciseState.restSeconds % 60;
+        restDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    // Inicializar series
+    const savedLogs = getAthleteExerciseLogs(athId, exId);
+    modalExerciseState.setsData = [];
+    const totalSets = ex.sets || 4;
+    for (let i = 1; i <= totalSets; i++) {
+        const existing = savedLogs.find(l => l.set_number === i);
+        modalExerciseState.setsData.push({
+            setNumber: i,
+            targetReps: ex.reps || '10-12',
+            weight: existing ? existing.weight_kg : (ex.defaultWeight || 16),
+            reps: existing ? existing.reps_completed : (ex.defaultReps || 10),
+            completed: Boolean(existing)
+        });
+    }
+
+    renderModalSeriesList();
+
+    if (backdrop) {
+        backdrop.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+};
+
+function renderModalSeriesList() {
+    const list = document.getElementById('modalExSeriesList');
+    const countEl = document.getElementById('modalExSeriesCount');
+    if (!list) return;
+
+    const completedCount = modalExerciseState.setsData.filter(s => s.completed).length;
+    const totalCount = modalExerciseState.setsData.length;
+    if (countEl) countEl.textContent = `${completedCount} de ${totalCount} series completadas`;
+
+    let html = '';
+    modalExerciseState.setsData.forEach((s, idx) => {
+        html += `
+            <div class="sens-tactile-set-row ${s.completed ? 'completed' : ''}" data-set-idx="${idx}">
+                <span class="sens-set-label">Set ${s.setNumber}</span>
+                
+                <div class="sens-stepper-wrap">
+                    <span style="font-size:10px; color:var(--text-muted); margin-right:2px;">KG:</span>
+                    <button type="button" class="sens-stepper-btn" onclick="stepSetWeight(${idx}, -2.5)">-</button>
+                    <input type="number" step="0.5" class="sens-stepper-input" value="${s.weight}" onchange="updateSetWeight(${idx}, this.value)">
+                    <button type="button" class="sens-stepper-btn" onclick="stepSetWeight(${idx}, 2.5)">+</button>
+                </div>
+
+                <div class="sens-stepper-wrap">
+                    <span style="font-size:10px; color:var(--text-muted); margin-right:2px;">REPS:</span>
+                    <button type="button" class="sens-stepper-btn" onclick="stepSetReps(${idx}, -1)">-</button>
+                    <input type="number" class="sens-stepper-input" value="${s.reps}" onchange="updateSetReps(${idx}, this.value)">
+                    <button type="button" class="sens-stepper-btn" onclick="stepSetReps(${idx}, 1)">+</button>
+                </div>
+
+                <button type="button" class="sens-check-set-btn ${s.completed ? 'checked' : ''}" onclick="toggleSetCompleted(${idx})" title="Marcar completado">
+                    ✓
+                </button>
+            </div>
+        `;
+    });
+
+    list.innerHTML = html;
+}
+
+window.stepSetWeight = function(idx, delta) {
+    if (!modalExerciseState.setsData[idx]) return;
+    modalExerciseState.setsData[idx].weight = Math.max(0, modalExerciseState.setsData[idx].weight + delta);
+    renderModalSeriesList();
+};
+
+window.updateSetWeight = function(idx, val) {
+    if (!modalExerciseState.setsData[idx]) return;
+    modalExerciseState.setsData[idx].weight = Math.max(0, Number(val) || 0);
+};
+
+window.stepSetReps = function(idx, delta) {
+    if (!modalExerciseState.setsData[idx]) return;
+    modalExerciseState.setsData[idx].reps = Math.max(1, modalExerciseState.setsData[idx].reps + delta);
+    renderModalSeriesList();
+};
+
+window.updateSetReps = function(idx, val) {
+    if (!modalExerciseState.setsData[idx]) return;
+    modalExerciseState.setsData[idx].reps = Math.max(1, parseInt(val, 10) || 1);
+};
+
+window.toggleSetCompleted = function(idx) {
+    const s = modalExerciseState.setsData[idx];
+    if (!s) return;
+    s.completed = !s.completed;
+    renderModalSeriesList();
+
+    const athId = getActiveAthleteId();
+    if (s.completed) {
+        logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps);
+        showSensToast(`Set ${s.setNumber} completado (${s.weight} kg × ${s.reps} reps)`, 'champagne', 2400);
+        // Iniciar descanso automático
+        startModalRestTimer();
+    }
+};
+
+function startModalRestTimer() {
+    clearInterval(modalExerciseState.restInterval);
+    const restDisplay = document.getElementById('modalExRestDisplay');
+    let remaining = modalExerciseState.restSeconds || 90;
+
+    modalExerciseState.restInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+            clearInterval(modalExerciseState.restInterval);
+            if (restDisplay) restDisplay.textContent = '00:00';
+            playBeep(880, 0.4);
+            showSensToast('¡Tiempo de descanso cumplido! A por la siguiente serie.', 'success', 3400);
+        } else {
+            if (restDisplay) {
+                const m = Math.floor(remaining / 60);
+                const s = remaining % 60;
+                restDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            }
+        }
+    }, 1000);
+}
+
+window.closeExerciseExecutionModal = function() {
+    const backdrop = document.getElementById('sensExerciseModalBackdrop');
+    if (backdrop) backdrop.style.display = 'none';
+    document.body.style.overflow = '';
+    clearInterval(modalExerciseState.tutInterval);
+    clearInterval(modalExerciseState.restInterval);
+    const modalVideo = document.getElementById('modalExVideo');
+    if (modalVideo) modalVideo.pause();
+    renderWorkoutDay(AppState.currentDay || 'day1');
+};
+
+// Wire up events del Modal
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('btnCloseExerciseModal');
+    const finishBtn = document.getElementById('btnModalFinishExercise');
+    const backdrop = document.getElementById('sensExerciseModalBackdrop');
+    const btnTut = document.getElementById('btnModalToggleTut');
+    const btnResetTut = document.getElementById('btnModalResetTut');
+    const tutDisplay = document.getElementById('modalExTutDisplay');
+    const btnStartRest = document.getElementById('btnModalStartRest');
+    const btnAdd15Rest = document.getElementById('btnModalAdd15Rest');
+    const btnSkipRest = document.getElementById('btnModalSkipRest');
+
+    if (closeBtn) closeBtn.addEventListener('click', closeExerciseExecutionModal);
+    if (finishBtn) finishBtn.addEventListener('click', closeExerciseExecutionModal);
+    if (backdrop) {
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closeExerciseExecutionModal();
+        });
+    }
+
+    if (btnTut && tutDisplay) {
+        btnTut.addEventListener('click', () => {
+            if (!modalExerciseState.isTutRunning) {
+                modalExerciseState.isTutRunning = true;
+                btnTut.textContent = 'Pausar Serie';
+                modalExerciseState.tutInterval = setInterval(() => {
+                    modalExerciseState.tutSeconds++;
+                    const m = Math.floor(modalExerciseState.tutSeconds / 60);
+                    const s = modalExerciseState.tutSeconds % 60;
+                    tutDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+                }, 1000);
+            } else {
+                modalExerciseState.isTutRunning = false;
+                btnTut.textContent = 'Reanudar';
+                clearInterval(modalExerciseState.tutInterval);
+            }
+        });
+    }
+
+    if (btnResetTut && tutDisplay && btnTut) {
+        btnResetTut.addEventListener('click', () => {
+            modalExerciseState.isTutRunning = false;
+            clearInterval(modalExerciseState.tutInterval);
+            modalExerciseState.tutSeconds = 0;
+            tutDisplay.textContent = '00:00';
+            btnTut.textContent = 'Iniciar Serie';
+        });
+    }
+
+    if (btnStartRest) btnStartRest.addEventListener('click', startModalRestTimer);
+    if (btnAdd15Rest) {
+        btnAdd15Rest.addEventListener('click', () => {
+            modalExerciseState.restSeconds += 15;
+            startModalRestTimer();
+        });
+    }
+    if (btnSkipRest) {
+        btnSkipRest.addEventListener('click', () => {
+            clearInterval(modalExerciseState.restInterval);
+            const restDisplay = document.getElementById('modalExRestDisplay');
+            if (restDisplay) restDisplay.textContent = '00:00';
+        });
+    }
+});
 
 function startRestTimer(seconds) {
     stopRestTimer();
@@ -4909,12 +5360,10 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
                         <span class="coach-athlete-email">${ath.email}</span>
                         <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
                             <label style="font-size: 10.5px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Plan:</label>
-                            <select class="input-control coach-athlete-plan-select" data-athlete-id="${ath.id}" style="width: auto; min-width: 210px; padding: 2px 8px; font-size: 11px; height: 26px; margin-bottom: 0; background: var(--bg-surface);">
-                                <option value="client_presencial_vip" ${planKey === 'client_presencial_vip' ? 'selected' : ''}>Presencial 1 a 1 VIP (CABA)</option>
-                                <option value="client_presencial_group" ${planKey === 'client_presencial_group' ? 'selected' : ''}>Presencial Dúo / Grupo</option>
-                                <option value="client_online_premium" ${planKey === 'client_online_premium' ? 'selected' : ''}>Online Premium (Diario)</option>
-                                <option value="client_online_basic" ${planKey === 'client_online_basic' ? 'selected' : ''}>Online Básico</option>
-                            </select>
+                            <button type="button" class="btn-coach-plan-pill-trigger btn-open-plan-sheet" data-athlete-id="${ath.id}" style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 20px; padding: 4px 10px; font-size: 11px; color: var(--accent-primary); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <span>${formatPlanName(planKey)}</span>
+                                <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -4941,11 +5390,10 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
         });
     });
 
-    container.querySelectorAll('.coach-athlete-plan-select').forEach(sel => {
-        sel.addEventListener('change', async (e) => {
-            const athId = sel.getAttribute('data-athlete-id');
-            const newPlanKey = e.target.value;
-            await updateAthletePlanType(athId, newPlanKey);
+    container.querySelectorAll('.btn-open-plan-sheet').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const athId = btn.getAttribute('data-athlete-id');
+            openCoachPlanSheet(athId);
         });
     });
 
@@ -4970,6 +5418,68 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
         });
     });
 }
+
+let coachAthletePendingPlanId = null;
+
+function formatPlanName(key) {
+    switch (key) {
+        case 'client_presencial_vip': return 'Presencial 1 a 1 VIP (CABA)';
+        case 'client_presencial_group': return 'Presencial Dúo / Grupo';
+        case 'client_online_premium': return 'Online Premium (Diario)';
+        case 'client_online_basic': return 'Online Básico';
+        default: return 'Presencial 1 a 1 VIP';
+    }
+}
+
+window.openCoachPlanSheet = function(athId) {
+    coachAthletePendingPlanId = athId;
+    const allAthletes = getConsolidatedCoachAthletes();
+    const ath = allAthletes.find(a => a.id === athId);
+    const titleEl = document.getElementById('coachPlanSheetAthleteTitle');
+    if (titleEl && ath) {
+        titleEl.textContent = `Asignar Plan a ${ath.full_name}`;
+    }
+
+    const backdrop = document.getElementById('coachPlanSheetBackdrop');
+    const sheet = document.getElementById('coachPlanPickerBottomSheet');
+    if (backdrop && sheet) {
+        backdrop.style.display = 'block';
+        sheet.style.display = 'block';
+        setTimeout(() => sheet.classList.add('active'), 10);
+    }
+};
+
+window.closeCoachPlanSheet = function() {
+    const backdrop = document.getElementById('coachPlanSheetBackdrop');
+    const sheet = document.getElementById('coachPlanPickerBottomSheet');
+    if (backdrop && sheet) {
+        sheet.classList.remove('active');
+        setTimeout(() => {
+            backdrop.style.display = 'none';
+            sheet.style.display = 'none';
+        }, 250);
+    }
+    coachAthletePendingPlanId = null;
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const closePlanSheetBtn = document.getElementById('btnClosePlanSheet');
+    const planBackdrop = document.getElementById('coachPlanSheetBackdrop');
+    if (closePlanSheetBtn) closePlanSheetBtn.addEventListener('click', closeCoachPlanSheet);
+    if (planBackdrop) planBackdrop.addEventListener('click', closeCoachPlanSheet);
+
+    document.querySelectorAll('.btn-coach-plan-opt').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const planKey = btn.getAttribute('data-plan');
+            if (coachAthletePendingPlanId && planKey) {
+                await updateAthletePlanType(coachAthletePendingPlanId, planKey);
+                showSensToast(`Modalidad actualizada a: ${formatPlanName(planKey)}`, 'champagne');
+                closeCoachPlanSheet();
+                renderCoachAthletesHub();
+            }
+        });
+    });
+});
 
 async function updateAthleteSubscriptionStatus(athId, newStatus) {
     if (supabaseClient && !athId.startsWith('mock_')) {
@@ -6252,15 +6762,104 @@ function initWeekStripCalendar() {
     const locName = document.getElementById('dashLocationName');
     const quickWorkoutBtn = document.getElementById('dashQuickWorkoutBtn');
 
-    const coachDirectives = [
-        "El jueves cargaste core, hoy toca full body. Arrancás con flexiones, zona media y swings. Lo principal: glúteos. Además, un HIIT de sentadillas y saltos. Cerrás con dominadas.",
-        "Día 2: Piernas y fuerza de cadera. Sentadillas profundas, empujes y peso muerto rumano. Priorizá rango articular completo.",
-        "Día 3: Tren superior y hombros. Movilidad escapular previa y series efectivas al 80% RPE.",
-        "Día 4: Core & Estabilidad dinámica. Trabajo isométrico y control respiratorio diafragmático.",
-        "Día 5: Fuerza principal y acondicionamiento metabólico. Cuidá la técnica en cada repetición.",
-        "Día 6: Cardio Zona 2 al aire libre (caminata rápida, trote o bici) para oxidar sustratos y regenerar tejidos.",
-        "Día 7: Descanso activo. 10,000 pasos conscientes, hidratación con electrolitos y estiramientos suaves."
-    ];
+    function updateDashboardWorkoutDirective(selectedDayIdx = 1) {
+        if (!msgEl) return;
+        const athId = getActiveAthleteId();
+        const hasRoutine = athleteHasAssignedRoutine(athId);
+
+        const headerTitle = document.getElementById('dashWorkoutTitle');
+        const badgeEl = document.getElementById('dashWorkoutBadge');
+
+        if (!hasRoutine) {
+            if (headerTitle) headerTitle.textContent = 'Tu entrenamiento';
+            if (badgeEl) {
+                badgeEl.textContent = 'Plan en preparación';
+                badgeEl.className = 'pill pill-dark';
+                badgeEl.style.color = '#F59E0B';
+                badgeEl.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+            }
+            msgEl.innerHTML = `
+                <div style="font-size: 13.5px; color: #FFFFFF; font-weight: 700; margin-bottom: 2px;">
+                    Nico está trabajando en un plan personalizado para vos.
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">
+                    En base a tu diagnóstico inicial, mapa de dolores articulares y objetivos, Nico está programando tus ejercicios y descansos cronometrados.
+                </div>
+            `;
+            if (quickWorkoutBtn) {
+                quickWorkoutBtn.textContent = 'Ver diagnóstico inicial →';
+                quickWorkoutBtn.onclick = () => {
+                    switchPortalView('onboardingSection');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+            }
+            return;
+        }
+
+        if (headerTitle) headerTitle.textContent = 'Tu entrenamiento';
+        if (badgeEl) {
+            badgeEl.textContent = 'Programado';
+            badgeEl.className = 'pill pill-champagne';
+            badgeEl.style.color = '';
+            badgeEl.style.borderColor = '';
+        }
+
+        const data = getCoachAthleteWorkoutData(athId);
+        const dayKeys = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
+        const currentKey = dayKeys[selectedDayIdx] || 'day1';
+        const dayData = data[currentKey];
+
+        if (dayData && dayData.exercises && dayData.exercises.length > 0) {
+            msgEl.innerHTML = `
+                <div style="font-size: 14.5px; color: #FFFFFF; font-weight: 800; margin-bottom: 3px;">
+                    ${dayData.title}
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted);">
+                    ${dayData.exercises.length} Ejercicios asignados • Foco en control excéntrico y sobrecarga progresiva sin dolor articular.
+                </div>
+            `;
+            if (quickWorkoutBtn) {
+                quickWorkoutBtn.textContent = 'Ir a entrenamiento de hoy →';
+                quickWorkoutBtn.onclick = () => {
+                    AppState.currentDay = currentKey;
+                    switchPortalView('workoutView');
+                    renderWorkoutDay(currentKey);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+            }
+        } else {
+            // Buscar próximo día programado
+            let nextDayLabel = 'Mañana';
+            for (let i = 1; i <= 6; i++) {
+                const nextIdx = (selectedDayIdx + i) % 7;
+                const nextKey = dayKeys[nextIdx];
+                if (data[nextKey] && data[nextKey].exercises && data[nextKey].exercises.length > 0) {
+                    const daysEsp = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                    nextDayLabel = `${daysEsp[nextIdx]} • ${data[nextKey].title}`;
+                    break;
+                }
+            }
+
+            msgEl.innerHTML = `
+                <div style="font-size: 14px; color: #FFFFFF; font-weight: 700; margin-bottom: 2px;">
+                    Hoy: Recuperación activa &amp; movilidad.
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted);">
+                    Próximo entrenamiento programado: <strong style="color: var(--accent-primary);">${nextDayLabel}</strong>.
+                </div>
+            `;
+            if (quickWorkoutBtn) {
+                quickWorkoutBtn.textContent = 'Ver rutina de la semana →';
+                quickWorkoutBtn.onclick = () => {
+                    switchPortalView('workoutView');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+            }
+        }
+    }
+
+    // Inicializar directiva para el día activo (por defecto Martes / 1)
+    updateDashboardWorkoutDirective(1);
 
     dayPills.forEach(pill => {
         pill.addEventListener('click', () => {
@@ -6268,13 +6867,7 @@ function initWeekStripCalendar() {
             pill.classList.add('active');
 
             const idx = parseInt(pill.getAttribute('data-day-idx'), 10) || 0;
-            if (msgEl && coachDirectives[idx]) {
-                msgEl.style.opacity = '0';
-                setTimeout(() => {
-                    msgEl.textContent = `"${coachDirectives[idx]}"`;
-                    msgEl.style.opacity = '1';
-                }, 150);
-            }
+            updateDashboardWorkoutDirective(idx);
 
             if (locName) {
                 locName.textContent = (idx % 2 === 0) ? 'Presencial Palermo' : 'Online / En Casa';

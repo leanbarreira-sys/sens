@@ -1994,13 +1994,27 @@
                                         <!-- Cintura -->
                                         <div class="tape-input-card">
                                             <div class="tape-card-info">
-                                                <label class="tape-card-label" for="diagTapeWaist">Cintura</label>
-                                                <span class="tape-card-guide">A la altura del ombligo, relajando el
-                                                    abdomen sin meter la panza.</span>
+                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                    <label class="tape-card-label" for="diagTapeWaist">Cintura</label>
+                                                    <div class="sens-tooltip-wrap">
+                                                        <button type="button" class="sens-tooltip-btn" aria-label="Ver guía de medición y prompt visual" title="Guía de medición">
+                                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                                        </button>
+                                                        <div class="sens-tooltip-popover">
+                                                            <div class="tooltip-header">Guía Anatómica &amp; Referencia Visual</div>
+                                                            <p class="tooltip-text">A la altura del ombligo, relajando el abdomen sin comprimir la piel ni contener el aire. Cinta paralela al suelo.</p>
+                                                            <div class="tooltip-prompt-box">
+                                                                <span class="prompt-badge">Prompt Imagen IA:</span>
+                                                                <div class="prompt-text-display">Ultra-realistic high-end fitness photo, waist circumference tape measurement guide, athletic person in minimalist obsidian fitness apparel standing in upright neutral posture, close-up shot of a soft vinyl measuring tape positioned horizontally around natural waist at navel level, hands gently holding tape without compressing skin, luxury wellness aesthetic, warm natural cinematic lighting, muted dark tones, Hasselblad 8k --ar 1:1 --style raw</div>
+                                                                <button type="button" class="btn-copy-prompt" onclick="copyTapePrompt(this)">Copiar Prompt</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="tape-card-guide">A la altura del ombligo, relajando el abdomen sin meter la panza.</span>
                                             </div>
                                             <div class="tape-card-input-wrap">
-                                                <input type="number" step="0.5" id="diagTapeWaist"
-                                                    class="tape-input-control" placeholder="Ej: 84">
+                                                <input type="number" step="0.5" id="diagTapeWaist" class="tape-input-control" placeholder="Ej: 84">
                                                 <span class="tape-unit">cm</span>
                                             </div>
                                         </div>
@@ -2008,13 +2022,27 @@
                                         <!-- Cadera -->
                                         <div class="tape-input-card">
                                             <div class="tape-card-info">
-                                                <label class="tape-card-label" for="diagTapeHip">Cadera</label>
-                                                <span class="tape-card-guide">En la zona de mayor contorno de los
-                                                    glúteos, pies juntos.</span>
+                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                    <label class="tape-card-label" for="diagTapeHip">Cadera</label>
+                                                    <div class="sens-tooltip-wrap">
+                                                        <button type="button" class="sens-tooltip-btn" aria-label="Ver guía de medición y prompt visual" title="Guía de medición">
+                                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                                        </button>
+                                                        <div class="sens-tooltip-popover">
+                                                            <div class="tooltip-header">Guía Anatómica &amp; Referencia Visual</div>
+                                                            <p class="tooltip-text">En la zona de mayor contorno de los glúteos, con ambos pies juntos y peso distribuido homogéneamente.</p>
+                                                            <div class="tooltip-prompt-box">
+                                                                <span class="prompt-badge">Prompt Imagen IA:</span>
+                                                                <div class="prompt-text-display">Ultra-realistic cinematic fitness photo, hip circumference tape measurement guide, athletic person wearing minimalist dark activewear standing in profile with feet together, close-up shot of measuring tape wrapped snugly around the maximum protruding circumference of glutes and hips, horizontal tape parallel to ground, luxury quiet wellness aesthetic, studio rim lighting, Sony A1 8k --ar 1:1 --style raw</div>
+                                                                <button type="button" class="btn-copy-prompt" onclick="copyTapePrompt(this)">Copiar Prompt</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="tape-card-guide">En la zona de mayor contorno de los glúteos, pies juntos.</span>
                                             </div>
                                             <div class="tape-card-input-wrap">
-                                                <input type="number" step="0.5" id="diagTapeHip"
-                                                    class="tape-input-control" placeholder="Ej: 98">
+                                                <input type="number" step="0.5" id="diagTapeHip" class="tape-input-control" placeholder="Ej: 98">
                                                 <span class="tape-unit">cm</span>
                                             </div>
                                         </div>
@@ -2022,13 +2050,27 @@
                                         <!-- Brazo relajado -->
                                         <div class="tape-input-card">
                                             <div class="tape-card-info">
-                                                <label class="tape-card-label" for="diagTapeArm">Brazo relajado</label>
-                                                <span class="tape-card-guide">En el punto medio entre hombro y codo, con
-                                                    el brazo suelto al costado.</span>
+                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                    <label class="tape-card-label" for="diagTapeArm">Brazo relajado</label>
+                                                    <div class="sens-tooltip-wrap">
+                                                        <button type="button" class="sens-tooltip-btn" aria-label="Ver guía de medición y prompt visual" title="Guía de medición">
+                                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                                        </button>
+                                                        <div class="sens-tooltip-popover">
+                                                            <div class="tooltip-header">Guía Anatómica &amp; Referencia Visual</div>
+                                                            <p class="tooltip-text">En el punto medio entre el hombro (acromion) y el codo (olécranon), brazo suelto y relajado al costado del cuerpo.</p>
+                                                            <div class="tooltip-prompt-box">
+                                                                <span class="prompt-badge">Prompt Imagen IA:</span>
+                                                                <div class="prompt-text-display">Ultra-realistic medical-grade fitness photo, relaxed arm circumference measurement guide, athletic arm hanging naturally beside the torso in relaxed state, close-up shot of measuring tape positioned at exact midpoint between shoulder and elbow, neutral lighting, soft shadows, quiet luxury obsidian ambiance, Leica SL2 8k --ar 1:1 --style raw</div>
+                                                                <button type="button" class="btn-copy-prompt" onclick="copyTapePrompt(this)">Copiar Prompt</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="tape-card-guide">En el punto medio entre hombro y codo, con el brazo suelto al costado.</span>
                                             </div>
                                             <div class="tape-card-input-wrap">
-                                                <input type="number" step="0.5" id="diagTapeArm"
-                                                    class="tape-input-control" placeholder="Ej: 32">
+                                                <input type="number" step="0.5" id="diagTapeArm" class="tape-input-control" placeholder="Ej: 32">
                                                 <span class="tape-unit">cm</span>
                                             </div>
                                         </div>
@@ -2036,13 +2078,27 @@
                                         <!-- Muslo medio -->
                                         <div class="tape-input-card">
                                             <div class="tape-card-info">
-                                                <label class="tape-card-label" for="diagTapeThigh">Muslo medio</label>
-                                                <span class="tape-card-guide">En el punto medio entre el pliegue de la
-                                                    ingle y la parte superior de la rodilla.</span>
+                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                    <label class="tape-card-label" for="diagTapeThigh">Muslo medio</label>
+                                                    <div class="sens-tooltip-wrap">
+                                                        <button type="button" class="sens-tooltip-btn" aria-label="Ver guía de medición y prompt visual" title="Guía de medición">
+                                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                                        </button>
+                                                        <div class="sens-tooltip-popover">
+                                                            <div class="tooltip-header">Guía Anatómica &amp; Referencia Visual</div>
+                                                            <p class="tooltip-text">En el punto medio entre el pliegue inguinal y el borde superior de la rótula, de pie y con el cuádriceps relajado.</p>
+                                                            <div class="tooltip-prompt-box">
+                                                                <span class="prompt-badge">Prompt Imagen IA:</span>
+                                                                <div class="prompt-text-display">Ultra-realistic high-end fitness photo, thigh circumference measurement guide, athletic person standing upright with weight evenly distributed on both feet, close-up macro shot of measuring tape wrapped horizontally around the midpoint between hip crease and top of kneecap, relaxed quadriceps, dark obsidian aesthetic, champagne accents, Hasselblad 8k --ar 1:1 --style raw</div>
+                                                                <button type="button" class="btn-copy-prompt" onclick="copyTapePrompt(this)">Copiar Prompt</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="tape-card-guide">En el punto medio entre el pliegue de la ingle y la parte superior de la rodilla.</span>
                                             </div>
                                             <div class="tape-card-input-wrap">
-                                                <input type="number" step="0.5" id="diagTapeThigh"
-                                                    class="tape-input-control" placeholder="Ej: 56">
+                                                <input type="number" step="0.5" id="diagTapeThigh" class="tape-input-control" placeholder="Ej: 56">
                                                 <span class="tape-unit">cm</span>
                                             </div>
                                         </div>
@@ -2538,239 +2594,159 @@
             <!-- =====================================================================
                  MÓDULO 6: GESTOR DE RUTINAS Y ENTRENAMIENTO
                  ===================================================================== -->
+            <!-- =====================================================================
+                 MÓDULO 6: GESTOR DE RUTINAS Y ENTRENAMIENTO (VIDEO-FIRST / ALTO IMPACTO)
+                 ===================================================================== -->
             <section class="portal-view" id="workoutView">
-                <!-- Barra Superior de Estudio & Stopwatch (Estilo BIGG) -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div class="sens-location-selector-btn" id="workoutLocationSelector">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            <span>SENS CLASS / PALERMO</span>
-                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <!-- 1. Tarjeta Superior de Objetivo General & Sesión -->
+                <div class="sens-workout-goal-hero">
+                    <div class="sens-workout-goal-content">
+                        <div class="sens-workout-goal-eyebrow">
+                            <span class="pill pill-champagne" id="workoutGoalPill">OBJETIVO: PÉRDIDA DE GRASA &amp; RECOMPOSICIÓN</span>
+                            <span class="pill pill-dark" id="workoutPhasePill">FASE 1: FUERZA BASE</span>
                         </div>
+                        <h2 class="sens-workout-goal-title" id="heroWorkoutTitle">
+                            Plan Personalizado SENS
+                        </h2>
+                        <p class="sens-workout-goal-desc" id="heroWorkoutSubtitle">
+                            Cargas adaptadas a tu nivel, descansos cronometrados y corrección biomecánica en video.
+                        </p>
                     </div>
-                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <div style="background: #141418; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 30px; padding: 6px 14px; display: flex; align-items: center; gap: 10px;">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            <span id="workoutStopwatchDisplay" style="font-size: 14px; font-weight: 800; color: var(--accent-primary); font-variant-numeric: tabular-nums;">00:00</span>
-                            <button type="button" class="btn btn-outline btn-sm" id="btnToggleStopwatch" style="font-size: 10px; padding: 2px 8px; border-radius: 20px;">Iniciar</button>
+                    <div class="sens-workout-top-actions">
+                        <div class="sens-workout-timer-pill">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span id="workoutStopwatchDisplay">00:00</span>
+                            <button type="button" class="btn btn-outline btn-sm" id="btnToggleStopwatch">Iniciar</button>
                         </div>
-                        <button class="btn btn-primary btn-sm" id="btnFinishWorkoutSession" style="font-weight: 700; border-radius: 20px;">Finalizar Sesión</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnFinishWorkoutSession">Finalizar Sesión</button>
                     </div>
                 </div>
 
-                <!-- Filtros Horizontales en Píldoras (Estilo BIGG) -->
-                <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 14px; -webkit-overflow-scrolling: touch;">
-                    <button type="button" class="pill pill-champagne muscle-filter-btn" data-group="all" style="cursor: pointer; border: none; white-space: nowrap;">Todos los Movimientos</button>
-                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="push" style="cursor: pointer; border: none; white-space: nowrap;">Empuje</button>
-                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="pull" style="cursor: pointer; border: none; white-space: nowrap;">Tracción</button>
-                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="quadriceps" style="cursor: pointer; border: none; white-space: nowrap;">Cuádriceps</button>
-                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="hamstrings_glutes" style="cursor: pointer; border: none; white-space: nowrap;">Isquios / Glúteo</button>
-                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="core_mobility" style="cursor: pointer; border: none; white-space: nowrap;">Core &amp; Movilidad</button>
+                <!-- 2. Navegador de Días de Entrenamiento (1 a 6 Días Programables por Nico) -->
+                <div class="workout-days-nav" id="workoutDaysNav">
+                    <button type="button" class="day-tab-btn active" data-day="day1">Día 1: Piernas &amp; Glúteos</button>
+                    <button type="button" class="day-tab-btn" data-day="day2">Día 2: Tren Superior (Empuje / Tirón)</button>
+                    <button type="button" class="day-tab-btn" data-day="day3">Día 3: Full Body &amp; Postura</button>
+                    <button type="button" class="day-tab-btn" data-day="day4">Día 4: Core &amp; Movilidad</button>
+                    <button type="button" class="day-tab-btn" data-day="day5">Día 5: Fuerza &amp; Acondicionamiento</button>
+                    <button type="button" class="day-tab-btn" data-day="day6">Día 6: Recuperación &amp; Cardio Zona 2</button>
                 </div>
 
-                <!-- Selector de días de entrenamiento (1 a 6 Días Programables) -->
-                <div class="workout-days-nav" id="workoutDaysNav" style="margin-bottom: 16px;">
-                    <button class="day-tab-btn active" data-day="day1">Día 1: Tren Superior (Empuje / Tirón)</button>
-                    <button class="day-tab-btn" data-day="day2">Día 2: Tren Inferior (Fuerza &amp; Cadera)</button>
-                    <button class="day-tab-btn" data-day="day3">Día 3: Full Body &amp; Postura</button>
-                    <button class="day-tab-btn" data-day="day4">Día 4: Core &amp; Movilidad (Casa)</button>
-                    <button class="day-tab-btn" data-day="day5">Día 5: Fuerza &amp; Acondicionamiento</button>
-                    <button class="day-tab-btn" data-day="day6">Día 6: Cardio Zona 2 &amp; Recuperación</button>
+                <!-- 3. Filtros Rápidos de Grupo Muscular (Músculo a Trabajar) -->
+                <div class="sens-muscle-filters-strip">
+                    <button type="button" class="pill pill-champagne muscle-filter-btn" data-group="all">Todos los Músculos</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="piernas">Piernas &amp; Glúteos</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="pecho_espalda">Pecho &amp; Espalda</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="brazos_hombros">Brazos &amp; Hombros</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="core_movilidad">Core &amp; Movilidad</button>
                 </div>
 
-                <!-- Barra de Acceso Rápido a Biblioteca & Acciones Coach -->
-                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px;">
-                    <button type="button" class="btn btn-outline btn-sm" id="btnOpenExerciseLibraryModal" style="border-radius: 20px;">
-                        Biblioteca de Ejercicios
+                <!-- 4. Barra de Acciones del Coach (Solo visible para Admin) -->
+                <div class="sens-workout-admin-bar" id="workoutAdminActionsBar" style="display: none;">
+                    <span style="font-size: 11px; color: var(--accent-primary); font-weight: 700;">Modo Asignación Coach Nico:</span>
+                    <button type="button" class="btn btn-primary btn-sm" id="btnAdminAddExercise">
+                        + Asignar Ejercicio a este Día
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" id="btnAdminAddExercise" style="border-radius: 20px; display: none;">
-                        + Asignar a este Día (Nico)
+                    <button type="button" class="btn btn-outline btn-sm" id="btnOpenExerciseLibraryModal">
+                        Biblioteca (50 Ejercicios)
                     </button>
                 </div>
 
-                <!-- Contenedor de Bloques de Entrenamiento (Estilo BIGG) -->
-                <div class="sens-workout-blocks-container" id="workoutBlocksWrapper">
-                    
-                    <!-- WARMUP -->
-                    <div class="sens-block-accordion" id="blockWarmup">
-                        <div class="sens-block-header">
-                            <div class="sens-block-header-left">
-                                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-primary); font-weight: 800;">WARMUP</span>
-                                <h4 class="sens-block-title">Activación Articular &amp; Zona Media</h4>
-                            </div>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        </div>
-                        <div class="sens-block-body">
-                            <span class="sens-block-instruction-pill">3 ROUNDS: MOVILIDAD CONTROLADA</span>
-                            <div class="sens-movement-item-card" data-movement-id="wm-1">
-                                <div class="sens-movement-row-collapsed">
-                                    <div class="sens-movement-left">
-                                        <button type="button" class="sens-movement-play-btn" title="Ver video">▶</button>
-                                        <span class="sens-movement-reps-pill">10</span>
-                                        <span class="sens-movement-name">Dislocaciones con Banda Elástica</span>
-                                    </div>
-                                    <div class="sens-movement-right">
-                                        <span style="font-size: 11px; color: var(--text-muted);">Banda</span>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <!-- 5. Subsección del Músculo a Trabajar (Encabezado Dinámico) -->
+                <div class="sens-muscle-focus-header" id="workoutMuscleFocusHeader">
+                    <div class="sens-muscle-badge-wrap">
+                        <span class="status-dot status-dot-active"></span>
+                        <span class="sens-muscle-focus-title" id="workoutFocusMuscleName">Tren Inferior: Piernas &amp; Glúteos</span>
                     </div>
-
-                    <!-- BLOQUE 1: COMBINED STRENGTH (Fuerza Principal) -->
-                    <div class="sens-block-accordion active" id="blockCombinedStrength">
-                        <div class="sens-block-header">
-                            <div class="sens-block-header-left">
-                                <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">RECOMENDADO POR OBJETIVO</span>
-                                <h4 class="sens-block-title">Combined Strength</h4>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; color: #FFFFFF;">
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                    6'
-                                </span>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
-                            </div>
-                        </div>
-
-                        <div class="sens-block-body">
-                            <div>
-                                <span class="sens-block-instruction-pill">COMPLETE 3 ROUNDS IN 6': BACK TO BASICS</span>
-                            </div>
-
-                            <!-- Movimiento 1: Push Ups (Expandido) -->
-                            <div class="sens-movement-item-card expanded" data-movement-id="mov-pushups">
-                                <div class="sens-movement-row-collapsed">
-                                    <div class="sens-movement-left">
-                                        <button type="button" class="sens-movement-play-btn" style="background: var(--accent-primary); color: #080809;">▶</button>
-                                        <span class="sens-movement-reps-pill">10</span>
-                                        <span class="sens-movement-name">Push Ups (Flexiones de Brazos)</span>
-                                    </div>
-                                    <div class="sens-movement-right">
-                                        <span style="font-size: 11px; color: var(--accent-primary); font-weight: 700;">BW</span>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
-                                    </div>
-                                </div>
-
-                                <div class="sens-movement-expanded-content">
-                                    <div class="sens-movement-video-wrap">
-                                        <video autoplay muted loop playsinline class="hero-video" style="width: 100%; height: 100%; object-fit: cover;">
-                                            <source src="vid/PILARES/1.mp4" type="video/mp4">
-                                        </video>
-                                    </div>
-
-                                    <div class="sens-movement-cue-box">
-                                        <div class="sens-movement-cue-title">¿Para qué sirve este ejercicio?</div>
-                                        <p class="sens-movement-cue-text">
-                                            Fortalece pectorales, deltoides anterior y tríceps mientras exige estabilización de todo el core y cintura escapular en plano horizontal.
-                                        </p>
-                                    </div>
-
-                                    <div style="margin-top: 12px;">
-                                        <div class="sens-set-logger-row">
-                                            <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">Serie 1</span>
-                                            <span style="font-size: 11.5px; color: var(--text-muted);">Sugerido: 10 reps</span>
-                                            <input type="number" class="set-input-tactile set-weight" placeholder="BW" value="0" style="width: 60px; height: 28px; font-size: 11px; padding: 2px 6px;">
-                                            <input type="number" class="set-input-tactile set-reps" placeholder="10" value="10" style="width: 50px; height: 28px; font-size: 11px; padding: 2px 6px;">
-                                            <button type="button" class="sens-set-check-btn checked" data-rest="60" title="Marcar completado">✓</button>
-                                        </div>
-                                        <div class="sens-set-logger-row">
-                                            <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">Serie 2</span>
-                                            <span style="font-size: 11.5px; color: var(--text-muted);">Sugerido: 10 reps</span>
-                                            <input type="number" class="set-input-tactile set-weight" placeholder="BW" value="0" style="width: 60px; height: 28px; font-size: 11px; padding: 2px 6px;">
-                                            <input type="number" class="set-input-tactile set-reps" placeholder="10" value="10" style="width: 50px; height: 28px; font-size: 11px; padding: 2px 6px;">
-                                            <button type="button" class="sens-set-check-btn" data-rest="60" title="Marcar completado">✓</button>
-                                        </div>
-                                        <div class="sens-set-logger-row">
-                                            <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">Serie 3</span>
-                                            <span style="font-size: 11.5px; color: var(--text-muted);">Sugerido: 10 reps</span>
-                                            <input type="number" class="set-input-tactile set-weight" placeholder="BW" value="0" style="width: 60px; height: 28px; font-size: 11px; padding: 2px 6px;">
-                                            <input type="number" class="set-input-tactile set-reps" placeholder="10" value="8" style="width: 50px; height: 28px; font-size: 11px; padding: 2px 6px;">
-                                            <button type="button" class="sens-set-check-btn" data-rest="60" title="Marcar completado">✓</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Movimiento 2: Plank Hold -->
-                            <div class="sens-movement-item-card" data-movement-id="mov-plank">
-                                <div class="sens-movement-row-collapsed">
-                                    <div class="sens-movement-left">
-                                        <button type="button" class="sens-movement-play-btn">▶</button>
-                                        <span class="sens-movement-reps-pill">30"</span>
-                                        <span class="sens-movement-name">Plank Hold (Plancha Frontal)</span>
-                                    </div>
-                                    <div class="sens-movement-right">
-                                        <span style="font-size: 11px; color: var(--text-muted);">Isométrico</span>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Movimiento 3: Russian Swing -->
-                            <div class="sens-movement-item-card" data-movement-id="mov-swing">
-                                <div class="sens-movement-row-collapsed">
-                                    <div class="sens-movement-left">
-                                        <button type="button" class="sens-movement-play-btn">▶</button>
-                                        <span class="sens-movement-reps-pill">10</span>
-                                        <span class="sens-movement-name">Russian Kettlebell Swing</span>
-                                    </div>
-                                    <div class="sens-movement-right">
-                                        <span style="font-size: 11px; color: var(--text-muted);">16 kg</span>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- BLOQUE 2: HIIT CONDICIONAMIENTO -->
-                    <div class="sens-block-accordion" id="blockHiit">
-                        <div class="sens-block-header">
-                            <div class="sens-block-header-left">
-                                <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">RECOMENDADO POR OBJETIVO</span>
-                                <h4 class="sens-block-title">HIIT &amp; Core</h4>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; color: #FFFFFF;">
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                    14'
-                                </span>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                            </div>
-                        </div>
-
-                        <div class="sens-block-body">
-                            <span class="sens-block-instruction-pill">40" ON / 20" OFF X 14': BANDED</span>
-                            
-                            <div class="sens-movement-item-card" data-movement-id="mov-bandsteps">
-                                <div class="sens-movement-row-collapsed">
-                                    <div class="sens-movement-left">
-                                        <button type="button" class="sens-movement-play-btn">▶</button>
-                                        <span class="sens-movement-reps-pill">40"</span>
-                                        <span class="sens-movement-name">Banded Side Steps (Glúteos)</span>
-                                    </div>
-                                    <div class="sens-movement-right">
-                                        <span style="font-size: 11px; color: var(--text-muted);">Banda Media</span>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Contenedor dinámico de respaldo para inyección de ejercicios programados por Nico -->
-                    <div id="exercisesContainer" style="display: none;"></div>
+                    <span class="sens-muscle-focus-sub" id="workoutFocusMuscleCue">Dominante de rodilla y cadera • Rango completo y control excéntrico</span>
                 </div>
 
-                <!-- Sticky Action Bar Inferior (Estilo BIGG) -->
-                <div class="sens-sticky-action-bar">
-                    <button type="button" class="sens-btn-block-action" id="btnStickyStartBlock">
-                        INICIAR BLOQUE
-                    </button>
+                <!-- 6. Contenedor Dinámico de Cards de Video de Alto Impacto (Estilo Pilares) -->
+                <div class="sens-exercise-video-grid" id="exercisesContainer">
+                    <!-- Inyectado dinámicamente por app.js con cards de video de alto impacto o empty state -->
                 </div>
             </section>
+
+            <!-- Modal / Bottom Sheet Táctil de Ejecución de Ejercicio (Apple-Grade Native Parity) -->
+            <div class="sens-exercise-modal-backdrop" id="sensExerciseModalBackdrop" style="display: none;">
+                <div class="sens-exercise-modal-sheet" id="sensExerciseModalSheet">
+                    <div class="sheet-drag-handle-wrap" id="sensExerciseSheetDragHandle">
+                        <span class="sheet-drag-handle"></span>
+                    </div>
+
+                    <div class="sens-exercise-modal-top">
+                        <div class="sens-exercise-modal-tags">
+                            <span class="pill pill-champagne" id="modalExMuscleGroup">PIERNAS &amp; GLÚTEOS</span>
+                            <span class="pill pill-dark" id="modalExTargetSetsReps">4 Series • 10-12 Reps</span>
+                        </div>
+                        <button type="button" class="sens-modal-close-btn" id="btnCloseExerciseModal" aria-label="Cerrar modal">✕</button>
+                    </div>
+
+                    <h3 class="sens-exercise-modal-title" id="modalExName">Sentadilla Copa con Pausa</h3>
+
+                    <!-- Video en Bucle de Alta Resolución -->
+                    <div class="sens-exercise-modal-video-wrap">
+                        <video autoplay muted loop playsinline class="sens-exercise-modal-video" id="modalExVideo">
+                            <source src="vid/PILARES/1.mp4" type="video/mp4">
+                        </video>
+                        <div class="sens-exercise-modal-video-cue" id="modalExCueText">
+                            Pecho erguido, empuje activo desde los talones, 1 segundo de pausa isométrica en el fondo sin rebotar.
+                        </div>
+                    </div>
+
+                    <!-- Recomendaciones de Nico -->
+                    <div class="sens-coach-notes-box">
+                        <div class="sens-coach-notes-header">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><circle cx="12" cy="12" r="4"/></svg>
+                            <span>Recomendaciones de Nico</span>
+                        </div>
+                        <p class="sens-coach-notes-body" id="modalExNotesBody">
+                            Priorizá la profundidad del movimiento manteniendo la curvatura neutra de la espalda baja. Si sentís molestia en rodilla, abrí la separación de pies a 35°.
+                        </p>
+                    </div>
+
+                    <!-- Dual Timers: Tiempo de Ejercicio (TUT) & Descanso -->
+                    <div class="sens-exercise-timers-grid">
+                        <!-- Timer 1: Duración de Ejercicio -->
+                        <div class="sens-timer-card">
+                            <div class="sens-timer-label">Duración del Ejercicio (TUT)</div>
+                            <div class="sens-timer-digits" id="modalExTutDisplay">00:00</div>
+                            <div class="sens-timer-controls">
+                                <button type="button" class="btn btn-primary btn-sm btn-timer-action" id="btnModalToggleTut">Iniciar Ejercicio</button>
+                                <button type="button" class="btn btn-outline btn-sm" id="btnModalResetTut">Reiniciar</button>
+                            </div>
+                        </div>
+
+                        <!-- Timer 2: Cronómetro de Descanso -->
+                        <div class="sens-timer-card">
+                            <div class="sens-timer-label">Descanso entre Series</div>
+                            <div class="sens-timer-digits text-champagne" id="modalExRestDisplay">01:30</div>
+                            <div class="sens-timer-controls">
+                                <button type="button" class="btn btn-outline btn-sm" id="btnModalStartRest">Iniciar Descanso</button>
+                                <button type="button" class="btn btn-outline btn-sm" id="btnModalAdd15Rest">+15s</button>
+                                <button type="button" class="btn btn-outline btn-sm text-muted" id="btnModalSkipRest">Saltar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logger Táctil de Series (Cero Tablas Desktop) -->
+                    <div class="sens-tactile-series-section">
+                        <div class="sens-series-section-header">
+                            <h4>Registro Táctil de Cargas</h4>
+                            <span class="sens-series-count" id="modalExSeriesCount">0 de 4 series completadas</span>
+                        </div>
+                        <div class="sens-tactile-series-list" id="modalExSeriesList">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button type="button" class="btn btn-primary btn-block" id="btnModalFinishExercise" style="padding: 12px; font-weight: 800; border-radius: 12px;">
+                            Guardar Progreso &amp; Cerrar Ejercicio
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <!-- =====================================================================
                  MÓDULO 7: NUTRICIÓN Y SEGUIMIENTO INTEGRAL
@@ -3782,6 +3758,53 @@
         <div class="sheet-footer">
             <button type="button" class="btn btn-outline btn-full btn-sm" id="btnSheetOpenCoachHub" style="font-size: 12px; font-weight: 700; letter-spacing: 0.5px;">
                 Abrir Panel de Gestión Coach Completo
+            </button>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         BOTTOM SHEET NATIVO DE ASIGNACIÓN DE PLAN / MODALIDAD (CERO <select>)
+         ========================================================================= -->
+    <div class="native-sheet-backdrop" id="coachPlanSheetBackdrop" style="display: none;"></div>
+    <div class="native-bottom-sheet" id="coachPlanPickerBottomSheet" role="dialog" aria-modal="true" aria-label="Asignar Modalidad al Alumno" style="display: none;">
+        <div class="sheet-drag-handle-wrap">
+            <div class="sheet-drag-handle"></div>
+        </div>
+        <div class="sheet-header">
+            <div>
+                <span class="sheet-eyebrow">MODALIDAD DE ATLETA</span>
+                <h3 class="sheet-title" id="coachPlanSheetAthleteTitle">Asignar Plan</h3>
+            </div>
+            <button type="button" class="sheet-close-btn" id="btnClosePlanSheet" aria-label="Cerrar">&times;</button>
+        </div>
+        <div class="coach-plan-options-container" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip">
+                <div class="plan-opt-left">
+                    <strong>Presencial 1 a 1 VIP (CABA)</strong>
+                    <span>Sesiones individuales de alta intensidad y técnica</span>
+                </div>
+                <span class="pill pill-champagne">VIP</span>
+            </button>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group">
+                <div class="plan-opt-left">
+                    <strong>Presencial Semi-Personalizado (Dúo)</strong>
+                    <span>Grupos reducidos de 2 a 3 personas</span>
+                </div>
+                <span class="pill pill-dark">Dúo</span>
+            </button>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_premium">
+                <div class="plan-opt-left">
+                    <strong>Online Asesorado Premium</strong>
+                    <span>Seguimiento diario, videollamadas y corrección técnica</span>
+                </div>
+                <span class="pill pill-champagne">Premium</span>
+            </button>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_basic">
+                <div class="plan-opt-left">
+                    <strong>Online Asesorado Básico</strong>
+                    <span>Plan mensual autónomo y feedback semanal</span>
+                </div>
+                <span class="pill pill-dark">Básico</span>
             </button>
         </div>
     </div>
