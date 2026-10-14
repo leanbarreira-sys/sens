@@ -8184,16 +8184,26 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 
-.sens-week-day-pill.active .sens-week-day-num {
-    background: var(--accent-primary);
-    color: #080809;
-    box-shadow: 0 4px 14px rgba(229, 203, 167, 0.35);
-    font-weight: 800;
+.sens-week-day-pill.active {
+    background: #09090B !important;
+    border: 1.5px solid #9E7D4B !important;
+    box-shadow: 0 8px 24px rgba(9, 9, 11, 0.28), 0 0 0 1px rgba(158, 125, 75, 0.35) !important;
+    transform: translateY(-2px) !important;
 }
 
-.sens-week-day-pill.active .sens-week-day-name {
-    color: var(--accent-primary);
-    font-weight: 600;
+.sens-week-day-pill.active .sens-week-day-num,
+.sens-week-day-pill.active .sens-day-hero-num,
+.sens-week-day-pill.active .sens-day-num {
+    background: transparent !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+    font-weight: 800 !important;
+}
+
+.sens-week-day-pill.active .sens-week-day-name,
+.sens-week-day-pill.active .sens-day-name {
+    color: #E5CBA7 !important;
+    font-weight: 700 !important;
 }
 
 .sens-week-day-pill.completed .sens-week-day-num {
@@ -10767,32 +10777,48 @@ body.in-portal .sens-day-num {
     justify-content: center !important;
 }
 
-body.in-portal .sens-week-day-pill.is-today {
-    border-color: rgba(158, 125, 75, 0.4) !important;
-    background: #FCFBF9 !important;
+body.in-portal .sens-week-day-pill.is-today:not(.active) {
+    border-color: rgba(158, 125, 75, 0.45) !important;
+    background: #FDFBF7 !important;
 }
 
-body.in-portal .sens-week-day-pill.is-today .sens-week-day-name,
-body.in-portal .sens-week-day-pill.is-today .sens-day-name {
+body.in-portal .sens-week-day-pill.is-today:not(.active) .sens-week-day-name,
+body.in-portal .sens-week-day-pill.is-today:not(.active) .sens-day-name {
     color: #9E7D4B !important;
     font-weight: 700 !important;
 }
 
-body.in-portal .sens-week-day-pill.active {
+body.in-portal .sens-week-day-pill.is-today:not(.active) .sens-day-hero-num,
+body.in-portal .sens-week-day-pill.is-today:not(.active) .sens-week-day-num,
+body.in-portal .sens-week-day-pill.is-today:not(.active) .sens-day-num {
+    color: #09090B !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-week-day-pill.active,
+body.in-portal .sens-week-day-pill.active.is-today {
     background: #09090B !important;
-    border-color: #09090B !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
+    border: 1.5px solid #9E7D4B !important;
+    box-shadow: 0 8px 24px rgba(9, 9, 11, 0.28), 0 0 0 1px rgba(158, 125, 75, 0.35) !important;
+    transform: translateY(-2px) !important;
 }
 
 body.in-portal .sens-week-day-pill.active .sens-week-day-name,
-body.in-portal .sens-week-day-pill.active .sens-day-name {
-    color: rgba(255, 255, 255, 0.65) !important;
+body.in-portal .sens-week-day-pill.active .sens-day-name,
+body.in-portal .sens-week-day-pill.active.is-today .sens-week-day-name,
+body.in-portal .sens-week-day-pill.active.is-today .sens-day-name {
+    color: #E5CBA7 !important;
+    font-weight: 700 !important;
 }
 
 body.in-portal .sens-week-day-pill.active .sens-day-hero-num,
 body.in-portal .sens-week-day-pill.active .sens-week-day-num,
-body.in-portal .sens-week-day-pill.active .sens-day-num {
+body.in-portal .sens-week-day-pill.active .sens-day-num,
+body.in-portal .sens-week-day-pill.active.is-today .sens-day-hero-num,
+body.in-portal .sens-week-day-pill.active.is-today .sens-week-day-num,
+body.in-portal .sens-week-day-pill.active.is-today .sens-day-num {
     color: #FFFFFF !important;
+    font-weight: 800 !important;
 }
 
 
@@ -11427,8 +11453,11 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.done {
     border-color: #10B981 !important;
 }
 
-body.in-portal .sens-week-day-pill.active .sens-day-badge.rest {
-    color: rgba(255, 255, 255, 0.4) !important;
+body.in-portal .sens-week-day-pill.active .sens-day-badge.rest,
+.sens-week-day-pill.active .sens-day-badge.rest {
+    color: #E5CBA7 !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
 }
 
 /* Leyenda de Modalidades debajo del Calendario */

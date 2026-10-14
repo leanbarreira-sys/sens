@@ -6456,23 +6456,42 @@ function loadCoachAthleteWorkouts(athId) {
 }
 
 function getCoachAthleteWorkoutData(athId) {
+    // 1. Si está en cache de atletas de Coach OS
+    if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object') {
+            return cached.prescribed_workouts;
+        }
+    }
+
+    // 2. Si es el alumno activo en su portal y tiene los datos en su perfil de Supabase
+    if (AppState.profile && AppState.profile.id === athId && AppState.profile.prescribed_workouts) {
+        return AppState.profile.prescribed_workouts;
+    }
+
+    // 3. Revisar en localStorage por si se guardó recientemente
     const raw = localStorage.getItem(`sens_prescribed_workouts_${athId}`);
     if (raw) {
-        try { return JSON.parse(raw); } catch (e) {}
+        try {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object') return parsed;
+        } catch (e) {}
     }
-    // Solo perfiles demostrativos heredan la rutina completa preconfigurada
+
+    // 4. Solo perfiles demostrativos heredan la rutina completa preconfigurada
     if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
         return JSON.parse(JSON.stringify(WORKOUT_DAYS_DATA));
     }
-    // Alumno real sin rutina cargada por Nico todavía
+
+    // 5. Alumno real sin rutina cargada por Nico todavía: todos los días en null (la línea "–")
     return {
-        day1: { title: 'Lunes', exercises: [], modality: 'presencial', completed: false },
-        day2: { title: 'Martes', exercises: [], modality: 'online', completed: false },
-        day3: { title: 'Miércoles', exercises: [], modality: 'descanso', completed: false },
-        day4: { title: 'Jueves', exercises: [], modality: 'presencial', completed: false },
-        day5: { title: 'Viernes', exercises: [], modality: 'autonomo', completed: false },
-        day6: { title: 'Sábado', exercises: [], modality: 'descanso', completed: false },
-        day7: { title: 'Domingo', exercises: [], modality: 'descanso', completed: false }
+        day1: { title: 'Lunes', exercises: [], modality: null, completed: false },
+        day2: { title: 'Martes', exercises: [], modality: null, completed: false },
+        day3: { title: 'Miércoles', exercises: [], modality: null, completed: false },
+        day4: { title: 'Jueves', exercises: [], modality: null, completed: false },
+        day5: { title: 'Viernes', exercises: [], modality: null, completed: false },
+        day6: { title: 'Sábado', exercises: [], modality: null, completed: false },
+        day7: { title: 'Domingo', exercises: [], modality: null, completed: false }
     };
 }
 
@@ -6486,11 +6505,11 @@ function renderCoachAssignedExercises() {
 
     if (titleInput) titleInput.value = day.title;
 
-    // Sincronizar botones de modalidad asignada por Nico
-    const assignedModality = day.modality || 'presencial';
+    // Sincronizar botones de modalidad asignada por Nico (ninguno activo si es null)
+    const assignedModality = day.modality || null;
     const modalityBtns = document.querySelectorAll('#coachModalityButtonsWrap .coach-modality-btn');
     modalityBtns.forEach(b => {
-        const isMatch = (b.getAttribute('data-modality') === assignedModality);
+        const isMatch = Boolean(assignedModality && b.getAttribute('data-modality') === assignedModality);
         b.classList.toggle('active', isMatch);
         b.classList.toggle('pill-champagne', isMatch);
         b.classList.toggle('pill-dark', !isMatch);
@@ -6575,9 +6594,9 @@ function saveCurrentCoachWorkoutDay() {
 
     if (titleInput) data[dayKey].title = titleInput.value.trim() || `Día: ${dayKey}`;
 
-    // Guardar modalidad
+    // Guardar modalidad asignada por Nico (o null si no hay ninguna activa)
     const activeModBtn = document.querySelector('#coachModalityButtonsWrap .coach-modality-btn.active');
-    data[dayKey].modality = activeModBtn ? activeModBtn.getAttribute('data-modality') : 'presencial';
+    data[dayKey].modality = activeModBtn ? activeModBtn.getAttribute('data-modality') : null;
 
     // Guardar asistencia/completado
     const completedCheck = document.getElementById('coachDayCompletedCheck');
@@ -6602,7 +6621,23 @@ function saveCurrentCoachWorkoutDay() {
 
     localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
 
+    // Sincronizar en cache local del roster de Coach OS
+    if (window.__coachAthletesCache) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached) cached.prescribed_workouts = data;
+    }
+
+    // Persistir en Supabase en profiles.prescribed_workouts
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        supabaseClient.from('profiles').update({
+            prescribed_workouts: data
+        }).eq('id', athId).then(({ error }) => {
+            if (error) console.warn('Error al guardar entrenamientos en Supabase:', error);
+        });
+    }
+
     if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
+        if (AppState.profile) AppState.profile.prescribed_workouts = data;
         Object.assign(WORKOUT_DAYS_DATA, data);
         renderWorkoutDay(AppState.currentDay || 'day1');
         renderMonthlyCalendar();
@@ -6702,6 +6737,23 @@ function initCoachDashboardNote() {
             const noteData = { title, body, updated_at: new Date().toISOString() };
             localStorage.setItem(`sens_coach_dash_note_${athId}`, JSON.stringify(noteData));
 
+            if (window.__coachAthletesCache) {
+                const cached = window.__coachAthletesCache.find(a => a.id === athId);
+                if (cached) cached.coach_note = noteData;
+            }
+
+            if (supabaseClient && !athId.startsWith('mock_')) {
+                supabaseClient.from('profiles').update({
+                    coach_note: noteData
+                }).eq('id', athId).then(({ error }) => {
+                    if (error) console.warn('Error al guardar nota en Supabase:', error);
+                });
+            }
+
+            if (AppState.profile && AppState.profile.id === athId) {
+                AppState.profile.coach_note = noteData;
+            }
+
             const dashWeeklyNote = document.getElementById('dashCoachWeeklyNote');
             if (dashWeeklyNote && body) dashWeeklyNote.textContent = body;
 
@@ -6713,10 +6765,19 @@ function initCoachDashboardNote() {
 }
 
 function loadCoachAthleteDashNote(athId) {
-    const raw = localStorage.getItem(`sens_coach_dash_note_${athId}`);
     const titleInp = document.getElementById('coachDashNoteTitleInput');
     const bodyInp = document.getElementById('coachDashNoteBodyInput');
 
+    if (window.__coachAthletesCache) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached && cached.coach_note) {
+            if (titleInp) titleInp.value = cached.coach_note.title || '';
+            if (bodyInp) bodyInp.value = cached.coach_note.body || '';
+            return;
+        }
+    }
+
+    const raw = localStorage.getItem(`sens_coach_dash_note_${athId}`);
     if (raw) {
         try {
             const parsed = JSON.parse(raw);
@@ -6726,8 +6787,8 @@ function loadCoachAthleteDashNote(athId) {
         } catch (e) {}
     }
 
-    if (titleInp) titleInp.value = 'Foco de la Semana: Precisión Biomecánica & Adherencia';
-    if (bodyInp) bodyInp.value = 'Excelente ritmo en tus sesiones. Esta semana mantené el foco en descansar los 75-90 segundos pautados y alcanzar tus 160g de proteína sin saltear comidas.';
+    if (titleInp) titleInp.value = athId.startsWith('mock_') ? 'Foco de la Semana: Precisión Biomecánica & Adherencia' : '';
+    if (bodyInp) bodyInp.value = athId.startsWith('mock_') ? 'Excelente ritmo en tus sesiones. Esta semana mantené el foco en descansar los 75-90 segundos pautados y alcanzar tus 160g de proteína sin saltear comidas.' : '';
 }
 
 // -----------------------------------------------------------------------------
@@ -6768,6 +6829,14 @@ function initMemberClarityActions() {
 function syncMemberNutritionPrescription(athId, forcedData = null) {
     let data = forcedData;
     if (!data) {
+        if (AppState.profile && AppState.profile.id === athId && AppState.profile.prescribed_nutrition) {
+            data = AppState.profile.prescribed_nutrition;
+        } else if (window.__coachAthletesCache) {
+            const cached = window.__coachAthletesCache.find(a => a.id === athId);
+            if (cached && cached.prescribed_nutrition) data = cached.prescribed_nutrition;
+        }
+    }
+    if (!data) {
         const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`);
         if (raw) {
             try { data = JSON.parse(raw); } catch (e) {}
@@ -6775,23 +6844,37 @@ function syncMemberNutritionPrescription(athId, forcedData = null) {
     }
 
     if (!data) {
-        data = {
-            target_calories: 2200,
-            directive_note: 'Priorizá llegar a tu meta de proteína diaria repartida en las comidas principales y mantener hidratación constante antes de entrenar.',
-            prescribed_foods: [
-                { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', grams: 200, cal: 330, protein: 62 },
-                { id: 'fd-p2', name: 'Huevos de Campo Enteros', grams: 120, cal: 172, protein: 15 },
-                { id: 'fd-c1', name: 'Avena Tradicional Arrollada', grams: 80, cal: 311, protein: 11 },
-                { id: 'fd-c2', name: 'Arroz Yamani / Integral', grams: 150, cal: 168, protein: 3.9 }
-            ]
-        };
+        if (!athId.startsWith('mock_') && athId !== 'usr-vip-001' && athId !== 'usr-onl-003') {
+            data = {
+                target_calories: null,
+                directive_note: 'Pendiente de prescripción por Nico.',
+                prescribed_foods: []
+            };
+        } else {
+            data = {
+                target_calories: 2200,
+                directive_note: 'Priorizá llegar a tu meta de proteína diaria repartida en las comidas principales y mantener hidratación constante antes de entrenar.',
+                prescribed_foods: [
+                    { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', grams: 200, cal: 330, protein: 62 },
+                    { id: 'fd-p2', name: 'Huevos de Campo Enteros', grams: 120, cal: 172, protein: 15 },
+                    { id: 'fd-c1', name: 'Avena Tradicional Arrollada', grams: 80, cal: 311, protein: 11 },
+                    { id: 'fd-c2', name: 'Arroz Yamani / Integral', grams: 150, cal: 168, protein: 3.9 }
+                ]
+            };
+        }
     }
 
     const kcalEl = document.getElementById('nutriPrescribedKcal');
     const noteEl = document.getElementById('nutriPrescribedCoachNote');
     const foodsGrid = document.getElementById('nutriPrescribedFoodsGrid');
 
-    if (kcalEl) kcalEl.innerHTML = `${(data.target_calories || 2200).toLocaleString('es-AR')} <span style="font-size: 1.1rem; color: var(--text-secondary); font-weight: 400;">kcal / día</span>`;
+    if (kcalEl) {
+        if (data.target_calories) {
+            kcalEl.innerHTML = `${data.target_calories.toLocaleString('es-AR')} <span style="font-size: 1.1rem; color: var(--text-secondary); font-weight: 400;">kcal / día</span>`;
+        } else {
+            kcalEl.innerHTML = `- <span style="font-size: 1.1rem; color: var(--text-secondary); font-weight: 400;">kcal / día</span>`;
+        }
+    }
     if (noteEl && data.directive_note) noteEl.textContent = `"${data.directive_note}"`;
 
     if (foodsGrid && Array.isArray(data.prescribed_foods)) {
@@ -7446,21 +7529,20 @@ function renderDynamicWeekStrip() {
         const isSelected = isSameDay(dayDate, AppState.selectedDate || new Date());
         const dayKey = 'day' + (i + 1);
         const dayData = data[dayKey] || {};
-        const hasEx = Boolean(dayData.exercises && dayData.exercises.length > 0);
-        const modality = dayData.modality || (hasEx ? 'presencial' : 'descanso');
+        const modality = dayData.modality;
         const isCompleted = Boolean(dayData.completed);
 
         let statusBadge = '';
         if (isCompleted) {
             statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
-        } else if (hasEx && modality === 'presencial') {
+        } else if (modality === 'presencial') {
             statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres.</span>`;
-        } else if (hasEx && modality === 'online') {
+        } else if (modality === 'online') {
             statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
-        } else if (hasEx && modality === 'autonomo') {
+        } else if (modality === 'autonomo') {
             statusBadge = `<span class="sens-day-badge auto" title="Sesión en gimnasio / app">Gym</span>`;
         } else {
-            statusBadge = `<span class="sens-day-badge rest" title="Recuperación / Descanso">–</span>`;
+            statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
 
         const heroNum = dayDate.getDate();
@@ -7622,17 +7704,23 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     // 3. Modality Pill
-    const modality = dayData.modality || 'presencial';
+    const modality = dayData.modality;
     if (modalityPill) {
         if (modality === 'presencial') {
             modalityPill.textContent = 'Presencial con Nico';
             modalityPill.className = 'sens-modality-pill';
+            modalityPill.style.display = 'inline-flex';
         } else if (modality === 'online') {
             modalityPill.textContent = 'Online con Nico';
             modalityPill.className = 'sens-modality-pill online';
-        } else {
+            modalityPill.style.display = 'inline-flex';
+        } else if (modality === 'autonomo') {
             modalityPill.textContent = 'Sesión Autónoma';
             modalityPill.className = 'sens-modality-pill auto';
+            modalityPill.style.display = 'inline-flex';
+        } else {
+            modalityPill.textContent = '–';
+            modalityPill.style.display = 'none';
         }
     }
 
