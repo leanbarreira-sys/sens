@@ -120,7 +120,13 @@
         
         .custom-box { width: 22px; height: 22px; border: 1.5px solid var(--text-muted); border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: var(--transition); background: var(--bg-elevated); }
         .selection-item input[type="checkbox"]:checked + .custom-box { background: var(--accent-primary); border-color: var(--accent-primary); }
-        .selection-item input[type="checkbox"]:checked + .custom-box::after { content: '✓'; color: #080809; font-size: 13px; font-weight: 900; }
+        .selection-item input[type="checkbox"]:checked + .custom-box::after { content: ''; width: 5px; height: 9px; border: solid #080809; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-bottom: 2px; }
+
+        /* Puntos de Estado CSS (Zero-Emoji Policy) */
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .status-dot-active { background: #10B981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+        .status-dot-pending { background: #F59E0B; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+        .status-dot-paused { background: #6B7280; }
 
         .custom-circle { width: 22px; height: 22px; border: 1.5px solid var(--text-muted); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition); background: var(--bg-elevated); }
         .selection-item input[type="radio"]:checked + .custom-circle { border-color: var(--accent-primary); }
@@ -189,7 +195,8 @@
             <li><a href="#ui-kit">3. UI Kit Interactivo</a></li>
             <li><a href="#canva-guide">4. Guía Canva & Composición</a></li>
             <li><a href="#social-mockups">5. 10 Casos de Redes</a></li>
-            <li><a href="#wording">6. Wording & Copys</a></li>
+            <li><a href="#wording">6. Wording &amp; Copys</a></li>
+            <li><a href="#clean-ux">7. Estándares Clean &amp; UX Nativa</a></li>
         </ul>
     </aside>
 
@@ -341,9 +348,9 @@
 
                     <h3 style="font-size: 11px; margin: 15px 0 8px; color: var(--text-muted);">Uso de Pills Semánticas:</h3>
                     <div class="pill-container">
-                        <span class="pill pill-champagne">★ Plan VIP Activo</span>
+                        <span class="pill pill-champagne">Plan VIP Activo</span>
                         <span class="pill pill-dark">Fuerza Base</span>
-                        <span class="pill pill-success">✓ Set Completado</span>
+                        <span class="pill pill-success"><span class="status-dot status-dot-active"></span> Set Completado</span>
                         <span class="pill pill-alert">Últimos 2 Cupos</span>
                     </div>
 
@@ -499,8 +506,8 @@
             <table class="specs-table">
                 <thead>
                     <tr>
-                        <th>Evitar (❌)</th>
-                        <th>Usar (✅)</th>
+                        <th>Prohibido / Evitar</th>
+                        <th>Estándar SENS</th>
                         <th>Criterio Técnico / Legal</th>
                     </tr>
                 </thead>
@@ -526,6 +533,93 @@
             <div class="panel">
                 <h3>Prompt Base para Generar Fondos Abstractos de IA</h3>
                 <pre><code>Ultra-premium editorial photography, low-key lighting, deep onyx black and soft warm dark tones, soft directional side light, matte textures, subtle film grain, shallow depth of field, minimal composition with large empty negative space in the upper third and lower third, vertical 4:5, no text, no logos, no people.</code></pre>
+            </div>
+        </section>
+
+        <!-- 7. ESTÁNDARES CLEAN, UX NATIVA & POLÍTICA ZERO-EMOJI (ANTI-IA) -->
+        <section id="clean-ux">
+            <h2>7. Estándares Clean, UX Nativa &amp; Política Zero-Emoji (Guía Anti-IA)</h2>
+            <p>Directrices mandatorias para evitar que las interfaces parezcan plantillas informales generadas por inteligencia artificial. El posicionamiento de ticket alto (ARS 85k - 260k) exige sofisticación, calma visual y una experiencia táctil indistinguible de una aplicación nativa de Apple o Equinox.</p>
+
+            <div class="grid-2">
+                <div class="panel">
+                    <h3>7.1 Política Innegociable Zero-Emoji</h3>
+                    <p><strong>Cero emoticones en toda la plataforma:</strong> Queda terminantemente prohibido el uso de emojis Unicode en botones, tarjetas, selectores, toasts, tablas o modales.</p>
+                    <p>Los emojis proyectan una estética amateur, infantil y descuidada. Además, los diferentes sistemas operativos (iOS, Android, Windows) los renderizan con estilos disonantes que rompen por completo la paleta Onyx &amp; Champagne.</p>
+                    <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                            <span style="color: var(--danger); font-weight: 700;">PROHIBIDO:</span>
+                            <span style="opacity: 0.7;">Emojis de semáforos, fueguitos, gotas, platos, pesas o disquetes.</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                            <span style="color: var(--accent-primary); font-weight: 700;">OBLIGATORIO:</span>
+                            <span>Puntos de estado CSS (.status-dot), íconos SVG monocromáticos (stroke 1.5-2px) y micro-flechas tipográficas (&rarr;).</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>7.2 Arquitectura Mobile Nativa</h3>
+                    <p><strong>Prohibición de Dropdowns Nativos (&lt;select&gt;):</strong> Nunca emplear el elemento &lt;select&gt; de navegador para flujos operativos clave, roles o selección de alumnos. Disparan modales toscos del sistema operativo que destruyen la inmersión de marca.</p>
+                    <p><strong>Componente Obligatorio: Native Bottom Sheet:</strong> Panel deslizable inferior con drag handle táctil, fondo blur (20px), buscador en tiempo real y segmented pills estilo Apple.</p>
+                    <p><strong>Barra Ejecutiva Sticky:</strong> Una sola fila compacta (48px) con trigger pill sutil, sin apilamiento de controles que invada la pantalla de entrenamiento.</p>
+                </div>
+            </div>
+
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th>Elemento UI</th>
+                        <th>Patrón Incorrecto / "Hecho con IA"</th>
+                        <th>Estándar SENS (Lujo Editorial)</th>
+                        <th>Implementación Técnica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Estados de Membresía</strong></td>
+                        <td>Emojis de colores (ACTIVO, PENDIENTE, PAUSADO con emojis)</td>
+                        <td>Puntos de estado CSS de 8px con halo luminoso sutil + texto sobrio</td>
+                        <td><code>&lt;span class="status-dot status-dot-active"&gt;&lt;/span&gt; Activo</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Selector de Alumnos / Roles</strong></td>
+                        <td>&lt;select&gt; HTML que dispara el selector tosco del celular</td>
+                        <td>Native Bottom Sheet deslizable con drag handle, buscador y tabs</td>
+                        <td><code>.native-bottom-sheet</code> con animación translateY fluida</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hábitos &amp; Métricas</strong></td>
+                        <td>Emojis dentro de los anillos visuales</td>
+                        <td>Iconografía SVG ultra limpia (stroke 2px) o datos numéricos tabulares</td>
+                        <td>SVGs monocromáticos optimizados inline</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Toasts &amp; Alertas</strong></td>
+                        <td>Toasts con emojis y exclamaciones exageradas</td>
+                        <td>Notificaciones concisas, sobrias y en 1 sola línea ejecutiva</td>
+                        <td><code>showSensToast(msg, 'champagne')</code> sin emoticones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Checkmarks de Planes</strong></td>
+                        <td>Caracter Unicode de tilde (U+2713) que el celular suele pintar como emoji</td>
+                        <td>Vector SVG champagne gold o geometría CSS pura</td>
+                        <td><code>&lt;svg class="check"&gt;&lt;polyline points="20 6 9 17 4 12"/&gt;&lt;/svg&gt;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cronómetros &amp; Pesos</strong></td>
+                        <td>Texto estándar que salta de ancho al cambiar los segundos</td>
+                        <td>Tipografía tabular con ancho numérico constante</td>
+                        <td><code>font-variant-numeric: tabular-nums;</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="panel">
+                <h3>Regla de Oro de Diseño para SENS</h3>
+                <p style="font-size: 1.15rem; color: #FFFFFF; font-style: italic; margin-bottom: 0;">
+                    "Si un elemento parece sacado de una app de mensajería informal o de un prompt genérico de IA, no pertenece a SENS. Cada interacción debe transmitir la calma, precisión y autoridad técnica de un servicio presencial de USD 200/mes."
+                </p>
             </div>
         </section>
     </main>
