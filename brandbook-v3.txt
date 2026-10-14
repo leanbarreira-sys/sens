@@ -224,6 +224,28 @@
                     <p><strong>Servicio Histórico:</strong> La propuesta "Trilogy" (Yoga, Masajes y Meditación a domicilio) se mantiene accesible al pie de la web pública de forma secundaria.</p>
                 </div>
             </div>
+
+            <!-- 1.3 Ecosistema de Dominios & Arquitectura Digital -->
+            <div class="panel" style="margin-top: 24px; border-left: 4px solid var(--accent-primary);">
+                <h3>1.3 Ecosistema de Dominios &amp; Arquitectura Digital</h3>
+                <div class="grid-3" style="margin-top: 14px;">
+                    <div>
+                        <span class="pill pill-champagne" style="font-size: 10px; margin-bottom: 8px;">FLAGSHIP LOCAL</span>
+                        <h4 style="color: #FFF; font-size: 15px; margin: 4px 0;">makesens.com.ar</h4>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Landing institucional de alta conversión, captación presencial 1 a 1 en CABA (Palermo / Belgrano / Puerto Madero), SEO/GEO y WhatsApp consultivo de Nico.</p>
+                    </div>
+                    <div>
+                        <span class="pill pill-champagne" style="font-size: 10px; margin-bottom: 8px;">GLOBAL WEBMOBILE APP</span>
+                        <h4 style="color: #FFF; font-size: 15px; margin: 4px 0;">makesens.online</h4>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Portal de clientes y atletas (PWA nativa), gestor de rutinas biomecánicas en video, prescripción de hábitos y Coach OS para escalar programas a nivel internacional.</p>
+                    </div>
+                    <div>
+                        <span class="pill pill-champagne" style="font-size: 10px; margin-bottom: 8px;">E-COMMERCE CURADO</span>
+                        <h4 style="color: #FFF; font-size: 15px; margin: 4px 0;">makesens.store</h4>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Catálogo curado de equipamiento (mancuernas, bandas, mat de 10mm) y suplementos clínicos (magnesio bisglicinato, creatina Creapure) con compra en 1 clic.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- 2. TOKENS -->
@@ -529,6 +551,44 @@
                     </tr>
                 </tbody>
             </table>
+
+            <!-- 6.1 La Jerarquía del Slogan & El Mantra de Marca "MAKE SENS." -->
+            <div class="panel" style="margin: 24px 0; border-left: 4px solid var(--accent-primary);">
+                <h3>6.1 Arquitectura del Slogan &amp; El Mantra "MAKE SENS."</h3>
+                <p style="font-size: 13.5px; color: var(--text-secondary); margin-bottom: 16px;">
+                    La identidad evoluciona de un descriptor funcional a un <strong>Mantra de Categoría</strong> que capitaliza el juego de palabras anglo-hispano: <em>To make sense</em> (tener sentido común, ser sensato) y <em>Make SENS</em> (accionar tu bienestar, vivir la metodología SENS).
+                </p>
+
+                <div class="grid-3" style="gap: 16px;">
+                    <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(229,203,167,0.3); border-radius: 12px; padding: 18px;">
+                        <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">NIVEL 1: BRAND MANTRA</span>
+                        <h4 style="font-size: 1.3rem; font-weight: 800; color: #FFF; letter-spacing: 2.5px; margin: 10px 0 6px;">MAKE SENS.</h4>
+                        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">Firma institucional con punto final tipográfico de aplomo. Cierre de videos, dorsal de indumentaria quiet luxury, footer y URLs.</p>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px;">
+                        <span class="pill pill-dark" style="font-size: 9.5px; font-weight: 800;">NIVEL 2: BRAND PROMISE</span>
+                        <h4 style="font-size: 1rem; font-weight: 700; color: #FFF; margin: 10px 0 6px;">Se ve por fuera. Se siente por dentro.</h4>
+                        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">Descriptor de resultado tangible: estética muscular, postura erguida, vitalidad real y descompresión de dolores articulares.</p>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px;">
+                        <span class="pill pill-dark" style="font-size: 9.5px; font-weight: 800;">NIVEL 3: REASON TO BELIEVE</span>
+                        <h4 style="font-size: 1rem; font-weight: 700; color: #FFF; margin: 10px 0 6px;">Salud que tiene sentido común.</h4>
+                        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45;">El contraste ético frente a la industria: sin dietas de hambre, sin lesiones por modas extremas, con biomecánica y seguimiento humano.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <h4 style="font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-primary); margin-bottom: 8px;">Territorio de Campaña Viral: "¿Tiene sentido? / Does it make sense?"</h4>
+                    <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">
+                        Estructura de storytelling para Reels y LinkedIn de Nico basada en el contraste:<br>
+                        • <em>"Pasarte 2 horas haciendo cardio en ayunas y no comer carbohidratos no tiene sentido. Make SENS."</em><br>
+                        • <em>"Copiar la rutina de un influencer de 20 años teniendo 45 y dolor lumbar no tiene sentido. Make SENS."</em><br>
+                        • <em>"Entrenar la fuerza con sobrecarga progresiva y proteger tus articulaciones... eso sí tiene sentido. Make SENS."</em>
+                    </p>
+                </div>
+            </div>
 
             <div class="panel">
                 <h3>Prompt Base para Generar Fondos Abstractos de IA</h3>
