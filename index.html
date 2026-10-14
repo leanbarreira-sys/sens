@@ -2218,193 +2218,320 @@
             </section>
 
             <!-- =====================================================================
-                 MÓDULO 5: DASHBOARD DE BIENVENIDA
+                 MÓDULO 5: DASHBOARD DE BIENVENIDA (ESTILO BIGG × SAMSUNG HEALTH)
                  ===================================================================== -->
             <section class="portal-view active" id="dashView">
-                <div class="dash-welcome-card">
-                    <div>
-                        <span class="pill pill-champagne" style="margin-bottom: 8px;">Portal del Atleta</span>
-                        <h2 class="dash-heading">Hola <span id="dashUserName">Atleta</span>. <strong>Sentite mejor en tu cuerpo hoy.</strong></h2>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px;">
-                            Tu constancia construye el cambio. Repasá tus números de la semana y arrancá el entrenamiento del día.
+                <!-- 1. Strip Calendar Semanal (Estilo BIGG) -->
+                <div class="sens-week-strip-wrap" id="portalWeekStrip">
+                    <button type="button" class="sens-week-day-pill" data-day-idx="0">
+                        <span class="sens-week-day-name">Lun</span>
+                        <span class="sens-week-day-num">12</span>
+                    </button>
+                    <button type="button" class="sens-week-day-pill active" data-day-idx="1">
+                        <span class="sens-week-day-name">Mar</span>
+                        <span class="sens-week-day-num">13</span>
+                    </button>
+                    <button type="button" class="sens-week-day-pill" data-day-idx="2">
+                        <span class="sens-week-day-name">Mié</span>
+                        <span class="sens-week-day-num">14</span>
+                    </button>
+                    <button type="button" class="sens-week-day-pill" data-day-idx="3">
+                        <span class="sens-week-day-name">Jue</span>
+                        <span class="sens-week-day-num">15</span>
+                    </button>
+                    <button type="button" class="sens-week-day-pill" data-day-idx="4">
+                        <span class="sens-week-day-name">Vie</span>
+                        <span class="sens-week-day-num">16</span>
+                    </button>
+                    <button type="button" class="sens-week-day-pill" data-day-idx="5">
+                        <span class="sens-week-day-name">Sáb</span>
+                        <span class="sens-week-day-num">17</span>
+                    </button>
+                    <button type="button" class="sens-week-day-pill" data-day-idx="6">
+                        <span class="sens-week-day-name">Dom</span>
+                        <span class="sens-week-day-num">18</span>
+                    </button>
+                </div>
+
+                <!-- 2. Tarjeta Editorial de Directiva de Nico (Estilo BIGG) -->
+                <div class="sens-coach-directive-card">
+                    <div class="sens-coach-card-upper">
+                        <div class="sens-coach-card-header">
+                            <h3 class="sens-coach-card-title">Tu entrenamiento</h3>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
+                        <p class="sens-coach-card-note" id="dashNicoMessage">
+                            "El jueves cargaste core, hoy toca full body. Arrancás con flexiones, zona media y swings. Lo principal: glúteos. Además, un HIIT de sentadillas y saltos. Cerrás con dominadas."
                         </p>
                     </div>
-                    <div>
-                        <button class="btn btn-primary" id="dashQuickWorkoutBtn">Comenzar Entrenamiento de Hoy →</button>
-                    </div>
-                </div>
-
-                <!-- GUÍA PASO A PASO: SIGUIENTE ACCIÓN DE HOY (CLARIDAD ABSOLUTA) -->
-                <div class="dash-next-step-card" id="dashNextStepCard" style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 12px; padding: 14px 22px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(229, 203, 167, 0.15); display: flex; align-items: center; justify-content: center; color: var(--accent-primary); flex-shrink: 0;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    <div class="sens-coach-card-lower">
+                        <div class="sens-location-pill-wrap">
+                            <span class="sens-location-label">¿Dónde entrenás hoy?</span>
+                            <div class="sens-location-selector-btn" id="dashLocationTrigger">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span id="dashLocationName">Presencial Palermo</span>
+                                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
                         </div>
-                        <div>
-                            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-primary); font-weight: 800;">Tu Prioridad Hoy</div>
-                            <div id="dashNextStepTitle" style="font-size: 14.5px; font-weight: 700; color: #FFFFFF;">Rutina prescripta: Día 1 — Tren Superior (Empuje / Tirón)</div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-sm" id="btnDashGoWorkoutNow" style="font-weight: 800; padding: 8px 18px; font-size: 12.5px;">
-                        Ir a Entrenar Ahora →
-                    </button>
-                </div>
-
-                <!-- ANILLOS DE HÁBITOS DIARIOS (ESTILO APPLE / WHOOP) -->
-                <div class="dash-rings-grid">
-                    <!-- Anillo 1: Entrenamiento -->
-                    <div class="habit-ring-card">
-                        <div class="habit-ring-visual">
-                            <svg class="habit-ring-svg" viewBox="0 0 58 58">
-                                <circle class="habit-ring-bg" cx="29" cy="29" r="24"></circle>
-                                <circle class="habit-ring-prog" id="ringWorkoutCircle" cx="29" cy="29" r="24" stroke="var(--accent-primary)" stroke-dasharray="150.8" stroke-dashoffset="45"></circle>
-                            </svg>
-                            <span class="habit-ring-icon">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg>
-                            </span>
-                        </div>
-                        <div>
-                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Entrenamiento</div>
-                            <div style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin-top: 2px;" id="ringWorkoutText">En Progreso</div>
-                            <div style="font-size: 11px; color: var(--text-secondary);">Día 1: Tren Superior</div>
-                        </div>
-                    </div>
-
-                    <!-- Anillo 2: Pasos Diarios -->
-                    <div class="habit-ring-card">
-                        <div class="habit-ring-visual">
-                            <svg class="habit-ring-svg" viewBox="0 0 58 58">
-                                <circle class="habit-ring-bg" cx="29" cy="29" r="24"></circle>
-                                <circle class="habit-ring-prog" id="ringStepsCircle" cx="29" cy="29" r="24" stroke="#10B981" stroke-dasharray="150.8" stroke-dashoffset="38"></circle>
-                            </svg>
-                            <span class="habit-ring-icon">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                            </span>
-                        </div>
-                        <div>
-                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Pasos Diarios</div>
-                            <div style="font-size: 17px; font-weight: 800; color: #10B981; margin-top: 2px;" id="ringStepsText">7.450 / 10k</div>
-                            <div style="font-size: 11px; color: var(--text-secondary);">75% completado</div>
-                        </div>
-                    </div>
-
-                    <!-- Anillo 3: Nutrición & Agua -->
-                    <div class="habit-ring-card">
-                        <div class="habit-ring-visual">
-                            <svg class="habit-ring-svg" viewBox="0 0 58 58">
-                                <circle class="habit-ring-bg" cx="29" cy="29" r="24"></circle>
-                                <circle class="habit-ring-prog" id="ringFuelCircle" cx="29" cy="29" r="24" stroke="#3B82F6" stroke-dasharray="150.8" stroke-dashoffset="30"></circle>
-                            </svg>
-                            <span class="habit-ring-icon">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                            </span>
-                        </div>
-                        <div>
-                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700;">Hidratación &amp; Fuel</div>
-                            <div style="font-size: 17px; font-weight: 800; color: #3B82F6; margin-top: 2px;" id="ringFuelText">2.0 / 2.5 L</div>
-                            <div style="font-size: 11px; color: var(--text-secondary);">1.650 / 2.100 kcal</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CÁPSULA EDITORIAL: MENSAJE DIRECTO DE NICO -->
-                <div class="dash-nico-card">
-                    <img src="img/nico-portrait.png" alt="Nico Coach SENS" class="dash-nico-avatar" onerror="this.src='img/logo-blanco.png'">
-                    <div style="flex: 1;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-                            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">MENSAJE DE NICO PARA HOY</span>
-                            <span style="font-size: 11px; color: var(--text-muted);">Semana de Progresión</span>
-                        </div>
-                        <p style="font-size: 13.5px; line-height: 1.5; color: var(--text-primary); margin: 6px 0 0;" id="dashNicoMessage">
-                            "Lean, hoy priorizamos técnica estricta en el remo y pausa de 1 segundo en contracción. Si sentís buena energía, subí 2.5kg en la última serie. ¡A meterle!"
-                        </p>
-                    </div>
-                </div>
-
-                <!-- ACCIONES RÁPIDAS (1-TAP QUICK ACTIONS) -->
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px;">
-                    <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogWater" style="border-color: rgba(59, 130, 246, 0.4); color: #60A5FA;">
-                        +500ml Agua
-                    </button>
-                    <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogWeight" style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">
-                        Registrar Peso
-                    </button>
-                    <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogMeal" style="border-color: rgba(16, 185, 129, 0.4); color: #34D399;">
-                        Cargar Comida
-                    </button>
-                    <button type="button" class="btn btn-outline btn-sm" id="btnQuickGoStore" style="border-color: rgba(255, 230, 0, 0.3); color: #FFE600;">
-                        Equipamiento MeLi
-                    </button>
-                </div>
-
-                <!-- CARD DESTACADA: EVALUACIÓN INICIAL & MIS DATOS (ACCESO Y MODIFICACIÓN) -->
-                <div class="diagnosis-summary-card" id="dashDiagnosisCard">
-                    <div class="diagnosis-card-header">
-                        <div class="diagnosis-card-badges">
-                            <span class="pill pill-champagne" id="dashDiagStatusPill">Evaluación Inicial de
-                                Fuerza</span>
-                            <span class="diagnosis-updated-badge" id="dashDiagDateBadge">Perfil Físico al día</span>
-                        </div>
-                        <button type="button" class="btn btn-outline btn-sm" id="dashEditDiagnosisBtn">
-                            Ver o Modificar mis Datos →
+                        <button type="button" class="sens-btn-start-workout" id="dashQuickWorkoutBtn">
+                            Ir a entrenamiento →
                         </button>
                     </div>
-                    <div class="diagnosis-card-body">
-                        <h3 class="diagnosis-card-title">Mis Datos Biométricos &amp; <strong>Evaluación</strong></h3>
-                        <p class="diagnosis-card-desc" id="dashDiagSummaryText">
-                            Tu historial físico, articulaciones atendidas, nivel de energía y métricas de peso
-                            registradas para la programación 1 a 1 de Nico.
-                        </p>
-                        <div class="diagnosis-quick-tags" id="dashDiagTags">
-                            <!-- Inyectado dinámicamente por app.js -->
-                            <span class="diag-tag">Peso: 78 kg</span>
-                            <span class="diag-tag">Frecuencia: 3 días/sem</span>
-                            <span class="diag-tag">Apto para entrenamiento</span>
-                            <span class="diag-tag">Agua: 2.7 L/día</span>
+                </div>
+
+                <!-- 3. Anillos Concéntricos de Actividad (Estilo Samsung Health) -->
+                <div class="sens-rings-card">
+                    <div class="sens-rings-metrics-list">
+                        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 700; margin-bottom: 2px;">
+                            Actividad diaria
+                        </div>
+                        <div class="sens-ring-metric-row">
+                            <span class="sens-ring-dot steps"></span>
+                            <div>
+                                <span class="sens-ring-metric-val" id="dashStepsMetricVal">10,649</span>
+                                <span class="sens-ring-metric-unit">pasos</span>
+                            </div>
+                        </div>
+                        <div class="sens-ring-metric-row">
+                            <span class="sens-ring-dot time"></span>
+                            <div>
+                                <span class="sens-ring-metric-val" id="dashTimeMetricVal">114</span>
+                                <span class="sens-ring-metric-unit">min</span>
+                            </div>
+                        </div>
+                        <div class="sens-ring-metric-row">
+                            <span class="sens-ring-dot calories"></span>
+                            <div>
+                                <span class="sens-ring-metric-val" id="dashCalMetricVal">586</span>
+                                <span class="sens-ring-metric-unit">kcal</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sens-rings-svg-container">
+                        <svg class="sens-concentric-svg" viewBox="0 0 120 120">
+                            <!-- Anillo Pasos (Verde #10B981) r=48 -->
+                            <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="48" stroke-width="9"></circle>
+                            <circle class="sens-concentric-ring-fg" id="svgConcentricSteps" cx="60" cy="60" r="48" stroke="#10B981" stroke-width="9" stroke-dasharray="301.6" stroke-dashoffset="60"></circle>
+                            
+                            <!-- Anillo Tiempo (Celeste #38BDF8) r=36 -->
+                            <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="36" stroke-width="9"></circle>
+                            <circle class="sens-concentric-ring-fg" id="svgConcentricTime" cx="60" cy="60" r="36" stroke="#38BDF8" stroke-width="9" stroke-dasharray="226.2" stroke-dashoffset="45"></circle>
+                            
+                            <!-- Anillo Calorías (Champagne #E5CBA7) r=24 -->
+                            <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="24" stroke-width="9"></circle>
+                            <circle class="sens-concentric-ring-fg" id="svgConcentricCals" cx="60" cy="60" r="24" stroke="#E5CBA7" stroke-width="9" stroke-dasharray="150.8" stroke-dashoffset="30"></circle>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 4. Racha Semanal & Hábitos (Estilo BIGG) -->
+                <div class="sens-habit-track-card">
+                    <div class="sens-habit-track-header">
+                        <span style="font-size: 15px; font-weight: 800; color: #FFFFFF;" id="dashHabitTitle">Te faltan 3 días</span>
+                        <span class="sens-habit-streak-badge" id="dashHabitStreak">0 semanas</span>
+                    </div>
+
+                    <div class="sens-habit-nodes-row">
+                        <div class="sens-habit-track-line"></div>
+                        <div class="sens-habit-node">
+                            <div class="sens-habit-circle completed"></div>
+                            <span class="sens-habit-day-lbl">L</span>
+                        </div>
+                        <div class="sens-habit-node">
+                            <div class="sens-habit-circle active"></div>
+                            <span class="sens-habit-day-lbl" style="color: #FFFFFF;">M</span>
+                        </div>
+                        <div class="sens-habit-node">
+                            <div class="sens-habit-circle"></div>
+                            <span class="sens-habit-day-lbl">M</span>
+                        </div>
+                        <div class="sens-habit-node">
+                            <div class="sens-habit-circle"></div>
+                            <span class="sens-habit-day-lbl">J</span>
+                        </div>
+                        <div class="sens-habit-node">
+                            <div class="sens-habit-circle"></div>
+                            <span class="sens-habit-day-lbl">V</span>
+                        </div>
+                        <div class="sens-habit-node">
+                            <div class="sens-habit-circle"></div>
+                            <span class="sens-habit-day-lbl">S</span>
+                        </div>
+                        <div class="sens-habit-node">
+                            <div class="sens-habit-circle"></div>
+                            <span class="sens-habit-day-lbl">D</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); margin-top: 14px;">
+                        <span>Objetivo semanal</span>
+                        <strong style="color: var(--accent-primary);" id="dashWeeklyGoalText">0 / 3 días →</strong>
+                    </div>
+                </div>
+
+                <!-- 5. Composición Corporal & Deltas (Estilo Samsung Health) -->
+                <div class="sens-biometrics-summary-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                        <span style="font-size: 14px; font-weight: 800; color: #FFFFFF;">Composición corporal</span>
+                        <span class="status-dot status-dot-active" style="width: 7px; height: 7px;"></span>
+                    </div>
+
+                    <!-- Fila 1: Peso -->
+                    <div class="sens-biometric-row">
+                        <div class="sens-biometric-left">
+                            <div class="sens-biometric-icon-wrap">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            </div>
+                            <div>
+                                <span class="sens-biometric-value" id="dashWeightVal">76.0</span>
+                                <span style="font-size: 11px; color: var(--text-muted);">kg</span>
+                                <span class="sens-biometric-delta negative" id="dashWeightDelta">-0.4</span>
+                            </div>
+                        </div>
+                        <div class="sens-tri-range-bar">
+                            <div class="sens-tri-range-zone low"></div>
+                            <div class="sens-tri-range-zone normal"></div>
+                            <div class="sens-tri-range-zone high"></div>
+                            <div class="sens-tri-range-pin" style="left: 48%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Fila 2: Masa Muscular -->
+                    <div class="sens-biometric-row">
+                        <div class="sens-biometric-left">
+                            <div class="sens-biometric-icon-wrap">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg>
+                            </div>
+                            <div>
+                                <span class="sens-biometric-value" id="dashMuscleVal">31.0</span>
+                                <span style="font-size: 11px; color: var(--text-muted);">kg</span>
+                                <span class="sens-biometric-delta negative" id="dashMuscleDelta">-1.2</span>
+                            </div>
+                        </div>
+                        <div class="sens-tri-range-bar">
+                            <div class="sens-tri-range-zone low"></div>
+                            <div class="sens-tri-range-zone normal"></div>
+                            <div class="sens-tri-range-zone high"></div>
+                            <div class="sens-tri-range-pin" style="left: 55%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Fila 3: Grasa Corporal -->
+                    <div class="sens-biometric-row">
+                        <div class="sens-biometric-left">
+                            <div class="sens-biometric-icon-wrap">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            </div>
+                            <div>
+                                <span class="sens-biometric-value" id="dashFatVal">24.7</span>
+                                <span style="font-size: 11px; color: var(--text-muted);">%</span>
+                                <span class="sens-biometric-delta positive" id="dashFatDelta">+1.9</span>
+                            </div>
+                        </div>
+                        <div class="sens-tri-range-bar">
+                            <div class="sens-tri-range-zone low"></div>
+                            <div class="sens-tri-range-zone normal"></div>
+                            <div class="sens-tri-range-zone high"></div>
+                            <div class="sens-tri-range-pin" style="left: 65%;"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Métricas KPIs de la semana -->
-                <div class="kpi-metrics-grid" id="dashKpiMetricsGrid">
-                    <div class="kpi-card">
-                        <div class="kpi-label">Días Entrenados (Semana)</div>
-                        <div class="kpi-value" id="kpiWorkoutsWeek">3 / 3</div>
-                        <div class="kpi-sub">Objetivo semanal completado</div>
+                <!-- 6. Entrenos esta semana (Gráfico D L M X J V S) -->
+                <div class="sens-weekly-workouts-card">
+                    <div>
+                        <span style="font-size: 14px; font-weight: 800; color: #FFFFFF;">Entrenos esta semana</span>
+                        <div style="font-size: 2.2rem; font-weight: 800; color: #FFFFFF; line-height: 1.1; margin-top: 6px;" id="dashWeeklyTimeNum">
+                            5:01:36
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="dashWeeklySessionsCal">
+                            15 sesiones • 1,879 kcal
+                        </div>
                     </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Evolución de Peso</div>
-                        <div class="kpi-value" id="kpiCurrentWeight">78.2 <span
-                                style="font-size:1rem; font-weight:400;">kg</span></div>
-                        <div class="kpi-sub text-champagne">-0.8 kg este mes</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Pasos Diarios Promedio</div>
-                        <div class="kpi-value" id="kpiAvgSteps">10.420</div>
-                        <div class="kpi-sub">Meta activa: 10.000 pasos</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Nivel de Recuperación</div>
-                        <div class="kpi-value" style="color: var(--success);">Óptimo</div>
-                        <div class="kpi-sub">7.5h de sueño promedio</div>
+
+                    <div class="sens-weekly-chart-cols">
+                        <div class="sens-weekly-col">
+                            <div class="sens-weekly-bar-track"><div class="sens-weekly-bar-fill highlight" style="height: 80%;"></div></div>
+                            <span class="sens-weekly-day-tag active">D</span>
+                        </div>
+                        <div class="sens-weekly-col">
+                            <div class="sens-weekly-bar-track"><div class="sens-weekly-bar-fill" style="height: 30%;"></div></div>
+                            <span class="sens-weekly-day-tag">L</span>
+                        </div>
+                        <div class="sens-weekly-col">
+                            <div class="sens-weekly-bar-track"><div class="sens-weekly-bar-fill" style="height: 60%;"></div></div>
+                            <span class="sens-weekly-day-tag">M</span>
+                        </div>
+                        <div class="sens-weekly-col">
+                            <div class="sens-weekly-bar-track"><div class="sens-weekly-bar-fill" style="height: 0%;"></div></div>
+                            <span class="sens-weekly-day-tag">X</span>
+                        </div>
+                        <div class="sens-weekly-col">
+                            <div class="sens-weekly-bar-track"><div class="sens-weekly-bar-fill" style="height: 0%;"></div></div>
+                            <span class="sens-weekly-day-tag">J</span>
+                        </div>
+                        <div class="sens-weekly-col">
+                            <div class="sens-weekly-bar-track"><div class="sens-weekly-bar-fill" style="height: 0%;"></div></div>
+                            <span class="sens-weekly-day-tag">V</span>
+                        </div>
+                        <div class="sens-weekly-col">
+                            <div class="sens-weekly-bar-track"><div class="sens-weekly-bar-fill" style="height: 0%;"></div></div>
+                            <span class="sens-weekly-day-tag">S</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Card Destacada de Acción -->
-                <div class="action-hero-card" id="dashActionHeroCard">
-                    <div>
-                        <span class="pill pill-dark" style="margin-bottom: 8px;">Sesión Asignada</span>
-                        <h3
-                            style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
-                            DÍA 1: FUERZA TREN SUPERIOR (Empuje / Tirón)
-                        </h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                            4 ejercicios principales • Tiempo estimado: 50 minutos • Enfoque: Fuerza & Estabilidad
-                            escápulo-humeral
-                        </p>
+                <!-- 7. Widgets Rápidos: Agua y Comida (Estilo Samsung Health) -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 22px;">
+                    <!-- Agua -->
+                    <div style="background: #121216; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 18px 20px;">
+                        <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Agua</span>
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 12px;">
+                            <div>
+                                <span style="font-size: 2rem; font-weight: 800; color: #FFFFFF;" id="dashWaterConsumed">1,250</span>
+                                <span style="font-size: 12px; color: var(--text-muted);">/ 2,000 ml</span>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogWater" style="border-radius: 20px; font-weight: 700; border-color: rgba(56, 189, 248, 0.4); color: #38BDF8;">
+                                + 250 ml
+                            </button>
+                        </div>
+                        <!-- 7 day mini dots -->
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.04); padding-top: 8px;">
+                            <span>7</span><span style="color: #38BDF8; font-weight: 800;">8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+                        </div>
                     </div>
-                    <button class="btn btn-outline" id="dashGoWorkoutDetailBtn">Ver Rutina y Registrar Sets</button>
+
+                    <!-- Comida -->
+                    <div style="background: #121216; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 18px 20px;">
+                        <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Comida</span>
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 12px;">
+                            <div>
+                                <span style="font-size: 2rem; font-weight: 800; color: #FFFFFF;" id="dashFoodConsumed">1,290</span>
+                                <span style="font-size: 12px; color: var(--text-muted);">/ 1,800 kcal</span>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogMeal" style="border-radius: 20px; font-weight: 700; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">
+                                + Cargar
+                            </button>
+                        </div>
+                        <!-- 7 day mini dots -->
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.04); padding-top: 8px;">
+                            <span>7</span><span>8</span><span style="color: #10B981; font-weight: 800;">9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- 8. Fila de Acción Rápida: Agregar al Día -->
+                <button type="button" id="btnQuickAddDailyActivity" style="width: 100%; background: #121216; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 18px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; color: #FFFFFF; cursor: pointer; margin-bottom: 24px; transition: border-color 0.2s ease;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700;">+</div>
+                        <div style="text-align: left;">
+                            <div style="font-size: 14px; font-weight: 700;">Agregar al día</div>
+                            <div style="font-size: 11.5px; color: var(--text-muted);">Actividad, movilidad o recovery</div>
+                        </div>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
             </section>
 
 
@@ -2412,70 +2539,37 @@
                  MÓDULO 6: GESTOR DE RUTINAS Y ENTRENAMIENTO
                  ===================================================================== -->
             <section class="portal-view" id="workoutView">
-                <div
-                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-                    <div>
-                        <h2 style="font-size: 1.8rem; font-weight: 800; text-transform: uppercase;">WORKOUT STUDIO &amp; RUTINAS</h2>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">
-                            Registrá tus pesos, repeticiones y descansos táctilmente. Programación flexible de 1 a 6 días por semana según prescripción de Nico.
-                        </p>
+                <!-- Barra Superior de Estudio & Stopwatch (Estilo BIGG) -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="sens-location-selector-btn" id="workoutLocationSelector">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>SENS CLASS / PALERMO</span>
+                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <!-- Widget de Cronómetro / Stopwatch de Sesión -->
-                        <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 30px; padding: 6px 14px; display: flex; align-items: center; gap: 10px;">
+                        <div style="background: #141418; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 30px; padding: 6px 14px; display: flex; align-items: center; gap: 10px;">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                             <span id="workoutStopwatchDisplay" style="font-size: 14px; font-weight: 800; color: var(--accent-primary); font-variant-numeric: tabular-nums;">00:00</span>
                             <button type="button" class="btn btn-outline btn-sm" id="btnToggleStopwatch" style="font-size: 10px; padding: 2px 8px; border-radius: 20px;">Iniciar</button>
                         </div>
-                        <button class="btn btn-primary" id="btnFinishWorkoutSession">Finalizar Rutina de Hoy</button>
+                        <button class="btn btn-primary btn-sm" id="btnFinishWorkoutSession" style="font-weight: 700; border-radius: 20px;">Finalizar Sesión</button>
                     </div>
                 </div>
 
-                <!-- HERO CARD DE SESIÓN ACTIVA DE HOY (CLARIDAD ABSOLUTA PARA EL ATLETA) -->
-                <div class="workout-today-hero-card" id="workoutTodayHeroCard" style="background: linear-gradient(135deg, rgba(229, 203, 167, 0.12) 0%, rgba(18, 18, 22, 0.95) 100%); border: 1px solid rgba(229, 203, 167, 0.4); border-radius: 14px; padding: 20px 24px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">TU ENTRENAMIENTO DE HOY</span>
-                            <span class="pill pill-dark" id="heroWorkoutFocusBadge" style="font-size: 10px; color: var(--accent-primary);">Prescripto por Nico</span>
-                        </div>
-                        <h3 id="heroWorkoutTitle" style="font-size: 1.4rem; font-weight: 800; color: #FFFFFF; margin-top: 6px; margin-bottom: 4px;">Día 1: Tren Superior (Empuje / Tirón)</h3>
-                        <p id="heroWorkoutSubtitle" style="font-size: 13px; color: var(--text-secondary); margin: 0;">4 Ejercicios asignados • ~45 min estimadas • Descanso cronometrado por serie</p>
-                    </div>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <button type="button" class="btn btn-primary" id="btnStartTodaySession" style="font-weight: 800; padding: 10px 20px; font-size: 13px; box-shadow: 0 4px 16px rgba(229, 203, 167, 0.25);">
-                            ▶ Empezar Entrenamiento
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CALENDARIO MENSUAL DE ENTRENAMIENTO -->
-                <div class="month-calendar-widget" id="workoutMonthCalendar">
-                    <div class="month-cal-header">
-                        <div>
-                            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">CALENDARIO MENSUAL</span>
-                            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;" id="monthCalendarTitle">Octubre 2026</h3>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--text-secondary);">
-                            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="color: #10B981;">●</span> Entrenado</span>
-                            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="color: var(--accent-primary);">●</span> Hoy</span>
-                            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="opacity: 0.4;">●</span> Descanso</span>
-                        </div>
-                    </div>
-                    <div class="month-cal-grid" id="monthCalGrid">
-                        <!-- Rótulos de días -->
-                        <div class="month-cal-day-label">L</div>
-                        <div class="month-cal-day-label">M</div>
-                        <div class="month-cal-day-label">M</div>
-                        <div class="month-cal-day-label">J</div>
-                        <div class="month-cal-day-label">V</div>
-                        <div class="month-cal-day-label">S</div>
-                        <div class="month-cal-day-label">D</div>
-                        <!-- Celdas inyectadas y sincronizadas por app.js -->
-                    </div>
+                <!-- Filtros Horizontales en Píldoras (Estilo BIGG) -->
+                <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 14px; -webkit-overflow-scrolling: touch;">
+                    <button type="button" class="pill pill-champagne muscle-filter-btn" data-group="all" style="cursor: pointer; border: none; white-space: nowrap;">Todos los Movimientos</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="push" style="cursor: pointer; border: none; white-space: nowrap;">Empuje</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="pull" style="cursor: pointer; border: none; white-space: nowrap;">Tracción</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="quadriceps" style="cursor: pointer; border: none; white-space: nowrap;">Cuádriceps</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="hamstrings_glutes" style="cursor: pointer; border: none; white-space: nowrap;">Isquios / Glúteo</button>
+                    <button type="button" class="pill pill-dark muscle-filter-btn" data-group="core_mobility" style="cursor: pointer; border: none; white-space: nowrap;">Core &amp; Movilidad</button>
                 </div>
 
                 <!-- Selector de días de entrenamiento (1 a 6 Días Programables) -->
-                <div class="workout-days-nav" id="workoutDaysNav">
+                <div class="workout-days-nav" id="workoutDaysNav" style="margin-bottom: 16px;">
                     <button class="day-tab-btn active" data-day="day1">Día 1: Tren Superior (Empuje / Tirón)</button>
                     <button class="day-tab-btn" data-day="day2">Día 2: Tren Inferior (Fuerza &amp; Cadera)</button>
                     <button class="day-tab-btn" data-day="day3">Día 3: Full Body &amp; Postura</button>
@@ -2484,177 +2578,197 @@
                     <button class="day-tab-btn" data-day="day6">Día 6: Cardio Zona 2 &amp; Recuperación</button>
                 </div>
 
-                <!-- Barra de Herramientas de Rutina & Acceso al Catálogo Maestro -->
-                <div class="workout-toolbar"
-                    style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 12px 18px; border-radius: 10px;">
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-                        <span
-                            style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 600;">Filtrar
-                            Grupo:</span>
-                        <button type="button" class="pill pill-champagne muscle-filter-btn" data-group="all"
-                            style="cursor: pointer; border: none;">Todos</button>
-                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="quadriceps"
-                            style="cursor: pointer; border: none;">Cuádriceps</button>
-                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="hamstrings_glutes"
-                            style="cursor: pointer; border: none;">Isquios / Glúteo</button>
-                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="push"
-                            style="cursor: pointer; border: none;">Empuje</button>
-                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="pull"
-                            style="cursor: pointer; border: none;">Tracción</button>
-                        <button type="button" class="pill pill-dark muscle-filter-btn" data-group="core_mobility"
-                            style="cursor: pointer; border: none;">Core &amp; Movilidad</button>
-                    </div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button type="button" class="btn btn-outline btn-sm" id="btnOpenExerciseLibraryModal"
-                            style="width: auto; margin-bottom: 0;">
-                            Biblioteca de Ejercicios
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm" id="btnAdminAddExercise"
-                            style="width: auto; margin-bottom: 0; display: none;">
-                            + Asignar a este Día (Nico)
-                        </button>
-                    </div>
+                <!-- Barra de Acceso Rápido a Biblioteca & Acciones Coach -->
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px;">
+                    <button type="button" class="btn btn-outline btn-sm" id="btnOpenExerciseLibraryModal" style="border-radius: 20px;">
+                        Biblioteca de Ejercicios
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" id="btnAdminAddExercise" style="border-radius: 20px; display: none;">
+                        + Asignar a este Día (Nico)
+                    </button>
                 </div>
 
-                <!-- Lista de ejercicios dinámica -->
-                <div id="exercisesContainer">
-                    <!-- Ejercicio 1 -->
-                    <div class="exercise-item-card" data-exercise-id="ex-1">
-                        <div class="exercise-header-row">
-                            <div>
-                                <h3 class="exercise-title">1. Peso Muerto Rumano con Mancuernas</h3>
-                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Foco en
-                                    bisagra de cadera y activación de isquiosurales y glúteos.</div>
+                <!-- Contenedor de Bloques de Entrenamiento (Estilo BIGG) -->
+                <div class="sens-workout-blocks-container" id="workoutBlocksWrapper">
+                    
+                    <!-- WARMUP -->
+                    <div class="sens-block-accordion" id="blockWarmup">
+                        <div class="sens-block-header">
+                            <div class="sens-block-header-left">
+                                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-primary); font-weight: 800;">WARMUP</span>
+                                <h4 class="sens-block-title">Activación Articular &amp; Zona Media</h4>
                             </div>
-                            <div class="exercise-meta-pills">
-                                <span class="pill pill-dark">4 Series</span>
-                                <span class="pill pill-dark">8-10 Reps</span>
-                                <span class="pill pill-champagne">Descanso: 90s</span>
-                                <button class="btn btn-outline btn-sm btn-video-demo"
-                                    data-video-title="Técnica: Peso Muerto Rumano">Video Técnica</button>
-                            </div>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                         </div>
-
-                        <div class="sets-table-wrap">
-                            <table class="sets-tracker-table">
-                                <thead>
-                                    <tr>
-                                        <th>Set</th>
-                                        <th>Reps Sugeridas</th>
-                                        <th>Peso Utilizado (kg)</th>
-                                        <th>Reps Logradas</th>
-                                        <th>Completado (Timer)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Set 1</strong></td>
-                                        <td>8 - 10</td>
-                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="22.5"
-                                                value="22.5"></td>
-                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="10"
-                                                value="10"></td>
-                                        <td>
-                                            <label class="selection-item" style="justify-content: center;">
-                                                <input type="checkbox" class="set-completed-chk" data-rest="90">
-                                                <div class="custom-box"></div>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Set 2</strong></td>
-                                        <td>8 - 10</td>
-                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="24"
-                                                value="24"></td>
-                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="10"
-                                                value="9"></td>
-                                        <td>
-                                            <label class="selection-item" style="justify-content: center;">
-                                                <input type="checkbox" class="set-completed-chk" data-rest="90">
-                                                <div class="custom-box"></div>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Set 3</strong></td>
-                                        <td>8 - 10</td>
-                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="24"
-                                                value="24"></td>
-                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="8"
-                                                value="8"></td>
-                                        <td>
-                                            <label class="selection-item" style="justify-content: center;">
-                                                <input type="checkbox" class="set-completed-chk" data-rest="90">
-                                                <div class="custom-box"></div>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="sens-block-body">
+                            <span class="sens-block-instruction-pill">3 ROUNDS: MOVILIDAD CONTROLADA</span>
+                            <div class="sens-movement-item-card" data-movement-id="wm-1">
+                                <div class="sens-movement-row-collapsed">
+                                    <div class="sens-movement-left">
+                                        <button type="button" class="sens-movement-play-btn" title="Ver video">▶</button>
+                                        <span class="sens-movement-reps-pill">10</span>
+                                        <span class="sens-movement-name">Dislocaciones con Banda Elástica</span>
+                                    </div>
+                                    <div class="sens-movement-right">
+                                        <span style="font-size: 11px; color: var(--text-muted);">Banda</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Ejercicio 2 -->
-                    <div class="exercise-item-card" data-exercise-id="ex-2">
-                        <div class="exercise-header-row">
-                            <div>
-                                <h3 class="exercise-title">2. Press Plano con Mancuernas en Banco</h3>
-                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Empuje
-                                    horizontal controlado con retracción escapular activa.</div>
+                    <!-- BLOQUE 1: COMBINED STRENGTH (Fuerza Principal) -->
+                    <div class="sens-block-accordion active" id="blockCombinedStrength">
+                        <div class="sens-block-header">
+                            <div class="sens-block-header-left">
+                                <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">RECOMENDADO POR OBJETIVO</span>
+                                <h4 class="sens-block-title">Combined Strength</h4>
                             </div>
-                            <div class="exercise-meta-pills">
-                                <span class="pill pill-dark">3 Series</span>
-                                <span class="pill pill-dark">10-12 Reps</span>
-                                <span class="pill pill-champagne">Descanso: 75s</span>
-                                <button class="btn btn-outline btn-sm btn-video-demo"
-                                    data-video-title="Técnica: Press con Mancuernas">Video Técnica</button>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; color: #FFFFFF;">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    6'
+                                </span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
                             </div>
                         </div>
 
-                        <div class="sets-table-wrap">
-                            <table class="sets-tracker-table">
-                                <thead>
-                                    <tr>
-                                        <th>Set</th>
-                                        <th>Reps Sugeridas</th>
-                                        <th>Peso Utilizado (kg)</th>
-                                        <th>Reps Logradas</th>
-                                        <th>Completado (Timer)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Set 1</strong></td>
-                                        <td>10 - 12</td>
-                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="18"
-                                                value="18"></td>
-                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="12"
-                                                value="12"></td>
-                                        <td>
-                                            <label class="selection-item" style="justify-content: center;">
-                                                <input type="checkbox" class="set-completed-chk" data-rest="75">
-                                                <div class="custom-box"></div>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Set 2</strong></td>
-                                        <td>10 - 12</td>
-                                        <td><input type="number" class="set-input-tactile set-weight" placeholder="18"
-                                                value="18"></td>
-                                        <td><input type="number" class="set-input-tactile set-reps" placeholder="11"
-                                                value="11"></td>
-                                        <td>
-                                            <label class="selection-item" style="justify-content: center;">
-                                                <input type="checkbox" class="set-completed-chk" data-rest="75">
-                                                <div class="custom-box"></div>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="sens-block-body">
+                            <div>
+                                <span class="sens-block-instruction-pill">COMPLETE 3 ROUNDS IN 6': BACK TO BASICS</span>
+                            </div>
+
+                            <!-- Movimiento 1: Push Ups (Expandido) -->
+                            <div class="sens-movement-item-card expanded" data-movement-id="mov-pushups">
+                                <div class="sens-movement-row-collapsed">
+                                    <div class="sens-movement-left">
+                                        <button type="button" class="sens-movement-play-btn" style="background: var(--accent-primary); color: #080809;">▶</button>
+                                        <span class="sens-movement-reps-pill">10</span>
+                                        <span class="sens-movement-name">Push Ups (Flexiones de Brazos)</span>
+                                    </div>
+                                    <div class="sens-movement-right">
+                                        <span style="font-size: 11px; color: var(--accent-primary); font-weight: 700;">BW</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+                                    </div>
+                                </div>
+
+                                <div class="sens-movement-expanded-content">
+                                    <div class="sens-movement-video-wrap">
+                                        <video autoplay muted loop playsinline class="hero-video" style="width: 100%; height: 100%; object-fit: cover;">
+                                            <source src="vid/PILARES/1.mp4" type="video/mp4">
+                                        </video>
+                                    </div>
+
+                                    <div class="sens-movement-cue-box">
+                                        <div class="sens-movement-cue-title">¿Para qué sirve este ejercicio?</div>
+                                        <p class="sens-movement-cue-text">
+                                            Fortalece pectorales, deltoides anterior y tríceps mientras exige estabilización de todo el core y cintura escapular en plano horizontal.
+                                        </p>
+                                    </div>
+
+                                    <div style="margin-top: 12px;">
+                                        <div class="sens-set-logger-row">
+                                            <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">Serie 1</span>
+                                            <span style="font-size: 11.5px; color: var(--text-muted);">Sugerido: 10 reps</span>
+                                            <input type="number" class="set-input-tactile set-weight" placeholder="BW" value="0" style="width: 60px; height: 28px; font-size: 11px; padding: 2px 6px;">
+                                            <input type="number" class="set-input-tactile set-reps" placeholder="10" value="10" style="width: 50px; height: 28px; font-size: 11px; padding: 2px 6px;">
+                                            <button type="button" class="sens-set-check-btn checked" data-rest="60" title="Marcar completado">✓</button>
+                                        </div>
+                                        <div class="sens-set-logger-row">
+                                            <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">Serie 2</span>
+                                            <span style="font-size: 11.5px; color: var(--text-muted);">Sugerido: 10 reps</span>
+                                            <input type="number" class="set-input-tactile set-weight" placeholder="BW" value="0" style="width: 60px; height: 28px; font-size: 11px; padding: 2px 6px;">
+                                            <input type="number" class="set-input-tactile set-reps" placeholder="10" value="10" style="width: 50px; height: 28px; font-size: 11px; padding: 2px 6px;">
+                                            <button type="button" class="sens-set-check-btn" data-rest="60" title="Marcar completado">✓</button>
+                                        </div>
+                                        <div class="sens-set-logger-row">
+                                            <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">Serie 3</span>
+                                            <span style="font-size: 11.5px; color: var(--text-muted);">Sugerido: 10 reps</span>
+                                            <input type="number" class="set-input-tactile set-weight" placeholder="BW" value="0" style="width: 60px; height: 28px; font-size: 11px; padding: 2px 6px;">
+                                            <input type="number" class="set-input-tactile set-reps" placeholder="10" value="8" style="width: 50px; height: 28px; font-size: 11px; padding: 2px 6px;">
+                                            <button type="button" class="sens-set-check-btn" data-rest="60" title="Marcar completado">✓</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Movimiento 2: Plank Hold -->
+                            <div class="sens-movement-item-card" data-movement-id="mov-plank">
+                                <div class="sens-movement-row-collapsed">
+                                    <div class="sens-movement-left">
+                                        <button type="button" class="sens-movement-play-btn">▶</button>
+                                        <span class="sens-movement-reps-pill">30"</span>
+                                        <span class="sens-movement-name">Plank Hold (Plancha Frontal)</span>
+                                    </div>
+                                    <div class="sens-movement-right">
+                                        <span style="font-size: 11px; color: var(--text-muted);">Isométrico</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Movimiento 3: Russian Swing -->
+                            <div class="sens-movement-item-card" data-movement-id="mov-swing">
+                                <div class="sens-movement-row-collapsed">
+                                    <div class="sens-movement-left">
+                                        <button type="button" class="sens-movement-play-btn">▶</button>
+                                        <span class="sens-movement-reps-pill">10</span>
+                                        <span class="sens-movement-name">Russian Kettlebell Swing</span>
+                                    </div>
+                                    <div class="sens-movement-right">
+                                        <span style="font-size: 11px; color: var(--text-muted);">16 kg</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- BLOQUE 2: HIIT CONDICIONAMIENTO -->
+                    <div class="sens-block-accordion" id="blockHiit">
+                        <div class="sens-block-header">
+                            <div class="sens-block-header-left">
+                                <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">RECOMENDADO POR OBJETIVO</span>
+                                <h4 class="sens-block-title">HIIT &amp; Core</h4>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; color: #FFFFFF;">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    14'
+                                </span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="sens-block-body">
+                            <span class="sens-block-instruction-pill">40" ON / 20" OFF X 14': BANDED</span>
+                            
+                            <div class="sens-movement-item-card" data-movement-id="mov-bandsteps">
+                                <div class="sens-movement-row-collapsed">
+                                    <div class="sens-movement-left">
+                                        <button type="button" class="sens-movement-play-btn">▶</button>
+                                        <span class="sens-movement-reps-pill">40"</span>
+                                        <span class="sens-movement-name">Banded Side Steps (Glúteos)</span>
+                                    </div>
+                                    <div class="sens-movement-right">
+                                        <span style="font-size: 11px; color: var(--text-muted);">Banda Media</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor dinámico de respaldo para inyección de ejercicios programados por Nico -->
+                    <div id="exercisesContainer" style="display: none;"></div>
+                </div>
+
+                <!-- Sticky Action Bar Inferior (Estilo BIGG) -->
+                <div class="sens-sticky-action-bar">
+                    <button type="button" class="sens-btn-block-action" id="btnStickyStartBlock">
+                        INICIAR BLOQUE
+                    </button>
                 </div>
             </section>
 
@@ -2663,145 +2777,174 @@
                  ===================================================================== -->
             <!-- Sub-vista 1: Nutrición & Hábitos -->
             <section class="portal-view" id="nutritionView">
-                <div class="section-head" style="text-align: left; margin-bottom: 30px;">
-                    <span class="section-eyebrow">Lineamientos & Hábitos</span>
-                    <h2 class="section-main-title">NUTRICIÓN <span class="text-champagne">Y HÁBITOS SALUDABLES</span>
-                    </h2>
-                    <p class="section-lead">Estructura sin dogmas. Mantener un aporte proteico regular e hidratación
-                        óptima es el 80% de tus resultados físicos.</p>
+                <!-- Navegador de Fecha en Cápsula (Estilo Samsung Health) -->
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                    <div class="sens-nutri-date-nav">
+                        <button type="button" id="btnNutriPrevDay" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:14px; padding:0 4px;">&lt;</button>
+                        <span style="font-size: 13.5px; font-weight: 700; color: #FFFFFF;" id="nutriDateText">mar, 6 de oct</span>
+                        <button type="button" id="btnNutriNextDay" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:14px; padding:0 4px;">&gt;</button>
+                    </div>
                 </div>
 
-                <!-- HERO CARD DE NUTRICIÓN PRESCRIPTA POR NICO (CLARIDAD ABSOLUTA) -->
-                <div class="card-panel" id="nutritionPrescribedHeroCard" style="border: 1px solid rgba(229, 203, 167, 0.35); background: linear-gradient(135deg, rgba(229, 203, 167, 0.08) 0%, rgba(18, 18, 22, 0.95) 100%); margin-bottom: 26px; padding: 22px 26px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">⭐️ PLAN PRESCRIPTO POR NICO</span>
-                            <span class="pill pill-dark" id="nutriPlanTypeBadge" style="font-size: 10px; color: var(--accent-primary);">Recomposición &amp; Fuerza</span>
+                <!-- 1. Hero Calórico con Zona de Rango Óptimo (Estilo Samsung Health) -->
+                <div class="sens-nutri-target-hero-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div class="sens-nutri-big-num" id="nutriConsumedNum">1,290</div>
+                            <span style="font-size: 14px; font-weight: 600; color: var(--text-muted);">kcal</span>
                         </div>
-                        <span style="font-size: 12px; color: var(--text-muted);" id="nutriCoachUpdatedBadge">Auditoría personalizada</span>
+                        <div class="sens-nutri-target-labels">
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #FFFFFF;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                                <span id="nutriTargetKcal">1,800 kcal</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-muted);">
+                                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4);"></span>
+                                <span id="nutriOptimalRangeText">1,620 - 1,980</span>
+                            </div>
+                        </div>
                     </div>
-                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
-                        <div id="nutriPrescribedKcal" style="font-size: 2.5rem; font-weight: 800; color: var(--accent-primary); line-height: 1;">2.200 <span style="font-size: 1.1rem; color: var(--text-secondary); font-weight: 400;">kcal / día</span></div>
+
+                    <!-- Dual Slider con Zona Rayada -->
+                    <div class="sens-nutri-range-slider-wrap">
+                        <div class="sens-nutri-dual-slider-track">
+                            <div class="sens-nutri-slider-fill" id="nutriSliderFill" style="width: 55%;"></div>
+                            <div class="sens-nutri-optimal-zone" style="left: 69%; width: 15%;"></div>
+                        </div>
+                        <div class="sens-nutri-target-pin" id="nutriTargetPin" style="left: 77%;"></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 8px;">
+                            <span>0</span>
+                            <span id="nutriMaxKcalLabel">2,340</span>
+                        </div>
                     </div>
-                    <p id="nutriPrescribedCoachNote" style="font-size: 13.5px; color: var(--text-primary); background: rgba(0,0,0,0.3); border-left: 3px solid var(--accent-primary); padding: 10px 14px; border-radius: 0 8px 8px 0; margin-bottom: 16px;">
+                </div>
+
+                <!-- 2. Info Nutrición & Trío de Macro Cards (Estilo Samsung Health) -->
+                <div style="background: #121216; border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; padding: 22px 24px; margin-bottom: 22px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <span style="font-size: 15px; font-weight: 800; color: #FFFFFF;">Info. nutrición</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+
+                    <div class="sens-macros-trio-grid">
+                        <div class="sens-macro-pill-card carb">
+                            <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Carb.</span>
+                            <div class="sens-macro-grams-bold" id="nutriCarbsGrams">160<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
+                        </div>
+                        <div class="sens-macro-pill-card fat">
+                            <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Grasa</span>
+                            <div class="sens-macro-grams-bold" id="nutriFatsGrams">52<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
+                        </div>
+                        <div class="sens-macro-pill-card prot">
+                            <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Proteína</span>
+                            <div class="sens-macro-grams-bold" id="nutriProtGrams">145<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Macro Segmented Bar (Real vs Recomendado) -->
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Distribución real vs recomendada</div>
+                    <div class="sens-macro-segmented-bar">
+                        <div class="sens-macro-seg carb" style="width: 45%;"></div>
+                        <div class="sens-macro-seg fat" style="width: 25%;"></div>
+                        <div class="sens-macro-seg prot" style="width: 30%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700;">
+                        <span style="color: #38BDF8;">45% Carb</span>
+                        <span style="color: #F59E0B;">25% Grasa</span>
+                        <span style="color: var(--accent-primary);">30% Proteína</span>
+                    </div>
+                </div>
+
+                <!-- 3. Lista Agrupada de Comidas: Registrar Comida (Estilo Samsung Health) -->
+                <div class="sens-meal-group-card">
+                    <div class="sens-meal-group-header">
+                        Registrar comida
+                    </div>
+
+                    <!-- Desayuno -->
+                    <div class="sens-meal-row" data-meal-type="breakfast">
+                        <div class="sens-meal-badge-kcal">
+                            <span class="sens-meal-badge-num">500</span>
+                            <span class="sens-meal-badge-unit">kcal</span>
+                        </div>
+                        <div class="sens-meal-info">
+                            <div class="sens-meal-name">Desayuno</div>
+                            <div class="sens-meal-desc">Huevos revueltos, Avena y Café con leche</div>
+                        </div>
+                        <button type="button" class="sens-meal-quick-add-btn btn-open-portion-modal" data-food-name="Huevos con Avena" data-cal="500" data-prot="32" data-carbs="55" data-fat="14">+</button>
+                    </div>
+
+                    <!-- Almuerzo -->
+                    <div class="sens-meal-row" data-meal-type="lunch">
+                        <div class="sens-meal-badge-kcal">
+                            <span class="sens-meal-badge-num">430</span>
+                            <span class="sens-meal-badge-unit">kcal</span>
+                        </div>
+                        <div class="sens-meal-info">
+                            <div class="sens-meal-name">Almuerzo</div>
+                            <div class="sens-meal-desc">Pechuga de Pollo 200g, Arroz 150g, Ensalada verde</div>
+                        </div>
+                        <button type="button" class="sens-meal-quick-add-btn btn-open-portion-modal" data-food-name="Pechuga de Pollo con Arroz" data-cal="430" data-prot="48" data-carbs="42" data-fat="7">+</button>
+                    </div>
+
+                    <!-- Merienda / Bocadillo tarde -->
+                    <div class="sens-meal-row" data-meal-type="snack_afternoon">
+                        <div class="sens-meal-badge-kcal">
+                            <span class="sens-meal-badge-num">250</span>
+                            <span class="sens-meal-badge-unit">kcal</span>
+                        </div>
+                        <div class="sens-meal-info">
+                            <div class="sens-meal-name">Merienda / Tarde</div>
+                            <div class="sens-meal-desc">Yogur griego con frutos secos</div>
+                        </div>
+                        <button type="button" class="sens-meal-quick-add-btn btn-open-portion-modal" data-food-name="Yogur Griego con Almendras" data-cal="250" data-prot="20" data-carbs="14" data-fat="11">+</button>
+                    </div>
+
+                    <!-- Cena -->
+                    <div class="sens-meal-row" data-meal-type="dinner">
+                        <div class="sens-meal-badge-kcal">
+                            <span class="sens-meal-badge-num">110</span>
+                            <span class="sens-meal-badge-unit">kcal</span>
+                        </div>
+                        <div class="sens-meal-info">
+                            <div class="sens-meal-name">Cena</div>
+                            <div class="sens-meal-desc">Sopa de calabaza y proteína vegetal</div>
+                        </div>
+                        <button type="button" class="sens-meal-quick-add-btn btn-open-portion-modal" data-food-name="Cena Ligera" data-cal="110" data-prot="12" data-carbs="14" data-fat="2">+</button>
+                    </div>
+
+                    <!-- Colación noche -->
+                    <div class="sens-meal-row" data-meal-type="snack_night">
+                        <div class="sens-meal-badge-kcal">
+                            <span class="sens-meal-badge-num">0</span>
+                            <span class="sens-meal-badge-unit">kcal</span>
+                        </div>
+                        <div class="sens-meal-info">
+                            <div class="sens-meal-name">Colación / Noche</div>
+                            <div class="sens-meal-desc">Sin registros aún</div>
+                        </div>
+                        <button type="button" class="sens-meal-quick-add-btn btn-open-portion-modal" data-food-name="Colación Nocturna" data-cal="0" data-prot="0" data-carbs="0" data-fat="0">+</button>
+                    </div>
+                </div>
+
+                <!-- 4. Hábitos Esenciales & Alimentos Base Curados por Nico -->
+                <div class="card-panel" style="margin-top: 24px; padding: 22px 24px;">
+                    <span class="pill pill-champagne" style="font-size: 10px;">DIRECTIVA DE NICO</span>
+                    <h3 style="font-size: 1.15rem; font-weight: 700; color: #FFFFFF; margin-top: 6px;">Hábitos Nutricionales Clave</h3>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
                         "Priorizá llegar a tu meta de proteína diaria repartida en las comidas principales y mantener hidratación constante antes de entrenar."
                     </p>
-                    <div id="nutriPrescribedFoodsWrap">
-                        <h4 style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 700; margin-bottom: 10px;">Alimentos Base Clave Prescriptos para vos:</h4>
-                        <div id="nutriPrescribedFoodsGrid" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <!-- Inyectado dinámicamente -->
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nutrition-grid">
-                    <!-- Targets Calóricos y Macros -->
-                    <div class="card-panel">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span class="pill pill-champagne">Meta Diaria</span>
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Recomposición Activa</span>
-                        </div>
-                        <div style="margin: 20px 0;">
-                            <div
-                                style="font-size: 2.8rem; font-weight: 800; color: var(--accent-primary); line-height: 1;">
-                                2.250 <span
-                                    style="font-size: 1.2rem; font-weight: 400; color: var(--text-secondary);">kcal</span>
-                            </div>
-                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Target calórico
-                                diario estimado</div>
-                        </div>
-
-                        <!-- Distribución de Macros -->
-                        <div class="macros-card-grid">
-                            <div class="macro-box">
-                                <span class="macro-box-title">Proteínas</span>
-                                <div class="macro-box-grams">155g</div>
-                                <span class="macro-box-cal">28% (620 kcal)</span>
-                            </div>
-                            <div class="macro-box">
-                                <span class="macro-box-title">Carbohidratos</span>
-                                <div class="macro-box-grams">235g</div>
-                                <span class="macro-box-cal">42% (940 kcal)</span>
-                            </div>
-                            <div class="macro-box">
-                                <span class="macro-box-title">Grasas</span>
-                                <div class="macro-box-grams">75g</div>
-                                <span class="macro-box-cal">30% (675 kcal)</span>
-                            </div>
-                        </div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
-                            *Ajustado según tu nivel de actividad y días de fuerza. Consumir carbohidratos complejos
-                            antes y después del entrenamiento.
-                        </p>
-                    </div>
-
-                    <!-- Checklist de Hábitos -->
-                    <div class="card-panel">
-                        <span class="pill pill-dark" style="margin-bottom: 16px;">Checklist Diario</span>
-                        <h3
-                            style="font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; color: var(--text-primary);">
-                            Hábitos Esenciales SENS</h3>
-
-                        <div class="selection-group">
-                            <label class="selection-item">
-                                <input type="checkbox" id="habitProtein" checked>
-                                <div class="custom-box"></div>
-                                <span class="selection-label"><strong>Proteína en cada comida:</strong> Mínimo 30g por
-                                    ingesta principal</span>
-                            </label>
-                            <label class="selection-item">
-                                <input type="checkbox" id="habitWater" checked>
-                                <div class="custom-box"></div>
-                                <span class="selection-label"><strong>Hidratación consciente:</strong> Al menos 2.5
-                                    litros de agua al día</span>
-                            </label>
-                            <label class="selection-item">
-                                <input type="checkbox" id="habitPreWorkout">
-                                <div class="custom-box"></div>
-                                <span class="selection-label"><strong>Comida pre-entreno:</strong> Carbohidrato ligero
-                                    60-90 min antes de la sesión</span>
-                            </label>
-                            <label class="selection-item">
-                                <input type="checkbox" id="habitSleep">
-                                <div class="custom-box"></div>
-                                <span class="selection-label"><strong>Higiene de sueño:</strong> Apagar pantallas 30 min
-                                    antes de dormir</span>
-                            </label>
-                        </div>
-                        <button class="btn btn-outline btn-full btn-sm" id="btnSaveHabits">Guardar Hábitos de
-                            Hoy</button>
-                    </div>
-                </div>
-
-                <!-- Banco de Alimentos Base Curados por Nico -->
-                <div class="card-panel" style="margin-top: 30px;">
-                    <div
-                        style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <span class="pill pill-champagne" style="font-size: 10px;">BANCO DE ALIMENTOS BASE</span>
-                            <h3
-                                style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-top: 6px;">
-                                Opciones Recomendadas para tu Práctica de Fuerza</h3>
-                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; margin-bottom: 0;">
-                                Selección de alimentos limpios para estructurar tus comidas sin caer en planes
-                                restrictivos insostenibles.</p>
-                        </div>
-                        <div class="pill-container" id="foodCategoryFilters" style="margin-bottom: 0; gap: 6px;">
-                            <button type="button" class="pill pill-champagne food-filter-btn" data-cat="all"
-                                style="cursor: pointer; border: none;">Todos</button>
-                            <button type="button" class="pill pill-dark food-filter-btn" data-cat="protein"
-                                style="cursor: pointer; border: none;">Proteínas</button>
-                            <button type="button" class="pill pill-dark food-filter-btn" data-cat="carbs"
-                                style="cursor: pointer; border: none;">Carbohidratos</button>
-                            <button type="button" class="pill pill-dark food-filter-btn" data-cat="healthy_fats"
-                                style="cursor: pointer; border: none;">Grasas</button>
-                            <button type="button" class="pill pill-dark food-filter-btn" data-cat="hydration_veg"
-                                style="cursor: pointer; border: none;">Hidratación</button>
-                        </div>
-                    </div>
-
-                    <div class="grid-3" id="foodCatalogGrid" style="gap: 16px; margin-bottom: 0;">
-                        <!-- Contenido dinámico inyectado por app.js -->
+                    <div class="selection-group">
+                        <label class="selection-item">
+                            <input type="checkbox" id="habitProtein" checked>
+                            <div class="custom-box"></div>
+                            <span class="selection-label"><strong>Proteína en cada comida:</strong> Mínimo 30g por ingesta principal</span>
+                        </label>
+                        <label class="selection-item">
+                            <input type="checkbox" id="habitWater" checked>
+                            <div class="custom-box"></div>
+                            <span class="selection-label"><strong>Hidratación consciente:</strong> Al menos 2.5 litros de agua al día</span>
+                        </label>
                     </div>
                 </div>
             </section>
@@ -3210,9 +3353,13 @@
                             </div>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <label style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Para Atleta:</label>
-                                <select id="coachNutritionAthleteSelector" class="input-control" style="width: auto; min-width: 220px; margin-bottom: 0;">
-                                    <!-- Inyectado por app.js -->
-                                </select>
+                                <input type="hidden" id="coachNutritionAthleteSelector" value="roberto-gomez">
+                                <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet" id="btnCoachNutriAthletePicker" aria-label="Cambiar alumno">
+        <span class="status-dot status-dot-active coachSyncStatusDot"></span>
+        <span class="pill-athlete-name coachSyncAthleteName">Roberto Gómez</span>
+        <span class="pill-plan-tag coachSyncAthletePlan">VIP</span>
+        <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
                             </div>
                         </div>
 
@@ -3306,9 +3453,13 @@
                             </div>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <label style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Para Atleta:</label>
-                                <select id="coachWorkoutAthleteSelector" class="input-control" style="width: auto; min-width: 220px; margin-bottom: 0;">
-                                    <!-- Inyectado por app.js -->
-                                </select>
+                                <input type="hidden" id="coachWorkoutAthleteSelector" value="roberto-gomez">
+                                <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet" id="btnCoachWorkoutAthletePicker" aria-label="Cambiar alumno">
+        <span class="status-dot status-dot-active coachSyncStatusDot"></span>
+        <span class="pill-athlete-name coachSyncAthleteName">Roberto Gómez</span>
+        <span class="pill-plan-tag coachSyncAthletePlan">VIP</span>
+        <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
                             </div>
                         </div>
 
@@ -3371,9 +3522,13 @@
 
                         <div style="margin-bottom: 16px;">
                             <label class="input-label" for="coachDashNoteAthleteSelector">Para Atleta</label>
-                            <select id="coachDashNoteAthleteSelector" class="input-control" style="max-width: 380px;">
-                                <!-- Inyectado por app.js -->
-                            </select>
+                            <input type="hidden" id="coachDashNoteAthleteSelector" value="roberto-gomez">
+                            <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet" id="btnCoachNoteAthletePicker" aria-label="Cambiar alumno" style="width: fit-content;">
+        <span class="status-dot status-dot-active coachSyncStatusDot"></span>
+        <span class="pill-athlete-name coachSyncAthleteName">Roberto Gómez</span>
+        <span class="pill-plan-tag coachSyncAthletePlan">VIP</span>
+        <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
                         </div>
 
                         <div style="margin-bottom: 16px;">
@@ -3463,6 +3618,133 @@
                 <!-- Rellenado dinámico por JS -->
             </div>
         </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL DE PORCIÓN & REGLA GRADUADA (ESTILO SAMSUNG HEALTH)
+         ========================================================================= -->
+    <div class="modal-overlay" id="portionSizeModal">
+        <div class="sens-portion-modal-card">
+            <button class="modal-close-btn" id="closePortionModalBtn">&times;</button>
+            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">NUTRICIÓN DE PRECISIÓN</span>
+            <h3 style="font-size: 1.3rem; font-weight: 800; color: #FFFFFF; margin-top: 6px;" id="portionModalFoodTitle">
+                Definir tamaño porción
+            </h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 16px;" id="portionModalFoodSub">
+                Elija unidad y defina la cantidad exacta.
+            </p>
+
+            <!-- Card de Control con Ruler Slider -->
+            <div style="background: #141418; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="font-size: 16px; color: #FFFFFF;" id="rulerFoodName">Pechuga de Pollo</strong>
+                        <div style="font-size: 13px; color: var(--accent-primary); font-weight: 800; margin-top: 2px;" id="rulerDynamicKcal">178 kcal</div>
+                    </div>
+                    <span style="font-size: 18px; color: var(--accent-primary);">★</span>
+                </div>
+
+                <!-- Ruler Slider Táctil -->
+                <div class="sens-ruler-container">
+                    <div class="sens-ruler-bubble" id="rulerBubbleVal">100 g</div>
+                    <input type="range" min="20" max="400" step="5" value="100" class="sens-ruler-slider-input" id="portionRulerInput">
+                    <div class="sens-ruler-notches">
+                        <span>50g</span>
+                        <span>100g</span>
+                        <span>150g</span>
+                        <span>200g</span>
+                        <span>300g</span>
+                        <span>400g</span>
+                    </div>
+                </div>
+
+                <!-- Dropdown de Unidad en Píldora -->
+                <div style="text-align: center; margin-top: 10px;">
+                    <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 700; color: #FFFFFF;">
+                        <span id="rulerUnitLabel">gramos (g)</span>
+                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ficha Clínica de Macronutrientes (FDA Style) -->
+            <div class="sens-fda-nutrition-panel">
+                <div class="sens-fda-header">
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800;">Macronutrientes</div>
+                    <!-- Barra segmentada -->
+                    <div class="sens-macro-segmented-bar" style="margin-top: 8px;">
+                        <div class="sens-macro-seg carb" id="fdaSegCarb" style="width: 35%;"></div>
+                        <div class="sens-macro-seg fat" id="fdaSegFat" style="width: 20%;"></div>
+                        <div class="sens-macro-seg prot" id="fdaSegProt" style="width: 45%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700;">
+                        <span style="color: #38BDF8;" id="fdaPctCarb">Carb. 35%</span>
+                        <span style="color: #F59E0B;" id="fdaPctFat">Grasa 20%</span>
+                        <span style="color: var(--accent-primary);" id="fdaPctProt">Proteína 45%</span>
+                    </div>
+                </div>
+
+                <div class="sens-fda-cal-row">
+                    <span class="sens-fda-cal-title">Calorías</span>
+                    <span class="sens-fda-cal-val" id="fdaValKcal">178</span>
+                </div>
+
+                <div class="sens-fda-row">
+                    <strong>Grasa total <span id="fdaValFatGrams">4.3g</span></strong>
+                    <span id="fdaValFatPct">6%</span>
+                </div>
+                <div class="sens-fda-row sub">
+                    <span>Grasa saturada 0.6g</span>
+                    <span>3%</span>
+                </div>
+                <div class="sens-fda-row">
+                    <span>Colesterol 0mg</span>
+                    <span>0%</span>
+                </div>
+                <div class="sens-fda-row">
+                    <span>Sodio 252mg</span>
+                    <span>11%</span>
+                </div>
+                <div class="sens-fda-row">
+                    <strong>Carbohidratos <span id="fdaValCarbGrams">16g</span></strong>
+                    <span id="fdaValCarbPct">6%</span>
+                </div>
+                <div class="sens-fda-row">
+                    <strong>Proteínas <span id="fdaValProtGrams">22.5g</span></strong>
+                    <span id="fdaValProtPct">45%</span>
+                </div>
+            </div>
+
+            <!-- Botones Flotantes en Píldora: Cancelar / Guardar -->
+            <div class="sens-floating-pill-actions">
+                <button type="button" class="sens-pill-btn-action" id="btnCancelPortionModal">Cancelar</button>
+                <button type="button" class="sens-pill-btn-action save" id="btnSavePortionModal">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Dock Inferior Móvil (Estilo BIGG / Samsung Health) -->
+    <div class="sens-floating-dock" id="sensFloatingDock">
+        <button type="button" class="sens-dock-item active" data-dock-tab="dashView">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Inicio</span>
+        </button>
+        <button type="button" class="sens-dock-item" data-dock-tab="workoutView">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg>
+            <span>Entrenar</span>
+        </button>
+        <button type="button" class="sens-dock-item" data-dock-tab="nutritionView">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+            <span>Nutrición</span>
+        </button>
+        <button type="button" class="sens-dock-item" data-dock-tab="trackingView">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Progreso</span>
+        </button>
+        <button type="button" class="sens-dock-item" data-dock-tab="profileSettingsView">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </button>
     </div>
 
     <!-- =========================================================================

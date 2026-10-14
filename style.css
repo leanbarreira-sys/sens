@@ -8022,4 +8022,1141 @@ input[type="range"]::-webkit-slider-thumb:hover {
     background: #121216;
 }
 
-
+
+
+
+/* =========================================================================
+   ESTÁNDARES NATIVOS HEALTH APP (SAMSUNG HEALTH × BIGG) — V3.0 MASTER
+   ========================================================================= */
+
+/* 1. Strip Calendar Semanal (Estilo BIGG) */
+.sens-week-strip-wrap {
+    margin-bottom: 22px;
+    background: #0E0E11;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 20px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sens-week-strip-wrap::-webkit-scrollbar {
+    display: none;
+}
+
+.sens-week-day-pill {
+    flex: 1;
+    min-width: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 4px;
+    border-radius: 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sens-week-day-pill:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: #FFFFFF;
+}
+
+.sens-week-day-name {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+}
+
+.sens-week-day-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.sens-week-day-pill.active .sens-week-day-num {
+    background: var(--accent-primary);
+    color: #080809;
+    box-shadow: 0 4px 14px rgba(229, 203, 167, 0.35);
+    font-weight: 800;
+}
+
+.sens-week-day-pill.active .sens-week-day-name {
+    color: var(--accent-primary);
+    font-weight: 700;
+}
+
+.sens-week-day-pill.completed .sens-week-day-num {
+    border: 1.5px solid #10B981;
+    color: #10B981;
+}
+
+/* 2. Hero Card Editorial de Nico (Estilo BIGG) */
+.sens-coach-directive-card {
+    background: #141418;
+    border: 1px solid rgba(229, 203, 167, 0.22);
+    border-radius: 22px;
+    overflow: hidden;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.sens-coach-card-upper {
+    background: linear-gradient(145deg, #1C1C22 0%, #121216 100%);
+    padding: 22px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sens-coach-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sens-coach-card-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.3px;
+    margin: 0;
+}
+
+.sens-coach-card-note {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 0;
+}
+
+.sens-coach-card-lower {
+    background: rgba(229, 203, 167, 0.04);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.sens-location-pill-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sens-location-label {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.sens-location-selector-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.sens-btn-start-workout {
+    background: var(--accent-primary);
+    color: #080809;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 22px;
+    font-size: 13.5px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.3);
+    transition: all 0.2s ease;
+}
+
+.sens-btn-start-workout:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+/* 3. Concentric Activity Rings (Estilo Samsung Health) */
+.sens-rings-card {
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.sens-rings-metrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+    min-width: 180px;
+}
+
+.sens-ring-metric-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sens-ring-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sens-ring-dot.steps { background: #10B981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+.sens-ring-dot.time { background: #38BDF8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+.sens-ring-dot.calories { background: #E5CBA7; box-shadow: 0 0 10px rgba(229, 203, 167, 0.4); }
+
+.sens-ring-metric-val {
+    font-size: 16px;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.sens-ring-metric-unit {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-left: 4px;
+}
+
+.sens-rings-svg-container {
+    width: 110px;
+    height: 110px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-concentric-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.sens-concentric-ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.06);
+}
+
+.sens-concentric-ring-fg {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 4. Habit Streak & Weekly Objective Track (Estilo BIGG) */
+.sens-habit-track-card {
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
+    padding: 20px 24px;
+    margin-bottom: 22px;
+}
+
+.sens-habit-track-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.sens-habit-streak-badge {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.sens-habit-nodes-row {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.sens-habit-track-line {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    right: 10px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.sens-habit-node {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.sens-habit-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #121216;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.sens-habit-circle.active {
+    border-color: #FFFFFF;
+    background: #FFFFFF;
+}
+
+.sens-habit-circle.active::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #080809;
+}
+
+.sens-habit-circle.completed {
+    border-color: var(--accent-primary);
+    background: var(--accent-primary);
+}
+
+.sens-habit-day-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+/* 5. Composición Corporal & Deltas (Estilo Samsung Health) */
+.sens-biometrics-summary-card {
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+}
+
+.sens-biometric-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sens-biometric-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.sens-biometric-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 140px;
+}
+
+.sens-biometric-icon-wrap {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(229, 203, 167, 0.12);
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-biometric-value {
+    font-size: 17px;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.sens-biometric-delta {
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 6px;
+}
+
+.sens-biometric-delta.negative { color: #10B981; }
+.sens-biometric-delta.positive { color: var(--accent-primary); }
+
+.sens-tri-range-bar {
+    flex: 1;
+    max-width: 160px;
+    height: 7px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+}
+
+.sens-tri-range-zone {
+    height: 100%;
+}
+
+.sens-tri-range-zone.low { width: 30%; background: #38BDF8; opacity: 0.3; }
+.sens-tri-range-zone.normal { width: 45%; background: #10B981; opacity: 0.85; }
+.sens-tri-range-zone.high { width: 25%; background: #F59E0B; opacity: 0.3; }
+
+.sens-tri-range-pin {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #FFFFFF;
+    border-radius: 2px;
+    box-shadow: 0 0 6px #FFFFFF;
+}
+
+/* 6. Gráfico Semanal de Entrenos (D L M X J V S) */
+.sens-weekly-workouts-card {
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.sens-weekly-chart-cols {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 70px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+.sens-weekly-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 18px;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.sens-weekly-bar-track {
+    width: 8px;
+    height: 50px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.sens-weekly-bar-fill {
+    width: 100%;
+    background: #38BDF8;
+    border-radius: 4px;
+    transition: height 0.4s ease;
+}
+
+.sens-weekly-bar-fill.highlight {
+    background: var(--accent-primary);
+}
+
+.sens-weekly-day-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.sens-weekly-day-tag.active {
+    color: var(--accent-primary);
+}
+
+/* 7. Arquitectura de Bloques de Entrenamiento (Estilo BIGG) */
+.sens-workout-blocks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 80px; /* Espacio para el sticky footer */
+}
+
+.sens-block-accordion {
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.sens-block-accordion.active {
+    border-color: rgba(229, 203, 167, 0.35);
+}
+
+.sens-block-header {
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: #15151A;
+    user-select: none;
+}
+
+.sens-block-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sens-block-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.2px;
+    margin: 0;
+}
+
+.sens-block-instruction-pill {
+    background: rgba(229, 203, 167, 0.12);
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    color: var(--accent-primary);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 8px 0 14px;
+    display: inline-block;
+}
+
+.sens-block-body {
+    padding: 0 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 8. Tarjeta de Movimiento en Acordeón (Estilo BIGG) */
+.sens-movement-item-card {
+    background: #17171C;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.sens-movement-item-card.expanded {
+    border-color: rgba(229, 203, 167, 0.4);
+    background: #191920;
+}
+
+.sens-movement-row-collapsed {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.sens-movement-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sens-movement-play-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: none;
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-movement-reps-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 4px 10px;
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #FFFFFF;
+    flex-shrink: 0;
+}
+
+.sens-movement-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-movement-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.sens-movement-expanded-content {
+    padding: 0 16px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sens-movement-video-wrap {
+    width: 100%;
+    aspect-ratio: 16/9;
+    max-height: 260px;
+    background: #080809;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 14px 0;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sens-movement-cue-box {
+    background: rgba(229, 203, 167, 0.06);
+    border-left: 3px solid var(--accent-primary);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 14px;
+}
+
+.sens-movement-cue-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-primary);
+    margin-bottom: 4px;
+}
+
+.sens-movement-cue-text {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+}
+
+.sens-set-logger-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sens-set-check-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sens-set-check-btn.checked {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #080809;
+}
+
+/* 9. Sticky Action Bar Inferior (Estilo BIGG) */
+.sens-sticky-action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(14, 14, 18, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+}
+
+.sens-btn-block-action {
+    width: 100%;
+    max-width: 600px;
+    background: var(--accent-primary);
+    color: #080809;
+    border: none;
+    border-radius: 16px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(229, 203, 167, 0.3);
+    text-transform: uppercase;
+}
+
+/* 10. Hero de Nutrición Diaria con Rango Óptimo (Estilo Samsung Health) */
+.sens-nutri-target-hero-card {
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 22px;
+}
+
+.sens-nutri-date-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 6px 14px;
+    margin-bottom: 20px;
+}
+
+.sens-nutri-big-num {
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.sens-nutri-target-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.sens-nutri-range-slider-wrap {
+    margin-top: 24px;
+    position: relative;
+}
+
+.sens-nutri-dual-slider-track {
+    height: 10px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.sens-nutri-slider-fill {
+    height: 100%;
+    background: #10B981;
+    border-radius: 5px;
+}
+
+.sens-nutri-optimal-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.1) 4px,
+        rgba(255, 255, 255, 0.2) 4px,
+        rgba(255, 255, 255, 0.2) 8px
+    );
+    border-radius: 4px;
+}
+
+.sens-nutri-target-pin {
+    position: absolute;
+    top: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #141418;
+    border: 3px solid var(--accent-primary);
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.5);
+    transform: translateX(-50%);
+}
+
+/* 11. Trío de Macro Cards & Barra Segmentada (Estilo Samsung Health) */
+.sens-macros-trio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.sens-macro-pill-card {
+    background: #17171C;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 14px 12px;
+    text-align: center;
+}
+
+.sens-macro-pill-card.carb .sens-macro-title { color: #38BDF8; }
+.sens-macro-pill-card.fat .sens-macro-title { color: #F59E0B; }
+.sens-macro-pill-card.prot .sens-macro-title { color: var(--accent-primary); }
+
+.sens-macro-grams-bold {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-top: 4px;
+}
+
+.sens-macro-segmented-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.sens-macro-seg {
+    height: 100%;
+}
+
+.sens-macro-seg.carb { background: #38BDF8; }
+.sens-macro-seg.fat { background: #F59E0B; }
+.sens-macro-seg.prot { background: var(--accent-primary); }
+
+/* 12. Filas Agrupadas de Comida (Estilo Samsung Health) */
+.sens-meal-group-card {
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
+    overflow: hidden;
+    margin-bottom: 22px;
+}
+
+.sens-meal-group-header {
+    padding: 20px 22px 12px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.sens-meal-row {
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sens-meal-row:last-child {
+    border-bottom: none;
+}
+
+.sens-meal-badge-kcal {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-meal-badge-num {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.sens-meal-badge-unit {
+    font-size: 9px;
+    color: var(--text-muted);
+}
+
+.sens-meal-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.sens-meal-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.sens-meal-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-meal-quick-add-btn {
+    background: transparent;
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    padding-left: 16px;
+    color: #FFFFFF;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+}
+
+/* 13. Modal de Porción con Ruler Slider & Ficha FDA (Estilo Samsung Health) */
+.sens-portion-modal-card {
+    background: #0F0F13;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 28px;
+    max-width: 480px;
+    width: 92%;
+    padding: 24px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.sens-ruler-container {
+    margin: 24px 0 16px;
+    position: relative;
+    padding: 20px 0 10px;
+    text-align: center;
+}
+
+.sens-ruler-bubble {
+    display: inline-block;
+    background: #202026;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 4px 12px;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--accent-primary);
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.sens-ruler-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #202026;
+}
+
+.sens-ruler-slider-input {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+}
+
+.sens-ruler-slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.6);
+}
+
+.sens-ruler-notches {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Ficha Clínica FDA */
+.sens-fda-nutrition-panel {
+    background: #141418;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-top: 18px;
+}
+
+.sens-fda-header {
+    border-bottom: 4px solid #FFFFFF;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+
+.sens-fda-cal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid #FFFFFF;
+    padding: 6px 0 8px;
+}
+
+.sens-fda-cal-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.sens-fda-cal-val {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent-primary);
+}
+
+.sens-fda-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 12.5px;
+    color: var(--text-secondary);
+}
+
+.sens-fda-row.sub {
+    padding-left: 14px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+.sens-floating-pill-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.sens-pill-btn-action {
+    border-radius: 24px;
+    padding: 10px 24px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #1A1A20;
+    color: #FFFFFF;
+    transition: all 0.2s ease;
+}
+
+.sens-pill-btn-action.save {
+    background: var(--accent-primary);
+    color: #080809;
+    border-color: var(--accent-primary);
+    font-weight: 800;
+}
+
+/* 14. Floating Dock Inferior Móvil */
+.sens-floating-dock {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(18, 18, 22, 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 36px;
+    padding: 6px 12px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    z-index: 99;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 900px) {
+    body.in-portal .sens-floating-dock {
+        display: flex;
+    }
+}
+
+.sens-dock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 14px;
+    border-radius: 24px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sens-dock-item.active {
+    background: rgba(229, 203, 167, 0.15);
+    color: var(--accent-primary);
+}

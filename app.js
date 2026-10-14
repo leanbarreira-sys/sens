@@ -588,9 +588,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // SUITE 2.0 WORLD-CLASS:
     initTopbarAvatar();
     initCoachOS();
+    initCoachAthletePickerTriggers();
     initQuickActionButtons();
     renderMonthlyCalendar();
     initWorkoutStopwatch();
+    initPortionRulerModal();
+    initWorkoutBlockAccordions();
+    initWeekStripCalendar();
+    initFloatingDock();
     updateDashboardRings();
     updateMetabolicEquation();
 });
@@ -1944,6 +1949,15 @@ function switchPortalView(viewId) {
 
     navItems.forEach(item => {
         if (item.getAttribute('data-portal-tab') === viewId) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+
+    const dockItems = document.querySelectorAll('.sens-dock-item[data-dock-tab]');
+    dockItems.forEach(item => {
+        if (item.getAttribute('data-dock-tab') === viewId) {
             item.classList.add('active');
         } else {
             item.classList.remove('active');
@@ -4116,6 +4130,37 @@ function updateDashboardRings() {
     if (fuelText) {
         fuelText.textContent = `${water.toFixed(1)} / 2.5 L`;
     }
+
+    // 4. Anillos Concéntricos de Actividad (Estilo Samsung Health)
+    const svgSteps = document.getElementById('svgConcentricSteps');
+    const svgTime = document.getElementById('svgConcentricTime');
+    const svgCals = document.getElementById('svgConcentricCals');
+
+    if (svgSteps) {
+        const cSteps = 301.6;
+        const ratio = Math.min(1, currentSteps / 10000);
+        svgSteps.style.strokeDashoffset = String(cSteps * (1 - ratio));
+        const valEl = document.getElementById('dashStepsMetricVal');
+        if (valEl) valEl.textContent = currentSteps.toLocaleString('es-AR');
+    }
+
+    if (svgTime) {
+        const cTime = 226.2;
+        const activeMins = 114;
+        const ratio = Math.min(1, activeMins / 120);
+        svgTime.style.strokeDashoffset = String(cTime * (1 - ratio));
+        const valEl = document.getElementById('dashTimeMetricVal');
+        if (valEl) valEl.textContent = activeMins;
+    }
+
+    if (svgCals) {
+        const cCals = 150.8;
+        const burnedCals = Math.min(600, Math.round((currentSteps * 0.04) + 160));
+        const ratio = Math.min(1, burnedCals / 600);
+        svgCals.style.strokeDashoffset = String(cCals * (1 - ratio));
+        const valEl = document.getElementById('dashCalMetricVal');
+        if (valEl) valEl.textContent = burnedCals;
+    }
 }
 
 function renderMonthlyCalendar() {
@@ -4543,8 +4588,19 @@ function selectAthleteFromSheet(athId) {
     // Sincronizar selectores en subpaneles del Hub
     ['coachNutritionAthleteSelector', 'coachWorkoutAthleteSelector', 'coachDashNoteAthleteSelector'].forEach(selId => {
         const el = document.getElementById(selId);
-        if (el) el.value = athId;
+        if (el) {
+            el.value = athId;
+            el.dispatchEvent(new Event('change'));
+        }
     });
+
+    // Actualizar visualmente todas las píldoras de alumno sincronizadas en el Coach OS
+    const shortPlan = (athlete.active_plan_name || '').toUpperCase().includes('VIP') ? 'VIP' :
+                     (athlete.active_plan_name || '').toUpperCase().includes('DUO') ? 'DUO' :
+                     (athlete.active_plan_name || '').toUpperCase().includes('ONLINE') ? 'ONLINE' : 'PRO';
+
+    document.querySelectorAll('.coachSyncAthleteName').forEach(el => el.textContent = athlete.full_name);
+    document.querySelectorAll('.coachSyncAthletePlan').forEach(el => el.textContent = shortPlan);
 
     // Cerrar bottom sheet con animación fluida
     const bottomSheet = document.getElementById('athletePickerBottomSheet');
@@ -5656,4 +5712,548 @@ function updateMetabolicEquation(weight = 78.2, steps = 10450, intake = 1820) {
         defEl.textContent = `${deficit > 0 ? '+' : ''}${deficit} kcal`;
         defEl.style.color = deficit <= 0 ? '#10B981' : '#F59E0B';
     }
+}
+
+
+// =============================================================================
+// SUITE 2.0 BENCHMARK EXPANSIONS (SAMSUNG HEALTH × BIGG NATIVE ARCHITECTURE)
+// =============================================================================
+
+/**
+ * MÓDULO A: Modal de Porción con Regla Graduada (Ruler Slider) & Ficha FDA
+ * Calcula calorías y macronutrientes por Regla de Tres Simple dinámica
+ */
+function initPortionRulerModal() {
+    const modal = document.getElementById('portionSizeModal');
+    const closeBtn = document.getElementById('closePortionModalBtn');
+    const cancelBtn = document.getElementById('btnCancelPortionModal');
+    const saveBtn = document.getElementById('btnSavePortionModal');
+    const rulerInput = document.getElementById('portionRulerInput');
+    const bubbleVal = document.getElementById('rulerBubbleVal');
+    const dynamicKcal = document.getElementById('rulerDynamicKcal');
+    const fdaKcal = document.getElementById('fdaValKcal');
+    const fdaFatGrams = document.getElementById('fdaValFatGrams');
+    const fdaFatPct = document.getElementById('fdaValFatPct');
+    const fdaCarbGrams = document.getElementById('fdaValCarbGrams');
+    const fdaCarbPct = document.getElementById('fdaValCarbPct');
+    const fdaProtGrams = document.getElementById('fdaValProtGrams');
+    const fdaProtPct = document.getElementById('fdaValProtPct');
+    const fdaSegCarb = document.getElementById('fdaSegCarb');
+    const fdaSegFat = document.getElementById('fdaSegFat');
+    const fdaSegProt = document.getElementById('fdaSegProt');
+    const fdaPctCarb = document.getElementById('fdaPctCarb');
+    const fdaPctFat = document.getElementById('fdaPctFat');
+    const fdaPctProt = document.getElementById('fdaPctProt');
+    const rulerFoodName = document.getElementById('rulerFoodName');
+    const portionModalFoodTitle = document.getElementById('portionModalFoodTitle');
+
+    if (!modal) return;
+
+    let activeFood = {
+        name: 'Pechuga de Pollo con Arroz',
+        baseGrams: 100,
+        baseCal: 178,
+        baseProt: 22.5,
+        baseCarbs: 16.0,
+        baseFat: 4.3,
+        targetRow: null
+    };
+
+    function updateRulerCalculations(grams) {
+        grams = Math.max(20, Math.min(400, parseInt(grams, 10) || 100));
+        if (bubbleVal) {
+            bubbleVal.textContent = `${grams} g`;
+            // Posicionar la burbuja suavemente a lo largo del recorrido
+            const pct = (grams - 20) / (400 - 20);
+            bubbleVal.style.left = `calc(${pct * 100}% + (${8 - pct * 16}px))`;
+        }
+
+        // Regla de 3 simple: valor_nuevo = (gramos * valor_base) / baseGrams
+        const factor = grams / (activeFood.baseGrams || 100);
+        const cal = Math.round(activeFood.baseCal * factor);
+        const prot = Math.round(activeFood.baseProt * factor * 10) / 10;
+        const carbs = Math.round(activeFood.baseCarbs * factor * 10) / 10;
+        const fat = Math.round(activeFood.baseFat * factor * 10) / 10;
+
+        if (dynamicKcal) dynamicKcal.textContent = `${cal} kcal`;
+        if (fdaKcal) fdaKcal.textContent = cal;
+        if (fdaFatGrams) fdaFatGrams.textContent = `${fat}g`;
+        if (fdaCarbGrams) fdaCarbGrams.textContent = `${carbs}g`;
+        if (fdaProtGrams) fdaProtGrams.textContent = `${prot}g`;
+
+        // Reparto porcentual de energía
+        const cCal = carbs * 4;
+        const fCal = fat * 9;
+        const pCal = prot * 4;
+        const macroTotal = cCal + fCal + pCal;
+
+        let cPct = 35, fPct = 20, pPct = 45;
+        if (macroTotal > 0) {
+            cPct = Math.round((cCal / macroTotal) * 100);
+            fPct = Math.round((fCal / macroTotal) * 100);
+            pPct = Math.max(0, 100 - cPct - fPct);
+        }
+
+        if (fdaSegCarb) fdaSegCarb.style.width = `${cPct}%`;
+        if (fdaSegFat) fdaSegFat.style.width = `${fPct}%`;
+        if (fdaSegProt) fdaSegProt.style.width = `${pPct}%`;
+
+        if (fdaPctCarb) fdaPctCarb.textContent = `Carb. ${cPct}%`;
+        if (fdaPctFat) fdaPctFat.textContent = `Grasa ${fPct}%`;
+        if (fdaPctProt) fdaPctProt.textContent = `Proteína ${pPct}%`;
+        if (fdaFatPct) fdaFatPct.textContent = `${Math.min(99, Math.round(fat * 1.5))}%`;
+        if (fdaCarbPct) fdaCarbPct.textContent = `${Math.min(99, Math.round(carbs * 0.35))}%`;
+        if (fdaProtPct) fdaProtPct.textContent = `${Math.min(99, Math.round(prot * 2))}%`;
+    }
+
+    if (rulerInput) {
+        rulerInput.addEventListener('input', (e) => {
+            updateRulerCalculations(e.target.value);
+        });
+    }
+
+    // Interacción táctil con las muescas de referencia
+    const notches = modal.querySelectorAll('.sens-ruler-notches span');
+    notches.forEach(notch => {
+        notch.addEventListener('click', () => {
+            const val = parseInt(notch.textContent, 10);
+            if (!isNaN(val) && rulerInput) {
+                rulerInput.value = val;
+                updateRulerCalculations(val);
+            }
+        });
+        notch.style.cursor = 'pointer';
+    });
+
+    function openModalForFood(data, targetRow = null) {
+        activeFood = {
+            name: data.foodName || 'Alimento Personalizado',
+            baseGrams: 100,
+            baseCal: parseFloat(data.cal) || 178,
+            baseProt: parseFloat(data.prot) || 22.5,
+            baseCarbs: parseFloat(data.carbs) || 16.0,
+            baseFat: parseFloat(data.fat) || 4.3,
+            targetRow: targetRow
+        };
+
+        if (portionModalFoodTitle) portionModalFoodTitle.textContent = activeFood.name;
+        if (rulerFoodName) rulerFoodName.textContent = activeFood.name;
+
+        const defaultGrams = 100;
+        if (rulerInput) rulerInput.value = defaultGrams;
+        updateRulerCalculations(defaultGrams);
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    // Delegación de apertura en botones .btn-open-portion-modal
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-open-portion-modal');
+        if (btn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const row = btn.closest('.sens-meal-row');
+            const data = {
+                foodName: btn.getAttribute('data-food-name') || (row ? row.querySelector('.sens-meal-name')?.textContent : 'Alimento SENS'),
+                cal: btn.getAttribute('data-cal') || (row ? row.querySelector('.sens-meal-badge-num')?.textContent : 180),
+                prot: btn.getAttribute('data-prot') || 22,
+                carbs: btn.getAttribute('data-carbs') || 18,
+                fat: btn.getAttribute('data-fat') || 5
+            };
+            openModalForFood(data, row);
+        }
+    });
+
+    // Guardado de la porción y actualización reactiva de la UI
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            const grams = rulerInput ? parseInt(rulerInput.value, 10) : 100;
+            const factor = grams / (activeFood.baseGrams || 100);
+            const cal = Math.round(activeFood.baseCal * factor);
+            const prot = Math.round(activeFood.baseProt * factor * 10) / 10;
+            const carbs = Math.round(activeFood.baseCarbs * factor * 10) / 10;
+            const fat = Math.round(activeFood.baseFat * factor * 10) / 10;
+
+            if (activeFood.targetRow) {
+                const badgeNum = activeFood.targetRow.querySelector('.sens-meal-badge-num');
+                if (badgeNum) badgeNum.textContent = cal;
+                const desc = activeFood.targetRow.querySelector('.sens-meal-desc');
+                if (desc) {
+                    desc.innerHTML = `${activeFood.name} — <strong style="color:var(--accent-primary);">${grams}g</strong> (${prot}g P • ${carbs}g C • ${fat}g G)`;
+                }
+            }
+
+            // Recalcular total consumido hoy sumando todos los badges
+            let totalCal = 0;
+            document.querySelectorAll('.sens-meal-row .sens-meal-badge-num').forEach(b => {
+                totalCal += parseInt(b.textContent, 10) || 0;
+            });
+
+            const consumedNum = document.getElementById('nutriConsumedNum');
+            if (consumedNum) consumedNum.textContent = totalCal.toLocaleString('es-AR');
+
+            const targetKcal = 1800;
+            const sliderFill = document.getElementById('nutriSliderFill');
+            if (sliderFill) {
+                const ratioPct = Math.min(100, Math.round((totalCal / targetKcal) * 77));
+                sliderFill.style.width = `${ratioPct}%`;
+            }
+
+            // Sincronizar macros totales en pantalla
+            const carbsEl = document.getElementById('nutriCarbsGrams');
+            const fatsEl = document.getElementById('nutriFatsGrams');
+            const protEl = document.getElementById('nutriProtGrams');
+            if (carbsEl) carbsEl.innerHTML = `${Math.round(totalCal * 0.12)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+            if (fatsEl) fatsEl.innerHTML = `${Math.round(totalCal * 0.038)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+            if (protEl) protEl.innerHTML = `${Math.round(totalCal * 0.105)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+
+            // Sincronizar Anillo Concéntrico de Calorías
+            const svgCals = document.getElementById('svgConcentricCals');
+            const dashCalMetricVal = document.getElementById('dashCalMetricVal');
+            if (svgCals) {
+                const circumference = 150.8;
+                const cRatio = Math.min(1, totalCal / 2200);
+                svgCals.style.strokeDashoffset = String(circumference * (1 - cRatio));
+            }
+            if (dashCalMetricVal) {
+                dashCalMetricVal.textContent = Math.round(totalCal * 0.45);
+            }
+
+            closeModal();
+            showSensToast(`${activeFood.name} (${grams}g) guardado: ${cal} kcal`, 'champagne', 3000);
+        });
+    }
+
+    // Navegador de fechas en Nutrición (< mar, 6 de oct >)
+    const prevDayBtn = document.getElementById('btnNutriPrevDay');
+    const nextDayBtn = document.getElementById('btnNutriNextDay');
+    const dateText = document.getElementById('nutriDateText');
+    let dateOffset = 0;
+
+    function updateNutriDateDisplay() {
+        if (!dateText) return;
+        const d = new Date();
+        d.setDate(d.getDate() + dateOffset);
+        const options = { weekday: 'short', day: 'numeric', month: 'short' };
+        let formatted = d.toLocaleDateString('es-AR', options);
+        if (dateOffset === 0) formatted += ' (Hoy)';
+        else if (dateOffset === -1) formatted += ' (Ayer)';
+        dateText.textContent = formatted;
+    }
+
+    if (prevDayBtn) {
+        prevDayBtn.addEventListener('click', () => {
+            dateOffset--;
+            updateNutriDateDisplay();
+        });
+    }
+    if (nextDayBtn) {
+        nextDayBtn.addEventListener('click', () => {
+            dateOffset++;
+            updateNutriDateDisplay();
+        });
+    }
+    updateNutriDateDisplay();
+}
+
+/**
+ * MÓDULO B: Acordeones de Bloques de Entrenamiento (Estilo BIGG)
+ * Video Demostración, Cues Posturales, Logger de Series & Sticky Action Bar
+ */
+function initWorkoutBlockAccordions() {
+    // 1. Accordion de Bloques
+    const blockHeaders = document.querySelectorAll('.sens-block-accordion .sens-block-header');
+    blockHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const accordion = header.closest('.sens-block-accordion');
+            if (accordion) {
+                accordion.classList.toggle('active');
+            }
+        });
+    });
+
+    // 2. Acordeón de Movimiento & Video (expand / collapse táctil)
+    document.addEventListener('click', (e) => {
+        const rowCollapsed = e.target.closest('.sens-movement-row-collapsed');
+        if (rowCollapsed) {
+            const card = rowCollapsed.closest('.sens-movement-item-card');
+            if (card) {
+                card.classList.toggle('expanded');
+                const video = card.querySelector('video');
+                if (video) {
+                    if (card.classList.contains('expanded')) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                    }
+                }
+            }
+        }
+    });
+
+    // 3. Set Tracker & Checkmarks con Haptic Timer
+    document.addEventListener('click', (e) => {
+        const checkBtn = e.target.closest('.sens-set-check-btn');
+        if (checkBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isChecked = checkBtn.classList.toggle('checked');
+            if (isChecked) {
+                checkBtn.textContent = '✓';
+                const restSecs = parseInt(checkBtn.getAttribute('data-rest'), 10) || 60;
+                if (typeof startRestTimer === 'function') {
+                    startRestTimer(restSecs);
+                }
+                if (typeof playBeep === 'function') {
+                    playBeep(440, 0.15);
+                }
+                showSensToast(`Serie completada. Descanso: ${restSecs}s`, 'champagne', 2600);
+            }
+        }
+    });
+
+    // 4. Sticky Action Bar ("INICIAR BLOQUE" / "PAUSAR BLOQUE")
+    const stickyBtn = document.getElementById('btnStickyStartBlock');
+    if (stickyBtn) {
+        stickyBtn.addEventListener('click', () => {
+            const toggleStopwatchBtn = document.getElementById('btnToggleStopwatch');
+            if (toggleStopwatchBtn) {
+                toggleStopwatchBtn.click();
+                if (stopwatchRunning) {
+                    stickyBtn.textContent = 'PAUSAR BLOQUE';
+                    stickyBtn.style.background = '#EF4444';
+                    stickyBtn.style.color = '#FFFFFF';
+                    showSensToast('Bloque de entrenamiento en curso.', 'champagne', 2400);
+                } else {
+                    stickyBtn.textContent = 'REANUDAR BLOQUE';
+                    stickyBtn.style.background = '';
+                    stickyBtn.style.color = '';
+                }
+            }
+        });
+    }
+
+    // 5. Finalizar Sesión
+    const finishBtn = document.getElementById('btnFinishWorkoutSession');
+    if (finishBtn) {
+        finishBtn.addEventListener('click', () => {
+            if (stopwatchRunning) {
+                const toggleStopwatchBtn = document.getElementById('btnToggleStopwatch');
+                if (toggleStopwatchBtn) toggleStopwatchBtn.click();
+            }
+            if (stickyBtn) {
+                stickyBtn.textContent = 'INICIAR BLOQUE';
+                stickyBtn.style.background = '';
+                stickyBtn.style.color = '';
+            }
+
+            const completed = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
+            const todayNum = new Date().getDate();
+            if (!completed.includes(todayNum)) {
+                completed.push(todayNum);
+                localStorage.setItem('sens_completed_workout_dates', JSON.stringify(completed));
+            }
+
+            const weeklyTime = document.getElementById('dashWeeklyTimeNum');
+            const weeklySessions = document.getElementById('dashWeeklySessionsCal');
+            if (weeklyTime) weeklyTime.textContent = '5:46:12';
+            if (weeklySessions) weeklySessions.textContent = '16 sesiones • 2,140 kcal';
+
+            updateDashboardRings();
+            renderMonthlyCalendar();
+            showSensToast('¡Sesión finalizada con éxito! Estadísticas sincronizadas con Nico.', 'success', 4000);
+        });
+    }
+
+    // 6. Muscle Filter Pills (Empuje, Tracción, Cuádriceps, Core)
+    const filterPills = document.querySelectorAll('.muscle-filter-btn');
+    filterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            filterPills.forEach(p => {
+                p.classList.remove('pill-champagne');
+                p.classList.add('pill-dark');
+            });
+            pill.classList.remove('pill-dark');
+            pill.classList.add('pill-champagne');
+
+            const group = pill.getAttribute('data-group');
+            const items = document.querySelectorAll('.sens-movement-item-card');
+            items.forEach(card => {
+                const mId = card.getAttribute('data-movement-id') || '';
+                if (group === 'all') {
+                    card.style.display = '';
+                } else if (group === 'push' && mId.includes('pushups')) {
+                    card.style.display = '';
+                } else if (group === 'core_mobility' && (mId.includes('plank') || mId.includes('wm-1'))) {
+                    card.style.display = '';
+                } else if (group === 'hamstrings_glutes' && (mId.includes('swing') || mId.includes('bandsteps'))) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = group === 'all' ? '' : 'none';
+                }
+            });
+        });
+    });
+
+    // 7. Day Tabs en Workout View (Día 1 a Día 6)
+    const dayTabs = document.querySelectorAll('#workoutDaysNav .day-tab-btn');
+    dayTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            dayTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const dayKey = tab.getAttribute('data-day') || 'day1';
+            AppState.currentDay = dayKey;
+
+            const blockTitle = document.querySelector('#blockCombinedStrength .sens-block-title');
+            if (blockTitle) {
+                const titles = {
+                    day1: 'Combined Strength — Tren Superior (Empuje / Tirón)',
+                    day2: 'Tren Inferior (Fuerza & Cadera)',
+                    day3: 'Full Body & Postura',
+                    day4: 'Core & Movilidad (Casa)',
+                    day5: 'Fuerza & Acondicionamiento',
+                    day6: 'Cardio Zona 2 & Recuperación'
+                };
+                blockTitle.textContent = titles[dayKey] || 'Fuerza Principal';
+            }
+            showSensToast(`Cargando rutina: ${tab.textContent.split(':')[0]}`, 'champagne', 1800);
+        });
+    });
+}
+
+/**
+ * MÓDULO C: Week Strip Calendar (7 Días BIGG) & Directivas de Nico
+ */
+function initWeekStripCalendar() {
+    const dayPills = document.querySelectorAll('.sens-week-day-pill');
+    const msgEl = document.getElementById('dashNicoMessage');
+    const locTrigger = document.getElementById('dashLocationTrigger');
+    const locName = document.getElementById('dashLocationName');
+    const quickWorkoutBtn = document.getElementById('dashQuickWorkoutBtn');
+
+    const coachDirectives = [
+        "El jueves cargaste core, hoy toca full body. Arrancás con flexiones, zona media y swings. Lo principal: glúteos. Además, un HIIT de sentadillas y saltos. Cerrás con dominadas.",
+        "Día 2: Piernas y fuerza de cadera. Sentadillas profundas, empujes y peso muerto rumano. Priorizá rango articular completo.",
+        "Día 3: Tren superior y hombros. Movilidad escapular previa y series efectivas al 80% RPE.",
+        "Día 4: Core & Estabilidad dinámica. Trabajo isométrico y control respiratorio diafragmático.",
+        "Día 5: Fuerza principal y acondicionamiento metabólico. Cuidá la técnica en cada repetición.",
+        "Día 6: Cardio Zona 2 al aire libre (caminata rápida, trote o bici) para oxidar sustratos y regenerar tejidos.",
+        "Día 7: Descanso activo. 10,000 pasos conscientes, hidratación con electrolitos y estiramientos suaves."
+    ];
+
+    dayPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            dayPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+
+            const idx = parseInt(pill.getAttribute('data-day-idx'), 10) || 0;
+            if (msgEl && coachDirectives[idx]) {
+                msgEl.style.opacity = '0';
+                setTimeout(() => {
+                    msgEl.textContent = `"${coachDirectives[idx]}"`;
+                    msgEl.style.opacity = '1';
+                }, 150);
+            }
+
+            if (locName) {
+                locName.textContent = (idx % 2 === 0) ? 'Presencial Palermo' : 'Online / En Casa';
+            }
+
+            // Sincronizar nodo de racha de hábitos
+            const habitNodes = document.querySelectorAll('.sens-habit-nodes-row .sens-habit-node .sens-habit-circle');
+            habitNodes.forEach((node, nIdx) => {
+                node.classList.remove('active');
+                if (nIdx === idx) {
+                    node.classList.add('active');
+                }
+            });
+        });
+    });
+
+    // Selector de Ubicación (Palermo / Puerto Madero / Online)
+    if (locTrigger && locName) {
+        const locations = ['Presencial Palermo', 'Presencial Puerto Madero', 'Online / En Casa'];
+        let locIdx = 0;
+        locTrigger.addEventListener('click', () => {
+            locIdx = (locIdx + 1) % locations.length;
+            locName.textContent = locations[locIdx];
+            showSensToast(`Sede de entreno: ${locations[locIdx]}`, 'champagne', 2200);
+        });
+    }
+
+    // Botón directo a entrenamiento
+    if (quickWorkoutBtn) {
+        quickWorkoutBtn.addEventListener('click', () => {
+            switchPortalView('workoutView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Quick Water en Dashboard (+250ml)
+    const btnWater = document.getElementById('btnQuickLogWater');
+    const waterConsumedEl = document.getElementById('dashWaterConsumed');
+    if (btnWater) {
+        btnWater.addEventListener('click', () => {
+            let current = 1250;
+            if (waterConsumedEl) {
+                const parsed = parseInt(waterConsumedEl.textContent.replace(/\D/g, ''), 10);
+                if (!isNaN(parsed)) current = parsed;
+                current += 250;
+                waterConsumedEl.textContent = current.toLocaleString('es-AR');
+            }
+            AppState.dailyWater = (current / 1000);
+            updateDashboardRings();
+            showSensToast(`+250ml agua registrados (Total: ${(current/1000).toFixed(2)} L)`, 'success', 2200);
+        });
+    }
+}
+
+/**
+ * MÓDULO D: Floating Dock Inferior Móvil (Estilo BIGG / Samsung Health)
+ */
+function initFloatingDock() {
+    const dockItems = document.querySelectorAll('.sens-dock-item[data-dock-tab]');
+    dockItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const targetTab = item.getAttribute('data-dock-tab');
+            if (targetTab) {
+                switchPortalView(targetTab);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    });
+}
+
+/**
+ * MÓDULO E: Sincronización de Triggers de Alumnos del Coach OS
+ */
+function initCoachAthletePickerTriggers() {
+    document.querySelectorAll('.btn-trigger-athlete-sheet').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const bottomSheet = document.getElementById('athletePickerBottomSheet');
+            const sheetBackdrop = document.getElementById('athleteSheetBackdrop');
+            if (bottomSheet && sheetBackdrop) {
+                bottomSheet.classList.add('active');
+                sheetBackdrop.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                if (typeof renderAthleteBottomSheetList === 'function') {
+                    renderAthleteBottomSheetList();
+                }
+            }
+        });
+    });
 }
