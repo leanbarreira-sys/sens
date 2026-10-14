@@ -9864,3 +9864,297 @@ input[type="range"]::-webkit-slider-thumb:hover {
     color: var(--text-muted);
 }
 
+/* =============================================================================
+   BANNER MAESTRO DE ATLETA EN COACH OS (SELECTOR NATIVO LUXURY)
+   ============================================================================= */
+.coach-master-active-athlete-card {
+    background: linear-gradient(135deg, rgba(20, 20, 26, 0.95), rgba(12, 12, 15, 0.98));
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    border-radius: 20px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.coach-active-athlete-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    flex: 1;
+}
+
+.coach-active-athlete-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.coach-active-athlete-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    color: #080809;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(229, 203, 167, 0.4);
+    box-shadow: 0 4px 12px rgba(229, 203, 167, 0.25);
+}
+
+.coach-active-athlete-avatar-wrap .status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    border: 2px solid #0E0E12;
+}
+
+.coach-active-athlete-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.coach-active-athlete-topline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.coach-active-athlete-eyebrow {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+}
+
+.coach-active-athlete-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.coach-active-athlete-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.coach-active-athlete-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-coach-action-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-coach-action-pill:hover,
+.btn-coach-action-pill:active {
+    background: rgba(229, 203, 167, 0.15);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.btn-coach-action-pill.primary {
+    background: var(--accent-gradient);
+    color: #080809;
+    border: none;
+    box-shadow: 0 4px 14px rgba(229, 203, 167, 0.3);
+}
+
+.btn-coach-action-pill.primary:hover {
+    filter: brightness(1.08);
+}
+
+/* =============================================================================
+   INDICADOR DE SELECCIÓN EN BOTTOM SHEET DE ALUMNOS (ESTILO NATIVO APPLE)
+   ============================================================================= */
+.sheet-athlete-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.sheet-athlete-avatar-wrap .status-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 2px solid #141418;
+}
+
+.sheet-athlete-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.sheet-athlete-check-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0.4;
+}
+
+.sheet-athlete-check-indicator svg {
+    display: none;
+}
+
+.sheet-athlete-item.is-selected .sheet-athlete-check-indicator {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.5);
+}
+
+.sheet-athlete-item.is-selected .sheet-athlete-check-indicator svg {
+    display: block;
+    stroke: #080809;
+}
+
+.sheet-athlete-item.is-selected {
+    background: rgba(229, 203, 167, 0.12);
+    border-color: rgba(229, 203, 167, 0.45);
+}
+
+.sheet-athlete-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sheet-plan-badge {
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 1px 7px;
+    border-radius: 8px;
+    background: rgba(229, 203, 167, 0.15);
+    color: var(--accent-primary);
+    border: 1px solid rgba(229, 203, 167, 0.3);
+}
+
+/* =============================================================================
+   TIRA DE FILTROS EN BIBLIOTECA DE EJERCICIOS (100% MOBILE-FIRST TÁCTIL)
+   ============================================================================= */
+.lib-group-filter-strip {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.lib-group-filter-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.lib-pill-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 18px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lib-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+}
+
+.lib-pill-btn.active {
+    background: var(--accent-primary);
+    color: #080809;
+    border-color: var(--accent-primary);
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(229, 203, 167, 0.3);
+}
+
+/* =============================================================================
+   OPTIMIZACIÓN RESPONSIVE DE BARRA EJECUTIVA COACH (<768px)
+   ============================================================================= */
+@media (max-width: 768px) {
+    .coach-native-bar {
+        padding: 6px 12px;
+        gap: 6px;
+    }
+
+    .coach-tag-brand {
+        display: none; /* Ahorra espacio crucial en mobile */
+    }
+
+    .coach-athlete-pill-trigger {
+        max-width: 170px;
+        padding: 4px 10px;
+        font-size: 11.5px;
+        gap: 6px;
+    }
+
+    .btn-coach-manage-pill {
+        display: none; /* Accesible directamente desde dock inferior */
+    }
+
+    .coach-segmented-switch .segmented-option {
+        padding: 3px 8px;
+        font-size: 10px;
+    }
+
+    .coach-master-active-athlete-card {
+        padding: 14px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .coach-active-athlete-actions {
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .coach-active-athlete-actions .btn-coach-action-pill {
+        flex: 1;
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 11.5px;
+    }
+}
+
+

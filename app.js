@@ -935,12 +935,14 @@ function applyUserProfile(userTypeKey) {
 // =============================================================================
 // NUEVO: MODAL DE BIBLIOTECA MAESTRA (50 EJERCICIOS) & BÚSQUEDA
 // =============================================================================
+let activeLibraryGroup = 'all';
+
 function initExerciseCatalogModal() {
     const modal = document.getElementById('exerciseLibraryModal');
     const openBtn = document.getElementById('btnOpenExerciseLibraryModal');
     const closeBtn = document.getElementById('closeLibraryModalBtn');
     const searchInput = document.getElementById('libSearchInput');
-    const groupFilter = document.getElementById('libGroupFilter');
+    const pillStrip = document.getElementById('libGroupPillStrip');
 
     if (openBtn) {
         openBtn.addEventListener('click', () => {
@@ -962,63 +964,99 @@ function initExerciseCatalogModal() {
         searchInput.addEventListener('input', () => renderExerciseLibraryList());
     }
 
-    if (groupFilter) {
-        groupFilter.addEventListener('change', () => renderExerciseLibraryList());
+    if (pillStrip) {
+        pillStrip.querySelectorAll('.lib-pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                pillStrip.querySelectorAll('.lib-pill-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeLibraryGroup = btn.getAttribute('data-group') || 'all';
+                renderExerciseLibraryList();
+            });
+        });
     }
 }
 
 function renderExerciseLibraryList() {
     const listContainer = document.getElementById('libraryExercisesList');
     const searchInput = document.getElementById('libSearchInput');
-    const groupFilter = document.getElementById('libGroupFilter');
     if (!listContainer) return;
 
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const selectedGroup = groupFilter ? groupFilter.value : 'all';
+    const selectedGroup = activeLibraryGroup || 'all';
 
-    const filtered = EXERCISE_CATALOG.filter(ex => {
-        const matchGroup = selectedGroup === 'all' || ex.muscle_group === selectedGroup;
-        const matchQuery = !query || ex.name.toLowerCase().includes(query) || ex.pattern.toLowerCase().includes(query) || ex.cue.toLowerCase().includes(query);
+    const sourceLibrary = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_EXERCISE_LIBRARY.length > 0)
+        ? SENS_EXERCISE_LIBRARY
+        : EXERCISE_CATALOG;
+
+    const filtered = sourceLibrary.filter(ex => {
+        const cat = (ex.category || ex.muscle_group || '').toLowerCase();
+        let matchGroup = false;
+        if (selectedGroup === 'all') {
+            matchGroup = true;
+        } else if (selectedGroup === 'piernas') {
+            matchGroup = (cat === 'piernas' || cat === 'cuadriceps' || cat === 'isquiotibiales' || cat === 'gluteos');
+        } else {
+            matchGroup = (cat === selectedGroup || (ex.muscle_group || '').toLowerCase() === selectedGroup);
+        }
+
+        const matchQuery = !query || 
+            (ex.name && ex.name.toLowerCase().includes(query)) ||
+            (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(query)) ||
+            (ex.execution && ex.execution.toLowerCase().includes(query)) ||
+            (ex.recommendations && ex.recommendations.toLowerCase().includes(query)) ||
+            (ex.objective && ex.objective.toLowerCase().includes(query)) ||
+            (ex.cue && ex.cue.toLowerCase().includes(query));
+
         return matchGroup && matchQuery;
     });
 
     if (filtered.length === 0) {
-        listContainer.innerHTML = '<p style="color:var(--text-muted); padding:20px; text-align:center;">No se encontraron ejercicios con ese criterio.</p>';
+        listContainer.innerHTML = '<p style="color:var(--text-muted); padding:28px 16px; text-align:center;">No se encontraron ejercicios en la biblioteca con los filtros seleccionados.</p>';
         return;
     }
 
-    const groupNames = {
-        quadriceps: 'Dominante Rodilla (Cuádriceps)',
-        hamstrings_glutes: 'Dominante Cadera (Isquios/Glúteo)',
-        push: 'Empuje Tren Superior',
-        pull: 'Tracción Tren Superior',
-        core_mobility: 'Core & Conciencia Postural'
-    };
+    const currentAthId = coachWorkoutState.activeAthleteId || getActiveAthleteId();
+    const currentDay = coachWorkoutState.activeDay || AppState.currentDay || 'day1';
+    const dayName = currentDay.toUpperCase();
 
-    const isAdmin = isCurrentUserAdmin();
+    let html = '';
     filtered.forEach(ex => {
+        const catLabel = (ex.category || ex.muscle_group || 'Fuerza').toUpperCase();
+        const primaryMusc = ex.primary_muscle || (ex.muscle_group ? formatMuscleGroup(ex.muscle_group) : 'Músculo Principal');
+        const cueText = ex.recommendations || ex.cue || 'Ejecución controlada con rango completo.';
+        const execText = ex.execution || '';
+        const levelLabel = ex.level || 'Intermedio';
+        const restSec = ex.rest || ex.rest_seconds || 90;
+        const setsVal = ex.default_sets || ex.sets || 3;
+        const repsVal = ex.default_reps || ex.reps || '10-12';
+
         html += `
-            <div style="background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:8px; padding:16px; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;">
-                <div style="flex:1; min-width:260px;">
-                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
-                        <span class="pill pill-dark" style="font-size:9px; padding:3px 8px;">${groupNames[ex.muscle_group] || ex.muscle_group}</span>
-                        <span class="pill pill-champagne" style="font-size:9px; padding:3px 8px;">${ex.pattern}</span>
-                        <span style="font-size:11px; color:var(--text-muted);">Descanso: ${ex.rest}s</span>
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 240px;">
+                        <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
+                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800; padding: 2px 7px;">${catLabel}</span>
+                            <span class="pill pill-dark" style="font-size: 9px; color: var(--accent-primary); border-color: rgba(229,203,167,0.3);">${primaryMusc}</span>
+                            <span class="pill pill-dark" style="font-size: 9px; color: var(--text-muted);">${levelLabel}</span>
+                            <span style="font-size: 11px; color: var(--text-muted); margin-left: auto;">Descanso: ${restSec}s</span>
+                        </div>
+                        <h4 style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">${ex.name}</h4>
+                        ${execText ? `<p style="font-size: 12px; color: var(--text-secondary); margin: 0 0 6px 0; line-height: 1.4;"><strong>Técnica:</strong> ${execText}</p>` : ''}
+                        <div style="background: rgba(229, 203, 167, 0.06); border-left: 3px solid var(--accent-primary); border-radius: 4px; padding: 6px 10px; font-size: 11.5px; color: var(--text-secondary); line-height: 1.4;">
+                            <strong style="color: var(--accent-primary);">Recomendación Nico:</strong> ${cueText}
+                        </div>
                     </div>
-                    <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-primary); margin-bottom:4px;">${ex.name}</h4>
-                    <p style="font-size:0.85rem; color:var(--text-secondary); margin:0; line-height:1.4;">
-                        <strong>Consejo de Nico:</strong> ${ex.cue}
-                    </p>
                 </div>
-                <div style="display:flex; gap:8px; align-items:center;">
-                    <button type="button" class="btn btn-outline btn-sm btn-lib-video" data-video-title="Técnica: ${ex.name}" data-video-cue="${ex.cue}" style="width:auto; margin:0; font-size:11px;">
-                        ▶ Video Técnica
-                    </button>
-                    ${isAdmin ? `
-                        <button type="button" class="btn btn-primary btn-sm btn-lib-assign" data-ex-id="${ex.id}" data-ex-name="${ex.name}" style="width:auto; margin:0; font-size:11px;">
-                            + Asignar a Rutina
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; gap: 8px; flex-wrap: wrap;">
+                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Sugerido: ${setsVal} series × ${repsVal}</span>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" class="btn btn-outline btn-sm btn-lib-video" data-video-title="${ex.name}" data-video-cue="${cueText}" style="font-size: 11px; padding: 5px 12px; border-color: rgba(255,255,255,0.2);">
+                            ▶ Ver Técnica
                         </button>
-                    ` : ''}
+                        <button type="button" class="btn btn-primary btn-sm btn-lib-assign" data-ex-id="${ex.id}" data-ex-name="${ex.name}" style="font-size: 11px; padding: 5px 14px; font-weight: 800;">
+                            + Asignar a ${dayName}
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -1026,7 +1064,7 @@ function renderExerciseLibraryList() {
 
     listContainer.innerHTML = html;
 
-    // Conectar botones de video dentro del modal de catálogo
+    // Listeners
     listContainer.querySelectorAll('.btn-lib-video').forEach(btn => {
         btn.addEventListener('click', () => {
             const title = btn.getAttribute('data-video-title');
@@ -1035,29 +1073,37 @@ function renderExerciseLibraryList() {
         });
     });
 
-    // Conectar botones de asignación para Nico/Admin
     listContainer.querySelectorAll('.btn-lib-assign').forEach(btn => {
         btn.addEventListener('click', () => {
             const exId = btn.getAttribute('data-ex-id');
             const exName = btn.getAttribute('data-ex-name');
-            const targetEx = EXERCISE_CATALOG.find(e => e.id === exId);
+            const sourceLibrary = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+            const targetEx = sourceLibrary.find(e => e.id === exId);
             if (targetEx) {
-                const currentDay = AppState.currentDay || 'day1';
-                if (!WORKOUT_DAYS_DATA[currentDay]) {
-                    WORKOUT_DAYS_DATA[currentDay] = { title: `Día: ${currentDay}`, exercises: [] };
+                const targetDay = coachWorkoutState.activeDay || AppState.currentDay || 'day1';
+                const targetAth = coachWorkoutState.activeAthleteId || getActiveAthleteId();
+                const data = getCoachAthleteWorkoutData(targetAth);
+                if (!data[targetDay]) {
+                    data[targetDay] = { title: `Día: ${targetDay.toUpperCase()}`, exercises: [] };
                 }
-                WORKOUT_DAYS_DATA[currentDay].exercises.push({
+                data[targetDay].exercises.push({
                     id: targetEx.id,
                     name: targetEx.name,
-                    notes: targetEx.cue,
-                    sets: 3,
-                    reps: '8-12',
-                    rest: targetEx.rest,
+                    notes: targetEx.recommendations || targetEx.cue || 'Cadencia y control biomecánico',
+                    sets: targetEx.default_sets || 3,
+                    reps: targetEx.default_reps || '10-12',
+                    rest: targetEx.rest || 75,
                     defaultWeight: 15,
                     defaultReps: 10
                 });
-                showSensToast(`${exName} asignado correctamente a ${currentDay.toUpperCase()}.`, 'champagne');
-                renderWorkoutDay(currentDay);
+                localStorage.setItem(`sens_prescribed_workouts_${targetAth}`, JSON.stringify(data));
+                if (typeof renderCoachAssignedExercises === 'function') {
+                    renderCoachAssignedExercises();
+                }
+                if (typeof renderWorkoutDay === 'function') {
+                    renderWorkoutDay(targetDay);
+                }
+                showSensToast(`${exName} asignado a ${targetDay.toUpperCase()}.`, 'champagne');
                 const modal = document.getElementById('exerciseLibraryModal');
                 if (modal) modal.classList.remove('active');
             }
@@ -2016,6 +2062,9 @@ function switchPortalView(viewId) {
     }
     if (viewId === 'profileSettingsView') {
         renderProfileSettingsData();
+    }
+    if (viewId === 'coachHubView') {
+        if (typeof syncCoachMasterCard === 'function') syncCoachMasterCard();
     }
 }
 
@@ -3553,15 +3602,9 @@ function initWorkoutManager() {
 // -----------------------------------------------------------------------------
 // GESTOR DE ENTRENAMIENTO VIDEO-FIRST & ALTO IMPACTO (ESTILO PILARES SENS)
 // -----------------------------------------------------------------------------
+const SENS_EXERCISE_MOCKUP_VIDEO = 'vid/pilar-2-vitalidad.mp4';
 const SENS_EXERCISE_VIDEOS = [
-    'vid/pilar-1-tecnica.mp4',
-    'vid/pilar-2-vitalidad.mp4',
-    'vid/pilar-3-movilidad.mp4',
-    'vid/pilar-4-adherencia.mp4',
-    'vid/PILARES/1.mp4',
-    'vid/PILARES/2.mp4',
-    'vid/PILARES/3.mp4',
-    'vid/PILARES/4.mp4'
+    'vid/pilar-2-vitalidad.mp4'
 ];
 
 function hashCode(str) {
@@ -3574,20 +3617,40 @@ function hashCode(str) {
 }
 
 function formatMuscleGroup(key) {
-    switch (key) {
-        case 'quadriceps':
+    if (!key) return 'Fuerza';
+    const k = key.toLowerCase();
+    switch (k) {
+        case 'pecho':
+            return 'Pectoral & Empuje';
+        case 'espalda':
+            return 'Dorsales & Espalda';
+        case 'hombros':
+            return 'Deltoides & Hombros';
+        case 'biceps':
+            return 'Bíceps & Brazos';
+        case 'triceps':
+            return 'Tríceps & Brazos';
+        case 'cuadriceps':
         case 'piernas':
-            return 'Piernas & Glúteos';
-        case 'hamstrings_glutes':
+            return 'Piernas & Cuádriceps';
+        case 'isquiotibiales':
             return 'Isquios & Cadera';
-        case 'push':
-        case 'pecho_espalda':
-            return 'Empuje & Pecho';
-        case 'pull':
-            return 'Tracción & Espalda';
+        case 'gluteos':
+            return 'Glúteos & Potencia';
+        case 'pantorrillas':
+            return 'Pantorrillas & Tobillos';
+        case 'core':
         case 'core_mobility':
         case 'core_movilidad':
-            return 'Core & Movilidad';
+            return 'Core & Estabilidad';
+        case 'movilidad':
+            return 'Movilidad Activa';
+        case 'cardio':
+            return 'Cardio & Potencia';
+        case 'push':
+            return 'Empuje Tren Superior';
+        case 'pull':
+            return 'Tracción Tren Superior';
         default:
             return 'Fuerza Funcional';
     }
@@ -3776,10 +3839,10 @@ function renderWorkoutDay(dayKey) {
 
     let html = '';
     exercisesToShow.forEach((ex, idx) => {
-        const catalogMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || {};
-        const muscleTag = catalogMatch.muscle_group ? formatMuscleGroup(catalogMatch.muscle_group) : 'Fuerza';
-        const videoIdx = Math.abs(hashCode(ex.name)) % SENS_EXERCISE_VIDEOS.length;
-        const videoSrc = SENS_EXERCISE_VIDEOS[videoIdx];
+        const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+        const catalogMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || {};
+        const muscleTag = catalogMatch.category || catalogMatch.muscle_group ? formatMuscleGroup(catalogMatch.category || catalogMatch.muscle_group) : 'Fuerza';
+        const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
         const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Peso Corporal';
 
         html += `
@@ -3822,14 +3885,14 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     clearInterval(modalExerciseState.tutInterval);
     clearInterval(modalExerciseState.restInterval);
 
-    const catalogMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || {};
-    const muscleName = catalogMatch.muscle_group 
-        ? formatMuscleGroup(catalogMatch.muscle_group)
+    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+    const catalogMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || {};
+    const muscleName = catalogMatch.category || catalogMatch.muscle_group 
+        ? formatMuscleGroup(catalogMatch.category || catalogMatch.muscle_group)
         : 'Piernas & Glúteos';
-    const cueTechnical = ex.notes || catalogMatch.cue || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
+    const cueTechnical = ex.notes || catalogMatch.recommendations || catalogMatch.cue || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
 
-    const videoIdx = Math.abs(hashCode(ex.name)) % SENS_EXERCISE_VIDEOS.length;
-    const videoSrc = SENS_EXERCISE_VIDEOS[videoIdx];
+    const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
 
     const backdrop = document.getElementById('sensExerciseModalBackdrop');
     const modalName = document.getElementById('modalExName');
@@ -4100,11 +4163,16 @@ function updateTimerDisplay() {
 function openVideoModal(title, cue) {
     const modal = document.getElementById('videoModal');
     const modalTitle = document.getElementById('videoModalTitle');
+    const videoPlayer = document.getElementById('videoModalPlayer');
     if (modal && modalTitle) {
         modalTitle.textContent = title || 'Demostración Técnica';
         const cueParagraph = modal.querySelector('p:last-of-type');
         if (cueParagraph && cue) {
             cueParagraph.innerHTML = `<strong>Consejo de Nico:</strong> ${cue}`;
+        }
+        if (videoPlayer) {
+            videoPlayer.src = SENS_EXERCISE_MOCKUP_VIDEO;
+            videoPlayer.play().catch(() => {});
         }
         modal.classList.add('active');
     }
@@ -5008,16 +5076,23 @@ function renderAthleteBottomSheetList(filter = 'all', searchQuery = '') {
         html += `
             <div class="sheet-athlete-item ${isSelected ? 'is-selected' : ''}" data-athlete-id="${ath.id}">
                 <div class="sheet-athlete-left">
-                    <div class="sheet-athlete-avatar">${initials}</div>
+                    <div class="sheet-athlete-avatar-wrap">
+                        <div class="sheet-athlete-avatar">${initials}</div>
+                        <span class="status-dot status-dot-${statusClass}"></span>
+                    </div>
                     <div class="sheet-athlete-info">
-                        <span class="sheet-athlete-name">${ath.full_name}</span>
-                        <span class="sheet-athlete-sub">${ath.active_plan_name || 'Plan SENS'} • ${ath.email}</span>
+                        <div class="sheet-athlete-name-row">
+                            <span class="sheet-athlete-name">${ath.full_name}</span>
+                            <span class="sheet-plan-badge">${ath.active_plan_name || 'Plan SENS'}</span>
+                        </div>
+                        <span class="sheet-athlete-sub">${ath.email} • ${statusLabel}</span>
                     </div>
                 </div>
-                <div class="sheet-athlete-status" style="display: flex; align-items: center;">
-                    <span class="status-dot status-dot-${statusClass}"></span>
-                    <span>${statusLabel}</span>
+                <div class="sheet-athlete-right">
                     ${quickApproveBtn}
+                    <div class="sheet-athlete-check-indicator ${isSelected ? 'checked' : ''}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
                 </div>
             </div>
         `;
@@ -5047,6 +5122,8 @@ function selectAthleteFromSheet(athId) {
     const athlete = roster.find(a => a.id === athId);
     if (!athlete) return;
 
+    AppState.activeAthleteId = athId;
+
     // Actualizar elementos de la barra ejecutiva nativa
     const nameEl = document.getElementById('coachCurrentAthleteName');
     const planEl = document.getElementById('coachCurrentAthletePlan');
@@ -5071,6 +5148,28 @@ function selectAthleteFromSheet(athId) {
     if (waLink) {
         const msg = encodeURIComponent(`Hola ${athlete.full_name}! Te escribo de SENS para revisar tu progreso y coordinar los entrenamientos.`);
         waLink.href = `https://wa.me/?text=${msg}`;
+    }
+
+    // Actualizar Banner Maestro de Atleta en Coach OS
+    const masterAvatar = document.getElementById('coachMasterAvatar');
+    const masterName = document.getElementById('coachMasterName');
+    const masterEmail = document.getElementById('coachMasterEmail');
+    const masterPlanBadge = document.getElementById('coachMasterPlanBadge');
+    const masterStatusDot = document.getElementById('coachMasterStatusDot');
+    const masterGoal = document.getElementById('coachMasterGoal');
+
+    const pParts = (athlete.full_name || 'Atleta').trim().split(' ');
+    let initMaster = pParts[0] ? pParts[0][0].toUpperCase() : 'S';
+    if (pParts.length > 1 && pParts[pParts.length - 1]) initMaster += pParts[pParts.length - 1][0].toUpperCase();
+
+    if (masterAvatar) masterAvatar.textContent = initMaster;
+    if (masterName) masterName.textContent = athlete.full_name;
+    if (masterEmail) masterEmail.textContent = athlete.email || 'alumno@sens.com';
+    if (masterPlanBadge) masterPlanBadge.textContent = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
+    if (masterGoal) masterGoal.textContent = athlete.goal ? `Meta: ${athlete.goal}` : 'Meta: Recomposición & Fuerza';
+    if (masterStatusDot) {
+        const s = athlete.subscription_status || 'active';
+        masterStatusDot.className = 'status-dot ' + (s === 'active' ? 'status-dot-active' : s === 'paused' ? 'status-dot-paused' : 'status-dot-pending');
     }
 
     if (athlete.isDb) {
@@ -5249,9 +5348,39 @@ function getConsolidatedCoachAthletes() {
     return roster;
 }
 
+function syncCoachMasterCard(athId) {
+    const targetId = athId || AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
+    const roster = getConsolidatedCoachAthletes();
+    const athlete = roster.find(a => a.id === targetId) || roster[0];
+    if (!athlete) return;
+
+    const masterAvatar = document.getElementById('coachMasterAvatar');
+    const masterName = document.getElementById('coachMasterName');
+    const masterEmail = document.getElementById('coachMasterEmail');
+    const masterPlanBadge = document.getElementById('coachMasterPlanBadge');
+    const masterStatusDot = document.getElementById('coachMasterStatusDot');
+    const masterGoal = document.getElementById('coachMasterGoal');
+
+    const pParts = (athlete.full_name || 'Atleta').trim().split(' ');
+    let initMaster = pParts[0] ? pParts[0][0].toUpperCase() : 'S';
+    if (pParts.length > 1 && pParts[pParts.length - 1]) initMaster += pParts[pParts.length - 1][0].toUpperCase();
+
+    if (masterAvatar) masterAvatar.textContent = initMaster;
+    if (masterName) masterName.textContent = athlete.full_name;
+    if (masterEmail) masterEmail.textContent = athlete.email || 'alumno@sens.com';
+    if (masterPlanBadge) masterPlanBadge.textContent = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
+    if (masterGoal) masterGoal.textContent = athlete.goal ? `Meta: ${athlete.goal}` : 'Meta: Recomposición & Fuerza';
+    if (masterStatusDot) {
+        const s = athlete.subscription_status || 'active';
+        masterStatusDot.className = 'status-dot ' + (s === 'active' ? 'status-dot-active' : s === 'paused' ? 'status-dot-paused' : 'status-dot-pending');
+    }
+}
+
 function initCoachAthletesHub() {
     const searchInput = document.getElementById('coachSearchAthleteInput');
     const filterBtns = document.querySelectorAll('.coach-filter-status');
+    const btnMasterInspect = document.getElementById('btnCoachMasterInspectAthlete');
+    const btnHubViewStudent = document.getElementById('btnCoachHubViewActiveStudent');
 
     if (searchInput) {
         searchInput.addEventListener('input', () => {
@@ -5274,6 +5403,22 @@ function initCoachAthletesHub() {
             renderCoachAthletesHub(status, term);
         });
     });
+
+    if (btnMasterInspect) {
+        btnMasterInspect.addEventListener('click', () => {
+            const athId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
+            inspectAthleteAsCoach(athId);
+        });
+    }
+
+    if (btnHubViewStudent) {
+        btnHubViewStudent.addEventListener('click', () => {
+            const athId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
+            inspectAthleteAsCoach(athId);
+        });
+    }
+
+    syncCoachMasterCard();
 }
 
 function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
