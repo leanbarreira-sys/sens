@@ -2074,7 +2074,10 @@ function openUserPortal(forceOnboarding = false) {
     const publicLanding = document.getElementById('publicLanding');
     const userEmailEl = document.getElementById('portalUserEmail');
     const planBadgeEl = document.getElementById('portalPlanBadge');
-    const coachBar = document.getElementById('coachAthleteBar');
+    const btnCoachOS = document.getElementById('btnTopbarCoachOS');
+    const dashCoach = document.getElementById('dashCoachCard');
+    const settingsCoach = document.getElementById('settingsCoachCard');
+    const coachBanner = document.getElementById('coachInspectionBanner');
     const globalHeader = document.querySelector('header');
     const mobileQuickBar = document.querySelector('.mobile-quick-bar');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -2103,12 +2106,18 @@ function openUserPortal(forceOnboarding = false) {
     const isAdmin = isCurrentUserAdmin();
 
     // Visibilidad del Panel de Control de Coach (Solo para Nico)
-    if (coachBar) {
-        coachBar.style.display = isAdmin ? 'flex' : 'none';
-        if (isAdmin) {
-            loadCoachAthletesList();
-            renderCoachAthletesHub();
-        }
+    if (btnCoachOS) btnCoachOS.style.display = isAdmin ? 'inline-flex' : 'none';
+    if (dashCoach) dashCoach.style.display = isAdmin ? 'block' : 'none';
+    if (settingsCoach) settingsCoach.style.display = isAdmin ? 'block' : 'none';
+    if (coachBanner && !isAdmin) coachBanner.style.display = 'none';
+
+    document.querySelectorAll('.coach-only-item').forEach(el => {
+        el.style.display = isAdmin ? 'flex' : 'none';
+    });
+
+    if (isAdmin) {
+        loadCoachAthletesList();
+        renderCoachAthletesHub();
     }
 
     const navCoachHub = document.getElementById('navCoachHub');
@@ -2270,6 +2279,10 @@ function renderDashboardData() {
 
     if (kpiGrid) kpiGrid.style.display = isOnboardingDone ? 'grid' : 'none';
     if (heroCard) heroCard.style.display = isOnboardingDone ? 'flex' : 'none';
+
+    if (typeof window.updateDashboardWorkoutDirective === 'function') {
+        window.updateDashboardWorkoutDirective();
+    }
 }
 
 // Iniciar Wizard de Diagnóstico (Modo Inicial o Modo Edición)
@@ -4852,6 +4865,25 @@ function initTopbarAvatar() {
         });
     }
 
+    const goCoachOS = document.getElementById('dropdownGoCoachOS');
+    if (goCoachOS) {
+        goCoachOS.addEventListener('click', () => {
+            dropdown.classList.remove('active');
+            switchPortalView('coachHubView');
+            renderCoachAthletesHub();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    const goStore = document.getElementById('dropdownGoStore');
+    if (goStore) {
+        goStore.addEventListener('click', () => {
+            dropdown.classList.remove('active');
+            switchPortalView('storeView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
     const goDiag = document.getElementById('dropdownGoDiagnosis');
     if (goDiag) {
         goDiag.addEventListener('click', () => {
@@ -4943,6 +4975,46 @@ function initCoachOS() {
     if (btnOpenSheet) btnOpenSheet.addEventListener('click', openAthleteSheet);
     if (btnCloseSheet) btnCloseSheet.addEventListener('click', closeAthleteSheet);
     if (sheetBackdrop) sheetBackdrop.addEventListener('click', closeAthleteSheet);
+
+    // Conectar todos los disparadores del Bottom Sheet en la app (banner, master card, etc)
+    document.querySelectorAll('.btn-trigger-athlete-sheet').forEach(btn => {
+        btn.addEventListener('click', openAthleteSheet);
+    });
+    window.openAthleteSheet = openAthleteSheet;
+    window.closeAthleteSheet = closeAthleteSheet;
+
+    // Botón de acceso a Coach OS en el Topbar
+    const btnTopbarCoachOS = document.getElementById('btnTopbarCoachOS');
+    if (btnTopbarCoachOS) {
+        btnTopbarCoachOS.addEventListener('click', () => {
+            switchPortalView('coachHubView');
+            renderCoachAthletesHub();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Botón de Salir de Inspección de Alumno
+    const btnExitInspection = document.getElementById('btnExitInspection');
+    if (btnExitInspection) {
+        btnExitInspection.addEventListener('click', exitAthleteInspection);
+    }
+
+    // Botones de entrada al Coach OS desde Dashboard o Settings
+    document.querySelectorAll('.btn-coach-hub-entry').forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchPortalView('coachHubView');
+            renderCoachAthletesHub();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+
+    // Botones de entrada a la Tienda Oficial MeLi desde Dashboard o Settings
+    document.querySelectorAll('.btn-store-entry').forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchPortalView('storeView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
 
     if (btnSheetOpenHub) {
         btnSheetOpenHub.addEventListener('click', () => {
@@ -5200,6 +5272,22 @@ function selectAthleteFromSheet(athId) {
 
     document.querySelectorAll('.coachSyncAthleteName').forEach(el => el.textContent = athlete.full_name);
     document.querySelectorAll('.coachSyncAthletePlan').forEach(el => el.textContent = shortPlan);
+
+    // Actualizar banner de inspección si está visible
+    const inspName = document.getElementById('inspectionAthleteName');
+    const inspPlan = document.getElementById('inspectionAthletePlan');
+    if (inspName) inspName.textContent = athlete.full_name;
+    if (inspPlan) {
+        let pTag = (athlete.active_plan_name || 'PLAN').toUpperCase();
+        if (pTag.includes('VIP')) pTag = 'VIP';
+        else if (pTag.includes('DUO') || pTag.includes('DÚO')) pTag = 'DÚO';
+        else if (pTag.includes('ONLINE')) pTag = 'ONLINE';
+        inspPlan.textContent = pTag;
+    }
+
+    if (typeof window.updateDashboardWorkoutDirective === 'function') {
+        window.updateDashboardWorkoutDirective();
+    }
 
     // Cerrar bottom sheet con animación fluida
     const bottomSheet = document.getElementById('athletePickerBottomSheet');
@@ -5727,6 +5815,8 @@ function inspectAthleteAsCoach(athId) {
     const target = athletes.find(a => a.id === athId);
     if (!target) return;
 
+    AppState.activeAthleteId = athId;
+
     if (athId.startsWith('mock_')) {
         const keyMap = {
             mock_vip: 'client_presencial_vip',
@@ -5739,9 +5829,37 @@ function inspectAthleteAsCoach(athId) {
         applyDatabaseAthlete(target);
     }
 
+    // Mostrar banner delgado de inspección
+    const banner = document.getElementById('coachInspectionBanner');
+    if (banner) {
+        banner.style.display = 'block';
+        const nameEl = document.getElementById('inspectionAthleteName');
+        const planEl = document.getElementById('inspectionAthletePlan');
+        if (nameEl) nameEl.textContent = target.full_name;
+        if (planEl) {
+            let pTag = (target.active_plan_name || 'PLAN').toUpperCase();
+            if (pTag.includes('VIP')) pTag = 'VIP';
+            else if (pTag.includes('DUO') || pTag.includes('DÚO')) pTag = 'DÚO';
+            else if (pTag.includes('ONLINE')) pTag = 'ONLINE';
+            planEl.textContent = pTag;
+        }
+    }
+
     switchPortalView('dashView');
+    if (typeof window.updateDashboardWorkoutDirective === 'function') {
+        window.updateDashboardWorkoutDirective();
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
     showSensToast(`Inspeccionando vista de ${target.full_name}.`, 'champagne');
+}
+
+function exitAthleteInspection() {
+    const banner = document.getElementById('coachInspectionBanner');
+    if (banner) banner.style.display = 'none';
+    switchPortalView('coachHubView');
+    renderCoachAthletesHub();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showSensToast('Regresaste al panel Coach OS.', 'champagne');
 }
 
 // -----------------------------------------------------------------------------
@@ -7002,6 +7120,9 @@ function initWeekStripCalendar() {
             }
         }
     }
+
+    // Exponer globalmente para reactividad inmediata al cambiar de alumno
+    window.updateDashboardWorkoutDirective = updateDashboardWorkoutDirective;
 
     // Inicializar directiva para el día activo (por defecto Martes / 1)
     updateDashboardWorkoutDirective(1);

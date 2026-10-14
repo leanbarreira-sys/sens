@@ -4171,6 +4171,14 @@ video.ig-img {
     overflow-x: auto;
 }
 
+@media (max-width: 768px) {
+    .portal-nav-bar,
+    .desktop-only-nav,
+    .desktop-only-btn {
+        display: none !important;
+    }
+}
+
 .portal-nav-item {
     padding: 16px 4px;
     background: transparent;
@@ -10156,5 +10164,228 @@ input[type="range"]::-webkit-slider-thumb:hover {
         font-size: 11.5px;
     }
 }
+
+/* =============================================================================
+   MOBILE-FIRST LUXURY PORTAL: INSPECTION BANNER, TOPBAR COACH PILL & SUBSECTIONS
+   ============================================================================= */
+
+/* 1. Botón Coach OS en Topbar */
+.btn-topbar-coach-pill {
+    background: rgba(229, 203, 167, 0.12);
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    color: var(--accent-primary);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 5px 11px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-topbar-coach-pill:hover,
+.btn-topbar-coach-pill:active {
+    background: rgba(229, 203, 167, 0.22);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 12px rgba(229, 203, 167, 0.2);
+}
+
+/* 2. Banner Delgado de Inspección de Alumno (Reemplazo ultra-clean de la barra masiva) */
+.coach-inspection-banner {
+    background: rgba(14, 14, 18, 0.96);
+    border-bottom: 1px solid rgba(229, 203, 167, 0.2);
+    padding: 7px 5%;
+    position: sticky;
+    top: 60px;
+    z-index: 890;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.inspection-banner-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.inspection-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.inspection-text {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.inspection-text strong {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.inspection-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn-inspection-pill {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-inspection-pill:hover,
+.btn-inspection-pill:active {
+    background: rgba(229, 203, 167, 0.15);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.btn-inspection-pill.exit {
+    background: rgba(229, 203, 167, 0.15);
+    border-color: rgba(229, 203, 167, 0.4);
+    color: var(--accent-primary);
+    font-weight: 700;
+}
+
+.btn-inspection-pill.exit:hover {
+    background: rgba(229, 203, 167, 0.28);
+}
+
+/* 3. Tarjeta Hero Coach OS en Dashboard */
+.sens-coach-banner-card {
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.08) 0%, rgba(18, 18, 22, 0.95) 100%);
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.sens-coach-banner-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.sens-coach-banner-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+}
+
+.sens-coach-banner-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 4px 0;
+}
+
+.sens-coach-banner-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+}
+
+@media (min-width: 640px) {
+    .sens-coach-banner-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .sens-coach-banner-content {
+        max-width: 70%;
+    }
+}
+
+/* 4. Tarjeta Hero MercadoLibre en Dashboard */
+.sens-store-banner-card {
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sens-store-banner-card:hover {
+    border-color: rgba(229, 203, 167, 0.35);
+    background: #16161B;
+}
+
+.sens-store-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sens-store-banner-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: rgba(229, 203, 167, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-store-banner-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.sens-store-banner-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+@media (max-width: 600px) {
+    .sens-store-banner-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .sens-store-banner-card .btn-store-entry {
+        width: 100%;
+        text-align: center;
+    }
+}
+
 
 
