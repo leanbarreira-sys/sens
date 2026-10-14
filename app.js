@@ -54,7 +54,9 @@ function isCurrentUserAdmin() {
         (user.user_metadata && user.user_metadata.role === 'admin') ||
         email === 'nico@sens.com' ||
         email === 'nicomaralle@gmail.com' ||
-        email === 'lean.barreira@gmail.com'
+        email === 'lean.barreira@gmail.com' ||
+        email === 'lean@sens.com' ||
+        email === 'admin@sens.com'
     );
 }
 

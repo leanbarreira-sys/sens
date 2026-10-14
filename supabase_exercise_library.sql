@@ -30,6 +30,7 @@ CREATE POLICY "Permitir lectura para todos" ON public.sens_exercise_library
 -- Política de escritura solo para administradores / coaches
 CREATE POLICY "Permitir escritura solo para admin" ON public.sens_exercise_library
     FOR ALL USING (
-        auth.jwt() ->> 'email' IN ('lean@sens.com', 'nico@sens.com', 'admin@sens.com')
+        auth.jwt() ->> 'email' IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com')
         OR auth.jwt() ->> 'role' = 'service_role'
+        OR public.is_admin()
     );

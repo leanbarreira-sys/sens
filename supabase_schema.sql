@@ -259,12 +259,16 @@ ALTER TABLE public.food_catalog ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_nutrition_guidelines ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.daily_logs ENABLE ROW LEVEL SECURITY;
 
--- Helper Function: Verificar rol Administrador (Nico)
+-- Helper Function: Verificar rol Administrador (Nico & Lean)
 CREATE OR REPLACE FUNCTION public.is_admin() RETURNS BOOLEAN AS $$
 BEGIN
-    RETURN EXISTS (
-        SELECT 1 FROM public.profiles 
-        WHERE id = auth.uid() AND (role = 'admin' OR user_type = 'admin')
+    RETURN (
+        auth.jwt() ->> 'email' IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com')
+        OR auth.jwt() ->> 'role' = 'service_role'
+        OR EXISTS (
+            SELECT 1 FROM public.profiles 
+            WHERE id = auth.uid() AND (role = 'admin' OR user_type = 'admin')
+        )
     );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -272,10 +276,12 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Helper Function: Verificar Membresía Activa o Admin (Blindaje para planes y workouts)
 CREATE OR REPLACE FUNCTION public.has_active_subscription() RETURNS BOOLEAN AS $$
 BEGIN
-    RETURN EXISTS (
-        SELECT 1 FROM public.profiles 
-        WHERE id = auth.uid() 
-          AND (subscription_status = 'active' OR role = 'admin' OR user_type = 'admin')
+    RETURN (
+        public.is_admin()
+        OR EXISTS (
+            SELECT 1 FROM public.profiles 
+            WHERE id = auth.uid() AND subscription_status = 'active'
+        )
     );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -283,7 +289,11 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Trigger Automático: Crear perfil al registrarse en auth.users
 CREATE OR REPLACE FUNCTION public.handle_new_user() 
 RETURNS TRIGGER AS $$
+DECLARE
+    v_is_admin BOOLEAN;
 BEGIN
+    v_is_admin := (NEW.email IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com'));
+
     INSERT INTO public.profiles (
         id, 
         full_name, 
@@ -298,13 +308,16 @@ BEGIN
         NEW.id,
         COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
         NEW.email,
-        COALESCE(NEW.raw_user_meta_data->>'user_type', 'client_presencial_vip'),
-        'user_normal',
-        'pending_activation',
+        CASE WHEN v_is_admin THEN 'admin' ELSE COALESCE(NEW.raw_user_meta_data->>'user_type', 'client_presencial_vip') END,
+        CASE WHEN v_is_admin THEN 'admin' ELSE 'user_normal' END,
+        CASE WHEN v_is_admin THEN 'active' ELSE 'pending_activation' END,
         'manual',
-        FALSE
+        v_is_admin
     )
-    ON CONFLICT (id) DO NOTHING;
+    ON CONFLICT (id) DO UPDATE SET
+        role = CASE WHEN v_is_admin THEN 'admin' ELSE public.profiles.role END,
+        user_type = CASE WHEN v_is_admin THEN 'admin' ELSE public.profiles.user_type END,
+        subscription_status = CASE WHEN v_is_admin THEN 'active' ELSE public.profiles.subscription_status END;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
