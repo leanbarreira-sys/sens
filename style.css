@@ -8037,6 +8037,51 @@ input[type="range"]::-webkit-slider-thumb:hover {
    ESTÁNDARES NATIVOS HEALTH APP (SAMSUNG HEALTH × BIGG) — V3.0 MASTER
    ========================================================================= */
 
+/* 0. Header de Bienvenida Dinámico (MAKE SENS) */
+.sens-dash-welcome-header {
+    margin-bottom: 22px;
+    padding: 2px 2px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sens-dash-welcome-question {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+}
+
+.sens-dash-welcome-athlete {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.sens-dash-welcome-slogan {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 3.5px;
+    color: var(--accent-primary);
+    line-height: 1.1;
+    font-family: var(--font-display, inherit);
+    text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+    .sens-dash-welcome-header {
+        margin-bottom: 18px;
+    }
+    .sens-dash-welcome-question {
+        font-size: 1.05rem;
+    }
+    .sens-dash-welcome-slogan {
+        font-size: 1.7rem;
+        letter-spacing: 2.5px;
+    }
+}
+
 /* 1. Strip Calendar Semanal (Estilo BIGG) */
 .sens-week-strip-wrap {
     margin-bottom: 22px;

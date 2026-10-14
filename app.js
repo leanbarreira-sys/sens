@@ -2185,6 +2185,7 @@ function openUserPortal(forceOnboarding = false) {
 
 function renderDashboardData() {
     const userNameEl = document.getElementById('dashUserName');
+    const greetingNameEl = document.getElementById('dashGreetingAthleteName');
     const planBadgeEl = document.getElementById('portalPlanBadge');
     const weightKpi = document.getElementById('kpiCurrentWeight');
     const diagTagsContainer = document.getElementById('dashDiagTags');
@@ -2195,7 +2196,13 @@ function renderDashboardData() {
     const profile = AppState.profile || {};
     const anamnesis = AppState.anamnesis || {};
 
-    if (profile.full_name) {
+    const rawFullName = profile.full_name || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || (AppState.user && AppState.user.email ? AppState.user.email.split('@')[0] : 'Lean');
+    const firstName = rawFullName.trim().split(' ')[0] || 'Lean';
+
+    if (greetingNameEl) {
+        greetingNameEl.textContent = firstName;
+    }
+    if (userNameEl && profile.full_name) {
         userNameEl.textContent = profile.full_name;
     }
     if (profile.active_plan_name && planBadgeEl) {
