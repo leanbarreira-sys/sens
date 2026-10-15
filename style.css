@@ -4183,6 +4183,13 @@ video.ig-img {
     display: block;
 }
 
+.auth-alert.info {
+    background: rgba(229, 203, 167, 0.15);
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    color: #E5CBA7;
+    display: block;
+}
+
 /* ==========================================================================
    6. PORTAL DE USUARIO (#app-container)
    ========================================================================== */

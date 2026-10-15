@@ -1672,30 +1672,36 @@ function initAuthModal() {
         });
     }
 
-    // Pestañas Iniciar Sesión / Registrarme / Recuperar Contraseña
+    // Pestañas Iniciar Sesión / Registrarme / Recuperar Contraseña / Actualizar Clave
+    const authTabs = document.querySelector('.auth-tabs');
     const tabLogin = document.getElementById('tabLoginBtn');
     const tabRegister = document.getElementById('tabRegisterBtn');
     const paneLogin = document.getElementById('loginForm');
     const paneRegister = document.getElementById('registerForm');
     const paneForgot = document.getElementById('forgotPassForm');
+    const paneUpdatePass = document.getElementById('updatePasswordForm');
     const btnForgotPass = document.getElementById('btnForgotPass');
     const btnBackToLogin = document.getElementById('btnBackToLoginFromForgot');
 
     tabLogin.addEventListener('click', () => {
+        if (authTabs) authTabs.style.display = 'flex';
         tabLogin.classList.add('active');
         tabRegister.classList.remove('active');
         if (paneLogin) paneLogin.classList.add('active');
         if (paneRegister) paneRegister.classList.remove('active');
         if (paneForgot) paneForgot.classList.remove('active');
+        if (paneUpdatePass) paneUpdatePass.classList.remove('active');
         clearAuthAlert();
     });
 
     tabRegister.addEventListener('click', () => {
+        if (authTabs) authTabs.style.display = 'flex';
         tabRegister.classList.add('active');
         tabLogin.classList.remove('active');
         if (paneRegister) paneRegister.classList.add('active');
         if (paneLogin) paneLogin.classList.remove('active');
         if (paneForgot) paneForgot.classList.remove('active');
+        if (paneUpdatePass) paneUpdatePass.classList.remove('active');
         clearAuthAlert();
     });
 
@@ -1705,6 +1711,7 @@ function initAuthModal() {
             tabRegister.classList.remove('active');
             if (paneLogin) paneLogin.classList.remove('active');
             if (paneRegister) paneRegister.classList.remove('active');
+            if (paneUpdatePass) paneUpdatePass.classList.remove('active');
             paneForgot.classList.add('active');
             clearAuthAlert();
         });
@@ -1712,11 +1719,13 @@ function initAuthModal() {
 
     if (btnBackToLogin && paneLogin) {
         btnBackToLogin.addEventListener('click', () => {
+            if (authTabs) authTabs.style.display = 'flex';
             tabLogin.classList.add('active');
             tabRegister.classList.remove('active');
             paneLogin.classList.add('active');
             if (paneForgot) paneForgot.classList.remove('active');
             if (paneRegister) paneRegister.classList.remove('active');
+            if (paneUpdatePass) paneUpdatePass.classList.remove('active');
             clearAuthAlert();
         });
     }
@@ -1903,6 +1912,84 @@ function initAuthModal() {
             }
         });
     }
+
+    // Formulario de Establecer Nueva Contraseña (Recovery Flow de Supabase)
+    if (paneUpdatePass) {
+        paneUpdatePass.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newPass = (document.getElementById('newPasswordInput')?.value || '').trim();
+            const confirmPass = (document.getElementById('confirmPasswordInput')?.value || '').trim();
+
+            if (newPass.length < 6) {
+                showAuthAlert('La nueva contraseña debe tener al menos 6 caracteres.', 'error');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                showAuthAlert('Las contraseñas no coinciden. Por favor verificalas.', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitUpdatePassBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Actualizando contraseña...';
+            }
+
+            showAuthAlert('Guardando tu nueva contraseña...', 'info');
+
+            if (supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient.auth.updateUser({
+                        password: newPass
+                    });
+
+                    if (error) {
+                        showAuthAlert(formatAuthErrorMessage(error.message), 'error');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Guardar Contraseña & Ingresar';
+                        }
+                        return;
+                    }
+
+                    showAuthAlert('¡Contraseña actualizada con éxito! Ingresando a tu portal...', 'success');
+                    try {
+                        history.replaceState(null, '', window.location.pathname);
+                    } catch (_) {}
+
+                    setTimeout(async () => {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Guardar Contraseña & Ingresar';
+                        }
+                        showAuthModal(false);
+                        if (data && data.user) {
+                            AppState.user = data.user;
+                            await loadProfileFromSupabase(data.user.id);
+                            updateAuthNavButtons();
+                        }
+                        openUserPortal(true);
+                    }, 1200);
+                } catch (err) {
+                    console.error('[SENS] Error al actualizar clave:', err);
+                    showAuthAlert('Ocurrió un error al actualizar la contraseña. Contactá a Nico por WhatsApp.', 'error');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Guardar Contraseña & Ingresar';
+                    }
+                }
+            } else {
+                showAuthAlert('¡Contraseña actualizada con éxito! (Modo Local)', 'success');
+                setTimeout(() => {
+                    showAuthModal(false);
+                    openUserPortal(true);
+                }, 1000);
+            }
+        });
+    }
+
+    // Verificar si la URL trae parámetros de error o recuperación de Supabase
+    checkAuthUrlParameters();
 }
 
 function showAuthModal(show) {
@@ -1913,6 +2000,83 @@ function showAuthModal(show) {
         clearAuthAlert();
     } else {
         modal.classList.remove('active');
+        const authTabs = document.querySelector('.auth-tabs');
+        if (authTabs) authTabs.style.display = 'flex';
+        const paneUpdatePass = document.getElementById('updatePasswordForm');
+        if (paneUpdatePass) paneUpdatePass.classList.remove('active');
+    }
+}
+
+window.openResetPasswordModal = function() {
+    showAuthModal(true);
+    const authTabs = document.querySelector('.auth-tabs');
+    const tabLogin = document.getElementById('tabLoginBtn');
+    const tabRegister = document.getElementById('tabRegisterBtn');
+    const paneLogin = document.getElementById('loginForm');
+    const paneRegister = document.getElementById('registerForm');
+    const paneForgot = document.getElementById('forgotPassForm');
+    const paneUpdatePass = document.getElementById('updatePasswordForm');
+
+    if (authTabs) authTabs.style.display = 'none';
+    if (tabLogin) tabLogin.classList.remove('active');
+    if (tabRegister) tabRegister.classList.remove('active');
+    if (paneLogin) paneLogin.classList.remove('active');
+    if (paneRegister) paneRegister.classList.remove('active');
+    if (paneForgot) paneForgot.classList.remove('active');
+    if (paneUpdatePass) paneUpdatePass.classList.add('active');
+
+    clearAuthAlert();
+    showAuthAlert('Identidad verificada. Ingresá tu nueva contraseña para acceder a SENS.', 'info');
+    setTimeout(() => {
+        const input = document.getElementById('newPasswordInput');
+        if (input) input.focus();
+    }, 150);
+};
+
+function checkAuthUrlParameters() {
+    const hash = window.location.hash || '';
+    const search = window.location.search || '';
+
+    // 1. Detección de enlace expirado o inválido de Supabase (error=access_denied / otp_expired)
+    if (hash.includes('error=') || search.includes('error=')) {
+        const raw = hash.includes('error=') ? hash.substring(1) : search.substring(1);
+        const params = new URLSearchParams(raw);
+        const errorCode = params.get('error_code') || '';
+        const errorDesc = decodeURIComponent(params.get('error_description') || '').replace(/\+/g, ' ');
+
+        if (errorCode === 'otp_expired' || errorDesc.toLowerCase().includes('expired') || errorDesc.toLowerCase().includes('invalid')) {
+            showAuthModal(true);
+            const authTabs = document.querySelector('.auth-tabs');
+            const tabLogin = document.getElementById('tabLoginBtn');
+            const tabRegister = document.getElementById('tabRegisterBtn');
+            const paneLogin = document.getElementById('loginForm');
+            const paneRegister = document.getElementById('registerForm');
+            const paneForgot = document.getElementById('forgotPassForm');
+
+            if (authTabs) authTabs.style.display = 'flex';
+            if (tabLogin) tabLogin.classList.remove('active');
+            if (tabRegister) tabRegister.classList.remove('active');
+            if (paneLogin) paneLogin.classList.remove('active');
+            if (paneRegister) paneRegister.classList.remove('active');
+            if (paneForgot) paneForgot.classList.add('active');
+
+            showAuthAlert('El enlace de recuperación ha expirado o ya fue utilizado. Por favor solicitá uno nuevo ingresando tu email.', 'error');
+
+            try {
+                history.replaceState(null, '', window.location.pathname);
+            } catch (_) {}
+            return;
+        }
+    }
+
+    // 2. Detección de token de recuperación en Hash (type=recovery)
+    if (hash.includes('type=recovery') || hash.includes('type=invite')) {
+        console.log('[SENS] Hash con type=recovery detectado en URL');
+        setTimeout(() => {
+            if (typeof window.openResetPasswordModal === 'function') {
+                window.openResetPasswordModal();
+            }
+        }, 300);
     }
 }
 
@@ -2017,12 +2181,21 @@ async function checkExistingSession() {
             console.warn('[SENS] Error al restaurar sesión previa:', e);
         }
 
-        // Suscripción reactiva a cambios de sesión (login, logout, refresh de token)
+        // Suscripción reactiva a cambios de sesión (login, logout, refresh de token, password recovery)
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'SIGNED_IN' && session && session.user) {
-                AppState.user = session.user;
-                await loadProfileFromSupabase(session.user.id);
-                updateAuthNavButtons();
+            console.log('[SENS] Auth state change event:', event);
+            if (event === 'PASSWORD_RECOVERY') {
+                console.log('[SENS] Evento PASSWORD_RECOVERY detectado');
+                if (typeof window.openResetPasswordModal === 'function') {
+                    window.openResetPasswordModal();
+                }
+            } else if (event === 'SIGNED_IN' && session && session.user) {
+                // Si la URL contiene type=recovery o estamos restableciendo clave, no forzar login regular
+                if (!window.location.hash.includes('type=recovery')) {
+                    AppState.user = session.user;
+                    await loadProfileFromSupabase(session.user.id);
+                    updateAuthNavButtons();
+                }
             } else if (event === 'SIGNED_OUT') {
                 AppState.user = null;
                 AppState.profile = null;

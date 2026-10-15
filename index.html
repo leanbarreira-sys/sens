@@ -62,7 +62,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=2.7">
+    <link rel="stylesheet" href="style.css?v=2.8">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1043,6 +1043,27 @@
                         Ayuda por WhatsApp →
                     </a>
                 </div>
+            </form>
+
+            <!-- Vista 4: Establecer Nueva Contraseña (Recovery Flow de Supabase) -->
+            <form class="auth-pane" id="updatePasswordForm">
+                <div style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; letter-spacing: 0.5px; margin-bottom: 6px;">
+                    Establecer Nueva Contraseña
+                </div>
+                <div style="margin-bottom: 16px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                    Ingresá y confirmá tu nueva clave para acceder a tu cuenta y portal SENS.
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="newPasswordInput">Nueva Contraseña</label>
+                    <input type="password" id="newPasswordInput" class="input-control" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="confirmPasswordInput">Confirmar Contraseña</label>
+                    <input type="password" id="confirmPasswordInput" class="input-control" placeholder="Repetí tu nueva clave" minlength="6" required autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="submitUpdatePassBtn">
+                    Guardar Contraseña &amp; Ingresar
+                </button>
             </form>
         </div>
     </div>
@@ -4562,7 +4583,7 @@
     <script src="exercises_db.js"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=2.7"></script>
+    <script src="app.js?v=2.8"></script>
 </body>
 
 </html>
