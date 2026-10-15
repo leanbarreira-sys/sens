@@ -1242,15 +1242,41 @@ function initLuxuryScrollReveals() {
 // =============================================================================
 // MÓDULO 1: NAVEGACIÓN Y NAVBAR GLOBAL
 // =============================================================================
+function ensurePublicNavbarVisibility() {
+    const isPortalActive = document.getElementById('app-container')?.classList.contains('active');
+    if (!isPortalActive) {
+        document.body.classList.remove('in-portal');
+        const globalHeader = document.querySelector('header');
+        if (globalHeader) {
+            globalHeader.style.display = '';
+            globalHeader.style.visibility = 'visible';
+            globalHeader.style.opacity = '1';
+        }
+        const navbar = document.getElementById('globalNavbar');
+        if (navbar) {
+            navbar.style.display = 'flex';
+            navbar.style.visibility = 'visible';
+            navbar.style.opacity = '1';
+        }
+    }
+}
+
+window.addEventListener('pageshow', () => {
+    ensurePublicNavbarVisibility();
+});
+
 function initNavbarScroll() {
     const navbar = document.getElementById('globalNavbar');
+    ensurePublicNavbarVisibility();
+
     window.addEventListener('scroll', () => {
+        if (!navbar) return;
         if (window.scrollY > 40) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
-    });
+    }, { passive: true });
 
     // Menú Móvil & Botón de Cruz para Cerrar
     const menuToggle = document.getElementById('menuToggle');
