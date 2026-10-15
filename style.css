@@ -10695,11 +10695,19 @@ body.in-portal .sens-objective-card:hover {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07) !important;
 }
 
-/* Tipografía de Encabezados en Modo Claro */
-body.in-portal h1,
-body.in-portal h2,
-body.in-portal h3,
-body.in-portal h4,
+/* Tipografía de Encabezados en Modo Claro (Exclusivo para Contenedores Claros del Portal) */
+body.in-portal .dash-welcome-card h1,
+body.in-portal .dash-welcome-card h2,
+body.in-portal .dash-welcome-card h3,
+body.in-portal .dash-welcome-card h4,
+body.in-portal .card-panel:not(.coach-only-card) h1,
+body.in-portal .card-panel:not(.coach-only-card) h2,
+body.in-portal .card-panel:not(.coach-only-card) h3,
+body.in-portal .card-panel:not(.coach-only-card) h4,
+body.in-portal .view-header h1,
+body.in-portal .view-header h2,
+body.in-portal .view-header h3,
+body.in-portal .view-title,
 body.in-portal .dash-heading,
 body.in-portal .portal-section-title,
 body.in-portal .sens-training-focus-title,
@@ -10720,13 +10728,41 @@ body.in-portal .sens-dash-welcome-slogan {
     color: #B89360 !important;
 }
 
-/* Textos secundarios y metadatos */
-body.in-portal p,
+/* Textos secundarios y metadatos en contenedores claros */
+body.in-portal .dash-welcome-card p,
+body.in-portal .card-panel:not(.coach-only-card) p,
+body.in-portal .view-subtitle,
 body.in-portal .dash-sub,
 body.in-portal .sens-training-eyebrow,
 body.in-portal .sens-nutri-eyebrow,
 body.in-portal .sens-objective-eyebrow {
     color: #71717A !important;
+}
+
+/* Inputs en Tarjetas Blancas del Portal */
+body.in-portal .card-panel:not(.coach-only-card) .input-control {
+    background: #F4F4F5 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #09090B !important;
+}
+
+body.in-portal .card-panel:not(.coach-only-card) .input-control:focus {
+    border-color: #9E7D4B !important;
+    box-shadow: 0 0 0 3px rgba(158, 125, 75, 0.15) !important;
+}
+
+body.in-portal .card-panel:not(.coach-only-card) .input-control::placeholder {
+    color: #A1A1AA !important;
+}
+
+body.in-portal .card-panel:not(.coach-only-card) .input-label {
+    color: #71717A !important;
+}
+
+body.in-portal .card-panel:not(.coach-only-card) .diag-tag {
+    background: #F4F4F5 !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    color: #09090B !important;
 }
 
 /* =============================================================================
@@ -11860,6 +11896,367 @@ body.in-portal .sens-muscle-focus-title {
 
 body.in-portal .sens-muscle-focus-sub {
     color: #71717A !important;
+}
+
+/* =============================================================================
+   MÓDULO DE CONTRASTE & BRANDBOOK QUIET LUXURY EN COMPONENTES OSCUROS (ONBOARDING, AUTH & MODALS)
+   ============================================================================= */
+
+/* 1. Onboarding, Anamnesis Digital & Evaluación Inicial (Fondo Obsidiana #121214) */
+body.in-portal .wizard-container,
+.wizard-container {
+    background: #121214 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .wizard-header,
+.wizard-header {
+    background: rgba(18, 18, 20, 0.98) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+body.in-portal .wizard-brand,
+.wizard-brand {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+body.in-portal .wizard-step-label,
+.wizard-step-label {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+body.in-portal .wizard-mode-badge,
+.wizard-mode-badge {
+    background: rgba(229, 203, 167, 0.12) !important;
+    color: #E5CBA7 !important;
+    border: 1px solid rgba(229, 203, 167, 0.25) !important;
+}
+
+body.in-portal .step-tag-pill,
+.step-tag-pill {
+    color: #E5CBA7 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .step-title,
+body.in-portal .wizard-step-card h2,
+.step-title,
+.wizard-step-card h2 {
+    color: #FFFFFF !important;
+    font-weight: 300 !important;
+}
+
+body.in-portal .step-title strong,
+body.in-portal .wizard-step-card h2 strong,
+.step-title strong,
+.wizard-step-card h2 strong {
+    color: #E5CBA7 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .step-desc,
+body.in-portal .wizard-step-card p,
+.step-desc,
+.wizard-step-card p {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Paso 0: Consentimiento & Ley de Datos */
+body.in-portal .legal-notice-box,
+.legal-notice-box {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-left: 3px solid #9E7D4B !important;
+    border-radius: 0 12px 12px 0 !important;
+}
+
+body.in-portal .legal-text,
+.legal-text {
+    color: rgba(255, 255, 255, 0.88) !important;
+}
+
+body.in-portal .legal-text strong,
+.legal-text strong {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .touch-card-consent,
+body.in-portal .touch-card,
+.touch-card-consent,
+.touch-card {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .touch-card .card-content,
+.touch-card .card-content {
+    color: #FFFFFF !important;
+}
+
+/* Inputs y Selectores dentro del Wizard */
+body.in-portal .wizard-container .input-control,
+.wizard-container .input-control {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .wizard-container .input-control:focus,
+.wizard-container .input-control:focus {
+    border-color: #E5CBA7 !important;
+    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.2) !important;
+}
+
+body.in-portal .wizard-container .input-control::placeholder,
+.wizard-container .input-control::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+body.in-portal .wizard-container .input-label,
+.wizard-container .input-label {
+    color: rgba(255, 255, 255, 0.78) !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal .gender-btn-pill .gender-btn-content,
+.gender-btn-pill .gender-btn-content {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+body.in-portal .gender-btn-pill input:checked + .gender-btn-content,
+.gender-btn-pill input:checked + .gender-btn-content {
+    background: rgba(229, 203, 167, 0.18) !important;
+    border-color: #E5CBA7 !important;
+    color: #E5CBA7 !important;
+    font-weight: 700 !important;
+}
+
+/* Tarjetas de Selección en Pasos del Wizard */
+body.in-portal .goal-selection-section,
+body.in-portal .goal-card,
+body.in-portal .parq-question-card,
+body.in-portal .health-switch-item,
+body.in-portal .joint-zone-card,
+body.in-portal .frequency-btn,
+body.in-portal .freq-slider-container,
+body.in-portal .equip-option-card,
+body.in-portal .metric-slider-card,
+body.in-portal .habit-barrier-card,
+body.in-portal .habit-value-card,
+body.in-portal .mobility-test-card,
+body.in-portal .tape-measurements-section,
+body.in-portal .photo-eval-section,
+body.in-portal .biometric-assessment-card,
+body.in-portal .congrats-card,
+.goal-selection-section,
+.goal-card,
+.parq-question-card,
+.health-switch-item,
+.joint-zone-card,
+.frequency-btn,
+.freq-slider-container,
+.equip-option-card,
+.metric-slider-card,
+.habit-barrier-card,
+.habit-value-card,
+.mobility-test-card,
+.tape-measurements-section,
+.photo-eval-section,
+.biometric-assessment-card,
+.congrats-card {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .wizard-container h3,
+body.in-portal .wizard-container h4,
+body.in-portal .goal-title,
+body.in-portal .equip-title,
+body.in-portal .habit-title,
+body.in-portal .joint-zone-name,
+.goal-title,
+.equip-title,
+.habit-title,
+.joint-zone-name {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .goal-desc,
+.goal-desc {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+body.in-portal .photo-box,
+.photo-box {
+    background: #121214 !important;
+    border: 1px dashed rgba(255, 255, 255, 0.2) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .tape-input-card,
+.tape-input-card {
+    background: #121214 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.in-portal .tape-input-control,
+.tape-input-control {
+    background: #18181B !important;
+    border: 1px solid rgba(229, 203, 167, 0.4) !important;
+    color: #E5CBA7 !important;
+}
+
+/* 2. Modal de Registro y Acceso (#authModal - Fondo Obsidiana #121214) */
+#authModal .modal-card,
+.modal-overlay .modal-card {
+    background: #121214 !important;
+    border: 1px solid rgba(229, 203, 167, 0.3) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85) !important;
+    color: #FFFFFF !important;
+}
+
+#authModal h2,
+#authModal h3,
+#authModal h4,
+#authModal .modal-card div:not(.auth-tab) {
+    color: #FFFFFF !important;
+}
+
+#authModal .modal-card div[style*="var(--accent-primary)"] {
+    color: #E5CBA7 !important;
+}
+
+#authModal p {
+    color: rgba(255, 255, 255, 0.78) !important;
+}
+
+#authModal .input-label {
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-weight: 600 !important;
+}
+
+#authModal .input-control {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    color: #FFFFFF !important;
+}
+
+#authModal .input-control:focus {
+    border-color: #E5CBA7 !important;
+    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.2) !important;
+}
+
+#authModal .input-control::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+#authModal .auth-tabs {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#authModal .auth-tab {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
+
+#authModal .auth-tab.active {
+    background: #E5CBA7 !important;
+    color: #09090B !important;
+    font-weight: 800 !important;
+}
+
+#authModal .btn-link-forgot {
+    color: #E5CBA7 !important;
+}
+
+#authModal #btnBackToLoginFromForgot {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* 3. Filas Agrupadas de Comida & Tarjetas Nutricionales Oscuras */
+body.in-portal .sens-meal-group-card,
+.sens-meal-group-card {
+    background: #121216 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-meal-group-header,
+.sens-meal-group-header {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-meal-name,
+.sens-meal-name {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-meal-desc,
+.sens-meal-desc {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+body.in-portal .sens-nutri-date-nav,
+.sens-nutri-date-nav {
+    background: #09090B !important;
+    border: 1px solid rgba(158, 125, 75, 0.3) !important;
+    border-radius: 20px !important;
+    padding: 6px 14px !important;
+}
+
+body.in-portal .sens-nutri-date-nav #nutriDateText,
+.sens-nutri-date-nav #nutriDateText {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+
+/* 4. Tarjeta de Ecuación Metabólica en Progreso */
+body.in-portal .metabolic-equation-card,
+.metabolic-equation-card {
+    background: #121214 !important;
+    border: 1px solid rgba(229, 203, 167, 0.3) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .metabolic-equation-card h3,
+.metabolic-equation-card h3 {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .metabolic-equation-card .eq-lbl,
+.metabolic-equation-card .eq-lbl {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+body.in-portal .metabolic-equation-card .eq-operator,
+.metabolic-equation-card .eq-operator {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 5. Modales Adicionales: Video, Catálogo y Porciones */
+#videoModal .modal-card,
+#exerciseLibraryModal .modal-card,
+.sens-portion-modal-card {
+    background: #121214 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #FFFFFF !important;
+}
+
+#videoModal h3,
+#exerciseLibraryModal h3,
+.sens-portion-modal-card h3 {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
 }
 
 
