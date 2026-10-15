@@ -4077,14 +4077,14 @@ function renderWorkoutDay(dayKey) {
                 <div class="sens-exercise-card-gradient"></div>
                 <div class="sens-exercise-top-pills">
                     <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">${muscleTag}</span>
-                    <span class="pill pill-dark" style="font-size: 9.5px; font-weight: 700;">${ex.sets || 3} Series × ${ex.reps || 10}</span>
+                    <span class="pill pill-dark" style="font-size: 9.5px; font-weight: 700; background: rgba(18, 18, 20, 0.88); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2);">${ex.sets || 3} Series × ${ex.reps || 10}</span>
                 </div>
                 <div class="sens-exercise-card-content">
-                    <h3 class="sens-exercise-card-title">${ex.name}</h3>
-                    <div class="sens-exercise-card-meta">
+                    <h3 class="sens-exercise-card-title" style="color: #FFFFFF !important; font-weight: 800; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);">${ex.name}</h3>
+                    <div class="sens-exercise-card-meta" style="color: rgba(255, 255, 255, 0.92) !important; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);">
                         <span>Descanso: ${ex.rest || 90}s</span> • <span>Sugerido: ${weightLabel}</span>
                     </div>
-                    <div class="sens-exercise-card-cta">
+                    <div class="sens-exercise-card-cta" style="color: #E5CBA7 !important; font-weight: 700; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);">
                         Tocar para iniciar serie &amp; técnica →
                     </div>
                 </div>

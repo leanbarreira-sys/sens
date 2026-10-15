@@ -10603,14 +10603,43 @@ body.in-portal #app-container {
     color: #09090B !important;
 }
 
-body.in-portal .portal-topbar {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
-    backdrop-filter: blur(20px);
+/* Barra Superior del Portal en Negro Obsidiana SENS */
+body.in-portal .portal-topbar,
+.portal-topbar {
+    background: #09090B !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
 }
 
-body.in-portal .portal-topbar .portal-logo {
-    color: #09090B !important;
+body.in-portal .portal-topbar .brand-logo-img-portal,
+.brand-logo-img-portal {
+    height: 32px !important;
+    width: auto !important;
+    display: block !important;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6)) !important;
+}
+
+body.in-portal .portal-topbar #portalPlanBadge {
+    background: rgba(229, 203, 167, 0.14) !important;
+    color: #E5CBA7 !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .portal-topbar .btn-topbar-coach-pill {
+    background: rgba(229, 203, 167, 0.18) !important;
+    color: #E5CBA7 !important;
+    border: 1px solid rgba(229, 203, 167, 0.4) !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .portal-topbar .user-avatar-btn {
+    background: #18181B !important;
+    border: 1.5px solid #9E7D4B !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
 }
 
 body.in-portal .portal-nav-bar {
@@ -11337,20 +11366,83 @@ body.in-portal .sens-week-day-pill.active.is-today .sens-day-num {
     background: #10B981;
 }
 
-/* Floating Dock en Blanco */
-body.in-portal .sens-floating-dock {
-    background: rgba(255, 255, 255, 0.94) !important;
-    border: 1px solid rgba(0, 0, 0, 0.08) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+/* Floating Dock en Negro Obsidiana SENS & Ajuste 100% Pantalla Móvil */
+body.in-portal .sens-floating-dock,
+.sens-floating-dock {
+    position: fixed !important;
+    bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 24px) !important;
+    max-width: 400px !important;
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 2px !important;
+    padding: 6px 4px !important;
+    background: #09090B !important;
+    border: 1px solid rgba(158, 125, 75, 0.3) !important;
+    border-radius: 36px !important;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    z-index: 1000 !important;
+    overflow: hidden !important;
 }
 
-body.in-portal .sens-dock-item {
-    color: #71717A !important;
+body.in-portal .sens-dock-item,
+.sens-dock-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    padding: 7px 2px !important;
+    border-radius: 20px !important;
+    background: transparent !important;
+    border: none !important;
+    color: #A1A1AA !important;
+    font-size: 9px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-body.in-portal .sens-dock-item.active {
-    background: rgba(0, 0, 0, 0.06) !important;
-    color: #09090B !important;
+body.in-portal .sens-dock-item svg,
+.sens-dock-item svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke: currentColor !important;
+    flex-shrink: 0 !important;
+}
+
+body.in-portal .sens-dock-item span,
+.sens-dock-item span {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    line-height: 1 !important;
+}
+
+body.in-portal .sens-dock-item:hover {
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-dock-item.active,
+.sens-dock-item.active {
+    background: rgba(229, 203, 167, 0.14) !important;
+    color: #E5CBA7 !important;
+}
+
+body.in-portal .sens-dock-item.active svg,
+.sens-dock-item.active svg {
+    stroke: #E5CBA7 !important;
 }
 
 /* Tabs Dinámicas de Entrenamiento con Fechas Reales (DD/MM) */
@@ -11563,6 +11655,206 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.rest,
     font-size: 11px;
     font-weight: 700;
 }
+
+/* =============================================================================
+   TIPOGRAFÍA Y CONTRASTE EN CARDS OSCURAS DEL PORTAL (QUIET LUXURY VISIBILITY)
+   ============================================================================= */
+
+/* 1. Cards de Ejercicios en Video / Fondos Oscuros */
+body.in-portal .sens-exercise-video-card,
+.sens-exercise-video-card {
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-exercise-video-card .sens-exercise-card-title,
+body.in-portal .sens-exercise-video-card h3,
+.sens-exercise-video-card .sens-exercise-card-title,
+.sens-exercise-video-card h3,
+.sens-exercise-card-title {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+body.in-portal .sens-exercise-video-card .sens-exercise-card-meta,
+body.in-portal .sens-exercise-video-card .sens-exercise-card-meta span,
+.sens-exercise-video-card .sens-exercise-card-meta,
+.sens-exercise-video-card .sens-exercise-card-meta span,
+.sens-exercise-card-meta,
+.sens-exercise-card-meta span {
+    color: rgba(255, 255, 255, 0.92) !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
+}
+
+body.in-portal .sens-exercise-video-card .sens-exercise-card-cta,
+.sens-exercise-video-card .sens-exercise-card-cta,
+.sens-exercise-card-cta {
+    color: #E5CBA7 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
+}
+
+body.in-portal .sens-exercise-video-card .sens-exercise-top-pills .pill-dark,
+.sens-exercise-video-card .sens-exercise-top-pills .pill-dark {
+    background: rgba(18, 18, 20, 0.9) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+/* 2. Hero de Objetivo de Entrenamiento (Fondo #121214) */
+body.in-portal .sens-workout-goal-hero,
+.sens-workout-goal-hero {
+    background: #121214 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-workout-goal-hero .sens-workout-goal-title,
+body.in-portal .sens-workout-goal-hero h2,
+.sens-workout-goal-hero .sens-workout-goal-title,
+.sens-workout-goal-hero h2,
+.sens-workout-goal-title {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-workout-goal-hero .sens-workout-goal-desc,
+body.in-portal .sens-workout-goal-hero p,
+.sens-workout-goal-hero .sens-workout-goal-desc,
+.sens-workout-goal-hero p,
+.sens-workout-goal-desc {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+body.in-portal .sens-workout-goal-hero .sens-workout-timer-pill,
+.sens-workout-goal-hero .sens-workout-timer-pill {
+    background: #18181C !important;
+    color: #E5CBA7 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* 3. Modal / Bottom Sheet Táctil de Ejecución de Ejercicio (#121214) */
+body.in-portal .sens-exercise-modal-sheet,
+.sens-exercise-modal-sheet {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet h2,
+body.in-portal .sens-exercise-modal-sheet h3,
+body.in-portal .sens-exercise-modal-sheet h4,
+body.in-portal .sens-exercise-modal-title,
+.sens-exercise-modal-sheet .sens-exercise-modal-title,
+.sens-exercise-modal-title {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet p,
+body.in-portal .sens-exercise-modal-sheet .sens-coach-notes-body,
+.sens-coach-notes-body {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet .sens-exercise-modal-video-cue,
+.sens-exercise-modal-video-cue {
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet .sens-timer-card,
+.sens-timer-card {
+    background: #18181C !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet .sens-timer-label,
+.sens-timer-label {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet .sens-timer-digits,
+.sens-timer-digits {
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet .sens-timer-digits.text-champagne {
+    color: #E5CBA7 !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet .sens-series-section-header h4,
+.sens-series-section-header h4 {
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet .sens-tactile-set-row,
+.sens-tactile-set-row {
+    background: #18181C !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet .sens-set-label,
+.sens-set-label {
+    color: #FFFFFF !important;
+}
+
+/* 4. Empty State de Rutina (#121214) */
+body.in-portal .sens-empty-state-card,
+.sens-empty-state-card {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-empty-state-card h3,
+body.in-portal .sens-empty-state-title,
+.sens-empty-state-title {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-empty-state-card p,
+body.in-portal .sens-empty-state-desc,
+.sens-empty-state-desc {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 5. Coach Master Active Athlete Card (#14141A) */
+body.in-portal .coach-master-active-athlete-card,
+.coach-master-active-athlete-card {
+    background: linear-gradient(135deg, rgba(20, 20, 26, 0.98), rgba(12, 12, 15, 0.99)) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .coach-master-active-athlete-card h3,
+body.in-portal .coach-active-athlete-name,
+.coach-active-athlete-name {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .coach-master-active-athlete-card p,
+body.in-portal .coach-master-active-athlete-card span {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 6. Encabezado de Enfoque Muscular en Portal Claro (Legibilidad en Fondo Blanco) */
+body.in-portal .sens-muscle-focus-header {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(0, 0, 0, 0.07) !important;
+    border-left: 3px solid #9E7D4B !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.in-portal .sens-muscle-focus-title {
+    color: #09090B !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-muscle-focus-sub {
+    color: #71717A !important;
+}
+
 
 
 
