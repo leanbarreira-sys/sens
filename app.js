@@ -2435,6 +2435,7 @@ function switchPortalView(viewId) {
     if (viewId === 'dashView') {
         if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
         if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
+        if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation();
     }
 }
 
@@ -7594,6 +7595,155 @@ function initWorkoutBlockAccordions() {
 }
 
 /**
+ * Dispara la animación de entrada fluida y rápida del saludo de bienvenida MAKE SENS
+ */
+function triggerWelcomeGreetingAnimation() {
+    const header = document.getElementById('sensDashWelcomeHeader');
+    if (!header) return;
+    header.classList.remove('play-entrance');
+    void header.offsetWidth; // Reflow para reiniciar la animación
+    header.classList.add('play-entrance');
+}
+
+/**
+ * Navega semanas en el calendario dinámico con física de animación GPU fluida (Swipe & Flechas)
+ * @param {'prev' | 'next'} direction 
+ */
+function navigateCalendarWeek(direction) {
+    if (!AppState.activeWeekStart) AppState.activeWeekStart = getMonday(new Date());
+    const newMonday = new Date(AppState.activeWeekStart);
+
+    if (direction === 'prev') {
+        newMonday.setDate(newMonday.getDate() - 7);
+        const minDate = new Date();
+        minDate.setDate(minDate.getDate() - 730); // Límite: 2 años atrás
+        if (newMonday < minDate) {
+            showSensToast('Límite del historial alcanzado (2 años)', 'info', 1800);
+            return;
+        }
+    } else if (direction === 'next') {
+        newMonday.setDate(newMonday.getDate() + 7);
+        const maxDate = new Date();
+        maxDate.setDate(maxDate.getDate() + 365); // Límite: 1 año adelante
+        if (newMonday > maxDate) {
+            showSensToast('Límite de planificación alcanzado (1 año)', 'info', 1800);
+            return;
+        }
+    }
+
+    AppState.activeWeekStart = newMonday;
+    renderDynamicWeekStrip();
+    renderWorkoutDaysNav();
+    if (typeof renderWeeklyBalanceChart === 'function') {
+        renderWeeklyBalanceChart(AppState.selectedDate || new Date());
+    }
+
+    // Trigger de animación slide izquierda/derecha al strip de días
+    const strip = document.getElementById('portalWeekStrip');
+    if (strip) {
+        strip.classList.remove('anim-slide-left', 'anim-slide-right');
+        void strip.offsetWidth;
+        const animClass = direction === 'next' ? 'anim-slide-left' : 'anim-slide-right';
+        strip.classList.add(animClass);
+        strip.addEventListener('animationend', () => {
+            strip.classList.remove(animClass);
+        }, { once: true });
+    }
+
+    // Micro-fade para el label de rango de fechas
+    const rangeLabel = document.getElementById('sensWeekRangeLabel');
+    if (rangeLabel) {
+        rangeLabel.classList.remove('anim-fade');
+        void rangeLabel.offsetWidth;
+        rangeLabel.classList.add('anim-fade');
+        rangeLabel.addEventListener('animationend', () => {
+            rangeLabel.classList.remove('anim-fade');
+        }, { once: true });
+    }
+}
+
+/**
+ * Inicializa gestos táctiles de swipe horizontal nativos en el calendario semanal
+ */
+function initCalendarSwipeGestures() {
+    const calendarWrapper = document.getElementById('sensCalendarStickyWrapper');
+    if (!calendarWrapper) return;
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    let isSwiping = false;
+
+    calendarWrapper.addEventListener('touchstart', (e) => {
+        if (!e.touches || e.touches.length !== 1) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchEndX = touchStartX;
+        touchEndY = touchStartY;
+        isSwiping = true;
+    }, { passive: true });
+
+    calendarWrapper.addEventListener('touchmove', (e) => {
+        if (!isSwiping || !e.touches || e.touches.length !== 1) return;
+        touchEndX = e.touches[0].clientX;
+        touchEndY = e.touches[0].clientY;
+    }, { passive: true });
+
+    calendarWrapper.addEventListener('touchend', () => {
+        if (!isSwiping) return;
+        isSwiping = false;
+
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Umbral de swipe: 45px horizontales y componente horizontal superior a vertical
+        if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.35) {
+            if (deltaX < 0) {
+                // Swipe hacia la izquierda -> Semana siguiente
+                navigateCalendarWeek('next');
+            } else {
+                // Swipe hacia la derecha -> Semana anterior
+                navigateCalendarWeek('prev');
+            }
+        }
+
+        touchStartX = 0;
+        touchStartY = 0;
+        touchEndX = 0;
+        touchEndY = 0;
+    }, { passive: true });
+}
+
+/**
+ * Observador de Scroll para el efecto Sticky Floating Frosted Glass del Calendario
+ */
+function initStickyCalendarWatcher() {
+    const wrapper = document.getElementById('sensCalendarStickyWrapper');
+    if (!wrapper) return;
+
+    let ticking = false;
+    const updateStickyState = () => {
+        const topbar = document.querySelector('.portal-topbar');
+        const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 48;
+        const rect = wrapper.getBoundingClientRect();
+        const isStuck = rect.top <= topbarHeight + 2;
+        wrapper.classList.toggle('is-stuck', isStuck);
+        ticking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(updateStickyState);
+            ticking = true;
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', updateStickyState, { passive: true });
+    updateStickyState();
+}
+
+/**
  * MÓDULO C: Week Strip Calendar Dinámico (Pasado y Futuro), Video Training Card, Nutri Card & Objective Card
  */
 function initWeekStripCalendar() {
@@ -7603,35 +7753,13 @@ function initWeekStripCalendar() {
 
     if (btnPrev) {
         btnPrev.addEventListener('click', () => {
-            if (!AppState.activeWeekStart) AppState.activeWeekStart = getMonday(new Date());
-            const newMonday = new Date(AppState.activeWeekStart);
-            newMonday.setDate(newMonday.getDate() - 7);
-            const minDate = new Date();
-            minDate.setDate(minDate.getDate() - 730); // Límite: 2 años atrás
-            if (newMonday >= minDate) {
-                AppState.activeWeekStart = newMonday;
-                renderDynamicWeekStrip();
-                renderWorkoutDaysNav();
-            } else {
-                showSensToast('Límite del historial alcanzado (2 años)', 'info', 1800);
-            }
+            navigateCalendarWeek('prev');
         });
     }
 
     if (btnNext) {
         btnNext.addEventListener('click', () => {
-            if (!AppState.activeWeekStart) AppState.activeWeekStart = getMonday(new Date());
-            const newMonday = new Date(AppState.activeWeekStart);
-            newMonday.setDate(newMonday.getDate() + 7);
-            const maxDate = new Date();
-            maxDate.setDate(maxDate.getDate() + 365); // Límite: 1 año adelante
-            if (newMonday <= maxDate) {
-                AppState.activeWeekStart = newMonday;
-                renderDynamicWeekStrip();
-                renderWorkoutDaysNav();
-            } else {
-                showSensToast('Límite de planificación alcanzado (1 año)', 'info', 1800);
-            }
+            navigateCalendarWeek('next');
         });
     }
 
@@ -7643,9 +7771,27 @@ function initWeekStripCalendar() {
             renderDynamicWeekStrip();
             renderWorkoutDaysNav();
             updateDynamicTrainingCard(AppState.selectedDate);
+            if (typeof renderWeeklyBalanceChart === 'function') {
+                renderWeeklyBalanceChart(AppState.selectedDate);
+            }
             showSensToast('Semana actual', 'champagne', 1500);
+
+            const strip = document.getElementById('portalWeekStrip');
+            if (strip) {
+                strip.classList.remove('anim-slide-left', 'anim-slide-right');
+                void strip.offsetWidth;
+                strip.classList.add('anim-slide-left');
+                strip.addEventListener('animationend', () => {
+                    strip.classList.remove('anim-slide-left');
+                }, { once: true });
+            }
         });
     }
+
+    // Inicializar gestos táctiles de swipe horizontal, watcher sticky y animación de entrada
+    initCalendarSwipeGestures();
+    initStickyCalendarWatcher();
+    triggerWelcomeGreetingAnimation();
 
     // Botón y Card de Inicio Rápido de Entrenamiento (panel activo y flecha circular)
     const startWorkoutBtn = document.getElementById('dashStartWorkoutBtn');

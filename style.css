@@ -8146,6 +8146,25 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-family: var(--font-main);
 }
 
+@keyframes sensWelcomeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 16px, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.sens-dash-welcome-header.play-entrance .sens-dash-welcome-question {
+    animation: sensWelcomeSlideUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.sens-dash-welcome-header.play-entrance .sens-dash-welcome-slogan {
+    animation: sensWelcomeSlideUp 0.48s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
 .sens-dash-welcome-question {
     font-family: var(--font-body);
     font-size: 1.15rem;
@@ -10828,8 +10847,96 @@ body.in-portal .card-panel:not(.coach-only-card) .diag-tag {
 }
 
 /* =============================================================================
-   2. NAVEGADOR DE SEMANAS (PASADO & FUTURO)
+   2. CONTENEDOR STICKY DE CALENDARIO & NAVEGADOR DE SEMANAS
    ============================================================================= */
+.sens-calendar-sticky-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 65px;
+    z-index: 90;
+    margin-bottom: 22px !important;
+    border-radius: 20px;
+    transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), padding 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+    .sens-calendar-sticky-wrapper {
+        top: 48px;
+    }
+}
+
+/* Evitar doble margen entre el contenedor sticky y las cards inferiores */
+.sens-calendar-sticky-wrapper .sens-week-strip-wrap,
+body.in-portal .sens-calendar-sticky-wrapper .sens-week-strip-wrap {
+    margin-bottom: 0 !important;
+}
+
+body.in-portal .sens-calendar-sticky-wrapper.is-stuck {
+    background: rgba(248, 249, 250, 0.95);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    padding: 6px 6px 10px 6px;
+    border-radius: 0 0 20px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.sens-calendar-sticky-wrapper.is-stuck {
+    background: rgba(9, 9, 11, 0.94);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    padding: 6px 6px 10px 6px;
+    border-radius: 0 0 20px 20px;
+    border-bottom: 1px solid rgba(229, 203, 167, 0.15);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Animaciones GPU de Desplazamiento de Semanas (Swipe & Flechas) */
+@keyframes sensWeekSlideLeft {
+    0% {
+        opacity: 0.35;
+        transform: translate3d(24px, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes sensWeekSlideRight {
+    0% {
+        opacity: 0.35;
+        transform: translate3d(-24px, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes sensWeekRangeFade {
+    0% {
+        opacity: 0.25;
+        transform: scale(0.96);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.sens-week-strip-wrap.anim-slide-left {
+    animation: sensWeekSlideLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.sens-week-strip-wrap.anim-slide-right {
+    animation: sensWeekSlideRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.sens-week-range-text.anim-fade {
+    animation: sensWeekRangeFade 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .sens-week-nav-bar {
     display: flex;
     align-items: center;

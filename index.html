@@ -62,7 +62,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=4.2">
+    <link rel="stylesheet" href="style.css?v=4.3">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2624,10 +2624,9 @@
                  ===================================================================== -->
             <section class="portal-view active" id="dashView">
                 <!-- 0. Saludo Personalizado de Bienvenida -->
-                <div class="sens-dash-welcome-header">
+                <div class="sens-dash-welcome-header play-entrance" id="sensDashWelcomeHeader">
                     <div class="sens-dash-welcome-question">
-                        <span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, ¿entrenamos
-                        juntos?
+                        <span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, ¿entrenamos juntos hoy?
                     </div>
                     <div class="sens-dash-welcome-slogan">
                         MAKE SENS.
@@ -2635,21 +2634,23 @@
                 </div>
 
                 <!-- 1. Navegador de Semanas & Strip Calendar Semanal (Dinámico Pasado y Futuro) -->
-                <div class="sens-week-nav-bar">
-                    <button type="button" class="sens-week-arrow-btn" id="btnWeekPrev" aria-label="Semana anterior" title="Semana anterior">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-                    </button>
-                    <div class="sens-week-title-wrap">
-                        <span class="sens-week-range-text" id="sensWeekRangeLabel">Cargando semana...</span>
-                        <button type="button" class="sens-pill-today" id="btnJumpToToday">Hoy</button>
+                <div class="sens-calendar-sticky-wrapper" id="sensCalendarStickyWrapper">
+                    <div class="sens-week-nav-bar">
+                        <button type="button" class="sens-week-arrow-btn" id="btnWeekPrev" aria-label="Semana anterior" title="Semana anterior">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <div class="sens-week-title-wrap">
+                            <span class="sens-week-range-text" id="sensWeekRangeLabel">Cargando semana...</span>
+                            <button type="button" class="sens-pill-today" id="btnJumpToToday">Hoy</button>
+                        </div>
+                        <button type="button" class="sens-week-arrow-btn" id="btnWeekNext" aria-label="Semana siguiente" title="Semana siguiente">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
                     </div>
-                    <button type="button" class="sens-week-arrow-btn" id="btnWeekNext" aria-label="Semana siguiente" title="Semana siguiente">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                    </button>
-                </div>
 
-                <div class="sens-week-strip-wrap" id="portalWeekStrip">
-                    <!-- Inyectado dinámicamente por app.js con fechas reales y hero number -->
+                    <div class="sens-week-strip-wrap" id="portalWeekStrip">
+                        <!-- Inyectado dinámicamente por app.js con fechas reales y hero number -->
+                    </div>
                 </div>
 
                 <!-- 2. Card de Entrenamiento Dinámica con Video & Foco Muscular Automático -->
@@ -4566,10 +4567,10 @@
     </div>
 
     <!-- Base de Datos Maestra de Ejercicios SENS (Guía Oficial Nico) -->
-    <script src="exercises_db.js?v=4.2"></script>
+    <script src="exercises_db.js?v=4.3"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=4.2"></script>
+    <script src="app.js?v=4.3"></script>
 </body>
 
 </html>
