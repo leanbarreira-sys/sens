@@ -8271,16 +8271,31 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
             barColors.push('rgba(255, 255, 255, 0.05)');
             borderColors.push('rgba(255, 255, 255, 0.12)');
         } else {
-            const isOptimal = isMuscleGain ? (m.netBalance >= 150) : (m.netBalance <= -300);
+            // Lógica adaptable según el objetivo (Déficit vs Superávit)
+            let isOptimal = false;
+            if (isMuscleGain) {
+                // Hipertrofia: Superávit objetivo (+150 a +550 kcal)
+                isOptimal = (m.netBalance >= 150 && m.netBalance <= 550);
+            } else {
+                // Pérdida de grasa: Déficit objetivo (-200 a -750 kcal)
+                isOptimal = (m.netBalance <= -200 && m.netBalance >= -750);
+            }
+
             if (isOptimal) {
+                // Objetivo cumplido: Siempre Champagne Gold
                 barColors.push('rgba(229, 203, 167, 0.85)');
                 borderColors.push('#E5CBA7');
             } else {
+                // Fuera del objetivo pautado: Ámbar / Arena suave
                 barColors.push('rgba(217, 119, 6, 0.75)');
                 borderColors.push('#D97706');
             }
         }
     }
+
+    // Calcular límites simétricos para centrar el 0 en el medio exacto del eje Y
+    const maxVal = Math.max(600, ...weekStats.map(s => Math.abs(s.netBalance || 0)));
+    const yLimit = Math.ceil((maxVal * 1.25) / 100) * 100;
 
     if (window._sensWeeklyBalanceChart) {
         window._sensWeeklyBalanceChart.destroy();
@@ -8347,9 +8362,14 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
                         }
                     },
                     y: {
-                        grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                        min: -yLimit,
+                        max: yLimit,
+                        grid: {
+                            color: (context) => (context.tick && context.tick.value === 0) ? 'rgba(229, 203, 167, 0.45)' : 'rgba(255, 255, 255, 0.05)',
+                            lineWidth: (context) => (context.tick && context.tick.value === 0) ? 1.5 : 1
+                        },
                         ticks: {
-                            color: '#A1A1AA',
+                            color: (context) => (context.tick && context.tick.value === 0) ? '#E5CBA7' : '#A1A1AA',
                             font: { family: 'Plus Jakarta Sans', size: 9 },
                             callback: function(val) {
                                 return (val > 0 ? '+' : '') + val;
@@ -8449,6 +8469,10 @@ function updateObjectiveCardData(selectedDate = null) {
     if (consistencyScoreText) {
         const consistencyPct = scheduledWorkouts > 0 ? Math.min(100, Math.round((doneWorkouts / scheduledWorkouts) * 100)) : 86;
         consistencyScoreText.textContent = `Índice de Consistencia: ${consistencyPct}% • ${consistencyPct >= 75 ? 'Rango Óptimo' : 'En Progreso'}`;
+        const dotEl = document.getElementById('dashConsistencyDot');
+        if (dotEl) {
+            dotEl.className = `sens-consistency-dot ${consistencyPct >= 75 ? 'gold' : 'warm'}`;
+        }
     }
 
     // Renderizar gráfico semanal
@@ -8477,8 +8501,12 @@ function updateBiometricsCardData(selectedDate = null) {
     const currentWeightEl = document.getElementById('dashBioCurrentWeight');
     const targetWeightEl = document.getElementById('dashBioTargetWeight');
     const weightDeltaEl = document.getElementById('dashBioWeightDelta');
+    const currentMuscleEl = document.getElementById('dashBioCurrentMuscle');
+    const targetMuscleEl = document.getElementById('dashBioTargetMuscle');
     const currentFatEl = document.getElementById('dashBioCurrentFat');
     const targetFatEl = document.getElementById('dashBioTargetFat');
+    const initialWeightEl = document.getElementById('dashBioInitialWeight');
+    const targetWeightBarEl = document.getElementById('dashBioTargetWeightBar');
     const progressBar = document.getElementById('dashBioProgressBar');
     const progressPct = document.getElementById('dashBioProgressPct');
     const lastLoggedDate = document.getElementById('dashBioLastLoggedDate');
@@ -8500,27 +8528,37 @@ function updateBiometricsCardData(selectedDate = null) {
 
     const weightRaw = profile.current_weight || anamnesis.weight;
     const currentWeight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 75.8 : 76.0);
+    const initialWeight = profile.initial_weight || anamnesis.initial_weight || (isDemo ? 82.0 : 80.0);
     const targetWeight = profile.target_weight || anamnesis.target_weight || (isDemo ? 72.0 : 70.0);
+
+    const muscleRaw = profile.muscle_mass || anamnesis.muscle_mass;
+    const currentMuscle = muscleRaw ? parseFloat(muscleRaw) : (isDemo ? 35.2 : 34.0);
+    const targetMuscle = profile.target_muscle_mass || (isDemo ? 36.5 : 36.0);
+
     const fatRaw = profile.body_fat || anamnesis.body_fat;
     const currentFat = fatRaw ? parseFloat(fatRaw) : (isDemo ? 13.8 : 15.0);
     const targetFat = profile.target_body_fat || (isDemo ? 11.5 : 12.0);
 
     if (currentWeightEl) currentWeightEl.textContent = currentWeight.toFixed(1);
     if (targetWeightEl) targetWeightEl.textContent = `${targetWeight.toFixed(1)} kg`;
+    if (currentMuscleEl) currentMuscleEl.textContent = currentMuscle.toFixed(1);
+    if (targetMuscleEl) targetMuscleEl.textContent = `${targetMuscle.toFixed(1)} kg`;
     if (currentFatEl) currentFatEl.textContent = currentFat.toFixed(1);
     if (targetFatEl) targetFatEl.textContent = `${targetFat.toFixed(1)}%`;
 
     if (weightDeltaEl) {
-        const delta = profile.weight_delta !== undefined ? profile.weight_delta : -0.4;
-        const sign = delta > 0 ? '+' : '';
-        weightDeltaEl.textContent = `${sign}${delta} kg esta sem`;
+        const totalDelta = currentWeight - initialWeight;
+        const sign = totalDelta > 0 ? '+' : '';
+        weightDeltaEl.textContent = `${sign}${totalDelta.toFixed(1)} kg vs inicio`;
     }
 
+    if (initialWeightEl) initialWeightEl.textContent = `${initialWeight.toFixed(1)} kg`;
+    if (targetWeightBarEl) targetWeightBarEl.textContent = `${targetWeight.toFixed(1)} kg`;
+
     if (progressBar && progressPct) {
-        const initialWeight = profile.initial_weight || (currentWeight + 4.5);
         const totalToLose = Math.abs(initialWeight - targetWeight);
         const lostSoFar = Math.abs(initialWeight - currentWeight);
-        const pct = totalToLose > 0 ? Math.min(100, Math.max(10, Math.round((lostSoFar / totalToLose) * 100))) : 68;
+        const pct = totalToLose > 0 ? Math.min(100, Math.max(5, Math.round((lostSoFar / totalToLose) * 100))) : 68;
         progressBar.style.width = `${pct}%`;
         progressPct.textContent = `${pct}% completado`;
     }
@@ -8548,6 +8586,7 @@ function initQuickBiometricsModal() {
     const closeBtn = document.getElementById('btnCloseQuickBioModal');
     const form = document.getElementById('quickBioForm');
     const weightInp = document.getElementById('quickInputWeight');
+    const muscleInp = document.getElementById('quickInputMuscle');
     const fatInp = document.getElementById('quickInputFat');
     const stepsInp = document.getElementById('quickInputSteps');
 
@@ -8560,6 +8599,7 @@ function initQuickBiometricsModal() {
             const profile = AppState.profile || {};
             const anamnesis = AppState.anamnesis || {};
             if (weightInp) weightInp.value = profile.current_weight || anamnesis.weight || '75.8';
+            if (muscleInp) muscleInp.value = profile.muscle_mass || '35.2';
             if (fatInp) fatInp.value = profile.body_fat || anamnesis.body_fat || '13.8';
             if (stepsInp) stepsInp.value = AppState.dailySteps || '8500';
             modal.style.display = 'flex';
@@ -8582,11 +8622,13 @@ function initQuickBiometricsModal() {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const w = parseFloat(weightInp?.value);
+            const m = parseFloat(muscleInp?.value);
             const f = parseFloat(fatInp?.value);
             const s = parseInt(stepsInp?.value, 10);
 
             if (!AppState.profile) AppState.profile = {};
             if (!isNaN(w) && w > 0) AppState.profile.current_weight = w;
+            if (!isNaN(m) && m > 0) AppState.profile.muscle_mass = m;
             if (!isNaN(f) && f > 0) AppState.profile.body_fat = f;
             if (!isNaN(s) && s > 0) AppState.dailySteps = s;
 

@@ -8186,7 +8186,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 /* 1. Strip Calendar Semanal (Estilo BIGG) */
 .sens-week-strip-wrap {
-    margin-bottom: 8px;
+    margin-bottom: 22px !important;
     background: #0E0E11;
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 20px;
@@ -10905,7 +10905,7 @@ body.in-portal .sens-week-strip-wrap {
     grid-template-columns: repeat(7, 1fr) !important;
     gap: 4px !important;
     padding: 10px 4px 8px 4px !important;
-    margin-bottom: 6px !important;
+    margin-bottom: 22px !important;
     border-radius: 20px !important;
     overflow-x: hidden !important;
 }
@@ -12595,7 +12595,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     border-radius: 22px !important;
     padding: 22px !important;
     margin-bottom: 22px !important;
-    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
     color: #FFFFFF !important;
     cursor: default;
 }
@@ -12816,6 +12816,25 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     color: #A1A1AA;
 }
 
+.sens-consistency-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sens-consistency-dot.gold {
+    background: #E5CBA7;
+    box-shadow: 0 0 8px rgba(229, 203, 167, 0.6);
+}
+
+.sens-consistency-dot.warm {
+    background: #D97706;
+    box-shadow: 0 0 6px rgba(217, 119, 6, 0.4);
+}
+
 .sens-gold-link {
     background: none;
     border: none;
@@ -12839,8 +12858,8 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     border: 1px solid rgba(229, 203, 167, 0.16) !important;
     border-radius: 22px !important;
     padding: 22px !important;
-    margin-bottom: 24px !important;
-    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    margin-bottom: 22px !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
     color: #FFFFFF !important;
 }
 
@@ -12893,9 +12912,24 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 
 .sens-bio-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
     margin-bottom: 16px;
+}
+
+@media (max-width: 460px) {
+    .sens-bio-grid {
+        gap: 6px;
+    }
+    .sens-bio-box {
+        padding: 11px 8px !important;
+    }
+    .sens-bio-box-val {
+        font-size: 1.25rem !important;
+    }
+    .sens-bio-box-sub {
+        font-size: 10px !important;
+    }
 }
 
 .sens-bio-box {

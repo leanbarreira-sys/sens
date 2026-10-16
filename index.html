@@ -62,7 +62,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=3.7">
+    <link rel="stylesheet" href="style.css?v=3.8">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2818,7 +2818,7 @@
                     <!-- Footer -->
                     <div class="sens-balance-footer">
                         <div class="sens-consistency-wrap">
-                            <span class="status-dot status-dot-active"></span>
+                            <span class="sens-consistency-dot gold" id="dashConsistencyDot"></span>
                             <span id="dashConsistencyScoreText">Índice de Consistencia: 86% • Rango Óptimo</span>
                         </div>
                         <button type="button" class="btn-link sens-gold-link" id="btnGoTrackingFromBalance">
@@ -2843,17 +2843,27 @@
                     <div class="sens-bio-grid">
                         <!-- Columna 1: Peso Corporal -->
                         <div class="sens-bio-box">
-                            <div class="sens-bio-box-label">Peso Actual</div>
+                            <div class="sens-bio-box-label">Peso Corporal</div>
                             <div class="sens-bio-box-val">
                                 <span id="dashBioCurrentWeight">75.8</span> <span class="unit">kg</span>
                             </div>
                             <div class="sens-bio-box-sub">
-                                <span>Meta: <strong id="dashBioTargetWeight">72.0 kg</strong></span>
-                                <span class="sens-bio-delta" id="dashBioWeightDelta">−0.4 kg esta sem</span>
+                                <span class="sens-bio-delta" id="dashBioWeightDelta">−6.2 kg vs inicio</span>
                             </div>
                         </div>
 
-                        <!-- Columna 2: Grasa Corporal -->
+                        <!-- Columna 2: Masa Muscular -->
+                        <div class="sens-bio-box">
+                            <div class="sens-bio-box-label">Masa Muscular</div>
+                            <div class="sens-bio-box-val">
+                                <span id="dashBioCurrentMuscle">35.2</span> <span class="unit">kg</span>
+                            </div>
+                            <div class="sens-bio-box-sub">
+                                <span>Meta: <strong id="dashBioTargetMuscle">36.5 kg</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Columna 3: Grasa Corporal -->
                         <div class="sens-bio-box">
                             <div class="sens-bio-box-label">Grasa Corporal</div>
                             <div class="sens-bio-box-val">
@@ -2861,15 +2871,14 @@
                             </div>
                             <div class="sens-bio-box-sub">
                                 <span>Meta: <strong id="dashBioTargetFat">11.5%</strong></span>
-                                <span class="sens-bio-status-badge">Rango Óptimo</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Barra de Progreso hacia la Meta -->
+                    <!-- Barra de Progreso hacia la Meta con Peso Inicial -->
                     <div class="sens-bio-progress-wrap">
                         <div class="sens-bio-progress-labels">
-                            <span>Progreso hacia Meta (72.0 kg)</span>
+                            <span>Inicio: <strong id="dashBioInitialWeight">82.0 kg</strong> → Meta: <strong id="dashBioTargetWeightBar">72.0 kg</strong></span>
                             <span id="dashBioProgressPct">68% completado</span>
                         </div>
                         <div class="sens-bio-progress-track">
@@ -4528,6 +4537,10 @@
                     <input type="number" step="0.1" id="quickInputWeight" class="input-control" placeholder="Ej: 75.8" required style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
                 </div>
                 <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Masa Muscular (kg) <span style="color: #71717A; font-weight: 400;">(Opcional)</span></label>
+                    <input type="number" step="0.1" id="quickInputMuscle" class="input-control" placeholder="Ej: 35.2" style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
+                </div>
+                <div style="margin-bottom: 14px;">
                     <label style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Grasa Corporal (%) <span style="color: #71717A; font-weight: 400;">(Opcional)</span></label>
                     <input type="number" step="0.1" id="quickInputFat" class="input-control" placeholder="Ej: 13.8" style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
                 </div>
@@ -4541,10 +4554,10 @@
     </div>
 
     <!-- Base de Datos Maestra de Ejercicios SENS (Guía Oficial Nico) -->
-    <script src="exercises_db.js?v=3.7"></script>
+    <script src="exercises_db.js?v=3.8"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=3.7"></script>
+    <script src="app.js?v=3.8"></script>
 </body>
 
 </html>
