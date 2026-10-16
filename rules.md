@@ -99,6 +99,49 @@ Eres el Chief Technology Officer (CTO) y Arquitecto de Software. Tu responsabili
 
 ---
 
+## 4. MANIFIESTO ANTI-UI DE IA & REGLAS DEFINITIVAS DE QUIET LUXURY (SENS BRANDBOOK 2026)
+
+Este manifiesto erradica los patrones genéricos que las herramientas de IA generan por defecto y consolida la identidad de **Quiet Luxury** (Apple Health, Alo Yoga, Equinox, Leica) para SENS TRAIN & WELLNESS.
+
+### Regla 1: Cero Wireframing y Cero Rebordes en Pills y Elementos Negros (Solid Surface over Wireframe)
+- **Prohibición de Líneas en Pills:** Queda prohibido aplicar `border: 1px solid rgba(...)` o cualquier borde perimetral fino a pills de estado, badges (`PREMIUM`, `COACH OS`, `HOY`, `Déficit Calórico`), selectores de semana y chips de comidas.
+- **Prohibición de "Aros Dorados sobre Negro":** Jamás bordear un elemento negro u oscuro con un trazo oro champán (`border: 1.5px solid #9E7D4B`). Este es el cliché número uno de las plantillas generadas por IA.
+- **Estándar de Implementación:** Las delimitaciones se logran mediante **superficies tonales puras** (`#09090B`, `#18181B`, `#F4F4F6`, `rgba(229, 203, 167, 0.14)`), `border: none !important` y elevación suave con **sombras de oclusión ambiental** (`box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12)`).
+
+### Regla 2: Jerarquía Tipográfica de 3 Niveles en Cards (Cero Redundancia Cognitiva)
+Ningún dato numérico o concepto debe repetirse en la misma tarjeta:
+- **Nivel 1 (Pill / Badge superior):** Métrica global o estado operativo (`1.950 kcal meta` / `Presencial con Nico`).
+- **Nivel 2 (Título de Card):** Dominio unívoco, sobrio y directo (`Nutrición del Día` / `Entrenamiento de Hoy`).
+- **Nivel 3 (Bajada de Coaching Nico):** Justificación biológica, adaptativa o estratégica del coach (`Déficit estructurado para preservar masa muscular` / `Plan calibrado por Nico para síntesis proteica & energía`). **PROHIBIDO** repetir el número de calorías o la cantidad de comidas ya visibles en badges y chips.
+- **Nivel 4 (Chips / Grilla Táctil):** Desglose cuantitativo granular (Desayuno, Almuerzo, Merienda, Cena, Snack).
+- **Nivel 5 (CTA de Acción):** Micro-interacción con glifo tipográfico (`Tocar para ver detalle & registrar ingesta →`).
+
+### Regla 3: Unicidad y Separación Estricta de Dominios
+- Las tarjetas deben tener **responsabilidad única de producto**.
+- Queda prohibido agrupar dominios distintos bajo títulos combinados como *"Nutrición & Hábitos"*.
+  - **Card A:** *Entrenamiento de Hoy* (Rutina, ejercicios, series, técnica).
+  - **Card B:** *Nutrición del Día* (Objetivo metabólico, ingesta calórica y 5 ingestas).
+  - **Card C:** *Hábitos & Estilo de Vida* (Agua, pasos, descanso, suplementación en sus propios anillos y tarjetas).
+
+### Regla 4: Tratamiento de Video Full-Bleed y Curado de Costuras GPU
+- **Cobertura a Sangre:** El video debe ocupar el 100% de la tarjeta sin franjas laterales ni márgenes interiores (`inset: -4px`, `scale(1.05)`, `object-fit: cover`).
+- **Rampa Asimétrica Obsidiana:** Degradado lineal que arranca transparente arriba (0% - 28%) y decae a negro obsidiana profundo (`#09090B` al 80% - 100%) en la base para asegurar legibilidad perfecta de la tipografía.
+- **Curado de Anti-Aliasing WebKit/Blink:** Todo contenedor con video acelerado por GPU y esquinas redondeadas (`border-radius: 20px`) DEBE incluir:
+  `-webkit-mask-image: -webkit-radial-gradient(white, black); mask-image: radial-gradient(white, black); isolation: isolate; transform: translateZ(0);`
+  Esto erradica la costura o halo blanco/gris de 1px en esquinas curvas en Safari y Chrome.
+
+### Regla 5: Matriz de Contrastes Permitidos vs. Prohibidos
+- **Permitido:**
+  - Títulos sobre video en **Blanco Diamante puro (`#FFFFFF`)** con `text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95)`.
+  - Acentos de llamada a la acción e indicadores en **Champagne Gold (`#E5CBA7`)**.
+  - Superficies del portal en **Blanco Clínico (`#FFFFFF`)** con tipografía de títulos en **Obsidiana `#09090B`** y texto secundario en `#71717A`.
+- **Prohibido:**
+  - Textos oscuros o grises sobre fondos oscuros o sobre videos en reproducción.
+  - Efectos "neon glow" o sombras fluorescentes.
+  - Emojis de cualquier tipo (ver Regla 6 de la sección 1).
+
+---
+
 ## INSTRUCCIONES DE ACTIVACIÓN PARA ANTIGRAVITY
 
 Al solicitar una tarea en Antigravity, invoca la skill correspondiente prefijando el comando en el prompt:
