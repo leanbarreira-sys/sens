@@ -8019,7 +8019,14 @@ function updateNutriSummaryCardData() {
     }
 
     if (subText) {
-        subText.textContent = `Meta: ${targetKcal.toLocaleString('es-AR')} kcal • 5 ingestas planificadas`;
+        const userGoal = profile.goal || anamnesis.goal || 'fat_loss';
+        const goalSubtexts = {
+            fat_loss: 'Déficit estructurado para preservar masa muscular',
+            muscle_gain: 'Superávit calibrado para máxima síntesis proteica',
+            recomp: 'Aporte óptimo para recomposición y rendimiento',
+            posture_health: 'Plan antiinflamatorio para salud y vitalidad'
+        };
+        subText.textContent = goalSubtexts[userGoal] || 'Plan calibrado por Nico para síntesis proteica & energía';
     }
 
     // 2. Desglose en 5 ingestas: 4 principales + 1 bocadillo (20%, 35%, 15%, 20%, 10%)
