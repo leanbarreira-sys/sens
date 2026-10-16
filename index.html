@@ -53,10 +53,31 @@
     }
     </script>
 
-    <!-- Preload Crítico LCP: Carga instantánea de imagen de Hero (72 KB) y Posters del Portal -->
+    <!-- Preload Crítico LCP: Carga instantánea de imagen de Hero (95 KB), Posters del Portal y Fuente Oficial -->
     <link rel="preload" as="image" href="img/hero-bg-opt.jpg" fetchpriority="high">
     <link rel="preload" as="image" href="img/pilar-3-movilidad.jpg">
     <link rel="preload" as="image" href="img/pilar-4-adherencia.jpg">
+    <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2" crossorigin>
+
+    <!-- Meta Theme Color y Anti-Flash Crítico Inline (Previene Flash Blanco en Refresh) -->
+    <meta name="theme-color" content="#080809">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        html, body {
+            background-color: #080809 !important;
+            color: #FFFFFF !important;
+            margin: 0;
+            padding: 0;
+        }
+        .sens-train-hero {
+            background-color: #080809;
+        }
+        html.in-portal-mode,
+        html.in-portal-mode body {
+            background-color: #F8F9FA !important;
+            color: #09090B !important;
+        }
+    </style>
 
     <!-- SENS Anti-Flash Script: Restaura el modo portal de inmediato antes del primer render -->
     <script>
@@ -69,16 +90,14 @@
         })();
     </script>
 
-    <!-- Google Fonts: Plus Jakarta Sans (display=optional previene el cambio abrupto de fuentes / FOUT) -->
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=optional">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=optional">
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=5.3">
+    <link rel="stylesheet" href="style.css?v=5.4">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -162,7 +181,22 @@
          ========================================================================= -->
     <main id="publicLanding">
         <!-- Hero Section (Apple-Grade Premium Presentation) -->
-        <section class="sens-train-hero">
+        <section class="sens-train-hero" id="sensTrainHero">
+            <!-- Skeleton Shimmer Placeholder: Lujo silencioso mientras el video / poster inicializa -->
+            <div class="hero-skeleton-wrap" id="heroSkeleton" aria-hidden="true">
+                <div class="hero-skeleton-shimmer"></div>
+                <div class="hero-skeleton-content">
+                    <div class="hero-skel-pill"></div>
+                    <div class="hero-skel-title"></div>
+                    <div class="hero-skel-subtitle"></div>
+                    <div class="hero-skel-subtitle short"></div>
+                    <div class="hero-skel-actions">
+                        <div class="hero-skel-btn"></div>
+                        <div class="hero-skel-btn outline"></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Fallback Image: Visible instantáneamente mientras carga el video -->
             <div class="hero-bg-fallback" id="heroBgFallback"></div>
             <!-- Video Hero: Se reproduce nítido en loop -->
@@ -4607,7 +4641,7 @@
     <script src="exercises_db.js?v=4.6"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=5.3"></script>
+    <script src="app.js?v=5.4"></script>
 </body>
 
 </html>

@@ -1195,28 +1195,79 @@ function renderExerciseLibraryList() {
     });
 }
 
-// Sincronización del Video de Hero y Desvanecimiento de Imagen Fallback
+// Sincronización del Video de Hero, Skeleton Shimmer y Revelación Silenciosa
 function initHeroVideo() {
+    const heroSection = document.getElementById('sensTrainHero') || document.querySelector('.sens-train-hero');
     const video = document.getElementById('heroVideo');
     const fallback = document.getElementById('heroBgFallback');
-    if (!video) return;
+    const skeleton = document.getElementById('heroSkeleton');
+    if (!heroSection) return;
 
-    function handleVideoPlaying() {
-        if (fallback) fallback.style.opacity = '0';
+    let isRevealed = false;
+
+    function revealHeroContent() {
+        if (isRevealed) return;
+        isRevealed = true;
+        heroSection.classList.add('hero-ready');
+        if (skeleton) {
+            skeleton.classList.add('fade-out');
+            setTimeout(() => {
+                if (skeleton && skeleton.parentNode) skeleton.style.display = 'none';
+            }, 550);
+        }
+        try {
+            sessionStorage.setItem('sens_hero_loaded', 'true');
+        } catch (e) {}
     }
 
-    video.addEventListener('playing', handleVideoPlaying);
-    video.addEventListener('timeupdate', () => {
-        if (video.currentTime > 0.05) handleVideoPlaying();
-    });
+    // Si ya cargó en esta sesión de navegación (ej. usuario recarga o vuelve a la home),
+    // revelar instantáneamente sin parpadeo de skeleton
+    try {
+        if (sessionStorage.getItem('sens_hero_loaded') === 'true') {
+            revealHeroContent();
+        }
+    } catch (e) {}
 
-    // Intentar reproducción automática inmediata
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-        playPromise.then(handleVideoPlaying).catch(() => {
-            if (fallback) fallback.style.opacity = '1';
+    if (video) {
+        function handleVideoReady() {
+            if (fallback) fallback.style.opacity = '0';
+            revealHeroContent();
+        }
+
+        video.addEventListener('playing', handleVideoReady);
+        video.addEventListener('canplay', () => {
+            const p = video.play();
+            if (p !== undefined) {
+                p.then(handleVideoReady).catch(() => {
+                    // Si el navegador móvil bloquea autoplay, mostrar el poster y revelar
+                    if (fallback) fallback.style.opacity = '1';
+                    revealHeroContent();
+                });
+            } else {
+                handleVideoReady();
+            }
         });
+
+        video.addEventListener('timeupdate', () => {
+            if (video.currentTime > 0.05) handleVideoReady();
+        });
+
+        // Intentar reproducción automática inmediata
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.then(handleVideoReady).catch(() => {
+                if (fallback) fallback.style.opacity = '1';
+                revealHeroContent();
+            });
+        }
     }
+
+    // Salvaguarda: si la red móvil es lenta o video tarda > 450ms, revelar con el poster de alta fidelidad
+    setTimeout(() => {
+        if (!isRevealed) {
+            revealHeroContent();
+        }
+    }, 450);
 }
 
 // =============================================================================
@@ -1233,6 +1284,8 @@ function initLuxuryScrollReveals() {
         return;
     }
 
+    const windowH = window.innerHeight;
+
     const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -1246,6 +1299,12 @@ function initLuxuryScrollReveals() {
     });
 
     targets.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        // Si el elemento ya está dentro del viewport inicial, NO aplicarle sens-reveal para evitar el flash de ocultamiento y re-aparición
+        if (rect.top < windowH && rect.bottom > 0) {
+            el.classList.add('is-revealed');
+            return;
+        }
         el.classList.add('sens-reveal');
         observer.observe(el);
     });
