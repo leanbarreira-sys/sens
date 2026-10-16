@@ -62,7 +62,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=3.0">
+    <link rel="stylesheet" href="style.css?v=3.1">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2685,13 +2685,16 @@
                             <span class="sens-duration-pill" id="dashWorkoutDurationPill">5 ejercicios • ~45 min</span>
                         </div>
                         <div class="sens-training-card-content">
-                            <div class="sens-training-info-left">
-                                <span class="sens-training-eyebrow" id="dashWorkoutDayDateLabel">Hoy entrenás</span>
-                                <h3 class="sens-training-focus-title" id="dashWorkoutFocusTitle">Pecho, Hombros y Tríceps</h3>
-                                <p class="sens-training-first-ex-note" id="dashFirstExerciseName">Primer ejercicio: Press de Banca Plano con Barra</p>
+                            <div class="sens-card-info-stack">
+                                <h3 class="sens-card-title-white" id="dashWorkoutFocusTitle">Pecho, Hombros y Tríceps</h3>
+                                <p class="sens-card-sub-white" id="dashFirstExerciseName">Primer ejercicio: Press de Banca Plano con Barra</p>
+                                <div class="sens-card-cta-gold">
+                                    <span>Tocar para iniciar serie &amp; técnica</span>
+                                    <span class="sens-cta-arrow">→</span>
+                                </div>
                             </div>
                             <button type="button" class="sens-btn-circle-arrow" id="dashStartWorkoutBtn" aria-label="Ir al entrenamiento de hoy" title="Comenzar entrenamiento">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
@@ -2723,38 +2726,39 @@
                     </video>
                     <div class="sens-nutri-overlay-gradient"></div>
                     <div class="sens-nutri-top-badges">
-                        <span class="sens-dish-pill">Almuerzo Sugerido</span>
-                        <span class="sens-duration-pill" id="dashNutriTargetBadge">-</span>
+                        <span class="sens-modality-pill" id="dashNutriGoalPill">Déficit Calórico</span>
+                        <span class="sens-duration-pill" id="dashNutriTargetBadge">1.950 kcal meta</span>
                     </div>
                     <div class="sens-nutri-card-content">
-                        <div class="sens-nutri-info-top">
-                            <span class="sens-nutri-eyebrow">Nutrición &amp; Hábitos del Día</span>
-                            <h3 class="sens-nutri-card-title">Bowl de Salmón &amp; Vegetales Salteados</h3>
-                            <p class="sens-nutri-recipe-note" id="dashNutriMealDesc">
-                                Bowl de salmón sellado o pechuga grillada con quinoa tibia, palta y vegetales salteados. Aporte proteico para síntesis muscular.
-                            </p>
-                        </div>
-                        <div class="sens-nutri-cals-row">
-                            <div class="sens-nutri-cal-chip">
-                                <span class="meal-name">Desayuno</span>
-                                <strong class="meal-val" id="calMealDesayuno">-</strong>
+                        <div class="sens-card-info-stack">
+                            <h3 class="sens-card-title-white">Nutrición &amp; Hábitos del Día</h3>
+                            <p class="sens-card-sub-white" id="dashNutriSubText">Meta: 1.950 kcal distribuidas en 5 ingestas</p>
+                            <div class="sens-nutri-5cals-row">
+                                <div class="sens-5cals-chip">
+                                    <span class="chip-name">Desayuno</span>
+                                    <strong class="chip-val" id="calMealDesayuno">-</strong>
+                                </div>
+                                <div class="sens-5cals-chip highlight">
+                                    <span class="chip-name">Almuerzo</span>
+                                    <strong class="chip-val" id="calMealAlmuerzo">-</strong>
+                                </div>
+                                <div class="sens-5cals-chip">
+                                    <span class="chip-name">Merienda</span>
+                                    <strong class="chip-val" id="calMealMerienda">-</strong>
+                                </div>
+                                <div class="sens-5cals-chip">
+                                    <span class="chip-name">Cena</span>
+                                    <strong class="chip-val" id="calMealCena">-</strong>
+                                </div>
+                                <div class="sens-5cals-chip">
+                                    <span class="chip-name">Snack</span>
+                                    <strong class="chip-val" id="calMealSnack">-</strong>
+                                </div>
                             </div>
-                            <div class="sens-nutri-cal-chip highlight">
-                                <span class="meal-name">Almuerzo</span>
-                                <strong class="meal-val" id="calMealAlmuerzo">-</strong>
+                            <div class="sens-card-cta-gold">
+                                <span>Tocar para ver detalle &amp; registrar ingesta</span>
+                                <span class="sens-cta-arrow">→</span>
                             </div>
-                            <div class="sens-nutri-cal-chip">
-                                <span class="meal-name">Merienda</span>
-                                <strong class="meal-val" id="calMealMerienda">-</strong>
-                            </div>
-                            <div class="sens-nutri-cal-chip">
-                                <span class="meal-name">Cena</span>
-                                <strong class="meal-val" id="calMealCena">-</strong>
-                            </div>
-                        </div>
-                        <div class="sens-nutri-card-cta">
-                            <span>Tocar para registrar comidas &amp; macros</span>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                         </div>
                     </div>
                 </div>
@@ -4578,7 +4582,7 @@
     <script src="exercises_db.js"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=3.0"></script>
+    <script src="app.js?v=3.1"></script>
 </body>
 
 </html>

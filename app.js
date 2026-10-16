@@ -7971,29 +7971,46 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
 window.updateDashboardWorkoutDirective = updateDynamicTrainingCard;
 
 /**
- * Actualiza la Card Nutricional con calorías por comida
+ * Actualiza la Card Nutricional con calorías por comida y objetivo biológico de Nico/Atleta
  */
 function updateNutriSummaryCardData() {
     const targetBadge = document.getElementById('dashNutriTargetBadge');
+    const goalPill = document.getElementById('dashNutriGoalPill');
+    const subText = document.getElementById('dashNutriSubText');
     const calDesayuno = document.getElementById('calMealDesayuno');
     const calAlmuerzo = document.getElementById('calMealAlmuerzo');
     const calMerienda = document.getElementById('calMealMerienda');
     const calCena = document.getElementById('calMealCena');
+    const calSnack = document.getElementById('calMealSnack');
 
     const profile = AppState.profile || {};
     const anamnesis = AppState.anamnesis || {};
     const athId = getActiveAthleteId();
     const isDemo = (athId === 'usr-vip-001' || athId === 'mock_vip');
 
+    // 1. Objetivo Biológico del Atleta (SENS Brandbook / Nico Coach)
+    if (goalPill) {
+        const userGoal = profile.goal || anamnesis.goal || 'fat_loss';
+        const goalLabels = {
+            fat_loss: 'Déficit Calórico',
+            muscle_gain: 'Superávit Hipertrofia',
+            recomp: 'Recomposición Magra',
+            posture_health: 'Salud Postural'
+        };
+        goalPill.textContent = goalLabels[userGoal] || 'Nutrición SENS';
+    }
+
     const rawKcal = profile.daily_calories || anamnesis.daily_calories;
     const targetKcal = rawKcal ? parseInt(rawKcal, 10) : (isDemo ? 1950 : 0);
 
     if (!targetKcal || targetKcal <= 0) {
         if (targetBadge) targetBadge.textContent = '-';
+        if (subText) subText.textContent = 'Plan nutricional adaptado por Nico';
         if (calDesayuno) calDesayuno.textContent = '-';
         if (calAlmuerzo) calAlmuerzo.textContent = '-';
         if (calMerienda) calMerienda.textContent = '-';
         if (calCena) calCena.textContent = '-';
+        if (calSnack) calSnack.textContent = '-';
         return;
     }
 
@@ -8001,10 +8018,16 @@ function updateNutriSummaryCardData() {
         targetBadge.textContent = `${targetKcal.toLocaleString('es-AR')} kcal meta`;
     }
 
-    if (calDesayuno) calDesayuno.textContent = `${Math.round(targetKcal * 0.22)} kcal`;
+    if (subText) {
+        subText.textContent = `Meta: ${targetKcal.toLocaleString('es-AR')} kcal • 5 ingestas planificadas`;
+    }
+
+    // 2. Desglose en 5 ingestas: 4 principales + 1 bocadillo (20%, 35%, 15%, 20%, 10%)
+    if (calDesayuno) calDesayuno.textContent = `${Math.round(targetKcal * 0.20)} kcal`;
     if (calAlmuerzo) calAlmuerzo.textContent = `${Math.round(targetKcal * 0.35)} kcal`;
-    if (calMerienda) calMerienda.textContent = `${Math.round(targetKcal * 0.18)} kcal`;
-    if (calCena) calCena.textContent = `${Math.round(targetKcal * 0.25)} kcal`;
+    if (calMerienda) calMerienda.textContent = `${Math.round(targetKcal * 0.15)} kcal`;
+    if (calCena) calCena.textContent = `${Math.round(targetKcal * 0.20)} kcal`;
+    if (calSnack) calSnack.textContent = `${Math.round(targetKcal * 0.10)} kcal`;
 }
 
 /**
