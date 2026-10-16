@@ -10946,8 +10946,6 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
     background-color: #09090B !important;
     -webkit-backface-visibility: hidden !important;
     backface-visibility: hidden !important;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
 }
 
 /* Hover refinado en Desktop */
@@ -11256,9 +11254,10 @@ body.in-portal .sens-training-video-card,
 
 .sens-video-loop-player {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    inset: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    max-width: none !important;
     object-fit: cover;
     z-index: 1;
     display: block;
@@ -11274,8 +11273,9 @@ body.in-portal .sens-training-video-card,
     background-color: #09090B !important;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+    transform: scale(1.06) translateZ(0);
+    -webkit-transform: scale(1.06) translateZ(0);
+    transform-origin: center center;
 }
 
 .sens-video-overlay-gradient {
@@ -11529,9 +11529,10 @@ body.in-portal .sens-nutri-summary-card,
 
 .sens-nutri-video-player {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    inset: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    max-width: none !important;
     object-fit: cover;
     z-index: 1;
     display: block;
@@ -11547,8 +11548,9 @@ body.in-portal .sens-nutri-summary-card,
     background-color: #09090B !important;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+    transform: scale(1.06) translateZ(0);
+    -webkit-transform: scale(1.06) translateZ(0);
+    transform-origin: center center;
 }
 
 .sens-nutri-overlay-gradient {
