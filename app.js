@@ -91,6 +91,16 @@ const AppState = {
     selectedMuscleFilter: 'all'
 };
 
+// Restauración síncrona inmediata desde caché local para render instantáneo sin flashes
+try {
+    const cachedUser = localStorage.getItem('sens_active_user');
+    const cachedProfile = localStorage.getItem('sens_active_profile');
+    const cachedAnam = localStorage.getItem('sens_active_anamnesis');
+    if (cachedUser) AppState.user = JSON.parse(cachedUser);
+    if (cachedProfile) AppState.profile = JSON.parse(cachedProfile);
+    if (cachedAnam) AppState.anamnesis = JSON.parse(cachedAnam);
+} catch (_) {}
+
 function isCurrentUserAdmin() {
     const profile = AppState.profile || {};
     const user = AppState.user || {};
@@ -1940,6 +1950,12 @@ function initAuthModal() {
         };
 
         AppState.profile = newProfile;
+        try {
+            localStorage.setItem('sens_active_profile', JSON.stringify(newProfile));
+            if (AppState.user) {
+                localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
+            }
+        } catch (_) {}
 
         // 1. Guardar en Supabase profiles si está conectado
         if (supabaseClient && newUserId) {
@@ -2207,6 +2223,12 @@ async function loadProfileFromSupabase(userId) {
 
         if (data && !error) {
             AppState.profile = data;
+            try {
+                localStorage.setItem('sens_active_profile', JSON.stringify(data));
+                if (AppState.user) {
+                    localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
+                }
+            } catch (_) {}
             const emailKey = (AppState.user && AppState.user.email) ? AppState.user.email : '';
             if (emailKey) {
                 const localSaved = localStorage.getItem('sens_profile_' + emailKey);
@@ -2215,6 +2237,9 @@ async function loadProfileFromSupabase(userId) {
                         const parsed = JSON.parse(localSaved);
                         if (parsed.onboarding_completed && !data.onboarding_completed) {
                             AppState.profile.onboarding_completed = true;
+                            try {
+                                localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+                            } catch (_) {}
                             supabaseClient
                                 .from('profiles')
                                 .update({ onboarding_completed: true })
@@ -2249,6 +2274,12 @@ async function loadProfileFromSupabase(userId) {
                     .maybeSingle();
 
                 AppState.profile = (created && !createErr) ? created : initialProfile;
+                try {
+                    localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+                    if (AppState.user) {
+                        localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
+                    }
+                } catch (_) {}
             } catch (err) {
                 AppState.profile = initialProfile;
             }
@@ -2262,6 +2293,9 @@ async function loadProfileFromSupabase(userId) {
 
         if (anamData) {
             AppState.anamnesis = anamData;
+            try {
+                localStorage.setItem('sens_active_anamnesis', JSON.stringify(anamData));
+            } catch (_) {}
         }
     } catch (e) {
         console.error('Error cargando perfil:', e);
@@ -2274,6 +2308,9 @@ async function checkExistingSession() {
             const { data: { session }, error } = await supabaseClient.auth.getSession();
             if (session && session.user) {
                 AppState.user = session.user;
+                try {
+                    localStorage.setItem('sens_active_user', JSON.stringify(session.user));
+                } catch (_) {}
                 await loadProfileFromSupabase(session.user.id);
                 updateAuthNavButtons();
                 console.log('[SENS] Sesión activa de Supabase detectada:', session.user.email);
@@ -2294,6 +2331,9 @@ async function checkExistingSession() {
                 // Si la URL contiene type=recovery o estamos restableciendo clave, no forzar login regular
                 if (!window.location.hash.includes('type=recovery')) {
                     AppState.user = session.user;
+                    try {
+                        localStorage.setItem('sens_active_user', JSON.stringify(session.user));
+                    } catch (_) {}
                     await loadProfileFromSupabase(session.user.id);
                     updateAuthNavButtons();
                 }
@@ -2301,6 +2341,12 @@ async function checkExistingSession() {
                 AppState.user = null;
                 AppState.profile = null;
                 AppState.anamnesis = null;
+                try {
+                    localStorage.removeItem('sens_active_user');
+                    localStorage.removeItem('sens_active_profile');
+                    localStorage.removeItem('sens_active_anamnesis');
+                    localStorage.removeItem('sens_in_portal');
+                } catch (_) {}
                 updateAuthNavButtons();
             }
         });
@@ -2309,8 +2355,8 @@ async function checkExistingSession() {
         if (localUser) {
             try {
                 AppState.user = JSON.parse(localUser);
-                const savedProfile = localStorage.getItem('sens_profile_' + AppState.user.email);
-                const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + AppState.user.email);
+                const savedProfile = localStorage.getItem('sens_profile_' + AppState.user.email) || localStorage.getItem('sens_active_profile');
+                const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + AppState.user.email) || localStorage.getItem('sens_active_anamnesis');
                 if (savedProfile) {
                     AppState.profile = JSON.parse(savedProfile);
                 }
@@ -2324,11 +2370,20 @@ async function checkExistingSession() {
         updateAuthNavButtons();
     }
 
-    // Si el usuario estaba navegando dentro del portal, mantenerlo en el portal en refresh
+    // Si el usuario estaba navegando dentro del portal, sincronizar estado
     try {
         if (localStorage.getItem('sens_in_portal') === 'true') {
-            if (typeof openUserPortal === 'function') {
+            const portalActive = document.getElementById('app-container')?.classList.contains('active');
+            if (!portalActive && typeof openUserPortal === 'function') {
                 openUserPortal(false);
+            } else if (portalActive) {
+                // El portal ya se abrió síncronamente al inicio; actualizamos datos sin reiniciar animaciones
+                renderDashboardData();
+                const isAdmin = isCurrentUserAdmin();
+                const isPending = Boolean(!isAdmin && AppState.profile && AppState.profile.subscription_status === 'pending_activation');
+                if (isPending) {
+                    switchPortalView('activationPendingView');
+                }
             }
         }
     } catch (_) {}
@@ -2423,6 +2478,9 @@ function initPortalNavigation() {
             const currentStatus = AppState.profile.subscription_status || 'pending_activation';
             const newStatus = (currentStatus === 'active') ? 'pending_activation' : 'active';
             AppState.profile.subscription_status = newStatus;
+            try {
+                localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+            } catch (_) {}
 
             const targetId = AppState.profile.id || (AppState.user && AppState.user.id);
             if (supabaseClient && targetId && !targetId.startsWith('usr-')) {
@@ -2454,6 +2512,9 @@ function initPortalNavigation() {
 function returnToPublicLanding() {
     try {
         localStorage.removeItem('sens_in_portal');
+        localStorage.removeItem('sens_active_user');
+        localStorage.removeItem('sens_active_profile');
+        localStorage.removeItem('sens_active_anamnesis');
         document.documentElement.classList.remove('in-portal-mode');
     } catch (_) {}
     document.body.classList.remove('in-portal');
@@ -2477,12 +2538,15 @@ function returnToPublicLanding() {
 
 function switchPortalView(viewId) {
     const isAdmin = isCurrentUserAdmin();
-    const profile = AppState.profile || {};
-    const subStatus = profile.subscription_status || (isAdmin ? 'active' : 'pending_activation');
-    const isSubActive = isAdmin || subStatus === 'active';
+    const profile = AppState.profile;
+    const isPendingActivation = Boolean(
+        !isAdmin && 
+        profile && 
+        profile.subscription_status === 'pending_activation'
+    );
 
-    // Bloqueo estricto para usuarios no activados por Nico
-    if (!isSubActive) {
+    // Bloqueo estricto SOLO si el usuario está explícitamente pendiente de activación por Nico
+    if (isPendingActivation) {
         viewId = 'activationPendingView';
         const subNav = document.getElementById('portalSubNav');
         if (subNav) subNav.style.display = 'none';
@@ -2619,11 +2683,16 @@ function openUserPortal(forceOnboarding = false) {
     // -------------------------------------------------------------------------
     // CONTROL DE MEMBRESÍA & PAGOS (MVP CON NICO / EG CON PASARELA DE PAGO)
     // -------------------------------------------------------------------------
-    // Todo nuevo usuario nace BLOQUEADO ('pending_activation') y requiere aprobación/check de Nico
-    const subStatus = profile.subscription_status || (isAdmin ? 'active' : 'pending_activation');
-    const isSubActive = isAdmin || subStatus === 'active';
+    // Bloqueo estricto SOLO si el usuario está explícitamente marcado como 'pending_activation'
+    // Si el perfil aún no terminó de cargar desde Supabase y no hay perfil en cache, NUNCA asumir 'pending_activation'
+    // para evitar un flash erróneo del paywall/activación al refrescar.
+    const isPendingActivation = Boolean(
+        !isAdmin && 
+        profile && 
+        profile.subscription_status === 'pending_activation'
+    );
 
-    if (!isSubActive) {
+    if (isPendingActivation) {
         // Redirige al Paywall de Activación y oculta menús y dock
         const subNav = document.getElementById('portalSubNav');
         if (subNav) subNav.style.display = 'none';
@@ -2654,9 +2723,10 @@ function openUserPortal(forceOnboarding = false) {
     // 1. Admin (Nico): va directo al dashboard de coach. Nunca se le piden preguntas iniciales de atleta.
     // 2. Atleta con onboarding completado: va directo al Dashboard con sus rutinas y métricas (NO repite preguntas).
     // 3. Atleta nuevo o que no finalizó su evaluación: entra a la Evaluación Inicial de Fuerza & Hábitos.
-    const isCompleted = isAdmin || Boolean(profile.onboarding_completed);
+    const hasProfileLoaded = Boolean(AppState.profile && (AppState.profile.id || AppState.profile.email));
+    const isCompleted = isAdmin || (hasProfileLoaded ? Boolean(profile.onboarding_completed) : true);
 
-    if (!isAdmin && (forceOnboarding || !isCompleted)) {
+    if (!isAdmin && (forceOnboarding || (hasProfileLoaded && !isCompleted))) {
         // Redirige a la Evaluación Inicial
         document.getElementById('portalSubNav').style.display = 'none';
         document.querySelectorAll('.sens-floating-dock').forEach(dock => {
@@ -3480,6 +3550,10 @@ async function processDiagnosisSubmission() {
     const emailKey = AppState.user && AppState.user.email ? AppState.user.email : 'local_user';
     localStorage.setItem(`sens_profile_${emailKey}`, JSON.stringify(AppState.profile));
     localStorage.setItem(`sens_anamnesis_${emailKey}`, JSON.stringify(cleanAnamnesisPayload));
+    try {
+        localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+        localStorage.setItem('sens_active_anamnesis', JSON.stringify(cleanAnamnesisPayload));
+    } catch (_) {}
     localStorage.removeItem('sens_onboarding_draft');
 
     // Sincronización robusta con Supabase (actualiza profiles y hace upsert/insert de anamnesis)
