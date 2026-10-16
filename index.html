@@ -53,16 +53,27 @@
     }
     </script>
 
-    <!-- Google Fonts: Plus Jakarta Sans (Brandbook SENS - Swiss Neogrotesque, Lining Figures & Quiet Luxury) -->
+    <!-- SENS Anti-Flash Script: Restaura el modo portal de inmediato antes del primer render -->
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sens_in_portal') === 'true' || localStorage.getItem('sens_active_user')) {
+                    document.documentElement.classList.add('in-portal-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+
+    <!-- Google Fonts: Plus Jakarta Sans (display=optional previene el cambio abrupto de fuentes / FOUT) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=optional">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=optional">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=5.1">
+    <link rel="stylesheet" href="style.css?v=5.2">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2624,7 +2635,7 @@
                  ===================================================================== -->
             <section class="portal-view active" id="dashView">
                 <!-- 0. Saludo Personalizado de Bienvenida -->
-                <div class="sens-dash-welcome-header play-entrance" id="sensDashWelcomeHeader">
+                <div class="sens-dash-welcome-header" id="sensDashWelcomeHeader">
                     <div class="sens-dash-welcome-question">
                         <span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, ¿entrenamos juntos hoy?
                     </div>
@@ -2640,7 +2651,7 @@
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
                         </button>
                         <div class="sens-week-title-wrap">
-                            <span class="sens-week-range-text" id="sensWeekRangeLabel">Cargando semana...</span>
+                            <span class="sens-week-range-text" id="sensWeekRangeLabel">Semana de Entrenamiento</span>
                             <button type="button" class="sens-pill-today" id="btnJumpToToday">Hoy</button>
                         </div>
                         <button type="button" class="sens-week-arrow-btn" id="btnWeekNext" aria-label="Semana siguiente" title="Semana siguiente">
@@ -2649,7 +2660,13 @@
                     </div>
 
                     <div class="sens-week-strip-wrap" id="portalWeekStrip">
-                        <!-- Inyectado dinámicamente por app.js con fechas reales y hero number -->
+                        <button type="button" class="sens-week-day-pill" data-day-key="day1"><span class="sens-day-name">LUN</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day2"><span class="sens-day-name">MAR</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day3"><span class="sens-day-name">MIÉ</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day4"><span class="sens-day-name">JUE</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge online">Online</span></div></button>
+                        <button type="button" class="sens-week-day-pill active is-today" data-day-key="day5"><span class="sens-day-name">VIE</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge auto">Aut</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day6"><span class="sens-day-name">SÁB</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day7"><span class="sens-day-name">DOM</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div></button>
                     </div>
                 </div>
 
@@ -2657,20 +2674,20 @@
                 <div class="sens-training-video-card" id="dashTrainingVideoCard">
                     <!-- Estado A: Con Entrenamiento Programado para el Día Seleccionado -->
                     <div class="sens-training-card-active" id="dashWorkoutActivePane">
-                        <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline webkit-playsinline autoplay disablePictureInPicture disableremoteplayback poster="img/pilar-1-tecnica.jpg">
-                            <source id="dashWorkoutVideoSource" src="vid/pilar-1-tecnica.mp4" type="video/mp4">
+                        <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline webkit-playsinline autoplay disablePictureInPicture disableremoteplayback poster="img/pilar-3-movilidad.jpg">
+                            <source id="dashWorkoutVideoSource" src="vid/pilar-3-movilidad.mp4" type="video/mp4">
                         </video>
                         <div class="sens-video-overlay-gradient"></div>
                         <div class="sens-video-top-badges">
-                            <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial</span>
+                            <span class="sens-modality-pill auto" id="dashWorkoutModalityPill">Autónomo</span>
                             <span class="sens-duration-pill" id="dashWorkoutDurationPill">5 ej • ~45 min</span>
                         </div>
                         <div class="sens-training-card-content">
                             <div class="sens-card-top-info-row">
                                 <div class="sens-card-info-stack">
                                     <span class="sens-card-domain-eyebrow" id="dashWorkoutDayDateLabel">Entrenamiento de Hoy</span>
-                                    <h3 class="sens-card-title-white" id="dashWorkoutFocusTitle">Pecho y Tríceps</h3>
-                                    <p class="sens-card-sub-white" id="dashWorkoutSubFocus">Volumen: 15 series totales • Sobrecarga progresiva</p>
+                                    <h3 class="sens-card-title-white" id="dashWorkoutFocusTitle">Piernas y Espalda</h3>
+                                    <p class="sens-card-sub-white" id="dashWorkoutSubFocus">Volumen: 10 series totales • Sobrecarga progresiva</p>
                                 </div>
                                 <button type="button" class="sens-btn-circle-arrow" id="dashStartWorkoutBtn" aria-label="Ir al entrenamiento de hoy" title="Comenzar entrenamiento">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -2681,7 +2698,22 @@
                             </div>
                             <!-- Fila de los 4 Tipos de Entrenamiento al Fondo (Muscular, Cardio, Movilidad, Yoga) -->
                             <div class="sens-workout-4types-row" id="dashWorkoutTypeIconsWrap">
-                                <!-- Inyectado dinámicamente con chips con icono y label -->
+                                <div class="sens-type-chip active highlight" title="Muscular: Estimulado hoy">
+                                    <span class="type-chip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M2 10v4"/><path d="M5 8v8"/><path d="M7 6v12"/><path d="M17 6v12"/><path d="M19 8v8"/><path d="M22 10v4"/></svg></span>
+                                    <span class="type-chip-label">Muscular</span>
+                                </div>
+                                <div class="sens-type-chip inactive" title="Cardio: No incluido">
+                                    <span class="type-chip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4" r="2"/><path d="m10 21 3-5 3 2 3-5"/><path d="m6 13 4-2 3 3 4-2"/></svg></span>
+                                    <span class="type-chip-label">Cardio</span>
+                                </div>
+                                <div class="sens-type-chip active highlight" title="Movilidad: Estimulado hoy">
+                                    <span class="type-chip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14.93-4M20 12a8 8 0 0 1-14.93 4"/><polyline points="18 4 20 8 16 8"/><polyline points="6 20 4 16 8 16"/></svg></span>
+                                    <span class="type-chip-label">Movilidad</span>
+                                </div>
+                                <div class="sens-type-chip inactive" title="Yoga: No incluido">
+                                    <span class="type-chip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 9v5"/><path d="M6 18c1.5-2 3.5-3 6-3s4.5 1 6 3"/><path d="m7 13 5 3 5-3"/></svg></span>
+                                    <span class="type-chip-label">Yoga</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2730,23 +2762,23 @@
                         <div class="sens-nutri-5cals-row">
                             <div class="sens-5cals-chip">
                                 <span class="chip-name">Desayuno</span>
-                                <strong class="chip-val" id="calMealDesayuno">-</strong>
+                                <strong class="chip-val" id="calMealDesayuno">390 kcal</strong>
                             </div>
                             <div class="sens-5cals-chip highlight">
                                 <span class="chip-name">Almuerzo</span>
-                                <strong class="chip-val" id="calMealAlmuerzo">-</strong>
+                                <strong class="chip-val" id="calMealAlmuerzo">683 kcal</strong>
                             </div>
                             <div class="sens-5cals-chip">
                                 <span class="chip-name">Merienda</span>
-                                <strong class="chip-val" id="calMealMerienda">-</strong>
+                                <strong class="chip-val" id="calMealMerienda">293 kcal</strong>
                             </div>
                             <div class="sens-5cals-chip">
                                 <span class="chip-name">Cena</span>
-                                <strong class="chip-val" id="calMealCena">-</strong>
+                                <strong class="chip-val" id="calMealCena">390 kcal</strong>
                             </div>
                             <div class="sens-5cals-chip">
                                 <span class="chip-name">Snack</span>
-                                <strong class="chip-val" id="calMealSnack">-</strong>
+                                <strong class="chip-val" id="calMealSnack">195 kcal</strong>
                             </div>
                         </div>
                     </div>
@@ -4570,7 +4602,7 @@
     <script src="exercises_db.js?v=4.6"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=5.1"></script>
+    <script src="app.js?v=5.2"></script>
 </body>
 
 </html>

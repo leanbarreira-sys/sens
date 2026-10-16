@@ -2238,6 +2238,15 @@ async function checkExistingSession() {
         }
         updateAuthNavButtons();
     }
+
+    // Si el usuario estaba navegando dentro del portal, mantenerlo en el portal en refresh
+    try {
+        if (localStorage.getItem('sens_in_portal') === 'true') {
+            if (typeof openUserPortal === 'function') {
+                openUserPortal(false);
+            }
+        }
+    } catch (_) {}
 }
 
 // =============================================================================
@@ -2260,6 +2269,8 @@ function initPortalNavigation() {
         logoutBtn.addEventListener('click', () => {
             if (supabaseClient) supabaseClient.auth.signOut();
             localStorage.removeItem('sens_active_user');
+            localStorage.removeItem('sens_in_portal');
+            document.documentElement.classList.remove('in-portal-mode');
             AppState.user = null;
             AppState.profile = null;
             document.body.classList.remove('in-portal');
@@ -2356,6 +2367,10 @@ function initPortalNavigation() {
 }
 
 function returnToPublicLanding() {
+    try {
+        localStorage.removeItem('sens_in_portal');
+        document.documentElement.classList.remove('in-portal-mode');
+    } catch (_) {}
     document.body.classList.remove('in-portal');
     const globalHeader = document.querySelector('header');
     const mobileQuickBar = document.querySelector('.mobile-quick-bar');
@@ -2448,6 +2463,10 @@ function switchPortalView(viewId) {
 
 
 function openUserPortal(forceOnboarding = false) {
+    try {
+        localStorage.setItem('sens_in_portal', 'true');
+        document.documentElement.classList.add('in-portal-mode');
+    } catch (_) {}
     const portal = document.getElementById('app-container');
     const publicLanding = document.getElementById('publicLanding');
     const userEmailEl = document.getElementById('portalUserEmail');
@@ -7604,12 +7623,16 @@ function initWorkoutBlockAccordions() {
 /**
  * Dispara la animación de entrada fluida y rápida del saludo de bienvenida MAKE SENS
  */
-function triggerWelcomeGreetingAnimation() {
+let hasPlayedGreetingAnimation = false;
+
+function triggerWelcomeGreetingAnimation(force = false) {
     const header = document.getElementById('sensDashWelcomeHeader');
     if (!header) return;
-    header.classList.remove('play-entrance');
-    void header.offsetWidth; // Reflow para reiniciar la animación
-    header.classList.add('play-entrance');
+    if (hasPlayedGreetingAnimation && !force) return;
+    hasPlayedGreetingAnimation = true;
+    requestAnimationFrame(() => {
+        header.classList.add('play-entrance');
+    });
 }
 
 /**
@@ -8344,10 +8367,10 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     // 1. Obtener detalles de sesión y título dinámico
     const details = getWorkoutSessionDetails(exercises, dayData.title);
 
-    if (focusTitle) {
+    if (focusTitle && focusTitle.textContent !== details.title) {
         focusTitle.textContent = details.title;
     }
-    if (subFocus) {
+    if (subFocus && subFocus.textContent !== details.subtitle) {
         subFocus.textContent = details.subtitle;
     }
 

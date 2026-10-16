@@ -13387,3 +13387,34 @@ video.sens-nutri-video-player::-webkit-media-controls-enclosure {
     display: none !important;
     -webkit-appearance: none;
 }
+
+
+/* =============================================================================
+   ESTABILIDAD VISUAL & PREVENCIÓN DE LAYOUT SHIFT (CLS = 0)
+   ============================================================================= */
+#portalWeekStrip,
+.sens-calendar-sticky-wrapper .sens-week-strip-wrap {
+    min-height: 66px !important;
+}
+
+.sens-workout-4types-row {
+    min-height: 38px !important;
+}
+
+/* Modo portal persistente: previene flash de landing pública en refresh */
+html.in-portal-mode body {
+    background-color: #F8F9FA !important;
+}
+
+html.in-portal-mode body header,
+html.in-portal-mode body #publicLanding,
+html.in-portal-mode body .mobile-quick-bar,
+html.in-portal-mode body .floating-social,
+html.in-portal-mode body #homeFloatingSocial {
+    display: none !important;
+}
+
+html.in-portal-mode body #app-container {
+    display: block !important;
+}
+
