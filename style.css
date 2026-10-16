@@ -8149,20 +8149,20 @@ input[type="range"]::-webkit-slider-thumb:hover {
 @keyframes sensWelcomeSlideUp {
     0% {
         opacity: 0;
-        transform: translate3d(0, 16px, 0);
+        transform: translate3d(0, 22px, 0) scale(0.98);
     }
     100% {
         opacity: 1;
-        transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0) scale(1);
     }
 }
 
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-question {
-    animation: sensWelcomeSlideUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: sensWelcomeSlideUp 0.78s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-slogan {
-    animation: sensWelcomeSlideUp 0.48s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+    animation: sensWelcomeSlideUp 0.88s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
 }
 
 .sens-dash-welcome-question {
