@@ -1057,13 +1057,25 @@ function renderExerciseLibraryList() {
         : EXERCISE_CATALOG;
 
     const filtered = sourceLibrary.filter(ex => {
-        const cat = (ex.category || ex.muscle_group || '').toLowerCase();
+        const tax = (typeof getExerciseTaxonomy === 'function') 
+            ? getExerciseTaxonomy(ex) 
+            : { type: 'muscular', muscleGroup: 'piernas' };
+
         let matchGroup = false;
         if (selectedGroup === 'all') {
             matchGroup = true;
-        } else if (selectedGroup === 'piernas') {
-            matchGroup = (cat === 'piernas' || cat === 'cuadriceps' || cat === 'isquiotibiales' || cat === 'gluteos');
+        } else if (selectedGroup === 'muscular') {
+            matchGroup = (tax.type === 'muscular');
+        } else if (selectedGroup === 'cardio') {
+            matchGroup = (tax.type === 'cardio');
+        } else if (selectedGroup === 'movilidad') {
+            matchGroup = (tax.type === 'movilidad');
+        } else if (selectedGroup === 'yoga') {
+            matchGroup = (tax.type === 'yoga');
+        } else if (['piernas', 'biceps', 'triceps', 'espalda', 'pecho', 'abdominales'].includes(selectedGroup)) {
+            matchGroup = (tax.muscleGroup === selectedGroup);
         } else {
+            const cat = (ex.category || ex.muscle_group || '').toLowerCase();
             matchGroup = (cat === selectedGroup || (ex.muscle_group || '').toLowerCase() === selectedGroup);
         }
 
@@ -1089,8 +1101,8 @@ function renderExerciseLibraryList() {
 
     let html = '';
     filtered.forEach(ex => {
-        const catLabel = (ex.category || ex.muscle_group || 'Fuerza').toUpperCase();
-        const primaryMusc = ex.primary_muscle || (ex.muscle_group ? formatMuscleGroup(ex.muscle_group) : 'Músculo Principal');
+        const tax = (typeof getExerciseTaxonomy === 'function') ? getExerciseTaxonomy(ex) : { type: 'muscular', typeLabel: 'Muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas' };
+        const primaryMusc = ex.primary_muscle || (tax.type === 'muscular' ? tax.muscleLabel : tax.typeLabel);
         const cueText = ex.recommendations || ex.cue || 'Ejecución controlada con rango completo.';
         const execText = ex.execution || '';
         const levelLabel = ex.level || 'Intermedio';
@@ -1103,9 +1115,9 @@ function renderExerciseLibraryList() {
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 240px;">
                         <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
-                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800; padding: 2px 7px;">${catLabel}</span>
-                            <span class="pill pill-dark" style="font-size: 9px; color: var(--accent-primary); border-color: rgba(229,203,167,0.3);">${primaryMusc}</span>
-                            <span class="pill pill-dark" style="font-size: 9px; color: var(--text-muted);">${levelLabel}</span>
+                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800; padding: 2px 7px;">${tax.typeLabel.toUpperCase()}</span>
+                            ${tax.type === 'muscular' ? `<span class="pill pill-dark" style="font-size: 9px; color: var(--accent-primary); border: none;">${tax.muscleLabel}</span>` : ''}
+                            <span class="pill pill-dark" style="font-size: 9px; color: var(--text-muted); border: none;">${levelLabel}</span>
                             <span style="font-size: 11px; color: var(--text-muted); margin-left: auto;">Descanso: ${restSec}s</span>
                         </div>
                         <h4 style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">${ex.name}</h4>
@@ -1148,6 +1160,7 @@ function renderExerciseLibraryList() {
             const sourceLibrary = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
             const targetEx = sourceLibrary.find(e => e.id === exId);
             if (targetEx) {
+                const tax = (typeof getExerciseTaxonomy === 'function') ? getExerciseTaxonomy(targetEx) : { type: 'muscular', muscleGroup: 'piernas' };
                 const targetDay = coachWorkoutState.activeDay || AppState.currentDay || 'day1';
                 const targetAth = coachWorkoutState.activeAthleteId || getActiveAthleteId();
                 const data = getCoachAthleteWorkoutData(targetAth);
@@ -1157,6 +1170,8 @@ function renderExerciseLibraryList() {
                 data[targetDay].exercises.push({
                     id: targetEx.id,
                     name: targetEx.name,
+                    exercise_type: tax.type,
+                    muscle_group: tax.muscleGroup,
                     notes: targetEx.recommendations || targetEx.cue || 'Cadencia y control biomecánico',
                     sets: targetEx.default_sets || 3,
                     reps: targetEx.default_reps || '10-12',
@@ -7742,13 +7757,13 @@ function renderDynamicWeekStrip() {
 
         let statusBadge = '';
         if (isCompleted) {
-            statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
+            statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓ Hecho</span>`;
         } else if (modality === 'presencial') {
-            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres.</span>`;
+            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Presencial</span>`;
         } else if (modality === 'online') {
             statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
         } else if (modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge auto" title="Sesión en gimnasio / app">Gym</span>`;
+            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Autónomo</span>`;
         } else {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -7778,6 +7793,7 @@ function renderDynamicWeekStrip() {
             AppState.currentDay = 'day' + (idx + 1);
 
             updateDynamicTrainingCard(dayDate, 'day' + (idx + 1));
+            updateObjectiveCardData(dayDate);
             renderWorkoutDaysNav();
         });
     });
@@ -7837,8 +7853,125 @@ function renderWorkoutDaysNav() {
     });
 }
 
+// =============================================================================
+// ICONOS VECTORIALES MONOLINE & TAXONOMÍA DINÁMICA DE ENTRENAMIENTO (ESTILO BIGG)
+// =============================================================================
+const SENS_TYPE_ICONS = {
+    muscular: {
+        label: 'Muscular',
+        svg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="3" height="10" rx="1"/><rect x="19" y="7" width="3" height="10" rx="1"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="7" y1="9" x2="7" y2="15"/><line x1="17" y1="9" x2="17" y2="15"/></svg>`
+    },
+    cardio: {
+        label: 'Cardio',
+        svg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="5" r="2"/><path d="m10 21 3-5 3 2 3-5"/><path d="m6 13 4-2 3 3 4-2"/></svg>`
+    },
+    movilidad: {
+        label: 'Movilidad',
+        svg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>`
+    },
+    yoga: {
+        label: 'Yoga',
+        svg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 9v4"/><path d="M5 19c2-2 4-3 7-3s5 1 7 3"/><path d="m7 12 5 2 5-2"/></svg>`
+    }
+};
+
 /**
- * Actualiza la Card de Entrenamiento del Dashboard con video del primer ejercicio y grupos musculares automáticos
+ * Deduce taxonomía, tipos y título dinámico de la sesión
+ */
+function getWorkoutSessionDetails(exercises, fallbackTitle = '') {
+    if (!Array.isArray(exercises) || exercises.length === 0) {
+        return {
+            title: fallbackTitle ? fallbackTitle.replace(/^Día\s*\d+:\s*/i, '') : 'Descanso Activo',
+            subtitle: 'Recuperación neuromuscular y regeneración tisular',
+            types: [],
+            totalSets: 0,
+            estMinutes: 0
+        };
+    }
+
+    const typesSet = new Set();
+    const muscleList = [];
+    let totalSets = 0;
+
+    exercises.forEach(ex => {
+        const tax = (typeof getExerciseTaxonomy === 'function') 
+            ? getExerciseTaxonomy(ex) 
+            : { type: 'muscular', typeLabel: 'Muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas' };
+
+        typesSet.add(tax.type);
+        if (tax.type === 'muscular') {
+            if (!muscleList.includes(tax.muscleLabel)) {
+                muscleList.push(tax.muscleLabel);
+            }
+        }
+        const s = parseInt(ex.sets, 10);
+        totalSets += (!isNaN(s) && s > 0) ? s : 3;
+    });
+
+    // Tipos complementarios no-musculares (Cardio, Yoga, Movilidad)
+    const otherTypeLabels = [];
+    if (typesSet.has('cardio')) otherTypeLabels.push('Cardio');
+    if (typesSet.has('yoga')) otherTypeLabels.push('Yoga');
+    if (typesSet.has('movilidad')) otherTypeLabels.push('Movilidad');
+
+    // 1. Construir Título Dinámico
+    let musclePart = '';
+    if (muscleList.length === 1) {
+        musclePart = muscleList[0];
+    } else if (muscleList.length === 2) {
+        musclePart = otherTypeLabels.length > 0 ? `${muscleList[0]}, ${muscleList[1]}` : `${muscleList[0]} y ${muscleList[1]}`;
+    } else if (muscleList.length === 3) {
+        musclePart = otherTypeLabels.length > 0 ? `${muscleList[0]}, ${muscleList[1]}, ${muscleList[2]}` : `${muscleList[0]}, ${muscleList[1]} y ${muscleList[2]}`;
+    } else if (muscleList.length >= 4) {
+        musclePart = 'Full Body Muscular';
+    }
+
+    let dynamicTitle = '';
+    if (musclePart) {
+        if (otherTypeLabels.length > 0) {
+            dynamicTitle = `${musclePart} & ${otherTypeLabels.join(' & ')}`;
+        } else {
+            dynamicTitle = musclePart;
+        }
+    } else {
+        if (otherTypeLabels.length > 0) {
+            if (otherTypeLabels.includes('Yoga') && otherTypeLabels.length === 1) {
+                dynamicTitle = 'Sesión Integral de Yoga';
+            } else if (otherTypeLabels.includes('Movilidad') && otherTypeLabels.length === 1) {
+                dynamicTitle = 'Movilidad Articular & Rango';
+            } else if (otherTypeLabels.includes('Cardio') && otherTypeLabels.length === 1) {
+                dynamicTitle = 'Cardio & Resistencia Aeróbica';
+            } else {
+                dynamicTitle = otherTypeLabels.join(' & ');
+            }
+        } else {
+            dynamicTitle = fallbackTitle ? fallbackTitle.replace(/^Día\s*\d+:\s*/i, '') : 'Entrenamiento Funcional';
+        }
+    }
+
+    // 2. Subtítulo con métricas reales
+    let subtitle = '';
+    if (typesSet.has('yoga') && !musclePart) {
+        subtitle = `Flujo respiratorio • ${exercises.length} asanas guiadas`;
+    } else if (typesSet.has('movilidad') && !musclePart) {
+        subtitle = `Descompresión articular y control postural • ${exercises.length} ejercicios`;
+    } else {
+        subtitle = `Volumen: ${totalSets} series totales • Sobrecarga progresiva`;
+    }
+
+    const estMinutes = Math.max(20, Math.round(exercises.length * 8.5 + (totalSets > 15 ? 10 : 5)));
+
+    return {
+        title: dynamicTitle,
+        subtitle,
+        types: Array.from(typesSet),
+        totalSets,
+        estMinutes
+    };
+}
+
+/**
+ * Actualiza la Card de Entrenamiento del Dashboard con video y taxonomía automática
  */
 function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     if (!dayKey) {
@@ -7850,10 +7983,11 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     const videoPlayer = document.getElementById('dashWorkoutVideoPlayer');
     const videoSource = document.getElementById('dashWorkoutVideoSource');
     const modalityPill = document.getElementById('dashWorkoutModalityPill');
+    const typeIconsWrap = document.getElementById('dashWorkoutTypeIconsWrap');
     const durationPill = document.getElementById('dashWorkoutDurationPill');
     const dayDateLabel = document.getElementById('dashWorkoutDayDateLabel');
     const focusTitle = document.getElementById('dashWorkoutFocusTitle');
-    const firstExName = document.getElementById('dashFirstExerciseName');
+    const subFocus = document.getElementById('dashWorkoutSubFocus');
 
     const athId = getActiveAthleteId();
     const hasRoutine = athleteHasAssignedRoutine(athId);
@@ -7878,37 +8012,23 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     if (activePane) activePane.style.display = 'block';
     if (restPane) restPane.style.display = 'none';
 
-    // 1. Deducir grupos musculares automáticamente de los ejercicios
-    const muscleSet = new Set();
-    exercises.forEach(ex => {
-        const catMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase());
-        const mg = catMatch ? catMatch.muscle_group : (ex.muscle_group || 'push');
-        muscleSet.add(mg);
-    });
-
-    let autoMuscleTitle = 'Fuerza & Acondicionamiento';
-    if (muscleSet.has('push') && muscleSet.has('pull')) {
-        autoMuscleTitle = 'Pecho, Espalda y Brazos';
-    } else if (muscleSet.has('push')) {
-        autoMuscleTitle = 'Pecho, Hombros y Tríceps';
-    } else if (muscleSet.has('pull')) {
-        autoMuscleTitle = 'Espalda y Bíceps';
-    } else if (muscleSet.has('quadriceps') || muscleSet.has('hamstrings_glutes')) {
-        autoMuscleTitle = 'Piernas y Glúteos';
-    } else if (muscleSet.has('core_mobility')) {
-        autoMuscleTitle = 'Core y Movilidad Articular';
-    } else if (dayData.title) {
-        autoMuscleTitle = dayData.title.replace(/^Día\s*\d+:\s*/i, '');
-    }
+    // 1. Obtener detalles de sesión y título dinámico
+    const details = getWorkoutSessionDetails(exercises, dayData.title);
 
     if (focusTitle) {
-        focusTitle.textContent = autoMuscleTitle;
+        focusTitle.textContent = details.title;
+    }
+    if (subFocus) {
+        subFocus.textContent = details.subtitle;
     }
 
-    // 2. Primer ejercicio del día
-    const firstEx = exercises[0];
-    if (firstExName && firstEx) {
-        firstExName.textContent = `Primer ejercicio: ${firstEx.name}`;
+    // 2. Iconos vectoriales monoline minimalistas (estilo BIGG)
+    if (typeIconsWrap) {
+        typeIconsWrap.innerHTML = details.types.map(t => {
+            const info = SENS_TYPE_ICONS[t];
+            if (!info) return '';
+            return `<span class="sens-type-chip">${info.svg} <span>${info.label}</span></span>`;
+        }).join('');
     }
 
     // 3. Modality Pill
@@ -7933,27 +8053,35 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     if (durationPill) {
-        durationPill.textContent = `${exercises.length} ejercicios • ~${exercises.length * 9} min`;
+        durationPill.textContent = `${exercises.length} ejercicios • ~${details.estMinutes} min`;
     }
 
-    // 4. Video demostrativo según primer ejercicio o grupo muscular
+    // 4. Video de fondo adaptado al tipo dominante
     let targetVideo = 'vid/pilar-1-tecnica.mp4';
     let targetPoster = 'img/pilar-1-tecnica.jpg';
 
+    const firstEx = exercises[0];
     if (firstEx && firstEx.video_url) {
         targetVideo = firstEx.video_url;
-    } else if (muscleSet.has('push')) {
-        targetVideo = 'vid/pilar-1-tecnica.mp4';
-        targetPoster = 'img/pilar-1-tecnica.jpg';
-    } else if (muscleSet.has('pull')) {
-        targetVideo = 'vid/pilar-2-vitalidad.mp4';
-        targetPoster = 'img/pilar-2-vitalidad.jpg';
-    } else if (muscleSet.has('quadriceps') || muscleSet.has('hamstrings_glutes')) {
+        targetPoster = firstEx.poster_url || targetPoster;
+    } else if (details.types.includes('yoga') && !details.types.includes('muscular')) {
         targetVideo = 'vid/pilar-3-movilidad.mp4';
         targetPoster = 'img/pilar-3-movilidad.jpg';
+    } else if (details.types.includes('cardio') && !details.types.includes('muscular')) {
+        targetVideo = 'vid/pilar-2-vitalidad.mp4';
+        targetPoster = 'img/pilar-2-vitalidad.jpg';
+    } else if (details.types.includes('movilidad') && !details.types.includes('muscular')) {
+        targetVideo = 'vid/pilar-3-movilidad.mp4';
+        targetPoster = 'img/pilar-3-movilidad.jpg';
+    } else if (details.title.toLowerCase().includes('piernas')) {
+        targetVideo = 'vid/pilar-3-movilidad.mp4';
+        targetPoster = 'img/pilar-3-movilidad.jpg';
+    } else if (details.title.toLowerCase().includes('espalda') || details.title.toLowerCase().includes('biceps') || details.title.toLowerCase().includes('bíceps')) {
+        targetVideo = 'vid/pilar-2-vitalidad.mp4';
+        targetPoster = 'img/pilar-2-vitalidad.jpg';
     } else {
-        targetVideo = 'vid/pilar-4-adherencia.mp4';
-        targetPoster = 'img/pilar-4-adherencia.jpg';
+        targetVideo = 'vid/pilar-1-tecnica.mp4';
+        targetPoster = 'img/pilar-1-tecnica.jpg';
     }
 
     if (videoPlayer && videoSource) {
@@ -7969,6 +8097,8 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
 
 // Exponer alias global para compatibilidad
 window.updateDashboardWorkoutDirective = updateDynamicTrainingCard;
+window.getWorkoutSessionDetails = getWorkoutSessionDetails;
+
 
 /**
  * Actualiza la Card Nutricional con calorías por comida y objetivo biológico de Nico/Atleta
@@ -8038,161 +8168,264 @@ function updateNutriSummaryCardData() {
 }
 
 /**
- * Actualiza la Card de Objetivo: balance neto, déficit, progresión de peso y entrenos
+ * Calcula las métricas metabólicas del día seleccionado (Ecuación real de balance energético)
  */
-function updateObjectiveCardData() {
-    const goalPill = document.getElementById('dashObjectiveGoalPill');
-    const netDeficitVal = document.getElementById('dashNetDeficitVal');
-    const tdeeNum = document.getElementById('dashTdeeNum');
-    const ingestaNum = document.getElementById('dashIngestaNum');
-    const weightProgVal = document.getElementById('dashWeightProgVal');
-    const weightTrendTag = document.getElementById('dashWeightTrendTag');
-    const fatProgVal = document.getElementById('dashFatProgVal');
-    const fatTrendTag = document.getElementById('dashFatTrendTag');
-    const workoutsCountVal = document.getElementById('dashWorkoutsCountVal');
-    const miniChips = document.getElementById('dashWorkoutsMiniChips');
-    const consistencyText = document.getElementById('dashConsistencyScoreText');
-
+function getDailyMetabolicMetrics(targetDate) {
     const athId = getActiveAthleteId();
     const isDemo = (athId === 'usr-vip-001' || athId === 'mock_vip');
     const profile = AppState.profile || {};
     const anamnesis = AppState.anamnesis || {};
 
-    const userGoal = profile.goal || anamnesis.goal;
-    if (goalPill) {
-        const goalMap = {
-            fat_loss: 'Déficit Definición',
-            muscle_gain: 'Superávit Hipertrofia',
-            recomp: 'Recomposición Corporal',
-            posture_health: 'Normocalórico Salud'
-        };
-        goalPill.textContent = (userGoal && goalMap[userGoal]) ? goalMap[userGoal] : (isDemo ? 'Déficit Definición' : '-');
-    }
-
-    // Mini chips de los 7 días de la semana
-    const data = getCoachAthleteWorkoutData(athId);
-    let doneCount = 0;
-    let scheduledCount = 0;
-    const dayLetters = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
-    const dayFullNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-    let chipsHtml = '';
-
-    for (let i = 1; i <= 7; i++) {
-        const dayData = data['day' + i];
-        const isDone = Boolean(dayData && dayData.completed);
-        const hasEx = Boolean(dayData && dayData.exercises && dayData.exercises.length > 0);
-        if (hasEx) scheduledCount++;
-        if (isDone) doneCount++;
-
-        let chipClass = 'rest';
-        let chipContent = '–';
-        let chipTitle = `${dayFullNames[i-1]}: Descanso`;
-
-        if (isDone) {
-            chipClass = 'done';
-            chipContent = '✓';
-            chipTitle = `${dayFullNames[i-1]}: Completado`;
-        } else if (hasEx) {
-            chipClass = 'pending';
-            chipContent = dayLetters[i-1];
-            chipTitle = `${dayFullNames[i-1]}: Programado (${dayData.modality || 'Entrenamiento'})`;
-        }
-
-        chipsHtml += `<span class="mini-chip ${chipClass}" title="${chipTitle}">${chipContent}</span>`;
-    }
-
-    if (workoutsCountVal) {
-        if (scheduledCount > 0) {
-            workoutsCountVal.innerHTML = `${doneCount} <span class="unit">/ ${scheduledCount} días</span>`;
-        } else {
-            workoutsCountVal.innerHTML = `- <span class="unit">/ - días</span>`;
-        }
-    }
-    if (miniChips) {
-        miniChips.innerHTML = chipsHtml;
-    }
-
-    if (consistencyText) {
-        if (scheduledCount > 0) {
-            const consistencyPct = Math.min(100, Math.round((doneCount / scheduledCount) * 100));
-            consistencyText.textContent = `Índice de Consistencia: ${consistencyPct}% • ${consistencyPct >= 75 ? 'Rango Óptimo' : 'En Progreso'}`;
-        } else {
-            consistencyText.textContent = `Índice de Consistencia: -`;
-        }
-    }
-
-    // Biometría y calorías
     const weightRaw = profile.current_weight || anamnesis.weight;
-    const weight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 76.0 : null);
+    const weight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 76.0 : 70.0);
+    const bmr = Math.round(weight * 22);
 
-    if (weight) {
-        const bmr = Math.round(weight * 22);
-        const activeCals = isDemo ? 650 : (AppState.dailyActiveCals || 400);
-        const tdee = bmr + activeCals;
+    const dayKey = getDayKeyFromDate(targetDate);
+    const data = getCoachAthleteWorkoutData(athId);
+    const dayData = data[dayKey] || {};
+    const hasWorkout = Boolean(dayData.exercises && dayData.exercises.length > 0 && dayData.modality !== 'descanso');
 
-        const targetCalories = profile.daily_calories || anamnesis.daily_calories;
-        let targetIntake = targetCalories ? parseInt(targetCalories, 10) : null;
-        if (!targetIntake && isDemo) {
-            targetIntake = tdee - 380;
-            if (userGoal === 'muscle_gain') targetIntake = tdee + 300;
-            else if (userGoal === 'recomp') targetIntake = tdee - 150;
-            else if (userGoal === 'posture_health') targetIntake = tdee;
-        }
+    const workoutBurn = hasWorkout ? 380 : 0;
+    const dailySteps = hasWorkout ? 9200 : 7100;
+    const stepsBurn = Math.round(dailySteps * 0.04);
+    const activeBurn = stepsBurn + workoutBurn;
+    const tdee = bmr + activeBurn;
 
-        if (tdeeNum) tdeeNum.textContent = tdee.toLocaleString('es-AR');
+    const rawKcal = profile.daily_calories || anamnesis.daily_calories;
+    let targetIntake = rawKcal ? parseInt(rawKcal, 10) : (isDemo ? 1850 : 2000);
 
-        if (targetIntake) {
-            const netBalance = targetIntake - tdee;
-            if (netDeficitVal) {
-                const sign = netBalance > 0 ? '+' : '';
-                netDeficitVal.innerHTML = `${sign}${netBalance} <span class="unit">kcal</span>`;
-                netDeficitVal.className = `sens-obj-box-val ${netBalance <= 0 ? 'text-success' : 'text-champagne'}`;
-            }
-            if (ingestaNum) ingestaNum.textContent = targetIntake.toLocaleString('es-AR');
-        } else {
-            if (netDeficitVal) netDeficitVal.innerHTML = `- <span class="unit">kcal</span>`;
-            if (ingestaNum) ingestaNum.textContent = '-';
-        }
+    const netBalance = targetIntake - tdee;
 
-        if (weightProgVal) {
-            weightProgVal.innerHTML = `${weight.toFixed(1)} <span class="unit">kg</span>`;
-        }
-        if (weightTrendTag) {
-            const deltaWeight = profile.weight_delta !== undefined ? profile.weight_delta : (isDemo ? -0.4 : null);
-            if (deltaWeight !== null) {
-                const sign = deltaWeight > 0 ? '+' : '';
-                weightTrendTag.innerHTML = `
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
-                    ${sign}${deltaWeight} kg vs semana anterior
-                `;
-            } else {
-                weightTrendTag.innerHTML = `-`;
-            }
-        }
-    } else {
-        if (netDeficitVal) netDeficitVal.innerHTML = `- <span class="unit">kcal</span>`;
-        if (tdeeNum) tdeeNum.textContent = '-';
-        if (ingestaNum) ingestaNum.textContent = '-';
-        if (weightProgVal) weightProgVal.innerHTML = `- <span class="unit">kg</span>`;
-        if (weightTrendTag) weightTrendTag.innerHTML = `-`;
+    return {
+        weight,
+        bmr,
+        dailySteps,
+        stepsBurn,
+        workoutBurn,
+        activeBurn,
+        tdee,
+        targetIntake,
+        netBalance,
+        hasWorkout
+    };
+}
+
+/**
+ * Renderiza el gráfico semanal interactivo con Chart.js en #dashWeeklyBalanceChart
+ */
+function renderWeeklyBalanceChart(selectedDate = new Date()) {
+    const canvas = document.getElementById('dashWeeklyBalanceChart');
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    if (!AppState.activeWeekStart) {
+        AppState.activeWeekStart = getMonday(new Date());
     }
 
-    const fatRaw = profile.body_fat || anamnesis.body_fat;
-    const fat = fatRaw ? parseFloat(fatRaw) : (isDemo ? 14.2 : null);
-    if (fatProgVal) {
-        fatProgVal.innerHTML = fat !== null ? `${fat.toFixed(1)} <span class="unit">%</span>` : `- <span class="unit">%</span>`;
-    }
-    if (fatTrendTag) {
-        const deltaFat = profile.fat_delta !== undefined ? profile.fat_delta : (isDemo ? -0.6 : null);
-        if (deltaFat !== null) {
-            const sign = deltaFat > 0 ? '+' : '';
-            fatTrendTag.innerHTML = `
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
-                ${sign}${deltaFat}% vs inicio
-            `;
+    const dayLabels = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    const weekStats = [];
+    const barColors = [];
+    const borderColors = [];
+
+    const profile = AppState.profile || {};
+    const userGoal = profile.goal || 'fat_loss';
+    const isMuscleGain = userGoal === 'muscle_gain';
+
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(AppState.activeWeekStart);
+        d.setDate(AppState.activeWeekStart.getDate() + i);
+
+        const m = getDailyMetabolicMetrics(d);
+        const dayLabel = `${dayLabels[i]} ${d.getDate()}`;
+        weekStats.push({ label: dayLabel, ...m, date: d });
+
+        const isOptimal = isMuscleGain ? (m.netBalance >= 150) : (m.netBalance <= -300);
+        if (isOptimal) {
+            barColors.push('#10B981');
+            borderColors.push('#059669');
         } else {
-            fatTrendTag.innerHTML = `-`;
+            barColors.push('#F59E0B');
+            borderColors.push('#D97706');
         }
+    }
+
+    if (window._sensWeeklyBalanceChart) {
+        window._sensWeeklyBalanceChart.destroy();
+    }
+
+    try {
+        const ctx = canvas.getContext('2d');
+        window._sensWeeklyBalanceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: weekStats.map(s => s.label),
+                datasets: [{
+                    data: weekStats.map(s => s.netBalance),
+                    backgroundColor: barColors,
+                    borderColor: borderColors,
+                    borderWidth: 1,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    maxBarThickness: 34
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: { top: 6, bottom: 0, left: 0, right: 0 }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#09090B',
+                        titleColor: '#FFFFFF',
+                        titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: '700' },
+                        bodyColor: '#E5CBA7',
+                        bodyFont: { family: 'Plus Jakarta Sans', size: 10.5 },
+                        padding: 9,
+                        cornerRadius: 8,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                const item = weekStats[context.dataIndex];
+                                const sign = item.netBalance > 0 ? '+' : '';
+                                return [
+                                    `Balance: ${sign}${item.netBalance} kcal`,
+                                    `Ingesta: ${item.targetIntake} kcal • Gasto: ${item.tdee} kcal`
+                                ];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            color: '#71717A',
+                            font: { family: 'Plus Jakarta Sans', size: 10, weight: '700' }
+                        }
+                    },
+                    y: {
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: {
+                            color: '#71717A',
+                            font: { family: 'Plus Jakarta Sans', size: 9 },
+                            callback: function(val) {
+                                return (val > 0 ? '+' : '') + val;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    } catch (e) {
+        console.warn('Error al renderizar el gráfico semanal de balance:', e);
+    }
+}
+
+/**
+ * Actualiza la Card de Balance Energético con los valores reales del día y el gráfico semanal
+ */
+function updateObjectiveCardData(selectedDate = null) {
+    if (!selectedDate) {
+        selectedDate = AppState.selectedDate || new Date();
+    }
+
+    const dateLabel = document.getElementById('dashBalanceDateLabel');
+    const goalPill = document.getElementById('dashObjectiveGoalPill');
+    const ingestaNum = document.getElementById('dashIngestaNum');
+    const tdeeNum = document.getElementById('dashTdeeNum');
+    const netValEl = document.getElementById('dashNetDeficitVal');
+    const statusTextEl = document.getElementById('dashBalanceStatusText');
+    const breakdownEl = document.getElementById('dashBalanceBurnBreakdown');
+    const graphGoalTarget = document.getElementById('dashGraphGoalTarget');
+    const consistencyScoreText = document.getElementById('dashConsistencyScoreText');
+    const btnGoTracking = document.getElementById('btnGoTrackingFromBalance');
+
+    const metrics = getDailyMetabolicMetrics(selectedDate);
+    const isToday = isSameDay(selectedDate, new Date());
+
+    if (dateLabel) {
+        dateLabel.textContent = isToday ? 'Balance Energético • Hoy' : `Balance Energético • ${formatDateDDMM(selectedDate)}`;
+    }
+
+    const profile = AppState.profile || {};
+    const userGoal = profile.goal || 'fat_loss';
+    const isMuscleGain = userGoal === 'muscle_gain';
+
+    if (goalPill) {
+        if (isMuscleGain) {
+            goalPill.textContent = 'Superávit Meta: +300 kcal';
+            goalPill.style.background = 'rgba(229, 203, 167, 0.25)';
+            goalPill.style.color = '#9E7D4B';
+        } else {
+            goalPill.textContent = 'Déficit Meta: -400 kcal';
+            goalPill.style.background = 'rgba(16, 185, 129, 0.12)';
+            goalPill.style.color = '#059669';
+        }
+    }
+
+    if (graphGoalTarget) {
+        graphGoalTarget.textContent = isMuscleGain ? '+300 kcal/día' : '-400 kcal/día';
+    }
+
+    if (ingestaNum) {
+        ingestaNum.textContent = metrics.targetIntake.toLocaleString('es-AR');
+    }
+
+    if (tdeeNum) {
+        tdeeNum.textContent = metrics.tdee.toLocaleString('es-AR');
+    }
+
+    if (breakdownEl) {
+        breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${metrics.activeBurn.toLocaleString('es-AR')} (Pasos & Entreno)`;
+    }
+
+    if (netValEl) {
+        const sign = metrics.netBalance > 0 ? '+' : '';
+        const isOptimal = isMuscleGain ? (metrics.netBalance >= 150) : (metrics.netBalance <= -300);
+        const color = isOptimal ? '#059669' : '#D97706';
+        netValEl.innerHTML = `${sign}${metrics.netBalance.toLocaleString('es-AR')} <span style="font-size: 12px; font-weight: 600;">kcal</span>`;
+        netValEl.style.color = color;
+    }
+
+    if (statusTextEl) {
+        const isOptimal = isMuscleGain ? (metrics.netBalance >= 150) : (metrics.netBalance <= -300);
+        if (isOptimal) {
+            statusTextEl.textContent = isMuscleGain ? 'Superávit Cumplido' : 'Déficit Logrado';
+            statusTextEl.style.color = '#059669';
+        } else {
+            statusTextEl.textContent = metrics.netBalance > 0 ? 'Superávit Elevado' : 'Próximo a Meta';
+            statusTextEl.style.color = '#D97706';
+        }
+    }
+
+    // Consistencia semanal
+    const athId = getActiveAthleteId();
+    const data = getCoachAthleteWorkoutData(athId);
+    let doneWorkouts = 0;
+    let scheduledWorkouts = 0;
+    for (let i = 1; i <= 7; i++) {
+        const dData = data['day' + i];
+        if (dData && dData.exercises && dData.exercises.length > 0) scheduledWorkouts++;
+        if (dData && dData.completed) doneWorkouts++;
+    }
+    if (consistencyScoreText) {
+        const consistencyPct = scheduledWorkouts > 0 ? Math.min(100, Math.round((doneWorkouts / scheduledWorkouts) * 100)) : 85;
+        consistencyScoreText.textContent = `Índice de Consistencia: ${consistencyPct}% • ${consistencyPct >= 75 ? 'Rango Óptimo' : 'En Progreso'}`;
+    }
+
+    // Renderizar gráfico semanal
+    renderWeeklyBalanceChart(selectedDate);
+
+    // Listener para ir a seguimiento
+    if (btnGoTracking) {
+        btnGoTracking.onclick = () => {
+            if (typeof switchPortalView === 'function') {
+                switchPortalView('trackingView');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
     }
 }
 

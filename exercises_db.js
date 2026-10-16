@@ -1710,9 +1710,214 @@ const SENS_EXERCISE_LIBRARY = [
         default_sets: 4,
         default_reps: '15-20',
         video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    // -------------------------------------------------------------------------
+    // 12. YOGA (8 Ejercicios Asanas & Flow con Nico)
+    // -------------------------------------------------------------------------
+    {
+        id: 'yoga-1',
+        name: 'Saludo al Sol A (Surya Namaskar A)',
+        exercise_type: 'yoga',
+        category: 'yoga',
+        muscle_group: 'yoga',
+        primary_muscle: 'Cuerpo completo, flexibilidad y respiración coordinada',
+        execution: 'Secuencia fluida de Tadasana, Urdhva Hastasana, Uttanasana, Chaturanga Dandasana, Urdhva Mukha Svanasana y Adho Mukha Svanasana.',
+        breathing: 'Inhalación en extensiones, exhalación en flexiones hacia adelante.',
+        recommendations: 'Priorizá la alineación de la columna antes de profundizar en la amplitud.',
+        level: 'Todos los niveles',
+        objective: 'Calentamiento dinámico y conciencia corporal',
+        rest: 30,
+        default_sets: 3,
+        default_reps: '5 ciclos',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+    {
+        id: 'yoga-2',
+        name: 'Guerrero II (Virabhadrasana II)',
+        exercise_type: 'yoga',
+        category: 'yoga',
+        muscle_group: 'yoga',
+        primary_muscle: 'Cuádriceps, glúteos, deltoides y apertura pélvica',
+        execution: 'Pies separados ampliamente, rodilla delantera flexionada a 90° alineada con el segundo dedo del pie, brazos extendidos paralelos al suelo y mirada fija sobre la mano delantera.',
+        breathing: 'Respiración Ujjayi suave y sostenida.',
+        recommendations: 'No dejes que la rodilla colapse hacia adentro; activá los glúteos.',
+        level: 'Principiante / Intermedio',
+        objective: 'Fuerza isométrica y apertura de caderas',
+        rest: 45,
+        default_sets: 3,
+        default_reps: '45 seg por lado',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+    {
+        id: 'yoga-3',
+        name: 'Perro Boca Abajo (Adho Mukha Svanasana)',
+        exercise_type: 'yoga',
+        category: 'yoga',
+        muscle_group: 'yoga',
+        primary_muscle: 'Cadena posterior, hombros y descompresión axial',
+        execution: 'En posición de V invertida, empujá el suelo con las palmas activas, isquiones hacia el cielo y talones descendiendo hacia el mat.',
+        breathing: 'Respiraciones profundas sintiendo el espacio intervertebral.',
+        recommendations: 'Si hay tensión en isquiotibiales, flexioná ligeramente las rodillas para cuidar las lumbares.',
+        level: 'Todos los niveles',
+        objective: 'Elongación de cadena posterior y descompresión',
+        rest: 30,
+        default_sets: 3,
+        default_reps: '60 segundos',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+    {
+        id: 'yoga-4',
+        name: 'Postura de la Cobra (Bhujangasana)',
+        exercise_type: 'yoga',
+        category: 'yoga',
+        muscle_group: 'yoga',
+        primary_muscle: 'Erectores espinales, glúteos y apertura de pecho',
+        execution: 'Boca abajo con manos debajo de hombros, elevá el pecho contrayendo la espalda media sin presionar en exceso con las manos.',
+        breathing: 'Inhalá al abrir el pecho, sostené la longitud cervical.',
+        recommendations: 'Mantené los hombros lejos de las orejas y el pubis pegado al suelo.',
+        level: 'Principiante',
+        objective: 'Extensión espinal y alivio postural',
+        rest: 30,
+        default_sets: 3,
+        default_reps: '10 respiraciones',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+    {
+        id: 'yoga-5',
+        name: 'Postura del Niño (Balasana)',
+        exercise_type: 'yoga',
+        category: 'yoga',
+        muscle_group: 'yoga',
+        primary_muscle: 'Flexores de cadera, lumbares y relajación parasimpática',
+        execution: 'Rodillas abiertas al ancho del mat, glúteos a los talones, brazos extendidos al frente y frente descansando en el suelo.',
+        breathing: 'Respiración diafragmática profunda hacia la espalda baja.',
+        recommendations: 'Postura de restauración ideal entre bloques de alta intensidad.',
+        level: 'Todos los niveles',
+        objective: 'Recuperación parasimpática y relax lumbar',
+        rest: 30,
+        default_sets: 2,
+        default_reps: '90 segundos',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+    {
+        id: 'yoga-6',
+        name: 'Torsión Espinal Suave en Suelo (Supta Matsyendrasana)',
+        exercise_type: 'yoga',
+        category: 'yoga',
+        muscle_group: 'yoga',
+        primary_muscle: 'Columna torácica, glúteos y oblicuos',
+        execution: 'Acostado boca arriba, flexioná una rodilla y cruzala sobre el cuerpo mientras mantenés ambos hombros apoyados en el suelo.',
+        breathing: 'Inhalá elongando la columna, exhalá profundizando la rotación.',
+        recommendations: 'No fuerces el cuello, mantené la mirada hacia el lado opuesto a la rodilla.',
+        level: 'Principiante',
+        objective: 'Movilidad rotacional y salud intervertebral',
+        rest: 30,
+        default_sets: 2,
+        default_reps: '45 seg por lado',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+    {
+        id: 'yoga-7',
+        name: 'Postura del Árbol (Vrksasana)',
+        exercise_type: 'yoga',
+        category: 'yoga',
+        muscle_group: 'yoga',
+        primary_muscle: 'Estabilizadores de tobillo, glúteo medio y core',
+        execution: 'De pie, apoyá la planta de un pie en la cara interna del muslo o pantorrilla opuesta (nunca en la rodilla). Manos al centro del pecho o arriba.',
+        breathing: 'Respiración calmada fijando un punto visual (Drishti).',
+        recommendations: 'Presioná activamente el pie contra el muslo y el muslo contra el pie.',
+        level: 'Intermedio',
+        objective: 'Equilibrio, propiocepción y concentración',
+        rest: 30,
+        default_sets: 3,
+        default_reps: '40 seg por lado',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+    {
+        id: 'yoga-8',
+        name: 'Puente Dinámico en Yoga (Setu Bandhasana Flow)',
+        exercise_type: 'yoga',
+        category: 'yoga',
+        muscle_group: 'yoga',
+        primary_muscle: 'Glúteos, isquiotibiales y apertura de cuádriceps',
+        execution: 'Boca arriba, pies al ancho de caderas, elevá la pelvis vértebra por vértebra coordinando con la respiración y descendé con control.',
+        breathing: 'Inhalá elevando la cadera, exhalá al descender.',
+        recommendations: 'No abras las rodillas hacia afuera; mantené los pies paralelos.',
+        level: 'Principiante',
+        objective: 'Movilidad articular de columna y activación posterior',
+        rest: 30,
+        default_sets: 3,
+        default_reps: '12 repeticiones',
+        video_url: 'vid/pilar-3-movilidad.mp4'
     }
 ];
 
+// Helper maestro para obtener Tipo (Muscular, Cardio, Movilidad, Yoga) y Grupo Muscular (Piernas, Biceps, Triceps, Espalda, Pecho, Abdominales)
+function getExerciseTaxonomy(ex) {
+    if (!ex) return { type: 'muscular', typeLabel: 'Muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas' };
+
+    let cat = (ex.category || '').toLowerCase();
+    let mg = (ex.muscle_group || '').toLowerCase();
+    let exTypeExplicit = (ex.exercise_type || '').toLowerCase();
+    const nameLower = (ex.name || '').toLowerCase();
+
+    // Si faltan metadatos, intentar encontrar en SENS_EXERCISE_LIBRARY
+    if ((!cat && !mg && !exTypeExplicit) && typeof SENS_EXERCISE_LIBRARY !== 'undefined') {
+        const found = SENS_EXERCISE_LIBRARY.find(item => item.id === ex.id || item.name.toLowerCase() === nameLower);
+        if (found) {
+            cat = (found.category || '').toLowerCase();
+            mg = (found.muscle_group || '').toLowerCase();
+            exTypeExplicit = (found.exercise_type || '').toLowerCase();
+        }
+    }
+
+    // 1. Tipo de Ejercicio
+    let type = 'muscular';
+    let typeLabel = 'Muscular';
+    if (exTypeExplicit === 'yoga' || cat === 'yoga' || mg === 'yoga' || nameLower.includes('yoga') || nameLower.includes('saludo al sol') || nameLower.includes('asana') || nameLower.includes('balasana')) {
+        type = 'yoga';
+        typeLabel = 'Yoga';
+    } else if (exTypeExplicit === 'cardio' || cat === 'cardio' || mg === 'cardio' || nameLower.includes('cardio') || nameLower.includes('carrera') || nameLower.includes('bici') || nameLower.includes('saltos') || nameLower.includes('zona 2')) {
+        type = 'cardio';
+        typeLabel = 'Cardio';
+    } else if (exTypeExplicit === 'movilidad' || cat === 'movilidad' || mg === 'movilidad' || nameLower.includes('movilidad') || nameLower.includes('rotación articular') || nameLower.includes('gato-vaca')) {
+        type = 'movilidad';
+        typeLabel = 'Movilidad';
+    }
+
+    // 2. Grupo Muscular (para Muscular o complementarios)
+    let muscleGroup = 'piernas';
+    let muscleLabel = 'Piernas';
+
+    if (cat === 'piernas' || cat === 'cuadriceps' || cat === 'isquiotibiales' || cat === 'gluteos' || cat === 'pantorrillas' ||
+        mg === 'piernas' || mg === 'quadriceps' || mg === 'hamstrings_glutes' || mg === 'gluteos' ||
+        nameLower.includes('peso muerto') || nameLower.includes('squat') || nameLower.includes('sentadilla') || nameLower.includes('estocada') || nameLower.includes('hip thrust') || nameLower.includes('gemelos') || nameLower.includes('prensa')) {
+        muscleGroup = 'piernas';
+        muscleLabel = 'Piernas';
+    } else if (cat === 'biceps' || mg === 'biceps' || nameLower.includes('biceps') || nameLower.includes('bíceps') || nameLower.includes('curl')) {
+        muscleGroup = 'biceps';
+        muscleLabel = 'Bíceps';
+    } else if (cat === 'triceps' || mg === 'triceps' || nameLower.includes('triceps') || nameLower.includes('tríceps') || nameLower.includes('copa') || nameLower.includes('fondos')) {
+        muscleGroup = 'triceps';
+        muscleLabel = 'Tríceps';
+    } else if (cat === 'espalda' || mg === 'espalda' || mg === 'pull' || nameLower.includes('remo') || nameLower.includes('jalón') || nameLower.includes('dominada') || nameLower.includes('dorsal')) {
+        muscleGroup = 'espalda';
+        muscleLabel = 'Espalda';
+    } else if (cat === 'pecho' || mg === 'pecho' || mg === 'push' || cat === 'hombros' || mg === 'hombros' || nameLower.includes('press') || nameLower.includes('banca') || nameLower.includes('militar') || nameLower.includes('flexiones') || nameLower.includes('aperturas')) {
+        muscleGroup = 'pecho';
+        muscleLabel = 'Pecho';
+    } else if (cat === 'core' || cat === 'abdominales' || mg === 'core' || mg === 'abdominales' || mg === 'core_mobility' || nameLower.includes('core') || nameLower.includes('plancha') || nameLower.includes('abdominal') || nameLower.includes('crunch')) {
+        muscleGroup = 'abdominales';
+        muscleLabel = 'Abdominales';
+    } else {
+        muscleGroup = 'piernas';
+        muscleLabel = 'Piernas';
+    }
+
+    return { type, typeLabel, muscleGroup, muscleLabel };
+}
+
 if (typeof window !== 'undefined') {
     window.SENS_EXERCISE_LIBRARY = SENS_EXERCISE_LIBRARY;
+    window.getExerciseTaxonomy = getExerciseTaxonomy;
 }

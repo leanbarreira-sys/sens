@@ -12418,3 +12418,36 @@ body.in-portal .sens-macro-grams-bold {
     color: #09090B !important;
 }
 
+/* =============================================================================
+   CHIPS DE TIPO DE EJERCICIO (MUSCULAR, CARDIO, MOVILIDAD, YOGA) - ESTILO BIGG
+   ============================================================================= */
+#dashWorkoutTypeIconsWrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.sens-type-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1;
+}
+
+.sens-type-chip svg {
+    color: var(--accent-primary, #E5CBA7);
+    stroke-width: 2.2;
+    flex-shrink: 0;
+}
+
