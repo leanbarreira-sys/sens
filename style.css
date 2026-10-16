@@ -10836,27 +10836,28 @@ body.in-portal .card-panel:not(.coach-only-card) .diag-tag {
 }
 
 /* =============================================================================
-   2. CONTENEDOR STICKY DE CALENDARIO & NAVEGADOR DE SEMANAS (BOX UNIFICADA)
+   2. CONTENEDOR STICKY DE CALENDARIO & NAVEGADOR DE SEMANAS (BOX UNIFICADA 60FPS)
    ============================================================================= */
 #sensCalendarStickyWrapper,
 .sens-calendar-sticky-wrapper,
 body.in-portal .sens-calendar-sticky-wrapper {
     position: -webkit-sticky;
     position: sticky;
-    top: var(--portal-topbar-height, 65px);
+    top: var(--portal-topbar-height, 48px);
     z-index: 500;
-    margin-bottom: 24px !important;
-    /* Box unificada 100% sólida y deliberadamente más ancha y alta que las cards */
+    margin-bottom: 22px !important;
+    /* Box unificada 100% sólida para enmascarar scroll inferior sin overlap */
     background: #FFFFFF !important;
     border: 1px solid rgba(0, 0, 0, 0.08) !important;
-    border-radius: 24px !important;
-    padding: 14px 12px 18px 12px !important;
-    margin-left: -16px !important;
-    margin-right: -16px !important;
-    width: calc(100% + 32px) !important;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+    border-radius: 22px !important;
+    padding: 12px 10px 14px 10px !important;
+    margin-left: -14px !important;
+    margin-right: -14px !important;
+    width: calc(100% + 28px) !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02) !important;
     box-sizing: border-box !important;
-    transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.25s ease;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 @media (max-width: 768px) {
@@ -10864,18 +10865,20 @@ body.in-portal .sens-calendar-sticky-wrapper {
     .sens-calendar-sticky-wrapper,
     body.in-portal .sens-calendar-sticky-wrapper {
         top: var(--portal-topbar-height, 48px);
-        margin-left: -14px !important;
-        margin-right: -14px !important;
-        width: calc(100% + 28px) !important;
-        padding: 12px 10px 16px 10px !important;
-        border-radius: 22px !important;
+        margin-left: -12px !important;
+        margin-right: -12px !important;
+        width: calc(100% + 24px) !important;
+        padding: 10px 8px 12px 8px !important;
+        border-radius: 20px !important;
     }
 }
 
 /* Integración interna perfecta: nav y strip integrados dentro de la card unificada */
 #portalWeekStrip,
 .sens-calendar-sticky-wrapper .sens-week-strip-wrap,
-body.in-portal .sens-calendar-sticky-wrapper .sens-week-strip-wrap {
+body.in-portal .sens-calendar-sticky-wrapper .sens-week-strip-wrap,
+body.in-portal .sens-week-strip-wrap,
+.sens-week-strip-wrap {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -10889,7 +10892,7 @@ body.in-portal .sens-calendar-sticky-wrapper .sens-week-strip-wrap {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
     padding: 0 4px !important;
 }
 
@@ -10899,9 +10902,9 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
 #sensCalendarStickyWrapper.is-stuck,
 .sens-calendar-sticky-wrapper.is-stuck {
     background: #FFFFFF !important;
-    border-radius: 0 0 24px 24px !important;
+    border-radius: 0 0 22px 22px !important;
     border-top: none !important;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.14), 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
 }
 
 @media (max-width: 768px) {
@@ -10909,12 +10912,12 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
     body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
     #sensCalendarStickyWrapper.is-stuck,
     .sens-calendar-sticky-wrapper.is-stuck {
-        border-radius: 0 0 22px 22px !important;
+        border-radius: 0 0 20px 20px !important;
     }
 }
 
 /* =============================================================================
-   MICRO-INTERACCIÓN TÁCTIL EXAGERADA: SPRING BOUNCE (RESORTE RÁPIDO)
+   MICRO-INTERACCIÓN TÁCTIL 60FPS: APPLE SPRING TOUCH (ZERO REFLECTION / ZERO WHITE FLASH)
    ============================================================================= */
 .sens-training-video-card,
 .sens-nutri-summary-card,
@@ -10925,9 +10928,27 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
     -webkit-tap-highlight-color: transparent !important;
     user-select: none;
     -webkit-user-select: none;
-    will-change: transform, box-shadow;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     transform-origin: center center;
-    transition: transform 0.22s cubic-bezier(0.18, 0.9, 0.32, 1.25), box-shadow 0.22s ease !important;
+    background-color: #09090B !important;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Prevenir fondos blancos en cards de video */
+.sens-training-video-card,
+.sens-training-card-active,
+.sens-video-loop-player,
+.sens-nutri-summary-card,
+.sens-nutri-video-player {
+    background: #09090B !important;
+    background-color: #09090B !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 /* Hover refinado en Desktop */
@@ -10936,54 +10957,40 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
     body.in-portal .sens-metabolic-balance-card:hover,
     body.in-portal .sens-biometrics-card:hover,
     body.in-portal .sens-store-banner-card:hover {
-        transform: translateY(-3px) translateZ(0);
-        box-shadow: 0 20px 42px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+        transform: translateY(-2px) translate3d(0, 0, 0);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16) !important;
     }
 }
 
-/* Compresión física profunda mientras se mantiene presionado con el dedo o clic sostenido */
+/* Compresión física instantánea al presionar con el dedo o clic sostenido (60 FPS puro) */
 .sens-training-video-card:active,
 .sens-nutri-summary-card:active,
 .sens-metabolic-balance-card:active,
 .sens-biometrics-card:active,
 .sens-store-banner-card:active {
-    transform: scale3d(0.915, 0.915, 1) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-    transition: transform 0.07s ease-out !important;
+    transform: scale3d(0.95, 0.95, 1) translate3d(0, 0, 0) !important;
+    -webkit-transform: scale3d(0.95, 0.95, 1) translate3d(0, 0, 0) !important;
+    transition: transform 0.06s ease-out !important;
 }
 
-/* Animación de Resorte Rápido Exagerado (Zoom In & Zoom Out Elástico) */
+/* Animación elástica de snap al hacer tap / click rápido (Compositor-Only, NO box-shadow) */
 @keyframes sensCardSpringPulse {
     0% {
         transform: scale3d(1, 1, 1);
     }
-    22% {
-        /* Zoom In rápido (compresión física profunda del resorte) */
-        transform: scale3d(0.91, 0.91, 1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+    28% {
+        transform: scale3d(0.94, 0.94, 1);
     }
-    54% {
-        /* Zoom Out exagerado (explosión elástica y pop hacia afuera) */
-        transform: scale3d(1.045, 1.045, 1);
-        box-shadow: 0 26px 54px rgba(0, 0, 0, 0.32);
-    }
-    75% {
-        /* Contracción elástica de retorno */
-        transform: scale3d(0.982, 0.982, 1);
-    }
-    88% {
-        /* Micro rebote elástico */
-        transform: scale3d(1.012, 1.012, 1);
+    68% {
+        transform: scale3d(1.035, 1.035, 1);
     }
     100% {
-        /* Regreso estable al reposo */
         transform: scale3d(1, 1, 1);
     }
 }
 
 .sens-card-touch-pulse {
-    animation: sensCardSpringPulse 0.38s cubic-bezier(0.18, 0.9, 0.32, 1.25) both !important;
-    z-index: 10 !important;
+    animation: sensCardSpringPulse 0.26s cubic-bezier(0.25, 1, 0.5, 1) both !important;
 }
 
 /* Animaciones GPU de Desplazamiento de Semanas (Swipe & Flechas) */
