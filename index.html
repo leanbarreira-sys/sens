@@ -62,7 +62,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=3.6">
+    <link rel="stylesheet" href="style.css?v=3.7">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2661,16 +2661,15 @@
                         </video>
                         <div class="sens-video-overlay-gradient"></div>
                         <div class="sens-video-top-badges">
-                            <div class="sens-badges-left">
-                                <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial</span>
-                                <div id="dashWorkoutTypeIconsWrap">
-                                    <!-- Iconos vectoriales inyectados dinámicamente: Muscular, Cardio, Movilidad, Yoga -->
-                                </div>
-                            </div>
+                            <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial</span>
                             <span class="sens-duration-pill" id="dashWorkoutDurationPill">5 ej • ~45 min</span>
                         </div>
                         <div class="sens-training-card-content">
                             <div class="sens-card-info-stack">
+                                <!-- Matriz de los 4 Tipos de Entrenamiento: Muscular, Cardio, Movilidad, Yoga -->
+                                <div class="sens-workout-type-matrix" id="dashWorkoutTypeIconsWrap">
+                                    <!-- Inyectado dinámicamente con los 4 iconos vectoriales -->
+                                </div>
                                 <h3 class="sens-card-title-white" id="dashWorkoutFocusTitle">Pecho y Tríceps</h3>
                                 <p class="sens-card-sub-white" id="dashWorkoutSubFocus">Volumen: 15 series totales • Sobrecarga progresiva</p>
                             </div>
@@ -2747,13 +2746,13 @@
                 <!-- 4. Card de Balance Energético Diario: Ecuación Real + Gráfico Semanal -->
                 <!-- 4. Card de Balance Energético Diario: Ecuación Real + Gráfico Semanal (Quiet Luxury Obsidian) -->
                 <div class="sens-metabolic-balance-card" id="dashObjectiveCard">
-                    <!-- Encabezado de Control Metabólico -->
+                    <!-- Encabezado de Balance Energético -->
                     <div class="sens-balance-header">
                         <div>
-                            <span class="sens-balance-eyebrow">CONTROL METABÓLICO &amp; RESULTADOS</span>
-                            <h3 class="sens-balance-title" id="dashBalanceDateLabel">Balance Energético • Hoy</h3>
+                            <h3 class="sens-balance-title">Balance Energético</h3>
+                            <span class="sens-balance-date-sub" id="dashBalanceDateLabel">15 de Octubre</span>
                         </div>
-                        <span class="sens-balance-goal-pill" id="dashObjectiveGoalPill">DÉFICIT META: -400 KCAL</span>
+                        <span class="sens-balance-goal-pill" id="dashObjectiveGoalPill">Meta: -400 kcal</span>
                     </div>
 
                     <!-- Ecuación de Balance: Ingesta vs Gasto TDEE -->
@@ -2802,16 +2801,16 @@
                         </div>
                         <div class="sens-chart-legend">
                             <div class="legend-item">
-                                <span class="legend-dot green"></span>
-                                <span>Objetivo Cumplido</span>
+                                <span class="legend-dot champagne"></span>
+                                <span>Meta Cumplida</span>
                             </div>
                             <div class="legend-item">
-                                <span class="legend-dot gray"></span>
-                                <span>Planificado (Próximos Días)</span>
+                                <span class="legend-dot frosted"></span>
+                                <span>Planificado</span>
                             </div>
                             <div class="legend-item">
-                                <span class="legend-dot amber"></span>
-                                <span>Por encima de calorías</span>
+                                <span class="legend-dot warm"></span>
+                                <span>Ajuste Requerido</span>
                             </div>
                         </div>
                     </div>
@@ -2832,8 +2831,8 @@
                 <div class="sens-biometrics-card" id="dashBiometricsCard">
                     <div class="sens-bio-header">
                         <div>
-                            <span class="sens-bio-eyebrow">COMPOSICIÓN CORPORAL &amp; BIOMETRÍA</span>
-                            <h3 class="sens-bio-title">Peso &amp; Grasa Corporal</h3>
+                            <h3 class="sens-bio-title">Composición Corporal</h3>
+                            <span class="sens-bio-date-sub" id="dashBioDateLabel">Registro al 15 de Octubre</span>
                         </div>
                         <button type="button" class="sens-btn-log-bio" id="btnOpenQuickBioModal" title="Cargar peso y métricas de hoy">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -2887,24 +2886,23 @@
                     </div>
                 </div>
 
-                <!-- 10. Sección Tienda Oficial MercadoLibre (Equipamiento & Suplementos) -->
+                <!-- 6. Sección Tienda Oficial MercadoLibre (Equipamiento & Suplementos) -->
                 <div class="sens-store-banner-card" id="dashStoreCard">
                     <div class="sens-store-banner-left">
                         <div class="sens-store-banner-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)"
-                                stroke-width="2">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="9" cy="21" r="1" />
                                 <circle cx="20" cy="21" r="1" />
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                             </svg>
                         </div>
                         <div>
-                            <div class="sens-store-banner-title">Equipamiento &amp; Suplementación SENS</div>
-                            <div class="sens-store-banner-desc">Mancuernas, bandas elásticas, mat y suplementos
-                                recomendados por Nico en MercadoLibre.</div>
+                            <span class="sens-store-badge">SELECCIÓN OFICIAL SENS</span>
+                            <div class="sens-store-banner-title">Equipamiento &amp; Suplementación</div>
+                            <div class="sens-store-banner-desc">Mancuernas, bandas elásticas, colchoneta y suplementos recomendados por Nico.</div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline btn-sm btn-store-entry" id="btnDashOpenStore">
+                    <button type="button" class="btn btn-primary btn-sm btn-store-entry" id="btnDashOpenStore">
                         Ver Tienda →
                     </button>
                 </div>
@@ -4543,10 +4541,10 @@
     </div>
 
     <!-- Base de Datos Maestra de Ejercicios SENS (Guía Oficial Nico) -->
-    <script src="exercises_db.js?v=3.6"></script>
+    <script src="exercises_db.js?v=3.7"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=3.6"></script>
+    <script src="app.js?v=3.7"></script>
 </body>
 
 </html>

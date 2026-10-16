@@ -7768,16 +7768,16 @@ function renderDynamicWeekStrip() {
             statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓ Hecho</span>`;
         } else if (isPast) {
             if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
-                statusBadge = `<span class="sens-day-badge missed" title="No realizado / Pendiente">✕ No realizado</span>`;
+                statusBadge = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
             } else {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
         } else if (modality === 'presencial') {
-            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Presencial</span>`;
+            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres.</span>`;
         } else if (modality === 'online') {
             statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
         } else if (modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Autónomo</span>`;
+            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut.</span>`;
         } else {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -8037,12 +8037,16 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         subFocus.textContent = details.subtitle;
     }
 
-    // 2. Iconos vectoriales monoline minimalistas (estilo BIGG)
+    // 2. Matriz de los 4 tipos de entrenamiento (Muscular, Cardio, Movilidad, Yoga)
     if (typeIconsWrap) {
-        typeIconsWrap.innerHTML = details.types.map(t => {
-            const info = SENS_TYPE_ICONS[t];
+        const ALL_TYPES = ['muscular', 'cardio', 'movilidad', 'yoga'];
+        typeIconsWrap.innerHTML = ALL_TYPES.map(typeKey => {
+            const info = SENS_TYPE_ICONS[typeKey];
             if (!info) return '';
-            return `<span class="sens-type-chip">${info.svg} <span>${info.label}</span></span>`;
+            const isActive = details.types.includes(typeKey);
+            const activeClass = isActive ? 'active' : 'inactive';
+            const tooltip = isActive ? `${info.label} (Programado para hoy)` : `${info.label} (No programado)`;
+            return `<span class="sens-type-matrix-icon ${activeClass}" title="${tooltip}" aria-label="${info.label}">${info.svg}</span>`;
         }).join('');
     }
 
@@ -8264,15 +8268,15 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
 
         if (isFuture) {
             // Días que aún no transcurrieron: NUNCA en ámbar de error. Barra neutra sutil de planificación
-            barColors.push('rgba(255, 255, 255, 0.08)');
-            borderColors.push('rgba(255, 255, 255, 0.16)');
+            barColors.push('rgba(255, 255, 255, 0.05)');
+            borderColors.push('rgba(255, 255, 255, 0.12)');
         } else {
             const isOptimal = isMuscleGain ? (m.netBalance >= 150) : (m.netBalance <= -300);
             if (isOptimal) {
-                barColors.push('#10B981');
-                borderColors.push('#059669');
+                barColors.push('rgba(229, 203, 167, 0.85)');
+                borderColors.push('#E5CBA7');
             } else {
-                barColors.push('#F59E0B');
+                barColors.push('rgba(217, 119, 6, 0.75)');
                 borderColors.push('#D97706');
             }
         }
@@ -8293,9 +8297,10 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
                     backgroundColor: barColors,
                     borderColor: borderColors,
                     borderWidth: 1,
-                    borderRadius: 6,
+                    borderRadius: 4,
                     borderSkipped: false,
-                    maxBarThickness: 32
+                    maxBarThickness: 22,
+                    barPercentage: 0.5
                 }]
             },
             options: {
@@ -8382,7 +8387,9 @@ function updateObjectiveCardData(selectedDate = null) {
     const isToday = isSameDay(selectedDate, new Date());
 
     if (dateLabel) {
-        dateLabel.textContent = isToday ? 'Balance Energético • Hoy' : `Balance Energético • ${formatDateDDMM(selectedDate)}`;
+        const d = selectedDate || AppState.selectedDate || new Date();
+        const formatted = d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
+        dateLabel.textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
     }
 
     const profile = AppState.profile || {};
@@ -8390,17 +8397,10 @@ function updateObjectiveCardData(selectedDate = null) {
     const isMuscleGain = userGoal === 'muscle_gain';
 
     if (goalPill) {
-        if (isMuscleGain) {
-            goalPill.textContent = 'SUPERÁVIT META: +300 KCAL';
-            goalPill.style.background = 'rgba(229, 203, 167, 0.2)';
-            goalPill.style.color = '#E5CBA7';
-            goalPill.style.borderColor = 'rgba(229, 203, 167, 0.35)';
-        } else {
-            goalPill.textContent = 'DÉFICIT META: -400 KCAL';
-            goalPill.style.background = 'rgba(16, 185, 129, 0.14)';
-            goalPill.style.color = '#10B981';
-            goalPill.style.borderColor = 'rgba(16, 185, 129, 0.25)';
-        }
+        goalPill.textContent = isMuscleGain ? 'Meta: +300 kcal' : 'Meta: -400 kcal';
+        goalPill.style.background = 'rgba(229, 203, 167, 0.12)';
+        goalPill.style.color = '#E5CBA7';
+        goalPill.style.borderColor = 'rgba(229, 203, 167, 0.3)';
     }
 
     if (graphGoalTarget) {
@@ -8421,20 +8421,18 @@ function updateObjectiveCardData(selectedDate = null) {
 
     if (netValEl) {
         const sign = metrics.netBalance > 0 ? '+' : '';
-        const isOptimal = isMuscleGain ? (metrics.netBalance >= 150) : (metrics.netBalance <= -300);
-        const color = isOptimal ? '#10B981' : '#F59E0B';
         netValEl.innerHTML = `${sign}${metrics.netBalance.toLocaleString('es-AR')} <span class="unit">kcal</span>`;
-        netValEl.style.color = color;
+        netValEl.style.color = '#FFFFFF';
     }
 
     if (statusTextEl) {
         const isOptimal = isMuscleGain ? (metrics.netBalance >= 150) : (metrics.netBalance <= -300);
         if (isOptimal) {
             statusTextEl.textContent = isMuscleGain ? 'Superávit Cumplido' : 'Déficit Logrado';
-            statusTextEl.style.color = '#10B981';
+            statusTextEl.style.color = '#E5CBA7';
         } else {
-            statusTextEl.textContent = metrics.netBalance > 0 ? 'Superávit Elevado' : 'Próximo a Meta';
-            statusTextEl.style.color = '#F59E0B';
+            statusTextEl.textContent = metrics.netBalance > 0 ? 'Superávit Elevado' : 'Ajuste Requerido';
+            statusTextEl.style.color = '#D97706';
         }
     }
 
@@ -8458,7 +8456,7 @@ function updateObjectiveCardData(selectedDate = null) {
 
     // Sincronizar card de biometría
     if (typeof updateBiometricsCardData === 'function') {
-        updateBiometricsCardData();
+        updateBiometricsCardData(selectedDate);
     }
 
     // Listener para ir a seguimiento
@@ -8475,7 +8473,7 @@ function updateObjectiveCardData(selectedDate = null) {
 /**
  * Actualiza la Card de Composición Corporal & Peso (#dashBiometricsCard)
  */
-function updateBiometricsCardData() {
+function updateBiometricsCardData(selectedDate = null) {
     const currentWeightEl = document.getElementById('dashBioCurrentWeight');
     const targetWeightEl = document.getElementById('dashBioTargetWeight');
     const weightDeltaEl = document.getElementById('dashBioWeightDelta');
@@ -8484,7 +8482,16 @@ function updateBiometricsCardData() {
     const progressBar = document.getElementById('dashBioProgressBar');
     const progressPct = document.getElementById('dashBioProgressPct');
     const lastLoggedDate = document.getElementById('dashBioLastLoggedDate');
+    const bioDateLabel = document.getElementById('dashBioDateLabel');
     const btnGoBio = document.getElementById('btnGoTrackingFromBio');
+
+    const d = selectedDate || AppState.selectedDate || new Date();
+    const isToday = isSameDay(d, new Date());
+
+    if (bioDateLabel) {
+        const formatted = d.toLocaleDateString('es-AR', { day: 'numeric', month: 'long' });
+        bioDateLabel.textContent = `Registro al ${formatted}`;
+    }
 
     const profile = AppState.profile || {};
     const anamnesis = AppState.anamnesis || {};
@@ -8519,7 +8526,7 @@ function updateBiometricsCardData() {
     }
 
     if (lastLoggedDate) {
-        lastLoggedDate.textContent = `Último pesaje: Hoy 08:30 hs`;
+        lastLoggedDate.textContent = isToday ? `Último pesaje: Hoy 08:30 hs` : `Último pesaje: ${formatDateDDMM(d)}`;
     }
 
     if (btnGoBio) {

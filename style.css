@@ -10561,52 +10561,93 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* 4. Tarjeta Hero MercadoLibre en Dashboard */
+/* 4. Tarjeta Hero MercadoLibre en Dashboard - Quiet Luxury Boutique */
 .sens-store-banner-card {
-    background: #121216;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
+    background: linear-gradient(135deg, #181820 0%, #0F0F14 100%) !important;
+    border: 1px solid rgba(229, 203, 167, 0.28) !important;
+    border-radius: 20px !important;
+    padding: 20px 22px !important;
+    margin-bottom: 24px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: 16px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(229, 203, 167, 0.15) !important;
+    color: #FFFFFF !important;
+    transition: all 0.25s ease;
 }
 
 .sens-store-banner-card:hover {
-    border-color: rgba(229, 203, 167, 0.35);
-    background: #16161B;
+    border-color: rgba(229, 203, 167, 0.5) !important;
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(229, 203, 167, 0.25) !important;
+    transform: translateY(-2px);
 }
 
 .sens-store-banner-left {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
+}
+
+.sens-store-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(229, 203, 167, 0.14);
+    color: #E5CBA7;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin-bottom: 6px;
+    width: fit-content;
 }
 
 .sens-store-banner-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    background: rgba(229, 203, 167, 0.1);
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: rgba(229, 203, 167, 0.12);
+    border: 1px solid rgba(229, 203, 167, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .sens-store-banner-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #FFFFFF;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    letter-spacing: -0.2px;
 }
 
 .sens-store-banner-desc {
     font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 2px;
+    color: #A1A1AA !important;
+    margin-top: 3px;
+    line-height: 1.4;
+}
+
+.sens-store-banner-card .btn-store-entry {
+    background: #E5CBA7 !important;
+    color: #09090B !important;
+    font-weight: 800 !important;
+    border-radius: 999px !important;
+    padding: 10px 22px !important;
+    font-size: 12.5px !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(229, 203, 167, 0.25) !important;
+    white-space: nowrap !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sens-store-banner-card .btn-store-entry:hover {
+    background: #DFC19B !important;
+    transform: scale(1.03);
 }
 
 @media (max-width: 600px) {
@@ -10701,8 +10742,7 @@ body.in-portal .sens-biometrics-summary-card,
 body.in-portal .sens-weekly-workouts-card,
 body.in-portal .sens-nutri-target-hero-card,
 body.in-portal .sens-meal-card,
-body.in-portal .exercise-card,
-body.in-portal .sens-store-banner-card {
+body.in-portal .exercise-card {
     background: #FFFFFF !important;
     border: 1px solid rgba(0, 0, 0, 0.06) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
@@ -12496,31 +12536,66 @@ body.in-portal .sens-macro-grams-bold {
 }
 
 /* =============================================================================
-   BADGE PARA DÍAS NO ASISTIDOS / PENDIENTES EN CALENDARIO
+   BADGE PARA DÍAS NO ASISTIDOS / PENDIENTES EN CALENDARIO (SOBRIO - NO ROJO)
    ============================================================================= */
 .sens-day-badge.missed {
-    background: rgba(239, 68, 68, 0.12) !important;
-    color: #EF4444 !important;
+    background: #F4F4F5 !important;
+    color: #71717A !important;
     border: none !important;
     font-weight: 700;
+    font-size: 10px;
+    padding: 2.5px 6px;
+    border-radius: 4px;
 }
 
 body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
-    background: #EF4444 !important;
+    background: rgba(255, 255, 255, 0.2) !important;
     color: #FFFFFF !important;
     font-weight: 800 !important;
+}
+
+/* Matriz de los 4 Tipos de Entrenamiento en Card de Entrenamiento */
+.sens-workout-type-matrix {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.sens-type-matrix-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+}
+
+.sens-type-matrix-icon.active {
+    background: rgba(229, 203, 167, 0.16);
+    border: 1px solid rgba(229, 203, 167, 0.45);
+    color: #E5CBA7;
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.25);
+}
+
+.sens-type-matrix-icon.inactive {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #71717A;
+    opacity: 0.35;
 }
 
 /* =============================================================================
    CARD DE BALANCE ENERGÉTICO & RESULTADOS - QUIET LUXURY OBSIDIAN
    ============================================================================= */
 .sens-metabolic-balance-card {
-    background: #121216 !important;
-    border: 1px solid rgba(229, 203, 167, 0.14) !important;
+    background: radial-gradient(120% 120% at 50% 0%, #16161D 0%, #0D0D11 100%) !important;
+    border: 1px solid rgba(229, 203, 167, 0.16) !important;
     border-radius: 22px !important;
     padding: 22px !important;
     margin-bottom: 22px !important;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45) !important;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
     color: #FFFFFF !important;
     cursor: default;
 }
@@ -12530,37 +12605,37 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 18px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.sens-balance-eyebrow {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #E5CBA7;
-    font-weight: 700;
-    display: block;
-    margin-bottom: 3px;
+    flex-wrap: nowrap;
+    gap: 12px;
 }
 
 .sens-balance-title {
-    font-size: 1.28rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: #FFFFFF !important;
     margin: 0;
     letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+
+.sens-balance-date-sub {
+    font-size: 11.5px;
+    color: #A1A1AA;
+    font-weight: 500;
+    display: block;
+    margin-top: 3px;
 }
 
 .sens-balance-goal-pill {
-    font-size: 10.5px;
-    font-weight: 800;
-    background: rgba(16, 185, 129, 0.14);
-    color: #10B981;
-    border: 1px solid rgba(16, 185, 129, 0.25);
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(229, 203, 167, 0.12) !important;
+    color: #E5CBA7 !important;
+    border: 1px solid rgba(229, 203, 167, 0.3) !important;
     padding: 4px 12px;
     border-radius: 999px;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
 }
 
 .sens-balance-equation-row {
@@ -12571,18 +12646,18 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 }
 
 .sens-balance-box {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
     padding: 13px 15px;
 }
 
 .sens-balance-box-label {
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 700;
-    color: #A1A1AA;
+    color: #71717A;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     margin-bottom: 3px;
 }
 
@@ -12606,8 +12681,9 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 }
 
 .sens-balance-hero-box {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
-    border: 1px solid rgba(16, 185, 129, 0.22);
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(229, 203, 167, 0.2);
+    box-shadow: inset 0 1px 0 rgba(229, 203, 167, 0.08);
     border-radius: 16px;
     padding: 14px 18px;
     display: flex;
@@ -12617,24 +12693,25 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 }
 
 .sens-balance-hero-label {
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     color: #A1A1AA;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
 }
 
 .sens-balance-hero-val {
-    font-size: 1.65rem;
+    font-size: 1.75rem;
     font-weight: 800;
-    color: #10B981;
+    color: #FFFFFF !important;
     line-height: 1.1;
+    font-variant-numeric: tabular-nums;
 }
 
 .sens-balance-hero-val .unit {
     font-size: 12px;
     font-weight: 600;
-    color: #10B981;
+    color: #A1A1AA;
 }
 
 .sens-balance-hero-right {
@@ -12644,7 +12721,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 .sens-balance-hero-status {
     font-size: 12px;
     font-weight: 800;
-    color: #10B981;
+    color: #E5CBA7;
 }
 
 .sens-balance-hero-sub {
@@ -12682,7 +12759,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 }
 
 .sens-chart-meta strong {
-    color: #10B981;
+    color: #E5CBA7;
 }
 
 .sens-chart-canvas-box {
@@ -12715,9 +12792,9 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     display: inline-block;
 }
 
-.sens-chart-legend .legend-dot.green { background: #10B981; }
-.sens-chart-legend .legend-dot.gray { background: #71717A; }
-.sens-chart-legend .legend-dot.amber { background: #F59E0B; }
+.sens-chart-legend .legend-dot.champagne { background: #E5CBA7; box-shadow: 0 0 6px rgba(229, 203, 167, 0.4); }
+.sens-chart-legend .legend-dot.frosted { background: rgba(255, 255, 255, 0.2); }
+.sens-chart-legend .legend-dot.warm { background: #D97706; }
 
 .sens-balance-footer {
     display: flex;
@@ -12758,38 +12835,39 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
    CARD DE COMPOSICIÓN CORPORAL & PESO - QUIET LUXURY OBSIDIAN
    ============================================================================= */
 .sens-biometrics-card {
-    background: #121216 !important;
-    border: 1px solid rgba(229, 203, 167, 0.14) !important;
+    background: radial-gradient(120% 120% at 50% 0%, #16161D 0%, #0D0D11 100%) !important;
+    border: 1px solid rgba(229, 203, 167, 0.16) !important;
     border-radius: 22px !important;
     padding: 22px !important;
     margin-bottom: 24px !important;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45) !important;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
     color: #FFFFFF !important;
 }
 
 .sens-bio-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 18px;
-}
-
-.sens-bio-eyebrow {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #E5CBA7;
-    font-weight: 700;
-    display: block;
-    margin-bottom: 3px;
+    flex-wrap: nowrap;
+    gap: 12px;
 }
 
 .sens-bio-title {
-    font-size: 1.28rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: #FFFFFF !important;
     margin: 0;
     letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+
+.sens-bio-date-sub {
+    font-size: 11.5px;
+    color: #A1A1AA;
+    font-weight: 500;
+    display: block;
+    margin-top: 3px;
 }
 
 .sens-btn-log-bio {
@@ -12805,6 +12883,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     padding: 6px 14px;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(229, 203, 167, 0.25);
+    white-space: nowrap;
     transition: transform 0.15s ease;
 }
 
@@ -12820,18 +12899,18 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 }
 
 .sens-bio-box {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
     padding: 13px 15px;
 }
 
 .sens-bio-box-label {
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 700;
-    color: #A1A1AA;
+    color: #71717A;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     margin-bottom: 3px;
 }
 
@@ -12864,17 +12943,18 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 }
 
 .sens-bio-delta {
-    color: #10B981;
+    color: #E5CBA7;
     font-weight: 700;
 }
 
 .sens-bio-status-badge {
-    background: rgba(16, 185, 129, 0.12);
-    color: #10B981;
+    background: rgba(229, 203, 167, 0.12);
+    color: #E5CBA7;
+    border: 1px solid rgba(229, 203, 167, 0.25);
     font-size: 9.5px;
-    font-weight: 800;
-    padding: 2px 7px;
-    border-radius: 4px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
 }
 
 .sens-bio-progress-wrap {
@@ -12909,7 +12989,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 
 .sens-bio-progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #E5CBA7 0%, #10B981 100%);
+    background: linear-gradient(90deg, #C5A880 0%, #E5CBA7 100%);
     border-radius: 999px;
     transition: width 0.4s ease;
 }
