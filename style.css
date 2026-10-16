@@ -10928,16 +10928,15 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
     -webkit-tap-highlight-color: transparent !important;
     user-select: none;
     -webkit-user-select: none;
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transform-origin: center center;
-    background-color: #09090B !important;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    transition: transform 0.22s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
-/* Prevenir fondos blancos en cards de video */
+/* Prevenir fondos blancos en cards y capas de video */
 .sens-training-video-card,
 .sens-training-card-active,
 .sens-video-loop-player,
@@ -10953,36 +10952,37 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
 
 /* Hover refinado en Desktop */
 @media (hover: hover) and (pointer: fine) {
+    body.in-portal .sens-training-video-card:hover,
     body.in-portal .sens-nutri-summary-card:hover,
     body.in-portal .sens-metabolic-balance-card:hover,
     body.in-portal .sens-biometrics-card:hover,
     body.in-portal .sens-store-banner-card:hover {
-        transform: translateY(-2px) translate3d(0, 0, 0);
+        transform: translateY(-2px) translateZ(0);
         box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16) !important;
     }
 }
 
-/* Compresión física instantánea al presionar con el dedo o clic sostenido (60 FPS puro) */
+/* Compresión física instantánea al presionar con el dedo o clic sostenido (60 FPS) */
 .sens-training-video-card:active,
 .sens-nutri-summary-card:active,
 .sens-metabolic-balance-card:active,
 .sens-biometrics-card:active,
 .sens-store-banner-card:active {
-    transform: scale3d(0.95, 0.95, 1) translate3d(0, 0, 0) !important;
-    -webkit-transform: scale3d(0.95, 0.95, 1) translate3d(0, 0, 0) !important;
-    transition: transform 0.06s ease-out !important;
+    transform: scale3d(0.965, 0.965, 1) translateZ(0) !important;
+    -webkit-transform: scale3d(0.965, 0.965, 1) translateZ(0) !important;
+    transition: transform 0.05s ease-out !important;
 }
 
-/* Animación elástica de snap al hacer tap / click rápido (Compositor-Only, NO box-shadow) */
+/* Rebote de resorte elástico rápido al soltar / hacer clic (Desde la compresión a 1.025 y reposo) */
 @keyframes sensCardSpringPulse {
     0% {
-        transform: scale3d(1, 1, 1);
+        transform: scale3d(0.965, 0.965, 1);
     }
-    28% {
-        transform: scale3d(0.94, 0.94, 1);
+    45% {
+        transform: scale3d(1.025, 1.025, 1);
     }
-    68% {
-        transform: scale3d(1.035, 1.035, 1);
+    75% {
+        transform: scale3d(0.992, 0.992, 1);
     }
     100% {
         transform: scale3d(1, 1, 1);
@@ -10990,7 +10990,7 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
 }
 
 .sens-card-touch-pulse {
-    animation: sensCardSpringPulse 0.26s cubic-bezier(0.25, 1, 0.5, 1) both !important;
+    animation: sensCardSpringPulse 0.24s cubic-bezier(0.25, 1, 0.5, 1) both !important;
 }
 
 /* Animaciones GPU de Desplazamiento de Semanas (Swipe & Flechas) */
@@ -11231,24 +11231,16 @@ body.in-portal .sens-training-video-card,
     border-radius: 20px;
     overflow: hidden;
     background: #09090B !important;
+    background-color: #09090B !important;
     border: none !important;
     outline: none !important;
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-    mask-image: radial-gradient(white, black);
-    isolation: isolate;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
     margin-bottom: 20px;
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease !important;
     cursor: pointer;
-}
-
-body.in-portal .sens-training-video-card:hover,
-.sens-training-video-card:hover {
-    transform: translateY(-3px) translateZ(0);
-    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.06) !important;
-    border: none !important;
 }
 
 .sens-training-card-active {
@@ -11258,22 +11250,32 @@ body.in-portal .sens-training-video-card:hover,
     height: 100%;
     border-radius: 20px;
     overflow: hidden;
+    background: #09090B !important;
+    background-color: #09090B !important;
 }
 
 .sens-video-loop-player {
     position: absolute;
-    inset: -4px;
-    width: calc(100% + 8px);
-    height: calc(100% + 8px);
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    transform: scale(1.05) translateZ(0);
-    -webkit-transform: scale(1.05) translateZ(0);
-    transform-origin: center center;
     z-index: 1;
     display: block;
     border-radius: 20px;
     border: none !important;
     outline: none !important;
+    pointer-events: none !important;
+    touch-action: none !important;
+    -webkit-touch-callout: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    background: #09090B !important;
+    background-color: #09090B !important;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .sens-video-overlay-gradient {
@@ -11323,20 +11325,17 @@ body.in-portal .sens-training-video-card:hover,
 .sens-modality-pill.auto {
     background: rgba(255, 255, 255, 0.22) !important;
     color: #FFFFFF !important;
-    backdrop-filter: blur(8px);
 }
 
 .sens-duration-pill {
-    background: rgba(0, 0, 0, 0.55) !important;
+    background: rgba(9, 9, 11, 0.72) !important;
     color: #FFFFFF !important;
     font-size: 10px !important;
     font-weight: 600 !important;
     letter-spacing: 0.4px !important;
     padding: 4px 11px !important;
     border-radius: 9999px !important;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
 .sens-training-card-content {
@@ -11515,41 +11514,41 @@ body.in-portal .sens-nutri-summary-card,
     border-radius: 20px;
     overflow: hidden;
     background: #09090B !important;
+    background-color: #09090B !important;
     border: none !important;
     outline: none !important;
     padding: 0 !important;
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-    mask-image: radial-gradient(white, black);
-    isolation: isolate;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
     margin-bottom: 20px;
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease !important;
     cursor: pointer;
-}
-
-body.in-portal .sens-nutri-summary-card:hover,
-.sens-nutri-summary-card:hover {
-    transform: translateY(-3px) translateZ(0);
-    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.06) !important;
-    border: none !important;
 }
 
 .sens-nutri-video-player {
     position: absolute;
-    inset: -4px;
-    width: calc(100% + 8px);
-    height: calc(100% + 8px);
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    transform: scale(1.05) translateZ(0);
-    -webkit-transform: scale(1.05) translateZ(0);
-    transform-origin: center center;
     z-index: 1;
     display: block;
     border-radius: 20px;
     border: none !important;
     outline: none !important;
+    pointer-events: none !important;
+    touch-action: none !important;
+    -webkit-touch-callout: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    background: #09090B !important;
+    background-color: #09090B !important;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .sens-nutri-overlay-gradient {
@@ -11600,13 +11599,11 @@ body.in-portal .sens-nutri-summary-card:hover,
 }
 
 .sens-5cals-chip {
-    background: rgba(0, 0, 0, 0.58);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(18, 18, 22, 0.82) !important;
     border-radius: 7px;
     padding: 4.5px 2px;
     text-align: center;
-    border: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     min-width: 0;
 }
 
@@ -12725,9 +12722,7 @@ body.in-portal .sens-macro-grams-bold {
     gap: 5px;
     padding: 3px 9px;
     border-radius: 999px;
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(18, 18, 22, 0.82) !important;
     border: 1px solid rgba(255, 255, 255, 0.14);
     color: #FFFFFF;
     font-size: 11px;
@@ -12815,9 +12810,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 }
 
 .sens-type-chip {
-    background: rgba(0, 0, 0, 0.58);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(18, 18, 22, 0.82) !important;
     border-radius: 8px;
     padding: 6px 2px;
     display: flex;
@@ -12826,7 +12819,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     justify-content: center;
     gap: 3px;
     border: 1px solid rgba(255, 255, 255, 0.06);
-    transition: all 0.25s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease;
     min-width: 0;
     cursor: default;
 }
@@ -13382,3 +13375,13 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 }
 
 
+
+
+/* Ocultar controles nativos de WebKit/iOS en videos decorativos */
+video.sens-video-loop-player::-webkit-media-controls,
+video.sens-nutri-video-player::-webkit-media-controls,
+video.sens-video-loop-player::-webkit-media-controls-enclosure,
+video.sens-nutri-video-player::-webkit-media-controls-enclosure {
+    display: none !important;
+    -webkit-appearance: none;
+}

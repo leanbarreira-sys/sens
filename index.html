@@ -62,7 +62,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=4.9">
+    <link rel="stylesheet" href="style.css?v=5.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2657,7 +2657,7 @@
                 <div class="sens-training-video-card" id="dashTrainingVideoCard">
                     <!-- Estado A: Con Entrenamiento Programado para el Día Seleccionado -->
                     <div class="sens-training-card-active" id="dashWorkoutActivePane">
-                        <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline autoplay poster="img/pilar-1-tecnica.jpg">
+                        <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline webkit-playsinline autoplay disablePictureInPicture disableremoteplayback poster="img/pilar-1-tecnica.jpg">
                             <source id="dashWorkoutVideoSource" src="vid/pilar-1-tecnica.mp4" type="video/mp4">
                         </video>
                         <div class="sens-video-overlay-gradient"></div>
@@ -2705,7 +2705,7 @@
 
                 <!-- 3. Card Nutricional con Video de Fondo & Desglose de Calorías -->
                 <div class="sens-nutri-summary-card" id="dashNutriSummaryCard" style="cursor: pointer;">
-                    <video class="sens-nutri-video-player" muted loop playsinline autoplay poster="img/pilar-4-adherencia.jpg">
+                    <video class="sens-nutri-video-player" muted loop playsinline webkit-playsinline autoplay disablePictureInPicture disableremoteplayback poster="img/pilar-4-adherencia.jpg">
                         <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
                     </video>
                     <div class="sens-nutri-overlay-gradient"></div>
@@ -4570,7 +4570,7 @@
     <script src="exercises_db.js?v=4.6"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=4.9"></script>
+    <script src="app.js?v=5.0"></script>
 </body>
 
 </html>

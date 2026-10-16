@@ -7779,30 +7779,44 @@ function initStickyCalendarWatcher() {
 /**
  * Dispara micro-interacción táctil elástica GPU pura sin reflow síncrono
  */
+let isPortalCardNavigating = false;
+
 function triggerCardSpringAnimation(cardEl) {
     if (!cardEl) return;
     cardEl.classList.remove('sens-card-touch-pulse');
     requestAnimationFrame(() => {
-        cardEl.classList.add('sens-card-touch-pulse');
-        cardEl.addEventListener('animationend', () => {
-            cardEl.classList.remove('sens-card-touch-pulse');
-        }, { once: true });
+        requestAnimationFrame(() => {
+            cardEl.classList.add('sens-card-touch-pulse');
+            cardEl.addEventListener('animationend', () => {
+                cardEl.classList.remove('sens-card-touch-pulse');
+            }, { once: true });
+        });
     });
 }
 
 /**
- * Navegación táctil instantánea y ultra-fluida (60 FPS / Cero Latencia)
+ * Navegación táctil con ciclo elástico completo (60/120 FPS sin cortes prematuros)
  */
 function triggerCardSpringAndNavigate(cardEl, navigateFn) {
     if (!cardEl) {
         if (typeof navigateFn === 'function') navigateFn();
         return;
     }
+    if (isPortalCardNavigating) return;
+    isPortalCardNavigating = true;
+
     triggerCardSpringAnimation(cardEl);
-    // Micro-delay de 60ms para registro táctil instantáneo sin congelar la interfaz
+
+    // Permitir ciclo elástico visual de compresión (0.965) y rebote (1.025) sin corte abrupto
     setTimeout(() => {
-        if (typeof navigateFn === 'function') navigateFn();
-    }, 60);
+        try {
+            if (typeof navigateFn === 'function') navigateFn();
+        } finally {
+            setTimeout(() => {
+                isPortalCardNavigating = false;
+            }, 300);
+        }
+    }, 140);
 }
 
 /**
