@@ -2365,6 +2365,12 @@ function returnToPublicLanding() {
     if (floatSocial) floatSocial.style.display = 'flex';
     document.getElementById('app-container').classList.remove('active');
     document.getElementById('publicLanding').style.display = 'block';
+
+    // Ocultar terminantemente el dock inferior del portal en la web pública
+    document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+        dock.style.display = 'none';
+    });
+
     updateAuthNavButtons();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -8894,6 +8900,13 @@ function initQuickBiometricsModal() {
  * MÓDULO D: Floating Dock Inferior Móvil (Estilo BIGG / Samsung Health)
  */
 function initFloatingDock() {
+    const isPortal = document.body.classList.contains('in-portal');
+    document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+        if (!isPortal) {
+            dock.style.display = 'none';
+        }
+    });
+
     const dockItems = document.querySelectorAll('.sens-dock-item[data-dock-tab]');
     dockItems.forEach(item => {
         item.addEventListener('click', () => {

@@ -9340,29 +9340,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-weight: 800;
 }
 
-/* 14. Floating Dock Inferior Móvil */
+/* 14. Floating Dock Inferior Móvil: Oculto por defecto en toda la web */
 .sens-floating-dock {
-    position: fixed;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(18, 18, 22, 0.88);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 36px;
-    padding: 6px 12px;
-    display: none;
-    align-items: center;
-    gap: 6px;
-    z-index: 99;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-@media (max-width: 900px) {
-    body.in-portal .sens-floating-dock {
-        display: flex;
-    }
+    display: none !important;
 }
 
 .sens-dock-item {
@@ -11753,28 +11733,41 @@ body.in-portal .sens-nutri-summary-card:hover,
     background: #10B981;
 }
 
-/* Floating Dock en Negro Obsidiana SENS & Ajuste 100% Pantalla Móvil */
-body.in-portal .sens-floating-dock,
-.sens-floating-dock {
-    position: fixed !important;
-    bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: calc(100% - 24px) !important;
-    max-width: 400px !important;
-    box-sizing: border-box !important;
-    display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 2px !important;
-    padding: 6px 4px !important;
-    background: #09090B !important;
-    border: none !important;
-    border-radius: 36px !important;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
-    backdrop-filter: blur(25px) !important;
-    -webkit-backdrop-filter: blur(25px) !important;
-    z-index: 1000 !important;
-    overflow: hidden !important;
+/* Floating Dock en Negro Obsidiana SENS: Oculto en Web Pública y Desktop */
+.sens-floating-dock,
+body:not(.in-portal) .sens-floating-dock {
+    display: none !important;
+}
+
+/* Solo visible en Mobile / Tablet cuando el usuario está en el portal de alumnos */
+@media (max-width: 900px) {
+    body.in-portal .sens-floating-dock {
+        position: fixed !important;
+        bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: calc(100% - 24px) !important;
+        max-width: 400px !important;
+        box-sizing: border-box !important;
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 2px !important;
+        padding: 6px 4px !important;
+        background: #09090B !important;
+        border: none !important;
+        border-radius: 36px !important;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
+        backdrop-filter: blur(25px) !important;
+        -webkit-backdrop-filter: blur(25px) !important;
+        z-index: 1000 !important;
+        overflow: hidden !important;
+    }
+}
+
+@media (min-width: 901px) {
+    body.in-portal .sens-floating-dock {
+        display: none !important;
+    }
 }
 
 body.in-portal .sens-dock-item,
