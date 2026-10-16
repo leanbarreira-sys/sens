@@ -11765,6 +11765,9 @@ body.in-portal .sens-dock-item.active svg,
     color: #09090B !important;
     border: none !important;
     font-weight: 800;
+    font-size: 10px;
+    min-width: 18px;
+    padding: 2.5px 5px;
 }
 
 .sens-day-badge.rest {
@@ -12756,9 +12759,10 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 .sens-balance-hero-val {
     font-size: 1.75rem;
     font-weight: 800;
-    color: #FFFFFF !important;
+    color: #E5CBA7;
     line-height: 1.1;
     font-variant-numeric: tabular-nums;
+    transition: color 0.25s ease;
 }
 
 .sens-balance-hero-val .unit {

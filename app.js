@@ -7773,7 +7773,7 @@ function renderDynamicWeekStrip() {
 
         let statusBadge = '';
         if (isCompleted) {
-            statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓ Hecho</span>`;
+            statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
         } else if (isPast) {
             if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
                 statusBadge = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
@@ -7781,11 +7781,11 @@ function renderDynamicWeekStrip() {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
         } else if (modality === 'presencial') {
-            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres.</span>`;
+            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
         } else if (modality === 'online') {
             statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
         } else if (modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut.</span>`;
+            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
         } else {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -8450,10 +8450,10 @@ function updateObjectiveCardData(selectedDate = null) {
         breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${metrics.activeBurn.toLocaleString('es-AR')} (Pasos: ${metrics.stepsBurn} • Entreno: ${metrics.workoutBurn})`;
     }
 
+    const netBoxEl = document.getElementById('dashBalanceNetBox');
     if (netValEl) {
         const sign = metrics.netBalance > 0 ? '+' : '';
         netValEl.innerHTML = `${sign}${metrics.netBalance.toLocaleString('es-AR')} <span class="unit">kcal</span>`;
-        netValEl.style.color = '#FFFFFF';
     }
 
     if (statusTextEl) {
@@ -8461,9 +8461,19 @@ function updateObjectiveCardData(selectedDate = null) {
         if (isOptimal) {
             statusTextEl.textContent = isMuscleGain ? 'Superávit Cumplido' : 'Déficit Logrado';
             statusTextEl.style.color = '#E5CBA7';
+            if (netValEl) netValEl.style.color = '#E5CBA7';
+            if (netBoxEl) {
+                netBoxEl.style.borderColor = 'rgba(229, 203, 167, 0.28)';
+                netBoxEl.style.background = 'linear-gradient(135deg, rgba(229, 203, 167, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)';
+            }
         } else {
             statusTextEl.textContent = metrics.netBalance > 0 ? 'Superávit Elevado' : 'Ajuste Requerido';
             statusTextEl.style.color = '#D97706';
+            if (netValEl) netValEl.style.color = '#D97706';
+            if (netBoxEl) {
+                netBoxEl.style.borderColor = 'rgba(217, 119, 6, 0.28)';
+                netBoxEl.style.background = 'linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)';
+            }
         }
     }
 
