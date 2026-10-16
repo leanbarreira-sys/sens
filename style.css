@@ -2347,7 +2347,7 @@ button.btn-primary:focus {
 .pill-dark {
     background: var(--bg-elevated);
     color: var(--text-secondary);
-    border: 1px solid var(--border-subtle);
+    border: none !important;
 }
 
 .pill-success {
@@ -4129,7 +4129,7 @@ video.ig-img {
     border-radius: 8px;
     padding: 4px;
     margin: 24px 0 28px;
-    border: 1px solid var(--border-subtle);
+    border: none !important;
 }
 
 .auth-tab {
@@ -9299,7 +9299,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-size: 13.5px;
     font-weight: 700;
     cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: none !important;
     background: #1A1A20;
     color: #FFFFFF;
     transition: all 0.2s ease;
@@ -9308,7 +9308,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .sens-pill-btn-action.save {
     background: var(--accent-primary);
     color: #080809;
-    border-color: var(--accent-primary);
+    border: none !important;
     font-weight: 800;
 }
 
@@ -11532,9 +11532,9 @@ body.in-portal .sens-floating-dock,
     gap: 2px !important;
     padding: 6px 4px !important;
     background: #09090B !important;
-    border: 1px solid rgba(158, 125, 75, 0.3) !important;
+    border: none !important;
     border-radius: 36px !important;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
     backdrop-filter: blur(25px) !important;
     -webkit-backdrop-filter: blur(25px) !important;
     z-index: 1000 !important;
@@ -11879,7 +11879,7 @@ body.in-portal .sens-exercise-video-card .sens-exercise-top-pills .pill-dark,
 .sens-exercise-video-card .sens-exercise-top-pills .pill-dark {
     background: rgba(18, 18, 20, 0.9) !important;
     color: #FFFFFF !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: none !important;
     backdrop-filter: blur(8px) !important;
 }
 
@@ -12255,7 +12255,7 @@ body.in-portal .tape-input-control,
 #authModal .modal-card,
 .modal-overlay .modal-card {
     background: #121214 !important;
-    border: 1px solid rgba(229, 203, 167, 0.3) !important;
+    border: none !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85) !important;
     color: #FFFFFF !important;
 }
@@ -12346,9 +12346,10 @@ body.in-portal .sens-meal-desc,
 body.in-portal .sens-nutri-date-nav,
 .sens-nutri-date-nav {
     background: #09090B !important;
-    border: 1px solid rgba(158, 125, 75, 0.3) !important;
+    border: none !important;
     border-radius: 20px !important;
-    padding: 6px 14px !important;
+    padding: 6px 16px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
 }
 
 body.in-portal .sens-nutri-date-nav #nutriDateText,
@@ -12361,7 +12362,8 @@ body.in-portal .sens-nutri-date-nav #nutriDateText,
 body.in-portal .metabolic-equation-card,
 .metabolic-equation-card {
     background: #121214 !important;
-    border: 1px solid rgba(229, 203, 167, 0.3) !important;
+    border: none !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
     color: #FFFFFF !important;
 }
 
@@ -12397,7 +12399,13 @@ body.in-portal .metabolic-equation-card .eq-operator,
     font-weight: 800 !important;
 }
 
+/* 6. Macro Cards en Portal Clínico */
+body.in-portal .sens-macro-pill-card {
+    background: #F4F4F6 !important;
+    border: none !important;
+}
 
-
-
+body.in-portal .sens-macro-grams-bold {
+    color: #09090B !important;
+}
 
