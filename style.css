@@ -8365,8 +8365,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
 @keyframes sensQuestionEntrance {
     0% {
         opacity: 0;
-        transform: translate3d(0, 16px, 0);
-        filter: blur(4px);
+        transform: translate3d(0, 14px, 0);
+        filter: blur(3px);
     }
     100% {
         opacity: 1;
@@ -8378,7 +8378,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 @keyframes sensSloganAnswerEntrance {
     0% {
         opacity: 0;
-        transform: translate3d(0, 20px, 0) scale(0.97);
+        transform: translate3d(0, 18px, 0) scale(0.97);
         filter: blur(5px);
     }
     100% {
@@ -8395,14 +8395,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
     will-change: opacity, transform, filter;
 }
 
-/* Paso 1: Aparece primero la pregunta (Nombre, ¿entrenamos juntos hoy?) */
+/* Paso 1: Aparece primero la pregunta de bienvenida de forma INMEDIATA y rápida (0s delay, 0.44s duration) */
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-question {
-    animation: sensQuestionEntrance 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+    animation: sensQuestionEntrance 0.44s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
 }
 
-/* Paso 2: Pausa narrativa deliberada (~500ms tras la pregunta). A 1.25s entra el slogan como respuesta */
+/* Paso 2: Pausa narrativa de ~500ms tras asentarse la pregunta (0.44s + 0.51s = 0.95s). A 0.95s entra el slogan como respuesta */
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-slogan {
-    animation: sensSloganAnswerEntrance 0.78s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
+    animation: sensSloganAnswerEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
 }
 
 /* Estado Consolidado al terminar la animación o fallback */

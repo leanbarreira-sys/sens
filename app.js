@@ -652,6 +652,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initNutritionHabits();
     initDailyTracking();
     initCharts();
+    try {
+        if (localStorage.getItem('sens_in_portal') === 'true' && typeof openUserPortal === 'function') {
+            openUserPortal(false);
+        }
+    } catch (_) {}
     checkExistingSession();
     // SUITE 2.0 WORLD-CLASS:
     initTopbarAvatar();
@@ -7725,10 +7730,10 @@ function triggerWelcomeGreetingAnimation(force = false) {
     void header.offsetWidth; // Forzar reflow limpio mientras opacity es 0
     requestAnimationFrame(() => {
         header.classList.add('play-entrance');
-        // Tras completar la animación narrativa (1.20s delay + 0.72s anim = 1.92s), consolidar con clase .played
+        // Tras completar la animación narrativa (0.95s delay + 0.70s anim = 1.65s), consolidar con clase .played
         welcomeGreetingTimer = setTimeout(() => {
             header.classList.add('played');
-        }, 2050);
+        }, 1750);
     });
 }
 
