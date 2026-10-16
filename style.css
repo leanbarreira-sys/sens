@@ -8388,6 +8388,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
     }
 }
 
+/* Estado Base: Oculto para evitar cualquier flash estático antes de que inicie la animación */
+.sens-dash-welcome-question,
+.sens-dash-welcome-slogan {
+    opacity: 0;
+    will-change: opacity, transform, filter;
+}
+
 /* Paso 1: Aparece primero la pregunta (Nombre, ¿entrenamos juntos hoy?) */
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-question {
     animation: sensQuestionEntrance 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
@@ -8396,6 +8403,25 @@ input[type="range"]::-webkit-slider-thumb:hover {
 /* Paso 2: Pausa narrativa deliberada (~500ms tras la pregunta). A 1.25s entra el slogan como respuesta */
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-slogan {
     animation: sensSloganAnswerEntrance 0.78s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
+}
+
+/* Estado Consolidado al terminar la animación o fallback */
+.sens-dash-welcome-header.played .sens-dash-welcome-question,
+.sens-dash-welcome-header.played .sens-dash-welcome-slogan {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sens-dash-welcome-question,
+    .sens-dash-welcome-slogan {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        animation: none !important;
+    }
 }
 
 .sens-dash-welcome-question {

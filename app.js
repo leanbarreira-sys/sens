@@ -7708,16 +7708,27 @@ function initWorkoutBlockAccordions() {
  * Dispara la animación de entrada fluida y rápida del saludo de bienvenida MAKE SENS
  */
 let hasPlayedGreetingAnimation = false;
+let welcomeGreetingTimer = null;
 
 function triggerWelcomeGreetingAnimation(force = false) {
     const header = document.getElementById('sensDashWelcomeHeader');
     if (!header) return;
     if (hasPlayedGreetingAnimation && !force) return;
     hasPlayedGreetingAnimation = true;
-    header.classList.remove('play-entrance');
-    void header.offsetWidth; // Forzar reflow limpio para reiniciar la coreografía
+
+    if (welcomeGreetingTimer) {
+        clearTimeout(welcomeGreetingTimer);
+        welcomeGreetingTimer = null;
+    }
+
+    header.classList.remove('play-entrance', 'played');
+    void header.offsetWidth; // Forzar reflow limpio mientras opacity es 0
     requestAnimationFrame(() => {
         header.classList.add('play-entrance');
+        // Tras completar la animación narrativa (1.20s delay + 0.72s anim = 1.92s), consolidar con clase .played
+        welcomeGreetingTimer = setTimeout(() => {
+            header.classList.add('played');
+        }, 2050);
     });
 }
 
