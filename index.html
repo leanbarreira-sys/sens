@@ -62,7 +62,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=2.9">
+    <link rel="stylesheet" href="style.css?v=3.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2676,17 +2676,15 @@
                 <div class="sens-training-video-card" id="dashTrainingVideoCard">
                     <!-- Estado A: Con Entrenamiento Programado para el Día Seleccionado -->
                     <div class="sens-training-card-active" id="dashWorkoutActivePane">
-                        <div class="sens-video-preview-box">
-                            <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline autoplay poster="img/pilar-1-tecnica.jpg">
-                                <source id="dashWorkoutVideoSource" src="vid/pilar-1-tecnica.mp4" type="video/mp4">
-                            </video>
-                            <div class="sens-video-overlay-gradient"></div>
-                            <div class="sens-video-top-badges">
-                                <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial con Nico</span>
-                                <span class="sens-duration-pill" id="dashWorkoutDurationPill">5 ejercicios • ~45 min</span>
-                            </div>
+                        <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline autoplay poster="img/pilar-1-tecnica.jpg">
+                            <source id="dashWorkoutVideoSource" src="vid/pilar-1-tecnica.mp4" type="video/mp4">
+                        </video>
+                        <div class="sens-video-overlay-gradient"></div>
+                        <div class="sens-video-top-badges">
+                            <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial con Nico</span>
+                            <span class="sens-duration-pill" id="dashWorkoutDurationPill">5 ejercicios • ~45 min</span>
                         </div>
-                        <div class="sens-training-card-body">
+                        <div class="sens-training-card-content">
                             <div class="sens-training-info-left">
                                 <span class="sens-training-eyebrow" id="dashWorkoutDayDateLabel">Hoy entrenás</span>
                                 <h3 class="sens-training-focus-title" id="dashWorkoutFocusTitle">Pecho, Hombros y Tríceps</h3>
@@ -2710,7 +2708,7 @@
                                 Día de descanso celular y adaptación del sistema nervioso. Hidratate bien, caminá suave y recargá energía para tu próximo estímulo de fuerza con Nico.
                             </p>
                             <div class="sens-rest-actions">
-                                <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches" style="font-size: 11.5px;">
+                                <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches" style="font-size: 11.5px; border-color: rgba(229, 203, 167, 0.4); color: #E5CBA7;">
                                     Ver estiramientos de movilidad →
                                 </button>
                             </div>
@@ -2718,49 +2716,46 @@
                     </div>
                 </div>
 
-                <!-- 3. Card Nutricional con Video de Almuerzo & Desglose de Calorías -->
+                <!-- 3. Card Nutricional con Video de Fondo & Desglose de Calorías -->
                 <div class="sens-nutri-summary-card" id="dashNutriSummaryCard" style="cursor: pointer;">
-                    <div class="sens-nutri-card-header">
-                        <div class="sens-nutri-header-left">
-                            <span class="sens-nutri-eyebrow">Nutrición &amp; Hábitos del Día</span>
-                            <h3 class="sens-nutri-card-title">Almuerzo sugerido por Nico</h3>
-                        </div>
-                        <span class="sens-nutri-goal-badge" id="dashNutriTargetBadge">-</span>
+                    <video class="sens-nutri-video-player" muted loop playsinline autoplay poster="img/pilar-4-adherencia.jpg">
+                        <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
+                    </video>
+                    <div class="sens-nutri-overlay-gradient"></div>
+                    <div class="sens-nutri-top-badges">
+                        <span class="sens-dish-pill">Almuerzo Sugerido</span>
+                        <span class="sens-duration-pill" id="dashNutriTargetBadge">-</span>
                     </div>
-                    <div class="sens-nutri-media-row">
-                        <div class="sens-nutri-video-wrap">
-                            <video class="sens-nutri-video-player" muted loop playsinline autoplay poster="img/pilar-4-adherencia.jpg">
-                                <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
-                            </video>
-                            <span class="sens-dish-tag">Almuerzo</span>
-                        </div>
-                        <div class="sens-nutri-details-col">
+                    <div class="sens-nutri-card-content">
+                        <div class="sens-nutri-info-top">
+                            <span class="sens-nutri-eyebrow">Nutrición &amp; Hábitos del Día</span>
+                            <h3 class="sens-nutri-card-title">Bowl de Salmón &amp; Vegetales Salteados</h3>
                             <p class="sens-nutri-recipe-note" id="dashNutriMealDesc">
                                 Bowl de salmón sellado o pechuga grillada con quinoa tibia, palta y vegetales salteados. Aporte proteico para síntesis muscular.
                             </p>
-                            <div class="sens-meal-cals-grid">
-                                <div class="sens-meal-cal-pill">
-                                    <span class="meal-name">Desayuno</span>
-                                    <strong class="meal-val" id="calMealDesayuno">-</strong>
-                                </div>
-                                <div class="sens-meal-cal-pill highlight">
-                                    <span class="meal-name">Almuerzo</span>
-                                    <strong class="meal-val" id="calMealAlmuerzo">-</strong>
-                                </div>
-                                <div class="sens-meal-cal-pill">
-                                    <span class="meal-name">Merienda</span>
-                                    <strong class="meal-val" id="calMealMerienda">-</strong>
-                                </div>
-                                <div class="sens-meal-cal-pill">
-                                    <span class="meal-name">Cena</span>
-                                    <strong class="meal-val" id="calMealCena">-</strong>
-                                </div>
+                        </div>
+                        <div class="sens-nutri-cals-row">
+                            <div class="sens-nutri-cal-chip">
+                                <span class="meal-name">Desayuno</span>
+                                <strong class="meal-val" id="calMealDesayuno">-</strong>
+                            </div>
+                            <div class="sens-nutri-cal-chip highlight">
+                                <span class="meal-name">Almuerzo</span>
+                                <strong class="meal-val" id="calMealAlmuerzo">-</strong>
+                            </div>
+                            <div class="sens-nutri-cal-chip">
+                                <span class="meal-name">Merienda</span>
+                                <strong class="meal-val" id="calMealMerienda">-</strong>
+                            </div>
+                            <div class="sens-nutri-cal-chip">
+                                <span class="meal-name">Cena</span>
+                                <strong class="meal-val" id="calMealCena">-</strong>
                             </div>
                         </div>
-                    </div>
-                    <div class="sens-nutri-card-footer">
-                        <span>Toca para ver el detalle en nutrición y registrar tus comidas</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        <div class="sens-nutri-card-cta">
+                            <span>Tocar para registrar comidas &amp; macros</span>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
                     </div>
                 </div>
 
@@ -4583,7 +4578,7 @@
     <script src="exercises_db.js"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=2.9"></script>
+    <script src="app.js?v=3.0"></script>
 </body>
 
 </html>

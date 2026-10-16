@@ -7631,16 +7631,25 @@ function initWeekStripCalendar() {
         });
     }
 
-    // Botón de Inicio Rápido de Entrenamiento (flecha circular)
+    // Botón y Card de Inicio Rápido de Entrenamiento (panel activo y flecha circular)
     const startWorkoutBtn = document.getElementById('dashStartWorkoutBtn');
+    const workoutActivePane = document.getElementById('dashWorkoutActivePane');
+    const handleStartWorkout = (e) => {
+        if (e && e.target && e.target.closest('#btnRestSeeStretches')) return;
+        const dayKey = getDayKeyFromDate(AppState.selectedDate || new Date());
+        AppState.currentDay = dayKey;
+        switchPortalView('workoutView');
+        renderWorkoutDay(dayKey);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
     if (startWorkoutBtn) {
-        startWorkoutBtn.addEventListener('click', () => {
-            const dayKey = getDayKeyFromDate(AppState.selectedDate || new Date());
-            AppState.currentDay = dayKey;
-            switchPortalView('workoutView');
-            renderWorkoutDay(dayKey);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        startWorkoutBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleStartWorkout(e);
         });
+    }
+    if (workoutActivePane) {
+        workoutActivePane.addEventListener('click', handleStartWorkout);
     }
 
     // Botón de Estiramientos en Card de Descanso
