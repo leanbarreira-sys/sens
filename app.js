@@ -7680,8 +7680,16 @@ function initWeekStripCalendar() {
 
     // Clicks en Card Nutricional y Card de Objetivo para ir a sus vistas
     const nutriCard = document.getElementById('dashNutriSummaryCard');
+    const goNutriBtn = document.getElementById('dashGoNutriBtn');
     if (nutriCard) {
         nutriCard.addEventListener('click', () => {
+            switchPortalView('nutritionView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+    if (goNutriBtn) {
+        goNutriBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             switchPortalView('nutritionView');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
@@ -7874,19 +7882,19 @@ function renderWorkoutDaysNav() {
 const SENS_TYPE_ICONS = {
     muscular: {
         label: 'Muscular',
-        svg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="3" height="10" rx="1"/><rect x="19" y="7" width="3" height="10" rx="1"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="7" y1="9" x2="7" y2="15"/><line x1="17" y1="9" x2="17" y2="15"/></svg>`
+        svg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M2 10v4"/><path d="M5 8v8"/><path d="M7 6v12"/><path d="M17 6v12"/><path d="M19 8v8"/><path d="M22 10v4"/></svg>`
     },
     cardio: {
         label: 'Cardio',
-        svg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="5" r="2"/><path d="m10 21 3-5 3 2 3-5"/><path d="m6 13 4-2 3 3 4-2"/></svg>`
+        svg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4" r="2"/><path d="m10 21 3-5 3 2 3-5"/><path d="m6 13 4-2 3 3 4-2"/></svg>`
     },
     movilidad: {
         label: 'Movilidad',
-        svg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>`
+        svg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14.93-4M20 12a8 8 0 0 1-14.93 4"/><polyline points="18 4 20 8 16 8"/><polyline points="6 20 4 16 8 16"/></svg>`
     },
     yoga: {
         label: 'Yoga',
-        svg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 9v4"/><path d="M5 19c2-2 4-3 7-3s5 1 7 3"/><path d="m7 12 5 2 5-2"/></svg>`
+        svg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 9v5"/><path d="M6 18c1.5-2 3.5-3 6-3s4.5 1 6 3"/><path d="m7 13 5 3 5-3"/></svg>`
     }
 };
 
@@ -8037,16 +8045,19 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         subFocus.textContent = details.subtitle;
     }
 
-    // 2. Matriz de los 4 tipos de entrenamiento (Muscular, Cardio, Movilidad, Yoga)
+    // 2. Fila de los 4 tipos de entrenamiento (Muscular, Cardio, Movilidad, Yoga) al fondo con icono y label
     if (typeIconsWrap) {
         const ALL_TYPES = ['muscular', 'cardio', 'movilidad', 'yoga'];
         typeIconsWrap.innerHTML = ALL_TYPES.map(typeKey => {
             const info = SENS_TYPE_ICONS[typeKey];
             if (!info) return '';
             const isActive = details.types.includes(typeKey);
-            const activeClass = isActive ? 'active' : 'inactive';
-            const tooltip = isActive ? `${info.label} (Programado para hoy)` : `${info.label} (No programado)`;
-            return `<span class="sens-type-matrix-icon ${activeClass}" title="${tooltip}" aria-label="${info.label}">${info.svg}</span>`;
+            const activeClass = isActive ? 'active highlight' : 'inactive';
+            const tooltip = isActive ? `${info.label}: Estimulado hoy` : `${info.label}: No incluido`;
+            return `<div class="sens-type-chip ${activeClass}" title="${tooltip}">
+                <span class="type-chip-icon">${info.svg}</span>
+                <span class="type-chip-label">${info.label}</span>
+            </div>`;
         }).join('');
     }
 
@@ -8456,25 +8467,6 @@ function updateObjectiveCardData(selectedDate = null) {
         }
     }
 
-    // Consistencia semanal
-    const athId = getActiveAthleteId();
-    const data = getCoachAthleteWorkoutData(athId);
-    let doneWorkouts = 0;
-    let scheduledWorkouts = 0;
-    for (let i = 1; i <= 7; i++) {
-        const dData = data['day' + i];
-        if (dData && dData.exercises && dData.exercises.length > 0) scheduledWorkouts++;
-        if (dData && dData.completed) doneWorkouts++;
-    }
-    if (consistencyScoreText) {
-        const consistencyPct = scheduledWorkouts > 0 ? Math.min(100, Math.round((doneWorkouts / scheduledWorkouts) * 100)) : 86;
-        consistencyScoreText.textContent = `Índice de Consistencia: ${consistencyPct}% • ${consistencyPct >= 75 ? 'Rango Óptimo' : 'En Progreso'}`;
-        const dotEl = document.getElementById('dashConsistencyDot');
-        if (dotEl) {
-            dotEl.className = `sens-consistency-dot ${consistencyPct >= 75 ? 'gold' : 'warm'}`;
-        }
-    }
-
     // Renderizar gráfico semanal
     renderWeeklyBalanceChart(selectedDate);
 
@@ -8485,7 +8477,8 @@ function updateObjectiveCardData(selectedDate = null) {
 
     // Listener para ir a seguimiento
     if (btnGoTracking) {
-        btnGoTracking.onclick = () => {
+        btnGoTracking.onclick = (e) => {
+            if (e) e.stopPropagation();
             if (typeof switchPortalView === 'function') {
                 switchPortalView('trackingView');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -8568,7 +8561,8 @@ function updateBiometricsCardData(selectedDate = null) {
     }
 
     if (btnGoBio) {
-        btnGoBio.onclick = () => {
+        btnGoBio.onclick = (e) => {
+            if (e) e.stopPropagation();
             if (typeof switchPortalView === 'function') {
                 switchPortalView('trackingView');
                 window.scrollTo({ top: 0, behavior: 'smooth' });

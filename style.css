@@ -11132,10 +11132,18 @@ body.in-portal .sens-training-video-card:hover,
     padding: 16px 18px;
     z-index: 3;
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 14px;
+    flex-direction: column;
+    gap: 8px;
     text-align: left;
+}
+
+/* Fila superior en contenido de tarjetas con video: Info a la izquierda, Botón circular a la derecha */
+.sens-card-top-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
 }
 
 /* Tipografía Unificada de Alto Contraste (3 Líneas) */
@@ -12554,36 +12562,81 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     font-weight: 800 !important;
 }
 
-/* Matriz de los 4 Tipos de Entrenamiento en Card de Entrenamiento */
-.sens-workout-type-matrix {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
+/* Fila de los 4 Tipos de Entrenamiento (Muscular, Cardio, Movilidad, Yoga) al fondo de la card */
+.sens-workout-4types-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    width: 100%;
+    margin-top: 2px;
 }
 
-.sens-type-matrix-icon {
-    width: 26px;
-    height: 26px;
-    border-radius: 7px;
-    display: inline-flex;
+.sens-type-chip {
+    background: rgba(0, 0, 0, 0.58);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 6px 2px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: all 0.25s ease;
-}
-
-.sens-type-matrix-icon.active {
-    background: rgba(229, 203, 167, 0.16);
-    border: 1px solid rgba(229, 203, 167, 0.45);
-    color: #E5CBA7;
-    box-shadow: 0 0 10px rgba(229, 203, 167, 0.25);
-}
-
-.sens-type-matrix-icon.inactive {
-    background: rgba(255, 255, 255, 0.04);
+    gap: 3px;
     border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.25s ease;
+    min-width: 0;
+    cursor: default;
+}
+
+.sens-type-chip .type-chip-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #71717A;
-    opacity: 0.35;
+    transition: color 0.25s ease;
+}
+
+.sens-type-chip .type-chip-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.sens-type-chip .type-chip-label {
+    display: block;
+    font-size: 8.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.25s ease;
+}
+
+/* Estado Activo: Estimulado en la sesión */
+.sens-type-chip.active,
+.sens-type-chip.highlight {
+    background: rgba(229, 203, 167, 0.16) !important;
+    border: 1px solid rgba(229, 203, 167, 0.45) !important;
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.15);
+}
+
+.sens-type-chip.active .type-chip-icon,
+.sens-type-chip.highlight .type-chip-icon {
+    color: #E5CBA7 !important;
+}
+
+.sens-type-chip.active .type-chip-label,
+.sens-type-chip.highlight .type-chip-label {
+    color: #E5CBA7 !important;
+    font-weight: 800 !important;
+}
+
+/* Estado Inactivo: No incluido en la sesión */
+.sens-type-chip.inactive {
+    opacity: 0.42;
 }
 
 /* =============================================================================
@@ -13032,10 +13085,55 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 12px;
+    padding-top: 14px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 11px;
-    color: #71717A;
+    font-size: 11.5px;
+    color: #A1A1AA;
+}
+
+/* Botón de flecha circular en footers de tarjetas Obsidian (Balance y Biometría) */
+.sens-balance-footer .sens-btn-circle-arrow,
+.sens-bio-footer .sens-btn-circle-arrow {
+    width: 38px;
+    height: 38px;
+    background: rgba(229, 203, 167, 0.08);
+    border: 1px solid rgba(229, 203, 167, 0.25) !important;
+    color: #E5CBA7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    flex-shrink: 0;
+}
+
+.sens-balance-footer .sens-btn-circle-arrow:hover,
+.sens-bio-footer .sens-btn-circle-arrow:hover {
+    background: #E5CBA7;
+    color: #09090B;
+    border-color: #E5CBA7 !important;
+    transform: scale(1.08);
+}
+
+.sens-balance-footer-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sens-footer-sub-label {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.65);
+    letter-spacing: 0.2px;
+}
+
+.sens-bio-footer-meta {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #A1A1AA;
 }
 
 
