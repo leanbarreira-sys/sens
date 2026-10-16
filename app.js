@@ -741,7 +741,11 @@ function initLeadCapture() {
     document.querySelectorAll('a[href="#sumate"]:not(.plan-select-btn)').forEach(link => {
         link.addEventListener('click', (e) => {
             const mobileMenu = document.getElementById('mobileMenu');
-            if (mobileMenu) mobileMenu.style.display = 'none';
+            if (mobileMenu) {
+                mobileMenu.style.display = 'none';
+                mobileMenu.classList.remove('is-open');
+                document.body.classList.remove('mobile-menu-open');
+            }
 
             const sumateSection = document.getElementById('sumate');
             if (sumateSection) {
@@ -1356,20 +1360,38 @@ function initNavbarScroll() {
     const mobileMenuClientAccessBtn = document.getElementById('mobileMenuClientAccessBtn');
 
     if (menuToggle && mobileMenu) {
-        menuToggle.addEventListener('click', () => {
-            const isVisible = mobileMenu.style.display === 'flex';
-            mobileMenu.style.display = isVisible ? 'none' : 'flex';
+        function openMobileMenu() {
+            mobileMenu.style.display = 'flex';
+            mobileMenu.classList.add('is-open');
+            document.body.classList.add('mobile-menu-open');
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.style.display = 'none';
+            mobileMenu.classList.remove('is-open');
+            document.body.classList.remove('mobile-menu-open');
+        }
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isVisible = mobileMenu.style.display === 'flex' || mobileMenu.classList.contains('is-open');
+            if (isVisible) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
         });
 
         if (mobileMenuCloseBtn) {
-            mobileMenuCloseBtn.addEventListener('click', () => {
-                mobileMenu.style.display = 'none';
+            mobileMenuCloseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeMobileMenu();
             });
         }
 
         if (mobileMenuClientAccessBtn) {
             mobileMenuClientAccessBtn.addEventListener('click', () => {
-                mobileMenu.style.display = 'none';
+                closeMobileMenu();
                 const authModal = document.getElementById('authModal');
                 if (authModal) authModal.style.display = 'flex';
             });
@@ -1378,7 +1400,7 @@ function initNavbarScroll() {
         mobileMenu.querySelectorAll('a, button').forEach(el => {
             if (el !== mobileMenuCloseBtn) {
                 el.addEventListener('click', () => {
-                    mobileMenu.style.display = 'none';
+                    closeMobileMenu();
                 });
             }
         });
@@ -1720,12 +1742,15 @@ function initAuthModal() {
     openBtns.forEach(btn => {
         if (btn) {
             btn.addEventListener('click', () => {
+                if (mobileMenu) {
+                    mobileMenu.style.display = 'none';
+                    mobileMenu.classList.remove('is-open');
+                    document.body.classList.remove('mobile-menu-open');
+                }
                 if (AppState.user) {
-                    if (mobileMenu) mobileMenu.style.display = 'none';
                     openUserPortal(false);
                     return;
                 }
-                if (mobileMenu) mobileMenu.style.display = 'none';
                 showAuthModal(true);
             });
         }
@@ -2511,7 +2536,7 @@ function switchPortalView(viewId) {
     if (viewId === 'dashView') {
         if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
         if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
-        if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation();
+        if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation(true);
         if (typeof initDashboardCardsTactileFeedback === 'function') initDashboardCardsTactileFeedback();
     }
 }
@@ -2537,7 +2562,11 @@ function openUserPortal(forceOnboarding = false) {
     document.body.classList.add('in-portal');
     if (globalHeader) globalHeader.style.display = 'none';
     if (mobileQuickBar) mobileQuickBar.style.display = 'none';
-    if (mobileMenu) mobileMenu.style.display = 'none';
+    if (mobileMenu) {
+        mobileMenu.style.display = 'none';
+        mobileMenu.classList.remove('is-open');
+        document.body.classList.remove('mobile-menu-open');
+    }
 
     const floatSocial = document.getElementById('homeFloatingSocial');
     if (floatSocial) floatSocial.style.display = 'none';
@@ -7685,6 +7714,8 @@ function triggerWelcomeGreetingAnimation(force = false) {
     if (!header) return;
     if (hasPlayedGreetingAnimation && !force) return;
     hasPlayedGreetingAnimation = true;
+    header.classList.remove('play-entrance');
+    void header.offsetWidth; // Forzar reflow limpio para reiniciar la coreografía
     requestAnimationFrame(() => {
         header.classList.add('play-entrance');
     });
@@ -7953,7 +7984,9 @@ function initWeekStripCalendar() {
     // Inicializar gestos táctiles de swipe horizontal, watcher sticky, animación de entrada y táctil de cards
     initCalendarSwipeGestures();
     initStickyCalendarWatcher();
-    triggerWelcomeGreetingAnimation();
+    if (document.getElementById('app-container')?.classList.contains('active')) {
+        triggerWelcomeGreetingAnimation(true);
+    }
     initDashboardCardsTactileFeedback();
 
     // Botón y Card de Inicio Rápido de Entrenamiento (panel activo y flecha circular)

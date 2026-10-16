@@ -1271,6 +1271,62 @@ footer p {
         display: none;
     }
 
+    /* Mobile Menu Overlay: Lujo Silencioso & Cobertura Total (Cero Fuga de Navbar o Hamburguesa) */
+    .mobile-menu-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        background: rgba(8, 8, 9, 0.98) !important;
+        z-index: 100000 !important;
+        padding: 35px 25px 40px !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+        text-align: center !important;
+        backdrop-filter: blur(25px) !important;
+        -webkit-backdrop-filter: blur(25px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    body.mobile-menu-open {
+        overflow: hidden !important;
+    }
+
+    body.mobile-menu-open header,
+    body.mobile-menu-open .navbar,
+    body.mobile-menu-open #globalNavbar {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+    }
+
+    .mobile-menu-close {
+        position: absolute !important;
+        top: 20px !important;
+        right: 20px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        color: #FFFFFF !important;
+        font-size: 24px !important;
+        line-height: 1 !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        z-index: 100010 !important;
+        transition: all 0.25s ease !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .mobile-menu-close:hover,
+    .mobile-menu-close:active {
+        background: rgba(229, 203, 167, 0.2) !important;
+        color: var(--accent-primary) !important;
+        transform: scale(1.06) !important;
+    }
+
     .trilogy-section {
         padding: 4rem 0 !important;
         background: linear-gradient(to bottom, var(--bg-section), rgba(5, 5, 5, 0.8));
@@ -8305,23 +8361,41 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-family: var(--font-main);
 }
 
-@keyframes sensWelcomeSlideUp {
+/* Coreografía Narrativa: Pregunta -> Pausa Reflexiva -> Respuesta "MAKE SENS." */
+@keyframes sensQuestionEntrance {
     0% {
         opacity: 0;
-        transform: translate3d(0, 22px, 0) scale(0.98);
+        transform: translate3d(0, 16px, 0);
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        filter: blur(0);
+    }
+}
+
+@keyframes sensSloganAnswerEntrance {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0) scale(0.97);
+        filter: blur(5px);
     }
     100% {
         opacity: 1;
         transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
     }
 }
 
+/* Paso 1: Aparece primero la pregunta (Nombre, ¿entrenamos juntos hoy?) */
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-question {
-    animation: sensWelcomeSlideUp 0.78s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: sensQuestionEntrance 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
 }
 
+/* Paso 2: Pausa narrativa deliberada (~500ms tras la pregunta). A 1.25s entra el slogan como respuesta */
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-slogan {
-    animation: sensWelcomeSlideUp 0.88s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+    animation: sensSloganAnswerEntrance 0.78s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
 }
 
 .sens-dash-welcome-question {
