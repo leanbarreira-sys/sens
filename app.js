@@ -7815,6 +7815,7 @@ function renderDynamicWeekStrip() {
             AppState.currentDay = 'day' + (idx + 1);
 
             updateDynamicTrainingCard(dayDate, 'day' + (idx + 1));
+            updateNutriSummaryCardData();
             updateObjectiveCardData(dayDate);
             if (typeof updateBiometricsCardData === 'function') updateBiometricsCardData();
             renderWorkoutDaysNav();
@@ -8137,6 +8138,8 @@ function updateNutriSummaryCardData() {
     const targetBadge = document.getElementById('dashNutriTargetBadge');
     const goalPill = document.getElementById('dashNutriGoalPill');
     const subText = document.getElementById('dashNutriSubText');
+    const nutriDayLabel = document.getElementById('dashNutriDayDateLabel');
+    const caloriesHero = document.getElementById('dashNutriCaloriesHero');
     const calDesayuno = document.getElementById('calMealDesayuno');
     const calAlmuerzo = document.getElementById('calMealAlmuerzo');
     const calMerienda = document.getElementById('calMealMerienda');
@@ -8147,10 +8150,17 @@ function updateNutriSummaryCardData() {
     const anamnesis = AppState.anamnesis || {};
     const athId = getActiveAthleteId();
     const isDemo = (athId === 'usr-vip-001' || athId === 'mock_vip');
+    const selectedDate = AppState.selectedDate || new Date();
+    const isToday = isSameDay(selectedDate, new Date());
+
+    // Eyebrow dinámico de Nutrición
+    if (nutriDayLabel) {
+        nutriDayLabel.textContent = isToday ? 'Nutrición de Hoy' : `Nutrición del ${formatDateDDMM(selectedDate)}`;
+    }
 
     // 1. Objetivo Biológico del Atleta (SENS Brandbook / Nico Coach)
+    const userGoal = profile.goal || anamnesis.goal || 'fat_loss';
     if (goalPill) {
-        const userGoal = profile.goal || anamnesis.goal || 'fat_loss';
         const goalLabels = {
             fat_loss: 'Déficit Calórico',
             muscle_gain: 'Superávit Hipertrofia',
@@ -8165,6 +8175,7 @@ function updateNutriSummaryCardData() {
 
     if (!targetKcal || targetKcal <= 0) {
         if (targetBadge) targetBadge.textContent = '-';
+        if (caloriesHero) caloriesHero.textContent = 'Nutrición SENS';
         if (subText) subText.textContent = 'Plan nutricional adaptado por Nico';
         if (calDesayuno) calDesayuno.textContent = '-';
         if (calAlmuerzo) calAlmuerzo.textContent = '-';
@@ -8174,22 +8185,35 @@ function updateNutriSummaryCardData() {
         return;
     }
 
+    // 2. Proteínas y Carbohidratos Recomendados en la Pastilla Superior
+    const weightRaw = profile.current_weight || anamnesis.weight;
+    const currentWeight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 75.8 : 70.0);
+    // Proteína: ~1.9 - 2.0g/kg para preservar masa muscular (o ~28% de kcal)
+    const recProtein = profile.target_protein ? Math.round(profile.target_protein) : Math.round(Math.max(120, currentWeight * 1.85)); // ~140g
+    // Carbohidratos recomendados: energía limpia (~40% de kcal)
+    const recCarbs = profile.target_carbs ? Math.round(profile.target_carbs) : Math.round((targetKcal * 0.39) / 4); // ~190g
+
     if (targetBadge) {
-        targetBadge.textContent = `${targetKcal.toLocaleString('es-AR')} kcal meta`;
+        targetBadge.textContent = `${recProtein}g Prot • ${recCarbs}g Carbs`;
     }
 
+    // 3. Título Hero: Calorías Totales del Día
+    if (caloriesHero) {
+        caloriesHero.textContent = `${targetKcal.toLocaleString('es-AR')} kcal Totales`;
+    }
+
+    // 4. Subtítulo: Objetivo Biológico y Coaching
     if (subText) {
-        const userGoal = profile.goal || anamnesis.goal || 'fat_loss';
         const goalSubtexts = {
-            fat_loss: 'Déficit estructurado para preservar masa muscular',
-            muscle_gain: 'Superávit calibrado para máxima síntesis proteica',
-            recomp: 'Aporte óptimo para recomposición y rendimiento',
-            posture_health: 'Plan antiinflamatorio para salud y vitalidad'
+            fat_loss: 'Déficit calórico estructurado para preservar masa muscular',
+            muscle_gain: 'Superávit calórico calibrado para máxima síntesis proteica',
+            recomp: 'Aporte óptimo para recomposición magra y rendimiento',
+            posture_health: 'Plan antiinflamatorio para longevidad y vitalidad'
         };
         subText.textContent = goalSubtexts[userGoal] || 'Plan calibrado por Nico para síntesis proteica & energía';
     }
 
-    // 2. Desglose en 5 ingestas: 4 principales + 1 bocadillo (20%, 35%, 15%, 20%, 10%)
+    // 5. Desglose en 5 ingestas: 4 principales + 1 bocadillo (20%, 35%, 15%, 20%, 10%)
     if (calDesayuno) calDesayuno.textContent = `${Math.round(targetKcal * 0.20)} kcal`;
     if (calAlmuerzo) calAlmuerzo.textContent = `${Math.round(targetKcal * 0.35)} kcal`;
     if (calMerienda) calMerienda.textContent = `${Math.round(targetKcal * 0.15)} kcal`;
