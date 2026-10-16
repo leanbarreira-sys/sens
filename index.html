@@ -53,6 +53,11 @@
     }
     </script>
 
+    <!-- Preload Crítico LCP: Carga instantánea de imagen de Hero (72 KB) y Posters del Portal -->
+    <link rel="preload" as="image" href="img/hero-bg-opt.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="img/pilar-3-movilidad.jpg">
+    <link rel="preload" as="image" href="img/pilar-4-adherencia.jpg">
+
     <!-- SENS Anti-Flash Script: Restaura el modo portal de inmediato antes del primer render -->
     <script>
         (function() {
@@ -73,7 +78,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=optional">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=5.2">
+    <link rel="stylesheet" href="style.css?v=5.3">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -161,7 +166,7 @@
             <!-- Fallback Image: Visible instantáneamente mientras carga el video -->
             <div class="hero-bg-fallback" id="heroBgFallback"></div>
             <!-- Video Hero: Se reproduce nítido en loop -->
-            <video autoplay muted loop playsinline poster="img/hero-bg-opt.png" class="hero-video" id="heroVideo">
+            <video autoplay muted loop playsinline preload="auto" poster="img/hero-bg-opt.jpg" class="hero-video" id="heroVideo">
                 <source src="vid/hero-bg-opt.mp4" type="video/mp4">
             </video>
             <!-- Overlay Brandbook: Gradiente responsivo (fade abajo en mobile, fade izquierda a derecha en desktop) -->
@@ -213,8 +218,8 @@
                     <!-- Pilar 1: Técnica con Criterio (Seguridad & Nico Coaching) -->
                     <div class="carousel-slide">
                         <div class="ig-post">
-                            <video autoplay muted loop playsinline poster="img/pilar-1-tecnica.jpg" class="ig-img"
-                                preload="metadata">
+                            <video muted loop playsinline poster="img/pilar-1-tecnica.jpg" class="ig-img"
+                                preload="none">
                                 <source src="vid/pilar-1-tecnica.mp4" type="video/mp4">
                             </video>
                             <div class="grad-bottom"></div>
@@ -235,8 +240,8 @@
                     <!-- Pilar 2: Sentirte Bien en tu Cuerpo (Vitalidad y Fuerza) -->
                     <div class="carousel-slide">
                         <div class="ig-post">
-                            <video autoplay muted loop playsinline poster="img/pilar-2-vitalidad.jpg" class="ig-img"
-                                preload="metadata">
+                            <video muted loop playsinline poster="img/pilar-2-vitalidad.jpg" class="ig-img"
+                                preload="none">
                                 <source src="vid/pilar-2-vitalidad.mp4" type="video/mp4">
                             </video>
                             <div class="grad-bottom"></div>
@@ -256,8 +261,8 @@
                     <!-- Pilar 3: Movilidad & Cero Dolor -->
                     <div class="carousel-slide">
                         <div class="ig-post">
-                            <video autoplay muted loop playsinline poster="img/pilar-3-movilidad.jpg" class="ig-img"
-                                preload="metadata">
+                            <video muted loop playsinline poster="img/pilar-3-movilidad.jpg" class="ig-img"
+                                preload="none">
                                 <source src="vid/pilar-3-movilidad.mp4" type="video/mp4">
                             </video>
                             <div class="grad-bottom"></div>
@@ -278,8 +283,8 @@
                     <!-- Pilar 4: Hábitos & Resultados Sostenibles -->
                     <div class="carousel-slide">
                         <div class="ig-post">
-                            <video autoplay muted loop playsinline poster="img/pilar-4-adherencia.jpg" class="ig-img"
-                                preload="metadata">
+                            <video muted loop playsinline poster="img/pilar-4-adherencia.jpg" class="ig-img"
+                                preload="none">
                                 <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
                             </video>
                             <div class="grad-bottom"></div>
@@ -2674,7 +2679,7 @@
                 <div class="sens-training-video-card" id="dashTrainingVideoCard">
                     <!-- Estado A: Con Entrenamiento Programado para el Día Seleccionado -->
                     <div class="sens-training-card-active" id="dashWorkoutActivePane">
-                        <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline webkit-playsinline autoplay disablePictureInPicture disableremoteplayback poster="img/pilar-3-movilidad.jpg">
+                        <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline webkit-playsinline autoplay preload="auto" disablePictureInPicture disableremoteplayback poster="img/pilar-3-movilidad.jpg">
                             <source id="dashWorkoutVideoSource" src="vid/pilar-3-movilidad.mp4" type="video/mp4">
                         </video>
                         <div class="sens-video-overlay-gradient"></div>
@@ -2737,7 +2742,7 @@
 
                 <!-- 3. Card Nutricional con Video de Fondo & Desglose de Calorías -->
                 <div class="sens-nutri-summary-card" id="dashNutriSummaryCard" style="cursor: pointer;">
-                    <video class="sens-nutri-video-player" muted loop playsinline webkit-playsinline autoplay disablePictureInPicture disableremoteplayback poster="img/pilar-4-adherencia.jpg">
+                    <video class="sens-nutri-video-player" muted loop playsinline webkit-playsinline autoplay preload="auto" disablePictureInPicture disableremoteplayback poster="img/pilar-4-adherencia.jpg">
                         <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
                     </video>
                     <div class="sens-nutri-overlay-gradient"></div>
@@ -4602,7 +4607,7 @@
     <script src="exercises_db.js?v=4.6"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=5.2"></script>
+    <script src="app.js?v=5.3"></script>
 </body>
 
 </html>

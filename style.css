@@ -6787,7 +6787,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     inset: 0;
     width: 100%;
     height: 100%;
-    background: url('img/hero-bg-opt.png') center/cover no-repeat;
+    background: url('img/hero-bg-opt.jpg') center/cover no-repeat;
     z-index: 1;
     filter: saturate(0.95);
     transition: opacity 0.6s ease;
@@ -6800,7 +6800,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     height: 100%;
     object-fit: cover;
     z-index: 2;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.6s ease;
 }
 

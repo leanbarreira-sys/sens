@@ -1199,11 +1199,10 @@ function renderExerciseLibraryList() {
 function initHeroVideo() {
     const video = document.getElementById('heroVideo');
     const fallback = document.getElementById('heroBgFallback');
-    if (!video || !fallback) return;
+    if (!video) return;
 
     function handleVideoPlaying() {
-        video.style.opacity = '1';
-        fallback.style.opacity = '0';
+        if (fallback) fallback.style.opacity = '0';
     }
 
     video.addEventListener('playing', handleVideoPlaying);
@@ -1211,14 +1210,11 @@ function initHeroVideo() {
         if (video.currentTime > 0.05) handleVideoPlaying();
     });
 
-    // Intentar reproducción automática
+    // Intentar reproducción automática inmediata
     const playPromise = video.play();
     if (playPromise !== undefined) {
-        playPromise.then(() => {
-            handleVideoPlaying();
-        }).catch(() => {
-            // Si el navegador bloquea autoplay, mantener la imagen nítida
-            fallback.style.opacity = '1';
+        playPromise.then(handleVideoPlaying).catch(() => {
+            if (fallback) fallback.style.opacity = '1';
         });
     }
 }
