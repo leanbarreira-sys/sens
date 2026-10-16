@@ -2436,6 +2436,7 @@ function switchPortalView(viewId) {
         if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
         if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
         if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation();
+        if (typeof initDashboardCardsTactileFeedback === 'function') initDashboardCardsTactileFeedback();
     }
 }
 
@@ -7716,6 +7717,21 @@ function initCalendarSwipeGestures() {
 }
 
 /**
+ * Mide la barra superior fija (.portal-topbar) y actualiza la variable CSS --portal-topbar-height
+ */
+function updatePortalTopbarHeight() {
+    const topbar = document.querySelector('.portal-topbar');
+    if (topbar) {
+        const h = Math.round(topbar.getBoundingClientRect().height);
+        if (h > 0) {
+            document.documentElement.style.setProperty('--portal-topbar-height', `${h}px`);
+            return h;
+        }
+    }
+    return 48;
+}
+
+/**
  * Observador de Scroll para el efecto Sticky Floating Frosted Glass del Calendario
  */
 function initStickyCalendarWatcher() {
@@ -7724,10 +7740,10 @@ function initStickyCalendarWatcher() {
 
     let ticking = false;
     const updateStickyState = () => {
-        const topbar = document.querySelector('.portal-topbar');
-        const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 48;
+        const topbarHeight = updatePortalTopbarHeight();
         const rect = wrapper.getBoundingClientRect();
-        const isStuck = rect.top <= topbarHeight + 2;
+        // Cuando el calendar wrapper alcanza la base del topbar
+        const isStuck = rect.top <= topbarHeight + 3;
         wrapper.classList.toggle('is-stuck', isStuck);
         ticking = false;
     };
@@ -7741,6 +7757,58 @@ function initStickyCalendarWatcher() {
 
     window.addEventListener('resize', updateStickyState, { passive: true });
     updateStickyState();
+}
+
+/**
+ * Micro-interacción táctil sofisticada con física de zoom in / zoom out rápido
+ * para todas las cards del inicio (Apple Spring Touch)
+ */
+function initDashboardCardsTactileFeedback() {
+    const cardSelectors = [
+        '#dashTrainingVideoCard',
+        '#dashNutriSummaryCard',
+        '#dashObjectiveCard',
+        '#dashBiometricsCard',
+        '#dashStoreCard'
+    ];
+
+    const cards = document.querySelectorAll(cardSelectors.join(', '));
+    cards.forEach(card => {
+        if (!card || card.dataset.tactileInitialized) return;
+        card.dataset.tactileInitialized = 'true';
+
+        const triggerTouchPulse = () => {
+            card.classList.remove('sens-card-touch-pulse');
+            void card.offsetWidth; // Reflow
+            card.classList.add('sens-card-touch-pulse');
+            card.addEventListener('animationend', () => {
+                card.classList.remove('sens-card-touch-pulse');
+            }, { once: true });
+        };
+
+        // Soporte Click Desktop
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('button, a, input, select, .sens-btn-circle-arrow')) return;
+            triggerTouchPulse();
+        });
+
+        // Soporte Touchscreen Mobile
+        let isTouching = false;
+        card.addEventListener('touchstart', (e) => {
+            if (e.target.closest('button, a, input, select, .sens-btn-circle-arrow')) return;
+            isTouching = true;
+        }, { passive: true });
+
+        card.addEventListener('touchend', (e) => {
+            if (!isTouching) return;
+            isTouching = false;
+            triggerTouchPulse();
+        }, { passive: true });
+
+        card.addEventListener('touchcancel', () => {
+            isTouching = false;
+        }, { passive: true });
+    });
 }
 
 /**
@@ -7788,10 +7856,11 @@ function initWeekStripCalendar() {
         });
     }
 
-    // Inicializar gestos táctiles de swipe horizontal, watcher sticky y animación de entrada
+    // Inicializar gestos táctiles de swipe horizontal, watcher sticky, animación de entrada y táctil de cards
     initCalendarSwipeGestures();
     initStickyCalendarWatcher();
     triggerWelcomeGreetingAnimation();
+    initDashboardCardsTactileFeedback();
 
     // Botón y Card de Inicio Rápido de Entrenamiento (panel activo y flecha circular)
     const startWorkoutBtn = document.getElementById('dashStartWorkoutBtn');

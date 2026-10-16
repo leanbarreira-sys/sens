@@ -58,7 +58,7 @@ html {
     color: var(--text-main);
     font-family: var(--font-body);
     scroll-padding-top: 100px;
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
 }
 
@@ -73,7 +73,7 @@ a:visited {
 
 body {
     font-family: var(--font-body);
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
     position: relative;
     -webkit-font-smoothing: antialiased;
@@ -4307,8 +4307,8 @@ video.ig-img {
 }
 
 @keyframes fadeInView {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* ==========================================================================
@@ -10688,6 +10688,15 @@ input[type="range"]::-webkit-slider-thumb:hover {
 body.in-portal {
     background-color: #F8F9FA !important;
     color: #09090B !important;
+    overflow-x: clip !important;
+}
+
+body.in-portal #app-container,
+body.in-portal .portal-body,
+body.in-portal .portal-view,
+body.in-portal #dashView {
+    overflow: visible !important;
+    overflow-x: clip !important;
 }
 
 body.in-portal #app-container {
@@ -10852,16 +10861,17 @@ body.in-portal .card-panel:not(.coach-only-card) .diag-tag {
 .sens-calendar-sticky-wrapper {
     position: -webkit-sticky;
     position: sticky;
-    top: 65px;
-    z-index: 90;
+    top: var(--portal-topbar-height, 65px);
+    z-index: 500;
     margin-bottom: 22px !important;
     border-radius: 20px;
+    background: transparent;
     transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), padding 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (max-width: 768px) {
     .sens-calendar-sticky-wrapper {
-        top: 48px;
+        top: var(--portal-topbar-height, 48px);
     }
 }
 
@@ -10871,24 +10881,74 @@ body.in-portal .sens-calendar-sticky-wrapper .sens-week-strip-wrap {
     margin-bottom: 0 !important;
 }
 
+body.in-portal .sens-calendar-sticky-wrapper {
+    background: #F8F9FA !important;
+    padding: 4px 0 6px 0;
+}
+
 body.in-portal .sens-calendar-sticky-wrapper.is-stuck {
-    background: rgba(248, 249, 250, 0.95);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    padding: 6px 6px 10px 6px;
+    background: rgba(248, 249, 250, 0.96) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    backdrop-filter: blur(25px) !important;
+    padding: 6px 4px 10px 4px;
     border-radius: 0 0 20px 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .sens-calendar-sticky-wrapper.is-stuck {
-    background: rgba(9, 9, 11, 0.94);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    padding: 6px 6px 10px 6px;
+    background: rgba(9, 9, 11, 0.95);
+    -webkit-backdrop-filter: blur(25px);
+    backdrop-filter: blur(25px);
+    padding: 6px 4px 10px 4px;
     border-radius: 0 0 20px 20px;
     border-bottom: 1px solid rgba(229, 203, 167, 0.15);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* =============================================================================
+   MICRO-INTERACCIÓN TÁCTIL SOFISTICADA: CARDS DEL INICIO (APPLE SPRING TOUCH)
+   ============================================================================= */
+.sens-training-video-card,
+.sens-nutri-summary-card,
+.sens-metabolic-balance-card,
+.sens-biometrics-card,
+.sens-store-banner-card {
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease !important;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none;
+    -webkit-user-select: none;
+    will-change: transform;
+}
+
+.sens-training-video-card:active,
+.sens-nutri-summary-card:active,
+.sens-metabolic-balance-card:active,
+.sens-biometrics-card:active,
+.sens-store-banner-card:active {
+    transform: scale(0.974) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
+    transition: transform 0.08s ease-out !important;
+}
+
+@keyframes sensCardTouchPulse {
+    0% {
+        transform: scale(1);
+    }
+    32% {
+        transform: scale(0.972);
+    }
+    68% {
+        transform: scale(1.008);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.sens-card-touch-pulse {
+    animation: sensCardTouchPulse 0.32s cubic-bezier(0.16, 1, 0.3, 1) both !important;
 }
 
 /* Animaciones GPU de Desplazamiento de Semanas (Swipe & Flechas) */
