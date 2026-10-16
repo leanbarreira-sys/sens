@@ -62,7 +62,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=3.5">
+    <link rel="stylesheet" href="style.css?v=3.6">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2661,11 +2661,13 @@
                         </video>
                         <div class="sens-video-overlay-gradient"></div>
                         <div class="sens-video-top-badges">
-                            <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial con Nico</span>
-                            <div id="dashWorkoutTypeIconsWrap" style="display: inline-flex; align-items: center; gap: 6px;">
-                                <!-- Iconos vectoriales inyectados dinámicamente: Muscular, Cardio, Movilidad, Yoga -->
+                            <div class="sens-badges-left">
+                                <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial</span>
+                                <div id="dashWorkoutTypeIconsWrap">
+                                    <!-- Iconos vectoriales inyectados dinámicamente: Muscular, Cardio, Movilidad, Yoga -->
+                                </div>
                             </div>
-                            <span class="sens-duration-pill" id="dashWorkoutDurationPill">5 ejercicios • ~45 min</span>
+                            <span class="sens-duration-pill" id="dashWorkoutDurationPill">5 ej • ~45 min</span>
                         </div>
                         <div class="sens-training-card-content">
                             <div class="sens-card-info-stack">
@@ -2743,182 +2745,146 @@
                 </div>
 
                 <!-- 4. Card de Balance Energético Diario: Ecuación Real + Gráfico Semanal -->
-                <div class="card-panel sens-metabolic-balance-card" id="dashObjectiveCard" style="padding: 24px; margin-bottom: 24px; cursor: default;">
+                <!-- 4. Card de Balance Energético Diario: Ecuación Real + Gráfico Semanal (Quiet Luxury Obsidian) -->
+                <div class="sens-metabolic-balance-card" id="dashObjectiveCard">
                     <!-- Encabezado de Control Metabólico -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+                    <div class="sens-balance-header">
                         <div>
-                            <span class="sens-objective-eyebrow" style="font-size: 10.5px; text-transform: uppercase; letter-spacing: 1.5px; color: #71717A; font-weight: 700;">CONTROL METABÓLICO &amp; RESULTADOS</span>
-                            <h3 style="font-size: 1.35rem; font-weight: 800; color: #09090B; margin: 4px 0 0 0;" id="dashBalanceDateLabel">Balance Energético Diario</h3>
+                            <span class="sens-balance-eyebrow">CONTROL METABÓLICO &amp; RESULTADOS</span>
+                            <h3 class="sens-balance-title" id="dashBalanceDateLabel">Balance Energético • Hoy</h3>
                         </div>
-                        <span class="pill" id="dashObjectiveGoalPill" style="font-size: 11px; font-weight: 800; background: rgba(16, 185, 129, 0.12); color: #059669; border: none; padding: 5px 14px; border-radius: 20px;">Déficit Meta: -400 kcal</span>
+                        <span class="sens-balance-goal-pill" id="dashObjectiveGoalPill">DÉFICIT META: -400 KCAL</span>
                     </div>
 
-                    <!-- Ecuación de Balance en 3 Columnas Claras -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                        <!-- Columna 1: Ingesta -->
-                        <div style="background: #F4F4F6; border-radius: 16px; padding: 14px 16px;">
-                            <div style="font-size: 11px; font-weight: 700; color: #71717A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Ingesta (Comida)</div>
-                            <div style="font-size: 1.45rem; font-weight: 800; color: #09090B;" id="dashBalanceIngestaVal">
-                                <span id="dashIngestaNum">1.850</span> <span style="font-size: 12px; font-weight: 600; color: #71717A;">kcal</span>
+                    <!-- Ecuación de Balance: Ingesta vs Gasto TDEE -->
+                    <div class="sens-balance-equation-row">
+                        <!-- Columna 1: Ingesta (Comida) -->
+                        <div class="sens-balance-box">
+                            <div class="sens-balance-box-label">Ingesta (Comida)</div>
+                            <div class="sens-balance-box-val" id="dashBalanceIngestaVal">
+                                <span id="dashIngestaNum">1.850</span> <span class="unit">kcal</span>
                             </div>
-                            <div style="font-size: 11px; color: #71717A; margin-top: 4px;" id="dashBalanceMealsCount">4 comidas registradas</div>
+                            <div class="sens-balance-box-sub" id="dashBalanceMealsCount">4 comidas registradas</div>
                         </div>
 
-                        <!-- Columna 2: Gasto Total TDEE -->
-                        <div style="background: #F4F4F6; border-radius: 16px; padding: 14px 16px;">
-                            <div style="font-size: 11px; font-weight: 700; color: #71717A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Gasto Total (TDEE)</div>
-                            <div style="font-size: 1.45rem; font-weight: 800; color: #09090B;" id="dashBalanceTdeeVal">
-                                <span id="dashTdeeNum">2.350</span> <span style="font-size: 12px; font-weight: 600; color: #71717A;">kcal</span>
+                        <!-- Columna 2: Gasto Total (TDEE) -->
+                        <div class="sens-balance-box">
+                            <div class="sens-balance-box-label">Gasto Total (TDEE)</div>
+                            <div class="sens-balance-box-val" id="dashBalanceTdeeVal">
+                                <span id="dashTdeeNum">2.420</span> <span class="unit">kcal</span>
                             </div>
-                            <div style="font-size: 11px; color: #71717A; margin-top: 4px;" id="dashBalanceBurnBreakdown">Basal: 1.700 • Activo: 650</div>
+                            <div class="sens-balance-box-sub" id="dashBalanceBurnBreakdown">Basal: 1.672 • Activo: 748</div>
                         </div>
+                    </div>
 
-                        <!-- Columna 3: Balance Neto -->
-                        <div style="background: #F4F4F6; border-radius: 16px; padding: 14px 16px;" id="dashBalanceNetBox">
-                            <div style="font-size: 11px; font-weight: 700; color: #71717A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Balance Neto</div>
-                            <div style="font-size: 1.45rem; font-weight: 800; color: #059669;" id="dashNetDeficitVal">
-                                -500 <span style="font-size: 12px; font-weight: 600;">kcal</span>
+                    <!-- Hero Metric: Balance Neto -->
+                    <div class="sens-balance-hero-box" id="dashBalanceNetBox">
+                        <div class="sens-balance-hero-left">
+                            <div class="sens-balance-hero-label">Balance Neto Diario</div>
+                            <div class="sens-balance-hero-val" id="dashNetDeficitVal">
+                                −570 <span class="unit">kcal</span>
                             </div>
-                            <div style="font-size: 11px; font-weight: 700; color: #059669; margin-top: 4px;" id="dashBalanceStatusText">Déficit Logrado</div>
+                        </div>
+                        <div class="sens-balance-hero-right">
+                            <div class="sens-balance-hero-status" id="dashBalanceStatusText">Déficit Logrado</div>
+                            <div class="sens-balance-hero-sub">Cumpliendo meta biológica</div>
                         </div>
                     </div>
 
                     <!-- Gráfico Semanal de Balance Energético vs Objetivo -->
-                    <div style="background: #F8F8FA; border-radius: 18px; padding: 18px 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                            <span style="font-size: 12px; font-weight: 800; color: #09090B;">Tendencia Semanal vs. Objetivo</span>
-                            <span style="font-size: 11.5px; color: #71717A;">Meta: <strong style="color: #059669;" id="dashGraphGoalTarget">-400 kcal/día</strong></span>
+                    <div class="sens-balance-chart-wrap">
+                        <div class="sens-chart-header">
+                            <span class="sens-chart-title">Tendencia Semanal vs. Objetivo</span>
+                            <span class="sens-chart-meta">Meta: <strong id="dashGraphGoalTarget">-400 kcal/día</strong></span>
                         </div>
-                        <div style="position: relative; height: 110px; width: 100%;">
+                        <div class="sens-chart-canvas-box">
                             <canvas id="dashWeeklyBalanceChart"></canvas>
                         </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 11px; color: #71717A; flex-wrap: wrap; gap: 8px;">
-                            <div style="display: flex; align-items: center; gap: 6px;">
-                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
-                                <span>Objetivo Calórico Cumplido</span>
+                        <div class="sens-chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-dot green"></span>
+                                <span>Objetivo Cumplido</span>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 6px;">
-                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
+                            <div class="legend-item">
+                                <span class="legend-dot gray"></span>
+                                <span>Planificado (Próximos Días)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot amber"></span>
                                 <span>Por encima de calorías</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Footer sutil para ir al desglose de peso y métricas -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.06); font-size: 11.5px; color: #71717A;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
+                    <!-- Footer -->
+                    <div class="sens-balance-footer">
+                        <div class="sens-consistency-wrap">
                             <span class="status-dot status-dot-active"></span>
                             <span id="dashConsistencyScoreText">Índice de Consistencia: 86% • Rango Óptimo</span>
                         </div>
-                        <button type="button" class="btn-link" id="btnGoTrackingFromBalance" style="background: none; border: none; font-size: 11.5px; color: #9E7D4B; font-weight: 700; cursor: pointer; padding: 0;">
-                            Ver registro de peso &amp; evolución →
+                        <button type="button" class="btn-link sens-gold-link" id="btnGoTrackingFromBalance">
+                            Ver análisis de progreso &amp; curvas →
                         </button>
                     </div>
                 </div>
 
-                <!-- 3. Anillos Concéntricos de Actividad (Estilo Samsung Health) -->
-                <div class="sens-rings-card">
-                    <div class="sens-rings-metrics-list">
-                        <div
-                            style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 700; margin-bottom: 2px;">
-                            Actividad diaria
-                        </div>
-                        <div class="sens-ring-metric-row">
-                            <span class="sens-ring-dot steps"></span>
-                            <div>
-                                <span class="sens-ring-metric-val" id="dashStepsMetricVal">-</span>
-                                <span class="sens-ring-metric-unit">pasos</span>
-                            </div>
-                        </div>
-                        <div class="sens-ring-metric-row">
-                            <span class="sens-ring-dot time"></span>
-                            <div>
-                                <span class="sens-ring-metric-val" id="dashTimeMetricVal">-</span>
-                                <span class="sens-ring-metric-unit">min</span>
-                            </div>
-                        </div>
-                        <div class="sens-ring-metric-row">
-                            <span class="sens-ring-dot calories"></span>
-                            <div>
-                                <span class="sens-ring-metric-val" id="dashCalMetricVal">-</span>
-                                <span class="sens-ring-metric-unit">kcal</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sens-rings-svg-container">
-                        <svg class="sens-concentric-svg" viewBox="0 0 120 120">
-                            <!-- Anillo Pasos (Verde #10B981) r=48 -->
-                            <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="48" stroke-width="9"></circle>
-                            <circle class="sens-concentric-ring-fg" id="svgConcentricSteps" cx="60" cy="60" r="48"
-                                stroke="#10B981" stroke-width="9" stroke-dasharray="301.6" stroke-dashoffset="301.6">
-                            </circle>
-
-                            <!-- Anillo Tiempo (Celeste #38BDF8) r=36 -->
-                            <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="36" stroke-width="9"></circle>
-                            <circle class="sens-concentric-ring-fg" id="svgConcentricTime" cx="60" cy="60" r="36"
-                                stroke="#38BDF8" stroke-width="9" stroke-dasharray="226.2" stroke-dashoffset="226.2">
-                            </circle>
-
-                            <!-- Anillo Calorías (Champagne #E5CBA7) r=24 -->
-                            <circle class="sens-concentric-ring-bg" cx="60" cy="60" r="24" stroke-width="9"></circle>
-                            <circle class="sens-concentric-ring-fg" id="svgConcentricCals" cx="60" cy="60" r="24"
-                                stroke="#E5CBA7" stroke-width="9" stroke-dasharray="150.8" stroke-dashoffset="150.8">
-                            </circle>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- 7. Widget de Hidratación Rápida (Estilo Portal Clínico SENS) -->
-                <div class="card-panel" style="padding: 18px 22px; margin-bottom: 18px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                <!-- 5. Card de Composición Corporal & Peso (Quiet Luxury) -->
+                <div class="sens-biometrics-card" id="dashBiometricsCard">
+                    <div class="sens-bio-header">
                         <div>
-                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: #71717A; font-weight: 700; display: block; margin-bottom: 4px;">Hidratación Diaria</span>
-                            <div style="display: flex; align-items: baseline; gap: 8px;">
-                                <span style="font-size: 1.85rem; font-weight: 800; color: #09090B; font-variant-numeric: tabular-nums;" id="dashWaterConsumed">-</span>
-                                <span style="font-size: 12px; color: #71717A; font-weight: 600;">/ 2.000 ml</span>
-                            </div>
+                            <span class="sens-bio-eyebrow">COMPOSICIÓN CORPORAL &amp; BIOMETRÍA</span>
+                            <h3 class="sens-bio-title">Peso &amp; Grasa Corporal</h3>
                         </div>
-                        <button type="button" class="btn btn-outline btn-sm" id="btnQuickLogWater"
-                            style="border-radius: 20px; font-weight: 700; border: none; background: rgba(56, 189, 248, 0.12); color: #0284C7; padding: 8px 18px; font-size: 12px;">
-                            + 250 ml
+                        <button type="button" class="sens-btn-log-bio" id="btnOpenQuickBioModal" title="Cargar peso y métricas de hoy">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span>+ Cargar Peso</span>
                         </button>
                     </div>
-                </div>
 
-                <!-- 8. Fila de Acción Rápida: Agregar al Día -->
-                <button type="button" id="btnQuickAddDailyActivity" class="card-panel"
-                    style="width: 100%; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; margin-bottom: 24px; text-align: left;">
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <div
-                            style="width: 36px; height: 36px; border-radius: 50%; background: #F4F4F6; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #09090B;">
-                            +</div>
-                        <div>
-                            <div style="font-size: 14px; font-weight: 700; color: #09090B;">Agregar al día</div>
-                            <div style="font-size: 11.5px; color: #71717A;">Actividad, movilidad o recuperación</div>
+                    <div class="sens-bio-grid">
+                        <!-- Columna 1: Peso Corporal -->
+                        <div class="sens-bio-box">
+                            <div class="sens-bio-box-label">Peso Actual</div>
+                            <div class="sens-bio-box-val">
+                                <span id="dashBioCurrentWeight">75.8</span> <span class="unit">kg</span>
+                            </div>
+                            <div class="sens-bio-box-sub">
+                                <span>Meta: <strong id="dashBioTargetWeight">72.0 kg</strong></span>
+                                <span class="sens-bio-delta" id="dashBioWeightDelta">−0.4 kg esta sem</span>
+                            </div>
+                        </div>
+
+                        <!-- Columna 2: Grasa Corporal -->
+                        <div class="sens-bio-box">
+                            <div class="sens-bio-box-label">Grasa Corporal</div>
+                            <div class="sens-bio-box-val">
+                                <span id="dashBioCurrentFat">13.8</span> <span class="unit">%</span>
+                            </div>
+                            <div class="sens-bio-box-sub">
+                                <span>Meta: <strong id="dashBioTargetFat">11.5%</strong></span>
+                                <span class="sens-bio-status-badge">Rango Óptimo</span>
+                            </div>
                         </div>
                     </div>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6" />
-                    </svg>
-                </button>
 
-                <!-- 9. Sección Coach OS: Acceso al Centro de Mando (Visible solo para Nico / Admin) -->
-                <div class="sens-coach-banner-card" id="dashCoachCard" style="display: none;">
-                    <div class="sens-coach-banner-content">
-                        <div class="sens-coach-banner-eyebrow">
-                            <span class="status-dot status-dot-active"></span>
-                            <span class="sens-coach-banner-tag">SENS COACH OS</span>
+                    <!-- Barra de Progreso hacia la Meta -->
+                    <div class="sens-bio-progress-wrap">
+                        <div class="sens-bio-progress-labels">
+                            <span>Progreso hacia Meta (72.0 kg)</span>
+                            <span id="dashBioProgressPct">68% completado</span>
                         </div>
-                        <h4 class="sens-coach-banner-title">Centro de Mando del Entrenador</h4>
-                        <p class="sens-coach-banner-desc">
-                            Aprobá alumnos, asigná rutinas de 1 a 6 días, prescribí macros y auditá métricas en tiempo
-                            real.
-                        </p>
+                        <div class="sens-bio-progress-track">
+                            <div class="sens-bio-progress-bar" id="dashBioProgressBar" style="width: 68%;"></div>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm btn-coach-hub-entry" id="btnDashOpenCoach">
-                        Abrir Coach OS →
-                    </button>
+
+                    <!-- Footer -->
+                    <div class="sens-bio-footer">
+                        <span style="font-size: 11px; color: #71717A;" id="dashBioLastLoggedDate">Último pesaje: Hoy 08:30 hs</span>
+                        <button type="button" class="btn-link sens-gold-link" id="btnGoTrackingFromBio">
+                            Ver historial de pesajes y curvas →
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 10. Sección Tienda Oficial MercadoLibre (Equipamiento & Suplementos) -->
@@ -4551,11 +4517,36 @@
         </a>
     </div>
 
+    <!-- Modal Rápido de Carga de Peso & Pasos (Quiet Luxury) -->
+    <div id="quickBiometricsModal" class="modal-overlay" style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+        <div style="background: #141418; border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 20px; max-width: 360px; width: 90%; padding: 24px; color: #FFFFFF; box-shadow: 0 20px 50px rgba(0,0,0,0.7);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #FFFFFF;">Registrar Peso &amp; Métricas</h4>
+                <button type="button" id="btnCloseQuickBioModal" style="background: none; border: none; color: #A1A1AA; font-size: 20px; cursor: pointer; padding: 4px;">✕</button>
+            </div>
+            <form id="quickBioForm">
+                <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Peso de Hoy (kg)</label>
+                    <input type="number" step="0.1" id="quickInputWeight" class="input-control" placeholder="Ej: 75.8" required style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
+                </div>
+                <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Grasa Corporal (%) <span style="color: #71717A; font-weight: 400;">(Opcional)</span></label>
+                    <input type="number" step="0.1" id="quickInputFat" class="input-control" placeholder="Ej: 13.8" style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Pasos Caminados Hoy</label>
+                    <input type="number" id="quickInputSteps" class="input-control" placeholder="Ej: 8500" style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 12px; padding: 12px; font-weight: 800; font-size: 13px;">Guardar Registro</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Base de Datos Maestra de Ejercicios SENS (Guía Oficial Nico) -->
-    <script src="exercises_db.js?v=3.5"></script>
+    <script src="exercises_db.js?v=3.6"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=3.5"></script>
+    <script src="app.js?v=3.6"></script>
 </body>
 
 </html>

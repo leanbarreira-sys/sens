@@ -664,6 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initWorkoutBlockAccordions();
     initWeekStripCalendar();
     initFloatingDock();
+    initQuickBiometricsModal();
     updateDashboardRings();
     updateMetabolicEquation();
 });
@@ -7755,9 +7756,22 @@ function renderDynamicWeekStrip() {
         const modality = dayData.modality;
         const isCompleted = Boolean(dayData.completed);
 
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const dayDateStart = new Date(dayDate);
+        dayDateStart.setHours(0, 0, 0, 0);
+        const isPast = dayDateStart < todayStart;
+        const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0);
+
         let statusBadge = '';
         if (isCompleted) {
             statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓ Hecho</span>`;
+        } else if (isPast) {
+            if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
+                statusBadge = `<span class="sens-day-badge missed" title="No realizado / Pendiente">✕ No realizado</span>`;
+            } else {
+                statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
+            }
         } else if (modality === 'presencial') {
             statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Presencial</span>`;
         } else if (modality === 'online') {
@@ -7794,6 +7808,7 @@ function renderDynamicWeekStrip() {
 
             updateDynamicTrainingCard(dayDate, 'day' + (idx + 1));
             updateObjectiveCardData(dayDate);
+            if (typeof updateBiometricsCardData === 'function') updateBiometricsCardData();
             renderWorkoutDaysNav();
         });
     });
@@ -8035,15 +8050,15 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     const modality = dayData.modality;
     if (modalityPill) {
         if (modality === 'presencial') {
-            modalityPill.textContent = 'Presencial con Nico';
+            modalityPill.textContent = 'Presencial';
             modalityPill.className = 'sens-modality-pill';
             modalityPill.style.display = 'inline-flex';
         } else if (modality === 'online') {
-            modalityPill.textContent = 'Online con Nico';
+            modalityPill.textContent = 'Online';
             modalityPill.className = 'sens-modality-pill online';
             modalityPill.style.display = 'inline-flex';
         } else if (modality === 'autonomo') {
-            modalityPill.textContent = 'Sesión Autónoma';
+            modalityPill.textContent = 'Autónomo';
             modalityPill.className = 'sens-modality-pill auto';
             modalityPill.style.display = 'inline-flex';
         } else {
@@ -8053,7 +8068,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     if (durationPill) {
-        durationPill.textContent = `${exercises.length} ejercicios • ~${details.estMinutes} min`;
+        durationPill.textContent = `${exercises.length} ej • ~${details.estMinutes} min`;
     }
 
     // 4. Video de fondo adaptado al tipo dominante
@@ -8213,6 +8228,9 @@ function getDailyMetabolicMetrics(targetDate) {
 /**
  * Renderiza el gráfico semanal interactivo con Chart.js en #dashWeeklyBalanceChart
  */
+/**
+ * Renderiza el gráfico semanal interactivo con Chart.js en #dashWeeklyBalanceChart
+ */
 function renderWeeklyBalanceChart(selectedDate = new Date()) {
     const canvas = document.getElementById('dashWeeklyBalanceChart');
     if (!canvas || typeof Chart === 'undefined') return;
@@ -8230,21 +8248,33 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
     const userGoal = profile.goal || 'fat_loss';
     const isMuscleGain = userGoal === 'muscle_gain';
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     for (let i = 0; i < 7; i++) {
         const d = new Date(AppState.activeWeekStart);
         d.setDate(AppState.activeWeekStart.getDate() + i);
+        const dStart = new Date(d);
+        dStart.setHours(0, 0, 0, 0);
+        const isFuture = dStart > today;
 
         const m = getDailyMetabolicMetrics(d);
         const dayLabel = `${dayLabels[i]} ${d.getDate()}`;
-        weekStats.push({ label: dayLabel, ...m, date: d });
+        weekStats.push({ label: dayLabel, ...m, date: d, isFuture });
 
-        const isOptimal = isMuscleGain ? (m.netBalance >= 150) : (m.netBalance <= -300);
-        if (isOptimal) {
-            barColors.push('#10B981');
-            borderColors.push('#059669');
+        if (isFuture) {
+            // Días que aún no transcurrieron: NUNCA en ámbar de error. Barra neutra sutil de planificación
+            barColors.push('rgba(255, 255, 255, 0.08)');
+            borderColors.push('rgba(255, 255, 255, 0.16)');
         } else {
-            barColors.push('#F59E0B');
-            borderColors.push('#D97706');
+            const isOptimal = isMuscleGain ? (m.netBalance >= 150) : (m.netBalance <= -300);
+            if (isOptimal) {
+                barColors.push('#10B981');
+                borderColors.push('#059669');
+            } else {
+                barColors.push('#F59E0B');
+                borderColors.push('#D97706');
+            }
         }
     }
 
@@ -8265,7 +8295,7 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
                     borderWidth: 1,
                     borderRadius: 6,
                     borderSkipped: false,
-                    maxBarThickness: 34
+                    maxBarThickness: 32
                 }]
             },
             options: {
@@ -8288,6 +8318,12 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
                         callbacks: {
                             label: function(context) {
                                 const item = weekStats[context.dataIndex];
+                                if (item.isFuture) {
+                                    return [
+                                        `Planificado: ${userGoal === 'muscle_gain' ? '+300' : '-400'} kcal`,
+                                        `Día aún no transcurrido`
+                                    ];
+                                }
                                 const sign = item.netBalance > 0 ? '+' : '';
                                 return [
                                     `Balance: ${sign}${item.netBalance} kcal`,
@@ -8301,14 +8337,14 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
                     x: {
                         grid: { display: false },
                         ticks: {
-                            color: '#71717A',
+                            color: '#A1A1AA',
                             font: { family: 'Plus Jakarta Sans', size: 10, weight: '700' }
                         }
                     },
                     y: {
-                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.08)' },
                         ticks: {
-                            color: '#71717A',
+                            color: '#A1A1AA',
                             font: { family: 'Plus Jakarta Sans', size: 9 },
                             callback: function(val) {
                                 return (val > 0 ? '+' : '') + val;
@@ -8355,13 +8391,15 @@ function updateObjectiveCardData(selectedDate = null) {
 
     if (goalPill) {
         if (isMuscleGain) {
-            goalPill.textContent = 'Superávit Meta: +300 kcal';
-            goalPill.style.background = 'rgba(229, 203, 167, 0.25)';
-            goalPill.style.color = '#9E7D4B';
+            goalPill.textContent = 'SUPERÁVIT META: +300 KCAL';
+            goalPill.style.background = 'rgba(229, 203, 167, 0.2)';
+            goalPill.style.color = '#E5CBA7';
+            goalPill.style.borderColor = 'rgba(229, 203, 167, 0.35)';
         } else {
-            goalPill.textContent = 'Déficit Meta: -400 kcal';
-            goalPill.style.background = 'rgba(16, 185, 129, 0.12)';
-            goalPill.style.color = '#059669';
+            goalPill.textContent = 'DÉFICIT META: -400 KCAL';
+            goalPill.style.background = 'rgba(16, 185, 129, 0.14)';
+            goalPill.style.color = '#10B981';
+            goalPill.style.borderColor = 'rgba(16, 185, 129, 0.25)';
         }
     }
 
@@ -8378,14 +8416,14 @@ function updateObjectiveCardData(selectedDate = null) {
     }
 
     if (breakdownEl) {
-        breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${metrics.activeBurn.toLocaleString('es-AR')} (Pasos & Entreno)`;
+        breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${metrics.activeBurn.toLocaleString('es-AR')} (Pasos: ${metrics.stepsBurn} • Entreno: ${metrics.workoutBurn})`;
     }
 
     if (netValEl) {
         const sign = metrics.netBalance > 0 ? '+' : '';
         const isOptimal = isMuscleGain ? (metrics.netBalance >= 150) : (metrics.netBalance <= -300);
-        const color = isOptimal ? '#059669' : '#D97706';
-        netValEl.innerHTML = `${sign}${metrics.netBalance.toLocaleString('es-AR')} <span style="font-size: 12px; font-weight: 600;">kcal</span>`;
+        const color = isOptimal ? '#10B981' : '#F59E0B';
+        netValEl.innerHTML = `${sign}${metrics.netBalance.toLocaleString('es-AR')} <span class="unit">kcal</span>`;
         netValEl.style.color = color;
     }
 
@@ -8393,10 +8431,10 @@ function updateObjectiveCardData(selectedDate = null) {
         const isOptimal = isMuscleGain ? (metrics.netBalance >= 150) : (metrics.netBalance <= -300);
         if (isOptimal) {
             statusTextEl.textContent = isMuscleGain ? 'Superávit Cumplido' : 'Déficit Logrado';
-            statusTextEl.style.color = '#059669';
+            statusTextEl.style.color = '#10B981';
         } else {
             statusTextEl.textContent = metrics.netBalance > 0 ? 'Superávit Elevado' : 'Próximo a Meta';
-            statusTextEl.style.color = '#D97706';
+            statusTextEl.style.color = '#F59E0B';
         }
     }
 
@@ -8411,12 +8449,17 @@ function updateObjectiveCardData(selectedDate = null) {
         if (dData && dData.completed) doneWorkouts++;
     }
     if (consistencyScoreText) {
-        const consistencyPct = scheduledWorkouts > 0 ? Math.min(100, Math.round((doneWorkouts / scheduledWorkouts) * 100)) : 85;
+        const consistencyPct = scheduledWorkouts > 0 ? Math.min(100, Math.round((doneWorkouts / scheduledWorkouts) * 100)) : 86;
         consistencyScoreText.textContent = `Índice de Consistencia: ${consistencyPct}% • ${consistencyPct >= 75 ? 'Rango Óptimo' : 'En Progreso'}`;
     }
 
     // Renderizar gráfico semanal
     renderWeeklyBalanceChart(selectedDate);
+
+    // Sincronizar card de biometría
+    if (typeof updateBiometricsCardData === 'function') {
+        updateBiometricsCardData();
+    }
 
     // Listener para ir a seguimiento
     if (btnGoTracking) {
@@ -8426,6 +8469,132 @@ function updateObjectiveCardData(selectedDate = null) {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         };
+    }
+}
+
+/**
+ * Actualiza la Card de Composición Corporal & Peso (#dashBiometricsCard)
+ */
+function updateBiometricsCardData() {
+    const currentWeightEl = document.getElementById('dashBioCurrentWeight');
+    const targetWeightEl = document.getElementById('dashBioTargetWeight');
+    const weightDeltaEl = document.getElementById('dashBioWeightDelta');
+    const currentFatEl = document.getElementById('dashBioCurrentFat');
+    const targetFatEl = document.getElementById('dashBioTargetFat');
+    const progressBar = document.getElementById('dashBioProgressBar');
+    const progressPct = document.getElementById('dashBioProgressPct');
+    const lastLoggedDate = document.getElementById('dashBioLastLoggedDate');
+    const btnGoBio = document.getElementById('btnGoTrackingFromBio');
+
+    const profile = AppState.profile || {};
+    const anamnesis = AppState.anamnesis || {};
+    const athId = getActiveAthleteId();
+    const isDemo = (athId === 'usr-vip-001' || athId === 'mock_vip');
+
+    const weightRaw = profile.current_weight || anamnesis.weight;
+    const currentWeight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 75.8 : 76.0);
+    const targetWeight = profile.target_weight || anamnesis.target_weight || (isDemo ? 72.0 : 70.0);
+    const fatRaw = profile.body_fat || anamnesis.body_fat;
+    const currentFat = fatRaw ? parseFloat(fatRaw) : (isDemo ? 13.8 : 15.0);
+    const targetFat = profile.target_body_fat || (isDemo ? 11.5 : 12.0);
+
+    if (currentWeightEl) currentWeightEl.textContent = currentWeight.toFixed(1);
+    if (targetWeightEl) targetWeightEl.textContent = `${targetWeight.toFixed(1)} kg`;
+    if (currentFatEl) currentFatEl.textContent = currentFat.toFixed(1);
+    if (targetFatEl) targetFatEl.textContent = `${targetFat.toFixed(1)}%`;
+
+    if (weightDeltaEl) {
+        const delta = profile.weight_delta !== undefined ? profile.weight_delta : -0.4;
+        const sign = delta > 0 ? '+' : '';
+        weightDeltaEl.textContent = `${sign}${delta} kg esta sem`;
+    }
+
+    if (progressBar && progressPct) {
+        const initialWeight = profile.initial_weight || (currentWeight + 4.5);
+        const totalToLose = Math.abs(initialWeight - targetWeight);
+        const lostSoFar = Math.abs(initialWeight - currentWeight);
+        const pct = totalToLose > 0 ? Math.min(100, Math.max(10, Math.round((lostSoFar / totalToLose) * 100))) : 68;
+        progressBar.style.width = `${pct}%`;
+        progressPct.textContent = `${pct}% completado`;
+    }
+
+    if (lastLoggedDate) {
+        lastLoggedDate.textContent = `Último pesaje: Hoy 08:30 hs`;
+    }
+
+    if (btnGoBio) {
+        btnGoBio.onclick = () => {
+            if (typeof switchPortalView === 'function') {
+                switchPortalView('trackingView');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+    }
+}
+
+/**
+ * Inicializa el Modal Rápido de Carga de Peso & Pasos
+ */
+function initQuickBiometricsModal() {
+    const modal = document.getElementById('quickBiometricsModal');
+    const openBtn = document.getElementById('btnOpenQuickBioModal');
+    const closeBtn = document.getElementById('btnCloseQuickBioModal');
+    const form = document.getElementById('quickBioForm');
+    const weightInp = document.getElementById('quickInputWeight');
+    const fatInp = document.getElementById('quickInputFat');
+    const stepsInp = document.getElementById('quickInputSteps');
+
+    if (!modal) return;
+
+    if (openBtn) {
+        openBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const profile = AppState.profile || {};
+            const anamnesis = AppState.anamnesis || {};
+            if (weightInp) weightInp.value = profile.current_weight || anamnesis.weight || '75.8';
+            if (fatInp) fatInp.value = profile.body_fat || anamnesis.body_fat || '13.8';
+            if (stepsInp) stepsInp.value = AppState.dailySteps || '8500';
+            modal.style.display = 'flex';
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const w = parseFloat(weightInp?.value);
+            const f = parseFloat(fatInp?.value);
+            const s = parseInt(stepsInp?.value, 10);
+
+            if (!AppState.profile) AppState.profile = {};
+            if (!isNaN(w) && w > 0) AppState.profile.current_weight = w;
+            if (!isNaN(f) && f > 0) AppState.profile.body_fat = f;
+            if (!isNaN(s) && s > 0) AppState.dailySteps = s;
+
+            const athId = getActiveAthleteId();
+            localStorage.setItem(`sens_profile_${athId}`, JSON.stringify(AppState.profile));
+
+            modal.style.display = 'none';
+            if (typeof showSensToast === 'function') {
+                showSensToast('Métricas actualizadas con éxito.', 'champagne');
+            }
+
+            // Actualizar reactivamente todas las tarjetas
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
+            if (typeof updateBiometricsCardData === 'function') updateBiometricsCardData();
+        });
     }
 }
 

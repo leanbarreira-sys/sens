@@ -12451,3 +12451,477 @@ body.in-portal .sens-macro-grams-bold {
     flex-shrink: 0;
 }
 
+/* =============================================================================
+   ESTRUCTURA DE BADGES DE VIDEO SIN WRAP (MOBILE PARITY)
+   ============================================================================= */
+.sens-video-top-badges {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
+    pointer-events: none;
+    flex-wrap: nowrap !important;
+    gap: 6px;
+}
+
+.sens-badges-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+.sens-modality-pill {
+    white-space: nowrap !important;
+    font-size: 9.5px !important;
+    padding: 3.5px 9px !important;
+}
+
+.sens-type-chip {
+    white-space: nowrap !important;
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+}
+
+.sens-duration-pill {
+    white-space: nowrap !important;
+    font-size: 9.5px !important;
+    padding: 3.5px 9px !important;
+    flex-shrink: 0;
+}
+
+/* =============================================================================
+   BADGE PARA DÍAS NO ASISTIDOS / PENDIENTES EN CALENDARIO
+   ============================================================================= */
+.sens-day-badge.missed {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #EF4444 !important;
+    border: none !important;
+    font-weight: 700;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
+    background: #EF4444 !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+/* =============================================================================
+   CARD DE BALANCE ENERGÉTICO & RESULTADOS - QUIET LUXURY OBSIDIAN
+   ============================================================================= */
+.sens-metabolic-balance-card {
+    background: #121216 !important;
+    border: 1px solid rgba(229, 203, 167, 0.14) !important;
+    border-radius: 22px !important;
+    padding: 22px !important;
+    margin-bottom: 22px !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45) !important;
+    color: #FFFFFF !important;
+    cursor: default;
+}
+
+.sens-balance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.sens-balance-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #E5CBA7;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.sens-balance-title {
+    font-size: 1.28rem;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.sens-balance-goal-pill {
+    font-size: 10.5px;
+    font-weight: 800;
+    background: rgba(16, 185, 129, 0.14);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.4px;
+}
+
+.sens-balance-equation-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.sens-balance-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 13px 15px;
+}
+
+.sens-balance-box-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #A1A1AA;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+
+.sens-balance-box-val {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.2;
+}
+
+.sens-balance-box-val .unit {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #A1A1AA;
+}
+
+.sens-balance-box-sub {
+    font-size: 11px;
+    color: #71717A;
+    margin-top: 4px;
+}
+
+.sens-balance-hero-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.22);
+    border-radius: 16px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.sens-balance-hero-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #A1A1AA;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sens-balance-hero-val {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #10B981;
+    line-height: 1.1;
+}
+
+.sens-balance-hero-val .unit {
+    font-size: 12px;
+    font-weight: 600;
+    color: #10B981;
+}
+
+.sens-balance-hero-right {
+    text-align: right;
+}
+
+.sens-balance-hero-status {
+    font-size: 12px;
+    font-weight: 800;
+    color: #10B981;
+}
+
+.sens-balance-hero-sub {
+    font-size: 10.5px;
+    color: #71717A;
+    margin-top: 2px;
+}
+
+.sens-balance-chart-wrap {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+}
+
+.sens-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sens-chart-title {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.sens-chart-meta {
+    font-size: 11px;
+    color: #A1A1AA;
+}
+
+.sens-chart-meta strong {
+    color: #10B981;
+}
+
+.sens-chart-canvas-box {
+    position: relative;
+    height: 110px;
+    width: 100%;
+}
+
+.sens-chart-legend {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 14px;
+    margin-top: 10px;
+    font-size: 10.5px;
+    color: #A1A1AA;
+    flex-wrap: wrap;
+}
+
+.sens-chart-legend .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sens-chart-legend .legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.sens-chart-legend .legend-dot.green { background: #10B981; }
+.sens-chart-legend .legend-dot.gray { background: #71717A; }
+.sens-chart-legend .legend-dot.amber { background: #F59E0B; }
+
+.sens-balance-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 11.5px;
+    color: #A1A1AA;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.sens-consistency-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: #A1A1AA;
+}
+
+.sens-gold-link {
+    background: none;
+    border: none;
+    font-size: 11.5px;
+    color: #E5CBA7 !important;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.2s;
+}
+
+.sens-gold-link:hover {
+    opacity: 0.8;
+}
+
+/* =============================================================================
+   CARD DE COMPOSICIÓN CORPORAL & PESO - QUIET LUXURY OBSIDIAN
+   ============================================================================= */
+.sens-biometrics-card {
+    background: #121216 !important;
+    border: 1px solid rgba(229, 203, 167, 0.14) !important;
+    border-radius: 22px !important;
+    padding: 22px !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45) !important;
+    color: #FFFFFF !important;
+}
+
+.sens-bio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.sens-bio-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #E5CBA7;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.sens-bio-title {
+    font-size: 1.28rem;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.sens-btn-log-bio {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #E5CBA7 !important;
+    color: #09090B !important;
+    border: none !important;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 6px 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(229, 203, 167, 0.25);
+    transition: transform 0.15s ease;
+}
+
+.sens-btn-log-bio:hover {
+    transform: scale(1.03);
+}
+
+.sens-bio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.sens-bio-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 13px 15px;
+}
+
+.sens-bio-box-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #A1A1AA;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+
+.sens-bio-box-val {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.2;
+}
+
+.sens-bio-box-val .unit {
+    font-size: 12px;
+    font-weight: 600;
+    color: #A1A1AA;
+}
+
+.sens-bio-box-sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #71717A;
+    margin-top: 6px;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.sens-bio-box-sub strong {
+    color: #FFFFFF;
+}
+
+.sens-bio-delta {
+    color: #10B981;
+    font-weight: 700;
+}
+
+.sens-bio-status-badge {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10B981;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.sens-bio-progress-wrap {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+}
+
+.sens-bio-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #A1A1AA;
+    margin-bottom: 7px;
+}
+
+.sens-bio-progress-labels span:last-child {
+    color: #E5CBA7;
+    font-weight: 700;
+}
+
+.sens-bio-progress-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.sens-bio-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #E5CBA7 0%, #10B981 100%);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+.sens-bio-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 11px;
+    color: #71717A;
+}
+
+
