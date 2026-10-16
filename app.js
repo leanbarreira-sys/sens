@@ -8019,9 +8019,9 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     const exercises = (dayData && Array.isArray(dayData.exercises)) ? dayData.exercises : [];
     const isToday = isSameDay(selectedDate, new Date());
 
-    // Label de fecha superior
+    // Label de fecha/dominio superior (Eyebrow Champagne)
     if (dayDateLabel) {
-        dayDateLabel.textContent = isToday ? 'Hoy entrenás' : `Entrenamiento del ${formatDateDDMM(selectedDate)}`;
+        dayDateLabel.textContent = isToday ? 'Entrenamiento de Hoy' : `Entrenamiento del ${formatDateDDMM(selectedDate)}`;
     }
 
     // Caso A: Descanso o sin ejercicios asignados
