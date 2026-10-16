@@ -10836,99 +10836,147 @@ body.in-portal .card-panel:not(.coach-only-card) .diag-tag {
 }
 
 /* =============================================================================
-   2. CONTENEDOR STICKY DE CALENDARIO & NAVEGADOR DE SEMANAS
+   2. CONTENEDOR STICKY DE CALENDARIO & NAVEGADOR DE SEMANAS (BOX UNIFICADA)
    ============================================================================= */
-.sens-calendar-sticky-wrapper {
+.sens-calendar-sticky-wrapper,
+body.in-portal .sens-calendar-sticky-wrapper {
     position: -webkit-sticky;
     position: sticky;
     top: var(--portal-topbar-height, 65px);
     z-index: 500;
     margin-bottom: 22px !important;
-    border-radius: 20px;
-    background: transparent;
-    transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), padding 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Box unificada 100% sólida y más ancha que las cards para enmascarar scroll inferior */
+    background: #FFFFFF !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 22px !important;
+    padding: 12px 10px 10px 10px !important;
+    margin-left: -12px !important;
+    margin-right: -12px !important;
+    width: calc(100% + 24px) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+    box-sizing: border-box !important;
+    transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.25s ease;
 }
 
 @media (max-width: 768px) {
-    .sens-calendar-sticky-wrapper {
+    .sens-calendar-sticky-wrapper,
+    body.in-portal .sens-calendar-sticky-wrapper {
         top: var(--portal-topbar-height, 48px);
+        margin-left: -10px !important;
+        margin-right: -10px !important;
+        width: calc(100% + 20px) !important;
+        padding: 10px 8px 8px 8px !important;
+        border-radius: 20px !important;
     }
 }
 
-/* Evitar doble margen entre el contenedor sticky y las cards inferiores */
+/* Integración interna perfecta: nav y strip integrados dentro de la card unificada */
 .sens-calendar-sticky-wrapper .sens-week-strip-wrap,
 body.in-portal .sens-calendar-sticky-wrapper .sens-week-strip-wrap {
-    margin-bottom: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 2px 0 0 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
 }
 
-body.in-portal .sens-calendar-sticky-wrapper {
-    background: #F8F9FA !important;
-    padding: 4px 0 6px 0;
+.sens-calendar-sticky-wrapper .sens-week-nav-bar {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin-bottom: 6px !important;
+    padding: 0 4px !important;
 }
 
-body.in-portal .sens-calendar-sticky-wrapper.is-stuck {
-    background: rgba(248, 249, 250, 0.96) !important;
-    -webkit-backdrop-filter: blur(25px) !important;
-    backdrop-filter: blur(25px) !important;
-    padding: 6px 4px 10px 4px;
-    border-radius: 0 0 20px 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-}
-
+/* Estado Pegado al Hacer Scroll (Sticky): fondo blanco opaco sólido con elevación */
+body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
 .sens-calendar-sticky-wrapper.is-stuck {
-    background: rgba(9, 9, 11, 0.95);
-    -webkit-backdrop-filter: blur(25px);
-    backdrop-filter: blur(25px);
-    padding: 6px 4px 10px 4px;
-    border-radius: 0 0 20px 20px;
-    border-bottom: 1px solid rgba(229, 203, 167, 0.15);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    background: #FFFFFF !important;
+    border-radius: 0 0 22px 22px !important;
+    border-top: none !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12), 0 3px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+@media (max-width: 768px) {
+    body.in-portal .sens-calendar-sticky-wrapper.is-stuck,
+    .sens-calendar-sticky-wrapper.is-stuck {
+        border-radius: 0 0 20px 20px !important;
+    }
 }
 
 /* =============================================================================
-   MICRO-INTERACCIÓN TÁCTIL SOFISTICADA: CARDS DEL INICIO (APPLE SPRING TOUCH)
+   MICRO-INTERACCIÓN TÁCTIL EXAGERADA: SPRING BOUNCE (RESORTE RÁPIDO)
    ============================================================================= */
 .sens-training-video-card,
 .sens-nutri-summary-card,
 .sens-metabolic-balance-card,
 .sens-biometrics-card,
 .sens-store-banner-card {
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease !important;
-    cursor: pointer;
+    cursor: pointer !important;
     -webkit-tap-highlight-color: transparent !important;
     user-select: none;
     -webkit-user-select: none;
-    will-change: transform;
+    will-change: transform, box-shadow;
+    transform-origin: center center;
+    transition: transform 0.22s cubic-bezier(0.18, 0.9, 0.32, 1.25), box-shadow 0.22s ease !important;
 }
 
+/* Hover refinado en Desktop */
+@media (hover: hover) and (pointer: fine) {
+    body.in-portal .sens-nutri-summary-card:hover,
+    body.in-portal .sens-metabolic-balance-card:hover,
+    body.in-portal .sens-biometrics-card:hover,
+    body.in-portal .sens-store-banner-card:hover {
+        transform: translateY(-3px) translateZ(0);
+        box-shadow: 0 20px 42px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+    }
+}
+
+/* Compresión física profunda mientras se mantiene presionado con el dedo o clic sostenido */
 .sens-training-video-card:active,
 .sens-nutri-summary-card:active,
 .sens-metabolic-balance-card:active,
 .sens-biometrics-card:active,
 .sens-store-banner-card:active {
-    transform: scale(0.974) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
-    transition: transform 0.08s ease-out !important;
+    transform: scale3d(0.915, 0.915, 1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    transition: transform 0.07s ease-out !important;
 }
 
-@keyframes sensCardTouchPulse {
+/* Animación de Resorte Rápido Exagerado (Zoom In & Zoom Out Elástico) */
+@keyframes sensCardSpringPulse {
     0% {
-        transform: scale(1);
+        transform: scale3d(1, 1, 1);
     }
-    32% {
-        transform: scale(0.972);
+    22% {
+        /* Zoom In rápido (compresión física profunda del resorte) */
+        transform: scale3d(0.91, 0.91, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
     }
-    68% {
-        transform: scale(1.008);
+    54% {
+        /* Zoom Out exagerado (explosión elástica y pop hacia afuera) */
+        transform: scale3d(1.045, 1.045, 1);
+        box-shadow: 0 26px 54px rgba(0, 0, 0, 0.32);
+    }
+    75% {
+        /* Contracción elástica de retorno */
+        transform: scale3d(0.982, 0.982, 1);
+    }
+    88% {
+        /* Micro rebote elástico */
+        transform: scale3d(1.012, 1.012, 1);
     }
     100% {
-        transform: scale(1);
+        /* Regreso estable al reposo */
+        transform: scale3d(1, 1, 1);
     }
 }
 
 .sens-card-touch-pulse {
-    animation: sensCardTouchPulse 0.32s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+    animation: sensCardSpringPulse 0.38s cubic-bezier(0.18, 0.9, 0.32, 1.25) both !important;
+    z-index: 10 !important;
 }
 
 /* Animaciones GPU de Desplazamiento de Semanas (Swipe & Flechas) */
@@ -11043,8 +11091,23 @@ body.in-portal .sens-calendar-sticky-wrapper.is-stuck {
     color: #FFFFFF;
 }
 
-/* Strip Semanal Dinámico */
-body.in-portal .sens-week-strip-wrap {
+/* Strip Semanal Dinámico dentro de la Box Unificada */
+body.in-portal .sens-calendar-sticky-wrapper .sens-week-strip-wrap,
+.sens-calendar-sticky-wrapper .sens-week-strip-wrap {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 2px 0 0 0 !important;
+    margin-bottom: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 4px !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
+}
+
+body.in-portal .sens-week-strip-wrap:not(.sens-calendar-sticky-wrapper *) {
     background: #FFFFFF !important;
     border: 1px solid rgba(0, 0, 0, 0.06) !important;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03) !important;
@@ -12825,7 +12888,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     margin-bottom: 22px !important;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
     color: #FFFFFF !important;
-    cursor: default;
+    cursor: pointer !important;
 }
 
 .sens-balance-header {
@@ -13090,6 +13153,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     margin-bottom: 22px !important;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
     color: #FFFFFF !important;
+    cursor: pointer !important;
 }
 
 .sens-bio-header {

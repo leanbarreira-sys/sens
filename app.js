@@ -7769,6 +7769,39 @@ function initStickyCalendarWatcher() {
  * Micro-interacción táctil sofisticada con física de zoom in / zoom out rápido
  * para todas las cards del inicio (Apple Spring Touch)
  */
+/**
+ * Dispara la micro-interacción de resorte rápido exagerado (Zoom In & Zoom Out elástico)
+ */
+function triggerCardSpringAnimation(cardEl) {
+    if (!cardEl) return;
+    cardEl.classList.remove('sens-card-touch-pulse');
+    void cardEl.offsetWidth; // Reflow para reiniciar animación
+    cardEl.classList.add('sens-card-touch-pulse');
+    const onEnd = () => {
+        cardEl.classList.remove('sens-card-touch-pulse');
+        cardEl.removeEventListener('animationend', onEnd);
+    };
+    cardEl.addEventListener('animationend', onEnd, { once: true });
+}
+
+/**
+ * Ejecuta navegación con feedback táctil elástico previo (190ms de compresión y pop de resorte)
+ */
+function triggerCardSpringAndNavigate(cardEl, navigateFn) {
+    if (!cardEl) {
+        if (typeof navigateFn === 'function') navigateFn();
+        return;
+    }
+    triggerCardSpringAnimation(cardEl);
+    setTimeout(() => {
+        if (typeof navigateFn === 'function') navigateFn();
+    }, 190);
+}
+
+/**
+ * Micro-interacción táctil sofisticada con física de resorte rápido exagerado
+ * para todas las cards del inicio (Zoom In y Out Elástico)
+ */
 function initDashboardCardsTactileFeedback() {
     const cardSelectors = [
         '#dashTrainingVideoCard',
@@ -7783,37 +7816,34 @@ function initDashboardCardsTactileFeedback() {
         if (!card || card.dataset.tactileInitialized) return;
         card.dataset.tactileInitialized = 'true';
 
-        const triggerTouchPulse = () => {
-            card.classList.remove('sens-card-touch-pulse');
-            void card.offsetWidth; // Reflow
-            card.classList.add('sens-card-touch-pulse');
-            card.addEventListener('animationend', () => {
-                card.classList.remove('sens-card-touch-pulse');
-            }, { once: true });
-        };
-
-        // Soporte Click Desktop
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('button, a, input, select, .sens-btn-circle-arrow')) return;
-            triggerTouchPulse();
-        });
-
-        // Soporte Touchscreen Mobile
+        // Manejo táctil móvil de alta sensibilidad con detección de tap vs scroll
+        let touchStartX = 0;
+        let touchStartY = 0;
         let isTouching = false;
+
         card.addEventListener('touchstart', (e) => {
-            if (e.target.closest('button, a, input, select, .sens-btn-circle-arrow')) return;
+            if (e.target.closest('#btnRestSeeStretches, #btnOpenQuickBioModal, input, select')) return;
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
             isTouching = true;
         }, { passive: true });
 
         card.addEventListener('touchend', (e) => {
             if (!isTouching) return;
             isTouching = false;
-            triggerTouchPulse();
+            const touch = e.changedTouches[0];
+            const diffX = Math.abs(touch.clientX - touchStartX);
+            const diffY = Math.abs(touch.clientY - touchStartY);
+            // Si el movimiento fue menor a 12px, se considera un tap táctil intencional
+            if (diffX < 12 && diffY < 12) {
+                triggerCardSpringAnimation(card);
+            }
         }, { passive: true });
 
         card.addEventListener('touchcancel', () => {
             isTouching = false;
-        }, { passive: true });
+        });
     });
 }
 
@@ -7869,15 +7899,19 @@ function initWeekStripCalendar() {
     initDashboardCardsTactileFeedback();
 
     // Botón y Card de Inicio Rápido de Entrenamiento (panel activo y flecha circular)
+    // 1. Card de Entrenamiento Dinámica con Video & Foco Muscular Automático
+    const trainingCard = document.getElementById('dashTrainingVideoCard');
     const startWorkoutBtn = document.getElementById('dashStartWorkoutBtn');
     const workoutActivePane = document.getElementById('dashWorkoutActivePane');
     const handleStartWorkout = (e) => {
         if (e && e.target && e.target.closest('#btnRestSeeStretches')) return;
         const dayKey = getDayKeyFromDate(AppState.selectedDate || new Date());
         AppState.currentDay = dayKey;
-        switchPortalView('workoutView');
-        renderWorkoutDay(dayKey);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        triggerCardSpringAndNavigate(trainingCard, () => {
+            switchPortalView('workoutView');
+            renderWorkoutDay(dayKey);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     };
     if (startWorkoutBtn) {
         startWorkoutBtn.addEventListener('click', (e) => {
@@ -7888,39 +7922,109 @@ function initWeekStripCalendar() {
     if (workoutActivePane) {
         workoutActivePane.addEventListener('click', handleStartWorkout);
     }
+    if (trainingCard) {
+        trainingCard.addEventListener('click', (e) => {
+            if (e.target.closest('#btnRestSeeStretches, #dashStartWorkoutBtn, #dashWorkoutActivePane')) return;
+            handleStartWorkout(e);
+        });
+    }
 
     // Botón de Estiramientos en Card de Descanso
     const btnRestSeeStretches = document.getElementById('btnRestSeeStretches');
     if (btnRestSeeStretches) {
-        btnRestSeeStretches.addEventListener('click', () => {
+        btnRestSeeStretches.addEventListener('click', (e) => {
+            e.stopPropagation();
             AppState.selectedMuscleFilter = 'core_movilidad';
-            switchPortalView('workoutView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            triggerCardSpringAndNavigate(trainingCard, () => {
+                switchPortalView('workoutView');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
     }
 
-    // Clicks en Card Nutricional y Card de Objetivo para ir a sus vistas
+    // 2. Card Nutricional con Video de Fondo & Desglose de Calorías
     const nutriCard = document.getElementById('dashNutriSummaryCard');
     const goNutriBtn = document.getElementById('dashGoNutriBtn');
-    if (nutriCard) {
-        nutriCard.addEventListener('click', () => {
+    const handleGoNutri = () => {
+        triggerCardSpringAndNavigate(nutriCard, () => {
             switchPortalView('nutritionView');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    };
+    if (nutriCard) {
+        nutriCard.addEventListener('click', (e) => {
+            if (e.target.closest('#dashGoNutriBtn')) return;
+            handleGoNutri();
         });
     }
     if (goNutriBtn) {
         goNutriBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            switchPortalView('nutritionView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            handleGoNutri();
         });
     }
 
+    // 3. Card de Balance Energético
     const objCard = document.getElementById('dashObjectiveCard');
-    if (objCard) {
-        objCard.addEventListener('click', () => {
+    const btnGoTrackingFromBalance = document.getElementById('btnGoTrackingFromBalance');
+    const handleGoTracking = () => {
+        triggerCardSpringAndNavigate(objCard, () => {
             switchPortalView('trackingView');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    };
+    if (objCard) {
+        objCard.addEventListener('click', (e) => {
+            if (e.target.closest('#btnGoTrackingFromBalance')) return;
+            handleGoTracking();
+        });
+    }
+    if (btnGoTrackingFromBalance) {
+        btnGoTrackingFromBalance.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleGoTracking();
+        });
+    }
+
+    // 4. Card de Composición Corporal & Peso
+    const bioCard = document.getElementById('dashBiometricsCard');
+    const btnGoTrackingFromBio = document.getElementById('btnGoTrackingFromBio');
+    const handleGoBioTracking = () => {
+        triggerCardSpringAndNavigate(bioCard, () => {
+            switchPortalView('trackingView');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    };
+    if (bioCard) {
+        bioCard.addEventListener('click', (e) => {
+            if (e.target.closest('#btnOpenQuickBioModal, #btnGoTrackingFromBio')) return;
+            handleGoBioTracking();
+        });
+    }
+    if (btnGoTrackingFromBio) {
+        btnGoTrackingFromBio.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleGoBioTracking();
+        });
+    }
+
+    // 5. Card Tienda Oficial MercadoLibre
+    const storeCard = document.getElementById('dashStoreCard');
+    const btnStoreEntry = document.getElementById('btnDashOpenStore');
+    if (storeCard) {
+        storeCard.addEventListener('click', (e) => {
+            if (e.target.closest('#btnDashOpenStore')) return;
+            triggerCardSpringAndNavigate(storeCard, () => {
+                window.open('https://listado.mercadolibre.com.ar/_CustId_12345678', '_blank');
+            });
+        });
+    }
+    if (btnStoreEntry) {
+        btnStoreEntry.addEventListener('click', (e) => {
+            e.stopPropagation();
+            triggerCardSpringAndNavigate(storeCard, () => {
+                window.open('https://listado.mercadolibre.com.ar/_CustId_12345678', '_blank');
+            });
         });
     }
 
@@ -8734,7 +8838,13 @@ function updateObjectiveCardData(selectedDate = null) {
     if (btnGoTracking) {
         btnGoTracking.onclick = (e) => {
             if (e) e.stopPropagation();
-            if (typeof switchPortalView === 'function') {
+            const card = document.getElementById('dashObjectiveCard');
+            if (typeof triggerCardSpringAndNavigate === 'function') {
+                triggerCardSpringAndNavigate(card, () => {
+                    switchPortalView('trackingView');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            } else if (typeof switchPortalView === 'function') {
                 switchPortalView('trackingView');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
@@ -8818,7 +8928,13 @@ function updateBiometricsCardData(selectedDate = null) {
     if (btnGoBio) {
         btnGoBio.onclick = (e) => {
             if (e) e.stopPropagation();
-            if (typeof switchPortalView === 'function') {
+            const card = document.getElementById('dashBiometricsCard');
+            if (typeof triggerCardSpringAndNavigate === 'function') {
+                triggerCardSpringAndNavigate(card, () => {
+                    switchPortalView('trackingView');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            } else if (typeof switchPortalView === 'function') {
                 switchPortalView('trackingView');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
