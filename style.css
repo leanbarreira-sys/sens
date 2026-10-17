@@ -7043,12 +7043,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
     animation: sensLuxuryEntrance 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
 }
 
-.sens-train-hero.hero-ready .hero-description-train {
-    animation: sensLuxuryEntrance 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
-}
-
+/* La animación de hero-description-train y hero-cta-group es gobernada exclusivamente
+   por el contenedor .sens-hero-followup (Paso C a 1.65s) para mantener la narrativa A -> B -> C */
+.sens-train-hero.hero-ready .hero-description-train,
 .sens-train-hero.hero-ready .hero-cta-group {
-    animation: sensLuxuryEntrance 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+    animation: none;
 }
 
 /* Transiciones Suaves al Scrollear por Secciones (Luxury Fade & Float) */
@@ -8465,34 +8464,56 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* =========================================================================
-   HERO PÚBLICO (HOME): ANIMACIÓN NARRATIVA COREOGRAFIADA (APPLE / WELLNESS)
+   HERO PÚBLICO (HOME): COREOGRAFÍA NARRATIVA EN ORDEN A -> B -> C
    ========================================================================= */
 .sens-hero-welcome-header {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
 .sens-hero-welcome-question,
-.sens-hero-welcome-slogan {
+.sens-hero-welcome-slogan,
+.sens-hero-followup {
     opacity: 0;
     will-change: opacity, transform, filter;
 }
 
-/* Paso 1: Pregunta / Saludo reflexivo (0.08s delay, 0.44s duration) */
+/* Paso 1 (A): Pregunta / Saludo reflexivo (0.08s delay, 0.44s duration) */
 .sens-hero-welcome-header.play-entrance .sens-hero-welcome-question {
     animation: sensQuestionEntrance 0.44s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
 }
 
-/* Paso 2: Pausa narrativa de ~500ms tras asentarse la pregunta. Entra slogan a 1.05s */
+/* Paso 2 (B): Pausa de ~500ms tras asentarse la pregunta. Entra slogan 'MAKE SENS.' a 0.95s */
 .sens-hero-welcome-header.play-entrance .sens-hero-welcome-slogan {
-    animation: sensSloganAnswerEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 1.05s both;
+    animation: sensSloganAnswerEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
 }
 
-/* Estado Consolidado */
+/* Paso 3 (C): Entra la bajada y CTAs a 1.65s (inmediatamente después de que 'MAKE SENS.' se asienta) */
+@keyframes sensFollowupEntrance {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+        filter: blur(3px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        filter: blur(0);
+    }
+}
+
+.sens-hero-followup.play-entrance,
+.sens-hero-welcome-header.play-entrance ~ .sens-hero-followup {
+    animation: sensFollowupEntrance 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.65s both;
+}
+
+/* Estado Consolidado al terminar la coreografía completa (A -> B -> C) */
 .sens-hero-welcome-header.played .sens-hero-welcome-question,
-.sens-hero-welcome-header.played .sens-hero-welcome-slogan {
+.sens-hero-welcome-header.played .sens-hero-welcome-slogan,
+.sens-hero-followup.played,
+.sens-hero-welcome-header.played ~ .sens-hero-followup {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
@@ -11171,15 +11192,16 @@ body.in-portal .sens-calendar-sticky-wrapper {
     position: sticky;
     top: var(--portal-topbar-height, 48px);
     z-index: 500;
-    margin-bottom: 22px !important;
+    margin-bottom: 20px !important;
     /* Box unificada 100% sólida para enmascarar scroll inferior sin overlap */
     background: #FFFFFF !important;
     border: 1px solid rgba(0, 0, 0, 0.08) !important;
-    border-radius: 22px !important;
+    border-radius: 20px !important;
     padding: 12px 10px 14px 10px !important;
-    margin-left: -14px !important;
-    margin-right: -14px !important;
-    width: calc(100% + 28px) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02) !important;
     box-sizing: border-box !important;
     transform: translateZ(0);
@@ -11191,11 +11213,13 @@ body.in-portal .sens-calendar-sticky-wrapper {
     .sens-calendar-sticky-wrapper,
     body.in-portal .sens-calendar-sticky-wrapper {
         top: var(--portal-topbar-height, 48px);
-        margin-left: -12px !important;
-        margin-right: -12px !important;
-        width: calc(100% + 24px) !important;
-        padding: 10px 8px 12px 8px !important;
-        border-radius: 20px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px 6px 12px 6px !important;
+        border-radius: 18px !important;
+        box-sizing: border-box !important;
     }
 }
 

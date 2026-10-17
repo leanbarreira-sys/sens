@@ -7849,7 +7849,8 @@ let heroGreetingTimer = null;
 
 function triggerHeroGreetingAnimation(force = false) {
     const header = document.getElementById('sensHeroWelcomeHeader');
-    if (!header) return;
+    const followup = document.getElementById('sensHeroFollowup');
+    if (!header && !followup) return;
     if (hasPlayedHeroAnimation && !force) return;
     hasPlayedHeroAnimation = true;
 
@@ -7858,22 +7859,35 @@ function triggerHeroGreetingAnimation(force = false) {
         heroGreetingTimer = null;
     }
 
-    header.classList.remove('play-entrance', 'played');
-    void header.offsetWidth;
-    header.classList.add('play-entrance');
+    if (header) {
+        header.classList.remove('play-entrance', 'played');
+    }
+    if (followup) {
+        followup.classList.remove('play-entrance', 'played');
+    }
+    if (header) void header.offsetWidth;
+    if (followup) void followup.offsetWidth;
+
+    if (header) header.classList.add('play-entrance');
+    if (followup) followup.classList.add('play-entrance');
 
     heroGreetingTimer = setTimeout(() => {
-        header.classList.add('played');
-    }, 1850);
+        if (header) header.classList.add('played');
+        if (followup) followup.classList.add('played');
+    }, 2400);
 }
 
-// Fallback de seguridad para el hero público
+// Fallback de seguridad para el hero público (A -> B -> C completo)
 setTimeout(() => {
     const h = document.getElementById('sensHeroWelcomeHeader');
+    const f = document.getElementById('sensHeroFollowup');
     if (h && !h.classList.contains('played')) {
         h.classList.add('played');
     }
-}, 2200);
+    if (f && !f.classList.contains('played')) {
+        f.classList.add('played');
+    }
+}, 2800);
 
 /**
  * Navega semanas en el calendario dinámico con física de animación GPU fluida (Swipe & Flechas)
