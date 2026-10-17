@@ -2753,6 +2753,8 @@ function switchPortalView(viewId) {
         const actionsBackdrop = document.getElementById('coachAthleteActionsBackdrop');
         if (actionsSheet) actionsSheet.classList.remove('active');
         if (actionsBackdrop) actionsBackdrop.classList.remove('active');
+        const userDrop = document.getElementById('userAvatarDropdown');
+        if (userDrop) userDrop.classList.remove('active');
         document.body.style.overflow = '';
 
         if (isExcluded) {
@@ -5841,6 +5843,12 @@ function initTopbarAvatar() {
             dropdown.classList.remove('active');
         }
     });
+
+    window.addEventListener('scroll', () => {
+        if (dropdown.classList.contains('active')) {
+            dropdown.classList.remove('active');
+        }
+    }, { passive: true });
 
     const goProfile = document.getElementById('dropdownGoProfile');
     if (goProfile) {
@@ -10194,25 +10202,12 @@ function triggerCardSpringAnimation(cardEl) {
  * Navegación táctil con ciclo elástico completo (60/120 FPS sin cortes prematuros)
  */
 function triggerCardSpringAndNavigate(cardEl, navigateFn) {
-    if (!cardEl) {
-        if (typeof navigateFn === 'function') navigateFn();
-        return;
+    if (cardEl) {
+        triggerCardSpringAnimation(cardEl);
     }
-    if (isPortalCardNavigating) return;
-    isPortalCardNavigating = true;
-
-    triggerCardSpringAnimation(cardEl);
-
-    // Permitir ciclo elástico visual de compresión (0.965) y rebote (1.025) sin corte abrupto
-    setTimeout(() => {
-        try {
-            if (typeof navigateFn === 'function') navigateFn();
-        } finally {
-            setTimeout(() => {
-                isPortalCardNavigating = false;
-            }, 300);
-        }
-    }, 140);
+    if (typeof navigateFn === 'function') {
+        navigateFn();
+    }
 }
 
 /**

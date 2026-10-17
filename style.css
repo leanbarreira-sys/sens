@@ -164,9 +164,7 @@ header {
     padding-top: 8px;
     padding-top: max(8px, env(safe-area-inset-top, 8px));
     padding-bottom: 8px;
-    background: rgba(8, 8, 9, 0.98) !important;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    background: #080809 !important;
     border-bottom: 1px solid var(--border-subtle);
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
@@ -1275,14 +1273,12 @@ footer p {
     .mobile-menu-overlay {
         position: fixed !important;
         inset: 0 !important;
-        background: rgba(8, 8, 9, 0.98) !important;
+        background: #080809 !important;
         z-index: 100000 !important;
         padding: 35px 25px 40px !important;
         flex-direction: column !important;
         gap: 20px !important;
         text-align: center !important;
-        backdrop-filter: blur(25px) !important;
-        -webkit-backdrop-filter: blur(25px) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
     }
@@ -2484,9 +2480,7 @@ button.btn-primary:focus {
 }
 
 .navbar.scrolled {
-    background: rgba(8, 8, 9, 0.95);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    background: #080809 !important;
     border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -2597,9 +2591,7 @@ a.hero-btn-apple-primary:visited:hover,
 .hero-btn-apple-outline {
     border-radius: 40px !important;
     padding: 16px 32px !important;
-    background: rgba(8, 8, 9, 0.65) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #080809 !important;
     border: 1px solid rgba(229, 203, 167, 0.5) !important;
     color: var(--accent-primary) !important;
 }
@@ -2622,8 +2614,6 @@ a.hero-btn-apple-dark:visited {
     letter-spacing: 1.8px !important;
     text-transform: uppercase !important;
     background: #080809 !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border: 1.5px solid var(--accent-primary) !important;
     color: var(--accent-primary) !important;
     -webkit-text-fill-color: var(--accent-primary) !important;
@@ -4033,10 +4023,8 @@ video.ig-img {
         left: 0;
         right: 0;
         padding: 10px 16px max(12px, env(safe-area-inset-bottom, 0px));
-        background: rgba(8, 8, 9, 0.94);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border-top: none !important;
+        background: #09090B !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
         z-index: 1500;
         align-items: center;
         gap: 10px;
@@ -4140,9 +4128,7 @@ video.ig-img {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(8, 8, 9, 0.88);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: rgba(8, 8, 9, 0.92);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4300,16 +4286,16 @@ video.ig-img {
 }
 
 .portal-topbar {
-    background: var(--bg-surface);
-    border-bottom: 1px solid var(--border-subtle);
+    background: #09090B !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
     padding: 16px 6%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     top: 0;
-    z-index: 1000;
-    backdrop-filter: blur(20px);
+    z-index: 9995 !important;
+    overflow: visible !important;
 }
 
 .portal-brand {
@@ -6178,8 +6164,8 @@ input[type="range"]::-moz-range-track {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    background: rgba(18, 18, 20, 0.95);
-    border: 1px solid var(--border-strong);
+    background: #141417 !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7);
     border-radius: 12px;
     padding: 16px 20px;
@@ -6187,9 +6173,7 @@ input[type="range"]::-moz-range-track {
     align-items: center;
     gap: 18px;
     z-index: 2000;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    animation: slideUpTimer 0.3s ease;
+    animation: slideUpTimer 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .floating-timer-widget.active {
@@ -6632,13 +6616,11 @@ body {
 .dash-welcome-card,
 .diagnosis-summary-card,
 .biometric-assessment-card {
-    background: linear-gradient(145deg, rgba(22, 22, 26, 0.92) 0%, rgba(14, 14, 16, 0.96) 100%) !important;
+    background: linear-gradient(145deg, #16161a 0%, #0e0e10 100%) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 18px !important;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease !important;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
     will-change: transform;
     position: relative;
 }
@@ -6653,12 +6635,10 @@ body {
 
 /* 3. Contenedor del Wizard Onboarding */
 .wizard-container {
-    background: linear-gradient(160deg, rgba(20, 20, 24, 0.96) 0%, rgba(10, 10, 12, 0.98) 100%) !important;
+    background: linear-gradient(160deg, #141418 0%, #0a0a0c 100%) !important;
     border: 1px solid rgba(229, 203, 167, 0.25) !important;
     border-radius: 24px !important;
     box-shadow: 0 28px 70px rgba(0, 0, 0, 0.85) !important;
-    backdrop-filter: blur(14px) !important;
-    -webkit-backdrop-filter: blur(14px) !important;
     position: relative;
     overflow: hidden;
 }
@@ -6678,19 +6658,17 @@ body {
 
 /* 4. Touch Cards Hápticas Ligeras y Rápidas */
 .touch-card {
-    background: rgba(26, 26, 30, 0.75) !important;
+    background: #16161a !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 14px !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease !important;
+    transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease !important;
     will-change: transform;
     position: relative !important;
     overflow: hidden !important;
 }
 
 .touch-card:hover {
-    background: rgba(32, 32, 38, 0.9) !important;
+    background: #1c1c22 !important;
     border-color: rgba(229, 203, 167, 0.4) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
@@ -6698,7 +6676,7 @@ body {
 
 .touch-card:has(input:checked),
 .touch-card.is-selected {
-    background: linear-gradient(135deg, rgba(229, 203, 167, 0.14) 0%, rgba(26, 26, 32, 0.98) 100%) !important;
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.14) 0%, #1a1a20 100%) !important;
     border-color: var(--accent-primary) !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(229, 203, 167, 0.2) !important;
     transform: translateY(-2px) !important;
@@ -6716,16 +6694,14 @@ body {
 
 /* 5. Tarjetas de KPIs del Dashboard (Fluidez Whoop) */
 .kpi-card {
-    background: linear-gradient(150deg, rgba(24, 24, 28, 0.9) 0%, rgba(14, 14, 16, 0.95) 100%) !important;
+    background: linear-gradient(150deg, #18181c 0%, #0e0e10 100%) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 16px !important;
     padding: 24px 22px !important;
     position: relative !important;
     overflow: hidden !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5) !important;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease !important;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
     will-change: transform;
 }
 
@@ -7222,17 +7198,16 @@ input[type="range"]::-webkit-slider-thumb:hover {
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    width: 260px;
-    background: rgba(18, 18, 20, 0.96);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-strong);
-    border-radius: 14px;
+    width: 270px;
+    background: #141417 !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    border-radius: 16px;
     padding: 12px;
-    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    z-index: 2000;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    z-index: 10005 !important;
     display: none;
-    animation: sensPopDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    overflow: visible !important;
+    animation: sensPopDown 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .user-avatar-dropdown.active {
@@ -7459,9 +7434,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%) translateY(120px);
-    background: rgba(18, 18, 20, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #141417 !important;
     border: 1px solid var(--accent-primary);
     border-radius: 40px;
     padding: 10px 24px;
@@ -7470,7 +7443,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     gap: 16px;
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(229, 203, 167, 0.25);
     z-index: 1500;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .rest-timer-bar.active {
@@ -8051,9 +8024,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 /* 1. Barra Ejecutiva de Coach (1 Sola Fila Compacta en Mobile y Desktop) */
 .coach-native-bar {
-    background: rgba(14, 14, 18, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #0E0E12 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding: 8px 4%;
     display: flex;
@@ -9451,9 +9422,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(14, 14, 18, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #0E0E12 !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
     z-index: 100;
@@ -9857,7 +9826,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     letter-spacing: 0.8px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: color 0.15s ease, background-color 0.15s ease, transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .sens-dock-item span {
@@ -9915,8 +9884,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
     z-index: 1200;
     display: none;
     text-align: left;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
 }
 
 .sens-tooltip-wrap.active .sens-tooltip-popover {
@@ -10128,17 +10095,15 @@ input[type="range"]::-webkit-slider-thumb:hover {
     background: #0c0c0e;
     border: none !important;
     outline: none !important;
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-    mask-image: radial-gradient(white, black);
-    isolation: isolate;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
     aspect-ratio: 4 / 5;
     cursor: pointer;
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45) !important;
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .sens-exercise-video-card:hover {
@@ -10148,23 +10113,26 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .sens-exercise-video-card:active {
-    transform: scale(0.98);
+    transform: scale(0.97) !important;
 }
 
 .sens-exercise-video-bg {
     position: absolute;
-    inset: -4px;
-    width: calc(100% + 8px);
-    height: calc(100% + 8px);
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    transform: scale(1.05);
-    transform-origin: center center;
+    border-radius: inherit;
     z-index: 1;
+    pointer-events: none;
 }
 
 .sens-exercise-card-gradient {
     position: absolute;
     inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: inherit;
     background: linear-gradient(180deg, 
         rgba(9, 9, 11, 0.08) 0%, 
         rgba(9, 9, 11, 0.25) 28%, 
@@ -10233,9 +10201,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .sens-exercise-modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.78);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(0, 0, 0, 0.82);
     z-index: 9999;
     display: flex;
     align-items: flex-end;
@@ -10252,7 +10218,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     overflow-y: auto;
     padding: 16px 20px 36px;
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.85);
-    animation: slideUpSheet 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: slideUpSheet 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     text-align: left;
 }
 
@@ -10319,9 +10285,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     position: absolute;
     bottom: 0;
     inset-inline: 0;
-    background: rgba(8, 8, 9, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(8, 8, 9, 0.92);
     padding: 8px 12px;
     font-size: 11.5px;
     color: #FFFFFF;
@@ -10915,14 +10879,12 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 /* 2. Banner Delgado de Inspección de Alumno (Reemplazo ultra-clean de la barra masiva) */
 .coach-inspection-banner {
-    background: rgba(14, 14, 18, 0.96);
+    background: #0E0E12 !important;
     border-bottom: 1px solid rgba(229, 203, 167, 0.2);
     padding: 7px 5%;
     position: sticky;
     top: 60px;
     z-index: 890;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
 }
 
 .inspection-banner-inner {
@@ -11190,10 +11152,14 @@ body.in-portal #app-container {
 /* Barra Superior del Portal en Negro Obsidiana SENS */
 body.in-portal .portal-topbar,
 .portal-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9995 !important;
     background: #09090B !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(25px) !important;
-    -webkit-backdrop-filter: blur(25px) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    overflow: visible !important;
 }
 
 body.in-portal .portal-topbar .brand-logo-img-portal,
@@ -11360,8 +11326,6 @@ body.in-portal .sens-calendar-sticky-wrapper {
     max-width: 100% !important;
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02) !important;
     box-sizing: border-box !important;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
 }
 
 @media (max-width: 768px) {
@@ -12332,8 +12296,6 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         border: none !important;
         border-radius: 36px !important;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
-        backdrop-filter: blur(25px) !important;
-        -webkit-backdrop-filter: blur(25px) !important;
         z-index: 1000 !important;
         overflow: hidden !important;
         contain: layout style;
@@ -12365,8 +12327,6 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         border: 1px solid rgba(229, 203, 167, 0.25) !important;
         border-radius: 36px !important;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65) !important;
-        backdrop-filter: blur(25px) !important;
-        -webkit-backdrop-filter: blur(25px) !important;
         z-index: 1000 !important;
         overflow: hidden !important;
         contain: layout style;
@@ -12424,7 +12384,7 @@ body.in-portal .sens-dock-item,
     min-width: 0 !important;
     width: 100% !important;
     box-sizing: border-box !important;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transition: color 0.15s ease, background-color 0.15s ease, transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
 }
 
 body.in-portal .sens-dock-item svg,
@@ -12743,10 +12703,9 @@ body.in-portal .sens-card-cta-gold,
 
 body.in-portal .sens-exercise-video-card .sens-exercise-top-pills .pill-dark,
 .sens-exercise-video-card .sens-exercise-top-pills .pill-dark {
-    background: rgba(18, 18, 20, 0.9) !important;
+    background: #121214 !important;
     color: #FFFFFF !important;
-    border: none !important;
-    backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 /* 2. Hero de Objetivo de Entrenamiento (Fondo #121214) */
@@ -15836,7 +15795,7 @@ body.in-portal #coachHubView {
     position: absolute;
     top: 6px;
     left: 6px;
-    background: rgba(18, 18, 20, 0.85);
+    background: rgba(18, 18, 20, 0.92);
     color: #E5CBA7;
     font-size: 8.5px;
     font-weight: 800;
@@ -15845,7 +15804,6 @@ body.in-portal #coachHubView {
     display: flex;
     align-items: center;
     gap: 4px;
-    backdrop-filter: blur(8px);
 }
 
 .wizard-feed-body {
@@ -16441,6 +16399,74 @@ body.in-portal #coachHubView {
 }
 .sens-tooltip-wrap {
     cursor: help;
+}
+
+/* =============================================================================
+   SENS APPLE-GRADE FLUIDITY & HAPTIC TOUCH ENGINE (SR-DIRECTOR-IT-WELLNESS)
+   Zero Tap-Delay, 60/120 FPS Compositing, Physics Spring Micro-interactions
+   ============================================================================= */
+
+*, *::before, *::after {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button, 
+a, 
+.btn, 
+.card-panel, 
+.sens-dock-item, 
+.topbar-mode-btn, 
+.sheet-athlete-item, 
+.sens-week-day-pill, 
+.pill-card, 
+.cta-btn,
+.user-avatar-btn,
+.avatar-dropdown-item,
+.sens-exercise-video-card,
+.touch-card {
+    touch-action: manipulation;
+}
+
+/* Micro-interacción Táctil Elástica Tipo Resorte Apple (0ms Latency) */
+.sens-dock-item:active,
+.topbar-mode-btn:active,
+.user-avatar-btn:active,
+.btn:active,
+button.btn-primary:active,
+button.btn-outline:active,
+.hero-btn-apple-dark:active,
+.hero-btn-apple-outline:active,
+.portal-nav-item:active,
+.sheet-close-btn:active,
+.modal-close-btn:active,
+.sens-exercise-modal-close:active,
+.avatar-dropdown-item:active,
+.btn-topbar-coach-pill:active {
+    transform: scale(0.95) !important;
+    transition: transform 0.08s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.card-panel:active,
+.sens-week-day-pill:active,
+.sheet-athlete-item:active,
+.touch-card:active,
+.kpi-card:active,
+.action-card:active,
+.quick-action-card:active,
+.stat-card:active,
+.biometric-assessment-card:active,
+.sens-exercise-video-card:active {
+    transform: scale(0.975) !important;
+    transition: transform 0.08s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* Fluidez Extrema de Scroll GPU */
+body.in-portal,
+#app-container,
+.portal-body,
+.portal-view {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: auto !important;
 }
 
 
