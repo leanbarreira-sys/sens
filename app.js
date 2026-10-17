@@ -6001,15 +6001,27 @@ function initCoachOS() {
             p.classList.toggle('active', p.id === resolvedPaneId);
         });
 
-        // Visibilidad del banner/selector de alumno activo:
+        // Sincronizar clases en contenedor para selectores CSS de alta especificidad
+        const coachHubViewEl = document.getElementById('coachHubView');
+        if (coachHubViewEl) {
+            coachHubViewEl.classList.remove('subtab-paneAthletes', 'subtab-paneWorkouts', 'subtab-paneNutrition', 'subtab-paneLibrary', 'subtab-paneMarketing', 'subtab-paneEvolution');
+            coachHubViewEl.classList.add(`subtab-${resolvedPaneId}`);
+        }
+
+        // Visibilidad estricta del banner/selector de alumno activo:
         // Solo debe mostrarse en las secciones por cliente (Entreno, Nutrición, Evolución/Progreso).
         // En Alumnos & Accesos (paneAthletes, vista macro general), Biblioteca o Marketing debe estar OCULTO.
         const masterCard = document.getElementById('coachMasterActiveAthleteCard');
         if (masterCard) {
             const isClientSpecificTab = ['paneWorkouts', 'paneNutrition', 'paneEvolution'].includes(resolvedPaneId);
-            masterCard.style.display = isClientSpecificTab ? '' : 'none';
-            if (isClientSpecificTab && typeof syncCoachMasterCard === 'function') {
-                syncCoachMasterCard(AppState.activeAthleteId);
+            masterCard.classList.toggle('is-hidden', !isClientSpecificTab);
+            if (isClientSpecificTab) {
+                masterCard.style.removeProperty('display');
+                if (typeof syncCoachMasterCard === 'function') {
+                    syncCoachMasterCard(AppState.activeAthleteId);
+                }
+            } else {
+                masterCard.style.setProperty('display', 'none', 'important');
             }
         }
 
@@ -6072,6 +6084,9 @@ function initCoachOS() {
     }
     if (typeof CoachEvolutionEngine !== 'undefined' && typeof CoachEvolutionEngine.init === 'function') {
         CoachEvolutionEngine.init();
+    }
+    if (typeof window.switchCoachSubTab === 'function') {
+        window.switchCoachSubTab('paneAthletes');
     }
 }
 
@@ -6424,6 +6439,19 @@ function syncCoachMasterCard(athId) {
         loadCoachAthletesList().then(list => {
             if (list && list.length > 0) syncCoachMasterCard(athId);
         }).catch(() => {});
+    }
+
+    // Control estricto de visibilidad: si la subpestaña activa no es de cliente individual, ocultar la tarjeta
+    const masterCard = document.getElementById('coachMasterActiveAthleteCard');
+    const activeSubpane = document.querySelector('#coachHubView .coach-subpane.active');
+    const isClientTab = activeSubpane ? ['paneWorkouts', 'paneNutrition', 'paneEvolution'].includes(activeSubpane.id) : false;
+    if (masterCard) {
+        masterCard.classList.toggle('is-hidden', !isClientTab);
+        if (!isClientTab) {
+            masterCard.style.setProperty('display', 'none', 'important');
+        } else {
+            masterCard.style.removeProperty('display');
+        }
     }
 
     const masterAvatar = document.getElementById('coachMasterAvatar');

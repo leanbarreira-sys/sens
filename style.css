@@ -14108,6 +14108,26 @@ body.in-portal #coachHubView {
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03) !important;
 }
 
+/* Reglas Estrictas de Visibilidad:
+   - Solo se muestra en sub-pestañas por cliente: Entreno (#paneWorkouts), Nutrición (#paneNutrition) y Evolución (#paneEvolution).
+   - Oculto absolutamente en Alumnos (#paneAthletes), Biblioteca (#paneLibrary) y Marketing (#paneMarketing).
+*/
+#coachHubView #coachMasterActiveAthleteCard.is-hidden,
+#coachHubView.subtab-paneAthletes #coachMasterActiveAthleteCard,
+#coachHubView.subtab-paneLibrary #coachMasterActiveAthleteCard,
+#coachHubView.subtab-paneMarketing #coachMasterActiveAthleteCard,
+#coachHubView:has(#paneAthletes.active) #coachMasterActiveAthleteCard,
+#coachHubView:has(#paneLibrary.active) #coachMasterActiveAthleteCard,
+#coachHubView:has(#paneMarketing.active) #coachMasterActiveAthleteCard {
+    display: none !important;
+}
+
+#coachHubView:has(#paneWorkouts.active) #coachMasterActiveAthleteCard:not(.is-hidden),
+#coachHubView:has(#paneNutrition.active) #coachMasterActiveAthleteCard:not(.is-hidden),
+#coachHubView:has(#paneEvolution.active) #coachMasterActiveAthleteCard:not(.is-hidden) {
+    display: flex !important;
+}
+
 .coach-active-athlete-left {
     display: flex;
     align-items: center;
@@ -15380,11 +15400,24 @@ body.in-portal #coachHubView {
     #coachHubView .coach-master-active-athlete-card {
         padding: 10px 10px !important;
         border-radius: 12px !important;
-        display: flex !important;
         flex-direction: column !important;
         gap: 8px !important;
         margin-bottom: 10px !important;
         box-sizing: border-box !important;
+    }
+    #coachHubView #coachMasterActiveAthleteCard.is-hidden,
+    #coachHubView.subtab-paneAthletes #coachMasterActiveAthleteCard,
+    #coachHubView.subtab-paneLibrary #coachMasterActiveAthleteCard,
+    #coachHubView.subtab-paneMarketing #coachMasterActiveAthleteCard,
+    #coachHubView:has(#paneAthletes.active) #coachMasterActiveAthleteCard,
+    #coachHubView:has(#paneLibrary.active) #coachMasterActiveAthleteCard,
+    #coachHubView:has(#paneMarketing.active) #coachMasterActiveAthleteCard {
+        display: none !important;
+    }
+    #coachHubView:has(#paneWorkouts.active) #coachMasterActiveAthleteCard:not(.is-hidden),
+    #coachHubView:has(#paneNutrition.active) #coachMasterActiveAthleteCard:not(.is-hidden),
+    #coachHubView:has(#paneEvolution.active) #coachMasterActiveAthleteCard:not(.is-hidden) {
+        display: flex !important;
     }
     .coach-active-athlete-topline {
         display: flex !important;
