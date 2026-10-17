@@ -15493,17 +15493,18 @@ body.in-portal #coachHubView {
     .wizard-modality-selector {
         width: 100% !important;
         display: flex !important;
-        gap: 4px !important;
+        gap: 2px !important;
+        padding: 2px !important;
+        box-sizing: border-box !important;
     }
     .wizard-mod-btn {
         flex: 1 1 0 !important;
         min-width: 0 !important;
         font-size: 9.5px !important;
-        padding: 6px 2px !important;
+        padding: 5px 3px !important;
         text-align: center !important;
         white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        border-radius: 14px !important;
     }
     .coach-month-calendar-grid {
         gap: 2px !important;
@@ -15687,34 +15688,45 @@ body.in-portal #coachHubView {
     box-shadow: 0 4px 14px rgba(158, 125, 75, 0.08);
 }
 
+.wizard-modality-selector {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    background: #F4F4F6 !important;
+    padding: 3px !important;
+    border-radius: 20px !important;
+    border: 1px solid #E4E4E7 !important;
+    max-width: 100% !important;
+}
+
 .wizard-mod-btn {
+    border: none !important;
+    background: transparent !important;
+    color: #71717A !important;
     font-size: 10.5px !important;
     font-weight: 700 !important;
-    padding: 6px 11px !important;
-    border-radius: 8px !important;
+    padding: 4px 10px !important;
+    border-radius: 16px !important;
     cursor: pointer !important;
     transition: all 0.15s ease !important;
     outline: none !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+    line-height: 1.25 !important;
 }
 
 .wizard-mod-btn.active {
     background: #9E7D4B !important;
-    border: 1px solid #9E7D4B !important;
+    border: none !important;
     color: #FFFFFF !important;
     font-weight: 800 !important;
-    box-shadow: 0 2px 8px rgba(158, 125, 75, 0.3) !important;
-}
-
-.wizard-mod-btn:not(.active) {
-    background: #F4F4F6 !important;
-    border: 1px solid #E4E4E7 !important;
-    color: #27272A !important;
-    font-weight: 600 !important;
+    box-shadow: 0 1px 5px rgba(158, 125, 75, 0.35) !important;
 }
 
 .wizard-mod-btn:not(.active):hover {
     background: #E4E4E7 !important;
-    color: #09090B !important;
+    color: #121214 !important;
 }
 
 /* 7. Paso 2: Chips Táctiles de Músculos */
@@ -15758,96 +15770,98 @@ body.in-portal #coachHubView {
 }
 
 .wizard-feed-ex-card {
-    background: #FFFFFF;
-    border: 1px solid #E4E4E7;
+    background: #121214;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 14px;
     overflow: hidden;
     cursor: pointer;
+    position: relative;
+    aspect-ratio: 4 / 5;
+    min-height: 220px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-    transition: transform 0.15s ease, border-color 0.15s ease;
+    justify-content: flex-end;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .wizard-feed-ex-card:hover {
-    border-color: #9E7D4B;
+    border-color: #E5CBA7;
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-.wizard-feed-thumb-box {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    background: #18181B;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.wizard-feed-thumb-box img {
+.wizard-feed-video-bg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 1;
 }
 
-.wizard-feed-video-badge {
+.wizard-feed-video-placeholder {
     position: absolute;
-    top: 6px;
-    left: 6px;
-    background: rgba(18, 18, 20, 0.92);
-    color: #E5CBA7;
-    font-size: 8.5px;
-    font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 4px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #27272A 0%, #09090B 100%);
+    z-index: 1;
+}
+
+.wizard-feed-card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(9, 9, 11, 0.35) 0%, rgba(9, 9, 11, 0.1) 30%, rgba(9, 9, 11, 0.75) 65%, rgba(9, 9, 11, 0.98) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.wizard-feed-top-pills {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 4px;
+    z-index: 3;
+    pointer-events: none;
 }
 
-.wizard-feed-body {
+.wizard-feed-content {
+    position: relative;
+    z-index: 3;
     padding: 10px;
     display: flex;
     flex-direction: column;
-    flex: 1;
-    justify-content: space-between;
-    gap: 6px;
-}
-
-.wizard-feed-muscle-pill {
-    align-self: flex-start;
-    background: rgba(229, 203, 167, 0.25);
-    color: #8C6A38;
-    font-size: 9px;
-    font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
+    gap: 3px;
 }
 
 .wizard-feed-title {
-    font-size: 11.5px;
-    font-weight: 700;
-    color: #121214 !important;
-    line-height: 1.25;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    min-height: 28px;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
 }
 
 .wizard-feed-meta {
-    font-size: 10px;
-    color: #71717A;
+    font-size: 9.5px !important;
+    color: #D4D4D8 !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+    font-weight: 500;
 }
 
 .wizard-feed-add-btn {
     width: 100%;
-    padding: 7px 10px;
+    padding: 6px 10px;
     border-radius: 8px;
     font-size: 11px;
     font-weight: 800;
@@ -15858,17 +15872,23 @@ body.in-portal #coachHubView {
     align-items: center;
     justify-content: center;
     gap: 4px;
+    margin-top: 4px;
 }
 
 .wizard-feed-add-btn.not-added {
-    background: #18181B;
-    color: #FFFFFF;
+    background: #E5CBA7 !important;
+    color: #09090B !important;
+    box-shadow: 0 2px 8px rgba(229, 203, 167, 0.3) !important;
+}
+
+.wizard-feed-add-btn.not-added:hover {
+    background: #D8B788 !important;
 }
 
 .wizard-feed-add-btn.added {
-    background: #ECFDF5;
-    color: #047857;
-    border: 1px solid #10B981;
+    background: rgba(16, 185, 129, 0.25) !important;
+    color: #10B981 !important;
+    border: 1px solid #10B981 !important;
 }
 
 /* 9. Barra Masiva de Series / Reps / Descanso & Inputs de Alta Legibilidad */
@@ -15982,23 +16002,28 @@ body.in-portal #coachHubView {
 
 /* 11. Grilla de Visión Mensual */
 .coach-month-calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    margin-top: 12px;
+    display: grid !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+    margin-top: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .coach-month-day-cell {
     background: #FFFFFF;
     border: 1px solid #E4E4E7;
     border-radius: 10px;
-    min-height: 78px;
-    padding: 6px 8px;
+    min-height: 60px;
+    padding: 5px 4px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
     transition: all 0.15s ease;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
 }
 
 .coach-month-day-cell:hover {
@@ -16015,17 +16040,47 @@ body.in-portal #coachHubView {
     border: 2px solid #09090B;
 }
 
-.coach-month-workout-pill {
-    background: linear-gradient(135deg, rgba(229, 203, 167, 0.3) 0%, rgba(196, 164, 124, 0.2) 100%);
-    border: 1px solid rgba(158, 125, 75, 0.3);
-    border-radius: 6px;
-    padding: 2px 5px;
-    font-size: 9px;
-    font-weight: 800;
-    color: #9E7D4B;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.coach-cal-mod-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.coach-cal-mod-dot.presencial {
+    background: #10B981;
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+}
+.coach-cal-mod-dot.online {
+    background: #3B82F6;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+}
+.coach-cal-mod-dot.autonomo {
+    background: #F59E0B;
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+}
+
+.coach-month-emojis {
+    font-size: 13px !important;
+    line-height: 1.1 !important;
+    text-align: center !important;
+    margin: 2px 0 1px 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    letter-spacing: 1px !important;
+}
+
+.coach-month-mod-label {
+    font-size: 8px !important;
+    font-weight: 700 !important;
+    color: #8C6A38 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    line-height: 1.1 !important;
 }
 
 .coach-month-day-cell.is-selected {
@@ -16044,42 +16099,28 @@ body.in-portal #coachHubView {
     background: #FFFDF9 !important;
 }
 
-.coach-month-muscle-pill {
-    background: rgba(158, 125, 75, 0.15);
-    color: #8C6A38;
-    font-size: 8.5px;
-    font-weight: 800;
-    padding: 1px 4px;
-    border-radius: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    margin-top: 2px;
-}
-
 @media (max-width: 600px) {
     .coach-month-calendar-grid {
         gap: 3px !important;
+        grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+        width: 100% !important;
     }
     .coach-month-day-cell {
-        min-height: 52px !important;
-        padding: 4px 3px !important;
+        min-height: 48px !important;
+        padding: 3px 2px !important;
         border-radius: 6px !important;
+        min-width: 0 !important;
     }
     .coach-month-day-cell .cell-number {
-        font-size: 11px !important;
+        font-size: 10.5px !important;
         font-weight: 700 !important;
     }
-    .coach-month-workout-pill {
-        font-size: 7.5px !important;
-        padding: 1px 3px !important;
-        line-height: 1.1 !important;
+    .coach-month-emojis {
+        font-size: 11px !important;
+        margin: 1px 0 !important;
     }
-    .coach-month-muscle-pill {
+    .coach-month-mod-label {
         font-size: 7px !important;
-        padding: 1px 2px !important;
-        margin-top: 1px !important;
     }
 }
 
@@ -16316,15 +16357,113 @@ body.in-portal #coachHubView {
 }
 
 /* Barra de Ajuste de Carga en Lote en Visión por Músculo */
+/* SENS Obsidian Brandbook: Barra de Ajuste de Carga en Lote */
 .coach-matrix-batch-bar {
-    background: linear-gradient(135deg, rgba(229, 203, 167, 0.12) 0%, rgba(248, 249, 250, 0.95) 100%);
-    border: 1px solid rgba(158, 125, 75, 0.35);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    background: #141417 !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    border-radius: 14px !important;
+    padding: 14px 16px !important;
+    margin-bottom: 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.coach-matrix-batch-bar strong {
+    color: #FFFFFF !important;
+}
+
+.coach-matrix-batch-bar .input-control {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #FFFFFF !important;
+}
+
+.coach-matrix-batch-bar .btn-outline {
+    background: #18181B !important;
+    border: 1px solid rgba(229, 203, 167, 0.4) !important;
+    color: #E5CBA7 !important;
+    font-weight: 700 !important;
+}
+
+.coach-matrix-batch-bar .btn-outline:hover {
+    background: rgba(229, 203, 167, 0.15) !important;
+}
+
+.coach-matrix-batch-bar .btn-primary {
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%) !important;
+    color: #09090B !important;
+    font-weight: 800 !important;
+    border: none !important;
+}
+
+/* SENS Obsidian Brandbook: Modal de Acciones en Lote (#modalCoachMultiDayActions) */
+#modalCoachMultiDayActions .modal-card,
+.coach-batch-modal-card {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85) !important;
+}
+
+#modalCoachMultiDayActions h3 {
+    color: #FFFFFF !important;
+}
+
+#modalCoachMultiDayActions p {
+    color: #D4D4D8 !important;
+}
+
+#modalCoachMultiDayActions .input-label {
+    color: #E5CBA7 !important;
+    font-weight: 700 !important;
+}
+
+#modalCoachMultiDayActions .input-control {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    color: #FFFFFF !important;
+    border-radius: 8px !important;
+}
+
+#modalCoachMultiDayActions .input-control:focus {
+    border-color: #E5CBA7 !important;
+    box-shadow: 0 0 0 2px rgba(229, 203, 167, 0.25) !important;
+}
+
+#modalCoachMultiDayActions select option {
+    background: #18181B !important;
+    color: #FFFFFF !important;
+}
+
+.coach-batch-tabs-wrap {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn-multi-tab {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #A1A1AA !important;
+    font-size: 11px !important;
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+.btn-multi-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-multi-tab.active {
+    background: #E5CBA7 !important;
+    color: #09090B !important;
+    border-color: #E5CBA7 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 8px rgba(229, 203, 167, 0.3) !important;
 }
 
 /* Tabla comparativa Plan vs Real en Detalle del Día */

@@ -100,7 +100,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=7.2">
+    <link rel="stylesheet" href="style.css?v=7.3">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4562,15 +4562,15 @@
                             </div>
 
                             <!-- Barra de Ajuste de Carga en Lote (Batch Adjust Bar) -->
-                            <div class="coach-matrix-batch-bar" id="coachMatrixBatchBar">
+                            <div class="coach-matrix-batch-bar" id="coachMatrixBatchBar" style="background: #141417; border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                                     <div style="display: flex; align-items: center; gap: 8px;">
                                         <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">AJUSTE MASIVO EN LOTE</span>
-                                        <strong style="font-size: 12.5px; color: #121214;">Herramientas para el Mesociclo:</strong>
+                                        <strong style="font-size: 12.5px; color: #FFFFFF;">Herramientas para el Mesociclo:</strong>
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 6px;">
-                                        <span style="font-size: 11px; color: #71717A;">Alcance:</span>
-                                        <select id="matrixBatchScope" class="input-control" style="height: 30px; font-size: 11.5px; padding: 2px 8px; margin: 0; background: #FFFFFF; font-weight: 700; border: 1px solid #E4E4E7; border-radius: 6px;">
+                                        <span style="font-size: 11px; color: #A1A1AA;">Alcance:</span>
+                                        <select id="matrixBatchScope" class="input-control" style="height: 32px; font-size: 11.5px; padding: 2px 8px; margin: 0; background: #18181B; color: #FFFFFF; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 6px;">
                                             <option value="future">Semanas Futuras (No completadas)</option>
                                             <option value="all">Todo el Mesociclo</option>
                                         </select>
@@ -4578,36 +4578,36 @@
                                 </div>
                                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
                                     <!-- Ajuste de Cargas -->
-                                    <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px;">
-                                        <span style="font-size: 10.5px; font-weight: 800; color: #71717A; text-transform: uppercase;">1. Ajuste de Carga (kg)</span>
-                                        <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-                                            <button type="button" class="btn btn-outline btn-sm btn-batch-kg" data-delta="2.5" style="font-size: 11px; padding: 3px 8px; font-weight: 700;">+2.5 kg</button>
-                                            <button type="button" class="btn btn-outline btn-sm btn-batch-kg" data-delta="5" style="font-size: 11px; padding: 3px 8px; font-weight: 700;">+5 kg</button>
-                                            <button type="button" class="btn btn-outline btn-sm btn-batch-kg" data-delta="-2.5" style="font-size: 11px; padding: 3px 8px; font-weight: 700;">-2.5 kg</button>
-                                            <input type="number" id="matrixBatchKgCustom" step="0.5" placeholder="±kg" class="input-control" style="width: 55px; height: 28px; padding: 2px 4px; font-size: 11px; margin: 0;">
-                                            <button type="button" class="btn btn-primary btn-sm" id="btnApplyBatchKg" style="font-size: 11px; padding: 4px 10px; background: #9E7D4B; color: #FFFFFF; font-weight: 700;">Aplicar</button>
+                                    <div style="background: #1A1A1E; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px;">
+                                        <span style="font-size: 10.5px; font-weight: 800; color: #E5CBA7; text-transform: uppercase;">1. Ajuste de Carga (kg)</span>
+                                        <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+                                            <button type="button" class="btn btn-outline btn-sm btn-batch-kg" data-delta="2.5" style="font-size: 11px; padding: 4px 8px; font-weight: 700; color: #E5CBA7; border-color: rgba(229, 203, 167, 0.4); background: #18181B;">+2.5 kg</button>
+                                            <button type="button" class="btn btn-outline btn-sm btn-batch-kg" data-delta="5" style="font-size: 11px; padding: 4px 8px; font-weight: 700; color: #E5CBA7; border-color: rgba(229, 203, 167, 0.4); background: #18181B;">+5 kg</button>
+                                            <button type="button" class="btn btn-outline btn-sm btn-batch-kg" data-delta="-2.5" style="font-size: 11px; padding: 4px 8px; font-weight: 700; color: #E5CBA7; border-color: rgba(229, 203, 167, 0.4); background: #18181B;">-2.5 kg</button>
+                                            <input type="number" id="matrixBatchKgCustom" step="0.5" placeholder="±kg" class="input-control" style="width: 55px; height: 30px; padding: 2px 4px; font-size: 11px; margin: 0; background: #121214; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2);">
+                                            <button type="button" class="btn btn-primary btn-sm" id="btnApplyBatchKg" style="font-size: 11px; padding: 5px 12px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 6px;">Aplicar</button>
                                         </div>
                                     </div>
                                     <!-- Ajuste de RIR en Bloque -->
-                                    <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px;">
-                                        <span style="font-size: 10.5px; font-weight: 800; color: #71717A; text-transform: uppercase; display: inline-flex; align-items: center; gap: 3px;">2. Intensidad RIR/RPE en Bloque <span class="sens-tooltip-trigger" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR 1 = RPE 9 (pico), RIR 2 = RPE 8 (hipertrofia estándar), RIR 4 = RPE 6 (descarga).">i</span></span>
-                                        <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
-                                            <select id="matrixBatchRirSelect" class="input-control" style="flex: 1; height: 28px; font-size: 11px; padding: 2px 6px; margin: 0; background: #F8F9FA;">
+                                    <div style="background: #1A1A1E; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px;">
+                                        <span style="font-size: 10.5px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; display: inline-flex; align-items: center; gap: 3px;">2. Intensidad RIR/RPE en Bloque <span class="sens-tooltip-trigger" style="color: #FFFFFF; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.15);" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR 1 = RPE 9 (pico), RIR 2 = RPE 8 (hipertrofia estándar), RIR 4 = RPE 6 (descarga).">i</span></span>
+                                        <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px;">
+                                            <select id="matrixBatchRirSelect" class="input-control" style="flex: 1; height: 30px; font-size: 11px; padding: 2px 6px; margin: 0; background: #121214; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2);">
                                                 <option value="1">RIR 1 / RPE 9 (Pico / Intensificación)</option>
                                                 <option value="2" selected>RIR 2 / RPE 8 (Hipertrofia Estándar)</option>
                                                 <option value="3">RIR 3 / RPE 7 (Adaptación / Volumen)</option>
                                                 <option value="4">RIR 4 / RPE 6 (Semana de Descarga)</option>
                                             </select>
-                                            <button type="button" class="btn btn-primary btn-sm" id="btnApplyBatchRir" style="font-size: 11px; padding: 4px 10px; background: #9E7D4B; color: #FFFFFF; font-weight: 700;">Aplicar</button>
+                                            <button type="button" class="btn btn-primary btn-sm" id="btnApplyBatchRir" style="font-size: 11px; padding: 5px 12px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 6px;">Aplicar</button>
                                         </div>
                                     </div>
                                     <!-- Ajuste de Volumen (Series) -->
-                                    <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px;">
-                                        <span style="font-size: 10.5px; font-weight: 800; color: #71717A; text-transform: uppercase;">3. Volumen (Series)</span>
-                                        <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
-                                            <button type="button" class="btn btn-outline btn-sm btn-batch-sets" data-delta="1" style="font-size: 11px; padding: 3px 10px; font-weight: 700;">+1 Serie</button>
-                                            <button type="button" class="btn btn-outline btn-sm btn-batch-sets" data-delta="-1" style="font-size: 11px; padding: 3px 10px; font-weight: 700;">-1 Serie</button>
-                                            <button type="button" class="btn btn-primary btn-sm" id="btnApplyBatchSets" style="font-size: 11px; padding: 4px 10px; background: #9E7D4B; color: #FFFFFF; font-weight: 700; margin-left: auto;">Aplicar</button>
+                                    <div style="background: #1A1A1E; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px;">
+                                        <span style="font-size: 10.5px; font-weight: 800; color: #E5CBA7; text-transform: uppercase;">3. Volumen (Series)</span>
+                                        <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px;">
+                                            <button type="button" class="btn btn-outline btn-sm btn-batch-sets" data-delta="1" style="font-size: 11px; padding: 4px 10px; font-weight: 700; color: #E5CBA7; border-color: rgba(229, 203, 167, 0.4); background: #18181B;">+1 Serie</button>
+                                            <button type="button" class="btn btn-outline btn-sm btn-batch-sets" data-delta="-1" style="font-size: 11px; padding: 4px 10px; font-weight: 700; color: #E5CBA7; border-color: rgba(229, 203, 167, 0.4); background: #18181B;">-1 Serie</button>
+                                            <button type="button" class="btn btn-primary btn-sm" id="btnApplyBatchSets" style="font-size: 11px; padding: 5px 12px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 6px; margin-left: auto;">Aplicar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -5241,18 +5241,18 @@
 
     <!-- Modal de Acciones en Lote para Múltiples Días Seleccionados (Calendario Mensual) -->
     <div class="modal-overlay" id="modalCoachMultiDayActions">
-        <div class="modal-card" style="max-width: 660px; max-height: 90vh; display: flex; flex-direction: column; background: #FFFFFF; color: #121214; border-radius: 16px; border: 1px solid #E4E4E7;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 12px; border-bottom: 1px solid #E4E4E7; margin-bottom: 14px;">
+        <div class="modal-card coach-batch-modal-card" style="max-width: 660px; max-height: 90vh; display: flex; flex-direction: column; background: #121214; color: #FFFFFF; border-radius: 16px; border: 1px solid rgba(229, 203, 167, 0.35); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 14px;">
                 <div>
                     <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">EDICIÓN MASIVA EN LOTE</span>
-                    <h3 id="multiDayModalTitle" style="font-size: 1.25rem; font-weight: 800; color: #121214; margin: 3px 0 0 0;">Acciones para Días Seleccionados</h3>
-                    <p id="multiDayModalSubtitle" style="font-size: 11.5px; color: #71717A; margin: 2px 0 0 0;">Aplicá cambios simultáneos en todas las sesiones marcadas.</p>
+                    <h3 id="multiDayModalTitle" style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 4px 0 0 0;">Acciones para Días Seleccionados</h3>
+                    <p id="multiDayModalSubtitle" style="font-size: 11.5px; color: #A1A1AA; margin: 2px 0 0 0;">Aplicá cambios simultáneos en todas las sesiones marcadas.</p>
                 </div>
-                <button type="button" class="modal-close-btn" id="btnCloseMultiDayModal" style="position: static; font-size: 24px; color: #71717A; cursor: pointer; background: transparent; border: none;">&times;</button>
+                <button type="button" class="modal-close-btn" id="btnCloseMultiDayModal" style="position: static; font-size: 24px; color: #A1A1AA; cursor: pointer; background: transparent; border: none;">&times;</button>
             </div>
 
             <!-- Tabs de Acciones en Lote -->
-            <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px; border-bottom: 1px solid #F4F4F5;">
+            <div class="coach-batch-tabs-wrap" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
                 <button type="button" class="btn btn-sm btn-multi-tab active" data-tab="replace" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Reemplazar Ejercicio</button>
                 <button type="button" class="btn btn-sm btn-multi-tab" data-tab="add" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Agregar Movimiento</button>
                 <button type="button" class="btn btn-sm btn-multi-tab" data-tab="delete" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Eliminar Ejercicio</button>
@@ -5262,81 +5262,81 @@
             <div style="overflow-y: auto; flex: 1; padding-right: 4px;">
                 <!-- Panel 1: Reemplazar Ejercicio por Sustituto Biomecánico -->
                 <div class="multi-tab-pane" id="multiTabPaneReplace">
-                    <p style="font-size: 12px; color: #52525B; margin-bottom: 12px;">
+                    <p style="font-size: 12px; color: #D4D4D8; margin-bottom: 12px;">
                         Sustituí un ejercicio (por ejemplo, por restricción de hombro, rodilla o lumbar) por otro movimiento en todos los días elegidos en un solo paso.
                     </p>
                     <div style="margin-bottom: 12px;">
-                        <label class="input-label" style="font-size: 11.5px;">1. Ejercicio actual a reemplazar:</label>
-                        <select id="multiSelectCurrentEx" class="input-control" style="font-size: 12px; height: 34px;">
+                        <label class="input-label" style="font-size: 11.5px; color: #E5CBA7;">1. Ejercicio actual a reemplazar:</label>
+                        <select id="multiSelectCurrentEx" class="input-control" style="font-size: 12px; height: 36px; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                             <!-- Inyectado dinámicamente con los ejercicios de los días seleccionados -->
                         </select>
                     </div>
                     <div style="margin-bottom: 14px;">
-                        <label class="input-label" style="font-size: 11.5px;">2. Nuevo ejercicio sustituto del catálogo:</label>
-                        <select id="multiSelectNewEx" class="input-control" style="font-size: 12px; height: 34px;">
+                        <label class="input-label" style="font-size: 11.5px; color: #E5CBA7;">2. Nuevo ejercicio sustituto del catálogo:</label>
+                        <select id="multiSelectNewEx" class="input-control" style="font-size: 12px; height: 36px; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                             <!-- Inyectado dinámicamente con el catálogo completo -->
                         </select>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm" id="btnExecuteMultiReplace" style="background: #9E7D4B; color: #FFFFFF; font-weight: 800; padding: 8px 18px; border-radius: 8px;">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnExecuteMultiReplace" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer;">
                         Reemplazar en Todos los Días Seleccionados
                     </button>
                 </div>
 
                 <!-- Panel 2: Agregar Ejercicio Ad-hoc -->
                 <div class="multi-tab-pane" id="multiTabPaneAdd" style="display: none;">
-                    <p style="font-size: 12px; color: #52525B; margin-bottom: 12px;">
+                    <p style="font-size: 12px; color: #D4D4D8; margin-bottom: 12px;">
                         Sumá un ejercicio accesorio o trabajo específico simultáneamente a todas las fechas seleccionadas.
                     </p>
                     <div style="margin-bottom: 12px;">
-                        <label class="input-label" style="font-size: 11.5px;">Seleccionar ejercicio del catálogo:</label>
-                        <select id="multiSelectAddEx" class="input-control" style="font-size: 12px; height: 34px;">
+                        <label class="input-label" style="font-size: 11.5px; color: #E5CBA7;">Seleccionar ejercicio del catálogo:</label>
+                        <select id="multiSelectAddEx" class="input-control" style="font-size: 12px; height: 36px; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                             <!-- Inyectado dinámicamente -->
                         </select>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
                         <div>
-                            <label class="input-label" style="font-size: 10.5px;">Series</label>
-                            <input type="number" id="multiAddSets" value="3" min="1" max="10" class="input-control" style="width: 55px; height: 32px; font-size: 12px; margin: 0;">
+                            <label class="input-label" style="font-size: 10.5px; color: #E5CBA7;">Series</label>
+                            <input type="number" id="multiAddSets" value="3" min="1" max="10" class="input-control" style="width: 55px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                         </div>
                         <div>
-                            <label class="input-label" style="font-size: 10.5px;">Reps</label>
-                            <input type="text" id="multiAddReps" value="10-12" class="input-control" style="width: 70px; height: 32px; font-size: 12px; margin: 0;">
+                            <label class="input-label" style="font-size: 10.5px; color: #E5CBA7;">Reps</label>
+                            <input type="text" id="multiAddReps" value="10-12" class="input-control" style="width: 70px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                         </div>
                         <div>
-                            <label class="input-label" style="font-size: 10.5px;">Peso (kg)</label>
-                            <input type="number" id="multiAddWeight" value="20" step="0.5" class="input-control" style="width: 65px; height: 32px; font-size: 12px; margin: 0;">
+                            <label class="input-label" style="font-size: 10.5px; color: #E5CBA7;">Peso (kg)</label>
+                            <input type="number" id="multiAddWeight" value="20" step="0.5" class="input-control" style="width: 65px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                         </div>
                         <div>
-                            <label class="input-label" style="font-size: 10.5px; display: inline-flex; align-items: center; gap: 3px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Repeticiones en reserva antes del fallo técnico. RIR 2 = RPE 8.">RIR/RPE Obj <span class="sens-tooltip-trigger">i</span></label>
-                            <input type="number" id="multiAddRir" value="2" min="0" max="5" step="0.5" class="input-control" style="width: 55px; height: 32px; font-size: 12px; margin: 0;">
+                            <label class="input-label" style="font-size: 10.5px; color: #E5CBA7; display: inline-flex; align-items: center; gap: 3px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Repeticiones en reserva antes del fallo técnico. RIR 2 = RPE 8.">RIR/RPE Obj <span class="sens-tooltip-trigger" style="color: #FFFFFF; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.15);">i</span></label>
+                            <input type="number" id="multiAddRir" value="2" min="0" max="5" step="0.5" class="input-control" style="width: 55px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm" id="btnExecuteMultiAdd" style="background: #9E7D4B; color: #FFFFFF; font-weight: 800; padding: 8px 18px; border-radius: 8px;">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnExecuteMultiAdd" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer;">
                         Agregar Movimiento a Todos los Días Seleccionados
                     </button>
                 </div>
 
                 <!-- Panel 3: Eliminar Ejercicio en Lote -->
                 <div class="multi-tab-pane" id="multiTabPaneDelete" style="display: none;">
-                    <p style="font-size: 12px; color: #52525B; margin-bottom: 12px;">
+                    <p style="font-size: 12px; color: #D4D4D8; margin-bottom: 12px;">
                         Remové un ejercicio en un solo paso de todas las fechas marcadas.
                     </p>
                     <div style="margin-bottom: 14px;">
-                        <label class="input-label" style="font-size: 11.5px;">Ejercicio a eliminar de los días seleccionados:</label>
-                        <select id="multiSelectDeleteEx" class="input-control" style="font-size: 12px; height: 34px;">
+                        <label class="input-label" style="font-size: 11.5px; color: #E5CBA7;">Ejercicio a eliminar de los días seleccionados:</label>
+                        <select id="multiSelectDeleteEx" class="input-control" style="font-size: 12px; height: 36px; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                             <!-- Inyectado dinámicamente -->
                         </select>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-outline btn-sm" id="btnExecuteMultiDelete" style="border-color: #FECACA; background: #FEF2F2; color: #DC2626; font-weight: 800; padding: 8px 16px; border-radius: 8px;">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnExecuteMultiDelete" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15); color: #FCA5A5; font-weight: 800; padding: 9px 16px; border-radius: 8px; cursor: pointer;">
                             Eliminar Ejercicio de los Días Seleccionados
                         </button>
                     </div>
 
-                    <div style="margin-top: 16px; padding-top: 14px; border-top: 1px dashed #E4E4E7;">
-                        <label class="input-label" style="font-size: 11.5px; color: #DC2626; font-weight: 800;">O Vaciar Sesión Completa:</label>
-                        <p style="font-size: 11px; color: #71717A; margin: 2px 0 8px 0;">Convierte todos los días seleccionados en días de descanso, eliminando todas sus rutinas.</p>
-                        <button type="button" class="btn btn-outline btn-sm" id="btnExecuteMultiDeleteSessions" style="border-color: #FECACA; background: #FEF2F2; color: #DC2626; font-weight: 800; padding: 7px 16px; border-radius: 8px;">
+                    <div style="margin-top: 16px; padding-top: 14px; border-top: 1px dashed rgba(255, 255, 255, 0.15);">
+                        <label class="input-label" style="font-size: 11.5px; color: #F87171; font-weight: 800;">O Vaciar Sesión Completa:</label>
+                        <p style="font-size: 11px; color: #A1A1AA; margin: 2px 0 8px 0;">Convierte todos los días seleccionados en días de descanso, eliminando todas sus rutinas.</p>
+                        <button type="button" class="btn btn-outline btn-sm" id="btnExecuteMultiDeleteSessions" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15); color: #FCA5A5; font-weight: 800; padding: 8px 16px; border-radius: 8px; cursor: pointer;">
                             Vaciar Sesión Completa en Días Seleccionados
                         </button>
                     </div>
@@ -5344,27 +5344,27 @@
 
                 <!-- Panel 4: Ajuste Masivo de Cargas / RIR -->
                 <div class="multi-tab-pane" id="multiTabPaneAdjust" style="display: none;">
-                    <p style="font-size: 12px; color: #52525B; margin-bottom: 12px;">
+                    <p style="font-size: 12px; color: #D4D4D8; margin-bottom: 12px;">
                         Aplicá un delta de carga (±kg) o ajustá el RIR/RPE objetivo a todos los ejercicios de los días seleccionados.
                     </p>
                     <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;">
                         <div style="flex: 1; min-width: 160px;">
-                            <label class="input-label" style="font-size: 11px;">Delta de Carga (kg):</label>
+                            <label class="input-label" style="font-size: 11px; color: #E5CBA7;">Delta de Carga (kg):</label>
                             <div style="display: flex; gap: 6px; align-items: center;">
-                                <input type="number" id="multiAdjustKg" value="2.5" step="0.5" class="input-control" style="width: 70px; height: 32px; font-size: 12px; margin: 0;">
-                                <button type="button" class="btn btn-outline btn-sm" id="btnMultiApplyKg" style="font-size: 11px; padding: 6px 12px; font-weight: 700;">Sumar kg</button>
+                                <input type="number" id="multiAdjustKg" value="2.5" step="0.5" class="input-control" style="width: 70px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
+                                <button type="button" class="btn btn-outline btn-sm" id="btnMultiApplyKg" style="font-size: 11px; padding: 7px 12px; font-weight: 700; color: #E5CBA7; border-color: rgba(229, 203, 167, 0.4); background: #18181B;">Sumar kg</button>
                             </div>
                         </div>
                         <div style="flex: 1; min-width: 160px;">
-                            <label class="input-label" style="font-size: 11px; display: inline-flex; align-items: center; gap: 3px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de esfuerzo submáximo. RIR 2 = RPE 8.">Fijar RIR/RPE Objetivo: <span class="sens-tooltip-trigger">i</span></label>
+                            <label class="input-label" style="font-size: 11px; color: #E5CBA7; display: inline-flex; align-items: center; gap: 3px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de esfuerzo submáximo. RIR 2 = RPE 8.">Fijar RIR/RPE Objetivo: <span class="sens-tooltip-trigger" style="color: #FFFFFF; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.15);">i</span></label>
                             <div style="display: flex; gap: 6px; align-items: center;">
-                                <select id="multiAdjustRirSelect" class="input-control" style="height: 32px; font-size: 11px; margin: 0;">
+                                <select id="multiAdjustRirSelect" class="input-control" style="height: 34px; font-size: 11px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
                                     <option value="1">RIR 1 / RPE 9 (Pico)</option>
                                     <option value="2" selected>RIR 2 / RPE 8 (Hipertrofia)</option>
                                     <option value="3">RIR 3 / RPE 7 (Adaptación)</option>
                                     <option value="4">RIR 4 / RPE 6 (Descarga)</option>
                                 </select>
-                                <button type="button" class="btn btn-primary btn-sm" id="btnMultiApplyRir" style="font-size: 11px; padding: 6px 12px; background: #9E7D4B; color: #FFFFFF; font-weight: 700;">Fijar RIR/RPE</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="btnMultiApplyRir" style="font-size: 11px; padding: 7px 14px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 8px;">Fijar RIR/RPE</button>
                             </div>
                         </div>
                     </div>
@@ -6419,7 +6419,7 @@
     <script src="exercises_db.js?v=6.7"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=7.2"></script>
+    <script src="app.js?v=7.3"></script>
 </body>
 
 </html>

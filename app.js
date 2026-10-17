@@ -120,31 +120,28 @@ try {
 } catch (_) {}
 
 function isCurrentUserAdmin() {
-    // 0. Si hay una sesión activa de Coach OS iniciada o en inspección, mantener privilegios de Coach
-    if (window._isCoachAdminActive || sessionStorage.getItem('sens_coach_admin_active') === 'true' || localStorage.getItem('sens_coach_admin_active') === 'true') {
+    // 0. Si Coach Nico está inspeccionando activamente a un alumno, mantener privilegios
+    if (window._sensCoachAdminUser || window._sensCoachAdminProfile) {
         return true;
     }
 
     const profile = AppState.profile || {};
     const user = AppState.user || {};
     const email = (user.email || profile.email || '').toLowerCase().trim();
+    if (!email) return false;
 
-    // Administradores y Coaches oficiales SENS (o cualquier usuario con rol admin/coach en Supabase)
-    return Boolean(
+    // Administradores y Coaches oficiales SENS estrictos (Nico Maralle) o rol explícito verificado en DB
+    const isOfficialCoachEmail = (email === 'nico@sens.com' || email === 'nicomaralle@gmail.com');
+    const hasAdminRole = Boolean(
         profile.role === 'admin' ||
         profile.role === 'coach' ||
         profile.user_type === 'admin' ||
         profile.user_type === 'coach' ||
         user.role === 'admin' ||
-        user.role === 'coach' ||
-        email === 'lean_barreira@hotmail.com' ||
-        email === 'lean.barreira@gmail.com' ||
-        email === 'nico@sens.com' ||
-        email === 'nicomaralle@gmail.com' ||
-        email.endsWith('@sens.com') ||
-        email.includes('admin') ||
-        email.includes('coach')
+        user.role === 'coach'
     );
+
+    return Boolean(isOfficialCoachEmail || hasAdminRole);
 }
 
 // -----------------------------------------------------------------------------
@@ -2958,12 +2955,13 @@ function openUserPortal(forceOnboarding = false) {
 
     const profile = AppState.profile || {};
     const user = AppState.user || {};
+    const realEmail = user.email || profile.email || '';
 
     if (userEmailEl) {
-        userEmailEl.textContent = user.email || 'atleta@sens.com';
+        userEmailEl.textContent = realEmail || 'Sesión Iniciada';
     }
     if (planBadgeEl) {
-        planBadgeEl.textContent = profile.active_plan_name || 'Presencial 1 a 1 VIP (CABA)';
+        planBadgeEl.textContent = profile.active_plan_name || (profile.user_type ? formatPlanName(profile.user_type) : 'Plan Personalizado');
     }
 
     const isAdmin = isCurrentUserAdmin();
@@ -2977,6 +2975,12 @@ function openUserPortal(forceOnboarding = false) {
         if (!window._sensCoachAdminProfile && AppState.profile && AppState.profile.role !== 'user_normal') {
             window._sensCoachAdminProfile = { ...AppState.profile };
         }
+    } else {
+        window._isCoachAdminActive = false;
+        sessionStorage.removeItem('sens_coach_admin_active');
+        localStorage.removeItem('sens_coach_admin_active');
+        window._sensCoachAdminUser = null;
+        window._sensCoachAdminProfile = null;
     }
 
     // Toggle en Topbar para el Admin (Cambiar entre App Alumno y Coach OS)
@@ -6017,7 +6021,13 @@ function initTopbarAvatar() {
         // 2. Resolver Nombre Real
         let fullName = '';
         if (isAdmin && !isInspecting) {
-            fullName = 'Nico Coach';
+            if (profile && profile.full_name && !profile.full_name.includes('Mock') && profile.full_name !== 'Alumno SENS') {
+                fullName = profile.full_name;
+            } else if (user && user.user_metadata && user.user_metadata.full_name) {
+                fullName = user.user_metadata.full_name;
+            } else {
+                fullName = 'Nico Coach';
+            }
         } else if (profile && profile.full_name && !profile.full_name.includes('Mock') && profile.full_name !== 'Alumno SENS') {
             fullName = profile.full_name;
         } else if (user && user.user_metadata && user.user_metadata.full_name) {
@@ -6035,6 +6045,8 @@ function initTopbarAvatar() {
             plan = 'Coach OS • Director';
         } else if (profile && profile.active_plan_name) {
             plan = profile.active_plan_name;
+        } else if (profile && profile.user_type) {
+            plan = formatPlanName(profile.user_type);
         } else {
             plan = 'Plan Personalizado';
         }
@@ -6055,6 +6067,11 @@ function initTopbarAvatar() {
         const coachItem = document.getElementById('dropdownGoCoachOS');
         if (coachItem) {
             coachItem.style.display = isAdmin ? 'flex' : 'none';
+        }
+
+        const topbarAdminToggle = document.getElementById('topbarAdminToggle');
+        if (topbarAdminToggle) {
+            topbarAdminToggle.style.display = isAdmin ? 'inline-flex' : 'none';
         }
     }
 
@@ -6478,7 +6495,7 @@ function selectAthleteFromSheet(athId) {
 
     if (masterAvatar) masterAvatar.textContent = initMaster;
     if (masterName) masterName.textContent = athlete.full_name;
-    if (masterEmail) masterEmail.textContent = athlete.email || 'alumno@sens.com';
+    if (masterEmail) masterEmail.textContent = athlete.email || '';
     if (masterPlanBadge) masterPlanBadge.textContent = typeof formatCoachPlanBadge === 'function' ? formatCoachPlanBadge(athlete.active_plan_name) : (athlete.active_plan_name || 'VIP 1:1');
     if (masterGoal) masterGoal.textContent = athlete.goal ? `Meta: ${athlete.goal}` : 'Meta: Recomposición & Fuerza';
     if (masterStatusDot) {
@@ -6493,16 +6510,18 @@ function selectAthleteFromSheet(athId) {
     const workoutPlanBadge = document.getElementById('coachWorkoutPlanBadge');
     if (workoutAvatar) workoutAvatar.textContent = initMaster;
     if (workoutName) workoutName.textContent = athlete.full_name;
-    if (workoutEmail) workoutEmail.textContent = athlete.email || 'alumno@sens.com';
+    if (workoutEmail) workoutEmail.textContent = athlete.email || '';
     if (workoutPlanBadge) workoutPlanBadge.textContent = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
 
     coachWorkoutState.activeAthleteId = athId;
     if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
     if (typeof renderCoachAssignedExercises === 'function') renderCoachAssignedExercises();
 
-    // Sincronizar datos del atleta activo manteniendo intacta la sesión ejecutiva del Coach
-    window._isCoachAdminActive = true;
-    sessionStorage.setItem('sens_coach_admin_active', 'true');
+    // Sincronizar datos del atleta activo manteniendo intacta la sesión ejecutiva del Coach si es admin
+    if (isCurrentUserAdmin()) {
+        window._isCoachAdminActive = true;
+        sessionStorage.setItem('sens_coach_admin_active', 'true');
+    }
     AppState.activeAthlete = athlete;
     AppState.activeAthleteId = athId;
     if (typeof syncCoachMasterCard === 'function') {
@@ -6670,7 +6689,7 @@ function syncCoachMasterCard(athId) {
         athlete = {
             id: targetId || AppState.activeAthleteId || AppState.profile.id || 'ath_active',
             full_name: AppState.profile.full_name,
-            email: (AppState.user && AppState.user.email) || AppState.profile.email || 'alumno@sens.com',
+            email: (AppState.user && AppState.user.email) || AppState.profile.email || '',
             active_plan_name: AppState.profile.active_plan_name || 'Plan Personalizado',
             subscription_status: AppState.profile.subscription_status || 'active',
             goal: AppState.profile.goal || 'Recomposición & Fuerza',
@@ -6735,7 +6754,7 @@ function syncCoachMasterCard(athId) {
     if (masterAvatar) masterAvatar.textContent = initMaster;
     if (masterName) masterName.textContent = athlete.full_name;
     if (masterEmail) {
-        let em = athlete.email || 'alumno@sens.com';
+        let em = athlete.email || '';
         if (em.length > 25) em = em.slice(0, 22) + '...';
         masterEmail.textContent = em;
     }
@@ -6752,7 +6771,7 @@ function syncCoachMasterCard(athId) {
 
     if (workoutAvatar) workoutAvatar.textContent = initMaster;
     if (workoutName) workoutName.textContent = athlete.full_name;
-    if (workoutEmail) workoutEmail.textContent = athlete.email || 'alumno@sens.com';
+    if (workoutEmail) workoutEmail.textContent = athlete.email || '';
     if (workoutPlanBadge) workoutPlanBadge.textContent = planBadgeText;
 
     // Sincronización de Ficha Resumen 100% Solo Lectura en Planificador de Rutinas
@@ -8616,7 +8635,7 @@ function initClarityTrainerModule() {
         const ath = roster.find(a => a.id === athId) || {
             id: athId,
             full_name: 'Atleta SENS',
-            email: 'alumno@sens.com',
+            email: '',
             active_plan_name: 'Presencial 1 a 1 VIP (CABA)',
             current_weight: 75
         };
@@ -15471,10 +15490,10 @@ const CoachWorkoutsMaster = {
                             <div style="font-size: 11px; color: #71717A;">${day.dateStr}</div>
                         </div>
                     </div>
-                    <div class="wizard-modality-selector" style="display: flex; gap: 6px; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-sm wizard-mod-btn ${day.modality === 'presencial' ? 'active' : ''}" data-date="${day.dateStr}" data-mod="presencial">Presencial Nico</button>
-                        <button type="button" class="btn btn-sm wizard-mod-btn ${day.modality === 'online' ? 'active' : ''}" data-date="${day.dateStr}" data-mod="online">Online Nico</button>
-                        <button type="button" class="btn btn-sm wizard-mod-btn ${day.modality === 'autonomo' ? 'active' : ''}" data-date="${day.dateStr}" data-mod="autonomo">Autónomo Gym</button>
+                    <div class="wizard-modality-selector">
+                        <button type="button" class="wizard-mod-btn ${day.modality === 'presencial' ? 'active' : ''}" data-date="${day.dateStr}" data-mod="presencial">Presencial</button>
+                        <button type="button" class="wizard-mod-btn ${day.modality === 'online' ? 'active' : ''}" data-date="${day.dateStr}" data-mod="online">Online</button>
+                        <button type="button" class="wizard-mod-btn ${day.modality === 'autonomo' ? 'active' : ''}" data-date="${day.dateStr}" data-mod="autonomo">Autónomo</button>
                     </div>
                 </div>
             `;
@@ -15552,7 +15571,7 @@ const CoachWorkoutsMaster = {
                 `;
             });
 
-            const modLabel = day.modality === 'presencial' ? 'Presencial Nico' : day.modality === 'online' ? 'Online Nico' : 'Autónomo Gym';
+            const modLabel = day.modality === 'presencial' ? 'Presencial' : day.modality === 'online' ? 'Online' : 'Autónomo';
 
             html += `
                 <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; padding: 14px;">
@@ -15747,29 +15766,29 @@ const CoachWorkoutsMaster = {
         filtered.forEach(ex => {
             const isAdded = assignedIds.has(ex.id);
             const thumb = this.getThumbnail(ex);
+            const videoSrc = (ex.video || ex.video_url || '').trim();
             const muscleTag = getBiomechanicalCategory(ex).toUpperCase();
 
             html += `
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
-                    <div class="wizard-feed-thumb-box">
-                        ${thumb ? `<img src="${thumb}" alt="${ex.name}" loading="lazy">` : `
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="1.8">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                <polygon points="10 8 16 12 10 16 10 8"/>
-                            </svg>
-                        `}
-                        <div class="wizard-feed-video-badge">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                            <span>VIDEO</span>
-                        </div>
+                    ${videoSrc ? `
+                        <video autoplay muted loop playsinline class="wizard-feed-video-bg">
+                            <source src="${videoSrc}" type="video/mp4">
+                        </video>
+                    ` : (thumb ? `
+                        <img src="${thumb}" alt="${ex.name}" class="wizard-feed-video-bg" loading="lazy">
+                    ` : `
+                        <div class="wizard-feed-video-placeholder"></div>
+                    `)}
+                    <div class="wizard-feed-card-gradient"></div>
+                    <div class="wizard-feed-top-pills">
+                        <span class="pill pill-champagne" style="font-size: 8px; font-weight: 800; padding: 2px 6px;">${muscleTag}</span>
+                        <span class="pill" style="font-size: 8px; font-weight: 700; background: rgba(18, 18, 20, 0.85); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); padding: 2px 6px;">${ex.sets || 3}x${ex.reps || '10-12'}</span>
                     </div>
-                    <div class="wizard-feed-body">
-                        <div>
-                            <span class="wizard-feed-muscle-pill">${muscleTag}</span>
-                            <h4 class="wizard-feed-title" title="${ex.name}">${ex.name}</h4>
-                            <div class="wizard-feed-meta">
-                                <span>${ex.sets || 3} series × ${ex.reps || '10-12'}</span>
-                            </div>
+                    <div class="wizard-feed-content">
+                        <h4 class="wizard-feed-title" title="${ex.name}">${ex.name}</h4>
+                        <div class="wizard-feed-meta">
+                            <span>${ex.rest || 90}s descanso</span>
                         </div>
                         <button type="button" class="wizard-feed-add-btn btn-wizard-add-ex ${isAdded ? 'added' : 'not-added'}" data-ex-id="${ex.id}">
                             ${isAdded ? '✓ Agregado' : '+ Agregar'}
@@ -16143,7 +16162,7 @@ const CoachWorkoutsMaster = {
         selectedDays.forEach(day => {
             const draft = this.wizardDraft[day.dateStr] || { exercises: [] };
             const exercises = draft.exercises || [];
-            const modLabel = (day.modality === 'presencial') ? 'Presencial Nico' : (day.modality === 'online') ? 'Online Nico' : 'Autónomo Gym';
+            const modLabel = (day.modality === 'presencial') ? 'Presencial' : (day.modality === 'online') ? 'Online' : 'Autónomo';
             const musclesLabel = (day.muscles && day.muscles.length > 0) ? day.muscles.join(' + ') : 'Fuerza & Hipertrofia';
 
             let exListHtml = '';
@@ -16734,34 +16753,35 @@ const CoachWorkoutsMaster = {
             const isSelected = (this.selectedCalendarDateStr === dateStr);
             const isMultiSelected = this.isMultiSelectMode && this.selectedMultiDates.has(dateStr);
 
-            let badgeHtml = '';
-            let musclePillHtml = '';
+            let bodyHtml = '';
             let statusDotHtml = '';
 
             if (hasWorkout) {
-                const exCount = session.exercises.length;
                 const modTag = (session.modality === 'presencial') ? 'Presencial' : (session.modality === 'online') ? 'Online' : 'Autónomo';
-                badgeHtml = `
-                    <div class="coach-month-workout-pill" title="${session.title || 'Entrenamiento'}">
-                        <strong>${modTag}</strong> • ${exCount} ej
-                    </div>
-                `;
-
-                // Resumen de músculos de la sesión
+                
+                // Emoticones de los grupos musculares (según requerimiento de visualización compacta)
                 const muscleCategories = new Set(session.exercises.map(ex => getBiomechanicalCategory(ex)));
-                const catLabels = [];
-                if (muscleCategories.has('piernas')) catLabels.push('Piernas');
-                if (muscleCategories.has('espalda')) catLabels.push('Espalda');
-                if (muscleCategories.has('pecho')) catLabels.push('Pecho');
-                if (muscleCategories.has('brazos')) catLabels.push('Brazos');
-                if (muscleCategories.has('hombros')) catLabels.push('Hombros');
-                if (muscleCategories.has('core')) catLabels.push('Core');
-                const muscleSummary = catLabels.slice(0, 2).join(' + ') + (catLabels.length > 2 ? ' +' : '');
+                const muscleEmojiMap = {
+                    piernas: '🦵',
+                    espalda: '🔙',
+                    pecho: '💪',
+                    brazos: '🦾',
+                    hombros: '🛡️',
+                    core: '⚡',
+                    movilidad: '🧘',
+                    cardio: '🏃'
+                };
+                const emojis = [];
+                ['piernas', 'espalda', 'pecho', 'brazos', 'hombros', 'core', 'movilidad', 'cardio'].forEach(cat => {
+                    if (muscleCategories.has(cat) && muscleEmojiMap[cat]) emojis.push(muscleEmojiMap[cat]);
+                });
+                if (emojis.length === 0) emojis.push('💪');
+                const emojiDisplay = emojis.slice(0, 2).join(' ');
+                const catNames = Array.from(muscleCategories).map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(' + ');
 
-                musclePillHtml = `
-                    <div class="coach-month-muscle-pill" title="${catLabels.join(', ')}">
-                        ${muscleSummary || 'Fuerza'}
-                    </div>
+                bodyHtml = `
+                    <div class="coach-month-emojis" title="${modTag}: ${catNames || 'Fuerza'}">${emojiDisplay}</div>
+                    <div class="coach-month-mod-label" title="${session.title || modTag}">${modTag}</div>
                 `;
 
                 // Micro-indicador de estado (Conforme al plan vs Desvío)
@@ -16790,19 +16810,20 @@ const CoachWorkoutsMaster = {
                 </div>
             ` : '';
 
+            const modClass = session && session.modality ? session.modality : 'presencial';
+
             html += `
                 <div class="coach-month-day-cell ${hasWorkout ? 'has-workout' : ''} ${isToday ? 'is-today' : ''} ${isSelected && !this.isMultiSelectMode ? 'is-selected' : ''} ${isMultiSelected ? 'is-multi-selected' : ''}" data-date="${dateStr}">
                     <div class="cell-top-bar">
                         <span class="cell-number ${isToday ? 'today-circle' : ''}">${dayNum}</span>
-                        <div style="display: flex; align-items: center; gap: 4px;">
+                        <div style="display: flex; align-items: center; gap: 3px;">
                             ${statusDotHtml}
-                            ${hasWorkout ? `<span class="cell-dot"></span>` : ''}
+                            ${hasWorkout ? `<span class="coach-cal-mod-dot ${modClass}"></span>` : ''}
                             ${multiCheckHtml}
                         </div>
                     </div>
                     <div class="cell-body">
-                        ${badgeHtml}
-                        ${musclePillHtml}
+                        ${bodyHtml}
                     </div>
                 </div>
             `;
@@ -16930,7 +16951,7 @@ const CoachWorkoutsMaster = {
 
         if (titleEl) titleEl.textContent = session.title || `Entrenamiento del ${dateStr}`;
         if (badgeEl) {
-            badgeEl.textContent = (session.modality === 'presencial') ? 'Presencial Nico' : (session.modality === 'online') ? 'Online Nico' : 'Autónomo Gym';
+            badgeEl.textContent = (session.modality === 'presencial') ? 'Presencial' : (session.modality === 'online') ? 'Online' : 'Autónomo';
         }
 
         let html = '';
