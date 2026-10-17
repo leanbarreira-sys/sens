@@ -1843,70 +1843,358 @@ const SENS_EXERCISE_LIBRARY = [
         execution: 'Boca arriba, pies al ancho de caderas, elevá la pelvis vértebra por vértebra coordinando con la respiración y descendé con control.',
         breathing: 'Inhalá elevando la cadera, exhalá al descender.',
         recommendations: 'No abras las rodillas hacia afuera; mantené los pies paralelos.',
+        donts: 'Evitá empujar desde el cuello o hiperextender bruscamente la columna lumbar.',
         level: 'Principiante',
         objective: 'Movilidad articular de columna y activación posterior',
         rest: 30,
         default_sets: 3,
         default_reps: '12 repeticiones',
         video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+
+    // -------------------------------------------------------------------------
+    // 13. ZONA LUMBAR (Erectores Espinales & Cadena Posterior Baja)
+    // -------------------------------------------------------------------------
+    {
+        id: 'lumbar-1',
+        name: 'Extensiones lumbares en banco a 45° (Hiperextensiones)',
+        exercise_type: 'muscular',
+        category: 'zona_lumbar',
+        muscle_group: 'zona_lumbar',
+        primary_muscle: 'Erectores espinales y multífidos lumbares',
+        execution: 'Apoyá los muslos en el almohadón dejando libre la articulación de la cadera. Descendé el torso manteniendo columna neutra y subí hasta alinear tronco y piernas.',
+        breathing: 'Inspirá al descender con control y espirá al alinear el tronco.',
+        recommendations: 'Frená exactamente en la línea recta del cuerpo con pausa isométrica de 1 segundo.',
+        donts: 'No hiperextiendas la columna hacia atrás pasando la línea neutra ni des tirones bruscos con inercia.',
+        level: 'Principiante a intermedio',
+        objective: 'Fortalecimiento lumbar y blindaje postural',
+        rest: 60,
+        default_sets: 3,
+        default_reps: '12-15',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    {
+        id: 'lumbar-2',
+        name: 'Extensión lumbar McGill / Superman alternado en suelo',
+        exercise_type: 'muscular',
+        category: 'zona_lumbar',
+        muscle_group: 'zona_lumbar',
+        primary_muscle: 'Cuadrado lumbar, multífidos y glúteo mayor',
+        execution: 'Acostado boca abajo, elevá suavemente brazo derecho y pierna izquierda apenas unos centímetros del suelo buscando longitud axial, no altura excesiva.',
+        breathing: 'Exhalá al extender e inhalá al apoyar sin perder tensión abdominal.',
+        recommendations: 'Mantené la mirada hacia el mat para conservar la columna cervical neutra.',
+        donts: 'No levantes excesivamente el mentón ni arquees la cintura de forma dolorosa.',
+        level: 'Principiante',
+        objective: 'Estabilidad lumbar y prevención de lumbalgia',
+        rest: 45,
+        default_sets: 3,
+        default_reps: '10 por lado',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+    {
+        id: 'lumbar-3',
+        name: 'Buenos días isométrico-dinámico con mancuerna al pecho',
+        exercise_type: 'muscular',
+        category: 'zona_lumbar',
+        muscle_group: 'zona_lumbar',
+        primary_muscle: 'Erectores espinales, zona lumbar e isquios',
+        execution: 'Sostené una mancuerna pegada al esternón, destrabá rodillas 15 grados e incliná el torso hacia adelante con espalda recta hasta sentir tensión controlada.',
+        breathing: 'Inhalá antes de bajar haciendo bracing abdominal y exhalá al volver.',
+        recommendations: 'Ideal para educar la resistencia isométrica de la espalda baja sin carga sobre cervicales.',
+        donts: 'Nunca redondees la espalda baja al final del recorrido.',
+        level: 'Intermedio',
+        objective: 'Fuerza postural de espalda baja',
+        rest: 75,
+        default_sets: 3,
+        default_reps: '10-12',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+
+    // -------------------------------------------------------------------------
+    // 14. ANTEBRAZOS & FUERZA DE AGARRE
+    // -------------------------------------------------------------------------
+    {
+        id: 'antebrazos-1',
+        name: 'Curl de muñeca en banco con mancuernas (Flexores)',
+        exercise_type: 'muscular',
+        category: 'antebrazos',
+        muscle_group: 'antebrazos',
+        primary_muscle: 'Flexores del carpo y antebrazo anterior',
+        execution: 'Apoyá los antebrazos sobre un banco o tus muslos con las palmas hacia arriba y las muñecas libres en el borde. Bajá las mancuernas y flexioná las muñecas hacia arriba.',
+        breathing: 'Inhalá al extender la muñeca y exhalá al contraer hacia arriba.',
+        recommendations: 'Realizá una pausa de 1 segundo en máxima contracción.',
+        donts: 'No despegues los antebrazos del banco ni uses cargas que generen pinchazo articular.',
+        level: 'Principiante a intermedio',
+        objective: 'Fuerza de agarre e hipertrofia de antebrazo',
+        rest: 45,
+        default_sets: 3,
+        default_reps: '15-20',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    {
+        id: 'antebrazos-2',
+        name: 'Curl inverso con barra Z o mancuernas (Braquiorradial)',
+        exercise_type: 'muscular',
+        category: 'antebrazos',
+        muscle_group: 'antebrazos',
+        primary_muscle: 'Braquiorradial y extensores de antebrazo',
+        execution: 'De pie con agarre prono (palmas hacia abajo), flexioná los codos manteniendo las muñecas firmes y alineadas con el antebrazo.',
+        breathing: 'Exhalá al subir la barra e inhalá descendiendo en 3 segundos.',
+        recommendations: 'Clavá los codos a los costados del torso para aislar el braquiorradial.',
+        donts: 'Evitá doblar las muñecas hacia abajo o balancear la espalda para subir el peso.',
+        level: 'Intermedio',
+        objective: 'Desarrollo de antebrazos y prevención de epicondilitis',
+        rest: 60,
+        default_sets: 3,
+        default_reps: '12-15',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    {
+        id: 'antebrazos-3',
+        name: 'Suspensión activa en barra (Dead Hang Escapular)',
+        exercise_type: 'muscular',
+        category: 'antebrazos',
+        muscle_group: 'antebrazos',
+        primary_muscle: 'Flexores profundos de los dedos, antebrazos y descompresión',
+        execution: 'Colgate de la barra fija cerrando el pulgar alrededor de la barra con hombros ligeramente activos lejos de las orejas.',
+        breathing: 'Respiración nasal lenta y profunda.',
+        recommendations: 'Excelente indicador de longevidad, fuerza de agarre y salud de hombros.',
+        donts: 'No te sueltes de golpe al terminar la serie ni cuelgues con dolor agudo de hombro.',
+        level: 'Todos los niveles',
+        objective: 'Resistencia de agarre y descompresión axial',
+        rest: 60,
+        default_sets: 3,
+        default_reps: '30-45 seg',
+        video_url: 'vid/pilar-3-movilidad.mp4'
+    },
+
+    // -------------------------------------------------------------------------
+    // 15. ESPECÍFICOS DE SUB-GRUPOS DE PIERNAS (Abductores & Sóleo) Y CARDIO
+    // -------------------------------------------------------------------------
+    {
+        id: 'abductores-1',
+        name: 'Caminata lateral con banda elástica (Monster Walk)',
+        exercise_type: 'muscular',
+        category: 'piernas',
+        muscle_group: 'piernas',
+        sub_muscle: 'abductores',
+        primary_muscle: 'Abductores de cadera y glúteo medio',
+        execution: 'Colocá una mini-banda por encima de las rodillas o en tobillos, adoptá media sentadilla atlética y desplazate lateralmente manteniendo tensión constante.',
+        breathing: 'Respiración continua y controlada.',
+        recommendations: 'Mantené las puntas de los pies mirando al frente sin juntar del todo los pies.',
+        donts: 'No arrastres los pies ni inclines el tronco de lado a lado al dar el paso.',
+        level: 'Principiante a intermedio',
+        objective: 'Estabilidad pélvica y tonificación de abductores',
+        rest: 45,
+        default_sets: 3,
+        default_reps: '15 pasos por lado',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    {
+        id: 'abductores-2',
+        name: 'Abducción de cadera de pie en polea baja',
+        exercise_type: 'muscular',
+        category: 'piernas',
+        muscle_group: 'piernas',
+        sub_muscle: 'abductores',
+        primary_muscle: 'Tensor de la fascia lata, glúteo medio y menor (abductores)',
+        execution: 'Con tobillera en la pierna externa a la polea, separá la pierna lateralmente unos 35-45 grados manteniendo la pelvis nivelada.',
+        breathing: 'Exhalá al separar la pierna e inhalá al volver.',
+        recommendations: 'Guiá el movimiento con el talón ligeramente rotado hacia afuera.',
+        donts: 'No inclines el torso para levantar más peso.',
+        level: 'Intermedio',
+        objective: 'Aislamiento analítico de abductores',
+        rest: 60,
+        default_sets: 3,
+        default_reps: '12-15 por pierna',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    {
+        id: 'soleo-1',
+        name: 'Elevación de talón sentado unilateral con mancuerna (Sóleo)',
+        exercise_type: 'muscular',
+        category: 'piernas',
+        muscle_group: 'piernas',
+        sub_muscle: 'soleo',
+        primary_muscle: 'Sóleo profundo y estabilizadores del tobillo',
+        execution: 'Sentado en banco con el antepié sobre un disco o escalón y una mancuerna apoyada sobre la rodilla a 90°, elevá el talón al máximo y bajá en 3 segundos.',
+        breathing: 'Exhalá en la contracción superior e inhalá en el estiramiento.',
+        recommendations: 'Al estar la rodilla flexionada a 90° se inhibe el gemelo y trabaja casi exclusivamente el sóleo.',
+        donts: 'No hagas rebotes cortos en la mitad del recorrido; buscá rango completo.',
+        level: 'Todos los niveles',
+        objective: 'Fortalecimiento del sóleo y protección del tendón de Aquiles',
+        rest: 45,
+        default_sets: 3,
+        default_reps: '15-20 por pierna',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    {
+        id: 'cardio-4',
+        name: 'Bicicleta fija / Air Bike en Zona 2 o Intervalos HIIT',
+        exercise_type: 'cardio',
+        category: 'cardio',
+        muscle_group: 'cardio',
+        primary_muscle: 'Sistema cardiorrespiratorio y tren inferior sin impacto articular',
+        execution: 'Ajustá el asiento a la altura de tu cadera. Pedaleá con cadencia constante de 80-90 RPM (Zona 2) o alterná sprints de 20s con 40s suaves.',
+        breathing: 'Respiración rítmica nasal en Zona 2 o bucal-nasal en intervalos.',
+        recommendations: 'Excelente opción de oxidación de grasas y salud mitocondrial con cero impacto en rodillas.',
+        donts: 'No configures el asiento tan bajo que las rodillas sufran flexión excesiva ni tan alto que se balancee la pelvis.',
+        level: 'Todos los niveles',
+        objective: 'Salud cardiovascular y gasto calórico',
+        rest: 45,
+        default_sets: 4,
+        default_reps: '3 a 5 minutos',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    {
+        id: 'cardio-5',
+        name: 'Caminata en cinta con inclinación (Incline Treadmill Zona 2)',
+        exercise_type: 'cardio',
+        category: 'cardio',
+        muscle_group: 'cardio',
+        primary_muscle: 'Capacidad aeróbica, glúteos y pantorrillas',
+        execution: 'Configurá la cinta con inclinación del 6% al 12% y velocidad de marcha firme (4.5 a 5.5 km/h) sin sujetarte de las barandas.',
+        breathing: 'Respiración controlada que permita hablar frases cortas (Zona 2).',
+        recommendations: 'No te cuelgues de los pasamanos: si te agarrás, reducís hasta un 30% el gasto calórico real.',
+        donts: 'Evitá sujetarte del frente de la máquina e inclinar el cuerpo hacia atrás.',
+        level: 'Todos los niveles',
+        objective: 'Oxidación de grasas sin fatiga del sistema nervioso',
+        rest: 30,
+        default_sets: 1,
+        default_reps: '15-25 min',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
+    },
+    {
+        id: 'cardio-6',
+        name: 'Saltos a la soga rítmicos (Jump Rope Coordinativo)',
+        exercise_type: 'cardio',
+        category: 'cardio',
+        muscle_group: 'cardio',
+        primary_muscle: 'Sistema cardiovascular, reactividad de tobillo, gemelos y sóleo',
+        execution: 'Con codos cerca de las costillas, girá la soga desde las muñecas y saltá apenas 2-3 cm del suelo sobre el metatarso.',
+        breathing: 'Respiración rítmica acompasada con los saltos.',
+        recommendations: 'Aterrizá suave sobre la punta de los pies sin golpear los talones.',
+        donts: 'No flexiones las rodillas llevando los talones a la cola ni abras los brazos.',
+        level: 'Intermedio',
+        objective: 'Coordinación, agilidad y alto gasto calórico',
+        rest: 45,
+        default_sets: 4,
+        default_reps: '60 segundos',
+        video_url: 'vid/pilar-2-vitalidad.mp4'
     }
 ];
 
-// Helper maestro para obtener Tipo (Muscular, Cardio, Movilidad, Yoga) y Grupo Muscular (Piernas, Biceps, Triceps, Espalda, Pecho, Abdominales)
-function getExerciseTaxonomy(ex) {
-    if (!ex) return { type: 'muscular', typeLabel: 'Muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas' };
+// =============================================================================
+// ÁRBOL TAXONÓMICO OFICIAL SENS DE 3 NIVELES (Arquitectura /sr-director-it-wellness)
+// Nivel 1: Tipo (Muscular, Cardio, Yoga, Movilidad)
+// Nivel 2: Grupo Muscular dentro de Muscular (Piernas, Bíceps, Tríceps, Pecho, Espalda, Abdominales, Hombros, Zona Lumbar, Antebrazos)
+// Nivel 3: Sub-músculo dentro de Piernas (Cuádriceps, Isquios, Abductores, Glúteos, Gemelos, Sóleo)
+// =============================================================================
+const SENS_TRAINING_TAXONOMY_TREE = {
+    types: [
+        { id: 'muscular', label: 'Muscular' },
+        { id: 'cardio', label: 'Cardio' },
+        { id: 'yoga', label: 'Yoga' },
+        { id: 'movilidad', label: 'Movilidad' }
+    ],
+    muscleGroups: [
+        { id: 'piernas', label: 'Piernas', hasSubGroups: true },
+        { id: 'biceps', label: 'Bíceps', hasSubGroups: false },
+        { id: 'triceps', label: 'Tríceps', hasSubGroups: false },
+        { id: 'pecho', label: 'Pecho', hasSubGroups: false },
+        { id: 'espalda', label: 'Espalda', hasSubGroups: false },
+        { id: 'abdominales', label: 'Abdominales', hasSubGroups: false },
+        { id: 'hombros', label: 'Hombros', hasSubGroups: false },
+        { id: 'zona_lumbar', label: 'Zona Lumbar', hasSubGroups: false },
+        { id: 'antebrazos', label: 'Antebrazos', hasSubGroups: false }
+    ],
+    piernasSubGroups: [
+        { id: 'cuadriceps', label: 'Cuádriceps' },
+        { id: 'isquios', label: 'Isquios' },
+        { id: 'abductores', label: 'Abductores' },
+        { id: 'gluteos', label: 'Glúteos' },
+        { id: 'gemelos', label: 'Gemelos' },
+        { id: 'soleo', label: 'Sóleo' }
+    ]
+};
 
+/**
+ * Clasificador Taxonómico de 3 Niveles para cualquier ejercicio de la plataforma
+ */
+function getExerciseTaxonomy(ex) {
+    if (!ex) {
+        return {
+            type: 'muscular',
+            typeLabel: 'Muscular',
+            muscleGroup: 'piernas',
+            muscleLabel: 'Piernas',
+            subMuscle: 'cuadriceps',
+            subMuscleLabel: 'Cuádriceps'
+        };
+    }
+
+    let idLower = (ex.id || '').toLowerCase();
     let cat = (ex.category || '').toLowerCase();
     let mg = (ex.muscle_group || '').toLowerCase();
+    let subExplicit = (ex.sub_muscle || '').toLowerCase();
     let exTypeExplicit = (ex.exercise_type || '').toLowerCase();
     const nameLower = (ex.name || '').toLowerCase();
+    const primaryLower = (ex.primary_muscle || '').toLowerCase();
 
     // Si faltan metadatos, intentar encontrar en SENS_EXERCISE_LIBRARY
     if ((!cat && !mg && !exTypeExplicit) && typeof SENS_EXERCISE_LIBRARY !== 'undefined') {
         const found = SENS_EXERCISE_LIBRARY.find(item => item.id === ex.id || item.name.toLowerCase() === nameLower);
         if (found) {
+            idLower = (found.id || '').toLowerCase();
             cat = (found.category || '').toLowerCase();
             mg = (found.muscle_group || '').toLowerCase();
+            subExplicit = (found.sub_muscle || '').toLowerCase();
             exTypeExplicit = (found.exercise_type || '').toLowerCase();
         }
     }
 
-    // 1. Tipo de Ejercicio
+    // NIVEL 1: Tipo de Entrenamiento (muscular, cardio, yoga, movilidad)
     let type = 'muscular';
     let typeLabel = 'Muscular';
-    if (exTypeExplicit === 'yoga' || cat === 'yoga' || mg === 'yoga' || nameLower.includes('yoga') || nameLower.includes('saludo al sol') || nameLower.includes('asana') || nameLower.includes('balasana')) {
+
+    if (exTypeExplicit === 'yoga' || cat === 'yoga' || mg === 'yoga' || idLower.startsWith('yoga-') || nameLower.includes('yoga') || nameLower.includes('saludo al sol') || nameLower.includes('asana') || nameLower.includes('balasana') || nameLower.includes('virabhadrasana')) {
         type = 'yoga';
         typeLabel = 'Yoga';
-    } else if (exTypeExplicit === 'cardio' || cat === 'cardio' || mg === 'cardio' || nameLower.includes('cardio') || nameLower.includes('carrera') || nameLower.includes('bici') || nameLower.includes('saltos') || nameLower.includes('zona 2')) {
+    } else if (exTypeExplicit === 'cardio' || cat === 'cardio' || mg === 'cardio' || idLower === 'cardio-1' || idLower === 'cardio-4' || idLower === 'cardio-5' || idLower === 'cardio-6' || nameLower.includes('ergométrico') || nameLower.includes('bicicleta') || nameLower.includes('cinta') || nameLower.includes('soga') || nameLower.includes('zona 2')) {
         type = 'cardio';
         typeLabel = 'Cardio';
-    } else if (exTypeExplicit === 'movilidad' || cat === 'movilidad' || mg === 'movilidad' || nameLower.includes('movilidad') || nameLower.includes('rotación articular') || nameLower.includes('gato-vaca')) {
+    } else if (exTypeExplicit === 'movilidad' || cat === 'movilidad' || mg === 'movilidad' || idLower.startsWith('mov-') || nameLower.includes('movilidad') || nameLower.includes('rotación torácica') || nameLower.includes('90/90') || nameLower.includes('gato-vaca') || nameLower.includes('cat-cow') || nameLower.includes('wall slides')) {
         type = 'movilidad';
         typeLabel = 'Movilidad';
     }
 
-    // 2. Grupo Muscular (para Muscular o complementarios)
+    // NIVEL 2: Grupo Muscular dentro de Muscular
+    // Opciones: piernas, biceps, triceps, pecho, espalda, abdominales, hombros, zona_lumbar, antebrazos
     let muscleGroup = 'piernas';
     let muscleLabel = 'Piernas';
 
-    if (cat === 'piernas' || cat === 'cuadriceps' || cat === 'isquiotibiales' || cat === 'gluteos' || cat === 'pantorrillas' ||
-        mg === 'piernas' || mg === 'quadriceps' || mg === 'hamstrings_glutes' || mg === 'gluteos' ||
-        nameLower.includes('peso muerto') || nameLower.includes('squat') || nameLower.includes('sentadilla') || nameLower.includes('estocada') || nameLower.includes('hip thrust') || nameLower.includes('gemelos') || nameLower.includes('prensa')) {
-        muscleGroup = 'piernas';
-        muscleLabel = 'Piernas';
-    } else if (cat === 'biceps' || mg === 'biceps' || nameLower.includes('biceps') || nameLower.includes('bíceps') || nameLower.includes('curl')) {
+    if (cat === 'zona_lumbar' || mg === 'zona_lumbar' || idLower.startsWith('lumbar-') || nameLower.includes('hiperextension') || nameLower.includes('extensión lumbar') || nameLower.includes('extensiones lumbares') || nameLower.includes('superman')) {
+        muscleGroup = 'zona_lumbar';
+        muscleLabel = 'Zona Lumbar';
+    } else if (cat === 'antebrazos' || mg === 'antebrazos' || idLower.startsWith('antebrazos-') || idLower === 'cardio-2' || nameLower.includes('muñeca') || nameLower.includes('granjero') || nameLower.includes('farmer') || nameLower.includes('curl inverso') || nameLower.includes('dead hang')) {
+        muscleGroup = 'antebrazos';
+        muscleLabel = 'Antebrazos';
+    } else if (cat === 'hombros' || mg === 'hombros' || idLower.startsWith('hombros-') || nameLower.includes('militar') || nameLower.includes('elevaciones laterales') || nameLower.includes('elevaciones frontales') || nameLower.includes('pájaros') || nameLower.includes('deltoides') || nameLower.includes('face pull') || nameLower.includes('arnold')) {
+        muscleGroup = 'hombros';
+        muscleLabel = 'Hombros';
+    } else if (cat === 'biceps' || mg === 'biceps' || idLower.startsWith('biceps-') || (nameLower.includes('curl') && !nameLower.includes('femoral') && !nameLower.includes('nórdico') && !nameLower.includes('muñeca') && !nameLower.includes('inverso')) || nameLower.includes('bíceps') || nameLower.includes('biceps') || nameLower.includes('martillo') || nameLower.includes('predicador')) {
         muscleGroup = 'biceps';
         muscleLabel = 'Bíceps';
-    } else if (cat === 'triceps' || mg === 'triceps' || nameLower.includes('triceps') || nameLower.includes('tríceps') || nameLower.includes('copa') || nameLower.includes('fondos')) {
+    } else if (cat === 'triceps' || mg === 'triceps' || idLower.startsWith('triceps-') || nameLower.includes('tríceps') || nameLower.includes('triceps') || nameLower.includes('francés') || nameLower.includes('copa') || nameLower.includes('patada de tríceps')) {
         muscleGroup = 'triceps';
         muscleLabel = 'Tríceps';
-    } else if (cat === 'espalda' || mg === 'espalda' || mg === 'pull' || nameLower.includes('remo') || nameLower.includes('jalón') || nameLower.includes('dominada') || nameLower.includes('dorsal')) {
-        muscleGroup = 'espalda';
-        muscleLabel = 'Espalda';
-    } else if (cat === 'pecho' || mg === 'pecho' || mg === 'push' || cat === 'hombros' || mg === 'hombros' || nameLower.includes('press') || nameLower.includes('banca') || nameLower.includes('militar') || nameLower.includes('flexiones') || nameLower.includes('aperturas')) {
+    } else if (cat === 'pecho' || mg === 'pecho' || mg === 'push' || idLower.startsWith('pecho-') || nameLower.includes('banca') || nameLower.includes('pecho') || nameLower.includes('aperturas') || nameLower.includes('flexiones') || nameLower.includes('push-up') || nameLower.includes('crossover') || nameLower.includes('fondos')) {
         muscleGroup = 'pecho';
         muscleLabel = 'Pecho';
-    } else if (cat === 'core' || cat === 'abdominales' || mg === 'core' || mg === 'abdominales' || mg === 'core_mobility' || nameLower.includes('core') || nameLower.includes('plancha') || nameLower.includes('abdominal') || nameLower.includes('crunch')) {
+    } else if (cat === 'espalda' || mg === 'espalda' || mg === 'pull' || idLower.startsWith('espalda-') || nameLower.includes('remo') || nameLower.includes('jalón') || nameLower.includes('dominada') || nameLower.includes('pullover') || nameLower.includes('dorsal')) {
+        muscleGroup = 'espalda';
+        muscleLabel = 'Espalda';
+    } else if (cat === 'core' || cat === 'abdominales' || mg === 'core' || mg === 'abdominales' || mg === 'core_mobility' || idLower.startsWith('core-') || nameLower.includes('crunch') || nameLower.includes('plancha') || nameLower.includes('dead bug') || nameLower.includes('deadbug') || nameLower.includes('pallof') || nameLower.includes('ab wheel') || nameLower.includes('rueda abdominal') || nameLower.includes('silla romana') || nameLower.includes('bird dog') || nameLower.includes('woodchop') || nameLower.includes('hollow')) {
         muscleGroup = 'abdominales';
         muscleLabel = 'Abdominales';
     } else {
@@ -1914,10 +2202,197 @@ function getExerciseTaxonomy(ex) {
         muscleLabel = 'Piernas';
     }
 
-    return { type, typeLabel, muscleGroup, muscleLabel };
+    // NIVEL 3: Sub-músculo dentro de Piernas (cuadriceps, isquios, abductores, gluteos, gemelos, soleo)
+    let subMuscle = null;
+    let subMuscleLabel = null;
+
+    if (muscleGroup === 'piernas') {
+        if (subExplicit === 'abductores' || idLower.startsWith('abductores-') || idLower === 'gluteos-5' || idLower === 'gluteos-6' || nameLower.includes('abducción') || nameLower.includes('abduccion') || nameLower.includes('monster walk') || nameLower.includes('abductor')) {
+            subMuscle = 'abductores';
+            subMuscleLabel = 'Abductores';
+        } else if (subExplicit === 'soleo' || idLower.startsWith('soleo-') || idLower === 'pantorrillas-2' || primaryLower.includes('sóleo') || primaryLower.includes('soleo') || (nameLower.includes('talones') && nameLower.includes('sentado'))) {
+            subMuscle = 'soleo';
+            subMuscleLabel = 'Sóleo';
+        } else if (subExplicit === 'gemelos' || cat === 'pantorrillas' || mg === 'pantorrillas' || idLower.startsWith('pantorrillas-') || nameLower.includes('talones') || nameLower.includes('talón') || nameLower.includes('gemelos') || nameLower.includes('pantorrilla')) {
+            subMuscle = 'gemelos';
+            subMuscleLabel = 'Gemelos';
+        } else if (subExplicit === 'gluteos' || cat === 'gluteos' || mg === 'gluteos' || idLower.startsWith('gluteos-') || idLower === 'cardio-3' || nameLower.includes('hip thrust') || nameLower.includes('puente de glúteo') || nameLower.includes('patada de glúteo') || nameLower.includes('zancadas hacia atrás') || nameLower.includes('banco romano') || nameLower.includes('swing')) {
+            subMuscle = 'gluteos';
+            subMuscleLabel = 'Glúteos';
+        } else if (subExplicit === 'isquios' || mg === 'isquiotibiales' || mg === 'hamstrings_glutes' || idLower.startsWith('isquios-') || nameLower.includes('femoral') || nameLower.includes('rumano') || nameLower.includes('buenos días') || nameLower.includes('nórdico') || nameLower.includes('pull-through') || nameLower.includes('peso muerto')) {
+            subMuscle = 'isquios';
+            subMuscleLabel = 'Isquios';
+        } else {
+            subMuscle = 'cuadriceps';
+            subMuscleLabel = 'Cuádriceps';
+        }
+    }
+
+    return {
+        type,
+        typeLabel,
+        muscleGroup,
+        muscleLabel,
+        subMuscle,
+        subMuscleLabel
+    };
 }
+
+/**
+ * Calcula el gasto calórico estimado por repetición, por serie y total del ejercicio
+ */
+function calculateExerciseKcal(ex, customSets = null, customReps = null) {
+    if (!ex) return { kcalPerRep: 0.65, kcalPerSet: 7.8, totalKcal: 24, met: 5.0 };
+    const tax = getExerciseTaxonomy(ex);
+    const nameLower = (ex.name || '').toLowerCase();
+
+    // Determinar MET y kcal base por repetición según demanda metabólica
+    let kcalPerRep = typeof ex.kcal_per_rep === 'number' ? ex.kcal_per_rep : 0.65;
+    let met = 5.5;
+
+    if (typeof ex.kcal_per_rep !== 'number') {
+        if (tax.type === 'cardio') {
+            kcalPerRep = 1.15;
+            met = 8.5;
+        } else if (tax.type === 'yoga' || tax.type === 'movilidad') {
+            kcalPerRep = 0.38;
+            met = 3.3;
+        } else if (tax.muscleGroup === 'piernas' && (nameLower.includes('sentadilla') || nameLower.includes('peso muerto') || nameLower.includes('prensa') || nameLower.includes('hip thrust') || nameLower.includes('búlgara') || nameLower.includes('zancada'))) {
+            kcalPerRep = 0.95;
+            met = 7.2;
+        } else if (tax.muscleGroup === 'espalda' || tax.muscleGroup === 'pecho' || tax.muscleGroup === 'piernas') {
+            kcalPerRep = 0.78;
+            met = 6.2;
+        } else if (tax.muscleGroup === 'hombros' || tax.muscleGroup === 'zona_lumbar' || tax.muscleGroup === 'abdominales') {
+            kcalPerRep = 0.58;
+            met = 5.0;
+        } else {
+            // Bíceps, tríceps, antebrazos, gemelos, sóleo, abductores
+            kcalPerRep = 0.48;
+            met = 4.2;
+        }
+    }
+
+    const setsNum = parseInt(customSets || ex.default_sets || ex.sets || 3, 10) || 3;
+    const repsStr = String(customReps || ex.default_reps || ex.reps || '10');
+    let repsNum = 10;
+    const nums = repsStr.match(/\d+/g);
+    if (nums && nums.length > 0) {
+        if (repsStr.toLowerCase().includes('seg') || repsStr.toLowerCase().includes('metro')) {
+            repsNum = Math.max(8, Math.round(parseInt(nums[0], 10) / 3.5));
+        } else if (nums.length >= 2) {
+            repsNum = Math.round((parseInt(nums[0], 10) + parseInt(nums[1], 10)) / 2);
+        } else {
+            repsNum = parseInt(nums[0], 10);
+        }
+    }
+
+    const kcalPerSet = typeof ex.kcal_per_set === 'number' && !customReps
+        ? ex.kcal_per_set
+        : Math.round(kcalPerRep * repsNum * 10) / 10;
+    const totalKcal = Math.round(kcalPerSet * setsNum);
+
+    return {
+        kcalPerRep: Math.round(kcalPerRep * 100) / 100,
+        kcalPerSet,
+        totalKcal,
+        sets: setsNum,
+        repsAvg: repsNum,
+        met
+    };
+}
+
+/**
+ * Genera el campo 'donts' (Cómo NO hacerlo / Errores a evitar) por defecto si no fue editado
+ */
+function getDefaultExerciseDonts(ex) {
+    if (ex && ex.donts) return ex.donts;
+    const rec = (ex && ex.recommendations) || '';
+    if (rec.toLowerCase().includes('evitá') || rec.toLowerCase().includes('no ')) {
+        return rec;
+    }
+    return 'Evitá usar inercia o balanceos del torso, no sacrifiques el rango controlado por exceso de peso y no contengas la respiración en el esfuerzo.';
+}
+
+/**
+ * Obtiene un ejercicio con los overrides aplicados (Base Maestra Global + Puntual del Alumno si corresponde)
+ */
+function getResolvedExercise(exOrId, athleteId = null) {
+    let baseEx = typeof exOrId === 'string'
+        ? SENS_EXERCISE_LIBRARY.find(e => e.id === exOrId || e.name === exOrId)
+        : exOrId;
+    if (!baseEx) return null;
+
+    let resolved = Object.assign({}, baseEx);
+
+    // 1. Aplicar Override Global (Base Maestra modificada por Nico para TODOS los usuarios)
+    try {
+        const globalRaw = localStorage.getItem('sens_global_exercise_overrides_v1');
+        if (globalRaw) {
+            const globalMap = JSON.parse(globalRaw);
+            if (globalMap && globalMap[resolved.id]) {
+                resolved = Object.assign(resolved, globalMap[resolved.id], { _hasGlobalOverride: true });
+            }
+        }
+    } catch (e) {}
+
+    // 2. Aplicar Override Puntual del Alumno (Solo para ese usuario)
+    const targetAthId = athleteId || (window.AppState && window.AppState.currentUser && window.AppState.currentUser.id) || null;
+    if (targetAthId) {
+        try {
+            const athRaw = localStorage.getItem('sens_athlete_exercise_overrides_' + targetAthId);
+            if (athRaw) {
+                const athMap = JSON.parse(athRaw);
+                if (athMap && athMap[resolved.id]) {
+                    resolved = Object.assign(resolved, athMap[resolved.id], { _hasAthleteOverride: true });
+                }
+            }
+        } catch (e) {}
+    }
+
+    const tax = getExerciseTaxonomy(resolved);
+    const energy = calculateExerciseKcal(resolved);
+    resolved.taxonomy = tax;
+    resolved.donts = getDefaultExerciseDonts(resolved);
+    resolved.kcal_per_rep = energy.kcalPerRep;
+    resolved.kcal_per_set = energy.kcalPerSet;
+    resolved.total_default_kcal = energy.totalKcal;
+
+    return resolved;
+}
+
+// Hidratar inicialmente todos los ejercicios de SENS_EXERCISE_LIBRARY en memoria
+function hydrateExerciseLibraryInMemory() {
+    let globalMap = {};
+    try {
+        const raw = localStorage.getItem('sens_global_exercise_overrides_v1');
+        if (raw) globalMap = JSON.parse(raw) || {};
+    } catch (e) {}
+
+    SENS_EXERCISE_LIBRARY.forEach(ex => {
+        if (globalMap[ex.id]) {
+            Object.assign(ex, globalMap[ex.id]);
+        }
+        const tax = getExerciseTaxonomy(ex);
+        const energy = calculateExerciseKcal(ex);
+        ex.exercise_type = tax.type;
+        ex.muscle_group_norm = tax.muscleGroup;
+        ex.sub_muscle = tax.subMuscle;
+        if (!ex.donts) ex.donts = getDefaultExerciseDonts(ex);
+        ex.kcal_per_rep = energy.kcalPerRep;
+        ex.kcal_per_set = energy.kcalPerSet;
+        ex.total_default_kcal = energy.totalKcal;
+    });
+}
+
+hydrateExerciseLibraryInMemory();
 
 if (typeof window !== 'undefined') {
     window.SENS_EXERCISE_LIBRARY = SENS_EXERCISE_LIBRARY;
+    window.SENS_TRAINING_TAXONOMY_TREE = SENS_TRAINING_TAXONOMY_TREE;
     window.getExerciseTaxonomy = getExerciseTaxonomy;
+    window.calculateExerciseKcal = calculateExerciseKcal;
+    window.getResolvedExercise = getResolvedExercise;
+    window.hydrateExerciseLibraryInMemory = hydrateExerciseLibraryInMemory;
 }
+

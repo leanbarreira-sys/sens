@@ -100,7 +100,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=6.0">
+    <link rel="stylesheet" href="style.css?v=6.1">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -3806,10 +3806,9 @@
                  ===================================================================== -->
             <section class="portal-view" id="coachHubView">
                 <div class="coach-hub-header">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">SENS COACH
-                                OS</span>
+                    <div class="coach-hub-header-left">
+                        <div class="coach-hub-badge-row">
+                            <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; letter-spacing: 0.5px;">COACH OS</span>
                             <span class="pill" id="coachPendingCountBadge"
                                 style="font-size: 10px; font-weight: 700; color: #F59E0B; background: rgba(245, 158, 11, 0.15); border: none;">0
                                 Pendientes</span>
@@ -3817,26 +3816,18 @@
                                 style="font-size: 10px; font-weight: 700; color: #10B981; background: rgba(16, 185, 129, 0.15); border: none;">0
                                 Activos</span>
                         </div>
-                        <h2
-                            style="font-size: 1.85rem; font-weight: 800; text-transform: uppercase; margin-top: 8px; color: #FFFFFF;">
-                            Centro de Gestión <span class="text-champagne">Coach Nico</span>
+                        <h2 class="coach-hub-title">
+                            Centro de Mando <span class="text-champagne">Coach Nico</span>
                         </h2>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; max-width: 780px;">
-                            Panel integral para aprobar alumnos, fijar planes presenciales u online, prescribir calorías
-                            y macros con regla de 3 simple, armar rutinas de 1 a 6 días y publicar notas de aliento.
-                        </p>
                     </div>
-                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-outline btn-sm" id="btnCoachHubRefreshTable">
-                            Actualizar Lista
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm" id="btnCoachHubViewActiveStudent">
-                            Ver como Alumno Seleccionado
+                    <div class="coach-hub-header-right">
+                        <button type="button" class="btn-coach-refresh-circle" id="btnCoachHubRefreshTable" title="Actualizar lista" aria-label="Actualizar">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
                         </button>
                     </div>
                 </div>
 
-                <!-- BANNER MAESTRO DE ATLETA EN EDICIÓN ACTIVA (SELECTOR NATIVO PREMIUM) -->
+                <!-- BANNER MAESTRO DE ATLETA EN EDICIÓN ACTIVA (SELECTOR NATIVO COMPACTO) -->
                 <div class="coach-master-active-athlete-card" id="coachMasterActiveAthleteCard">
                     <div class="coach-active-athlete-left">
                         <div class="coach-active-athlete-avatar-wrap">
@@ -3845,34 +3836,27 @@
                         </div>
                         <div class="coach-active-athlete-info">
                             <div class="coach-active-athlete-topline">
-                                <span class="coach-active-athlete-eyebrow">ALUMNO EN EDICIÓN ACTIVA</span>
-                                <span class="pill pill-champagne" id="coachMasterPlanBadge">VIP PRESENCIAL</span>
+                                <span class="coach-active-athlete-eyebrow">EN EDICIÓN ACTIVA</span>
+                                <span class="pill pill-champagne" id="coachMasterPlanBadge">ALUMNO SENS</span>
                             </div>
-                            <h3 class="coach-active-athlete-name" id="coachMasterName">Roberto Gómez</h3>
+                            <h3 class="coach-active-athlete-name" id="coachMasterName">Seleccionar Alumno</h3>
                             <div class="coach-active-athlete-sub" id="coachMasterSub">
-                                <span id="coachMasterEmail">roberto@sens.com</span> • <span id="coachMasterGoal">Meta:
-                                    Pérdida de Grasa &amp; Hipertrofia</span>
+                                <span id="coachMasterEmail">alumno@sens.com</span> • <span id="coachMasterGoal">Meta: Recomposición &amp; Fuerza</span>
                             </div>
                         </div>
                     </div>
                     <div class="coach-active-athlete-actions">
                         <button type="button" class="btn-coach-action-pill btn-trigger-athlete-sheet"
                             id="btnCoachMasterChangeAthlete" aria-label="Cambiar alumno">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                 <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                             </svg>
-                            <span>Cambiar Alumno</span>
-                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-                                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
+                            <span>Cambiar</span>
                         </button>
-                        <button type="button" class="btn-coach-action-pill primary" id="btnCoachMasterInspectAthlete">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        <button type="button" class="btn-coach-action-pill primary" id="btnCoachMasterInspectAthlete" aria-label="Ver portal del alumno">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                 <circle cx="12" cy="12" r="3" />
@@ -3882,304 +3866,272 @@
                     </div>
                 </div>
 
-                <!-- Sub-Tabs de Navegación del Hub -->
+                <!-- Sub-Tabs de Navegación del Hub (Sincronizados con el Dock Inferior Mobile del Coach) -->
                 <div class="coach-subnav-tabs" id="coachHubSubnav">
                     <button type="button" class="coach-subnav-btn active" data-subtab="paneAthletes">
-                        1. Alumnos &amp; Aprobaciones
-                    </button>
-                    <button type="button" class="coach-subnav-btn" data-subtab="paneNutrition">
-                        2. Prescribir Nutrición &amp; Calorías
+                        Alumnos &amp; Accesos
                     </button>
                     <button type="button" class="coach-subnav-btn" data-subtab="paneWorkouts">
-                        3. Prescribir Rutinas (1 a 6 Días)
+                        Entreno &amp; Objetivos
                     </button>
-                    <button type="button" class="coach-subnav-btn" data-subtab="paneDashboardNote">
-                        4. Nota de Nico en Dashboard
+                    <button type="button" class="coach-subnav-btn" data-subtab="paneNutrition">
+                        Nutrición &amp; Macros
+                    </button>
+                    <button type="button" class="coach-subnav-btn" data-subtab="paneLibrary">
+                        Biblioteca Maestra
+                    </button>
+                    <button type="button" class="coach-subnav-btn" data-subtab="paneMarketing">
+                        Marketing Studio
                     </button>
                 </div>
 
-                <!-- SUB-PANE 1: GESTIÓN DE ALUMNOS & APROBACIONES -->
+                <!-- =================================================================
+                     ESTACIÓN 1: GESTIÓN DE ALUMNOS, ACCESOS & MODELO DE NEGOCIO
+                     ================================================================= -->
                 <div class="coach-subpane active" id="paneAthletes">
-                    <!-- Stat Bar -->
+                    <!-- Stat Bar Mobile 2x2 -->
                     <div class="coach-stats-grid">
                         <div class="coach-stat-card">
-                            <span class="coach-stat-label">Total Alumnos</span>
+                            <span class="coach-stat-label">Total Usuarios</span>
                             <div class="coach-stat-val" id="kpiCoachTotalAthletes">0</div>
-                            <span class="coach-stat-sub">Registrados en plataforma</span>
+                            <span class="coach-stat-sub">En base de datos SENS</span>
                         </div>
                         <div class="coach-stat-card highlight-pending">
                             <span class="coach-stat-label"><span class="status-dot status-dot-pending"
-                                    style="display:inline-block; margin-right:6px;"></span>Pendientes de
-                                Aprobación</span>
+                                    style="display:inline-block; margin-right:6px;"></span>Pendientes</span>
                             <div class="coach-stat-val text-warning" id="kpiCoachPendingAthletes">0</div>
-                            <span class="coach-stat-sub">Requieren confirmación de pago</span>
+                            <span class="coach-stat-sub">Requieren activación</span>
                         </div>
                         <div class="coach-stat-card">
                             <span class="coach-stat-label"><span class="status-dot status-dot-active"
-                                    style="display:inline-block; margin-right:6px;"></span>Membresías Activas</span>
+                                    style="display:inline-block; margin-right:6px;"></span>Membresías</span>
                             <div class="coach-stat-val text-success" id="kpiCoachActiveAthletes">0</div>
-                            <span class="coach-stat-sub">Con acceso habilitado</span>
+                            <span class="coach-stat-sub" id="kpiCoachMrrEstimate">Activas con acceso</span>
                         </div>
                         <div class="coach-stat-card">
-                            <span class="coach-stat-label">Planes Presenciales vs Online</span>
-                            <div class="coach-stat-val" id="kpiCoachPresencialVsOnline">0 / 0</div>
-                            <span class="coach-stat-sub">Distribución actual</span>
+                            <span class="coach-stat-label">Mix Alumnos</span>
+                            <div class="coach-stat-val" id="kpiCoachPresencialVsOnline" style="font-size: 1.15rem;">0 / 0</div>
+                            <span class="coach-stat-sub">Presencial vs. Digital</span>
                         </div>
                     </div>
 
-                    <!-- Buscador & Filtros -->
-                    <div class="card-panel" style="margin-top: 20px; padding: 18px 24px;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-                            <div style="display: flex; gap: 10px; align-items: center; flex: 1; min-width: 260px;">
+                    <!-- Acordeón Desplegable del Modelo Comercial de Nico (No bloquea la lista de alumnos) -->
+                    <div class="coach-business-tiers-wrapper" id="coachBusinessTiersWrapper">
+                        <button type="button" class="coach-tiers-toggle-btn" id="btnToggleBusinessTiers" aria-expanded="false">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                <span>Estructura de Planes &amp; Precios</span>
+                                <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 6px;">4 Niveles</span>
+                            </div>
+                            <svg class="tiers-toggle-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <div class="coach-business-tiers-banner" id="coachBusinessTiersBanner" style="display: none;">
+                            <div class="coach-tier-mini-card">
+                                <span class="tier-mini-tag">NIVEL 1 • HIGH-TICKET CABA</span>
+                                <strong>Presencial Individual 1:1</strong>
+                                <span class="tier-mini-price">1x $130k • 2x $200k • 3x $260k</span>
+                                <small>Seguimiento 1:1 en vivo + Portal personalizado</small>
+                            </div>
+                            <div class="coach-tier-mini-card">
+                                <span class="tier-mini-tag">NIVEL 2 • RENTABILIDAD HORA</span>
+                                <strong>Presencial Grupal (Dúo / Trío)</strong>
+                                <span class="tier-mini-price">Dúo $100k-$195k • Trío $85k-$170k</span>
+                                <small>Multiplica x2/x3 el valor hora de Nico con ficha propia</small>
+                            </div>
+                            <div class="coach-tier-mini-card">
+                                <span class="tier-mini-tag">NIVEL 3 • ESCALA REMOTA</span>
+                                <strong>Online Personalizado 1:1</strong>
+                                <span class="tier-mini-price">Premium $90k • Básico $40k</span>
+                                <small>Rutina y nutrición prescriptas por Nico a distancia</small>
+                            </div>
+                            <div class="coach-tier-mini-card highlight-saas">
+                                <span class="tier-mini-tag">NIVEL 4 • SAAS ESCALABLE</span>
+                                <strong>Suscripción App Generalista</strong>
+                                <span class="tier-mini-price">$19.900 / mes <small>(Payback Mes 1 • LTV 5.4x)</small></span>
+                                <small>Autónomo por algoritmo. Embudo de upsell al 1:1</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buscador & Filtros Dobles (Estado + Modalidad de Negocio) -->
+                    <div class="coach-surface-card" style="margin-top: 14px; padding: 18px 16px;">
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    style="opacity:0.6;">
+                                    style="opacity:0.6; flex-shrink: 0;">
                                     <circle cx="11" cy="11" r="8" />
                                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                                 </svg>
                                 <input type="text" id="coachSearchAthleteInput" class="input-control"
-                                    placeholder="Buscar por nombre o email..." style="margin-bottom: 0;">
+                                    placeholder="Buscar usuario por nombre, email o plan..." style="margin-bottom: 0; width: 100%;">
                             </div>
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-                                <span
-                                    style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 700;">Filtrar:</span>
-                                <button type="button" class="pill pill-champagne coach-filter-status" data-status="all"
-                                    style="cursor: pointer; border: none;">Todos</button>
-                                <button type="button" class="pill pill-dark coach-filter-status"
-                                    data-status="pending_activation" style="cursor: pointer; border: none;"><span
-                                        class="status-dot status-dot-pending"
-                                        style="display:inline-block; margin-right:5px;"></span>Pendientes</button>
-                                <button type="button" class="pill pill-dark coach-filter-status" data-status="active"
-                                    style="cursor: pointer; border: none;"><span class="status-dot status-dot-active"
-                                        style="display:inline-block; margin-right:5px;"></span>Activos</button>
-                                <button type="button" class="pill pill-dark coach-filter-status" data-status="paused"
-                                    style="cursor: pointer; border: none;"><span class="status-dot status-dot-paused"
-                                        style="display:inline-block; margin-right:5px;"></span>Pausados</button>
+
+                            <!-- Filtro 1: Por Estado de Acceso -->
+                            <div class="coach-horizontal-pills" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; align-items: center;">
+                                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800; flex-shrink: 0;">Estado:</span>
+                                <button type="button" class="pill pill-champagne coach-filter-status" data-status="all" style="cursor: pointer; border: none; flex-shrink: 0;">Todos</button>
+                                <button type="button" class="pill pill-dark coach-filter-status" data-status="pending_activation" style="cursor: pointer; border: none; flex-shrink: 0;"><span class="status-dot status-dot-pending" style="display:inline-block; margin-right:5px;"></span>Pendientes</button>
+                                <button type="button" class="pill pill-dark coach-filter-status" data-status="active" style="cursor: pointer; border: none; flex-shrink: 0;"><span class="status-dot status-dot-active" style="display:inline-block; margin-right:5px;"></span>Activos</button>
+                                <button type="button" class="pill pill-dark coach-filter-status" data-status="paused" style="cursor: pointer; border: none; flex-shrink: 0;"><span class="status-dot status-dot-paused" style="display:inline-block; margin-right:5px;"></span>Pausados / Vencidos</button>
+                            </div>
+
+                            <!-- Filtro 2: Por Nivel de Negocio -->
+                            <div class="coach-horizontal-pills" id="coachFilterTierBar" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; align-items: center;">
+                                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800; flex-shrink: 0;">Plan:</span>
+                                <button type="button" class="pill pill-champagne coach-filter-tier" data-tier="all" style="cursor: pointer; border: none; flex-shrink: 0;">Todos los Planes</button>
+                                <button type="button" class="pill pill-dark coach-filter-tier" data-tier="presencial_ind" style="cursor: pointer; border: none; flex-shrink: 0;">Presencial 1:1</button>
+                                <button type="button" class="pill pill-dark coach-filter-tier" data-tier="presencial_grp" style="cursor: pointer; border: none; flex-shrink: 0;">Grupal Dúo/Trío</button>
+                                <button type="button" class="pill pill-dark coach-filter-tier" data-tier="online" style="cursor: pointer; border: none; flex-shrink: 0;">Online 1:1</button>
+                                <button type="button" class="pill pill-dark coach-filter-tier" data-tier="app_sub" style="cursor: pointer; border: none; flex-shrink: 0;">Suscripción App ($19.900)</button>
                             </div>
                         </div>
 
-                        <!-- Lista de Atletas -->
-                        <div class="coach-athletes-list" id="coachAthletesListContainer" style="margin-top: 20px;">
+                        <!-- Lista de Atletas (Tarjetas Mobile-First con Ficha 360° Solo Lectura + Gestión de Accesos) -->
+                        <div class="coach-athletes-list" id="coachAthletesListContainer" style="margin-top: 18px;">
                             <!-- Inyectado dinámicamente por app.js -->
                         </div>
                     </div>
                 </div>
 
-                <!-- SUB-PANE 2: PRESCRIPCIÓN DE NUTRICIÓN & CALORÍAS -->
-                <div class="coach-subpane" id="paneNutrition">
-                    <div class="card-panel" style="padding: 26px;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 24px;">
-                            <div>
-                                <span class="pill pill-champagne" style="font-size: 10px;">CONFIGURACIÓN
-                                    NUTRICIONAL</span>
-                                <h3 style="font-size: 1.35rem; color: #FFFFFF; font-weight: 700; margin-top: 6px;">
-                                    Prescribir Calorías, Macros &amp; Comidas Sugeridas
-                                </h3>
-                                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">
-                                    Definí las calorías y los alimentos recomendados para el alumno seleccionado. Se
-                                    calculan automáticamente por regla de 3 simple.
-                                </p>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <label
-                                    style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Para
-                                    Atleta:</label>
-                                <input type="hidden" id="coachNutritionAthleteSelector" value="roberto-gomez">
-                                <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
-                                    id="btnCoachNutriAthletePicker" aria-label="Cambiar alumno">
-                                    <span class="status-dot status-dot-active coachSyncStatusDot"></span>
-                                    <span class="pill-athlete-name coachSyncAthleteName">Roberto Gómez</span>
-                                    <span class="pill-plan-tag coachSyncAthletePlan">VIP</span>
-                                    <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Target Calórico y Presets -->
-                        <div
-                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-                            <div>
-                                <label class="input-label">Meta Calórica Diaria (Kcal)</label>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <input type="number" id="coachTargetKcalInput" class="input-control" value="2200"
-                                        step="50" min="1200" max="5000"
-                                        style="font-size: 1.4rem; font-weight: 800; color: var(--accent-primary);">
-                                    <span style="font-weight: 700; color: var(--text-muted);">kcal / día</span>
-                                </div>
-                                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;">
-                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
-                                        data-kcal="1800" style="font-size: 10.5px; padding: 3px 8px;">Déficit:
-                                        1800</button>
-                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
-                                        data-kcal="2100" style="font-size: 10.5px; padding: 3px 8px;">Recomp:
-                                        2100</button>
-                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
-                                        data-kcal="2400" style="font-size: 10.5px; padding: 3px 8px;">Mantenim:
-                                        2400</button>
-                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
-                                        data-kcal="2700" style="font-size: 10.5px; padding: 3px 8px;">Fuerza:
-                                        2700</button>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="input-label">Distribución de Macronutrientes (Gramos)</label>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                                    <div>
-                                        <span
-                                            style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Proteína
-                                            (g)</span>
-                                        <input type="number" id="coachTargetProtInput" class="input-control" value="160"
-                                            step="5" style="margin-bottom: 0;">
-                                        <span id="coachProtPctBadge"
-                                            style="font-size: 10px; color: var(--accent-primary); display: block; margin-top: 4px;">~29%</span>
-                                    </div>
-                                    <div>
-                                        <span
-                                            style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Carbos
-                                            (g)</span>
-                                        <input type="number" id="coachTargetCarbsInput" class="input-control"
-                                            value="220" step="5" style="margin-bottom: 0;">
-                                        <span id="coachCarbsPctBadge"
-                                            style="font-size: 10px; color: var(--accent-primary); display: block; margin-top: 4px;">~40%</span>
-                                    </div>
-                                    <div>
-                                        <span
-                                            style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Grasas
-                                            (g)</span>
-                                        <input type="number" id="coachTargetFatsInput" class="input-control" value="70"
-                                            step="5" style="margin-bottom: 0;">
-                                        <span id="coachFatsPctBadge"
-                                            style="font-size: 10px; color: var(--accent-primary); display: block; margin-top: 4px;">~29%</span>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 10px;">
-                                    <span style="font-size: 11px; color: var(--text-muted);">Agua Diaria:</span>
-                                    <input type="number" id="coachTargetWaterInput" class="input-control" value="2.5"
-                                        step="0.5"
-                                        style="display: inline-block; width: 80px; margin-left: 8px; margin-bottom: 0; padding: 4px 8px; height: 28px;">
-                                    <span
-                                        style="font-size: 11px; color: var(--text-secondary); margin-left: 4px;">Litros</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Selector de Comidas Recomendadas de Nico (Regla de 3 Simple) -->
-                        <div style="margin-bottom: 24px;">
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                                <h4 style="font-size: 1.1rem; color: #FFFFFF; font-weight: 700; margin: 0;">
-                                    Alimentos Recomendados para este Alumno (Catálogo Curado SENS)
-                                </h4>
-                                <span style="font-size: 11px; color: var(--text-muted);">
-                                    Tildá los alimentos y ajustá los gramos sugeridos.
-                                </span>
-                            </div>
-
-                            <div class="coach-food-selection-grid" id="coachFoodSelectionGrid">
-                                <!-- Inyectado dinámicamente con checkboxes y steppers de gramos -->
-                            </div>
-                        </div>
-
-                        <!-- Nota / Directiva Nutricional de Nico -->
-                        <div style="margin-bottom: 24px;">
-                            <label class="input-label" for="coachNutritionDirectiveInput">
-                                Directiva / Consejo Nutricional de Nico (Visible en el Portal del Alumno)
-                            </label>
-                            <textarea id="coachNutritionDirectiveInput" class="input-control" rows="3"
-                                placeholder="Ej: Esta semana priorizá 1.8g de proteína por kg. Consumí los 200g de pollo al mediodía y la avena 60 min antes de la sesión de fuerza."></textarea>
-                        </div>
-
-                        <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                            <button type="button" class="btn btn-primary" id="btnSaveCoachNutritionPrescription"
-                                style="padding: 12px 28px; font-weight: 700;">
-                                Guardar Prescripción Nutricional
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SUB-PANE 3: PRESCRIPCIÓN DE RUTINAS (DÍAS 1 A 6) -->
+                <!-- =================================================================
+                     ESTACIÓN 2: PRESCRIPCIÓN DE ENTRENAMIENTO, OBJETIVOS & NOTAS
+                     ================================================================= -->
                 <div class="coach-subpane" id="paneWorkouts">
-                    <div class="card-panel" style="padding: 26px;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+                    <div class="coach-surface-card" style="padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
                             <div>
-                                <span class="pill pill-champagne" style="font-size: 10px;">PROGRAMACIÓN DE
-                                    ENTRENAMIENTO</span>
-                                <h3 style="font-size: 1.35rem; color: #FFFFFF; font-weight: 700; margin-top: 6px;">
-                                    Prescribir Rutinas (1 a 6 Días)
+                                <span class="pill pill-champagne" style="font-size: 10px;">PRESCRIPCIÓN BIOMECÁNICA &amp; OBJETIVOS</span>
+                                <h3 style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">
+                                    Objetivos, Rutina Semanal &amp; Consejos
                                 </h3>
-                                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">
-                                    Asigná ejercicios, series, repeticiones, cargas y tiempos de descanso para el alumno
-                                    activo.
+                                <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">
+                                    Nico gestiona objetivos, entrenamiento y notas. La información personal y biometría del alumno es de solo lectura.
                                 </p>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <label
-                                    style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Para
-                                    Atleta:</label>
-                                <input type="hidden" id="coachWorkoutAthleteSelector" value="roberto-gomez">
-                                <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
-                                    id="btnCoachWorkoutAthletePicker" aria-label="Cambiar alumno">
-                                    <span class="status-dot status-dot-active coachSyncStatusDot"></span>
-                                    <span class="pill-athlete-name coachSyncAthleteName">Roberto Gómez</span>
-                                    <span class="pill-plan-tag coachSyncAthletePlan">VIP</span>
-                                    <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <input type="hidden" id="coachWorkoutAthleteSelector" value="">
+                            </div>
+                        </div>
+
+                        <!-- BANNER FIJO DEL ALUMNO EN EDICIÓN ACTIVA -->
+                        <div class="coach-workout-active-athlete-bar" id="coachWorkoutActiveAthleteBar">
+                            <div style="display: flex; align-items: center; gap: 12px; min-width: 240px;">
+                                <div class="coach-ath-avatar-circle" id="coachWorkoutAvatar">--</div>
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                        <span style="font-size: 9.5px; letter-spacing: 1px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">ALUMNO EN EDICIÓN</span>
+                                        <span class="pill pill-champagne" id="coachWorkoutPlanBadge" style="font-size: 9.5px; padding: 2px 7px;">Plan</span>
+                                    </div>
+                                    <h4 id="coachWorkoutName" style="margin: 2px 0 0 0; font-size: 1.15rem; font-weight: 800; color: #FFFFFF;">Seleccionar Alumno</h4>
+                                    <span id="coachWorkoutEmail" style="font-size: 11.5px; color: var(--text-secondary);">alumno@sens.com</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <button type="button" class="btn-coach-action-select btn-trigger-athlete-sheet" id="btnCoachWorkoutChangeAth">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                    <span>Cambiar Alumno</span>
+                                </button>
+                                <button type="button" class="btn-coach-action-portal" id="btnCoachWorkoutInspectPortal">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <span>Ver como Alumno</span>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-sm" id="btnWorkoutOpenReadonlyDossier" style="font-size: 11px; padding: 7px 12px;">
+                                    Ficha 360°
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Barra de Días (Día 1 a Día 6) -->
-                        <div class="coach-day-selector" id="coachDaySelectorBar"
-                            style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-                            <button type="button" class="coach-day-btn active" data-day="day1">Día 1</button>
-                            <button type="button" class="coach-day-btn" data-day="day2">Día 2</button>
-                            <button type="button" class="coach-day-btn" data-day="day3">Día 3</button>
-                            <button type="button" class="coach-day-btn" data-day="day4">Día 4</button>
-                            <button type="button" class="coach-day-btn" data-day="day5">Día 5</button>
-                            <button type="button" class="coach-day-btn" data-day="day6">Día 6</button>
-                        </div>
-
-                        <!-- Barra de Plantillas Rápidas -->
-                        <div
-                            style="background: rgba(229, 203, 167, 0.05); border: 1px dashed rgba(229, 203, 167, 0.3); border-radius: 8px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-                            <span style="font-size: 11.5px; color: var(--accent-primary); font-weight: 700;">Plantillas
-                                Rápidas:</span>
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="fuerza3d" style="font-size: 10.5px; padding: 3px 10px;">Fuerza &amp;
-                                    Postura (3 Días)</button>
-                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="hipertrofia4d"
-                                    style="font-size: 10.5px; padding: 3px 10px;">Recomposición (4 Días)</button>
-                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="movilidad2d" style="font-size: 10.5px; padding: 3px 10px;">Movilidad
-                                    &amp; Cardio (2 Días)</button>
+                        <!-- 1. GESTIÓN DE OBJETIVO DEL ALUMNO (Editable por Nico) -->
+                        <div class="coach-goal-prescription-box" id="coachGoalPrescriptionBox">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                                <div>
+                                    <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #9E7D4B;">OBJETIVO ASIGNADO POR NICO</span>
+                                    <h4 style="font-size: 1rem; font-weight: 800; margin: 2px 0 0 0;">Definir Foco Clínico del Ciclo</h4>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" id="btnSaveCoachAthleteGoal" style="font-size: 11px; padding: 6px 14px;">
+                                    Guardar Objetivo
+                                </button>
+                            </div>
+                            <div class="coach-goal-pills-row" id="coachGoalPillsRow">
+                                <button type="button" class="coach-goal-pill active" data-goal="recomposicion">Recomposición Corporal</button>
+                                <button type="button" class="coach-goal-pill" data-goal="deficit">Déficit &amp; Oxidación</button>
+                                <button type="button" class="coach-goal-pill" data-goal="hipertrofia">Fuerza &amp; Hipertrofia</button>
+                                <button type="button" class="coach-goal-pill" data-goal="movilidad">Movilidad &amp; Salud Articular</button>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 12px;">
+                                <div>
+                                    <label class="input-label" style="font-size: 11px;">Título de Meta Visible</label>
+                                    <input type="text" id="coachCustomGoalTextInput" class="input-control" value="Fuerza & Recomposición Corporal" style="margin-bottom: 0; font-size: 12.5px;">
+                                </div>
+                                <div>
+                                    <label class="input-label" style="font-size: 11px;">Meta Pasos / Día</label>
+                                    <input type="number" id="coachCustomStepsGoalInput" class="input-control" value="10000" step="500" style="margin-bottom: 0; font-size: 12.5px;">
+                                </div>
+                                <div>
+                                    <label class="input-label" style="font-size: 11px;">Frecuencia Semanal</label>
+                                    <input type="text" id="coachCustomFreqGoalInput" class="input-control" value="3 a 4 sesiones / sem" style="margin-bottom: 0; font-size: 12.5px;">
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Título del Día en Edición -->
-                        <div style="margin-bottom: 18px;">
-                            <label class="input-label" for="coachDayTitleInput">Título / Enfoque del Día</label>
-                            <input type="text" id="coachDayTitleInput" class="input-control"
-                                value="Tren Superior (Empuje / Tirón)" style="max-width: 500px;">
+                        <!-- 2. COPILOTO DE RECOMENDACIONES INTELIGENTES SEGÚN OBJETIVO Y FICHA -->
+                        <div class="coach-ai-recommendation-banner" id="coachWorkoutAiRecBanner">
+                            <div class="ai-rec-header">
+                                <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">RECOMENDACIÓN CLÍNICA SENS</span>
+                                <span class="ai-rec-subtitle" id="coachWorkoutRecContextLabel">Basado en Ficha 360° + Objetivo Recomposición</span>
+                            </div>
+                            <p class="ai-rec-body" id="coachWorkoutRecBodyText">
+                                Para este perfil se sugiere priorizar multiarticulares controlados (RIR 2), combinando fuerza de tren superior/inferior con estabilidad lumbopélvica (Dead bug / Pallof press) y caminata en Zona 2.
+                            </p>
+                            <div class="ai-rec-chips" id="coachWorkoutRecChips">
+                                <!-- Chips dinámicos de sugerencia según objetivo -->
+                            </div>
                         </div>
 
-                        <!-- Configuración de Modalidad y Asistencia (Presencial vs Online por Nico) -->
+                        <!-- 3. CALENDARIO SEMANAL DINÁMICO DEL ALUMNO (Con fechas reales 14/10, 15/10... idéntico al portal del alumno) -->
+                        <div class="sens-calendar-sticky-wrapper" id="coachCalendarStickyWrapper" style="margin-bottom: 18px; border-radius: 12px; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(229, 203, 167, 0.15); padding: 12px 14px;">
+                            <div class="sens-week-header-row" style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                <button type="button" class="sens-week-nav-btn" id="btnCoachWeekPrev" title="Semana anterior">‹</button>
+                                <span class="sens-week-range-label" id="coachWeekRangeLabel" style="font-weight: 800; color: #FFFFFF; font-size: 13px;">Semana Activa</span>
+                                <button type="button" class="sens-week-nav-btn" id="btnCoachWeekNext" title="Semana siguiente">›</button>
+                            </div>
+                            <div class="sens-week-strip" id="coachWeekStrip" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;">
+                                <!-- Inyectado dinámicamente: LUN 14/10, MAR 15/10, MIÉ 16/10... con modalidad y asistencia -->
+                            </div>
+                        </div>
+
+                        <!-- Barra de Plantillas Rápidas por Objetivo -->
+                        <div style="background: rgba(158, 125, 75, 0.08); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                            <span style="font-size: 11px; color: #9E7D4B; font-weight: 800;">Plantillas Maestras según Objetivo:</span>
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
+                                    data-template="fuerza3d" style="font-size: 10.5px; padding: 4px 10px;">Fuerza &amp; Postura (Lun/Mié/Vie)</button>
+                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
+                                    data-template="hipertrofia4d" style="font-size: 10.5px; padding: 4px 10px;">Recomposición (Lun/Mar/Jue/Vie)</button>
+                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
+                                    data-template="movilidad2d" style="font-size: 10.5px; padding: 4px 10px;">Movilidad &amp; Cardio (Mar/Jue)</button>
+                            </div>
+                        </div>
+
+                        <!-- Título del Día y Gasto Calórico Total Estimado -->
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                            <div style="flex: 1; min-width: 240px;">
+                                <label class="input-label" for="coachDayTitleInput" id="coachDayTitleLabel">Enfoque de la Sesión (Lunes)</label>
+                                <input type="text" id="coachDayTitleInput" class="input-control"
+                                    value="Tren Superior (Empuje / Tirón)" style="margin-bottom: 0;">
+                            </div>
+                            <div class="coach-session-kcal-pill" id="coachSessionTotalKcalBadge">
+                                Gasto Estimado Sesión: <strong>~165 kcal</strong>
+                            </div>
+                        </div>
+
+                        <!-- Configuración de Modalidad y Asistencia -->
                         <div class="coach-session-modality-card"
-                            style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
+                            style="background: rgba(0, 0, 0, 0.03); border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;">
                             <div>
                                 <label class="input-label" style="margin-bottom: 6px;">Modalidad asignada por Nico:</label>
-                                <div class="coach-modality-selector" id="coachModalityButtonsWrap" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <div class="coach-modality-selector" id="coachModalityButtonsWrap" style="display: flex; gap: 6px; flex-wrap: wrap;">
                                     <button type="button" class="pill pill-champagne coach-modality-btn active" data-modality="presencial">Presencial Nico</button>
                                     <button type="button" class="pill pill-dark coach-modality-btn" data-modality="online">Online Nico</button>
                                     <button type="button" class="pill pill-dark coach-modality-btn" data-modality="autonomo">Autónomo</button>
@@ -4187,81 +4139,596 @@
                                 </div>
                             </div>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #FFFFFF;">
-                                    <input type="checkbox" id="coachDayCompletedCheck" style="accent-color: #10B981; width: 17px; height: 17px; cursor: pointer;">
-                                    <span style="font-weight: 600;">Sesión Realizada / Asistió</span>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; font-weight: 700;">
+                                    <input type="checkbox" id="coachDayCompletedCheck" style="accent-color: #10B981; width: 18px; height: 18px; cursor: pointer;">
+                                    <span>Sesión Realizada / Asistió</span>
                                 </label>
                             </div>
                         </div>
 
                         <!-- Lista de Ejercicios Asignados a este Día -->
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <h4 style="font-size: 1.1rem; color: #FFFFFF; font-weight: 700; margin: 0;">Ejercicios
-                                Asignados a este Día</h4>
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                            <h4 style="font-size: 1.05rem; font-weight: 800; margin: 0;">Ejercicios Asignados (con Kcal por Serie y Reps)</h4>
                             <button type="button" class="btn btn-outline btn-sm" id="btnCoachAddExerciseFromLib"
-                                style="border-color: var(--accent-primary); color: var(--accent-primary);">
-                                + Agregar Ejercicio de Biblioteca (50 Ejercicios)
+                                style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700;">
+                                + Explorar Mapa de Ejercicios
                             </button>
                         </div>
 
                         <div id="coachAssignedExercisesContainer"
-                            style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+                            style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
                             <!-- Inyectado dinámicamente -->
                         </div>
 
-                        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 26px;">
                             <button type="button" class="btn btn-primary" id="btnSaveCoachWorkoutDay"
-                                style="padding: 12px 28px; font-weight: 700;">
-                                Guardar Rutina de este Día
+                                style="padding: 12px 24px; font-weight: 800; width: 100%; max-width: 340px;">
+                                Guardar Rutina del Lunes
+                            </button>
+                        </div>
+
+                        <!-- 4. NOTA DESTACADA & CONSEJOS DE ENTRENAMIENTO EN DASHBOARD DEL ALUMNO -->
+                        <div style="border-top: 1px solid rgba(0,0,0,0.08); padding-top: 20px;" id="paneDashboardNote">
+                            <span class="pill pill-champagne" style="font-size: 10px;">FEEDBACK DIRECTO &amp; CONSEJOS DE ENTRENAMIENTO</span>
+                            <h4 style="font-size: 1.15rem; font-weight: 800; margin-top: 6px;">
+                                Nota &amp; Sugerencia de Nico para el Alumno
+                            </h4>
+                            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+                                Aparece destacada en el Inicio y sección de Entrenamiento del alumno. Tocá un consejo sugerido o escribí el tuyo:
+                            </p>
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;" id="coachQuickNoteChipsWrap">
+                                <button type="button" class="pill pill-dark coach-quick-note-chip" data-title="Foco Semana: Control Excéntrico" data-body="Esta semana priorizá bajar en 3 segundos controlados en cada serie y respetar los 90s de descanso para maximizar el reclutamiento muscular.">Control Excéntrico 3s</button>
+                                <button type="button" class="pill pill-dark coach-quick-note-chip" data-title="Cuidado Postural & Core" data-body="Mantené el abdomen activo antes de iniciar cada empuje o tracción. Si sentís fatiga lumbar, frenamos 1 repetición antes (RIR 2).">Protección Lumbar &amp; RIR 2</button>
+                                <button type="button" class="pill pill-dark coach-quick-note-chip" data-title="Meta de Adherencia & Pasos" data-body="Excelente constancia en las sesiones. En los días autónomos priorizá alcanzar los pasos diarios y 10 minutos de movilidad articular.">Constancia &amp; NEAT</button>
+                            </div>
+                            <input type="hidden" id="coachDashNoteAthleteSelector" value="">
+                            <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
+                                id="btnCoachNoteAthletePicker" aria-label="Cambiar alumno" style="display: none;">
+                                <span class="status-dot status-dot-active coachSyncStatusDot"></span>
+                                <span class="pill-athlete-name coachSyncAthleteName">Seleccionar Alumno</span>
+                                <span class="pill-plan-tag coachSyncAthletePlan">PLAN</span>
+                            </button>
+                            <div style="margin-bottom: 12px;">
+                                <label class="input-label" for="coachDashNoteTitleInput">Título del Consejo / Foco Semanal</label>
+                                <input type="text" id="coachDashNoteTitleInput" class="input-control"
+                                    placeholder="Ej: Foco de la Semana: Precisión Biomecánica">
+                            </div>
+                            <div style="margin-bottom: 14px;">
+                                <label class="input-label" for="coachDashNoteBodyInput">Sugerencia / Consejo de Entrenamiento y Hábitos</label>
+                                <textarea id="coachDashNoteBodyInput" class="input-control" rows="3"
+                                    placeholder="Ej: Excelente ritmo en la sesión de piernas. Esta semana enfocate en no apurar las repeticiones y descansar 90 segundos entre series."></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="btnSaveCoachDashNote"
+                                style="padding: 11px 22px; font-weight: 800;">
+                                Publicar Nota y Consejo en el Portal del Alumno
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- SUB-PANE 4: MENSAJE & NOTA DE NICO EN DASHBOARD -->
-                <div class="coach-subpane" id="paneDashboardNote">
-                    <div class="card-panel" style="padding: 26px; max-width: 750px;">
-                        <span class="pill pill-champagne" style="font-size: 10px;">COMUNICACIÓN CON EL ALUMNO</span>
-                        <h3 style="font-size: 1.35rem; color: #FFFFFF; font-weight: 700; margin-top: 6px;">
-                            Mensaje Destacado de Nico en Dashboard
-                        </h3>
-                        <p style="font-size: 13px; color: var(--text-secondary); margin-top: 2px; margin-bottom: 20px;">
-                            Este mensaje aparece en la tarjeta dorada superior del Dashboard del alumno cuando inicia
-                            sesión.
-                        </p>
+                <!-- =================================================================
+                     ESTACIÓN 3: PRESCRIPCIÓN DE NUTRICIÓN, MACROS & COMIDAS
+                     ================================================================= -->
+                <div class="coach-subpane" id="paneNutrition">
+                    <div class="coach-surface-card" style="padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+                            <div>
+                                <span class="pill pill-champagne" style="font-size: 10px;">PRESCRIPCIÓN NUTRICIONAL DE PRECISIÓN</span>
+                                <h3 style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">
+                                    Calorías, Macros, Comidas &amp; Consejos
+                                </h3>
+                                <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">
+                                    Configurá el plan por objetivo y tipo de comida (Desayuno, Almuerzo, Merienda, Cena, Snacks) con cálculo proporcional automático.
+                                </p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="hidden" id="coachNutritionAthleteSelector" value="">
+                                <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
+                                    id="btnCoachNutriAthletePicker" aria-label="Cambiar alumno">
+                                    <span class="status-dot status-dot-active coachSyncStatusDot"></span>
+                                    <span class="pill-athlete-name coachSyncAthleteName">Seleccionar Alumno</span>
+                                    <span class="pill-plan-tag coachSyncAthletePlan">PLAN</span>
+                                    <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
 
-                        <div style="margin-bottom: 16px;">
-                            <label class="input-label" for="coachDashNoteAthleteSelector">Para Atleta</label>
-                            <input type="hidden" id="coachDashNoteAthleteSelector" value="roberto-gomez">
-                            <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
-                                id="btnCoachNoteAthletePicker" aria-label="Cambiar alumno" style="width: fit-content;">
-                                <span class="status-dot status-dot-active coachSyncStatusDot"></span>
-                                <span class="pill-athlete-name coachSyncAthleteName">Roberto Gómez</span>
-                                <span class="pill-plan-tag coachSyncAthletePlan">VIP</span>
-                                <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
+                        <!-- Copiloto Nutricional Automático según Ficha y Objetivo del Alumno -->
+                        <div class="coach-ai-recommendation-banner" id="coachNutritionAiRecBanner" style="margin-bottom: 18px;">
+                            <div class="ai-rec-header">
+                                <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">SUGERENCIA NUTRICIONAL SEGÚN FICHA</span>
+                                <button type="button" class="btn btn-outline btn-sm" id="btnApplySuggestedMacros" style="font-size: 10.5px; padding: 3px 10px;">
+                                    Aplicar Cálculo Sugerido en 1 Tap
+                                </button>
+                            </div>
+                            <p class="ai-rec-body" id="coachNutritionRecBodyText">
+                                Según el peso, nivel de actividad y objetivo de este alumno, se sugiere una ingesta de 2.150 kcal (165g Proteína • 210g Carbohidratos • 70g Grasas • 2.8L Agua).
+                            </p>
+                        </div>
+
+                        <!-- Target Calórico y Presets -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; background: rgba(0,0,0,0.025); border-radius: 14px; padding: 16px; margin-bottom: 20px;">
+                            <div>
+                                <label class="input-label">Meta Calórica Diaria (Kcal)</label>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="number" id="coachTargetKcalInput" class="input-control" value="2200"
+                                        step="50" min="1200" max="5000"
+                                        style="font-size: 1.35rem; font-weight: 800; color: #9E7D4B; margin-bottom: 0;">
+                                    <span style="font-weight: 700; color: var(--text-muted); font-size: 12px;">kcal / día</span>
+                                </div>
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;">
+                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
+                                        data-kcal="1800" style="font-size: 10.5px; padding: 4px 8px;">Déficit: 1800</button>
+                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
+                                        data-kcal="2100" style="font-size: 10.5px; padding: 4px 8px;">Recomp: 2100</button>
+                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
+                                        data-kcal="2400" style="font-size: 10.5px; padding: 4px 8px;">Mantenim: 2400</button>
+                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
+                                        data-kcal="2700" style="font-size: 10.5px; padding: 4px 8px;">Fuerza: 2700</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="input-label">Distribución de Macronutrientes (Gramos)</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                                    <div>
+                                        <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Proteína (g)</span>
+                                        <input type="number" id="coachTargetProtInput" class="input-control" value="160" step="5" style="margin-bottom: 0;">
+                                        <span id="coachProtPctBadge" style="font-size: 10px; color: #9E7D4B; font-weight: 700; display: block; margin-top: 4px;">~29%</span>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Carbos (g)</span>
+                                        <input type="number" id="coachTargetCarbsInput" class="input-control" value="220" step="5" style="margin-bottom: 0;">
+                                        <span id="coachCarbsPctBadge" style="font-size: 10px; color: #9E7D4B; font-weight: 700; display: block; margin-top: 4px;">~40%</span>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Grasas (g)</span>
+                                        <input type="number" id="coachTargetFatsInput" class="input-control" value="70" step="5" style="margin-bottom: 0;">
+                                        <span id="coachFatsPctBadge" style="font-size: 10px; color: #9E7D4B; font-weight: 700; display: block; margin-top: 4px;">~29%</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Agua Diaria:</span>
+                                    <input type="number" id="coachTargetWaterInput" class="input-control" value="2.8" step="0.2"
+                                        style="width: 80px; margin-bottom: 0; padding: 4px 8px; height: 30px;">
+                                    <span style="font-size: 11px; color: var(--text-secondary);">Litros</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Filtros de Alimentos por Tipo de Comida y Objetivo -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                                <h4 style="font-size: 1.05rem; font-weight: 800; margin: 0;">
+                                    Alimentos &amp; Comidas Sugeridas (Por Momento y Objetivo)
+                                </h4>
+                                <span style="font-size: 11px; color: var(--text-muted);">
+                                    Tildá qué incluir, ajustá gramos o editá la ficha base del alimento.
+                                </span>
+                            </div>
+
+                            <!-- Barra de Momento de Comida -->
+                            <div class="coach-horizontal-pills" id="coachNutriMealTypeFilterBar" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px;">
+                                <button type="button" class="pill pill-champagne coach-nutri-meal-pill active" data-meal="all">Todas las Comidas</button>
+                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="desayuno">Desayuno</button>
+                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="almuerzo">Almuerzo</button>
+                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="merienda">Merienda</button>
+                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="cena">Cena</button>
+                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="snacks">Snacks / Pre-Post</button>
+                            </div>
+
+                            <div class="coach-food-selection-grid" id="coachFoodSelectionGrid">
+                                <!-- Inyectado dinámicamente con checkboxes, macros, momento de comida, gramos y botón Editar Base -->
+                            </div>
+                        </div>
+
+                        <!-- Nota / Directiva Nutricional de Nico con Chips Rápidos -->
+                        <div style="margin-bottom: 20px;">
+                            <label class="input-label" for="coachNutritionDirectiveInput">
+                                Directiva / Consejo Nutricional de Nico (Visible en el Portal del Alumno)
+                            </label>
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+                                <button type="button" class="pill pill-dark coach-quick-nutri-chip" data-text="Priorizá 35-40g de proteína en cada una de las 4 comidas principales. Sumá los carbohidratos complejos (arroz, papa o avena) alrededor de tu horario de entrenamiento.">Distribución Proteica 4 Comidas</button>
+                                <button type="button" class="pill pill-dark coach-quick-nutri-chip" data-text="Para maximizar saciedad en déficit, comenzá almuerzo y cena con el plato de hojas verdes + proteína magra, y tomá 500ml de agua 20 minutos antes de comer.">Protocolo Saciedad &amp; Déficit</button>
+                                <button type="button" class="pill pill-dark coach-quick-nutri-chip" data-text="Consumí la merienda o snack pre-entreno 60 minutos antes de la sesión (avena o fruta + proteína) para sostener niveles altos de fuerza.">Timing Pre &amp; Post Entreno</button>
+                            </div>
+                            <textarea id="coachNutritionDirectiveInput" class="input-control" rows="3"
+                                placeholder="Ej: Esta semana priorizá 1.8g de proteína por kg. Consumí los 200g de pollo al mediodía y la avena 60 min antes de la sesión de fuerza."></textarea>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                            <button type="button" class="btn btn-primary" id="btnSaveCoachNutritionPrescription"
+                                style="padding: 12px 26px; font-weight: 800; width: 100%; max-width: 340px;">
+                                Guardar Prescripción Nutricional
                             </button>
                         </div>
+                    </div>
+                </div>
 
-                        <div style="margin-bottom: 16px;">
-                            <label class="input-label" for="coachDashNoteTitleInput">Título / Foco</label>
-                            <input type="text" id="coachDashNoteTitleInput" class="input-control"
-                                placeholder="Ej: Foco de la Semana: Precisión Biomecánica">
+                <!-- =================================================================
+                     ESTACIÓN 4: BIBLIOTECA MAESTRA (MAPA DE 3 NIVELES + NUTRICIÓN)
+                     ================================================================= -->
+                <div class="coach-subpane" id="paneLibrary">
+                    <div class="coach-surface-card" style="padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                            <div>
+                                <span class="pill pill-champagne" style="font-size: 10px;">CATÁLOGO CIENTÍFICO &amp; BASE DE DATOS SENS</span>
+                                <h3 style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">
+                                    Biblioteca Maestra de Ejercicios &amp; Nutrición
+                                </h3>
+                                <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">
+                                    Explorá el árbol completo de entrenamiento y alimentos. Podés editar cualquier ficha para un alumno puntual o actualizar la Base Maestra para todos los usuarios.
+                                </p>
+                            </div>
+                            <div class="coach-lib-domain-switcher" id="coachLibDomainSwitcher">
+                                <button type="button" class="coach-domain-switch-btn active" data-libdomain="exercises">
+                                    Mapa de Ejercicios
+                                </button>
+                                <button type="button" class="coach-domain-switch-btn" data-libdomain="nutrition">
+                                    Catálogo de Nutrición
+                                </button>
+                            </div>
                         </div>
 
-                        <div style="margin-bottom: 20px;">
-                            <label class="input-label" for="coachDashNoteBodyInput">Cuerpo del Mensaje</label>
-                            <textarea id="coachDashNoteBodyInput" class="input-control" rows="4"
-                                placeholder="Ej: Excelente ritmo en la sesión de piernas. Esta semana enfocate en no apurar las repeticiones y descansar 90 segundos entre series."></textarea>
+                        <!-- SUB-VISTA 4A: MAPA DE ENTRENAMIENTO JERÁRQUICO DE 3 NIVELES -->
+                        <div id="coachLibExercisesSection">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+                                <input type="text" id="coachMasterExSearchInput" class="input-control"
+                                    placeholder="Buscar ejercicio, músculo, técnica o patrón..." style="flex: 1; min-width: 220px; margin-bottom: 0;">
+                                <button type="button" class="btn btn-outline btn-sm" id="btnCoachCreateNewExercise" style="font-weight: 800; border-color: #9E7D4B; color: #9E7D4B;">
+                                    + Nuevo Ejercicio
+                                </button>
+                            </div>
+
+                            <!-- NIVEL 1: POR TIPO (Muscular, Cardio, Yoga, Movilidad) -->
+                            <div class="coach-taxonomy-level-box">
+                                <span class="taxonomy-level-label">1. Por Tipo:</span>
+                                <div class="coach-horizontal-pills" id="coachTaxLevel1TypeBar">
+                                    <button type="button" class="pill pill-champagne tax-l1-btn active" data-type="all">Todos</button>
+                                    <button type="button" class="pill pill-dark tax-l1-btn" data-type="muscular">Muscular</button>
+                                    <button type="button" class="pill pill-dark tax-l1-btn" data-type="cardio">Cardio</button>
+                                    <button type="button" class="pill pill-dark tax-l1-btn" data-type="yoga">Yoga</button>
+                                    <button type="button" class="pill pill-dark tax-l1-btn" data-type="movilidad">Movilidad</button>
+                                </div>
+                            </div>
+
+                            <!-- NIVEL 2: DENTRO DE MUSCULAR (Piernas, Bíceps, Tríceps, Pecho, Espalda, Abdominales, Hombros, Zona Lumbar, Antebrazos) -->
+                            <div class="coach-taxonomy-level-box" id="coachTaxLevel2MuscleBox">
+                                <span class="taxonomy-level-label">2. Grupo Muscular:</span>
+                                <div class="coach-horizontal-pills" id="coachTaxLevel2MuscleBar">
+                                    <button type="button" class="pill pill-champagne tax-l2-btn active" data-muscle="all">Todos</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="piernas">Piernas ▾</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="biceps">Bíceps</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="triceps">Tríceps</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="pecho">Pecho</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="espalda">Espalda</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="abdominales">Abdominales</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="hombros">Hombros</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="zona_lumbar">Zona Lumbar</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn" data-muscle="antebrazos">Antebrazos</button>
+                                </div>
+                            </div>
+
+                            <!-- NIVEL 3: DENTRO DE PIERNAS (Cuádriceps, Isquios, Abductores, Glúteos, Gemelos, Sóleo) -->
+                            <div class="coach-taxonomy-level-box sub-level-legs" id="coachTaxLevel3LegsBox" style="display: none;">
+                                <span class="taxonomy-level-label">3. Foco Piernas:</span>
+                                <div class="coach-horizontal-pills" id="coachTaxLevel3LegsBar">
+                                    <button type="button" class="pill pill-champagne tax-l3-btn active" data-submuscle="all">Todas las Piernas</button>
+                                    <button type="button" class="pill pill-dark tax-l3-btn" data-submuscle="cuadriceps">Cuádriceps</button>
+                                    <button type="button" class="pill pill-dark tax-l3-btn" data-submuscle="isquios">Isquios</button>
+                                    <button type="button" class="pill pill-dark tax-l3-btn" data-submuscle="abductores">Abductores</button>
+                                    <button type="button" class="pill pill-dark tax-l3-btn" data-submuscle="gluteos">Glúteos</button>
+                                    <button type="button" class="pill pill-dark tax-l3-btn" data-submuscle="gemelos">Gemelos</button>
+                                    <button type="button" class="pill pill-dark tax-l3-btn" data-submuscle="soleo">Sóleo</button>
+                                </div>
+                            </div>
+
+                            <div class="coach-lib-results-meta" id="coachLibExercisesCountLabel" style="font-size: 11.5px; color: var(--text-muted); margin: 10px 0;">
+                                Mostrando ejercicios del catálogo oficial SENS
+                            </div>
+
+                            <!-- Grid de Cards de Ejercicios con Kcal por Serie/Reps y Botón de Edición Base/Puntual -->
+                            <div class="coach-master-lib-grid" id="coachMasterExercisesGrid">
+                                <!-- Inyectado dinámicamente por app.js -->
+                            </div>
                         </div>
 
-                        <button type="button" class="btn btn-primary" id="btnSaveCoachDashNote"
-                            style="padding: 10px 24px; font-weight: 700;">
-                            Publicar en Dashboard del Alumno
-                        </button>
+                        <!-- SUB-VISTA 4B: BIBLIOTECA DE NUTRICIÓN (POR COMIDA Y POR OBJETIVO) -->
+                        <div id="coachLibNutritionSection" style="display: none;">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+                                <input type="text" id="coachMasterFoodSearchInput" class="input-control"
+                                    placeholder="Buscar alimento, comida, macronutriente o beneficio..." style="flex: 1; min-width: 220px; margin-bottom: 0;">
+                                <button type="button" class="btn btn-outline btn-sm" id="btnCoachCreateNewFood" style="font-weight: 800; border-color: #9E7D4B; color: #9E7D4B;">
+                                    + Nuevo Alimento / Plato
+                                </button>
+                            </div>
+
+                            <!-- Filtro 1: Por Tipo de Comida -->
+                            <div class="coach-taxonomy-level-box">
+                                <span class="taxonomy-level-label">1. Tipo de Comida:</span>
+                                <div class="coach-horizontal-pills" id="coachLibFoodMealBar">
+                                    <button type="button" class="pill pill-champagne lib-food-meal-btn active" data-meal="all">Todas</button>
+                                    <button type="button" class="pill pill-dark lib-food-meal-btn" data-meal="desayuno">Desayuno</button>
+                                    <button type="button" class="pill pill-dark lib-food-meal-btn" data-meal="almuerzo">Almuerzo</button>
+                                    <button type="button" class="pill pill-dark lib-food-meal-btn" data-meal="merienda">Merienda</button>
+                                    <button type="button" class="pill pill-dark lib-food-meal-btn" data-meal="cena">Cena</button>
+                                    <button type="button" class="pill pill-dark lib-food-meal-btn" data-meal="snacks">Snacks</button>
+                                </div>
+                            </div>
+
+                            <!-- Filtro 2: Por Objetivo Nutricional -->
+                            <div class="coach-taxonomy-level-box">
+                                <span class="taxonomy-level-label">2. Por Objetivo:</span>
+                                <div class="coach-horizontal-pills" id="coachLibFoodGoalBar">
+                                    <button type="button" class="pill pill-champagne lib-food-goal-btn active" data-goal="all">Todos los Objetivos</button>
+                                    <button type="button" class="pill pill-dark lib-food-goal-btn" data-goal="deficit">Déficit &amp; Saciedad</button>
+                                    <button type="button" class="pill pill-dark lib-food-goal-btn" data-goal="recomposicion">Recomposición Magra</button>
+                                    <button type="button" class="pill pill-dark lib-food-goal-btn" data-goal="hipertrofia">Fuerza &amp; Masa Muscular</button>
+                                    <button type="button" class="pill pill-dark lib-food-goal-btn" data-goal="digestivo">Digestión Ligera &amp; Salud</button>
+                                </div>
+                            </div>
+
+                            <div class="coach-master-lib-grid" id="coachMasterFoodsGrid" style="margin-top: 14px;">
+                                <!-- Inyectado dinámicamente por app.js -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =================================================================
+                     ESTACIÓN 5: GROWTH MARKETING STUDIO SENS (PLUG & PLAY APB)
+                     ================================================================= -->
+                <div class="coach-subpane" id="paneMarketing">
+                    <div class="coach-surface-card" style="padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">GROWTH MARKETING STUDIO • PLUG &amp; PLAY</span>
+                                    <span class="pill pill-dark" style="font-size: 10px;">0 Bytes en Supabase (Memoria Local)</span>
+                                </div>
+                                <h3 style="font-size: 1.35rem; font-weight: 800; margin-top: 6px;">
+                                    Creador de Reels, Stories &amp; Carruseles <span style="color: #9E7D4B;">MAKE SENS.</span>
+                                </h3>
+                                <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px; max-width: 720px;">
+                                    Diseñado para que no tengas que pensar qué escribir ni cómo diseñar. Elegí uno de los 12 templates de alta conversión, cargá tu foto o video y descargalo listo con estética Brandbook bloqueada contra errores.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="sens-mkt-studio-layout">
+                            <!-- COLUMNA IZQUIERDA / CONTROLES PLUG & PLAY -->
+                            <div class="sens-mkt-controls-col">
+                                <!-- Paso 1: Formato de Red Social -->
+                                <div class="sens-mkt-control-block">
+                                    <span class="sens-mkt-step-badge">PASO 1 • FORMATO DE PUBLICACIÓN</span>
+                                    <div class="sens-mkt-format-grid" id="mktFormatSelectorGrid">
+                                        <button type="button" class="sens-mkt-format-btn active" data-format="reel_video_9_16">
+                                            <strong>Reel / TikTok Multi-Escena</strong>
+                                            <span>1080×1920 (9:16) • Cambia texto por seg</span>
+                                        </button>
+                                        <button type="button" class="sens-mkt-format-btn" data-format="carousel_4_5">
+                                            <strong>Carrusel 4 Slides (Swipe)</strong>
+                                            <span>1080×1350 (4:5) • Secuencia completa</span>
+                                        </button>
+                                        <button type="button" class="sens-mkt-format-btn" data-format="post_4_5">
+                                            <strong>Post Feed Individual</strong>
+                                            <span>1080×1350 (4:5) • Alto impacto visual</span>
+                                        </button>
+                                        <button type="button" class="sens-mkt-format-btn" data-format="story_9_16">
+                                            <strong>Story Estática / Cupos</strong>
+                                            <span>1080×1920 (9:16) • Conversión directa</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Paso 2: 12 Plantillas de Alto Engagement & Conversión -->
+                                <div class="sens-mkt-control-block">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">PASO 2 • ELEGÍ EL TEMPLATE (12 FÓRMULAS VIRALES)</span>
+                                        <span style="font-size: 10.5px; color: #9E7D4B; font-weight: 700;">Estética 100% Bloqueada</span>
+                                    </div>
+                                    <div class="sens-mkt-templates-grid" id="mktTemplateSelectorGrid">
+                                        <!-- Inyectado dinámicamente con las 12 plantillas de Growth Marketing -->
+                                    </div>
+                                </div>
+
+                                <!-- Paso 3: Autocompletar con un Ejercicio o Alimento de la Biblioteca (Opcional 1-Tap) -->
+                                <div class="sens-mkt-control-block">
+                                    <span class="sens-mkt-step-badge">PASO 3 • AUTOCOMPLETAR DESDE TU BIBLIOTECA (OPCIONAL 1-TAP)</span>
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktAutofillExercise" style="flex: 1; font-size: 11.5px; font-weight: 700;">
+                                            Cargar Datos de un Ejercicio
+                                        </button>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktAutofillFood" style="flex: 1; font-size: 11.5px; font-weight: 700;">
+                                            Cargar Datos de un Alimento
+                                        </button>
+                                    </div>
+                                    <div id="mktAutofillPickerDrawer" style="display: none; margin-top: 10px;">
+                                        <input type="text" id="mktAutofillSearchInput" class="input-control" placeholder="Filtrar ítem de biblioteca..." style="margin-bottom: 8px; font-size: 12px;">
+                                        <div id="mktAutofillItemsList" style="max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Paso 4: Subir Foto o Video de la Sesión (Efímero en RAM) -->
+                                <div class="sens-mkt-control-block">
+                                    <span class="sens-mkt-step-badge">PASO 4 • TU FOTO O VIDEO DE FONDO (SOLO DURA ESTA SESIÓN)</span>
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                                        <label for="mktMediaFileInput" class="btn btn-primary btn-sm" style="cursor: pointer; font-weight: 800; flex: 1; text-align: center;">
+                                            Subir Foto o Video del Celular
+                                        </label>
+                                        <input type="file" id="mktMediaFileInput" accept="image/*,video/*" style="display: none;">
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktUseDefaultMedia" style="font-size: 11px;">
+                                            Usar Fondo SENS Oficial
+                                        </button>
+                                    </div>
+                                    <!-- Sliders de Encuadre / Zoom / Oscuridad de Overlay -->
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 12px;">
+                                        <div>
+                                            <label style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block;">Zoom (<span id="mktZoomValLabel">105%</span>)</label>
+                                            <input type="range" id="mktMediaZoomSlider" min="100" max="160" value="105" style="width: 100%;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block;">Encuadre Vertical</label>
+                                            <input type="range" id="mktMediaPanYSlider" min="-40" max="40" value="0" style="width: 100%;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block;">Intensidad Overlay</label>
+                                            <input type="range" id="mktOverlayOpacitySlider" min="50" max="95" value="80" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Paso 5: Editor Guiado con Guardrails de Caracteres (Con Soporte Multi-Escena por Segundos y Multi-Slide Carrusel) -->
+                                <div class="sens-mkt-control-block">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">PASO 5 • TEXTOS GUIADOS (CON LÍMITE ESTÉTICO)</span>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktNextHookIdea" style="font-size: 10.5px; padding: 3px 9px; border-color: #9E7D4B; color: #9E7D4B;">
+                                            Sugerir Otro Hook Viral ↻
+                                        </button>
+                                    </div>
+
+                                    <!-- Selector de Escena por Segundos (Para Videos Multi-Escena) -->
+                                    <div id="mktVideoScenesTimelineBar" class="sens-mkt-timeline-bar">
+                                        <div style="font-size: 10.5px; font-weight: 800; color: #9E7D4B; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+                                            <span>LÍNEA DE TIEMPO DEL VIDEO (CAMBIO AUTOMÁTICO POR SEGUNDOS):</span>
+                                            <label style="display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-weight: 700;">
+                                                <input type="checkbox" id="mktAutoCycleScenesCheck" checked style="accent-color: #9E7D4B;">
+                                                <span>Rotar en vivo</span>
+                                            </label>
+                                        </div>
+                                        <div class="sens-mkt-scene-tabs">
+                                            <button type="button" class="sens-mkt-scene-btn active" data-scene="0">
+                                                <strong>0s – 3s • HOOK</strong>
+                                                <span>Frena el scroll</span>
+                                            </button>
+                                            <button type="button" class="sens-mkt-scene-btn" data-scene="1">
+                                                <strong>3s – 7s • VALOR</strong>
+                                                <span>Método / Técnica</span>
+                                            </button>
+                                            <button type="button" class="sens-mkt-scene-btn" data-scene="2">
+                                                <strong>7s+ • CTA</strong>
+                                                <span>Conversión</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Selector de Slide (Para Carrusel 4:5 de 4 Diapositivas) -->
+                                    <div id="mktCarouselSlidesBar" class="sens-mkt-timeline-bar" style="display: none;">
+                                        <div style="font-size: 10.5px; font-weight: 800; color: #9E7D4B; margin-bottom: 6px;">
+                                            DIAPOSITIVAS DEL CARRUSEL 4:5 (SECUENCIA DE ALTO GUARDADO):
+                                        </div>
+                                        <div class="sens-mkt-scene-tabs">
+                                            <button type="button" class="sens-mkt-slide-btn active" data-slide="0">
+                                                <strong>Slide 1/4</strong>
+                                                <span>Portada Hook</span>
+                                            </button>
+                                            <button type="button" class="sens-mkt-slide-btn" data-slide="1">
+                                                <strong>Slide 2/4</strong>
+                                                <span>El Error Común</span>
+                                            </button>
+                                            <button type="button" class="sens-mkt-slide-btn" data-slide="2">
+                                                <strong>Slide 3/4</strong>
+                                                <span>Solución SENS</span>
+                                            </button>
+                                            <button type="button" class="sens-mkt-slide-btn" data-slide="3">
+                                                <strong>Slide 4/4</strong>
+                                                <span>Cierre &amp; CTA</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Campos con Límite Estricto de Caracteres -->
+                                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                                        <div>
+                                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px;">
+                                                <label class="input-label" style="margin:0;">Etiqueta Superior (Eyebrow Champagne)</label>
+                                                <span id="mktCharCountBadge" style="color: var(--text-muted); font-variant-numeric: tabular-nums;">16/26</span>
+                                            </div>
+                                            <input type="text" id="mktInputEyebrow" class="input-control" maxlength="26" value="BIOMECÁNICA SENS" style="margin-bottom: 0;">
+                                        </div>
+
+                                        <div>
+                                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px;">
+                                                <label class="input-label" style="margin:0;">Titular de Alto Impacto / Hook</label>
+                                                <span id="mktCharCountHeadline" style="color: var(--text-muted); font-variant-numeric: tabular-nums;">34/52</span>
+                                            </div>
+                                            <input type="text" id="mktInputHeadline" class="input-control" maxlength="52" value="EL ERROR #1 AL HACER SENTADILLA" style="margin-bottom: 0; font-weight: 800;">
+                                        </div>
+
+                                        <div>
+                                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px;">
+                                                <label class="input-label" style="margin:0;">Bajada / Explicación Corta</label>
+                                                <span id="mktCharCountSub" style="color: var(--text-muted); font-variant-numeric: tabular-nums;">68/110</span>
+                                            </div>
+                                            <textarea id="mktInputSubtitle" class="input-control" maxlength="110" rows="2" style="margin-bottom: 0;">Bajar en 3 segundos controlados recluta el doble de fibras que rebotar con exceso de peso.</textarea>
+                                        </div>
+
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                                            <div>
+                                                <label class="input-label" style="font-size: 10.5px;">Chip 1 (Foco)</label>
+                                                <input type="text" id="mktInputChip1" class="input-control" maxlength="20" value="Foco: Cuádriceps" style="margin-bottom: 0; font-size: 12px;">
+                                            </div>
+                                            <div>
+                                                <label class="input-label" style="font-size: 10.5px;">Chip 2 (Métrica)</label>
+                                                <input type="text" id="mktInputChip2" class="input-control" maxlength="20" value="~11 kcal / serie" style="margin-bottom: 0; font-size: 12px;">
+                                            </div>
+                                            <div>
+                                                <label class="input-label" style="font-size: 10.5px;">Chip 3 / CTA</label>
+                                                <input type="text" id="mktInputChip3" class="input-control" maxlength="22" value="Escribime SENS →" style="margin-bottom: 0; font-size: 12px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Paso 6: Caption de Instagram / TikTok Pre-Redactado con Estructura AIDA -->
+                                <div class="sens-mkt-control-block">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">PASO 6 • TEXTO DEL POST LISTO PARA COPIAR Y PEGAR</span>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktCopyCaption" style="font-size: 10.5px; padding: 3px 10px; font-weight: 800;">
+                                            Copiar Caption IG / TikTok
+                                        </button>
+                                    </div>
+                                    <textarea id="mktCaptionOutput" class="input-control" rows="4" readonly style="font-size: 11.5px; margin-bottom: 0;"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- COLUMNA DERECHA / PREVIEW EN VIVO 1080p Y EXPORTACIÓN -->
+                            <div class="sens-mkt-preview-col">
+                                <div class="sens-mkt-preview-sticky">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);" id="mktPreviewResolutionLabel">
+                                            VISTA PREVIA EN VIVO • 1080×1920 (9:16)
+                                        </span>
+                                        <span class="pill pill-champagne" id="mktActiveSceneIndicator" style="font-size: 9.5px; padding: 2px 8px;">
+                                            Escena 1: 0s–3s (Hook)
+                                        </span>
+                                    </div>
+
+                                    <!-- Contenedor del Canvas de Alta Resolución (1080x1350 o 1080x1920) -->
+                                    <div class="sens-mkt-canvas-stage" id="mktCanvasStageWrap">
+                                        <canvas id="sensMarketingCanvas" width="1080" height="1920"></canvas>
+                                        <!-- Elementos multimedia ocultos que alimentan el canvas en RAM -->
+                                        <video id="mktHiddenSourceVideo" muted loop playsinline crossorigin="anonymous" src="vid/pilar-2-vitalidad.mp4" style="display: none;"></video>
+                                    </div>
+
+                                    <!-- Botones de Exportación en Alta Definición -->
+                                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+                                        <button type="button" class="btn btn-primary btn-full" id="btnMktExportPng" style="font-weight: 800; padding: 12px;">
+                                            Descargar Pieza Actual en HD (PNG)
+                                        </button>
+                                        <button type="button" class="btn btn-outline btn-full" id="btnMktExportAllPack" style="font-weight: 800; padding: 11px; border-color: #9E7D4B; color: #9E7D4B;">
+                                            Descargar Secuencia Completa (Todas las Escenas / Slides)
+                                        </button>
+                                        <button type="button" class="btn btn-outline btn-full" id="btnMktRecordVideoWebm" style="font-weight: 700; padding: 10px; font-size: 12px;">
+                                            Grabar Video Animado con Cambios de Texto por Segundos
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -4302,39 +4769,54 @@
         </div>
     </div>
 
-    <!-- Modal de Biblioteca Maestra de Ejercicios SENS (50 Ejercicios) -->
+    <!-- Modal de Biblioteca Maestra de Ejercicios SENS (Mapa de 3 Niveles) -->
     <div class="modal-overlay" id="exerciseLibraryModal">
         <div class="modal-card" style="max-width: 880px; max-height: 90vh; display: flex; flex-direction: column;">
             <div
-                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 14px;">
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
                 <div>
-                    <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">BIBLIOTECA OFICIAL
-                        SENS</span>
-                    <h3 style="font-size: 1.35rem; margin-top: 4px; color: var(--text-primary); font-weight: 800;">
+                    <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">MAPA DE ENTRENAMIENTO SENS (3 NIVELES)</span>
+                    <h3 style="font-size: 1.3rem; margin-top: 4px; color: var(--text-primary); font-weight: 800;">
                         Catálogo Maestro de Ejercicios (Guía Nico)</h3>
                 </div>
                 <button class="modal-close-btn" id="closeLibraryModalBtn"
                     style="position: static; font-size: 24px; cursor: pointer;">&times;</button>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
                 <input type="text" id="libSearchInput" class="input-control"
-                    placeholder="Buscar ejercicio, músculo o técnica (ej. Press, Sentadilla, Búlgaras, Jalón)..."
-                    style="width: 100%; padding: 12px 16px; font-size: 13.5px; border-radius: 12px; margin-bottom: 0;">
+                    placeholder="Buscar ejercicio, músculo o técnica (ej. Press, Sentadilla, Búlgaras, Sóleo, Lumbar)..."
+                    style="width: 100%; padding: 11px 16px; font-size: 13.5px; border-radius: 12px; margin-bottom: 0;">
 
+                <!-- Nivel 1 & 2 en el Modal Rápido -->
                 <div class="lib-group-filter-strip" id="libGroupPillStrip">
                     <button type="button" class="lib-pill-btn active" data-group="all">Todos</button>
                     <button type="button" class="lib-pill-btn" data-group="muscular">Muscular</button>
                     <button type="button" class="lib-pill-btn" data-group="cardio">Cardio</button>
-                    <button type="button" class="lib-pill-btn" data-group="movilidad">Movilidad</button>
                     <button type="button" class="lib-pill-btn" data-group="yoga">Yoga</button>
+                    <button type="button" class="lib-pill-btn" data-group="movilidad">Movilidad</button>
                     <span style="display: inline-block; width: 1px; height: 16px; background: rgba(255,255,255,0.15); margin: 0 4px; vertical-align: middle;"></span>
-                    <button type="button" class="lib-pill-btn" data-group="piernas">Piernas</button>
+                    <button type="button" class="lib-pill-btn" data-group="piernas">Piernas ▾</button>
                     <button type="button" class="lib-pill-btn" data-group="biceps">Bíceps</button>
                     <button type="button" class="lib-pill-btn" data-group="triceps">Tríceps</button>
-                    <button type="button" class="lib-pill-btn" data-group="espalda">Espalda</button>
                     <button type="button" class="lib-pill-btn" data-group="pecho">Pecho</button>
+                    <button type="button" class="lib-pill-btn" data-group="espalda">Espalda</button>
                     <button type="button" class="lib-pill-btn" data-group="abdominales">Abdominales</button>
+                    <button type="button" class="lib-pill-btn" data-group="hombros">Hombros</button>
+                    <button type="button" class="lib-pill-btn" data-group="zona_lumbar">Zona Lumbar</button>
+                    <button type="button" class="lib-pill-btn" data-group="antebrazos">Antebrazos</button>
+                </div>
+
+                <!-- Nivel 3: Sub-filtro de Piernas en el Modal -->
+                <div class="lib-group-filter-strip" id="libLegsSubPillStrip" style="display: none; padding-top: 4px;">
+                    <span style="font-size: 10px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; margin-right: 4px;">Piernas:</span>
+                    <button type="button" class="lib-pill-btn active" data-subgroup="all">Todas</button>
+                    <button type="button" class="lib-pill-btn" data-subgroup="cuadriceps">Cuádriceps</button>
+                    <button type="button" class="lib-pill-btn" data-subgroup="isquios">Isquios</button>
+                    <button type="button" class="lib-pill-btn" data-subgroup="abductores">Abductores</button>
+                    <button type="button" class="lib-pill-btn" data-subgroup="gluteos">Glúteos</button>
+                    <button type="button" class="lib-pill-btn" data-subgroup="gemelos">Gemelos</button>
+                    <button type="button" class="lib-pill-btn" data-subgroup="soleo">Sóleo</button>
                 </div>
             </div>
 
@@ -4458,7 +4940,7 @@
         </div>
     </div>
 
-    <!-- Floating Dock Inferior Móvil (Estilo BIGG / Samsung Health) -->
+    <!-- Floating Dock Inferior Móvil del Atleta (Estilo BIGG / Samsung Health) -->
     <div class="sens-floating-dock" id="sensFloatingDock">
         <button type="button" class="sens-dock-item active" data-dock-tab="dashView">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -4492,6 +4974,46 @@
                 <circle cx="12" cy="7" r="4" />
             </svg>
             <span>Perfil</span>
+        </button>
+    </div>
+
+    <!-- Floating Dock Inferior Móvil Exclusivo de SENS Coach OS (5 Estaciones Táctiles) -->
+    <div class="sens-floating-dock coach-mode-dock" id="sensCoachFloatingDock" style="display: none;">
+        <button type="button" class="sens-dock-item coach-dock-btn active" data-coach-subtab="paneAthletes">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            <span>Alumnos</span>
+        </button>
+        <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneWorkouts">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12" />
+            </svg>
+            <span>Entreno</span>
+        </button>
+        <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneNutrition">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+            </svg>
+            <span>Nutrición</span>
+        </button>
+        <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneLibrary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+            <span>Biblioteca</span>
+        </button>
+        <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneMarketing">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+            <span>Marketing</span>
         </button>
     </div>
 
@@ -4542,7 +5064,109 @@
     </div>
 
     <!-- =========================================================================
-         BOTTOM SHEET NATIVO DE ASIGNACIÓN DE PLAN / MODALIDAD (CERO <select>)
+         BOTTOM SHEET NATIVO DE ACCIONES DEL ALUMNO (COACH OS QUICK SHEET APPLE HEALTH)
+         ========================================================================= -->
+    <div class="native-sheet-backdrop" id="coachAthleteActionsBackdrop" style="display: none;"></div>
+    <div class="native-bottom-sheet" id="coachAthleteActionsBottomSheet" role="dialog" aria-modal="true"
+        aria-label="Acciones de Gestión del Alumno" style="display: none;">
+        <div class="sheet-drag-handle-wrap">
+            <div class="sheet-drag-handle"></div>
+        </div>
+        <div class="sheet-header" style="align-items: center; padding-bottom: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="coach-ath-avatar-circle" id="sheetAthleteAvatar" style="width: 44px; height: 44px; font-size: 15px; flex-shrink: 0;">--</div>
+                <div>
+                    <h3 class="sheet-title" id="sheetAthleteFullName" style="font-size: 1.15rem; margin-bottom: 2px; color: #FFFFFF;">Alumno SENS</h3>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span class="pill pill-champagne" id="sheetAthletePlanPill" style="font-size: 9px; padding: 2px 7px;">PLAN SENS</span>
+                        <span id="sheetAthleteStatusPill" style="font-size: 11px; font-weight: 700; color: #10B981;">● Activo</span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="sheet-close-btn" id="btnCloseAthleteActionsSheet" aria-label="Cerrar">&times;</button>
+        </div>
+        <div class="coach-action-sheet-body" style="padding: 10px 18px 30px 18px; display: flex; flex-direction: column; gap: 8px;">
+            <button type="button" class="coach-sheet-action-item" id="sheetActionDossier">
+                <div class="coach-sheet-action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="coach-sheet-action-text">
+                    <strong>Ficha Clínica 360° (Solo Lectura)</strong>
+                    <span>Biometría, historial de lesiones, estrés y datos declarados</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="coach-sheet-action-item" id="sheetActionWorkouts">
+                <div class="coach-sheet-action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5v14"/><path d="M18 5v14"/><path d="M2 9v6"/><path d="M22 9v6"/><path d="M6 12h12"/></svg>
+                </div>
+                <div class="coach-sheet-action-text">
+                    <strong>Prescribir Entrenamiento &amp; Objetivos</strong>
+                    <span>Rutinas de 1 a 6 días, foco muscular y notas de Nico</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="coach-sheet-action-item" id="sheetActionNutrition">
+                <div class="coach-sheet-action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                </div>
+                <div class="coach-sheet-action-text">
+                    <strong>Prescribir Nutrición &amp; Macros</strong>
+                    <span>Kcal, proteínas, carbohidratos, grasas y sugerencias</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="coach-sheet-action-item" id="sheetActionChangePlan">
+                <div class="coach-sheet-action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+                <div class="coach-sheet-action-text">
+                    <strong>Cambiar Plan / Membresía</strong>
+                    <span>1:1 VIP, Grupal Dúo/Trío, Online o Suscripción App</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="coach-sheet-action-item" id="sheetActionToggleStatus">
+                <div class="coach-sheet-action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                </div>
+                <div class="coach-sheet-action-text">
+                    <strong id="sheetActionToggleStatusTitle">Pausar Acceso</strong>
+                    <span id="sheetActionToggleStatusSub">Cambiar estado de membresía del alumno</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <a href="#" target="_blank" rel="noopener" class="coach-sheet-action-item whatsapp" id="sheetActionWhatsApp">
+                <div class="coach-sheet-action-icon wa-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                </div>
+                <div class="coach-sheet-action-text">
+                    <strong style="color: #25D366;">Contactar por WhatsApp</strong>
+                    <span>Abrir chat directo con mensaje prearmado</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+
+            <button type="button" class="coach-sheet-action-item inspect-portal" id="sheetActionInspectPortal">
+                <div class="coach-sheet-action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <div class="coach-sheet-action-text">
+                    <strong style="color: #E5CBA7;">Ver Portal como este Alumno</strong>
+                    <span>Inspeccionar vista real del alumno</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         BOTTOM SHEET NATIVO DE ASIGNACIÓN DE PLAN / MODALIDAD (4 NIVELES DE NEGOCIO)
          ========================================================================= -->
     <div class="native-sheet-backdrop" id="coachPlanSheetBackdrop" style="display: none;"></div>
     <div class="native-bottom-sheet" id="coachPlanPickerBottomSheet" role="dialog" aria-modal="true"
@@ -4552,41 +5176,232 @@
         </div>
         <div class="sheet-header">
             <div>
-                <span class="sheet-eyebrow">MODALIDAD DE ATLETA</span>
+                <span class="sheet-eyebrow">MEMBRESÍA &amp; ACCESO COMERCIAL</span>
                 <h3 class="sheet-title" id="coachPlanSheetAthleteTitle">Asignar Plan</h3>
             </div>
             <button type="button" class="sheet-close-btn" id="btnClosePlanSheet" aria-label="Cerrar">&times;</button>
         </div>
         <div class="coach-plan-options-container"
-            style="padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+            style="padding: 14px 20px 24px 20px; display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto;">
             <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip">
                 <div class="plan-opt-left">
-                    <strong>Presencial 1 a 1 VIP (CABA)</strong>
-                    <span>Sesiones individuales de alta intensidad y técnica</span>
+                    <strong>1. Presencial Individual 1 a 1 (CABA)</strong>
+                    <span>1x ($130k) • 2x ($200k) • 3x ($260k) / mes • Atención exclusiva</span>
                 </div>
-                <span class="pill pill-champagne">VIP</span>
+                <span class="pill pill-champagne">1:1 VIP</span>
             </button>
             <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group">
                 <div class="plan-opt-left">
-                    <strong>Presencial Semi-Personalizado (Dúo)</strong>
-                    <span>Grupos reducidos de 2 a 3 personas</span>
+                    <strong>2. Presencial Grupal (Dúo / Trío CABA)</strong>
+                    <span>Dúo ($100k-$195k) • Trío ($85k-$170k) • Seguimiento individual en App</span>
                 </div>
-                <span class="pill pill-dark">Dúo</span>
+                <span class="pill pill-dark">Dúo / Trío</span>
             </button>
             <button type="button" class="btn-coach-plan-opt" data-plan="client_online_premium">
                 <div class="plan-opt-left">
-                    <strong>Online Asesorado Premium</strong>
-                    <span>Seguimiento diario, videollamadas y corrección técnica</span>
+                    <strong>3A. Online Personalizado Premium ($90.000/mes)</strong>
+                    <span>Videollamadas con Nico, corrección por video y plan 100% a medida</span>
                 </div>
-                <span class="pill pill-champagne">Premium</span>
+                <span class="pill pill-champagne">Online VIP</span>
             </button>
             <button type="button" class="btn-coach-plan-opt" data-plan="client_online_basic">
                 <div class="plan-opt-left">
-                    <strong>Online Asesorado Básico</strong>
-                    <span>Plan mensual autónomo y feedback semanal</span>
+                    <strong>3B. Online Asesorado Básico ($40.000/mes)</strong>
+                    <span>Programación mensual de entrenamiento y nutrición por Nico</span>
                 </div>
-                <span class="pill pill-dark">Básico</span>
+                <span class="pill pill-dark">Online</span>
             </button>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_app_subscription">
+                <div class="plan-opt-left">
+                    <strong>4. Suscripción App Generalista ($19.900/mes)</strong>
+                    <span>Acceso autónomo sin horas 1:1 de Nico • Rutinas y macros por objetivo</span>
+                </div>
+                <span class="pill pill-dark">App SaaS</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL / SHEET DE FICHA CLÍNICA 360° DEL ALUMNO (100% SOLO LECTURA PARA NICO)
+         ========================================================================= -->
+    <div class="modal-overlay" id="coachAthleteDossierModal" style="display: none;">
+        <div class="modal-card" style="max-width: 680px; max-height: 88vh; overflow-y: auto; background: #121215; color: #FFFFFF; border: 1px solid rgba(229, 203, 167, 0.25);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px; margin-bottom: 16px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">FICHA CLÍNICA 360° • SOLO LECTURA</span>
+                        <span class="pill pill-dark" style="font-size: 9.5px;">Datos declarados por el usuario (Inalterables por Admin)</span>
+                    </div>
+                    <h3 id="dossierAthleteNameTitle" style="font-size: 1.4rem; font-weight: 800; color: #FFFFFF; margin-top: 6px;">Alumno SENS</h3>
+                    <p id="dossierAthleteSubMeta" style="font-size: 12px; color: #A1A1AA; margin: 2px 0 0 0;">alumno@sens.com • Plan SENS</p>
+                </div>
+                <button type="button" class="modal-close-btn" id="btnCloseAthleteDossierModal" style="position: static; font-size: 24px;">&times;</button>
+            </div>
+
+            <div id="coachAthleteDossierBody" style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- Inyectado dinámicamente con biometría, avances, historia clínica, lesiones, sueño, estrés y adherencia -->
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-outline btn-sm" id="btnDossierGoNutrition">Prescribir Nutrición →</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnDossierGoWorkouts">Prescribir Entrenamiento &amp; Objetivos →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL EDITOR DE FICHA DE EJERCICIO O ALIMENTO (GOBERNANZA BASE MAESTRA VS. PUNTUAL)
+         ========================================================================= -->
+    <div class="modal-overlay" id="coachDbItemEditorModal" style="display: none;">
+        <div class="modal-card" style="max-width: 680px; max-height: 90vh; overflow-y: auto; background: #121215; color: #FFFFFF; border: 1px solid rgba(229, 203, 167, 0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; margin-bottom: 14px;">
+                <div>
+                    <span class="pill pill-champagne" id="dbEditorDomainBadge" style="font-size: 9.5px; font-weight: 800;">EDITOR DE CATÁLOGO SENS</span>
+                    <h3 id="dbEditorModalTitle" style="font-size: 1.3rem; font-weight: 800; color: #FFFFFF; margin-top: 6px;">Editar Ficha Técnica</h3>
+                </div>
+                <button type="button" class="modal-close-btn" id="btnCloseDbItemEditorModal" style="position: static; font-size: 24px;">&times;</button>
+            </div>
+
+            <!-- Banner de Alerta de Gobernanza de Base de Datos -->
+            <div class="coach-db-governance-alert" id="dbEditorGovernanceAlertBox">
+                <div style="font-size: 11px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">
+                    ALCANCE DE LA MODIFICACIÓN (ELEGÍ DÓNDE IMPACTA ESTE CAMBIO):
+                </div>
+                <div class="db-scope-radio-group" id="dbEditorScopeSelector">
+                    <label class="db-scope-option active" data-scope="athlete">
+                        <input type="radio" name="dbEditScopeRadio" value="athlete" checked>
+                        <div>
+                            <strong>Aplicar SOLO al Alumno Activo (<span id="dbEditorActiveAthleteLabel">Alumno Activo</span>)</strong>
+                            <span>Modifica las recomendaciones o valores únicamente para este usuario sin alterar la base general.</span>
+                        </div>
+                    </label>
+                    <label class="db-scope-option global-warning" data-scope="global">
+                        <input type="radio" name="dbEditScopeRadio" value="global">
+                        <div>
+                            <strong>Modificar BASE MAESTRA SENS (Aplica a TODOS los Usuarios)</strong>
+                            <span style="color: #FBBF24;">Atención: Si guardás en esta opción, actualizarás la base de datos oficial de este ítem para todos los usuarios de la app.</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <form id="coachDbItemEditorForm" style="display: flex; flex-direction: column; gap: 12px; margin-top: 14px;">
+                <input type="hidden" id="dbEditItemType" value="exercise">
+                <input type="hidden" id="dbEditItemId" value="">
+
+                <div>
+                    <label class="input-label">Nombre del Ejercicio / Alimento</label>
+                    <input type="text" id="dbEditNameInput" class="input-control" required style="margin-bottom: 0;">
+                </div>
+
+                <!-- Campos Específicos de Ejercicio -->
+                <div id="dbEditExerciseFieldsWrap" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                        <div>
+                            <label class="input-label">1. Tipo</label>
+                            <div class="coach-horizontal-pills" id="dbEditExTypePills">
+                                <button type="button" class="pill pill-champagne db-ex-type-pill" data-val="muscular">Muscular</button>
+                                <button type="button" class="pill pill-dark db-ex-type-pill" data-val="cardio">Cardio</button>
+                                <button type="button" class="pill pill-dark db-ex-type-pill" data-val="yoga">Yoga</button>
+                                <button type="button" class="pill pill-dark db-ex-type-pill" data-val="movilidad">Movilidad</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="input-label">Músculo Principal</label>
+                            <input type="text" id="dbEditExPrimaryMuscle" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;">
+                        <div>
+                            <label class="input-label" style="font-size: 10.5px;">Kcal / Serie</label>
+                            <input type="number" step="0.5" id="dbEditExKcalSet" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <label class="input-label" style="font-size: 10.5px;">Kcal / Rep</label>
+                            <input type="number" step="0.05" id="dbEditExKcalRep" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <label class="input-label" style="font-size: 10.5px;">Series Base</label>
+                            <input type="number" id="dbEditExDefaultSets" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <label class="input-label" style="font-size: 10.5px;">Reps Base</label>
+                            <input type="text" id="dbEditExDefaultReps" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="input-label">Cómo Hacer el Ejercicio (Ejecución Técnica Paso a Paso)</label>
+                        <textarea id="dbEditExExecution" class="input-control" rows="2" style="margin-bottom: 0;"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="input-label">Cómo NO Hacerlo (Errores Comunes a Evitar)</label>
+                        <textarea id="dbEditExDonts" class="input-control" rows="2" style="margin-bottom: 0;"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="input-label">Mejores Prácticas &amp; Recomendaciones de Nico</label>
+                        <textarea id="dbEditExRecommendations" class="input-control" rows="2" style="margin-bottom: 0;"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="input-label">Pauta de Respiración</label>
+                        <input type="text" id="dbEditExBreathing" class="input-control" style="margin-bottom: 0;">
+                    </div>
+                </div>
+
+                <!-- Campos Específicos de Alimento / Nutrición -->
+                <div id="dbEditFoodFieldsWrap" style="display: none; flex-direction: column; gap: 12px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;">
+                        <div>
+                            <label class="input-label" style="font-size: 10.5px;">Kcal (c/100g)</label>
+                            <input type="number" step="1" id="dbEditFoodKcal100" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <label class="input-label" style="font-size: 10.5px;">Proteína (g)</label>
+                            <input type="number" step="0.1" id="dbEditFoodProt100" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <label class="input-label" style="font-size: 10.5px;">Carbos (g)</label>
+                            <input type="number" step="0.1" id="dbEditFoodCarbs100" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <label class="input-label" style="font-size: 10.5px;">Grasas (g)</label>
+                            <input type="number" step="0.1" id="dbEditFoodFats100" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <label class="input-label">Porción Sugerida (g)</label>
+                            <input type="number" step="5" id="dbEditFoodDefaultGrams" class="input-control" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <label class="input-label">Equivalencia Práctica</label>
+                            <input type="text" id="dbEditFoodPortionLabel" class="input-control" placeholder="Ej: 150-180g (1 pechuga)" style="margin-bottom: 0;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="input-label">Momentos de Comida Ideales (separados por coma: desayuno, almuerzo, merienda, cena, snacks)</label>
+                        <input type="text" id="dbEditFoodMealsInput" class="input-control" placeholder="almuerzo, cena" style="margin-bottom: 0;">
+                    </div>
+
+                    <div>
+                        <label class="input-label">Recomendación Nutricional / Mejores Prácticas de Nico</label>
+                        <textarea id="dbEditFoodNoteInput" class="input-control" rows="3" style="margin-bottom: 0;"></textarea>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+                    <button type="button" class="btn btn-outline btn-sm" id="btnCancelDbItemEditor">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="btnSubmitDbItemEditor" style="font-weight: 800; padding: 10px 20px;">
+                        Confirmar y Guardar Cambios
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -4638,11 +5453,30 @@
         </div>
     </div>
 
+    <!-- MODAL DE CONFIRMACIÓN DE GUARDADO EXITOSO PARA COACH (VISIBILIDAD MÁXIMA) -->
+    <div class="sens-modal-overlay" id="coachSaveSuccessModal" style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(0,0,0,0.82); backdrop-filter: blur(10px);">
+        <div class="sens-modal-card" style="background: #121214; border: 1px solid var(--accent-champagne); border-radius: 20px; padding: 30px 24px; max-width: 440px; width: 90%; text-align: center; box-shadow: 0 16px 50px rgba(229, 203, 167, 0.25);">
+            <div style="width: 58px; height: 58px; border-radius: 50%; background: rgba(229, 203, 167, 0.15); border: 2px solid var(--accent-champagne); color: var(--accent-champagne); font-size: 28px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                ✓
+            </div>
+            <h3 id="coachSaveSuccessModalTitle" style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin-bottom: 8px;">¡Rutina Guardada y Sincronizada!</h3>
+            <p id="coachSaveSuccessModalBody" style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 18px;">
+                La rutina del Lunes fue guardada con éxito. El alumno la verá reflejada en su portal.
+            </p>
+            <div id="coachSaveSuccessSupabaseNotice" style="display: none; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 10px; padding: 12px; margin-bottom: 18px; font-size: 12px; color: #f59e0b; text-align: left; line-height: 1.4;">
+                <!-- Aviso explicativo en caso de requerir script SQL en Supabase -->
+            </div>
+            <button type="button" class="btn btn-primary" id="btnDismissCoachSaveSuccess" style="width: 100%; padding: 12px; font-weight: 800; font-size: 13px;">
+                Entendido, Continuar
+            </button>
+        </div>
+    </div>
+
     <!-- Base de Datos Maestra de Ejercicios SENS (Guía Oficial Nico) -->
-    <script src="exercises_db.js?v=4.6"></script>
+    <script src="exercises_db.js?v=6.1"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=6.0"></script>
+    <script src="app.js?v=6.1"></script>
 </body>
 
 </html>

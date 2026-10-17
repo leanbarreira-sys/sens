@@ -7766,41 +7766,39 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .coach-athlete-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 18px 20px;
+    background: #121214;
+    border: 1px solid rgba(229, 203, 167, 0.15);
+    border-radius: 14px;
+    padding: 16px 18px;
     margin-bottom: 12px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
 .coach-athlete-card:hover {
-    border-color: rgba(229, 203, 167, 0.4);
+    border-color: rgba(229, 203, 167, 0.35);
 }
 
 .coach-athlete-card.is-pending {
-    border-color: rgba(245, 158, 11, 0.5);
-    background: rgba(245, 158, 11, 0.03);
+    border-color: rgba(245, 158, 11, 0.45);
+    background: rgba(245, 158, 11, 0.04);
 }
 
-.coach-athlete-info {
+.coach-ath-card-head {
     display: flex;
     align-items: center;
-    gap: 14px;
-    min-width: 240px;
+    gap: 12px;
 }
 
-.coach-athlete-avatar {
+.coach-ath-avatar-circle {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: var(--accent-gradient);
-    color: #080809;
+    background: rgba(229, 203, 167, 0.12);
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    color: var(--accent-champagne);
     font-weight: 800;
     font-size: 14px;
     display: flex;
@@ -7809,28 +7807,165 @@ input[type="range"]::-webkit-slider-thumb:hover {
     flex-shrink: 0;
 }
 
-.coach-athlete-meta {
+.coach-ath-primary-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
+    min-width: 0;
+    flex: 1;
 }
 
-.coach-athlete-name {
+.coach-ath-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.coach-ath-name {
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 800;
     color: #FFFFFF;
 }
 
-.coach-athlete-email {
+.coach-ath-sub-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.coach-ath-email {
     font-size: 12px;
     color: var(--text-secondary);
 }
 
-.coach-athlete-actions {
+.coach-ath-goal-chip {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 11.5px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
+}
+
+.coach-ath-goal-label {
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+}
+
+.coach-ath-goal-text {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.coach-ath-action-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     flex-wrap: wrap;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-coach-action-primary {
+    background: var(--accent-champagne) !important;
+    color: #080809 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-coach-action-primary:hover {
+    background: #eedbc2 !important;
+    transform: translateY(-1px);
+}
+
+.btn-coach-action-portal {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-coach-action-portal:hover {
+    background: rgba(229, 203, 167, 0.12) !important;
+    border-color: var(--accent-champagne) !important;
+    color: var(--accent-champagne) !important;
+}
+
+.btn-coach-action-manage {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-coach-action-manage:hover {
+    border-color: var(--accent-champagne) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-coach-action-select {
+    background: rgba(229, 203, 167, 0.1) !important;
+    color: var(--accent-champagne) !important;
+    border: 1px solid rgba(229, 203, 167, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-coach-action-select:hover {
+    background: var(--accent-champagne) !important;
+    color: #080809 !important;
+}
+
+/* Barra de Alumno Activo en Pantalla de Entreno */
+.coach-workout-active-athlete-bar {
+    background: #121214;
+    border: 1px solid rgba(229, 203, 167, 0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .coach-food-selection-grid {
@@ -7853,20 +7988,30 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .coach-day-selector {
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
     margin-bottom: 16px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.coach-day-selector::-webkit-scrollbar {
+    display: none;
 }
 
 .coach-day-btn {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     color: var(--text-secondary);
-    padding: 6px 14px;
-    border-radius: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .coach-day-btn:hover {
@@ -7878,6 +8023,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
     background: var(--accent-primary);
     color: #080809;
     border-color: var(--accent-primary);
+    font-weight: 800;
+    box-shadow: 0 2px 10px rgba(229, 203, 167, 0.25);
 }
 
 .coach-ex-card {
@@ -11086,8 +11233,8 @@ body.in-portal .portal-nav-item.active {
     border-bottom-color: #9E7D4B !important;
 }
 
-/* Tarjetas y Contenedores en Blanco Clínico Puro */
-body.in-portal .card-panel,
+/* Tarjetas y Contenedores en Blanco Clínico Puro (Exclusivo Dashboard Alumno, NUNCA Coach OS) */
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *),
 body.in-portal .dash-welcome-card,
 body.in-portal .sens-coach-directive-card,
 body.in-portal .sens-objective-card,
@@ -11106,7 +11253,7 @@ body.in-portal .exercise-card {
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
 }
 
-body.in-portal .card-panel:hover,
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *):hover,
 body.in-portal .sens-objective-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07) !important;
@@ -11117,10 +11264,10 @@ body.in-portal .dash-welcome-card h1,
 body.in-portal .dash-welcome-card h2,
 body.in-portal .dash-welcome-card h3,
 body.in-portal .dash-welcome-card h4,
-body.in-portal .card-panel:not(.coach-only-card) h1,
-body.in-portal .card-panel:not(.coach-only-card) h2,
-body.in-portal .card-panel:not(.coach-only-card) h3,
-body.in-portal .card-panel:not(.coach-only-card) h4,
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) h1,
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) h2,
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) h3,
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) h4,
 body.in-portal .view-header h1,
 body.in-portal .view-header h2,
 body.in-portal .view-header h3,
@@ -11147,7 +11294,7 @@ body.in-portal .sens-dash-welcome-slogan {
 
 /* Textos secundarios y metadatos en contenedores claros */
 body.in-portal .dash-welcome-card p,
-body.in-portal .card-panel:not(.coach-only-card) p,
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) p,
 body.in-portal .view-subtitle,
 body.in-portal .dash-sub,
 body.in-portal .sens-training-eyebrow,
@@ -11157,26 +11304,26 @@ body.in-portal .sens-objective-eyebrow {
 }
 
 /* Inputs en Tarjetas Blancas del Portal */
-body.in-portal .card-panel:not(.coach-only-card) .input-control {
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) .input-control {
     background: #F4F4F5 !important;
     border: 1px solid rgba(0, 0, 0, 0.1) !important;
     color: #09090B !important;
 }
 
-body.in-portal .card-panel:not(.coach-only-card) .input-control:focus {
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) .input-control:focus {
     border-color: #9E7D4B !important;
     box-shadow: 0 0 0 3px rgba(158, 125, 75, 0.15) !important;
 }
 
-body.in-portal .card-panel:not(.coach-only-card) .input-control::placeholder {
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) .input-control::placeholder {
     color: #A1A1AA !important;
 }
 
-body.in-portal .card-panel:not(.coach-only-card) .input-label {
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) .input-label {
     color: #71717A !important;
 }
 
-body.in-portal .card-panel:not(.coach-only-card) .diag-tag {
+body.in-portal .card-panel:not(.coach-only-card):not(.coach-surface-card):not(#coachHubView *) .diag-tag {
     background: #F4F4F5 !important;
     border: 1px solid rgba(0, 0, 0, 0.08) !important;
     color: #09090B !important;
@@ -13768,4 +13915,1160 @@ html.in-portal-mode body #homeFloatingSocial {
 html.in-portal-mode body #app-container {
     display: block !important;
 }
+
+/* =============================================================================
+   SENS COACH OS — QUIET LUXURY COMMAND CENTER (APPLE HEALTH & EQUINOX STANDARD)
+   Deep Onyx Obsidian (#080809) • Elevated Surfaces (#121214) • Champagne Gold (#E5CBA7)
+   ============================================================================= */
+
+/* Base View Container */
+#coachHubView {
+    background: #080809 !important;
+    background-color: #080809 !important;
+    color: #FFFFFF !important;
+    min-height: 100vh;
+    padding: 16px 14px 120px 14px;
+    box-sizing: border-box;
+}
+
+body.in-portal #coachHubView {
+    background-color: #080809 !important;
+}
+
+/* Global Typography inside Coach OS */
+#coachHubView h1,
+#coachHubView h2,
+#coachHubView h3,
+#coachHubView h4,
+#coachHubView strong,
+#coachHubView .coach-stat-val,
+#coachHubView .coach-ath-name,
+#coachHubView .coach-active-athlete-name {
+    color: #FFFFFF !important;
+}
+
+#coachHubView p,
+#coachHubView span:not(.text-champagne):not(.text-warning):not(.text-success):not(.pill-champagne):not(.status-dot):not(.coach-stat-val),
+#coachHubView small,
+#coachHubView label,
+#coachHubView .coach-stat-sub,
+#coachHubView .coach-ath-email,
+#coachHubView .coach-active-athlete-sub {
+    color: #A1A1AA !important;
+}
+
+/* Surface Cards & Containers */
+.coach-surface-card {
+    background: #121214 !important;
+    background-color: #121214 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 20px !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45) !important;
+    box-sizing: border-box;
+}
+
+/* Inputs, Selects & Textareas inside Coach OS */
+#coachHubView .input-control,
+#coachHubView select,
+#coachHubView textarea,
+.sheet-search-input {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #FFFFFF !important;
+    border-radius: 12px !important;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#coachHubView .input-control:focus,
+#coachHubView select:focus,
+#coachHubView textarea:focus,
+.sheet-search-input:focus {
+    border-color: #E5CBA7 !important;
+    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.18) !important;
+    outline: none !important;
+}
+
+#coachHubView .input-control::placeholder,
+#coachHubView textarea::placeholder,
+.sheet-search-input::placeholder {
+    color: #71717A !important;
+}
+
+#coachHubView .input-label {
+    color: #D4D4D8 !important;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* 1. Header del Hub */
+.coach-hub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 12px;
+}
+
+.coach-hub-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.coach-hub-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.3px;
+    margin: 0;
+    color: #FFFFFF !important;
+}
+
+.btn-coach-refresh-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #18181B;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #E5CBA7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-coach-refresh-circle:hover {
+    background: #27272A;
+    transform: rotate(45deg);
+}
+
+/* 2. Banner de Atleta en Edición Activa (Sleek Luxury Bar) */
+.coach-master-active-athlete-card {
+    background: #121214 !important;
+    border: 1px solid rgba(229, 203, 167, 0.25) !important;
+    border-radius: 16px !important;
+    padding: 10px 14px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.coach-active-athlete-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.coach-active-athlete-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.coach-active-athlete-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(229, 203, 167, 0.12);
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    color: #E5CBA7;
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.coach-active-athlete-info {
+    min-width: 0;
+}
+
+.coach-active-athlete-topline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.coach-active-athlete-eyebrow {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #B38B59 !important;
+    text-transform: uppercase;
+}
+
+.coach-active-athlete-name {
+    font-size: 13.5px;
+    font-weight: 800;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #FFFFFF !important;
+}
+
+.coach-active-athlete-sub {
+    font-size: 11px;
+    color: #A1A1AA !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.coach-active-athlete-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn-coach-action-pill {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #18181B;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-coach-action-pill.primary {
+    background: rgba(229, 203, 167, 0.14);
+    border-color: rgba(229, 203, 167, 0.35);
+    color: #E5CBA7;
+}
+
+.btn-coach-action-pill:hover {
+    background: #27272A;
+}
+
+.btn-coach-action-pill.primary:hover {
+    background: rgba(229, 203, 167, 0.22);
+}
+
+/* 3. Sub-Tabs de Navegación del Hub */
+.coach-subnav-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+}
+
+.coach-subnav-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.coach-subnav-btn {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #121214;
+    color: #A1A1AA;
+    font-size: 11.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.coach-subnav-btn:hover {
+    color: #FFFFFF;
+    background: #18181B;
+}
+
+.coach-subnav-btn.active {
+    background: #E5CBA7 !important;
+    border-color: #E5CBA7 !important;
+    color: #080809 !important;
+    font-weight: 800;
+    box-shadow: 0 2px 10px rgba(229, 203, 167, 0.3);
+}
+
+.coach-subpane {
+    display: none;
+}
+
+.coach-subpane.active {
+    display: block;
+    animation: coachFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes coachFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 4. Stat Bar 2x2 */
+.coach-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 640px) {
+    .coach-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.coach-stat-card {
+    background: #121214 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.coach-stat-card.highlight-pending {
+    border-color: rgba(245, 158, 11, 0.3) !important;
+    background: linear-gradient(135deg, #121214 0%, rgba(245, 158, 11, 0.06) 100%) !important;
+}
+
+.coach-stat-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #71717A !important;
+}
+
+.coach-stat-val {
+    font-size: 1.45rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #FFFFFF !important;
+    line-height: 1.2;
+}
+
+.coach-stat-val.text-warning {
+    color: #F59E0B !important;
+}
+
+.coach-stat-val.text-success {
+    color: #10B981 !important;
+}
+
+.coach-stat-sub {
+    font-size: 10.5px;
+    color: #71717A !important;
+}
+
+/* 5. Acordeón Desplegable de Planes de Negocio */
+.coach-business-tiers-wrapper {
+    margin-bottom: 12px;
+}
+
+.coach-tiers-toggle-btn {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: #121214;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #A1A1AA;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.coach-tiers-toggle-btn:hover {
+    background: #18181B;
+    color: #FFFFFF;
+}
+
+.tiers-toggle-chevron {
+    transition: transform 0.25s ease;
+}
+
+.coach-tiers-toggle-btn.expanded .tiers-toggle-chevron {
+    transform: rotate(180deg);
+}
+
+.coach-business-tiers-banner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+    animation: coachFadeIn 0.2s ease;
+}
+
+@media (max-width: 768px) {
+    .coach-business-tiers-banner {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.coach-tier-mini-card {
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.coach-tier-mini-card.highlight-saas {
+    border-color: rgba(229, 203, 167, 0.35) !important;
+    background: linear-gradient(145deg, #16161A 0%, rgba(229, 203, 167, 0.08) 100%) !important;
+}
+
+.tier-mini-tag {
+    font-size: 8.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #E5CBA7 !important;
+}
+
+.coach-tier-mini-card strong {
+    font-size: 12px;
+    font-weight: 800;
+    color: #FFFFFF !important;
+}
+
+.tier-mini-price {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #10B981 !important;
+    font-variant-numeric: tabular-nums;
+}
+
+.coach-tier-mini-card small {
+    font-size: 10px;
+    color: #71717A !important;
+    line-height: 1.3;
+}
+
+/* 6. Clinical Copilot & Goal Prescription Box */
+.coach-goal-prescription-box {
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px;
+    padding: 14px 16px;
+}
+
+.coach-ai-recommendation-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(18, 18, 22, 0.98) 0%, rgba(26, 26, 32, 0.98) 100%);
+    border: 1px solid rgba(229, 203, 167, 0.32);
+    border-radius: 16px;
+    padding: 14px 16px;
+    color: #FFFFFF;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.coach-ai-rec-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(229, 203, 167, 0.14);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    color: #E5CBA7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.coach-ai-rec-kicker {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: #E5CBA7;
+}
+
+.coach-ai-rec-text {
+    font-size: 12px;
+    color: #D4D4D8;
+    line-height: 1.45;
+    margin-top: 2px;
+}
+
+/* 7. Taxonomy Level Box */
+.coach-taxonomy-level-box {
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+}
+
+.coach-taxonomy-level-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.9px;
+    text-transform: uppercase;
+    color: #52525B;
+    margin-bottom: 8px;
+}
+
+.coach-kcal-sim-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: #121215;
+    color: #FFFFFF;
+    padding: 12px 16px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(229, 203, 167, 0.25);
+}
+
+.coach-kcal-sim-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #E4E4E7;
+}
+
+.coach-kcal-sim-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #E5CBA7;
+}
+
+.coach-kcal-sim-controls input {
+    width: 54px;
+    padding: 5px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    font-weight: 800;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.coach-master-lib-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+}
+
+.coach-lib-item-card {
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 18px !important;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.coach-lib-item-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(229, 203, 167, 0.3) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.coach-lib-tax-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.coach-lib-badge {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #A1A1AA;
+}
+
+.coach-lib-badge.badge-gold {
+    background: rgba(229, 203, 167, 0.16);
+    color: #E5CBA7;
+}
+
+.coach-lib-badge.badge-emerald {
+    background: rgba(16, 185, 129, 0.14);
+    color: #10B981;
+}
+
+.coach-lib-badge.badge-override {
+    background: rgba(59, 130, 246, 0.18);
+    color: #60A5FA;
+}
+
+.coach-lib-kcal-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 8px 10px;
+    text-align: center;
+}
+
+.coach-lib-kcal-cell span {
+    display: block;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #71717A;
+}
+
+.coach-lib-kcal-cell strong {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 5. DB Governance Alert & Read-Only 360 Dossier */
+.coach-db-governance-alert {
+    background: rgba(229, 203, 167, 0.08);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.coach-db-scope-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.db-scope-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.db-scope-option.active {
+    border-color: #E5CBA7;
+    background: rgba(229, 203, 167, 0.14);
+}
+
+.db-scope-option input[type="radio"] {
+    margin-top: 3px;
+    accent-color: #E5CBA7;
+}
+
+.db-scope-option strong {
+    display: block;
+    font-size: 12px;
+    color: #FFFFFF;
+}
+
+.db-scope-option small {
+    display: block;
+    font-size: 10.5px;
+    color: #A1A1AA;
+    line-height: 1.3;
+    margin-top: 2px;
+}
+
+@media (max-width: 560px) {
+    .coach-db-scope-selector {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dossier-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.dossier-section-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.dossier-section-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #E5CBA7;
+    margin: 0 0 10px 0;
+}
+
+.dossier-kv-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.dossier-kv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.07);
+    padding-bottom: 5px;
+}
+
+.dossier-kv-row span {
+    color: #A1A1AA;
+}
+
+.dossier-kv-row strong {
+    color: #FFFFFF;
+    font-weight: 700;
+    text-align: right;
+}
+
+@media (max-width: 600px) {
+    .dossier-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 6. Growth Marketing Studio (Plug & Play 1080x1350 / 1080x1920) */
+.sens-mkt-studio-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 960px) {
+    .sens-mkt-studio-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sens-mkt-step-card {
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+}
+
+.sens-mkt-step-title {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.9px;
+    text-transform: uppercase;
+    color: #E5CBA7 !important;
+    margin-bottom: 10px;
+}
+
+.sens-mkt-format-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+@media (max-width: 480px) {
+    .sens-mkt-format-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sens-mkt-format-btn {
+    text-align: left;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #18181B !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sens-mkt-format-btn strong {
+    font-size: 12px;
+    font-weight: 800;
+    color: #FFFFFF !important;
+}
+
+.sens-mkt-format-btn span {
+    font-size: 10.5px;
+    color: #71717A !important;
+}
+
+.sens-mkt-format-btn.active {
+    background: rgba(229, 203, 167, 0.12) !important;
+    border-color: #E5CBA7 !important;
+}
+
+.sens-mkt-format-btn.active strong {
+    color: #E5CBA7 !important;
+}
+
+.sens-mkt-format-btn.active span {
+    color: #D4D4D8 !important;
+}
+
+.sens-mkt-templates-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+@media (max-width: 480px) {
+    .sens-mkt-templates-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sens-mkt-tpl-card {
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #18181B !important;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.sens-mkt-tpl-card.active {
+    border-color: #E5CBA7 !important;
+    background: rgba(229, 203, 167, 0.14) !important;
+}
+
+.sens-mkt-tpl-cat {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #E5CBA7 !important;
+    display: block;
+}
+
+.sens-mkt-tpl-name {
+    font-size: 12px;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    display: block;
+    margin-top: 2px;
+}
+
+.sens-mkt-tpl-desc {
+    font-size: 10.5px;
+    color: #A1A1AA !important;
+    display: block;
+    margin-top: 2px;
+}
+
+.sens-mkt-timeline-bar,
+.sens-mkt-carousel-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.sens-mkt-carousel-bar {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.mkt-scene-btn,
+.mkt-slide-btn {
+    padding: 8px 6px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #18181B !important;
+    font-size: 11px;
+    font-weight: 700;
+    color: #A1A1AA !important;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.mkt-scene-btn.active,
+.mkt-slide-btn.active {
+    background: #09090B !important;
+    color: #E5CBA7 !important;
+    border-color: #E5CBA7 !important;
+}
+
+.sens-mkt-upload-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px;
+    border: 1.5px dashed rgba(229, 203, 167, 0.35) !important;
+    border-radius: 14px;
+    background: #141417 !important;
+    cursor: pointer;
+    text-align: center;
+    color: #FFFFFF !important;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sens-mkt-upload-zone:hover {
+    border-color: #E5CBA7 !important;
+    background: #18181B !important;
+}
+
+.sens-mkt-upload-zone span {
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+}
+
+.sens-mkt-upload-zone small {
+    font-size: 10.5px;
+    color: #71717A !important;
+}
+
+.sens-mkt-preview-column {
+    position: sticky;
+    top: 16px;
+}
+
+.sens-mkt-preview-frame-wrap {
+    background: #141417 !important;
+    border: 1px solid rgba(229, 203, 167, 0.25) !important;
+    border-radius: 20px;
+    padding: 14px;
+    color: #FFFFFF;
+}
+
+.sens-mkt-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #E5CBA7 !important;
+    margin-bottom: 10px;
+}
+
+.sens-mkt-canvas-stage {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #080809;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#mktStudioCanvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.sens-mkt-caption-box {
+    margin-top: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+/* 7. Bottom Sheet Nativo de Acciones del Alumno (Apple Health Grade) */
+.coach-sheet-action-item {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #18181B;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.coach-sheet-action-item:hover,
+.coach-sheet-action-item:active {
+    background: #222226;
+    border-color: rgba(229, 203, 167, 0.25);
+    transform: scale(0.99);
+}
+
+.coach-sheet-action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #E5CBA7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.coach-sheet-action-icon.wa-icon {
+    background: rgba(37, 211, 102, 0.12);
+    color: #25D366;
+}
+
+.coach-sheet-action-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.coach-sheet-action-text strong {
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+}
+
+.coach-sheet-action-text span {
+    font-size: 11px;
+    color: #71717A !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =============================================================================
+   COACH OS DYNAMIC WEEK STRIP & REAL-DATE CALENDAR (14/10, 15/10...)
+   ============================================================================= */
+#coachCalendarStickyWrapper {
+    background: #141416 !important;
+    border: 1px solid rgba(229, 203, 167, 0.2) !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 20px !important;
+}
+
+#coachCalendarStickyWrapper .sens-week-nav-btn {
+    background: #1C1C1F !important;
+    border: 1px solid rgba(229, 203, 167, 0.3) !important;
+    color: #E5CBA7 !important;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+#coachCalendarStickyWrapper .sens-week-nav-btn:hover {
+    background: var(--accent-champagne) !important;
+    color: #09090B !important;
+}
+
+.coach-week-day-pill {
+    background: #18181B !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 8px 10px !important;
+    min-width: 58px !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    color: #FFFFFF !important;
+}
+
+.coach-week-day-pill:hover {
+    background: #242428 !important;
+    border-color: rgba(229, 203, 167, 0.45) !important;
+}
+
+.coach-week-day-pill.active {
+    background: var(--accent-champagne) !important;
+    border-color: var(--accent-champagne) !important;
+    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.35) !important;
+}
+
+.coach-week-day-pill.active .sens-day-name,
+.coach-week-day-pill.active .sens-day-hero-num {
+    color: #09090B !important;
+}
+
+.coach-week-day-pill.is-today:not(.active) {
+    border-color: var(--accent-champagne) !important;
+    background: rgba(229, 203, 167, 0.1) !important;
+}
+
+.coach-week-day-pill .sens-day-name {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    color: #A1A1AA !important;
+    margin-bottom: 2px !important;
+}
+
+.coach-week-day-pill .sens-day-hero-num {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    line-height: 1.2 !important;
+    margin: 2px 0 3px 0 !important;
+}
+
+.coach-week-day-pill .sens-day-modality-indicator {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 18px !important;
+}
+
 

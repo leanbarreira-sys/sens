@@ -67,6 +67,24 @@ function getDayKeyFromDate(d) {
     return map[day] || 'day1';
 }
 
+const SENS_DAY_MAP = {
+    day1: { name: 'Lunes', short: 'LUN', index: 0 },
+    day2: { name: 'Martes', short: 'MAR', index: 1 },
+    day3: { name: 'Miércoles', short: 'MIÉ', index: 2 },
+    day4: { name: 'Jueves', short: 'JUE', index: 3 },
+    day5: { name: 'Viernes', short: 'VIE', index: 4 },
+    day6: { name: 'Sábado', short: 'SÁB', index: 5 },
+    day7: { name: 'Domingo', short: 'DOM', index: 6 }
+};
+
+function getDayNameFromKey(dayKey) {
+    return SENS_DAY_MAP[dayKey]?.name || 'Lunes';
+}
+
+function getDayShortFromKey(dayKey) {
+    return SENS_DAY_MAP[dayKey]?.short || 'LUN';
+}
+
 function getWeekRangeLabel(monday) {
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
@@ -252,6 +270,21 @@ const MOCK_USER_PROFILES = {
         goal_text: 'Movilidad & Tonificación',
         coach_message: 'Plan de rutina al día. Recordar marcar las series en la web para chequear los descansos.'
     },
+    client_app_subscription: {
+        id: 'usr-sub-005',
+        full_name: 'Sofía Alvear',
+        email: 'sofia.alvear@sens.com',
+        user_type: 'client_app_subscription',
+        role: 'user_normal',
+        active_plan_name: 'Suscripción App Generalista ($19.900/mes)',
+        plan_badge_text: 'Suscripción App • Autogestión',
+        sessions_week: '3 / 3',
+        current_weight: 61.0,
+        weight_diff: '-1.0 kg',
+        avg_steps: '9.800',
+        goal_text: 'Recomposición & Hábitos',
+        coach_message: 'Plan autogestionado activo con acceso completo a Biblioteca Maestra y seguimiento metabólico.'
+    },
     admin: {
         id: 'usr-adm-nico',
         full_name: 'Nico (Coach & Admin)',
@@ -337,42 +370,77 @@ const EXERCISE_CATALOG = [
 ];
 
 // -----------------------------------------------------------------------------
-// CATÁLOGO DE ALIMENTOS BASE & HÁBITOS (Curados por Nico)
+// CATÁLOGO DE ALIMENTOS BASE & HÁBITOS (Curados por Nico — Por Comida & Objetivo)
 // -----------------------------------------------------------------------------
 const FOOD_CATALOG = [
     // Proteínas
-    { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', cat: 'protein', baseGrams: 100, calPer100: 165, protPer100: 31, carbsPer100: 0, fatsPer100: 3.6, defaultGrams: 180, portion: '150 - 200g cocido', note: 'Proteína magra de altísimo valor biológico, digestión ágil y nula grasa saturada agregada.' },
-    { id: 'fd-p2', name: 'Huevos de Campo Enteros', cat: 'protein', baseGrams: 100, calPer100: 143, protPer100: 12.6, carbsPer100: 0.8, fatsPer100: 9.5, defaultGrams: 120, portion: '2 a 4 unidades diarias', note: 'Aporte completo de aminoácidos esenciales, colina para la función cerebral y grasas saludables.' },
-    { id: 'fd-p3', name: 'Carne Vacuna Magra (Lomo, Cuadril)', cat: 'protein', baseGrams: 100, calPer100: 195, protPer100: 28, carbsPer100: 0, fatsPer100: 8.5, defaultGrams: 180, portion: '150 - 200g (2-3x sem)', note: 'Rica en hierro hemínico, zinc y creatina natural para soporte de fuerza y masa muscular.' },
-    { id: 'fd-p4', name: 'Atún al Natural / Salmón Blanco', cat: 'protein', baseGrams: 100, calPer100: 130, protPer100: 28, carbsPer100: 0, fatsPer100: 1.5, defaultGrams: 150, portion: '1 lata o 150 - 180g filete', note: 'Proteína de fácil absorción y ácidos grasos que favorecen la recuperación tisular.' },
-    { id: 'fd-p5', name: 'Yogur Griego Natural (Sin Azúcar)', cat: 'protein', baseGrams: 100, calPer100: 97, protPer100: 10, carbsPer100: 3.8, fatsPer100: 5, defaultGrams: 170, portion: '150 - 200g', note: 'Rico en caseína de digestión lenta y probióticos para la salud de la microbiota intestinal.' },
-    { id: 'fd-p6', name: 'Tofu Firme Orgánico', cat: 'protein', baseGrams: 100, calPer100: 144, protPer100: 15.5, carbsPer100: 2.8, fatsPer100: 8.5, defaultGrams: 200, portion: '180 - 220g salteado', note: 'Excelente fuente de proteína vegetal completa para opciones basadas en plantas.' },
-    { id: 'fd-p7', name: 'Proteína de Suero (Whey Isolate)', cat: 'protein', baseGrams: 30, calPer100: 380, protPer100: 85, carbsPer100: 3, fatsPer100: 1.5, defaultGrams: 30, portion: '1 scoop (25-30g)', note: 'Practicidad óptima para alcanzar los gramos diarios de proteína sin sumar grasas extras.' },
+    { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', cat: 'protein', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 165, protPer100: 31, carbsPer100: 0, fatsPer100: 3.6, defaultGrams: 180, portion: '150 - 200g cocido', note: 'Proteína magra de altísimo valor biológico, digestión ágil y nula grasa saturada agregada.' },
+    { id: 'fd-p2', name: 'Huevos de Campo Enteros', cat: 'protein', meals: ['desayuno', 'merienda', 'cena', 'snacks'], goals: ['deficit', 'recomposicion', 'hipertrofia'], baseGrams: 100, calPer100: 143, protPer100: 12.6, carbsPer100: 0.8, fatsPer100: 9.5, defaultGrams: 120, portion: '2 a 4 unidades diarias', note: 'Aporte completo de aminoácidos esenciales, colina para la función cerebral y grasas saludables.' },
+    { id: 'fd-p3', name: 'Carne Vacuna Magra (Lomo, Cuadril)', cat: 'protein', meals: ['almuerzo', 'cena'], goals: ['recomposicion', 'hipertrofia'], baseGrams: 100, calPer100: 195, protPer100: 28, carbsPer100: 0, fatsPer100: 8.5, defaultGrams: 180, portion: '150 - 200g (2-3x sem)', note: 'Rica en hierro hemínico, zinc y creatina natural para soporte de fuerza y masa muscular.' },
+    { id: 'fd-p4', name: 'Atún al Natural / Salmón Blanco', cat: 'protein', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 130, protPer100: 28, carbsPer100: 0, fatsPer100: 1.5, defaultGrams: 150, portion: '1 lata o 150 - 180g filete', note: 'Proteína de fácil absorción y ácidos grasos que favorecen la recuperación tisular.' },
+    { id: 'fd-p5', name: 'Yogur Griego Natural (Sin Azúcar)', cat: 'protein', meals: ['desayuno', 'merienda', 'snacks'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 97, protPer100: 10, carbsPer100: 3.8, fatsPer100: 5, defaultGrams: 170, portion: '150 - 200g', note: 'Rico en caseína de digestión lenta y probióticos para la salud de la microbiota intestinal.' },
+    { id: 'fd-p6', name: 'Tofu Firme Orgánico', cat: 'protein', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 144, protPer100: 15.5, carbsPer100: 2.8, fatsPer100: 8.5, defaultGrams: 200, portion: '180 - 220g salteado', note: 'Excelente fuente de proteína vegetal completa para opciones basadas en plantas.' },
+    { id: 'fd-p7', name: 'Proteína de Suero (Whey Isolate)', cat: 'protein', meals: ['desayuno', 'merienda', 'snacks'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 30, calPer100: 380, protPer100: 85, carbsPer100: 3, fatsPer100: 1.5, defaultGrams: 30, portion: '1 scoop (25-30g)', note: 'Practicidad óptima para alcanzar los gramos diarios de proteína sin sumar grasas extras.' },
 
     // Carbohidratos
-    { id: 'fd-c1', name: 'Arroz Integral o Basmati al Vapor', cat: 'carbs', baseGrams: 100, calPer100: 130, protPer100: 2.7, carbsPer100: 28, fatsPer100: 0.3, defaultGrams: 160, portion: '1 taza cocida (150-180g)', note: 'Energía limpia y sostenida para reponer glucógeno muscular post-entrenamiento.' },
-    { id: 'fd-c2', name: 'Papa y Batata Horneadas con Piel', cat: 'carbs', baseGrams: 100, calPer100: 86, protPer100: 1.6, carbsPer100: 20, fatsPer100: 0.1, defaultGrams: 180, portion: '1 unidad mediana (180g)', note: 'Ricas en potasio, almidón resistente y gran poder de saciedad sin pesadez digestiva.' },
-    { id: 'fd-c3', name: 'Avena Arrollada Tradicional', cat: 'carbs', baseGrams: 100, calPer100: 379, protPer100: 13.5, carbsPer100: 67, fatsPer100: 6.5, defaultGrams: 50, portion: '40 - 60g en porridge', note: 'Fibra betaglucano que estabiliza la glucemia y brinda saciedad prolongada.' },
-    { id: 'fd-c4', name: 'Quinoa Cocida', cat: 'carbs', baseGrams: 100, calPer100: 120, protPer100: 4.4, carbsPer100: 21.3, fatsPer100: 1.9, defaultGrams: 150, portion: '1 taza cocida', note: 'Pseudocereal con perfil balanceado de carbohidratos complejos y micronutrientes.' },
-    { id: 'fd-c5', name: 'Frutas Enteras (Banana, Arándanos)', cat: 'carbs', baseGrams: 100, calPer100: 89, protPer100: 1.1, carbsPer100: 22.8, fatsPer100: 0.3, defaultGrams: 150, portion: '1 a 2 porciones al día', note: 'Antioxidantes naturales, vitaminas y fructosa natural para energía previa a la sesión.' },
-    { id: 'fd-c6', name: 'Pan de Masa Madre Genuino', cat: 'carbs', baseGrams: 100, calPer100: 245, protPer100: 8.5, carbsPer100: 48, fatsPer100: 1.2, defaultGrams: 70, portion: '1 a 2 rebanadas tostadas', note: 'Fermentación lenta que degrada antinutrientes facilitando la asimilación digestiva.' },
+    { id: 'fd-c1', name: 'Arroz Integral o Basmati al Vapor', cat: 'carbs', meals: ['almuerzo', 'cena'], goals: ['recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 130, protPer100: 2.7, carbsPer100: 28, fatsPer100: 0.3, defaultGrams: 160, portion: '1 taza cocida (150-180g)', note: 'Energía limpia y sostenida para reponer glucógeno muscular post-entrenamiento.' },
+    { id: 'fd-c2', name: 'Papa y Batata Horneadas con Piel', cat: 'carbs', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 86, protPer100: 1.6, carbsPer100: 20, fatsPer100: 0.1, defaultGrams: 180, portion: '1 unidad mediana (180g)', note: 'Ricas en potasio, almidón resistente y gran poder de saciedad sin pesadez digestiva.' },
+    { id: 'fd-c3', name: 'Avena Arrollada Tradicional', cat: 'carbs', meals: ['desayuno', 'merienda'], goals: ['recomposicion', 'hipertrofia'], baseGrams: 100, calPer100: 379, protPer100: 13.5, carbsPer100: 67, fatsPer100: 6.5, defaultGrams: 50, portion: '40 - 60g en porridge', note: 'Fibra betaglucano que estabiliza la glucemia y brinda saciedad prolongada.' },
+    { id: 'fd-c4', name: 'Quinoa Cocida', cat: 'carbs', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 120, protPer100: 4.4, carbsPer100: 21.3, fatsPer100: 1.9, defaultGrams: 150, portion: '1 taza cocida', note: 'Pseudocereal con perfil balanceado de carbohidratos complejos y micronutrientes.' },
+    { id: 'fd-c5', name: 'Frutas Enteras (Banana, Arándanos)', cat: 'carbs', meals: ['desayuno', 'merienda', 'snacks'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 89, protPer100: 1.1, carbsPer100: 22.8, fatsPer100: 0.3, defaultGrams: 150, portion: '1 a 2 porciones al día', note: 'Antioxidantes naturales, vitaminas y fructosa natural para energía previa a la sesión.' },
+    { id: 'fd-c6', name: 'Pan de Masa Madre Genuino', cat: 'carbs', meals: ['desayuno', 'merienda'], goals: ['recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 245, protPer100: 8.5, carbsPer100: 48, fatsPer100: 1.2, defaultGrams: 70, portion: '1 a 2 rebanadas tostadas', note: 'Fermentación lenta que degrada antinutrientes facilitando la asimilación digestiva.' },
 
     // Grasas Saludables
-    { id: 'fd-g1', name: 'Palta (Aguacate)', cat: 'healthy_fats', baseGrams: 100, calPer100: 160, protPer100: 2, carbsPer100: 8.5, fatsPer100: 14.7, defaultGrams: 80, portion: '1/2 unidad al día', note: 'Ácidos grasos monoinsaturados que apoyan la salud cardiovascular y hormonal.' },
-    { id: 'fd-g2', name: 'Aceite de Oliva Extra Virgen (Crudo)', cat: 'healthy_fats', baseGrams: 15, calPer100: 884, protPer100: 0, carbsPer100: 0, fatsPer100: 100, defaultGrams: 15, portion: '1 cucharada sopera (15ml)', note: 'Polifenoles y grasas antiinflamatorias esenciales para articulaciones.' },
-    { id: 'fd-g3', name: 'Frutos Secos (Nueces, Almendras)', cat: 'healthy_fats', baseGrams: 100, calPer100: 607, protPer100: 20, carbsPer100: 16, fatsPer100: 54, defaultGrams: 30, portion: '1 puñado cerrado (30g)', note: 'Densidad energética y magnesio para relajar el sistema neuromuscular.' },
-    { id: 'fd-g4', name: 'Semillas de Chía y Lino Molidas', cat: 'healthy_fats', baseGrams: 100, calPer100: 486, protPer100: 16.5, carbsPer100: 42, fatsPer100: 30.7, defaultGrams: 15, portion: '1 cucharadita en yogur', note: 'Ácido alfa-linolénico (Omega 3 vegetal) y fibra soluble reguladora.' },
+    { id: 'fd-g1', name: 'Palta (Aguacate)', cat: 'healthy_fats', meals: ['desayuno', 'almuerzo', 'merienda', 'cena'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 160, protPer100: 2, carbsPer100: 8.5, fatsPer100: 14.7, defaultGrams: 80, portion: '1/2 unidad al día', note: 'Ácidos grasos monoinsaturados que apoyan la salud cardiovascular y hormonal.' },
+    { id: 'fd-g2', name: 'Aceite de Oliva Extra Virgen (Crudo)', cat: 'healthy_fats', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 15, calPer100: 884, protPer100: 0, carbsPer100: 0, fatsPer100: 100, defaultGrams: 15, portion: '1 cucharada sopera (15ml)', note: 'Polifenoles y grasas antiinflamatorias esenciales para articulaciones.' },
+    { id: 'fd-g3', name: 'Frutos Secos (Nueces, Almendras)', cat: 'healthy_fats', meals: ['desayuno', 'merienda', 'snacks'], goals: ['recomposicion', 'hipertrofia'], baseGrams: 100, calPer100: 607, protPer100: 20, carbsPer100: 16, fatsPer100: 54, defaultGrams: 30, portion: '1 puñado cerrado (30g)', note: 'Densidad energética y magnesio para relajar el sistema neuromuscular.' },
+    { id: 'fd-g4', name: 'Semillas de Chía y Lino Molidas', cat: 'healthy_fats', meals: ['desayuno', 'merienda', 'snacks'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 486, protPer100: 16.5, carbsPer100: 42, fatsPer100: 30.7, defaultGrams: 15, portion: '1 cucharadita en yogur', note: 'Ácido alfa-linolénico (Omega 3 vegetal) y fibra soluble reguladora.' },
 
     // Hidratación y Vegetales
-    { id: 'fd-h1', name: 'Agua Mineral / Filtrada', cat: 'hydration_veg', baseGrams: 100, calPer100: 0, protPer100: 0, carbsPer100: 0, fatsPer100: 0, defaultGrams: 500, portion: '35ml/kg (2.5L a 3.5L/día)', note: 'El medio fundamental para el rendimiento muscular y la eliminación de fatiga.' },
-    { id: 'fd-h2', name: 'Vegetales de Hoja Verde (Espinaca, Rúcula)', cat: 'hydration_veg', baseGrams: 100, calPer100: 23, protPer100: 2.9, carbsPer100: 3.6, fatsPer100: 0.4, defaultGrams: 120, portion: 'Libre en almuerzo y cena', note: 'Nitratos naturales para vasodilatación y micronutrientes sin calorías vacías.' },
-    { id: 'fd-h3', name: 'Brócoli y Espárragos al Vapor', cat: 'hydration_veg', baseGrams: 100, calPer100: 34, protPer100: 2.8, carbsPer100: 6.6, fatsPer100: 0.4, defaultGrams: 150, portion: '1 taza colmada', note: 'Crucíferas con componentes antioxidantes y soporte a la digestión.' }
+    { id: 'fd-h1', name: 'Agua Mineral / Filtrada', cat: 'hydration_veg', meals: ['desayuno', 'almuerzo', 'merienda', 'cena', 'snacks'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 0, protPer100: 0, carbsPer100: 0, fatsPer100: 0, defaultGrams: 500, portion: '35ml/kg (2.5L a 3.5L/día)', note: 'El medio fundamental para el rendimiento muscular y la eliminación de fatiga.' },
+    { id: 'fd-h2', name: 'Vegetales de Hoja Verde (Espinaca, Rúcula)', cat: 'hydration_veg', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 23, protPer100: 2.9, carbsPer100: 3.6, fatsPer100: 0.4, defaultGrams: 120, portion: 'Libre en almuerzo y cena', note: 'Nitratos naturales para vasodilatación y micronutrientes sin calorías vacías.' },
+    { id: 'fd-h3', name: 'Brócoli y Espárragos al Vapor', cat: 'hydration_veg', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 34, protPer100: 2.8, carbsPer100: 6.6, fatsPer100: 0.4, defaultGrams: 150, portion: '1 taza colmada', note: 'Crucíferas con componentes antioxidantes y soporte a la digestión.' }
 ];
 
-// Rutinas Preconfiguradas para SENS TRAIN (1 a 6 Días Programables)
+// Hidratación y gobernanza de Base Maestra vs. Alumno Puntual para Alimentos
+window.getResolvedFood = function(foodOrId, athleteId) {
+    const baseFood = typeof foodOrId === 'string'
+        ? FOOD_CATALOG.find(f => f.id === foodOrId)
+        : foodOrId;
+    if (!baseFood) return null;
+
+    let resolved = Object.assign({}, baseFood);
+    try {
+        const globalOverrides = JSON.parse(localStorage.getItem('sens_global_food_overrides_v1') || '{}');
+        if (globalOverrides[baseFood.id]) {
+            Object.assign(resolved, globalOverrides[baseFood.id], { _hasGlobalOverride: true });
+        }
+        if (athleteId) {
+            const athOverrides = JSON.parse(localStorage.getItem('sens_athlete_food_overrides_' + athleteId) || '{}');
+            if (athOverrides[baseFood.id]) {
+                Object.assign(resolved, athOverrides[baseFood.id], { _hasAthleteOverride: true });
+            }
+        }
+    } catch (e) {}
+    return resolved;
+};
+
+window.hydrateFoodCatalogInMemory = function() {
+    try {
+        const globalOverrides = JSON.parse(localStorage.getItem('sens_global_food_overrides_v1') || '{}');
+        FOOD_CATALOG.forEach(f => {
+            if (globalOverrides[f.id]) {
+                Object.assign(f, globalOverrides[f.id], { _hasGlobalOverride: true });
+            }
+        });
+    } catch (e) {}
+};
+window.hydrateFoodCatalogInMemory();
+
+// Rutinas Preconfiguradas para SENS TRAIN (Lunes a Domingo)
 const WORKOUT_DAYS_DATA = {
     day1: {
-        title: 'Día 1: Tren Superior (Empuje / Tirón)',
+        title: 'Lunes: Tren Superior (Empuje / Tirón)',
         modality: 'presencial',
         completed: true,
         exercises: [
@@ -419,7 +487,7 @@ const WORKOUT_DAYS_DATA = {
         ]
     },
     day2: {
-        title: 'Día 2: Tren Inferior (Fuerza & Cadera)',
+        title: 'Martes: Tren Inferior (Fuerza & Cadera)',
         modality: 'online',
         completed: true,
         exercises: [
@@ -466,7 +534,7 @@ const WORKOUT_DAYS_DATA = {
         ]
     },
     day3: {
-        title: 'Día 3: Full Body & Conciencia Postural',
+        title: 'Miércoles: Full Body & Conciencia Postural',
         modality: 'presencial',
         completed: true,
         exercises: [
@@ -513,7 +581,7 @@ const WORKOUT_DAYS_DATA = {
         ]
     },
     day4: {
-        title: 'Día 4: Core & Movilidad (Casa / Edificio)',
+        title: 'Jueves: Core & Movilidad (Casa / Edificio)',
         modality: 'online',
         completed: false,
         exercises: [
@@ -550,7 +618,7 @@ const WORKOUT_DAYS_DATA = {
         ]
     },
     day5: {
-        title: 'Día 5: Fuerza & Potencia Funcional',
+        title: 'Viernes: Fuerza & Potencia Funcional',
         modality: 'autonomo',
         completed: false,
         exercises: [
@@ -587,7 +655,7 @@ const WORKOUT_DAYS_DATA = {
         ]
     },
     day6: {
-        title: 'Día 6: Cardio Zona 2 & Recuperación',
+        title: 'Sábado: Cardio Zona 2 & Recuperación',
         modality: 'descanso',
         completed: false,
         exercises: [
@@ -614,7 +682,7 @@ const WORKOUT_DAYS_DATA = {
         ]
     },
     day7: {
-        title: 'Día 7: Descanso Celular & Regeneración',
+        title: 'Domingo: Descanso Celular & Regeneración',
         modality: 'descanso',
         completed: false,
         exercises: []
@@ -1038,9 +1106,10 @@ function applyUserProfile(userTypeKey) {
 }
 
 // =============================================================================
-// NUEVO: MODAL DE BIBLIOTECA MAESTRA (50 EJERCICIOS) & BÚSQUEDA
+// NUEVO: MODAL DE BIBLIOTECA MAESTRA (TAXONOMÍA 3 NIVELES + KCAL + EDITOR DB)
 // =============================================================================
 let activeLibraryGroup = 'all';
+let activeLibraryLegsSub = 'all';
 
 function initExerciseCatalogModal() {
     const modal = document.getElementById('exerciseLibraryModal');
@@ -1048,6 +1117,7 @@ function initExerciseCatalogModal() {
     const closeBtn = document.getElementById('closeLibraryModalBtn');
     const searchInput = document.getElementById('libSearchInput');
     const pillStrip = document.getElementById('libGroupPillStrip');
+    const legsSubStrip = document.getElementById('libLegsSubPillStrip');
 
     if (openBtn) {
         openBtn.addEventListener('click', () => {
@@ -1075,6 +1145,23 @@ function initExerciseCatalogModal() {
                 pillStrip.querySelectorAll('.lib-pill-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 activeLibraryGroup = btn.getAttribute('data-group') || 'all';
+                if (legsSubStrip) {
+                    legsSubStrip.style.display = (activeLibraryGroup === 'piernas') ? 'flex' : 'none';
+                }
+                if (activeLibraryGroup !== 'piernas') {
+                    activeLibraryLegsSub = 'all';
+                }
+                renderExerciseLibraryList();
+            });
+        });
+    }
+
+    if (legsSubStrip) {
+        legsSubStrip.querySelectorAll('.lib-subpill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                legsSubStrip.querySelectorAll('.lib-subpill-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeLibraryLegsSub = btn.getAttribute('data-subgroup') || 'all';
                 renderExerciseLibraryList();
             });
         });
@@ -1088,35 +1175,37 @@ function renderExerciseLibraryList() {
 
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const selectedGroup = activeLibraryGroup || 'all';
+    const selectedSub = activeLibraryLegsSub || 'all';
+    const currentAthId = coachWorkoutState.activeAthleteId || getActiveAthleteId();
 
     const sourceLibrary = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_EXERCISE_LIBRARY.length > 0)
         ? SENS_EXERCISE_LIBRARY
         : EXERCISE_CATALOG;
 
-    const filtered = sourceLibrary.filter(ex => {
-        const tax = (typeof getExerciseTaxonomy === 'function') 
-            ? getExerciseTaxonomy(ex) 
-            : { type: 'muscular', muscleGroup: 'piernas' };
+    const filtered = sourceLibrary.filter(rawEx => {
+        const ex = (typeof window.getResolvedExercise === 'function')
+            ? window.getResolvedExercise(rawEx, currentAthId)
+            : rawEx;
+        const tax = (typeof getExerciseTaxonomy === 'function')
+            ? getExerciseTaxonomy(ex)
+            : { type: 'muscular', muscleGroup: 'piernas', subMuscle: null };
 
         let matchGroup = false;
         if (selectedGroup === 'all') {
             matchGroup = true;
-        } else if (selectedGroup === 'muscular') {
-            matchGroup = (tax.type === 'muscular');
-        } else if (selectedGroup === 'cardio') {
-            matchGroup = (tax.type === 'cardio');
-        } else if (selectedGroup === 'movilidad') {
-            matchGroup = (tax.type === 'movilidad');
-        } else if (selectedGroup === 'yoga') {
-            matchGroup = (tax.type === 'yoga');
-        } else if (['piernas', 'biceps', 'triceps', 'espalda', 'pecho', 'abdominales'].includes(selectedGroup)) {
+        } else if (['muscular', 'cardio', 'movilidad', 'yoga'].includes(selectedGroup)) {
+            matchGroup = (tax.type === selectedGroup);
+        } else if (['piernas', 'biceps', 'triceps', 'pecho', 'espalda', 'abdominales', 'hombros', 'zona_lumbar', 'antebrazos'].includes(selectedGroup)) {
             matchGroup = (tax.muscleGroup === selectedGroup);
+            if (matchGroup && selectedGroup === 'piernas' && selectedSub !== 'all') {
+                matchGroup = (tax.subMuscle === selectedSub);
+            }
         } else {
             const cat = (ex.category || ex.muscle_group || '').toLowerCase();
-            matchGroup = (cat === selectedGroup || (ex.muscle_group || '').toLowerCase() === selectedGroup);
+            matchGroup = (cat === selectedGroup);
         }
 
-        const matchQuery = !query || 
+        const matchQuery = !query ||
             (ex.name && ex.name.toLowerCase().includes(query)) ||
             (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(query)) ||
             (ex.execution && ex.execution.toLowerCase().includes(query)) ||
@@ -1132,16 +1221,25 @@ function renderExerciseLibraryList() {
         return;
     }
 
-    const currentAthId = coachWorkoutState.activeAthleteId || getActiveAthleteId();
     const currentDay = coachWorkoutState.activeDay || AppState.currentDay || 'day1';
     const dayName = currentDay.toUpperCase();
+    const isAdmin = isCurrentUserAdmin();
 
     let html = '';
-    filtered.forEach(ex => {
-        const tax = (typeof getExerciseTaxonomy === 'function') ? getExerciseTaxonomy(ex) : { type: 'muscular', typeLabel: 'Muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas' };
-        const primaryMusc = ex.primary_muscle || (tax.type === 'muscular' ? tax.muscleLabel : tax.typeLabel);
+    filtered.forEach(rawEx => {
+        const ex = (typeof window.getResolvedExercise === 'function')
+            ? window.getResolvedExercise(rawEx, currentAthId)
+            : rawEx;
+        const tax = (typeof getExerciseTaxonomy === 'function')
+            ? getExerciseTaxonomy(ex)
+            : { type: 'muscular', typeLabel: 'Muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas', subMuscleLabel: null };
+        const kcalData = (typeof window.calculateExerciseKcal === 'function')
+            ? window.calculateExerciseKcal(ex, ex.default_sets || 3, ex.default_reps || '10-12')
+            : { kcalPerRep: 0.45, kcalPerSet: 5, totalKcal: 15 };
+
         const cueText = ex.recommendations || ex.cue || 'Ejecución controlada con rango completo.';
         const execText = ex.execution || '';
+        const mistakesText = ex.common_mistakes || '';
         const levelLabel = ex.level || 'Intermedio';
         const restSec = ex.rest || ex.rest_seconds || 90;
         const setsVal = ex.default_sets || ex.sets || 3;
@@ -1153,20 +1251,23 @@ function renderExerciseLibraryList() {
                     <div style="flex: 1; min-width: 240px;">
                         <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
                             <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800; padding: 2px 7px;">${tax.typeLabel.toUpperCase()}</span>
-                            ${tax.type === 'muscular' ? `<span class="pill pill-dark" style="font-size: 9px; color: var(--accent-primary); border: none;">${tax.muscleLabel}</span>` : ''}
+                            ${tax.muscleLabel ? `<span class="pill pill-dark" style="font-size: 9px; color: var(--accent-primary); border: none;">${tax.muscleLabel}</span>` : ''}
+                            ${tax.subMuscleLabel ? `<span class="pill pill-dark" style="font-size: 9px; color: #10B981; border: none;">${tax.subMuscleLabel}</span>` : ''}
                             <span class="pill pill-dark" style="font-size: 9px; color: var(--text-muted); border: none;">${levelLabel}</span>
-                            <span style="font-size: 11px; color: var(--text-muted); margin-left: auto;">Descanso: ${restSec}s</span>
+                            <span style="font-size: 11px; color: #E5CBA7; font-weight: 700; margin-left: auto;">~${kcalData.totalKcal} kcal (${kcalData.kcalPerSet} kcal/serie)</span>
                         </div>
                         <h4 style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">${ex.name}</h4>
-                        ${execText ? `<p style="font-size: 12px; color: var(--text-secondary); margin: 0 0 6px 0; line-height: 1.4;"><strong>Técnica:</strong> ${execText}</p>` : ''}
+                        ${execText ? `<p style="font-size: 12px; color: var(--text-secondary); margin: 0 0 5px 0; line-height: 1.4;"><strong>Cómo hacerlo:</strong> ${execText}</p>` : ''}
+                        ${mistakesText ? `<p style="font-size: 11.5px; color: #FCA5A5; margin: 0 0 6px 0; line-height: 1.35;"><strong>Cómo NO hacerlo:</strong> ${mistakesText}</p>` : ''}
                         <div style="background: rgba(229, 203, 167, 0.06); border-left: 3px solid var(--accent-primary); border-radius: 4px; padding: 6px 10px; font-size: 11.5px; color: var(--text-secondary); line-height: 1.4;">
                             <strong style="color: var(--accent-primary);">Recomendación Nico:</strong> ${cueText}
                         </div>
                     </div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; gap: 8px; flex-wrap: wrap;">
-                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Sugerido: ${setsVal} series × ${repsVal}</span>
-                    <div style="display: flex; gap: 8px; align-items: center;">
+                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Sugerido: ${setsVal} series × ${repsVal} • Descanso: ${restSec}s</span>
+                    <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                        ${isAdmin ? `<button type="button" class="btn btn-outline btn-sm btn-lib-edit-db" data-ex-id="${ex.id}" style="font-size: 11px; padding: 5px 10px; border-color: rgba(229,203,167,0.35); color: #E5CBA7;">Editar Ficha Base</button>` : ''}
                         <button type="button" class="btn btn-outline btn-sm btn-lib-video" data-video-title="${ex.name}" data-video-cue="${cueText}" style="font-size: 11px; padding: 5px 12px; border-color: rgba(255,255,255,0.2);">
                             ▶ Ver Técnica
                         </button>
@@ -1181,7 +1282,15 @@ function renderExerciseLibraryList() {
 
     listContainer.innerHTML = html;
 
-    // Listeners
+    listContainer.querySelectorAll('.btn-lib-edit-db').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const exId = btn.getAttribute('data-ex-id');
+            if (typeof window.openCoachDbItemEditor === 'function') {
+                window.openCoachDbItemEditor('exercise', exId);
+            }
+        });
+    });
+
     listContainer.querySelectorAll('.btn-lib-video').forEach(btn => {
         btn.addEventListener('click', () => {
             const title = btn.getAttribute('data-video-title');
@@ -1195,8 +1304,11 @@ function renderExerciseLibraryList() {
             const exId = btn.getAttribute('data-ex-id');
             const exName = btn.getAttribute('data-ex-name');
             const sourceLibrary = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
-            const targetEx = sourceLibrary.find(e => e.id === exId);
-            if (targetEx) {
+            const rawTarget = sourceLibrary.find(e => e.id === exId);
+            if (rawTarget) {
+                const targetEx = (typeof window.getResolvedExercise === 'function')
+                    ? window.getResolvedExercise(rawTarget, currentAthId)
+                    : rawTarget;
                 const tax = (typeof getExerciseTaxonomy === 'function') ? getExerciseTaxonomy(targetEx) : { type: 'muscular', muscleGroup: 'piernas' };
                 const targetDay = coachWorkoutState.activeDay || AppState.currentDay || 'day1';
                 const targetAth = coachWorkoutState.activeAthleteId || getActiveAthleteId();
@@ -1209,6 +1321,7 @@ function renderExerciseLibraryList() {
                     name: targetEx.name,
                     exercise_type: tax.type,
                     muscle_group: tax.muscleGroup,
+                    sub_muscle: tax.subMuscle || null,
                     notes: targetEx.recommendations || targetEx.cue || 'Cadencia y control biomecánico',
                     sets: targetEx.default_sets || 3,
                     reps: targetEx.default_reps || '10-12',
@@ -2583,9 +2696,18 @@ function switchPortalView(viewId) {
         const subNav = document.getElementById('portalSubNav');
         const isExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection');
         if (subNav) subNav.style.display = isExcluded ? 'none' : 'flex';
-        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
-            dock.style.display = isExcluded ? 'none' : 'flex';
-        });
+        const athleteDock = document.getElementById('sensFloatingDock');
+        const coachDock = document.getElementById('sensCoachFloatingDock');
+        if (isExcluded) {
+            if (athleteDock) athleteDock.style.display = 'none';
+            if (coachDock) coachDock.style.display = 'none';
+        } else if (viewId === 'coachHubView') {
+            if (athleteDock) athleteDock.style.display = 'none';
+            if (coachDock) coachDock.style.display = 'flex';
+        } else {
+            if (athleteDock) athleteDock.style.display = 'flex';
+            if (coachDock) coachDock.style.display = 'none';
+        }
     }
 
     const navItems = document.querySelectorAll('.portal-nav-item[data-portal-tab]');
@@ -2762,9 +2884,10 @@ function openUserPortal(forceOnboarding = false) {
     } else {
         // Redirige al Dashboard de Atleta
         document.getElementById('portalSubNav').style.display = 'flex';
-        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
-            dock.style.display = 'flex';
-        });
+        const athleteDock = document.getElementById('sensFloatingDock');
+        const coachDock = document.getElementById('sensCoachFloatingDock');
+        if (athleteDock) athleteDock.style.display = 'flex';
+        if (coachDock) coachDock.style.display = 'none';
         renderDashboardData();
         renderWorkoutDay(AppState.currentDay || 'day1');
         switchPortalView('dashView');
@@ -4308,16 +4431,19 @@ function athleteHasAssignedRoutine(athId) {
 }
 
 function getActiveAthleteId() {
+    // 1. Si es un alumno regular, SIEMPRE retornar su ID propio de Supabase/perfil
+    if (!isCurrentUserAdmin()) {
+        if (AppState.user && AppState.user.id) return AppState.user.id;
+        if (AppState.profile && AppState.profile.id) return AppState.profile.id;
+    }
+    // 2. Si es el coach en Coach OS o impersonando a un atleta:
     if (coachWorkoutState && coachWorkoutState.activeAthleteId) {
         return coachWorkoutState.activeAthleteId;
     }
-    if (AppState.user && AppState.user.id) {
-        return AppState.user.id;
-    }
-    if (AppState.profile && AppState.profile.id) {
-        return AppState.profile.id;
-    }
-    return 'usr-vip-001';
+    // 3. Fallbacks
+    if (AppState.user && AppState.user.id) return AppState.user.id;
+    if (AppState.profile && AppState.profile.id) return AppState.profile.id;
+    return null;
 }
 
 function getAthleteExerciseLogs(athId, exId) {
@@ -4466,13 +4592,23 @@ function renderWorkoutDay(dayKey) {
         return;
     }
 
+    const userWeight = parseFloat(AppState.profile?.current_weight || AppState.anamnesis?.weight || 75) || 75;
+    let totalWorkoutKcal = 0;
+    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+
     let html = '';
     exercisesToShow.forEach((ex, idx) => {
-        const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
-        const catalogMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || {};
+        const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
+        const catalogMatch = (typeof window.getResolvedExercise === 'function')
+            ? window.getResolvedExercise(rawMatch, athId)
+            : rawMatch;
         const muscleTag = catalogMatch.category || catalogMatch.muscle_group ? formatMuscleGroup(catalogMatch.category || catalogMatch.muscle_group) : 'Fuerza';
         const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
         const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Peso Corporal';
+        const kcalData = (typeof window.calculateExerciseKcal === 'function')
+            ? window.calculateExerciseKcal(catalogMatch, ex.sets || 3, ex.reps || 10, userWeight)
+            : { kcalPerSet: 7, totalKcal: 21 };
+        totalWorkoutKcal += kcalData.totalKcal;
 
         html += `
             <div class="sens-exercise-video-card" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}')">
@@ -4482,12 +4618,12 @@ function renderWorkoutDay(dayKey) {
                 <div class="sens-exercise-card-gradient"></div>
                 <div class="sens-exercise-top-pills">
                     <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">${muscleTag}</span>
-                    <span class="pill pill-dark" style="font-size: 9.5px; font-weight: 700; background: rgba(18, 18, 20, 0.88); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2);">${ex.sets || 3} Series × ${ex.reps || 10}</span>
+                    <span class="pill pill-dark" style="font-size: 9.5px; font-weight: 700; background: rgba(18, 18, 20, 0.88); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2);">${ex.sets || 3} Series × ${ex.reps || 10} • ~${kcalData.totalKcal} kcal</span>
                 </div>
                 <div class="sens-exercise-card-content">
-                    <h3 class="sens-exercise-card-title" style="color: #FFFFFF !important; font-weight: 800; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);">${ex.name}</h3>
+                    <h3 class="sens-exercise-card-title" style="color: #FFFFFF !important; font-weight: 800; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);">${catalogMatch.name || ex.name}</h3>
                     <div class="sens-exercise-card-meta" style="color: rgba(255, 255, 255, 0.92) !important; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);">
-                        <span>Descanso: ${ex.rest || 90}s</span> • <span>Sugerido: ${weightLabel}</span>
+                        <span>Descanso: ${ex.rest || 90}s</span> • <span>Sugerido: ${weightLabel}</span> • <span>~${kcalData.kcalPerSet} kcal/serie</span>
                     </div>
                     <div class="sens-exercise-card-cta" style="color: #E5CBA7 !important; font-weight: 700; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);">
                         Tocar para iniciar serie &amp; técnica →
@@ -4496,6 +4632,10 @@ function renderWorkoutDay(dayKey) {
             </div>
         `;
     });
+
+    if (heroSub) {
+        heroSub.textContent = `${exercisesToShow.length} Ejercicios asignados • ~${Math.max(30, exercisesToShow.length * 12)} min • Gasto estimado: ~${totalWorkoutKcal} kcal`;
+    }
 
     container.innerHTML = html;
 }
@@ -4515,11 +4655,21 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     clearInterval(modalExerciseState.restInterval);
 
     const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
-    const catalogMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || {};
+    const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
+    const catalogMatch = (typeof window.getResolvedExercise === 'function')
+        ? window.getResolvedExercise(rawMatch, athId)
+        : rawMatch;
+    const userWeight = parseFloat(AppState.profile?.current_weight || AppState.anamnesis?.weight || 75) || 75;
+    const kcalData = (typeof window.calculateExerciseKcal === 'function')
+        ? window.calculateExerciseKcal(catalogMatch, ex.sets || 4, ex.reps || '10-12', userWeight)
+        : { kcalPerSet: 7, totalKcal: 28 };
+
     const muscleName = catalogMatch.category || catalogMatch.muscle_group 
         ? formatMuscleGroup(catalogMatch.category || catalogMatch.muscle_group)
         : 'Piernas & Glúteos';
-    const cueTechnical = ex.notes || catalogMatch.recommendations || catalogMatch.cue || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
+    const cueTechnical = catalogMatch.execution || ex.notes || catalogMatch.cue || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
+    const commonMistakes = catalogMatch.common_mistakes || 'Evitar rebotes articulares, pérdida de neutralidad lumbar o apnea prolongada.';
+    const nicoRecs = ex.notes || catalogMatch.recommendations || 'Mantener el pecho erguido, control respiratorio y 1 segundo de pausa isométrica en el punto de máxima contracción. Detener la serie en RIR 2.';
 
     const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
 
@@ -4534,15 +4684,20 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     const restDisplay = document.getElementById('modalExRestDisplay');
     const btnTut = document.getElementById('btnModalToggleTut');
 
-    if (modalName) modalName.textContent = ex.name;
+    if (modalName) modalName.textContent = catalogMatch.name || ex.name;
     if (modalMuscle) modalMuscle.textContent = muscleName;
-    if (modalSetsReps) modalSetsReps.textContent = `${ex.sets || 4} Series • ${ex.reps || '10-12'} Reps`;
+    if (modalSetsReps) modalSetsReps.textContent = `${ex.sets || 4} Series • ${ex.reps || '10-12'} Reps • ~${kcalData.totalKcal} kcal (${kcalData.kcalPerSet} kcal/serie)`;
     if (modalVideo) {
         modalVideo.src = videoSrc;
         modalVideo.play().catch(() => {});
     }
     if (modalCue) modalCue.textContent = cueTechnical;
-    if (modalNotes) modalNotes.textContent = `Recomendación de Nico: Mantener el pecho erguido, control respiratorio y 1 segundo de pausa isométrica en el punto de máxima contracción. Detener la serie en RIR 2 sin llegar al fallo lesivo.`;
+    if (modalNotes) {
+        modalNotes.innerHTML = `
+            <div style="margin-bottom: 8px;"><strong style="color: #F4A261;">Cómo NO hacerlo (Errores a evitar):</strong> ${commonMistakes}</div>
+            <div><strong style="color: var(--accent-champagne);">Recomendación de Nico:</strong> ${nicoRecs}</div>
+        `;
+    }
     if (tutDisplay) tutDisplay.textContent = '00:00';
     if (btnTut) btnTut.textContent = 'Iniciar Serie';
 
@@ -5745,16 +5900,57 @@ function initCoachOS() {
         });
     }
 
+    // Función unificada para cambiar de Sub-Tab en Coach Hub (sincroniza Subnav y Dock Inferior)
+    window.switchCoachSubTab = function(targetPaneId) {
+        const resolvedPaneId = targetPaneId === 'paneDatabases' ? 'paneLibrary' : targetPaneId;
+        document.querySelectorAll('#coachHubSubnav .coach-subnav-btn').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-subtab') === resolvedPaneId);
+        });
+        document.querySelectorAll('#sensCoachFloatingDock .coach-dock-btn, #sensCoachFloatingDock .sens-coach-dock-btn').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-coach-subtab') === resolvedPaneId);
+        });
+        document.querySelectorAll('#coachHubView .coach-subpane').forEach(p => {
+            p.classList.toggle('active', p.id === resolvedPaneId);
+        });
+
+        // 3. Marketing Studio es de uso exclusivo de Coach Nico (ocultar tarjeta de alumno)
+        const masterCard = document.getElementById('coachMasterActiveAthleteCard');
+        if (masterCard) {
+            masterCard.style.display = (resolvedPaneId === 'paneMarketing') ? 'none' : '';
+        }
+
+        if (resolvedPaneId === 'paneWorkouts') {
+            if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
+            if (typeof renderCoachAssignedExercises === 'function') renderCoachAssignedExercises();
+        }
+        if (resolvedPaneId === 'paneLibrary' && typeof window.renderCoachDatabasesTab === 'function') {
+            window.renderCoachDatabasesTab();
+        }
+        if (resolvedPaneId === 'paneMarketing' && typeof window.renderCoachMarketingStudio === 'function') {
+            window.renderCoachMarketingStudio();
+        }
+    };
+
     // Navegación de Sub-Tabs dentro de Coach Hub
     const subnavBtns = document.querySelectorAll('#coachHubSubnav .coach-subnav-btn');
     subnavBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            subnavBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
             const targetPaneId = btn.getAttribute('data-subtab');
-            document.querySelectorAll('#coachHubView .coach-subpane').forEach(p => p.classList.remove('active'));
-            const targetPane = document.getElementById(targetPaneId);
-            if (targetPane) targetPane.classList.add('active');
+            if (targetPaneId) window.switchCoachSubTab(targetPaneId);
+        });
+    });
+
+    // Navegación desde el Floating Dock Inferior Exclusivo de Coach OS
+    document.querySelectorAll('#sensCoachFloatingDock .coach-dock-btn, #sensCoachFloatingDock .sens-coach-dock-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetPaneId = btn.getAttribute('data-coach-subtab');
+            if (targetPaneId) {
+                if (!document.getElementById('coachHubView')?.classList.contains('active')) {
+                    switchPortalView('coachHubView');
+                }
+                window.switchCoachSubTab(targetPaneId);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         });
     });
 
@@ -5763,6 +5959,9 @@ function initCoachOS() {
     initCoachNutritionPrescription();
     initCoachWorkoutsPrescription();
     initCoachDashboardNote();
+    if (typeof window.initCoachDatabasesTab === 'function') window.initCoachDatabasesTab();
+    if (typeof window.initCoachMarketingStudio === 'function') window.initCoachMarketingStudio();
+    if (typeof window.initCoachDossierAndCopilots === 'function') window.initCoachDossierAndCopilots();
     initMemberClarityActions();
 }
 
@@ -5917,6 +6116,20 @@ function selectAthleteFromSheet(athId) {
         masterStatusDot.className = 'status-dot ' + (s === 'active' ? 'status-dot-active' : s === 'paused' ? 'status-dot-paused' : 'status-dot-pending');
     }
 
+    // Sincronizar barra fija de alumno en la pestaña de Entreno & Objetivos
+    const workoutAvatar = document.getElementById('coachWorkoutAvatar');
+    const workoutName = document.getElementById('coachWorkoutName');
+    const workoutEmail = document.getElementById('coachWorkoutEmail');
+    const workoutPlanBadge = document.getElementById('coachWorkoutPlanBadge');
+    if (workoutAvatar) workoutAvatar.textContent = initMaster;
+    if (workoutName) workoutName.textContent = athlete.full_name;
+    if (workoutEmail) workoutEmail.textContent = athlete.email || 'alumno@sens.com';
+    if (workoutPlanBadge) workoutPlanBadge.textContent = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
+
+    coachWorkoutState.activeAthleteId = athId;
+    if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
+    if (typeof renderCoachAssignedExercises === 'function') renderCoachAssignedExercises();
+
     if (athlete.isDb) {
         applyDatabaseAthlete(athlete);
     } else {
@@ -5983,7 +6196,7 @@ function getConsolidatedCoachAthletes() {
     const seenIds = new Set();
     const seenEmails = new Set();
 
-    // 1. Atletas de Base de Datos Supabase
+    // 1. Atletas de Base de Datos Supabase (Atletas Reales)
     dbAthletes.forEach(ath => {
         const emailLower = (ath.email || '').toLowerCase();
         // Omitir si es cuenta de administración pura de Nico para no mezclar entrenador con alumnos
@@ -6005,12 +6218,15 @@ function getConsolidatedCoachAthletes() {
         });
     });
 
-    // 2. Atletas registrados localmente (Fallback de alta inmediata)
+    // 2. Atletas registrados localmente (Alumnos reales en tránsito de alta)
     try {
         const localRoster = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
         localRoster.forEach(localAth => {
             const emailLower = (localAth.email || '').toLowerCase();
             if (emailLower === 'nico@sens.com' || emailLower === 'nicomaralle@gmail.com') return;
+            // Omitir cualquier usuario mock legacy
+            if (localAth.id && localAth.id.startsWith('mock_')) return;
+            if (emailLower.includes('prueba@') || emailLower.includes('@duo.com') || emailLower.includes('@wellness.com') || emailLower.includes('@tech.com') || emailLower.includes('@appsens.com')) return;
 
             if (!seenIds.has(localAth.id) && !seenEmails.has(emailLower)) {
                 seenIds.add(localAth.id);
@@ -6031,89 +6247,39 @@ function getConsolidatedCoachAthletes() {
         });
     } catch (e) {}
 
-    // 3. Fallback seguro: Si 'Prueba 1' fue creada y no está aún en cache, inyectarla
-    if (!seenEmails.has('prueba@gmail.com')) {
-        roster.unshift({
-            id: '549bcbed-0cae-455f-9d6a-952b501e3865',
-            isDb: true,
-            full_name: 'Prueba 1',
-            email: 'prueba@gmail.com',
-            user_type: 'client_presencial_vip',
-            active_plan_name: 'Presencial 1 a 1 VIP (CABA)',
-            subscription_status: 'pending_activation',
-            current_weight: 75,
-            created_at: '2026-10-13T20:36:46.000Z'
-        });
-        seenEmails.add('prueba@gmail.com');
-        seenIds.add('549bcbed-0cae-455f-9d6a-952b501e3865');
-    }
-
-    // 4. Mocks de demostración
-    const mockList = [
-        {
-            id: 'mock_vip',
-            isDb: false,
-            full_name: 'Roberto Gómez',
-            email: 'roberto.gomez@gmail.com',
-            user_type: 'client_presencial_vip',
-            active_plan_name: 'Presencial 1 a 1 VIP (CABA)',
-            subscription_status: 'active',
-            current_weight: 78.5,
-            created_at: '2026-09-15T10:00:00Z'
-        },
-        {
-            id: 'mock_duo',
-            isDb: false,
-            full_name: 'Laura & Marcos',
-            email: 'laura.marcos@duo.com',
-            user_type: 'client_presencial_group',
-            active_plan_name: 'Presencial Dúo / Grupo (CABA)',
-            subscription_status: 'active',
-            current_weight: 71.0,
-            created_at: '2026-09-20T14:30:00Z'
-        },
-        {
-            id: 'mock_online_prem',
-            isDb: false,
-            full_name: 'Esteban Bianchi',
-            email: 'esteban.bianchi@tech.com',
-            user_type: 'client_online_premium',
-            active_plan_name: 'Online Premium (Seguimiento Diario)',
-            subscription_status: 'pending_activation',
-            current_weight: 84.2,
-            created_at: '2026-10-12T09:15:00Z'
-        },
-        {
-            id: 'mock_online_basic',
-            isDb: false,
-            full_name: 'Carla Méndez',
-            email: 'carla.mendez@wellness.com',
-            user_type: 'client_online_basic',
-            active_plan_name: 'Online Básico',
-            subscription_status: 'active',
-            current_weight: 63.5,
-            created_at: '2026-10-01T11:20:00Z'
-        }
-    ];
-
-    mockList.forEach(m => {
-        if (!seenIds.has(m.id)) {
-            const overrideStr = localStorage.getItem(`sens_athlete_override_${m.id}`);
-            if (overrideStr) {
-                try { Object.assign(m, JSON.parse(overrideStr)); } catch (e) {}
-            }
-            roster.push(m);
-        }
-    });
-
     return roster;
 }
 
+window.purgeAllMockUsersAndCache = function() {
+    try {
+        localStorage.removeItem('sens_registered_athletes');
+        localStorage.removeItem('sens_prescribed_workouts_usr-vip-001');
+        localStorage.removeItem('sens_prescribed_workouts_mock_vip');
+        localStorage.removeItem('sens_prescribed_workouts_mock_onl');
+        localStorage.removeItem('sens_prescribed_workouts_549bcbed-0cae-455f-9d6a-952b501e3865');
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && (k.includes('mock_') || k.includes('prueba@') || k.includes('usr-vip-001') || k.includes('roberto.gomez') || k.includes('roberto-gomez'))) {
+                keysToRemove.push(k);
+            }
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+        console.log('✓ Purga de usuarios mock y datos de prueba completada exitosamente.');
+    } catch (e) {}
+};
+window.purgeAllMockUsersAndCache();
+
 function syncCoachMasterCard(athId) {
-    const targetId = athId || AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
+    const targetId = athId || AppState.activeAthleteId || coachWorkoutState.activeAthleteId || (AppState.user ? AppState.user.id : null);
     const roster = getConsolidatedCoachAthletes();
-    const athlete = roster.find(a => a.id === targetId) || roster[0];
-    if (!athlete) return;
+    let athlete = null;
+    if (targetId) {
+        athlete = roster.find(a => a.id === targetId);
+    }
+    if (!athlete && roster.length > 0) {
+        athlete = roster[0];
+    }
 
     const masterAvatar = document.getElementById('coachMasterAvatar');
     const masterName = document.getElementById('coachMasterName');
@@ -6121,6 +6287,21 @@ function syncCoachMasterCard(athId) {
     const masterPlanBadge = document.getElementById('coachMasterPlanBadge');
     const masterStatusDot = document.getElementById('coachMasterStatusDot');
     const masterGoal = document.getElementById('coachMasterGoal');
+
+    const workoutAvatar = document.getElementById('coachWorkoutAvatar');
+    const workoutName = document.getElementById('coachWorkoutName');
+    const workoutEmail = document.getElementById('coachWorkoutEmail');
+    const workoutPlanBadge = document.getElementById('coachWorkoutPlanBadge');
+
+    if (!athlete) {
+        if (masterName) masterName.textContent = 'Sin Alumnos Registrados';
+        if (masterEmail) masterEmail.textContent = 'Esperando altas de alumnos';
+        if (masterPlanBadge) masterPlanBadge.textContent = 'SIN ALUMNO';
+        if (workoutName) workoutName.textContent = 'Sin Alumnos Registrados';
+        if (workoutEmail) workoutEmail.textContent = 'Esperando altas de alumnos';
+        if (workoutPlanBadge) workoutPlanBadge.textContent = 'SIN ALUMNO';
+        return;
+    }
 
     const pParts = (athlete.full_name || 'Atleta').trim().split(' ');
     let initMaster = pParts[0] ? pParts[0][0].toUpperCase() : 'S';
@@ -6135,11 +6316,21 @@ function syncCoachMasterCard(athId) {
         const s = athlete.subscription_status || 'active';
         masterStatusDot.className = 'status-dot ' + (s === 'active' ? 'status-dot-active' : s === 'paused' ? 'status-dot-paused' : 'status-dot-pending');
     }
+
+    if (workoutAvatar) workoutAvatar.textContent = initMaster;
+    if (workoutName) workoutName.textContent = athlete.full_name;
+    if (workoutEmail) workoutEmail.textContent = athlete.email || 'alumno@sens.com';
+    if (workoutPlanBadge) workoutPlanBadge.textContent = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
+
+    coachWorkoutState.activeAthleteId = athlete.id;
 }
+
+let coachAthletesTierFilter = 'all';
 
 function initCoachAthletesHub() {
     const searchInput = document.getElementById('coachSearchAthleteInput');
     const filterBtns = document.querySelectorAll('.coach-filter-status');
+    const tierBtns = document.querySelectorAll('#coachFilterTierBar .coach-filter-tier');
     const btnMasterInspect = document.getElementById('btnCoachMasterInspectAthlete');
     const btnHubViewStudent = document.getElementById('btnCoachHubViewActiveStudent');
 
@@ -6165,6 +6356,21 @@ function initCoachAthletesHub() {
         });
     });
 
+    tierBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tierBtns.forEach(b => {
+                b.classList.remove('pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('pill-champagne');
+            coachAthletesTierFilter = btn.getAttribute('data-tier') || 'all';
+            const activeStatus = document.querySelector('.coach-filter-status.pill-champagne')?.getAttribute('data-status') || 'all';
+            const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            renderCoachAthletesHub(activeStatus, term);
+        });
+    });
+
     if (btnMasterInspect) {
         btnMasterInspect.addEventListener('click', () => {
             const athId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
@@ -6176,6 +6382,17 @@ function initCoachAthletesHub() {
         btnHubViewStudent.addEventListener('click', () => {
             const athId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
             inspectAthleteAsCoach(athId);
+        });
+    }
+
+    const toggleTiersBtn = document.getElementById('btnToggleBusinessTiers');
+    const tiersBanner = document.getElementById('coachBusinessTiersBanner');
+    if (toggleTiersBtn && tiersBanner) {
+        toggleTiersBtn.addEventListener('click', () => {
+            const isHidden = (tiersBanner.style.display === 'none' || !tiersBanner.style.display);
+            tiersBanner.style.display = isHidden ? 'block' : 'none';
+            toggleTiersBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+            toggleTiersBtn.classList.toggle('expanded', isHidden);
         });
     }
 
@@ -6193,7 +6410,7 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
     const pendingCount = allAthletes.filter(a => a.subscription_status === 'pending_activation').length;
     const activeCount = allAthletes.filter(a => a.subscription_status === 'active').length;
     const presencialCount = allAthletes.filter(a => (a.user_type || '').includes('presencial')).length;
-    const onlineCount = allAthletes.filter(a => (a.user_type || '').includes('online')).length;
+    const onlineCount = allAthletes.filter(a => (a.user_type || '').includes('online') || a.user_type === 'client_app_subscription').length;
 
     const kpiTotal = document.getElementById('kpiCoachTotalAthletes');
     const kpiPending = document.getElementById('kpiCoachPendingAthletes');
@@ -6205,7 +6422,7 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
     if (kpiTotal) kpiTotal.textContent = totalCount;
     if (kpiPending) kpiPending.textContent = pendingCount;
     if (kpiActive) kpiActive.textContent = activeCount;
-    if (kpiRatio) kpiRatio.textContent = `${presencialCount} Presenc. / ${onlineCount} Online`;
+    if (kpiRatio) kpiRatio.textContent = `${presencialCount} Pres. / ${onlineCount} Dig.`;
     if (badgePending) badgePending.textContent = `${pendingCount} Pendiente${pendingCount === 1 ? '' : 's'}`;
     if (badgeActive) badgeActive.textContent = `${activeCount} Activo${activeCount === 1 ? '' : 's'}`;
 
@@ -6213,6 +6430,16 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
     let filtered = allAthletes;
     if (statusFilter !== 'all') {
         filtered = filtered.filter(a => a.subscription_status === statusFilter);
+    }
+    if (coachAthletesTierFilter !== 'all') {
+        filtered = filtered.filter(a => {
+            const ut = a.user_type || '';
+            if (coachAthletesTierFilter === 'presencial_ind') return ut === 'client_presencial_vip';
+            if (coachAthletesTierFilter === 'presencial_grp') return ut === 'client_presencial_group';
+            if (coachAthletesTierFilter === 'online') return ut === 'client_online_premium' || ut === 'client_online_basic';
+            if (coachAthletesTierFilter === 'app_sub') return ut === 'client_app_subscription';
+            return true;
+        });
     }
     if (searchTerm) {
         filtered = filtered.filter(a => 
@@ -6223,8 +6450,8 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
 
     if (filtered.length === 0) {
         container.innerHTML = `
-            <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
-                <p>No se encontraron alumnos con los filtros seleccionados.</p>
+            <div style="text-align: center; padding: 36px 20px; color: #71717A;">
+                <p style="font-size: 13px;">No se encontraron alumnos con los filtros seleccionados.</p>
             </div>
         `;
         return;
@@ -6241,44 +6468,58 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
 
         let statusBadgeHtml = '';
         if (isAct) {
-            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #10B981; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.15);"><span class="status-dot status-dot-active" style="display:inline-block; margin-right:5px;"></span>Activo</span>';
+            statusBadgeHtml = '<span class="coach-ath-badge active"><span class="status-dot status-dot-active"></span>Activo</span>';
         } else if (isPend) {
-            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #F59E0B; border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.15);"><span class="status-dot status-dot-pending" style="display:inline-block; margin-right:5px;"></span>Pendiente</span>';
+            statusBadgeHtml = '<span class="coach-ath-badge pending"><span class="status-dot status-dot-pending"></span>Pendiente</span>';
         } else {
-            statusBadgeHtml = '<span class="pill pill-champagne" style="font-size: 10px; color: #EF4444; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15);"><span class="status-dot status-dot-paused" style="display:inline-block; margin-right:5px;"></span>Pausado</span>';
+            statusBadgeHtml = '<span class="coach-ath-badge paused"><span class="status-dot status-dot-paused"></span>Pausado</span>';
         }
 
-        const toggleBtnHtml = isAct
-            ? `<button type="button" class="btn btn-outline btn-sm btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="active" style="font-size: 11px; padding: 5px 12px; color: #F59E0B; border-color: rgba(245, 158, 11, 0.4);">Pausar Acceso</button>`
-            : `<button type="button" class="btn btn-primary btn-sm btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="${ath.subscription_status}" style="font-size: 11px; padding: 5px 12px; font-weight: 800;">Aprobar Acceso</button>`;
-
         const planKey = ath.user_type || 'client_presencial_vip';
+        const isGeneralistApp = (planKey === 'client_app_subscription');
+        const planBadgeHtml = isGeneralistApp
+            ? '<span class="pill pill-dark" style="font-size: 9.5px; padding: 2px 7px;">App SaaS ($19.900)</span>'
+            : '<span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">Personalizado 1:1</span>';
+
+        const goalText = ath.primary_goal || 'Rendimiento general y fuerza';
 
         html += `
-            <div class="coach-athlete-card ${isPend ? 'is-pending' : ''}">
-                <div class="coach-athlete-info">
-                    <div class="coach-athlete-avatar">${initials}</div>
-                    <div class="coach-athlete-meta">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="coach-athlete-name">${ath.full_name}</span>
+            <div class="coach-athlete-card ${isPend ? 'is-pending' : ''}" data-athlete-id="${ath.id}">
+                <div class="coach-ath-card-head btn-open-athlete-actions-sheet" data-athlete-id="${ath.id}" style="cursor: pointer;">
+                    <div class="coach-ath-avatar-circle">${initials}</div>
+                    <div class="coach-ath-primary-info">
+                        <div class="coach-ath-name-row">
+                            <span class="coach-ath-name">${ath.full_name}</span>
                             ${statusBadgeHtml}
                         </div>
-                        <span class="coach-athlete-email">${ath.email}</span>
-                        <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
-                            <label style="font-size: 10.5px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Plan:</label>
-                            <button type="button" class="btn-coach-plan-pill-trigger btn-open-plan-sheet" data-athlete-id="${ath.id}" style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 20px; padding: 4px 10px; font-size: 11px; color: var(--accent-primary); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <span>${formatPlanName(planKey)}</span>
-                                <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </button>
+                        <div class="coach-ath-sub-row">
+                            ${planBadgeHtml}
+                            <span class="coach-ath-email">${ath.email}</span>
                         </div>
                     </div>
                 </div>
-                <div class="coach-athlete-actions">
-                    ${toggleBtnHtml}
-                    <button type="button" class="btn btn-outline btn-sm btn-hub-prescribe-nutri" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px;">Prescribir Nutrición</button>
-                    <button type="button" class="btn btn-outline btn-sm btn-hub-prescribe-workout" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px;">Prescribir Rutina</button>
-                    <button type="button" class="btn btn-outline btn-sm btn-hub-inspect-student" data-athlete-id="${ath.id}" style="font-size: 11px; padding: 5px 10px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">Ver como Alumno</button>
-                    <a href="https://wa.me/?text=${encodeURIComponent(`Hola ${ath.full_name}, te escribo de SENS para coordinar tu plan.`)}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="font-size: 11px; padding: 5px 10px; color: #25D366; border-color: rgba(37, 211, 102, 0.4);">WhatsApp</a>
+
+                <div class="coach-ath-goal-chip btn-open-athlete-actions-sheet" data-athlete-id="${ath.id}" style="cursor: pointer;">
+                    <span class="coach-ath-goal-label">Meta:</span>
+                    <span class="coach-ath-goal-text">${goalText}</span>
+                </div>
+
+                <div class="coach-ath-action-row">
+                    ${isPend ? `
+                        <button type="button" class="btn-coach-action-primary btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="pending_activation">
+                            Aprobar Acceso ✓
+                        </button>
+                    ` : `
+                        <button type="button" class="btn-coach-action-manage btn-open-athlete-actions-sheet" data-athlete-id="${ath.id}">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            <span>Gestionar Alumno</span>
+                            <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    `}
+                    <button type="button" class="btn-coach-action-portal btn-hub-inspect-student" data-athlete-id="${ath.id}">
+                        <span>Ver Portal</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
                 </div>
             </div>
         `;
@@ -6288,7 +6529,8 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
 
     // Delegación de eventos en las tarjetas de atletas
     container.querySelectorAll('.btn-hub-toggle-status').forEach(btn => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
             const athId = btn.getAttribute('data-athlete-id');
             const currentStatus = btn.getAttribute('data-current-status');
             const newStatus = (currentStatus === 'active') ? 'paused' : 'active';
@@ -6296,29 +6538,18 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
         });
     });
 
-    container.querySelectorAll('.btn-open-plan-sheet').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const athId = btn.getAttribute('data-athlete-id');
-            openCoachPlanSheet(athId);
-        });
-    });
-
-    container.querySelectorAll('.btn-hub-prescribe-nutri').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const athId = btn.getAttribute('data-athlete-id');
-            selectAthleteForPrescription('nutri', athId);
-        });
-    });
-
-    container.querySelectorAll('.btn-hub-prescribe-workout').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const athId = btn.getAttribute('data-athlete-id');
-            selectAthleteForPrescription('workout', athId);
+    container.querySelectorAll('.btn-open-athlete-actions-sheet').forEach(elem => {
+        elem.addEventListener('click', () => {
+            const athId = elem.getAttribute('data-athlete-id');
+            if (athId && typeof window.openCoachAthleteActionsSheet === 'function') {
+                window.openCoachAthleteActionsSheet(athId);
+            }
         });
     });
 
     container.querySelectorAll('.btn-hub-inspect-student').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const athId = btn.getAttribute('data-athlete-id');
             inspectAthleteAsCoach(athId);
         });
@@ -6333,9 +6564,82 @@ function formatPlanName(key) {
         case 'client_presencial_group': return 'Presencial Dúo / Grupo';
         case 'client_online_premium': return 'Online Premium (Diario)';
         case 'client_online_basic': return 'Online Básico';
+        case 'client_app_subscription': return 'Suscripción App Generalista ($19.900/mes)';
         default: return 'Presencial 1 a 1 VIP';
     }
 }
+
+window.currentActionAthleteId = null;
+
+window.openCoachAthleteActionsSheet = function(athId) {
+    window.currentActionAthleteId = athId;
+    const athletes = getConsolidatedCoachAthletes();
+    const ath = athletes.find(a => a.id === athId);
+    if (!ath) return;
+
+    const backdrop = document.getElementById('coachAthleteActionsBackdrop');
+    const sheet = document.getElementById('coachAthleteActionsBottomSheet');
+    if (!backdrop || !sheet) return;
+
+    // Avatar + Name + Plan
+    const parts = (ath.full_name || 'Atleta').trim().split(' ');
+    let initials = parts[0] ? parts[0][0].toUpperCase() : 'S';
+    if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0].toUpperCase();
+
+    const avatarEl = document.getElementById('sheetAthleteAvatar');
+    const nameEl = document.getElementById('sheetAthleteFullName');
+    const planEl = document.getElementById('sheetAthletePlanPill');
+    const statusEl = document.getElementById('sheetAthleteStatusPill');
+
+    if (avatarEl) avatarEl.textContent = initials;
+    if (nameEl) nameEl.textContent = ath.full_name;
+    if (planEl) planEl.textContent = formatPlanName(ath.user_type || 'client_presencial_vip');
+
+    const isAct = (ath.subscription_status === 'active');
+    const isPend = (ath.subscription_status === 'pending_activation');
+    if (statusEl) {
+        if (isAct) {
+            statusEl.innerHTML = '<span class="status-dot status-dot-active" style="display:inline-block; margin-right:4px;"></span>Activo';
+            statusEl.style.color = '#10B981';
+        } else if (isPend) {
+            statusEl.innerHTML = '<span class="status-dot status-dot-pending" style="display:inline-block; margin-right:4px;"></span>Pendiente';
+            statusEl.style.color = '#F59E0B';
+        } else {
+            statusEl.innerHTML = '<span class="status-dot status-dot-paused" style="display:inline-block; margin-right:4px;"></span>Pausado';
+            statusEl.style.color = '#EF4444';
+        }
+    }
+
+    const toggleTitle = document.getElementById('sheetActionToggleStatusTitle');
+    const toggleSub = document.getElementById('sheetActionToggleStatusSub');
+    if (toggleTitle) {
+        toggleTitle.textContent = isAct ? 'Pausar Acceso del Alumno' : 'Aprobar / Activar Acceso';
+    }
+    if (toggleSub) {
+        toggleSub.textContent = isAct ? 'Desactivará el acceso al portal temporalmente' : 'Dará acceso completo e inmediato al portal';
+    }
+
+    const waBtn = document.getElementById('sheetActionWhatsApp');
+    if (waBtn) {
+        waBtn.href = `https://wa.me/?text=${encodeURIComponent(`Hola ${ath.full_name}, te escribo de SENS para coordinar tu plan.`)}`;
+    }
+
+    backdrop.style.display = 'block';
+    sheet.style.display = 'block';
+    setTimeout(() => sheet.classList.add('active'), 10);
+};
+
+window.closeCoachAthleteActionsSheet = function() {
+    const backdrop = document.getElementById('coachAthleteActionsBackdrop');
+    const sheet = document.getElementById('coachAthleteActionsBottomSheet');
+    if (backdrop && sheet) {
+        sheet.classList.remove('active');
+        setTimeout(() => {
+            backdrop.style.display = 'none';
+            sheet.style.display = 'none';
+        }, 250);
+    }
+};
 
 window.openCoachPlanSheet = function(athId) {
     coachAthletePendingPlanId = athId;
@@ -6373,6 +6677,73 @@ document.addEventListener('DOMContentLoaded', () => {
     const planBackdrop = document.getElementById('coachPlanSheetBackdrop');
     if (closePlanSheetBtn) closePlanSheetBtn.addEventListener('click', closeCoachPlanSheet);
     if (planBackdrop) planBackdrop.addEventListener('click', closeCoachPlanSheet);
+
+    // Bottom sheet de acciones del atleta
+    const closeActionsSheetBtn = document.getElementById('btnCloseAthleteActionsSheet');
+    const actionsBackdrop = document.getElementById('coachAthleteActionsBackdrop');
+    if (closeActionsSheetBtn) closeActionsSheetBtn.addEventListener('click', closeCoachAthleteActionsSheet);
+    if (actionsBackdrop) actionsBackdrop.addEventListener('click', closeCoachAthleteActionsSheet);
+
+    const btnActionDossier = document.getElementById('sheetActionDossier');
+    if (btnActionDossier) {
+        btnActionDossier.addEventListener('click', () => {
+            const athId = window.currentActionAthleteId;
+            closeCoachAthleteActionsSheet();
+            if (athId && typeof window.openCoachAthleteDossier === 'function') {
+                window.openCoachAthleteDossier(athId);
+            }
+        });
+    }
+
+    const btnActionWorkouts = document.getElementById('sheetActionWorkouts');
+    if (btnActionWorkouts) {
+        btnActionWorkouts.addEventListener('click', () => {
+            const athId = window.currentActionAthleteId;
+            closeCoachAthleteActionsSheet();
+            if (athId) selectAthleteForPrescription('workout', athId);
+        });
+    }
+
+    const btnActionNutrition = document.getElementById('sheetActionNutrition');
+    if (btnActionNutrition) {
+        btnActionNutrition.addEventListener('click', () => {
+            const athId = window.currentActionAthleteId;
+            closeCoachAthleteActionsSheet();
+            if (athId) selectAthleteForPrescription('nutri', athId);
+        });
+    }
+
+    const btnActionChangePlan = document.getElementById('sheetActionChangePlan');
+    if (btnActionChangePlan) {
+        btnActionChangePlan.addEventListener('click', () => {
+            const athId = window.currentActionAthleteId;
+            closeCoachAthleteActionsSheet();
+            if (athId) openCoachPlanSheet(athId);
+        });
+    }
+
+    const btnActionToggleStatus = document.getElementById('sheetActionToggleStatus');
+    if (btnActionToggleStatus) {
+        btnActionToggleStatus.addEventListener('click', async () => {
+            const athId = window.currentActionAthleteId;
+            if (!athId) return;
+            const athletes = getConsolidatedCoachAthletes();
+            const ath = athletes.find(a => a.id === athId);
+            const isAct = (ath && ath.subscription_status === 'active');
+            const newStatus = isAct ? 'paused' : 'active';
+            closeCoachAthleteActionsSheet();
+            await updateAthleteSubscriptionStatus(athId, newStatus);
+        });
+    }
+
+    const btnActionInspectPortal = document.getElementById('sheetActionInspectPortal');
+    if (btnActionInspectPortal) {
+        btnActionInspectPortal.addEventListener('click', () => {
+            const athId = window.currentActionAthleteId;
+            closeCoachAthleteActionsSheet();
+            if (athId) inspectAthleteAsCoach(athId);
+        });
+    }
 
     document.querySelectorAll('.btn-coach-plan-opt').forEach(btn => {
         btn.addEventListener('click', async () => {
@@ -6429,7 +6800,8 @@ async function updateAthletePlanType(athId, newPlanKey) {
         client_presencial_vip: 'Presencial 1 a 1 VIP (CABA)',
         client_presencial_group: 'Presencial Dúo / Grupo (CABA)',
         client_online_premium: 'Online Premium (Seguimiento Diario)',
-        client_online_basic: 'Online Básico'
+        client_online_basic: 'Online Básico',
+        client_app_subscription: 'Suscripción App Generalista ($19.900/mes)'
     };
     const newPlanName = planNames[newPlanKey] || 'Plan SENS';
 
@@ -6495,7 +6867,8 @@ function inspectAthleteAsCoach(athId) {
             mock_vip: 'client_presencial_vip',
             mock_duo: 'client_presencial_group',
             mock_online_prem: 'client_online_premium',
-            mock_online_basic: 'client_online_basic'
+            mock_online_basic: 'client_online_basic',
+            mock_app_sub: 'client_app_subscription'
         };
         applyUserProfile(keyMap[athId] || 'client_presencial_vip');
     } else {
@@ -6513,6 +6886,7 @@ function inspectAthleteAsCoach(athId) {
             let pTag = (target.active_plan_name || 'PLAN').toUpperCase();
             if (pTag.includes('VIP')) pTag = 'VIP';
             else if (pTag.includes('DUO') || pTag.includes('DÚO')) pTag = 'DÚO';
+            else if (pTag.includes('SUSCRIPCI') || pTag.includes('APP')) pTag = 'APP SUB';
             else if (pTag.includes('ONLINE')) pTag = 'ONLINE';
             planEl.textContent = pTag;
         }
@@ -6538,6 +6912,12 @@ function exitAthleteInspection() {
 // -----------------------------------------------------------------------------
 // SUB-MÓDULO 2: PRESCRIPCIÓN DE NUTRICIÓN, CALORÍAS Y ALIMENTOS (REGLA DE 3)
 // -----------------------------------------------------------------------------
+let coachNutritionFilterState = {
+    meal: 'all',
+    goal: 'all',
+    lastPrescribedFoods: []
+};
+
 function initCoachNutritionPrescription() {
     const athleteSel = document.getElementById('coachNutritionAthleteSelector');
     const kcalInput = document.getElementById('coachTargetKcalInput');
@@ -6547,6 +6927,7 @@ function initCoachNutritionPrescription() {
     const waterInput = document.getElementById('coachTargetWaterInput');
     const noteInput = document.getElementById('coachNutritionDirectiveInput');
     const saveBtn = document.getElementById('btnSaveCoachNutritionPrescription');
+    const createFoodBtn = document.getElementById('btnCoachCreateNewFood');
 
     function populateSelector() {
         if (!athleteSel) return;
@@ -6562,6 +6943,68 @@ function initCoachNutritionPrescription() {
     if (athleteSel) {
         athleteSel.addEventListener('change', () => {
             loadCoachAthleteNutrition(athleteSel.value);
+        });
+    }
+
+    // Filtros por tipo de comida (Desayuno, Almuerzo, Merienda, Cena, Snacks)
+    const mealPills = document.querySelectorAll('#coachFoodMealFilterStrip .coach-food-meal-pill, #coachNutriMealTypeFilterBar .coach-nutri-meal-pill');
+    mealPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            mealPills.forEach(p => {
+                p.classList.remove('active', 'pill-champagne');
+                p.classList.add('pill-dark');
+            });
+            pill.classList.remove('pill-dark');
+            pill.classList.add('active', 'pill-champagne');
+            coachNutritionFilterState.meal = pill.getAttribute('data-meal') || 'all';
+            renderCoachFoodSelectionGrid(coachNutritionFilterState.lastPrescribedFoods);
+        });
+    });
+
+    // Filtros por objetivo nutricional
+    document.querySelectorAll('#coachFoodGoalFilterStrip .coach-food-goal-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            document.querySelectorAll('#coachFoodGoalFilterStrip .coach-food-goal-pill').forEach(p => {
+                p.classList.remove('active', 'pill-champagne');
+                p.classList.add('pill-dark');
+            });
+            pill.classList.remove('pill-dark');
+            pill.classList.add('active', 'pill-champagne');
+            coachNutritionFilterState.goal = pill.getAttribute('data-goal') || 'all';
+            renderCoachFoodSelectionGrid(coachNutritionFilterState.lastPrescribedFoods);
+        });
+    });
+
+    // Botón 1-Tap para aplicar sugerencia nutricional según ficha
+    const btnApplyMacros = document.getElementById('btnApplySuggestedMacros');
+    if (btnApplyMacros) {
+        btnApplyMacros.addEventListener('click', () => {
+            if (kcalInput) kcalInput.value = 2150;
+            if (protInput) protInput.value = 165;
+            if (carbsInput) carbsInput.value = 210;
+            if (fatsInput) fatsInput.value = 70;
+            if (waterInput) waterInput.value = 2.8;
+            updateMacroPercentageIndicators();
+            showSensToast('Cálculo sugerido según ficha 360° aplicado.', 'champagne');
+        });
+    }
+
+    // Chips rápidos de directiva nutricional
+    document.querySelectorAll('.coach-quick-nutri-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            const text = chip.getAttribute('data-text');
+            if (noteInput && text) {
+                noteInput.value = text;
+                showSensToast('Consejo nutricional cargado.', 'info');
+            }
+        });
+    });
+
+    if (createFoodBtn) {
+        createFoodBtn.addEventListener('click', () => {
+            if (typeof window.openCoachDbItemEditor === 'function') {
+                window.openCoachDbItemEditor('food', null);
+            }
         });
     }
 
@@ -6628,7 +7071,10 @@ function initCoachNutritionPrescription() {
             const prescribedFoods = [];
             document.querySelectorAll('#coachFoodSelectionGrid .coach-food-cb:checked').forEach(cb => {
                 const foodId = cb.getAttribute('data-food-id');
-                const food = FOOD_CATALOG.find(f => f.id === foodId);
+                const rawFood = FOOD_CATALOG.find(f => f.id === foodId);
+                const food = rawFood && typeof window.getResolvedFood === 'function'
+                    ? window.getResolvedFood(rawFood, athId)
+                    : rawFood;
                 const gramInput = document.querySelector(`.coach-food-grams[data-food-id="${foodId}"]`);
                 const grams = gramInput ? parseInt(gramInput.value, 10) || 100 : 100;
                 if (food) {
@@ -6645,6 +7091,8 @@ function initCoachNutritionPrescription() {
                 }
             });
 
+            coachNutritionFilterState.lastPrescribedFoods = prescribedFoods;
+
             const prescriptionData = {
                 target_calories: kcal,
                 target_protein: prot,
@@ -6658,18 +7106,36 @@ function initCoachNutritionPrescription() {
 
             localStorage.setItem(`sens_prescribed_nutrition_${athId}`, JSON.stringify(prescriptionData));
 
+            let nutriSupabaseError = null;
             if (supabaseClient && !athId.startsWith('mock_')) {
                 try {
-                    await supabaseClient.from('profiles').update({
+                    const { error } = await supabaseClient.from('profiles').update({
                         prescribed_nutrition: prescriptionData
                     }).eq('id', athId);
+                    if (error) {
+                        console.warn('Error al guardar nutrición en Supabase:', error);
+                        nutriSupabaseError = error;
+                    }
                 } catch (e) {
-                    console.warn('Error al guardar nutrición en Supabase:', e);
+                    console.warn('Error al conectar con Supabase para nutrición:', e);
+                    nutriSupabaseError = e;
                 }
             }
 
             syncMemberNutritionPrescription(athId, prescriptionData);
-            showSensToast(`Prescripción nutricional guardada con éxito para el alumno.`, 'champagne');
+
+            if (nutriSupabaseError) {
+                showCoachSaveSuccessBanner({
+                    title: 'Pauta Nutricional Guardada Localmente',
+                    body: 'Los macros y calorías se guardaron en la memoria local.',
+                    errorNotice: `<strong>Aviso de Base de Datos:</strong> Supabase reportó: <em>${nutriSupabaseError.message || nutriSupabaseError}</em>.<br><br>Para sincronizar nutrición con los alumnos, ejecutá <code>supabase_coach_prescriptions.sql</code> en Supabase.`
+                });
+            } else {
+                showCoachSaveSuccessBanner({
+                    title: '¡Pauta Nutricional Guardada y Sincronizada!',
+                    body: 'Las calorías y distribución de macronutrientes fueron guardadas y actualizadas en Supabase para el alumno.'
+                });
+            }
         });
     }
 
@@ -6707,6 +7173,7 @@ function loadCoachAthleteNutrition(athId) {
     if (waterInput) waterInput.value = data.target_water;
     if (noteInput) noteInput.value = data.directive_note;
 
+    coachNutritionFilterState.lastPrescribedFoods = data.prescribed_foods || [];
     renderCoachFoodSelectionGrid(data.prescribed_foods);
     const pBadge = document.getElementById('coachProtPctBadge');
     if (pBadge) {
@@ -6720,28 +7187,71 @@ function renderCoachFoodSelectionGrid(prescribedList = []) {
     const container = document.getElementById('coachFoodSelectionGrid');
     if (!container) return;
 
-    const prescribedMap = new Map();
-    prescribedList.forEach(p => prescribedMap.set(p.id, p.grams));
+    if (Array.isArray(prescribedList) && prescribedList.length > 0) {
+        coachNutritionFilterState.lastPrescribedFoods = prescribedList;
+    }
 
-    const foods = FOOD_CATALOG.slice(0, 14);
+    const athleteSel = document.getElementById('coachNutritionAthleteSelector');
+    const athId = athleteSel ? athleteSel.value : (AppState.activeAthleteId || 'mock_vip');
+
+    const prescribedMap = new Map();
+    (prescribedList || []).forEach(p => prescribedMap.set(p.id, p.grams));
+
+    const mealFilter = coachNutritionFilterState.meal || 'all';
+    const goalFilter = coachNutritionFilterState.goal || 'all';
+
+    const resolvedFoods = FOOD_CATALOG.map(f =>
+        (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : f
+    ).filter(f => {
+        const matchMeal = mealFilter === 'all' || (Array.isArray(f.meals) && f.meals.includes(mealFilter));
+        const matchGoal = goalFilter === 'all' || (Array.isArray(f.goals) && f.goals.includes(goalFilter));
+        return matchMeal && matchGoal;
+    });
+
+    if (resolvedFoods.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--text-muted); font-size: 12px;">No hay alimentos para el filtro seleccionado.</div>`;
+        return;
+    }
+
+    const mealLabelMap = {
+        desayuno: 'Desayuno',
+        almuerzo: 'Almuerzo',
+        merienda: 'Merienda',
+        cena: 'Cena',
+        snacks: 'Snacks'
+    };
 
     let html = '';
-    foods.forEach(f => {
+    resolvedFoods.forEach(f => {
         const isChecked = prescribedMap.has(f.id);
         const grams = isChecked ? prescribedMap.get(f.id) : (f.defaultGrams || 100);
         const cal = Math.round((grams * (f.calPer100 || 0)) / 100);
         const prot = Math.round(((grams * (f.protPer100 || 0)) / 100) * 10) / 10;
+        const carbs = Math.round(((grams * (f.carbsPer100 || 0)) / 100) * 10) / 10;
+        const fats = Math.round(((grams * (f.fatsPer100 || 0)) / 100) * 10) / 10;
+        const mealBadges = Array.isArray(f.meals) ? f.meals.slice(0, 2).map(m => mealLabelMap[m] || m).join(' / ') : '';
 
         html += `
-            <div class="coach-food-item" style="background: ${isChecked ? 'rgba(229, 203, 167, 0.08)' : 'var(--bg-surface)'}; border-color: ${isChecked ? 'rgba(229, 203, 167, 0.4)' : 'var(--border-subtle)'};">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <input type="checkbox" class="coach-food-cb" data-food-id="${f.id}" ${isChecked ? 'checked' : ''} style="cursor: pointer; width: 18px; height: 18px;">
-                    <div>
-                        <strong style="font-size: 13px; color: #FFFFFF; display: block;">${f.name}</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);"><span class="coach-food-cal-display" data-food-id="${f.id}">${cal}</span> kcal • <span class="coach-food-prot-display" data-food-id="${f.id}">${prot}g</span> prot</span>
+            <div class="coach-food-item" style="background: ${isChecked ? 'rgba(229, 203, 167, 0.08)' : 'var(--bg-surface)'}; border-color: ${isChecked ? 'rgba(229, 203, 167, 0.4)' : 'var(--border-subtle)'}; flex-direction: column; align-items: stretch; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <input type="checkbox" class="coach-food-cb" data-food-id="${f.id}" ${isChecked ? 'checked' : ''} style="cursor: pointer; width: 18px; height: 18px; margin-top: 2px;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                <strong style="font-size: 13px; color: #FFFFFF;">${f.name}</strong>
+                                ${f._hasAthleteOverride ? `<span class="pill pill-champagne" style="font-size:8px; padding:1px 5px;">Personalizado</span>` : ''}
+                            </div>
+                            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 2px;">
+                                <strong style="color: var(--accent-champagne);"><span class="coach-food-cal-display" data-food-id="${f.id}">${cal}</span> kcal</strong> • 
+                                <span class="coach-food-prot-display" data-food-id="${f.id}">${prot}g</span> P • ${carbs}g C • ${fats}g G
+                            </span>
+                            ${mealBadges ? `<span style="font-size: 9.5px; color: rgba(255,255,255,0.45); display: block; margin-top: 2px;">Ideal: ${mealBadges}</span>` : ''}
+                        </div>
                     </div>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="window.openCoachDbItemEditor && window.openCoachDbItemEditor('food', '${f.id}')" style="padding: 2px 7px; font-size: 9.5px; height: 22px; flex-shrink: 0;">Editar</button>
                 </div>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 4px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px;">
+                    <span style="font-size: 10px; color: var(--text-muted); margin-right: auto;">Porción prescripta:</span>
                     <button type="button" class="btn btn-outline btn-sm btn-coach-stepper" data-food-id="${f.id}" data-delta="-20" style="padding: 2px 6px; font-size: 11px; height: 26px;">-</button>
                     <input type="number" class="input-control coach-food-grams" data-food-id="${f.id}" value="${grams}" step="10" min="20" max="600" style="width: 60px; text-align: center; padding: 2px 4px; font-size: 12px; height: 26px; margin-bottom: 0;">
                     <span style="font-size: 11px; color: var(--text-muted);">g</span>
@@ -6801,26 +7311,173 @@ function recalcCoachFoodItem(foodId, grams) {
 }
 
 // -----------------------------------------------------------------------------
-// SUB-MÓDULO 3: PRESCRIPCIÓN DE RUTINAS Y EJERCICIOS (1 A 6 DÍAS)
+// SUB-MÓDULO 3: PRESCRIPCIÓN DE RUTINAS Y EJERCICIOS (CALENDARIO REAL 14/10, 15/10...)
 // -----------------------------------------------------------------------------
 let coachWorkoutState = {
-    activeAthleteId: 'mock_vip',
-    activeDay: 'day1'
+    activeAthleteId: null,
+    activeDay: 'day1',
+    activeWeekStart: getMonday(new Date())
 };
+
+function showCoachSaveSuccessBanner({ title, body, errorNotice } = {}) {
+    const modal = document.getElementById('coachSaveSuccessModal');
+    if (!modal) {
+        showSensToast(title || 'Guardado exitosamente', 'champagne', 4000);
+        return;
+    }
+    const titleEl = document.getElementById('coachSaveSuccessModalTitle');
+    const bodyEl = document.getElementById('coachSaveSuccessModalBody');
+    const noticeEl = document.getElementById('coachSaveSuccessSupabaseNotice');
+    const dismissBtn = document.getElementById('btnDismissCoachSaveSuccess');
+
+    if (titleEl) titleEl.textContent = title || '¡Rutina Guardada y Sincronizada!';
+    if (bodyEl) bodyEl.textContent = body || 'La rutina fue guardada con éxito y se reflejará en el portal del alumno.';
+    
+    if (noticeEl) {
+        if (errorNotice) {
+            noticeEl.style.display = 'block';
+            noticeEl.innerHTML = errorNotice;
+        } else {
+            noticeEl.style.display = 'none';
+            noticeEl.innerHTML = '';
+        }
+    }
+
+    modal.style.display = 'flex';
+
+    if (dismissBtn) {
+        dismissBtn.onclick = () => {
+            modal.style.display = 'none';
+        };
+    }
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+    };
+}
+
+function updateCoachWorkoutDayLabels() {
+    const dayKey = coachWorkoutState.activeDay || 'day1';
+    const dayName = getDayNameFromKey(dayKey);
+    const dayIdx = parseInt(dayKey.replace('day', ''), 10) - 1;
+    let dateStr = '';
+    if (coachWorkoutState.activeWeekStart && !isNaN(dayIdx)) {
+        const d = new Date(coachWorkoutState.activeWeekStart);
+        d.setDate(d.getDate() + dayIdx);
+        dateStr = ` (${formatDateDDMM(d)})`;
+    }
+    const dayLabel = document.getElementById('coachDayTitleLabel');
+    if (dayLabel) {
+        dayLabel.textContent = `Enfoque de la Sesión: ${dayName}${dateStr}`;
+    }
+    const saveBtn = document.getElementById('btnSaveCoachWorkoutDay');
+    if (saveBtn) {
+        saveBtn.innerHTML = `Guardar Rutina del <strong>${dayName}${dateStr}</strong>`;
+    }
+}
+
+function renderCoachDynamicWeekStrip() {
+    const stripContainer = document.getElementById('coachWeekStrip');
+    const rangeLabel = document.getElementById('coachWeekRangeLabel');
+    if (!stripContainer) return;
+
+    if (!coachWorkoutState.activeWeekStart) {
+        coachWorkoutState.activeWeekStart = getMonday(new Date());
+    }
+
+    if (rangeLabel) {
+        rangeLabel.textContent = getWeekRangeLabel(coachWorkoutState.activeWeekStart);
+    }
+
+    const athId = coachWorkoutState.activeAthleteId;
+    const data = athId ? getCoachAthleteWorkoutData(athId) : {};
+    const dayNames = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
+    let html = '';
+
+    for (let i = 0; i < 7; i++) {
+        const dayDate = new Date(coachWorkoutState.activeWeekStart);
+        dayDate.setDate(coachWorkoutState.activeWeekStart.getDate() + i);
+
+        const isToday = isSameDay(dayDate, new Date());
+        const dayKey = 'day' + (i + 1);
+        const isSelected = (coachWorkoutState.activeDay === dayKey);
+        const dayData = data[dayKey] || {};
+        const modality = dayData.modality;
+        const isCompleted = Boolean(dayData.completed);
+
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const dayDateStart = new Date(dayDate);
+        dayDateStart.setHours(0, 0, 0, 0);
+        const isPast = dayDateStart < todayStart;
+        const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0);
+
+        let statusBadge = '';
+        if (isCompleted) {
+            statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
+        } else if (isPast) {
+            if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
+                statusBadge = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
+            } else {
+                statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
+            }
+        } else if (modality === 'presencial') {
+            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
+        } else if (modality === 'online') {
+            statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
+        } else if (modality === 'autonomo') {
+            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
+        } else {
+            statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
+        }
+
+        const dateFormatted = formatDateDDMM(dayDate);
+
+        html += `
+            <button type="button" class="coach-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
+                <span class="sens-day-name">${dayNames[i]}</span>
+                <span class="sens-day-hero-num">${dateFormatted}</span>
+                <div class="sens-day-modality-indicator">${statusBadge}</div>
+            </button>
+        `;
+    }
+
+    stripContainer.innerHTML = html;
+
+    stripContainer.querySelectorAll('.coach-week-day-pill').forEach((pill, idx) => {
+        pill.addEventListener('click', () => {
+            stripContainer.querySelectorAll('.coach-week-day-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            const dayKey = 'day' + (idx + 1);
+            coachWorkoutState.activeDay = dayKey;
+            updateCoachWorkoutDayLabels();
+            renderCoachAssignedExercises();
+        });
+    });
+}
 
 function initCoachWorkoutsPrescription() {
     const athleteSel = document.getElementById('coachWorkoutAthleteSelector');
-    const dayBtns = document.querySelectorAll('#coachDaySelectorBar .coach-day-btn');
-    const dayTitleInput = document.getElementById('coachDayTitleInput');
     const addLibBtn = document.getElementById('btnCoachAddExerciseFromLib');
     const saveDayBtn = document.getElementById('btnSaveCoachWorkoutDay');
+    const btnPrev = document.getElementById('btnCoachWeekPrev');
+    const btnNext = document.getElementById('btnCoachWeekNext');
+    const btnChangeAth = document.getElementById('btnCoachWorkoutChangeAth');
+    const btnInspect = document.getElementById('btnCoachWorkoutInspectPortal');
+    const btnDossier = document.getElementById('btnWorkoutOpenReadonlyDossier');
+
+    // Inicializar atleta activo si aún no está asignado
+    const roster = getConsolidatedCoachAthletes();
+    if (!coachWorkoutState.activeAthleteId && roster.length > 0) {
+        coachWorkoutState.activeAthleteId = roster[0].id;
+    }
 
     function populateSelector() {
         if (!athleteSel) return;
-        const roster = getConsolidatedCoachAthletes();
+        const currentRoster = getConsolidatedCoachAthletes();
         let html = '';
-        roster.forEach(ath => {
-            html += `<option value="${ath.id}">${ath.full_name} (${ath.active_plan_name})</option>`;
+        currentRoster.forEach(ath => {
+            const isSel = (ath.id === coachWorkoutState.activeAthleteId) ? 'selected' : '';
+            html += `<option value="${ath.id}" ${isSel}>${ath.full_name} (${ath.active_plan_name})</option>`;
         });
         athleteSel.innerHTML = html;
     }
@@ -6830,17 +7487,54 @@ function initCoachWorkoutsPrescription() {
         athleteSel.addEventListener('change', () => {
             coachWorkoutState.activeAthleteId = athleteSel.value;
             loadCoachAthleteWorkouts(athleteSel.value);
+            syncCoachMasterCard(athleteSel.value);
         });
     }
 
-    dayBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            dayBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            coachWorkoutState.activeDay = btn.getAttribute('data-day') || 'day1';
-            renderCoachAssignedExercises();
+    if (btnPrev) {
+        btnPrev.addEventListener('click', () => {
+            if (!coachWorkoutState.activeWeekStart) coachWorkoutState.activeWeekStart = getMonday(new Date());
+            const newMon = new Date(coachWorkoutState.activeWeekStart);
+            newMon.setDate(newMon.getDate() - 7);
+            coachWorkoutState.activeWeekStart = newMon;
+            renderCoachDynamicWeekStrip();
+            updateCoachWorkoutDayLabels();
         });
-    });
+    }
+
+    if (btnNext) {
+        btnNext.addEventListener('click', () => {
+            if (!coachWorkoutState.activeWeekStart) coachWorkoutState.activeWeekStart = getMonday(new Date());
+            const newMon = new Date(coachWorkoutState.activeWeekStart);
+            newMon.setDate(newMon.getDate() + 7);
+            coachWorkoutState.activeWeekStart = newMon;
+            renderCoachDynamicWeekStrip();
+            updateCoachWorkoutDayLabels();
+        });
+    }
+
+    if (btnChangeAth) {
+        btnChangeAth.addEventListener('click', () => {
+            const btnOpen = document.getElementById('btnOpenAthleteSheet');
+            if (btnOpen) btnOpen.click();
+        });
+    }
+
+    if (btnInspect) {
+        btnInspect.addEventListener('click', () => {
+            if (coachWorkoutState.activeAthleteId) {
+                inspectAthleteAsCoach(coachWorkoutState.activeAthleteId);
+            }
+        });
+    }
+
+    if (btnDossier) {
+        btnDossier.addEventListener('click', () => {
+            if (coachWorkoutState.activeAthleteId && typeof window.openCoachDossierModal === 'function') {
+                window.openCoachDossierModal(coachWorkoutState.activeAthleteId);
+            }
+        });
+    }
 
     document.querySelectorAll('.coach-apply-template').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -6878,11 +7572,15 @@ function initCoachWorkoutsPrescription() {
         });
     }
 
+    renderCoachDynamicWeekStrip();
+    updateCoachWorkoutDayLabels();
     renderCoachAssignedExercises();
 }
 
 function loadCoachAthleteWorkouts(athId) {
     coachWorkoutState.activeAthleteId = athId;
+    renderCoachDynamicWeekStrip();
+    updateCoachWorkoutDayLabels();
     renderCoachAssignedExercises();
 }
 
@@ -6931,10 +7629,22 @@ function renderCoachAssignedExercises() {
     const titleInput = document.getElementById('coachDayTitleInput');
     if (!container) return;
 
-    const data = getCoachAthleteWorkoutData(coachWorkoutState.activeAthleteId);
-    const day = data[coachWorkoutState.activeDay] || { title: `Día: ${coachWorkoutState.activeDay}`, exercises: [] };
+    const dayKey = coachWorkoutState.activeDay || 'day1';
+    const dayName = getDayNameFromKey(dayKey);
 
-    if (titleInput) titleInput.value = day.title;
+    const dayLabel = document.getElementById('coachDayTitleLabel');
+    if (dayLabel) {
+        dayLabel.textContent = `Enfoque de la Sesión (${dayName})`;
+    }
+    const saveBtn = document.getElementById('btnSaveCoachWorkoutDay');
+    if (saveBtn) {
+        saveBtn.innerHTML = `Guardar Rutina del <strong>${dayName}</strong>`;
+    }
+
+    const data = getCoachAthleteWorkoutData(coachWorkoutState.activeAthleteId);
+    const day = data[dayKey] || { title: `${dayName}`, exercises: [] };
+
+    if (titleInput) titleInput.value = day.title || dayName;
 
     // Sincronizar botones de modalidad asignada por Nico (ninguno activo si es null)
     const assignedModality = day.modality || null;
@@ -6955,25 +7665,40 @@ function renderCoachAssignedExercises() {
     if (!day.exercises || day.exercises.length === 0) {
         container.innerHTML = `
             <div style="background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: 10px; padding: 26px; text-align: center; color: var(--text-muted);">
-                <p style="margin-bottom: 12px;">No hay ejercicios asignados a este día todavía.</p>
+                <p style="margin-bottom: 12px;">No hay ejercicios asignados al <strong>${dayName}</strong> todavía.</p>
                 <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('btnCoachAddExerciseFromLib').click()">
-                    + Agregar desde Biblioteca (50 Ejercicios)
+                    + Agregar desde Biblioteca (Taxonomía 3 Niveles)
                 </button>
             </div>
         `;
         return;
     }
 
+    const athId = coachWorkoutState.activeAthleteId || 'mock_vip';
+    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+    let totalDayKcal = 0;
+
     let html = '';
     day.exercises.forEach((ex, idx) => {
+        const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
+        const resolvedEx = (typeof window.getResolvedExercise === 'function')
+            ? window.getResolvedExercise(rawMatch, athId)
+            : rawMatch;
+        const kcalData = (typeof window.calculateExerciseKcal === 'function')
+            ? window.calculateExerciseKcal(resolvedEx, ex.sets || 3, ex.reps || '10', 75)
+            : { kcalPerSet: 7, totalKcal: 21 };
+        totalDayKcal += kcalData.totalKcal;
+
         html += `
             <div class="coach-ex-card" data-ex-id="${ex.id}">
                 <div style="flex: 1; min-width: 220px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">#${idx + 1}</span>
-                        <strong style="font-size: 14px; color: #FFFFFF;">${ex.name}</strong>
+                        <strong style="font-size: 14px; color: #FFFFFF;">${resolvedEx.name || ex.name}</strong>
+                        <span class="pill pill-dark" style="font-size: 9.5px; padding: 2px 6px; border: 1px solid rgba(229,203,167,0.3); color: var(--accent-champagne);">~${kcalData.totalKcal} kcal (${kcalData.kcalPerSet} kcal/serie)</span>
+                        ${resolvedEx._hasAthleteOverride ? `<span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 5px;">Personalizado Alumno</span>` : ''}
                     </div>
-                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">${ex.notes || 'Pauta biomecánica asignada'}</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">${resolvedEx.recommendations || ex.notes || 'Pauta biomecánica asignada'}</div>
                 </div>
                 <div class="coach-ex-inputs">
                     <div style="display: flex; align-items: center; gap: 4px;">
@@ -6992,13 +7717,26 @@ function renderCoachAssignedExercises() {
                         <label style="font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Descanso (s):</label>
                         <input type="number" class="input-control coach-ex-rest" value="${ex.rest || 75}" step="15" style="width: 60px; padding: 2px 6px; height: 28px; margin-bottom: 0;">
                     </div>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="window.openCoachDbItemEditor && window.openCoachDbItemEditor('exercise', '${ex.id}')" style="padding: 4px 8px; font-size: 10px;">Editar Ficha</button>
                     <button type="button" class="btn btn-outline btn-sm btn-coach-remove-ex" data-ex-id="${ex.id}" style="border-color: var(--danger); color: var(--danger); padding: 4px 8px; font-size: 11px;">&times;</button>
                 </div>
             </div>
         `;
     });
 
-    container.innerHTML = html;
+    const sessionBadgeEl = document.getElementById('coachSessionTotalKcalBadge');
+    if (sessionBadgeEl) {
+        sessionBadgeEl.innerHTML = `Gasto Estimado Sesión: <strong>~${totalDayKcal} kcal</strong>`;
+    }
+
+    const summaryBanner = `
+        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(229,203,167,0.06); border: 1px solid rgba(229,203,167,0.2); border-radius: 8px; padding: 8px 14px; margin-bottom: 10px; font-size: 11.5px;">
+            <span style="color: var(--text-muted);">Volumen de <strong style="color: var(--accent-champagne);">${dayName}</strong>: <strong style="color: #FFFFFF;">${day.exercises.length} ejercicios</strong></span>
+            <span style="color: var(--accent-champagne); font-weight: 700;">Gasto Energético Estimado: ~${totalDayKcal} kcal</span>
+        </div>
+    `;
+
+    container.innerHTML = summaryBanner + html;
 
     container.querySelectorAll('.btn-coach-remove-ex').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -7014,16 +7752,28 @@ function renderCoachAssignedExercises() {
     });
 }
 
-function saveCurrentCoachWorkoutDay() {
+async function saveCurrentCoachWorkoutDay() {
     const athId = coachWorkoutState.activeAthleteId;
-    const dayKey = coachWorkoutState.activeDay;
+    if (!athId) {
+        showSensToast('Seleccioná un alumno para guardar su rutina.', 'warning');
+        return;
+    }
+    const dayKey = coachWorkoutState.activeDay || 'day1';
+    const dayName = getDayNameFromKey(dayKey);
+    const dayIdx = parseInt(dayKey.replace('day', ''), 10) - 1;
+    let dateStr = '';
+    if (coachWorkoutState.activeWeekStart && !isNaN(dayIdx)) {
+        const d = new Date(coachWorkoutState.activeWeekStart);
+        d.setDate(d.getDate() + dayIdx);
+        dateStr = ` (${formatDateDDMM(d)})`;
+    }
     const titleInput = document.getElementById('coachDayTitleInput');
     const container = document.getElementById('coachAssignedExercisesContainer');
 
     const data = getCoachAthleteWorkoutData(athId);
-    if (!data[dayKey]) data[dayKey] = { title: `Día: ${dayKey}`, exercises: [] };
+    if (!data[dayKey]) data[dayKey] = { title: dayName, exercises: [] };
 
-    if (titleInput) data[dayKey].title = titleInput.value.trim() || `Día: ${dayKey}`;
+    if (titleInput) data[dayKey].title = titleInput.value.trim() || dayName;
 
     // Guardar modalidad asignada por Nico (o null si no hay ninguna activa)
     const activeModBtn = document.querySelector('#coachModalityButtonsWrap .coach-modality-btn.active');
@@ -7058,13 +7808,21 @@ function saveCurrentCoachWorkoutDay() {
         if (cached) cached.prescribed_workouts = data;
     }
 
+    let supabaseError = null;
     // Persistir en Supabase en profiles.prescribed_workouts
     if (supabaseClient && !athId.startsWith('mock_')) {
-        supabaseClient.from('profiles').update({
-            prescribed_workouts: data
-        }).eq('id', athId).then(({ error }) => {
-            if (error) console.warn('Error al guardar entrenamientos en Supabase:', error);
-        });
+        try {
+            const { error } = await supabaseClient.from('profiles').update({
+                prescribed_workouts: data
+            }).eq('id', athId);
+            if (error) {
+                console.warn('Error al guardar entrenamientos en Supabase:', error);
+                supabaseError = error;
+            }
+        } catch (err) {
+            console.warn('Excepción al conectar con Supabase:', err);
+            supabaseError = err;
+        }
     }
 
     if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
@@ -7074,13 +7832,26 @@ function saveCurrentCoachWorkoutDay() {
         renderMonthlyCalendar();
     }
 
-    // Actualizar reactivamente todas las tarjetas del portal
+    // Actualizar reactivamente todas las tarjetas del portal y Coach OS
+    renderCoachDynamicWeekStrip();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
     if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
     if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
     if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
 
-    showSensToast(`Rutina de ${data[dayKey].title} guardada con éxito.`, 'champagne');
+    // Notificación de confirmación de alta visibilidad para Coach Nico
+    if (supabaseError) {
+        showCoachSaveSuccessBanner({
+            title: `Rutina Guardada Localmente`,
+            body: `La rutina del ${dayName}${dateStr} fue guardada en memoria local.`,
+            errorNotice: `<strong>Aviso de Base de Datos:</strong> Supabase reportó: <em>${supabaseError.message || supabaseError}</em>.<br><br>Para que los alumnos descarguen sus rutinas en vivo en su portal, ejecutá el script <code>supabase_coach_prescriptions.sql</code> en el SQL Editor de Supabase.`
+        });
+    } else {
+        showCoachSaveSuccessBanner({
+            title: `¡Rutina Guardada y Sincronizada!`,
+            body: `La rutina del ${dayName}${dateStr} se guardó exitosamente en la base de datos de Supabase. El alumno verá sus cambios inmediatamente al entrar a su portal.`
+        });
+    }
 }
 
 function applyCoachWorkoutTemplate(templateKey) {
@@ -7089,7 +7860,9 @@ function applyCoachWorkoutTemplate(templateKey) {
 
     if (templateKey === 'fuerza3d') {
         data.day1 = {
-            title: 'Día 1: Tren Superior (Empuje / Tirón)',
+            title: 'Lunes: Tren Superior (Empuje / Tirón)',
+            modality: 'presencial',
+            completed: false,
             exercises: [
                 { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', sets: 4, reps: '8-10', rest: 90, defaultWeight: 22, notes: 'Escápulas retraídas' },
                 { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano en Banco', sets: 4, reps: '10-12', rest: 75, defaultWeight: 18, notes: 'Sin rotar tronco' },
@@ -7097,40 +7870,158 @@ function applyCoachWorkoutTemplate(templateKey) {
             ]
         };
         data.day2 = {
-            title: 'Día 2: Tren Inferior (Fuerza & Cadera)',
+            title: 'Martes: Descanso Activo / Pasos',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day3 = {
+            title: 'Miércoles: Tren Inferior (Fuerza & Cadera)',
+            modality: 'online',
+            completed: false,
             exercises: [
                 { id: 'ex-q1', name: 'Sentadilla Goblet con Mancuerna', sets: 4, reps: '10-12', rest: 90, defaultWeight: 24, notes: 'Profundidad cómoda' },
                 { id: 'ex-h1', name: 'Peso Muerto Rumano con Mancuernas', sets: 4, reps: '8-10', rest: 90, defaultWeight: 26, notes: 'Bisagra de cadera' },
                 { id: 'ex-q5', name: 'Estocadas Búlgaras con Mancuernas', sets: 3, reps: '10', rest: 75, defaultWeight: 12, notes: 'Control excéntrico' }
             ]
         };
-        data.day3 = {
-            title: 'Día 3: Full Body & Cadena Posterior',
+        data.day4 = {
+            title: 'Jueves: Descanso Activo / Movilidad',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day5 = {
+            title: 'Viernes: Full Body & Cadena Posterior',
+            modality: 'autonomo',
+            completed: false,
             exercises: [
                 { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: 4, reps: '10-12', rest: 90, defaultWeight: 45, notes: 'Pausa 2s arriba' },
                 { id: 'ex-t2', name: 'Jalón al Pecho en Polea', sets: 4, reps: '10-12', rest: 75, defaultWeight: 40, notes: 'Dorsales activos' },
                 { id: 'ex-p6', name: 'Flexiones con Pausa', sets: 3, reps: '12-15', rest: 60, defaultWeight: 0, notes: 'Core sólido' }
             ]
         };
+        data.day6 = {
+            title: 'Sábado: Descanso Regenerativo',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day7 = {
+            title: 'Domingo: Descanso Celular',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
     } else if (templateKey === 'hipertrofia4d') {
-        data.day1.title = 'Día 1: Torso Hipertrofia (A)';
-        data.day2.title = 'Día 2: Piernas & Core (A)';
-        data.day3.title = 'Día 3: Torso Hipertrofia (B)';
-        data.day4 = {
-            title: 'Día 4: Piernas Enfoque Glúteos/Isquios (B)',
+        data.day1 = {
+            title: 'Lunes: Torso Hipertrofia (A)',
+            modality: 'presencial',
+            completed: false,
             exercises: [
-                { id: 'ex-h1', name: 'Peso Muerto Rumano', sets: 4, reps: '10', rest: 90, defaultWeight: 24, notes: 'Tensión constante' },
+                { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', sets: 4, reps: '8-10', rest: 90, defaultWeight: 22, notes: 'Escápulas retraídas' },
+                { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano en Banco', sets: 4, reps: '10-12', rest: 75, defaultWeight: 18, notes: 'Sin rotar tronco' }
+            ]
+        };
+        data.day2 = {
+            title: 'Martes: Piernas & Core (A)',
+            modality: 'presencial',
+            completed: false,
+            exercises: [
+                { id: 'ex-q1', name: 'Sentadilla Goblet con Mancuerna', sets: 4, reps: '10-12', rest: 90, defaultWeight: 24, notes: 'Profundidad' },
+                { id: 'ex-h1', name: 'Peso Muerto Rumano', sets: 4, reps: '10', rest: 90, defaultWeight: 24, notes: 'Tensión constante' }
+            ]
+        };
+        data.day3 = {
+            title: 'Miércoles: Descanso Activo / Pasos',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day4 = {
+            title: 'Jueves: Torso Hipertrofia (B)',
+            modality: 'online',
+            completed: false,
+            exercises: [
+                { id: 'ex-p4', name: 'Press Militar Sentado con Mancuernas', sets: 3, reps: '10', rest: 75, defaultWeight: 14, notes: 'Pecho alto' },
+                { id: 'ex-t2', name: 'Jalón al Pecho en Polea', sets: 4, reps: '10-12', rest: 75, defaultWeight: 40, notes: 'Dorsales activos' }
+            ]
+        };
+        data.day5 = {
+            title: 'Viernes: Piernas Enfoque Glúteos/Isquios (B)',
+            modality: 'autonomo',
+            completed: false,
+            exercises: [
+                { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: 4, reps: '10-12', rest: 90, defaultWeight: 45, notes: 'Pausa 2s arriba' },
                 { id: 'ex-q4', name: 'Prensa 45°', sets: 4, reps: '12', rest: 90, defaultWeight: 90, notes: 'Rango profundo' }
             ]
         };
+        data.day6 = {
+            title: 'Sábado: Descanso Regenerativo',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day7 = {
+            title: 'Domingo: Descanso Celular',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
     } else if (templateKey === 'movilidad2d') {
-        data.day1.title = 'Día 1: Fuerza Funcional & Postura';
-        data.day2.title = 'Día 2: Movilidad, Cadera & Zona 2';
+        data.day1 = {
+            title: 'Lunes: Descanso Activo / Pasos',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day2 = {
+            title: 'Martes: Fuerza Funcional & Postura',
+            modality: 'presencial',
+            completed: false,
+            exercises: [
+                { id: 'ex-p6', name: 'Flexiones con Pausa', sets: 3, reps: '10', rest: 60, defaultWeight: 0, notes: 'Core sólido' },
+                { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano', sets: 3, reps: '10', rest: 75, defaultWeight: 16, notes: 'Control escapular' }
+            ]
+        };
+        data.day3 = {
+            title: 'Miércoles: Descanso Activo / Pasos',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day4 = {
+            title: 'Jueves: Movilidad, Cadera & Zona 2',
+            modality: 'online',
+            completed: false,
+            exercises: [
+                { id: 'ex-h1', name: 'Peso Muerto Rumano Ligero', sets: 3, reps: '12', rest: 75, defaultWeight: 14, notes: 'Flexibilidad de isquios' },
+                { id: 'ex-601', name: 'Caminata Inclinada Zona 2', sets: 1, reps: '35 min', rest: 0, defaultWeight: 0, notes: 'Ritmo conversacional' }
+            ]
+        };
+        data.day5 = {
+            title: 'Viernes: Descanso Activo / Pasos',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day6 = {
+            title: 'Sábado: Descanso Regenerativo',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
+        data.day7 = {
+            title: 'Domingo: Descanso Celular',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        };
     }
 
     localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
     renderCoachAssignedExercises();
-    showSensToast('Plantilla de entrenamiento aplicada.', 'champagne');
+    showSensToast('Plantilla semanal aplicada a los días del calendario.', 'champagne');
 }
 
 // -----------------------------------------------------------------------------
@@ -8430,13 +9321,15 @@ function renderWorkoutDaysNav() {
         const isSelected = isSameDay(dayDate, AppState.selectedDate || new Date());
         const dayKey = 'day' + (i + 1);
         const dayData = data[dayKey] || {};
-        const rawTitle = dayData.title || `Día ${i + 1}`;
-        const cleanTitle = rawTitle.replace(/^Día\s*\d+:\s*/i, '');
+        const dayName = getDayNameFromKey(dayKey);
+        const dayShort = getDayShortFromKey(dayKey);
+        const rawTitle = dayData.title || dayName;
+        const cleanTitle = rawTitle.replace(/^(Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo|Día\s*\d+)[:\s-]*/i, '') || rawTitle;
         const dateStr = formatDateDDMM(dayDate);
 
         html += `
             <button type="button" class="sens-workout-day-tab ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}">
-                <span class="tab-date-num">${dateStr}</span>
+                <span class="tab-date-num">${dayShort} ${dateStr}</span>
                 <span class="tab-title-sub">${cleanTitle}</span>
             </button>
         `;
@@ -8553,7 +9446,7 @@ function getWorkoutSessionDetails(exercises, fallbackTitle = '') {
                 dynamicTitle = otherTypeLabels.join(' & ');
             }
         } else {
-            dynamicTitle = fallbackTitle ? fallbackTitle.replace(/^Día\s*\d+:\s*/i, '') : 'Entrenamiento Funcional';
+            dynamicTitle = fallbackTitle ? fallbackTitle.replace(/^(Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo|Día\s*\d+)[:\s-]*/i, '') : 'Entrenamiento Funcional';
         }
     }
 
@@ -9315,3 +10208,1523 @@ function initCoachAthletePickerTriggers() {
         });
     });
 }
+
+// =============================================================================
+// MÓDULO F: FICHA CLÍNICA 360° SOLO LECTURA, GESTIÓN DE OBJETIVOS & COPILOTO IA
+// =============================================================================
+window.openCoachAthleteDossier = function(athId) {
+    const modal = document.getElementById('coachAthleteDossierModal');
+    const titleEl = document.getElementById('dossierAthleteNameTitle');
+    const metaEl = document.getElementById('dossierAthleteSubMeta');
+    const bodyEl = document.getElementById('coachAthleteDossierBody');
+    if (!modal || !bodyEl) return;
+
+    const targetId = athId || AppState.activeAthleteId || 'mock_vip';
+    const roster = getConsolidatedCoachAthletes();
+    const ath = roster.find(a => a.id === targetId) || roster[0];
+    if (!ath) return;
+
+    if (titleEl) titleEl.textContent = ath.full_name;
+    if (metaEl) metaEl.textContent = `${ath.email} • ${formatPlanName(ath.user_type || 'client_presencial_vip')}`;
+
+    const mockAnamnesisMap = {
+        mock_vip: {
+            age: 38, height: 178, weight: 78.5, targetWeight: 74.0, bodyFat: 15.2, muscleMass: 36.4,
+            goal: 'Recomposición Corporal & Postura',
+            injuries: 'Molestia lumbar leve al pasar +7hs sentado; hombro derecho sensible en press trasnuca.',
+            sleep: '6.5 a 7 hs / noche • Estrés laboral moderado-alto',
+            adherence: '92% asistencia presencial (11 de 12 sesiones completadas este mes)'
+        },
+        mock_duo: {
+            age: 34, height: 170, weight: 71.0, targetWeight: 67.5, bodyFat: 18.0, muscleMass: 31.2,
+            goal: 'Tono Muscular, Energía Diaria & Salud Articular',
+            injuries: 'Sin lesiones activas. Rigidez de cadera y tobillos.',
+            sleep: '7.5 hs / noche • Estrés moderado',
+            adherence: '88% asistencia en formato Dúo CABA'
+        },
+        mock_online_prem: {
+            age: 41, height: 181, weight: 84.2, targetWeight: 78.0, bodyFat: 19.5, muscleMass: 37.0,
+            goal: 'Déficit Calórico & Fuerza Base',
+            injuries: 'Tendinopatía rotuliana izquierda antigua (evitar rebote en sentadilla profunda).',
+            sleep: '6 hs / noche • Viajes frecuentes de trabajo',
+            adherence: '85% cumplimiento de check-ins online'
+        },
+        mock_online_basic: {
+            age: 29, height: 165, weight: 63.5, targetWeight: 61.0, bodyFat: 21.0, muscleMass: 26.8,
+            goal: 'Hipertrofia Tren Inferior & Glúteos',
+            injuries: 'Ninguna lesión reportada.',
+            sleep: '7.5 a 8 hs / noche • Buena recuperación',
+            adherence: '90% sesiones autónomas registradas'
+        },
+        mock_app_sub: {
+            age: 27, height: 163, weight: 59.0, targetWeight: 58.0, bodyFat: 20.2, muscleMass: 25.4,
+            goal: 'Mantenimiento, Vitalidad & Hábitos (Suscripción App)',
+            injuries: 'Tensión cervical por trabajo en computadora.',
+            sleep: '7 hs / noche',
+            adherence: 'Autónomo (3 sesiones / semana en App)'
+        }
+    };
+
+    const bio = mockAnamnesisMap[ath.id] || {
+        age: 33, height: 174, weight: ath.current_weight || 75.0, targetWeight: 71.0, bodyFat: 16.5, muscleMass: 34.0,
+        goal: ath.goal || 'Recomposición Corporal & Salud Articular',
+        injuries: 'Sin dolores articulares agudos declarados en el diagnóstico inicial.',
+        sleep: '7 hs promedio • Nivel de estrés moderado',
+        adherence: 'En seguimiento activo dentro del portal SENS'
+    };
+
+    bodyEl.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
+                <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Peso Actual / Meta</span>
+                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${bio.weight} kg <span style="font-size: 12px; color: #E5CBA7;">→ ${bio.targetWeight} kg</span></strong>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
+                <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Masa Muscular / Grasa</span>
+                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${bio.muscleMass} kg • ${bio.bodyFat}%</strong>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
+                <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Edad &amp; Altura</span>
+                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${bio.age} años • ${bio.height} cm</strong>
+            </div>
+        </div>
+        <div style="background: rgba(229, 203, 167, 0.06); border: 1px solid rgba(229, 203, 167, 0.22); border-radius: 12px; padding: 14px;">
+            <div style="font-size: 10.5px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; margin-bottom: 4px;">Mapa Articular, Lesiones &amp; Postura (Solo Lectura)</div>
+            <p style="font-size: 12.5px; color: #E4E4E7; margin: 0;">${bio.injuries}</p>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
+                <div style="font-size: 10px; font-weight: 800; color: #A1A1AA; text-transform: uppercase; margin-bottom: 4px;">Descanso &amp; Estilo de Vida</div>
+                <p style="font-size: 12px; color: #E4E4E7; margin: 0;">${bio.sleep}</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
+                <div style="font-size: 10px; font-weight: 800; color: #A1A1AA; text-transform: uppercase; margin-bottom: 4px;">Adherencia &amp; Avances</div>
+                <p style="font-size: 12px; color: #10B981; font-weight: 700; margin: 0;">${bio.adherence}</p>
+            </div>
+        </div>
+    `;
+
+    const btnGoNutri = document.getElementById('btnDossierGoNutrition');
+    const btnGoWork = document.getElementById('btnDossierGoWorkouts');
+    if (btnGoNutri) {
+        btnGoNutri.onclick = () => {
+            modal.style.display = 'none';
+            selectAthleteForPrescription('nutri', ath.id);
+        };
+    }
+    if (btnGoWork) {
+        btnGoWork.onclick = () => {
+            modal.style.display = 'none';
+            selectAthleteForPrescription('workout', ath.id);
+        };
+    }
+
+    modal.style.display = 'flex';
+};
+
+window.initCoachDossierAndCopilots = function() {
+    const dossierModal = document.getElementById('coachAthleteDossierModal');
+    const closeDossierBtn = document.getElementById('btnCloseAthleteDossierModal');
+    const openFromWorkoutBtn = document.getElementById('btnWorkoutOpenReadonlyDossier');
+
+    if (closeDossierBtn && dossierModal) {
+        closeDossierBtn.addEventListener('click', () => { dossierModal.style.display = 'none'; });
+        dossierModal.addEventListener('click', (e) => {
+            if (e.target === dossierModal) dossierModal.style.display = 'none';
+        });
+    }
+    if (openFromWorkoutBtn) {
+        openFromWorkoutBtn.addEventListener('click', () => {
+            const athId = document.getElementById('coachWorkoutAthleteSelector')?.value || AppState.activeAthleteId || 'mock_vip';
+            window.openCoachAthleteDossier(athId);
+        });
+    }
+
+    // Gestión de Objetivos y Copiloto de Recomendaciones en Estación 2
+    const goalPills = document.querySelectorAll('#coachGoalPillsRow .coach-goal-pill');
+    const goalTextInput = document.getElementById('coachCustomGoalTextInput');
+    const stepsInput = document.getElementById('coachCustomStepsGoalInput');
+    const freqInput = document.getElementById('coachCustomFreqGoalInput');
+    const recContext = document.getElementById('coachWorkoutRecContextLabel');
+    const recBody = document.getElementById('coachWorkoutRecBodyText');
+    const saveGoalBtn = document.getElementById('btnSaveCoachAthleteGoal');
+
+    const goalCopilotData = {
+        recomposicion: {
+            title: 'Fuerza & Recomposición Corporal',
+            steps: 10000,
+            freq: '3 a 4 sesiones / sem',
+            context: 'Basado en Ficha 360° + Objetivo Recomposición',
+            rec: 'Priorizar multiarticulares controlados (RIR 2), combinando fuerza de tren superior/inferior con estabilidad lumbopélvica (Dead bug / Pallof press) y caminata diaria en Zona 2.'
+        },
+        deficit: {
+            title: 'Déficit Calórico & Oxidación Metabólica',
+            steps: 12000,
+            freq: '4 sesiones / sem + NEAT alto',
+            context: 'Basado en Ficha 360° + Objetivo Déficit',
+            rec: 'Mantener cargas altas en básicos (6-10 reps) para preservar masa muscular en déficit, reducir descansos a 60-75s en accesorios y sumar bloque metabólico final sin impacto articular.'
+        },
+        hipertrofia: {
+            title: 'Fuerza Base & Hipertrofia Muscular',
+            steps: 8500,
+            freq: '4 a 5 sesiones / sem',
+            context: 'Basado en Ficha 360° + Objetivo Hipertrofia',
+            rec: 'Aumentar volumen efectivo a 12-16 series semanales por grupo muscular, cadencia excéntrica 3-1-1-0 y sobrecarga progresiva controlada en empujes, tracciones y piernas.'
+        },
+        movilidad: {
+            title: 'Longevidad, Postura & Salud Articular',
+            steps: 9000,
+            freq: '3 sesiones / sem + Movilidad diaria',
+            context: 'Basado en Ficha 360° + Objetivo Salud Articular',
+            rec: 'Priorizar descompresión axial, apertura torácica, control escapular, fuerza isométrica de core (McGill Big 3) y trabajo unilateral de cadera libre de dolor.'
+        }
+    };
+
+    goalPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            goalPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            const gKey = pill.getAttribute('data-goal') || 'recomposicion';
+            const cfg = goalCopilotData[gKey] || goalCopilotData.recomposicion;
+            if (goalTextInput) goalTextInput.value = cfg.title;
+            if (stepsInput) stepsInput.value = cfg.steps;
+            if (freqInput) freqInput.value = cfg.freq;
+            if (recContext) recContext.textContent = cfg.context;
+            if (recBody) recBody.textContent = cfg.rec;
+        });
+    });
+
+    if (saveGoalBtn) {
+        saveGoalBtn.addEventListener('click', () => {
+            const athId = document.getElementById('coachWorkoutAthleteSelector')?.value || AppState.activeAthleteId || 'mock_vip';
+            const activeGoal = document.querySelector('#coachGoalPillsRow .coach-goal-pill.active')?.getAttribute('data-goal') || 'recomposicion';
+            const goalPayload = {
+                goal_key: activeGoal,
+                goal_title: goalTextInput ? goalTextInput.value.trim() : 'Fuerza & Recomposición Corporal',
+                target_steps: stepsInput ? parseInt(stepsInput.value, 10) || 10000 : 10000,
+                target_freq: freqInput ? freqInput.value.trim() : '3 a 4 sesiones / sem',
+                updated_at: new Date().toISOString()
+            };
+            localStorage.setItem(`sens_athlete_goal_${athId}`, JSON.stringify(goalPayload));
+            const masterGoal = document.getElementById('coachMasterGoal');
+            if (masterGoal) masterGoal.textContent = `Meta: ${goalPayload.goal_title}`;
+            showSensToast(`Objetivo "${goalPayload.goal_title}" actualizado para el alumno.`, 'champagne');
+        });
+    }
+
+    // Chips rápidos para Nota y Consejo de Entrenamiento
+    document.querySelectorAll('#coachQuickNoteChipsWrap .coach-quick-note-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            const t = chip.getAttribute('data-title');
+            const b = chip.getAttribute('data-body');
+            const titleInp = document.getElementById('coachDashNoteTitleInput');
+            const bodyInp = document.getElementById('coachDashNoteBodyInput');
+            if (titleInp && t) titleInp.value = t;
+            if (bodyInp && b) bodyInp.value = b;
+            showSensToast('Consejo sugerido cargado. Podés editarlo o publicarlo.', 'info');
+        });
+    });
+};
+
+// =============================================================================
+// ESTACIÓN 4: BIBLIOTECA MAESTRA DE 3 NIVELES + NUTRICIÓN + GOBERNANZA DB
+// =============================================================================
+let coachMasterLibState = {
+    domain: 'exercises',
+    exType: 'all',
+    exMuscle: 'all',
+    exLegsSub: 'all',
+    exSearch: '',
+    foodMeal: 'all',
+    foodGoal: 'all',
+    foodSearch: ''
+};
+
+window.initCoachDatabasesTab = function() {
+    // Switcher de dominio (Mapa de Ejercicios vs Catálogo de Nutrición)
+    document.querySelectorAll('#coachLibDomainSwitcher .coach-domain-switch-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#coachLibDomainSwitcher .coach-domain-switch-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            coachMasterLibState.domain = btn.getAttribute('data-libdomain') || 'exercises';
+            const exSec = document.getElementById('coachLibExercisesSection');
+            const foodSec = document.getElementById('coachLibNutritionSection');
+            if (exSec) exSec.style.display = coachMasterLibState.domain === 'exercises' ? 'block' : 'none';
+            if (foodSec) foodSec.style.display = coachMasterLibState.domain === 'nutrition' ? 'block' : 'none';
+            window.renderCoachDatabasesTab();
+        });
+    });
+
+    // Nivel 1: Por Tipo (Muscular, Cardio, Yoga, Movilidad)
+    document.querySelectorAll('#coachTaxLevel1TypeBar .tax-l1-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#coachTaxLevel1TypeBar .tax-l1-btn').forEach(b => {
+                b.classList.remove('active', 'pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('active', 'pill-champagne');
+            coachMasterLibState.exType = btn.getAttribute('data-type') || 'all';
+
+            const l2Box = document.getElementById('coachTaxLevel2MuscleBox');
+            const l3Box = document.getElementById('coachTaxLevel3LegsBox');
+            const showMuscles = (coachMasterLibState.exType === 'all' || coachMasterLibState.exType === 'muscular');
+            if (l2Box) l2Box.style.display = showMuscles ? 'flex' : 'none';
+            if (!showMuscles && l3Box) l3Box.style.display = 'none';
+            window.renderCoachDatabasesTab();
+        });
+    });
+
+    // Nivel 2: Dentro de Muscular (Piernas, Bíceps, Tríceps, Pecho, Espalda, Abdominales, Hombros, Zona Lumbar, Antebrazos)
+    document.querySelectorAll('#coachTaxLevel2MuscleBar .tax-l2-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#coachTaxLevel2MuscleBar .tax-l2-btn').forEach(b => {
+                b.classList.remove('active', 'pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('active', 'pill-champagne');
+            coachMasterLibState.exMuscle = btn.getAttribute('data-muscle') || 'all';
+            coachMasterLibState.exLegsSub = 'all';
+
+            const l3Box = document.getElementById('coachTaxLevel3LegsBox');
+            if (l3Box) {
+                l3Box.style.display = coachMasterLibState.exMuscle === 'piernas' ? 'flex' : 'none';
+                document.querySelectorAll('#coachTaxLevel3LegsBar .tax-l3-btn').forEach((b, i) => {
+                    b.classList.toggle('active', i === 0);
+                    b.classList.toggle('pill-champagne', i === 0);
+                    b.classList.toggle('pill-dark', i !== 0);
+                });
+            }
+            window.renderCoachDatabasesTab();
+        });
+    });
+
+    // Nivel 3: Dentro de Piernas (Cuádriceps, Isquios, Abductores, Glúteos, Gemelos, Sóleo)
+    document.querySelectorAll('#coachTaxLevel3LegsBar .tax-l3-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#coachTaxLevel3LegsBar .tax-l3-btn').forEach(b => {
+                b.classList.remove('active', 'pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('active', 'pill-champagne');
+            coachMasterLibState.exLegsSub = btn.getAttribute('data-submuscle') || 'all';
+            window.renderCoachDatabasesTab();
+        });
+    });
+
+    const exSearch = document.getElementById('coachMasterExSearchInput');
+    if (exSearch) {
+        exSearch.addEventListener('input', () => {
+            coachMasterLibState.exSearch = exSearch.value.trim().toLowerCase();
+            window.renderCoachDatabasesTab();
+        });
+    }
+
+    // Filtros de Nutrición en Biblioteca Maestra (Tipo de Comida + Objetivo)
+    document.querySelectorAll('#coachLibFoodMealBar .lib-food-meal-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#coachLibFoodMealBar .lib-food-meal-btn').forEach(b => {
+                b.classList.remove('active', 'pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('active', 'pill-champagne');
+            coachMasterLibState.foodMeal = btn.getAttribute('data-meal') || 'all';
+            window.renderCoachDatabasesTab();
+        });
+    });
+
+    document.querySelectorAll('#coachLibFoodGoalBar .lib-food-goal-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#coachLibFoodGoalBar .lib-food-goal-btn').forEach(b => {
+                b.classList.remove('active', 'pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('active', 'pill-champagne');
+            coachMasterLibState.foodGoal = btn.getAttribute('data-goal') || 'all';
+            window.renderCoachDatabasesTab();
+        });
+    });
+
+    const foodSearch = document.getElementById('coachMasterFoodSearchInput');
+    if (foodSearch) {
+        foodSearch.addEventListener('input', () => {
+            coachMasterLibState.foodSearch = foodSearch.value.trim().toLowerCase();
+            window.renderCoachDatabasesTab();
+        });
+    }
+
+    const newExBtn = document.getElementById('btnCoachCreateNewExercise');
+    if (newExBtn) {
+        newExBtn.addEventListener('click', () => window.openCoachDbItemEditor('exercise', null));
+    }
+
+    // Inicializar Modal Editor de Gobernanza (Base Maestra vs Alumno Puntual)
+    const editorModal = document.getElementById('coachDbItemEditorModal');
+    const closeEditorBtn = document.getElementById('btnCloseDbItemEditorModal');
+    const cancelEditorBtn = document.getElementById('btnCancelDbItemEditor');
+    const editorForm = document.getElementById('coachDbItemEditorForm');
+
+    if (closeEditorBtn && editorModal) closeEditorBtn.addEventListener('click', () => { editorModal.style.display = 'none'; });
+    if (cancelEditorBtn && editorModal) cancelEditorBtn.addEventListener('click', () => { editorModal.style.display = 'none'; });
+
+    document.querySelectorAll('#dbEditorScopeSelector .db-scope-option').forEach(lbl => {
+        lbl.addEventListener('click', () => {
+            document.querySelectorAll('#dbEditorScopeSelector .db-scope-option').forEach(l => l.classList.remove('active'));
+            lbl.classList.add('active');
+            const radio = lbl.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+        });
+    });
+
+    document.querySelectorAll('#dbEditExTypePills .db-ex-type-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            document.querySelectorAll('#dbEditExTypePills .db-ex-type-pill').forEach(p => {
+                p.classList.remove('pill-champagne');
+                p.classList.add('pill-dark');
+            });
+            pill.classList.remove('pill-dark');
+            pill.classList.add('pill-champagne');
+        });
+    });
+
+    if (editorForm) {
+        editorForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveCoachDbItemEditorChanges();
+        });
+    }
+
+    window.renderCoachDatabasesTab();
+};
+
+window.renderCoachDatabasesTab = function() {
+    const athId = AppState.activeAthleteId || 'mock_vip';
+
+    if (coachMasterLibState.domain === 'exercises') {
+        const grid = document.getElementById('coachMasterExercisesGrid');
+        const countLabel = document.getElementById('coachLibExercisesCountLabel');
+        if (!grid) return;
+
+        const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+        const resolvedList = sourceLib.map(ex => (typeof window.getResolvedExercise === 'function') ? window.getResolvedExercise(ex, athId) : ex);
+
+        const filtered = resolvedList.filter(ex => {
+            if (coachMasterLibState.exType !== 'all' && ex.type_level1 !== coachMasterLibState.exType) return false;
+            if ((coachMasterLibState.exType === 'all' || coachMasterLibState.exType === 'muscular') && coachMasterLibState.exMuscle !== 'all') {
+                if (ex.group_level2 !== coachMasterLibState.exMuscle) return false;
+                if (coachMasterLibState.exMuscle === 'piernas' && coachMasterLibState.exLegsSub !== 'all') {
+                    const sub = (ex.sub_level3 || '').toLowerCase();
+                    const targetSub = coachMasterLibState.exLegsSub.toLowerCase();
+                    if (targetSub === 'isquios' && !sub.includes('isquio')) return false;
+                    else if ((targetSub === 'gemelos' || targetSub === 'soleo') && !sub.includes('gemelo') && !sub.includes('soleo')) return false;
+                    else if (targetSub !== 'isquios' && targetSub !== 'gemelos' && targetSub !== 'soleo' && sub !== targetSub) return false;
+                }
+            }
+            if (coachMasterLibState.exSearch) {
+                const q = coachMasterLibState.exSearch;
+                const hay = `${ex.name} ${ex.primary_muscle || ''} ${ex.execution || ''} ${ex.recommendations || ''}`.toLowerCase();
+                if (!hay.includes(q)) return false;
+            }
+            return true;
+        });
+
+        if (countLabel) {
+            countLabel.textContent = `Mostrando ${filtered.length} ejercicios del mapa biomecánico SENS`;
+        }
+
+        let html = '';
+        filtered.forEach(ex => {
+            const kcalData = (typeof window.calculateExerciseKcal === 'function')
+                ? window.calculateExerciseKcal(ex, ex.sets || 4, ex.reps || '10', 75)
+                : { kcalPerRep: 0.65, kcalPerSet: 7, totalKcal: 28 };
+            const typeTag = (ex.type_level1 || 'muscular').toUpperCase();
+            const groupTag = (ex.group_level2 || ex.category || 'fuerza').replace('_', ' ').toUpperCase();
+            const subTag = ex.sub_level3 ? ` • ${ex.sub_level3.toUpperCase()}` : '';
+
+            html += `
+                <div class="coach-master-lib-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">${typeTag}</span>
+                            <span class="pill pill-dark" style="font-size: 9px;">${groupTag}${subTag}</span>
+                            ${ex._hasAthleteOverride ? `<span class="pill pill-champagne" style="font-size: 8.5px; background: rgba(16,185,129,0.18); color: #10B981;">Personalizado Alumno</span>` : ''}
+                        </div>
+                        <span class="pill pill-dark" style="font-size: 9.5px; color: #E5CBA7; border: 1px solid rgba(229,203,167,0.35);">
+                            ~${kcalData.kcalPerSet} kcal/serie (${kcalData.kcalPerRep} kcal/rep)
+                        </span>
+                    </div>
+                    <h4 style="font-size: 1rem; font-weight: 800; margin: 0 0 4px 0;">${ex.name}</h4>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
+                        Músculo: <strong>${ex.primary_muscle || 'Principal'}</strong> • Base: ${ex.sets || 4} series × ${ex.reps || '10'} (~${kcalData.totalKcal} kcal totales)
+                    </div>
+                    <div style="font-size: 11.5px; line-height: 1.45; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
+                        <div><strong style="color: #9E7D4B;">Cómo hacerlo:</strong> ${ex.execution || 'Ejecución controlada en rango completo.'}</div>
+                        <div><strong style="color: #D97706;">Cómo NO hacerlo:</strong> ${ex.common_mistakes || 'Evitar compensación lumbar e impulso excesivo.'}</div>
+                        <div><strong style="color: #10B981;">Recomendación Nico:</strong> ${ex.recommendations || 'Foco en conexión mente-músculo y RIR 2.'}</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06);">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="window.openCoachDbItemEditor('exercise', '${ex.id}')" style="font-size: 11px; font-weight: 700; flex: 1;">
+                            Editar Ficha (Base o Alumno)
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        grid.innerHTML = html || `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted);">No se encontraron ejercicios para este filtro.</div>`;
+    } else {
+        const foodGrid = document.getElementById('coachMasterFoodsGrid');
+        if (!foodGrid) return;
+
+        const resolvedFoods = FOOD_CATALOG.map(f => (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : f);
+        const filteredFoods = resolvedFoods.filter(f => {
+            if (coachMasterLibState.foodMeal !== 'all' && (!Array.isArray(f.meals) || !f.meals.includes(coachMasterLibState.foodMeal))) return false;
+            if (coachMasterLibState.foodGoal !== 'all' && (!Array.isArray(f.goals) || !f.goals.includes(coachMasterLibState.foodGoal))) return false;
+            if (coachMasterLibState.foodSearch) {
+                const q = coachMasterLibState.foodSearch;
+                const hay = `${f.name} ${f.cat || ''} ${f.coachNote || ''}`.toLowerCase();
+                if (!hay.includes(q)) return false;
+            }
+            return true;
+        });
+
+        let html = '';
+        filteredFoods.forEach(f => {
+            const mealsStr = Array.isArray(f.meals) ? f.meals.map(m => m.toUpperCase()).join(' • ') : 'TODAS LAS COMIDAS';
+            const goalsStr = Array.isArray(f.goals) ? f.goals.map(g => g.toUpperCase()).join(' • ') : 'GENERAL';
+
+            html += `
+                <div class="coach-master-lib-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+                        <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">${mealsStr}</span>
+                        <span class="pill pill-dark" style="font-size: 9.5px; color: #E5CBA7;">${f.calPer100} kcal / 100g</span>
+                    </div>
+                    <h4 style="font-size: 1rem; font-weight: 800; margin: 0 0 4px 0;">${f.name}</h4>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
+                        Objetivos: <strong>${goalsStr}</strong> • Porción sugerida: ${f.portion || `${f.defaultGrams || 100}g`}
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: rgba(0,0,0,0.03); padding: 8px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-size: 11px;">
+                        <div><strong style="display:block; color:#9E7D4B;">${f.protPer100}g</strong>Proteína</div>
+                        <div><strong style="display:block; color:#9E7D4B;">${f.carbsPer100}g</strong>Carbos</div>
+                        <div><strong style="display:block; color:#9E7D4B;">${f.fatsPer100}g</strong>Grasas</div>
+                    </div>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-bottom: 12px;">
+                        <strong style="color: #9E7D4B;">Consejo Nutricional Nico:</strong> ${f.coachNote || 'Priorizar alimento fresco y medir porción en crudo.'}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06);">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="window.openCoachDbItemEditor('food', '${f.id}')" style="font-size: 11px; font-weight: 700; flex: 1;">
+                            Editar Alimento (Base o Alumno)
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        foodGrid.innerHTML = html || `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted);">No se encontraron alimentos para este filtro.</div>`;
+    }
+};
+
+window.openCoachDbItemEditor = function(itemType, itemId) {
+    const modal = document.getElementById('coachDbItemEditorModal');
+    if (!modal) return;
+
+    const athId = AppState.activeAthleteId || 'mock_vip';
+    const roster = getConsolidatedCoachAthletes();
+    const ath = roster.find(a => a.id === athId) || { full_name: 'Roberto Gómez' };
+
+    const activeAthLabel = document.getElementById('dbEditorActiveAthleteLabel');
+    if (activeAthLabel) activeAthLabel.textContent = ath.full_name;
+
+    document.getElementById('dbEditItemType').value = itemType;
+    document.getElementById('dbEditItemId').value = itemId || '';
+
+    const exWrap = document.getElementById('dbEditExerciseFieldsWrap');
+    const foodWrap = document.getElementById('dbEditFoodFieldsWrap');
+    const domainBadge = document.getElementById('dbEditorDomainBadge');
+    const titleEl = document.getElementById('dbEditorModalTitle');
+
+    if (itemType === 'exercise') {
+        if (exWrap) exWrap.style.display = 'flex';
+        if (foodWrap) foodWrap.style.display = 'none';
+        if (domainBadge) domainBadge.textContent = 'GOBERNANZA • FICHA TÉCNICA DE EJERCICIO';
+
+        const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+        const rawEx = itemId ? sourceLib.find(x => x.id === itemId) : null;
+        const ex = rawEx && typeof window.getResolvedExercise === 'function' ? window.getResolvedExercise(rawEx, athId) : (rawEx || {
+            name: '', type_level1: 'muscular', primary_muscle: 'Cuádriceps', kcal_per_set: 8, kcal_per_rep: 0.7, sets: 4, reps: '10-12',
+            execution: '', common_mistakes: '', recommendations: '', breathing: 'Inhalar en fase excéntrica, exhalar al empujar/traccionar'
+        });
+
+        if (titleEl) titleEl.textContent = itemId ? `Editar: ${ex.name}` : 'Crear Nuevo Ejercicio en Biblioteca';
+        document.getElementById('dbEditNameInput').value = ex.name || '';
+        document.getElementById('dbEditExPrimaryMuscle').value = ex.primary_muscle || '';
+        document.getElementById('dbEditExKcalSet').value = ex.kcal_per_set || 8;
+        document.getElementById('dbEditExKcalRep').value = ex.kcal_per_rep || 0.7;
+        document.getElementById('dbEditExDefaultSets').value = ex.sets || 4;
+        document.getElementById('dbEditExDefaultReps').value = ex.reps || '10-12';
+        document.getElementById('dbEditExExecution').value = ex.execution || '';
+        document.getElementById('dbEditExDonts').value = ex.common_mistakes || '';
+        document.getElementById('dbEditExRecommendations').value = ex.recommendations || '';
+        document.getElementById('dbEditExBreathing').value = ex.breathing || '';
+
+        const tVal = ex.type_level1 || 'muscular';
+        document.querySelectorAll('#dbEditExTypePills .db-ex-type-pill').forEach(p => {
+            const match = p.getAttribute('data-val') === tVal;
+            p.classList.toggle('pill-champagne', match);
+            p.classList.toggle('pill-dark', !match);
+        });
+    } else {
+        if (exWrap) exWrap.style.display = 'none';
+        if (foodWrap) foodWrap.style.display = 'flex';
+        if (domainBadge) domainBadge.textContent = 'GOBERNANZA • FICHA NUTRICIONAL DE ALIMENTO';
+
+        const rawFood = itemId ? FOOD_CATALOG.find(x => x.id === itemId) : null;
+        const food = rawFood && typeof window.getResolvedFood === 'function' ? window.getResolvedFood(rawFood, athId) : (rawFood || {
+            name: '', calPer100: 150, protPer100: 20, carbsPer100: 10, fatsPer100: 5, defaultGrams: 150, portion: '150g (1 porción)',
+            meals: ['almuerzo', 'cena'], coachNote: ''
+        });
+
+        if (titleEl) titleEl.textContent = itemId ? `Editar: ${food.name}` : 'Crear Nuevo Alimento en Catálogo';
+        document.getElementById('dbEditNameInput').value = food.name || '';
+        document.getElementById('dbEditFoodKcal100').value = food.calPer100 || 0;
+        document.getElementById('dbEditFoodProt100').value = food.protPer100 || 0;
+        document.getElementById('dbEditFoodCarbs100').value = food.carbsPer100 || 0;
+        document.getElementById('dbEditFoodFats100').value = food.fatsPer100 || 0;
+        document.getElementById('dbEditFoodDefaultGrams').value = food.defaultGrams || 100;
+        document.getElementById('dbEditFoodPortionLabel').value = food.portion || '100g';
+        document.getElementById('dbEditFoodMealsInput').value = Array.isArray(food.meals) ? food.meals.join(', ') : 'almuerzo, cena';
+        document.getElementById('dbEditFoodNoteInput').value = food.coachNote || '';
+    }
+
+    modal.style.display = 'flex';
+};
+
+function saveCoachDbItemEditorChanges() {
+    const itemType = document.getElementById('dbEditItemType').value;
+    let itemId = document.getElementById('dbEditItemId').value;
+    const scope = document.querySelector('input[name="dbEditScopeRadio"]:checked')?.value || 'athlete';
+    const athId = AppState.activeAthleteId || 'mock_vip';
+    const name = document.getElementById('dbEditNameInput').value.trim();
+    if (!name) return;
+
+    if (itemType === 'exercise') {
+        const activeTypePill = document.querySelector('#dbEditExTypePills .db-ex-type-pill.pill-champagne');
+        const payload = {
+            name,
+            type_level1: activeTypePill ? activeTypePill.getAttribute('data-val') : 'muscular',
+            primary_muscle: document.getElementById('dbEditExPrimaryMuscle').value.trim() || 'General',
+            kcal_per_set: parseFloat(document.getElementById('dbEditExKcalSet').value) || 8,
+            kcal_per_rep: parseFloat(document.getElementById('dbEditExKcalRep').value) || 0.7,
+            sets: parseInt(document.getElementById('dbEditExDefaultSets').value, 10) || 4,
+            reps: document.getElementById('dbEditExDefaultReps').value.trim() || '10-12',
+            execution: document.getElementById('dbEditExExecution').value.trim(),
+            common_mistakes: document.getElementById('dbEditExDonts').value.trim(),
+            recommendations: document.getElementById('dbEditExRecommendations').value.trim(),
+            breathing: document.getElementById('dbEditExBreathing').value.trim()
+        };
+
+        if (!itemId) {
+            itemId = 'ex-custom-' + Date.now();
+            payload.id = itemId;
+            payload.group_level2 = 'piernas';
+            if (typeof SENS_EXERCISE_LIBRARY !== 'undefined') SENS_EXERCISE_LIBRARY.unshift(payload);
+        }
+
+        if (scope === 'global') {
+            const globalOverrides = JSON.parse(localStorage.getItem('sens_global_exercise_overrides_v1') || '{}');
+            globalOverrides[itemId] = payload;
+            localStorage.setItem('sens_global_exercise_overrides_v1', JSON.stringify(globalOverrides));
+            if (typeof window.hydrateExerciseLibraryInMemory === 'function') window.hydrateExerciseLibraryInMemory();
+            showSensToast(`Base Maestra actualizada para TODOS los usuarios: ${name}`, 'champagne');
+        } else {
+            const athOverrides = JSON.parse(localStorage.getItem(`sens_athlete_exercise_overrides_${athId}`) || '{}');
+            athOverrides[itemId] = payload;
+            localStorage.setItem(`sens_athlete_exercise_overrides_${athId}`, JSON.stringify(athOverrides));
+            showSensToast(`Ficha de "${name}" personalizada solo para el alumno activo.`, 'champagne');
+        }
+    } else {
+        const mealsArr = document.getElementById('dbEditFoodMealsInput').value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        const payload = {
+            name,
+            calPer100: parseFloat(document.getElementById('dbEditFoodKcal100').value) || 0,
+            protPer100: parseFloat(document.getElementById('dbEditFoodProt100').value) || 0,
+            carbsPer100: parseFloat(document.getElementById('dbEditFoodCarbs100').value) || 0,
+            fatsPer100: parseFloat(document.getElementById('dbEditFoodFats100').value) || 0,
+            defaultGrams: parseInt(document.getElementById('dbEditFoodDefaultGrams').value, 10) || 100,
+            portion: document.getElementById('dbEditFoodPortionLabel').value.trim() || '100g',
+            meals: mealsArr.length ? mealsArr : ['almuerzo', 'cena'],
+            coachNote: document.getElementById('dbEditFoodNoteInput').value.trim()
+        };
+
+        if (!itemId) {
+            itemId = 'fd-custom-' + Date.now();
+            payload.id = itemId;
+            payload.cat = 'proteinas';
+            payload.goals = ['recomposicion', 'deficit', 'hipertrofia'];
+            FOOD_CATALOG.unshift(payload);
+        }
+
+        if (scope === 'global') {
+            const globalFoodOverrides = JSON.parse(localStorage.getItem('sens_global_food_overrides_v1') || '{}');
+            globalFoodOverrides[itemId] = payload;
+            localStorage.setItem('sens_global_food_overrides_v1', JSON.stringify(globalFoodOverrides));
+            if (typeof window.hydrateFoodCatalogInMemory === 'function') window.hydrateFoodCatalogInMemory();
+            showSensToast(`Catálogo Nutricional Maestro actualizado para TODOS: ${name}`, 'champagne');
+        } else {
+            const athFoodOverrides = JSON.parse(localStorage.getItem(`sens_athlete_food_overrides_${athId}`) || '{}');
+            athFoodOverrides[itemId] = payload;
+            localStorage.setItem(`sens_athlete_food_overrides_${athId}`, JSON.stringify(athFoodOverrides));
+            showSensToast(`Alimento "${name}" personalizado solo para el alumno activo.`, 'champagne');
+        }
+    }
+
+    document.getElementById('coachDbItemEditorModal').style.display = 'none';
+    window.renderCoachDatabasesTab();
+    renderCoachFoodSelectionGrid(coachNutritionFilterState.lastPrescribedFoods);
+    renderCoachAssignedExercises();
+}
+
+// =============================================================================
+// ESTACIÓN 5: GROWTH MARKETING STUDIO SENS (PLUG & PLAY APB • 12 TEMPLATES)
+// =============================================================================
+const SENS_MARKETING_TEMPLATES = [
+    {
+        id: 'tpl_error_biomecanico',
+        name: '1. El Error #1 (Stop-Scroll)',
+        badge: 'ALTA RETENCIÓN',
+        scenes: [
+            { eyebrow: 'BIOMECÁNICA SENS', headline: 'EL ERROR #1 AL HACER SENTADILLA', sub: 'Si tus talones se despegan o rebotás abajo, perdés tensión muscular y sobrecargás la rodilla.', c1: 'Foco: Cuádriceps', c2: '~11 kcal / serie', c3: 'Miralo hasta el final' },
+            { eyebrow: 'CORRECCIÓN TÉCNICA', headline: 'BAJÁ EN 3 SEGUNDOS CONTROLADOS', sub: 'Mantené el trípode plantar firme, pecho alto y pausa 1 segundo en el punto más bajo.', c1: 'Cadencia 3-1-1-0', c2: 'RIR 2 Seguro', c3: 'Cero dolor lumbar' },
+            { eyebrow: 'ENTRENÁ CON SENTIDO', headline: '¿QUERÉS ENTRENAR SIN DOLOR?', sub: 'Diagnóstico biomecánico + Plan personalizado Presencial CABA, Online o App.', c1: 'Presencial CABA', c2: 'Online / App', c3: 'Escribime SENS →' }
+        ],
+        slides: [
+            { eyebrow: 'DESLIZÁ • 1/4', headline: 'EL ERROR #1 QUE FRENA TUS PIERNAS', sub: 'Por qué subir kilos sin control excéntrico te estanca y fatiga tus articulaciones.', c1: 'Biomecánica', c2: 'Fuerza Real', c3: 'Deslizá →' },
+            { eyebrow: 'EL PROBLEMA • 2/4', headline: 'REBOTAR ABAJO MATA LA TENSIÓN', sub: 'Cuando usás inercia en vez de control muscular, el tendón absorbe el impacto y el músculo no estimula.', c1: 'Evitá rebotes', c2: 'Cuidá rodillas', c3: 'Deslizá →' },
+            { eyebrow: 'SOLUCIÓN SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + RANGO PROFUNDO', sub: '3 segundos al bajar, 1 segundo de pausa abajo y subida explosiva exhalando.', c1: '+Reclutamiento', c2: '~42 kcal totales', c3: 'Deslizá →' },
+            { eyebrow: 'TU PLAN • 4/4', headline: ' ¿ENTRENAMOS JUNTOS? MAKE SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA, Online o desde la App SENS.', c1: 'Cupos Activos', c2: 'Plan a Medida', c3: 'Link en Bio →' }
+        ],
+        caption: 'El 90% comete este error en el gimnasio por priorizar ego antes que biomecánica.\n\nEn SENS trabajamos con cadencia controlada (3-1-1-0) y selección clínica de ejercicios para que construyas fuerza real sin dolor articular.\n\nComentá "SENS" o escribime por mensaje directo para evaluar tu caso (Presencial CABA, Online 1:1 o Suscripción App).'
+    },
+    {
+        id: 'tpl_vs_ejecucion',
+        name: '2. Cómo NO vs. Cómo SÍ',
+        badge: 'GUARDADOS ALTOS',
+        scenes: [
+            { eyebrow: 'CÓMO NO VS. CÓMO SÍ', headline: 'DEJÁ DE TIRAR CON LOS BRAZOS EN ESPALDA', sub: 'Si encogés los hombros al traccionar, llevás toda la tensión al trapecio y cuello.', c1: 'Espalda & Dorsal', c2: '~9 kcal / serie', c3: 'Fijate la diferencia' },
+            { eyebrow: 'TÉCNICA CORRECTA', headline: 'INICIÁ EL MOVIMIENTO DEPRIMIENDO ESCÁPULAS', sub: 'Pensá en llevar los codos hacia el bolsillo trasero del pantalón manteniendo el pecho abierto.', c1: 'Control Escapular', c2: 'Pausa 1s atrás', c3: 'Postura Sólida' },
+            { eyebrow: 'MÉTODO MAKE SENS', headline: 'TRANSFORMÁ TU POSTURA Y FUERZA', sub: 'Entrenamiento inteligente adaptado a tu estructura corporal.', c1: '1:1 & Dúo CABA', c2: 'App Generalista', c3: 'Escribime SENS →' }
+        ],
+        slides: [
+            { eyebrow: 'GUÍA PRÁCTICA • 1/4', headline: 'CÓMO NO VS. CÓMO SÍ ENTRENAR ESPALDA', sub: 'El ajuste de 2 centímetros que cambia por completo tu postura.', c1: 'Espalda Sana', c2: 'Técnica SENS', c3: 'Deslizá →' },
+            { eyebrow: 'CÓMO NO • 2/4', headline: 'ENCOGER HOMBROS Y ARQUEAR CUELLO', sub: 'Genera sobrecarga cervical y cero estímulo en los dorsales.', c1: 'Error Frecuente', c2: 'Tensión Cervical', c3: 'Deslizá →' },
+            { eyebrow: 'CÓMO SÍ • 3/4', headline: 'DEPRESIÓN ESCAPULAR + CODOS ABAJO', sub: 'Inhalá al estirar, exhalá llevando los codos hacia tu cadera con control.', c1: 'Dorsal Activo', c2: '~36 kcal / 4 sets', c3: 'Deslizá →' },
+            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Make Sens', c3: 'Escribime SENS →' }
+        ],
+        caption: 'Pequeños ajustes biomecánicos generan grandes cambios en tu estructura física.\n\nGuardá este post para tu próxima sesión de tracción y probá iniciar cada repetición deprimiendo las escápulas.\n\n¿Querés que armemos tu programación completa? Escribime "SENS" por DM.'
+    },
+    {
+        id: 'tpl_gasto_kcal',
+        name: '3. Gasto Real de Kcal por Serie',
+        badge: 'VIRAL / DATOS',
+        scenes: [
+            { eyebrow: 'CIENCIA & METABOLISMO', headline: '¿CUÁNTAS KCAL GASTA REALMENTE ESTE EJERCICIO?', sub: 'No necesitás saltar sin sentido: la fuerza multiarticular pesada dispara tu gasto energético.', c1: '~11 kcal / serie', c2: '~44 kcal / 4 sets', c3: '+Efecto EPOC 24hs' },
+            { eyebrow: 'POR QUÉ FUNCIONA', headline: 'MÁS MASA MUSCULAR = MAYOR METABOLISMO BASAL', sub: 'Cada serie controlada cerca del fallo técnico (RIR 2) oxida energía durante y después de entrenar.', c1: 'Recomposición', c2: 'Fuerza Base', c3: 'Sin impacto lesivo' },
+            { eyebrow: 'APP & COACHING SENS', headline: 'CONOCÉ EL GASTO DE CADA RUTINA EN NUESTRA APP', sub: 'Seguimiento de series, pesos, descansos y calorías por ejercicio.', c1: 'App $19.900/mes', c2: 'Coaching 1:1', c3: 'Probala Hoy →' }
+        ],
+        slides: [
+            { eyebrow: 'DATOS REALES • 1/4', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA BIEN HECHA?', sub: 'Desmitificando el cardio eterno vs. el entrenamiento de fuerza inteligente.', c1: 'Metabolismo', c2: 'Ciencia SENS', c3: 'Deslizá →' },
+            { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cadencia controlada y cargas progresivas.', c1: '~0.9 kcal / rep', c2: 'Alta Demanda', c3: 'Deslizá →' },
+            { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO QUEMA CALORÍAS AÚN DURMIENDO', sub: 'Preservar y construir tejido magro es la clave número 1 para no sufrir efecto rebote.', c1: 'Sostenible', c2: 'Salud Hormonal', c3: 'Deslizá →' },
+            { eyebrow: 'SUMATE A SENS • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN TU CELULAR', sub: 'Elegí tu modalidad: Presencial CABA, Online 1:1 o Suscripción App.', c1: 'Make Sens', c2: 'Acceso Inmediato', c3: 'Link en Bio →' }
+        ],
+        caption: '¿Sabías cuánta energía demanda una serie de fuerza multiarticular ejecutada con tempo controlado?\n\nEn la plataforma SENS cada ejercicio y cada comida tienen sus métricas exactas para que avances sin adivinar.\n\nSumate hoy desde el link de la bio.'
+    },
+    {
+        id: 'tpl_nutri_regla3',
+        name: '4. Hack Nutricional & Proteína',
+        badge: 'NUTRICIÓN SIMPLE',
+        scenes: [
+            { eyebrow: 'NUTRICIÓN SIN EXTREMOS', headline: 'EL CAMBIO Nº1 PARA DEFINIR SIN PASAR HAMBRE', sub: 'Si llegás a la noche con ansiedad, te está faltando proteína en desayuno y almuerzo.', c1: '35-40g Prot / comida', c2: 'Alta Saciedad', c3: 'Cero Dietas Raras' },
+            { eyebrow: 'FÓRMULA PRÁCTICA', headline: 'COMBINÁ PROTEÍNA MAGRA + FIBRA + CARBO TIMING', sub: 'Huevos o yogur griego a la mañana, pollo o corte magro al mediodía y carbohidratos cerca de entrenar.', c1: 'Energía Estable', c2: 'Mejor Digestión', c3: 'Regla de 3 Simple' },
+            { eyebrow: 'PORTAL NUTRICIONAL SENS', headline: 'TU PLAN DE COMIDAS Y EQUIVALENCIAS AL INSTANTE', sub: 'Desayuno, almuerzo, merienda, cena y snacks adaptados a tus calorías.', c1: 'Fácil de Cumplir', c2: '100% Flexible', c3: 'Escribime SENS →' }
+        ],
+        slides: [
+            { eyebrow: 'NUTRICIÓN REAL • 1/4', headline: 'CÓMO LLEGAR A TU PROTEÍNA DIARIA SIN COMPLICARTE', sub: 'Sin suplementos obligatorios ni comidas aburridas.', c1: 'Saciedad', c2: 'Recomposición', c3: 'Deslizá →' },
+            { eyebrow: 'EL ERROR • 2/4', headline: 'DESAYUNAR SOLO TOSTADAS Y CAFÉ', sub: 'Dispara tu glucosa a la mañana y te deja sin energía ni saciedad a las 3 horas.', c1: 'Pico de Insulina', c2: 'Hambre Temprana', c3: 'Deslizá →' },
+            { eyebrow: 'EL AJUSTE • 3/4', headline: 'SUMÁ 30G DE PROTEÍNA EN CADA COMIDA', sub: '3 huevos + fruta, 180g de pechuga o lomo al almuerzo, yogur + avena en merienda.', c1: '~160g Prot / día', c2: 'Masa Magra', c3: 'Deslizá →' },
+            { eyebrow: 'TU PLAN EN SENS • 4/4', headline: 'CALCULADORA DE PORCIONES EN VIVO EN LA APP', sub: 'Intercambiá alimentos por comida y objetivo con un toque.', c1: 'Desayuno a Cena', c2: 'Make Sens', c3: 'Link en Bio →' }
+        ],
+        caption: 'La mejor nutrición no es la más restrictiva, sino la que podés sostener un martes a las 9 de la noche después de trabajar.\n\nEn SENS diseñamos tu estructura por momento de comida (Desayuno, Almuerzo, Merienda, Cena y Snacks) con equivalencias automáticas.\n\nEscribime "NUTRI" o entrá al link de mi perfil.'
+    },
+    {
+        id: 'tpl_oficina_postura',
+        name: '5. Dolor Lumbar & Oficina (+8hs Sentado)',
+        badge: 'ALTA CONVERSIÓN',
+        scenes: [
+            { eyebrow: 'SALUD ARTICULAR & POSTURA', headline: '¿PASÁS MÁS DE 7 HORAS SENTADO POR DÍA?', sub: 'Tu cadera se acorta, tus glúteos se apagan y tu zona lumbar termina pagando el precio.', c1: 'Zona Lumbar', c2: 'Movilidad Cadera', c3: 'Probá esta secuencia' },
+            { eyebrow: 'PROTOCOLO DE 5 MINUTOS', headline: 'MOVILIDAD 90/90 + EXTENSIÓN TORÁCICA + CORE', sub: 'Descomprimí la columna antes de entrenar fuerza para volver a moverte libre de dolor.', c1: '0 Dolor Articular', c2: '~5 kcal / serie', c3: 'Longevidad Activa' },
+            { eyebrow: 'ESPECIALIDAD SENS', headline: 'ENTRENAMIENTO PENSADO PARA PROFESIONALES', sub: 'Devolvéle movilidad, fuerza y energía a tu cuerpo en 3 sesiones semanales.', c1: 'CABA & Online', c2: 'Diagnóstico 360°', c3: 'Agendá tu Lugar →' }
+        ],
+        slides: [
+            { eyebrow: 'POSTURA & SALUD • 1/4', headline: 'SI TRABAJÁS SENTADO 8 HORAS, NECESITÁS ESTO', sub: 'Por qué estirar el isquio no alcanza para quitar la tensión lumbar.', c1: 'Columna Sana', c2: 'Movilidad SENS', c3: 'Deslizá →' },
+            { eyebrow: 'CAUSA REAL • 2/4', headline: 'AMNESIA GLÚTEA Y RIGIDEZ DE CADERA', sub: 'Cuando la cadera y la espalda alta no se mueven, la zona lumbar compensa en cada movimiento.', c1: 'Causa Raíz', c2: 'Biomecánica', c3: 'Deslizá →' },
+            { eyebrow: 'LA SOLUCIÓN • 3/4', headline: 'ESTABILIDAD LUMBOPÉLVICA + FUERZA PROGRESIVA', sub: 'Bird-Dog, Pallof Press y bisagra de cadera controlada fortalecen tu faja natural.', c1: 'Core Anti-Rotación', c2: 'Fuerza Segura', c3: 'Deslizá →' },
+            { eyebrow: 'EVALUACIÓN • 4/4', headline: 'HACÉ TU DIAGNÓSTICO DE MOVIMIENTO EN SENS', sub: 'Adaptamos cada ejercicio a tu historial articular.', c1: 'Presencial / Online', c2: 'Make Sens', c3: 'Escribime SENS →' }
+        ],
+        caption: 'Entrenar no debería doler: debería quitarte los dolores del día a día.\n\nSi trabajás muchas horas frente a la computadora, tu rutina tiene que combinar fuerza estructural con movilidad torácica y estabilidad lumbopélvica.\n\nEscribime "POSTURA" para evaluar tu caso.'
+    },
+    {
+        id: 'tpl_mito_cardio',
+        name: '6. Mito Derribado: Sudar vs. Oxidar Grasa',
+        badge: 'DEBATE & ALCANCE',
+        scenes: [
+            { eyebrow: 'MITO VS. REALIDAD', headline: 'TRANSPIRAR MÁS NO SIGNIFICA QUEMAR MÁS GRASA', sub: 'Abrigar de más o hacer saltos sin descanso solo te deshidrata y eleva tu cortisol.', c1: 'Fisiología Real', c2: 'Cero Humo', c3: 'Leé por qué' },
+            { eyebrow: 'LO QUE SÍ FUNCIONA', headline: 'FUERZA PROGRESIVA + PASOS DIARIOS + DÉFICIT SUAVE', sub: 'Construí músculo en 3-4 sesiones por semana y mantené 8.000 a 10.000 pasos diarios.', c1: '8k-10k Pasos', c2: 'Déficit 300 kcal', c3: 'Resultados Reales' },
+            { eyebrow: 'MÉTODO MAKE SENS', headline: 'UN SISTEMA CLARO QUE PODÉS SOSTENER TODO EL AÑO', sub: 'Sin rutinas improvisadas ni dietas extremas.', c1: 'Ciencia Aplicada', c2: 'Seguimiento Real', c3: 'Sumate a SENS →' }
+        ],
+        slides: [
+            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'La diferencia entre terminar agotado y entrenar de verdad.', c1: 'Fisiología', c2: 'Make Sens', c3: 'Deslizá →' },
+            { eyebrow: 'EL ERROR • 2/4', headline: 'CASTIGARTE CON CARDIO EXTREMO TODOS LOS DÍAS', sub: 'Aumenta el hambre reactiva, fatiga tus rodillas y reduce tu masa muscular.', c1: 'Fatiga Central', c2: 'Efecto Rebote', c3: 'Deslizá →' },
+            { eyebrow: 'EL SISTEMA • 3/4', headline: 'SOBRECARGA PROGRESIVA + NEAT + PROTEÍNA', sub: '3 pilares medibles desde el dashboard de nuestra plataforma.', c1: 'Medible', c2: 'Sostenible', c3: 'Deslizá →' },
+            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App.', c1: 'Nico Maralle', c2: 'SENS Train', c3: 'Link en Bio →' }
+        ],
+        caption: 'Salir agotado no siempre es sinónimo de haber entrenado bien.\n\nLa recomposición corporal ocurre cuando combinás estímulo mecánico real en tus músculos, pasos diarios constantes y un déficit calórico moderado con suficiente proteína.\n\nEso hacemos todos los días en SENS.'
+    },
+    {
+        id: 'tpl_rutina_express',
+        name: '7. Rutina Eficiente 45 Minutos',
+        badge: 'AGENDA OCUPADA',
+        scenes: [
+            { eyebrow: 'EFICIENCIA PURA', headline: 'NO NECESITÁS 2 HORAS EN EL GIMNASIO PARA VER CAMBIOS', sub: 'Con 45 minutos bien estructurados y descansos medidos lográs el doble de estímulo.', c1: '45 Minutos', c2: '~185 kcal sesión', c3: 'Alta Densidad' },
+            { eyebrow: 'ESTRUCTURA SENS', headline: '1 EMPUJE + 1 TRACCIÓN + 1 DOMINANTE DE CADERA + CORE', sub: '4 ejercicios multiarticulares a RIR 2 con cronómetro de descanso integrado en la app.', c1: '4 Básicos Clave', c2: 'Descanso 75-90s', c3: 'Cero Tiempo Muerto' },
+            { eyebrow: 'TU RUTINA EN EL BOLSILLO', headline: 'ENTRÁ AL GIMNASIO SABIENDO EXACTAMENTE QUÉ HACER', sub: 'Videos demostrativos, pesos sugeridos y registro por serie.', c1: 'App SENS $19.900', c2: 'Planes 1:1', c3: 'Empezá Hoy →' }
+        ],
+        slides: [
+            { eyebrow: 'SIN EXCUSAS • 1/4', headline: 'LA RUTINA DE 45 MINUTOS PARA GENTE SIN TIEMPO', sub: 'Cómo entrenar todo el cuerpo con máxima eficiencia.', c1: '45 Minutos', c2: 'Full Body SENS', c3: 'Deslizá →' },
+            { eyebrow: 'BLOQUE A • 2/4', headline: 'SENTADILLA GOBLET + REMO CON MANCUERNA', sub: '4 series de 10 reps alternando tren inferior y tracción horizontal.', c1: '~72 kcal bloque', c2: 'Postura & Piernas', c3: 'Deslizá →' },
+            { eyebrow: 'BLOQUE B • 3/4', headline: 'PESO MUERTO RUMANO + PRESS INCLINADO + CORE', sub: 'Cadena posterior firme, empuje seguro para el hombro y estabilidad media.', c1: '~85 kcal bloque', c2: 'Estímulo Completo', c3: 'Deslizá →' },
+            { eyebrow: 'LLEVALA EN TU CELU • 4/4', headline: 'TODAS TUS SERIES Y VIDEOS EN LA APP SENS', sub: 'Activá tu cuenta hoy mismo y entrená con sentido.', c1: 'Make Sens', c2: '100% Guiado', c3: 'Link en Bio →' }
+        ],
+        caption: 'La falta de tiempo no se resuelve entrenando más rápido y mal, sino eligiendo los ejercicios con mayor retorno por minuto invertido.\n\nGuardá esta estructura de 45 minutos o tenela lista con videos y cronómetro dentro de la App SENS.'
+    },
+    {
+        id: 'tpl_gluteos_isquios',
+        name: '8. Especial Piernas: Glúteos vs. Isquios',
+        badge: 'HIPERTROFIA',
+        scenes: [
+            { eyebrow: 'BIOMECÁNICA DE PIERNAS', headline: '¿SENTÍS EL PESO MUERTO EN LA CINTURA Y NO EN GLÚTEOS?', sub: 'Este ajuste en el ángulo de tu tibia y cadera cambia el 100% del reclutamiento.', c1: 'Glúteos & Isquios', c2: '~11 kcal / serie', c3: 'Mirá el ángulo' },
+            { eyebrow: 'EL AJUSTE CLAVE', headline: 'LLEVÁ LA CADERA ATRÁS COMO CERRANDO UNA PUERTA', sub: 'Frená apenas tu cadera deje de viajar hacia atrás: bajar más solo dobla tu columna lumbar.', c1: 'Bisagra Pura', c2: 'Barra Pegada', c3: 'Tensión Continua' },
+            { eyebrow: 'ENTRENO PERSONALIZADO', headline: 'APRENDÉ LA TÉCNICA PERFECTA CON SEGUIMIENTO', sub: 'Corrección presencial en CABA o por video en modalidad Online.', c1: 'Presencial / Dúo', c2: 'Online VIP', c3: 'Escribime SENS →' }
+        ],
+        slides: [
+            { eyebrow: 'TREN INFERIOR • 1/4', headline: 'CÓMO ENFOCAR GLÚTEOS O ISQUIOS SEGÚN TU TÉCNICA', sub: 'Dominá la bisagra de cadera sin sobrecargar la espalda baja.', c1: 'Piernas SENS', c2: 'Biomecánica', c3: 'Deslizá →' },
+            { eyebrow: 'FOCO ISQUIOS • 2/4', headline: 'TIBIAS CASI VERTICALES Y RODILLAS SEMI-RÍGIDAS', sub: 'Mayor estiramiento de los isquiotibiales en el descenso controlado.', c1: 'Isquiotibiales', c2: '3s al bajar', c3: 'Deslizá →' },
+            { eyebrow: 'FOCO GLÚTEOS • 3/4', headline: 'LEVE FLEXIÓN DE RODILLA + EMPUJE DE CADERA', sub: 'Combinado con Hip Thrust con pausa isométrica de 2 segundos arriba.', c1: 'Glúteo Mayor', c2: '~45 kcal / 4 sets', c3: 'Deslizá →' },
+            { eyebrow: 'ENTRENA EN SENS • 4/4', headline: 'PROGRAMACIÓN ESPECÍFICA SEGÚN TU OBJETIVO', sub: 'Sumate a los entrenamientos presenciales u online.', c1: 'Make Sens', c2: 'Resultados', c3: 'Escribime SENS →' }
+        ],
+        caption: 'La diferencia entre sentir un ejercicio en la espalda baja o sentirlo al 100% en glúteos e isquiotibiales está en entender dónde termina tu rango real de cadera.\n\nGuardá este post para tu próximo día de piernas.'
+    },
+    {
+        id: 'tpl_progreso_habitos',
+        name: '9. Constancia > Perfección (Mindset)',
+        badge: 'CONEXIÓN & MARCA',
+        scenes: [
+            { eyebrow: 'FILOSOFÍA MAKE SENS', headline: 'EL MEJOR PLAN NO ES EL PERFECTO, ES EL QUE CUMPLÍS', sub: 'Entrenar 3 veces por semana durante 12 meses supera a entrenar 6 días durante 2 semanas.', c1: 'Adherencia 90%', c2: 'Hábitos Reales', c3: 'Largo Plazo' },
+            { eyebrow: 'SISTEMA DE HÁBITOS', headline: 'MEDIMOS TU PROGRESO MÁS ALLÁ DE LA BALANZA', sub: 'Fuerza en cada ejercicio, centímetros, energía diaria, calidad de sueño y composición corporal.', c1: 'Más Fuerza', c2: 'Mejor Postura', c3: 'Menos Estrés' },
+            { eyebrow: 'HEY, ¿ENTRENAMOS JUNTOS?', headline: 'EMPEZÁ TU PROCESO HOY CON SENS', sub: 'Elegí el plan que mejor se adapte a tu rutina actual.', c1: 'Presencial CABA', c2: 'Online & App', c3: 'Hablemos Hoy →' }
+        ],
+        slides: [
+            { eyebrow: 'MENTALIDAD SENS • 1/4', headline: 'POR QUÉ LA CONSTANCIA SIEMPRE LE GANA A LA INTENSIDAD', sub: 'Construir un cuerpo fuerte y sano es un juego de adherencia.', c1: 'Make Sens', c2: 'Estilo de Vida', c3: 'Deslizá →' },
+            { eyebrow: 'LA TRAMPA • 2/4', headline: 'EL "TODO O NADA" QUE TE HACE ABANDONAR', sub: 'Creer que por perder un día o tener una cena social arruinaste la semana.', c1: 'Cero Culpa', c2: 'Equilibrio', c3: 'Deslizá →' },
+            { eyebrow: 'EL MÉTODO • 3/4', headline: 'MÍNIMO INNEGOCIABLE: 3 SESIONES + PROTEÍNA + PASOS', sub: 'Cuando tenés claridad en lo que importa, mantenerte en ruta es simple.', c1: 'Claridad Total', c2: 'Dashboard SENS', c3: 'Deslizá →' },
+            { eyebrow: 'SUMATE HOY • 4/4', headline: 'HEY, ¿ENTRENAMOS JUNTOS? MAKE SENS.', sub: 'Escribime y diseñamos tu plan a medida.', c1: 'Nico Maralle', c2: 'CABA & Online', c3: 'Link en Bio →' }
+        ],
+        caption: 'No buscamos que vivas para contar calorías ni que pases tu vida adentro de un gimnasio.\n\nBuscamos que el entrenamiento y la nutrición te den más energía, mejor postura y confianza para todo el resto de tu vida.\n\nHey, ¿entrenamos juntos? Make Sens.'
+    },
+    {
+        id: 'tpl_duo_presencial',
+        name: '10. Entrenamiento Dúo / Grupal CABA',
+        badge: 'CUPOS PRESENCIAL',
+        scenes: [
+            { eyebrow: 'PRESENCIAL EN CABA', headline: 'ENTRENÁ CON UN AMIGO O PAREJA CON PLAN 100% PROPIO', sub: 'Compartís el horario y la motivación, pero cada uno tiene su ficha clínica, cargas y objetivos en la App.', c1: 'Modalidad Dúo/Trío', c2: 'Ficha Individual', c3: 'Beneficio en Valor' },
+            { eyebrow: 'CÓMO FUNCIONA', headline: 'SUPERVISIÓN TÉCNICA EN VIVO + PORTAL DIGITAL SENS', sub: 'Corregimos cada serie en persona y llevás el registro de tus avances y nutrición en el celular.', c1: 'CABA Presencial', c2: 'App Incluida', c3: '1, 2 o 3 veces/sem' },
+            { eyebrow: 'CUPOS LIMITADOS', headline: 'RESERVÁ SU HORARIO DE PRUEBA ESTA SEMANA', sub: 'Consultá disponibilidad de turnos en CABA por WhatsApp.', c1: 'Atención VIP', c2: 'Turnos Abiertos', c3: 'Escribime DÚO →' }
+        ],
+        slides: [
+            { eyebrow: 'FORMATO DÚO/TRÍO • 1/4', headline: 'ENTRENAR DE A DOS, PERO CON PLAN 100% PERSONALIZADO', sub: 'La combinación ideal entre motivación compartida y precisión clínica.', c1: 'Presencial CABA', c2: 'Dúo & Trío', c3: 'Deslizá →' },
+            { eyebrow: 'DIFERENCIAL • 2/4', headline: 'NO HACEN LA MISMA RUTINA GENÉRICA', sub: 'Cada alumno tiene su propia evaluación articular, sus pesos y sus metas nutricionales.', c1: 'Ficha 360° Propia', c2: 'Cargas a Medida', c3: 'Deslizá →' },
+            { eyebrow: 'INVERSIÓN • 3/4', headline: 'ACCEDÉ AL SEGUIMIENTO PRESENCIAL CON VALOR PREFERENCIAL', sub: '1, 2 o 3 sesiones semanales en CABA con acceso total a la App SENS.', c1: 'Desde $85.000', c2: 'Portal Completo', c3: 'Deslizá →' },
+            { eyebrow: 'COORDINEMOS • 4/4', headline: 'ETIQUETÁ A ESA PERSONA Y ARRANCAMOS ESTA SEMANA', sub: 'Escribime por DM o WhatsApp para ver horarios disponibles.', c1: 'Cupos CABA', c2: 'Make Sens', c3: 'Escribime DÚO →' }
+        ],
+        caption: 'Entrenar acompañado multiplica tu constancia, pero no significa hacer la misma rutina genérica.\n\nEn el formato Dúo y Trío Presencial en CABA cada uno tiene su evaluación inicial, su progresión de cargas y su plan nutricional individual dentro de la App SENS.\n\nEscribime "DÚO" para consultar horarios disponibles.'
+    },
+    {
+        id: 'tpl_lanzamiento_app',
+        name: '11. Suscripción App SENS ($19.900/mes)',
+        badge: 'OFERTA ESCALABLE',
+        scenes: [
+            { eyebrow: 'NUEVO • SUSCRIPCIÓN APP SENS', headline: 'TODA LA METODOLOGÍA SENS EN TU CELULAR POR $19.900/MES', sub: 'Si entrenás por tu cuenta en el gimnasio y no sabés qué rutina ni qué macros seguir, esto es para vos.', c1: '$19.900 / mes', c2: 'Rutina + Macros', c3: 'Acceso Inmediato' },
+            { eyebrow: 'QUÉ INCLUYE TU ACCESO', headline: 'RUTINAS EN VIDEO + KCAL POR SERIE + NUTRICIÓN POR COMIDA', sub: 'Diagnóstico inicial automático, cronómetro de descanso, registro de pesos y catálogo nutricional.', c1: 'Videos HD', c2: 'Regla de 3 Nutri', c3: 'Sin Permanencia' },
+            { eyebrow: 'ACTIVÁ TU CUENTA HOY', headline: 'MENOS DE LO QUE CUESTA UNA CENA AFUERA AL MES', sub: 'Entrá al link de la bio, completá tu diagnóstico en 2 minutos y empezá hoy.', c1: 'Alta en 2 Min', c2: 'Make Sens', c3: 'Link en Bio →' }
+        ],
+        slides: [
+            { eyebrow: 'NUEVO ACCESO • 1/4', headline: 'ENTRENÁ CON EL SISTEMA SENS DESDE CUALQUIER GIMNASIO', sub: 'Suscripción mensual accesible con toda nuestra biblioteca técnica y nutricional.', c1: '$19.900 / mes', c2: 'App WebMobile', c3: 'Deslizá →' },
+            { eyebrow: 'ENTRENAMIENTO • 2/4', headline: 'VIDEOS EN BUCLE, KCAL POR SERIE Y CRONÓMETRO', sub: 'Sabé exactamente cómo hacer cada ejercicio, cómo NO hacerlo y cuánto descansar.', c1: 'Mapa Muscular', c2: 'Registro de Kg', c3: 'Deslizá →' },
+            { eyebrow: 'NUTRICIÓN • 3/4', headline: 'COMIDAS POR OBJETIVO CON CÁLCULO DE PORCIONES', sub: 'Desayuno, almuerzo, merienda, cena y snacks ajustados a tu meta calórica.', c1: 'Macros Claros', c2: 'Agua & Pasos', c3: 'Deslizá →' },
+            { eyebrow: 'EMPEZÁ AHORA • 4/4', headline: 'ACTIVÁ TU SUSCRIPCIÓN MENSUAL POR $19.900', sub: 'Sin contratos largos. Entrá desde el link de la bio.', c1: 'Make Sens', c2: 'Alta Inmediata', c3: 'Link en Bio →' }
+        ],
+        caption: 'Muchos me escriben desde distintas ciudades o buscan una opción accesible para entrenar en su propio gimnasio con una estructura profesional.\n\nCon la Suscripción App SENS ($19.900/mes) tenés acceso completo al diagnóstico inicial, rutinas por objetivo con videos demostrativos, cálculo de calorías por serie y catálogo nutricional interactivo.\n\nEntrá al link de la bio y activá tu cuenta hoy.'
+    },
+    {
+        id: 'tpl_cupos_vip',
+        name: '12. Apertura de Cupos 1:1 (Urgencia)',
+        badge: 'CIERRE DE VENTAS',
+        scenes: [
+            { eyebrow: 'AGENDA DEL MES ABIERTA', headline: 'SE ABRIERON 3 LUGARES PARA ENTRENAMIENTO 1:1', sub: 'Seguimiento personalizado conmigo para transformar tu fuerza, composición corporal y postura.', c1: 'Solo 3 Cupos', c2: 'CABA & Online VIP', c3: 'Atención 1 a 1' },
+            { eyebrow: 'QUÉ VAMOS A TRABAJAR', headline: 'DIAGNÓSTICO 360° + RUTINA A MEDIDA + NUTRICIÓN REAL', sub: 'Adaptado 100% a tus horarios, tus gustos alimenticios y tu historial articular.', c1: 'Plan Integral', c2: 'Feedback Directo', c3: 'Portal Exclusivo' },
+            { eyebrow: 'POSTULATE HOY', headline: 'ESCRIBIME "PLAN" POR MENSAJE DIRECTO O WHATSAPP', sub: 'Coordinamos una breve evaluación para definir el mejor formato para vos.', c1: 'Presencial CABA', c2: 'Online Premium', c3: 'Escribime PLAN →' }
+        ],
+        slides: [
+            { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO PERSONALIZADO 1:1', sub: 'Para quienes buscan acompañamiento directo paso a paso.', c1: 'Presencial CABA', c2: 'Online VIP', c3: 'Deslizá →' },
+            { eyebrow: 'PASO 1 • 2/4', headline: 'EVALUACIÓN DE POSTURA, FUERZA Y HÁBITOS ACTUALES', sub: 'Detectamos qué te frenó hasta hoy y diseñamos una hoja de ruta realista.', c1: 'Ficha 360°', c2: 'Sin Improvisar', c3: 'Deslizá →' },
+            { eyebrow: 'PASO 2 • 3/4', headline: 'EJECUCIÓN GUIADA Y AJUSTES SEMANALES EN LA APP', sub: 'Monitoreamos tus cargas, tu nutrición y tu recuperación semana a semana.', c1: '100% a Medida', c2: 'Contacto Directo', c3: 'Deslizá →' },
+            { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O TOCÁ EL LINK DE WHATSAPP', sub: 'Los lugares presenciales en CABA se asignan por orden de consulta.', c1: 'Nico Maralle', c2: 'Make Sens', c3: 'Escribime PLAN →' }
+        ],
+        caption: 'Abrimos 3 lugares este mes para seguimiento personalizado 1 a 1 (tanto en modalidad Presencial en CABA como Online Premium).\n\nSi querés dejar de adivinar en el gimnasio y seguir un plan biomecánico y nutricional diseñado específicamente para tu cuerpo y tu agenda, escribime "PLAN" por mensaje directo o WhatsApp.'
+    }
+];
+
+let mktStudioState = {
+    format: 'reel_video_9_16', // 'reel_video_9_16', 'carousel_4_5', 'post_4_5', 'story_9_16'
+    templateId: 'tpl_error_biomecanico',
+    sceneIdx: 0,
+    slideIdx: 0,
+    autoCycleScenes: true,
+    zoom: 105,
+    panY: 0,
+    overlayOpacity: 80,
+    mediaType: 'video', // 'video' | 'image'
+    customImageObj: null,
+    objectUrlCache: null,
+    rafId: null,
+    cycleTimer: null
+};
+
+window.initCoachMarketingStudio = function() {
+    const tplGrid = document.getElementById('mktTemplateSelectorGrid');
+    const formatBtns = document.querySelectorAll('#mktFormatSelectorGrid .sens-mkt-format-btn');
+    const sceneBtns = document.querySelectorAll('#mktVideoScenesTimelineBar .sens-mkt-scene-btn');
+    const slideBtns = document.querySelectorAll('#mktCarouselSlidesBar .sens-mkt-slide-btn');
+    const autoCycleCheck = document.getElementById('mktAutoCycleScenesCheck');
+
+    const inpEyebrow = document.getElementById('mktInputEyebrow');
+    const inpHeadline = document.getElementById('mktInputHeadline');
+    const inpSub = document.getElementById('mktInputSubtitle');
+    const inpC1 = document.getElementById('mktInputChip1');
+    const inpC2 = document.getElementById('mktInputChip2');
+    const inpC3 = document.getElementById('mktInputChip3');
+
+    if (tplGrid) {
+        let html = '';
+        SENS_MARKETING_TEMPLATES.forEach((t, idx) => {
+            html += `
+                <button type="button" class="sens-mkt-tpl-card ${idx === 0 ? 'active' : ''}" data-tpl-id="${t.id}">
+                    <span class="tpl-badge">${t.badge}</span>
+                    <strong>${t.name}</strong>
+                </button>
+            `;
+        });
+        tplGrid.innerHTML = html;
+
+        tplGrid.querySelectorAll('.sens-mkt-tpl-card').forEach(btn => {
+            btn.addEventListener('click', () => {
+                tplGrid.querySelectorAll('.sens-mkt-tpl-card').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                mktStudioState.templateId = btn.getAttribute('data-tpl-id');
+                mktStudioState.sceneIdx = 0;
+                mktStudioState.slideIdx = 0;
+                applyMarketingTemplateToInputs();
+            });
+        });
+    }
+
+    formatBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            formatBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            mktStudioState.format = btn.getAttribute('data-format') || 'reel_video_9_16';
+            updateMarketingFormatLayout();
+            applyMarketingTemplateToInputs();
+        });
+    });
+
+    sceneBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sceneBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            mktStudioState.sceneIdx = parseInt(btn.getAttribute('data-scene'), 10) || 0;
+            loadActiveSceneOrSlideIntoInputs();
+        });
+    });
+
+    slideBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            slideBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            mktStudioState.slideIdx = parseInt(btn.getAttribute('data-slide'), 10) || 0;
+            loadActiveSceneOrSlideIntoInputs();
+        });
+    });
+
+    if (autoCycleCheck) {
+        autoCycleCheck.addEventListener('change', () => {
+            mktStudioState.autoCycleScenes = autoCycleCheck.checked;
+        });
+    }
+
+    // Inputs en tiempo real con guardado en la escena/slide activa y contadores de caracteres
+    const syncInputsToActiveFrame = () => {
+        const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
+        const frame = mktStudioState.format === 'carousel_4_5'
+            ? tpl.slides[mktStudioState.slideIdx]
+            : tpl.scenes[mktStudioState.sceneIdx];
+
+        if (frame) {
+            frame.eyebrow = (inpEyebrow?.value || '').slice(0, 26);
+            frame.headline = (inpHeadline?.value || '').slice(0, 52);
+            frame.sub = (inpSub?.value || '').slice(0, 110);
+            frame.c1 = (inpC1?.value || '').slice(0, 20);
+            frame.c2 = (inpC2?.value || '').slice(0, 20);
+            frame.c3 = (inpC3?.value || '').slice(0, 22);
+        }
+
+        const cBadge = document.getElementById('mktCharCountBadge');
+        const cHead = document.getElementById('mktCharCountHeadline');
+        const cSub = document.getElementById('mktCharCountSub');
+        if (cBadge && inpEyebrow) cBadge.textContent = `${inpEyebrow.value.length}/26`;
+        if (cHead && inpHeadline) cHead.textContent = `${inpHeadline.value.length}/52`;
+        if (cSub && inpSub) cSub.textContent = `${inpSub.value.length}/110`;
+
+        renderMarketingCanvasFrame();
+    };
+
+    [inpEyebrow, inpHeadline, inpSub, inpC1, inpC2, inpC3].forEach(inp => {
+        if (inp) inp.addEventListener('input', syncInputsToActiveFrame);
+    });
+
+    // Botón Sugerir Otro Hook Viral
+    const nextHookBtn = document.getElementById('btnMktNextHookIdea');
+    if (nextHookBtn) {
+        nextHookBtn.addEventListener('click', () => {
+            const currentIdx = SENS_MARKETING_TEMPLATES.findIndex(t => t.id === mktStudioState.templateId);
+            const nextIdx = (currentIdx + 1) % SENS_MARKETING_TEMPLATES.length;
+            const nextTpl = SENS_MARKETING_TEMPLATES[nextIdx];
+            mktStudioState.templateId = nextTpl.id;
+            document.querySelectorAll('#mktTemplateSelectorGrid .sens-mkt-tpl-card').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-tpl-id') === nextTpl.id);
+            });
+            applyMarketingTemplateToInputs();
+            showSensToast(`Template cargado: ${nextTpl.name}`, 'champagne');
+        });
+    }
+
+    // Autocompletar 1-Tap desde Biblioteca de Ejercicios o Alimentos
+    const btnAutoEx = document.getElementById('btnMktAutofillExercise');
+    const btnAutoFood = document.getElementById('btnMktAutofillFood');
+    const autoDrawer = document.getElementById('mktAutofillPickerDrawer');
+    const autoSearch = document.getElementById('mktAutofillSearchInput');
+    const autoList = document.getElementById('mktAutofillItemsList');
+    let autoMode = 'exercise';
+
+    const renderAutofillDrawerList = (q = '') => {
+        if (!autoList) return;
+        let html = '';
+        if (autoMode === 'exercise') {
+            const lib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+            lib.filter(x => !q || x.name.toLowerCase().includes(q)).slice(0, 15).forEach(ex => {
+                html += `<button type="button" class="btn btn-outline btn-sm mkt-autofill-pick-item" data-id="${ex.id}" style="text-align:left; justify-content:space-between; display:flex;"><span>${ex.name}</span><span style="color:#9E7D4B;">~${ex.kcal_per_set || 8} kcal/serie</span></button>`;
+            });
+        } else {
+            FOOD_CATALOG.filter(f => !q || f.name.toLowerCase().includes(q)).slice(0, 15).forEach(f => {
+                html += `<button type="button" class="btn btn-outline btn-sm mkt-autofill-pick-item" data-id="${f.id}" style="text-align:left; justify-content:space-between; display:flex;"><span>${f.name}</span><span style="color:#9E7D4B;">${f.calPer100} kcal • ${f.protPer100}g P</span></button>`;
+            });
+        }
+        autoList.innerHTML = html;
+
+        autoList.querySelectorAll('.mkt-autofill-pick-item').forEach(b => {
+            b.addEventListener('click', () => {
+                const id = b.getAttribute('data-id');
+                if (autoMode === 'exercise') {
+                    const lib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+                    const ex = lib.find(x => x.id === id);
+                    if (ex) {
+                        const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
+                        tpl.scenes[0] = { eyebrow: `TÉCNICA • ${(ex.primary_muscle || 'FUERZA').toUpperCase().slice(0, 14)}`, headline: `CÓMO HACER ${ex.name.toUpperCase()}`.slice(0, 52), sub: (ex.common_mistakes || ex.execution || '').slice(0, 110), c1: `Foco: ${(ex.primary_muscle || 'Músculo').slice(0, 12)}`, c2: `~${ex.kcal_per_set || 8} kcal / serie`, c3: 'Mirá la técnica →' };
+                        tpl.scenes[1] = { eyebrow: 'EJECUCIÓN CORRECTA', headline: 'CLAVES BIOMECÁNICAS SENS', sub: (ex.execution || ex.recommendations || '').slice(0, 110), c1: `${ex.sets || 4} Series × ${ex.reps || '10'}`, c2: `Descanso ${ex.rest || 90}s`, c3: 'Control RIR 2' };
+                        loadActiveSceneOrSlideIntoInputs();
+                        showSensToast(`Datos de "${ex.name}" cargados en las escenas.`, 'champagne');
+                    }
+                } else {
+                    const f = FOOD_CATALOG.find(x => x.id === id);
+                    if (f) {
+                        const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
+                        tpl.scenes[0] = { eyebrow: 'NUTRICIÓN INTELIGENTE', headline: f.name.toUpperCase().slice(0, 52), sub: (f.coachNote || 'Alimento clave del catálogo nutricional SENS.').slice(0, 110), c1: `${f.calPer100} kcal / 100g`, c2: `${f.protPer100}g Proteína`, c3: `${f.carbsPer100}g C • ${f.fatsPer100}g G` };
+                        loadActiveSceneOrSlideIntoInputs();
+                        showSensToast(`Datos nutricionales de "${f.name}" cargados.`, 'champagne');
+                    }
+                }
+                if (autoDrawer) autoDrawer.style.display = 'none';
+            });
+        });
+    };
+
+    if (btnAutoEx) {
+        btnAutoEx.addEventListener('click', () => {
+            autoMode = 'exercise';
+            if (autoDrawer) autoDrawer.style.display = 'block';
+            renderAutofillDrawerList('');
+        });
+    }
+    if (btnAutoFood) {
+        btnAutoFood.addEventListener('click', () => {
+            autoMode = 'food';
+            if (autoDrawer) autoDrawer.style.display = 'block';
+            renderAutofillDrawerList('');
+        });
+    }
+    if (autoSearch) {
+        autoSearch.addEventListener('input', () => renderAutofillDrawerList(autoSearch.value.trim().toLowerCase()));
+    }
+
+    // Carga Efímera en RAM de Foto o Video (0 Bytes en Supabase)
+    const fileInput = document.getElementById('mktMediaFileInput');
+    const defaultMediaBtn = document.getElementById('btnMktUseDefaultMedia');
+    const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
+
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            if (mktStudioState.objectUrlCache) {
+                URL.revokeObjectURL(mktStudioState.objectUrlCache);
+            }
+            const url = URL.createObjectURL(file);
+            mktStudioState.objectUrlCache = url;
+
+            if (file.type.startsWith('video/')) {
+                mktStudioState.mediaType = 'video';
+                if (hiddenVideo) {
+                    hiddenVideo.src = url;
+                    hiddenVideo.play().catch(() => {});
+                }
+                showSensToast('Video cargado en memoria local (0 bytes en servidor).', 'champagne');
+            } else {
+                mktStudioState.mediaType = 'image';
+                const img = new Image();
+                img.onload = () => {
+                    mktStudioState.customImageObj = img;
+                    renderMarketingCanvasFrame();
+                };
+                img.src = url;
+                showSensToast('Imagen cargada en memoria local (0 bytes en servidor).', 'champagne');
+            }
+        });
+    }
+
+    if (defaultMediaBtn) {
+        defaultMediaBtn.addEventListener('click', () => {
+            mktStudioState.mediaType = 'video';
+            mktStudioState.customImageObj = null;
+            if (hiddenVideo) {
+                hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
+                hiddenVideo.play().catch(() => {});
+            }
+            showSensToast('Fondo oficial SENS restaurado.', 'info');
+        });
+    }
+
+    // Sliders de Zoom, Encuadre y Opacidad
+    const zoomSlider = document.getElementById('mktMediaZoomSlider');
+    const panYSlider = document.getElementById('mktMediaPanYSlider');
+    const opacitySlider = document.getElementById('mktOverlayOpacitySlider');
+    const zoomLabel = document.getElementById('mktZoomValLabel');
+
+    if (zoomSlider) {
+        zoomSlider.addEventListener('input', () => {
+            mktStudioState.zoom = parseInt(zoomSlider.value, 10) || 105;
+            if (zoomLabel) zoomLabel.textContent = `${mktStudioState.zoom}%`;
+            renderMarketingCanvasFrame();
+        });
+    }
+    if (panYSlider) {
+        panYSlider.addEventListener('input', () => {
+            mktStudioState.panY = parseInt(panYSlider.value, 10) || 0;
+            renderMarketingCanvasFrame();
+        });
+    }
+    if (opacitySlider) {
+        opacitySlider.addEventListener('input', () => {
+            mktStudioState.overlayOpacity = parseInt(opacitySlider.value, 10) || 80;
+            renderMarketingCanvasFrame();
+        });
+    }
+
+    // Copiar Caption IG / TikTok
+    const copyCapBtn = document.getElementById('btnMktCopyCaption');
+    if (copyCapBtn) {
+        copyCapBtn.addEventListener('click', () => {
+            const capEl = document.getElementById('mktCaptionOutput');
+            if (capEl && navigator.clipboard) {
+                navigator.clipboard.writeText(capEl.value);
+                showSensToast('Caption copiado al portapapeles listo para Instagram / TikTok.', 'champagne');
+            }
+        });
+    }
+
+    // Exportar PNG actual, Secuencia Completa o Video Animado WebM
+    const btnExportPng = document.getElementById('btnMktExportPng');
+    const btnExportPack = document.getElementById('btnMktExportAllPack');
+    const btnRecordVideo = document.getElementById('btnMktRecordVideoWebm');
+
+    if (btnExportPng) {
+        btnExportPng.addEventListener('click', () => {
+            renderMarketingCanvasFrame();
+            const canvas = document.getElementById('sensMarketingCanvas');
+            if (!canvas) return;
+            const link = document.createElement('a');
+            const suffix = mktStudioState.format === 'carousel_4_5' ? `slide-${mktStudioState.slideIdx + 1}` : `escena-${mktStudioState.sceneIdx + 1}`;
+            link.download = `SENS-${mktStudioState.templateId}-${suffix}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+            showSensToast('Pieza descargada en alta definición (PNG).', 'champagne');
+        });
+    }
+
+    if (btnExportPack) {
+        btnExportPack.addEventListener('click', async () => {
+            const canvas = document.getElementById('sensMarketingCanvas');
+            if (!canvas) return;
+            const isCarousel = mktStudioState.format === 'carousel_4_5';
+            const totalFrames = isCarousel ? 4 : 3;
+            showSensToast(`Generando las ${totalFrames} piezas de la secuencia...`, 'champagne');
+
+            for (let i = 0; i < totalFrames; i++) {
+                if (isCarousel) mktStudioState.slideIdx = i;
+                else mktStudioState.sceneIdx = i;
+                loadActiveSceneOrSlideIntoInputs();
+                renderMarketingCanvasFrame();
+                await new Promise(r => setTimeout(r, 220));
+                const link = document.createElement('a');
+                link.download = `SENS-${mktStudioState.templateId}-${isCarousel ? 'Slide' : 'Escena'}-${i + 1}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+            }
+            showSensToast(`Secuencia completa de ${totalFrames} piezas descargada.`, 'champagne');
+        });
+    }
+
+    if (btnRecordVideo) {
+        btnRecordVideo.addEventListener('click', () => {
+            const canvas = document.getElementById('sensMarketingCanvas');
+            if (!canvas || typeof canvas.captureStream !== 'function' || typeof MediaRecorder === 'undefined') {
+                showSensToast('Usá el botón "Descargar Secuencia Completa" en este navegador.', 'info');
+                return;
+            }
+            showSensToast('Grabando Reel de 9 segundos (3s Hook • 3s Valor • 3s CTA)...', 'champagne', 9000);
+            const stream = canvas.captureStream(30);
+            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            const chunks = [];
+            recorder.ondataavailable = (ev) => { if (ev.data.size > 0) chunks.push(ev.data); };
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `SENS-Reel-${mktStudioState.templateId}.webm`;
+                a.click();
+                showSensToast('Video Reel con cambios de texto por segundo descargado.', 'champagne');
+            };
+
+            mktStudioState.sceneIdx = 0;
+            loadActiveSceneOrSlideIntoInputs();
+            recorder.start();
+            setTimeout(() => { mktStudioState.sceneIdx = 1; loadActiveSceneOrSlideIntoInputs(); }, 3000);
+            setTimeout(() => { mktStudioState.sceneIdx = 2; loadActiveSceneOrSlideIntoInputs(); }, 6000);
+            setTimeout(() => { recorder.stop(); }, 9000);
+        });
+    }
+
+    updateMarketingFormatLayout();
+    applyMarketingTemplateToInputs();
+};
+
+function updateMarketingFormatLayout() {
+    const canvas = document.getElementById('sensMarketingCanvas');
+    const resLabel = document.getElementById('mktPreviewResolutionLabel');
+    const scenesBar = document.getElementById('mktVideoScenesTimelineBar');
+    const slidesBar = document.getElementById('mktCarouselSlidesBar');
+    const f = mktStudioState.format;
+
+    const is916 = (f === 'reel_video_9_16' || f === 'story_9_16');
+    if (canvas) {
+        canvas.width = 1080;
+        canvas.height = is916 ? 1920 : 1350;
+    }
+    if (resLabel) {
+        resLabel.textContent = is916
+            ? 'VISTA PREVIA EN VIVO • 1080×1920 (9:16)'
+            : 'VISTA PREVIA EN VIVO • 1080×1350 (4:5)';
+    }
+    if (scenesBar) scenesBar.style.display = (f === 'reel_video_9_16') ? 'block' : 'none';
+    if (slidesBar) slidesBar.style.display = (f === 'carousel_4_5') ? 'block' : 'none';
+}
+
+function applyMarketingTemplateToInputs() {
+    const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
+    const capOutput = document.getElementById('mktCaptionOutput');
+    if (capOutput) capOutput.value = tpl.caption || '';
+    loadActiveSceneOrSlideIntoInputs();
+}
+
+function loadActiveSceneOrSlideIntoInputs() {
+    const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
+    const isCarousel = mktStudioState.format === 'carousel_4_5';
+    const frame = isCarousel
+        ? (tpl.slides[mktStudioState.slideIdx] || tpl.slides[0])
+        : (tpl.scenes[mktStudioState.sceneIdx] || tpl.scenes[0]);
+
+    const inpEyebrow = document.getElementById('mktInputEyebrow');
+    const inpHeadline = document.getElementById('mktInputHeadline');
+    const inpSub = document.getElementById('mktInputSubtitle');
+    const inpC1 = document.getElementById('mktInputChip1');
+    const inpC2 = document.getElementById('mktInputChip2');
+    const inpC3 = document.getElementById('mktInputChip3');
+    const indicator = document.getElementById('mktActiveSceneIndicator');
+
+    if (inpEyebrow) inpEyebrow.value = frame.eyebrow || '';
+    if (inpHeadline) inpHeadline.value = frame.headline || '';
+    if (inpSub) inpSub.value = frame.sub || '';
+    if (inpC1) inpC1.value = frame.c1 || '';
+    if (inpC2) inpC2.value = frame.c2 || '';
+    if (inpC3) inpC3.value = frame.c3 || '';
+
+    if (indicator) {
+        if (isCarousel) {
+            indicator.textContent = `Slide ${mktStudioState.slideIdx + 1}/4`;
+        } else if (mktStudioState.format === 'reel_video_9_16') {
+            const labels = ['Escena 1: 0s–3s (Hook)', 'Escena 2: 3s–7s (Valor)', 'Escena 3: 7s+ (CTA)'];
+            indicator.textContent = labels[mktStudioState.sceneIdx] || labels[0];
+        } else {
+            indicator.textContent = 'Pieza Lista en HD';
+        }
+    }
+
+    document.querySelectorAll('#mktVideoScenesTimelineBar .sens-mkt-scene-btn').forEach((b, idx) => {
+        b.classList.toggle('active', idx === mktStudioState.sceneIdx);
+    });
+    document.querySelectorAll('#mktCarouselSlidesBar .sens-mkt-slide-btn').forEach((b, idx) => {
+        b.classList.toggle('active', idx === mktStudioState.slideIdx);
+    });
+
+    renderMarketingCanvasFrame();
+}
+
+window.renderCoachMarketingStudio = function() {
+    const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
+    if (hiddenVideo && mktStudioState.mediaType === 'video') {
+        hiddenVideo.play().catch(() => {});
+    }
+
+    if (mktStudioState.cycleTimer) clearInterval(mktStudioState.cycleTimer);
+    mktStudioState.cycleTimer = setInterval(() => {
+        const pane = document.getElementById('paneMarketing');
+        if (!pane || !pane.classList.contains('active')) return;
+        if (mktStudioState.format === 'reel_video_9_16' && mktStudioState.autoCycleScenes) {
+            const activeEl = document.activeElement;
+            const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
+            if (!isTyping) {
+                mktStudioState.sceneIdx = (mktStudioState.sceneIdx + 1) % 3;
+                loadActiveSceneOrSlideIntoInputs();
+            }
+        }
+    }, 3400);
+
+    const loopCanvas = () => {
+        const pane = document.getElementById('paneMarketing');
+        if (pane && pane.classList.contains('active')) {
+            renderMarketingCanvasFrame();
+        }
+        mktStudioState.rafId = requestAnimationFrame(loopCanvas);
+    };
+    if (!mktStudioState.rafId) {
+        mktStudioState.rafId = requestAnimationFrame(loopCanvas);
+    }
+    renderMarketingCanvasFrame();
+};
+
+function renderMarketingCanvasFrame() {
+    const canvas = document.getElementById('sensMarketingCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // 1. Fondo Base Obsidian
+    ctx.fillStyle = '#080809';
+    ctx.fillRect(0, 0, W, H);
+
+    // 2. Dibujar Video o Imagen con Zoom y Encuadre
+    const sourceMedia = mktStudioState.mediaType === 'image' && mktStudioState.customImageObj
+        ? mktStudioState.customImageObj
+        : document.getElementById('mktHiddenSourceVideo');
+
+    if (sourceMedia) {
+        const mW = sourceMedia.videoWidth || sourceMedia.naturalWidth || 1080;
+        const mH = sourceMedia.videoHeight || sourceMedia.naturalHeight || 1920;
+        if (mW > 0 && mH > 0) {
+            const scale = Math.max(W / mW, H / mH) * (mktStudioState.zoom / 100);
+            const drawW = mW * scale;
+            const drawH = mH * scale;
+            const dx = (W - drawW) / 2;
+            const dy = ((H - drawH) / 2) + (mktStudioState.panY * 8);
+            try {
+                ctx.drawImage(sourceMedia, dx, dy, drawW, drawH);
+            } catch (_) {}
+        }
+    }
+
+    // 3. Gradiente Cinematográfico Quiet Luxury (Bloqueado para legibilidad perfecta)
+    const op = (mktStudioState.overlayOpacity || 80) / 100;
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.55).toFixed(2)})`);
+    grad.addColorStop(0.42, `rgba(8, 8, 9, ${(op * 0.25).toFixed(2)})`);
+    grad.addColorStop(0.72, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+    grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.12).toFixed(2)})`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // 4. Header Superior de Marca SENS (Identidad Inalterable)
+    ctx.save();
+    ctx.fillStyle = 'rgba(18, 18, 22, 0.82)';
+    ctx.strokeStyle = 'rgba(229, 203, 167, 0.45)';
+    ctx.lineWidth = 2;
+    roundRectCanvas(ctx, 64, 68, 290, 56, 28);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#E5CBA7';
+    ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('MAKE SENS • STUDIO', 94, 97);
+
+    // Indicador de secuencia arriba a la derecha
+    const topRightText = mktStudioState.format === 'carousel_4_5'
+        ? `${mktStudioState.slideIdx + 1} / 4`
+        : mktStudioState.format === 'reel_video_9_16'
+            ? (mktStudioState.sceneIdx === 0 ? 'HOOK 0-3s' : mktStudioState.sceneIdx === 1 ? 'CLAVE TÉCNICA' : 'PLAN SENS')
+            : ' @SENS.TRAIN.BA';
+    ctx.font = '700 21px "Plus Jakarta Sans", sans-serif';
+    const trWidth = ctx.measureText(topRightText).width + 52;
+    ctx.fillStyle = 'rgba(18, 18, 22, 0.82)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+    roundRectCanvas(ctx, W - 64 - trWidth, 68, trWidth, 56, 28);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(topRightText, W - 64 - trWidth + 26, 97);
+
+    // 5. Bloque Inferior Estilo Card de Entrenamiento SENS
+    const eyebrow = (document.getElementById('mktInputEyebrow')?.value || 'BIOMECÁNICA SENS').toUpperCase();
+    const headline = (document.getElementById('mktInputHeadline')?.value || 'ENTRENÁ CON SENTIDO').toUpperCase();
+    const sub = document.getElementById('mktInputSubtitle')?.value || '';
+    const c1 = document.getElementById('mktInputChip1')?.value || '';
+    const c2 = document.getElementById('mktInputChip2')?.value || '';
+    const c3 = document.getElementById('mktInputChip3')?.value || '';
+
+    const bottomBaseY = H - 110;
+
+    // Chips inferiores (3 píldoras estilo tarjeta de ejercicio)
+    const chips = [c1, c2, c3].filter(Boolean);
+    let chipX = 64;
+    const chipY = bottomBaseY - 64;
+    ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
+    chips.forEach((ch, idx) => {
+        const isLast = (idx === chips.length - 1);
+        const w = ctx.measureText(ch).width + 48;
+        ctx.fillStyle = isLast ? '#E5CBA7' : 'rgba(24, 24, 28, 0.9)';
+        ctx.strokeStyle = isLast ? '#E5CBA7' : 'rgba(229, 203, 167, 0.35)';
+        ctx.lineWidth = 2;
+        roundRectCanvas(ctx, chipX, chipY, w, 58, 29);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = isLast ? '#080809' : '#FFFFFF';
+        ctx.fillText(ch, chipX + 24, chipY + 30);
+        chipX += w + 16;
+    });
+
+    // Subtítulo / Bajada explicativa
+    ctx.fillStyle = 'rgba(244, 244, 245, 0.92)';
+    ctx.font = '500 32px "Plus Jakarta Sans", sans-serif';
+    const subLines = wrapCanvasText(ctx, sub, W - 128);
+    let currentY = chipY - 36 - (subLines.length * 44);
+    subLines.forEach((line, i) => {
+        ctx.fillText(line, 64, currentY + (i * 44));
+    });
+
+    // Titular Principal (con última línea destacada en Champagne Gold)
+    ctx.font = '800 62px "Plus Jakarta Sans", sans-serif';
+    const headLines = wrapCanvasText(ctx, headline, W - 128);
+    const headStartY = currentY - 32 - (headLines.length * 72);
+    headLines.forEach((line, i) => {
+        ctx.fillStyle = (i === headLines.length - 1 && headLines.length > 1) ? '#E5CBA7' : '#FFFFFF';
+        ctx.fillText(line, 64, headStartY + (i * 72));
+    });
+
+    // Píldora Eyebrow Champagne encima del titular
+    const eyeY = headStartY - 76;
+    ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
+    const eyeW = ctx.measureText(eyebrow).width + 44;
+    ctx.fillStyle = 'rgba(229, 203, 167, 0.16)';
+    ctx.strokeStyle = '#E5CBA7';
+    ctx.lineWidth = 2;
+    roundRectCanvas(ctx, 64, eyeY, eyeW, 50, 25);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#E5CBA7';
+    ctx.fillText(eyebrow, 86, eyeY + 26);
+
+    ctx.restore();
+}
+
+function roundRectCanvas(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+}
+
+function wrapCanvasText(ctx, text, maxWidth) {
+    const words = String(text || '').split(' ');
+    const lines = [];
+    let current = '';
+    words.forEach(w => {
+        const test = current ? `${current} ${w}` : w;
+        if (ctx.measureText(test).width > maxWidth && current) {
+            lines.push(current);
+            current = w;
+        } else {
+            current = test;
+        }
+    });
+    if (current) lines.push(current);
+    return lines.slice(0, 3);
+}
+
+
