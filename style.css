@@ -12834,24 +12834,7 @@ body.in-portal .sens-empty-state-desc,
     color: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* 5. Coach Master Active Athlete Card (#14141A) */
-body.in-portal .coach-master-active-athlete-card,
-.coach-master-active-athlete-card {
-    background: linear-gradient(135deg, rgba(20, 20, 26, 0.98), rgba(12, 12, 15, 0.99)) !important;
-    color: #FFFFFF !important;
-}
-
-body.in-portal .coach-master-active-athlete-card h3,
-body.in-portal .coach-active-athlete-name,
-.coach-active-athlete-name {
-    color: #FFFFFF !important;
-    font-weight: 800 !important;
-}
-
-body.in-portal .coach-master-active-athlete-card p,
-body.in-portal .coach-master-active-athlete-card span {
-    color: rgba(255, 255, 255, 0.8) !important;
-}
+/* 5. Coach Master Active Athlete Card: Modern Quiet Luxury Claro styled in #coachHubView section */
 
 /* 6. Encabezado de Enfoque Muscular en Portal Claro (Legibilidad en Fondo Blanco) */
 body.in-portal .sens-muscle-focus-header {
@@ -14181,12 +14164,17 @@ body.in-portal #coachHubView {
 }
 
 #coachHubView #coachMasterPlanBadge {
-    background: #F4F4F5 !important;
-    border: 1px solid #E4E4E7 !important;
-    color: #18181B !important;
+    background: rgba(158, 125, 75, 0.12) !important;
+    border: 1px solid rgba(158, 125, 75, 0.35) !important;
+    color: #8C6A38 !important;
     font-size: 9.5px !important;
     font-weight: 800 !important;
-    padding: 2px 7px !important;
+    padding: 3px 8px !important;
+    border-radius: 6px !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
 }
 
 #coachHubView .coach-active-athlete-sub {
@@ -14210,37 +14198,68 @@ body.in-portal #coachHubView {
 }
 
 #coachHubView .btn-coach-action-pill {
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: 1px solid #E4E4E7 !important;
+    padding: 7px 12px;
+    border-radius: 8px;
+    border: 1px solid #D4D4D8 !important;
     background: #FFFFFF !important;
     color: #18181B !important;
     font-size: 11px;
     font-weight: 700;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 5px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.15s ease;
 }
 
-#coachHubView .btn-coach-action-pill:hover {
+#coachHubView .btn-coach-action-pill span {
+    color: #18181B !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+}
+
+#coachHubView .btn-coach-action-pill svg {
+    color: #18181B !important;
+    stroke: #18181B !important;
+    flex-shrink: 0 !important;
+}
+
+#coachHubView .btn-coach-action-pill:hover,
+#coachHubView .btn-coach-action-pill:active,
+#coachHubView .btn-coach-action-pill.active {
     background: #F4F4F5 !important;
-    border-color: #D4D4D8 !important;
-    color: #09090B !important;
+    border-color: #9E7D4B !important;
+    color: #9E7D4B !important;
+}
+
+#coachHubView .btn-coach-action-pill:hover span,
+#coachHubView .btn-coach-action-pill:active span,
+#coachHubView .btn-coach-action-pill.active span {
+    color: #9E7D4B !important;
+}
+
+#coachHubView .btn-coach-action-pill:hover svg,
+#coachHubView .btn-coach-action-pill:active svg,
+#coachHubView .btn-coach-action-pill.active svg {
+    color: #9E7D4B !important;
+    stroke: #9E7D4B !important;
 }
 
 #coachHubView .btn-coach-action-pill.primary {
     background: #9E7D4B !important;
-    border: 1px solid #9E7D4B !important;
+    border: 1px solid #8C6A38 !important;
     color: #FFFFFF !important;
     font-weight: 800 !important;
     box-shadow: 0 2px 8px rgba(158, 125, 75, 0.35) !important;
 }
 
-#coachHubView .btn-coach-action-pill.primary:hover {
+#coachHubView .btn-coach-action-pill.primary:hover,
+#coachHubView .btn-coach-action-pill.primary:active {
     background: #8C6A38 !important;
-    border-color: #8C6A38 !important;
+    border-color: #72542B !important;
     color: #FFFFFF !important;
 }
 
@@ -15392,17 +15411,21 @@ body.in-portal #coachHubView {
     #coachHubView .coach-active-athlete-actions {
         width: 100% !important;
         display: flex !important;
-        gap: 5px !important;
-        margin-top: 4px !important;
+        gap: 6px !important;
+        margin-top: 6px !important;
     }
     #coachHubView .coach-active-athlete-actions .btn-coach-action-pill {
         flex: 1 1 0 !important;
         min-width: 0 !important;
         justify-content: center !important;
-        padding: 7px 2px !important;
-        font-size: 10.5px !important;
+        padding: 7px 4px !important;
+        font-size: 11px !important;
         white-space: nowrap !important;
         border-radius: 8px !important;
+    }
+    #coachHubView .coach-active-athlete-actions .btn-coach-action-pill span {
+        font-size: 11px !important;
+        font-weight: 700 !important;
     }
     .coach-client-summary-card {
         padding: 8px 10px !important;

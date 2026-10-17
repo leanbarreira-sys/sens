@@ -6001,10 +6001,16 @@ function initCoachOS() {
             p.classList.toggle('active', p.id === resolvedPaneId);
         });
 
-        // 3. Marketing Studio es de uso exclusivo de Coach Nico (ocultar tarjeta de alumno)
+        // Visibilidad del banner/selector de alumno activo:
+        // Solo debe mostrarse en las secciones por cliente (Entreno, Nutrición, Evolución/Progreso).
+        // En Alumnos & Accesos (paneAthletes, vista macro general), Biblioteca o Marketing debe estar OCULTO.
         const masterCard = document.getElementById('coachMasterActiveAthleteCard');
         if (masterCard) {
-            masterCard.style.display = (resolvedPaneId === 'paneMarketing') ? 'none' : '';
+            const isClientSpecificTab = ['paneWorkouts', 'paneNutrition', 'paneEvolution'].includes(resolvedPaneId);
+            masterCard.style.display = isClientSpecificTab ? '' : 'none';
+            if (isClientSpecificTab && typeof syncCoachMasterCard === 'function') {
+                syncCoachMasterCard(AppState.activeAthleteId);
+            }
         }
 
         if (resolvedPaneId === 'paneWorkouts') {
@@ -6213,7 +6219,7 @@ function selectAthleteFromSheet(athId) {
     if (masterAvatar) masterAvatar.textContent = initMaster;
     if (masterName) masterName.textContent = athlete.full_name;
     if (masterEmail) masterEmail.textContent = athlete.email || 'alumno@sens.com';
-    if (masterPlanBadge) masterPlanBadge.textContent = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
+    if (masterPlanBadge) masterPlanBadge.textContent = typeof formatCoachPlanBadge === 'function' ? formatCoachPlanBadge(athlete.active_plan_name) : (athlete.active_plan_name || 'VIP 1:1');
     if (masterGoal) masterGoal.textContent = athlete.goal ? `Meta: ${athlete.goal}` : 'Meta: Recomposición & Fuerza';
     if (masterStatusDot) {
         const s = athlete.subscription_status || 'active';
@@ -6378,6 +6384,20 @@ window.purgeAllMockUsersAndCache = function() {
 };
 window.purgeAllMockUsersAndCache();
 
+function formatCoachPlanBadge(rawPlanName) {
+    if (!rawPlanName) return 'VIP 1:1';
+    const raw = String(rawPlanName).toUpperCase().trim();
+    if (raw.includes('VIP') || raw.includes('1 A 1') || raw.includes('1:1')) return 'VIP 1:1';
+    if (raw.includes('DUO') || raw.includes('DÚO') || raw.includes('GRUPO') || raw.includes('SEMI')) return 'PLAN DÚO';
+    if (raw.includes('ONLINE') && (raw.includes('PREM') || raw.includes('PRO'))) return 'ONLINE PRO';
+    if (raw.includes('ONLINE')) return 'ONLINE';
+    if (raw.includes('APP') || raw.includes('SUSCRIPCI')) return 'APP SUB';
+    if (raw.includes('PERSONALIZADO') || raw.includes('TRAIN')) return 'VIP 1:1';
+    if (raw.length > 12) return raw.slice(0, 10).trim();
+    return raw;
+}
+window.formatCoachPlanBadge = formatCoachPlanBadge;
+
 function syncCoachMasterCard(athId) {
     const targetId = athId || AppState.activeAthleteId || coachWorkoutState.activeAthleteId || (AppState.user ? AppState.user.id : null);
     let roster = getConsolidatedCoachAthletes();
@@ -6439,14 +6459,8 @@ function syncCoachMasterCard(athId) {
     let initMaster = pParts[0] ? pParts[0][0].toUpperCase() : 'S';
     if (pParts.length > 1 && pParts[pParts.length - 1]) initMaster += pParts[pParts.length - 1][0].toUpperCase();
 
-    // Formateo de Badge de Plan compacto de alto contraste
-    let planBadgeText = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
-    if (planBadgeText.includes('VIP')) planBadgeText = 'PLAN VIP';
-    else if (planBadgeText.includes('DUO') || planBadgeText.includes('DÚO') || planBadgeText.includes('GRUPO')) planBadgeText = 'PLAN DÚO';
-    else if (planBadgeText.includes('ONLINE') && planBadgeText.includes('PREM')) planBadgeText = 'ONLINE PRO';
-    else if (planBadgeText.includes('ONLINE')) planBadgeText = 'ONLINE';
-    else if (planBadgeText.includes('APP') || planBadgeText.includes('SUSCRIPCI')) planBadgeText = 'APP SUB';
-    else if (planBadgeText.length > 16) planBadgeText = planBadgeText.slice(0, 14) + '...';
+    // Formateo de Badge de Plan compacto de alto contraste (Quiet Luxury tier legible)
+    let planBadgeText = formatCoachPlanBadge(athlete.active_plan_name);
 
     if (masterAvatar) masterAvatar.textContent = initMaster;
     if (masterName) masterName.textContent = athlete.full_name;
@@ -15009,7 +15023,8 @@ const CoachWorkoutsMaster = {
             btnExp.addEventListener('click', () => {
                 const isHidden = details.style.display === 'none' || details.style.display === '';
                 details.style.display = isHidden ? 'block' : 'none';
-                if (label) label.textContent = isHidden ? '▲ Colapsar Ficha' : '▼ Ver Ficha Completa';
+                if (label) label.textContent = isHidden ? 'Ocultar' : 'Ficha';
+                btnExp.classList.toggle('active', isHidden);
             });
         }
     },
