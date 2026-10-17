@@ -4687,7 +4687,7 @@ function renderWorkoutDay(dayKey) {
                 <div class="sens-exercise-card-content">
                     <h3 class="sens-exercise-card-title" style="color: #FFFFFF !important; font-weight: 800; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);">${catalogMatch.name || ex.name}</h3>
                     <div class="sens-exercise-card-meta" style="color: rgba(255, 255, 255, 0.92) !important; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);">
-                        <span>Descanso: ${ex.rest || 90}s</span> • <span>Sugerido: ${weightLabel}</span> • <span>~${kcalData.kcalPerSet} kcal/serie</span>
+                        <span>Descanso: ${ex.rest || 90}s</span> • <span>Sugerido: ${weightLabel}</span> • <span class="sens-tooltip-wrap" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR ${ex.rir !== undefined ? ex.rir : 2} significa terminar la serie pudiendo hacer exactamente ${ex.rir !== undefined ? ex.rir : 2} repeticiones más con técnica limpia antes de fallar (RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)}).">RIR/RPE: <strong>${ex.rir !== undefined ? ex.rir : 2}</strong> <span class="sens-tooltip-trigger" style="border-color: rgba(255,255,255,0.4); color: #FFFFFF; background: rgba(255,255,255,0.18);">i</span></span> • <span>~${kcalData.kcalPerSet} kcal/serie</span>
                     </div>
                     <div class="sens-exercise-card-cta" style="color: #E5CBA7 !important; font-weight: 700; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);">
                         Tocar para iniciar serie &amp; técnica →
@@ -4733,7 +4733,7 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
         : 'Piernas & Glúteos';
     const cueTechnical = catalogMatch.execution || ex.notes || catalogMatch.cue || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
     const commonMistakes = catalogMatch.common_mistakes || 'Evitar rebotes articulares, pérdida de neutralidad lumbar o apnea prolongada.';
-    const nicoRecs = ex.notes || catalogMatch.recommendations || 'Mantener el pecho erguido, control respiratorio y 1 segundo de pausa isométrica en el punto de máxima contracción. Detener la serie en RIR 2.';
+    const nicoRecs = ex.notes || catalogMatch.recommendations || `Mantener el pecho erguido, control respiratorio y 1 segundo de pausa isométrica en el punto de máxima contracción. Detener la serie en RIR/RPE ${ex.rir !== undefined ? ex.rir : 2}.`;
 
     const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
 
@@ -4750,7 +4750,7 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
 
     if (modalName) modalName.textContent = catalogMatch.name || ex.name;
     if (modalMuscle) modalMuscle.textContent = muscleName;
-    if (modalSetsReps) modalSetsReps.textContent = `${ex.sets || 4} Series • ${ex.reps || '10-12'} Reps • ~${kcalData.totalKcal} kcal (${kcalData.kcalPerSet} kcal/serie)`;
+    if (modalSetsReps) modalSetsReps.innerHTML = `${ex.sets || 4} Series • ${ex.reps || '10-12'} Reps • <span class="sens-tooltip-wrap" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR ${ex.rir !== undefined ? ex.rir : 2} = RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)}. Guardate ${ex.rir !== undefined ? ex.rir : 2} repeticiones antes del fallo muscular.">RIR/RPE Obj: <strong>${ex.rir !== undefined ? ex.rir : 2}</strong> <span class="sens-tooltip-trigger">i</span></span> • ~${kcalData.totalKcal} kcal`;
     if (modalVideo) {
         modalVideo.src = videoSrc;
         modalVideo.play().catch(() => {});
@@ -14328,19 +14328,19 @@ function calculateExerciseDelta(planEx, realLog) {
     if (deltaWeight > 0) {
         status = 'positive';
         badgeClass = 'is-positive';
-        badgeText = `+${deltaWeight} kg • RIR ${realRir}`;
+        badgeText = `+${deltaWeight} kg • RIR/RPE ${realRir}`;
     } else if (deltaWeight < 0) {
         status = 'warning';
         badgeClass = 'is-warning';
-        badgeText = `${deltaWeight} kg • RIR ${realRir}`;
+        badgeText = `${deltaWeight} kg • RIR/RPE ${realRir}`;
     } else if (deltaRir <= -1.5) {
         status = 'warning';
         badgeClass = 'is-warning';
-        badgeText = `Δ RIR ${deltaRir} (Fatiga alta / Fallo)`;
+        badgeText = `Δ RIR/RPE ${deltaRir} (Fatiga alta / Fallo)`;
     } else if (deltaRir >= 1.5) {
         status = 'positive';
         badgeClass = 'is-positive';
-        badgeText = `RIR ${realRir} (Submáximo)`;
+        badgeText = `RIR/RPE ${realRir} (Submáximo)`;
     } else if (deltaSets < 0) {
         status = 'negative';
         badgeClass = 'is-negative';
@@ -14734,7 +14734,7 @@ const CoachMultiDayActionsManager = {
         this.closeModal();
 
         if (typeof showSensToast === 'function') {
-            showSensToast(`✓ Se fijó RIR ${targetRir} a ${count} ejercicios en ${this.selectedDates.length} días.`, 'champagne');
+            showSensToast(`✓ Se fijó RIR/RPE ${targetRir} a ${count} ejercicios en ${this.selectedDates.length} días.`, 'champagne');
         }
         this.refreshViews();
     },
@@ -15436,7 +15436,7 @@ const CoachWorkoutsMaster = {
                             <input type="number" step="0.5" value="${ex.defaultWeight || 20}" class="input-control row-inp-weight" data-idx="${idx}" style="width: 56px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
                         </div>
                         <div class="wizard-param-input-group">
-                            <label>RIR Obj</label>
+                            <label style="display: inline-flex; align-items: center; gap: 2px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo. RIR 2 = RPE 8.">RIR/RPE <span class="sens-tooltip-trigger">i</span></label>
                             <input type="number" min="0" max="5" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="input-control row-inp-rir" data-idx="${idx}" style="width: 50px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
                         </div>
                         <div class="wizard-param-input-group">
@@ -15698,7 +15698,7 @@ const CoachWorkoutsMaster = {
                     });
                     this.renderStep3Worktable(activeDay);
                     if (typeof showSensToast === 'function') {
-                        showSensToast(`Volumen y RIR ${globalRir} aplicados a toda la sesión.`, 'champagne');
+                        showSensToast(`Volumen y RIR/RPE ${globalRir} aplicados a toda la sesión.`, 'champagne');
                     }
                 } else {
                     if (typeof showSensToast === 'function') showSensToast('Agregá ejercicios primero para aplicar el volumen.', 'info');
@@ -15745,7 +15745,7 @@ const CoachWorkoutsMaster = {
                         <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                             <span class="pill" style="font-size: 9.5px; background: #F4F4F5; color: #18181B; font-weight: 700;">${ex.sets || 3} series × ${ex.reps || '10-12'}</span>
                             <span class="pill" style="font-size: 9.5px; background: #F4F4F5; color: #18181B; font-weight: 700;">${ex.defaultWeight || 20} kg</span>
-                            <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">RIR ${ex.rir !== undefined ? ex.rir : 2}</span>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; cursor: help;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo. RIR ${ex.rir !== undefined ? ex.rir : 2} = RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)}.">RIR/RPE ${ex.rir !== undefined ? ex.rir : 2} <span class="sens-tooltip-trigger">i</span></span>
                             <span class="pill" style="font-size: 9.5px; background: #F4F4F5; color: #71717A;">${ex.rest || 75}s rest</span>
                         </div>
                         ${ex.notes ? `<div style="width: 100%; font-size: 10.5px; color: #71717A; margin-top: 2px; padding-left: 20px;">Notas: <em>${ex.notes}</em></div>` : ''}
@@ -16569,7 +16569,7 @@ const CoachWorkoutsMaster = {
                                     <input type="number" step="0.5" value="${ex.defaultWeight || 20}" class="input-control month-inp-weight" data-idx="${idx}" style="width: 48px; height: 26px; padding: 1px 3px; font-size: 11px; margin: 0;">
                                 </div>
                                 <div class="wizard-param-input-group">
-                                    <label>RIR Obj</label>
+                                    <label style="display: inline-flex; align-items: center; gap: 2px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo. RIR 2 = RPE 8.">RIR/RPE <span class="sens-tooltip-trigger">i</span></label>
                                     <input type="number" min="0" max="5" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="input-control month-inp-rir" data-idx="${idx}" style="width: 42px; height: 26px; padding: 1px 3px; font-size: 11px; margin: 0;">
                                 </div>
                                 <div class="wizard-param-input-group">
@@ -16592,7 +16592,7 @@ const CoachWorkoutsMaster = {
                                         ${studentLog.sets}s × ${studentLog.reps} reps • ${studentLog.weight} kg
                                     </div>
                                     <div style="font-size: 10.5px; color: #166534; margin-top: 2px;">
-                                        RIR Real: <strong>${studentLog.rir}</strong> (Obj prescripto: ${ex.rir !== undefined ? ex.rir : 2})
+                                        RIR/RPE Real: <strong>${studentLog.rir}</strong> (Obj prescripto: ${ex.rir !== undefined ? ex.rir : 2}) <span class="sens-tooltip-trigger" title="RIR/RPE Real registrado por el alumno vs el objetivo prescripto.">i</span>
                                     </div>
                                     ${studentLog.notes ? `<div style="font-size: 9.5px; color: #71717A; margin-top: 3px; font-style: italic;">"${studentLog.notes}"</div>` : ''}
                                 </div>
@@ -16888,7 +16888,7 @@ const CoachMatrixProgressionView = {
             });
         });
 
-        await this.persistAndRefresh(workoutData, `✓ RIR ${targetRir} fijado en ${modifiedCount} ejercicios (${scope === 'future' ? 'semanas futuras' : 'mesociclo completo'}).`);
+        await this.persistAndRefresh(workoutData, `✓ RIR/RPE ${targetRir} fijado en ${modifiedCount} ejercicios (${scope === 'future' ? 'semanas futuras' : 'mesociclo completo'}).`);
     },
 
     async applyBatchSets(deltaSets) {
@@ -17056,7 +17056,7 @@ const CoachMatrixProgressionView = {
                                 ${delta.badgeHtml}
                             </div>
                             <div style="font-size: 11px; font-weight: 700; color: #166534; margin-top: 2px;">
-                                ${studentLog.sets}s × ${studentLog.reps} • ${studentLog.weight}kg • RIR ${studentLog.rir}
+                                ${studentLog.sets}s × ${studentLog.reps} • ${studentLog.weight}kg • RIR/RPE ${studentLog.rir}
                             </div>
                             ${studentLog.notes ? `<div style="font-size: 9.5px; color: #71717A; margin-top: 2px; font-style: italic;">"${studentLog.notes}"</div>` : ''}
                         </div>
@@ -17078,7 +17078,7 @@ const CoachMatrixProgressionView = {
                             <div style="margin-bottom: 4px;">
                                 <span class="coach-matrix-badge-plan">PLAN NICO</span>
                                 <div style="font-size: 11px; font-weight: 700; color: #18181B; margin-top: 2px;">
-                                    ${planSets}s × ${planReps} • ${planWeight}kg • RIR ${planRir}
+                                    ${planSets}s × ${planReps} • ${planWeight}kg • RIR/RPE ${planRir}
                                 </div>
                             </div>
 
@@ -17095,8 +17095,8 @@ const CoachMatrixProgressionView = {
                                     <div style="display: flex; gap: 4px; align-items: center;">
                                         <input type="number" step="0.5" value="${planWeight}" class="input-control matrix-inp-weight" data-date="${dStr}" data-ex-id="${item.id}" title="Peso kg" style="width: 44px; height: 24px; padding: 1px 2px; font-size: 10.5px; margin: 0;">
                                         <span style="font-size: 10px; color: #71717A;">kg</span>
-                                        <input type="number" min="0" max="5" step="0.5" value="${planRir}" class="input-control matrix-inp-rir" data-date="${dStr}" data-ex-id="${item.id}" title="RIR" style="width: 36px; height: 24px; padding: 1px 2px; font-size: 10.5px; margin: 0;">
-                                        <span style="font-size: 10px; color: #9E7D4B; font-weight: 700;">RIR</span>
+                                        <input type="number" min="0" max="5" step="0.5" value="${planRir}" class="input-control matrix-inp-rir" data-date="${dStr}" data-ex-id="${item.id}" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido)" style="width: 36px; height: 24px; padding: 1px 2px; font-size: 10.5px; margin: 0;">
+                                        <span style="font-size: 9px; color: #9E7D4B; font-weight: 700; cursor: help;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo. RIR 2 = RPE 8.">RIR/RPE</span>
                                     </div>
                                     <label style="display: flex; align-items: center; gap: 4px; font-size: 9px; color: #52525B; margin-top: 4px; cursor: pointer;" title="Aplica este cambio proporcional a todas las semanas futuras de este ejercicio">
                                         <input type="checkbox" class="matrix-inp-ripple" data-date="${dStr}" data-ex-id="${item.id}" style="width: 12px; height: 12px; accent-color: #9E7D4B;">
@@ -17580,7 +17580,7 @@ const CoachEvolutionEngine = {
 
         const intVal = document.getElementById('evoIntensityVal');
         const rpeSub = document.getElementById('evoRpeSub');
-        if (intVal) intVal.innerHTML = `${m.avgRir} <span style="font-size: 12px; font-weight: 600;">RIR</span>`;
+        if (intVal) intVal.innerHTML = `${m.avgRir} <span style="font-size: 12px; font-weight: 600;">RIR/RPE</span>`;
         if (rpeSub) rpeSub.textContent = `RPE ${m.avgRpe} • ${m.intensityStatus}`;
 
         const recVal = document.getElementById('evoRecoveryVal');
@@ -17647,7 +17647,7 @@ const CoachEvolutionEngine = {
                     <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                         <div>
                             <strong style="font-size: 12.5px; color: #121214; display: block;">${lift.name}</strong>
-                            <span style="font-size: 10.5px; color: #71717A;">Serie submáxima: ${lift.submaxWeight} kg × ${lift.reps} reps (RIR ${lift.rir})</span>
+                            <span style="font-size: 10.5px; color: #71717A;">Serie submáxima: ${lift.submaxWeight} kg × ${lift.reps} reps (RIR/RPE ${lift.rir})</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <div style="text-align: right;">

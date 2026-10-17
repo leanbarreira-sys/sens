@@ -4051,8 +4051,8 @@
                                 <div class="evo-metric-sub text-success" id="evoTonnageDelta">+9.8% vs semana ant.</div>
                             </div>
                             <div class="coach-evolution-metric-card">
-                                <span class="evo-metric-label">Intensidad Media</span>
-                                <div class="evo-metric-value" id="evoIntensityVal">1.8 <span style="font-size: 12px; font-weight: 600;">RIR</span></div>
+                                <span class="evo-metric-label" style="display: inline-flex; align-items: center; gap: 3px;">Intensidad Media <span class="sens-tooltip-trigger" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo. RIR 1.8 equivale a RPE 8.2 en la escala Borg/Tuchscherer.">i</span></span>
+                                <div class="evo-metric-value" id="evoIntensityVal">1.8 <span style="font-size: 12px; font-weight: 600;">RIR/RPE</span></div>
                                 <div class="evo-metric-sub" id="evoRpeSub">RPE 8.2 • Esfuerzo óptimo</div>
                             </div>
                             <div class="coach-evolution-metric-card">
@@ -4362,7 +4362,7 @@
                                             <input type="text" id="wizardGlobalReps" value="10-12" class="input-control" style="width: 60px; height: 30px; padding: 2px 6px; margin: 0; font-size: 12px;">
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 4px;">
-                                            <label style="font-size: 10.5px; color: #52525B; font-weight: 700;">RIR Obj:</label>
+                                            <label style="font-size: 10.5px; color: #52525B; font-weight: 700; display: inline-flex; align-items: center; gap: 3px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo. RIR 2 = terminar la serie pudiendo hacer exactamente 2 repeticiones más (RPE 8).">RIR/RPE: <span class="sens-tooltip-trigger">i</span></label>
                                             <input type="number" id="wizardGlobalRir" value="2" min="0" max="5" step="0.5" class="input-control" style="width: 48px; height: 30px; padding: 2px 6px; margin: 0; font-size: 12px;">
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 4px;">
@@ -4634,13 +4634,13 @@
                                     </div>
                                     <!-- Ajuste de RIR en Bloque -->
                                     <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px;">
-                                        <span style="font-size: 10.5px; font-weight: 800; color: #71717A; text-transform: uppercase;">2. Intensidad RIR en Bloque</span>
+                                        <span style="font-size: 10.5px; font-weight: 800; color: #71717A; text-transform: uppercase; display: inline-flex; align-items: center; gap: 3px;">2. Intensidad RIR/RPE en Bloque <span class="sens-tooltip-trigger" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR 1 = RPE 9 (pico), RIR 2 = RPE 8 (hipertrofia estándar), RIR 4 = RPE 6 (descarga).">i</span></span>
                                         <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
                                             <select id="matrixBatchRirSelect" class="input-control" style="flex: 1; height: 28px; font-size: 11px; padding: 2px 6px; margin: 0; background: #F8F9FA;">
-                                                <option value="1">RIR 1 (Pico / Intensificación)</option>
-                                                <option value="2" selected>RIR 2 (Hipertrofia Estándar)</option>
-                                                <option value="3">RIR 3 (Adaptación / Volumen)</option>
-                                                <option value="4">RIR 4 (Semana de Descarga)</option>
+                                                <option value="1">RIR 1 / RPE 9 (Pico / Intensificación)</option>
+                                                <option value="2" selected>RIR 2 / RPE 8 (Hipertrofia Estándar)</option>
+                                                <option value="3">RIR 3 / RPE 7 (Adaptación / Volumen)</option>
+                                                <option value="4">RIR 4 / RPE 6 (Semana de Descarga)</option>
                                             </select>
                                             <button type="button" class="btn btn-primary btn-sm" id="btnApplyBatchRir" style="font-size: 11px; padding: 4px 10px; background: #9E7D4B; color: #FFFFFF; font-weight: 700;">Aplicar</button>
                                         </div>
@@ -5300,7 +5300,7 @@
                 <button type="button" class="btn btn-sm btn-multi-tab active" data-tab="replace" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Reemplazar Ejercicio</button>
                 <button type="button" class="btn btn-sm btn-multi-tab" data-tab="add" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Agregar Movimiento</button>
                 <button type="button" class="btn btn-sm btn-multi-tab" data-tab="delete" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Eliminar Ejercicio</button>
-                <button type="button" class="btn btn-sm btn-multi-tab" data-tab="adjust" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Ajustar Cargas / RIR</button>
+                <button type="button" class="btn btn-sm btn-multi-tab" data-tab="adjust" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Ajustar Cargas / RIR / RPE</button>
             </div>
 
             <div style="overflow-y: auto; flex: 1; padding-right: 4px;">
@@ -5351,7 +5351,7 @@
                             <input type="number" id="multiAddWeight" value="20" step="0.5" class="input-control" style="width: 65px; height: 32px; font-size: 12px; margin: 0;">
                         </div>
                         <div>
-                            <label class="input-label" style="font-size: 10.5px;">RIR Obj</label>
+                            <label class="input-label" style="font-size: 10.5px; display: inline-flex; align-items: center; gap: 3px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Repeticiones en reserva antes del fallo técnico. RIR 2 = RPE 8.">RIR/RPE Obj <span class="sens-tooltip-trigger">i</span></label>
                             <input type="number" id="multiAddRir" value="2" min="0" max="5" step="0.5" class="input-control" style="width: 55px; height: 32px; font-size: 12px; margin: 0;">
                         </div>
                     </div>
@@ -5389,7 +5389,7 @@
                 <!-- Panel 4: Ajuste Masivo de Cargas / RIR -->
                 <div class="multi-tab-pane" id="multiTabPaneAdjust" style="display: none;">
                     <p style="font-size: 12px; color: #52525B; margin-bottom: 12px;">
-                        Aplicá un delta de carga (±kg) o ajustá el RIR objetivo a todos los ejercicios de los días seleccionados.
+                        Aplicá un delta de carga (±kg) o ajustá el RIR/RPE objetivo a todos los ejercicios de los días seleccionados.
                     </p>
                     <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;">
                         <div style="flex: 1; min-width: 160px;">
@@ -5400,15 +5400,15 @@
                             </div>
                         </div>
                         <div style="flex: 1; min-width: 160px;">
-                            <label class="input-label" style="font-size: 11px;">Fijar RIR Objetivo:</label>
+                            <label class="input-label" style="font-size: 11px; display: inline-flex; align-items: center; gap: 3px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de esfuerzo submáximo. RIR 2 = RPE 8.">Fijar RIR/RPE Objetivo: <span class="sens-tooltip-trigger">i</span></label>
                             <div style="display: flex; gap: 6px; align-items: center;">
                                 <select id="multiAdjustRirSelect" class="input-control" style="height: 32px; font-size: 11px; margin: 0;">
-                                    <option value="1">RIR 1 (Pico)</option>
-                                    <option value="2" selected>RIR 2 (Hipertrofia)</option>
-                                    <option value="3">RIR 3 (Adaptación)</option>
-                                    <option value="4">RIR 4 (Descarga)</option>
+                                    <option value="1">RIR 1 / RPE 9 (Pico)</option>
+                                    <option value="2" selected>RIR 2 / RPE 8 (Hipertrofia)</option>
+                                    <option value="3">RIR 3 / RPE 7 (Adaptación)</option>
+                                    <option value="4">RIR 4 / RPE 6 (Descarga)</option>
                                 </select>
-                                <button type="button" class="btn btn-primary btn-sm" id="btnMultiApplyRir" style="font-size: 11px; padding: 6px 12px; background: #9E7D4B; color: #FFFFFF; font-weight: 700;">Fijar RIR</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="btnMultiApplyRir" style="font-size: 11px; padding: 6px 12px; background: #9E7D4B; color: #FFFFFF; font-weight: 700;">Fijar RIR/RPE</button>
                             </div>
                         </div>
                     </div>
