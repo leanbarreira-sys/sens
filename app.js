@@ -15947,55 +15947,65 @@ const CoachWorkoutsMaster = {
             return;
         }
 
-        let html = '';
+        let html = `
+            <div class="wizard-worktable-wrap">
+                <div class="wizard-worktable-table">
+                    <div class="wizard-worktable-header">
+                        <div class="wcol-ex">EJERCICIO</div>
+                        <div class="wcol-param" title="Series">SETS</div>
+                        <div class="wcol-param" title="Repeticiones objetivo">REPS</div>
+                        <div class="wcol-param" title="Peso de referencia (kg)">KG</div>
+                        <div class="wcol-param" title="RIR (Repeticiones en Reserva) / RPE">RIR</div>
+                        <div class="wcol-param" title="Descanso entre series (segundos)">DESC</div>
+                        <div class="wcol-notes" title="Notas biomecánicas o indicaciones ad-hoc">NOTAS TÉCNICAS</div>
+                        <div class="wcol-act"></div>
+                    </div>
+                    <div class="wizard-worktable-body">
+        `;
+
         exercises.forEach((ex, idx) => {
-            const thumb = this.getThumbnail(ex);
+            const category = typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : (ex.category || 'General');
             html += `
-                <div class="wizard-selected-ex-row" data-ex-index="${idx}" style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
-                        <div style="display: flex; align-items: center; gap: 10px; min-width: 170px; flex: 1;">
-                            <div style="width: 38px; height: 38px; border-radius: 8px; overflow: hidden; background: #18181B; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                                ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
-                            </div>
-                            <div>
-                                <strong style="font-size: 13px; color: #121214; display: block; line-height: 1.25;">${ex.name}</strong>
-                                <span style="font-size: 10.5px; color: #71717A;">${getBiomechanicalCategory(ex).toUpperCase()} • Ejercicio ${idx + 1}</span>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-outline btn-sm btn-remove-row-ex" data-idx="${idx}" title="Remover ejercicio" style="border: 1px solid #FECACA; background: #FEF2F2; color: #EF4444; width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; border-radius: 6px; cursor: pointer;">
+                <div class="wizard-worktable-row wizard-selected-ex-row" data-ex-index="${idx}">
+                    <div class="wcol-ex" title="${ex.name} • ${category.toUpperCase()}">
+                        <span class="wrow-num">${idx + 1}</span>
+                        <span class="wrow-title">${ex.name}</span>
+                    </div>
+                    <div class="wcol-param">
+                        <input type="number" min="1" max="20" value="${ex.sets || 3}" class="wizard-row-compact-input row-inp-sets" data-idx="${idx}" title="Series">
+                    </div>
+                    <div class="wcol-param">
+                        <input type="text" value="${ex.reps || '10-12'}" class="wizard-row-compact-input row-inp-reps" data-idx="${idx}" title="Repeticiones">
+                    </div>
+                    <div class="wcol-param">
+                        <input type="number" step="0.5" value="${ex.defaultWeight !== undefined ? ex.defaultWeight : 20}" class="wizard-row-compact-input row-inp-weight" data-idx="${idx}" title="Peso (kg)">
+                    </div>
+                    <div class="wcol-param">
+                        <input type="number" min="0" max="10" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="wizard-row-compact-input row-inp-rir" data-idx="${idx}" title="RIR / RPE">
+                    </div>
+                    <div class="wcol-param">
+                        <input type="number" step="15" value="${ex.rest || 75}" class="wizard-row-compact-input row-inp-rest" data-idx="${idx}" title="Descanso (s)">
+                    </div>
+                    <div class="wcol-notes">
+                        <input type="text" placeholder="Indicaciones ad-hoc..." value="${ex.notes || ''}" class="wizard-row-compact-notes row-inp-notes" data-idx="${idx}" title="Notas biomecánicas o indicaciones ad-hoc">
+                    </div>
+                    <div class="wcol-act">
+                        <button type="button" class="btn-remove-row-ex" data-idx="${idx}" title="Remover de la sesión">
                             &times;
                         </button>
-                    </div>
-
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
-                        <div class="wizard-param-input-group">
-                            <label>Series</label>
-                            <input type="number" min="1" max="10" value="${ex.sets || 3}" class="input-control row-inp-sets" data-idx="${idx}" style="width: 48px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
-                        </div>
-                        <div class="wizard-param-input-group">
-                            <label>Reps</label>
-                            <input type="text" value="${ex.reps || '10-12'}" class="input-control row-inp-reps" data-idx="${idx}" style="width: 58px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
-                        </div>
-                        <div class="wizard-param-input-group">
-                            <label>Peso (kg)</label>
-                            <input type="number" step="0.5" value="${ex.defaultWeight || 20}" class="input-control row-inp-weight" data-idx="${idx}" style="width: 56px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
-                        </div>
-                        <div class="wizard-param-input-group">
-                            <label style="display: inline-flex; align-items: center; gap: 2px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo. RIR 2 = RPE 8.">RIR/RPE <span class="sens-tooltip-trigger">i</span></label>
-                            <input type="number" min="0" max="5" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="input-control row-inp-rir" data-idx="${idx}" style="width: 50px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
-                        </div>
-                        <div class="wizard-param-input-group">
-                            <label>Descanso (s)</label>
-                            <input type="number" step="15" value="${ex.rest || 75}" class="input-control row-inp-rest" data-idx="${idx}" style="width: 56px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 4px;">
-                        <input type="text" placeholder="Notas biomecánicas o indicaciones ad-hoc para este ejercicio..." value="${ex.notes || ''}" class="input-control row-inp-notes" data-idx="${idx}" style="width: 100%; height: 30px; font-size: 11.5px; padding: 2px 10px; margin: 0; background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 6px;">
                     </div>
                 </div>
             `;
         });
+
+        html += `
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-worktable-scroll-hint">
+                <span>⇄ Deslizá horizontalmente para ver todos los parámetros</span>
+            </div>
+        `;
 
         list.innerHTML = html;
 
