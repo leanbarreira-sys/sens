@@ -13557,24 +13557,645 @@ function initClarityTrainerModule() {
 window.initClarityTrainerModule = initClarityTrainerModule;
 
 // =============================================================================
-// MOTOR DETERMINISTA: COACH WORKOUTS MASTER (WIZARD 4 PASOS & VISIÓN MENSUAL)
+// MOTOR DETERMINISTA: COACH WORKOUTS MASTER (WIZARD 4 PASOS, CALENDARIO & MATRIZ)
 // Arquitectura Quiet Luxury, Estilo 'Inicio', 100% Sin Emojis, Paridad Apple Health
+// =============================================================================
+
+/**
+ * Clasificación biomecánica unificada de cualquier ejercicio del catálogo SENS
+ * @param {Object} ex Objeto ejercicio
+ * @returns {'piernas' | 'espalda' | 'pecho' | 'brazos' | 'hombros' | 'core'}
+ */
+function getBiomechanicalCategory(ex) {
+    if (!ex) return 'core';
+    const name = (ex.name || '').toLowerCase();
+    const mg = (ex.muscle_group || ex.primary_muscle || '').toLowerCase();
+    const pat = (ex.pattern || '').toLowerCase();
+
+    // 1. Piernas (Dominante rodilla / cadera, glúteos, isquios, gemelos)
+    if (mg.includes('quad') || mg.includes('hamstring') || mg.includes('glute') || mg.includes('pierna') || mg.includes('pantorrilla') ||
+        pat.includes('squat') || pat.includes('leg') || pat.includes('hinge') || pat.includes('lunge') || pat.includes('deadlift') ||
+        name.includes('sentadilla') || name.includes('prensa') || name.includes('estocada') || name.includes('hip thrust') ||
+        name.includes('búlgara') || name.includes('bulgara') || name.includes('femoral') || name.includes('cuádriceps') ||
+        name.includes('cuadriceps') || name.includes('isquio') || name.includes('glúteo') || name.includes('gluteo') ||
+        name.includes('peso muerto') || name.includes('step-up') || name.includes('cosaca') || name.includes('hack') ||
+        name.includes('gemelo') || name.includes('pantorrilla') || name.includes('zancada')) {
+        return 'piernas';
+    }
+
+    // 2. Brazos (Bíceps, Tríceps, Antebrazo, Braquial)
+    if (mg.includes('biceps') || mg.includes('triceps') || mg.includes('brazo') ||
+        pat.includes('biceps') || pat.includes('triceps') || pat.includes('brachialis') ||
+        name.includes('curl') || name.includes('bíceps') || name.includes('biceps') ||
+        name.includes('tríceps') || name.includes('triceps') || name.includes('francés') ||
+        name.includes('frances') || name.includes('martillo') || name.includes('antebrazo') ||
+        (name.includes('cuerda') && mg.includes('push'))) {
+        return 'brazos';
+    }
+
+    // 3. Hombros / Deltoides
+    if (mg.includes('shoulder') || mg.includes('deltoid') || mg.includes('hombro') ||
+        pat.includes('overhead') || pat.includes('lateral raise') || pat.includes('rear delt') ||
+        name.includes('militar') || name.includes('lateral') || name.includes('hombro') ||
+        name.includes('deltoide') || name.includes('face pull') || name.includes('pájaro') || name.includes('pajaro')) {
+        return 'hombros';
+    }
+
+    // 4. Pecho / Pectoral
+    if (mg.includes('chest') || mg.includes('pectoral') || (mg.includes('push') && !mg.includes('shoulder')) ||
+        pat.includes('horizontal push') || pat.includes('incline push') || pat.includes('flye') ||
+        name.includes('banca') || name.includes('pecho') || name.includes('pectoral') ||
+        name.includes('apertura') || name.includes('crossover') || name.includes('flexiones') ||
+        name.includes('push-up') || name.includes('fondos')) {
+        return 'pecho';
+    }
+
+    // 5. Espalda / Dorsales / Tracción
+    if (mg.includes('pull') || mg.includes('back') || mg.includes('dorsal') ||
+        pat.includes('vertical pull') || pat.includes('horizontal pull') || pat.includes('lat isolation') || pat.includes('row') ||
+        name.includes('remo') || name.includes('jalón') || name.includes('jalon') ||
+        name.includes('dominada') || name.includes('espalda') || name.includes('dorsal') ||
+        name.includes('pullover') || name.includes('trapecio')) {
+        return 'espalda';
+    }
+
+    // 6. Core & Movilidad (default)
+    return 'core';
+}
+window.getBiomechanicalCategory = getBiomechanicalCategory;
+
+// =============================================================================
+// GESTOR DE PLANTILLAS REUTILIZABLES DE RUTINA (CURADAS POR NICO)
+// =============================================================================
+const CoachRoutineTemplatesManager = {
+    STORAGE_KEY: 'sens_coach_routine_templates_v2',
+
+    getDefaultTemplates() {
+        return [
+            {
+                id: 'tpl-bespoke-3days',
+                title: 'Hipertrofia Bespoke SENS (3 Días)',
+                description: 'Distribución clínica de frecuencia óptima para recomposición corporal. Pecho & Tríceps, Espalda & Bíceps, Piernas, Hombros & Core.',
+                daysCount: 3,
+                days: [
+                    {
+                        dayOfWeekIdx: 1, // Lunes
+                        dayName: 'Lunes',
+                        modality: 'presencial',
+                        muscles: ['Pecho + Pectoral', 'Bíceps + Tríceps'],
+                        exercises: [
+                            { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', sets: 3, reps: '8-10', defaultWeight: 24, rir: 2, rest: 90, notes: 'Escápulas retraídas y pausa abajo' },
+                            { id: 'ex-p7', name: 'Press Inclinado con Mancuernas (30°)', sets: 3, reps: '10-12', defaultWeight: 20, rir: 2, rest: 75, notes: 'Foco en haz clavicular' },
+                            { id: 'ex-p8', name: 'Aperturas en Polea (Crossover)', sets: 3, reps: '12-15', defaultWeight: 12.5, rir: 1.5, rest: 60, notes: 'Apretar 1s en contracción máxima' },
+                            { id: 'ex-p11', name: 'Extensión de Tríceps en Polea con Cuerda', sets: 3, reps: '12-15', defaultWeight: 22.5, rir: 1, rest: 60, notes: 'Separar cuerda abajo' },
+                            { id: 'ex-p12', name: 'Press Francés con Mancuernas en Banco Plano', sets: 3, reps: '10-12', defaultWeight: 12, rir: 2, rest: 75, notes: 'Codos fijos y control excéntrico' }
+                        ]
+                    },
+                    {
+                        dayOfWeekIdx: 3, // Miércoles
+                        dayName: 'Miércoles',
+                        modality: 'online',
+                        muscles: ['Espalda + Dorsales', 'Bíceps + Tríceps'],
+                        exercises: [
+                            { id: 'ex-t2', name: 'Jalón al Pecho en Polea (Agarre Neutro)', sets: 3, reps: '8-10', defaultWeight: 55, rir: 2, rest: 90, notes: 'Tirar codos a los bolsillos traseros' },
+                            { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano en Banco', sets: 3, reps: '10-12', defaultWeight: 24, rir: 2, rest: 75, notes: 'Torso paralelo sin rotación' },
+                            { id: 'ex-t5', name: 'Remo en Polea Baja con Agarre Estrecho', sets: 3, reps: '10-12', defaultWeight: 45, rir: 1.5, rest: 75, notes: 'Juntar escápulas 1 segundo' },
+                            { id: 'ex-t9', name: 'Curl de Bíceps con Mancuernas Supinadas', sets: 3, reps: '10-12', defaultWeight: 12, rir: 1, rest: 60, notes: 'Supinación completa al subir' },
+                            { id: 'ex-t10', name: 'Curl Martillo con Mancuernas o Cuerda', sets: 3, reps: '12-15', defaultWeight: 10, rir: 1, rest: 60, notes: 'Fortalece braquial y antebrazo' }
+                        ]
+                    },
+                    {
+                        dayOfWeekIdx: 5, // Viernes
+                        dayName: 'Viernes',
+                        modality: 'presencial',
+                        muscles: ['Piernas (Cuádriceps & Glúteos)', 'Hombros & Deltoides', 'Core & Abdominales'],
+                        exercises: [
+                            { id: 'ex-q1', name: 'Sentadilla Goblet con Mancuerna', sets: 3, reps: '10-12', defaultWeight: 28, rir: 2, rest: 90, notes: 'Descenso en 3 segundos' },
+                            { id: 'ex-q4', name: 'Prensa 45°', sets: 3, reps: '10-12', defaultWeight: 130, rir: 2, rest: 90, notes: 'Pies a media altura sin despegar sacro' },
+                            { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: 3, reps: '10-12', defaultWeight: 65, rir: 1.5, rest: 90, notes: 'Pausa arriba 2s' },
+                            { id: 'ex-p10', name: 'Elevaciones Laterales con Mancuerna', sets: 4, reps: '12-15', defaultWeight: 8, rir: 1, rest: 60, notes: 'Guiar con los codos sin encoger trapecios' },
+                            { id: 'ex-c1', name: 'Plancha Frontal con Retroversión Pélvica', sets: 3, reps: '30s', defaultWeight: 0, rir: 2, rest: 60, notes: 'Retroversión pélvica activa' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'tpl-torso-pierna-4days',
+                title: 'Torso / Pierna Frecuencia 2 (4 Días)',
+                description: 'Ideal para hipertrofia neuromuscular balanceada. 2 días de estímulo de tren superior y 2 días de estímulo de tren inferior.',
+                daysCount: 4,
+                days: [
+                    {
+                        dayOfWeekIdx: 1,
+                        dayName: 'Lunes',
+                        modality: 'presencial',
+                        muscles: ['Pecho + Pectoral', 'Espalda + Dorsales', 'Hombros & Deltoides'],
+                        exercises: [
+                            { id: 'ex-p2', name: 'Press de Banca con Barra', sets: 4, reps: '6-8', defaultWeight: 60, rir: 2, rest: 120, notes: 'Fuerza base tren superior' },
+                            { id: 'ex-t4', name: 'Remo con Barra Inclinado (Agarre Prono)', sets: 4, reps: '6-8', defaultWeight: 50, rir: 2, rest: 90, notes: 'Torso a 45 grados' },
+                            { id: 'ex-p3', name: 'Press Militar de Pie con Barra', sets: 3, reps: '8-10', defaultWeight: 35, rir: 2, rest: 90, notes: 'Glúteos y core firmes' },
+                            { id: 'ex-p9', name: 'Elevaciones Laterales en Polea a Una Mano', sets: 3, reps: '12-15', defaultWeight: 7.5, rir: 1, rest: 60, notes: 'Plano escapular' }
+                        ]
+                    },
+                    {
+                        dayOfWeekIdx: 2,
+                        dayName: 'Martes',
+                        modality: 'online',
+                        muscles: ['Piernas (Cuádriceps & Glúteos)', 'Core & Abdominales'],
+                        exercises: [
+                            { id: 'ex-q2', name: 'Sentadilla Trasera con Barra', sets: 4, reps: '6-8', defaultWeight: 75, rir: 2, rest: 120, notes: 'Profundidad paralela' },
+                            { id: 'ex-h1', name: 'Peso Muerto Rumano con Mancuernas', sets: 3, reps: '8-10', defaultWeight: 26, rir: 2, rest: 90, notes: 'Empujar cadera atrás' },
+                            { id: 'ex-q5', name: 'Estocadas Búlgaras con Mancuernas', sets: 3, reps: '10-12', defaultWeight: 14, rir: 1.5, rest: 75, notes: 'Ligera inclinación del torso' },
+                            { id: 'ex-c3', name: 'Press Pallof con Banda o Polea', sets: 3, reps: '12-15', defaultWeight: 15, rir: 2, rest: 60, notes: 'Anti-rotación pura' }
+                        ]
+                    },
+                    {
+                        dayOfWeekIdx: 4,
+                        dayName: 'Jueves',
+                        modality: 'presencial',
+                        muscles: ['Pecho + Pectoral', 'Espalda + Dorsales', 'Bíceps + Tríceps'],
+                        exercises: [
+                            { id: 'ex-p7', name: 'Press Inclinado con Mancuernas (30°)', sets: 3, reps: '10-12', defaultWeight: 22, rir: 2, rest: 90, notes: 'Pausa abajo' },
+                            { id: 'ex-t1', name: 'Dominadas Asistidas en Máquina o Banda', sets: 3, reps: '8-10', defaultWeight: 0, rir: 2, rest: 90, notes: 'Depresión escapular previa' },
+                            { id: 'ex-t5', name: 'Remo en Polea Baja con Agarre Estrecho', sets: 3, reps: '10-12', defaultWeight: 45, rir: 1.5, rest: 75, notes: 'Rango completo' },
+                            { id: 'ex-t9', name: 'Curl de Bíceps con Mancuernas Supinadas', sets: 3, reps: '10-12', defaultWeight: 12, rir: 1, rest: 60, notes: 'Aislamiento braquial' },
+                            { id: 'ex-p11', name: 'Extensión de Tríceps en Polea con Cuerda', sets: 3, reps: '12-15', defaultWeight: 22.5, rir: 1, rest: 60, notes: 'Pico de contracción' }
+                        ]
+                    },
+                    {
+                        dayOfWeekIdx: 5,
+                        dayName: 'Viernes',
+                        modality: 'autonomo',
+                        muscles: ['Piernas (Cuádriceps & Glúteos)', 'Core & Abdominales'],
+                        exercises: [
+                            { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: 4, reps: '8-10', defaultWeight: 70, rir: 2, rest: 90, notes: 'Contracción de 2 segundos' },
+                            { id: 'ex-q7', name: 'Sentadilla Hack en Máquina', sets: 3, reps: '10-12', defaultWeight: 90, rir: 1.5, rest: 90, notes: 'Control excéntrico 3s' },
+                            { id: 'ex-h4', name: 'Curl Femoral Acostado en Máquina', sets: 3, reps: '12-15', defaultWeight: 40, rir: 1, rest: 60, notes: 'Sin arquear lumbares' },
+                            { id: 'ex-c2', name: 'Deadbug con Control Lumbar y Respiración', sets: 3, reps: '10-12', defaultWeight: 0, rir: 2, rest: 60, notes: 'Espalda baja sellada' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'tpl-ppl-6days',
+                title: 'Push / Pull / Legs Rendimiento (6 Días)',
+                description: 'Periodización de alto rendimiento con ciclo rotativo Empuje, Tracción y Piernas para atletas avanzados.',
+                daysCount: 6,
+                days: [
+                    { dayOfWeekIdx: 1, dayName: 'Lunes', modality: 'presencial', muscles: ['Pecho + Pectoral', 'Hombros & Deltoides', 'Bíceps + Tríceps'], exercises: [ { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', sets: 4, reps: '8-10', defaultWeight: 26, rir: 2, rest: 90 }, { id: 'ex-p4', name: 'Press Militar Sentado con Mancuernas', sets: 3, reps: '10-12', defaultWeight: 18, rir: 2, rest: 75 }, { id: 'ex-p11', name: 'Extensión de Tríceps en Polea con Cuerda', sets: 3, reps: '12-15', defaultWeight: 22.5, rir: 1, rest: 60 } ] },
+                    { dayOfWeekIdx: 2, dayName: 'Martes', modality: 'online', muscles: ['Espalda + Dorsales', 'Bíceps + Tríceps'], exercises: [ { id: 'ex-t2', name: 'Jalón al Pecho en Polea (Agarre Neutro)', sets: 4, reps: '8-10', defaultWeight: 60, rir: 2, rest: 90 }, { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano en Banco', sets: 3, reps: '10-12', defaultWeight: 24, rir: 2, rest: 75 }, { id: 'ex-t10', name: 'Curl Martillo con Mancuernas o Cuerda', sets: 3, reps: '12-15', defaultWeight: 12, rir: 1, rest: 60 } ] },
+                    { dayOfWeekIdx: 3, dayName: 'Miércoles', modality: 'presencial', muscles: ['Piernas (Cuádriceps & Glúteos)', 'Core & Abdominales'], exercises: [ { id: 'ex-q1', name: 'Sentadilla Goblet con Mancuerna', sets: 4, reps: '10-12', defaultWeight: 30, rir: 2, rest: 90 }, { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: 3, reps: '10-12', defaultWeight: 70, rir: 1.5, rest: 90 }, { id: 'ex-c1', name: 'Plancha Frontal con Retroversión Pélvica', sets: 3, reps: '30s', defaultWeight: 0, rir: 2, rest: 60 } ] },
+                    { dayOfWeekIdx: 4, dayName: 'Jueves', modality: 'autonomo', muscles: ['Pecho + Pectoral', 'Hombros & Deltoides', 'Bíceps + Tríceps'], exercises: [ { id: 'ex-p7', name: 'Press Inclinado con Mancuernas (30°)', sets: 4, reps: '10-12', defaultWeight: 22, rir: 2, rest: 90 }, { id: 'ex-p10', name: 'Elevaciones Laterales con Mancuerna', sets: 4, reps: '12-15', defaultWeight: 8, rir: 1, rest: 60 }, { id: 'ex-p12', name: 'Press Francés con Mancuernas en Banco Plano', sets: 3, reps: '10-12', defaultWeight: 12, rir: 1.5, rest: 75 } ] },
+                    { dayOfWeekIdx: 5, dayName: 'Viernes', modality: 'presencial', muscles: ['Espalda + Dorsales', 'Bíceps + Tríceps'], exercises: [ { id: 'ex-t5', name: 'Remo en Polea Baja con Agarre Estrecho', sets: 4, reps: '10-12', defaultWeight: 50, rir: 2, rest: 75 }, { id: 'ex-t8', name: 'Pullover en Polea Alta con Barra Recta', sets: 3, reps: '12-15', defaultWeight: 25, rir: 1.5, rest: 60 }, { id: 'ex-t9', name: 'Curl de Bíceps con Mancuernas Supinadas', sets: 3, reps: '10-12', defaultWeight: 12, rir: 1, rest: 60 } ] },
+                    { dayOfWeekIdx: 6, dayName: 'Sábado', modality: 'online', muscles: ['Piernas (Cuádriceps & Glúteos)', 'Core & Abdominales'], exercises: [ { id: 'ex-q4', name: 'Prensa 45°', sets: 4, reps: '10-12', defaultWeight: 140, rir: 2, rest: 90 }, { id: 'ex-h4', name: 'Curl Femoral Acostado en Máquina', sets: 3, reps: '12-15', defaultWeight: 45, rir: 1, rest: 60 }, { id: 'ex-c3', name: 'Press Pallof con Banda o Polea', sets: 3, reps: '12-15', defaultWeight: 15, rir: 2, rest: 60 } ] }
+                ]
+            }
+        ];
+    },
+
+    getTemplates() {
+        try {
+            const raw = localStorage.getItem(this.STORAGE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            }
+        } catch (e) {}
+        const defs = this.getDefaultTemplates();
+        this.saveAllTemplates(defs);
+        return defs;
+    },
+
+    saveAllTemplates(arr) {
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(arr));
+        } catch (e) {}
+    },
+
+    saveTemplate(tpl) {
+        const all = this.getTemplates();
+        const existingIdx = all.findIndex(t => t.id === tpl.id);
+        if (existingIdx >= 0) {
+            all[existingIdx] = tpl;
+        } else {
+            all.unshift(tpl);
+        }
+        this.saveAllTemplates(all);
+    },
+
+    deleteTemplate(tplId) {
+        const all = this.getTemplates().filter(t => t.id !== tplId);
+        this.saveAllTemplates(all);
+        this.renderModal();
+        if (typeof showSensToast === 'function') {
+            showSensToast('Plantilla eliminada de la biblioteca.', 'champagne');
+        }
+    },
+
+    init() {
+        const btnClose = document.getElementById('btnCloseTemplatesModal');
+        const modal = document.getElementById('modalCoachRoutineTemplates');
+        if (btnClose && modal && !btnClose._hasListener) {
+            btnClose._hasListener = true;
+            btnClose.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+        }
+    },
+
+    openModal() {
+        const modal = document.getElementById('modalCoachRoutineTemplates');
+        if (!modal) return;
+        this.renderModal();
+        modal.classList.add('active');
+    },
+
+    closeModal() {
+        const modal = document.getElementById('modalCoachRoutineTemplates');
+        if (modal) modal.classList.remove('active');
+    },
+
+    renderModal() {
+        const container = document.getElementById('coachTemplatesListContainer');
+        if (!container) return;
+
+        const templates = this.getTemplates();
+        if (templates.length === 0) {
+            container.innerHTML = `<div style="padding: 24px; text-align: center; color: #71717A; font-size: 13px;">No hay plantillas guardadas. Creá una rutina en el planificador y tocala para guardarla.</div>`;
+            return;
+        }
+
+        let html = '';
+        templates.forEach(tpl => {
+            const isDefault = tpl.id.startsWith('tpl-');
+            let daysBadgesHtml = '';
+            (tpl.days || []).forEach(d => {
+                const exCount = (d.exercises || []).length;
+                const musclesShort = (d.muscles || []).slice(0, 2).join(' + ');
+                daysBadgesHtml += `
+                    <div style="background: #F4F4F5; border-radius: 6px; padding: 4px 8px; font-size: 11px;">
+                        <strong style="color: #18181B;">${d.dayName}</strong>: <span style="color: #71717A;">${musclesShort || 'Fuerza'} (${exCount} ej)</span>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="coach-template-card" data-tpl-id="${tpl.id}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">${tpl.daysCount || (tpl.days || []).length} DÍAS / SEMANA</span>
+                                <strong style="font-size: 14px; color: #121214;">${tpl.title}</strong>
+                            </div>
+                            <p style="font-size: 12px; color: #71717A; margin: 4px 0 0 0; line-height: 1.35;">${tpl.description || 'Plantilla de entrenamiento curada por Nico.'}</p>
+                        </div>
+                        ${!isDefault ? `
+                            <button type="button" class="btn btn-outline btn-sm btn-delete-tpl" data-tpl-id="${tpl.id}" title="Eliminar plantilla" style="color: #EF4444; border-color: #FECACA; background: #FEF2F2; padding: 2px 8px; font-size: 11px;">
+                                Eliminar
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 12px 0;">
+                        ${daysBadgesHtml}
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                        <button type="button" class="btn btn-primary btn-sm btn-load-tpl" data-tpl-id="${tpl.id}" style="background: #9E7D4B; color: #FFFFFF; font-weight: 700; font-size: 11.5px; padding: 6px 14px; border-radius: 8px;">
+                            Cargar en el Planificador Masivo →
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+
+        // Wiring cargar plantilla
+        container.querySelectorAll('.btn-load-tpl').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tplId = btn.getAttribute('data-tpl-id');
+                this.loadTemplateIntoWizard(tplId);
+            });
+        });
+
+        // Wiring eliminar plantilla
+        container.querySelectorAll('.btn-delete-tpl').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tplId = btn.getAttribute('data-tpl-id');
+                if (confirm('¿Deseás eliminar esta plantilla de tu biblioteca personal?')) {
+                    this.deleteTemplate(tplId);
+                }
+            });
+        });
+    },
+
+    loadTemplateIntoWizard(tplId) {
+        const tpl = this.getTemplates().find(t => t.id === tplId);
+        if (!tpl) return;
+
+        // Asegurar que estamos en la vista de Wizard
+        const btnWizard = document.getElementById('btnToggleCoachWorkoutsWizard');
+        if (btnWizard) btnWizard.click();
+
+        // Aplicar días y ejercicios al borrador del wizard
+        const dowMap = {};
+        (tpl.days || []).forEach(d => {
+            dowMap[d.dayOfWeekIdx] = d;
+        });
+
+        // Actualizar daysConfig
+        CoachWorkoutsMaster.daysConfig.forEach(dc => {
+            const tDay = dowMap[dc.dayOfWeekIdx];
+            if (tDay) {
+                dc.selected = true;
+                dc.modality = tDay.modality || 'presencial';
+                dc.muscles = [...(tDay.muscles || [])];
+                CoachWorkoutsMaster.wizardDraft[dc.dateStr] = {
+                    dateStr: dc.dateStr,
+                    dayOfWeek: dc.dayOfWeek,
+                    label: dc.label,
+                    modality: dc.modality,
+                    muscles: dc.muscles,
+                    exercises: JSON.parse(JSON.stringify(tDay.exercises || []))
+                };
+            } else {
+                dc.selected = false;
+                if (CoachWorkoutsMaster.wizardDraft[dc.dateStr]) {
+                    CoachWorkoutsMaster.wizardDraft[dc.dateStr].exercises = [];
+                }
+            }
+        });
+
+        CoachWorkoutsMaster.step3ActiveDayIndex = 0;
+        CoachWorkoutsMaster.switchStep(1);
+        CoachWorkoutsMaster.renderStep1();
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Plantilla "${tpl.title}" cargada en el planificador.`, 'champagne');
+        }
+    },
+
+    saveCurrentWizardAsTemplate() {
+        const selectedDays = CoachWorkoutsMaster.daysConfig.filter(d => d.selected);
+        if (selectedDays.length === 0) {
+            if (typeof showSensToast === 'function') showSensToast('No hay días configurados para guardar como plantilla.', 'warning');
+            return;
+        }
+
+        const titlePrompt = prompt('Ingresá un nombre para esta plantilla de rutina:', `Rutina Nico ${selectedDays.length} Días`);
+        if (!titlePrompt || !titlePrompt.trim()) return;
+
+        const newTpl = {
+            id: 'custom-' + Date.now(),
+            title: titlePrompt.trim(),
+            description: `Plantilla creada por Nico con ${selectedDays.length} días de entrenamiento pautados.`,
+            daysCount: selectedDays.length,
+            days: selectedDays.map(d => {
+                const draft = CoachWorkoutsMaster.wizardDraft[d.dateStr] || {};
+                return {
+                    dayOfWeekIdx: d.dayOfWeekIdx,
+                    dayName: d.dayOfWeek,
+                    modality: d.modality || 'presencial',
+                    muscles: [...(d.muscles || [])],
+                    exercises: JSON.parse(JSON.stringify(draft.exercises || []))
+                };
+            })
+        };
+
+        this.saveTemplate(newTpl);
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Plantilla "${newTpl.title}" guardada con éxito en tu biblioteca.`, 'champagne');
+        }
+    }
+};
+window.CoachRoutineTemplatesManager = CoachRoutineTemplatesManager;
+
+// =============================================================================
+// MODAL RÁPIDO PARA AGREGAR EJERCICIOS AD-HOC (CALENDARIO MENSUAL & MATRIZ)
+// =============================================================================
+const CoachQuickAddManager = {
+    targetDateStr: null,
+    targetAthleteId: null,
+    onSuccessCallback: null,
+    activeCat: 'all',
+    searchQuery: '',
+
+    init() {
+        const btnClose = document.getElementById('btnCloseQuickAddModal');
+        const modal = document.getElementById('modalCoachQuickAddExercise');
+        const searchInput = document.getElementById('quickAddSearchInput');
+        const categoryPillsWrap = document.getElementById('quickAddCategoryPills');
+
+        if (btnClose && modal && !btnClose._hasListener) {
+            btnClose._hasListener = true;
+            btnClose.addEventListener('click', () => this.closeModal());
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) this.closeModal();
+            });
+        }
+
+        if (searchInput && !searchInput._hasListener) {
+            searchInput._hasListener = true;
+            searchInput.addEventListener('input', () => {
+                this.searchQuery = searchInput.value.toLowerCase().trim();
+                this.renderList();
+            });
+        }
+
+        if (categoryPillsWrap && !categoryPillsWrap._hasListener) {
+            categoryPillsWrap._hasListener = true;
+            categoryPillsWrap.querySelectorAll('button[data-cat]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryPillsWrap.querySelectorAll('button[data-cat]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    this.activeCat = btn.getAttribute('data-cat') || 'all';
+                    this.renderList();
+                });
+            });
+        }
+    },
+
+    openModal({ dateStr, athId, onAdded }) {
+        this.targetDateStr = dateStr;
+        this.targetAthleteId = athId;
+        this.onSuccessCallback = onAdded;
+        this.activeCat = 'all';
+        this.searchQuery = '';
+
+        const titleEl = document.getElementById('quickAddDayTitle');
+        if (titleEl) {
+            titleEl.textContent = `Agregar Ejercicio a la Sesión del ${dateStr}`;
+        }
+
+        const searchInput = document.getElementById('quickAddSearchInput');
+        if (searchInput) searchInput.value = '';
+
+        const catWrap = document.getElementById('quickAddCategoryPills');
+        if (catWrap) {
+            catWrap.querySelectorAll('button[data-cat]').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-cat') === 'all');
+            });
+        }
+
+        const modal = document.getElementById('modalCoachQuickAddExercise');
+        if (modal) modal.classList.add('active');
+
+        this.renderList();
+    },
+
+    closeModal() {
+        const modal = document.getElementById('modalCoachQuickAddExercise');
+        if (modal) modal.classList.remove('active');
+    },
+
+    renderList() {
+        const list = document.getElementById('quickAddExercisesList');
+        if (!list) return;
+
+        const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_EXERCISE_LIBRARY.length > 0)
+            ? SENS_EXERCISE_LIBRARY
+            : (typeof EXERCISE_CATALOG !== 'undefined' ? EXERCISE_CATALOG : []);
+
+        const cat = this.activeCat;
+        const q = this.searchQuery;
+
+        const filtered = sourceLib.filter(ex => {
+            const nameMatch = !q || ex.name.toLowerCase().includes(q) || (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(q));
+            if (!nameMatch) return false;
+            if (cat === 'all') return true;
+            return getBiomechanicalCategory(ex) === cat;
+        });
+
+        if (filtered.length === 0) {
+            list.innerHTML = `<div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: #71717A; font-size: 12px;">No se encontraron ejercicios en esta categoría.</div>`;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(ex => {
+            const thumb = CoachWorkoutsMaster.getThumbnail(ex);
+            const bioCat = getBiomechanicalCategory(ex).toUpperCase();
+
+            html += `
+                <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px; min-width: 140px; flex: 1;">
+                        <div style="width: 36px; height: 36px; border-radius: 6px; overflow: hidden; background: #18181B; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                            ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
+                        </div>
+                        <div>
+                            <span class="pill" style="font-size: 8.5px; padding: 1px 5px; font-weight: 800; background: #F4F4F5; color: #71717A;">${bioCat}</span>
+                            <strong style="font-size: 12px; color: #121214; display: block; line-height: 1.2; margin-top: 2px;">${ex.name}</strong>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm btn-quick-select-ex" data-ex-id="${ex.id}" style="font-size: 11px; padding: 4px 10px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; white-space: nowrap;">
+                        + Agregar
+                    </button>
+                </div>
+            `;
+        });
+
+        list.innerHTML = html;
+
+        list.querySelectorAll('.btn-quick-select-ex').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const exId = btn.getAttribute('data-ex-id');
+                const exObj = sourceLib.find(x => x.id === exId);
+                if (exObj) {
+                    await this.addExerciseToSession(exObj);
+                }
+            });
+        });
+    },
+
+    async addExerciseToSession(exObj) {
+        const athId = this.targetAthleteId || CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+        const dateStr = this.targetDateStr;
+        if (!athId || !dateStr) return;
+
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+
+        if (!workoutData.calendar_schedule[dateStr]) {
+            workoutData.calendar_schedule[dateStr] = {
+                dateStr: dateStr,
+                title: `Entrenamiento del ${dateStr}`,
+                modality: 'presencial',
+                completed: false,
+                exercises: []
+            };
+        }
+
+        const session = workoutData.calendar_schedule[dateStr];
+        if (!session.exercises) session.exercises = [];
+
+        session.exercises.push({
+            id: exObj.id,
+            name: exObj.name,
+            sets: 3,
+            reps: '10-12',
+            defaultWeight: exObj.defaultWeight || 20,
+            rir: 2,
+            rest: 75,
+            notes: '',
+            primary_muscle: exObj.primary_muscle || exObj.muscle_group || 'Fuerza',
+            video: exObj.video || exObj.video_url || '',
+            poster_url: exObj.poster_url || exObj.thumbnail || ''
+        });
+
+        // Guardar
+        localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+        if (window.__coachAthletesCache) {
+            const cached = window.__coachAthletesCache.find(a => a.id === athId);
+            if (cached) cached.prescribed_workouts = workoutData;
+        }
+
+        if (supabaseClient && !athId.startsWith('mock_')) {
+            try {
+                await supabaseClient.from('profiles').update({
+                    prescribed_workouts: workoutData
+                }).eq('id', athId);
+            } catch (err) {}
+        }
+
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ ${exObj.name} sumado a la sesión del ${dateStr}.`, 'champagne');
+        }
+
+        if (typeof this.onSuccessCallback === 'function') {
+            this.onSuccessCallback();
+        }
+    }
+};
+window.CoachQuickAddManager = CoachQuickAddManager;
+
+// =============================================================================
+// MOTOR DETERMINISTA: COACH WORKOUTS MASTER (WIZARD & CALENDARIO)
 // =============================================================================
 const CoachWorkoutsMaster = {
     activeAthleteId: null,
     currentStep: 1,
-    activeVision: 'wizard', // 'wizard' | 'month'
+    activeVision: 'wizard', // 'wizard' | 'month' | 'matrix'
     calendarMonth: new Date().getMonth(),
     calendarYear: new Date().getFullYear(),
     selectedCalendarDateStr: null,
-    
-    // Configuración del Paso 1: 7 días dinámicos a partir de hoy
+    monthMuscleFilter: 'all',
+
+    // Configuración del Paso 1: 7 días dinámicos ordenados estrictamente Lun a Dom
     daysConfig: [], 
     // Índice de día activo en Paso 3
     step3ActiveDayIndex: 0,
+    // Sub-filtro de músculo para días con más de 1 grupo en Paso 3
+    step3MuscleSubFilter: 'all',
     // Búsqueda en catálogo
     searchFilter: '',
-    // Almacén de rutinas en borrador para el wizard: { [dateStr]: { dateStr, dayName, modality, muscles: [], exercises: [] } }
+    // Almacén de rutinas en borrador para el wizard
     wizardDraft: {},
     // Semanas a replicar
     replicateWeeks: 4,
@@ -13587,6 +14208,11 @@ const CoachWorkoutsMaster = {
         this.bindStep3Actions();
         this.bindStep4Actions();
         this.bindMonthCalendarNav();
+
+        CoachRoutineTemplatesManager.init();
+        CoachQuickAddManager.init();
+        CoachMatrixProgressionView.init();
+
         this.generateUpcomingDays();
         this.renderStep1();
     },
@@ -13597,14 +14223,21 @@ const CoachWorkoutsMaster = {
         this.renderStep1();
         if (this.activeVision === 'month') {
             this.renderMonthCalendar();
+        } else if (this.activeVision === 'matrix') {
+            CoachMatrixProgressionView.render();
         }
     },
 
     bindVisionToggle() {
         const btnWizard = document.getElementById('btnToggleCoachWorkoutsWizard');
         const btnMonth = document.getElementById('btnToggleCoachWorkoutsMonth');
+        const btnMatrix = document.getElementById('btnToggleCoachWorkoutsMatrix');
         const wizardView = document.getElementById('coachWorkoutsWizardView');
         const monthView = document.getElementById('coachWorkoutsMonthView');
+        const matrixView = document.getElementById('coachWorkoutsMatrixView');
+        const btnTemplates = document.getElementById('btnOpenCoachTemplatesModal');
+        const btnWizardLoad = document.getElementById('btnWizardLoadTemplate');
+        const btnWizardSave = document.getElementById('btnWizardSaveAsTemplate');
 
         if (btnWizard && !btnWizard._hasListener) {
             btnWizard._hasListener = true;
@@ -13612,8 +14245,10 @@ const CoachWorkoutsMaster = {
                 this.activeVision = 'wizard';
                 btnWizard.classList.add('active');
                 if (btnMonth) btnMonth.classList.remove('active');
+                if (btnMatrix) btnMatrix.classList.remove('active');
                 if (wizardView) wizardView.style.display = 'block';
                 if (monthView) monthView.style.display = 'none';
+                if (matrixView) matrixView.style.display = 'none';
             });
         }
 
@@ -13623,9 +14258,46 @@ const CoachWorkoutsMaster = {
                 this.activeVision = 'month';
                 btnMonth.classList.add('active');
                 if (btnWizard) btnWizard.classList.remove('active');
+                if (btnMatrix) btnMatrix.classList.remove('active');
                 if (wizardView) wizardView.style.display = 'none';
                 if (monthView) monthView.style.display = 'block';
+                if (matrixView) matrixView.style.display = 'none';
                 this.renderMonthCalendar();
+            });
+        }
+
+        if (btnMatrix && !btnMatrix._hasListener) {
+            btnMatrix._hasListener = true;
+            btnMatrix.addEventListener('click', () => {
+                this.activeVision = 'matrix';
+                btnMatrix.classList.add('active');
+                if (btnWizard) btnWizard.classList.remove('active');
+                if (btnMonth) btnMonth.classList.remove('active');
+                if (wizardView) wizardView.style.display = 'none';
+                if (monthView) monthView.style.display = 'none';
+                if (matrixView) matrixView.style.display = 'block';
+                CoachMatrixProgressionView.render();
+            });
+        }
+
+        if (btnTemplates && !btnTemplates._hasListener) {
+            btnTemplates._hasListener = true;
+            btnTemplates.addEventListener('click', () => {
+                CoachRoutineTemplatesManager.openModal();
+            });
+        }
+
+        if (btnWizardLoad && !btnWizardLoad._hasListener) {
+            btnWizardLoad._hasListener = true;
+            btnWizardLoad.addEventListener('click', () => {
+                CoachRoutineTemplatesManager.openModal();
+            });
+        }
+
+        if (btnWizardSave && !btnWizardSave._hasListener) {
+            btnWizardSave._hasListener = true;
+            btnWizardSave.addEventListener('click', () => {
+                CoachRoutineTemplatesManager.saveCurrentWizardAsTemplate();
             });
         }
     },
@@ -13671,12 +14343,10 @@ const CoachWorkoutsMaster = {
             startDayIdx = parseInt(startDaySelect.value, 10);
         }
 
-        // Calcular la fecha exacta del día de inicio (hoy o el próximo día correspondiente)
         const offsetToStart = (startDayIdx - todayDayIdx + 7) % 7;
         const startDate = new Date(today);
         startDate.setDate(today.getDate() + offsetToStart);
 
-        // Generar mapa de los 7 días consecutivos del ciclo comenzando en startDate
         const cycleDaysMap = {};
         for (let i = 0; i < 7; i++) {
             const d = new Date(startDate);
@@ -13691,7 +14361,6 @@ const CoachWorkoutsMaster = {
             };
         }
 
-        // Conservar selecciones previas si existían
         const prevSelections = {};
         if (Array.isArray(this.daysConfig)) {
             this.daysConfig.forEach(dc => {
@@ -13706,8 +14375,7 @@ const CoachWorkoutsMaster = {
         this.daysConfig = [];
         const newWizardDraft = {};
 
-        // La semana SIEMPRE se muestra estrictamente ordenada de Lunes (1) a Domingo (0)
-        // [1: Lunes, 2: Martes, 3: Miércoles, 4: Jueves, 5: Viernes, 6: Sábado, 0: Domingo]
+        // Semana ordenada estrictamente de Lunes (1) a Domingo (0)
         const orderedDaysOfWeek = [1, 2, 3, 4, 5, 6, 0];
 
         orderedDaysOfWeek.forEach((dow, displayIdx) => {
@@ -13725,7 +14393,6 @@ const CoachWorkoutsMaster = {
             }
 
             const fullLabel = `${dayOfWeekName} ${dayMonthStr}${badgeNote}`;
-
             const prev = prevSelections[dow];
             const isSelected = prev ? prev.selected : (dow === 1 || dow === 3 || dow === 5 || cycleInfo.isCycleStart);
             const modality = prev ? prev.modality : 'presencial';
@@ -13761,7 +14428,7 @@ const CoachWorkoutsMaster = {
     },
 
     // ==========================================
-    // PASO 1: Selección de Días y Modalidades
+    // PASO 1: Días y Modalidades
     // ==========================================
     renderStep1() {
         const container = document.getElementById('wizardStep1DaysContainer');
@@ -13794,7 +14461,6 @@ const CoachWorkoutsMaster = {
 
         container.innerHTML = html;
 
-        // Wiring de checkboxes
         container.querySelectorAll('.wizard-day-checkbox').forEach(chk => {
             chk.addEventListener('change', () => {
                 const dateStr = chk.getAttribute('data-date');
@@ -13810,7 +14476,6 @@ const CoachWorkoutsMaster = {
             });
         });
 
-        // Wiring de modalidad
         container.querySelectorAll('.wizard-mod-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -13831,7 +14496,7 @@ const CoachWorkoutsMaster = {
     },
 
     // ==========================================
-    // PASO 2: Asignación de Músculos por Día
+    // PASO 2: Grupos Musculares por Día
     // ==========================================
     renderStep2() {
         const container = document.getElementById('wizardStep2MusclesContainer');
@@ -13870,7 +14535,7 @@ const CoachWorkoutsMaster = {
 
             html += `
                 <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; padding: 14px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
                         <div>
                             <strong style="font-size: 13.5px; color: #121214;">${day.label}</strong>
                             <span class="pill pill-champagne" style="font-size: 9.5px; margin-left: 8px;">${modLabel}</span>
@@ -13886,7 +14551,6 @@ const CoachWorkoutsMaster = {
 
         container.innerHTML = html;
 
-        // Wiring de chips
         container.querySelectorAll('.wizard-muscle-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 const dateStr = chip.getAttribute('data-date');
@@ -13911,7 +14575,7 @@ const CoachWorkoutsMaster = {
     },
 
     // ==========================================
-    // PASO 3: Selección de Ejercicios & Cargas
+    // PASO 3: Selección de Ejercicios & Cargas (RIR, Notas, Sub-filtros & Validación)
     // ==========================================
     renderStep3() {
         const selectedDays = this.daysConfig.filter(d => d.selected);
@@ -13929,16 +14593,32 @@ const CoachWorkoutsMaster = {
             dayLabelEl.textContent = activeDay.label;
         }
 
-        // Render Day switch pills
+        // Render Day switch pills con estado completo / incompleto
         if (pillsStrip) {
             let pillsHtml = '';
             selectedDays.forEach((d, idx) => {
                 const isActive = idx === this.step3ActiveDayIndex;
                 const draft = this.wizardDraft[d.dateStr];
                 const count = (draft && draft.exercises) ? draft.exercises.length : 0;
+                const isComplete = count > 0;
+                
+                let pillClass = 'btn btn-sm ';
+                let pillStyle = 'font-size: 11px; padding: 5px 12px; border-radius: 20px; white-space: nowrap; cursor: pointer; transition: all 0.2s ease;';
+                
+                if (isActive) {
+                    pillStyle += ' background: #9E7D4B; color: #FFFFFF; border: 1.5px solid #9E7D4B; font-weight: 700; box-shadow: 0 2px 8px rgba(158,125,75,0.3);';
+                } else if (isComplete) {
+                    pillClass += 'wizard-day-pill-complete ';
+                    pillStyle += ' background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; font-weight: 600;';
+                } else {
+                    pillClass += 'wizard-day-pill-incomplete ';
+                    pillStyle += ' background: #FFFBEB; color: #B45309; border: 1.5px solid #FCD34D; font-weight: 600;';
+                }
+                
+                const countLabel = isComplete ? `${count} ej ✓` : `0 ej (Incompleto)`;
                 pillsHtml += `
-                    <button type="button" class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline'}" data-day-index="${idx}" style="font-size: 11px; padding: 5px 12px; border-radius: 20px; white-space: nowrap; ${isActive ? 'background: #9E7D4B; color: #FFF; border-color: #9E7D4B;' : 'background: #FFF; color: #18181B; border-color: #E4E4E7;'}">
-                        ${d.dayOfWeek} (${count})
+                    <button type="button" class="${pillClass}" data-day-index="${idx}" style="${pillStyle}">
+                        ${d.dayOfWeek}: ${countLabel}
                     </button>
                 `;
             });
@@ -13947,9 +14627,38 @@ const CoachWorkoutsMaster = {
             pillsStrip.querySelectorAll('button[data-day-index]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     this.step3ActiveDayIndex = parseInt(btn.getAttribute('data-day-index'), 10);
+                    this.step3MuscleSubFilter = 'all';
                     this.renderStep3();
                 });
             });
+        }
+
+        // Render Sub-filtros de músculo para días multi-músculo
+        const filterStrip = document.getElementById('wizardCatalogMuscleFilterStrip');
+        if (filterStrip) {
+            const dayMuscles = activeDay.muscles || [];
+            if (dayMuscles.length > 1 && !dayMuscles.includes('Full Body / Hipertrofia Global')) {
+                let stripHtml = `<button type="button" class="coach-muscle-filter-chip ${this.step3MuscleSubFilter === 'all' ? 'active' : ''}" data-muscle-sub="all">Todos del día</button>`;
+                dayMuscles.forEach(m => {
+                    const isSubActive = (this.step3MuscleSubFilter === m);
+                    stripHtml += `<button type="button" class="coach-muscle-filter-chip ${isSubActive ? 'active' : ''}" data-muscle-sub="${m}">${m}</button>`;
+                });
+                stripHtml += `<button type="button" class="coach-muscle-filter-chip ${this.step3MuscleSubFilter === 'catalog_all' ? 'active' : ''}" data-muscle-sub="catalog_all">Ver Todo el Catálogo</button>`;
+                filterStrip.innerHTML = stripHtml;
+                filterStrip.style.display = 'flex';
+
+                filterStrip.querySelectorAll('[data-muscle-sub]').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        this.step3MuscleSubFilter = chip.getAttribute('data-muscle-sub');
+                        filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(c => c.classList.remove('active'));
+                        chip.classList.add('active');
+                        this.renderStep3Catalog(activeDay);
+                    });
+                });
+            } else {
+                filterStrip.innerHTML = '';
+                filterStrip.style.display = 'none';
+            }
         }
 
         this.renderStep3Catalog(activeDay);
@@ -13966,27 +14675,40 @@ const CoachWorkoutsMaster = {
 
         const dayMuscles = activeDay.muscles || [];
         const query = this.searchFilter.toLowerCase().trim();
+        const subFilter = this.step3MuscleSubFilter || 'all';
 
         const filtered = sourceLib.filter(ex => {
             const nameMatch = !query || ex.name.toLowerCase().includes(query) || (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(query));
             if (!nameMatch) return false;
 
+            if (subFilter === 'catalog_all') return true;
+
+            const exBioCat = getBiomechanicalCategory(ex);
+
+            if (subFilter !== 'all') {
+                const targetSub = subFilter.toLowerCase();
+                if (targetSub.includes('bíceps') || targetSub.includes('biceps') || targetSub.includes('tríceps') || targetSub.includes('triceps')) {
+                    return exBioCat === 'brazos';
+                }
+                if (targetSub.includes('pierna')) return exBioCat === 'piernas';
+                if (targetSub.includes('espalda')) return exBioCat === 'espalda';
+                if (targetSub.includes('pecho')) return exBioCat === 'pecho';
+                if (targetSub.includes('hombro')) return exBioCat === 'hombros';
+                if (targetSub.includes('core')) return exBioCat === 'core';
+            }
+
             if (dayMuscles.length === 0 || dayMuscles.includes('Full Body / Hipertrofia Global')) {
                 return true;
             }
 
-            // Mapeo biomecánico por grupos musculares
-            const mg = (ex.muscle_group || ex.primary_muscle || '').toLowerCase();
-            const pat = (ex.pattern || '').toLowerCase();
-            const exName = ex.name.toLowerCase();
-
             for (const dm of dayMuscles) {
-                if (dm.includes('Bíceps') && (mg.includes('biceps') || mg.includes('triceps') || mg.includes('brazos') || mg.includes('pull') || mg.includes('push') || exName.includes('curl') || exName.includes('tríceps') || exName.includes('triceps'))) return true;
-                if (dm.includes('Piernas') && (mg.includes('quad') || mg.includes('hamstring') || mg.includes('glute') || mg.includes('piernas') || pat.includes('squat') || pat.includes('leg') || pat.includes('hinge') || exName.includes('sentadilla') || exName.includes('prensa') || exName.includes('estocada') || exName.includes('hip thrust'))) return true;
-                if (dm.includes('Espalda') && (mg.includes('pull') || mg.includes('back') || mg.includes('dorsal') || pat.includes('pull') || pat.includes('row') || exName.includes('remo') || exName.includes('jalón') || exName.includes('jalon') || exName.includes('dominada'))) return true;
-                if (dm.includes('Pecho') && (mg.includes('push') || mg.includes('chest') || mg.includes('pectoral') || pat.includes('press') || exName.includes('banca') || exName.includes('pecho') || exName.includes('apertura'))) return true;
-                if (dm.includes('Hombros') && (mg.includes('shoulder') || mg.includes('deltoid') || mg.includes('hombro') || pat.includes('overhead') || exName.includes('militar') || exName.includes('lateral'))) return true;
-                if (dm.includes('Core') && (mg.includes('core') || mg.includes('abs') || mg.includes('movilidad') || exName.includes('plancha') || exName.includes('crunch') || exName.includes('paloff') || exName.includes('deadbug'))) return true;
+                const dmL = dm.toLowerCase();
+                if ((dmL.includes('bíceps') || dmL.includes('biceps') || dmL.includes('tríceps') || dmL.includes('triceps')) && exBioCat === 'brazos') return true;
+                if (dmL.includes('pierna') && exBioCat === 'piernas') return true;
+                if (dmL.includes('espalda') && exBioCat === 'espalda') return true;
+                if (dmL.includes('pecho') && exBioCat === 'pecho') return true;
+                if (dmL.includes('hombro') && exBioCat === 'hombros') return true;
+                if (dmL.includes('core') && exBioCat === 'core') return true;
             }
             return false;
         });
@@ -13995,15 +14717,16 @@ const CoachWorkoutsMaster = {
         const assignedIds = new Set((activeDraft.exercises || []).map(e => e.id));
 
         if (filtered.length === 0) {
-            grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #71717A; font-size: 12px; background: #FFFFFF; border-radius: 12px; border: 1px dashed #E4E4E7;">No se encontraron ejercicios para los músculos de este día. Probá limpiar la búsqueda o cambiar el filtro.</div>`;
+            grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #71717A; font-size: 12px; background: #FFFFFF; border-radius: 12px; border: 1px dashed #E4E4E7;">No se encontraron ejercicios con este filtro. Probá limpiar la búsqueda o cambiar el grupo muscular.</div>`;
             return;
         }
 
+        // Se renderizan TODOS los ejercicios sin truncar arbitrariamente
         let html = '';
-        filtered.slice(0, 24).forEach(ex => {
+        filtered.forEach(ex => {
             const isAdded = assignedIds.has(ex.id);
             const thumb = this.getThumbnail(ex);
-            const muscleTag = (ex.primary_muscle || ex.muscle_group || 'Fuerza').toUpperCase();
+            const muscleTag = getBiomechanicalCategory(ex).toUpperCase();
 
             html += `
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
@@ -14074,36 +14797,47 @@ const CoachWorkoutsMaster = {
         exercises.forEach((ex, idx) => {
             const thumb = this.getThumbnail(ex);
             html += `
-                <div class="wizard-selected-ex-row" data-ex-index="${idx}" style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
-                    <div style="display: flex; align-items: center; gap: 12px; min-width: 170px; flex: 1;">
-                        <div style="width: 42px; height: 42px; border-radius: 8px; overflow: hidden; background: #18181B; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                            ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
+                <div class="wizard-selected-ex-row" data-ex-index="${idx}" style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 170px; flex: 1;">
+                            <div style="width: 38px; height: 38px; border-radius: 8px; overflow: hidden; background: #18181B; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                                ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
+                            </div>
+                            <div>
+                                <strong style="font-size: 13px; color: #121214; display: block; line-height: 1.25;">${ex.name}</strong>
+                                <span style="font-size: 10.5px; color: #71717A;">${getBiomechanicalCategory(ex).toUpperCase()} • Ejercicio ${idx + 1}</span>
+                            </div>
                         </div>
-                        <div>
-                            <strong style="font-size: 13px; color: #121214; display: block; line-height: 1.25;">${ex.name}</strong>
-                            <span style="font-size: 10.5px; color: #71717A;">${ex.primary_muscle || 'Fuerza'} • Ejercicio ${idx + 1}</span>
-                        </div>
+                        <button type="button" class="btn btn-outline btn-sm btn-remove-row-ex" data-idx="${idx}" title="Remover ejercicio" style="border: 1px solid #FECACA; background: #FEF2F2; color: #EF4444; width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; border-radius: 6px; cursor: pointer;">
+                            &times;
+                        </button>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
                         <div class="wizard-param-input-group">
                             <label>Series</label>
-                            <input type="number" min="1" max="10" value="${ex.sets || 3}" class="input-control row-inp-sets" data-idx="${idx}" style="width: 50px; height: 32px; padding: 2px 4px; font-size: 12px; margin: 0;">
+                            <input type="number" min="1" max="10" value="${ex.sets || 3}" class="input-control row-inp-sets" data-idx="${idx}" style="width: 48px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
                         </div>
                         <div class="wizard-param-input-group">
                             <label>Reps</label>
-                            <input type="text" value="${ex.reps || '10-12'}" class="input-control row-inp-reps" data-idx="${idx}" style="width: 60px; height: 32px; padding: 2px 4px; font-size: 12px; margin: 0;">
+                            <input type="text" value="${ex.reps || '10-12'}" class="input-control row-inp-reps" data-idx="${idx}" style="width: 58px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
                         </div>
                         <div class="wizard-param-input-group">
                             <label>Peso (kg)</label>
-                            <input type="number" step="0.5" value="${ex.defaultWeight || 20}" class="input-control row-inp-weight" data-idx="${idx}" style="width: 58px; height: 32px; padding: 2px 4px; font-size: 12px; margin: 0;">
+                            <input type="number" step="0.5" value="${ex.defaultWeight || 20}" class="input-control row-inp-weight" data-idx="${idx}" style="width: 56px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
+                        </div>
+                        <div class="wizard-param-input-group">
+                            <label>RIR Obj</label>
+                            <input type="number" min="0" max="5" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="input-control row-inp-rir" data-idx="${idx}" style="width: 50px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
                         </div>
                         <div class="wizard-param-input-group">
                             <label>Descanso (s)</label>
-                            <input type="number" step="15" value="${ex.rest || 75}" class="input-control row-inp-rest" data-idx="${idx}" style="width: 58px; height: 32px; padding: 2px 4px; font-size: 12px; margin: 0;">
+                            <input type="number" step="15" value="${ex.rest || 75}" class="input-control row-inp-rest" data-idx="${idx}" style="width: 56px; height: 30px; padding: 2px 4px; font-size: 12px; margin: 0;">
                         </div>
-                        <button type="button" class="btn btn-outline btn-sm btn-remove-row-ex" data-idx="${idx}" title="Remover ejercicio" style="border: 1px solid #FECACA; background: #FEF2F2; color: #EF4444; width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; border-radius: 6px; cursor: pointer; margin-top: 14px;">
-                            ×
-                        </button>
+                    </div>
+
+                    <div style="margin-top: 4px;">
+                        <input type="text" placeholder="Notas biomecánicas o indicaciones ad-hoc para este ejercicio..." value="${ex.notes || ''}" class="input-control row-inp-notes" data-idx="${idx}" style="width: 100%; height: 30px; font-size: 11.5px; padding: 2px 10px; margin: 0; background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 6px;">
                     </div>
                 </div>
             `;
@@ -14111,7 +14845,6 @@ const CoachWorkoutsMaster = {
 
         list.innerHTML = html;
 
-        // Sync inputs
         list.querySelectorAll('.row-inp-sets').forEach(inp => {
             inp.addEventListener('change', () => {
                 const idx = parseInt(inp.getAttribute('data-idx'), 10);
@@ -14130,10 +14863,22 @@ const CoachWorkoutsMaster = {
                 if (exercises[idx]) exercises[idx].defaultWeight = parseFloat(inp.value) || 0;
             });
         });
+        list.querySelectorAll('.row-inp-rir').forEach(inp => {
+            inp.addEventListener('change', () => {
+                const idx = parseInt(inp.getAttribute('data-idx'), 10);
+                if (exercises[idx]) exercises[idx].rir = parseFloat(inp.value) || 2;
+            });
+        });
         list.querySelectorAll('.row-inp-rest').forEach(inp => {
             inp.addEventListener('change', () => {
                 const idx = parseInt(inp.getAttribute('data-idx'), 10);
                 if (exercises[idx]) exercises[idx].rest = parseInt(inp.value, 10) || 75;
+            });
+        });
+        list.querySelectorAll('.row-inp-notes').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const idx = parseInt(inp.getAttribute('data-idx'), 10);
+                if (exercises[idx]) exercises[idx].notes = inp.value;
             });
         });
         list.querySelectorAll('.btn-remove-row-ex').forEach(btn => {
@@ -14159,12 +14904,13 @@ const CoachWorkoutsMaster = {
         const draft = this.wizardDraft[activeDay.dateStr];
         const existing = draft.exercises.find(e => e.id === exObj.id);
         if (existing) {
-            showSensToast(`El ejercicio ${exObj.name} ya está en la sesión.`, 'info');
+            if (typeof showSensToast === 'function') showSensToast(`El ejercicio ${exObj.name} ya está en la sesión.`, 'info');
             return;
         }
 
         const globalSets = parseInt(document.getElementById('wizardGlobalSets')?.value, 10) || 3;
         const globalReps = document.getElementById('wizardGlobalReps')?.value || '10-12';
+        const globalRir = parseFloat(document.getElementById('wizardGlobalRir')?.value) || 2;
         const globalRest = parseInt(document.getElementById('wizardGlobalRest')?.value, 10) || 75;
 
         draft.exercises.push({
@@ -14172,15 +14918,17 @@ const CoachWorkoutsMaster = {
             name: exObj.name,
             sets: exObj.sets || globalSets,
             reps: exObj.reps || globalReps,
+            rir: exObj.rir !== undefined ? exObj.rir : globalRir,
             rest: exObj.rest || globalRest,
             defaultWeight: exObj.defaultWeight || 20,
+            notes: exObj.notes || '',
             primary_muscle: exObj.primary_muscle || exObj.muscle_group || 'Fuerza',
             video: exObj.video || exObj.video_url || '',
             poster_url: exObj.poster_url || exObj.thumbnail || ''
         });
 
         this.renderStep3();
-        showSensToast(`+ ${exObj.name} agregado`, 'champagne');
+        if (typeof showSensToast === 'function') showSensToast(`+ ${exObj.name} agregado`, 'champagne');
     },
 
     bindStepButtons() {
@@ -14190,7 +14938,7 @@ const CoachWorkoutsMaster = {
             btnNext1.addEventListener('click', () => {
                 const selected = this.daysConfig.filter(d => d.selected);
                 if (selected.length === 0) {
-                    showSensToast('Marcá al menos 1 día de entrenamiento en el calendario.', 'warning');
+                    if (typeof showSensToast === 'function') showSensToast('Marcá al menos 1 día de entrenamiento en el calendario.', 'warning');
                     return;
                 }
                 this.switchStep(2);
@@ -14224,20 +14972,33 @@ const CoachWorkoutsMaster = {
             });
         }
 
+        // Validación estricta: impedir avanzar si algún día seleccionado no tiene ejercicios
         const btnNext3 = document.getElementById('btnWizardNextToStep4');
         if (btnNext3 && !btnNext3._hasListener) {
             btnNext3._hasListener = true;
             btnNext3.addEventListener('click', () => {
                 const selectedDays = this.daysConfig.filter(d => d.selected);
-                const hasExercises = selectedDays.some(d => {
-                    const draft = this.wizardDraft[d.dateStr];
-                    return draft && draft.exercises && draft.exercises.length > 0;
-                });
-                if (!hasExercises) {
-                    showSensToast('Agregá al menos un ejercicio a alguna de las sesiones antes de duplicar.', 'warning');
+                if (selectedDays.length === 0) {
+                    if (typeof showSensToast === 'function') showSensToast('Marcá al menos un día en el Paso 1.', 'warning');
                     return;
                 }
+
+                const incompleteDay = selectedDays.find(d => {
+                    const draft = this.wizardDraft[d.dateStr];
+                    return !draft || !draft.exercises || draft.exercises.length === 0;
+                });
+
+                if (incompleteDay) {
+                    if (typeof showSensToast === 'function') {
+                        showSensToast(`Falta completar ${incompleteDay.dayOfWeek}. Todos los días elegidos deben tener al menos 1 ejercicio antes de duplicar.`, 'warning');
+                    }
+                    this.step3ActiveDayIndex = selectedDays.findIndex(d => d.dateStr === incompleteDay.dateStr);
+                    this.renderStep3();
+                    return;
+                }
+
                 this.switchStep(4);
+                this.renderStep4Summary();
             });
         }
 
@@ -14254,10 +15015,22 @@ const CoachWorkoutsMaster = {
             node.addEventListener('click', () => {
                 const targetStep = parseInt(node.getAttribute('data-step'), 10);
                 if (targetStep && targetStep !== this.currentStep) {
+                    if (targetStep === 4) {
+                        const selectedDays = this.daysConfig.filter(d => d.selected);
+                        const incompleteDay = selectedDays.find(d => {
+                            const draft = this.wizardDraft[d.dateStr];
+                            return !draft || !draft.exercises || draft.exercises.length === 0;
+                        });
+                        if (incompleteDay) {
+                            if (typeof showSensToast === 'function') showSensToast(`Completá los ejercicios de ${incompleteDay.dayOfWeek} antes de ir al resumen.`, 'warning');
+                            return;
+                        }
+                    }
                     this.switchStep(targetStep);
                     if (targetStep === 1) this.renderStep1();
                     if (targetStep === 2) this.renderStep2();
                     if (targetStep === 3) this.renderStep3();
+                    if (targetStep === 4) this.renderStep4Summary();
                 }
             });
         });
@@ -14281,7 +15054,7 @@ const CoachWorkoutsMaster = {
                 1: 'Paso 1 de 4 • Días de la Semana y Modalidades',
                 2: 'Paso 2 de 4 • Asignación de Grupos Musculares',
                 3: 'Paso 3 de 4 • Selección de Ejercicios y Prescripción de Cargas',
-                4: 'Paso 4 de 4 • Duplicar Semanas y Publicar Mesociclo'
+                4: 'Paso 4 de 4 • Resumen y Proyección Masiva'
             };
             progressTextEl.textContent = stepNames[stepNum] || `Paso ${stepNum} de 4`;
         }
@@ -14303,6 +15076,7 @@ const CoachWorkoutsMaster = {
 
                 const globalSets = parseInt(document.getElementById('wizardGlobalSets')?.value, 10) || 3;
                 const globalReps = document.getElementById('wizardGlobalReps')?.value || '10-12';
+                const globalRir = parseFloat(document.getElementById('wizardGlobalRir')?.value) || 2;
                 const globalRest = parseInt(document.getElementById('wizardGlobalRest')?.value, 10) || 75;
 
                 const draft = this.wizardDraft[activeDay.dateStr];
@@ -14310,12 +15084,15 @@ const CoachWorkoutsMaster = {
                     draft.exercises.forEach(ex => {
                         ex.sets = globalSets;
                         ex.reps = globalReps;
+                        ex.rir = globalRir;
                         ex.rest = globalRest;
                     });
                     this.renderStep3Worktable(activeDay);
-                    showSensToast(`Volumen aplicado a todos los ejercicios de ${activeDay.label}.`, 'champagne');
+                    if (typeof showSensToast === 'function') {
+                        showSensToast(`Volumen y RIR ${globalRir} aplicados a toda la sesión.`, 'champagne');
+                    }
                 } else {
-                    showSensToast('Agregá ejercicios primero para aplicar el volumen.', 'info');
+                    if (typeof showSensToast === 'function') showSensToast('Agregá ejercicios primero para aplicar el volumen.', 'info');
                 }
             });
         }
@@ -14330,6 +15107,61 @@ const CoachWorkoutsMaster = {
                 if (activeDay) this.renderStep3Catalog(activeDay);
             });
         }
+    },
+
+    // ==========================================
+    // PASO 4: Resumen General Día por Día & Duplicación
+    // ==========================================
+    renderStep4Summary() {
+        const summaryContainer = document.getElementById('wizardStep4WeeklySummary');
+        if (!summaryContainer) return;
+
+        const selectedDays = this.daysConfig.filter(d => d.selected);
+        let html = '';
+
+        selectedDays.forEach(day => {
+            const draft = this.wizardDraft[day.dateStr] || { exercises: [] };
+            const exercises = draft.exercises || [];
+            const modLabel = (day.modality === 'presencial') ? 'Presencial Nico' : (day.modality === 'online') ? 'Online Nico' : 'Autónomo Gym';
+            const musclesLabel = (day.muscles && day.muscles.length > 0) ? day.muscles.join(' + ') : 'Fuerza & Hipertrofia';
+
+            let exListHtml = '';
+            exercises.forEach((ex, i) => {
+                exListHtml += `
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 8px 10px; background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 8px; font-size: 11.5px;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 160px;">
+                            <span style="font-weight: 800; color: #9E7D4B; font-size: 11px;">#${i + 1}</span>
+                            <strong style="color: #121214;">${ex.name}</strong>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                            <span class="pill" style="font-size: 9.5px; background: #F4F4F5; color: #18181B; font-weight: 700;">${ex.sets || 3} series × ${ex.reps || '10-12'}</span>
+                            <span class="pill" style="font-size: 9.5px; background: #F4F4F5; color: #18181B; font-weight: 700;">${ex.defaultWeight || 20} kg</span>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">RIR ${ex.rir !== undefined ? ex.rir : 2}</span>
+                            <span class="pill" style="font-size: 9.5px; background: #F4F4F5; color: #71717A;">${ex.rest || 75}s rest</span>
+                        </div>
+                        ${ex.notes ? `<div style="width: 100%; font-size: 10.5px; color: #71717A; margin-top: 2px; padding-left: 20px;">Notas: <em>${ex.notes}</em></div>` : ''}
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="wizard-summary-day-box" style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                        <div>
+                            <strong style="font-size: 13.5px; color: #121214;">${day.dayOfWeek} ${day.dayMonthStr}</strong>
+                            <span class="pill pill-champagne" style="font-size: 9px; margin-left: 6px;">${modLabel}</span>
+                            <div style="font-size: 11px; color: #71717A; margin-top: 2px;">${musclesLabel}</div>
+                        </div>
+                        <span style="font-size: 11.5px; font-weight: 700; color: #18181B;">${exercises.length} ejercicios</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        ${exListHtml}
+                    </div>
+                </div>
+            `;
+        });
+
+        summaryContainer.innerHTML = html;
     },
 
     bindStep4Actions() {
@@ -14382,13 +15214,10 @@ const CoachWorkoutsMaster = {
         }
     },
 
-    // ==========================================
-    // EJECUCIÓN & PUBLICACIÓN EN SUPABASE
-    // ==========================================
     async executeSaveAndPublishMassRoutine() {
         const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
         if (!athId) {
-            showSensToast('Seleccioná un alumno antes de publicar la rutina.', 'warning');
+            if (typeof showSensToast === 'function') showSensToast('Seleccioná un alumno antes de publicar la rutina.', 'warning');
             return;
         }
 
@@ -14396,10 +15225,10 @@ const CoachWorkoutsMaster = {
         const hasOverload = document.getElementById('wizardCheckOverload')?.checked !== false;
         const totalWeeks = this.replicateWeeks || 4;
 
-        const baseWorkouts = getCoachAthleteWorkoutData(athId);
+        const baseWorkouts = getCoachAthleteWorkoutData(athId) || {};
         const calendarDatedWorkouts = baseWorkouts.calendar_schedule || {};
 
-        // Mapeo de días de la semana (1: Lunes ... 7: Domingo)
+        // Guardar plantilla semanal base
         selectedDays.forEach(day => {
             const draft = this.wizardDraft[day.dateStr];
             if (draft && draft.exercises && draft.exercises.length > 0) {
@@ -14488,24 +15317,27 @@ const CoachWorkoutsMaster = {
 
         showCoachSaveSuccessBanner({
             title: `¡Rutina Masiva de ${totalWeeks} Semanas Publicada!`,
-            body: `Se programaron todas las sesiones desde hoy hacia adelante con sobrecarga progresiva pautada. Todo sincronizado en vivo en Supabase.`,
+            body: `Se programaron todas las sesiones desde hoy hacia adelante con sobrecarga progresiva pautada y sincronización en vivo.`,
             errorNotice: supabaseError ? `Aviso de Supabase: ${supabaseError.message || supabaseError}` : null
         });
 
-        showSensToast(`✓ Rutina de ${totalWeeks} semanas guardada en Supabase`, 'champagne');
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Rutina de ${totalWeeks} semanas guardada en Supabase`, 'champagne');
+        }
 
-        // Conmutar a la vista de calendario mensual para visualizar el resultado
         const btnMonth = document.getElementById('btnToggleCoachWorkoutsMonth');
         if (btnMonth) btnMonth.click();
     },
 
     // ==========================================
-    // VISIÓN MENSUAL (CALENDARIO INTERACTIVO)
+    // VISIÓN MENSUAL (CALENDARIO COMPACTO & FILTRO POR MÚSCULO)
     // ==========================================
     bindMonthCalendarNav() {
         const btnPrev = document.getElementById('btnCoachMonthPrev');
         const btnNext = document.getElementById('btnCoachMonthNext');
         const btnSaveEdits = document.getElementById('btnSaveMonthDayEdits');
+        const btnAddEx = document.getElementById('btnAddExerciseToMonthDay');
+        const filterStrip = document.getElementById('coachMonthMuscleFilterStrip');
 
         if (btnPrev && !btnPrev._hasListener) {
             btnPrev._hasListener = true;
@@ -14535,6 +15367,36 @@ const CoachWorkoutsMaster = {
             btnSaveEdits._hasListener = true;
             btnSaveEdits.addEventListener('click', async () => {
                 await this.saveActiveMonthDayEdits();
+            });
+        }
+
+        if (btnAddEx && !btnAddEx._hasListener) {
+            btnAddEx._hasListener = true;
+            btnAddEx.addEventListener('click', () => {
+                if (!this.selectedCalendarDateStr) {
+                    if (typeof showSensToast === 'function') showSensToast('Tocá un día del calendario primero.', 'info');
+                    return;
+                }
+                CoachQuickAddManager.openModal({
+                    dateStr: this.selectedCalendarDateStr,
+                    athId: this.activeAthleteId,
+                    onAdded: () => {
+                        this.renderMonthCalendar();
+                        this.renderMonthDayDetail(this.selectedCalendarDateStr);
+                    }
+                });
+            });
+        }
+
+        if (filterStrip && !filterStrip._hasListener) {
+            filterStrip._hasListener = true;
+            filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    this.monthMuscleFilter = chip.getAttribute('data-muscle') || 'all';
+                    this.applyMonthMuscleFilter();
+                });
             });
         }
     },
@@ -14585,12 +15447,31 @@ const CoachWorkoutsMaster = {
             const isSelected = (this.selectedCalendarDateStr === dateStr);
 
             let badgeHtml = '';
+            let musclePillHtml = '';
+
             if (hasWorkout) {
                 const exCount = session.exercises.length;
                 const modTag = (session.modality === 'presencial') ? 'Presencial' : (session.modality === 'online') ? 'Online' : 'Autónomo';
                 badgeHtml = `
                     <div class="coach-month-workout-pill" title="${session.title || 'Entrenamiento'}">
                         <strong>${modTag}</strong> • ${exCount} ej
+                    </div>
+                `;
+
+                // Resumen de músculos de la sesión
+                const muscleCategories = new Set(session.exercises.map(ex => getBiomechanicalCategory(ex)));
+                const catLabels = [];
+                if (muscleCategories.has('piernas')) catLabels.push('Piernas');
+                if (muscleCategories.has('espalda')) catLabels.push('Espalda');
+                if (muscleCategories.has('pecho')) catLabels.push('Pecho');
+                if (muscleCategories.has('brazos')) catLabels.push('Brazos');
+                if (muscleCategories.has('hombros')) catLabels.push('Hombros');
+                if (muscleCategories.has('core')) catLabels.push('Core');
+                const muscleSummary = catLabels.slice(0, 2).join(' + ') + (catLabels.length > 2 ? ' +' : '');
+
+                musclePillHtml = `
+                    <div class="coach-month-muscle-pill" title="${catLabels.join(', ')}">
+                        ${muscleSummary || 'Fuerza'}
                     </div>
                 `;
             }
@@ -14603,6 +15484,7 @@ const CoachWorkoutsMaster = {
                     </div>
                     <div class="cell-body">
                         ${badgeHtml}
+                        ${musclePillHtml}
                     </div>
                 </div>
             `;
@@ -14617,9 +15499,46 @@ const CoachWorkoutsMaster = {
             });
         });
 
+        this.applyMonthMuscleFilter();
+
         if (this.selectedCalendarDateStr) {
             this.renderMonthDayDetail(this.selectedCalendarDateStr);
         }
+    },
+
+    applyMonthMuscleFilter() {
+        const filterCat = this.monthMuscleFilter || 'all';
+        const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        const cells = document.querySelectorAll('.coach-month-day-cell[data-date]');
+        cells.forEach(cell => {
+            const dateStr = cell.getAttribute('data-date');
+            let session = datedSchedule[dateStr];
+            if (!session) {
+                const parts = dateStr.split('-');
+                const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                const dayIndex = d.getDay();
+                const key = dayIndex === 0 ? 'day7' : `day${dayIndex}`;
+                session = workoutData[key];
+            }
+
+            const hasWorkout = Boolean(session && session.exercises && session.exercises.length > 0);
+            if (!hasWorkout || filterCat === 'all') {
+                cell.classList.remove('is-matching-filter', 'is-dimmed');
+                return;
+            }
+
+            const hasMatchingMuscle = session.exercises.some(ex => getBiomechanicalCategory(ex) === filterCat);
+            if (hasMatchingMuscle) {
+                cell.classList.add('is-matching-filter');
+                cell.classList.remove('is-dimmed');
+            } else {
+                cell.classList.add('is-dimmed');
+                cell.classList.remove('is-matching-filter');
+            }
+        });
     },
 
     selectCalendarDay(dateStr) {
@@ -14656,10 +15575,28 @@ const CoachWorkoutsMaster = {
             if (titleEl) titleEl.textContent = `Sesión del ${dateStr}`;
             if (badgeEl) badgeEl.textContent = 'Descanso';
             listEl.innerHTML = `
-                <div style="padding: 16px; text-align: center; color: #71717A; font-size: 12px;">
+                <div style="padding: 18px; text-align: center; color: #71717A; font-size: 12.5px;">
                     No hay entrenamientos cargados para el día <strong>${dateStr}</strong>.
+                    <div style="margin-top: 8px;">
+                        <button type="button" class="btn btn-outline btn-sm btn-quick-add-from-empty" style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700;">
+                            + Agregar Ejercicio a este Día
+                        </button>
+                    </div>
                 </div>
             `;
+            const emptyAddBtn = listEl.querySelector('.btn-quick-add-from-empty');
+            if (emptyAddBtn) {
+                emptyAddBtn.addEventListener('click', () => {
+                    CoachQuickAddManager.openModal({
+                        dateStr: dateStr,
+                        athId: athId,
+                        onAdded: () => {
+                            this.renderMonthCalendar();
+                            this.renderMonthDayDetail(dateStr);
+                        }
+                    });
+                });
+            }
             return;
         }
 
@@ -14672,33 +15609,47 @@ const CoachWorkoutsMaster = {
         session.exercises.forEach((ex, idx) => {
             const thumb = this.getThumbnail(ex);
             html += `
-                <div class="wizard-selected-ex-row" style="background: #FFFFFF;" data-idx="${idx}">
-                    <div style="display: flex; align-items: center; gap: 10px; min-width: 180px; flex: 1;">
-                        <div style="width: 36px; height: 36px; border-radius: 6px; overflow: hidden; background: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                            ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
+                <div class="wizard-selected-ex-row" style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px 12px; margin-bottom: 6px;" data-idx="${idx}">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 170px; flex: 1;">
+                            <div style="width: 34px; height: 34px; border-radius: 6px; overflow: hidden; background: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                                ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
+                            </div>
+                            <div>
+                                <strong style="font-size: 12.5px; color: #121214; display: block; line-height: 1.2;">${ex.name}</strong>
+                                <span style="font-size: 10px; color: #71717A;">${getBiomechanicalCategory(ex).toUpperCase()}</span>
+                            </div>
                         </div>
-                        <div>
-                            <strong style="font-size: 12px; color: #121214; display: block; line-height: 1.2;">${ex.name}</strong>
-                            <span style="font-size: 10px; color: #71717A;">${ex.primary_muscle || 'Fuerza'}</span>
-                        </div>
+                        <button type="button" class="btn btn-outline btn-sm btn-delete-month-ex" data-idx="${idx}" title="Eliminar ejercicio de este día" style="border: 1px solid #FECACA; background: #FEF2F2; color: #EF4444; width: 26px; height: 26px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; border-radius: 6px; cursor: pointer;">
+                            &times;
+                        </button>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+
+                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 6px;">
                         <div class="wizard-param-input-group">
                             <label>Series</label>
-                            <input type="number" min="1" max="10" value="${ex.sets || 3}" class="input-control month-inp-sets" data-idx="${idx}" style="width: 45px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
+                            <input type="number" min="1" max="10" value="${ex.sets || 3}" class="input-control month-inp-sets" data-idx="${idx}" style="width: 44px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
                         </div>
                         <div class="wizard-param-input-group">
                             <label>Reps</label>
-                            <input type="text" value="${ex.reps || '10-12'}" class="input-control month-inp-reps" data-idx="${idx}" style="width: 58px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
+                            <input type="text" value="${ex.reps || '10-12'}" class="input-control month-inp-reps" data-idx="${idx}" style="width: 56px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
                         </div>
                         <div class="wizard-param-input-group">
                             <label>Peso (kg)</label>
                             <input type="number" step="0.5" value="${ex.defaultWeight || 20}" class="input-control month-inp-weight" data-idx="${idx}" style="width: 52px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
                         </div>
                         <div class="wizard-param-input-group">
+                            <label>RIR Obj</label>
+                            <input type="number" min="0" max="5" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="input-control month-inp-rir" data-idx="${idx}" style="width: 46px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
+                        </div>
+                        <div class="wizard-param-input-group">
                             <label>Descanso (s)</label>
                             <input type="number" step="15" value="${ex.rest || 75}" class="input-control month-inp-rest" data-idx="${idx}" style="width: 52px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
                         </div>
+                    </div>
+
+                    <div style="margin-top: 2px;">
+                        <input type="text" placeholder="Notas ad-hoc..." value="${ex.notes || ''}" class="input-control month-inp-notes" data-idx="${idx}" style="width: 100%; height: 28px; font-size: 11px; padding: 2px 8px; margin: 0; background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 6px;">
                     </div>
                 </div>
             `;
@@ -14724,15 +15675,42 @@ const CoachWorkoutsMaster = {
                 if (session.exercises[idx]) session.exercises[idx].defaultWeight = parseFloat(inp.value) || 0;
             });
         });
+        listEl.querySelectorAll('.month-inp-rir').forEach(inp => {
+            inp.addEventListener('change', () => {
+                const idx = parseInt(inp.getAttribute('data-idx'), 10);
+                if (session.exercises[idx]) session.exercises[idx].rir = parseFloat(inp.value) || 2;
+            });
+        });
         listEl.querySelectorAll('.month-inp-rest').forEach(inp => {
             inp.addEventListener('change', () => {
                 const idx = parseInt(inp.getAttribute('data-idx'), 10);
                 if (session.exercises[idx]) session.exercises[idx].rest = parseInt(inp.value, 10) || 75;
             });
         });
+        listEl.querySelectorAll('.month-inp-notes').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const idx = parseInt(inp.getAttribute('data-idx'), 10);
+                if (session.exercises[idx]) session.exercises[idx].notes = inp.value;
+            });
+        });
+
+        // Eliminar ejercicio ad-hoc
+        listEl.querySelectorAll('.btn-delete-month-ex').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const idx = parseInt(btn.getAttribute('data-idx'), 10);
+                const removedName = session.exercises[idx]?.name || 'ejercicio';
+                session.exercises.splice(idx, 1);
+                await this.saveActiveMonthDayEdits(false);
+                this.renderMonthDayDetail(dateStr);
+                this.renderMonthCalendar();
+                if (typeof showSensToast === 'function') {
+                    showSensToast(`✓ Se eliminó ${removedName} de este día.`, 'champagne');
+                }
+            });
+        });
     },
 
-    async saveActiveMonthDayEdits() {
+    async saveActiveMonthDayEdits(showToast = true) {
         const dateStr = this.selectedCalendarDateStr;
         if (!dateStr) return;
 
@@ -14756,7 +15734,9 @@ const CoachWorkoutsMaster = {
             } catch (err) {}
         }
 
-        showSensToast(`✓ Cambios del día ${dateStr} guardados exitosamente.`, 'champagne');
+        if (showToast && typeof showSensToast === 'function') {
+            showSensToast(`✓ Cambios del día ${dateStr} guardados exitosamente.`, 'champagne');
+        }
         this.renderMonthCalendar();
     },
 
@@ -14778,6 +15758,299 @@ const CoachWorkoutsMaster = {
 };
 
 window.CoachWorkoutsMaster = CoachWorkoutsMaster;
+
+// =============================================================================
+// VISTA 3: VISIÓN POR MÚSCULO & MATRIZ EVOLUTIVA (PLAN VS REAL)
+// =============================================================================
+const CoachMatrixProgressionView = {
+    activeMuscleFilter: 'all',
+
+    init() {
+        this.bindEvents();
+    },
+
+    bindEvents() {
+        const filterStrip = document.getElementById('coachMatrixMuscleFilterStrip');
+        const btnSave = document.getElementById('btnSaveMatrixProgressionEdits');
+
+        if (filterStrip && !filterStrip._hasListener) {
+            filterStrip._hasListener = true;
+            filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    this.activeMuscleFilter = chip.getAttribute('data-muscle') || 'all';
+                    this.render();
+                });
+            });
+        }
+
+        if (btnSave && !btnSave._hasListener) {
+            btnSave._hasListener = true;
+            btnSave.addEventListener('click', async () => {
+                await this.saveEdits();
+            });
+        }
+    },
+
+    render() {
+        const container = document.getElementById('coachMatrixContentList');
+        if (!container) return;
+
+        const athId = CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        // Recolectar fechas únicas ordenadas
+        const scheduledDates = Object.keys(datedSchedule).sort();
+        if (scheduledDates.length === 0) {
+            container.innerHTML = `
+                <div style="background: #FFFFFF; border: 1.5px dashed #E4E4E7; border-radius: 14px; padding: 32px; text-align: center; color: #71717A;">
+                    <h5 style="font-size: 14px; color: #18181B; margin: 0 0 6px 0;">No hay sesiones programadas aún</h5>
+                    <p style="font-size: 12px; margin: 0 0 14px 0;">Creá un mesociclo en el Planificador Masivo para comparar la progresión Plan vs Real.</p>
+                    <button type="button" class="btn btn-primary btn-sm" id="btnMatrixGoToWizard" style="background: #9E7D4B; color: #FFFFFF; font-weight: 700;">
+                        Ir al Planificador Masivo →
+                    </button>
+                </div>
+            `;
+            const goBtn = document.getElementById('btnMatrixGoToWizard');
+            if (goBtn) {
+                goBtn.addEventListener('click', () => {
+                    const btnW = document.getElementById('btnToggleCoachWorkoutsWizard');
+                    if (btnW) btnW.click();
+                });
+            }
+            return;
+        }
+
+        // Recolectar todos los ejercicios únicos programados
+        const exercisesMap = {};
+        scheduledDates.forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                session.exercises.forEach(ex => {
+                    if (!exercisesMap[ex.id]) {
+                        exercisesMap[ex.id] = {
+                            id: ex.id,
+                            name: ex.name,
+                            category: getBiomechanicalCategory(ex),
+                            poster_url: ex.poster_url || ex.thumbnail || '',
+                            video: ex.video || ex.video_url || '',
+                            historyByDate: {}
+                        };
+                    }
+                    exercisesMap[ex.id].historyByDate[dStr] = ex;
+                });
+            }
+        });
+
+        const filter = this.activeMuscleFilter;
+        let exerciseList = Object.values(exercisesMap);
+        if (filter !== 'all') {
+            exerciseList = exerciseList.filter(e => e.category === filter);
+        }
+
+        if (exerciseList.length === 0) {
+            container.innerHTML = `<div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 24px; text-align: center; color: #71717A; font-size: 12.5px;">No hay ejercicios que coincidan con la categoría elegida.</div>`;
+            return;
+        }
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        let html = '';
+
+        exerciseList.forEach(item => {
+            const thumb = CoachWorkoutsMaster.getThumbnail(item);
+            let timelineColsHtml = '';
+
+            scheduledDates.forEach(dStr => {
+                const exInstance = item.historyByDate[dStr];
+                const session = datedSchedule[dStr];
+                const isPastOrToday = (dStr <= todayStr);
+                const isCompleted = session && session.completed;
+
+                if (!exInstance) {
+                    // El ejercicio no fue programado en este día
+                    timelineColsHtml += `
+                        <div class="coach-matrix-day-col" style="opacity: 0.45; background: #FAFAFA;">
+                            <div class="coach-matrix-day-header">
+                                <span class="matrix-day-name">${dStr.slice(5)}</span>
+                                <span class="pill" style="font-size: 8px; background: #E4E4E7; color: #71717A;">Libre</span>
+                            </div>
+                            <div style="font-size: 10.5px; color: #A1A1AA; text-align: center; padding: 12px 0;">
+                                —
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Planificado
+                    const planSets = exInstance.sets || 3;
+                    const planReps = exInstance.reps || '10-12';
+                    const planWeight = exInstance.defaultWeight || 20;
+                    const planRir = exInstance.rir !== undefined ? exInstance.rir : 2;
+
+                    // Real (si el alumno completó la sesión en la app)
+                    const realSets = exInstance.realSets || (isCompleted ? planSets : null);
+                    const realReps = exInstance.realReps || (isCompleted ? planReps : null);
+                    const realWeight = exInstance.realWeight || (isCompleted ? planWeight : null);
+                    const realRir = exInstance.realRir || (isCompleted ? planRir : null);
+
+                    const realHtml = isCompleted ? `
+                        <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #E4E4E7;">
+                            <span class="coach-matrix-badge-real">REAL ALUMNO</span>
+                            <div style="font-size: 11px; font-weight: 700; color: #166534; margin-top: 2px;">
+                                ${realSets}s × ${realReps} • ${realWeight}kg • RIR ${realRir}
+                            </div>
+                        </div>
+                    ` : `
+                        <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #E4E4E7;">
+                            <span style="font-size: 9.5px; color: #A1A1AA; font-style: italic;">Sin registro aún</span>
+                        </div>
+                    `;
+
+                    timelineColsHtml += `
+                        <div class="coach-matrix-day-col">
+                            <div class="coach-matrix-day-header">
+                                <span class="matrix-day-name">${dStr.slice(5)}</span>
+                                <span class="pill ${isCompleted ? 'pill-champagne' : ''}" style="font-size: 8.5px;">
+                                    ${isCompleted ? 'Completado' : isPastOrToday ? 'Hoy / Pasado' : 'Próximo'}
+                                </span>
+                            </div>
+
+                            <div style="margin-bottom: 4px;">
+                                <span class="coach-matrix-badge-plan">PLAN NICO</span>
+                                <div style="font-size: 11px; font-weight: 700; color: #18181B; margin-top: 2px;">
+                                    ${planSets}s × ${planReps} • ${planWeight}kg • RIR ${planRir}
+                                </div>
+                            </div>
+
+                            ${realHtml}
+
+                            <!-- Ajuste Editable Futuro In-place -->
+                            ${!isCompleted ? `
+                                <div class="coach-matrix-editable-box">
+                                    <div style="display: flex; gap: 4px; align-items: center; margin-bottom: 4px;">
+                                        <input type="number" min="1" max="10" value="${planSets}" class="input-control matrix-inp-sets" data-date="${dStr}" data-ex-id="${item.id}" title="Series" style="width: 36px; height: 24px; padding: 1px 2px; font-size: 10.5px; margin: 0;">
+                                        <span style="font-size: 10px; color: #71717A;">×</span>
+                                        <input type="text" value="${planReps}" class="input-control matrix-inp-reps" data-date="${dStr}" data-ex-id="${item.id}" title="Reps" style="width: 46px; height: 24px; padding: 1px 2px; font-size: 10.5px; margin: 0;">
+                                    </div>
+                                    <div style="display: flex; gap: 4px; align-items: center;">
+                                        <input type="number" step="0.5" value="${planWeight}" class="input-control matrix-inp-weight" data-date="${dStr}" data-ex-id="${item.id}" title="Peso kg" style="width: 44px; height: 24px; padding: 1px 2px; font-size: 10.5px; margin: 0;">
+                                        <span style="font-size: 10px; color: #71717A;">kg</span>
+                                        <input type="number" min="0" max="5" step="0.5" value="${planRir}" class="input-control matrix-inp-rir" data-date="${dStr}" data-ex-id="${item.id}" title="RIR" style="width: 36px; height: 24px; padding: 1px 2px; font-size: 10.5px; margin: 0;">
+                                        <span style="font-size: 10px; color: #9E7D4B; font-weight: 700;">RIR</span>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+            });
+
+            html += `
+                <div class="coach-matrix-card">
+                    <div class="coach-matrix-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 38px; height: 38px; border-radius: 8px; overflow: hidden; background: #18181B; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                                ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
+                            </div>
+                            <div>
+                                <span class="pill pill-champagne" style="font-size: 8.5px; font-weight: 800;">${item.category.toUpperCase()}</span>
+                                <h4 style="font-size: 13.5px; font-weight: 800; color: #121214; margin: 2px 0 0 0;">${item.name}</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="coach-matrix-grid-wrap">
+                        ${timelineColsHtml}
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    },
+
+    async saveEdits() {
+        const athId = CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+        if (!athId) return;
+
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        const setsInputs = document.querySelectorAll('.matrix-inp-sets');
+        setsInputs.forEach(inp => {
+            const dStr = inp.getAttribute('data-date');
+            const exId = inp.getAttribute('data-ex-id');
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                const ex = session.exercises.find(e => e.id === exId);
+                if (ex) {
+                    ex.sets = parseInt(inp.value, 10) || 3;
+                }
+            }
+        });
+
+        const repsInputs = document.querySelectorAll('.matrix-inp-reps');
+        repsInputs.forEach(inp => {
+            const dStr = inp.getAttribute('data-date');
+            const exId = inp.getAttribute('data-ex-id');
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                const ex = session.exercises.find(e => e.id === exId);
+                if (ex) {
+                    ex.reps = inp.value.trim() || '10-12';
+                }
+            }
+        });
+
+        const weightInputs = document.querySelectorAll('.matrix-inp-weight');
+        weightInputs.forEach(inp => {
+            const dStr = inp.getAttribute('data-date');
+            const exId = inp.getAttribute('data-ex-id');
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                const ex = session.exercises.find(e => e.id === exId);
+                if (ex) {
+                    ex.defaultWeight = parseFloat(inp.value) || 0;
+                }
+            }
+        });
+
+        const rirInputs = document.querySelectorAll('.matrix-inp-rir');
+        rirInputs.forEach(inp => {
+            const dStr = inp.getAttribute('data-date');
+            const exId = inp.getAttribute('data-ex-id');
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                const ex = session.exercises.find(e => e.id === exId);
+                if (ex) {
+                    ex.rir = parseFloat(inp.value) || 2;
+                }
+            }
+        });
+
+        localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+        if (window.__coachAthletesCache) {
+            const cached = window.__coachAthletesCache.find(a => a.id === athId);
+            if (cached) cached.prescribed_workouts = workoutData;
+        }
+
+        if (supabaseClient && !athId.startsWith('mock_')) {
+            try {
+                await supabaseClient.from('profiles').update({
+                    prescribed_workouts: workoutData
+                }).eq('id', athId);
+            } catch (err) {}
+        }
+
+        if (typeof showSensToast === 'function') {
+            showSensToast('✓ Ajustes de cargas y progresión guardados exitosamente.', 'champagne');
+        }
+
+        this.render();
+    }
+};
+window.CoachMatrixProgressionView = CoachMatrixProgressionView;
 
 // =============================================================================
 // MOTOR DETERMINISTA: COACH EVOLUTION ENGINE (MONITOREO & DECISIONES CLÍNICAS)

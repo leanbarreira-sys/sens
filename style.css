@@ -15792,3 +15792,206 @@ body.in-portal #coachHubView {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.coach-month-day-cell.is-selected {
+    border: 2px solid #9E7D4B !important;
+    background: #FFFDF9 !important;
+    box-shadow: 0 0 0 3px rgba(158, 125, 75, 0.25) !important;
+}
+
+.coach-month-day-cell.is-dimmed {
+    opacity: 0.3 !important;
+    filter: grayscale(80%) !important;
+}
+
+.coach-month-day-cell.is-matching-filter {
+    border: 2px solid #9E7D4B !important;
+    background: #FFFDF9 !important;
+}
+
+.coach-month-muscle-pill {
+    background: rgba(158, 125, 75, 0.15);
+    color: #8C6A38;
+    font-size: 8.5px;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin-top: 2px;
+}
+
+@media (max-width: 600px) {
+    .coach-month-calendar-grid {
+        gap: 3px !important;
+    }
+    .coach-month-day-cell {
+        min-height: 52px !important;
+        padding: 4px 3px !important;
+        border-radius: 6px !important;
+    }
+    .coach-month-day-cell .cell-number {
+        font-size: 11px !important;
+        font-weight: 700 !important;
+    }
+    .coach-month-workout-pill {
+        font-size: 7.5px !important;
+        padding: 1px 3px !important;
+        line-height: 1.1 !important;
+    }
+    .coach-month-muscle-pill {
+        font-size: 7px !important;
+        padding: 1px 2px !important;
+        margin-top: 1px !important;
+    }
+}
+
+/* 12. Píldoras de Estado del Wizard (Completado vs Incompleto) */
+.wizard-day-pill-incomplete {
+    border-color: #F59E0B !important;
+    color: #B45309 !important;
+    background: #FFFBEB !important;
+}
+
+.wizard-day-pill-complete {
+    border-color: #10B981 !important;
+    color: #047857 !important;
+    background: #ECFDF5 !important;
+}
+
+/* 13. Sub-Filtros de Grupos Musculares (Step 3, Calendario & Matriz) */
+.coach-muscle-filter-chip {
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 20px;
+    border: 1px solid #E4E4E7;
+    background: #FFFFFF;
+    color: #27272A;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.coach-muscle-filter-chip:hover {
+    border-color: #9E7D4B;
+    color: #121214;
+}
+
+.coach-muscle-filter-chip.active {
+    background: #9E7D4B !important;
+    color: #FFFFFF !important;
+    border-color: #9E7D4B !important;
+    box-shadow: 0 1px 4px rgba(158, 125, 75, 0.35);
+}
+
+/* 14. Visión por Músculo & Progresión (Matriz de Entrenamiento) */
+.coach-matrix-card {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+.coach-matrix-grid-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+    .coach-matrix-grid-wrap {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 6px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+    .coach-matrix-day-col {
+        min-width: 140px;
+        scroll-snap-align: start;
+        flex-shrink: 0;
+    }
+}
+
+.coach-matrix-day-col {
+    background: #F8F9FA;
+    border: 1px solid #E4E4E7;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.coach-matrix-day-col.is-completed {
+    background: #F0FDF4;
+    border-color: #BBF7D0;
+}
+
+.coach-matrix-badge-plan {
+    font-size: 10px;
+    font-weight: 700;
+    color: #52525B;
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    padding: 3px 6px;
+    border-radius: 6px;
+    display: block;
+}
+
+.coach-matrix-badge-real {
+    font-size: 10px;
+    font-weight: 800;
+    color: #047857;
+    background: #DCFCE7;
+    border: 1px solid #86EFAC;
+    padding: 3px 6px;
+    border-radius: 6px;
+    display: block;
+}
+
+.coach-matrix-editable-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px dashed #D4D4D8;
+}
+
+/* 15. Plantillas de Rutina Reutilizables de Nico */
+.coach-template-card {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    transition: all 0.15s ease;
+}
+
+.coach-template-card:hover {
+    border-color: #9E7D4B;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* 16. Resumen General del Wizard (Paso 4) */
+.wizard-summary-day-box {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+}
