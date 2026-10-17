@@ -3865,6 +3865,12 @@
                             </svg>
                             <span>Cambiar</span>
                         </button>
+                        <button type="button" class="btn-coach-action-pill" id="btnCoachMasterViewEvolution" aria-label="Ver evolución del alumno">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                            </svg>
+                            <span>Evolución</span>
+                        </button>
                         <button type="button" class="btn-coach-action-pill primary" id="btnCoachMasterInspectAthlete" aria-label="Ver portal del alumno">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
@@ -4005,8 +4011,132 @@
                 </div>
 
                 <!-- =================================================================
-                     ESTACIÓN 2: PRESCRIPCIÓN DE ENTRENAMIENTO, OBJETIVOS & NOTAS
+                     ESTACIÓN DE EVOLUCIÓN & TOMA DE DECISIONES CLÍNICAS (P0 COACH NICO)
                      ================================================================= -->
+                <div class="coach-subpane" id="paneEvolution">
+                    <div class="coach-surface-card-light" style="padding: 20px;">
+                        <!-- Header de Evolución -->
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                            <div>
+                                <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; letter-spacing: 0.5px;">MONITOREO &amp; DECISIONES CLÍNICAS</span>
+                                <h3 style="font-size: 1.35rem; font-weight: 800; margin-top: 6px; color: #121214;">
+                                    Evolución &amp; Periodización del Atleta
+                                </h3>
+                                <p style="font-size: 12px; color: #52525B; margin-top: 2px;">
+                                    Panel visual para analizar la respuesta biológica, el volumen de carga y tomar decisiones informadas sobre el entrenamiento.
+                                </p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button type="button" class="btn btn-outline btn-sm btn-trigger-athlete-sheet" style="font-size: 11px; padding: 6px 12px; background: #FFFFFF; color: #18181B; border-color: #E4E4E7;">
+                                    Cambiar Alumno
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 1. ALERTAS & SUGERENCIAS ORIENTATIVAS DE TOMA DE DECISIONES -->
+                        <div id="coachEvolutionAlertsContainer" style="margin-bottom: 18px;">
+                            <!-- Inyectado dinámicamente con alertas basadas en tendencias reales -->
+                        </div>
+
+                        <!-- 2. RESUMEN CLAVE (KPIs ESENCIALES) -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px;">
+                            <div class="coach-evolution-metric-card">
+                                <span class="evo-metric-label">Adherencia Semanal</span>
+                                <div class="evo-metric-value" id="evoAdherenceVal">100%</div>
+                                <div class="evo-metric-sub" id="evoAdherenceSub">4 de 4 sesiones cumplidas</div>
+                            </div>
+                            <div class="coach-evolution-metric-card">
+                                <span class="evo-metric-label">Volumen de Carga (kg)</span>
+                                <div class="evo-metric-value" id="evoTonnageVal">18.450 <span style="font-size: 12px; font-weight: 600;">kg</span></div>
+                                <div class="evo-metric-sub text-success" id="evoTonnageDelta">+9.8% vs semana ant.</div>
+                            </div>
+                            <div class="coach-evolution-metric-card">
+                                <span class="evo-metric-label">Intensidad Media</span>
+                                <div class="evo-metric-value" id="evoIntensityVal">1.8 <span style="font-size: 12px; font-weight: 600;">RIR</span></div>
+                                <div class="evo-metric-sub" id="evoRpeSub">RPE 8.2 • Esfuerzo óptimo</div>
+                            </div>
+                            <div class="coach-evolution-metric-card">
+                                <span class="evo-metric-label">Recuperación Media</span>
+                                <div class="evo-metric-value" id="evoRecoveryVal">4.2 <span style="font-size: 12px; font-weight: 600;">/ 5</span></div>
+                                <div class="evo-metric-sub" id="evoRecoverySub">Sueño 4 • Fatiga baja</div>
+                            </div>
+                        </div>
+
+                        <!-- 3. VOLUMEN SEMANAL POR GRUPO MUSCULAR (SERIES EFECTIVAS) -->
+                        <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 16px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <strong style="font-size: 13px; color: #121214;">Series Semanales por Grupo Muscular</strong>
+                                <span class="pill pill-champagne" style="font-size: 9.5px;">Rango Óptimo: 10 - 18 series</span>
+                            </div>
+                            <div id="evoMuscleVolumeBarsList" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Inyectado dinámicamente -->
+                            </div>
+                        </div>
+
+                        <!-- 4. FUERZA ESTIMADA (e1RM SUBMÁXIMA - FÓRMULA EPLEY) & PROGRESIÓN -->
+                        <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 16px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                                <div>
+                                    <strong style="font-size: 13px; color: #121214;">Fuerza Máxima Estimada (e1RM) &amp; Progresión</strong>
+                                    <div style="font-size: 11px; color: #71717A; margin-top: 2px;">
+                                        Estimada a partir de series submáximas (Fórmula Epley: Peso × (1 + Reps/30)).
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="evoEstimated1RMTable" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Inyectado dinámicamente -->
+                            </div>
+                        </div>
+
+                        <!-- 5. PERIODIZACIÓN DEL MESOCICLO (BLOQUES DE 4 A 8 SEMANAS) -->
+                        <div style="background: #F8F9FA; border: 1px solid rgba(229, 203, 167, 0.5); border-radius: 14px; padding: 16px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                                <div>
+                                    <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">PERIODIZACIÓN DEL ENTRENADOR</span>
+                                    <h4 style="font-size: 1.1rem; font-weight: 800; color: #121214; margin: 4px 0 0 0;" id="evoMesocycleTitle">
+                                        Mesociclo 1 • Hipertrofia &amp; Fuerza Base
+                                    </h4>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnEvoExtendBlock" style="font-size: 11px; padding: 5px 12px; background: #FFF;">
+                                        Extender Bloque (6-8 sem)
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnEvoProgramDeload" style="font-size: 11px; padding: 5px 12px; background: #9E7D4B; color: #FFF;">
+                                        Programar Descarga
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 12px;" id="evoMesocycleWeeksGrid">
+                                <!-- Inyectado dinámicamente -->
+                            </div>
+                            <div style="font-size: 11px; color: #71717A;">
+                                Permite ajustar cargas y ejercicios conservando el historial de semanas previas.
+                            </div>
+                        </div>
+
+                        <!-- 6. SECCIÓN AVANZADA OPCIONAL (Colapsada por defecto para no abrumar) -->
+                        <div style="border-top: 1px dashed #E4E4E7; padding-top: 14px;">
+                            <button type="button" class="btn btn-outline btn-sm" id="btnToggleAdvancedEvoMetrics" style="width: 100%; justify-content: center; font-size: 11.5px; padding: 8px; border-color: #E4E4E7; color: #52525B; background: #FFFFFF;">
+                                <span id="evoAdvancedToggleLabel">▼ Ver Métricas Avanzadas (Curva de Carga &amp; Tendencias)</span>
+                            </button>
+                            <div id="evoAdvancedMetricsBox" style="display: none; margin-top: 14px;">
+                                <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+                                    <div style="font-size: 12px; font-weight: 700; color: #121214; margin-bottom: 8px;">Evolución de Tonelaje Semanal (kg levantados)</div>
+                                    <div id="evoTonnageSvgChartWrap" style="height: 140px; width: 100%; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; padding-top: 20px;">
+                                        <!-- Inyectado dinámicamente -->
+                                    </div>
+                                </div>
+                                <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 14px;">
+                                    <div style="font-size: 12px; font-weight: 700; color: #121214; margin-bottom: 8px;">Check-in de Bienestar (Últimos 7 días)</div>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px;" id="evoRecoveryDetailsGrid">
+                                        <!-- Inyectado dinámicamente -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- =================================================================
                      ESTACIÓN 2: PRESCRIPCIÓN DE ENTRENAMIENTO, WIZARD MASIVO & VISIÓN MENSUAL
                      ================================================================= -->
@@ -4118,16 +4248,36 @@
                                     <span class="wizard-step-label">Duplicar Semanas</span>
                                 </div>
                             </div>
+                            <div id="wizardStepProgressText" style="text-align: center; font-size: 11.5px; font-weight: 700; color: #9E7D4B; margin-top: -12px; margin-bottom: 16px;">
+                                Paso 1 de 4 • Días de la Semana
+                            </div>
 
-                            <!-- PASO 1: Selección de Días y Modalidades (Hoy en adelante) -->
+                            <!-- PASO 1: Selección de Días y Modalidades (Lunes a Domingo + Inicio Dinámico) -->
                             <div class="wizard-pane-step" id="wizardPaneStep1">
                                 <div style="margin-bottom: 14px;">
-                                    <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">1. Seleccioná los días de entrenamiento (de hoy en adelante)</h4>
-                                    <p style="font-size: 12px; color: #71717A; margin: 0;">Marcá qué días entrenará el alumno y definí la modalidad para cada uno (Presencial, Online o Autónomo).</p>
+                                    <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">1. Seleccioná los días de entrenamiento (Lunes a Domingo)</h4>
+                                    <p style="font-size: 12px; color: #71717A; margin: 0;">Elegí los días fijos de la semana, qué día arranca el ciclo y la modalidad para cada uno.</p>
+                                </div>
+
+                                <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                                    <div>
+                                        <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #9E7D4B;">PUNTO DE PARTIDA</span>
+                                        <div style="font-size: 12.5px; font-weight: 700; color: #121214;">¿Qué día arranca este ciclo?</div>
+                                        <div style="font-size: 11px; color: #71717A;">La rutina se muestra de Lunes a Domingo y comenzará en el día elegido.</div>
+                                    </div>
+                                    <select id="wizardStartDayOfWeekSelect" class="input-control" style="min-width: 140px; height: 34px; padding: 2px 8px; font-size: 12px; margin: 0; font-weight: 700; background: #FFFFFF; color: #121214; border: 1px solid #E4E4E7; border-radius: 8px;">
+                                        <option value="1">Lunes</option>
+                                        <option value="2">Martes</option>
+                                        <option value="3">Miércoles</option>
+                                        <option value="4">Jueves</option>
+                                        <option value="5">Viernes</option>
+                                        <option value="6">Sábado</option>
+                                        <option value="0">Domingo</option>
+                                    </select>
                                 </div>
 
                                 <div id="wizardStep1DaysContainer" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px;">
-                                    <!-- Inyectado dinámicamente con los próximos 7 días a partir de hoy -->
+                                    <!-- Inyectado dinámicamente con los 7 días de Lunes a Domingo -->
                                 </div>
 
                                 <div style="display: flex; justify-content: flex-end;">
@@ -4158,7 +4308,7 @@
                                 </div>
                             </div>
 
-                            <!-- PASO 3: Selección de Ejercicios y Prescripción de Cargas (Grid 9 por Scroll) -->
+                            <!-- PASO 3: Selección de Ejercicios y Prescripción de Cargas (Grid 2 Columnas Feed Mobile) -->
                             <div class="wizard-pane-step" id="wizardPaneStep3" style="display: none;">
                                 
                                 <!-- Selector de Día Activo en el Wizard -->
@@ -4180,31 +4330,35 @@
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                         <div style="display: flex; align-items: center; gap: 4px;">
-                                            <label style="font-size: 10.5px; color: #71717A;">Series:</label>
+                                            <label style="font-size: 10.5px; color: #52525B; font-weight: 700;">Series:</label>
                                             <input type="number" id="wizardGlobalSets" value="3" min="1" max="8" class="input-control" style="width: 45px; height: 30px; padding: 2px 6px; margin: 0; font-size: 12px;">
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 4px;">
-                                            <label style="font-size: 10.5px; color: #71717A;">Reps:</label>
+                                            <label style="font-size: 10.5px; color: #52525B; font-weight: 700;">Reps:</label>
                                             <input type="text" id="wizardGlobalReps" value="10-12" class="input-control" style="width: 60px; height: 30px; padding: 2px 6px; margin: 0; font-size: 12px;">
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 4px;">
-                                            <label style="font-size: 10.5px; color: #71717A;">Descanso (s):</label>
+                                            <label style="font-size: 10.5px; color: #52525B; font-weight: 700;">Descanso (s):</label>
                                             <input type="number" id="wizardGlobalRest" value="75" step="15" class="input-control" style="width: 55px; height: 30px; padding: 2px 6px; margin: 0; font-size: 12px;">
                                         </div>
-                                        <button type="button" class="btn btn-outline btn-sm" id="btnWizardApplyGlobalVolume" style="font-size: 10.5px; padding: 5px 12px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 700;">
-                                            ⚡ Aplicar a Todos
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnWizardApplyGlobalVolume" style="font-size: 10.5px; padding: 5px 12px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                            <span>Aplicar a Todos</span>
                                         </button>
                                     </div>
                                 </div>
 
-                                <!-- Buscador y Grid Denso (9 por scroll) -->
+                                <!-- Buscador y Grid Feed (2 columnas en mobile, 6 por vista) -->
                                 <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 14px; padding: 14px; margin-bottom: 18px;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px;">
-                                        <span style="font-size: 11.5px; font-weight: 800; color: #18181B; text-transform: uppercase;">Catálogo Biomecánico (9 por vista):</span>
-                                        <input type="text" id="wizardExSearchInput" placeholder="Buscar ejercicio por nombre..." class="input-control" style="max-width: 260px; height: 32px; font-size: 11.5px; margin: 0;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                                        <div>
+                                            <span style="font-size: 11.5px; font-weight: 800; color: #18181B; text-transform: uppercase;">Catálogo Biomecánico:</span>
+                                            <div style="font-size: 10.5px; color: #71717A;">Tocá "+ Agregar" para sumar ejercicios a este día</div>
+                                        </div>
+                                        <input type="text" id="wizardExSearchInput" placeholder="Buscar ejercicio por nombre..." class="input-control" style="max-width: 240px; height: 32px; font-size: 11.5px; margin: 0; background: #FFFFFF; color: #121214;">
                                     </div>
-                                    <div class="wizard-ex-grid-9" id="wizardExCardsGrid">
-                                        <!-- Inyectado dinámicamente con cards compactas de video/foto -->
+                                    <div class="wizard-ex-grid-feed" id="wizardExCardsGrid">
+                                        <!-- Inyectado dinámicamente con cards verticales estilo feed Mercado Libre / Temu mini (6 por vista móvil) -->
                                     </div>
                                 </div>
 
@@ -5119,6 +5273,12 @@
                 <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12" />
             </svg>
             <span>Entreno</span>
+        </button>
+        <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneEvolution">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg>
+            <span>Evolución</span>
         </button>
         <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneNutrition">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

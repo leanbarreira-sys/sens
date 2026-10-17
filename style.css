@@ -13955,24 +13955,29 @@ html.in-portal-mode body #app-container {
 
 /* =============================================================================
    SENS COACH OS — QUIET LUXURY COMMAND CENTER (APPLE HEALTH & EQUINOX STANDARD)
-   Deep Onyx Obsidian (#080809) • Elevated Surfaces (#121214) • Champagne Gold (#E5CBA7)
+   Light Off-White Palette (#F8F9FA) • Pure White Surfaces (#FFFFFF) • Champagne Gold (#9E7D4B)
    ============================================================================= */
 
-/* Base View Container */
+/* Base View Container: Quiet Luxury Claro idéntico al Dashboard de Inicio */
 #coachHubView {
-    background: #080809 !important;
-    background-color: #080809 !important;
-    color: #FFFFFF !important;
+    background: #F8F9FA !important;
+    background-color: #F8F9FA !important;
+    color: #121214 !important;
     min-height: 100vh;
     padding: 16px 14px 120px 14px;
     box-sizing: border-box;
 }
 
 body.in-portal #coachHubView {
-    background-color: #080809 !important;
+    background-color: #F8F9FA !important;
 }
 
-/* Global Typography inside Coach OS */
+/* Ocultar barra redundante de sub-tabs: El menú inferior flotante es la única fuente de verdad */
+#coachHubSubnav {
+    display: none !important;
+}
+
+/* Global Typography inside Coach OS: Alto contraste carbón profundo */
 #coachHubView h1,
 #coachHubView h2,
 #coachHubView h3,
@@ -13980,40 +13985,48 @@ body.in-portal #coachHubView {
 #coachHubView strong,
 #coachHubView .coach-stat-val,
 #coachHubView .coach-ath-name,
-#coachHubView .coach-active-athlete-name {
-    color: #FFFFFF !important;
+#coachHubView .coach-active-athlete-name,
+#coachHubView .coach-hub-title {
+    color: #121214 !important;
 }
 
 #coachHubView p,
-#coachHubView span:not(.text-champagne):not(.text-warning):not(.text-success):not(.pill-champagne):not(.status-dot):not(.coach-stat-val),
 #coachHubView small,
 #coachHubView label,
 #coachHubView .coach-stat-sub,
 #coachHubView .coach-ath-email,
 #coachHubView .coach-active-athlete-sub {
-    color: #A1A1AA !important;
+    color: #52525B !important;
 }
 
-/* Surface Cards & Containers */
-.coach-surface-card {
-    background: #121214 !important;
-    background-color: #121214 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 20px !important;
-    color: #FFFFFF !important;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45) !important;
+/* Surface Cards & Containers: Blanco puro con sombras sutiles y bordes champagne */
+#coachHubView .coach-surface-card,
+#coachHubView .coach-stat-card,
+#coachHubView .coach-master-active-athlete-card {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 16px !important;
+    color: #121214 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
     box-sizing: border-box;
 }
 
-/* Inputs, Selects & Textareas inside Coach OS */
+#coachHubView .coach-master-active-athlete-card {
+    border: 1px solid rgba(229, 203, 167, 0.6) !important;
+    padding: 12px 16px !important;
+    margin-bottom: 16px !important;
+}
+
+/* Inputs, Selects & Textareas inside Coach OS: Superficies claras de alta legibilidad */
 #coachHubView .input-control,
 #coachHubView select,
 #coachHubView textarea,
 .sheet-search-input {
-    background: #18181B !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: #FFFFFF !important;
-    border-radius: 12px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E4E4E7 !important;
+    color: #121214 !important;
+    border-radius: 10px !important;
     box-sizing: border-box;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -14022,9 +14035,10 @@ body.in-portal #coachHubView {
 #coachHubView select:focus,
 #coachHubView textarea:focus,
 .sheet-search-input:focus {
-    border-color: #E5CBA7 !important;
-    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.18) !important;
+    border-color: #9E7D4B !important;
+    box-shadow: 0 0 0 3px rgba(158, 125, 75, 0.15) !important;
     outline: none !important;
+    background: #FFFFFF !important;
 }
 
 #coachHubView .input-control::placeholder,
@@ -14034,7 +14048,7 @@ body.in-portal #coachHubView {
 }
 
 #coachHubView .input-label {
-    color: #D4D4D8 !important;
+    color: #52525B !important;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
@@ -14066,42 +14080,30 @@ body.in-portal #coachHubView {
     text-transform: uppercase;
     letter-spacing: -0.3px;
     margin: 0;
-    color: #FFFFFF !important;
+    color: #121214 !important;
 }
 
 .btn-coach-refresh-circle {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: #18181B;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #E5CBA7;
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    color: #9E7D4B;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .btn-coach-refresh-circle:hover {
-    background: #27272A;
+    background: #F4F4F6;
     transform: rotate(45deg);
 }
 
 /* 2. Banner de Atleta en Edición Activa (Sleek Luxury Bar) */
-.coach-master-active-athlete-card {
-    background: #121214 !important;
-    border: 1px solid rgba(229, 203, 167, 0.25) !important;
-    border-radius: 16px !important;
-    padding: 10px 14px !important;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-    gap: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-}
-
 .coach-active-athlete-left {
     display: flex;
     align-items: center;
@@ -14118,8 +14120,8 @@ body.in-portal #coachHubView {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(229, 203, 167, 0.12);
-    border: 1px solid rgba(229, 203, 167, 0.3);
+    background: #09090B;
+    border: 1.5px solid #E5CBA7;
     color: #E5CBA7;
     font-size: 13px;
     font-weight: 800;
@@ -14143,7 +14145,7 @@ body.in-portal #coachHubView {
     font-size: 9px;
     font-weight: 800;
     letter-spacing: 0.8px;
-    color: #B38B59 !important;
+    color: #8C6A38 !important;
     text-transform: uppercase;
 }
 
@@ -14154,7 +14156,7 @@ body.in-portal #coachHubView {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #FFFFFF !important;
+    color: #121214 !important;
 }
 
 .coach-active-athlete-sub {
@@ -15267,6 +15269,19 @@ body.in-portal #coachHubView {
     font-weight: 700 !important;
 }
 
+@media (max-width: 600px) {
+    .coach-surface-card-light {
+        padding: 14px 10px !important;
+        border-radius: 14px !important;
+    }
+    .coach-client-summary-card {
+        padding: 10px 12px !important;
+    }
+    .wizard-step-label {
+        display: none !important;
+    }
+}
+
 /* 3. Ficha Resumen del Cliente (Colapsable / Read-Only) */
 .coach-client-summary-card {
     background: #F8F9FA;
@@ -15411,33 +15426,68 @@ body.in-portal #coachHubView {
     font-weight: 800;
 }
 
-/* 6. Paso 1: Tarjetas de Día y Modalidad */
+/* 6. Paso 1: Tarjetas de Día y Modalidad (Mobile First & High Contrast) */
 .wizard-day-card {
     background: #FFFFFF;
     border: 1px solid #E4E4E7;
     border-radius: 14px;
-    padding: 14px 16px;
+    padding: 12px 14px;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.wizard-day-card strong {
+    color: #121214 !important;
 }
 
 .wizard-day-card.active {
     border-color: #9E7D4B;
-    background: #FAFAFA;
-    box-shadow: 0 4px 16px rgba(158, 125, 75, 0.08);
+    background: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(158, 125, 75, 0.08);
+}
+
+.wizard-mod-btn {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    padding: 6px 11px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    outline: none !important;
+}
+
+.wizard-mod-btn.active {
+    background: #9E7D4B !important;
+    border: 1px solid #9E7D4B !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 8px rgba(158, 125, 75, 0.3) !important;
+}
+
+.wizard-mod-btn:not(.active) {
+    background: #F4F4F6 !important;
+    border: 1px solid #E4E4E7 !important;
+    color: #27272A !important;
+    font-weight: 600 !important;
+}
+
+.wizard-mod-btn:not(.active):hover {
+    background: #E4E4E7 !important;
+    color: #09090B !important;
 }
 
 /* 7. Paso 2: Chips Táctiles de Músculos */
 .wizard-muscle-chip {
-    padding: 6px 14px;
+    padding: 7px 14px;
     border-radius: 20px;
     border: 1px solid #E4E4E7;
     background: #FFFFFF;
-    color: #3F3F46;
+    color: #27272A;
     font-size: 11.5px;
     font-weight: 700;
     cursor: pointer;
@@ -15446,90 +15496,152 @@ body.in-portal #coachHubView {
 
 .wizard-muscle-chip.active,
 .wizard-muscle-chip.selected {
-    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%);
-    border-color: #9E7D4B;
-    color: #09090B;
-    box-shadow: 0 2px 8px rgba(229, 203, 167, 0.35);
+    background: #9E7D4B !important;
+    border-color: #9E7D4B !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 3px 10px rgba(158, 125, 75, 0.3);
 }
 
-/* 8. Paso 3: Grid de Ejercicios Compacto (9 por scroll) */
-.wizard-ex-grid-9 {
+/* 8. Paso 3: Catálogo Biomecánico Estilo Feed Vertical 2 Columnas (Mercado Libre / Temu mini) */
+.wizard-ex-grid-feed {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    max-height: 480px;
+    max-height: 520px;
     overflow-y: auto;
-    padding: 4px;
+    padding: 2px;
     scrollbar-width: thin;
     scrollbar-color: #CBD5E1 transparent;
+    -webkit-overflow-scrolling: touch;
 }
 
-.wizard-compact-ex-card {
+@media (min-width: 768px) {
+    .wizard-ex-grid-feed {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.wizard-feed-ex-card {
     background: #FFFFFF;
     border: 1px solid #E4E4E7;
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    transition: all 0.2s ease;
-    height: 145px;
-    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
-.wizard-compact-ex-card:hover {
+.wizard-feed-ex-card:hover {
     border-color: #9E7D4B;
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
-.wizard-compact-ex-card.selected {
-    border-color: #10B981;
-    background: #F0FDF4;
-    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
-}
-
-.wizard-compact-thumb-wrap {
-    height: 70px;
+.wizard-feed-thumb-box {
     width: 100%;
+    aspect-ratio: 16 / 9;
     background: #18181B;
-    overflow: hidden;
     position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.wizard-compact-thumb-wrap video,
-.wizard-compact-thumb-wrap img {
+.wizard-feed-thumb-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.9;
 }
 
-.wizard-compact-info {
-    padding: 8px 10px;
-    flex: 1;
+.wizard-feed-video-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: rgba(18, 18, 20, 0.85);
+    color: #E5CBA7;
+    font-size: 8.5px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(8px);
+}
+
+.wizard-feed-body {
+    padding: 10px;
     display: flex;
     flex-direction: column;
+    flex: 1;
     justify-content: space-between;
+    gap: 6px;
 }
 
-.wizard-compact-title {
-    font-size: 11.5px;
+.wizard-feed-muscle-pill {
+    align-self: flex-start;
+    background: rgba(229, 203, 167, 0.25);
+    color: #8C6A38;
+    font-size: 9px;
     font-weight: 800;
-    color: #09090B;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.wizard-feed-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #121214 !important;
     line-height: 1.25;
+    margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: 28px;
 }
 
-/* 9. Barra Masiva de Series / Reps / Descanso */
+.wizard-feed-meta {
+    font-size: 10px;
+    color: #71717A;
+}
+
+.wizard-feed-add-btn {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.wizard-feed-add-btn.not-added {
+    background: #18181B;
+    color: #FFFFFF;
+}
+
+.wizard-feed-add-btn.added {
+    background: #ECFDF5;
+    color: #047857;
+    border: 1px solid #10B981;
+}
+
+/* 9. Barra Masiva de Series / Reps / Descanso & Inputs de Alta Legibilidad */
 .wizard-global-batch-bar {
     background: #F8F9FA;
     border: 1px dashed rgba(158, 125, 75, 0.4);
     border-radius: 14px;
-    padding: 12px 16px;
+    padding: 12px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -15538,12 +15650,40 @@ body.in-portal #coachHubView {
     margin-bottom: 16px;
 }
 
+.wizard-global-batch-bar strong,
+.wizard-global-batch-bar span {
+    color: #121214 !important;
+}
+
+.wizard-global-batch-bar .input-control,
+.wizard-selected-ex-row .input-control {
+    background: #FFFFFF !important;
+    border: 1px solid #E4E4E7 !important;
+    color: #121214 !important;
+    font-family: var(--font-main) !important;
+    font-variant-numeric: tabular-nums !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    border-radius: 8px !important;
+    height: 32px !important;
+    padding: 2px 6px !important;
+    margin: 0 !important;
+}
+
+.wizard-global-batch-bar .input-control:focus,
+.wizard-selected-ex-row .input-control:focus {
+    border-color: #9E7D4B !important;
+    box-shadow: 0 0 0 2px rgba(158, 125, 75, 0.2) !important;
+    background: #FFFFFF !important;
+}
+
 /* 10. Fila de Ejercicio Seleccionado en la Mesa de Trabajo */
 .wizard-selected-ex-row {
     background: #FFFFFF;
     border: 1px solid #E4E4E7;
     border-radius: 12px;
-    padding: 10px 14px;
+    padding: 10px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -15553,10 +15693,56 @@ body.in-portal #coachHubView {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
-.wizard-selected-ex-row .ex-meta-title {
-    font-size: 13px;
+.wizard-selected-ex-row strong {
+    color: #121214 !important;
+}
+
+.wizard-param-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+}
+
+.wizard-param-input-group label {
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.4px !important;
+    color: #71717A !important;
+}
+
+/* 11. Tarjetas de Métricas de Evolución (Estación P0 Coach Nico) */
+.coach-evolution-metric-card {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.evo-metric-label {
+    font-size: 10.5px;
     font-weight: 800;
-    color: #09090B;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #71717A;
+}
+
+.evo-metric-value {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #121214;
+    margin: 6px 0 2px 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.evo-metric-sub {
+    font-size: 11px;
+    color: #71717A;
 }
 
 /* 11. Grilla de Visión Mensual */
