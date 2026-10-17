@@ -121,7 +121,7 @@ try {
 
 function isCurrentUserAdmin() {
     // 0. Si hay una sesión activa de Coach OS iniciada o en inspección, mantener privilegios de Coach
-    if (window._isCoachAdminActive || sessionStorage.getItem('sens_coach_admin_active') === 'true') {
+    if (window._isCoachAdminActive || sessionStorage.getItem('sens_coach_admin_active') === 'true' || localStorage.getItem('sens_coach_admin_active') === 'true') {
         return true;
     }
 
@@ -926,8 +926,7 @@ function initLeadCapture() {
 async function loadCoachAthletesList() {
     let dbAthletes = [];
     if (!isCurrentUserAdmin()) {
-        window.__coachAthletesCache = [];
-        return [];
+        return window.__coachAthletesCache || [];
     }
     if (supabaseClient) {
         // Asegurar que el Coach/Admin tenga rol admin en base de datos
@@ -6037,10 +6036,16 @@ function initCoachOS() {
         btn.addEventListener('click', () => {
             const targetPaneId = btn.getAttribute('data-coach-subtab');
             if (targetPaneId) {
+                window._isCoachAdminActive = true;
+                sessionStorage.setItem('sens_coach_admin_active', 'true');
+                localStorage.setItem('sens_coach_admin_active', 'true');
                 if (!document.getElementById('coachHubView')?.classList.contains('active')) {
                     switchPortalView('coachHubView');
                 }
                 window.switchCoachSubTab(targetPaneId);
+                if (typeof syncCoachMasterCard === 'function') {
+                    syncCoachMasterCard(AppState.activeAthleteId);
+                }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
@@ -6375,13 +6380,30 @@ window.purgeAllMockUsersAndCache();
 
 function syncCoachMasterCard(athId) {
     const targetId = athId || AppState.activeAthleteId || coachWorkoutState.activeAthleteId || (AppState.user ? AppState.user.id : null);
-    const roster = getConsolidatedCoachAthletes();
+    let roster = getConsolidatedCoachAthletes();
     let athlete = null;
     if (targetId) {
         athlete = roster.find(a => a.id === targetId);
     }
     if (!athlete && roster.length > 0) {
         athlete = roster[0];
+    }
+    // Fallback de seguridad: recuperar alumno activo si el roster está sincronizando
+    if (!athlete && AppState.profile && AppState.profile.full_name) {
+        athlete = {
+            id: targetId || AppState.activeAthleteId || AppState.profile.id || 'ath_active',
+            full_name: AppState.profile.full_name,
+            email: (AppState.user && AppState.user.email) || AppState.profile.email || 'alumno@sens.com',
+            active_plan_name: AppState.profile.active_plan_name || 'Plan Personalizado',
+            subscription_status: AppState.profile.subscription_status || 'active',
+            goal: AppState.profile.goal || 'Recomposición & Fuerza',
+            current_weight: AppState.profile.current_weight || 75
+        };
+    }
+    if (!athlete && roster.length === 0) {
+        loadCoachAthletesList().then(list => {
+            if (list && list.length > 0) syncCoachMasterCard(athId);
+        }).catch(() => {});
     }
 
     const masterAvatar = document.getElementById('coachMasterAvatar');
@@ -6417,11 +6439,28 @@ function syncCoachMasterCard(athId) {
     let initMaster = pParts[0] ? pParts[0][0].toUpperCase() : 'S';
     if (pParts.length > 1 && pParts[pParts.length - 1]) initMaster += pParts[pParts.length - 1][0].toUpperCase();
 
+    // Formateo de Badge de Plan compacto de alto contraste
+    let planBadgeText = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
+    if (planBadgeText.includes('VIP')) planBadgeText = 'PLAN VIP';
+    else if (planBadgeText.includes('DUO') || planBadgeText.includes('DÚO') || planBadgeText.includes('GRUPO')) planBadgeText = 'PLAN DÚO';
+    else if (planBadgeText.includes('ONLINE') && planBadgeText.includes('PREM')) planBadgeText = 'ONLINE PRO';
+    else if (planBadgeText.includes('ONLINE')) planBadgeText = 'ONLINE';
+    else if (planBadgeText.includes('APP') || planBadgeText.includes('SUSCRIPCI')) planBadgeText = 'APP SUB';
+    else if (planBadgeText.length > 16) planBadgeText = planBadgeText.slice(0, 14) + '...';
+
     if (masterAvatar) masterAvatar.textContent = initMaster;
     if (masterName) masterName.textContent = athlete.full_name;
-    if (masterEmail) masterEmail.textContent = athlete.email || 'alumno@sens.com';
-    if (masterPlanBadge) masterPlanBadge.textContent = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
-    if (masterGoal) masterGoal.textContent = athlete.goal ? `Meta: ${athlete.goal}` : 'Meta: Recomposición & Fuerza';
+    if (masterEmail) {
+        let em = athlete.email || 'alumno@sens.com';
+        if (em.length > 25) em = em.slice(0, 22) + '...';
+        masterEmail.textContent = em;
+    }
+    if (masterPlanBadge) masterPlanBadge.textContent = planBadgeText;
+    if (masterGoal) {
+        let g = athlete.goal ? athlete.goal : 'Recomposición';
+        if (g.length > 22) g = g.slice(0, 20) + '...';
+        masterGoal.textContent = g;
+    }
     if (masterStatusDot) {
         const s = athlete.subscription_status || 'active';
         masterStatusDot.className = 'status-dot ' + (s === 'active' ? 'status-dot-active' : s === 'paused' ? 'status-dot-paused' : 'status-dot-pending');
@@ -6430,7 +6469,7 @@ function syncCoachMasterCard(athId) {
     if (workoutAvatar) workoutAvatar.textContent = initMaster;
     if (workoutName) workoutName.textContent = athlete.full_name;
     if (workoutEmail) workoutEmail.textContent = athlete.email || 'alumno@sens.com';
-    if (workoutPlanBadge) workoutPlanBadge.textContent = (athlete.active_plan_name || 'PLAN SENS').toUpperCase();
+    if (workoutPlanBadge) workoutPlanBadge.textContent = planBadgeText;
 
     // Sincronización de Ficha Resumen 100% Solo Lectura en Planificador de Rutinas
     const weightVal = athlete.current_weight || athlete.weight || 75;

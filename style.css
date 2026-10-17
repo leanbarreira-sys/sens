@@ -14235,13 +14235,23 @@ body.in-portal #coachHubView {
     border: 1px solid #9E7D4B !important;
     color: #FFFFFF !important;
     font-weight: 800 !important;
-    box-shadow: 0 2px 8px rgba(158, 125, 75, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(158, 125, 75, 0.35) !important;
 }
 
 #coachHubView .btn-coach-action-pill.primary:hover {
     background: #8C6A38 !important;
     border-color: #8C6A38 !important;
     color: #FFFFFF !important;
+}
+
+#coachHubView .btn-coach-action-pill.primary span,
+#coachHubView .btn-coach-action-pill.primary strong {
+    color: #FFFFFF !important;
+}
+
+#coachHubView .btn-coach-action-pill.primary svg {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
 }
 
 /* 3. Sub-Tabs de Navegación del Hub */
@@ -15314,52 +15324,109 @@ body.in-portal #coachHubView {
     #coachHubView {
         padding: 12px 8px 120px 8px !important;
     }
+    .coach-hub-header {
+        margin-bottom: 8px !important;
+        gap: 3px !important;
+    }
+    .coach-hub-badge-row {
+        gap: 4px !important;
+    }
+    .coach-hub-title-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 6px !important;
+        width: 100% !important;
+    }
+    .coach-hub-title {
+        font-size: clamp(14px, 4.2vw, 17px) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        line-height: 1.2 !important;
+    }
+    .btn-coach-refresh-circle {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+        max-width: 30px !important;
+        flex-shrink: 0 !important;
+    }
     .coach-surface-card-light {
-        padding: 12px 10px !important;
-        border-radius: 14px !important;
+        padding: 10px 8px !important;
+        border-radius: 12px !important;
     }
     #coachHubView .coach-master-active-athlete-card {
         padding: 10px 10px !important;
+        border-radius: 12px !important;
         display: flex !important;
         flex-direction: column !important;
         gap: 8px !important;
+        margin-bottom: 10px !important;
+        box-sizing: border-box !important;
+    }
+    .coach-active-athlete-topline {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 6px !important;
+        width: 100% !important;
     }
     .coach-active-athlete-left {
-        width: 100% !important;
+        width: auto !important;
+        min-width: 0 !important;
+        flex: 1 1 0 !important;
+        gap: 8px !important;
+    }
+    .coach-active-athlete-name {
+        font-size: 13.5px !important;
+    }
+    #coachHubView #coachMasterPlanBadge {
+        font-size: 8.5px !important;
+        padding: 2px 6px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
     #coachHubView .coach-active-athlete-actions {
         width: 100% !important;
         display: flex !important;
-        gap: 6px !important;
+        gap: 5px !important;
+        margin-top: 4px !important;
     }
     #coachHubView .coach-active-athlete-actions .btn-coach-action-pill {
         flex: 1 1 0 !important;
         min-width: 0 !important;
         justify-content: center !important;
-        padding: 6px 4px !important;
+        padding: 7px 2px !important;
         font-size: 10.5px !important;
         white-space: nowrap !important;
+        border-radius: 8px !important;
     }
     .coach-client-summary-card {
-        padding: 10px 10px !important;
+        padding: 8px 10px !important;
+        border-radius: 8px !important;
     }
     .wizard-step-label {
         display: none !important;
     }
     .coach-vision-toggle-strip {
-        padding: 3px !important;
+        padding: 2px !important;
         gap: 2px !important;
-        margin-bottom: 12px !important;
+        margin-bottom: 10px !important;
         width: 100% !important;
+        max-width: 100% !important;
         box-sizing: border-box !important;
     }
     .coach-vision-tab-btn {
         flex: 1 1 0 !important;
         min-width: 0 !important;
-        padding: 6px 3px !important;
+        padding: 6px 2px !important;
         font-size: 10.5px !important;
         gap: 3px !important;
         white-space: nowrap !important;
+        border-radius: 6px !important;
     }
     .coach-vision-tab-btn span {
         white-space: nowrap !important;
@@ -15393,12 +15460,15 @@ body.in-portal #coachHubView {
         text-overflow: ellipsis !important;
     }
     .coach-month-calendar-grid {
-        gap: 3px !important;
+        gap: 2px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
     .coach-month-day-cell {
-        min-height: 48px !important;
-        padding: 4px 2px !important;
-        border-radius: 6px !important;
+        min-height: 46px !important;
+        padding: 3px 2px !important;
+        border-radius: 5px !important;
+        box-sizing: border-box !important;
     }
 }
 
