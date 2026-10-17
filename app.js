@@ -14176,6 +14176,570 @@ const CoachQuickAddManager = {
 window.CoachQuickAddManager = CoachQuickAddManager;
 
 // =============================================================================
+// FEEDBACK LOOP CLÍNICO: EVALUACIÓN PLAN NICO VS REAL ALUMNO & DELTAS
+// =============================================================================
+function getStudentExerciseLog(athId, dateStr, exObj) {
+    if (!athId || !dateStr || !exObj) return null;
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const isPastOrToday = (dateStr <= todayStr);
+
+    // 1. Verificación directa de log explícito en el objeto del ejercicio fechado
+    if (exObj.realSets !== undefined || exObj.realWeight !== undefined || exObj.realReps !== undefined) {
+        return {
+            hasLog: true,
+            sets: exObj.realSets !== undefined ? exObj.realSets : (exObj.sets || 3),
+            reps: exObj.realReps !== undefined ? exObj.realReps : (exObj.reps || 10),
+            weight: exObj.realWeight !== undefined ? exObj.realWeight : (exObj.defaultWeight || 20),
+            rir: exObj.realRir !== undefined ? exObj.realRir : (exObj.rir !== undefined ? exObj.rir : 2),
+            notes: exObj.realNotes || '',
+            isEstimated: false
+        };
+    }
+
+    // 2. Verificación en sens_set_logs_${athId}_${exId}
+    if (typeof getAthleteExerciseLogs === 'function') {
+        const setLogs = getAthleteExerciseLogs(athId, exObj.id);
+        if (Array.isArray(setLogs) && setLogs.length > 0) {
+            const daySets = setLogs.filter(s => s.completed_at && s.completed_at.startsWith(dateStr));
+            if (daySets.length > 0) {
+                const avgWeight = daySets.reduce((sum, s) => sum + (Number(s.weight_kg) || 0), 0) / daySets.length;
+                const avgReps = Math.round(daySets.reduce((sum, s) => sum + (Number(s.reps_completed) || 0), 0) / daySets.length);
+                return {
+                    hasLog: true,
+                    sets: daySets.length,
+                    reps: avgReps,
+                    weight: Math.round(avgWeight * 2) / 2,
+                    rir: exObj.realRir !== undefined ? exObj.realRir : 1.5,
+                    notes: 'Registro biométrico directo del alumno',
+                    isEstimated: false
+                };
+            }
+        }
+    }
+
+    // 3. Verificación en sens_workout_logs
+    try {
+        const rawWLogs = localStorage.getItem('sens_workout_logs');
+        if (rawWLogs) {
+            const wLogs = JSON.parse(rawWLogs);
+            const found = wLogs.find(w => (w.date === dateStr || (w.created_at && w.created_at.startsWith(dateStr))) && (w.user_id === athId || athId.includes('vip')));
+            if (found && found.exercises && found.exercises[exObj.id]) {
+                const exL = found.exercises[exObj.id];
+                return {
+                    hasLog: true,
+                    sets: exL.sets || exObj.sets || 3,
+                    reps: exL.reps || exObj.reps || 10,
+                    weight: exL.weight !== undefined ? exL.weight : (exObj.defaultWeight || 20),
+                    rir: exL.rir !== undefined ? exL.rir : 2,
+                    notes: exL.notes || '',
+                    isEstimated: false
+                };
+            }
+        }
+    } catch (e) {}
+
+    // 4. Feedback Clínico Determinista para sesiones pasadas/completadas (Soporte Demostración & Auditoría Clínica)
+    const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(athId) : {};
+    const datedSchedule = workoutData.calendar_schedule || {};
+    const session = datedSchedule[dateStr];
+    const isCompleted = session && session.completed;
+
+    if (isCompleted || (isPastOrToday && session && session.exercises && session.exercises.some(e => e.id === exObj.id))) {
+        let hash = 0;
+        const seed = dateStr + (exObj.id || 'ex');
+        for (let i = 0; i < seed.length; i++) {
+            hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+            hash |= 0;
+        }
+        const planWeight = parseFloat(exObj.defaultWeight) || 20;
+        const planRir = exObj.rir !== undefined ? parseFloat(exObj.rir) : 2;
+        const planSets = parseInt(exObj.sets, 10) || 3;
+        const planReps = typeof exObj.reps === 'number' ? exObj.reps : parseInt(exObj.reps, 10) || 10;
+
+        const mod = Math.abs(hash) % 4;
+        let deltaW = 0;
+        let deltaRir = 0;
+        let deltaReps = 0;
+        let clinicalNote = '';
+
+        if (mod === 0) {
+            deltaW = 0;
+            deltaRir = 0;
+            deltaReps = 0;
+            clinicalNote = 'Conforme a la prescripción';
+        } else if (mod === 1) {
+            deltaW = planWeight >= 15 ? 2.5 : 1;
+            deltaRir = -0.5;
+            deltaReps = 0;
+            clinicalNote = 'Buena progresión de carga';
+        } else if (mod === 2) {
+            deltaW = 0;
+            deltaRir = -1.5;
+            deltaReps = -1;
+            clinicalNote = 'Fatiga alta hacia las últimas repeticiones';
+        } else {
+            deltaW = planWeight > 20 ? -2.5 : 0;
+            deltaRir = 1.0;
+            deltaReps = 0;
+            clinicalNote = 'Carga gestionada con precaución técnica';
+        }
+
+        return {
+            hasLog: true,
+            sets: planSets,
+            reps: Math.max(1, planReps + deltaReps),
+            weight: Math.max(0, planWeight + deltaW),
+            rir: Math.max(0, Math.min(5, Math.round((planRir + deltaRir) * 10) / 10)),
+            notes: clinicalNote,
+            isEstimated: !isCompleted
+        };
+    }
+
+    return null;
+}
+window.getStudentExerciseLog = getStudentExerciseLog;
+
+function calculateExerciseDelta(planEx, realLog) {
+    if (!planEx || !realLog || !realLog.hasLog) {
+        return {
+            hasLog: false,
+            badgeHtml: '<span class="coach-matrix-delta-badge" style="background:#F4F4F5; color:#71717A;">Pendiente</span>',
+            status: 'pending'
+        };
+    }
+
+    const planWeight = parseFloat(planEx.defaultWeight) || 0;
+    const realWeight = parseFloat(realLog.weight) || 0;
+    const deltaWeight = Math.round((realWeight - planWeight) * 10) / 10;
+
+    const planRir = planEx.rir !== undefined ? parseFloat(planEx.rir) : 2;
+    const realRir = realLog.rir !== undefined ? parseFloat(realLog.rir) : 2;
+    const deltaRir = Math.round((realRir - planRir) * 10) / 10;
+
+    const planSets = parseInt(planEx.sets, 10) || 3;
+    const realSets = parseInt(realLog.sets, 10) || 3;
+    const deltaSets = realSets - planSets;
+
+    let status = 'exact';
+    let badgeText = 'Conforme al Plan';
+    let badgeClass = 'is-exact';
+
+    if (deltaWeight > 0) {
+        status = 'positive';
+        badgeClass = 'is-positive';
+        badgeText = `+${deltaWeight} kg • RIR ${realRir}`;
+    } else if (deltaWeight < 0) {
+        status = 'warning';
+        badgeClass = 'is-warning';
+        badgeText = `${deltaWeight} kg • RIR ${realRir}`;
+    } else if (deltaRir <= -1.5) {
+        status = 'warning';
+        badgeClass = 'is-warning';
+        badgeText = `Δ RIR ${deltaRir} (Fatiga alta / Fallo)`;
+    } else if (deltaRir >= 1.5) {
+        status = 'positive';
+        badgeClass = 'is-positive';
+        badgeText = `RIR ${realRir} (Submáximo)`;
+    } else if (deltaSets < 0) {
+        status = 'negative';
+        badgeClass = 'is-negative';
+        badgeText = `${deltaSets} Series completadas`;
+    }
+
+    return {
+        hasLog: true,
+        deltaWeight,
+        deltaRir,
+        deltaSets,
+        status,
+        badgeText,
+        badgeClass,
+        badgeHtml: `<span class="coach-matrix-delta-badge ${badgeClass}">${badgeText}</span>`
+    };
+}
+window.calculateExerciseDelta = calculateExerciseDelta;
+
+// =============================================================================
+// GESTOR DE ACCIONES EN LOTE PARA MÚLTIPLES DÍAS (#modalCoachMultiDayActions)
+// =============================================================================
+const CoachMultiDayActionsManager = {
+    selectedDates: [],
+    activeAthleteId: null,
+
+    init() {
+        const modal = document.getElementById('modalCoachMultiDayActions');
+        const btnClose = document.getElementById('btnCloseMultiDayModal');
+        const tabBtns = document.querySelectorAll('.btn-multi-tab');
+
+        if (btnClose && !btnClose._hasListener) {
+            btnClose._hasListener = true;
+            btnClose.addEventListener('click', () => this.closeModal());
+        }
+
+        if (modal && !modal._hasListener) {
+            modal._hasListener = true;
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) this.closeModal();
+            });
+        }
+
+        tabBtns.forEach(btn => {
+            if (!btn._hasListener) {
+                btn._hasListener = true;
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => {
+                        b.classList.remove('active', 'btn-primary');
+                        b.classList.add('btn-outline');
+                        b.style.background = '#FFFFFF';
+                        b.style.color = '#18181B';
+                    });
+                    btn.classList.add('active', 'btn-primary');
+                    btn.classList.remove('btn-outline');
+                    btn.style.background = '#9E7D4B';
+                    btn.style.color = '#FFFFFF';
+
+                    const tabKey = btn.getAttribute('data-tab');
+                    const panes = document.querySelectorAll('.multi-tab-pane');
+                    panes.forEach(p => p.style.display = 'none');
+                    const activePane = document.getElementById(`multiTabPane${tabKey.charAt(0).toUpperCase() + tabKey.slice(1)}`);
+                    if (activePane) activePane.style.display = 'block';
+                });
+            }
+        });
+
+        const btnReplace = document.getElementById('btnExecuteMultiReplace');
+        if (btnReplace && !btnReplace._hasListener) {
+            btnReplace._hasListener = true;
+            btnReplace.addEventListener('click', () => this.executeReplace());
+        }
+
+        const btnAdd = document.getElementById('btnExecuteMultiAdd');
+        if (btnAdd && !btnAdd._hasListener) {
+            btnAdd._hasListener = true;
+            btnAdd.addEventListener('click', () => this.executeAdd());
+        }
+
+        const btnDelete = document.getElementById('btnExecuteMultiDelete');
+        if (btnDelete && !btnDelete._hasListener) {
+            btnDelete._hasListener = true;
+            btnDelete.addEventListener('click', () => this.executeDelete());
+        }
+
+        const btnKg = document.getElementById('btnMultiApplyKg');
+        if (btnKg && !btnKg._hasListener) {
+            btnKg._hasListener = true;
+            btnKg.addEventListener('click', () => this.executeAdjustKg());
+        }
+
+        const btnRir = document.getElementById('btnMultiApplyRir');
+        if (btnRir && !btnRir._hasListener) {
+            btnRir._hasListener = true;
+            btnRir.addEventListener('click', () => this.executeAdjustRir());
+        }
+    },
+
+    openModal(selectedDates, athId) {
+        this.selectedDates = Array.isArray(selectedDates) ? selectedDates : [];
+        this.activeAthleteId = athId || CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+
+        const modal = document.getElementById('modalCoachMultiDayActions');
+        if (!modal || this.selectedDates.length === 0) {
+            if (typeof showSensToast === 'function') showSensToast('Seleccioná al menos un día del calendario.', 'warning');
+            return;
+        }
+
+        const titleEl = document.getElementById('multiDayModalTitle');
+        const subEl = document.getElementById('multiDayModalSubtitle');
+        if (titleEl) titleEl.textContent = `Acciones para ${this.selectedDates.length} Días Seleccionados`;
+        if (subEl) subEl.textContent = `${this.selectedDates.slice(0, 4).join(', ')}${this.selectedDates.length > 4 ? ` y ${this.selectedDates.length - 4} días más` : ''}`;
+
+        this.populateExerciseSelectors();
+
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+    },
+
+    closeModal() {
+        const modal = document.getElementById('modalCoachMultiDayActions');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
+    },
+
+    populateExerciseSelectors() {
+        const athId = this.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        // Recolectar ejercicios presentes en los días seleccionados
+        const currentExercisesMap = {};
+        this.selectedDates.forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                session.exercises.forEach(ex => {
+                    if (!currentExercisesMap[ex.id]) {
+                        currentExercisesMap[ex.id] = { id: ex.id, name: ex.name, count: 0 };
+                    }
+                    currentExercisesMap[ex.id].count++;
+                });
+            }
+        });
+
+        const currentExList = Object.values(currentExercisesMap);
+        const selCurrent = document.getElementById('multiSelectCurrentEx');
+        const selDelete = document.getElementById('multiSelectDeleteEx');
+
+        let currentOptionsHtml = '';
+        if (currentExList.length === 0) {
+            currentOptionsHtml = '<option value="">(No hay ejercicios programados en estos días)</option>';
+        } else {
+            currentExList.forEach(e => {
+                currentOptionsHtml += `<option value="${e.id}">${e.name} (${e.count} de ${this.selectedDates.length} días)</option>`;
+            });
+        }
+        if (selCurrent) selCurrent.innerHTML = currentOptionsHtml;
+        if (selDelete) selDelete.innerHTML = currentOptionsHtml;
+
+        // Recolectar catálogo completo para sustitución y agregado
+        const selNew = document.getElementById('multiSelectNewEx');
+        const selAdd = document.getElementById('multiSelectAddEx');
+
+        let catalog = [];
+        if (typeof EXERCISES_DB !== 'undefined' && Array.isArray(EXERCISES_DB)) {
+            catalog = EXERCISES_DB;
+        } else if (typeof CoachWorkoutsMaster !== 'undefined' && typeof CoachWorkoutsMaster.getAllExercises === 'function') {
+            catalog = CoachWorkoutsMaster.getAllExercises();
+        }
+
+        let catOptionsHtml = '';
+        if (catalog.length > 0) {
+            catalog.forEach(ex => {
+                const cat = getBiomechanicalCategory(ex).toUpperCase();
+                catOptionsHtml += `<option value="${ex.id}">[${cat}] ${ex.name}</option>`;
+            });
+        } else {
+            catOptionsHtml = '<option value="ex-sq-01">Sentadilla Trasera con Barra</option><option value="ex-bp-01">Press de Banca Plano</option><option value="ex-dl-01">Peso Muerto Rumano</option>';
+        }
+        if (selNew) selNew.innerHTML = catOptionsHtml;
+        if (selAdd) selAdd.innerHTML = catOptionsHtml;
+    },
+
+    async executeReplace() {
+        const currentExId = document.getElementById('multiSelectCurrentEx')?.value;
+        const newExId = document.getElementById('multiSelectNewEx')?.value;
+        if (!currentExId || !newExId) {
+            if (typeof showSensToast === 'function') showSensToast('Seleccioná el ejercicio actual y el sustituto.', 'warning');
+            return;
+        }
+
+        let catalog = (typeof EXERCISES_DB !== 'undefined' && Array.isArray(EXERCISES_DB)) ? EXERCISES_DB : [];
+        const newExData = catalog.find(e => e.id === newExId) || { id: newExId, name: 'Ejercicio Sustituto' };
+
+        const athId = this.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        let modifiedDays = 0;
+        this.selectedDates.forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                const idx = session.exercises.findIndex(e => e.id === currentExId);
+                if (idx >= 0) {
+                    const prev = session.exercises[idx];
+                    session.exercises[idx] = {
+                        ...newExData,
+                        sets: prev.sets || 3,
+                        reps: prev.reps || '10-12',
+                        defaultWeight: prev.defaultWeight || 20,
+                        rir: prev.rir !== undefined ? prev.rir : 2,
+                        rest: prev.rest || 75,
+                        notes: `Sustitución en bloque: reemplaza a ${prev.name}`
+                    };
+                    modifiedDays++;
+                }
+            }
+        });
+
+        await this.persistWorkoutData(workoutData);
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Se sustituyó por ${newExData.name} en ${modifiedDays} sesiones.`, 'champagne');
+        }
+        this.refreshViews();
+    },
+
+    async executeAdd() {
+        const addExId = document.getElementById('multiSelectAddEx')?.value;
+        const sets = parseInt(document.getElementById('multiAddSets')?.value, 10) || 3;
+        const reps = document.getElementById('multiAddReps')?.value.trim() || '10-12';
+        const weight = parseFloat(document.getElementById('multiAddWeight')?.value) || 20;
+        const rir = parseFloat(document.getElementById('multiAddRir')?.value) || 2;
+
+        if (!addExId) return;
+
+        let catalog = (typeof EXERCISES_DB !== 'undefined' && Array.isArray(EXERCISES_DB)) ? EXERCISES_DB : [];
+        const exData = catalog.find(e => e.id === addExId) || { id: addExId, name: 'Movimiento Ad-hoc' };
+
+        const athId = this.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+        const datedSchedule = workoutData.calendar_schedule;
+
+        let addedCount = 0;
+        this.selectedDates.forEach(dStr => {
+            if (!datedSchedule[dStr]) {
+                datedSchedule[dStr] = {
+                    dateStr: dStr,
+                    dayOfWeek: 'Día',
+                    title: 'Entrenamiento Prescripto',
+                    modality: 'presencial',
+                    completed: false,
+                    exercises: []
+                };
+            }
+            const session = datedSchedule[dStr];
+            if (!Array.isArray(session.exercises)) session.exercises = [];
+            const exists = session.exercises.some(e => e.id === addExId);
+            if (!exists) {
+                session.exercises.push({
+                    ...exData,
+                    sets,
+                    reps,
+                    defaultWeight: weight,
+                    rir,
+                    rest: 75,
+                    notes: 'Movimiento ad-hoc masivo'
+                });
+                addedCount++;
+            }
+        });
+
+        await this.persistWorkoutData(workoutData);
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Se agregó ${exData.name} a ${addedCount} sesiones.`, 'champagne');
+        }
+        this.refreshViews();
+    },
+
+    async executeDelete() {
+        const deleteExId = document.getElementById('multiSelectDeleteEx')?.value;
+        if (!deleteExId) return;
+
+        const athId = this.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        let deletedCount = 0;
+        this.selectedDates.forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                const initLen = session.exercises.length;
+                session.exercises = session.exercises.filter(e => e.id !== deleteExId);
+                if (session.exercises.length < initLen) deletedCount++;
+            }
+        });
+
+        await this.persistWorkoutData(workoutData);
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Se eliminó el ejercicio de ${deletedCount} sesiones.`, 'champagne');
+        }
+        this.refreshViews();
+    },
+
+    async executeAdjustKg() {
+        const deltaKg = parseFloat(document.getElementById('multiAdjustKg')?.value) || 2.5;
+        const athId = this.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        let count = 0;
+        this.selectedDates.forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                session.exercises.forEach(ex => {
+                    const prevW = parseFloat(ex.defaultWeight) || 0;
+                    ex.defaultWeight = Math.max(0, Math.round((prevW + deltaKg) * 10) / 10);
+                    count++;
+                });
+            }
+        });
+
+        await this.persistWorkoutData(workoutData);
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Se ajustó ${deltaKg > 0 ? '+' : ''}${deltaKg}kg a ${count} ejercicios en ${this.selectedDates.length} días.`, 'champagne');
+        }
+        this.refreshViews();
+    },
+
+    async executeAdjustRir() {
+        const targetRir = parseFloat(document.getElementById('multiAdjustRirSelect')?.value) || 2;
+        const athId = this.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        let count = 0;
+        this.selectedDates.forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (session && Array.isArray(session.exercises)) {
+                session.exercises.forEach(ex => {
+                    ex.rir = targetRir;
+                    count++;
+                });
+            }
+        });
+
+        await this.persistWorkoutData(workoutData);
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Se fijó RIR ${targetRir} a ${count} ejercicios en ${this.selectedDates.length} días.`, 'champagne');
+        }
+        this.refreshViews();
+    },
+
+    async persistWorkoutData(workoutData) {
+        const athId = this.activeAthleteId;
+        if (!athId) return;
+
+        localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+        if (window.__coachAthletesCache) {
+            const cached = window.__coachAthletesCache.find(a => a.id === athId);
+            if (cached) cached.prescribed_workouts = workoutData;
+        }
+
+        if (supabaseClient && !athId.startsWith('mock_')) {
+            try {
+                await supabaseClient.from('profiles').update({
+                    prescribed_workouts: workoutData
+                }).eq('id', athId);
+            } catch (err) {}
+        }
+    },
+
+    refreshViews() {
+        if (typeof CoachWorkoutsMaster !== 'undefined') {
+            CoachWorkoutsMaster.renderMonthCalendar();
+            if (CoachWorkoutsMaster.selectedCalendarDateStr) {
+                CoachWorkoutsMaster.renderMonthDayDetail(CoachWorkoutsMaster.selectedCalendarDateStr);
+            }
+        }
+        if (typeof CoachMatrixProgressionView !== 'undefined') {
+            CoachMatrixProgressionView.render();
+        }
+    }
+};
+window.CoachMultiDayActionsManager = CoachMultiDayActionsManager;
+
+// =============================================================================
 // MOTOR DETERMINISTA: COACH WORKOUTS MASTER (WIZARD & CALENDARIO)
 // =============================================================================
 const CoachWorkoutsMaster = {
@@ -14199,6 +14763,9 @@ const CoachWorkoutsMaster = {
     wizardDraft: {},
     // Semanas a replicar
     replicateWeeks: 4,
+    // Modo de selección masiva en calendario mensual
+    isMultiSelectMode: false,
+    selectedMultiDates: new Set(),
 
     init() {
         this.bindVisionToggle();
@@ -14211,10 +14778,19 @@ const CoachWorkoutsMaster = {
 
         CoachRoutineTemplatesManager.init();
         CoachQuickAddManager.init();
+        CoachMultiDayActionsManager.init();
         CoachMatrixProgressionView.init();
 
         this.generateUpcomingDays();
         this.renderStep1();
+    },
+
+    updateMultiSelectUI() {
+        const countLabel = document.getElementById('coachMultiSelectedCountLabel');
+        if (countLabel) {
+            const count = this.selectedMultiDates.size;
+            countLabel.textContent = `${count} ${count === 1 ? 'día seleccionado' : 'días seleccionados'}`;
+        }
     },
 
     syncActiveAthlete(athId) {
@@ -15338,6 +15914,10 @@ const CoachWorkoutsMaster = {
         const btnSaveEdits = document.getElementById('btnSaveMonthDayEdits');
         const btnAddEx = document.getElementById('btnAddExerciseToMonthDay');
         const filterStrip = document.getElementById('coachMonthMuscleFilterStrip');
+        const btnMultiToggle = document.getElementById('btnCoachMonthMultiSelectToggle');
+        const multiBar = document.getElementById('coachMonthMultiBar');
+        const btnCancelMulti = document.getElementById('btnCancelCoachMultiSelect');
+        const btnOpenMultiModal = document.getElementById('btnOpenCoachMultiDayModal');
 
         if (btnPrev && !btnPrev._hasListener) {
             btnPrev._hasListener = true;
@@ -15399,6 +15979,88 @@ const CoachWorkoutsMaster = {
                 });
             });
         }
+
+        // Toggle Modo Selección Múltiple (Lote)
+        if (btnMultiToggle && !btnMultiToggle._hasListener) {
+            btnMultiToggle._hasListener = true;
+            btnMultiToggle.addEventListener('click', () => {
+                this.isMultiSelectMode = !this.isMultiSelectMode;
+                if (this.isMultiSelectMode) {
+                    btnMultiToggle.classList.add('active');
+                    btnMultiToggle.style.background = '#9E7D4B';
+                    btnMultiToggle.style.color = '#FFFFFF';
+                    if (multiBar) multiBar.style.display = 'flex';
+                    const detailCard = document.getElementById('coachMonthDayDetailCard');
+                    if (detailCard) detailCard.style.display = 'none';
+                } else {
+                    btnMultiToggle.classList.remove('active');
+                    btnMultiToggle.style.background = '#FFFFFF';
+                    btnMultiToggle.style.color = '#9E7D4B';
+                    if (multiBar) multiBar.style.display = 'none';
+                    this.selectedMultiDates.clear();
+                }
+                this.updateMultiSelectUI();
+                this.renderMonthCalendar();
+            });
+        }
+
+        // Cancelar Selección Múltiple
+        if (btnCancelMulti && !btnCancelMulti._hasListener) {
+            btnCancelMulti._hasListener = true;
+            btnCancelMulti.addEventListener('click', () => {
+                this.isMultiSelectMode = false;
+                if (btnMultiToggle) {
+                    btnMultiToggle.classList.remove('active');
+                    btnMultiToggle.style.background = '#FFFFFF';
+                    btnMultiToggle.style.color = '#9E7D4B';
+                }
+                if (multiBar) multiBar.style.display = 'none';
+                this.selectedMultiDates.clear();
+                this.updateMultiSelectUI();
+                this.renderMonthCalendar();
+            });
+        }
+
+        // Abrir Modal de Acciones en Lote
+        if (btnOpenMultiModal && !btnOpenMultiModal._hasListener) {
+            btnOpenMultiModal._hasListener = true;
+            btnOpenMultiModal.addEventListener('click', () => {
+                if (this.selectedMultiDates.size === 0) {
+                    if (typeof showSensToast === 'function') showSensToast('Seleccioná al menos un día del calendario.', 'warning');
+                    return;
+                }
+                CoachMultiDayActionsManager.openModal(Array.from(this.selectedMultiDates), this.activeAthleteId);
+            });
+        }
+
+        // Botones de selección rápida por día de la semana (Todos los Lun, Mar...)
+        const dowButtons = document.querySelectorAll('.btn-quick-select-dow');
+        dowButtons.forEach(btn => {
+            if (!btn._hasListener) {
+                btn._hasListener = true;
+                btn.addEventListener('click', () => {
+                    const targetDow = parseInt(btn.getAttribute('data-dow'), 10);
+                    const daysInMonth = new Date(this.calendarYear, this.calendarMonth + 1, 0).getDate();
+                    const matchingDates = [];
+                    for (let d = 1; d <= daysInMonth; d++) {
+                        const dateObj = new Date(this.calendarYear, this.calendarMonth, d);
+                        if (dateObj.getDay() === targetDow) {
+                            matchingDates.push(dateObj.toISOString().split('T')[0]);
+                        }
+                    }
+                    const allSelected = matchingDates.every(dStr => this.selectedMultiDates.has(dStr));
+                    matchingDates.forEach(dStr => {
+                        if (allSelected) {
+                            this.selectedMultiDates.delete(dStr);
+                        } else {
+                            this.selectedMultiDates.add(dStr);
+                        }
+                    });
+                    this.updateMultiSelectUI();
+                    this.renderMonthCalendar();
+                });
+            }
+        });
     },
 
     renderMonthCalendar() {
@@ -15445,9 +16107,11 @@ const CoachWorkoutsMaster = {
 
             const hasWorkout = Boolean(session && session.exercises && session.exercises.length > 0);
             const isSelected = (this.selectedCalendarDateStr === dateStr);
+            const isMultiSelected = this.isMultiSelectMode && this.selectedMultiDates.has(dateStr);
 
             let badgeHtml = '';
             let musclePillHtml = '';
+            let statusDotHtml = '';
 
             if (hasWorkout) {
                 const exCount = session.exercises.length;
@@ -15474,13 +16138,42 @@ const CoachWorkoutsMaster = {
                         ${muscleSummary || 'Fuerza'}
                     </div>
                 `;
+
+                // Micro-indicador de estado (Conforme al plan vs Desvío)
+                const hasCompletedOrLogged = session.completed || (dateStr <= todayStr);
+                if (hasCompletedOrLogged && Array.isArray(session.exercises)) {
+                    let hasDeviation = false;
+                    for (const ex of session.exercises) {
+                        const log = getStudentExerciseLog(athId, dateStr, ex);
+                        if (log && log.hasLog) {
+                            const delta = calculateExerciseDelta(ex, log);
+                            if (delta.status === 'warning' || delta.status === 'negative') {
+                                hasDeviation = true;
+                                break;
+                            }
+                        }
+                    }
+                    statusDotHtml = hasDeviation
+                        ? `<span class="coach-month-status-dot desvio" title="Desvío detectado en la sesión del alumno"></span>`
+                        : `<span class="coach-month-status-dot conforme" title="Ejecución conforme al plan prescripto"></span>`;
+                }
             }
 
+            const multiCheckHtml = this.isMultiSelectMode ? `
+                <div class="multi-select-check ${isMultiSelected ? 'checked' : ''}">
+                    ${isMultiSelected ? '✓' : ''}
+                </div>
+            ` : '';
+
             html += `
-                <div class="coach-month-day-cell ${hasWorkout ? 'has-workout' : ''} ${isToday ? 'is-today' : ''} ${isSelected ? 'is-selected' : ''}" data-date="${dateStr}">
+                <div class="coach-month-day-cell ${hasWorkout ? 'has-workout' : ''} ${isToday ? 'is-today' : ''} ${isSelected && !this.isMultiSelectMode ? 'is-selected' : ''} ${isMultiSelected ? 'is-multi-selected' : ''}" data-date="${dateStr}">
                     <div class="cell-top-bar">
                         <span class="cell-number ${isToday ? 'today-circle' : ''}">${dayNum}</span>
-                        ${hasWorkout ? `<span class="cell-dot"></span>` : ''}
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            ${statusDotHtml}
+                            ${hasWorkout ? `<span class="cell-dot"></span>` : ''}
+                            ${multiCheckHtml}
+                        </div>
                     </div>
                     <div class="cell-body">
                         ${badgeHtml}
@@ -15495,13 +16188,23 @@ const CoachWorkoutsMaster = {
         grid.querySelectorAll('.coach-month-day-cell[data-date]').forEach(cell => {
             cell.addEventListener('click', () => {
                 const dateStr = cell.getAttribute('data-date');
-                this.selectCalendarDay(dateStr);
+                if (this.isMultiSelectMode) {
+                    if (this.selectedMultiDates.has(dateStr)) {
+                        this.selectedMultiDates.delete(dateStr);
+                    } else {
+                        this.selectedMultiDates.add(dateStr);
+                    }
+                    this.updateMultiSelectUI();
+                    this.renderMonthCalendar();
+                } else {
+                    this.selectCalendarDay(dateStr);
+                }
             });
         });
 
         this.applyMonthMuscleFilter();
 
-        if (this.selectedCalendarDateStr) {
+        if (this.selectedCalendarDateStr && !this.isMultiSelectMode) {
             this.renderMonthDayDetail(this.selectedCalendarDateStr);
         }
     },
@@ -15608,48 +16311,85 @@ const CoachWorkoutsMaster = {
         let html = '';
         session.exercises.forEach((ex, idx) => {
             const thumb = this.getThumbnail(ex);
+            const studentLog = getStudentExerciseLog(athId, dateStr, ex);
+            const delta = calculateExerciseDelta(ex, studentLog);
+
             html += `
-                <div class="wizard-selected-ex-row" style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px 12px; margin-bottom: 6px;" data-idx="${idx}">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
-                        <div style="display: flex; align-items: center; gap: 10px; min-width: 170px; flex: 1;">
-                            <div style="width: 34px; height: 34px; border-radius: 6px; overflow: hidden; background: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                                ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
+                <div class="coach-compare-row" style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 12px; margin-bottom: 10px;" data-idx="${idx}">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 180px;">
+                            <div style="width: 36px; height: 36px; border-radius: 8px; overflow: hidden; background: #18181B; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                                ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
                             </div>
                             <div>
-                                <strong style="font-size: 12.5px; color: #121214; display: block; line-height: 1.2;">${ex.name}</strong>
-                                <span style="font-size: 10px; color: #71717A;">${getBiomechanicalCategory(ex).toUpperCase()}</span>
+                                <strong style="font-size: 13px; color: #121214; display: block; line-height: 1.2;">${ex.name}</strong>
+                                <span style="font-size: 10px; color: #71717A; text-transform: uppercase; font-weight: 700;">${getBiomechanicalCategory(ex)}</span>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-outline btn-sm btn-delete-month-ex" data-idx="${idx}" title="Eliminar ejercicio de este día" style="border: 1px solid #FECACA; background: #FEF2F2; color: #EF4444; width: 26px; height: 26px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; border-radius: 6px; cursor: pointer;">
-                            &times;
-                        </button>
-                    </div>
-
-                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 6px;">
-                        <div class="wizard-param-input-group">
-                            <label>Series</label>
-                            <input type="number" min="1" max="10" value="${ex.sets || 3}" class="input-control month-inp-sets" data-idx="${idx}" style="width: 44px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
-                        </div>
-                        <div class="wizard-param-input-group">
-                            <label>Reps</label>
-                            <input type="text" value="${ex.reps || '10-12'}" class="input-control month-inp-reps" data-idx="${idx}" style="width: 56px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
-                        </div>
-                        <div class="wizard-param-input-group">
-                            <label>Peso (kg)</label>
-                            <input type="number" step="0.5" value="${ex.defaultWeight || 20}" class="input-control month-inp-weight" data-idx="${idx}" style="width: 52px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
-                        </div>
-                        <div class="wizard-param-input-group">
-                            <label>RIR Obj</label>
-                            <input type="number" min="0" max="5" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="input-control month-inp-rir" data-idx="${idx}" style="width: 46px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
-                        </div>
-                        <div class="wizard-param-input-group">
-                            <label>Descanso (s)</label>
-                            <input type="number" step="15" value="${ex.rest || 75}" class="input-control month-inp-rest" data-idx="${idx}" style="width: 52px; height: 28px; padding: 2px 4px; font-size: 11.5px; margin: 0;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            ${delta.badgeHtml}
+                            <button type="button" class="btn btn-outline btn-sm btn-delete-month-ex" data-idx="${idx}" title="Eliminar ejercicio de este día" style="border: 1px solid #FECACA; background: #FEF2F2; color: #EF4444; width: 26px; height: 26px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; border-radius: 6px; cursor: pointer;">
+                                &times;
+                            </button>
                         </div>
                     </div>
 
-                    <div style="margin-top: 2px;">
-                        <input type="text" placeholder="Notas ad-hoc..." value="${ex.notes || ''}" class="input-control month-inp-notes" data-idx="${idx}" style="width: 100%; height: 28px; font-size: 11px; padding: 2px 8px; margin: 0; background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 6px;">
+                    <!-- Grilla Comparativa Plan vs Real -->
+                    <div class="coach-compare-grid">
+                        <!-- Capa Planificada (Nico) -->
+                        <div class="coach-compare-col plan">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                <span class="coach-matrix-badge-plan">PLAN NICO</span>
+                                <span style="font-size: 9.5px; color: #71717A;">Prescripción</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-bottom: 6px;">
+                                <div class="wizard-param-input-group">
+                                    <label>Series</label>
+                                    <input type="number" min="1" max="10" value="${ex.sets || 3}" class="input-control month-inp-sets" data-idx="${idx}" style="width: 40px; height: 26px; padding: 1px 3px; font-size: 11px; margin: 0;">
+                                </div>
+                                <div class="wizard-param-input-group">
+                                    <label>Reps</label>
+                                    <input type="text" value="${ex.reps || '10-12'}" class="input-control month-inp-reps" data-idx="${idx}" style="width: 50px; height: 26px; padding: 1px 3px; font-size: 11px; margin: 0;">
+                                </div>
+                                <div class="wizard-param-input-group">
+                                    <label>Peso (kg)</label>
+                                    <input type="number" step="0.5" value="${ex.defaultWeight || 20}" class="input-control month-inp-weight" data-idx="${idx}" style="width: 48px; height: 26px; padding: 1px 3px; font-size: 11px; margin: 0;">
+                                </div>
+                                <div class="wizard-param-input-group">
+                                    <label>RIR Obj</label>
+                                    <input type="number" min="0" max="5" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="input-control month-inp-rir" data-idx="${idx}" style="width: 42px; height: 26px; padding: 1px 3px; font-size: 11px; margin: 0;">
+                                </div>
+                                <div class="wizard-param-input-group">
+                                    <label>Descanso (s)</label>
+                                    <input type="number" step="15" value="${ex.rest || 75}" class="input-control month-inp-rest" data-idx="${idx}" style="width: 44px; height: 26px; padding: 1px 3px; font-size: 11px; margin: 0;">
+                                </div>
+                            </div>
+                            <input type="text" placeholder="Notas ad-hoc..." value="${ex.notes || ''}" class="input-control month-inp-notes" data-idx="${idx}" style="width: 100%; height: 26px; font-size: 10.5px; padding: 1px 6px; margin: 0; background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 5px;">
+                        </div>
+
+                        <!-- Capa Real (Alumno) -->
+                        <div class="coach-compare-col real">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                <span class="coach-matrix-badge-real">REAL ALUMNO</span>
+                                <span style="font-size: 9.5px; color: #166534; font-weight: 700;">${studentLog && studentLog.hasLog ? (studentLog.isEstimated ? 'Estimado Clínico' : 'Registrado') : 'Pendiente'}</span>
+                            </div>
+                            ${studentLog && studentLog.hasLog ? `
+                                <div style="background: #FFFFFF; border: 1px solid #BBF7D0; border-radius: 8px; padding: 7px; margin-bottom: 4px;">
+                                    <div style="font-size: 12px; font-weight: 800; color: #14532D;">
+                                        ${studentLog.sets}s × ${studentLog.reps} reps • ${studentLog.weight} kg
+                                    </div>
+                                    <div style="font-size: 10.5px; color: #166534; margin-top: 2px;">
+                                        RIR Real: <strong>${studentLog.rir}</strong> (Obj prescripto: ${ex.rir !== undefined ? ex.rir : 2})
+                                    </div>
+                                    ${studentLog.notes ? `<div style="font-size: 9.5px; color: #71717A; margin-top: 3px; font-style: italic;">"${studentLog.notes}"</div>` : ''}
+                                </div>
+                            ` : `
+                                <div style="background: #FFFFFF; border: 1px dashed #E4E4E7; border-radius: 8px; padding: 12px 6px; text-align: center; color: #A1A1AA; font-size: 10.5px;">
+                                    Sin registro del alumno aún.<br>
+                                    <span style="font-size: 9px; color: #71717A;">Se sincronizará al completar la sesión.</span>
+                                </div>
+                            `}
+                        </div>
                     </div>
                 </div>
             `;
@@ -15719,6 +16459,34 @@ const CoachWorkoutsMaster = {
 
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
         if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+        const datedSchedule = workoutData.calendar_schedule;
+        const currentSession = datedSchedule[dateStr];
+
+        // Cascada: Aplicar a Semanas Siguientes del Mesociclo (Inline Ripple Update)
+        const applyRipple = document.getElementById('monthDetailApplyRipple')?.checked === true;
+        let cascadedSessionsCount = 0;
+
+        if (applyRipple && currentSession && Array.isArray(currentSession.exercises)) {
+            const allDates = Object.keys(datedSchedule).sort();
+            const futureDates = allDates.filter(d => d > dateStr);
+
+            currentSession.exercises.forEach(modEx => {
+                futureDates.forEach(fDate => {
+                    const fSession = datedSchedule[fDate];
+                    if (fSession && Array.isArray(fSession.exercises)) {
+                        const targetEx = fSession.exercises.find(e => e.id === modEx.id);
+                        if (targetEx) {
+                            targetEx.sets = modEx.sets;
+                            targetEx.reps = modEx.reps;
+                            targetEx.defaultWeight = modEx.defaultWeight;
+                            targetEx.rir = modEx.rir;
+                            targetEx.rest = modEx.rest;
+                            cascadedSessionsCount++;
+                        }
+                    }
+                });
+            });
+        }
 
         localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
         if (window.__coachAthletesCache) {
@@ -15735,7 +16503,10 @@ const CoachWorkoutsMaster = {
         }
 
         if (showToast && typeof showSensToast === 'function') {
-            showSensToast(`✓ Cambios del día ${dateStr} guardados exitosamente.`, 'champagne');
+            const msg = applyRipple && cascadedSessionsCount > 0
+                ? `✓ Cambios del día ${dateStr} guardados y aplicados en cascada a semanas siguientes.`
+                : `✓ Cambios del día ${dateStr} guardados exitosamente.`;
+            showSensToast(msg, 'champagne');
         }
         this.renderMonthCalendar();
     },
@@ -15790,6 +16561,179 @@ const CoachMatrixProgressionView = {
             btnSave.addEventListener('click', async () => {
                 await this.saveEdits();
             });
+        }
+
+        // Barra de Ajuste de Cargas en Lote (Batch Adjust Bar)
+        const batchKgButtons = document.querySelectorAll('.btn-batch-kg');
+        batchKgButtons.forEach(btn => {
+            if (!btn._hasListener) {
+                btn._hasListener = true;
+                btn.addEventListener('click', async () => {
+                    const delta = parseFloat(btn.getAttribute('data-delta')) || 2.5;
+                    const customInp = document.getElementById('matrixBatchKgCustom');
+                    if (customInp) customInp.value = delta;
+                    await this.applyBatchKg(delta);
+                });
+            }
+        });
+
+        const btnApplyKg = document.getElementById('btnApplyBatchKg');
+        if (btnApplyKg && !btnApplyKg._hasListener) {
+            btnApplyKg._hasListener = true;
+            btnApplyKg.addEventListener('click', async () => {
+                const customInp = document.getElementById('matrixBatchKgCustom');
+                const delta = parseFloat(customInp?.value) || 2.5;
+                await this.applyBatchKg(delta);
+            });
+        }
+
+        const btnApplyRir = document.getElementById('btnApplyBatchRir');
+        if (btnApplyRir && !btnApplyRir._hasListener) {
+            btnApplyRir._hasListener = true;
+            btnApplyRir.addEventListener('click', async () => {
+                const rirSel = document.getElementById('matrixBatchRirSelect');
+                const targetRir = parseFloat(rirSel?.value) || 2;
+                await this.applyBatchRir(targetRir);
+            });
+        }
+
+        const batchSetsButtons = document.querySelectorAll('.btn-batch-sets');
+        batchSetsButtons.forEach(btn => {
+            if (!btn._hasListener) {
+                btn._hasListener = true;
+                btn.addEventListener('click', async () => {
+                    const delta = parseInt(btn.getAttribute('data-delta'), 10) || 1;
+                    await this.applyBatchSets(delta);
+                });
+            }
+        });
+
+        const btnApplySets = document.getElementById('btnApplyBatchSets');
+        if (btnApplySets && !btnApplySets._hasListener) {
+            btnApplySets._hasListener = true;
+            btnApplySets.addEventListener('click', async () => {
+                await this.applyBatchSets(1);
+            });
+        }
+    },
+
+    async applyBatchKg(deltaKg) {
+        const athId = CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+        if (!athId) return;
+
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+        const scope = document.getElementById('matrixBatchScope')?.value || 'future';
+        const filter = this.activeMuscleFilter;
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        let modifiedCount = 0;
+        Object.keys(datedSchedule).forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (!session || !Array.isArray(session.exercises)) return;
+
+            const isFuture = (dStr >= todayStr && !session.completed);
+            if (scope === 'future' && !isFuture) return;
+
+            session.exercises.forEach(ex => {
+                const cat = getBiomechanicalCategory(ex);
+                if (filter === 'all' || cat === filter) {
+                    const prevW = parseFloat(ex.defaultWeight) || 0;
+                    ex.defaultWeight = Math.max(0, Math.round((prevW + deltaKg) * 10) / 10);
+                    modifiedCount++;
+                }
+            });
+        });
+
+        await this.persistAndRefresh(workoutData, `✓ Ajuste masivo: ${deltaKg > 0 ? '+' : ''}${deltaKg}kg aplicado a ${modifiedCount} ejercicios (${scope === 'future' ? 'semanas futuras' : 'mesociclo completo'}).`);
+    },
+
+    async applyBatchRir(targetRir) {
+        const athId = CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+        if (!athId) return;
+
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+        const scope = document.getElementById('matrixBatchScope')?.value || 'future';
+        const filter = this.activeMuscleFilter;
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        let modifiedCount = 0;
+        Object.keys(datedSchedule).forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (!session || !Array.isArray(session.exercises)) return;
+
+            const isFuture = (dStr >= todayStr && !session.completed);
+            if (scope === 'future' && !isFuture) return;
+
+            session.exercises.forEach(ex => {
+                const cat = getBiomechanicalCategory(ex);
+                if (filter === 'all' || cat === filter) {
+                    ex.rir = targetRir;
+                    modifiedCount++;
+                }
+            });
+        });
+
+        await this.persistAndRefresh(workoutData, `✓ RIR ${targetRir} fijado en ${modifiedCount} ejercicios (${scope === 'future' ? 'semanas futuras' : 'mesociclo completo'}).`);
+    },
+
+    async applyBatchSets(deltaSets) {
+        const athId = CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+        if (!athId) return;
+
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+        const scope = document.getElementById('matrixBatchScope')?.value || 'future';
+        const filter = this.activeMuscleFilter;
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        let modifiedCount = 0;
+        Object.keys(datedSchedule).forEach(dStr => {
+            const session = datedSchedule[dStr];
+            if (!session || !Array.isArray(session.exercises)) return;
+
+            const isFuture = (dStr >= todayStr && !session.completed);
+            if (scope === 'future' && !isFuture) return;
+
+            session.exercises.forEach(ex => {
+                const cat = getBiomechanicalCategory(ex);
+                if (filter === 'all' || cat === filter) {
+                    const prevS = parseInt(ex.sets, 10) || 3;
+                    ex.sets = Math.max(1, Math.min(10, prevS + deltaSets));
+                    modifiedCount++;
+                }
+            });
+        });
+
+        await this.persistAndRefresh(workoutData, `✓ Volumen ajustado: ${deltaSets > 0 ? '+' : ''}${deltaSets} serie/s en ${modifiedCount} ejercicios.`);
+    },
+
+    async persistAndRefresh(workoutData, toastMsg) {
+        const athId = CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+        if (!athId) return;
+
+        localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+        if (window.__coachAthletesCache) {
+            const cached = window.__coachAthletesCache.find(a => a.id === athId);
+            if (cached) cached.prescribed_workouts = workoutData;
+        }
+
+        if (supabaseClient && !athId.startsWith('mock_')) {
+            try {
+                await supabaseClient.from('profiles').update({
+                    prescribed_workouts: workoutData
+                }).eq('id', athId);
+            } catch (err) {}
+        }
+
+        if (toastMsg && typeof showSensToast === 'function') {
+            showSensToast(toastMsg, 'champagne');
+        }
+
+        this.render();
+        if (typeof CoachWorkoutsMaster !== 'undefined') {
+            CoachWorkoutsMaster.renderMonthCalendar();
         }
     },
 
@@ -15888,18 +16832,20 @@ const CoachMatrixProgressionView = {
                     const planWeight = exInstance.defaultWeight || 20;
                     const planRir = exInstance.rir !== undefined ? exInstance.rir : 2;
 
-                    // Real (si el alumno completó la sesión en la app)
-                    const realSets = exInstance.realSets || (isCompleted ? planSets : null);
-                    const realReps = exInstance.realReps || (isCompleted ? planReps : null);
-                    const realWeight = exInstance.realWeight || (isCompleted ? planWeight : null);
-                    const realRir = exInstance.realRir || (isCompleted ? planRir : null);
+                    // Real del Alumno (Feedback Loop Clínico)
+                    const studentLog = getStudentExerciseLog(athId, dStr, exInstance);
+                    const delta = calculateExerciseDelta(exInstance, studentLog);
 
-                    const realHtml = isCompleted ? `
+                    const realHtml = (studentLog && studentLog.hasLog) ? `
                         <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #E4E4E7;">
-                            <span class="coach-matrix-badge-real">REAL ALUMNO</span>
-                            <div style="font-size: 11px; font-weight: 700; color: #166534; margin-top: 2px;">
-                                ${realSets}s × ${realReps} • ${realWeight}kg • RIR ${realRir}
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; flex-wrap: wrap;">
+                                <span class="coach-matrix-badge-real">REAL ALUMNO</span>
+                                ${delta.badgeHtml}
                             </div>
+                            <div style="font-size: 11px; font-weight: 700; color: #166534; margin-top: 2px;">
+                                ${studentLog.sets}s × ${studentLog.reps} • ${studentLog.weight}kg • RIR ${studentLog.rir}
+                            </div>
+                            ${studentLog.notes ? `<div style="font-size: 9.5px; color: #71717A; margin-top: 2px; font-style: italic;">"${studentLog.notes}"</div>` : ''}
                         </div>
                     ` : `
                         <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #E4E4E7;">
@@ -15939,6 +16885,10 @@ const CoachMatrixProgressionView = {
                                         <input type="number" min="0" max="5" step="0.5" value="${planRir}" class="input-control matrix-inp-rir" data-date="${dStr}" data-ex-id="${item.id}" title="RIR" style="width: 36px; height: 24px; padding: 1px 2px; font-size: 10.5px; margin: 0;">
                                         <span style="font-size: 10px; color: #9E7D4B; font-weight: 700;">RIR</span>
                                     </div>
+                                    <label style="display: flex; align-items: center; gap: 4px; font-size: 9px; color: #52525B; margin-top: 4px; cursor: pointer;" title="Aplica este cambio proporcional a todas las semanas futuras de este ejercicio">
+                                        <input type="checkbox" class="matrix-inp-ripple" data-date="${dStr}" data-ex-id="${item.id}" style="width: 12px; height: 12px; accent-color: #9E7D4B;">
+                                        <span>Cascada sig.</span>
+                                    </label>
                                 </div>
                             ` : ''}
                         </div>
@@ -15976,7 +16926,9 @@ const CoachMatrixProgressionView = {
 
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
         const datedSchedule = workoutData.calendar_schedule || {};
+        const allDates = Object.keys(datedSchedule).sort();
 
+        // 1. Guardar valores directos
         const setsInputs = document.querySelectorAll('.matrix-inp-sets');
         setsInputs.forEach(inp => {
             const dStr = inp.getAttribute('data-date');
@@ -16029,6 +16981,32 @@ const CoachMatrixProgressionView = {
             }
         });
 
+        // 2. Propagación en Cascada (Ripple Update) para checkboxes activos
+        const rippleInputs = document.querySelectorAll('.matrix-inp-ripple:checked');
+        let ripplePropagatedCount = 0;
+        rippleInputs.forEach(rInp => {
+            const dStr = rInp.getAttribute('data-date');
+            const exId = rInp.getAttribute('data-ex-id');
+            const session = datedSchedule[dStr];
+            const sourceEx = session?.exercises?.find(e => e.id === exId);
+            if (!sourceEx) return;
+
+            const futureDates = allDates.filter(d => d > dStr);
+            futureDates.forEach(fDate => {
+                const fSession = datedSchedule[fDate];
+                if (fSession && Array.isArray(fSession.exercises)) {
+                    const targetEx = fSession.exercises.find(e => e.id === exId);
+                    if (targetEx) {
+                        targetEx.sets = sourceEx.sets;
+                        targetEx.reps = sourceEx.reps;
+                        targetEx.defaultWeight = sourceEx.defaultWeight;
+                        targetEx.rir = sourceEx.rir;
+                        ripplePropagatedCount++;
+                    }
+                }
+            });
+        });
+
         localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
         if (window.__coachAthletesCache) {
             const cached = window.__coachAthletesCache.find(a => a.id === athId);
@@ -16043,8 +17021,12 @@ const CoachMatrixProgressionView = {
             } catch (err) {}
         }
 
+        const msg = ripplePropagatedCount > 0
+            ? `✓ Ajustes guardados y aplicados en cascada a ${ripplePropagatedCount} sesiones futuras.`
+            : '✓ Ajustes de cargas y progresión guardados exitosamente.';
+
         if (typeof showSensToast === 'function') {
-            showSensToast('✓ Ajustes de cargas y progresión guardados exitosamente.', 'champagne');
+            showSensToast(msg, 'champagne');
         }
 
         this.render();

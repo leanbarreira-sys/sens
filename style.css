@@ -15995,3 +15995,122 @@ body.in-portal #coachHubView {
     padding: 12px 14px;
     margin-bottom: 10px;
 }
+
+/* 17. Feedback Loop Clínico (Plan vs Real, Delta Δ y Ripple Cascading) */
+.coach-matrix-delta-badge {
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 3px;
+    letter-spacing: 0.2px;
+}
+.coach-matrix-delta-badge.is-exact {
+    background: #F4F4F5;
+    color: #52525B;
+    border: 1px solid #E4E4E7;
+}
+.coach-matrix-delta-badge.is-positive {
+    background: #DCFCE7;
+    color: #15803D;
+    border: 1px solid #86EFAC;
+}
+.coach-matrix-delta-badge.is-warning {
+    background: #FEF3C7;
+    color: #B45309;
+    border: 1px solid #FCD34D;
+}
+.coach-matrix-delta-badge.is-negative {
+    background: #FEE2E2;
+    color: #B91C1C;
+    border: 1px solid #FCA5A5;
+}
+
+/* Micro-indicador de estado en calendario mensual */
+.coach-month-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.coach-month-status-dot.conforme {
+    background: #10B981;
+}
+.coach-month-status-dot.desvio {
+    background: #F59E0B;
+}
+
+/* Modo Selección Múltiple en Calendario */
+.coach-month-day-cell.is-multi-selected {
+    border: 2px solid #9E7D4B !important;
+    background: #FFFDF9 !important;
+    box-shadow: 0 0 0 3px rgba(158, 125, 75, 0.25) !important;
+}
+.coach-month-day-cell .multi-select-check {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    accent-color: #9E7D4B;
+    cursor: pointer;
+    display: none;
+    z-index: 2;
+}
+.coach-month-calendar-grid.is-multi-selecting .coach-month-day-cell .multi-select-check {
+    display: block;
+}
+
+/* Barra flotante de acciones múltiples en calendario */
+.coach-month-multi-bar {
+    background: #18181B;
+    color: #FFFFFF;
+    border-radius: 14px;
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    margin-top: 14px;
+}
+
+/* Barra de Ajuste de Carga en Lote en Visión por Músculo */
+.coach-matrix-batch-bar {
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.12) 0%, rgba(248, 249, 250, 0.95) 100%);
+    border: 1px solid rgba(158, 125, 75, 0.35);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Tabla comparativa Plan vs Real en Detalle del Día */
+.coach-compare-row {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.coach-compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+@media (max-width: 500px) {
+    .coach-compare-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
