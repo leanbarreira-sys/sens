@@ -35,7 +35,14 @@ CREATE POLICY "Profiles: lectura por propietario o admin"
         OR (auth.jwt() ->> 'email') IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean_barreira@hotmail.com', 'lean@sens.com', 'admin@sens.com')
     );
 
--- 3. Habilitar Supabase Realtime para la tabla public.profiles
+-- 3. Columnas de compatibilidad en daily_logs (evitar error 400 en métricas)
+ALTER TABLE public.daily_logs 
+    ADD COLUMN IF NOT EXISTS weight NUMERIC(5,2),
+    ADD COLUMN IF NOT EXISTS steps INTEGER,
+    ADD COLUMN IF NOT EXISTS calories_consumed INTEGER,
+    ADD COLUMN IF NOT EXISTS water_ml INTEGER;
+
+-- 4. Habilitar Supabase Realtime para la tabla public.profiles
 DO $$
 BEGIN
     IF NOT EXISTS (
@@ -49,5 +56,8 @@ EXCEPTION
         NULL;
 END $$;
 
--- 4. Confirmar que RLS esté activo en public.profiles
+-- 5. Confirmar que RLS esté activo en public.profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- 6. Recargar la caché del esquema en PostgREST de forma inmediata
+NOTIFY pgrst, 'reload schema';

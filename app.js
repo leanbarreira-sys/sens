@@ -5497,13 +5497,12 @@ function initDailyTracking() {
                     await supabaseClient.from('daily_logs').upsert({
                         user_id: AppState.user.id,
                         log_date: new Date().toISOString().split('T')[0],
-                        weight,
-                        steps,
-                        calories_consumed: calories,
-                        notes
-                    });
+                        weight_kg: weight,
+                        steps_count: steps,
+                        notes: notes || ''
+                    }, { onConflict: 'user_id,log_date' });
                 } catch (err) {
-                    console.warn('Daily log saved locally');
+                    console.warn('Daily log saved locally:', err);
                 }
             }
 
@@ -16638,9 +16637,13 @@ const CoachWorkoutsMaster = {
                 const { error } = await supabaseClient.from('profiles').update({
                     prescribed_workouts: baseWorkouts
                 }).eq('id', athId);
-                if (error) supabaseError = error;
+                if (error) {
+                    supabaseError = error;
+                    console.error('[SENS Supabase Error] Falló update en profiles.prescribed_workouts:', error);
+                }
             } catch (err) {
                 supabaseError = err;
+                console.error('[SENS Supabase Exception]', err);
             }
         }
 
@@ -16653,20 +16656,33 @@ const CoachWorkoutsMaster = {
 
         if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
 
-        const toastDetail = (mode === 'fill_empty' && preservedCount > 0)
-            ? `✓ Rutina de ${totalWeeks} semanas publicada (${preservedCount} sesiones existentes conservadas).`
-            : (overriddenCount > 0)
-            ? `✓ Rutina de ${totalWeeks} semanas publicada (${overriddenCount} sesiones sobreescritas).`
-            : `✓ Rutina de ${totalWeeks} semanas guardada en Supabase`;
+        if (supabaseError) {
+            const isMissingCol = (supabaseError.code === '42703' || (supabaseError.message && supabaseError.message.includes('prescribed_workouts')));
+            showCoachSaveSuccessBanner({
+                title: `Rutina Guardada Solo en Memoria Local`,
+                body: `Se programaron ${newlyScheduledCount + overriddenCount} sesiones en este dispositivo. <strong>Atención: NO se guardó en Supabase</strong> para el alumno debido a un error de base de datos.`,
+                errorNotice: isMissingCol
+                    ? `<strong>Falta Columna en Supabase:</strong> La tabla <code>profiles</code> no tiene la columna <code>prescribed_workouts</code>.<br><br>👉 <strong>Solución:</strong> En tu panel de Supabase, abrí el <em>SQL Editor</em> y ejecutá el script <code>supabase_coach_prescriptions.sql</code> para crear las columnas y sincronizar con tus alumnos en vivo.`
+                    : `<strong>Error de Supabase:</strong> ${supabaseError.message || JSON.stringify(supabaseError)}`
+            });
+            if (typeof showSensToast === 'function') {
+                showSensToast(`⚠️ Guardada localmente. Error en Supabase: ${isMissingCol ? "falta columna 'prescribed_workouts'" : (supabaseError.message || 'Error de red')}`, 'alert', 7000);
+            }
+        } else {
+            const toastDetail = (mode === 'fill_empty' && preservedCount > 0)
+                ? `✓ Rutina de ${totalWeeks} semanas publicada (${preservedCount} sesiones existentes conservadas).`
+                : (overriddenCount > 0)
+                ? `✓ Rutina de ${totalWeeks} semanas publicada (${overriddenCount} sesiones sobreescritas).`
+                : `✓ Rutina de ${totalWeeks} semanas guardada en Supabase`;
 
-        showCoachSaveSuccessBanner({
-            title: `¡Rutina Masiva de ${totalWeeks} Semanas Publicada!`,
-            body: `Se programaron ${newlyScheduledCount + overriddenCount} sesiones. ${preservedCount > 0 ? `Se respetaron ${preservedCount} sesiones existentes.` : ''} Sincronización en vivo con el alumno.`,
-            errorNotice: supabaseError ? `Aviso de Supabase: ${supabaseError.message || supabaseError}` : null
-        });
+            showCoachSaveSuccessBanner({
+                title: `¡Rutina Masiva de ${totalWeeks} Semanas Publicada!`,
+                body: `Se programaron ${newlyScheduledCount + overriddenCount} sesiones. ${preservedCount > 0 ? `Se respetaron ${preservedCount} sesiones existentes.` : ''} Sincronización en vivo con el alumno exitosa.`
+            });
 
-        if (typeof showSensToast === 'function') {
-            showSensToast(toastDetail, 'champagne');
+            if (typeof showSensToast === 'function') {
+                showSensToast(toastDetail, 'champagne');
+            }
         }
 
         const btnMonth = document.getElementById('btnToggleCoachWorkoutsMonth');
@@ -17308,19 +17324,31 @@ const CoachWorkoutsMaster = {
             if (cached) cached.prescribed_workouts = workoutData;
         }
 
+        let monthSaveError = null;
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                await supabaseClient.from('profiles').update({
+                const { error } = await supabaseClient.from('profiles').update({
                     prescribed_workouts: workoutData
                 }).eq('id', athId);
-            } catch (err) {}
+                if (error) {
+                    monthSaveError = error;
+                    console.error('[SENS] Error al guardar cambios del mes en Supabase profiles:', error);
+                }
+            } catch (err) {
+                monthSaveError = err;
+                console.error('[SENS] Excepción al actualizar Supabase:', err);
+            }
         }
 
         if (showToast && typeof showSensToast === 'function') {
-            const msg = applyRipple && cascadedSessionsCount > 0
-                ? `✓ Cambios del día ${dateStr} guardados y aplicados en cascada a semanas siguientes.`
-                : `✓ Cambios del día ${dateStr} guardados exitosamente.`;
-            showSensToast(msg, 'champagne');
+            if (monthSaveError) {
+                showSensToast(`⚠️ Guardado localmente. Error en Supabase: falta columna 'prescribed_workouts'`, 'alert', 6000);
+            } else {
+                const msg = applyRipple && cascadedSessionsCount > 0
+                    ? `✓ Cambios del día ${dateStr} guardados y aplicados en cascada a semanas siguientes.`
+                    : `✓ Cambios del día ${dateStr} guardados exitosamente.`;
+                showSensToast(msg, 'champagne');
+            }
         }
         this.renderMonthCalendar();
     },
