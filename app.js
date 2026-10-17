@@ -2075,9 +2075,7 @@ function initAuthModal() {
         const email = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPassword').value;
 
-        showAuthAlert('Creando tu cuenta...', 'info');
-
-        const isCoach = (email.toLowerCase() === 'nico@sens.com' || email.toLowerCase() === 'nicomaralle@gmail.com' || email.toLowerCase() === 'lean.barreira@gmail.com');
+        const isCoach = (email.toLowerCase() === 'nico@sens.com' || email.toLowerCase() === 'nicomaralle@gmail.com');
 
         let newUserId = 'local-user-' + Date.now();
 
@@ -2162,7 +2160,7 @@ function initAuthModal() {
             if (typeof renderAthleteBottomSheetList === 'function') renderAthleteBottomSheetList();
         }
 
-        showAuthAlert('¡Cuenta creada con éxito! Ingresando a tu cuenta...', 'success');
+        showAuthAlert('¡Cuenta creada con éxito! Iniciando tu Evaluación Inicial Obligatoria...', 'success');
         updateAuthNavButtons();
         setTimeout(() => {
             showAuthModal(false);
@@ -2618,12 +2616,18 @@ async function checkExistingSession() {
             if (!portalActive && typeof openUserPortal === 'function') {
                 openUserPortal(false);
             } else if (portalActive) {
-                // El portal ya se abrió síncronamente al inicio; actualizamos datos sin reiniciar animaciones
-                renderDashboardData();
+                // El portal ya se abrió síncronamente al inicio; sincronizamos con los datos del perfil
                 const isAdmin = isCurrentUserAdmin();
-                const isPending = Boolean(!isAdmin && AppState.profile && AppState.profile.subscription_status === 'pending_activation');
-                if (isPending) {
-                    switchPortalView('activationPendingView');
+                const isOnboardingDone = Boolean(AppState.profile && AppState.profile.onboarding_completed);
+                if (!isAdmin && !isOnboardingDone) {
+                    startDiagnosisWizard(false);
+                } else {
+                    const isPending = Boolean(!isAdmin && AppState.profile && AppState.profile.subscription_status === 'pending_activation');
+                    if (isPending) {
+                        switchPortalView('activationPendingView');
+                    } else {
+                        renderDashboardData();
+                    }
                 }
             }
         }
@@ -2756,6 +2760,7 @@ function returnToPublicLanding() {
         localStorage.removeItem('sens_active_user');
         localStorage.removeItem('sens_active_profile');
         localStorage.removeItem('sens_active_anamnesis');
+        localStorage.removeItem('sens_onboarding_draft');
         document.documentElement.classList.remove('in-portal-mode');
     } catch (_) {}
     document.body.classList.remove('in-portal');
@@ -2794,7 +2799,8 @@ function switchPortalView(viewId) {
     }
 
     // Bloqueo estricto SOLO si el usuario está explícitamente pendiente de activación por Nico
-    if (isPendingActivation) {
+    // EXCEPCIÓN VITAL: La Evaluación Inicial obligatoria ('onboardingSection') NUNCA se bloquea por estado de pago
+    if (isPendingActivation && viewId !== 'onboardingSection') {
         viewId = 'activationPendingView';
         const subNav = document.getElementById('portalSubNav');
         if (subNav) subNav.style.display = 'none';
@@ -3062,7 +3068,29 @@ function openUserPortal(forceOnboarding = false) {
     if (adminAddBtn) adminAddBtn.style.display = isAdmin ? 'inline-block' : 'none';
 
     // -------------------------------------------------------------------------
-    // CONTROL DE MEMBRESÍA & PAGOS (MVP CON NICO / EG CON PASARELA DE PAGO)
+    // 1. REGLA SUPREMA: EVALUACIÓN INICIAL / ONBOARDING CLÍNICO OBLIGATORIO (MÓDULO 4)
+    // -------------------------------------------------------------------------
+    // Los administradores (Nico Coach) nunca realizan la evaluación de alumno.
+    // Para todos los alumnos/atletas: Si no han completado el diagnóstico inicial (onboarding_completed: false)
+    // o se solicita forzarlo explícitamente (forceOnboarding: true), DEBEN completar la Evaluación Inicial de 8 pasos.
+    // Esto es de cumplimiento OBLIGATORIO antes de cualquier otra pantalla (incluyendo activación y dashboard),
+    // ya que el coach necesita las respuestas de salud, lesiones (PAR-Q) y hábitos para evaluar al atleta.
+    const isOnboardingDone = Boolean(profile && profile.onboarding_completed);
+    const mustDoOnboarding = !isAdmin && (forceOnboarding || !isOnboardingDone);
+
+    if (mustDoOnboarding) {
+        const subNav = document.getElementById('portalSubNav');
+        if (subNav) subNav.style.display = 'none';
+        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+            dock.style.display = 'none';
+        });
+        startDiagnosisWizard(false);
+        window.scrollTo(0, 0);
+        return;
+    }
+
+    // -------------------------------------------------------------------------
+    // 2. CONTROL DE MEMBRESÍA & PAGOS (SOLO TRAS FINALIZAR EL ONBOARDING)
     // -------------------------------------------------------------------------
     // Bloqueo estricto SOLO si el usuario está explícitamente marcado como 'pending_activation'
     // Si el perfil aún no terminó de cargar desde Supabase y no hay perfil en cache, NUNCA asumir 'pending_activation'
@@ -3092,7 +3120,7 @@ function openUserPortal(forceOnboarding = false) {
             const athleteName = encodeURIComponent(profile.full_name || 'Nuevo Atleta');
             const athleteEmail = encodeURIComponent(user.email || '');
             const athletePlan = encodeURIComponent(profile.active_plan_name || 'Plan SENS');
-            notifyWaBtn.href = `https://wa.me/5491136329846?text=Hola%20Nico!%20Cre%C3%A9%20mi%20cuenta%20en%20SENS%20(${athleteName}%20-%20${athleteEmail}).%20Te%20aviso%20para%20confirmar%20mi%20abono%20del%20plan%20${athletePlan}%20y%20activar%20mi%20acceso.`;
+            notifyWaBtn.href = `https://wa.me/5491136329846?text=Hola%20Nico!%20Complet%C3%A9%20mi%20evaluaci%C3%B3n%20en%20SENS%20(${athleteName}%20-%20${athleteEmail}).%20Te%20aviso%20para%20confirmar%20mi%20abono%20del%20plan%20${athletePlan}%20y%20activar%20mi%20acceso.`;
         }
 
         switchPortalView('activationPendingView');
@@ -3100,27 +3128,17 @@ function openUserPortal(forceOnboarding = false) {
         return;
     }
 
-    // Regla de Enrutamiento Onboarding:
-    // 1. Admin (Nico): va directo al dashboard de coach. Nunca se le piden preguntas iniciales de atleta.
-    // 2. Atleta con onboarding completado: va directo al Dashboard con sus rutinas y métricas (NO repite preguntas).
-    // 3. Atleta nuevo o que no finalizó su evaluación: entra a la Evaluación Inicial de Fuerza & Hábitos.
-    const hasProfileLoaded = Boolean(AppState.profile && (AppState.profile.id || AppState.profile.email));
-    const isCompleted = isAdmin || (hasProfileLoaded ? Boolean(profile.onboarding_completed) : true);
+    // -------------------------------------------------------------------------
+    // 3. DASHBOARD PRINCIPAL (O COACH OS SI ES ADMIN)
+    // -------------------------------------------------------------------------
+    document.getElementById('portalSubNav').style.display = 'flex';
+    if (athleteDock) athleteDock.style.display = isAdmin ? 'none' : 'grid';
+    if (coachDock) coachDock.style.display = isAdmin ? 'grid' : 'none';
 
-    if (!isAdmin && (forceOnboarding || (hasProfileLoaded && !isCompleted))) {
-        // Redirige a la Evaluación Inicial
-        document.getElementById('portalSubNav').style.display = 'none';
-        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
-            dock.style.display = 'none';
-        });
-        startDiagnosisWizard(false);
+    if (isAdmin && window._isCoachAdminActive !== false) {
+        switchPortalView('coachHubView');
+        renderCoachAthletesHub();
     } else {
-        // Redirige al Dashboard de Atleta
-        document.getElementById('portalSubNav').style.display = 'flex';
-        const athleteDock = document.getElementById('sensFloatingDock');
-        const coachDock = document.getElementById('sensCoachFloatingDock');
-        if (athleteDock) athleteDock.style.display = 'flex';
-        if (coachDock) coachDock.style.display = 'none';
         renderDashboardData();
         renderWorkoutDay(AppState.currentDay || 'day1');
         switchPortalView('dashView');
@@ -3270,13 +3288,26 @@ function startDiagnosisWizard(isEditMode = false) {
         prefillDiagnosisForm();
         window.diagWizardGoStep(1);
     } else {
-        if (modeBadge) modeBadge.textContent = 'Diagnóstico Inicial';
+        if (modeBadge) modeBadge.textContent = 'Evaluación Inicial Obligatoria';
         if (exitBtn) exitBtn.style.display = 'none';
+
+        // Precargar nombre si está disponible en auth o profile
+        const fullNameInput = document.getElementById('diagFullName');
+        if (fullNameInput && !fullNameInput.value) {
+            const p = AppState.profile || {};
+            const u = AppState.user || {};
+            fullNameInput.value = p.full_name || (u.user_metadata && u.user_metadata.full_name) || (u.email ? u.email.split('@')[0] : '');
+        }
         
         // Intentar restaurar borrador guardado en localStorage
         const hasDraft = restoreDiagnosisDraft();
         if (!hasDraft) {
             window.diagWizardGoStep(0);
+        } else {
+            const targetStep = (AppState.diagnosisDraft && typeof AppState.diagnosisDraft.step === 'number') 
+                ? AppState.diagnosisDraft.step 
+                : 0;
+            window.diagWizardGoStep(targetStep);
         }
     }
 
@@ -5997,7 +6028,7 @@ function initTopbarAvatar() {
     if (goDiag) {
         goDiag.addEventListener('click', () => {
             dropdown.classList.remove('active');
-            switchPortalView('onboardingSection');
+            startDiagnosisWizard(true);
         });
     }
 

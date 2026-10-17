@@ -292,7 +292,7 @@ RETURNS TRIGGER AS $$
 DECLARE
     v_is_admin BOOLEAN;
 BEGIN
-    v_is_admin := (NEW.email IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com'));
+    v_is_admin := (NEW.email IN ('nico@sens.com', 'nicomaralle@gmail.com'));
 
     INSERT INTO public.profiles (
         id, 
