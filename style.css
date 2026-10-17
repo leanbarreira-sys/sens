@@ -7710,7 +7710,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .coach-subpane {
     display: none;
-    animation: fadeInCoach 0.25s ease-out;
 }
 
 .coach-subpane.active {
@@ -8233,17 +8232,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .native-sheet-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(8, 8, 10, 0.82);
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.25s ease;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
     z-index: 9999;
 }
 
 .native-sheet-backdrop.active {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
 }
 
@@ -8263,12 +8262,18 @@ input[type="range"]::-webkit-slider-thumb:hover {
     display: flex;
     flex-direction: column;
     box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.85);
-    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.32s ease;
     overscroll-behavior: contain;
+    visibility: hidden;
+    pointer-events: none;
+    contain: paint layout;
+    will-change: transform;
 }
 
 .native-bottom-sheet.active {
     transform: translate(-50%, 0);
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .sheet-drag-handle-wrap {
@@ -8536,24 +8541,21 @@ input[type="range"]::-webkit-slider-thumb:hover {
     }
 }
 
-/* Estado Base: Oculto para evitar cualquier flash estático antes de que inicie la animación */
+/* Estado Base: Visible permanentemente para evitar flash blanco o desaparición de texto */
 .sens-dash-welcome-question,
 .sens-dash-welcome-slogan {
-    opacity: 0;
-    will-change: opacity, transform, filter;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
 }
 
-/* Paso 1: Aparece primero la pregunta de bienvenida de forma INMEDIATA y rápida (0s delay, 0.44s duration) */
-.sens-dash-welcome-header.play-entrance .sens-dash-welcome-question {
-    animation: sensQuestionEntrance 0.44s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
-}
-
-/* Paso 2: Pausa narrativa de ~500ms tras asentarse la pregunta (0.44s + 0.51s = 0.95s). A 0.95s entra el slogan como respuesta */
+.sens-dash-welcome-header.play-entrance .sens-dash-welcome-question,
 .sens-dash-welcome-header.play-entrance .sens-dash-welcome-slogan {
-    animation: sensSloganAnswerEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+    animation: none !important;
+    opacity: 1 !important;
 }
 
-/* Estado Consolidado al terminar la animación o fallback */
+/* Estado Consolidado */
 .sens-dash-welcome-header.played .sens-dash-welcome-question,
 .sens-dash-welcome-header.played .sens-dash-welcome-slogan {
     opacity: 1 !important;
@@ -14475,7 +14477,6 @@ body.in-portal #coachHubView {
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     margin-top: 8px;
-    animation: coachFadeIn 0.2s ease;
 }
 
 @media (max-width: 768px) {

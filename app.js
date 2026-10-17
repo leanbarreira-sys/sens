@@ -129,20 +129,21 @@ function isCurrentUserAdmin() {
     const user = AppState.user || {};
     const email = (user.email || profile.email || '').toLowerCase().trim();
 
-    // Cuenta de prueba estrictamente no admin (solo cuando NO hay sesión de Coach activa)
-    if (email === 'lean_barreira@hotmail.com') {
-        return false;
-    }
-
     // Administradores y Coaches oficiales SENS (o cualquier usuario con rol admin/coach en Supabase)
     return Boolean(
         profile.role === 'admin' ||
         profile.role === 'coach' ||
+        profile.user_type === 'admin' ||
+        profile.user_type === 'coach' ||
+        user.role === 'admin' ||
+        user.role === 'coach' ||
+        email === 'lean_barreira@hotmail.com' ||
         email === 'lean.barreira@gmail.com' ||
         email === 'nico@sens.com' ||
         email === 'nicomaralle@gmail.com' ||
         email.endsWith('@sens.com') ||
-        email.includes('admin')
+        email.includes('admin') ||
+        email.includes('coach')
     );
 }
 
@@ -2706,7 +2707,7 @@ function returnToPublicLanding() {
     });
 
     updateAuthNavButtons();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
 }
 
 function switchPortalView(viewId) {
@@ -2735,12 +2736,24 @@ function switchPortalView(viewId) {
         });
     } else {
         const subNav = document.getElementById('portalSubNav');
-        const isExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection');
+        const isExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView');
         if (subNav) subNav.style.display = isExcluded ? 'none' : 'flex';
         const athleteDock = document.getElementById('sensFloatingDock');
         const coachDock = document.getElementById('sensCoachFloatingDock');
         const isAdmin = isCurrentUserAdmin();
         document.body.setAttribute('data-active-view', viewId);
+        document.body.classList.toggle('is-admin', isAdmin);
+
+        // Cerrar cualquier bottom sheet o modal activo para que no quede flotando entre vistas
+        const athleteSheet = document.getElementById('athletePickerBottomSheet');
+        const athleteSheetBackdrop = document.getElementById('athleteSheetBackdrop');
+        if (athleteSheet) athleteSheet.classList.remove('active');
+        if (athleteSheetBackdrop) athleteSheetBackdrop.classList.remove('active');
+        const actionsSheet = document.getElementById('coachAthleteActionsBottomSheet');
+        const actionsBackdrop = document.getElementById('coachAthleteActionsBackdrop');
+        if (actionsSheet) actionsSheet.classList.remove('active');
+        if (actionsBackdrop) actionsBackdrop.classList.remove('active');
+        document.body.style.overflow = '';
 
         if (isExcluded) {
             if (athleteDock) athleteDock.style.display = 'none';
@@ -2756,6 +2769,10 @@ function switchPortalView(viewId) {
         }
 
         // Sincronizar toggle superior de versión para el Admin
+        const topbarAdminToggle = document.getElementById('topbarAdminToggle');
+        if (topbarAdminToggle) {
+            topbarAdminToggle.style.display = isAdmin ? 'inline-flex' : 'none';
+        }
         const btnModeApp = document.getElementById('btnModeAppGeneral');
         const btnModeCoach = document.getElementById('btnModeCoachOS');
         if (btnModeApp && btnModeCoach) {
@@ -2804,7 +2821,8 @@ function switchPortalView(viewId) {
         renderProfileSettingsData();
     }
     if (viewId === 'coachHubView') {
-        if (typeof syncCoachMasterCard === 'function') syncCoachMasterCard();
+        if (typeof syncCoachMasterCard === 'function') syncCoachMasterCard(AppState.activeAthleteId);
+        if (typeof renderCoachAthletesHub === 'function') renderCoachAthletesHub();
     } else {
         if (typeof window.stopCoachMarketingStudio === 'function') {
             window.stopCoachMarketingStudio();
@@ -2812,11 +2830,19 @@ function switchPortalView(viewId) {
     }
     if (viewId === 'workoutView') {
         if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
+        if (typeof renderWorkoutDay === 'function') renderWorkoutDay(AppState.currentDay || 'day1');
+    }
+    if (viewId === 'nutritionView') {
+        if (typeof renderNutritionPrescriptionForMember === 'function') {
+            const athId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
+            renderNutritionPrescriptionForMember(athId);
+        }
     }
     if (viewId === 'dashView') {
+        if (typeof renderDashboardData === 'function') renderDashboardData();
         if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
         if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
-        if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation(true);
+        if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation(false);
         if (typeof initDashboardCardsTactileFeedback === 'function') initDashboardCardsTactileFeedback();
     }
 
@@ -2870,6 +2896,16 @@ function openUserPortal(forceOnboarding = false) {
 
     const isAdmin = isCurrentUserAdmin();
     document.body.classList.toggle('is-admin', isAdmin);
+    if (isAdmin) {
+        window._isCoachAdminActive = true;
+        sessionStorage.setItem('sens_coach_admin_active', 'true');
+        if (!window._sensCoachAdminUser && AppState.user && AppState.user.role !== 'user_normal') {
+            window._sensCoachAdminUser = { ...AppState.user };
+        }
+        if (!window._sensCoachAdminProfile && AppState.profile && AppState.profile.role !== 'user_normal') {
+            window._sensCoachAdminProfile = { ...AppState.profile };
+        }
+    }
 
     // Toggle en Topbar para el Admin (Cambiar entre App Alumno y Coach OS)
     const topbarAdminToggle = document.getElementById('topbarAdminToggle');
@@ -2881,8 +2917,16 @@ function openUserPortal(forceOnboarding = false) {
     if (btnModeApp && !btnModeApp._hasListener) {
         btnModeApp._hasListener = true;
         btnModeApp.addEventListener('click', () => {
+            window._isCoachAdminActive = true;
+            sessionStorage.setItem('sens_coach_admin_active', 'true');
+            if (!window._sensCoachAdminUser && AppState.user && AppState.user.role !== 'user_normal') {
+                window._sensCoachAdminUser = { ...AppState.user };
+            }
+            if (!window._sensCoachAdminProfile && AppState.profile && AppState.profile.role !== 'user_normal') {
+                window._sensCoachAdminProfile = { ...AppState.profile };
+            }
             switchPortalView('dashView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.scrollY > 80) window.scrollTo(0, 0);
         });
     }
     if (btnModeCoach && !btnModeCoach._hasListener) {
@@ -2897,11 +2941,14 @@ function openUserPortal(forceOnboarding = false) {
                 AppState.profile = { ...window._sensCoachAdminProfile };
             }
             switchPortalView('coachHubView');
+            const activeSubpane = document.querySelector('#coachHubView .coach-subpane.active');
+            if (!activeSubpane && typeof window.switchCoachSubTab === 'function') {
+                window.switchCoachSubTab('paneAthletes');
+            }
             if (typeof syncCoachMasterCard === 'function') {
                 syncCoachMasterCard(AppState.activeAthleteId);
             }
-            renderCoachAthletesHub();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.scrollY > 80) window.scrollTo(0, 0);
         });
     }
 
@@ -2973,7 +3020,7 @@ function openUserPortal(forceOnboarding = false) {
         }
 
         switchPortalView('activationPendingView');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
         return;
     }
 
@@ -3003,7 +3050,7 @@ function openUserPortal(forceOnboarding = false) {
         switchPortalView('dashView');
     }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
 }
 
 function renderDashboardData() {
@@ -3158,7 +3205,7 @@ function startDiagnosisWizard(isEditMode = false) {
     }
 
     switchPortalView('onboardingSection');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
 }
 
 // =============================================================================
@@ -3460,7 +3507,7 @@ function initDiagnosisWizard() {
                 renderDashboardData();
                 renderWorkoutDay(AppState.currentDay || 'day1');
                 switchPortalView('dashView');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo(0, 0);
             }
         });
     }
@@ -3472,7 +3519,7 @@ function initDiagnosisWizard() {
             document.getElementById('portalSubNav').style.display = 'flex';
             renderDashboardData();
             switchPortalView('dashView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo(0, 0);
         });
     }
 
@@ -3580,7 +3627,7 @@ window.diagWizardGoStep = function(targetStep, toastMsg) {
     }
 
     AppState.diagnosisCurrentStep = targetStep;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
 };
 
 // Auto-avance Fricción Cero en preguntas de opción única (350ms pause)
@@ -5809,7 +5856,7 @@ function initTopbarAvatar() {
             dropdown.classList.remove('active');
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo(0, 0);
         });
     }
 
@@ -5818,7 +5865,7 @@ function initTopbarAvatar() {
         goStore.addEventListener('click', () => {
             dropdown.classList.remove('active');
             switchPortalView('storeView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo(0, 0);
         });
     }
 
@@ -5924,6 +5971,8 @@ function initCoachOS() {
 
     // Conectar todos los disparadores del Bottom Sheet en la app (banner, master card, etc)
     document.querySelectorAll('.btn-trigger-athlete-sheet').forEach(btn => {
+        if (btn._hasSheetTrigger) return;
+        btn._hasSheetTrigger = true;
         btn.addEventListener('click', openAthleteSheet);
     });
     window.openAthleteSheet = openAthleteSheet;
@@ -6293,16 +6342,13 @@ function selectAthleteFromSheet(athId) {
     if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
     if (typeof renderCoachAssignedExercises === 'function') renderCoachAssignedExercises();
 
-    if (athlete.isDb) {
-        applyDatabaseAthlete(athlete);
-    } else {
-        const keyMap = {
-            mock_vip: 'client_presencial_vip',
-            mock_duo: 'client_presencial_group',
-            mock_online_prem: 'client_online_premium',
-            mock_online_basic: 'client_online_basic'
-        };
-        applyUserProfile(keyMap[athlete.id] || athlete.user_type || 'client_presencial_vip');
+    // Sincronizar datos del atleta activo manteniendo intacta la sesión ejecutiva del Coach
+    window._isCoachAdminActive = true;
+    sessionStorage.setItem('sens_coach_admin_active', 'true');
+    AppState.activeAthlete = athlete;
+    AppState.activeAthleteId = athId;
+    if (typeof syncCoachMasterCard === 'function') {
+        syncCoachMasterCard(athId);
     }
 
     // Sincronizar selectores en subpaneles del Hub
@@ -7105,7 +7151,7 @@ function selectAthleteForPrescription(type, athId) {
             loadCoachAthleteWorkouts(athId);
         }
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
 }
 
 function inspectAthleteAsCoach(athId) {
@@ -9303,7 +9349,7 @@ function initMemberClarityActions() {
     const dashQuickWorkoutBtn = document.getElementById('dashQuickWorkoutBtn');
     const handleGoWorkout = () => {
         switchPortalView('workoutView');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
         showSensToast('Abriendo tu sesión pautada para hoy.', 'champagne', 2500);
     };
 
@@ -10226,7 +10272,7 @@ function initWeekStripCalendar() {
     initCalendarSwipeGestures();
     initStickyCalendarWatcher();
     if (document.getElementById('app-container')?.classList.contains('active')) {
-        triggerWelcomeGreetingAnimation(true);
+        triggerWelcomeGreetingAnimation(false);
     }
     initDashboardCardsTactileFeedback();
 
@@ -10242,7 +10288,6 @@ function initWeekStripCalendar() {
         triggerCardSpringAndNavigate(trainingCard, () => {
             switchPortalView('workoutView');
             renderWorkoutDay(dayKey);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     };
     if (startWorkoutBtn) {
@@ -10269,7 +10314,6 @@ function initWeekStripCalendar() {
             AppState.selectedMuscleFilter = 'core_movilidad';
             triggerCardSpringAndNavigate(trainingCard, () => {
                 switchPortalView('workoutView');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
     }
@@ -10280,7 +10324,6 @@ function initWeekStripCalendar() {
     const handleGoNutri = () => {
         triggerCardSpringAndNavigate(nutriCard, () => {
             switchPortalView('nutritionView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     };
     if (nutriCard) {
@@ -10302,7 +10345,6 @@ function initWeekStripCalendar() {
     const handleGoTracking = () => {
         triggerCardSpringAndNavigate(objCard, () => {
             switchPortalView('trackingView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     };
     if (objCard) {
@@ -10324,7 +10366,6 @@ function initWeekStripCalendar() {
     const handleGoBioTracking = () => {
         triggerCardSpringAndNavigate(bioCard, () => {
             switchPortalView('trackingView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     };
     if (bioCard) {
@@ -11176,11 +11217,9 @@ function updateObjectiveCardData(selectedDate = null) {
             if (typeof triggerCardSpringAndNavigate === 'function') {
                 triggerCardSpringAndNavigate(card, () => {
                     switchPortalView('trackingView');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             } else if (typeof switchPortalView === 'function') {
                 switchPortalView('trackingView');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         };
     }
@@ -11266,11 +11305,9 @@ function updateBiometricsCardData(selectedDate = null) {
             if (typeof triggerCardSpringAndNavigate === 'function') {
                 triggerCardSpringAndNavigate(card, () => {
                     switchPortalView('trackingView');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             } else if (typeof switchPortalView === 'function') {
                 switchPortalView('trackingView');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         };
     }
@@ -11363,7 +11400,7 @@ function initFloatingDock() {
             const targetTab = item.getAttribute('data-dock-tab');
             if (targetTab) {
                 switchPortalView(targetTab);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
             }
         });
     });
@@ -11374,6 +11411,8 @@ function initFloatingDock() {
  */
 function initCoachAthletePickerTriggers() {
     document.querySelectorAll('.btn-trigger-athlete-sheet').forEach(btn => {
+        if (btn._hasSheetTrigger) return;
+        btn._hasSheetTrigger = true;
         btn.addEventListener('click', (e) => {
             if (!isCurrentUserAdmin()) {
                 e.preventDefault();
@@ -11382,15 +11421,8 @@ function initCoachAthletePickerTriggers() {
             }
             e.preventDefault();
             e.stopPropagation();
-            const bottomSheet = document.getElementById('athletePickerBottomSheet');
-            const sheetBackdrop = document.getElementById('athleteSheetBackdrop');
-            if (bottomSheet && sheetBackdrop) {
-                bottomSheet.classList.add('active');
-                sheetBackdrop.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                if (typeof renderAthleteBottomSheetList === 'function') {
-                    renderAthleteBottomSheetList();
-                }
+            if (typeof window.openAthleteSheet === 'function') {
+                window.openAthleteSheet();
             }
         });
     });
@@ -15862,7 +15894,7 @@ const CoachWorkoutsMaster = {
 
         const wrap = document.getElementById('coachWorkoutsWizardView');
         if (wrap) {
-            window.scrollTo({ top: wrap.offsetTop - 80, behavior: 'smooth' });
+            window.scrollTo(0, Math.max(0, wrap.offsetTop - 80));
         }
     },
 
@@ -17469,7 +17501,7 @@ const CoachEvolutionEngine = {
             btnViewEvo.addEventListener('click', () => {
                 if (typeof window.switchCoachSubTab === 'function') {
                     window.switchCoachSubTab('paneEvolution');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo(0, 0);
                 }
             });
         }
