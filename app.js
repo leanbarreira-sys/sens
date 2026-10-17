@@ -14426,6 +14426,14 @@ const CoachMultiDayActionsManager = {
             btnDelete.addEventListener('click', () => this.executeDelete());
         }
 
+        const btnDeleteSessions = document.getElementById('btnExecuteMultiDeleteSessions');
+        if (btnDeleteSessions && !btnDeleteSessions._hasListener) {
+            btnDeleteSessions._hasListener = true;
+            btnDeleteSessions.addEventListener('click', async () => {
+                await this.executeDeleteAllSessionsInDates();
+            });
+        }
+
         const btnKg = document.getElementById('btnMultiApplyKg');
         if (btnKg && !btnKg._hasListener) {
             btnKg._hasListener = true;
@@ -14649,6 +14657,31 @@ const CoachMultiDayActionsManager = {
 
         if (typeof showSensToast === 'function') {
             showSensToast(`✓ Se eliminó el ejercicio de ${deletedCount} sesiones.`, 'champagne');
+        }
+        this.refreshViews();
+    },
+
+    async executeDeleteAllSessionsInDates() {
+        if (!this.selectedDates || this.selectedDates.length === 0) return;
+
+        const athId = this.activeAthleteId;
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        const datedSchedule = workoutData.calendar_schedule || {};
+
+        let clearedCount = 0;
+        this.selectedDates.forEach(dStr => {
+            if (datedSchedule[dStr]) {
+                delete datedSchedule[dStr];
+                clearedCount++;
+            }
+        });
+
+        workoutData.calendar_schedule = datedSchedule;
+        await this.persistWorkoutData(workoutData);
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Se vaciaron las sesiones de los ${clearedCount} días seleccionados (descanso).`, 'champagne');
         }
         this.refreshViews();
     },
@@ -15798,6 +15831,115 @@ const CoachWorkoutsMaster = {
         }
 
         const selectedDays = this.daysConfig.filter(d => d.selected);
+        const totalWeeks = this.replicateWeeks || 4;
+        const baseWorkouts = getCoachAthleteWorkoutData(athId) || {};
+        const calendarDatedWorkouts = baseWorkouts.calendar_schedule || {};
+
+        // Detección de solapamiento con sesiones existentes
+        const conflictingDates = [];
+        for (let w = 0; w < totalWeeks; w++) {
+            selectedDays.forEach(day => {
+                const draft = this.wizardDraft[day.dateStr];
+                if (draft && draft.exercises && draft.exercises.length > 0) {
+                    const scheduledDate = new Date(day.dateObj);
+                    scheduledDate.setDate(scheduledDate.getDate() + (w * 7));
+                    const schDateStr = scheduledDate.toISOString().split('T')[0];
+
+                    const existing = calendarDatedWorkouts[schDateStr];
+                    if (existing && Array.isArray(existing.exercises) && existing.exercises.length > 0) {
+                        conflictingDates.push({
+                            dateStr: schDateStr,
+                            dayOfWeek: day.dayOfWeek,
+                            title: existing.title || 'Entrenamiento existente',
+                            exCount: existing.exercises.length,
+                            completed: Boolean(existing.completed)
+                        });
+                    }
+                }
+            });
+        }
+
+        if (conflictingDates.length > 0) {
+            this.openConflictResolutionModal(conflictingDates);
+            return;
+        }
+
+        // Sin conflicto, proceder directamente
+        await this.publishMassRoutineWithMode('overwrite');
+    },
+
+    openConflictResolutionModal(conflictingDates) {
+        const modal = document.getElementById('modalCoachMassPublishConflict');
+        const summaryTitle = document.getElementById('conflictModalSummaryTitle');
+        const listContainer = document.getElementById('conflictDatesListContainer');
+        const btnClose = document.getElementById('btnCloseConflictModal');
+        const btnOverwrite = document.getElementById('btnConflictOverwrite');
+        const btnKeepExisting = document.getElementById('btnConflictKeepExisting');
+        const btnCancel = document.getElementById('btnConflictCancel');
+
+        if (!modal) {
+            this.publishMassRoutineWithMode('overwrite');
+            return;
+        }
+
+        if (summaryTitle) {
+            summaryTitle.textContent = `Se detectaron ${conflictingDates.length} ${conflictingDates.length === 1 ? 'día con entrenamiento previo' : 'días con entrenamientos previos'}`;
+        }
+
+        if (listContainer) {
+            let listHtml = '';
+            conflictingDates.forEach(c => {
+                listHtml += `
+                    <div class="conflict-date-row">
+                        <div>
+                            <strong>${c.dateStr}</strong> • <span style="color: #71717A;">${c.title} (${c.exCount} ej)</span>
+                        </div>
+                        <span class="conflict-date-badge ${c.completed ? 'is-completed' : ''}">
+                            ${c.completed ? 'Completado por Alumno' : 'Programado'}
+                        </span>
+                    </div>
+                `;
+            });
+            listContainer.innerHTML = listHtml;
+        }
+
+        const closeConflictModal = () => {
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        };
+
+        if (btnClose && !btnClose._hasConflictListener) {
+            btnClose._hasConflictListener = true;
+            btnClose.addEventListener('click', closeConflictModal);
+        }
+        if (btnCancel && !btnCancel._hasConflictListener) {
+            btnCancel._hasConflictListener = true;
+            btnCancel.addEventListener('click', closeConflictModal);
+        }
+
+        if (btnOverwrite) {
+            btnOverwrite.onclick = async () => {
+                closeConflictModal();
+                await this.publishMassRoutineWithMode('overwrite');
+            };
+        }
+
+        if (btnKeepExisting) {
+            btnKeepExisting.onclick = async () => {
+                closeConflictModal();
+                await this.publishMassRoutineWithMode('fill_empty');
+            };
+        }
+
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+    },
+
+    async publishMassRoutineWithMode(mode = 'overwrite') {
+        const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
+        if (!athId) return;
+
+        const selectedDays = this.daysConfig.filter(d => d.selected);
         const hasOverload = document.getElementById('wizardCheckOverload')?.checked !== false;
         const totalWeeks = this.replicateWeeks || 4;
 
@@ -15819,6 +15961,10 @@ const CoachWorkoutsMaster = {
             }
         });
 
+        let overriddenCount = 0;
+        let preservedCount = 0;
+        let newlyScheduledCount = 0;
+
         // Replicación a N semanas en el calendario fechado
         for (let w = 0; w < totalWeeks; w++) {
             const isDeloadWeek = (hasOverload && totalWeeks > 2 && w === totalWeeks - 1);
@@ -15830,6 +15976,15 @@ const CoachWorkoutsMaster = {
                     const scheduledDate = new Date(day.dateObj);
                     scheduledDate.setDate(scheduledDate.getDate() + (w * 7));
                     const schDateStr = scheduledDate.toISOString().split('T')[0];
+
+                    const existingSession = calendarDatedWorkouts[schDateStr];
+                    const hasExisting = Boolean(existingSession && Array.isArray(existingSession.exercises) && existingSession.exercises.length > 0);
+
+                    // Si se eligió 'fill_empty' y ya hay entrenamiento en esa fecha, se conserva intacto
+                    if (mode === 'fill_empty' && hasExisting) {
+                        preservedCount++;
+                        return;
+                    }
 
                     const weekExercises = JSON.parse(JSON.stringify(draft.exercises));
                     if (isDeloadWeek) {
@@ -15847,14 +16002,22 @@ const CoachWorkoutsMaster = {
                         });
                     }
 
+                    const isCompleted = existingSession && existingSession.completed;
+
                     calendarDatedWorkouts[schDateStr] = {
                         dateStr: schDateStr,
                         dayOfWeek: day.dayOfWeek,
                         title: `${day.muscles.join(' + ') || 'Rutina Semanal'}${isDeloadWeek ? ' (Descarga)' : ''}`,
                         modality: day.modality || 'presencial',
-                        completed: false,
+                        completed: isCompleted || false,
                         exercises: weekExercises
                     };
+
+                    if (hasExisting) {
+                        overriddenCount++;
+                    } else {
+                        newlyScheduledCount++;
+                    }
                 }
             });
         }
@@ -15891,14 +16054,20 @@ const CoachWorkoutsMaster = {
 
         if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
 
+        const toastDetail = (mode === 'fill_empty' && preservedCount > 0)
+            ? `✓ Rutina de ${totalWeeks} semanas publicada (${preservedCount} sesiones existentes conservadas).`
+            : (overriddenCount > 0)
+            ? `✓ Rutina de ${totalWeeks} semanas publicada (${overriddenCount} sesiones sobreescritas).`
+            : `✓ Rutina de ${totalWeeks} semanas guardada en Supabase`;
+
         showCoachSaveSuccessBanner({
             title: `¡Rutina Masiva de ${totalWeeks} Semanas Publicada!`,
-            body: `Se programaron todas las sesiones desde hoy hacia adelante con sobrecarga progresiva pautada y sincronización en vivo.`,
+            body: `Se programaron ${newlyScheduledCount + overriddenCount} sesiones. ${preservedCount > 0 ? `Se respetaron ${preservedCount} sesiones existentes.` : ''} Sincronización en vivo con el alumno.`,
             errorNotice: supabaseError ? `Aviso de Supabase: ${supabaseError.message || supabaseError}` : null
         });
 
         if (typeof showSensToast === 'function') {
-            showSensToast(`✓ Rutina de ${totalWeeks} semanas guardada en Supabase`, 'champagne');
+            showSensToast(toastDetail, 'champagne');
         }
 
         const btnMonth = document.getElementById('btnToggleCoachWorkoutsMonth');
@@ -15912,6 +16081,7 @@ const CoachWorkoutsMaster = {
         const btnPrev = document.getElementById('btnCoachMonthPrev');
         const btnNext = document.getElementById('btnCoachMonthNext');
         const btnSaveEdits = document.getElementById('btnSaveMonthDayEdits');
+        const btnDeleteWholeDay = document.getElementById('btnDeleteWholeMonthSession');
         const btnAddEx = document.getElementById('btnAddExerciseToMonthDay');
         const filterStrip = document.getElementById('coachMonthMuscleFilterStrip');
         const btnMultiToggle = document.getElementById('btnCoachMonthMultiSelectToggle');
@@ -15947,6 +16117,49 @@ const CoachWorkoutsMaster = {
             btnSaveEdits._hasListener = true;
             btnSaveEdits.addEventListener('click', async () => {
                 await this.saveActiveMonthDayEdits();
+            });
+        }
+
+        if (btnDeleteWholeDay && !btnDeleteWholeDay._hasListener) {
+            btnDeleteWholeDay._hasListener = true;
+            btnDeleteWholeDay.addEventListener('click', async () => {
+                const dateStr = this.selectedCalendarDateStr;
+                if (!dateStr) return;
+
+                const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
+                if (!athId) return;
+
+                const workoutData = getCoachAthleteWorkoutData(athId) || {};
+                const datedSchedule = workoutData.calendar_schedule || {};
+
+                if (!datedSchedule[dateStr] || !datedSchedule[dateStr].exercises || datedSchedule[dateStr].exercises.length === 0) {
+                    if (typeof showSensToast === 'function') showSensToast('Este día ya está libre.', 'info');
+                    return;
+                }
+
+                delete datedSchedule[dateStr];
+                workoutData.calendar_schedule = datedSchedule;
+
+                localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+                if (window.__coachAthletesCache) {
+                    const cached = window.__coachAthletesCache.find(a => a.id === athId);
+                    if (cached) cached.prescribed_workouts = workoutData;
+                }
+
+                if (supabaseClient && !athId.startsWith('mock_')) {
+                    try {
+                        await supabaseClient.from('profiles').update({
+                            prescribed_workouts: workoutData
+                        }).eq('id', athId);
+                    } catch (err) {}
+                }
+
+                if (typeof showSensToast === 'function') {
+                    showSensToast(`✓ Sesión del ${dateStr} eliminada. Marcado como descanso.`, 'champagne');
+                }
+
+                this.renderMonthCalendar();
+                this.renderMonthDayDetail(dateStr);
             });
         }
 

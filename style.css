@@ -16114,3 +16114,33 @@ body.in-portal #coachHubView {
     }
 }
 
+/* Modal de Resolución de Conflicto de Planificación Masiva */
+.conflict-date-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 11.5px;
+}
+.conflict-date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    color: #92400E;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+}
+.conflict-date-badge.is-completed {
+    background: #DCFCE7;
+    border-color: #86EFAC;
+    color: #166534;
+}
+
+
