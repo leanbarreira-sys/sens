@@ -2402,6 +2402,12 @@ async function loadProfileFromSupabase(userId) {
                 if (AppState.user) {
                     localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
                 }
+                if (data.prescribed_workouts && typeof data.prescribed_workouts === 'object') {
+                    localStorage.setItem(`sens_prescribed_workouts_${userId}`, JSON.stringify(data.prescribed_workouts));
+                }
+                if (data.prescribed_nutrition && typeof data.prescribed_nutrition === 'object') {
+                    localStorage.setItem(`sens_prescribed_nutrition_${userId}`, JSON.stringify(data.prescribed_nutrition));
+                }
             } catch (_) {}
             const emailKey = (AppState.user && AppState.user.email) ? AppState.user.email : '';
             if (emailKey) {
@@ -2476,6 +2482,58 @@ async function loadProfileFromSupabase(userId) {
     }
 }
 
+function setupRealtimeProfileSubscription(userId) {
+    if (!supabaseClient || !userId || String(userId).startsWith('mock_')) return;
+
+    if (window._sensRealtimeProfileChannel) {
+        try { supabaseClient.removeChannel(window._sensRealtimeProfileChannel); } catch (_) {}
+        window._sensRealtimeProfileChannel = null;
+    }
+
+    try {
+        window._sensRealtimeProfileChannel = supabaseClient
+            .channel(`profile-realtime-${userId}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'profiles',
+                    filter: `id=eq.${userId}`
+                },
+                (payload) => {
+                    console.log('[SENS Realtime] Actualización en perfil recibida:', payload);
+                    if (payload && payload.new) {
+                        const updated = payload.new;
+                        AppState.profile = { ...AppState.profile, ...updated };
+                        try {
+                            localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+                            if (updated.prescribed_workouts && typeof updated.prescribed_workouts === 'object') {
+                                localStorage.setItem(`sens_prescribed_workouts_${userId}`, JSON.stringify(updated.prescribed_workouts));
+                            }
+                            if (updated.prescribed_nutrition && typeof updated.prescribed_nutrition === 'object') {
+                                localStorage.setItem(`sens_prescribed_nutrition_${userId}`, JSON.stringify(updated.prescribed_nutrition));
+                            }
+                        } catch (_) {}
+
+                        if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
+                        if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
+                        if (typeof renderWorkoutDay === 'function') renderWorkoutDay(AppState.currentDay || 'day1');
+                        if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
+                        if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
+                        if (typeof renderDashboardData === 'function') renderDashboardData();
+                        if (typeof syncMemberNutritionPrescription === 'function') syncMemberNutritionPrescription(userId, updated.prescribed_nutrition);
+
+                        showSensToast('Tu plan fue actualizado por Nico en tiempo real.', 'champagne', 4000);
+                    }
+                }
+            )
+            .subscribe();
+    } catch (e) {
+        console.warn('[SENS Realtime] Error al inicializar suscripción:', e);
+    }
+}
+
 async function checkExistingSession() {
     if (supabaseClient) {
         try {
@@ -2487,6 +2545,9 @@ async function checkExistingSession() {
                 } catch (_) {}
                 await loadProfileFromSupabase(session.user.id);
                 updateAuthNavButtons();
+                if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
+                if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
+                setupRealtimeProfileSubscription(session.user.id);
                 console.log('[SENS] Sesión activa de Supabase detectada:', session.user.email);
             }
         } catch (e) {
@@ -2510,11 +2571,18 @@ async function checkExistingSession() {
                     } catch (_) {}
                     await loadProfileFromSupabase(session.user.id);
                     updateAuthNavButtons();
+                    if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
+                    if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
+                    setupRealtimeProfileSubscription(session.user.id);
                 }
             } else if (event === 'SIGNED_OUT') {
                 AppState.user = null;
                 AppState.profile = null;
                 AppState.anamnesis = null;
+                if (window._sensRealtimeProfileChannel && supabaseClient) {
+                    try { supabaseClient.removeChannel(window._sensRealtimeProfileChannel); } catch (_) {}
+                    window._sensRealtimeProfileChannel = null;
+                }
                 try {
                     localStorage.removeItem('sens_active_user');
                     localStorage.removeItem('sens_active_profile');
@@ -2522,6 +2590,8 @@ async function checkExistingSession() {
                     localStorage.removeItem('sens_in_portal');
                 } catch (_) {}
                 updateAuthNavButtons();
+                if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
+                if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
             }
         });
     } else {
@@ -4573,19 +4643,44 @@ function formatMuscleGroup(key) {
 
 function athleteHasAssignedRoutine(athId) {
     if (!athId) return false;
-    // Si Coach guardó una prescripción en localStorage para este alumno
+
+    // 1. Revisar en AppState.profile.prescribed_workouts (descargado de Supabase para el alumno activo)
+    const profileWorkouts = AppState.profile?.prescribed_workouts;
+    if (profileWorkouts && typeof profileWorkouts === 'object') {
+        const hasExercises = Object.values(profileWorkouts).some(
+            day => day && Array.isArray(day.exercises) && day.exercises.length > 0
+        );
+        if (hasExercises) return true;
+    }
+
+    // 2. Si está en cache de atletas de Coach OS
+    if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object') {
+            const hasExercises = Object.values(cached.prescribed_workouts).some(
+                day => day && Array.isArray(day.exercises) && day.exercises.length > 0
+            );
+            if (hasExercises) return true;
+        }
+    }
+
+    // 3. Revisar en localStorage (cache offline)
     const raw = localStorage.getItem(`sens_prescribed_workouts_${athId}`);
     if (raw) {
         try {
             const data = JSON.parse(raw);
-            const hasEx = Object.values(data).some(d => d && Array.isArray(d.exercises) && d.exercises.length > 0);
-            if (hasEx) return true;
+            const hasExercises = Object.values(data).some(
+                day => day && Array.isArray(day.exercises) && day.exercises.length > 0
+            );
+            if (hasExercises) return true;
         } catch (e) {}
     }
-    // Perfiles demostrativos preasignados
+
+    // 4. Perfiles demostrativos preasignados
     if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
         return true;
     }
+
     return false;
 }
 
@@ -5534,6 +5629,7 @@ function renderProfileSettingsData() {
     const profile = AppState.profile || {};
     const user = AppState.user || {};
     const anamnesis = AppState.anamnesis || {};
+    const isAdmin = isCurrentUserAdmin();
 
     const nameEl = document.getElementById('settingsProfileName');
     const emailEl = document.getElementById('settingsProfileEmail');
@@ -5541,12 +5637,27 @@ function renderProfileSettingsData() {
     const subBadge = document.getElementById('settingsSubBadge');
     const diagTagsContainer = document.getElementById('settingsDiagTags');
 
-    if (nameEl) nameEl.textContent = profile.full_name || 'Atleta SENS';
-    if (emailEl) emailEl.textContent = user.email || profile.email || 'atleta@sens.com';
-    if (planEl) planEl.textContent = profile.active_plan_name || 'Presencial 1 a 1 VIP (CABA)';
+    const realEmail = user.email || profile.email || '';
+    let realName = profile.full_name || (user.user_metadata && user.user_metadata.full_name) || '';
+    if (!realName && realEmail) {
+        const localPart = realEmail.split('@')[0];
+        realName = localPart.charAt(0).toUpperCase() + localPart.slice(1);
+    }
+    if (!realName) realName = isAdmin ? 'Nico Coach' : 'Atleta SENS';
+
+    let realPlan = '';
+    if (isAdmin) {
+        realPlan = 'Coach & Director SENS (Coach OS)';
+    } else {
+        realPlan = profile.active_plan_name || 'Plan Personalizado SENS';
+    }
+
+    if (nameEl) nameEl.textContent = realName;
+    if (emailEl) emailEl.textContent = realEmail || 'Sin email registrado';
+    if (planEl) planEl.textContent = realPlan;
 
     if (subBadge) {
-        const isAct = (profile.subscription_status === 'active' || isCurrentUserAdmin());
+        const isAct = (profile.subscription_status === 'active' || isAdmin);
         subBadge.textContent = isAct ? 'Membresía Activa' : 'Validación Pendiente';
         subBadge.style.background = isAct ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
         subBadge.style.color = isAct ? '#10B981' : '#F59E0B';
@@ -5835,6 +5946,7 @@ function initTopbarAvatar() {
 
     avatarBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        syncAvatarData();
         dropdown.classList.toggle('active');
     });
 
@@ -5886,15 +5998,48 @@ function initTopbarAvatar() {
     }
 
     function syncAvatarData() {
-        let fullName = (AppState.profile && AppState.profile.full_name) || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name);
-        const email = (AppState.user && AppState.user.email) || '';
-        if (!fullName && email) {
+        const isAdmin = isCurrentUserAdmin();
+        const user = AppState.user;
+        const profile = AppState.profile;
+
+        // 1. Resolver Email Real
+        let email = '';
+        if (user && user.email) {
+            email = user.email;
+        } else if (profile && profile.email) {
+            email = profile.email;
+        }
+
+        // Si estamos en modo de inspección activa de un alumno por el coach
+        const inspectionBanner = document.getElementById('coachInspectionBanner');
+        const isInspecting = Boolean(inspectionBanner && inspectionBanner.style.display !== 'none');
+
+        // 2. Resolver Nombre Real
+        let fullName = '';
+        if (isAdmin && !isInspecting) {
+            fullName = 'Nico Coach';
+        } else if (profile && profile.full_name && !profile.full_name.includes('Mock') && profile.full_name !== 'Alumno SENS') {
+            fullName = profile.full_name;
+        } else if (user && user.user_metadata && user.user_metadata.full_name) {
+            fullName = user.user_metadata.full_name;
+        } else if (email) {
             const localPart = email.split('@')[0];
             fullName = localPart.charAt(0).toUpperCase() + localPart.slice(1);
+        } else {
+            fullName = 'Mi Perfil SENS';
         }
-        if (!fullName) fullName = 'Alumno SENS';
-        const plan = (AppState.profile && AppState.profile.active_plan_name) || 'Plan SENS';
 
+        // 3. Resolver Plan
+        let plan = '';
+        if (isAdmin && !isInspecting) {
+            plan = 'Coach OS • Director';
+        } else if (profile && profile.active_plan_name) {
+            plan = profile.active_plan_name;
+        } else {
+            plan = 'Plan Personalizado';
+        }
+
+        // 4. Iniciales
         const cleanStr = fullName.replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
         const parts = cleanStr.split(/\s+/).filter(Boolean);
         let initials = parts[0] ? parts[0][0].toUpperCase() : 'S';
@@ -5904,8 +6049,13 @@ function initTopbarAvatar() {
 
         if (initialsEl) initialsEl.textContent = initials;
         if (nameEl) nameEl.textContent = fullName;
-        if (emailEl) emailEl.textContent = email || 'atleta@sens.com';
+        if (emailEl) emailEl.textContent = email || 'Sesión no iniciada';
         if (planEl) planEl.textContent = plan;
+
+        const coachItem = document.getElementById('dropdownGoCoachOS');
+        if (coachItem) {
+            coachItem.style.display = isAdmin ? 'flex' : 'none';
+        }
     }
 
     syncAvatarData();
@@ -7924,17 +8074,22 @@ function loadCoachAthleteWorkouts(athId) {
 }
 
 function getCoachAthleteWorkoutData(athId) {
-    // 1. Si está en cache de atletas de Coach OS
+    // 1. Si es el alumno activo en su portal y tiene los datos en su perfil de Supabase
+    if (AppState.profile && AppState.profile.prescribed_workouts && typeof AppState.profile.prescribed_workouts === 'object') {
+        if (!isCurrentUserAdmin() || AppState.profile.id === athId) {
+            const pw = AppState.profile.prescribed_workouts;
+            if (Object.keys(pw).length > 0) {
+                return pw;
+            }
+        }
+    }
+
+    // 2. Si está en cache de atletas de Coach OS
     if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
         const cached = window.__coachAthletesCache.find(a => a.id === athId);
         if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object') {
             return cached.prescribed_workouts;
         }
-    }
-
-    // 2. Si es el alumno activo en su portal y tiene los datos en su perfil de Supabase
-    if (AppState.profile && AppState.profile.id === athId && AppState.profile.prescribed_workouts) {
-        return AppState.profile.prescribed_workouts;
     }
 
     // 3. Revisar en localStorage por si se guardó recientemente
@@ -9384,12 +9539,20 @@ function initMemberClarityActions() {
     syncMemberNutritionPrescription(currentAthId);
 }
 
+window.renderNutritionPrescriptionForMember = function(athId) {
+    const targetId = athId || getActiveAthleteId();
+    syncMemberNutritionPrescription(targetId);
+};
+
 function syncMemberNutritionPrescription(athId, forcedData = null) {
     let data = forcedData;
     if (!data) {
-        if (AppState.profile && AppState.profile.id === athId && AppState.profile.prescribed_nutrition) {
-            data = AppState.profile.prescribed_nutrition;
-        } else if (window.__coachAthletesCache) {
+        if (AppState.profile && AppState.profile.prescribed_nutrition && typeof AppState.profile.prescribed_nutrition === 'object') {
+            if (!isCurrentUserAdmin() || AppState.profile.id === athId) {
+                data = AppState.profile.prescribed_nutrition;
+            }
+        }
+        if (!data && window.__coachAthletesCache) {
             const cached = window.__coachAthletesCache.find(a => a.id === athId);
             if (cached && cached.prescribed_nutrition) data = cached.prescribed_nutrition;
         }
@@ -9404,13 +9567,21 @@ function syncMemberNutritionPrescription(athId, forcedData = null) {
     if (!data) {
         if (!athId.startsWith('mock_') && athId !== 'usr-vip-001' && athId !== 'usr-onl-003') {
             data = {
-                target_calories: null,
-                directive_note: 'Pendiente de prescripción por Nico.',
+                target_calories: 2000,
+                target_protein: 150,
+                target_carbs: 200,
+                target_fats: 65,
+                target_water: 2.5,
+                directive_note: 'Pauta en preparación por Nico. Priorizá hidratación constante y alimentos de alta densidad nutricional.',
                 prescribed_foods: []
             };
         } else {
             data = {
                 target_calories: 2200,
+                target_protein: 160,
+                target_carbs: 220,
+                target_fats: 70,
+                target_water: 2.5,
                 directive_note: 'Priorizá llegar a tu meta de proteína diaria repartida en las comidas principales y mantener hidratación constante antes de entrenar.',
                 prescribed_foods: [
                     { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', grams: 200, cal: 330, protein: 62 },
@@ -9422,6 +9593,7 @@ function syncMemberNutritionPrescription(athId, forcedData = null) {
         }
     }
 
+    // 1. Elementos de Pauta del Entrenador
     const kcalEl = document.getElementById('nutriPrescribedKcal');
     const noteEl = document.getElementById('nutriPrescribedCoachNote');
     const foodsGrid = document.getElementById('nutriPrescribedFoodsGrid');
@@ -9434,6 +9606,27 @@ function syncMemberNutritionPrescription(athId, forcedData = null) {
         }
     }
     if (noteEl && data.directive_note) noteEl.textContent = `"${data.directive_note}"`;
+
+    // 2. Elementos del Hero de Nutrición (Samsung Health Target)
+    const targetKcalEl = document.getElementById('nutriTargetKcal');
+    const optimalRangeEl = document.getElementById('nutriOptimalRangeText');
+    const maxKcalLabel = document.getElementById('nutriMaxKcalLabel');
+    const carbsGramsEl = document.getElementById('nutriCarbsGrams');
+    const fatsGramsEl = document.getElementById('nutriFatsGrams');
+    const protGramsEl = document.getElementById('nutriProtGrams');
+
+    const targetKcal = data.target_calories || 2000;
+    const targetProt = data.target_protein || 150;
+    const targetCarbs = data.target_carbs || 200;
+    const targetFats = data.target_fats || 65;
+
+    if (targetKcalEl) targetKcalEl.textContent = `${targetKcal.toLocaleString('es-AR')} kcal`;
+    if (optimalRangeEl) optimalRangeEl.textContent = `${Math.round(targetKcal * 0.9).toLocaleString('es-AR')} - ${Math.round(targetKcal * 1.1).toLocaleString('es-AR')}`;
+    if (maxKcalLabel) maxKcalLabel.textContent = `${Math.round(targetKcal * 1.3).toLocaleString('es-AR')}`;
+
+    if (carbsGramsEl) carbsGramsEl.innerHTML = `${targetCarbs}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+    if (fatsGramsEl) fatsGramsEl.innerHTML = `${targetFats}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+    if (protGramsEl) protGramsEl.innerHTML = `${targetProt}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
 
     if (foodsGrid && Array.isArray(data.prescribed_foods)) {
         if (data.prescribed_foods.length === 0) {

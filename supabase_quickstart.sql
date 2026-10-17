@@ -31,7 +31,7 @@ CREATE POLICY "Permitir lectura para todos" ON public.sens_exercise_library
 DROP POLICY IF EXISTS "Permitir escritura solo para admin" ON public.sens_exercise_library;
 CREATE POLICY "Permitir escritura solo para admin" ON public.sens_exercise_library
     FOR ALL USING (
-        auth.jwt() ->> 'email' IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com')
+        auth.jwt() ->> 'email' IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean_barreira@hotmail.com', 'lean@sens.com', 'admin@sens.com')
         OR auth.jwt() ->> 'role' = 'service_role'
     );
 
@@ -39,7 +39,7 @@ CREATE POLICY "Permitir escritura solo para admin" ON public.sens_exercise_libra
 CREATE OR REPLACE FUNCTION public.is_admin() RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
-        auth.jwt() ->> 'email' IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com')
+        auth.jwt() ->> 'email' IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean_barreira@hotmail.com', 'lean@sens.com', 'admin@sens.com')
         OR auth.jwt() ->> 'role' = 'service_role'
         OR EXISTS (
             SELECT 1 FROM public.profiles 
@@ -56,7 +56,7 @@ RETURNS TRIGGER AS $$
 DECLARE
     v_is_admin BOOLEAN;
 BEGIN
-    v_is_admin := (NEW.email IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com'));
+    v_is_admin := (NEW.email IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean_barreira@hotmail.com', 'lean@sens.com', 'admin@sens.com'));
 
     INSERT INTO public.profiles (
         id, 
@@ -94,4 +94,4 @@ CREATE TRIGGER on_auth_user_created
 -- 4. PROMOVER A ADMIN CUALQUIER PERFIL YA EXISTENTE DE NICO O LEAN
 UPDATE public.profiles
 SET role = 'admin', user_type = 'admin', subscription_status = 'active'
-WHERE email IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com');
+WHERE email IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean_barreira@hotmail.com', 'lean@sens.com', 'admin@sens.com');

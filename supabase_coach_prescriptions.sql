@@ -18,7 +18,12 @@ CREATE POLICY "Profiles: escritura por propietario o admin"
     USING (
         auth.uid() = id 
         OR public.is_admin()
-        OR (auth.jwt() ->> 'email') IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com')
+        OR (auth.jwt() ->> 'email') IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean_barreira@hotmail.com', 'lean@sens.com', 'admin@sens.com')
+    )
+    WITH CHECK (
+        auth.uid() = id 
+        OR public.is_admin()
+        OR (auth.jwt() ->> 'email') IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean_barreira@hotmail.com', 'lean@sens.com', 'admin@sens.com')
     );
 
 DROP POLICY IF EXISTS "Profiles: lectura por propietario o admin" ON public.profiles;
@@ -27,8 +32,22 @@ CREATE POLICY "Profiles: lectura por propietario o admin"
     USING (
         auth.uid() = id 
         OR public.is_admin()
-        OR (auth.jwt() ->> 'email') IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com')
+        OR (auth.jwt() ->> 'email') IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean_barreira@hotmail.com', 'lean@sens.com', 'admin@sens.com')
     );
 
--- 3. Confirmar que RLS esté activo en public.profiles
+-- 3. Habilitar Supabase Realtime para la tabla public.profiles
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' AND tablename = 'profiles'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END $$;
+
+-- 4. Confirmar que RLS esté activo en public.profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
