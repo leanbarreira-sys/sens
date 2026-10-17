@@ -15664,32 +15664,37 @@ const CoachWorkoutsMaster = {
             dayLabelEl.textContent = activeDay.label;
         }
 
-        // Render Day switch pills con estado completo / incompleto
+        // Render Day switch pills con estado completo / incompleto (Compactas, responsivas, 0 overflow)
         if (pillsStrip) {
             let pillsHtml = '';
+            const shortDayMap = {
+                'lunes': 'LUN',
+                'martes': 'MAR',
+                'miércoles': 'MIÉ',
+                'miercoles': 'MIÉ',
+                'jueves': 'JUE',
+                'viernes': 'VIE',
+                'sábado': 'SÁB',
+                'sabado': 'SÁB',
+                'domingo': 'DOM'
+            };
+
             selectedDays.forEach((d, idx) => {
                 const isActive = idx === this.step3ActiveDayIndex;
                 const draft = this.wizardDraft[d.dateStr];
                 const count = (draft && draft.exercises) ? draft.exercises.length : 0;
                 const isComplete = count > 0;
-                
-                let pillClass = 'btn btn-sm ';
-                let pillStyle = 'font-size: 11px; padding: 5px 12px; border-radius: 20px; white-space: nowrap; cursor: pointer; transition: all 0.2s ease;';
-                
-                if (isActive) {
-                    pillStyle += ' background: #9E7D4B; color: #FFFFFF; border: 1.5px solid #9E7D4B; font-weight: 700; box-shadow: 0 2px 8px rgba(158,125,75,0.3);';
-                } else if (isComplete) {
-                    pillClass += 'wizard-day-pill-complete ';
-                    pillStyle += ' background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; font-weight: 600;';
-                } else {
-                    pillClass += 'wizard-day-pill-incomplete ';
-                    pillStyle += ' background: #FFFBEB; color: #B45309; border: 1.5px solid #FCD34D; font-weight: 600;';
-                }
-                
-                const countLabel = isComplete ? `${count} ej ✓` : `0 ej (Incompleto)`;
+                const dayKey = (d.dayOfWeek || '').toLowerCase().trim();
+                const shortName = shortDayMap[dayKey] || (d.dayOfWeek ? d.dayOfWeek.substring(0, 3).toUpperCase() : `DÍA ${idx + 1}`);
+                const countLabel = isComplete ? `${count} ej ✓` : `• 0 ej`;
+
                 pillsHtml += `
-                    <button type="button" class="${pillClass}" data-day-index="${idx}" style="${pillStyle}">
-                        ${d.dayOfWeek}: ${countLabel}
+                    <button type="button" 
+                        class="wizard-day-pill-btn ${isActive ? 'active' : ''} ${isComplete ? 'is-complete' : 'is-incomplete'}" 
+                        data-day-index="${idx}"
+                        title="${d.dayOfWeek} (${d.label}): ${count} ejercicios asignados">
+                        <span class="pill-day-name">${shortName}</span>
+                        <span class="pill-day-count">${countLabel}</span>
                     </button>
                 `;
             });
@@ -15697,43 +15702,68 @@ const CoachWorkoutsMaster = {
 
             pillsStrip.querySelectorAll('button[data-day-index]').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    this.step3ActiveDayIndex = parseInt(btn.getAttribute('data-day-index'), 10);
-                    this.step3MuscleSubFilter = 'all';
+                    const newIdx = parseInt(btn.getAttribute('data-day-index'), 10);
+                    if (this.step3ActiveDayIndex === newIdx) return;
+                    this.step3ActiveDayIndex = newIdx;
+                    this.step3MuscleSubFilter = 'day_muscles';
                     this.renderStep3();
                 });
             });
         }
 
-        // Render Sub-filtros de músculo para días multi-músculo
+        // Render Sub-filtros de músculo para el catálogo (siempre visible con acceso a todo el catálogo)
         const filterStrip = document.getElementById('wizardCatalogMuscleFilterStrip');
         if (filterStrip) {
             const dayMuscles = activeDay.muscles || [];
-            if (dayMuscles.length > 1 && !dayMuscles.includes('Full Body / Hipertrofia Global')) {
-                let stripHtml = `<button type="button" class="coach-muscle-filter-chip ${this.step3MuscleSubFilter === 'all' ? 'active' : ''}" data-muscle-sub="all">Todos del día</button>`;
-                dayMuscles.forEach(m => {
-                    const isSubActive = (this.step3MuscleSubFilter === m);
-                    stripHtml += `<button type="button" class="coach-muscle-filter-chip ${isSubActive ? 'active' : ''}" data-muscle-sub="${m}">${m}</button>`;
-                });
-                stripHtml += `<button type="button" class="coach-muscle-filter-chip ${this.step3MuscleSubFilter === 'catalog_all' ? 'active' : ''}" data-muscle-sub="catalog_all">Ver Todo el Catálogo</button>`;
-                filterStrip.innerHTML = stripHtml;
-                filterStrip.style.display = 'flex';
-
-                filterStrip.querySelectorAll('[data-muscle-sub]').forEach(chip => {
-                    chip.addEventListener('click', () => {
-                        this.step3MuscleSubFilter = chip.getAttribute('data-muscle-sub');
-                        filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(c => c.classList.remove('active'));
-                        chip.classList.add('active');
-                        this.renderStep3Catalog(activeDay);
-                    });
-                });
-            } else {
-                filterStrip.innerHTML = '';
-                filterStrip.style.display = 'none';
+            if (!this.step3MuscleSubFilter) {
+                this.step3MuscleSubFilter = 'day_muscles';
             }
+
+            const categories = [
+                { id: 'day_muscles', label: dayMuscles.length > 0 ? `Día: ${dayMuscles.join(' + ')}` : 'Músculos del Día' },
+                { id: 'catalog_all', label: 'Ver Todo el Catálogo' },
+                { id: 'piernas', label: 'Piernas' },
+                { id: 'pecho', label: 'Pecho' },
+                { id: 'espalda', label: 'Espalda' },
+                { id: 'hombros', label: 'Hombros' },
+                { id: 'brazos', label: 'Brazos' },
+                { id: 'core', label: 'Core & Movilidad' }
+            ];
+
+            let stripHtml = '';
+            categories.forEach(cat => {
+                const isSubActive = (this.step3MuscleSubFilter === cat.id);
+                stripHtml += `<button type="button" class="coach-muscle-filter-chip ${isSubActive ? 'active' : ''}" data-muscle-sub="${cat.id}">${cat.label}</button>`;
+            });
+            filterStrip.innerHTML = stripHtml;
+            filterStrip.style.display = 'flex';
+
+            filterStrip.querySelectorAll('[data-muscle-sub]').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    this.step3MuscleSubFilter = chip.getAttribute('data-muscle-sub');
+                    filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    this.renderStep3Catalog(activeDay);
+                });
+            });
         }
 
         this.renderStep3Catalog(activeDay);
         this.renderStep3Worktable(activeDay);
+    },
+
+    getPosterForExercise(ex) {
+        if (!ex) return 'img/pilar-1-tecnica.jpg';
+        if (ex.poster_url) return ex.poster_url;
+        if (ex.thumbnail) return ex.thumbnail;
+        const thumb = this.getThumbnail(ex);
+        if (thumb) return thumb;
+
+        const cat = (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : (ex.category || 'fuerza')).toLowerCase();
+        if (cat === 'piernas') return 'img/pilar-1-tecnica.jpg';
+        if (cat === 'pecho' || cat === 'brazos') return 'img/pilar-2-vitalidad.jpg';
+        if (cat === 'espalda' || cat === 'hombros') return 'img/pilar-3-movilidad.jpg';
+        return 'img/pilar-4-adherencia.jpg';
     },
 
     renderStep3Catalog(activeDay) {
@@ -15745,36 +15775,46 @@ const CoachWorkoutsMaster = {
             : (typeof EXERCISE_CATALOG !== 'undefined' ? EXERCISE_CATALOG : []);
 
         const dayMuscles = activeDay.muscles || [];
-        const query = this.searchFilter.toLowerCase().trim();
-        const subFilter = this.step3MuscleSubFilter || 'all';
+        const rawQuery = (this.searchFilter || '').trim();
+        const normQuery = rawQuery.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const subFilter = this.step3MuscleSubFilter || 'day_muscles';
 
         const filtered = sourceLib.filter(ex => {
-            const nameMatch = !query || ex.name.toLowerCase().includes(query) || (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(query));
-            if (!nameMatch) return false;
+            const nameNorm = (ex.name || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const muscleNorm = (ex.primary_muscle || ex.muscle_group || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const catNorm = (ex.category || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const patternNorm = (ex.pattern || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-            if (subFilter === 'catalog_all') return true;
-
-            const exBioCat = getBiomechanicalCategory(ex);
-
-            if (subFilter !== 'all') {
-                const targetSub = subFilter.toLowerCase();
-                if (targetSub.includes('bíceps') || targetSub.includes('biceps') || targetSub.includes('tríceps') || targetSub.includes('triceps')) {
-                    return exBioCat === 'brazos';
-                }
-                if (targetSub.includes('pierna')) return exBioCat === 'piernas';
-                if (targetSub.includes('espalda')) return exBioCat === 'espalda';
-                if (targetSub.includes('pecho')) return exBioCat === 'pecho';
-                if (targetSub.includes('hombro')) return exBioCat === 'hombros';
-                if (targetSub.includes('core')) return exBioCat === 'core';
+            // 1. Si hay texto en el buscador, búsqueda global en todo el catálogo sin trabas de día
+            if (normQuery.length > 0) {
+                return nameNorm.includes(normQuery) || 
+                       muscleNorm.includes(normQuery) || 
+                       catNorm.includes(normQuery) || 
+                       patternNorm.includes(normQuery);
             }
 
+            // 2. Si no hay texto, aplicar el chip activo
+            if (subFilter === 'catalog_all') return true;
+
+            const exBioCat = (typeof getBiomechanicalCategory === 'function') 
+                ? getBiomechanicalCategory(ex) 
+                : (ex.category || 'core').toLowerCase();
+
+            if (subFilter === 'piernas') return exBioCat === 'piernas';
+            if (subFilter === 'pecho') return exBioCat === 'pecho';
+            if (subFilter === 'espalda') return exBioCat === 'espalda';
+            if (subFilter === 'hombros') return exBioCat === 'hombros';
+            if (subFilter === 'brazos') return exBioCat === 'brazos';
+            if (subFilter === 'core') return exBioCat === 'core';
+
+            // Por defecto: 'day_muscles' (músculos de la sesión elegidos en Paso 2)
             if (dayMuscles.length === 0 || dayMuscles.includes('Full Body / Hipertrofia Global')) {
                 return true;
             }
 
             for (const dm of dayMuscles) {
                 const dmL = dm.toLowerCase();
-                if ((dmL.includes('bíceps') || dmL.includes('biceps') || dmL.includes('tríceps') || dmL.includes('triceps')) && exBioCat === 'brazos') return true;
+                if ((dmL.includes('bíceps') || dmL.includes('biceps') || dmL.includes('tríceps') || dmL.includes('triceps') || dmL.includes('brazo')) && exBioCat === 'brazos') return true;
                 if (dmL.includes('pierna') && exBioCat === 'piernas') return true;
                 if (dmL.includes('espalda') && exBioCat === 'espalda') return true;
                 if (dmL.includes('pecho') && exBioCat === 'pecho') return true;
@@ -15788,26 +15828,25 @@ const CoachWorkoutsMaster = {
         const assignedIds = new Set((activeDraft.exercises || []).map(e => e.id));
 
         if (filtered.length === 0) {
-            grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #71717A; font-size: 12px; background: #FFFFFF; border-radius: 12px; border: 1px dashed #E4E4E7;">No se encontraron ejercicios con este filtro. Probá limpiar la búsqueda o cambiar el grupo muscular.</div>`;
+            grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #71717A; font-size: 12px; background: #FFFFFF; border-radius: 12px; border: 1px dashed #E4E4E7;">No se encontraron ejercicios con este filtro. Probá limpiar la búsqueda o seleccionar otro grupo muscular en las pastillas de arriba.</div>`;
             return;
         }
 
-        // Se renderizan TODOS los ejercicios sin truncar arbitrariamente
         let html = '';
         filtered.forEach(ex => {
             const isAdded = assignedIds.has(ex.id);
-            const thumb = this.getThumbnail(ex);
+            const posterSrc = this.getPosterForExercise(ex);
             const videoSrc = (ex.video || ex.video_url || '').trim();
-            const muscleTag = getBiomechanicalCategory(ex).toUpperCase();
+            const muscleTag = (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : (ex.category || 'fuerza')).toUpperCase();
 
             html += `
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
                     ${videoSrc ? `
-                        <video autoplay muted loop playsinline class="wizard-feed-video-bg">
+                        <video muted loop playsinline preload="none" poster="${posterSrc}" class="wizard-feed-video-bg">
                             <source src="${videoSrc}" type="video/mp4">
                         </video>
-                    ` : (thumb ? `
-                        <img src="${thumb}" alt="${ex.name}" class="wizard-feed-video-bg" loading="lazy">
+                    ` : (posterSrc ? `
+                        <img src="${posterSrc}" alt="${ex.name}" class="wizard-feed-video-bg" loading="lazy">
                     ` : `
                         <div class="wizard-feed-video-placeholder"></div>
                     `)}
@@ -15817,8 +15856,8 @@ const CoachWorkoutsMaster = {
                         <span class="pill" style="font-size: 8px; font-weight: 700; background: rgba(18, 18, 20, 0.85); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); padding: 2px 6px;">${ex.sets || 3}x${ex.reps || '10-12'}</span>
                     </div>
                     <div class="wizard-feed-content">
-                        <h4 class="wizard-feed-title" title="${ex.name}">${ex.name}</h4>
-                        <div class="wizard-feed-meta">
+                        <h4 class="wizard-feed-title" title="${ex.name}" style="color: #FFFFFF !important; font-size: 11.5px !important; font-weight: 800 !important; line-height: 1.25 !important; margin: 0 0 3px 0 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85) !important;">${ex.name}</h4>
+                        <div class="wizard-feed-meta" style="color: #E4E4E7 !important; font-size: 9.5px !important; text-shadow: 0 1px 3px rgba(0,0,0,0.9) !important; font-weight: 500;">
                             <span>${ex.rest || 90}s descanso</span>
                         </div>
                         <button type="button" class="wizard-feed-add-btn btn-wizard-add-ex ${isAdded ? 'added' : 'not-added'}" data-ex-id="${ex.id}">
@@ -15831,6 +15870,50 @@ const CoachWorkoutsMaster = {
 
         grid.innerHTML = html;
 
+        // Optimization: IntersectionObserver to play ONLY videos that are actively visible (max 2 decoders concurrently)
+        if (this._step3VideoObserver) {
+            try { this._step3VideoObserver.disconnect(); } catch (e) {}
+            this._step3VideoObserver = null;
+        }
+
+        if ('IntersectionObserver' in window) {
+            this._step3VideoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+                        const playPromise = video.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(() => {});
+                        }
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, {
+                root: grid,
+                threshold: [0, 0.4]
+            });
+
+            grid.querySelectorAll('video.wizard-feed-video-bg').forEach(v => {
+                this._step3VideoObserver.observe(v);
+            });
+        }
+
+        // Desktop hover preview support
+        grid.querySelectorAll('.wizard-feed-ex-card').forEach(card => {
+            const vid = card.querySelector('video.wizard-feed-video-bg');
+            if (vid) {
+                card.addEventListener('mouseenter', () => {
+                    const p = vid.play();
+                    if (p !== undefined) p.catch(() => {});
+                });
+                card.addEventListener('mouseleave', () => {
+                    if (!this._step3VideoObserver) vid.pause();
+                });
+            }
+        });
+
+        // Click handler for "+ Agregar" (updates in-place without rebuilding DOM)
         grid.querySelectorAll('.btn-wizard-add-ex').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -15955,8 +16038,13 @@ const CoachWorkoutsMaster = {
         list.querySelectorAll('.btn-remove-row-ex').forEach(btn => {
             btn.addEventListener('click', () => {
                 const idx = parseInt(btn.getAttribute('data-idx'), 10);
+                const removedEx = exercises[idx];
                 exercises.splice(idx, 1);
-                this.renderStep3();
+                if (removedEx && removedEx.id) {
+                    this.updateCardAddedState(removedEx.id, false);
+                }
+                this.renderStep3Worktable(activeDay);
+                this.updateStep3DayPillsCounts();
             });
         });
     },
@@ -15998,8 +16086,57 @@ const CoachWorkoutsMaster = {
             poster_url: exObj.poster_url || exObj.thumbnail || ''
         });
 
-        this.renderStep3();
+        // In-place UI updates without reloading the video feed
+        this.updateCardAddedState(exObj.id, true);
+        this.renderStep3Worktable(activeDay);
+        this.updateStep3DayPillsCounts();
+
         if (typeof showSensToast === 'function') showSensToast(`+ ${exObj.name} agregado`, 'champagne');
+    },
+
+    updateCardAddedState(exId, isAdded) {
+        const grid = document.getElementById('wizardExCardsGrid');
+        if (!grid) return;
+        const card = grid.querySelector(`.wizard-feed-ex-card[data-ex-id="${exId}"]`);
+        if (!card) return;
+        const btn = card.querySelector('.btn-wizard-add-ex');
+        if (isAdded) {
+            card.classList.add('is-added');
+            if (btn) {
+                btn.classList.remove('not-added');
+                btn.classList.add('added');
+                btn.textContent = '✓ Agregado';
+            }
+        } else {
+            card.classList.remove('is-added');
+            if (btn) {
+                btn.classList.remove('added');
+                btn.classList.add('not-added');
+                btn.textContent = '+ Agregar';
+            }
+        }
+    },
+
+    updateStep3DayPillsCounts() {
+        const selectedDays = this.daysConfig.filter(d => d.selected);
+        const pillsStrip = document.getElementById('wizardStep3DayPillsStrip');
+        if (!pillsStrip) return;
+
+        selectedDays.forEach((d, idx) => {
+            const btn = pillsStrip.querySelector(`button[data-day-index="${idx}"]`);
+            if (!btn) return;
+            const draft = this.wizardDraft[d.dateStr];
+            const count = (draft && draft.exercises) ? draft.exercises.length : 0;
+            const isComplete = count > 0;
+
+            btn.classList.remove('is-complete', 'is-incomplete');
+            btn.classList.add(isComplete ? 'is-complete' : 'is-incomplete');
+
+            const countEl = btn.querySelector('.pill-day-count');
+            if (countEl) {
+                countEl.textContent = isComplete ? `${count} ej ✓` : '• 0 ej';
+            }
+        });
     },
 
     bindStepButtons() {

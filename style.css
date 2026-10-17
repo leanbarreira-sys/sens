@@ -15322,7 +15322,7 @@ body.in-portal #coachHubView {
 .coach-surface-card-light h1,
 .coach-surface-card-light h2,
 .coach-surface-card-light h3,
-.coach-surface-card-light h4 {
+.coach-surface-card-light h4:not(.wizard-feed-title) {
     color: #121214 !important;
 }
 
@@ -15752,43 +15752,53 @@ body.in-portal #coachHubView {
 
 /* 8. Paso 3: Catálogo Biomecánico Estilo Feed Vertical 2 Columnas (Mercado Libre / Temu mini) */
 .wizard-ex-grid-feed {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
     max-height: 520px;
     overflow-y: auto;
-    padding: 2px;
+    padding: 6px 4px 16px 4px !important;
     scrollbar-width: thin;
     scrollbar-color: #CBD5E1 transparent;
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box !important;
 }
 
 @media (min-width: 768px) {
     .wizard-ex-grid-feed {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 16px !important;
     }
 }
 
 .wizard-feed-ex-card {
-    background: #121214;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 14px;
-    overflow: hidden;
+    background: #121214 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
     cursor: pointer;
     position: relative;
-    aspect-ratio: 4 / 5;
     min-height: 220px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    isolation: isolate;
 }
 
 .wizard-feed-ex-card:hover {
-    border-color: #E5CBA7;
+    border-color: #E5CBA7 !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+}
+
+.wizard-feed-ex-card.is-added {
+    border-color: rgba(16, 185, 129, 0.7) !important;
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3) !important;
 }
 
 .wizard-feed-video-bg {
@@ -15836,10 +15846,14 @@ body.in-portal #coachHubView {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
+    background: transparent !important;
 }
 
-.wizard-feed-title {
+.wizard-feed-title,
+.coach-surface-card-light .wizard-feed-title,
+#coachWorkoutsWizardView .wizard-feed-title,
+.wizard-feed-content h4 {
     font-size: 11.5px !important;
     font-weight: 800 !important;
     color: #FFFFFF !important;
@@ -15849,19 +15863,21 @@ body.in-portal #coachHubView {
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.85) !important;
 }
 
-.wizard-feed-meta {
+.wizard-feed-meta,
+.coach-surface-card-light .wizard-feed-meta,
+#coachWorkoutsWizardView .wizard-feed-meta {
     font-size: 9.5px !important;
-    color: #D4D4D8 !important;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+    color: #E4E4E7 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
     font-weight: 500;
 }
 
 .wizard-feed-add-btn {
     width: 100%;
-    padding: 6px 10px;
+    padding: 7px 10px;
     border-radius: 8px;
     font-size: 11px;
     font-weight: 800;
@@ -15889,6 +15905,129 @@ body.in-portal #coachHubView {
     background: rgba(16, 185, 129, 0.25) !important;
     color: #10B981 !important;
     border: 1px solid #10B981 !important;
+}
+
+/* Day switch pills in Step 3 */
+#wizardStep3DayPillsStrip {
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 4px 2px 8px 2px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#wizardStep3DayPillsStrip::-webkit-scrollbar {
+    display: none;
+}
+
+.wizard-day-pill-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 7px 14px !important;
+    border-radius: 20px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: #F4F4F5 !important;
+    color: #52525B !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.wizard-day-pill-btn .pill-day-name {
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+}
+
+.wizard-day-pill-btn .pill-day-count {
+    font-size: 10px !important;
+    opacity: 0.9 !important;
+}
+
+.wizard-day-pill-btn.is-incomplete {
+    background: #FFFBEB !important;
+    color: #B45309 !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.wizard-day-pill-btn.is-complete {
+    background: #ECFDF5 !important;
+    color: #047857 !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.wizard-day-pill-btn.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    border: 1.5px solid #E5CBA7 !important;
+    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.25) !important;
+}
+
+.wizard-day-pill-btn.active .pill-day-name {
+    color: #E5CBA7 !important;
+}
+
+.wizard-day-pill-btn.active.is-complete .pill-day-count {
+    color: #34D399 !important;
+}
+
+.wizard-day-pill-btn.active.is-incomplete .pill-day-count {
+    color: #FBBF24 !important;
+}
+
+/* Category filter strip */
+#wizardCatalogMuscleFilterStrip {
+    display: flex !important;
+    gap: 6px !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 2px 2px 10px 2px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#wizardCatalogMuscleFilterStrip::-webkit-scrollbar {
+    display: none;
+}
+
+.coach-muscle-filter-chip {
+    padding: 5px 12px !important;
+    border-radius: 16px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    border: 1px solid #E4E4E7 !important;
+    background: #FFFFFF !important;
+    color: #52525B !important;
+    transition: all 0.15s ease !important;
+}
+
+.coach-muscle-filter-chip:hover {
+    border-color: #9E7D4B !important;
+    color: #121214 !important;
+}
+
+.coach-muscle-filter-chip.active {
+    background: #121214 !important;
+    color: #E5CBA7 !important;
+    border-color: #E5CBA7 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* 9. Barra Masiva de Series / Reps / Descanso & Inputs de Alta Legibilidad */
