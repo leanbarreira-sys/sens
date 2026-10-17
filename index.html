@@ -3816,23 +3816,19 @@
                  ===================================================================== -->
             <section class="portal-view" id="coachHubView">
                 <div class="coach-hub-header">
-                    <div class="coach-hub-header-left">
-                        <div class="coach-hub-badge-row">
-                            <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; letter-spacing: 0.5px;">COACH OS</span>
-                            <span class="pill" id="coachPendingCountBadge"
-                                style="font-size: 10px; font-weight: 700; color: #F59E0B; background: rgba(245, 158, 11, 0.15); border: none;">0
-                                Pendientes</span>
-                            <span class="pill" id="coachActiveCountBadge"
-                                style="font-size: 10px; font-weight: 700; color: #10B981; background: rgba(16, 185, 129, 0.15); border: none;">0
-                                Activos</span>
-                        </div>
+                    <div class="coach-hub-badge-row">
+                        <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;">COACH OS</span>
+                        <span class="pill" id="coachPendingCountBadge"
+                            style="font-size: 9.5px; font-weight: 700; color: #D97706; background: rgba(245, 158, 11, 0.12); border: none;">0 Pendientes</span>
+                        <span class="pill" id="coachActiveCountBadge"
+                            style="font-size: 9.5px; font-weight: 700; color: #059669; background: rgba(16, 185, 129, 0.12); border: none;">0 Activos</span>
+                    </div>
+                    <div class="coach-hub-title-row">
                         <h2 class="coach-hub-title">
                             Centro de Mando <span class="text-champagne">Coach Nico</span>
                         </h2>
-                    </div>
-                    <div class="coach-hub-header-right">
                         <button type="button" class="btn-coach-refresh-circle" id="btnCoachHubRefreshTable" title="Actualizar lista" aria-label="Actualizar">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
                         </button>
                     </div>
                 </div>
@@ -3845,11 +3841,10 @@
                             <span class="status-dot status-dot-active" id="coachMasterStatusDot"></span>
                         </div>
                         <div class="coach-active-athlete-info">
-                            <div class="coach-active-athlete-topline">
-                                <span class="coach-active-athlete-eyebrow">EN EDICIÓN ACTIVA</span>
-                                <span class="pill pill-champagne" id="coachMasterPlanBadge">ALUMNO SENS</span>
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <h3 class="coach-active-athlete-name" id="coachMasterName">Seleccionar Alumno</h3>
+                                <span class="pill" id="coachMasterPlanBadge">ALUMNO SENS</span>
                             </div>
-                            <h3 class="coach-active-athlete-name" id="coachMasterName">Seleccionar Alumno</h3>
                             <div class="coach-active-athlete-sub" id="coachMasterSub">
                                 <span id="coachMasterEmail">alumno@sens.com</span> • <span id="coachMasterGoal">Meta: Recomposición &amp; Fuerza</span>
                             </div>
@@ -3858,22 +3853,20 @@
                     <div class="coach-active-athlete-actions">
                         <button type="button" class="btn-coach-action-pill btn-trigger-athlete-sheet"
                             id="btnCoachMasterChangeAthlete" aria-label="Cambiar alumno">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                 <circle cx="9" cy="7" r="4" />
                             </svg>
                             <span>Cambiar</span>
                         </button>
                         <button type="button" class="btn-coach-action-pill" id="btnCoachMasterViewEvolution" aria-label="Ver evolución del alumno">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
                             </svg>
                             <span>Evolución</span>
                         </button>
                         <button type="button" class="btn-coach-action-pill primary" id="btnCoachMasterInspectAthlete" aria-label="Ver portal del alumno">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                 <circle cx="12" cy="12" r="3" />
                             </svg>
@@ -4014,7 +4007,7 @@
                      ESTACIÓN DE EVOLUCIÓN & TOMA DE DECISIONES CLÍNICAS (P0 COACH NICO)
                      ================================================================= -->
                 <div class="coach-subpane" id="paneEvolution">
-                    <div class="coach-surface-card-light" style="padding: 20px;">
+                    <div class="coach-surface-card-light">
                         <!-- Header de Evolución -->
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
                             <div>
@@ -4141,72 +4134,71 @@
                      ESTACIÓN 2: PRESCRIPCIÓN DE ENTRENAMIENTO, WIZARD MASIVO & VISIÓN MENSUAL
                      ================================================================= -->
                 <div class="coach-subpane" id="paneWorkouts">
-                    <div class="coach-surface-card-light" style="padding: 24px;">
+                    <div class="coach-surface-card-light">
                         
                         <!-- ENCABEZADO Y SELECTOR TOGGLE DE VISIÓN -->
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
-                            <div>
-                                <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; letter-spacing: 0.5px;">PRESCRIPCIÓN DETERMINISTA &amp; PERIODIZACIÓN</span>
-                                <h3 style="font-size: 1.35rem; font-weight: 800; margin-top: 6px; color: #121214;">
-                                    Planificador de Rutinas Semanal &amp; Mensual
-                                </h3>
-                                <p style="font-size: 12.5px; color: #52525B; margin-top: 2px;">
-                                    Cargá masivamente la semana por días y músculos, o gestioná el mes completo desde el calendario interactivo.
-                                </p>
+                        <!-- ENCABEZADO Y SELECTOR TOGGLE DE VISIÓN -->
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                                <div>
+                                    <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;">PRESCRIPCIÓN DETERMINISTA &amp; PERIODIZACIÓN</span>
+                                    <h3 style="font-size: 1.25rem; font-weight: 800; margin: 4px 0 0 0; color: #121214;">
+                                        Planificador de Rutinas
+                                    </h3>
+                                    <p style="font-size: 11.5px; color: #52525B; margin: 2px 0 0 0;">
+                                        Cargá masivamente la semana o gestioná el mes completo desde el calendario.
+                                    </p>
+                                </div>
+                                <button type="button" class="btn btn-outline btn-sm" id="btnOpenCoachTemplatesModal" style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; padding: 5px 12px; font-size: 11px; border-radius: 8px; background: #FFFFFF; display: inline-flex; align-items: center; gap: 4px;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                    <span>Plantillas de Nico</span>
+                                </button>
                             </div>
                             
-                            <!-- Toggle Superior: Creación Masiva Paso a Paso vs Visión Mensual vs Visión por Músculo -->
+                            <!-- Toggle Superior: Creación Masiva Paso a Paso vs Visión Mensual vs Visión por Músculo (3 Tabs 100% responsive) -->
                             <div class="coach-vision-toggle-strip">
                                 <button type="button" class="coach-vision-tab-btn active" id="btnToggleCoachWorkoutsWizard" data-target="wizard">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                                    <span>Planificador Masivo</span>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                    <span>Planif. Masivo</span>
                                 </button>
                                 <button type="button" class="coach-vision-tab-btn" id="btnToggleCoachWorkoutsMonth" data-target="month">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                                     <span>Visión Mensual</span>
                                 </button>
                                 <button type="button" class="coach-vision-tab-btn" id="btnToggleCoachWorkoutsMatrix" data-target="matrix">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                                    <span>Visión por Músculo</span>
-                                </button>
-                                <button type="button" class="btn btn-outline btn-sm" id="btnOpenCoachTemplatesModal" style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; padding: 6px 12px; font-size: 11px; border-radius: 8px; background: #FFFFFF; display: inline-flex; align-items: center; gap: 4px;">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                                    <span>Plantillas de Nico</span>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                    <span>Por Músculo</span>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- 1. FICHA RESUMEN DEL CLIENTE (Colapsada por defecto / Solo Lectura) -->
-                        <div class="coach-client-summary-card" id="coachClientSummaryBox">
-                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div class="coach-ath-avatar-circle" id="coachWorkoutAvatar" style="width: 42px; height: 42px; font-size: 14px; background: #09090B; color: #E5CBA7; border: 1.5px solid #E5CBA7;">--</div>
-                                    <div>
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <strong id="coachWorkoutName" style="font-size: 14.5px; font-weight: 800; color: #121214;">Seleccionar Alumno</strong>
-                                            <span class="pill pill-champagne" id="coachWorkoutPlanBadge" style="font-size: 9.5px; padding: 2px 7px;">Plan VIP</span>
+                        <!-- 1. FICHA RESUMEN DEL CLIENTE (Compacta y Solo Lectura) -->
+                        <div class="coach-client-summary-card" id="coachClientSummaryBox" style="display: flex; flex-direction: column; gap: 8px; padding: 10px 14px; background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; width: 100%;">
+                                <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                                    <div class="coach-ath-avatar-circle" id="coachWorkoutAvatar" style="width: 32px; height: 32px; font-size: 11px; background: #09090B; color: #E5CBA7; border: 1.5px solid #E5CBA7; flex-shrink: 0;">--</div>
+                                    <div style="min-width: 0;">
+                                        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                            <strong id="coachWorkoutName" style="font-size: 13px; font-weight: 800; color: #121214;">Seleccionar Alumno</strong>
+                                            <span class="pill" id="coachWorkoutPlanBadge" style="font-size: 9px; padding: 1px 6px; background: #F4F4F5; color: #18181B; border: 1px solid #E4E4E7;">Plan VIP</span>
                                         </div>
-                                        <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
-                                            <span id="coachWorkoutEmail" style="font-size: 11.5px; color: #71717A;">alumno@sens.com</span>
-                                            <span style="color: #D4D4D8;">•</span>
-                                            <span id="coachWorkoutWeightBadge" style="font-size: 11.5px; font-weight: 700; color: #9E7D4B;">75 kg</span>
-                                            <span style="color: #D4D4D8;">•</span>
-                                            <span id="coachWorkoutGoalBadge" style="font-size: 11.5px; color: #52525B;">Recomposición Corporal</span>
+                                        <div style="font-size: 11px; color: #71717A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            <span id="coachWorkoutEmail">alumno@sens.com</span> • <span id="coachWorkoutWeightBadge" style="font-weight: 700; color: #9E7D4B;">75 kg</span> • <span id="coachWorkoutGoalBadge">Recomposición</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <button type="button" class="btn btn-outline btn-sm btn-trigger-athlete-sheet" style="font-size: 11px; padding: 6px 12px; border-color: #E4E4E7; color: #18181B; background: #FFFFFF;">
-                                        Cambiar Alumno
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <button type="button" class="btn btn-outline btn-sm btn-trigger-athlete-sheet" style="font-size: 10.5px; padding: 4px 10px; border-color: #E4E4E7; color: #18181B; background: #FFFFFF; border-radius: 6px;">
+                                        Cambiar
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-sm" id="btnToggleAthleteSummaryExpand" style="font-size: 11px; padding: 6px 12px; border-color: #9E7D4B; color: #9E7D4B; background: #FFFFFF;">
-                                        <span id="summaryExpandLabel">▼ Ver Ficha Completa</span>
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnToggleAthleteSummaryExpand" style="font-size: 10.5px; padding: 4px 8px; border-color: #9E7D4B; color: #9E7D4B; background: #FFFFFF; border-radius: 6px;">
+                                        <span id="summaryExpandLabel">Ficha</span>
                                     </button>
                                 </div>
                             </div>
                             
                             <!-- Panel Desplegable de Datos del Cliente (100% Solo Lectura) -->
-                            <div id="coachClientSummaryDetails" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(229, 203, 167, 0.5);">
+                            <div id="coachClientSummaryDetails" style="display: none; margin-top: 4px; padding-top: 10px; border-top: 1px dashed rgba(229, 203, 167, 0.5); width: 100%;">
                                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
                                     <div class="coach-readonly-param-chip">
                                         <div class="param-label">Biometría</div>
@@ -4479,25 +4471,25 @@
                              VISTA 2: VISIÓN MENSUAL (CALENDARIO MENSUAL INTERACTIVO)
                              ============================================================= -->
                         <div id="coachWorkoutsMonthView" style="display: none;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
                                 <div>
-                                    <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0;">Calendario Mensual de Entrenamientos</h4>
-                                    <p style="font-size: 12px; color: #71717A; margin: 2px 0 0 0;">Visualizá qué días entrena el alumno, consultá ejercicios y ajustá pesos/repeticiones directamente.</p>
+                                    <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0;">Calendario Mensual</h4>
+                                    <p style="font-size: 11px; color: #71717A; margin: 2px 0 0 0;">Visualizá qué días entrena el alumno y editá cargas directamente.</p>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                    <button type="button" class="btn btn-outline btn-sm" id="btnCoachMonthMultiSelectToggle" style="font-size: 11px; padding: 5px 12px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; background: #FFFFFF; display: inline-flex; align-items: center; gap: 5px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; width: 100%; margin-top: 4px;">
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnCoachMonthPrev" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #FFFFFF;">‹ Ant</button>
+                                    <strong id="coachMonthTitleLabel" style="font-size: 12.5px; color: #18181B; text-align: center; flex: 1;">Octubre 2026</strong>
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnCoachMonthNext" style="font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #FFFFFF;">Sig ›</button>
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnCoachMonthMultiSelectToggle" style="font-size: 10.5px; padding: 4px 10px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; background: #FFFFFF; display: inline-flex; align-items: center; gap: 4px; border-radius: 6px;">
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 12 2 2 4-4"/></svg>
-                                        <span>Seleccionar Días (Lote)</span>
+                                        <span>Lote</span>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-sm" id="btnCoachMonthPrev">‹ Mes Anterior</button>
-                                    <strong id="coachMonthTitleLabel" style="font-size: 13px; color: #18181B; min-width: 120px; text-align: center;">Octubre 2026</strong>
-                                    <button type="button" class="btn btn-outline btn-sm" id="btnCoachMonthNext">Mes Siguiente ›</button>
                                 </div>
                             </div>
 
-                            <!-- Filtro de Músculo en Calendario Mensual -->
-                            <div style="display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 10px 0; margin-bottom: 8px;" id="coachMonthMuscleFilterStrip">
-                                <button type="button" class="coach-muscle-filter-chip active" data-muscle="all">Todos los Músculos</button>
+                            <!-- Filtro de Músculo en Calendario Mensual (Scroll Horizontal Táctil) -->
+                            <div style="display: flex; gap: 4px; overflow-x: auto; padding: 2px 0 8px 0; margin-bottom: 6px; -webkit-overflow-scrolling: touch; scrollbar-width: none;" id="coachMonthMuscleFilterStrip">
+                                <button type="button" class="coach-muscle-filter-chip active" data-muscle="all">Todos</button>
                                 <button type="button" class="coach-muscle-filter-chip" data-muscle="piernas">Piernas</button>
                                 <button type="button" class="coach-muscle-filter-chip" data-muscle="espalda">Espalda</button>
                                 <button type="button" class="coach-muscle-filter-chip" data-muscle="pecho">Pecho</button>
@@ -4507,14 +4499,14 @@
                             </div>
 
                             <!-- Grilla de Días de la Semana -->
-                            <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 6px; margin-bottom: 6px;">
-                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">LUN</span>
-                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">MAR</span>
-                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">MIÉ</span>
-                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">JUE</span>
-                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">VIE</span>
-                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">SÁB</span>
-                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">DOM</span>
+                            <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 3px; margin-bottom: 4px; width: 100%;">
+                                <span style="font-size: 9.5px; font-weight: 800; color: #71717A;">LUN</span>
+                                <span style="font-size: 9.5px; font-weight: 800; color: #71717A;">MAR</span>
+                                <span style="font-size: 9.5px; font-weight: 800; color: #71717A;">MIÉ</span>
+                                <span style="font-size: 9.5px; font-weight: 800; color: #71717A;">JUE</span>
+                                <span style="font-size: 9.5px; font-weight: 800; color: #71717A;">VIE</span>
+                                <span style="font-size: 9.5px; font-weight: 800; color: #71717A;">SÁB</span>
+                                <span style="font-size: 9.5px; font-weight: 800; color: #71717A;">DOM</span>
                             </div>
 
                             <!-- Grilla Mensual de Celdas -->

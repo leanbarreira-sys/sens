@@ -120,11 +120,16 @@ try {
 } catch (_) {}
 
 function isCurrentUserAdmin() {
+    // 0. Si hay una sesión activa de Coach OS iniciada o en inspección, mantener privilegios de Coach
+    if (window._isCoachAdminActive || sessionStorage.getItem('sens_coach_admin_active') === 'true') {
+        return true;
+    }
+
     const profile = AppState.profile || {};
     const user = AppState.user || {};
     const email = (user.email || profile.email || '').toLowerCase().trim();
 
-    // Cuenta de prueba estrictamente no admin
+    // Cuenta de prueba estrictamente no admin (solo cuando NO hay sesión de Coach activa)
     if (email === 'lean_barreira@hotmail.com') {
         return false;
     }
@@ -135,7 +140,9 @@ function isCurrentUserAdmin() {
         profile.role === 'coach' ||
         email === 'lean.barreira@gmail.com' ||
         email === 'nico@sens.com' ||
-        email === 'nicomaralle@gmail.com'
+        email === 'nicomaralle@gmail.com' ||
+        email.endsWith('@sens.com') ||
+        email.includes('admin')
     );
 }
 
@@ -2853,7 +2860,18 @@ function openUserPortal(forceOnboarding = false) {
     if (btnModeCoach && !btnModeCoach._hasListener) {
         btnModeCoach._hasListener = true;
         btnModeCoach.addEventListener('click', () => {
+            window._isCoachAdminActive = true;
+            sessionStorage.setItem('sens_coach_admin_active', 'true');
+            if (window._sensCoachAdminUser) {
+                AppState.user = { ...window._sensCoachAdminUser };
+            }
+            if (window._sensCoachAdminProfile) {
+                AppState.profile = { ...window._sensCoachAdminProfile };
+            }
             switchPortalView('coachHubView');
+            if (typeof syncCoachMasterCard === 'function') {
+                syncCoachMasterCard(AppState.activeAthleteId);
+            }
             renderCoachAthletesHub();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
@@ -6976,6 +6994,16 @@ function inspectAthleteAsCoach(athId) {
     const target = athletes.find(a => a.id === athId);
     if (!target) return;
 
+    // Guardar credenciales de sesión de Coach antes de impersonar al alumno
+    window._isCoachAdminActive = true;
+    sessionStorage.setItem('sens_coach_admin_active', 'true');
+    if (!window._sensCoachAdminUser && AppState.user && AppState.user.role !== 'user_normal') {
+        window._sensCoachAdminUser = { ...AppState.user };
+    }
+    if (!window._sensCoachAdminProfile && AppState.profile && AppState.profile.role !== 'user_normal') {
+        window._sensCoachAdminProfile = { ...AppState.profile };
+    }
+
     AppState.activeAthleteId = athId;
 
     if (athId.startsWith('mock_')) {
@@ -7008,6 +7036,10 @@ function inspectAthleteAsCoach(athId) {
         }
     }
 
+    // Asegurar que el toggle superior permanezca visible para alternar sin trabas
+    const topbarAdminToggle = document.getElementById('topbarAdminToggle');
+    if (topbarAdminToggle) topbarAdminToggle.style.display = 'inline-flex';
+
     switchPortalView('dashView');
     if (typeof window.updateDashboardWorkoutDirective === 'function') {
         window.updateDashboardWorkoutDirective();
@@ -7017,9 +7049,27 @@ function inspectAthleteAsCoach(athId) {
 }
 
 function exitAthleteInspection() {
+    window._isCoachAdminActive = true;
+    sessionStorage.setItem('sens_coach_admin_active', 'true');
     const banner = document.getElementById('coachInspectionBanner');
     if (banner) banner.style.display = 'none';
+
+    // Restaurar usuario coach si existía snapshot
+    if (window._sensCoachAdminUser) {
+        AppState.user = { ...window._sensCoachAdminUser };
+    } else if (AppState.user) {
+        AppState.user.role = 'coach';
+    }
+    if (window._sensCoachAdminProfile) {
+        AppState.profile = { ...window._sensCoachAdminProfile };
+    } else if (AppState.profile) {
+        AppState.profile.role = 'coach';
+    }
+
     switchPortalView('coachHubView');
+    if (typeof syncCoachMasterCard === 'function') {
+        syncCoachMasterCard(AppState.activeAthleteId);
+    }
     renderCoachAthletesHub();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     showSensToast('Regresaste al panel Coach OS.', 'champagne');
