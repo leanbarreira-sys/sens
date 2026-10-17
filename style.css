@@ -15071,4 +15071,88 @@ body.in-portal #coachHubView {
     min-height: 18px !important;
 }
 
+/* =============================================================================
+   SENS CLARITY TRAINER - PLANIFICADOR MASIVO & AUTOMÁTICO
+   ============================================================================= */
+.clarity-tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 18px;
+    color: #A1A1AA;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.clarity-tab-btn:hover {
+    color: #FFFFFF;
+}
+.clarity-tab-btn.active {
+    color: var(--accent-champagne);
+    border-bottom-color: var(--accent-champagne);
+}
+.clarity-pane {
+    display: none;
+}
+.clarity-pane.active {
+    display: block;
+}
+.clarity-day-card {
+    background: #18181B;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.2s ease;
+}
+.clarity-day-card.active-split {
+    border-color: rgba(229, 203, 167, 0.35);
+    background: #1C1C20;
+}
+.clarity-day-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 6px;
+}
+.clarity-day-card-head strong {
+    font-size: 13px;
+    color: #FFFFFF;
+}
+.clarity-day-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.clarity-ex-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 5px 8px;
+    border-radius: 6px;
+}
+.clarity-ex-item .ex-name {
+    color: #FFFFFF;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 140px;
+}
+.clarity-ex-item .ex-sets-reps {
+    color: var(--accent-champagne);
+    font-weight: 700;
+}
+
+
 

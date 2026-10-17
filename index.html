@@ -4011,6 +4011,10 @@
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                 <input type="hidden" id="coachWorkoutAthleteSelector" value="">
+                                <button type="button" class="btn btn-primary btn-sm btn-open-clarity-planner" id="btnCoachOpenClarityPlanner" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; font-size: 11.5px; padding: 7px 15px; border: none; box-shadow: 0 4px 15px rgba(229,203,167,0.35); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                    <span>Planificador Masivo (SENS Clarity)</span>
+                                </button>
                             </div>
                         </div>
 
@@ -4101,16 +4105,28 @@
                             </div>
                         </div>
 
-                        <!-- Barra de Plantillas Rápidas por Objetivo -->
+                        <!-- Barra de Plantillas Rápidas y Operaciones Masivas (SENS Clarity) -->
                         <div style="background: rgba(158, 125, 75, 0.08); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
-                            <span style="font-size: 11px; color: #9E7D4B; font-weight: 800;">Plantillas Maestras según Objetivo:</span>
+                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                <span style="font-size: 11px; color: #9E7D4B; font-weight: 800;">Operaciones Masivas:</span>
+                                <button type="button" class="btn btn-primary btn-sm btn-open-clarity-planner" style="font-size: 10.5px; padding: 5px 12px; font-weight: 800; background: var(--accent-champagne); color: #09090B;">
+                                    ⚡ Planificador Automático Clarity
+                                </button>
+                                <button type="button" class="btn btn-outline btn-sm btn-open-clarity-duplicate" style="font-size: 10.5px; padding: 5px 11px;">
+                                    📋 Duplicar Día
+                                </button>
+                                <button type="button" class="btn btn-outline btn-sm btn-open-clarity-replicate" style="font-size: 10.5px; padding: 5px 11px;">
+                                    🗓️ Replicar a Todo el Mes
+                                </button>
+                            </div>
                             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                <span style="font-size: 10.5px; color: var(--text-muted); align-self: center;">Plantillas Rápidas:</span>
                                 <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="fuerza3d" style="font-size: 10.5px; padding: 4px 10px;">Fuerza &amp; Postura (Lun/Mié/Vie)</button>
+                                    data-template="fuerza3d" style="font-size: 10px; padding: 4px 8px;">Fuerza 3D</button>
                                 <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="hipertrofia4d" style="font-size: 10.5px; padding: 4px 10px;">Recomposición (Lun/Mar/Jue/Vie)</button>
+                                    data-template="hipertrofia4d" style="font-size: 10px; padding: 4px 8px;">Recomposición 4D</button>
                                 <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="movilidad2d" style="font-size: 10.5px; padding: 4px 10px;">Movilidad &amp; Cardio (Mar/Jue)</button>
+                                    data-template="movilidad2d" style="font-size: 10px; padding: 4px 8px;">Movilidad 2D</button>
                             </div>
                         </div>
 
@@ -4221,7 +4237,11 @@
                                     Configurá el plan por objetivo y tipo de comida (Desayuno, Almuerzo, Merienda, Cena, Snacks) con cálculo proporcional automático.
                                 </p>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                <button type="button" class="btn btn-primary btn-sm btn-open-clarity-planner-nutri" id="btnCoachOpenClarityNutri" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; font-size: 11.5px; padding: 7px 15px; border: none; box-shadow: 0 4px 15px rgba(229,203,167,0.35); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                    <span>Planificador TDEE &amp; Macros (Clarity)</span>
+                                </button>
                                 <input type="hidden" id="coachNutritionAthleteSelector" value="">
                                 <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
                                     id="btnCoachNutriAthletePicker" aria-label="Cambiar alumno">
@@ -5469,6 +5489,291 @@
             <button type="button" class="btn btn-primary" id="btnDismissCoachSaveSuccess" style="width: 100%; padding: 12px; font-weight: 800; font-size: 13px;">
                 Entendido, Continuar
             </button>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL PLANIFICADOR INTELIGENTE & MASIVO SENS CLARITY TRAINER
+         ========================================================================= -->
+    <div class="sens-modal-overlay" id="sensClarityPlannerModal" style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); padding: 16px;">
+        <div class="sens-modal-card" style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 20px; max-width: 880px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(229, 203, 167, 0.15);">
+            <!-- Modal Header -->
+            <div style="padding: 20px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; background: #161619;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                        <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;">SENS CLARITY TRAINER</span>
+                        <span class="pill pill-dark" style="font-size: 9.5px; border: 1px solid rgba(229, 203, 167, 0.25); color: var(--accent-champagne);">Motor de Periodización &amp; Carga Masiva</span>
+                    </div>
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 0;">Planificador Automático de Entrenamiento &amp; Nutrición</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 3px 0 0 0;">Generación algorítmica por objetivos clínicos, TDEE exacto y réplica a mesociclo de 4 semanas.</p>
+                </div>
+                <button type="button" class="modal-close-btn" id="btnCloseClarityPlannerModal" aria-label="Cerrar modal" style="position: static; font-size: 26px; color: #A1A1AA; background: transparent; border: none; cursor: pointer; padding: 4px 8px; line-height: 1;">&times;</button>
+            </div>
+
+            <!-- Active Athlete Context Banner -->
+            <div style="padding: 10px 24px; background: rgba(229, 203, 167, 0.05); border-bottom: 1px solid rgba(229, 203, 167, 0.15); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="coach-ath-avatar-circle" id="clarityAthleteAvatar" style="width: 32px; height: 32px; font-size: 12px;">--</div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <strong id="clarityAthleteName" style="font-size: 13px; color: #FFFFFF;">Alumno Seleccionado</strong>
+                            <span class="pill pill-champagne" id="clarityAthletePlan" style="font-size: 9px; padding: 1px 6px;">Plan</span>
+                        </div>
+                        <span id="clarityAthleteMeta" style="font-size: 11px; color: var(--text-muted);">Objetivo: Recomposición • 75 kg • 175 cm</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button type="button" class="btn btn-outline btn-sm btn-trigger-athlete-sheet" style="font-size: 10.5px; padding: 4px 10px;">Cambiar Alumno</button>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div style="display: flex; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: #121214; padding: 0 16px; overflow-x: auto; scrollbar-width: none;">
+                <button type="button" class="clarity-tab-btn active" data-clarity-tab="tabClarityWorkouts">
+                    <span>⚡ Rutina &amp; Ejercicios</span>
+                </button>
+                <button type="button" class="clarity-tab-btn" data-clarity-tab="tabClarityNutrition">
+                    <span>🥗 Nutrición &amp; TDEE</span>
+                </button>
+                <button type="button" class="clarity-tab-btn" data-clarity-tab="tabClarityMass">
+                    <span>📋 Duplicar &amp; Replicar Mesociclo</span>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div style="padding: 20px 24px; overflow-y: auto; flex: 1;" id="clarityModalBody">
+                
+                <!-- TAB 1: ENTRENAMIENTO -->
+                <div class="clarity-pane active" id="tabClarityWorkouts">
+                    <div style="background: #18181B; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 16px; margin-bottom: 18px;">
+                        <div style="font-size: 11px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;">
+                            1. Parámetros de Prescripción Algorítmica:
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 14px;">
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Objetivo Clínico</label>
+                                <select id="clarityWorkoutGoalSelect" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="recomposicion">Recomposición Corporal</option>
+                                    <option value="deficit">Déficit &amp; Oxidación</option>
+                                    <option value="hipertrofia">Fuerza &amp; Hipertrofia</option>
+                                    <option value="movilidad">Movilidad &amp; Salud Articular</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Frecuencia Semanal</label>
+                                <select id="clarityWorkoutFreqSelect" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="2">2 Días / Semana (Full Body A/B)</option>
+                                    <option value="3" selected>3 Días / Semana (Torso / Pierna / Full)</option>
+                                    <option value="4">4 Días / Semana (Upper / Lower)</option>
+                                    <option value="5">5 Días / Semana (Push / Pull / Legs)</option>
+                                    <option value="6">6 Días / Semana (Doble Frecuencia)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Modalidad de Entrega</label>
+                                <select id="clarityWorkoutModalitySelect" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="presencial">Presencial 1:1 con Nico</option>
+                                    <option value="online">Online Asesorado (App)</option>
+                                    <option value="mixto">Mixto (Presencial + Autónomo)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Restricciones / Cuidado</label>
+                                <select id="clarityWorkoutRestrictionSelect" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="ninguna">Sin restricciones (Avanzado)</option>
+                                    <option value="lumbar">Cuidado Lumbar (Anti-flexión/core)</option>
+                                    <option value="hombro">Cuidado Hombro (Rango neutro)</option>
+                                    <option value="rodilla">Cuidado Rodilla (Dominancia cadera)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="btnClarityGenerateWorkout" style="width: 100%; padding: 10px; font-weight: 800; font-size: 12.5px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
+                            ⚡ Generar Propuesta de Rutina en 1 Segundo
+                        </button>
+                    </div>
+
+                    <!-- Vista previa de los días generados -->
+                    <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 11.5px; font-weight: 800; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.5px;">2. Propuesta Semanal Generada:</span>
+                        <span id="clarityWorkoutVolumeBadge" style="font-size: 11px; color: var(--accent-champagne); font-weight: 700;">Volumen: 3 sesiones • ~510 kcal total</span>
+                    </div>
+                    <div id="clarityWorkoutDaysGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                        <!-- Inyectado dinámicamente con las tarjetas de días -->
+                    </div>
+
+                    <!-- Botones de Acción para Entrenamientos -->
+                    <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+                        <button type="button" class="btn btn-outline" id="btnClarityApplyAndEdit" style="font-size: 12px; padding: 10px 16px;">
+                            ✏️ Aceptar y Editar en Coach OS
+                        </button>
+                        <button type="button" class="btn btn-primary" id="btnClarityApplyWorkoutAll" style="font-size: 12px; padding: 10px 20px; font-weight: 800; background: var(--accent-champagne); color: #09090B;">
+                            ✓ Aceptar Plan Completo (1-Click)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB 2: NUTRICIÓN & TDEE -->
+                <div class="clarity-pane" id="tabClarityNutrition" style="display: none;">
+                    <div style="background: #18181B; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 16px; margin-bottom: 18px;">
+                        <div style="font-size: 11px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;">
+                            1. Parámetros Biométricos &amp; Meta Calórica (Mifflin-St Jeor):
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 12px;">
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Peso (kg)</label>
+                                <input type="number" id="clarityNutriWeight" class="input-control" value="75" step="0.5" style="margin-bottom: 0; font-size: 12.5px; height: 36px;">
+                            </div>
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Altura (cm)</label>
+                                <input type="number" id="clarityNutriHeight" class="input-control" value="175" step="1" style="margin-bottom: 0; font-size: 12.5px; height: 36px;">
+                            </div>
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Edad (años)</label>
+                                <input type="number" id="clarityNutriAge" class="input-control" value="30" step="1" style="margin-bottom: 0; font-size: 12.5px; height: 36px;">
+                            </div>
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Sexo</label>
+                                <select id="clarityNutriSex" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="male">Hombre (+5)</option>
+                                    <option value="female">Mujer (-161)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Actividad Física</label>
+                                <select id="clarityNutriActivity" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="1.2">Sedentario (x1.2)</option>
+                                    <option value="1.375">Ligero 1-3 días (x1.375)</option>
+                                    <option value="1.55" selected>Moderado 3-5 días (x1.55)</option>
+                                    <option value="1.725">Intenso 6-7 días (x1.725)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="input-label" style="font-size: 11px;">Estrategia Calórica</label>
+                                <select id="clarityNutriGoalStrategy" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="deficit">Déficit (-450 kcal)</option>
+                                    <option value="recomposicion" selected>Recomposición (-150 kcal)</option>
+                                    <option value="hipertrofia">Superávit (+300 kcal)</option>
+                                    <option value="normo">Normocalórico (0 kcal)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline" id="btnClarityRecalcNutri" style="width: 100%; padding: 8px; font-size: 11.5px; font-weight: 700;">
+                            Recalcular TDEE &amp; Macronutrientes
+                        </button>
+                    </div>
+
+                    <!-- Métricas de Nutrición Calculadas -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 18px;">
+                        <div style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 12px; padding: 12px; text-align: center;">
+                            <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">TDEE Mantenimiento</span>
+                            <div id="clarityKpiTdee" style="font-size: 1.3rem; font-weight: 800; color: #FFFFFF; margin-top: 4px;">2450 kcal</div>
+                        </div>
+                        <div style="background: rgba(229, 203, 167, 0.12); border: 1px solid var(--accent-champagne); border-radius: 12px; padding: 12px; text-align: center;">
+                            <span style="font-size: 10px; text-transform: uppercase; color: var(--accent-champagne); font-weight: 800;">Calorías Pautadas</span>
+                            <div id="clarityKpiTargetKcal" style="font-size: 1.4rem; font-weight: 800; color: var(--accent-champagne); margin-top: 4px;">2300 kcal</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; text-align: center;">
+                            <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Proteínas (2.0 g/kg)</span>
+                            <div id="clarityKpiProtein" style="font-size: 1.3rem; font-weight: 800; color: #60A5FA; margin-top: 4px;">150 g</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; text-align: center;">
+                            <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Carbohidratos</span>
+                            <div id="clarityKpiCarbs" style="font-size: 1.3rem; font-weight: 800; color: #34D399; margin-top: 4px;">260 g</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; text-align: center;">
+                            <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Grasas (0.9 g/kg)</span>
+                            <div id="clarityKpiFats" style="font-size: 1.3rem; font-weight: 800; color: #FBBF24; margin-top: 4px;">68 g</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; text-align: center;">
+                            <span style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Agua / Día</span>
+                            <div id="clarityKpiWater" style="font-size: 1.3rem; font-weight: 800; color: #38BDF8; margin-top: 4px;">2.6 L</div>
+                        </div>
+                    </div>
+
+                    <!-- Directiva Nutricional del Coach -->
+                    <div style="margin-bottom: 16px;">
+                        <label class="input-label" style="font-size: 11px;">Directiva &amp; Sugerencia de Alimentos para el Alumno</label>
+                        <textarea id="clarityNutriDirective" class="input-control" rows="3" style="font-size: 12.5px;"></textarea>
+                    </div>
+
+                    <!-- Botón de Guardado Nutrición -->
+                    <div style="display: flex; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+                        <button type="button" class="btn btn-primary" id="btnClarityApplyNutrition" style="font-size: 12px; padding: 10px 22px; font-weight: 800; background: var(--accent-champagne); color: #09090B;">
+                            ✓ Aceptar y Sincronizar Pauta Nutricional
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB 3: OPERACIONES MASIVAS (DUPLICAR & REPLICAR MESOCICLO) -->
+                <div class="clarity-pane" id="tabClarityMass" style="display: none;">
+                    
+                    <!-- BLOQUE 1: DUPLICAR DÍA -->
+                    <div style="background: #18181B; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px; margin-bottom: 18px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">HERRAMIENTA 1</span>
+                            <strong style="font-size: 14px; color: #FFFFFF;">Duplicar Sesión de un Día hacia Otro Día</strong>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 14px;">
+                            Copia de manera inmediata todos los ejercicios, series, repeticiones, cargas y pautas técnicas de un día hacia otro día de la semana.
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;">
+                            <div style="flex: 1; min-width: 140px;">
+                                <label class="input-label" style="font-size: 11px;">Copiar Sesión de:</label>
+                                <select id="clarityDupSourceDay" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="day1">Lunes (Día 1)</option>
+                                    <option value="day2">Martes (Día 2)</option>
+                                    <option value="day3">Miércoles (Día 3)</option>
+                                    <option value="day4">Jueves (Día 4)</option>
+                                    <option value="day5">Viernes (Día 5)</option>
+                                    <option value="day6">Sábado (Día 6)</option>
+                                    <option value="day7">Domingo (Día 7)</option>
+                                </select>
+                            </div>
+                            <div style="color: var(--accent-champagne); font-size: 18px; align-self: flex-end; margin-bottom: 8px;">→</div>
+                            <div style="flex: 1; min-width: 140px;">
+                                <label class="input-label" style="font-size: 11px;">Pegar en:</label>
+                                <select id="clarityDupTargetDay" class="input-control" style="margin-bottom: 0; font-size: 12px; height: 36px;">
+                                    <option value="day4" selected>Jueves (Día 4)</option>
+                                    <option value="day1">Lunes (Día 1)</option>
+                                    <option value="day2">Martes (Día 2)</option>
+                                    <option value="day3">Miércoles (Día 3)</option>
+                                    <option value="day5">Viernes (Día 5)</option>
+                                    <option value="day6">Sábado (Día 6)</option>
+                                    <option value="day7">Domingo (Día 7)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline" id="btnClarityExecuteDuplicateDay" style="padding: 10px 18px; font-size: 12px; font-weight: 700; width: 100%;">
+                            📋 Duplicar Día Ahora
+                        </button>
+                    </div>
+
+                    <!-- BLOQUE 2: REPLICAR A TODO EL MES (MESOCICLO 4 SEMANAS) -->
+                    <div style="background: #18181B; border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 14px; padding: 18px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">HERRAMIENTA 2</span>
+                            <strong style="font-size: 14px; color: #FFFFFF;">Replicar Mesociclo Mensual (4 Semanas Completas)</strong>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;">
+                            Esta acción proyecta la semana activa a las <strong>4 semanas del mes</strong> en el portal del alumno. Así el alumno tiene su mes planificado completo y el coach no necesita cargar semana por semana.
+                        </p>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(229,203,167,0.06); border: 1px dashed rgba(229,203,167,0.3); border-radius: 10px; padding: 12px; margin-bottom: 16px;">
+                            <input type="checkbox" id="clarityCheckProgressiveOverload" checked style="width: 18px; height: 18px; accent-color: var(--accent-champagne);">
+                            <div style="font-size: 12px; color: #FFFFFF;">
+                                <strong>Aplicar Sobrecarga Progresiva Fisiológica</strong>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                                    Semanas 2 y 3: +2.5 kg en multiarticulares o +1 repetición. Semana 4: Descarga técnica con mismo peso a menor RPE.
+                                </div>
+                            </div>
+                        </label>
+                        <button type="button" class="btn btn-primary" id="btnClarityExecuteReplicateMonth" style="width: 100%; padding: 12px; font-weight: 800; font-size: 12.5px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
+                            🗓️ Replicar Plan a Todo el Mes (4 Semanas)
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
         </div>
     </div>
 

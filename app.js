@@ -122,17 +122,18 @@ try {
 function isCurrentUserAdmin() {
     const profile = AppState.profile || {};
     const user = AppState.user || {};
-    const email = (user.email || profile.email || '').toLowerCase();
+    const email = (user.email || profile.email || '').toLowerCase().trim();
+
+    // Lista explícita de cuentas que NUNCA deben tener rol admin (alumnos regulares de prueba o reales)
+    if (email === 'lean.barreira@gmail.com' || email === 'lean_barreira@hotmail.com') {
+        return false;
+    }
+
+    // Únicamente Nico Maralle es administrador del Coach OS
     return Boolean(
-        profile.user_type === 'admin' ||
-        profile.role === 'admin' ||
-        user.user_type === 'admin' ||
-        (user.user_metadata && user.user_metadata.role === 'admin') ||
         email === 'nico@sens.com' ||
         email === 'nicomaralle@gmail.com' ||
-        email === 'lean.barreira@gmail.com' ||
-        email === 'lean@sens.com' ||
-        email === 'admin@sens.com'
+        (profile.role === 'admin' && (email === 'nico@sens.com' || email === 'nicomaralle@gmail.com'))
     );
 }
 
@@ -915,9 +916,22 @@ function initLeadCapture() {
 // =============================================================================
 async function loadCoachAthletesList() {
     let dbAthletes = [];
+    if (!isCurrentUserAdmin()) {
+        window.__coachAthletesCache = [];
+        // Sanear perfil de usuario regular en caso de elevación accidental previa
+        if (supabaseClient && AppState.user && (AppState.user.email === 'lean.barreira@gmail.com' || AppState.user.email === 'lean_barreira@hotmail.com')) {
+            try {
+                await supabaseClient.from('profiles').update({
+                    role: 'user_vip',
+                    user_type: 'client_presencial_vip'
+                }).eq('id', AppState.user.id);
+            } catch (_) {}
+        }
+        return [];
+    }
     if (supabaseClient) {
-        // Auto-promover en DB si el usuario actual es admin (Nico o Lean) para que RLS permita ver perfiles
-        if (isCurrentUserAdmin() && AppState.user && AppState.user.id) {
+        // Asegurar que Nico tenga rol admin en base de datos
+        if (AppState.user && AppState.user.id) {
             try {
                 await supabaseClient.from('profiles').update({
                     role: 'admin',
@@ -2683,6 +2697,13 @@ function switchPortalView(viewId) {
         profile && 
         profile.subscription_status === 'pending_activation'
     );
+
+    // Bloqueo estricto de seguridad: usuarios no administradores jamás pueden acceder a Coach OS
+    if (viewId === 'coachHubView' && !isAdmin) {
+        console.warn('[Security Guard] Acceso denegado a Coach OS para usuario no administrador.');
+        showSensToast('Acceso restringido: vista exclusiva del entrenador.', 'warning');
+        viewId = 'dashView';
+    }
 
     // Bloqueo estricto SOLO si el usuario está explícitamente pendiente de activación por Nico
     if (isPendingActivation) {
@@ -5781,6 +5802,7 @@ function initCoachOS() {
     const btnSheetOpenHub = document.getElementById('btnSheetOpenCoachHub');
 
     function openAthleteSheet() {
+        if (!isCurrentUserAdmin()) return;
         if (!bottomSheet || !sheetBackdrop) return;
         bottomSheet.classList.add('active');
         sheetBackdrop.classList.add('active');
@@ -5963,6 +5985,7 @@ function initCoachOS() {
     if (typeof window.initCoachMarketingStudio === 'function') window.initCoachMarketingStudio();
     if (typeof window.initCoachDossierAndCopilots === 'function') window.initCoachDossierAndCopilots();
     initMemberClarityActions();
+    initClarityTrainerModule();
 }
 
 function renderAthleteBottomSheetList(filter = 'all', searchQuery = '') {
@@ -6191,6 +6214,10 @@ function selectAthleteFromSheet(athId) {
 // SUB-MÓDULO 1: GESTIÓN DE ATLETAS & APROBACIONES
 // -----------------------------------------------------------------------------
 function getConsolidatedCoachAthletes() {
+    // Aislamiento estricto de datos: usuarios no administradores jamás reciben el listado consolidado de atletas
+    if (!isCurrentUserAdmin()) {
+        return [];
+    }
     const dbAthletes = window.__coachAthletesCache || [];
     const roster = [];
     const seenIds = new Set();
@@ -6572,6 +6599,7 @@ function formatPlanName(key) {
 window.currentActionAthleteId = null;
 
 window.openCoachAthleteActionsSheet = function(athId) {
+    if (!isCurrentUserAdmin()) return;
     window.currentActionAthleteId = athId;
     const athletes = getConsolidatedCoachAthletes();
     const ath = athletes.find(a => a.id === athId);
@@ -8022,6 +8050,903 @@ function applyCoachWorkoutTemplate(templateKey) {
     localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
     renderCoachAssignedExercises();
     showSensToast('Plantilla semanal aplicada a los días del calendario.', 'champagne');
+}
+
+// =============================================================================
+// SUB-MÓDULO SENS CLARITY TRAINER: MOTOR DE PLANIFICACIÓN & OPERACIONES MASIVAS
+// Inspirado en Clarity Trainer, Laraña Trainer y Harbiz (DudyFit)
+// =============================================================================
+let clarityGeneratedPlan = null;
+
+function initClarityTrainerModule() {
+    if (!isCurrentUserAdmin()) return;
+
+    const modal = document.getElementById('sensClarityPlannerModal');
+    if (!modal) return;
+
+    const btnClose = document.getElementById('btnCloseClarityPlannerModal');
+    const tabBtns = modal.querySelectorAll('.clarity-tab-btn');
+    const panes = modal.querySelectorAll('.clarity-pane');
+
+    // Función para conmutar tabs dentro del modal
+    function switchClarityTab(targetTabId) {
+        tabBtns.forEach(b => {
+            const isMatch = b.getAttribute('data-clarity-tab') === targetTabId;
+            b.classList.toggle('active', isMatch);
+        });
+        panes.forEach(p => {
+            p.style.display = (p.id === targetTabId) ? 'block' : 'none';
+        });
+    }
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-clarity-tab');
+            if (targetId) switchClarityTab(targetId);
+        });
+    });
+
+    // Abrir modal sincronizando el atleta seleccionado en Coach OS
+    function openClarityModal(initialTab = 'tabClarityWorkouts') {
+        syncClarityAthleteContext();
+        switchClarityTab(initialTab);
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        if (initialTab === 'tabClarityWorkouts') {
+            generateAndRenderClarityWorkoutProposal();
+        } else if (initialTab === 'tabClarityNutrition') {
+            calculateAndRenderClarityNutrition();
+        }
+    }
+
+    function closeClarityModal() {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    if (btnClose) btnClose.addEventListener('click', closeClarityModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeClarityModal();
+    });
+
+    // Disparadores desde Coach OS (botones superiores de barra y accesos rápidos)
+    document.querySelectorAll('.btn-open-clarity-planner, #btnCoachOpenClarityPlanner').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openClarityModal('tabClarityWorkouts');
+        });
+    });
+
+    document.querySelectorAll('.btn-open-clarity-planner-nutri, #btnCoachOpenClarityNutri').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openClarityModal('tabClarityNutrition');
+        });
+    });
+
+    document.querySelectorAll('.btn-open-clarity-duplicate').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openClarityModal('tabClarityMass');
+            const dupSource = document.getElementById('clarityDupSourceDay');
+            if (dupSource && coachWorkoutState.activeDay) {
+                dupSource.value = coachWorkoutState.activeDay;
+            }
+        });
+    });
+
+    document.querySelectorAll('.btn-open-clarity-replicate').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openClarityModal('tabClarityMass');
+        });
+    });
+
+    // Sincronizar contexto del atleta activo en el header del modal
+    function syncClarityAthleteContext() {
+        const athId = coachWorkoutState.activeAthleteId || 'mock_vip';
+        const roster = getConsolidatedCoachAthletes();
+        const ath = roster.find(a => a.id === athId) || {
+            id: athId,
+            full_name: 'Atleta SENS',
+            email: 'alumno@sens.com',
+            active_plan_name: 'Presencial 1 a 1 VIP (CABA)',
+            current_weight: 75
+        };
+
+        const avatarEl = document.getElementById('clarityAthleteAvatar');
+        const nameEl = document.getElementById('clarityAthleteName');
+        const planEl = document.getElementById('clarityAthletePlan');
+        const metaEl = document.getElementById('clarityAthleteMeta');
+
+        const parts = (ath.full_name || 'Atleta').trim().split(' ');
+        let initials = parts[0] ? parts[0][0].toUpperCase() : 'S';
+        if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0].toUpperCase();
+
+        if (avatarEl) avatarEl.textContent = initials;
+        if (nameEl) nameEl.textContent = ath.full_name;
+        if (planEl) planEl.textContent = (ath.active_plan_name || 'PLAN SENS').toUpperCase();
+
+        const w = ath.current_weight || ath.weight || 75;
+        const h = ath.height || 175;
+        const g = ath.goal || 'Recomposición Corporal & Fuerza';
+        if (metaEl) metaEl.textContent = `Objetivo: ${g} • ${w} kg • ${h} cm`;
+
+        const wInp = document.getElementById('clarityNutriWeight');
+        const hInp = document.getElementById('clarityNutriHeight');
+        const aInp = document.getElementById('clarityNutriAge');
+        if (wInp) wInp.value = w;
+        if (hInp) hInp.value = h;
+        if (aInp) aInp.value = ath.age || 30;
+    }
+
+    // TAB 1: Generación de entrenamiento
+    const btnGenWorkout = document.getElementById('btnClarityGenerateWorkout');
+    if (btnGenWorkout) {
+        btnGenWorkout.addEventListener('click', () => {
+            generateAndRenderClarityWorkoutProposal();
+        });
+    }
+
+    function generateAndRenderClarityWorkoutProposal() {
+        const goal = document.getElementById('clarityWorkoutGoalSelect')?.value || 'recomposicion';
+        const freq = parseInt(document.getElementById('clarityWorkoutFreqSelect')?.value, 10) || 3;
+        const modality = document.getElementById('clarityWorkoutModalitySelect')?.value || 'presencial';
+        const restriction = document.getElementById('clarityWorkoutRestrictionSelect')?.value || 'ninguna';
+        const athId = coachWorkoutState.activeAthleteId || 'mock_vip';
+
+        clarityGeneratedPlan = buildClarityWorkoutSplit({ goal, freq, modality, restriction, athId });
+        renderClarityWorkoutDaysGrid(clarityGeneratedPlan);
+    }
+
+    const btnApplyAll = document.getElementById('btnClarityApplyWorkoutAll');
+    if (btnApplyAll) {
+        btnApplyAll.addEventListener('click', async () => {
+            if (!clarityGeneratedPlan) {
+                showSensToast('Generá una propuesta primero.', 'warning');
+                return;
+            }
+            await applyClarityWorkoutPlan(clarityGeneratedPlan, false);
+            closeClarityModal();
+        });
+    }
+
+    const btnApplyEdit = document.getElementById('btnClarityApplyAndEdit');
+    if (btnApplyEdit) {
+        btnApplyEdit.addEventListener('click', async () => {
+            if (!clarityGeneratedPlan) {
+                showSensToast('Generá una propuesta primero.', 'warning');
+                return;
+            }
+            await applyClarityWorkoutPlan(clarityGeneratedPlan, true);
+            closeClarityModal();
+            if (typeof window.switchCoachSubTab === 'function') {
+                window.switchCoachSubTab('paneWorkouts');
+            }
+        });
+    }
+
+    // TAB 2: Nutrición algorítmica
+    const btnRecalcNutri = document.getElementById('btnClarityRecalcNutri');
+    if (btnRecalcNutri) {
+        btnRecalcNutri.addEventListener('click', calculateAndRenderClarityNutrition);
+    }
+
+    const btnApplyNutri = document.getElementById('btnClarityApplyNutrition');
+    if (btnApplyNutri) {
+        btnApplyNutri.addEventListener('click', async () => {
+            await applyClarityNutritionPlan();
+            closeClarityModal();
+        });
+    }
+
+    // TAB 3: Operaciones masivas
+    const btnExecDup = document.getElementById('btnClarityExecuteDuplicateDay');
+    if (btnExecDup) {
+        btnExecDup.addEventListener('click', async () => {
+            const srcDay = document.getElementById('clarityDupSourceDay')?.value || 'day1';
+            const tgtDay = document.getElementById('clarityDupTargetDay')?.value || 'day4';
+            if (srcDay === tgtDay) {
+                showSensToast('El día de origen y destino deben ser diferentes.', 'warning');
+                return;
+            }
+            await executeClarityDuplicateDay(srcDay, tgtDay);
+            closeClarityModal();
+        });
+    }
+
+    const btnExecRep = document.getElementById('btnClarityExecuteReplicateMonth');
+    if (btnExecRep) {
+        btnExecRep.addEventListener('click', async () => {
+            const hasOverload = Boolean(document.getElementById('clarityCheckProgressiveOverload')?.checked);
+            await executeClarityReplicateMonth(hasOverload);
+            closeClarityModal();
+        });
+    }
+}
+
+// -----------------------------------------------------------------------------
+// MOTOR ALGORÍTMICO DE SPLITS (TAXONOMÍA SENS BIOMECÁNICA)
+// -----------------------------------------------------------------------------
+function buildClarityWorkoutSplit({ goal, freq, modality, restriction, athId }) {
+    // Parámetros de series y repeticiones según objetivo clínico
+    let setsCount = 4;
+    let compoundReps = '8-10';
+    let isoReps = '10-12';
+    let restCompound = 90;
+    let restIso = 75;
+
+    if (goal === 'deficit') {
+        setsCount = 3;
+        compoundReps = '10-12';
+        isoReps = '12-15';
+        restCompound = 75;
+        restIso = 60;
+    } else if (goal === 'hipertrofia') {
+        setsCount = 4;
+        compoundReps = '8-10';
+        isoReps = '10-12';
+        restCompound = 90;
+        restIso = 75;
+    } else if (goal === 'movilidad') {
+        setsCount = 3;
+        compoundReps = '12';
+        isoReps = '15';
+        restCompound = 60;
+        restIso = 60;
+    }
+
+    // Bloques biomecánicos adaptados a restricciones
+    const getChestCompound = () => {
+        if (restriction === 'hombro') {
+            return { id: 'ex-p1-neutro', name: 'Press de Banca con Mancuernas (Agarre Neutro)', sets: setsCount, reps: compoundReps, rest: restCompound, defaultWeight: 20, notes: 'Codos a 30° respecto al torso para preservar cápsula anterior' };
+        }
+        return { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', sets: setsCount, reps: compoundReps, rest: restCompound, defaultWeight: 22, notes: 'Escápulas retraídas y arco fisiológico natural' };
+    };
+
+    const getBackCompound = () => {
+        if (restriction === 'lumbar') {
+            return { id: 'ex-t3-apoyado', name: 'Remo en Banco Inclinado Pecho Apoyado', sets: setsCount, reps: compoundReps, rest: restCompound, defaultWeight: 18, notes: 'Pecho firme en banco a 30°, cero estrés de cizalla lumbar' };
+        }
+        return { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano en Banco', sets: setsCount, reps: compoundReps, rest: restCompound, defaultWeight: 20, notes: 'Tracción al bolsillo sin rotar el torso' };
+    };
+
+    const getShoulderAccessory = () => {
+        if (restriction === 'hombro') {
+            return { id: 'ex-sh1-facepull', name: 'Face Pull en Polea con Rotación Externa', sets: 3, reps: '15', rest: 60, defaultWeight: 15, notes: 'Codos altos y rotación externa para estabilidad de manguito' };
+        }
+        return { id: 'ex-p4', name: 'Press Militar Sentado con Mancuernas', sets: 3, reps: isoReps, rest: restIso, defaultWeight: 14, notes: 'Pecho alto, core comprimido, recorrido hasta mentón' };
+    };
+
+    const getQuadCompound = () => {
+        if (restriction === 'rodilla') {
+            return { id: 'ex-q1-box', name: 'Sentadilla al Cajón (Box Squat con Espinilla Vertical)', sets: setsCount, reps: compoundReps, rest: restCompound, defaultWeight: 22, notes: 'Espinilla 90° con suelo para minimizar compresión patelofemoral' };
+        }
+        if (restriction === 'lumbar') {
+            return { id: 'ex-q4', name: 'Prensa 45° con Respaldo Apoyado', sets: setsCount, reps: compoundReps, rest: restCompound, defaultWeight: 80, notes: 'Sacro totalmente pegado al respaldo sin retroversión pélvica' };
+        }
+        return { id: 'ex-q1', name: 'Sentadilla Goblet con Mancuerna', sets: setsCount, reps: compoundReps, rest: restCompound, defaultWeight: 24, notes: 'Bajada en 3s buscando profundidad cómoda y empuje de talones' };
+    };
+
+    const getPosteriorCompound = () => {
+        if (restriction === 'lumbar') {
+            return { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: setsCount, reps: isoReps, rest: restCompound, defaultWeight: 50, notes: 'Máxima activación de glúteo mayor sin carga axial sobre columna' };
+        }
+        return { id: 'ex-h1', name: 'Peso Muerto Rumano con Mancuernas', sets: setsCount, reps: compoundReps, rest: restCompound, defaultWeight: 26, notes: 'Bisagra pura de cadera manteniendo columna neutra' };
+    };
+
+    const plan = {
+        day1: { title: 'Lunes', exercises: [], modality: null, completed: false },
+        day2: { title: 'Martes', exercises: [], modality: null, completed: false },
+        day3: { title: 'Miércoles', exercises: [], modality: null, completed: false },
+        day4: { title: 'Jueves', exercises: [], modality: null, completed: false },
+        day5: { title: 'Viernes', exercises: [], modality: null, completed: false },
+        day6: { title: 'Sábado', exercises: [], modality: null, completed: false },
+        day7: { title: 'Domingo', exercises: [], modality: null, completed: false }
+    };
+
+    const resolveMod = (index, totalDays) => {
+        if (modality === 'presencial') return 'presencial';
+        if (modality === 'online') return 'online';
+        if (modality === 'mixto') {
+            return (index < 2) ? 'presencial' : 'autonomo';
+        }
+        return 'presencial';
+    };
+
+    if (freq === 2) {
+        plan.day1 = {
+            title: 'Lunes: Full Body A (Empuje & Cuádriceps)',
+            modality: resolveMod(0, 2),
+            completed: false,
+            exercises: [
+                getChestCompound(),
+                getQuadCompound(),
+                getBackCompound(),
+                { id: 'ex-core1', name: 'Plancha Frontal con Respiración Diafragmática', sets: 3, reps: '45s', rest: 60, defaultWeight: 0, notes: 'Core compacto y glúteos contraídos' }
+            ]
+        };
+        plan.day2 = { title: 'Martes: Descanso Activo / Pasos', modality: 'descanso', completed: false, exercises: [] };
+        plan.day3 = { title: 'Miércoles: Descanso Regenerativo', modality: 'descanso', completed: false, exercises: [] };
+        plan.day4 = {
+            title: 'Jueves: Full Body B (Tracción & Cadena Posterior)',
+            modality: resolveMod(1, 2),
+            completed: false,
+            exercises: [
+                getBackCompound(),
+                getPosteriorCompound(),
+                getShoulderAccessory(),
+                { id: 'ex-t2', name: 'Jalón al Pecho en Polea Alta', sets: 3, reps: isoReps, rest: restIso, defaultWeight: 40, notes: 'Dorsales anchos activos, tracción limpia' }
+            ]
+        };
+        plan.day5 = { title: 'Viernes: Descanso Activo / Pasos', modality: 'descanso', completed: false, exercises: [] };
+        plan.day6 = { title: 'Sábado: Movilidad Articular', modality: 'descanso', completed: false, exercises: [] };
+        plan.day7 = { title: 'Domingo: Descanso Celular', modality: 'descanso', completed: false, exercises: [] };
+    } else if (freq === 3) {
+        plan.day1 = {
+            title: 'Lunes: Torso (Empuje & Tirón)',
+            modality: resolveMod(0, 3),
+            completed: false,
+            exercises: [
+                getChestCompound(),
+                getBackCompound(),
+                getShoulderAccessory(),
+                { id: 'ex-t2', name: 'Jalón al Pecho en Polea', sets: 3, reps: isoReps, rest: restIso, defaultWeight: 40, notes: 'Tracción al esternón' }
+            ]
+        };
+        plan.day2 = { title: 'Martes: Descanso Activo / 8.000 Pasos', modality: 'descanso', completed: false, exercises: [] };
+        plan.day3 = {
+            title: 'Miércoles: Piernas (Fuerza & Cadera)',
+            modality: resolveMod(1, 3),
+            completed: false,
+            exercises: [
+                getQuadCompound(),
+                getPosteriorCompound(),
+                { id: 'ex-q5', name: 'Estocadas Búlgaras con Mancuernas', sets: 3, reps: '10', rest: restIso, defaultWeight: 12, notes: 'Énfasis en cuádriceps y glúteo' },
+                { id: 'ex-h3', name: 'Curl Femoral Sentado', sets: 3, reps: '12', rest: 60, defaultWeight: 35, notes: 'Tensión continua en flexión' }
+            ]
+        };
+        plan.day4 = { title: 'Jueves: Descanso Activo / Movilidad', modality: 'descanso', completed: false, exercises: [] };
+        plan.day5 = {
+            title: 'Viernes: Full Body & Cadena Posterior',
+            modality: resolveMod(2, 3),
+            completed: false,
+            exercises: [
+                { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: setsCount, reps: isoReps, rest: restCompound, defaultWeight: 45, notes: 'Pausa 2s arriba en contracción máxima' },
+                { id: 'ex-p6', name: 'Flexiones con Pausa en Suelo', sets: 3, reps: '12-15', rest: 60, defaultWeight: 0, notes: 'Core sólido y rango completo' },
+                getBackCompound(),
+                { id: 'ex-p5', name: 'Elevaciones Laterales con Mancuernas', sets: 3, reps: '15', rest: 60, defaultWeight: 8, notes: 'Plano escapular a 30 grados' }
+            ]
+        };
+        plan.day6 = { title: 'Sábado: Descanso Regenerativo', modality: 'descanso', completed: false, exercises: [] };
+        plan.day7 = { title: 'Domingo: Descanso Celular', modality: 'descanso', completed: false, exercises: [] };
+    } else if (freq === 4) {
+        plan.day1 = {
+            title: 'Lunes: Torso Fuerza & Empuje (A)',
+            modality: resolveMod(0, 4),
+            completed: false,
+            exercises: [
+                getChestCompound(),
+                getBackCompound(),
+                getShoulderAccessory(),
+                { id: 'ex-tr1', name: 'Extensiones de Tríceps en Polea Alta', sets: 3, reps: '12', rest: 60, defaultWeight: 20, notes: 'Codos estables pegados al tronco' }
+            ]
+        };
+        plan.day2 = {
+            title: 'Martes: Piernas & Core (A)',
+            modality: resolveMod(1, 4),
+            completed: false,
+            exercises: [
+                getQuadCompound(),
+                getPosteriorCompound(),
+                { id: 'ex-q4', name: 'Prensa 45°', sets: 3, reps: '12', rest: restIso, defaultWeight: 90, notes: 'Profundidad de 90° sin despegue de sacro' },
+                { id: 'ex-core1', name: 'Plancha Abdominal Frontal', sets: 3, reps: '45s', rest: 60, defaultWeight: 0, notes: 'Glúteos y transverso firmes' }
+            ]
+        };
+        plan.day3 = { title: 'Miércoles: Descanso Activo / Pasos', modality: 'descanso', completed: false, exercises: [] };
+        plan.day4 = {
+            title: 'Jueves: Torso Hipertrofia & Brazos (B)',
+            modality: resolveMod(2, 4),
+            completed: false,
+            exercises: [
+                { id: 'ex-p2', name: 'Press Inclinado con Mancuernas', sets: setsCount, reps: isoReps, rest: restCompound, defaultWeight: 18, notes: 'Banco a 30°, pecho alto' },
+                { id: 'ex-t2', name: 'Jalón al Pecho en Polea', sets: setsCount, reps: isoReps, rest: restIso, defaultWeight: 42, notes: 'Dorsales en tensión continua' },
+                { id: 'ex-p5', name: 'Elevaciones Laterales con Mancuernas', sets: 3, reps: '15', rest: 60, defaultWeight: 8, notes: 'Plano escapular sin balanceo' },
+                { id: 'ex-b1', name: 'Curl de Bíceps con Mancuernas', sets: 3, reps: '12', rest: 60, defaultWeight: 12, notes: 'Supinación al subir' }
+            ]
+        };
+        plan.day5 = {
+            title: 'Viernes: Piernas & Glúteos (B)',
+            modality: resolveMod(3, 4),
+            completed: false,
+            exercises: [
+                { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', sets: setsCount, reps: isoReps, rest: restCompound, defaultWeight: 50, notes: 'Pausa 2s arriba' },
+                getQuadCompound(),
+                { id: 'ex-h3', name: 'Curl Femoral Sentado', sets: 3, reps: '12', rest: 60, defaultWeight: 35, notes: 'Recorrido completo controlado' }
+            ]
+        };
+        plan.day6 = { title: 'Sábado: Descanso Regenerativo', modality: 'descanso', completed: false, exercises: [] };
+        plan.day7 = { title: 'Domingo: Descanso Celular', modality: 'descanso', completed: false, exercises: [] };
+    } else if (freq >= 5) {
+        // Split Push / Pull / Legs + Upper / Lower
+        plan.day1 = {
+            title: 'Lunes: Push (Pecho, Hombro, Tríceps)',
+            modality: resolveMod(0, freq),
+            completed: false,
+            exercises: [
+                getChestCompound(),
+                getShoulderAccessory(),
+                { id: 'ex-p2', name: 'Press Inclinado con Mancuernas', sets: 3, reps: isoReps, rest: restIso, defaultWeight: 18, notes: 'Banco a 30°' },
+                { id: 'ex-tr1', name: 'Extensiones de Tríceps en Polea', sets: 3, reps: '12', rest: 60, defaultWeight: 20, notes: 'Bloqueo distal' }
+            ]
+        };
+        plan.day2 = {
+            title: 'Martes: Pull (Espalda, Deltoides Post, Bíceps)',
+            modality: resolveMod(1, freq),
+            completed: false,
+            exercises: [
+                getBackCompound(),
+                { id: 'ex-t2', name: 'Jalón al Pecho en Polea', sets: setsCount, reps: isoReps, rest: restIso, defaultWeight: 42, notes: 'Dorsales anchos' },
+                { id: 'ex-sh1-facepull', name: 'Face Pull con Rotación Externa', sets: 3, reps: '15', rest: 60, defaultWeight: 16, notes: 'Manguito rotador' },
+                { id: 'ex-b1', name: 'Curl de Bíceps con Mancuernas', sets: 3, reps: '12', rest: 60, defaultWeight: 12, notes: 'Supinación limpia' }
+            ]
+        };
+        plan.day3 = {
+            title: 'Miércoles: Legs (Cuádriceps, Isquios & Glúteos)',
+            modality: resolveMod(2, freq),
+            completed: false,
+            exercises: [
+                getQuadCompound(),
+                getPosteriorCompound(),
+                { id: 'ex-h2', name: 'Hip Thrust con Barra', sets: 3, reps: '12', rest: restCompound, defaultWeight: 45, notes: 'Pausa 2s arriba' },
+                { id: 'ex-h3', name: 'Curl Femoral Sentado', sets: 3, reps: '12', rest: 60, defaultWeight: 35, notes: 'Control excéntrico' }
+            ]
+        };
+        plan.day4 = { title: freq === 6 ? 'Jueves: Push Secundario' : 'Jueves: Descanso Activo / Movilidad', modality: freq === 6 ? resolveMod(3, 6) : 'descanso', completed: false, exercises: freq === 6 ? [getChestCompound(), getShoulderAccessory()] : [] };
+        plan.day5 = {
+            title: 'Viernes: Upper Hipertrofia & Densidad',
+            modality: resolveMod(freq === 6 ? 4 : 3, freq),
+            completed: false,
+            exercises: [
+                getBackCompound(),
+                getChestCompound(),
+                { id: 'ex-p5', name: 'Elevaciones Laterales en Polea', sets: 3, reps: '15', rest: 60, defaultWeight: 7, notes: 'Tensión continua' }
+            ]
+        };
+        plan.day6 = {
+            title: 'Sábado: Lower & Core Funcional',
+            modality: resolveMod(freq === 6 ? 5 : 4, freq),
+            completed: false,
+            exercises: [
+                getQuadCompound(),
+                getPosteriorCompound(),
+                { id: 'ex-core1', name: 'Plancha Abdominal Frontal', sets: 3, reps: '45s', rest: 60, defaultWeight: 0, notes: 'Core firme' }
+            ]
+        };
+        plan.day7 = { title: 'Domingo: Descanso Celular', modality: 'descanso', completed: false, exercises: [] };
+    }
+
+    return plan;
+}
+
+function renderClarityWorkoutDaysGrid(plan) {
+    const grid = document.getElementById('clarityWorkoutDaysGrid');
+    const badge = document.getElementById('clarityWorkoutVolumeBadge');
+    if (!grid) return;
+
+    let totalSessions = 0;
+    let totalPlanKcal = 0;
+    let html = '';
+
+    const dayKeys = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
+    dayKeys.forEach(k => {
+        const d = plan[k];
+        if (!d) return;
+
+        const dayName = getDayNameFromKey(k);
+        const hasEx = d.exercises && d.exercises.length > 0;
+        if (hasEx) totalSessions++;
+
+        let dayKcal = 0;
+        let exHtml = '';
+
+        if (hasEx) {
+            d.exercises.forEach((ex, idx) => {
+                const s = parseInt(ex.sets, 10) || 3;
+                const w = parseFloat(ex.defaultWeight) || 0;
+                const basePerSet = w >= 40 ? 10 : (w >= 15 ? 8 : 6);
+                const exKcal = s * basePerSet;
+                dayKcal += exKcal;
+
+                exHtml += `
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 7px 9px; margin-bottom: 6px; font-size: 11px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+                            <strong style="color: #FFFFFF; font-size: 11.5px;">#${idx + 1} ${ex.name}</strong>
+                            <span style="color: var(--accent-champagne); font-size: 10px; font-weight: 700;">~${exKcal} kcal</span>
+                        </div>
+                        <div style="color: var(--text-muted); font-size: 10.5px; display: flex; gap: 8px;">
+                            <span>${ex.sets} series × ${ex.reps} reps</span>
+                            ${w > 0 ? `<span>• ${w} kg</span>` : ''}
+                            <span>• ${ex.rest || 75}s desc</span>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            exHtml = `
+                <div style="padding: 18px 10px; text-align: center; color: var(--text-muted); font-size: 11.5px; font-style: italic;">
+                    Descanso activo, hidratación y regeneración neuromuscular.
+                </div>
+            `;
+        }
+
+        totalPlanKcal += dayKcal;
+
+        const mod = d.modality || 'descanso';
+        const modBadgeClass = (mod === 'presencial') ? 'presencial' : (mod === 'online') ? 'online' : (mod === 'autonomo') ? 'auto' : 'rest';
+        const modLabel = (mod === 'presencial') ? 'Presencial 1:1' : (mod === 'online') ? 'Online App' : (mod === 'autonomo') ? 'Autónomo' : 'Descanso';
+
+        html += `
+            <div class="clarity-day-card ${hasEx ? 'has-exercises' : 'is-rest'}" style="background: #141417; border: 1px solid ${hasEx ? 'rgba(229, 203, 167, 0.25)' : 'rgba(255, 255, 255, 0.06)'}; border-radius: 12px; padding: 12px; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
+                    <div>
+                        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent-champagne); font-weight: 800;">${dayName}</div>
+                        <div style="font-size: 12px; font-weight: 700; color: #FFFFFF; margin-top: 2px;">${d.title || dayName}</div>
+                    </div>
+                    <span class="sens-day-badge ${modBadgeClass}" style="font-size: 9.5px; padding: 2px 7px;">${modLabel}</span>
+                </div>
+                <div style="flex: 1;">
+                    ${exHtml}
+                </div>
+                ${hasEx ? `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.08); font-size: 10.5px;">
+                        <span style="color: var(--text-muted);">${d.exercises.length} ejercicios</span>
+                        <strong style="color: var(--accent-champagne);">~${dayKcal} kcal</strong>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    });
+
+    grid.innerHTML = html;
+
+    if (badge) {
+        badge.textContent = `Volumen Semanal: ${totalSessions} sesiones • ~${totalPlanKcal} kcal quemadas`;
+    }
+}
+
+async function applyClarityWorkoutPlan(plan, focusEdit = false) {
+    const athId = coachWorkoutState.activeAthleteId || 'mock_vip';
+    localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(plan));
+
+    if (window.__coachAthletesCache) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached) cached.prescribed_workouts = plan;
+    }
+
+    let supabaseError = null;
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            const { error } = await supabaseClient.from('profiles').update({
+                prescribed_workouts: plan
+            }).eq('id', athId);
+            if (error) supabaseError = error;
+        } catch (e) {
+            supabaseError = e;
+        }
+    }
+
+    if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
+        if (AppState.profile) AppState.profile.prescribed_workouts = plan;
+        Object.assign(WORKOUT_DAYS_DATA, plan);
+        renderWorkoutDay(AppState.currentDay || 'day1');
+        renderMonthlyCalendar();
+    }
+
+    renderCoachDynamicWeekStrip();
+    renderCoachAssignedExercises();
+    if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
+    if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
+
+    const activeSessions = Object.values(plan).filter(d => d.exercises && d.exercises.length > 0).length;
+
+    if (supabaseError) {
+        showCoachSaveSuccessBanner({
+            title: 'Plan Clarity Guardado Localmente',
+            body: `Se generó y guardó la periodización de ${activeSessions} sesiones semanales en memoria local.`,
+            errorNotice: `<strong>Aviso de Base de Datos:</strong> ${supabaseError.message || supabaseError}`
+        });
+    } else {
+        showCoachSaveSuccessBanner({
+            title: '¡Plan Mensual SENS Clarity Sincronizado!',
+            body: `Se asignó la periodización completa de ${activeSessions} sesiones semanales directamente a la cuenta del alumno en Supabase. El alumno verá todos sus días actualizados al instante.`
+        });
+    }
+}
+
+// -----------------------------------------------------------------------------
+// MOTOR NUTRICIONAL ALGORÍTMICO (MIFFLIN-ST JEOR & DIRECTIVA SENS)
+// -----------------------------------------------------------------------------
+function calculateAndRenderClarityNutrition() {
+    const w = parseFloat(document.getElementById('clarityNutriWeight')?.value) || 75;
+    const h = parseFloat(document.getElementById('clarityNutriHeight')?.value) || 175;
+    const age = parseFloat(document.getElementById('clarityNutriAge')?.value) || 30;
+    const sex = document.getElementById('clarityNutriSex')?.value || 'male';
+    const act = parseFloat(document.getElementById('clarityNutriActivity')?.value) || 1.55;
+    const strategy = document.getElementById('clarityNutriGoalStrategy')?.value || 'recomposicion';
+
+    // Mifflin-St Jeor TMB
+    const bmr = (10 * w) + (6.25 * h) - (5 * age) + (sex === 'male' ? 5 : -161);
+    const tdee = Math.round(bmr * act);
+
+    let adj = -150;
+    let protPerKg = 2.0;
+    let strategyLabel = 'Recomposición Corporal';
+
+    if (strategy === 'deficit') {
+        adj = -450;
+        protPerKg = 2.0;
+        strategyLabel = 'Déficit Calórico & Oxidación de Grasas';
+    } else if (strategy === 'recomposicion') {
+        adj = -150;
+        protPerKg = 2.0;
+        strategyLabel = 'Recomposición Fisiológica';
+    } else if (strategy === 'hipertrofia') {
+        adj = 300;
+        protPerKg = 1.8;
+        strategyLabel = 'Superávit Controlado para Hipertrofia';
+    } else if (strategy === 'normo') {
+        adj = 0;
+        protPerKg = 1.8;
+        strategyLabel = 'Normocalórico & Mantenimiento Celular';
+    }
+
+    const targetKcal = Math.max(1300, Math.round(tdee + adj));
+    const prot = Math.round(w * protPerKg);
+    const fats = Math.round(w * 0.9);
+    const remainingKcal = targetKcal - (prot * 4) - (fats * 9);
+    const carbs = Math.max(50, Math.round(remainingKcal / 4));
+    const water = (Math.round(w * 0.035 * 10) / 10).toFixed(1);
+
+    const kpiTdee = document.getElementById('clarityKpiTdee');
+    const kpiTarget = document.getElementById('clarityKpiTargetKcal');
+    const kpiProt = document.getElementById('clarityKpiProtein');
+    const kpiCarbs = document.getElementById('clarityKpiCarbs');
+    const kpiFats = document.getElementById('clarityKpiFats');
+    const kpiWater = document.getElementById('clarityKpiWater');
+    const dirInput = document.getElementById('clarityNutriDirective');
+
+    if (kpiTdee) kpiTdee.textContent = `${tdee} kcal`;
+    if (kpiTarget) kpiTarget.textContent = `${targetKcal} kcal`;
+    if (kpiProt) kpiProt.textContent = `${prot} g`;
+    if (kpiCarbs) kpiCarbs.textContent = `${carbs} g`;
+    if (kpiFats) kpiFats.textContent = `${fats} g`;
+    if (kpiWater) kpiWater.textContent = `${water} L`;
+
+    if (dirInput) {
+        dirInput.value = `Pauta SENS de ${strategyLabel}: Target de ${targetKcal} kcal (${prot}g proteína • 2.0g/kg para preservar masa magra, ${carbs}g carbohidratos complejos peri-entrenamiento y ${fats}g grasas esenciales). Hidratación objetivo: ${water}L de agua filtrada al día. Priorizar alimentos reales: pechuga pastoril, huevos de campo, lomo magro, arroz basmati, avena y palta.`;
+    }
+}
+
+async function applyClarityNutritionPlan() {
+    const athId = coachWorkoutState.activeAthleteId || 'mock_vip';
+    const kcal = parseInt(document.getElementById('clarityKpiTargetKcal')?.textContent, 10) || 2200;
+    const prot = parseInt(document.getElementById('clarityKpiProtein')?.textContent, 10) || 160;
+    const carbs = parseInt(document.getElementById('clarityKpiCarbs')?.textContent, 10) || 220;
+    const fats = parseInt(document.getElementById('clarityKpiFats')?.textContent, 10) || 70;
+    const water = parseFloat(document.getElementById('clarityKpiWater')?.textContent) || 2.6;
+    const directive = document.getElementById('clarityNutriDirective')?.value || '';
+
+    // Sincronizar en inputs de la pestaña Nutrición de Coach OS
+    const coachKcal = document.getElementById('coachTargetKcalInput');
+    const coachProt = document.getElementById('coachTargetProtInput');
+    const coachCarbs = document.getElementById('coachTargetCarbsInput');
+    const coachFats = document.getElementById('coachTargetFatsInput');
+    const coachWater = document.getElementById('coachTargetWaterInput');
+    const coachDir = document.getElementById('coachNutritionDirectiveInput');
+
+    if (coachKcal) coachKcal.value = kcal;
+    if (coachProt) coachProt.value = prot;
+    if (coachCarbs) coachCarbs.value = carbs;
+    if (coachFats) coachFats.value = fats;
+    if (coachWater) coachWater.value = water;
+    if (coachDir) coachDir.value = directive;
+
+    const prescriptionData = {
+        target_calories: kcal,
+        target_protein: prot,
+        target_carbs: carbs,
+        target_fats: fats,
+        target_water: water,
+        directive_note: directive,
+        prescribed_foods: coachNutritionFilterState?.lastPrescribedFoods || [],
+        updated_at: new Date().toISOString()
+    };
+
+    localStorage.setItem(`sens_prescribed_nutrition_${athId}`, JSON.stringify(prescriptionData));
+
+    let supabaseError = null;
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            const { error } = await supabaseClient.from('profiles').update({
+                prescribed_nutrition: prescriptionData
+            }).eq('id', athId);
+            if (error) supabaseError = error;
+        } catch (e) {
+            supabaseError = e;
+        }
+    }
+
+    if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
+        if (AppState.profile) AppState.profile.prescribed_nutrition = prescriptionData;
+        if (typeof syncMemberNutritionPrescription === 'function') {
+            syncMemberNutritionPrescription(athId, prescriptionData);
+        }
+    }
+
+    if (supabaseError) {
+        showCoachSaveSuccessBanner({
+            title: 'Nutrición Guardada Localmente',
+            body: `Pauta de ${kcal} kcal y macros asignada en memoria local.`,
+            errorNotice: `<strong>Aviso de Base de Datos:</strong> ${supabaseError.message || supabaseError}`
+        });
+    } else {
+        showCoachSaveSuccessBanner({
+            title: '¡Pauta Nutricional Sincronizada!',
+            body: `Se asignó un target calórico de ${kcal} kcal (${prot}g Proteínas / ${carbs}g Carbohidratos / ${fats}g Grasas / ${water}L Agua) directamente al portal del alumno en Supabase.`
+        });
+    }
+}
+
+// -----------------------------------------------------------------------------
+// OPERACIONES MASIVAS (DUPLICAR DÍA & REPLICAR MESOCICLO A 4 SEMANAS)
+// -----------------------------------------------------------------------------
+async function executeClarityDuplicateDay(sourceKey, targetKey) {
+    const athId = coachWorkoutState.activeAthleteId || 'mock_vip';
+    const data = getCoachAthleteWorkoutData(athId);
+
+    const sourceDay = data[sourceKey];
+    if (!sourceDay || !sourceDay.exercises || sourceDay.exercises.length === 0) {
+        showSensToast(`El ${getDayNameFromKey(sourceKey)} no tiene ejercicios cargados para duplicar.`, 'warning', 3500);
+        return;
+    }
+
+    const srcName = getDayNameFromKey(sourceKey);
+    const tgtName = getDayNameFromKey(targetKey);
+
+    data[targetKey] = {
+        title: `${tgtName}: Replicado de ${srcName} (${sourceDay.title || srcName})`,
+        modality: sourceDay.modality || 'presencial',
+        completed: false,
+        exercises: JSON.parse(JSON.stringify(sourceDay.exercises))
+    };
+
+    localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
+
+    if (window.__coachAthletesCache) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached) cached.prescribed_workouts = data;
+    }
+
+    let supabaseError = null;
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            const { error } = await supabaseClient.from('profiles').update({
+                prescribed_workouts: data
+            }).eq('id', athId);
+            if (error) supabaseError = error;
+        } catch (e) {
+            supabaseError = e;
+        }
+    }
+
+    if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
+        if (AppState.profile) AppState.profile.prescribed_workouts = data;
+        Object.assign(WORKOUT_DAYS_DATA, data);
+        renderWorkoutDay(AppState.currentDay || 'day1');
+        renderMonthlyCalendar();
+    }
+
+    renderCoachDynamicWeekStrip();
+    renderCoachAssignedExercises();
+
+    showCoachSaveSuccessBanner({
+        title: '¡Día Duplicado Exitosamente!',
+        body: `Se copiaron los ${sourceDay.exercises.length} ejercicios de ${srcName} directamente a ${tgtName} con sus series, repeticiones y cargas pautadas.`
+    });
+}
+
+async function executeClarityReplicateMonth(hasOverload = true) {
+    const athId = coachWorkoutState.activeAthleteId || 'mock_vip';
+    const data = getCoachAthleteWorkoutData(athId);
+
+    const hasAnySession = Object.values(data).some(d => d.exercises && d.exercises.length > 0);
+    if (!hasAnySession) {
+        showSensToast('Cargá o generá una rutina semanal antes de replicar el mesociclo.', 'warning', 3500);
+        return;
+    }
+
+    // Proyección del mesociclo de 4 semanas
+    const mesocycleProjection = {
+        athlete_id: athId,
+        created_at: new Date().toISOString(),
+        progressive_overload_enabled: hasOverload,
+        weeks: {
+            week1: { label: 'Semana 1: Carga Base (Técnica & Calibración)', load_factor: 1.0, data: JSON.parse(JSON.stringify(data)) },
+            week2: { label: 'Semana 2: Progresión (+2.5 kg en multiarticulares)', load_factor: 1.05, data: applyOverloadToWeek(data, 2.5, 0) },
+            week3: { label: 'Semana 3: Pico de Volumen (+5.0 kg o +1 repetición)', load_factor: 1.10, data: applyOverloadToWeek(data, 5.0, 1) },
+            week4: { label: 'Semana 4: Descarga Técnica & Regeneración (RPE 6)', load_factor: 0.85, data: applyDeloadToWeek(data) }
+        }
+    };
+
+    localStorage.setItem(`sens_athlete_mesocycle_${athId}`, JSON.stringify(mesocycleProjection));
+    localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
+
+    let supabaseError = null;
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            const { error } = await supabaseClient.from('profiles').update({
+                prescribed_workouts: data,
+                mesocycle_plan: mesocycleProjection
+            }).eq('id', athId);
+            if (error) supabaseError = error;
+        } catch (e) {
+            supabaseError = e;
+        }
+    }
+
+    if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
+        if (AppState.profile) {
+            AppState.profile.prescribed_workouts = data;
+            AppState.profile.mesocycle_plan = mesocycleProjection;
+        }
+        Object.assign(WORKOUT_DAYS_DATA, data);
+        renderWorkoutDay(AppState.currentDay || 'day1');
+        renderMonthlyCalendar();
+    }
+
+    renderCoachDynamicWeekStrip();
+    renderCoachAssignedExercises();
+
+    showCoachSaveSuccessBanner({
+        title: '¡Mesociclo de 4 Semanas Replicado!',
+        body: `Se proyectó la rutina completa a las 4 semanas del mes con sobrecarga progresiva fisiológica programada semana a semana. El alumno tiene todo su mes planificado en su calendario.`
+    });
+}
+
+function applyOverloadToWeek(weekData, kgAdd, repAdd) {
+    const cloned = JSON.parse(JSON.stringify(weekData));
+    Object.keys(cloned).forEach(k => {
+        const day = cloned[k];
+        if (day && day.exercises) {
+            day.exercises.forEach(ex => {
+                const w = parseFloat(ex.defaultWeight) || 0;
+                if (w >= 14) {
+                    ex.defaultWeight = Math.round((w + kgAdd) * 2) / 2;
+                } else if (repAdd > 0) {
+                    ex.notes = (ex.notes ? ex.notes + ' • ' : '') + `+${repAdd} rep sobrecarga`;
+                }
+            });
+        }
+    });
+    return cloned;
+}
+
+function applyDeloadToWeek(weekData) {
+    const cloned = JSON.parse(JSON.stringify(weekData));
+    Object.keys(cloned).forEach(k => {
+        const day = cloned[k];
+        if (day && day.exercises) {
+            day.title = (day.title || '') + ' (Descarga Técnica)';
+            day.exercises.forEach(ex => {
+                ex.sets = Math.max(2, (ex.sets || 3) - 1);
+                ex.notes = (ex.notes ? ex.notes + ' • ' : '') + 'Descarga activa: foco en técnica y velocidad a RPE 6';
+            });
+        }
+    });
+    return cloned;
 }
 
 // -----------------------------------------------------------------------------
@@ -10193,6 +11118,11 @@ function initFloatingDock() {
 function initCoachAthletePickerTriggers() {
     document.querySelectorAll('.btn-trigger-athlete-sheet').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            if (!isCurrentUserAdmin()) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
             e.preventDefault();
             e.stopPropagation();
             const bottomSheet = document.getElementById('athletePickerBottomSheet');
@@ -10213,6 +11143,7 @@ function initCoachAthletePickerTriggers() {
 // MÓDULO F: FICHA CLÍNICA 360° SOLO LECTURA, GESTIÓN DE OBJETIVOS & COPILOTO IA
 // =============================================================================
 window.openCoachAthleteDossier = function(athId) {
+    if (!isCurrentUserAdmin()) return;
     const modal = document.getElementById('coachAthleteDossierModal');
     const titleEl = document.getElementById('dossierAthleteNameTitle');
     const metaEl = document.getElementById('dossierAthleteSubMeta');
