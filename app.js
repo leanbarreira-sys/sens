@@ -923,40 +923,53 @@ function initLeadCapture() {
 // =============================================================================
 // GESTOR DE ROLES Y ATLETAS PARA PANEL DE COACH (NICO)
 // =============================================================================
-async function loadCoachAthletesList() {
-    let dbAthletes = [];
+async function loadCoachAthletesList(forceRefresh = false) {
     if (!isCurrentUserAdmin()) {
         return window.__coachAthletesCache || [];
     }
-    if (supabaseClient) {
-        // Asegurar que el Coach/Admin tenga rol admin en base de datos
-        if (AppState.user && AppState.user.id) {
-            try {
-                await supabaseClient.from('profiles').update({
-                    role: 'admin',
-                    user_type: 'admin'
-                }).eq('id', AppState.user.id);
-            } catch (err) {}
-        }
 
-        try {
-            const { data, error } = await supabaseClient
-                .from('profiles')
-                .select('*')
-                .order('created_at', { ascending: false });
-            if (!error && data && data.length > 0) {
-                dbAthletes = data;
-            }
-        } catch (e) {
-            console.warn('Error al cargar atletas de Supabase para coach:', e);
-        }
+    // In-flight deduplication: Si ya hay una petición en curso, retornar la misma promesa
+    if (window._isFetchingCoachAthletes) {
+        return window._isFetchingCoachAthletes;
     }
 
-    window.__coachAthletesCache = dbAthletes;
+    window._isFetchingCoachAthletes = (async () => {
+        let dbAthletes = [];
+        if (supabaseClient) {
+            // Asegurar rol admin solo una vez por sesión (cero mutaciones innecesarias en cada lectura)
+            if (AppState.user && AppState.user.id && !window.__sensAdminRoleSynced) {
+                try {
+                    await supabaseClient.from('profiles').update({
+                        role: 'admin',
+                        user_type: 'admin'
+                    }).eq('id', AppState.user.id);
+                    window.__sensAdminRoleSynced = true;
+                } catch (err) {}
+            }
 
-    // Sincronizar Bottom Sheet Nativo y Hub de Gestión
-    if (typeof renderAthleteBottomSheetList === 'function') renderAthleteBottomSheetList();
-    if (typeof renderCoachAthletesHub === 'function') renderCoachAthletesHub();
+            try {
+                const { data, error } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (!error && data && data.length > 0) {
+                    dbAthletes = data;
+                }
+            } catch (e) {
+                console.warn('Error al cargar atletas de Supabase para coach:', e);
+            }
+        }
+
+        // Cache diffing: verificar si la lista cambió para no provocar layout thrashing en la UI
+        const prevCache = window.__coachAthletesCache || [];
+        const isDataChanged = forceRefresh || prevCache.length !== dbAthletes.length || JSON.stringify(prevCache) !== JSON.stringify(dbAthletes);
+        window.__coachAthletesCache = dbAthletes;
+
+        if (isDataChanged) {
+            // Sincronizar Bottom Sheet Nativo y Hub de Gestión solo si hubo cambios reales
+            if (typeof renderAthleteBottomSheetList === 'function') renderAthleteBottomSheetList();
+            if (typeof renderCoachAthletesHub === 'function') renderCoachAthletesHub();
+        }
 
     // Sincronizar selectores del Hub de Coach si son elementos select
     const roster = getConsolidatedCoachAthletes();
@@ -1001,6 +1014,14 @@ async function loadCoachAthletesList() {
             waLink.href = `https://wa.me/?text=${msg}`;
         }
     }
+    return dbAthletes;
+})();
+
+try {
+    return await window._isFetchingCoachAthletes;
+} finally {
+    window._isFetchingCoachAthletes = null;
+}
 }
 
 function initRoleSwitcher() {
@@ -2784,6 +2805,10 @@ function switchPortalView(viewId) {
     }
     if (viewId === 'coachHubView') {
         if (typeof syncCoachMasterCard === 'function') syncCoachMasterCard();
+    } else {
+        if (typeof window.stopCoachMarketingStudio === 'function') {
+            window.stopCoachMarketingStudio();
+        }
     }
     if (viewId === 'workoutView') {
         if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
@@ -2793,6 +2818,10 @@ function switchPortalView(viewId) {
         if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
         if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation(true);
         if (typeof initDashboardCardsTactileFeedback === 'function') initDashboardCardsTactileFeedback();
+    }
+
+    if (window.scrollY > 80) {
+        window.scrollTo({ top: 0, behavior: 'instant' });
     }
 }
 
@@ -5875,7 +5904,8 @@ function initCoachOS() {
         document.body.style.overflow = 'hidden';
         if (btnOpenSheet) btnOpenSheet.setAttribute('aria-expanded', 'true');
         renderAthleteBottomSheetList();
-        if (typeof loadCoachAthletesList === 'function') {
+        // Solo refrescar en segundo plano si no hay datos en caché para evitar jank/layout thrashing al abrir el sheet
+        if ((!window.__coachAthletesCache || window.__coachAthletesCache.length === 0) && typeof loadCoachAthletesList === 'function') {
             loadCoachAthletesList();
         }
     }
@@ -5905,7 +5935,7 @@ function initCoachOS() {
         btnTopbarCoachOS.addEventListener('click', () => {
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
         });
     }
 
@@ -5920,7 +5950,7 @@ function initCoachOS() {
         btn.addEventListener('click', () => {
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
         });
     });
 
@@ -5928,7 +5958,7 @@ function initCoachOS() {
     document.querySelectorAll('.btn-store-entry').forEach(btn => {
         btn.addEventListener('click', () => {
             switchPortalView('storeView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
         });
     });
 
@@ -5937,7 +5967,7 @@ function initCoachOS() {
             closeAthleteSheet();
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
         });
     }
 
@@ -5965,7 +5995,7 @@ function initCoachOS() {
         btnOpenHub.addEventListener('click', () => {
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
         });
     }
 
@@ -5973,7 +6003,7 @@ function initCoachOS() {
     const refreshTableBtn = document.getElementById('btnCoachHubRefreshTable');
     if (refreshTableBtn) {
         refreshTableBtn.addEventListener('click', async () => {
-            await loadCoachAthletesList();
+            await loadCoachAthletesList(true);
             renderCoachAthletesHub();
             showSensToast('Lista de atletas sincronizada con éxito.', 'champagne');
         });
@@ -5984,7 +6014,7 @@ function initCoachOS() {
     if (viewStudentBtn) {
         viewStudentBtn.addEventListener('click', () => {
             switchPortalView('dashView');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
         });
     }
 
@@ -6035,8 +6065,14 @@ function initCoachOS() {
         if (resolvedPaneId === 'paneLibrary' && typeof window.renderCoachDatabasesTab === 'function') {
             window.renderCoachDatabasesTab();
         }
-        if (resolvedPaneId === 'paneMarketing' && typeof window.renderCoachMarketingStudio === 'function') {
-            window.renderCoachMarketingStudio();
+        if (resolvedPaneId === 'paneMarketing') {
+            if (typeof window.renderCoachMarketingStudio === 'function') {
+                window.renderCoachMarketingStudio();
+            }
+        } else {
+            if (typeof window.stopCoachMarketingStudio === 'function') {
+                window.stopCoachMarketingStudio();
+            }
         }
     };
 
@@ -6064,7 +6100,9 @@ function initCoachOS() {
                 if (typeof syncCoachMasterCard === 'function') {
                     syncCoachMasterCard(AppState.activeAthleteId);
                 }
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (window.scrollY > 80) {
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                }
             }
         });
     });
@@ -7125,7 +7163,7 @@ function inspectAthleteAsCoach(athId) {
     if (typeof window.updateDashboardWorkoutDirective === 'function') {
         window.updateDashboardWorkoutDirective();
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
     showSensToast(`Inspeccionando vista de ${target.full_name}.`, 'champagne');
 }
 
@@ -7152,7 +7190,7 @@ function exitAthleteInspection() {
         syncCoachMasterCard(AppState.activeAthleteId);
     }
     renderCoachAthletesHub();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
     showSensToast('Regresaste al panel Coach OS.', 'champagne');
 }
 
@@ -12707,13 +12745,35 @@ window.renderCoachMarketingStudio = function() {
         const pane = document.getElementById('paneMarketing');
         if (pane && pane.classList.contains('active')) {
             renderMarketingCanvasFrame();
+            mktStudioState.rafId = requestAnimationFrame(loopCanvas);
+        } else {
+            mktStudioState.rafId = null;
         }
-        mktStudioState.rafId = requestAnimationFrame(loopCanvas);
     };
     if (!mktStudioState.rafId) {
-        mktStudioState.rafId = requestAnimationFrame(loopCanvas);
+        const pane = document.getElementById('paneMarketing');
+        if (pane && pane.classList.contains('active')) {
+            mktStudioState.rafId = requestAnimationFrame(loopCanvas);
+        }
     }
     renderMarketingCanvasFrame();
+};
+
+window.stopCoachMarketingStudio = function() {
+    if (typeof mktStudioState !== 'undefined') {
+        if (mktStudioState.rafId) {
+            cancelAnimationFrame(mktStudioState.rafId);
+            mktStudioState.rafId = null;
+        }
+        if (mktStudioState.cycleTimer) {
+            clearInterval(mktStudioState.cycleTimer);
+            mktStudioState.cycleTimer = null;
+        }
+        const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
+        if (hiddenVideo && !hiddenVideo.paused) {
+            try { hiddenVideo.pause(); } catch (_) {}
+        }
+    }
 };
 
 function renderMarketingCanvasFrame() {

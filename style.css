@@ -4374,11 +4374,11 @@ video.ig-img {
 
 .portal-view.active {
     display: block;
-    animation: fadeInView 0.35s ease;
+    animation: none !important;
 }
 
 @keyframes fadeInView {
-    from { opacity: 0; }
+    from { opacity: 1; }
     to { opacity: 1; }
 }
 
@@ -7718,7 +7718,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 @keyframes fadeInCoach {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 1; transform: translateY(0); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -11158,11 +11158,18 @@ input[type="range"]::-webkit-slider-thumb:hover {
    MÓDULO DE EXPERIENCIA USUARIO LIGHT LUXURY & FLUID ANIMATIONS (APPLE HEALTH / OURA GRADE)
    ============================================================================= */
 
-/* 1. Base Portal en Blanco y Colores Claros de Brandbook */
+/* 1. Base Portal en Blanco y Colores Claros de Brandbook (Cero flash negro en overscroll móvil) */
+html.in-portal-mode,
+html:has(body.in-portal) {
+    background-color: #F8F9FA !important;
+    scroll-behavior: auto !important;
+}
+
 body.in-portal {
     background-color: #F8F9FA !important;
     color: #09090B !important;
     overflow-x: clip !important;
+    scroll-behavior: auto !important;
 }
 
 body.in-portal #app-container,
@@ -12310,7 +12317,8 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         position: fixed !important;
         bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
         left: 50% !important;
-        transform: translateX(-50%) !important;
+        transform: translate3d(-50%, 0, 0) !important;
+        -webkit-transform: translate3d(-50%, 0, 0) !important;
         width: calc(100% - 24px) !important;
         max-width: 400px !important;
         box-sizing: border-box !important;
@@ -12326,6 +12334,8 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         -webkit-backdrop-filter: blur(25px) !important;
         z-index: 1000 !important;
         overflow: hidden !important;
+        contain: layout style;
+        will-change: transform;
     }
 
     /* Si se está viendo Coach OS, ocultar dock de alumno y mostrar dock de coach */
@@ -12334,20 +12344,21 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         display: none !important;
     }
 
-    /* Dock de Coach OS: Exclusivo para cuando el admin está en Coach OS */
+    /* Dock de Coach OS: Exclusivo para cuando el admin está en Coach OS (6 Estaciones en 1 Fila Sin Wrap) */
     body.in-portal.is-admin.in-coach-mode #sensCoachFloatingDock,
     body.in-portal.is-admin[data-active-view="coachHubView"] #sensCoachFloatingDock {
         position: fixed !important;
         bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
         left: 50% !important;
-        transform: translateX(-50%) !important;
-        width: calc(100% - 24px) !important;
-        max-width: 400px !important;
+        transform: translate3d(-50%, 0, 0) !important;
+        -webkit-transform: translate3d(-50%, 0, 0) !important;
+        width: calc(100% - 16px) !important;
+        max-width: 440px !important;
         box-sizing: border-box !important;
         display: grid !important;
-        grid-template-columns: repeat(5, 1fr) !important;
-        gap: 2px !important;
-        padding: 6px 4px !important;
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 1px !important;
+        padding: 5px 2px !important;
         background: #09090B !important;
         border: 1px solid rgba(229, 203, 167, 0.25) !important;
         border-radius: 36px !important;
@@ -12356,6 +12367,25 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         -webkit-backdrop-filter: blur(25px) !important;
         z-index: 1000 !important;
         overflow: hidden !important;
+        contain: layout style;
+        will-change: transform;
+    }
+
+    #sensCoachFloatingDock .sens-dock-item {
+        padding: 6px 1px !important;
+        gap: 2px !important;
+        min-width: 0 !important;
+    }
+
+    #sensCoachFloatingDock .sens-dock-item svg {
+        width: 17px !important;
+        height: 17px !important;
+    }
+
+    #sensCoachFloatingDock .sens-dock-item span {
+        font-size: 8px !important;
+        letter-spacing: 0.1px !important;
+        max-width: 100% !important;
     }
 
     /* Bajo ninguna circunstancia un usuario no admin o una vista regular muestra el dock de coach */
@@ -14340,11 +14370,11 @@ body.in-portal #coachHubView {
 
 .coach-subpane.active {
     display: block;
-    animation: coachFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: none !important;
 }
 
 @keyframes coachFadeIn {
-    from { opacity: 0; transform: translateY(4px); }
+    from { opacity: 1; transform: translateY(0); }
     to { opacity: 1; transform: translateY(0); }
 }
 
