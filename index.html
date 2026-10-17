@@ -85,6 +85,9 @@
             try {
                 if (localStorage.getItem('sens_in_portal') === 'true' || localStorage.getItem('sens_active_user')) {
                     document.documentElement.classList.add('in-portal-mode');
+                    document.addEventListener('DOMContentLoaded', function() {
+                        if (document.body) document.body.classList.add('in-portal');
+                    }, { once: true });
                 }
             } catch(e) {}
         })();
@@ -97,7 +100,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=5.8">
+    <link rel="stylesheet" href="style.css?v=5.9">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -207,20 +210,16 @@
             <div class="hero-overlay"></div>
 
             <div class="hero-train-content">
-                <div class="hero-slogan-capsule"
-                    style="margin-bottom: 16px; display: inline-flex; align-items: center; gap: 8px; background: rgba(18, 18, 22, 0.75); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: none; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4); padding: 6px 16px; border-radius: 24px; width: fit-content;">
-                    <span style="font-size: 12px; color: #FFFFFF; font-weight: 300; letter-spacing: 0.5px;">¿Entrenamos
-                        juntos?</span>
-                    <span
-                        style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--accent-primary);">MAKE
-                        SENS.</span>
+                <div class="sens-hero-welcome-header play-entrance" id="sensHeroWelcomeHeader">
+                    <div class="sens-hero-welcome-question">
+                        Hey, ¿entrenamos juntos?
+                    </div>
+                    <h1 class="sens-hero-welcome-slogan">
+                        MAKE SENS.
+                    </h1>
                 </div>
-                <h1 class="hero-main-heading">
-                    <span class="hero-apple-highlight">SENTITE BIEN EN TU CUERPO.</span>
-                </h1>
                 <p class="hero-description-train">
-                    Entrenamiento de fuerza, movilidad y hábitos personalizados. Diseñado para personas reales en CABA y
-                    Online.
+                    Sentite bien en tu cuerpo. Fuerza progresiva, movilidad articular y hábitos personalizados en CABA y Online.
                 </p>
                 <div class="hero-cta-group">
                     <a href="#sumate" class="btn hero-btn-apple-dark">
@@ -4641,7 +4640,7 @@
     <script src="exercises_db.js?v=4.6"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=5.8"></script>
+    <script src="app.js?v=5.9"></script>
 </body>
 
 </html>

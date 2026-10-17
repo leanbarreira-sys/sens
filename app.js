@@ -647,6 +647,28 @@ const DEMO_METRICS = {
 // 1. INICIALIZACIÓN AL CARGAR EL DOM
 // =============================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    // 0. Si el usuario está en el portal, restaurar síncronamente antes de inicializar módulos de la landing
+    const isSavedPortal = (
+        document.documentElement.classList.contains('in-portal-mode') || 
+        localStorage.getItem('sens_in_portal') === 'true' || 
+        Boolean(localStorage.getItem('sens_active_user'))
+    );
+    if (isSavedPortal) {
+        document.body.classList.add('in-portal');
+        try {
+            if (typeof openUserPortal === 'function') {
+                openUserPortal(false);
+            }
+        } catch (e) {
+            console.warn('[SENS] Error restaurando portal:', e);
+        }
+    } else {
+        // En la landing pública, disparar animación del Hero
+        if (typeof triggerHeroGreetingAnimation === 'function') {
+            triggerHeroGreetingAnimation();
+        }
+    }
+
     initNavbarScroll();
     initHeroVideo();
     initLuxuryScrollReveals();
@@ -662,11 +684,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initNutritionHabits();
     initDailyTracking();
     initCharts();
-    try {
-        if (localStorage.getItem('sens_in_portal') === 'true' && typeof openUserPortal === 'function') {
-            openUserPortal(false);
-        }
-    } catch (_) {}
     checkExistingSession();
     // SUITE 2.0 WORLD-CLASS:
     initTopbarAvatar();
@@ -1228,6 +1245,9 @@ function initHeroVideo() {
         if (isRevealed) return;
         isRevealed = true;
         heroSection.classList.add('hero-ready');
+        if (typeof triggerHeroGreetingAnimation === 'function') {
+            triggerHeroGreetingAnimation(true);
+        }
         if (skeleton) {
             skeleton.classList.add('fade-out');
             setTimeout(() => {
@@ -1379,12 +1399,18 @@ function initNavbarScroll() {
             mobileMenu.style.display = 'flex';
             mobileMenu.classList.add('is-open');
             document.body.classList.add('mobile-menu-open');
+            const quickBar = document.querySelector('.mobile-quick-bar');
+            if (quickBar) quickBar.style.display = 'none';
         }
 
         function closeMobileMenu() {
             mobileMenu.style.display = 'none';
             mobileMenu.classList.remove('is-open');
             document.body.classList.remove('mobile-menu-open');
+            const quickBar = document.querySelector('.mobile-quick-bar');
+            if (quickBar && !document.body.classList.contains('in-portal')) {
+                quickBar.style.display = '';
+            }
         }
 
         menuToggle.addEventListener('click', (e) => {
@@ -7802,14 +7828,52 @@ function triggerWelcomeGreetingAnimation(force = false) {
 
     header.classList.remove('play-entrance', 'played');
     void header.offsetWidth; // Forzar reflow limpio mientras opacity es 0
-    requestAnimationFrame(() => {
-        header.classList.add('play-entrance');
-        // Tras completar la animación narrativa (0.95s delay + 0.70s anim = 1.65s), consolidar con clase .played
-        welcomeGreetingTimer = setTimeout(() => {
-            header.classList.add('played');
-        }, 1750);
-    });
+    header.classList.add('play-entrance');
+
+    // Tras completar la animación narrativa (0.95s delay + 0.70s anim = 1.65s), consolidar con clase .played
+    welcomeGreetingTimer = setTimeout(() => {
+        header.classList.add('played');
+    }, 1750);
 }
+
+// Fallback de seguridad: asegura que el saludo del portal nunca quede en blanco tras 2.2s
+setTimeout(() => {
+    const h = document.getElementById('sensDashWelcomeHeader');
+    if (h && !h.classList.contains('played')) {
+        h.classList.add('played');
+    }
+}, 2200);
+
+let hasPlayedHeroAnimation = false;
+let heroGreetingTimer = null;
+
+function triggerHeroGreetingAnimation(force = false) {
+    const header = document.getElementById('sensHeroWelcomeHeader');
+    if (!header) return;
+    if (hasPlayedHeroAnimation && !force) return;
+    hasPlayedHeroAnimation = true;
+
+    if (heroGreetingTimer) {
+        clearTimeout(heroGreetingTimer);
+        heroGreetingTimer = null;
+    }
+
+    header.classList.remove('play-entrance', 'played');
+    void header.offsetWidth;
+    header.classList.add('play-entrance');
+
+    heroGreetingTimer = setTimeout(() => {
+        header.classList.add('played');
+    }, 1850);
+}
+
+// Fallback de seguridad para el hero público
+setTimeout(() => {
+    const h = document.getElementById('sensHeroWelcomeHeader');
+    if (h && !h.classList.contains('played')) {
+        h.classList.add('played');
+    }
+}, 2200);
 
 /**
  * Navega semanas en el calendario dinámico con física de animación GPU fluida (Swipe & Flechas)
