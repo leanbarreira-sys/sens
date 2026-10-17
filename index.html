@@ -1130,6 +1130,17 @@
                 <span class="pill pill-champagne" id="portalPlanBadge">Presencial 1 a 1 VIP (CABA)</span>
             </div>
             <div class="portal-user-badge" style="display: flex; align-items: center; gap: 10px;">
+                <!-- Toggle Rápido para Admin: Cambiar entre App Alumno y Coach OS -->
+                <div class="topbar-admin-toggle-pill" id="topbarAdminToggle" style="display: none;">
+                    <button type="button" class="topbar-mode-btn" id="btnModeAppGeneral" title="Ver App como Alumno">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>App Alumno</span>
+                    </button>
+                    <button type="button" class="topbar-mode-btn active" id="btnModeCoachOS" title="Panel Master Coach OS">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        <span>Coach OS</span>
+                    </button>
+                </div>
                 <button type="button" class="btn-topbar-coach-pill" id="btnTopbarCoachOS" style="display: none;">
                     COACH OS
                 </button>
@@ -1139,16 +1150,15 @@
                 <div class="user-avatar-wrap" id="userAvatarWrap">
                     <button type="button" class="user-avatar-btn" id="userAvatarBtn" aria-label="Abrir Menú de Perfil"
                         title="Mi Cuenta SENS">
-                        <span id="userAvatarInitials">LB</span>
+                        <span id="userAvatarInitials">--</span>
                     </button>
                     <!-- Dropdown flotante estilo Apple -->
                     <div class="user-avatar-dropdown" id="userAvatarDropdown">
                         <div class="avatar-dropdown-header">
-                            <strong id="dropdownUserName">Lean Barreira</strong>
-                            <span id="dropdownUserEmail" style="word-break: break-all;">atleta@sens.com</span>
+                            <strong id="dropdownUserName">Mi Cuenta</strong>
+                            <span id="dropdownUserEmail" style="word-break: break-all;">usuario@sens.com</span>
                             <span class="pill pill-champagne" id="dropdownUserPlan"
-                                style="margin-top: 6px; font-size: 10px; width: fit-content;">Presencial 1 a 1
-                                VIP</span>
+                                style="margin-top: 6px; font-size: 10px; width: fit-content;">Plan SENS</span>
                         </div>
                         <div class="avatar-dropdown-divider"></div>
                         <button type="button" class="avatar-dropdown-item coach-only-item" id="dropdownGoCoachOS"
@@ -3997,228 +4007,324 @@
                 <!-- =================================================================
                      ESTACIÓN 2: PRESCRIPCIÓN DE ENTRENAMIENTO, OBJETIVOS & NOTAS
                      ================================================================= -->
+                <!-- =================================================================
+                     ESTACIÓN 2: PRESCRIPCIÓN DE ENTRENAMIENTO, WIZARD MASIVO & VISIÓN MENSUAL
+                     ================================================================= -->
                 <div class="coach-subpane" id="paneWorkouts">
-                    <div class="coach-surface-card" style="padding: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+                    <div class="coach-surface-card-light" style="padding: 24px;">
+                        
+                        <!-- ENCABEZADO Y SELECTOR TOGGLE DE VISIÓN -->
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
                             <div>
-                                <span class="pill pill-champagne" style="font-size: 10px;">PRESCRIPCIÓN BIOMECÁNICA &amp; OBJETIVOS</span>
-                                <h3 style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">
-                                    Objetivos, Rutina Semanal &amp; Consejos
+                                <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; letter-spacing: 0.5px;">PRESCRIPCIÓN DETERMINISTA &amp; PERIODIZACIÓN</span>
+                                <h3 style="font-size: 1.35rem; font-weight: 800; margin-top: 6px; color: #121214;">
+                                    Planificador de Rutinas Semanal &amp; Mensual
                                 </h3>
-                                <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">
-                                    Nico gestiona objetivos, entrenamiento y notas. La información personal y biometría del alumno es de solo lectura.
+                                <p style="font-size: 12.5px; color: #52525B; margin-top: 2px;">
+                                    Cargá masivamente la semana por días y músculos, o gestioná el mes completo desde el calendario interactivo.
                                 </p>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                <input type="hidden" id="coachWorkoutAthleteSelector" value="">
-                                <button type="button" class="btn btn-primary btn-sm btn-open-clarity-planner" id="btnCoachOpenClarityPlanner" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; font-size: 11.5px; padding: 7px 15px; border: none; box-shadow: 0 4px 15px rgba(229,203,167,0.35); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                                    <span>Planificador Masivo (SENS Clarity)</span>
+                            
+                            <!-- Toggle Superior: Creación Masiva Paso a Paso vs Visión Mensual -->
+                            <div class="coach-vision-toggle-strip">
+                                <button type="button" class="coach-vision-tab-btn active" id="btnToggleCoachWorkoutsWizard" data-target="wizard">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                    <span>Planificador Masivo (Paso a Paso)</span>
+                                </button>
+                                <button type="button" class="coach-vision-tab-btn" id="btnToggleCoachWorkoutsMonth" data-target="month">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <span>Visión Mensual</span>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- BANNER FIJO DEL ALUMNO EN EDICIÓN ACTIVA -->
-                        <div class="coach-workout-active-athlete-bar" id="coachWorkoutActiveAthleteBar">
-                            <div style="display: flex; align-items: center; gap: 12px; min-width: 240px;">
-                                <div class="coach-ath-avatar-circle" id="coachWorkoutAvatar">--</div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                        <span style="font-size: 9.5px; letter-spacing: 1px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">ALUMNO EN EDICIÓN</span>
-                                        <span class="pill pill-champagne" id="coachWorkoutPlanBadge" style="font-size: 9.5px; padding: 2px 7px;">Plan</span>
+                        <!-- 1. FICHA RESUMEN DEL CLIENTE (Colapsada por defecto / Solo Lectura) -->
+                        <div class="coach-client-summary-card" id="coachClientSummaryBox">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div class="coach-ath-avatar-circle" id="coachWorkoutAvatar" style="width: 42px; height: 42px; font-size: 14px; background: #09090B; color: #E5CBA7; border: 1.5px solid #E5CBA7;">--</div>
+                                    <div>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <strong id="coachWorkoutName" style="font-size: 14.5px; font-weight: 800; color: #121214;">Seleccionar Alumno</strong>
+                                            <span class="pill pill-champagne" id="coachWorkoutPlanBadge" style="font-size: 9.5px; padding: 2px 7px;">Plan VIP</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
+                                            <span id="coachWorkoutEmail" style="font-size: 11.5px; color: #71717A;">alumno@sens.com</span>
+                                            <span style="color: #D4D4D8;">•</span>
+                                            <span id="coachWorkoutWeightBadge" style="font-size: 11.5px; font-weight: 700; color: #9E7D4B;">75 kg</span>
+                                            <span style="color: #D4D4D8;">•</span>
+                                            <span id="coachWorkoutGoalBadge" style="font-size: 11.5px; color: #52525B;">Recomposición Corporal</span>
+                                        </div>
                                     </div>
-                                    <h4 id="coachWorkoutName" style="margin: 2px 0 0 0; font-size: 1.15rem; font-weight: 800; color: #FFFFFF;">Seleccionar Alumno</h4>
-                                    <span id="coachWorkoutEmail" style="font-size: 11.5px; color: var(--text-secondary);">alumno@sens.com</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <button type="button" class="btn btn-outline btn-sm btn-trigger-athlete-sheet" style="font-size: 11px; padding: 6px 12px; border-color: #E4E4E7; color: #18181B; background: #FFFFFF;">
+                                        Cambiar Alumno
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnToggleAthleteSummaryExpand" style="font-size: 11px; padding: 6px 12px; border-color: #9E7D4B; color: #9E7D4B; background: #FFFFFF;">
+                                        <span id="summaryExpandLabel">▼ Ver Ficha Completa</span>
+                                    </button>
                                 </div>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                <button type="button" class="btn-coach-action-select btn-trigger-athlete-sheet" id="btnCoachWorkoutChangeAth">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                                    <span>Cambiar Alumno</span>
-                                </button>
-                                <button type="button" class="btn-coach-action-portal" id="btnCoachWorkoutInspectPortal">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                    <span>Ver como Alumno</span>
-                                </button>
-                                <button type="button" class="btn btn-outline btn-sm" id="btnWorkoutOpenReadonlyDossier" style="font-size: 11px; padding: 7px 12px;">
-                                    Ficha 360°
-                                </button>
+                            
+                            <!-- Panel Desplegable de Datos del Cliente (100% Solo Lectura) -->
+                            <div id="coachClientSummaryDetails" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(229, 203, 167, 0.5);">
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                                    <div class="coach-readonly-param-chip">
+                                        <div class="param-label">Biometría</div>
+                                        <div class="param-value" id="roClientBio">75 kg • 175 cm</div>
+                                    </div>
+                                    <div class="coach-readonly-param-chip">
+                                        <div class="param-label">Objetivo Clínico</div>
+                                        <div class="param-value" id="roClientGoal">Recomposición Corporal</div>
+                                    </div>
+                                    <div class="coach-readonly-param-chip">
+                                        <div class="param-label">Restricciones / Cuidados</div>
+                                        <div class="param-value" id="roClientRestrictions" style="color: #B45309;">Sin lesiones reportadas</div>
+                                    </div>
+                                    <div class="coach-readonly-param-chip">
+                                        <div class="param-label">Nivel &amp; Experiencia</div>
+                                        <div class="param-value" id="roClientLevel">Intermedio / Avanzado</div>
+                                    </div>
+                                    <div class="coach-readonly-param-chip">
+                                        <div class="param-label">Frecuencia Semanal</div>
+                                        <div class="param-value" id="roClientFrequency">3 a 4 sesiones / sem</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 1. GESTIÓN DE OBJETIVO DEL ALUMNO (Editable por Nico) -->
-                        <div class="coach-goal-prescription-box" id="coachGoalPrescriptionBox">
-                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                        <!-- =============================================================
+                             VISTA 1: WIZARD MASIVO PASO A PASO (4 PASOS)
+                             ============================================================= -->
+                        <div id="coachWorkoutsWizardView">
+                            
+                            <!-- Barra Indicadora de Pasos -->
+                            <div class="wizard-stepper-bar">
+                                <div class="wizard-step-node active" id="stepNode1" data-step="1">
+                                    <div class="wizard-step-circle">1</div>
+                                    <span class="wizard-step-label">Días &amp; Modalidad</span>
+                                </div>
+                                <div class="wizard-step-node" id="stepNode2" data-step="2">
+                                    <div class="wizard-step-circle">2</div>
+                                    <span class="wizard-step-label">Músculos por Día</span>
+                                </div>
+                                <div class="wizard-step-node" id="stepNode3" data-step="3">
+                                    <div class="wizard-step-circle">3</div>
+                                    <span class="wizard-step-label">Ejercicios &amp; Cargas</span>
+                                </div>
+                                <div class="wizard-step-node" id="stepNode4" data-step="4">
+                                    <div class="wizard-step-circle">4</div>
+                                    <span class="wizard-step-label">Duplicar Semanas</span>
+                                </div>
+                            </div>
+
+                            <!-- PASO 1: Selección de Días y Modalidades (Hoy en adelante) -->
+                            <div class="wizard-pane-step" id="wizardPaneStep1">
+                                <div style="margin-bottom: 14px;">
+                                    <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">1. Seleccioná los días de entrenamiento (de hoy en adelante)</h4>
+                                    <p style="font-size: 12px; color: #71717A; margin: 0;">Marcá qué días entrenará el alumno y definí la modalidad para cada uno (Presencial, Online o Autónomo).</p>
+                                </div>
+
+                                <div id="wizardStep1DaysContainer" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px;">
+                                    <!-- Inyectado dinámicamente con los próximos 7 días a partir de hoy -->
+                                </div>
+
+                                <div style="display: flex; justify-content: flex-end;">
+                                    <button type="button" class="btn btn-primary" id="btnWizardNextToStep2" style="padding: 10px 22px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
+                                        Continuar: Asignar Músculos →
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PASO 2: Asignación de Músculos por Día -->
+                            <div class="wizard-pane-step" id="wizardPaneStep2" style="display: none;">
+                                <div style="margin-bottom: 14px;">
+                                    <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">2. Asigná los grupos musculares a trabajar en cada día</h4>
+                                    <p style="font-size: 12px; color: #71717A; margin: 0;">Tocá los grupos musculares para cada sesión activa (ej: Bíceps + Tríceps, Piernas, Espalda + Hombros).</p>
+                                </div>
+
+                                <div id="wizardStep2MusclesContainer" style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px;">
+                                    <!-- Inyectado dinámicamente con las tarjetas de los días elegidos en el paso 1 -->
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <button type="button" class="btn btn-outline" id="btnWizardBackToStep1" style="font-size: 12px; padding: 9px 18px;">
+                                        ← Volver a Días
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="btnWizardNextToStep3" style="padding: 10px 22px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
+                                        Continuar: Seleccionar Ejercicios →
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PASO 3: Selección de Ejercicios y Prescripción de Cargas (Grid 9 por Scroll) -->
+                            <div class="wizard-pane-step" id="wizardPaneStep3" style="display: none;">
+                                
+                                <!-- Selector de Día Activo en el Wizard -->
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+                                    <div>
+                                        <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 2px 0;">3. Definí los ejercicios para cada sesión</h4>
+                                        <p style="font-size: 12px; color: #71717A; margin: 0;">Seleccioná el día para editar. El catálogo ya viene prefiltrado por los músculos elegidos.</p>
+                                    </div>
+                                    <div id="wizardStep3DayPillsStrip" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px;">
+                                        <!-- Inyectado dinámicamente con los días activos para alternar -->
+                                    </div>
+                                </div>
+
+                                <!-- Barra Global de Series y Repeticiones (Aplicar a Todos) -->
+                                <div class="wizard-global-batch-bar">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">VOLUMEN GLOBAL</span>
+                                        <strong style="font-size: 12px; color: #18181B;">Aplicar a todos los ejercicios de este día:</strong>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                        <div style="display: flex; align-items: center; gap: 4px;">
+                                            <label style="font-size: 10.5px; color: #71717A;">Series:</label>
+                                            <input type="number" id="wizardGlobalSets" value="3" min="1" max="8" class="input-control" style="width: 45px; height: 30px; padding: 2px 6px; margin: 0; font-size: 12px;">
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 4px;">
+                                            <label style="font-size: 10.5px; color: #71717A;">Reps:</label>
+                                            <input type="text" id="wizardGlobalReps" value="10-12" class="input-control" style="width: 60px; height: 30px; padding: 2px 6px; margin: 0; font-size: 12px;">
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 4px;">
+                                            <label style="font-size: 10.5px; color: #71717A;">Descanso (s):</label>
+                                            <input type="number" id="wizardGlobalRest" value="75" step="15" class="input-control" style="width: 55px; height: 30px; padding: 2px 6px; margin: 0; font-size: 12px;">
+                                        </div>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnWizardApplyGlobalVolume" style="font-size: 10.5px; padding: 5px 12px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 700;">
+                                            ⚡ Aplicar a Todos
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Buscador y Grid Denso (9 por scroll) -->
+                                <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 14px; padding: 14px; margin-bottom: 18px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                        <span style="font-size: 11.5px; font-weight: 800; color: #18181B; text-transform: uppercase;">Catálogo Biomecánico (9 por vista):</span>
+                                        <input type="text" id="wizardExSearchInput" placeholder="Buscar ejercicio por nombre..." class="input-control" style="max-width: 260px; height: 32px; font-size: 11.5px; margin: 0;">
+                                    </div>
+                                    <div class="wizard-ex-grid-9" id="wizardExCardsGrid">
+                                        <!-- Inyectado dinámicamente con cards compactas de video/foto -->
+                                    </div>
+                                </div>
+
+                                <!-- Mesa de Trabajo: Ejercicios Asignados al Día Activo -->
+                                <div style="margin-bottom: 22px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <strong style="font-size: 13px; color: #121214;">Ejercicios Asignados a <span id="wizardCurrentDayLabel" style="color: #9E7D4B;">este día</span>:</strong>
+                                        <span id="wizardCurrentDayCountBadge" class="pill pill-champagne" style="font-size: 10px;">0 ejercicios</span>
+                                    </div>
+                                    <div id="wizardSelectedExercisesList" style="display: flex; flex-direction: column; gap: 8px;">
+                                        <!-- Inyectado dinámicamente con filas de ajuste fino (series, reps, kg, rest) -->
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <button type="button" class="btn btn-outline" id="btnWizardBackToStep2" style="font-size: 12px; padding: 9px 18px;">
+                                        ← Volver a Músculos
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="btnWizardNextToStep4" style="padding: 10px 22px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
+                                        Continuar: Duplicar Semanas →
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PASO 4: Duplicación de Semanas (1 a 12 semanas) -->
+                            <div class="wizard-pane-step" id="wizardPaneStep4" style="display: none;">
+                                <div style="margin-bottom: 16px;">
+                                    <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">4. Proyección y Duplicación Masiva</h4>
+                                    <p style="font-size: 12px; color: #71717A; margin: 0;">Seleccioná cuántas semanas querés proyectar esta rutina en el portal del alumno.</p>
+                                </div>
+
+                                <div style="background: #F8F9FA; border: 1px solid rgba(229, 203, 167, 0.4); border-radius: 14px; padding: 18px; margin-bottom: 18px;">
+                                    <label class="input-label" style="font-size: 12px; margin-bottom: 8px;">Cantidad de semanas a duplicar:</label>
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;" id="wizardWeeksButtonsWrap">
+                                        <button type="button" class="btn btn-outline btn-sm wizard-week-btn" data-weeks="1" style="font-size: 11px; padding: 6px 14px;">1 Semana</button>
+                                        <button type="button" class="btn btn-outline btn-sm wizard-week-btn" data-weeks="2" style="font-size: 11px; padding: 6px 14px;">2 Semanas</button>
+                                        <button type="button" class="btn btn-primary btn-sm wizard-week-btn active" data-weeks="4" style="font-size: 11px; padding: 6px 16px; font-weight: 800; background: #9E7D4B; color: #FFFFFF;">4 Semanas (1 Mes)</button>
+                                        <button type="button" class="btn btn-outline btn-sm wizard-week-btn" data-weeks="8" style="font-size: 11px; padding: 6px 14px;">8 Semanas (2 Meses)</button>
+                                        <button type="button" class="btn btn-outline btn-sm wizard-week-btn" data-weeks="12" style="font-size: 11px; padding: 6px 14px;">12 Semanas (Trimestre)</button>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 12px; color: #71717A;">O seleccionar número exacto:</span>
+                                        <input type="number" id="wizardExactWeeksInput" min="1" max="12" value="4" class="input-control" style="width: 65px; height: 32px; padding: 2px 8px; margin: 0; font-size: 12.5px;">
+                                        <span style="font-size: 12px; font-weight: 700; color: #18181B;">semanas</span>
+                                    </div>
+                                </div>
+
+                                <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 14px; margin-bottom: 20px;">
+                                    <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin: 0;">
+                                        <input type="checkbox" id="wizardCheckOverload" checked style="width: 18px; height: 18px; margin-top: 2px; accent-color: #9E7D4B;">
+                                        <div>
+                                            <strong style="font-size: 12.5px; color: #121214;">Aplicar Sobrecarga Progresiva Fisiológica</strong>
+                                            <p style="font-size: 11.5px; color: #71717A; margin: 2px 0 0 0;">
+                                                Semanas intermedias: +2.5 kg en multiarticulares o +1 repetición. Última semana: descarga del SNC (-1 serie) para consolidar hipertrofia y adaptación ligamentaria.
+                                            </p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                    <button type="button" class="btn btn-outline" id="btnWizardBackToStep3" style="font-size: 12px; padding: 9px 18px;">
+                                        ← Volver a Ejercicios
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="btnWizardExecuteSaveAll" style="padding: 12px 28px; font-weight: 800; font-size: 13px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; box-shadow: 0 4px 15px rgba(229,203,167,0.4);">
+                                        ✓ Confirmar y Publicar Rutina Masiva en Supabase
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- =============================================================
+                             VISTA 2: VISIÓN MENSUAL (CALENDARIO MENSUAL INTERACTIVO)
+                             ============================================================= -->
+                        <div id="coachWorkoutsMonthView" style="display: none;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
                                 <div>
-                                    <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #9E7D4B;">OBJETIVO ASIGNADO POR NICO</span>
-                                    <h4 style="font-size: 1rem; font-weight: 800; margin: 2px 0 0 0;">Definir Foco Clínico del Ciclo</h4>
+                                    <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0;">Calendario Mensual de Entrenamientos</h4>
+                                    <p style="font-size: 12px; color: #71717A; margin: 2px 0 0 0;">Visualizá qué días entrena el alumno, consultá ejercicios y ajustá pesos/repeticiones directamente.</p>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm" id="btnSaveCoachAthleteGoal" style="font-size: 11px; padding: 6px 14px;">
-                                    Guardar Objetivo
-                                </button>
-                            </div>
-                            <div class="coach-goal-pills-row" id="coachGoalPillsRow">
-                                <button type="button" class="coach-goal-pill active" data-goal="recomposicion">Recomposición Corporal</button>
-                                <button type="button" class="coach-goal-pill" data-goal="deficit">Déficit &amp; Oxidación</button>
-                                <button type="button" class="coach-goal-pill" data-goal="hipertrofia">Fuerza &amp; Hipertrofia</button>
-                                <button type="button" class="coach-goal-pill" data-goal="movilidad">Movilidad &amp; Salud Articular</button>
-                            </div>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 12px;">
-                                <div>
-                                    <label class="input-label" style="font-size: 11px;">Título de Meta Visible</label>
-                                    <input type="text" id="coachCustomGoalTextInput" class="input-control" value="Fuerza & Recomposición Corporal" style="margin-bottom: 0; font-size: 12.5px;">
-                                </div>
-                                <div>
-                                    <label class="input-label" style="font-size: 11px;">Meta Pasos / Día</label>
-                                    <input type="number" id="coachCustomStepsGoalInput" class="input-control" value="10000" step="500" style="margin-bottom: 0; font-size: 12.5px;">
-                                </div>
-                                <div>
-                                    <label class="input-label" style="font-size: 11px;">Frecuencia Semanal</label>
-                                    <input type="text" id="coachCustomFreqGoalInput" class="input-control" value="3 a 4 sesiones / sem" style="margin-bottom: 0; font-size: 12.5px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnCoachMonthPrev">‹ Mes Anterior</button>
+                                    <strong id="coachMonthTitleLabel" style="font-size: 13px; color: #18181B; min-width: 120px; text-align: center;">Octubre 2026</strong>
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnCoachMonthNext">Mes Siguiente ›</button>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- 2. COPILOTO DE RECOMENDACIONES INTELIGENTES SEGÚN OBJETIVO Y FICHA -->
-                        <div class="coach-ai-recommendation-banner" id="coachWorkoutAiRecBanner">
-                            <div class="ai-rec-header">
-                                <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">RECOMENDACIÓN CLÍNICA SENS</span>
-                                <span class="ai-rec-subtitle" id="coachWorkoutRecContextLabel">Basado en Ficha 360° + Objetivo Recomposición</span>
+                            <!-- Grilla de Días de la Semana -->
+                            <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 6px; margin-bottom: 6px;">
+                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">LUN</span>
+                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">MAR</span>
+                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">MIÉ</span>
+                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">JUE</span>
+                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">VIE</span>
+                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">SÁB</span>
+                                <span style="font-size: 10.5px; font-weight: 800; color: #71717A;">DOM</span>
                             </div>
-                            <p class="ai-rec-body" id="coachWorkoutRecBodyText">
-                                Para este perfil se sugiere priorizar multiarticulares controlados (RIR 2), combinando fuerza de tren superior/inferior con estabilidad lumbopélvica (Dead bug / Pallof press) y caminata en Zona 2.
-                            </p>
-                            <div class="ai-rec-chips" id="coachWorkoutRecChips">
-                                <!-- Chips dinámicos de sugerencia según objetivo -->
-                            </div>
-                        </div>
 
-                        <!-- 3. CALENDARIO SEMANAL DINÁMICO DEL ALUMNO (Con fechas reales 14/10, 15/10... idéntico al portal del alumno) -->
-                        <div class="sens-calendar-sticky-wrapper" id="coachCalendarStickyWrapper" style="margin-bottom: 18px; border-radius: 12px; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(229, 203, 167, 0.15); padding: 12px 14px;">
-                            <div class="sens-week-header-row" style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-                                <button type="button" class="sens-week-nav-btn" id="btnCoachWeekPrev" title="Semana anterior">‹</button>
-                                <span class="sens-week-range-label" id="coachWeekRangeLabel" style="font-weight: 800; color: #FFFFFF; font-size: 13px;">Semana Activa</span>
-                                <button type="button" class="sens-week-nav-btn" id="btnCoachWeekNext" title="Semana siguiente">›</button>
+                            <!-- Grilla Mensual de Celdas -->
+                            <div class="coach-month-calendar-grid" id="coachMonthGridContainer">
+                                <!-- Inyectado dinámicamente con los 31 días del mes -->
                             </div>
-                            <div class="sens-week-strip" id="coachWeekStrip" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;">
-                                <!-- Inyectado dinámicamente: LUN 14/10, MAR 15/10, MIÉ 16/10... con modalidad y asistencia -->
-                            </div>
-                        </div>
 
-                        <!-- Barra de Plantillas Rápidas y Operaciones Masivas (SENS Clarity) -->
-                        <div style="background: rgba(158, 125, 75, 0.08); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
-                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                <span style="font-size: 11px; color: #9E7D4B; font-weight: 800;">Operaciones Masivas:</span>
-                                <button type="button" class="btn btn-primary btn-sm btn-open-clarity-planner" style="font-size: 10.5px; padding: 5px 12px; font-weight: 800; background: var(--accent-champagne); color: #09090B;">
-                                    ⚡ Planificador Automático Clarity
-                                </button>
-                                <button type="button" class="btn btn-outline btn-sm btn-open-clarity-duplicate" style="font-size: 10.5px; padding: 5px 11px;">
-                                    📋 Duplicar Día
-                                </button>
-                                <button type="button" class="btn btn-outline btn-sm btn-open-clarity-replicate" style="font-size: 10.5px; padding: 5px 11px;">
-                                    🗓️ Replicar a Todo el Mes
-                                </button>
-                            </div>
-                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                                <span style="font-size: 10.5px; color: var(--text-muted); align-self: center;">Plantillas Rápidas:</span>
-                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="fuerza3d" style="font-size: 10px; padding: 4px 8px;">Fuerza 3D</button>
-                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="hipertrofia4d" style="font-size: 10px; padding: 4px 8px;">Recomposición 4D</button>
-                                <button type="button" class="btn btn-outline btn-sm coach-apply-template"
-                                    data-template="movilidad2d" style="font-size: 10px; padding: 4px 8px;">Movilidad 2D</button>
-                            </div>
-                        </div>
-
-                        <!-- Título del Día y Gasto Calórico Total Estimado -->
-                        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
-                            <div style="flex: 1; min-width: 240px;">
-                                <label class="input-label" for="coachDayTitleInput" id="coachDayTitleLabel">Enfoque de la Sesión (Lunes)</label>
-                                <input type="text" id="coachDayTitleInput" class="input-control"
-                                    value="Tren Superior (Empuje / Tirón)" style="margin-bottom: 0;">
-                            </div>
-                            <div class="coach-session-kcal-pill" id="coachSessionTotalKcalBadge">
-                                Gasto Estimado Sesión: <strong>~165 kcal</strong>
-                            </div>
-                        </div>
-
-                        <!-- Configuración de Modalidad y Asistencia -->
-                        <div class="coach-session-modality-card"
-                            style="background: rgba(0, 0, 0, 0.03); border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;">
-                            <div>
-                                <label class="input-label" style="margin-bottom: 6px;">Modalidad asignada por Nico:</label>
-                                <div class="coach-modality-selector" id="coachModalityButtonsWrap" style="display: flex; gap: 6px; flex-wrap: wrap;">
-                                    <button type="button" class="pill pill-champagne coach-modality-btn active" data-modality="presencial">Presencial Nico</button>
-                                    <button type="button" class="pill pill-dark coach-modality-btn" data-modality="online">Online Nico</button>
-                                    <button type="button" class="pill pill-dark coach-modality-btn" data-modality="autonomo">Autónomo</button>
-                                    <button type="button" class="pill pill-dark coach-modality-btn" data-modality="descanso">Descanso</button>
+                            <!-- Panel de Detalle y Edición del Día Tocado -->
+                            <div id="coachMonthDayDetailCard" style="display: none; margin-top: 18px; background: #F8F9FA; border: 1px solid rgba(229, 203, 167, 0.4); border-radius: 14px; padding: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <div>
+                                        <span class="pill pill-champagne" id="monthDetailModalityBadge" style="font-size: 9.5px;">Presencial</span>
+                                        <h4 id="monthDetailTitle" style="font-size: 1.1rem; font-weight: 800; color: #121214; margin: 4px 0 0 0;">Sesión del Día</h4>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveMonthDayEdits" style="font-size: 11px; padding: 6px 14px; background: #9E7D4B; color: #FFFFFF;">
+                                        Guardar Cambios de este Día
+                                    </button>
+                                </div>
+                                <div id="monthDetailExercisesList" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <!-- Inyectado dinámicamente con los ejercicios de esa fecha para editar peso/reps -->
                                 </div>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; font-weight: 700;">
-                                    <input type="checkbox" id="coachDayCompletedCheck" style="accent-color: #10B981; width: 18px; height: 18px; cursor: pointer;">
-                                    <span>Sesión Realizada / Asistió</span>
-                                </label>
-                            </div>
                         </div>
 
-                        <!-- Lista de Ejercicios Asignados a este Día -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-                            <h4 style="font-size: 1.05rem; font-weight: 800; margin: 0;">Ejercicios Asignados (con Kcal por Serie y Reps)</h4>
-                            <button type="button" class="btn btn-outline btn-sm" id="btnCoachAddExerciseFromLib"
-                                style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700;">
-                                + Explorar Mapa de Ejercicios
-                            </button>
-                        </div>
-
-                        <div id="coachAssignedExercisesContainer"
-                            style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-                            <!-- Inyectado dinámicamente -->
-                        </div>
-
-                        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 26px;">
-                            <button type="button" class="btn btn-primary" id="btnSaveCoachWorkoutDay"
-                                style="padding: 12px 24px; font-weight: 800; width: 100%; max-width: 340px;">
-                                Guardar Rutina del Lunes
-                            </button>
-                        </div>
-
-                        <!-- 4. NOTA DESTACADA & CONSEJOS DE ENTRENAMIENTO EN DASHBOARD DEL ALUMNO -->
-                        <div style="border-top: 1px solid rgba(0,0,0,0.08); padding-top: 20px;" id="paneDashboardNote">
-                            <span class="pill pill-champagne" style="font-size: 10px;">FEEDBACK DIRECTO &amp; CONSEJOS DE ENTRENAMIENTO</span>
-                            <h4 style="font-size: 1.15rem; font-weight: 800; margin-top: 6px;">
-                                Nota &amp; Sugerencia de Nico para el Alumno
-                            </h4>
-                            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
-                                Aparece destacada en el Inicio y sección de Entrenamiento del alumno. Tocá un consejo sugerido o escribí el tuyo:
-                            </p>
-                            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;" id="coachQuickNoteChipsWrap">
-                                <button type="button" class="pill pill-dark coach-quick-note-chip" data-title="Foco Semana: Control Excéntrico" data-body="Esta semana priorizá bajar en 3 segundos controlados en cada serie y respetar los 90s de descanso para maximizar el reclutamiento muscular.">Control Excéntrico 3s</button>
-                                <button type="button" class="pill pill-dark coach-quick-note-chip" data-title="Cuidado Postural & Core" data-body="Mantené el abdomen activo antes de iniciar cada empuje o tracción. Si sentís fatiga lumbar, frenamos 1 repetición antes (RIR 2).">Protección Lumbar &amp; RIR 2</button>
-                                <button type="button" class="pill pill-dark coach-quick-note-chip" data-title="Meta de Adherencia & Pasos" data-body="Excelente constancia en las sesiones. En los días autónomos priorizá alcanzar los pasos diarios y 10 minutos de movilidad articular.">Constancia &amp; NEAT</button>
-                            </div>
-                            <input type="hidden" id="coachDashNoteAthleteSelector" value="">
-                            <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
-                                id="btnCoachNoteAthletePicker" aria-label="Cambiar alumno" style="display: none;">
-                                <span class="status-dot status-dot-active coachSyncStatusDot"></span>
-                                <span class="pill-athlete-name coachSyncAthleteName">Seleccionar Alumno</span>
-                                <span class="pill-plan-tag coachSyncAthletePlan">PLAN</span>
-                            </button>
-                            <div style="margin-bottom: 12px;">
-                                <label class="input-label" for="coachDashNoteTitleInput">Título del Consejo / Foco Semanal</label>
-                                <input type="text" id="coachDashNoteTitleInput" class="input-control"
-                                    placeholder="Ej: Foco de la Semana: Precisión Biomecánica">
-                            </div>
-                            <div style="margin-bottom: 14px;">
-                                <label class="input-label" for="coachDashNoteBodyInput">Sugerencia / Consejo de Entrenamiento y Hábitos</label>
-                                <textarea id="coachDashNoteBodyInput" class="input-control" rows="3"
-                                    placeholder="Ej: Excelente ritmo en la sesión de piernas. Esta semana enfocate en no apurar las repeticiones y descansar 90 segundos entre series."></textarea>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="btnSaveCoachDashNote"
-                                style="padding: 11px 22px; font-weight: 800;">
-                                Publicar Nota y Consejo en el Portal del Alumno
-                            </button>
-                        </div>
                     </div>
                 </div>
 

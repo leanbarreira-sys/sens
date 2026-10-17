@@ -12297,16 +12297,16 @@ body.in-portal .sens-nutri-summary-card,
     background: #10B981;
 }
 
-/* Floating Dock en Negro Obsidiana SENS: Oculto en Web Pública y Desktop */
+/* Floating Docks: Ocultos por defecto en Web Pública y Desktop */
 .sens-floating-dock,
 html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
     display: none !important;
 }
 
-/* Solo visible en Mobile / Tablet cuando el usuario está en el portal de alumnos */
+/* Solo visible en Mobile / Tablet cuando el usuario está en el portal */
 @media (max-width: 900px) {
-    body.in-portal .sens-floating-dock,
-    html.in-portal-mode body .sens-floating-dock {
+    /* Dock de Alumno: Visible en mobile únicamente en vistas de alumno */
+    body.in-portal #sensFloatingDock {
         position: fixed !important;
         bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
         left: 50% !important;
@@ -12327,10 +12327,47 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         z-index: 1000 !important;
         overflow: hidden !important;
     }
+
+    /* Si se está viendo Coach OS, ocultar dock de alumno y mostrar dock de coach */
+    body.in-portal.in-coach-mode #sensFloatingDock,
+    body.in-portal[data-active-view="coachHubView"] #sensFloatingDock {
+        display: none !important;
+    }
+
+    /* Dock de Coach OS: Exclusivo para cuando el admin está en Coach OS */
+    body.in-portal.is-admin.in-coach-mode #sensCoachFloatingDock,
+    body.in-portal.is-admin[data-active-view="coachHubView"] #sensCoachFloatingDock {
+        position: fixed !important;
+        bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: calc(100% - 24px) !important;
+        max-width: 400px !important;
+        box-sizing: border-box !important;
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 2px !important;
+        padding: 6px 4px !important;
+        background: #09090B !important;
+        border: 1px solid rgba(229, 203, 167, 0.25) !important;
+        border-radius: 36px !important;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65) !important;
+        backdrop-filter: blur(25px) !important;
+        -webkit-backdrop-filter: blur(25px) !important;
+        z-index: 1000 !important;
+        overflow: hidden !important;
+    }
+
+    /* Bajo ninguna circunstancia un usuario no admin o una vista regular muestra el dock de coach */
+    body:not(.is-admin) #sensCoachFloatingDock,
+    body:not(.in-coach-mode):not([data-active-view="coachHubView"]) #sensCoachFloatingDock {
+        display: none !important;
+    }
 }
 
 @media (min-width: 901px) {
-    body.in-portal .sens-floating-dock {
+    body.in-portal #sensFloatingDock,
+    body.in-portal #sensCoachFloatingDock {
         display: none !important;
     }
 }
@@ -15154,5 +15191,418 @@ body.in-portal #coachHubView {
     font-weight: 700;
 }
 
+/* =============================================================================
+   COACH OS: REDISEÑO QUIET LUXURY CLARO (ESTILO "INICIO") & WIZARD MASIVO
+   ============================================================================= */
 
+/* 1. Toggle Modo Admin en Topbar (App Alumno vs Coach OS) */
+.topbar-admin-toggle-pill {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    border-radius: 24px;
+    padding: 3px;
+    gap: 4px;
+}
 
+.topbar-mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: none;
+    background: transparent;
+    color: #A1A1AA;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.topbar-mode-btn.active {
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%);
+    color: #09090B;
+    box-shadow: 0 2px 10px rgba(229, 203, 167, 0.3);
+}
+
+/* 2. Tarjetas de Superficie Clara para Coach OS (#paneWorkouts) */
+.coach-surface-card-light {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(0, 0, 0, 0.07) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    color: #121214 !important;
+    box-sizing: border-box;
+}
+
+.coach-surface-card-light h1,
+.coach-surface-card-light h2,
+.coach-surface-card-light h3,
+.coach-surface-card-light h4 {
+    color: #121214 !important;
+}
+
+.coach-surface-card-light p {
+    color: #52525B !important;
+}
+
+.coach-surface-card-light .input-control {
+    background: #F8F9FA !important;
+    border: 1px solid #E4E4E7 !important;
+    color: #18181B !important;
+    font-weight: 600;
+    border-radius: 10px !important;
+}
+
+.coach-surface-card-light .input-control:focus {
+    border-color: #9E7D4B !important;
+    box-shadow: 0 0 0 3px rgba(158, 125, 75, 0.15) !important;
+    background: #FFFFFF !important;
+}
+
+.coach-surface-card-light .input-label {
+    color: #52525B !important;
+    font-weight: 700 !important;
+}
+
+/* 3. Ficha Resumen del Cliente (Colapsable / Read-Only) */
+.coach-client-summary-card {
+    background: #F8F9FA;
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    transition: all 0.25s ease;
+}
+
+.coach-client-summary-card.expanded {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
+}
+
+.coach-readonly-param-chip {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.coach-readonly-param-chip .param-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #71717A;
+}
+
+.coach-readonly-param-chip .param-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #18181B;
+    margin-top: 2px;
+}
+
+/* 4. Switch Toggle de Visión (Wizard Masivo vs Calendario Mensual) */
+.coach-vision-toggle-strip {
+    display: flex;
+    background: #F4F4F5;
+    border: 1px solid #E4E4E7;
+    border-radius: 14px;
+    padding: 4px;
+    gap: 4px;
+    margin-bottom: 20px;
+    max-width: 440px;
+}
+
+.coach-vision-tab-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #71717A;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.coach-vision-tab-btn.active {
+    background: #FFFFFF;
+    color: #09090B;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 5. Wizard Masivo: Indicador de 4 Pasos */
+.wizard-stepper-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    position: relative;
+    padding: 0 10px;
+}
+
+.wizard-stepper-bar::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background: #E4E4E7;
+    z-index: 1;
+}
+
+.wizard-step-node {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    background: #FFFFFF;
+    padding: 0 8px;
+}
+
+.wizard-step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #F4F4F5;
+    border: 2px solid #E4E4E7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #71717A;
+    transition: all 0.2s ease;
+}
+
+.wizard-step-node.active .wizard-step-circle {
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%);
+    border-color: #9E7D4B;
+    color: #09090B;
+    box-shadow: 0 4px 12px rgba(229, 203, 167, 0.4);
+}
+
+.wizard-step-node.completed .wizard-step-circle {
+    background: #10B981;
+    border-color: #10B981;
+    color: #FFFFFF;
+}
+
+.wizard-step-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #71717A;
+    white-space: nowrap;
+}
+
+.wizard-step-node.active .wizard-step-label {
+    color: #09090B;
+    font-weight: 800;
+}
+
+/* 6. Paso 1: Tarjetas de Día y Modalidad */
+.wizard-day-card {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 14px;
+    padding: 14px 16px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.wizard-day-card.active {
+    border-color: #9E7D4B;
+    background: #FAFAFA;
+    box-shadow: 0 4px 16px rgba(158, 125, 75, 0.08);
+}
+
+/* 7. Paso 2: Chips Táctiles de Músculos */
+.wizard-muscle-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #E4E4E7;
+    background: #FFFFFF;
+    color: #3F3F46;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.wizard-muscle-chip.active,
+.wizard-muscle-chip.selected {
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%);
+    border-color: #9E7D4B;
+    color: #09090B;
+    box-shadow: 0 2px 8px rgba(229, 203, 167, 0.35);
+}
+
+/* 8. Paso 3: Grid de Ejercicios Compacto (9 por scroll) */
+.wizard-ex-grid-9 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px;
+    max-height: 480px;
+    overflow-y: auto;
+    padding: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 transparent;
+}
+
+.wizard-compact-ex-card {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+    height: 145px;
+    position: relative;
+}
+
+.wizard-compact-ex-card:hover {
+    border-color: #9E7D4B;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.wizard-compact-ex-card.selected {
+    border-color: #10B981;
+    background: #F0FDF4;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
+}
+
+.wizard-compact-thumb-wrap {
+    height: 70px;
+    width: 100%;
+    background: #18181B;
+    overflow: hidden;
+    position: relative;
+}
+
+.wizard-compact-thumb-wrap video,
+.wizard-compact-thumb-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
+.wizard-compact-info {
+    padding: 8px 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.wizard-compact-title {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #09090B;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 9. Barra Masiva de Series / Reps / Descanso */
+.wizard-global-batch-bar {
+    background: #F8F9FA;
+    border: 1px dashed rgba(158, 125, 75, 0.4);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+/* 10. Fila de Ejercicio Seleccionado en la Mesa de Trabajo */
+.wizard-selected-ex-row {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.wizard-selected-ex-row .ex-meta-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #09090B;
+}
+
+/* 11. Grilla de Visión Mensual */
+.coach-month-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.coach-month-day-cell {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 10px;
+    min-height: 78px;
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.coach-month-day-cell:hover {
+    border-color: #9E7D4B;
+    background: #FAFAFA;
+}
+
+.coach-month-day-cell.has-workout {
+    border-color: rgba(229, 203, 167, 0.6);
+    background: #FCFBF9;
+}
+
+.coach-month-day-cell.is-today {
+    border: 2px solid #09090B;
+}
+
+.coach-month-workout-pill {
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.3) 0%, rgba(196, 164, 124, 0.2) 100%);
+    border: 1px solid rgba(158, 125, 75, 0.3);
+    border-radius: 6px;
+    padding: 2px 5px;
+    font-size: 9px;
+    font-weight: 800;
+    color: #9E7D4B;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
