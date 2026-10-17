@@ -120,28 +120,31 @@ try {
 } catch (_) {}
 
 function isCurrentUserAdmin() {
-    // 0. Si Coach Nico está inspeccionando activamente a un alumno, mantener privilegios
+    // 0. Si un Coach/Admin está inspeccionando activamente a un alumno, mantener privilegios
     if (window._sensCoachAdminUser || window._sensCoachAdminProfile) {
         return true;
     }
 
     const profile = AppState.profile || {};
     const user = AppState.user || {};
-    const email = (user.email || profile.email || '').toLowerCase().trim();
-    if (!email) return false;
 
-    // Administradores y Coaches oficiales SENS estrictos (Nico Maralle) o rol explícito verificado en DB
-    const isOfficialCoachEmail = (email === 'nico@sens.com' || email === 'nicomaralle@gmail.com');
-    const hasAdminRole = Boolean(
+    // Verificación estricta por rol RBAC (admin / coach) en profile o claims de Auth
+    return Boolean(
         profile.role === 'admin' ||
         profile.role === 'coach' ||
         profile.user_type === 'admin' ||
         profile.user_type === 'coach' ||
         user.role === 'admin' ||
-        user.role === 'coach'
+        user.role === 'coach' ||
+        user.app_metadata?.role === 'admin' ||
+        user.app_metadata?.role === 'coach' ||
+        user.user_metadata?.role === 'admin' ||
+        user.user_metadata?.role === 'coach'
     );
+}
 
-    return Boolean(isOfficialCoachEmail || hasAdminRole);
+function isCoachProfile() {
+    return isCurrentUserAdmin();
 }
 
 // -----------------------------------------------------------------------------
@@ -2075,8 +2078,6 @@ function initAuthModal() {
         const email = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPassword').value;
 
-        const isCoach = (email.toLowerCase() === 'nico@sens.com' || email.toLowerCase() === 'nicomaralle@gmail.com');
-
         let newUserId = 'local-user-' + Date.now();
 
         if (supabaseClient) {
@@ -2086,8 +2087,8 @@ function initAuthModal() {
                 options: { 
                     data: { 
                         full_name: fullName,
-                        role: isCoach ? 'admin' : 'user_normal',
-                        user_type: isCoach ? 'admin' : 'client_presencial_vip'
+                        role: 'user_normal',
+                        user_type: 'client_presencial_vip'
                     } 
                 }
             });
@@ -2109,10 +2110,10 @@ function initAuthModal() {
             id: newUserId,
             full_name: fullName,
             email: email,
-            role: isCoach ? 'admin' : 'user_normal',
-            user_type: isCoach ? 'admin' : 'client_presencial_vip',
-            subscription_status: isCoach ? 'active' : 'pending_activation',
-            active_plan_name: isCoach ? 'Panel Administrador SENS' : 'Presencial Personalizado 1 a 1 (CABA)',
+            role: 'user_normal',
+            user_type: 'client_presencial_vip',
+            subscription_status: 'pending_activation',
+            active_plan_name: 'Presencial Personalizado 1 a 1 (CABA)',
             billing_provider: 'manual',
             onboarding_completed: false,
             created_at: new Date().toISOString()
@@ -6618,10 +6619,10 @@ function getConsolidatedCoachAthletes() {
 
     // 1. Atletas de Base de Datos Supabase (Atletas Reales)
     dbAthletes.forEach(ath => {
-        const emailLower = (ath.email || '').toLowerCase();
         // Omitir si es cuenta de administración / coach para no mezclar entrenador con alumnos
-        if (emailLower === 'nico@sens.com' || emailLower === 'nicomaralle@gmail.com' || emailLower === 'lean.barreira@gmail.com') return;
+        if (ath.role === 'admin' || ath.role === 'coach' || ath.user_type === 'admin' || ath.user_type === 'coach') return;
 
+        const emailLower = (ath.email || '').toLowerCase();
         seenIds.add(ath.id);
         if (emailLower) seenEmails.add(emailLower);
 
@@ -6642,8 +6643,8 @@ function getConsolidatedCoachAthletes() {
     try {
         const localRoster = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
         localRoster.forEach(localAth => {
+            if (localAth.role === 'admin' || localAth.role === 'coach' || localAth.user_type === 'admin' || localAth.user_type === 'coach') return;
             const emailLower = (localAth.email || '').toLowerCase();
-            if (emailLower === 'nico@sens.com' || emailLower === 'nicomaralle@gmail.com' || emailLower === 'lean.barreira@gmail.com') return;
             // Omitir cualquier usuario mock legacy
             if (localAth.id && localAth.id.startsWith('mock_')) return;
             if (emailLower.includes('prueba@') || emailLower.includes('@duo.com') || emailLower.includes('@wellness.com') || emailLower.includes('@tech.com') || emailLower.includes('@appsens.com')) return;

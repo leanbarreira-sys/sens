@@ -259,19 +259,24 @@ ALTER TABLE public.food_catalog ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_nutrition_guidelines ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.daily_logs ENABLE ROW LEVEL SECURITY;
 
--- Helper Function: Verificar rol Administrador (Nico & Lean)
+-- Helper Function: Verificar rol Administrador o Coach (100% RBAC)
 CREATE OR REPLACE FUNCTION public.is_admin() RETURNS BOOLEAN AS $$
 BEGIN
-    RETURN (
-        auth.jwt() ->> 'email' IN ('nico@sens.com', 'nicomaralle@gmail.com', 'lean.barreira@gmail.com', 'lean@sens.com', 'admin@sens.com')
-        OR auth.jwt() ->> 'role' = 'service_role'
-        OR EXISTS (
-            SELECT 1 FROM public.profiles 
-            WHERE id = auth.uid() AND (role = 'admin' OR user_type = 'admin')
-        )
+    IF (auth.jwt() ->> 'role') = 'service_role' THEN
+        RETURN TRUE;
+    END IF;
+
+    IF (auth.jwt() -> 'app_metadata' ->> 'role') IN ('admin', 'coach') 
+       OR (auth.jwt() -> 'user_metadata' ->> 'role') IN ('admin', 'coach') THEN
+        RETURN TRUE;
+    END IF;
+
+    RETURN EXISTS (
+        SELECT 1 FROM public.profiles 
+        WHERE id = auth.uid() AND (role IN ('admin', 'coach') OR user_type IN ('admin', 'coach'))
     );
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public STABLE;
 
 -- Helper Function: Verificar Membresía Activa o Admin (Blindaje para planes y workouts)
 CREATE OR REPLACE FUNCTION public.has_active_subscription() RETURNS BOOLEAN AS $$
