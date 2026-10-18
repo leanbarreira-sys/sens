@@ -4502,6 +4502,44 @@ function initWorkoutManager() {
         });
     });
 
+    // Navegación Semanal en Vista de Entrenamiento (Paridad 1:1 con Inicio)
+    const btnWorkoutPrev = document.getElementById('btnWorkoutWeekPrev');
+    const btnWorkoutNext = document.getElementById('btnWorkoutWeekNext');
+    const btnWorkoutToday = document.getElementById('btnWorkoutJumpToToday');
+
+    if (btnWorkoutPrev) {
+        btnWorkoutPrev.addEventListener('click', () => {
+            navigateCalendarWeek('prev');
+        });
+    }
+    if (btnWorkoutNext) {
+        btnWorkoutNext.addEventListener('click', () => {
+            navigateCalendarWeek('next');
+        });
+    }
+    if (btnWorkoutToday) {
+        btnWorkoutToday.addEventListener('click', () => {
+            AppState.selectedDate = new Date();
+            AppState.activeWeekStart = getMonday(new Date());
+            AppState.currentDay = getDayKeyFromDate(new Date());
+            renderDynamicWeekStrip();
+            renderWorkoutDaysNav();
+            renderWorkoutDay(AppState.currentDay);
+            if (typeof showSensToast === 'function') {
+                showSensToast('Semana actual', 'champagne', 1500);
+            }
+        });
+    }
+
+    window.scrollWorkoutCarousel = function(btn, dir) {
+        if (!btn) return;
+        const block = btn.closest('.sens-workout-muscle-group-block');
+        if (!block) return;
+        const carousel = block.querySelector('.sens-workout-carousel');
+        if (!carousel) return;
+        carousel.scrollBy({ left: dir * 180, behavior: 'smooth' });
+    };
+
     // Botón de Admin: Asignar Ejercicio a este Día
     const btnAdminAdd = document.getElementById('btnAdminAddExercise');
     if (btnAdminAdd) {
@@ -5060,7 +5098,7 @@ function renderWorkoutDay(dayKey) {
     if (minCountEl) minCountEl.textContent = dayData.durationMinutes ? `${dayData.durationMinutes} min` : `~${estMinutes} min`;
     if (kcalCountEl) kcalCountEl.textContent = `~${totalWorkoutKcal} kcal`;
 
-    // 3. Renderizar Asistencia y Registro de Sesión
+    // 3. Renderizar Asistencia y Registro de Sesión (Compacto y Ligero)
     const attendanceBox = document.getElementById('workoutAttendanceBox');
     if (attendanceBox) {
         const isCompleted = Boolean(dayData.completed);
@@ -5070,11 +5108,11 @@ function renderWorkoutDay(dayKey) {
             attendanceBox.innerHTML = `
                 <div class="workout-attendance-completed">
                     <div class="attendance-done-info">
-                        <span class="status-dot status-dot-active" style="background: #10B981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></span>
-                        <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">Sesión Registrada • ${dayData.durationMinutes || estMinutes} min completados</span>
+                        <span class="status-dot status-dot-active" style="background: #10B981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);"></span>
+                        <span style="font-size: 11.5px; font-weight: 700; color: #FFFFFF;">Sesión registrada (${dayData.durationMinutes || estMinutes} min)</span>
                     </div>
-                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}')" style="font-size: 11px; color: #A1A1AA; background: none; border: none; cursor: pointer; text-decoration: underline;">
-                        Editar
+                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer; text-decoration: underline;">
+                        Cambiar
                     </button>
                 </div>
             `;
@@ -5082,9 +5120,9 @@ function renderWorkoutDay(dayKey) {
             attendanceBox.innerHTML = `
                 <div class="workout-attendance-missed">
                     <div class="attendance-missed-info">
-                        <span style="font-size: 12px; color: #A1A1AA;">✕ Marcado como no entrenado / descanso</span>
+                        <span style="font-size: 11.5px; color: #A1A1AA;">✕ Descanso registrado</span>
                     </div>
-                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}')" style="font-size: 11px; color: var(--accent-primary); background: none; border: none; cursor: pointer;">
+                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer;">
                         Cambiar a completado →
                     </button>
                 </div>
@@ -5092,19 +5130,19 @@ function renderWorkoutDay(dayKey) {
         } else {
             attendanceBox.innerHTML = `
                 <div class="workout-attendance-pending" id="workoutAttendancePendingPane">
-                    <span class="attendance-prompt">¿Realizaste este entrenamiento?</span>
+                    <span class="attendance-prompt">¿Entrenaste hoy?</span>
                     <div class="attendance-actions-wrap">
                         <button type="button" class="btn btn-sm btn-workout-attended" onclick="showWorkoutTimePicker('${dayKey}', ${estMinutes})">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                            Completé la sesión
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Sí, asistí
                         </button>
                         <button type="button" class="btn btn-sm btn-workout-missed" onclick="markWorkoutAttendanceMissed('${dayKey}')">
-                            No entrené hoy
+                            No fui
                         </button>
                     </div>
                 </div>
                 <div class="workout-attendance-timing" id="workoutAttendanceTimingPane" style="display: none;">
-                    <div style="font-size: 11px; color: #FFFFFF; font-weight: 700;">¿Cuánto tiempo entrenaste?</div>
+                    <div style="font-size: 10.5px; color: #FFFFFF; font-weight: 700;">¿Cuánto tiempo estuviste?</div>
                     <div class="workout-time-chips">
                         <button type="button" class="workout-time-chip ${estMinutes <= 35 ? 'selected' : ''}" data-min="30" onclick="selectWorkoutDurationChip(30)">30m</button>
                         <button type="button" class="workout-time-chip ${estMinutes > 35 && estMinutes <= 50 ? 'selected' : ''}" data-min="45" onclick="selectWorkoutDurationChip(45)">45m</button>
@@ -5182,13 +5220,13 @@ function renderWorkoutDay(dayKey) {
         muscleKeys.forEach(mk => totalTypeExercises += tg.muscles[mk].length);
 
         groupedHtml += `
-            <div class="sens-workout-type-section">
+            <div class="sens-workout-type-section" data-type="${tg.key}">
                 <div class="sens-workout-type-header">
                     <div class="sens-workout-type-title">
                         ${tg.icon}
                         <span>${tg.label}</span>
                     </div>
-                    <span style="font-size: 10px; color: #71717A; font-weight: 700;">${totalTypeExercises} ejercicio${totalTypeExercises > 1 ? 's' : ''}</span>
+                    <span class="sens-workout-type-badge">${totalTypeExercises} ejercicio${totalTypeExercises > 1 ? 's' : ''}</span>
                 </div>
         `;
 
@@ -5197,10 +5235,18 @@ function renderWorkoutDay(dayKey) {
             groupedHtml += `
                 <div class="sens-workout-muscle-group-block">
                     <div class="sens-workout-muscle-label-row">
-                        <span class="sens-workout-muscle-label">${mKey}</span>
-                        <span class="sens-workout-muscle-count">${list.length} ejercicio${list.length > 1 ? 's' : ''}</span>
+                        <div class="sens-workout-muscle-label-info">
+                            <span class="sens-workout-muscle-label">${mKey}</span>
+                            <span class="sens-workout-muscle-count">${list.length} ejercicio${list.length > 1 ? 's' : ''}</span>
+                        </div>
+                        <div class="sens-carousel-nav-controls">
+                            <span class="sens-carousel-hint-pill">Deslizá →</span>
+                            <button type="button" class="sens-carousel-arrow-btn" aria-label="Anterior" onclick="scrollWorkoutCarousel(this, -1)" title="Anterior">‹</button>
+                            <button type="button" class="sens-carousel-arrow-btn" aria-label="Siguiente" onclick="scrollWorkoutCarousel(this, 1)" title="Siguiente">›</button>
+                        </div>
                     </div>
-                    <div class="sens-workout-carousel">
+                    <div class="sens-carousel-wrap">
+                        <div class="sens-workout-carousel">
             `;
 
             list.forEach(item => {
@@ -5237,6 +5283,7 @@ function renderWorkoutDay(dayKey) {
             });
 
             groupedHtml += `
+                        </div>
                     </div>
                 </div>
             `;
@@ -11104,24 +11151,36 @@ function renderDynamicWeekStrip() {
     });
 }
 
+const SENS_MUSCLE_MICRO_ICONS = {
+    pecho: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 12h16"/><path d="M2 9v6"/><path d="M6 7v10"/><path d="M18 7v10"/><path d="M22 9v6"/></svg>`,
+    espalda: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m3 7 9 4 9-4"/><path d="m3 17 9-4 9 4"/><path d="M12 3v18"/></svg>`,
+    piernas: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 4v7a3 3 0 0 0 6 0V4"/><path d="M11 11v9"/><path d="M13 11v9"/></svg>`,
+    brazos: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 5v14"/><path d="M18 5v14"/><path d="M3 8v8"/><path d="M21 8v8"/><path d="M6 12h12"/></svg>`,
+    core: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`,
+    yoga: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="6" r="2.5"/><path d="M6 19c0-3.5 2.5-6 6-6s6 2.5 6 6"/></svg>`,
+    cardio: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`,
+    movilidad: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>`
+};
+
 /**
- * Determina el micro-badge (tipo o grupo muscular) para el día en el calendario semanal
+ * Determina el micro-badge con iconos chicos por grupo muscular (hasta 3 iconos por pill)
  */
 function getDayFocusBadge(dayData) {
     if (dayData && dayData.completed) {
-        return '<span class="sens-calendar-mini-pill done" title="Entrenamiento completado">✓ Hecho</span>';
+        return '<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>';
     }
     const exercises = (dayData && Array.isArray(dayData.exercises)) ? dayData.exercises : [];
     if (exercises.length === 0) {
         const titleLower = ((dayData && dayData.title) || '').toLowerCase();
         if (titleLower.includes('descanso') || titleLower.includes('rest')) {
-            return '<span class="sens-calendar-mini-pill rest">Descanso</span>';
+            return '<span class="sens-day-badge rest" title="Descanso">–</span>';
         }
-        return '<span class="sens-calendar-mini-pill rest">–</span>';
+        return '<span class="sens-day-badge rest">–</span>';
     }
 
     const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : (typeof EXERCISE_CATALOG !== 'undefined' ? EXERCISE_CATALOG : []);
-    const counts = { type: {}, muscle: {} };
+    const iconKeys = [];
+    const labelSet = new Set();
 
     exercises.forEach(ex => {
         const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
@@ -11129,43 +11188,53 @@ function getDayFocusBadge(dayData) {
             ? getExerciseTaxonomy(rawMatch) 
             : { type: 'muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas' };
         
-        counts.type[tax.type] = (counts.type[tax.type] || 0) + 1;
-        if (tax.muscleLabel) {
-            counts.muscle[tax.muscleLabel] = (counts.muscle[tax.muscleLabel] || 0) + 1;
+        if (tax.type === 'yoga') {
+            iconKeys.push('yoga');
+            labelSet.add('Yoga');
+        } else if (tax.type === 'cardio') {
+            iconKeys.push('cardio');
+            labelSet.add('Cardio');
+        } else if (tax.type === 'movilidad') {
+            iconKeys.push('movilidad');
+            labelSet.add('Movilidad');
+        } else {
+            const mg = (tax.muscleGroup || '').toLowerCase();
+            const ml = (tax.muscleLabel || '').toLowerCase();
+            if (mg.includes('pecho') || ml.includes('pecho')) {
+                iconKeys.push('pecho');
+                labelSet.add('Pecho');
+            } else if (mg.includes('espalda') || ml.includes('espalda')) {
+                iconKeys.push('espalda');
+                labelSet.add('Espalda');
+            } else if (mg.includes('pierna') || mg.includes('quad') || mg.includes('glute') || ml.includes('pierna') || ml.includes('cuádricep') || ml.includes('glúteo')) {
+                iconKeys.push('piernas');
+                labelSet.add('Piernas');
+            } else if (mg.includes('core') || mg.includes('abdom') || ml.includes('core')) {
+                iconKeys.push('core');
+                labelSet.add('Core');
+            } else if (['biceps', 'triceps', 'hombros', 'brazos'].some(b => mg.includes(b) || ml.includes(b))) {
+                iconKeys.push('brazos');
+                labelSet.add('Brazos');
+            } else {
+                iconKeys.push('piernas');
+                labelSet.add('Fuerza');
+            }
         }
     });
 
-    if (counts.type['yoga']) {
-        return '<span class="sens-calendar-mini-pill yoga">Yoga</span>';
-    }
-    if (counts.type['cardio'] && counts.type['cardio'] >= exercises.length / 2) {
-        return '<span class="sens-calendar-mini-pill cardio">Cardio</span>';
-    }
-    if (counts.type['movilidad'] && counts.type['movilidad'] >= exercises.length / 2) {
-        return '<span class="sens-calendar-mini-pill movilidad">Movilidad</span>';
+    const uniqueKeys = Array.from(new Set(iconKeys)).slice(0, 3);
+    if (uniqueKeys.length === 0) {
+        return '<span class="sens-day-badge rest">–</span>';
     }
 
-    const sortedMuscles = Object.entries(counts.muscle).sort((a, b) => b[1] - a[1]);
-    if (sortedMuscles.length > 0) {
-        const label = sortedMuscles[0][0];
-        let shortLabel = label;
-        if (label === 'Glúteos & Isquios' || label.includes('Glúteos')) shortLabel = 'Glúteos';
-        else if (label === 'Cuádriceps' || label === 'Piernas') shortLabel = 'Piernas';
-        else if (label.includes('Espalda')) shortLabel = 'Espalda';
-        else if (label.includes('Pecho')) shortLabel = 'Pecho';
-        else if (label.includes('Hombro')) shortLabel = 'Hombros';
-        else if (label.includes('Brazos') || label.includes('Bíceps') || label.includes('Tríceps')) shortLabel = 'Brazos';
-        else if (label.includes('Core') || label.includes('Abdom')) shortLabel = 'Core';
-        else if (shortLabel.length > 8) shortLabel = shortLabel.substring(0, 8);
-        return `<span class="sens-calendar-mini-pill muscular">${shortLabel}</span>`;
-    }
-
-    return '<span class="sens-calendar-mini-pill muscular">Fuerza</span>';
+    const iconsHtml = uniqueKeys.map(k => SENS_MUSCLE_MICRO_ICONS[k] || SENS_MUSCLE_MICRO_ICONS.brazos).join('');
+    const tooltipText = Array.from(labelSet).join(' • ');
+    return `<div class="sens-pill-icons-row" title="${tooltipText}">${iconsHtml}</div>`;
 }
 
 /**
  * Renderiza el calendario de 7 días (id="workoutDaysNav") con paridad 1:1 con la Home
- * Mostrando en micro-pills el tipo de entrenamiento o grupo muscular del día
+ * Mostrando en micro-pills hasta 3 micro-iconos por grupo muscular
  */
 function renderWorkoutDaysNav() {
     const container = document.getElementById('workoutDaysNav');
@@ -11173,6 +11242,11 @@ function renderWorkoutDaysNav() {
 
     if (!AppState.activeWeekStart) {
         AppState.activeWeekStart = getMonday(new Date());
+    }
+
+    const rangeLabel = document.getElementById('sensWorkoutWeekRangeLabel');
+    if (rangeLabel && typeof getWeekRangeLabel === 'function') {
+        rangeLabel.textContent = getWeekRangeLabel(AppState.activeWeekStart);
     }
 
     const athId = getActiveAthleteId();

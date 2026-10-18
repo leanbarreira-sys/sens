@@ -9992,81 +9992,76 @@ input[type="range"]::-webkit-slider-thumb:hover {
     line-height: 1.4;
 }
 
-/* 2. Cuadro Resumen Compacto de Sesión & Registro de Asistencia */
+/* 2. Cuadro Resumen Compacto de Sesión & Registro de Asistencia (Ligero, Menos Pesado) */
 .sens-workout-summary-card {
-    background: #121214;
+    background: #141417;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
-    padding: 16px 18px;
-    margin-bottom: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+body.in-portal .sens-workout-summary-card {
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .sens-workout-summary-top {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
     flex-wrap: wrap;
-    gap: 12px;
-    padding-bottom: 12px;
+    gap: 8px;
+    padding-bottom: 8px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.sens-workout-summary-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
 .sens-workout-day-tag {
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    color: var(--accent-primary);
+    color: #B89360;
 }
 
 .sens-workout-summary-title {
     font-family: var(--font-heading);
-    font-size: 1.15rem;
-    font-weight: 800;
+    font-size: 1rem;
+    font-weight: 700;
     color: #FFFFFF;
-    margin: 2px 0 0 0;
-    line-height: 1.2;
+    margin: 0;
+    line-height: 1.25;
 }
 
 .sens-workout-metrics-strip {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
-    flex-wrap: wrap;
+    font-size: 11px;
+    color: #A1A1AA;
 }
 
-.sens-workout-metric-pill {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 8px;
-    padding: 4px 10px;
-    min-width: 58px;
-}
-
-.sens-workout-metric-pill .metric-val {
-    font-size: 13px;
-    font-weight: 800;
+.sens-summary-metric strong {
     color: #FFFFFF;
     font-variant-numeric: tabular-nums;
-    line-height: 1.15;
 }
 
-.sens-workout-metric-pill .metric-lbl {
+.sens-summary-metric-sep {
+    color: rgba(255, 255, 255, 0.25);
     font-size: 9px;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
 }
 
-/* Registro de Asistencia Táctil */
+/* Registro de Asistencia Táctil (Compacto) */
 .sens-workout-attendance-box {
-    margin-top: 12px;
+    margin-top: 8px;
+    padding-top: 2px;
 }
 
 .workout-attendance-pending {
@@ -10074,63 +10069,57 @@ input[type="range"]::-webkit-slider-thumb:hover {
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
 .attendance-prompt {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.85);
-    font-weight: 600;
+    font-size: 11.5px;
+    color: #A1A1AA;
+    font-weight: 500;
 }
 
 .attendance-actions-wrap {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
-    flex-wrap: wrap;
 }
 
 .btn-workout-attended {
-    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%) !important;
+    background: #B89360 !important;
     color: #09090B !important;
-    font-weight: 800 !important;
-    font-size: 11.5px !important;
-    border-radius: 8px !important;
-    padding: 7px 14px !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    border-radius: 999px !important;
+    padding: 5px 12px !important;
     border: none !important;
     cursor: pointer !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 6px !important;
-    box-shadow: 0 2px 8px rgba(196, 164, 124, 0.25) !important;
+    gap: 4px !important;
+    box-shadow: 0 2px 6px rgba(184, 147, 96, 0.2) !important;
 }
 
 .btn-workout-missed {
-    background: transparent !important;
+    background: rgba(255, 255, 255, 0.05) !important;
     color: #A1A1AA !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
     font-weight: 600 !important;
     font-size: 11px !important;
-    border-radius: 8px !important;
-    padding: 7px 12px !important;
+    border-radius: 999px !important;
+    padding: 5px 10px !important;
     cursor: pointer !important;
-}
-
-.btn-workout-missed:hover {
-    color: #FFFFFF !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
 }
 
 .workout-attendance-timing {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 6px 0;
+    gap: 6px;
+    padding: 2px 0;
 }
 
 .workout-time-chips {
     display: flex;
-    gap: 6px;
+    gap: 5px;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -10139,25 +10128,25 @@ input[type="range"]::-webkit-slider-thumb:hover {
     background: #18181B;
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #E4E4E7;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
-    padding: 5px 10px;
+    padding: 4px 9px;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.15s ease;
 }
 
 .workout-time-chip.selected {
-    background: #E5CBA7;
+    background: #B89360;
     color: #09090B;
-    border-color: #E5CBA7;
+    border-color: #B89360;
     font-weight: 800;
 }
 
 .btn-confirm-time {
-    padding: 5px 14px !important;
-    font-size: 11.5px !important;
-    font-weight: 800 !important;
+    padding: 4px 12px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
 }
 
 .workout-attendance-completed {
@@ -10165,13 +10154,21 @@ input[type="range"]::-webkit-slider-thumb:hover {
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
 .attendance-done-info {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    font-size: 11.5px;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.attendance-done-info .status-dot {
+    background: #10B981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
 }
 
 .workout-attendance-missed {
@@ -10179,35 +10176,38 @@ input[type="range"]::-webkit-slider-thumb:hover {
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
-/* 3. Micro-pills del Calendario Semanal (Paridad Home) */
-.sens-calendar-mini-pill {
-    display: inline-block;
-    font-size: 8.5px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    padding: 2px 6px;
+/* 3. Micro-iconos del Calendario Semanal por Grupo Muscular (Hasta 3 Iconos) */
+.sens-pill-icons-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5px;
+    height: 16px;
+    padding: 1px 3px;
     border-radius: 4px;
-    background: rgba(229, 203, 167, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    color: #B89360;
+    max-width: 44px;
+}
+
+.sens-pill-icons-row svg {
+    width: 11px;
+    height: 11px;
+    stroke: currentColor;
+    flex-shrink: 0;
+}
+
+.sens-week-day-pill.active .sens-pill-icons-row {
+    background: rgba(184, 147, 96, 0.22);
     color: #E5CBA7;
-    white-space: nowrap;
-    max-width: 62px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
 }
 
-.sens-calendar-mini-pill.rest {
-    background: rgba(255, 255, 255, 0.05);
-    color: #71717A;
-}
-
-.sens-calendar-mini-pill.done {
-    background: rgba(16, 185, 129, 0.16);
-    color: #10B981;
+body.in-portal .sens-week-day-pill:not(.active) .sens-pill-icons-row {
+    background: rgba(0, 0, 0, 0.05);
+    color: #9E7D4B;
 }
 
 /* 4. Filtros de Entrenamiento (1 Sola Row Swipeable) */
@@ -10218,7 +10218,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 6px;
-    padding: 2px 0 14px 0;
+    padding: 2px 0 12px 0;
 }
 
 .sens-workout-filters-row::-webkit-scrollbar {
@@ -10229,9 +10229,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
     height: 28px;
     padding: 0 12px;
     border-radius: 999px;
-    background: #18181B !important;
-    border: none !important;
-    color: #A1A1AA;
+    background: #FFFFFF !important;
+    border: 1px solid #E4E4E7 !important;
+    color: #52525B;
     font-size: 11px;
     font-weight: 700;
     white-space: nowrap;
@@ -10241,23 +10241,32 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .workout-filter-chip:hover {
-    color: #FFFFFF;
-    background: #27272A !important;
+    color: #09090B;
+    background: #F4F4F5 !important;
 }
 
 .workout-filter-chip.active {
-    background: #E5CBA7 !important;
-    color: #09090B !important;
-    font-weight: 800;
+    background: #09090B !important;
+    border-color: #09090B !important;
+    color: #FFFFFF !important;
+    font-weight: 700;
 }
 
-/* 5. Card de Indicación Técnica / Nota de Nico */
+/* 5. Card de Indicación Técnica / Nota de Nico (Alto Contraste) */
 .sens-coach-daily-note-card {
-    background: rgba(229, 203, 167, 0.05);
-    border: 1px solid rgba(229, 203, 167, 0.2);
+    background: #FFFFFF !important;
+    border: 1px solid #E4E4E7 !important;
+    border-left: 3.5px solid #B89360 !important;
     border-radius: 12px;
     padding: 12px 14px;
     margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.in-portal .sens-coach-daily-note-card {
+    background: #FFFFFF !important;
+    border: 1px solid #E4E4E7 !important;
+    border-left: 3.5px solid #B89360 !important;
 }
 
 .sens-coach-note-header {
@@ -10271,8 +10280,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #E5CBA7;
-    box-shadow: 0 0 6px rgba(229, 203, 167, 0.6);
+    background: #9E7D4B;
 }
 
 .sens-coach-note-title {
@@ -10280,17 +10288,18 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #E5CBA7;
+    color: #9E7D4B;
 }
 
 .sens-coach-note-body {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.88);
-    line-height: 1.4;
+    color: #18181B;
+    font-weight: 500;
+    line-height: 1.45;
     margin: 0;
 }
 
-/* 6. Agrupación Jerárquica: Tipo -> Músculo -> Carrusel Horizontal */
+/* 6. Agrupación Jerárquica y Carruseles Explícitos */
 .sens-workout-type-section {
     margin-bottom: 22px;
 }
@@ -10301,7 +10310,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     justify-content: space-between;
     margin-bottom: 12px;
     padding-bottom: 6px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1.5px solid #E4E4E7;
 }
 
 .sens-workout-type-title {
@@ -10309,14 +10318,36 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: var(--accent-primary);
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
+/* Diferenciación Cromática de Agrupaciones */
+.sens-workout-type-section[data-type="muscular"] .sens-workout-type-title {
+    color: #B89360;
+}
+.sens-workout-type-section[data-type="cardio"] .sens-workout-type-title {
+    color: #0284C7;
+}
+.sens-workout-type-section[data-type="movilidad"] .sens-workout-type-title {
+    color: #7C3AED;
+}
+.sens-workout-type-section[data-type="yoga"] .sens-workout-type-title {
+    color: #059669;
+}
+
+.sens-workout-type-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #ECECEE;
+    color: #52525B;
+}
+
 .sens-workout-muscle-group-block {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .sens-workout-muscle-label-row {
@@ -10326,16 +10357,83 @@ input[type="range"]::-webkit-slider-thumb:hover {
     margin-bottom: 8px;
 }
 
+.sens-workout-muscle-label-info {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
 .sens-workout-muscle-label {
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #09090B;
 }
 
 .sens-workout-muscle-count {
-    font-size: 10px;
+    font-size: 10.5px;
     color: #71717A;
     font-weight: 600;
+}
+
+/* Controles de Navegación Explícitos del Carrusel */
+.sens-carousel-nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sens-carousel-hint-pill {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #9E7D4B;
+    background: rgba(184, 147, 96, 0.12);
+    padding: 2px 7px;
+    border-radius: 999px;
+    letter-spacing: 0.2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    user-select: none;
+}
+
+.sens-carousel-arrow-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    color: #18181B;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 0;
+    line-height: 1;
+}
+
+.sens-carousel-arrow-btn:active {
+    transform: scale(0.92);
+    background: #F4F4F5;
+}
+
+.sens-carousel-wrap {
+    position: relative;
+}
+
+.sens-carousel-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 8px;
+    width: 26px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent 0%, rgba(248, 249, 250, 0.85) 100%);
+    z-index: 4;
 }
 
 /* Carrusel Horizontal Snap Scroll */

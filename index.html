@@ -100,7 +100,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=7.6">
+    <link rel="stylesheet" href="style.css?v=7.7">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -3020,36 +3020,29 @@
                  MÓDULO 6: GESTOR DE RUTINAS Y ENTRENAMIENTO (VIDEO-FIRST / ALTO IMPACTO)
                  ===================================================================== -->
             <section class="portal-view" id="workoutView">
-                <!-- 0. Saludo Editorial Personalizado -->
-                <div class="sens-workout-greeting-hero">
-                    <h2 class="sens-workout-greeting-title" id="workoutGreetingTitle">
-                        <span id="workoutGreetingAthleteName">Lean</span>, ¿entrenamos hoy? <span style="color: var(--accent-primary);">Makes Sens.</span>
-                    </h2>
-                    <p class="sens-workout-greeting-sub" id="workoutGreetingSub">
-                        Tu planificación biomecánica y prescripción de cargas para la sesión de hoy.
-                    </p>
+                <!-- 0. Saludo Personalizado de Bienvenida (Idéntico a Inicio) -->
+                <div class="sens-dash-welcome-header" id="workoutWelcomeHeader">
+                    <div class="sens-dash-welcome-question">
+                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, ¿entrenamos juntos hoy?
+                    </div>
+                    <div class="sens-dash-welcome-slogan">
+                        MAKES SENS.
+                    </div>
                 </div>
 
-                <!-- 1. Cuadro Resumen Compacto de la Sesión y Registro de Asistencia -->
+                <!-- 1. Cuadro Resumen Ligero de la Sesión y Registro de Asistencia -->
                 <div class="sens-workout-summary-card" id="workoutSummaryCard">
                     <div class="sens-workout-summary-top">
                         <div class="sens-workout-summary-info">
-                            <div class="sens-workout-day-tag" id="workoutSummaryDayTag">Sesión del Día</div>
+                            <span class="sens-workout-day-tag" id="workoutSummaryDayTag">Sesión del Día</span>
                             <h3 class="sens-workout-summary-title" id="heroWorkoutTitle">Cargando sesión...</h3>
                         </div>
                         <div class="sens-workout-metrics-strip" id="workoutMetricsStrip">
-                            <div class="sens-workout-metric-pill" id="metricPillExercises">
-                                <span class="metric-val" id="metricValExercises">0</span>
-                                <span class="metric-lbl">ejercicios</span>
-                            </div>
-                            <div class="sens-workout-metric-pill" id="metricPillMinutes">
-                                <span class="metric-val" id="metricValMinutes">~0</span>
-                                <span class="metric-lbl">minutos</span>
-                            </div>
-                            <div class="sens-workout-metric-pill" id="metricPillKcal">
-                                <span class="metric-val" id="metricValKcal">~0</span>
-                                <span class="metric-lbl">kcal</span>
-                            </div>
+                            <span class="sens-summary-metric" id="metricPillExercises"><strong id="metricValExercises">0</strong> ejerc.</span>
+                            <span class="sens-summary-metric-sep">•</span>
+                            <span class="sens-summary-metric" id="metricPillMinutes"><strong id="metricValMinutes">~0</strong></span>
+                            <span class="sens-summary-metric-sep">•</span>
+                            <span class="sens-summary-metric" id="metricPillKcal"><strong id="metricValKcal">~0</strong></span>
                         </div>
                     </div>
 
@@ -3059,10 +3052,23 @@
                     </div>
                 </div>
 
-                <!-- 2. Navegador de Días Semanales (Paridad con Calendario de la Home) -->
-                <div class="sens-calendar-sticky-wrapper" style="margin-bottom: 14px;">
+                <!-- 2. Navegador de Semanas & Calendario Semanal (Paridad con Inicio) -->
+                <div class="sens-calendar-sticky-wrapper" id="workoutCalendarStickyWrapper" style="margin-bottom: 14px;">
+                    <div class="sens-week-nav-bar">
+                        <button type="button" class="sens-week-arrow-btn" id="btnWorkoutWeekPrev" aria-label="Semana anterior" title="Semana anterior">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <div class="sens-week-title-wrap">
+                            <span class="sens-week-range-text" id="sensWorkoutWeekRangeLabel">Semana de Entrenamiento</span>
+                            <button type="button" class="sens-pill-today" id="btnWorkoutJumpToToday">Hoy</button>
+                        </div>
+                        <button type="button" class="sens-week-arrow-btn" id="btnWorkoutWeekNext" aria-label="Semana siguiente" title="Semana siguiente">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                    </div>
+
                     <div class="sens-week-strip-wrap" id="workoutDaysNav">
-                        <!-- Inyectado dinámicamente con los 7 días y micro-pills por app.js -->
+                        <!-- Inyectado dinámicamente con los 7 días y micro-iconos por app.js -->
                     </div>
                 </div>
 
@@ -6426,7 +6432,7 @@
     <script src="exercises_db.js?v=6.7"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=7.9"></script>
+    <script src="app.js?v=8.0"></script>
 </body>
 
 </html>
