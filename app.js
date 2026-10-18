@@ -4487,16 +4487,16 @@ function initWorkoutManager() {
         });
     });
 
-    // Filtros de Grupo Muscular
-    const muscleFilterBtns = document.querySelectorAll('.muscle-filter-btn');
+    // Filtros de Grupo Muscular (1 Sola Row Horizontal Swipeable)
+    const muscleFilterBtns = document.querySelectorAll('.workout-filter-chip, .muscle-filter-btn');
     muscleFilterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             muscleFilterBtns.forEach(b => {
-                b.classList.remove('pill-champagne');
+                b.classList.remove('active', 'pill-champagne');
                 b.classList.add('pill-dark');
             });
             btn.classList.remove('pill-dark');
-            btn.classList.add('pill-champagne');
+            btn.classList.add('active', 'pill-champagne');
             AppState.selectedMuscleFilter = btn.getAttribute('data-group') || 'all';
             renderWorkoutDay(AppState.currentDay || 'day1');
         });
@@ -4790,17 +4790,157 @@ let modalExerciseState = {
     isRestRunning: false
 };
 
+function saveAthleteDayWorkoutStatus(athId, dayKey, statusUpdate) {
+    let workoutData = getCoachAthleteWorkoutData(athId);
+    if (!workoutData || typeof workoutData !== 'object') {
+        workoutData = {};
+    }
+    if (!workoutData[dayKey]) {
+        workoutData[dayKey] = { title: getDayNameFromKey(dayKey), exercises: [] };
+    }
+    Object.assign(workoutData[dayKey], statusUpdate);
+    
+    // Guardar en localStorage
+    localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+    
+    // Actualizar cache y AppState profile
+    if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached) cached.prescribed_workouts = workoutData;
+    }
+    if (AppState.profile && AppState.profile.id === athId) {
+        AppState.profile.prescribed_workouts = workoutData;
+    }
+    
+    // Sincronizar en Supabase
+    if (typeof supabaseClient !== 'undefined' && supabaseClient && AppState.user) {
+        supabaseClient.from('profiles').update({
+            prescribed_workouts: workoutData
+        }).eq('id', athId).then(({ error }) => {
+            if (error) console.warn('Sync workout status error:', error);
+        });
+    }
+}
+
+let selectedSessionDuration = 60;
+
+window.showWorkoutTimePicker = function(dayKey, defaultMinutes) {
+    selectedSessionDuration = defaultMinutes || 60;
+    const pendingPane = document.getElementById('workoutAttendancePendingPane');
+    const timingPane = document.getElementById('workoutAttendanceTimingPane');
+    if (pendingPane) pendingPane.style.display = 'none';
+    if (timingPane) {
+        timingPane.style.display = 'flex';
+        timingPane.querySelectorAll('.workout-time-chip').forEach(chip => {
+            const m = parseInt(chip.getAttribute('data-min'), 10);
+            if (m === selectedSessionDuration) chip.classList.add('selected');
+            else chip.classList.remove('selected');
+        });
+    }
+};
+
+window.selectWorkoutDurationChip = function(minutes) {
+    selectedSessionDuration = minutes;
+    const timingPane = document.getElementById('workoutAttendanceTimingPane');
+    if (timingPane) {
+        timingPane.querySelectorAll('.workout-time-chip').forEach(chip => {
+            const m = parseInt(chip.getAttribute('data-min'), 10);
+            if (m === minutes) chip.classList.add('selected');
+            else chip.classList.remove('selected');
+        });
+    }
+};
+
+window.confirmWorkoutSessionAttendance = function(dayKey) {
+    const athId = getActiveAthleteId();
+    saveAthleteDayWorkoutStatus(athId, dayKey, {
+        completed: true,
+        missed: false,
+        attended: true,
+        durationMinutes: selectedSessionDuration,
+        completedAt: new Date().toISOString()
+    });
+    if (typeof showSensToast === 'function') {
+        showSensToast(`✓ Sesión registrada: ${selectedSessionDuration} minutos. ¡Excelente trabajo!`, 'champagne');
+    }
+    renderWorkoutDay(dayKey);
+    renderWorkoutDaysNav();
+    if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate || new Date(), dayKey);
+};
+
+window.markWorkoutAttendanceMissed = function(dayKey) {
+    const athId = getActiveAthleteId();
+    saveAthleteDayWorkoutStatus(athId, dayKey, {
+        completed: false,
+        missed: true,
+        attended: false,
+        durationMinutes: 0
+    });
+    if (typeof showSensToast === 'function') {
+        showSensToast('Marcado como día de descanso / no realizado.', 'info');
+    }
+    renderWorkoutDay(dayKey);
+    renderWorkoutDaysNav();
+    if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate || new Date(), dayKey);
+};
+
+window.resetWorkoutAttendance = function(dayKey) {
+    const athId = getActiveAthleteId();
+    saveAthleteDayWorkoutStatus(athId, dayKey, {
+        completed: false,
+        missed: false,
+        attended: null
+    });
+    renderWorkoutDay(dayKey);
+    renderWorkoutDaysNav();
+    if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate || new Date(), dayKey);
+};
+
+window.toggleExerciseFinished = function(exId, dayKey) {
+    const athId = getActiveAthleteId();
+    const data = getCoachAthleteWorkoutData(athId);
+    const day = (data && data[dayKey]) ? data[dayKey] : null;
+    if (!day || !Array.isArray(day.exercises)) return;
+
+    const ex = day.exercises.find(e => e.id === exId);
+    if (!ex) return;
+
+    ex.completed = !ex.completed;
+    saveAthleteDayWorkoutStatus(athId, dayKey, { exercises: day.exercises });
+
+    const allDone = day.exercises.every(e => e.completed);
+    if (allDone && !day.completed) {
+        day.completed = true;
+        day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
+        saveAthleteDayWorkoutStatus(athId, dayKey, { completed: true, durationMinutes: day.durationMinutes });
+        if (typeof showSensToast === 'function') {
+            showSensToast('¡Felicitaciones! Completaste todos los ejercicios de la sesión.', 'champagne');
+        }
+    } else {
+        if (typeof showSensToast === 'function') {
+            showSensToast(ex.completed ? `✓ ${ex.name} finalizado` : `Ejercicio desmarcado`, 'info');
+        }
+    }
+
+    renderWorkoutDay(dayKey);
+    renderWorkoutDaysNav();
+    if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+};
+
 function renderWorkoutDay(dayKey) {
     AppState.currentDay = dayKey;
     const athId = getActiveAthleteId();
     const hasRoutine = athleteHasAssignedRoutine(athId);
     const container = document.getElementById('exercisesContainer');
     const heroTitle = document.getElementById('heroWorkoutTitle');
-    const heroSub = document.getElementById('heroWorkoutSubtitle');
-    const goalPill = document.getElementById('workoutGoalPill');
-    const muscleFocusName = document.getElementById('workoutFocusMuscleName');
-    const muscleFocusCue = document.getElementById('workoutFocusMuscleCue');
+    const greetingAthleteName = document.getElementById('workoutGreetingAthleteName');
+    const summaryDayTag = document.getElementById('workoutSummaryDayTag');
     const adminBar = document.getElementById('workoutAdminActionsBar');
+    const coachCard = document.getElementById('workoutCoachDailyNoteCard');
+    const coachBody = document.getElementById('workoutCoachDailyNoteBody');
 
     if (!container) return;
 
@@ -4809,27 +4949,26 @@ function renderWorkoutDay(dayKey) {
         adminBar.style.display = isAdmin ? 'flex' : 'none';
     }
 
-    // Sincronizar badge de objetivo general arriba
-    const userGoal = AppState.profile?.goal || 'fat_loss';
-    if (goalPill) {
-        switch (userGoal) {
-            case 'fat_loss': goalPill.textContent = 'OBJETIVO: PÉRDIDA DE GRASA & DEFINICIÓN'; break;
-            case 'muscle_gain': goalPill.textContent = 'OBJETIVO: HIPERTROFIA & FUERZA BASE'; break;
-            case 'recomp': goalPill.textContent = 'OBJETIVO: RECOMPOSICIÓN CORPORAL'; break;
-            case 'posture_health': goalPill.textContent = 'OBJETIVO: POSTURA & SALUD ARTICULAR'; break;
-            default: goalPill.textContent = 'OBJETIVO: VITALIDAD & RENDIMIENTO'; break;
-        }
+    // 1. Saludo Personalizado
+    const athleteName = (AppState.profile?.full_name || AppState.profile?.name || AppState.user?.email?.split('@')[0] || 'Atleta').trim().split(' ')[0] || 'Atleta';
+    if (greetingAthleteName) {
+        greetingAthleteName.textContent = athleteName;
     }
 
     // Caso 1: Usuario nuevo sin rutina asignada por Nico
     if (!hasRoutine) {
         if (heroTitle) heroTitle.textContent = 'Plan en Preparación';
-        if (heroSub) heroSub.textContent = 'Nico está evaluando tu mapa articular y objetivos.';
-        if (muscleFocusName) muscleFocusName.textContent = 'Asignación Pendiente';
-        if (muscleFocusCue) muscleFocusCue.textContent = 'Rutina personalizada en confección clínica';
+        if (summaryDayTag) summaryDayTag.textContent = 'Asignación Pendiente';
+        const exVal = document.getElementById('metricValExercises');
+        const minVal = document.getElementById('metricValMinutes');
+        const kcalVal = document.getElementById('metricValKcal');
+        if (exVal) exVal.textContent = '0';
+        if (minVal) minVal.textContent = '~0';
+        if (kcalVal) kcalVal.textContent = '~0';
+        if (coachCard) coachCard.style.display = 'none';
 
         container.innerHTML = `
-            <div class="sens-empty-state-card" style="grid-column: 1 / -1;">
+            <div class="sens-empty-state-card" style="grid-column: 1 / -1; margin-bottom: 24px;">
                 <div class="sens-empty-state-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
@@ -4853,81 +4992,260 @@ function renderWorkoutDay(dayKey) {
     const data = getCoachAthleteWorkoutData(athId);
     const dayData = (data && data[dayKey]) ? data[dayKey] : { title: `Día: ${dayKey}`, exercises: [] };
     const filterGroup = AppState.selectedMuscleFilter || 'all';
+    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+    const allDayExercises = Array.isArray(dayData.exercises) ? dayData.exercises : [];
 
-    let exercisesToShow = dayData.exercises || [];
+    let exercisesToShow = allDayExercises;
     if (filterGroup !== 'all') {
         exercisesToShow = exercisesToShow.filter(ex => {
-            const catalogMatch = EXERCISE_CATALOG.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase());
-            const mg = catalogMatch ? catalogMatch.muscle_group : (ex.muscle_group || 'quadriceps');
-            if (filterGroup === 'piernas') return mg === 'quadriceps' || mg === 'hamstrings_glutes';
-            if (filterGroup === 'pecho_espalda') return mg === 'push' || mg === 'pull';
-            if (filterGroup === 'brazos_hombros') return mg === 'push' || mg === 'pull';
-            if (filterGroup === 'core_movilidad') return mg === 'core_mobility';
+            const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
+            const catalogMatch = (typeof window.getResolvedExercise === 'function')
+                ? window.getResolvedExercise(rawMatch, athId)
+                : rawMatch;
+            const tax = (typeof getExerciseTaxonomy === 'function') 
+                ? getExerciseTaxonomy(catalogMatch) 
+                : { type: 'muscular', muscleGroup: 'piernas' };
+            
+            if (['muscular', 'cardio', 'movilidad', 'yoga'].includes(filterGroup)) {
+                return tax.type === filterGroup;
+            }
+            if (filterGroup === 'piernas') {
+                return tax.muscleGroup === 'piernas' || tax.muscleGroup === 'quadriceps' || tax.muscleGroup === 'hamstrings_glutes';
+            }
+            if (filterGroup === 'pecho') {
+                return tax.muscleGroup === 'pecho' || tax.muscleGroup === 'push';
+            }
+            if (filterGroup === 'espalda') {
+                return tax.muscleGroup === 'espalda' || tax.muscleGroup === 'pull';
+            }
+            if (filterGroup === 'brazos_hombros' || filterGroup === 'hombros_brazos') {
+                return ['biceps', 'triceps', 'hombros'].includes(tax.muscleGroup);
+            }
+            if (filterGroup === 'core') {
+                return ['abdominales', 'zona_lumbar', 'core'].includes(tax.muscleGroup) || tax.subMuscle === 'core';
+            }
+            if (filterGroup === 'yoga_movilidad') {
+                return tax.type === 'yoga' || tax.type === 'movilidad';
+            }
             return true;
         });
     }
 
-    if (heroTitle) heroTitle.textContent = dayData.title || `Día: ${dayKey}`;
-    if (heroSub) heroSub.textContent = `${exercisesToShow.length} Ejercicios asignados • ~${Math.max(30, exercisesToShow.length * 12)} min estimadas • Descanso cronometrado`;
-    if (muscleFocusName) muscleFocusName.textContent = dayData.title || 'Músculo Principal';
-    if (muscleFocusCue) muscleFocusCue.textContent = 'Enfoque biomecánico en cadencia 3-0-1-0 y rango completo sin dolor articular';
+    // 2. Calcular Métricas de Sesión
+    const userWeight = parseFloat(AppState.profile?.current_weight || AppState.anamnesis?.weight || 75) || 75;
+    let totalWorkoutKcal = 0;
+    allDayExercises.forEach(ex => {
+        const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
+        const catalogMatch = (typeof window.getResolvedExercise === 'function')
+            ? window.getResolvedExercise(rawMatch, athId)
+            : rawMatch;
+        const kcalData = (typeof window.calculateExerciseKcal === 'function')
+            ? window.calculateExerciseKcal(catalogMatch, ex.sets || 3, ex.reps || 10, userWeight)
+            : { kcalPerSet: 7, totalKcal: 21 };
+        totalWorkoutKcal += kcalData.totalKcal;
+    });
 
+    const estMinutes = Math.max(25, Math.round(allDayExercises.length * 8.5 + 5));
+
+    // Actualizar Cuadro Resumen Compacto
+    const dayName = getDayNameFromKey(dayKey);
+    const isToday = isSameDay(AppState.selectedDate || new Date(), new Date());
+    if (summaryDayTag) summaryDayTag.textContent = isToday ? 'Entrenamiento de Hoy' : `Sesión: ${dayName}`;
+    if (heroTitle) heroTitle.textContent = dayData.title || `Día: ${dayName}`;
+
+    const exCountEl = document.getElementById('metricValExercises');
+    const minCountEl = document.getElementById('metricValMinutes');
+    const kcalCountEl = document.getElementById('metricValKcal');
+    if (exCountEl) exCountEl.textContent = allDayExercises.length;
+    if (minCountEl) minCountEl.textContent = dayData.durationMinutes ? `${dayData.durationMinutes} min` : `~${estMinutes} min`;
+    if (kcalCountEl) kcalCountEl.textContent = `~${totalWorkoutKcal} kcal`;
+
+    // 3. Renderizar Asistencia y Registro de Sesión
+    const attendanceBox = document.getElementById('workoutAttendanceBox');
+    if (attendanceBox) {
+        const isCompleted = Boolean(dayData.completed);
+        const isMissed = Boolean(dayData.missed || dayData.attended === false);
+
+        if (isCompleted) {
+            attendanceBox.innerHTML = `
+                <div class="workout-attendance-completed">
+                    <div class="attendance-done-info">
+                        <span class="status-dot status-dot-active" style="background: #10B981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></span>
+                        <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">Sesión Registrada • ${dayData.durationMinutes || estMinutes} min completados</span>
+                    </div>
+                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}')" style="font-size: 11px; color: #A1A1AA; background: none; border: none; cursor: pointer; text-decoration: underline;">
+                        Editar
+                    </button>
+                </div>
+            `;
+        } else if (isMissed) {
+            attendanceBox.innerHTML = `
+                <div class="workout-attendance-missed">
+                    <div class="attendance-missed-info">
+                        <span style="font-size: 12px; color: #A1A1AA;">✕ Marcado como no entrenado / descanso</span>
+                    </div>
+                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}')" style="font-size: 11px; color: var(--accent-primary); background: none; border: none; cursor: pointer;">
+                        Cambiar a completado →
+                    </button>
+                </div>
+            `;
+        } else {
+            attendanceBox.innerHTML = `
+                <div class="workout-attendance-pending" id="workoutAttendancePendingPane">
+                    <span class="attendance-prompt">¿Realizaste este entrenamiento?</span>
+                    <div class="attendance-actions-wrap">
+                        <button type="button" class="btn btn-sm btn-workout-attended" onclick="showWorkoutTimePicker('${dayKey}', ${estMinutes})">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Completé la sesión
+                        </button>
+                        <button type="button" class="btn btn-sm btn-workout-missed" onclick="markWorkoutAttendanceMissed('${dayKey}')">
+                            No entrené hoy
+                        </button>
+                    </div>
+                </div>
+                <div class="workout-attendance-timing" id="workoutAttendanceTimingPane" style="display: none;">
+                    <div style="font-size: 11px; color: #FFFFFF; font-weight: 700;">¿Cuánto tiempo entrenaste?</div>
+                    <div class="workout-time-chips">
+                        <button type="button" class="workout-time-chip ${estMinutes <= 35 ? 'selected' : ''}" data-min="30" onclick="selectWorkoutDurationChip(30)">30m</button>
+                        <button type="button" class="workout-time-chip ${estMinutes > 35 && estMinutes <= 50 ? 'selected' : ''}" data-min="45" onclick="selectWorkoutDurationChip(45)">45m</button>
+                        <button type="button" class="workout-time-chip ${estMinutes > 50 && estMinutes <= 65 ? 'selected' : ''}" data-min="60" onclick="selectWorkoutDurationChip(60)">60m</button>
+                        <button type="button" class="workout-time-chip ${estMinutes > 65 && estMinutes <= 80 ? 'selected' : ''}" data-min="75" onclick="selectWorkoutDurationChip(75)">75m</button>
+                        <button type="button" class="workout-time-chip ${estMinutes > 80 ? 'selected' : ''}" data-min="90" onclick="selectWorkoutDurationChip(90)">90m</button>
+                        <button type="button" class="btn btn-primary btn-sm btn-confirm-time" onclick="confirmWorkoutSessionAttendance('${dayKey}')">Guardar</button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    // 4. Card de Indicación Técnica / Nota de Nico
+    if (coachCard && coachBody) {
+        const dayNote = dayData.notes || dayData.coachNotes || dayData.coach_notes || (AppState.profile?.directive_note);
+        if (dayNote && dayNote.trim().length > 0) {
+            coachCard.style.display = 'block';
+            coachBody.textContent = dayNote.trim();
+        } else {
+            coachCard.style.display = 'block';
+            coachBody.textContent = 'Enfoque biomecánico en cadencia 3-0-1-0 y rango completo sin dolor articular. Finalizá cada serie en RIR 2.';
+        }
+    }
+
+    // 5. Estado Vacío si no hay ejercicios para el filtro
     if (exercisesToShow.length === 0) {
         container.innerHTML = `
-            <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:14px; padding:32px 20px; text-align:center; grid-column: 1 / -1;">
-                <p style="color:var(--text-muted); margin-bottom:12px;">No hay ejercicios de este grupo asignados para ${dayData.title}.</p>
+            <div style="background:#121214; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:32px 20px; text-align:center; margin-bottom:24px;">
+                <p style="color:var(--text-muted); margin-bottom:12px;">No hay ejercicios asignados en este grupo para ${dayData.title || dayName}.</p>
                 ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()">+ Asignar ejercicios desde el catálogo (Nico)</button>` : ''}
             </div>
         `;
         return;
     }
 
-    const userWeight = parseFloat(AppState.profile?.current_weight || AppState.anamnesis?.weight || 75) || 75;
-    let totalWorkoutKcal = 0;
-    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
+    // 6. Agrupación Jerárquica: Tipo de Ejercicio -> Grupo Muscular -> Carrusel Horizontal
+    const typeGroups = {
+        muscular: { key: 'muscular', label: 'TRABAJO MUSCULAR & FUERZA', icon: SENS_TYPE_ICONS.muscular.svg, muscles: {} },
+        cardio: { key: 'cardio', label: 'CARDIO & RESISTENCIA', icon: SENS_TYPE_ICONS.cardio.svg, muscles: {} },
+        movilidad: { key: 'movilidad', label: 'MOVILIDAD & RANGO ARTICULAR', icon: SENS_TYPE_ICONS.movilidad.svg, muscles: {} },
+        yoga: { key: 'yoga', label: 'YOGA & DESCOMPRESIÓN', icon: SENS_TYPE_ICONS.yoga.svg, muscles: {} }
+    };
 
-    let html = '';
-    exercisesToShow.forEach((ex, idx) => {
+    exercisesToShow.forEach(ex => {
         const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
         const catalogMatch = (typeof window.getResolvedExercise === 'function')
             ? window.getResolvedExercise(rawMatch, athId)
             : rawMatch;
-        const muscleTag = catalogMatch.category || catalogMatch.muscle_group ? formatMuscleGroup(catalogMatch.category || catalogMatch.muscle_group) : 'Fuerza';
-        const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
-        const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Peso Corporal';
-        const kcalData = (typeof window.calculateExerciseKcal === 'function')
-            ? window.calculateExerciseKcal(catalogMatch, ex.sets || 3, ex.reps || 10, userWeight)
-            : { kcalPerSet: 7, totalKcal: 21 };
-        totalWorkoutKcal += kcalData.totalKcal;
+        const tax = (typeof getExerciseTaxonomy === 'function')
+            ? getExerciseTaxonomy(catalogMatch)
+            : { type: 'muscular', muscleLabel: 'Fuerza' };
 
-        html += `
-            <div class="sens-exercise-video-card" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}')">
-                <video autoplay muted loop playsinline class="sens-exercise-video-bg">
-                    <source src="${videoSrc}" type="video/mp4">
-                </video>
-                <div class="sens-exercise-card-gradient"></div>
-                <div class="sens-exercise-top-pills">
-                    <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">${muscleTag}</span>
-                    <span class="pill pill-dark" style="font-size: 9.5px; font-weight: 700; background: rgba(18, 18, 20, 0.88); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2);">${ex.sets || 3} Series × ${ex.reps || 10} • ~${kcalData.totalKcal} kcal</span>
-                </div>
-                <div class="sens-exercise-card-content">
-                    <h3 class="sens-exercise-card-title" style="color: #FFFFFF !important; font-weight: 800; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);">${catalogMatch.name || ex.name}</h3>
-                    <div class="sens-exercise-card-meta" style="color: rgba(255, 255, 255, 0.92) !important; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);">
-                        <span>Descanso: ${ex.rest || 90}s</span> • <span>Sugerido: ${weightLabel}</span> • <span class="sens-tooltip-wrap" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR ${ex.rir !== undefined ? ex.rir : 2} significa terminar la serie pudiendo hacer exactamente ${ex.rir !== undefined ? ex.rir : 2} repeticiones más con técnica limpia antes de fallar (RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)}).">RIR/RPE: <strong>${ex.rir !== undefined ? ex.rir : 2}</strong> <span class="sens-tooltip-trigger" style="border-color: rgba(255,255,255,0.4); color: #FFFFFF; background: rgba(255,255,255,0.18);">i</span></span> • <span>~${kcalData.kcalPerSet} kcal/serie</span>
-                    </div>
-                    <div class="sens-exercise-card-cta" style="color: #E5CBA7 !important; font-weight: 700; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);">
-                        Tocar para iniciar serie &amp; técnica →
-                    </div>
-                </div>
-            </div>
-        `;
+        const typeKey = ['muscular', 'cardio', 'movilidad', 'yoga'].includes(tax.type) ? tax.type : 'muscular';
+        const muscleLabel = tax.muscleLabel || 'General';
+
+        if (!typeGroups[typeKey].muscles[muscleLabel]) {
+            typeGroups[typeKey].muscles[muscleLabel] = [];
+        }
+        typeGroups[typeKey].muscles[muscleLabel].push({
+            ex,
+            catalogMatch,
+            tax
+        });
     });
 
-    if (heroSub) {
-        heroSub.textContent = `${exercisesToShow.length} Ejercicios asignados • ~${Math.max(30, exercisesToShow.length * 12)} min • Gasto estimado: ~${totalWorkoutKcal} kcal`;
-    }
+    let groupedHtml = '';
+    const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
 
-    container.innerHTML = html;
+    Object.values(typeGroups).forEach(tg => {
+        const muscleKeys = Object.keys(tg.muscles);
+        if (muscleKeys.length === 0) return;
+
+        let totalTypeExercises = 0;
+        muscleKeys.forEach(mk => totalTypeExercises += tg.muscles[mk].length);
+
+        groupedHtml += `
+            <div class="sens-workout-type-section">
+                <div class="sens-workout-type-header">
+                    <div class="sens-workout-type-title">
+                        ${tg.icon}
+                        <span>${tg.label}</span>
+                    </div>
+                    <span style="font-size: 10px; color: #71717A; font-weight: 700;">${totalTypeExercises} ejercicio${totalTypeExercises > 1 ? 's' : ''}</span>
+                </div>
+        `;
+
+        muscleKeys.forEach(mKey => {
+            const list = tg.muscles[mKey];
+            groupedHtml += `
+                <div class="sens-workout-muscle-group-block">
+                    <div class="sens-workout-muscle-label-row">
+                        <span class="sens-workout-muscle-label">${mKey}</span>
+                        <span class="sens-workout-muscle-count">${list.length} ejercicio${list.length > 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="sens-workout-carousel">
+            `;
+
+            list.forEach(item => {
+                const ex = item.ex;
+                const cat = item.catalogMatch;
+                const isExDone = Boolean(ex.completed);
+                const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Cuerpo';
+
+                groupedHtml += `
+                    <div class="sens-ex-compact-card ${isExDone ? 'completed' : ''}" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}')">
+                        <video autoplay muted loop playsinline class="sens-ex-compact-video">
+                            <source src="${videoSrc}" type="video/mp4">
+                        </video>
+                        <div class="sens-ex-compact-overlay"></div>
+                        <div class="sens-ex-compact-top">
+                            <span class="ex-compact-sets-badge">${ex.sets || 3} × ${ex.reps || 10}</span>
+                            <button type="button" class="ex-compact-check-btn ${isExDone ? 'completed' : ''}" 
+                                    title="${isExDone ? 'Desmarcar ejercicio' : 'Marcar como finalizado'}" 
+                                    onclick="event.stopPropagation(); toggleExerciseFinished('${ex.id}', '${dayKey}')">
+                                ✓
+                            </button>
+                        </div>
+                        <div class="sens-ex-compact-bottom">
+                            <div class="ex-compact-title" title="${cat.name || ex.name}">${cat.name || ex.name}</div>
+                            <div class="ex-compact-meta">
+                                <span>${weightLabel}</span> • <span>RIR ${ex.rir !== undefined ? ex.rir : 2}</span> • <span>${ex.rest || 75}s</span>
+                            </div>
+                            <div class="ex-compact-cue">
+                                Ver técnica &amp; video →
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            groupedHtml += `
+                    </div>
+                </div>
+            `;
+        });
+
+        groupedHtml += `</div>`;
+    });
+
+    container.innerHTML = groupedHtml;
 }
 
 window.openExerciseExecutionModal = function(exId, dayKey) {
@@ -5144,7 +5462,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSkipRest = document.getElementById('btnModalSkipRest');
 
     if (closeBtn) closeBtn.addEventListener('click', closeExerciseExecutionModal);
-    if (finishBtn) finishBtn.addEventListener('click', closeExerciseExecutionModal);
+    if (finishBtn) {
+        finishBtn.addEventListener('click', () => {
+            const currentExId = modalExerciseState.exId;
+            const currentDayKey = AppState.currentDay || 'day1';
+            if (currentExId) {
+                const athId = getActiveAthleteId();
+                const data = getCoachAthleteWorkoutData(athId);
+                const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
+                if (day && Array.isArray(day.exercises)) {
+                    const ex = day.exercises.find(e => e.id === currentExId);
+                    if (ex && !ex.completed) {
+                        ex.completed = true;
+                        saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises });
+                        const allDone = day.exercises.every(e => e.completed);
+                        if (allDone && !day.completed) {
+                            day.completed = true;
+                            day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
+                            saveAthleteDayWorkoutStatus(athId, currentDayKey, { completed: true, durationMinutes: day.durationMinutes });
+                        }
+                        if (typeof showSensToast === 'function') {
+                            showSensToast(`✓ ${ex.name} finalizado`, 'success', 2200);
+                        }
+                    }
+                }
+            }
+            closeExerciseExecutionModal();
+        });
+    }
     if (backdrop) {
         backdrop.addEventListener('click', (e) => {
             if (e.target === backdrop) closeExerciseExecutionModal();
@@ -10180,7 +10525,7 @@ function initWorkoutBlockAccordions() {
 }
 
 /**
- * Dispara la animación de entrada fluida y rápida del saludo de bienvenida MAKE SENS
+ * Dispara la animación de entrada fluida y rápida del saludo de bienvenida MAKES SENS
  */
 let hasPlayedGreetingAnimation = false;
 let welcomeGreetingTimer = null;
@@ -10760,7 +11105,67 @@ function renderDynamicWeekStrip() {
 }
 
 /**
- * Renderiza las pestañas de fecha real (14/10, 15/10...) en la vista de Entrenamiento
+ * Determina el micro-badge (tipo o grupo muscular) para el día en el calendario semanal
+ */
+function getDayFocusBadge(dayData) {
+    if (dayData && dayData.completed) {
+        return '<span class="sens-calendar-mini-pill done" title="Entrenamiento completado">✓ Hecho</span>';
+    }
+    const exercises = (dayData && Array.isArray(dayData.exercises)) ? dayData.exercises : [];
+    if (exercises.length === 0) {
+        const titleLower = ((dayData && dayData.title) || '').toLowerCase();
+        if (titleLower.includes('descanso') || titleLower.includes('rest')) {
+            return '<span class="sens-calendar-mini-pill rest">Descanso</span>';
+        }
+        return '<span class="sens-calendar-mini-pill rest">–</span>';
+    }
+
+    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : (typeof EXERCISE_CATALOG !== 'undefined' ? EXERCISE_CATALOG : []);
+    const counts = { type: {}, muscle: {} };
+
+    exercises.forEach(ex => {
+        const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
+        const tax = (typeof getExerciseTaxonomy === 'function') 
+            ? getExerciseTaxonomy(rawMatch) 
+            : { type: 'muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas' };
+        
+        counts.type[tax.type] = (counts.type[tax.type] || 0) + 1;
+        if (tax.muscleLabel) {
+            counts.muscle[tax.muscleLabel] = (counts.muscle[tax.muscleLabel] || 0) + 1;
+        }
+    });
+
+    if (counts.type['yoga']) {
+        return '<span class="sens-calendar-mini-pill yoga">Yoga</span>';
+    }
+    if (counts.type['cardio'] && counts.type['cardio'] >= exercises.length / 2) {
+        return '<span class="sens-calendar-mini-pill cardio">Cardio</span>';
+    }
+    if (counts.type['movilidad'] && counts.type['movilidad'] >= exercises.length / 2) {
+        return '<span class="sens-calendar-mini-pill movilidad">Movilidad</span>';
+    }
+
+    const sortedMuscles = Object.entries(counts.muscle).sort((a, b) => b[1] - a[1]);
+    if (sortedMuscles.length > 0) {
+        const label = sortedMuscles[0][0];
+        let shortLabel = label;
+        if (label === 'Glúteos & Isquios' || label.includes('Glúteos')) shortLabel = 'Glúteos';
+        else if (label === 'Cuádriceps' || label === 'Piernas') shortLabel = 'Piernas';
+        else if (label.includes('Espalda')) shortLabel = 'Espalda';
+        else if (label.includes('Pecho')) shortLabel = 'Pecho';
+        else if (label.includes('Hombro')) shortLabel = 'Hombros';
+        else if (label.includes('Brazos') || label.includes('Bíceps') || label.includes('Tríceps')) shortLabel = 'Brazos';
+        else if (label.includes('Core') || label.includes('Abdom')) shortLabel = 'Core';
+        else if (shortLabel.length > 8) shortLabel = shortLabel.substring(0, 8);
+        return `<span class="sens-calendar-mini-pill muscular">${shortLabel}</span>`;
+    }
+
+    return '<span class="sens-calendar-mini-pill muscular">Fuerza</span>';
+}
+
+/**
+ * Renderiza el calendario de 7 días (id="workoutDaysNav") con paridad 1:1 con la Home
+ * Mostrando en micro-pills el tipo de entrenamiento o grupo muscular del día
  */
 function renderWorkoutDaysNav() {
     const container = document.getElementById('workoutDaysNav');
@@ -10772,6 +11177,7 @@ function renderWorkoutDaysNav() {
 
     const athId = getActiveAthleteId();
     const data = getCoachAthleteWorkoutData(athId);
+    const dayNames = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
     let html = '';
 
     for (let i = 0; i < 7; i++) {
@@ -10782,26 +11188,24 @@ function renderWorkoutDaysNav() {
         const isSelected = isSameDay(dayDate, AppState.selectedDate || new Date());
         const dayKey = 'day' + (i + 1);
         const dayData = data[dayKey] || {};
-        const dayName = getDayNameFromKey(dayKey);
-        const dayShort = getDayShortFromKey(dayKey);
-        const rawTitle = dayData.title || dayName;
-        const cleanTitle = rawTitle.replace(/^(Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo|Día\s*\d+)[:\s-]*/i, '') || rawTitle;
-        const dateStr = formatDateDDMM(dayDate);
+        const heroNum = dayDate.getDate();
+        const badgeHtml = getDayFocusBadge(dayData);
 
         html += `
-            <button type="button" class="sens-workout-day-tab ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}">
-                <span class="tab-date-num">${dayShort} ${dateStr}</span>
-                <span class="tab-title-sub">${cleanTitle}</span>
+            <button type="button" class="sens-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
+                <span class="sens-day-name">${dayNames[i]}</span>
+                <span class="sens-day-hero-num">${heroNum}</span>
+                <div class="sens-day-modality-indicator">${badgeHtml}</div>
             </button>
         `;
     }
 
     container.innerHTML = html;
 
-    container.querySelectorAll('.sens-workout-day-tab').forEach((tab, idx) => {
-        tab.addEventListener('click', () => {
-            container.querySelectorAll('.sens-workout-day-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+    container.querySelectorAll('.sens-week-day-pill').forEach((pill, idx) => {
+        pill.addEventListener('click', () => {
+            container.querySelectorAll('.sens-week-day-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
 
             const dayDate = new Date(AppState.activeWeekStart);
             dayDate.setDate(AppState.activeWeekStart.getDate() + idx);
@@ -10810,7 +11214,8 @@ function renderWorkoutDaysNav() {
             AppState.currentDay = dayKey;
 
             renderWorkoutDay(dayKey);
-            renderDynamicWeekStrip();
+            renderWorkoutDaysNav();
+            if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
         });
     });
 }
@@ -12363,7 +12768,7 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'DESLIZÁ • 1/4', headline: 'EL ERROR #1 QUE FRENA TUS PIERNAS', sub: 'Por qué subir kilos sin control excéntrico te estanca y fatiga tus articulaciones.', c1: 'Biomecánica', c2: 'Fuerza Real', c3: 'Deslizá →' },
             { eyebrow: 'EL PROBLEMA • 2/4', headline: 'REBOTAR ABAJO MATA LA TENSIÓN', sub: 'Cuando usás inercia en vez de control muscular, el tendón absorbe el impacto y el músculo no estimula.', c1: 'Evitá rebotes', c2: 'Cuidá rodillas', c3: 'Deslizá →' },
             { eyebrow: 'SOLUCIÓN SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + RANGO PROFUNDO', sub: '3 segundos al bajar, 1 segundo de pausa abajo y subida explosiva exhalando.', c1: '+Reclutamiento', c2: '~42 kcal totales', c3: 'Deslizá →' },
-            { eyebrow: 'TU PLAN • 4/4', headline: ' ¿ENTRENAMOS JUNTOS? MAKE SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA, Online o desde la App SENS.', c1: 'Cupos Activos', c2: 'Plan a Medida', c3: 'Link en Bio →' }
+            { eyebrow: 'TU PLAN • 4/4', headline: ' ¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA, Online o desde la App SENS.', c1: 'Cupos Activos', c2: 'Plan a Medida', c3: 'Link en Bio →' }
         ],
         caption: 'El 90% comete este error en el gimnasio por priorizar ego antes que biomecánica.\n\nEn SENS trabajamos con cadencia controlada (3-1-1-0) y selección clínica de ejercicios para que construyas fuerza real sin dolor articular.\n\nComentá "SENS" o escribime por mensaje directo para evaluar tu caso (Presencial CABA, Online 1:1 o Suscripción App).'
     },
@@ -12374,13 +12779,13 @@ const SENS_MARKETING_TEMPLATES = [
         scenes: [
             { eyebrow: 'CÓMO NO VS. CÓMO SÍ', headline: 'DEJÁ DE TIRAR CON LOS BRAZOS EN ESPALDA', sub: 'Si encogés los hombros al traccionar, llevás toda la tensión al trapecio y cuello.', c1: 'Espalda & Dorsal', c2: '~9 kcal / serie', c3: 'Fijate la diferencia' },
             { eyebrow: 'TÉCNICA CORRECTA', headline: 'INICIÁ EL MOVIMIENTO DEPRIMIENDO ESCÁPULAS', sub: 'Pensá en llevar los codos hacia el bolsillo trasero del pantalón manteniendo el pecho abierto.', c1: 'Control Escapular', c2: 'Pausa 1s atrás', c3: 'Postura Sólida' },
-            { eyebrow: 'MÉTODO MAKE SENS', headline: 'TRANSFORMÁ TU POSTURA Y FUERZA', sub: 'Entrenamiento inteligente adaptado a tu estructura corporal.', c1: '1:1 & Dúo CABA', c2: 'App Generalista', c3: 'Escribime SENS →' }
+            { eyebrow: 'MÉTODO MAKES SENS', headline: 'TRANSFORMÁ TU POSTURA Y FUERZA', sub: 'Entrenamiento inteligente adaptado a tu estructura corporal.', c1: '1:1 & Dúo CABA', c2: 'App Generalista', c3: 'Escribime SENS →' }
         ],
         slides: [
             { eyebrow: 'GUÍA PRÁCTICA • 1/4', headline: 'CÓMO NO VS. CÓMO SÍ ENTRENAR ESPALDA', sub: 'El ajuste de 2 centímetros que cambia por completo tu postura.', c1: 'Espalda Sana', c2: 'Técnica SENS', c3: 'Deslizá →' },
             { eyebrow: 'CÓMO NO • 2/4', headline: 'ENCOGER HOMBROS Y ARQUEAR CUELLO', sub: 'Genera sobrecarga cervical y cero estímulo en los dorsales.', c1: 'Error Frecuente', c2: 'Tensión Cervical', c3: 'Deslizá →' },
             { eyebrow: 'CÓMO SÍ • 3/4', headline: 'DEPRESIÓN ESCAPULAR + CODOS ABAJO', sub: 'Inhalá al estirar, exhalá llevando los codos hacia tu cadera con control.', c1: 'Dorsal Activo', c2: '~36 kcal / 4 sets', c3: 'Deslizá →' },
-            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Make Sens', c3: 'Escribime SENS →' }
+            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Makes Sens', c3: 'Escribime SENS →' }
         ],
         caption: 'Pequeños ajustes biomecánicos generan grandes cambios en tu estructura física.\n\nGuardá este post para tu próxima sesión de tracción y probá iniciar cada repetición deprimiendo las escápulas.\n\n¿Querés que armemos tu programación completa? Escribime "SENS" por DM.'
     },
@@ -12397,7 +12802,7 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'DATOS REALES • 1/4', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA BIEN HECHA?', sub: 'Desmitificando el cardio eterno vs. el entrenamiento de fuerza inteligente.', c1: 'Metabolismo', c2: 'Ciencia SENS', c3: 'Deslizá →' },
             { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cadencia controlada y cargas progresivas.', c1: '~0.9 kcal / rep', c2: 'Alta Demanda', c3: 'Deslizá →' },
             { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO QUEMA CALORÍAS AÚN DURMIENDO', sub: 'Preservar y construir tejido magro es la clave número 1 para no sufrir efecto rebote.', c1: 'Sostenible', c2: 'Salud Hormonal', c3: 'Deslizá →' },
-            { eyebrow: 'SUMATE A SENS • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN TU CELULAR', sub: 'Elegí tu modalidad: Presencial CABA, Online 1:1 o Suscripción App.', c1: 'Make Sens', c2: 'Acceso Inmediato', c3: 'Link en Bio →' }
+            { eyebrow: 'SUMATE A SENS • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN TU CELULAR', sub: 'Elegí tu modalidad: Presencial CABA, Online 1:1 o Suscripción App.', c1: 'Makes Sens', c2: 'Acceso Inmediato', c3: 'Link en Bio →' }
         ],
         caption: '¿Sabías cuánta energía demanda una serie de fuerza multiarticular ejecutada con tempo controlado?\n\nEn la plataforma SENS cada ejercicio y cada comida tienen sus métricas exactas para que avances sin adivinar.\n\nSumate hoy desde el link de la bio.'
     },
@@ -12414,7 +12819,7 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'NUTRICIÓN REAL • 1/4', headline: 'CÓMO LLEGAR A TU PROTEÍNA DIARIA SIN COMPLICARTE', sub: 'Sin suplementos obligatorios ni comidas aburridas.', c1: 'Saciedad', c2: 'Recomposición', c3: 'Deslizá →' },
             { eyebrow: 'EL ERROR • 2/4', headline: 'DESAYUNAR SOLO TOSTADAS Y CAFÉ', sub: 'Dispara tu glucosa a la mañana y te deja sin energía ni saciedad a las 3 horas.', c1: 'Pico de Insulina', c2: 'Hambre Temprana', c3: 'Deslizá →' },
             { eyebrow: 'EL AJUSTE • 3/4', headline: 'SUMÁ 30G DE PROTEÍNA EN CADA COMIDA', sub: '3 huevos + fruta, 180g de pechuga o lomo al almuerzo, yogur + avena en merienda.', c1: '~160g Prot / día', c2: 'Masa Magra', c3: 'Deslizá →' },
-            { eyebrow: 'TU PLAN EN SENS • 4/4', headline: 'CALCULADORA DE PORCIONES EN VIVO EN LA APP', sub: 'Intercambiá alimentos por comida y objetivo con un toque.', c1: 'Desayuno a Cena', c2: 'Make Sens', c3: 'Link en Bio →' }
+            { eyebrow: 'TU PLAN EN SENS • 4/4', headline: 'CALCULADORA DE PORCIONES EN VIVO EN LA APP', sub: 'Intercambiá alimentos por comida y objetivo con un toque.', c1: 'Desayuno a Cena', c2: 'Makes Sens', c3: 'Link en Bio →' }
         ],
         caption: 'La mejor nutrición no es la más restrictiva, sino la que podés sostener un martes a las 9 de la noche después de trabajar.\n\nEn SENS diseñamos tu estructura por momento de comida (Desayuno, Almuerzo, Merienda, Cena y Snacks) con equivalencias automáticas.\n\nEscribime "NUTRI" o entrá al link de mi perfil.'
     },
@@ -12431,7 +12836,7 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'POSTURA & SALUD • 1/4', headline: 'SI TRABAJÁS SENTADO 8 HORAS, NECESITÁS ESTO', sub: 'Por qué estirar el isquio no alcanza para quitar la tensión lumbar.', c1: 'Columna Sana', c2: 'Movilidad SENS', c3: 'Deslizá →' },
             { eyebrow: 'CAUSA REAL • 2/4', headline: 'AMNESIA GLÚTEA Y RIGIDEZ DE CADERA', sub: 'Cuando la cadera y la espalda alta no se mueven, la zona lumbar compensa en cada movimiento.', c1: 'Causa Raíz', c2: 'Biomecánica', c3: 'Deslizá →' },
             { eyebrow: 'LA SOLUCIÓN • 3/4', headline: 'ESTABILIDAD LUMBOPÉLVICA + FUERZA PROGRESIVA', sub: 'Bird-Dog, Pallof Press y bisagra de cadera controlada fortalecen tu faja natural.', c1: 'Core Anti-Rotación', c2: 'Fuerza Segura', c3: 'Deslizá →' },
-            { eyebrow: 'EVALUACIÓN • 4/4', headline: 'HACÉ TU DIAGNÓSTICO DE MOVIMIENTO EN SENS', sub: 'Adaptamos cada ejercicio a tu historial articular.', c1: 'Presencial / Online', c2: 'Make Sens', c3: 'Escribime SENS →' }
+            { eyebrow: 'EVALUACIÓN • 4/4', headline: 'HACÉ TU DIAGNÓSTICO DE MOVIMIENTO EN SENS', sub: 'Adaptamos cada ejercicio a tu historial articular.', c1: 'Presencial / Online', c2: 'Makes Sens', c3: 'Escribime SENS →' }
         ],
         caption: 'Entrenar no debería doler: debería quitarte los dolores del día a día.\n\nSi trabajás muchas horas frente a la computadora, tu rutina tiene que combinar fuerza estructural con movilidad torácica y estabilidad lumbopélvica.\n\nEscribime "POSTURA" para evaluar tu caso.'
     },
@@ -12442,10 +12847,10 @@ const SENS_MARKETING_TEMPLATES = [
         scenes: [
             { eyebrow: 'MITO VS. REALIDAD', headline: 'TRANSPIRAR MÁS NO SIGNIFICA QUEMAR MÁS GRASA', sub: 'Abrigar de más o hacer saltos sin descanso solo te deshidrata y eleva tu cortisol.', c1: 'Fisiología Real', c2: 'Cero Humo', c3: 'Leé por qué' },
             { eyebrow: 'LO QUE SÍ FUNCIONA', headline: 'FUERZA PROGRESIVA + PASOS DIARIOS + DÉFICIT SUAVE', sub: 'Construí músculo en 3-4 sesiones por semana y mantené 8.000 a 10.000 pasos diarios.', c1: '8k-10k Pasos', c2: 'Déficit 300 kcal', c3: 'Resultados Reales' },
-            { eyebrow: 'MÉTODO MAKE SENS', headline: 'UN SISTEMA CLARO QUE PODÉS SOSTENER TODO EL AÑO', sub: 'Sin rutinas improvisadas ni dietas extremas.', c1: 'Ciencia Aplicada', c2: 'Seguimiento Real', c3: 'Sumate a SENS →' }
+            { eyebrow: 'MÉTODO MAKES SENS', headline: 'UN SISTEMA CLARO QUE PODÉS SOSTENER TODO EL AÑO', sub: 'Sin rutinas improvisadas ni dietas extremas.', c1: 'Ciencia Aplicada', c2: 'Seguimiento Real', c3: 'Sumate a SENS →' }
         ],
         slides: [
-            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'La diferencia entre terminar agotado y entrenar de verdad.', c1: 'Fisiología', c2: 'Make Sens', c3: 'Deslizá →' },
+            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'La diferencia entre terminar agotado y entrenar de verdad.', c1: 'Fisiología', c2: 'Makes Sens', c3: 'Deslizá →' },
             { eyebrow: 'EL ERROR • 2/4', headline: 'CASTIGARTE CON CARDIO EXTREMO TODOS LOS DÍAS', sub: 'Aumenta el hambre reactiva, fatiga tus rodillas y reduce tu masa muscular.', c1: 'Fatiga Central', c2: 'Efecto Rebote', c3: 'Deslizá →' },
             { eyebrow: 'EL SISTEMA • 3/4', headline: 'SOBRECARGA PROGRESIVA + NEAT + PROTEÍNA', sub: '3 pilares medibles desde el dashboard de nuestra plataforma.', c1: 'Medible', c2: 'Sostenible', c3: 'Deslizá →' },
             { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App.', c1: 'Nico Maralle', c2: 'SENS Train', c3: 'Link en Bio →' }
@@ -12465,7 +12870,7 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'SIN EXCUSAS • 1/4', headline: 'LA RUTINA DE 45 MINUTOS PARA GENTE SIN TIEMPO', sub: 'Cómo entrenar todo el cuerpo con máxima eficiencia.', c1: '45 Minutos', c2: 'Full Body SENS', c3: 'Deslizá →' },
             { eyebrow: 'BLOQUE A • 2/4', headline: 'SENTADILLA GOBLET + REMO CON MANCUERNA', sub: '4 series de 10 reps alternando tren inferior y tracción horizontal.', c1: '~72 kcal bloque', c2: 'Postura & Piernas', c3: 'Deslizá →' },
             { eyebrow: 'BLOQUE B • 3/4', headline: 'PESO MUERTO RUMANO + PRESS INCLINADO + CORE', sub: 'Cadena posterior firme, empuje seguro para el hombro y estabilidad media.', c1: '~85 kcal bloque', c2: 'Estímulo Completo', c3: 'Deslizá →' },
-            { eyebrow: 'LLEVALA EN TU CELU • 4/4', headline: 'TODAS TUS SERIES Y VIDEOS EN LA APP SENS', sub: 'Activá tu cuenta hoy mismo y entrená con sentido.', c1: 'Make Sens', c2: '100% Guiado', c3: 'Link en Bio →' }
+            { eyebrow: 'LLEVALA EN TU CELU • 4/4', headline: 'TODAS TUS SERIES Y VIDEOS EN LA APP SENS', sub: 'Activá tu cuenta hoy mismo y entrená con sentido.', c1: 'Makes Sens', c2: '100% Guiado', c3: 'Link en Bio →' }
         ],
         caption: 'La falta de tiempo no se resuelve entrenando más rápido y mal, sino eligiendo los ejercicios con mayor retorno por minuto invertido.\n\nGuardá esta estructura de 45 minutos o tenela lista con videos y cronómetro dentro de la App SENS.'
     },
@@ -12482,7 +12887,7 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'TREN INFERIOR • 1/4', headline: 'CÓMO ENFOCAR GLÚTEOS O ISQUIOS SEGÚN TU TÉCNICA', sub: 'Dominá la bisagra de cadera sin sobrecargar la espalda baja.', c1: 'Piernas SENS', c2: 'Biomecánica', c3: 'Deslizá →' },
             { eyebrow: 'FOCO ISQUIOS • 2/4', headline: 'TIBIAS CASI VERTICALES Y RODILLAS SEMI-RÍGIDAS', sub: 'Mayor estiramiento de los isquiotibiales en el descenso controlado.', c1: 'Isquiotibiales', c2: '3s al bajar', c3: 'Deslizá →' },
             { eyebrow: 'FOCO GLÚTEOS • 3/4', headline: 'LEVE FLEXIÓN DE RODILLA + EMPUJE DE CADERA', sub: 'Combinado con Hip Thrust con pausa isométrica de 2 segundos arriba.', c1: 'Glúteo Mayor', c2: '~45 kcal / 4 sets', c3: 'Deslizá →' },
-            { eyebrow: 'ENTRENA EN SENS • 4/4', headline: 'PROGRAMACIÓN ESPECÍFICA SEGÚN TU OBJETIVO', sub: 'Sumate a los entrenamientos presenciales u online.', c1: 'Make Sens', c2: 'Resultados', c3: 'Escribime SENS →' }
+            { eyebrow: 'ENTRENA EN SENS • 4/4', headline: 'PROGRAMACIÓN ESPECÍFICA SEGÚN TU OBJETIVO', sub: 'Sumate a los entrenamientos presenciales u online.', c1: 'Makes Sens', c2: 'Resultados', c3: 'Escribime SENS →' }
         ],
         caption: 'La diferencia entre sentir un ejercicio en la espalda baja o sentirlo al 100% en glúteos e isquiotibiales está en entender dónde termina tu rango real de cadera.\n\nGuardá este post para tu próximo día de piernas.'
     },
@@ -12491,17 +12896,17 @@ const SENS_MARKETING_TEMPLATES = [
         name: '9. Constancia > Perfección (Mindset)',
         badge: 'CONEXIÓN & MARCA',
         scenes: [
-            { eyebrow: 'FILOSOFÍA MAKE SENS', headline: 'EL MEJOR PLAN NO ES EL PERFECTO, ES EL QUE CUMPLÍS', sub: 'Entrenar 3 veces por semana durante 12 meses supera a entrenar 6 días durante 2 semanas.', c1: 'Adherencia 90%', c2: 'Hábitos Reales', c3: 'Largo Plazo' },
+            { eyebrow: 'FILOSOFÍA MAKES SENS', headline: 'EL MEJOR PLAN NO ES EL PERFECTO, ES EL QUE CUMPLÍS', sub: 'Entrenar 3 veces por semana durante 12 meses supera a entrenar 6 días durante 2 semanas.', c1: 'Adherencia 90%', c2: 'Hábitos Reales', c3: 'Largo Plazo' },
             { eyebrow: 'SISTEMA DE HÁBITOS', headline: 'MEDIMOS TU PROGRESO MÁS ALLÁ DE LA BALANZA', sub: 'Fuerza en cada ejercicio, centímetros, energía diaria, calidad de sueño y composición corporal.', c1: 'Más Fuerza', c2: 'Mejor Postura', c3: 'Menos Estrés' },
             { eyebrow: 'HEY, ¿ENTRENAMOS JUNTOS?', headline: 'EMPEZÁ TU PROCESO HOY CON SENS', sub: 'Elegí el plan que mejor se adapte a tu rutina actual.', c1: 'Presencial CABA', c2: 'Online & App', c3: 'Hablemos Hoy →' }
         ],
         slides: [
-            { eyebrow: 'MENTALIDAD SENS • 1/4', headline: 'POR QUÉ LA CONSTANCIA SIEMPRE LE GANA A LA INTENSIDAD', sub: 'Construir un cuerpo fuerte y sano es un juego de adherencia.', c1: 'Make Sens', c2: 'Estilo de Vida', c3: 'Deslizá →' },
+            { eyebrow: 'MENTALIDAD SENS • 1/4', headline: 'POR QUÉ LA CONSTANCIA SIEMPRE LE GANA A LA INTENSIDAD', sub: 'Construir un cuerpo fuerte y sano es un juego de adherencia.', c1: 'Makes Sens', c2: 'Estilo de Vida', c3: 'Deslizá →' },
             { eyebrow: 'LA TRAMPA • 2/4', headline: 'EL "TODO O NADA" QUE TE HACE ABANDONAR', sub: 'Creer que por perder un día o tener una cena social arruinaste la semana.', c1: 'Cero Culpa', c2: 'Equilibrio', c3: 'Deslizá →' },
             { eyebrow: 'EL MÉTODO • 3/4', headline: 'MÍNIMO INNEGOCIABLE: 3 SESIONES + PROTEÍNA + PASOS', sub: 'Cuando tenés claridad en lo que importa, mantenerte en ruta es simple.', c1: 'Claridad Total', c2: 'Dashboard SENS', c3: 'Deslizá →' },
-            { eyebrow: 'SUMATE HOY • 4/4', headline: 'HEY, ¿ENTRENAMOS JUNTOS? MAKE SENS.', sub: 'Escribime y diseñamos tu plan a medida.', c1: 'Nico Maralle', c2: 'CABA & Online', c3: 'Link en Bio →' }
+            { eyebrow: 'SUMATE HOY • 4/4', headline: 'HEY, ¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Escribime y diseñamos tu plan a medida.', c1: 'Nico Maralle', c2: 'CABA & Online', c3: 'Link en Bio →' }
         ],
-        caption: 'No buscamos que vivas para contar calorías ni que pases tu vida adentro de un gimnasio.\n\nBuscamos que el entrenamiento y la nutrición te den más energía, mejor postura y confianza para todo el resto de tu vida.\n\nHey, ¿entrenamos juntos? Make Sens.'
+        caption: 'No buscamos que vivas para contar calorías ni que pases tu vida adentro de un gimnasio.\n\nBuscamos que el entrenamiento y la nutrición te den más energía, mejor postura y confianza para todo el resto de tu vida.\n\nHey, ¿entrenamos juntos? Makes Sens.'
     },
     {
         id: 'tpl_duo_presencial',
@@ -12516,7 +12921,7 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'FORMATO DÚO/TRÍO • 1/4', headline: 'ENTRENAR DE A DOS, PERO CON PLAN 100% PERSONALIZADO', sub: 'La combinación ideal entre motivación compartida y precisión clínica.', c1: 'Presencial CABA', c2: 'Dúo & Trío', c3: 'Deslizá →' },
             { eyebrow: 'DIFERENCIAL • 2/4', headline: 'NO HACEN LA MISMA RUTINA GENÉRICA', sub: 'Cada alumno tiene su propia evaluación articular, sus pesos y sus metas nutricionales.', c1: 'Ficha 360° Propia', c2: 'Cargas a Medida', c3: 'Deslizá →' },
             { eyebrow: 'INVERSIÓN • 3/4', headline: 'ACCEDÉ AL SEGUIMIENTO PRESENCIAL CON VALOR PREFERENCIAL', sub: '1, 2 o 3 sesiones semanales en CABA con acceso total a la App SENS.', c1: 'Desde $85.000', c2: 'Portal Completo', c3: 'Deslizá →' },
-            { eyebrow: 'COORDINEMOS • 4/4', headline: 'ETIQUETÁ A ESA PERSONA Y ARRANCAMOS ESTA SEMANA', sub: 'Escribime por DM o WhatsApp para ver horarios disponibles.', c1: 'Cupos CABA', c2: 'Make Sens', c3: 'Escribime DÚO →' }
+            { eyebrow: 'COORDINEMOS • 4/4', headline: 'ETIQUETÁ A ESA PERSONA Y ARRANCAMOS ESTA SEMANA', sub: 'Escribime por DM o WhatsApp para ver horarios disponibles.', c1: 'Cupos CABA', c2: 'Makes Sens', c3: 'Escribime DÚO →' }
         ],
         caption: 'Entrenar acompañado multiplica tu constancia, pero no significa hacer la misma rutina genérica.\n\nEn el formato Dúo y Trío Presencial en CABA cada uno tiene su evaluación inicial, su progresión de cargas y su plan nutricional individual dentro de la App SENS.\n\nEscribime "DÚO" para consultar horarios disponibles.'
     },
@@ -12527,13 +12932,13 @@ const SENS_MARKETING_TEMPLATES = [
         scenes: [
             { eyebrow: 'NUEVO • SUSCRIPCIÓN APP SENS', headline: 'TODA LA METODOLOGÍA SENS EN TU CELULAR POR $19.900/MES', sub: 'Si entrenás por tu cuenta en el gimnasio y no sabés qué rutina ni qué macros seguir, esto es para vos.', c1: '$19.900 / mes', c2: 'Rutina + Macros', c3: 'Acceso Inmediato' },
             { eyebrow: 'QUÉ INCLUYE TU ACCESO', headline: 'RUTINAS EN VIDEO + KCAL POR SERIE + NUTRICIÓN POR COMIDA', sub: 'Diagnóstico inicial automático, cronómetro de descanso, registro de pesos y catálogo nutricional.', c1: 'Videos HD', c2: 'Regla de 3 Nutri', c3: 'Sin Permanencia' },
-            { eyebrow: 'ACTIVÁ TU CUENTA HOY', headline: 'MENOS DE LO QUE CUESTA UNA CENA AFUERA AL MES', sub: 'Entrá al link de la bio, completá tu diagnóstico en 2 minutos y empezá hoy.', c1: 'Alta en 2 Min', c2: 'Make Sens', c3: 'Link en Bio →' }
+            { eyebrow: 'ACTIVÁ TU CUENTA HOY', headline: 'MENOS DE LO QUE CUESTA UNA CENA AFUERA AL MES', sub: 'Entrá al link de la bio, completá tu diagnóstico en 2 minutos y empezá hoy.', c1: 'Alta en 2 Min', c2: 'Makes Sens', c3: 'Link en Bio →' }
         ],
         slides: [
             { eyebrow: 'NUEVO ACCESO • 1/4', headline: 'ENTRENÁ CON EL SISTEMA SENS DESDE CUALQUIER GIMNASIO', sub: 'Suscripción mensual accesible con toda nuestra biblioteca técnica y nutricional.', c1: '$19.900 / mes', c2: 'App WebMobile', c3: 'Deslizá →' },
             { eyebrow: 'ENTRENAMIENTO • 2/4', headline: 'VIDEOS EN BUCLE, KCAL POR SERIE Y CRONÓMETRO', sub: 'Sabé exactamente cómo hacer cada ejercicio, cómo NO hacerlo y cuánto descansar.', c1: 'Mapa Muscular', c2: 'Registro de Kg', c3: 'Deslizá →' },
             { eyebrow: 'NUTRICIÓN • 3/4', headline: 'COMIDAS POR OBJETIVO CON CÁLCULO DE PORCIONES', sub: 'Desayuno, almuerzo, merienda, cena y snacks ajustados a tu meta calórica.', c1: 'Macros Claros', c2: 'Agua & Pasos', c3: 'Deslizá →' },
-            { eyebrow: 'EMPEZÁ AHORA • 4/4', headline: 'ACTIVÁ TU SUSCRIPCIÓN MENSUAL POR $19.900', sub: 'Sin contratos largos. Entrá desde el link de la bio.', c1: 'Make Sens', c2: 'Alta Inmediata', c3: 'Link en Bio →' }
+            { eyebrow: 'EMPEZÁ AHORA • 4/4', headline: 'ACTIVÁ TU SUSCRIPCIÓN MENSUAL POR $19.900', sub: 'Sin contratos largos. Entrá desde el link de la bio.', c1: 'Makes Sens', c2: 'Alta Inmediata', c3: 'Link en Bio →' }
         ],
         caption: 'Muchos me escriben desde distintas ciudades o buscan una opción accesible para entrenar en su propio gimnasio con una estructura profesional.\n\nCon la Suscripción App SENS ($19.900/mes) tenés acceso completo al diagnóstico inicial, rutinas por objetivo con videos demostrativos, cálculo de calorías por serie y catálogo nutricional interactivo.\n\nEntrá al link de la bio y activá tu cuenta hoy.'
     },
@@ -12550,7 +12955,7 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO PERSONALIZADO 1:1', sub: 'Para quienes buscan acompañamiento directo paso a paso.', c1: 'Presencial CABA', c2: 'Online VIP', c3: 'Deslizá →' },
             { eyebrow: 'PASO 1 • 2/4', headline: 'EVALUACIÓN DE POSTURA, FUERZA Y HÁBITOS ACTUALES', sub: 'Detectamos qué te frenó hasta hoy y diseñamos una hoja de ruta realista.', c1: 'Ficha 360°', c2: 'Sin Improvisar', c3: 'Deslizá →' },
             { eyebrow: 'PASO 2 • 3/4', headline: 'EJECUCIÓN GUIADA Y AJUSTES SEMANALES EN LA APP', sub: 'Monitoreamos tus cargas, tu nutrición y tu recuperación semana a semana.', c1: '100% a Medida', c2: 'Contacto Directo', c3: 'Deslizá →' },
-            { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O TOCÁ EL LINK DE WHATSAPP', sub: 'Los lugares presenciales en CABA se asignan por orden de consulta.', c1: 'Nico Maralle', c2: 'Make Sens', c3: 'Escribime PLAN →' }
+            { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O TOCÁ EL LINK DE WHATSAPP', sub: 'Los lugares presenciales en CABA se asignan por orden de consulta.', c1: 'Nico Maralle', c2: 'Makes Sens', c3: 'Escribime PLAN →' }
         ],
         caption: 'Abrimos 3 lugares este mes para seguimiento personalizado 1 a 1 (tanto en modalidad Presencial en CABA como Online Premium).\n\nSi querés dejar de adivinar en el gimnasio y seguir un plan biomecánico y nutricional diseñado específicamente para tu cuerpo y tu agenda, escribime "PLAN" por mensaje directo o WhatsApp.'
     }
@@ -13099,7 +13504,7 @@ function renderMarketingCanvasFrame() {
     ctx.fillStyle = '#E5CBA7';
     ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
     ctx.textBaseline = 'middle';
-    ctx.fillText('MAKE SENS • STUDIO', 94, 97);
+    ctx.fillText('MAKES SENS • STUDIO', 94, 97);
 
     // Indicador de secuencia arriba a la derecha
     const topRightText = mktStudioState.format === 'carousel_4_5'
