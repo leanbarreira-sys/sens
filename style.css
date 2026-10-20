@@ -18813,6 +18813,84 @@ body.in-portal,
     padding-top: 12px;
 }
 
+/* Canvas de Confeti y Gamificación */
+.sens-confetti-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 10015;
+    display: none;
+}
+
+.sens-congrats-level-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: rgba(229, 203, 167, 0.15);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    color: #E5CBA7;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.sens-congrats-streak-counter-bump {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    border-radius: 14px;
+    padding: 8px 16px;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.sens-bump-number {
+    font-size: 26px;
+    font-weight: 900;
+    color: #E5CBA7;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    animation: sensCountBump 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sensCountBump {
+    0% { transform: scale(0.6); opacity: 0; }
+    60% { transform: scale(1.25); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.sens-bump-label {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.sens-btn-congrats-continue {
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%) !important;
+    color: #080809 !important;
+    border: none !important;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(229, 203, 167, 0.35);
+    transition: transform 0.2s ease;
+}
+
+.sens-btn-congrats-continue:hover {
+    transform: translateY(-1px) scale(1.02);
+}
+
 /* 8. Modal de Confirmación de Salida */
 .sens-exit-confirm-backdrop {
     position: fixed;
@@ -19445,8 +19523,7 @@ body.in-portal,
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 8px;
     flex-wrap: nowrap;
 }
 
@@ -19458,16 +19535,38 @@ body.in-portal,
 }
 
 .sens-streak-flame-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background: rgba(229, 203, 167, 0.1);
-    border: 1px solid rgba(229, 203, 167, 0.3);
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.16) 0%, rgba(229, 203, 167, 0.05) 100%);
+    border: 1px solid rgba(229, 203, 167, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 0 14px rgba(229, 203, 167, 0.15);
+    box-shadow: 0 0 16px rgba(229, 203, 167, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sens-streak-flame-icon.active-glow {
+    animation: sensFlamePulseGlow 2.4s infinite ease-in-out;
+}
+
+@keyframes sensFlamePulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 14px rgba(229, 203, 167, 0.2);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 24px rgba(229, 203, 167, 0.55), 0 0 40px rgba(229, 203, 167, 0.2);
+        transform: scale(1.04);
+    }
+}
+
+.sens-streak-count-col {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 
 .sens-streak-count-row {
@@ -19477,7 +19576,7 @@ body.in-portal,
 }
 
 .sens-streak-hero-num {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 900;
     color: #E5CBA7;
     font-variant-numeric: tabular-nums;
@@ -19493,22 +19592,82 @@ body.in-portal,
     text-transform: uppercase;
 }
 
-.sens-streak-sub {
-    font-size: 11px;
-    color: #8E8E93;
-    font-weight: 500;
+.sens-streak-level-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: #E5CBA7;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
     margin-top: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-/* Tira de 7 micro-anillos Lun-Dom */
+.sens-streak-status-pill {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(229, 203, 167, 0.12);
+    color: #E5CBA7;
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.sens-streak-status-pill.perfect {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #10B981 !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+.sens-streak-status-pill.lost {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #F87171 !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+.sens-streak-sub-row {
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+.sens-streak-sub {
+    font-size: 12px;
+    color: #A1A1AA;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+/* Fila dedicada a la tira semanal de 7 días (Anti-overlap) */
+.sens-streak-weekly-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    margin-bottom: 14px;
+}
+
+.sens-streak-weekly-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #71717A;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    flex-shrink: 0;
+}
+
 .sens-streak-dots-wrap {
     display: flex;
     align-items: center;
-    gap: 5px;
-    flex-shrink: 0;
+    justify-content: space-between;
+    gap: 6px;
+    flex: 1;
+    max-width: 250px;
 }
 
 .sens-streak-day-dot-unit {
@@ -19516,6 +19675,12 @@ body.in-portal,
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.sens-streak-day-dot-unit:hover .sens-streak-dot-ring {
+    transform: scale(1.15);
 }
 
 .sens-streak-dot-name {
@@ -19526,17 +19691,17 @@ body.in-portal,
 }
 
 .sens-streak-dot-ring {
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     border-radius: 50%;
     border: 1.5px solid rgba(255, 255, 255, 0.15);
     background: transparent;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 8.5px;
-    font-weight: 800;
+    font-size: 9px;
+    font-weight: 900;
     line-height: 1;
 }
 
@@ -19544,13 +19709,14 @@ body.in-portal,
     background: #E5CBA7;
     border-color: #E5CBA7;
     color: #080809;
-    box-shadow: 0 0 8px rgba(229, 203, 167, 0.5);
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.5);
 }
 
 .sens-streak-dot-ring.missed {
-    background: rgba(239, 68, 68, 0.12);
-    border-color: rgba(239, 68, 68, 0.4);
-    color: #F87171;
+    background: rgba(239, 68, 68, 0.16);
+    border-color: rgba(239, 68, 68, 0.6);
+    color: #EF4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
 }
 
 .sens-streak-dot-ring.today {
@@ -19565,6 +19731,73 @@ body.in-portal,
 .sens-streak-dot-ring.future {
     opacity: 0.3;
     border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Card / Drawer con Detalle de Racha no alcanzada (Item 2) */
+.sens-streak-missed-detail-box {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    animation: sensFadeIn 0.25s ease;
+}
+
+.sens-streak-missed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.sens-missed-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: #F87171;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sens-btn-close-missed {
+    color: #F87171;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.sens-streak-missed-reasons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.sens-missed-reason-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 11.5px;
+    color: #E4E4E7;
+    line-height: 1.4;
+}
+
+.sens-missed-cross-badge {
+    color: #EF4444;
+    font-weight: 900;
+    font-size: 12px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.sens-streak-missed-coaching-tip {
+    font-size: 11px;
+    color: #A1A1AA;
+    font-style: italic;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 6px;
 }
     animation: sensPulseDot 2s infinite ease-in-out;
 }

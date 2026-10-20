@@ -2696,23 +2696,49 @@
 
                 <!-- 0.5. Racha SENS & Gamificación Quiet Luxury (BIGG / Apple Health Benchmark) -->
                 <div class="sens-streak-card" id="sensDailyStreakCard">
+                    <!-- Fila 1: Hero Badge + Contador de Racha + Nivel + Status Pill -->
                     <div class="sens-streak-top-row">
                         <div class="sens-streak-badge-wrap">
-                            <div class="sens-streak-flame-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="sens-streak-flame-icon active-glow" id="sensStreakFlameIcon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
                                 </svg>
                             </div>
-                            <div>
+                            <div class="sens-streak-count-col">
                                 <div class="sens-streak-count-row">
-                                    <span class="sens-streak-hero-num" id="sensStreakHeroNum">5</span>
+                                    <span class="sens-streak-hero-num" id="sensStreakHeroNum">0</span>
                                     <span class="sens-streak-hero-unit">DÍAS EN RACHA</span>
                                 </div>
-                                <div class="sens-streak-sub" id="sensStreakSubText">Racha activa • ¡Seguí sumando hábitos hoy!</div>
+                                <div class="sens-streak-level-tag" id="sensStreakLevelTag">Nivel 1 • Semilla del Hábito</div>
                             </div>
                         </div>
+                        <span class="sens-streak-status-pill" id="sensStreakStatusPill">En progreso</span>
+                    </div>
+
+                    <!-- Fila 2: Subtítulo con ancho completo (Zero Overlap) -->
+                    <div class="sens-streak-sub-row">
+                        <div class="sens-streak-sub" id="sensStreakSubText">Completá tus objetivos de hoy para mantener la racha.</div>
+                    </div>
+
+                    <!-- Fila 3: Tira Semanal de 7 Días Independiente y Distribuida (Lun - Dom) -->
+                    <div class="sens-streak-weekly-row">
+                        <span class="sens-streak-weekly-label">Semana en Curso:</span>
                         <div class="sens-streak-dots-wrap" id="sensStreakDotsWrap">
-                            <!-- Inyectado dinámicamente: 7 micro-anillos Lun-Dom -->
+                            <!-- Inyectado dinámicamente: 7 micro-anillos Lun-Dom con ✓ y ✕ -->
+                        </div>
+                    </div>
+
+                    <!-- Fila 4: Detalle Desplegable de Racha no alcanzada / Motivos (Item 2) -->
+                    <div class="sens-streak-missed-detail-box" id="sensStreakMissedDetailBox" style="display: none;">
+                        <div class="sens-streak-missed-header">
+                            <span class="sens-missed-title" id="sensStreakMissedDateTitle">Racha no alcanzada • Detalle del día</span>
+                            <button type="button" class="btn-clean sens-btn-close-missed" id="btnCloseStreakMissedDetail" aria-label="Cerrar detalle">✕</button>
+                        </div>
+                        <div class="sens-streak-missed-reasons" id="sensStreakMissedReasonsList">
+                            <!-- Inyectado dinámicamente: motivos exactos de por qué no se completó -->
+                        </div>
+                        <div class="sens-streak-missed-coaching-tip" id="sensStreakMissedCoachingTip">
+                            "La disciplina biológica se construye recuperando el ritmo hoy. Nico AI adaptó tus metas para consolidar tu racha."
                         </div>
                     </div>
 
@@ -6827,16 +6853,29 @@
         </div>
     </div>
 
-    <!-- Overlay Global de Felicitación / Animación Congrats & Racha SENS (Point 3) -->
+    <!-- Overlay Global de Felicitación / Animación Congrats & Racha SENS (Point 3 & 4) -->
     <div class="sens-congrats-overlay" id="sensCongratsOverlay" style="display: none;">
+        <canvas id="sensConfettiCanvas" class="sens-confetti-canvas"></canvas>
         <div class="sens-congrats-card">
             <div class="sens-congrats-ring-wrap">
                 <div class="sens-congrats-pulse-ring"></div>
-                <div class="sens-congrats-core-badge">✓</div>
+                <div class="sens-congrats-core-badge" id="sensCongratsBadgeIcon">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                    </svg>
+                </div>
             </div>
+            <div class="sens-congrats-level-pill" id="sensCongratsLevelPill">Nivel 1 • Semilla del Hábito</div>
             <h3 class="sens-congrats-title" id="sensCongratsTitle">¡OBJETIVO CUMPLIDO!</h3>
             <p class="sens-congrats-subtitle" id="sensCongratsSubtitle">Racha SENS Activa</p>
+            <div class="sens-congrats-streak-counter-bump" id="sensCongratsCounterBump">
+                <span class="sens-bump-number" id="sensBumpNumber">1</span>
+                <span class="sens-bump-label">DÍAS EN RACHA</span>
+            </div>
             <div class="sens-congrats-quote" id="sensCongratsQuote">"Gran trabajo. Cada hábito ejecutado con intención consolida tu rendimiento y longevidad celular."</div>
+            <button type="button" class="btn btn-primary sens-btn-congrats-continue" id="btnSensCongratsContinue">
+                Continuar Imparable →
+            </button>
         </div>
     </div>
 

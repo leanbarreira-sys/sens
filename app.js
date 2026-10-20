@@ -5623,24 +5623,185 @@ window.completeAllExerciseSets = function() {
 /**
  * Animación de Felicitación Congrats & Chime Sonoro Sintético
  */
-function playChimeSequence(notes = [523.25, 659.25, 783.99, 1046.50]) {
-    try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        notes.forEach((freq, idx) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.12);
-            gain.gain.setValueAtTime(0.2, ctx.currentTime + idx * 0.12);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.12 + 0.4);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(ctx.currentTime + idx * 0.12);
-            osc.stop(ctx.currentTime + idx * 0.12 + 0.45);
-        });
-    } catch (e) {}
+/**
+ * =============================================================================
+ * SENS GAMIFICATION, AUDIO & CONFETTI ENGINE (SR-DIRECTOR-UX & PM STANDARDS)
+ * =============================================================================
+ */
+const SensConfetti = {
+    canvas: null,
+    ctx: null,
+    particles: [],
+    animationId: null,
+
+    init() {
+        this.canvas = document.getElementById('sensConfettiCanvas');
+        if (!this.canvas) {
+            this.canvas = document.createElement('canvas');
+            this.canvas.id = 'sensConfettiCanvas';
+            this.canvas.className = 'sens-confetti-canvas';
+            document.body.appendChild(this.canvas);
+        }
+        this.ctx = this.canvas.getContext('2d');
+    },
+
+    burst(particleCount = 130) {
+        this.init();
+        if (!this.canvas || !this.ctx) return;
+
+        const w = (this.canvas.width = window.innerWidth);
+        const h = (this.canvas.height = window.innerHeight);
+        this.canvas.style.display = 'block';
+
+        const colors = ['#E5CBA7', '#F4E6D2', '#C4A47C', '#D4AF37', '#FFFFFF', '#A67C52'];
+        this.particles = [];
+
+        for (let i = 0; i < particleCount; i++) {
+            const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.6;
+            const speed = 7 + Math.random() * 20;
+            this.particles.push({
+                x: w * 0.5 + (Math.random() - 0.5) * 80,
+                y: h * 0.42 + (Math.random() - 0.5) * 50,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 7,
+                size: 5 + Math.random() * 8,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                rotation: Math.random() * 360,
+                rotationSpeed: (Math.random() - 0.5) * 14,
+                opacity: 1,
+                drag: 0.985,
+                gravity: 0.42,
+                isStar: Math.random() > 0.6
+            });
+        }
+
+        if (this.animationId) cancelAnimationFrame(this.animationId);
+        const startTime = Date.now();
+
+        const render = () => {
+            const elapsed = Date.now() - startTime;
+            this.ctx.clearRect(0, 0, w, h);
+
+            let activeCount = 0;
+            this.particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vx *= p.drag;
+                p.vy *= p.drag;
+                p.vy += p.gravity;
+                p.rotation += p.rotationSpeed;
+                if (elapsed > 1800) {
+                    p.opacity = Math.max(0, p.opacity - 0.025);
+                }
+
+                if (p.opacity > 0 && p.y < h + 60) {
+                    activeCount++;
+                    this.ctx.save();
+                    this.ctx.globalAlpha = p.opacity;
+                    this.ctx.translate(p.x, p.y);
+                    this.ctx.rotate((p.rotation * Math.PI) / 180);
+                    this.ctx.fillStyle = p.color;
+
+                    if (p.isStar) {
+                        this.ctx.font = `${p.size * 1.5}px sans-serif`;
+                        this.ctx.fillText('★', -p.size * 0.5, p.size * 0.5);
+                    } else {
+                        this.ctx.fillRect(-p.size * 0.5, -p.size * 0.25, p.size, p.size * 0.5);
+                    }
+                    this.ctx.restore();
+                }
+            });
+
+            if (activeCount > 0 && elapsed < 3500) {
+                this.animationId = requestAnimationFrame(render);
+            } else {
+                this.ctx.clearRect(0, 0, w, h);
+                this.canvas.style.display = 'none';
+                this.animationId = null;
+            }
+        };
+
+        this.animationId = requestAnimationFrame(render);
+    }
+};
+
+const SensGamification = {
+    audioCtx: null,
+
+    getAudioContext() {
+        if (!this.audioCtx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.audioCtx = new AudioCtx();
+        }
+        if (this.audioCtx && this.audioCtx.state === 'suspended') {
+            this.audioCtx.resume();
+        }
+        return this.audioCtx;
+    },
+
+    playCelebrationFanfare() {
+        try {
+            const ctx = this.getAudioContext();
+            if (!ctx) return;
+            const now = ctx.currentTime;
+            const arpeggio = [
+                { f: 523.25, t: 0.00, d: 0.35, g: 0.22 },
+                { f: 659.25, t: 0.11, d: 0.35, g: 0.24 },
+                { f: 783.99, t: 0.22, d: 0.40, g: 0.26 },
+                { f: 1046.50, t: 0.33, d: 1.10, g: 0.32 }
+            ];
+
+            arpeggio.forEach(n => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(n.f, now + n.t);
+                gain.gain.setValueAtTime(n.g, now + n.t);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + n.t + n.d);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now + n.t);
+                osc.stop(now + n.t + n.d + 0.05);
+            });
+
+            [523.25, 659.25, 783.99, 1046.50].forEach(f => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(f, now + 0.33);
+                gain.gain.setValueAtTime(0.06, now + 0.33);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now + 0.33);
+                osc.stop(now + 1.65);
+            });
+        } catch (e) {}
+    },
+
+    playHapticFeedback() {
+        try {
+            if (navigator.vibrate) {
+                navigator.vibrate([40, 60, 40, 100, 60, 120]);
+            }
+        } catch (e) {}
+    },
+
+    getStreakLevel(streakDays) {
+        if (streakDays >= 30) return { level: 5, title: 'Longevidad Élite 👑', next: '¡Racha Máxima SENS!' };
+        if (streakDays >= 14) return { level: 4, title: 'Disciplina Olímpica 🏆', next: 'Meta: 30 Días' };
+        if (streakDays >= 7)  return { level: 3, title: 'Dominio Semanal ⚡', next: 'Meta: 14 Días' };
+        if (streakDays >= 3)  return { level: 2, title: 'Fuego Constante 🔥', next: 'Meta: 7 Días' };
+        if (streakDays >= 1)  return { level: 1, title: 'Semilla del Hábito 🌱', next: 'Meta: 3 Días' };
+        return { level: 0, title: 'Iniciá tu Racha Hoy', next: 'Completá 1 objetivo' };
+    }
+};
+
+window.SensConfetti = SensConfetti;
+window.SensGamification = SensGamification;
+
+function playChimeSequence() {
+    SensGamification.playCelebrationFanfare();
 }
 
 window.showSensCelebrationToast = function(title, subtitle, quote) {
@@ -5648,24 +5809,39 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
     const titleEl = document.getElementById('sensCongratsTitle');
     const subtitleEl = document.getElementById('sensCongratsSubtitle');
     const quoteEl = document.getElementById('sensCongratsQuote');
+    const levelPillEl = document.getElementById('sensCongratsLevelPill');
+    const bumpNumEl = document.getElementById('sensBumpNumber');
+    const continueBtn = document.getElementById('btnSensCongratsContinue');
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 1;
+    const levelInfo = SensGamification.getStreakLevel(streakDays);
 
     if (titleEl) titleEl.textContent = title || '¡OBJETIVO CUMPLIDO!';
     if (subtitleEl) subtitleEl.textContent = subtitle || 'Racha SENS Activa';
     if (quoteEl && quote) quoteEl.textContent = quote;
+    if (levelPillEl) levelPillEl.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
+    if (bumpNumEl) bumpNumEl.textContent = streakDays;
+
+    SensGamification.playCelebrationFanfare();
+    SensGamification.playHapticFeedback();
+    SensConfetti.burst(140);
 
     if (overlay) {
         overlay.style.display = 'flex';
-        playChimeSequence();
+
+        const dismiss = () => {
+            if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
+            overlay.style.display = 'none';
+        };
+
+        if (continueBtn) continueBtn.onclick = (e) => { e.stopPropagation(); dismiss(); };
+        overlay.onclick = dismiss;
 
         if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
         window._sensCelebrationTimer = setTimeout(() => {
             overlay.style.display = 'none';
-        }, 2800);
-
-        overlay.onclick = () => {
-            if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
-            overlay.style.display = 'none';
-        };
+        }, 4200);
     } else {
         if (typeof showSensToast === 'function') {
             showSensToast(`${title}: ${subtitle}`, 'champagne', 3500);
@@ -14416,6 +14592,25 @@ const SensDailyStreakManager = {
         const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
         const dayKey = (typeof getDayKeyFromDate === 'function') ? getDayKeyFromDate(sDate) : 'day1';
 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const targetMidnight = new Date(sDate);
+        targetMidnight.setHours(0, 0, 0, 0);
+        const isPastDay = targetMidnight < today;
+
+        const records = this.getAllRecords(id);
+        const existingRecord = records[dateIso];
+
+        // REGLA DE INMUTABILIDAD HISTÓRICA (Item 3):
+        // Una vez finalizado el día (días pasados), la racha queda sellada e inmutable (locked: true).
+        // Se pueden editar pesos o comidas retroactivas, pero el estado de la racha de ese día permanece congelado.
+        if (isPastDay && existingRecord && existingRecord.locked) {
+            return {
+                current: existingRecord,
+                previous: existingRecord
+            };
+        }
+
         // 1. EVALUAR PILAR ENTRENAMIENTO
         // Solo 100% completado desde ejercicios (o descanso)
         let workoutDone = false;
@@ -14501,7 +14696,46 @@ const SensDailyStreakManager = {
         const completedCount = (workoutDone ? 1 : 0) + (nutriDone ? 1 : 0) + (cardioDone ? 1 : 0);
         const isQualified = (completedCount >= 1);
 
-        const records = this.getAllRecords(id);
+        // Motivos detallados si la racha no se logró (Item 2)
+        const missedReasons = [];
+        if (!workoutDone) {
+            if (workoutMetric.includes('de')) {
+                missedReasons.push({
+                    pillar: 'Entrenamiento',
+                    detail: `Faltaron ejercicios: Solo completaste ${workoutMetric}.`
+                });
+            } else {
+                missedReasons.push({
+                    pillar: 'Entrenamiento',
+                    detail: `No se completó la sesión prescripta de fuerza del día.`
+                });
+            }
+        }
+        if (!nutriDone) {
+            if (nutriStatus === 'exceeded') {
+                missedReasons.push({
+                    pillar: 'Nutrición',
+                    detail: `Exceso calórico: ${consumedCals.toLocaleString('es-AR')} kcal consumidas (+10% del objetivo de ${targetCals.toLocaleString('es-AR')} kcal).`
+                });
+            } else if (consumedCals === 0) {
+                missedReasons.push({
+                    pillar: 'Nutrición',
+                    detail: `Sin registro de comidas para este día.`
+                });
+            } else {
+                missedReasons.push({
+                    pillar: 'Nutrición',
+                    detail: `Calorías insuficientes: ${consumedCals.toLocaleString('es-AR')} kcal (debajo del rango mínimo de ${minTarget.toLocaleString('es-AR')} kcal).`
+                });
+            }
+        }
+        if (!cardioDone) {
+            missedReasons.push({
+                pillar: 'Pasos & Cardio',
+                detail: `Actividad insuficiente: ${steps.toLocaleString('es-AR')} pasos (mínimo: 10.000 pasos ó 90m caminata / 30m cardio).`
+            });
+        }
+
         const previous = records[dateIso] || null;
 
         records[dateIso] = {
@@ -14510,6 +14744,8 @@ const SensDailyStreakManager = {
             cardio: { done: cardioDone, steps, cardioMinutes, cardioType, metric: cardioMetric },
             completedCount,
             isQualified,
+            missedReasons,
+            locked: isPastDay,
             updatedAt: Date.now()
         };
         this.saveAllRecords(id, records);
@@ -14556,6 +14792,65 @@ const SensDailyStreakManager = {
 
 window.SensDailyStreakManager = SensDailyStreakManager;
 
+/**
+ * Muestra el detalle contextual de por qué no se completó la racha en un día (Item 2)
+ */
+window.showStreakMissedDetail = function(dateIso = null) {
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const sDate = dateIso ? new Date(dateIso + 'T12:00:00') : (AppState.selectedDate || new Date());
+    const iso = dateIso || `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+
+    const evalResult = SensDailyStreakManager.evaluateDay(sDate, athId);
+    const rec = evalResult.current;
+    const box = document.getElementById('sensStreakMissedDetailBox');
+    const titleEl = document.getElementById('sensStreakMissedDateTitle');
+    const listEl = document.getElementById('sensStreakMissedReasonsList');
+    const tipEl = document.getElementById('sensStreakMissedCoachingTip');
+
+    if (!box || !listEl) return;
+
+    const dayName = sDate.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
+    const capitalizedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+
+    if (rec.isQualified) {
+        if (titleEl) titleEl.textContent = `${capitalizedDay} • Racha Activa (${rec.completedCount} / 3)`;
+        titleEl.style.color = '#10B981';
+        listEl.innerHTML = `
+            <div style="font-size: 12px; color: #10B981; font-weight: 700; padding: 4px 0;">
+                ✓ ¡Racha asegurada! Cumpliste con tus hábitos biológicos programados.
+            </div>
+        `;
+        if (tipEl) tipEl.textContent = '"La disciplina consistente es el único atajo comprobado a la recomposición y longevidad celular."';
+    } else {
+        if (titleEl) titleEl.textContent = `${capitalizedDay} • Racha no alcanzada`;
+        titleEl.style.color = '#F87171';
+
+        const reasons = (rec.missedReasons && rec.missedReasons.length > 0) ? rec.missedReasons : [
+            { pillar: 'Objetivos', detail: 'No se completaron todos los requisitos del día.' }
+        ];
+
+        listEl.innerHTML = reasons.map(r => `
+            <div class="sens-missed-reason-item">
+                <span class="sens-missed-cross-badge">✕</span>
+                <div>
+                    <strong style="color: #F87171;">${r.pillar}:</strong>
+                    <span>${r.detail}</span>
+                </div>
+            </div>
+        `).join('') + (rec.locked ? `<div style="font-size: 10px; color: #71717A; margin-top: 6px;">🔒 Día finalizado e inmutable. Podés editar cargas y comidas pasadas, pero la racha permanece sellada.</div>` : '');
+
+        if (tipEl) tipEl.textContent = '"Un día no define tu metabolismo. Enfocate en clavar tu rutina y rango de calorías de hoy para reactivar el fuego."';
+    }
+
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+};
+
+window.closeStreakMissedDetail = function() {
+    const box = document.getElementById('sensStreakMissedDetailBox');
+    if (box) box.style.display = 'none';
+};
+
 function renderStreakWeeklyDots(targetDate) {
     const wrap = document.getElementById('sensStreakDotsWrap');
     if (!wrap) return;
@@ -14594,21 +14889,21 @@ function renderStreakWeeklyDots(targetDate) {
             dotHtml = `<div class="sens-streak-dot-ring future" title="${dayLabels[i]} ${d.getDate()}: Planificado"></div>`;
         } else if (isPast) {
             if (isDone) {
-                dotHtml = `<div class="sens-streak-dot-ring done" title="${dayLabels[i]} ${d.getDate()}: Objetivos cumplidos">✓</div>`;
+                dotHtml = `<div class="sens-streak-dot-ring done" onclick="window.showStreakMissedDetail('${dIso}')" title="${dayLabels[i]} ${d.getDate()}: Objetivos cumplidos (Tocar para ver)">✓</div>`;
             } else {
-                dotHtml = `<div class="sens-streak-dot-ring missed" title="${dayLabels[i]} ${d.getDate()}: Objetivos no completados">✕</div>`;
+                dotHtml = `<div class="sens-streak-dot-ring missed" onclick="window.showStreakMissedDetail('${dIso}')" title="${dayLabels[i]} ${d.getDate()}: Racha no alcanzada (Tocar para ver por qué)">✕</div>`;
             }
         } else {
             // Hoy
             if (isDone) {
-                dotHtml = `<div class="sens-streak-dot-ring done today" title="Hoy: Racha activa">✓</div>`;
+                dotHtml = `<div class="sens-streak-dot-ring done today" onclick="window.showStreakMissedDetail('${dIso}')" title="Hoy: Racha activa">✓</div>`;
             } else {
-                dotHtml = `<div class="sens-streak-dot-ring today" title="Hoy: En progreso"></div>`;
+                dotHtml = `<div class="sens-streak-dot-ring today" onclick="window.showStreakMissedDetail('${dIso}')" title="Hoy: En progreso (Tocar para ver)"></div>`;
             }
         }
 
         html += `
-            <div class="sens-streak-day-dot-unit">
+            <div class="sens-streak-day-dot-unit" onclick="window.showStreakMissedDetail('${dIso}')">
                 <span class="sens-streak-dot-name" style="${isToday ? 'color: #E5CBA7; font-weight: 800;' : ''}">${dayLabels[i]}</span>
                 ${dotHtml}
             </div>
@@ -14673,22 +14968,65 @@ function updateSensStreakCard(targetDate = null) {
     const ratioEl = document.getElementById('sensPillarsRatio');
     if (ratioEl) ratioEl.textContent = `${dayRec.completedCount} de 3 completados`;
 
-    // Racha Hero
+    // Racha Hero, Nivel & Status Pill
     const streakNum = document.getElementById('sensStreakHeroNum');
     const streakSub = document.getElementById('sensStreakSubText');
+    const streakStatusPill = document.getElementById('sensStreakStatusPill');
+    const streakLevelTag = document.getElementById('sensStreakLevelTag');
+    const flameIcon = document.getElementById('sensStreakFlameIcon');
+
     const streakDays = SensDailyStreakManager.calculateStreak(athId);
+    const levelInfo = (typeof SensGamification !== 'undefined' && SensGamification.getStreakLevel)
+        ? SensGamification.getStreakLevel(streakDays)
+        : { level: 1, title: 'Semilla del Hábito' };
+
     if (streakNum) streakNum.textContent = streakDays;
+    if (streakLevelTag) streakLevelTag.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
+    if (flameIcon) flameIcon.classList.toggle('active-glow', streakDays > 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const sDate = (targetDate instanceof Date) ? targetDate : new Date(targetDate);
+    sDate.setHours(0, 0, 0, 0);
+    const isPast = sDate < today;
+
+    if (streakStatusPill) {
+        if (dayRec.completedCount === 3) {
+            streakStatusPill.className = 'sens-streak-status-pill perfect';
+            streakStatusPill.textContent = 'Día Perfecto 100%';
+        } else if (dayRec.completedCount >= 1) {
+            streakStatusPill.className = 'sens-streak-status-pill';
+            streakStatusPill.textContent = 'Racha Activa';
+        } else if (isPast) {
+            streakStatusPill.className = 'sens-streak-status-pill lost';
+            streakStatusPill.textContent = 'Racha no alcanzada';
+        } else {
+            streakStatusPill.className = 'sens-streak-status-pill';
+            streakStatusPill.textContent = 'En progreso';
+        }
+    }
+
     if (streakSub) {
         if (dayRec.completedCount === 3) {
             streakSub.textContent = '¡Día 100% completado! Racha perfecta asegurada.';
             streakSub.style.color = '#10B981';
         } else if (dayRec.completedCount >= 1) {
-            streakSub.textContent = 'Racha activa • ¡Seguí sumando hábitos hoy!';
+            streakSub.textContent = `${dayRec.completedCount} de 3 objetivos cumplidos • ¡Seguí sumando hábitos hoy!`;
             streakSub.style.color = '#E5CBA7';
+        } else if (isPast) {
+            streakSub.textContent = 'Día finalizado sin cumplir objetivos. Tocá ✕ para ver el detalle.';
+            streakSub.style.color = '#F87171';
         } else {
-            streakSub.textContent = 'Completá tus objetivos de hoy para mantener la racha.';
+            streakSub.textContent = 'Completá tus objetivos de hoy para mantener la racha activa.';
             streakSub.style.color = '#A1A1AA';
         }
+    }
+
+    // Botón para cerrar detalle
+    const closeMissedBtn = document.getElementById('btnCloseStreakMissedDetail');
+    if (closeMissedBtn && !closeMissedBtn._hasCloseMissedBound) {
+        closeMissedBtn._hasCloseMissedBound = true;
+        closeMissedBtn.addEventListener('click', window.closeStreakMissedDetail);
     }
 
     renderStreakWeeklyDots(targetDate);
