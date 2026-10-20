@@ -1072,6 +1072,9 @@ const CoachNutritionMaster = {
                     <button type="button" class="btn btn-outline btn-sm" id="btnDupSatToSun" style="font-size: 11px; padding: 8px 14px;">
                         Copiar Sábado a Domingo
                     </button>
+                    <button type="button" class="btn btn-outline btn-sm" id="btnDupToFullMonth" style="font-size: 11px; padding: 8px 14px; background: rgba(229, 203, 167, 0.15); border-color: #E5CBA7; color: #121214; font-weight: 800;">
+                        Duplicar a Todo el Mes (4 Semanas de Periodización)
+                    </button>
                 </div>
 
                 <!-- Selección Granular por Días -->
@@ -1101,11 +1104,14 @@ const CoachNutritionMaster = {
                 </div>
             </div>
 
+            <!-- Banner Prominente de Confirmación de Guardado -->
+            <div id="coachNutriSaveNotice" class="sens-save-feedback-banner" style="display: none; margin-bottom: 14px;"></div>
+
             <div style="display: flex; justify-content: space-between; gap: 12px;">
                 <button type="button" class="btn btn-outline" onclick="CoachNutritionMaster.goToStep(3)">
                     ← Volver a Alimentos
                 </button>
-                <button type="button" class="btn btn-primary" id="btnSaveCompleteNutritionPlan" style="font-weight: 800; padding: 12px 32px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; box-shadow: 0 4px 15px rgba(229,203,167,0.35);">
+                <button type="button" class="btn btn-primary" id="btnSaveCompleteNutritionPlan" style="font-weight: 800; padding: 12px 32px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; box-shadow: 0 4px 15px rgba(229,203,167,0.35); transition: all 0.25s ease;">
                     Guardar &amp; Sincronizar Plan Nutricional
                 </button>
             </div>
@@ -1118,6 +1124,7 @@ const CoachNutritionMaster = {
         const btnMonFri = document.getElementById('btnDupMonToFri');
         const btnMonAll = document.getElementById('btnDupMonToAll');
         const btnSatSun = document.getElementById('btnDupSatToSun');
+        const btnFullMonth = document.getElementById('btnDupToFullMonth');
         const btnGranular = document.getElementById('btnExecuteGranularDuplicate');
         const btnSave = document.getElementById('btnSaveCompleteNutritionPlan');
         const noteInput = document.getElementById('nutriStep4DirectiveText');
@@ -1139,6 +1146,7 @@ const CoachNutritionMaster = {
         if (btnMonFri) btnMonFri.addEventListener('click', () => duplicate('day1', ['day2', 'day3', 'day4', 'day5']));
         if (btnMonAll) btnMonAll.addEventListener('click', () => duplicate('day1', ['day2', 'day3', 'day4', 'day5', 'day6', 'day7']));
         if (btnSatSun) btnSatSun.addEventListener('click', () => duplicate('day6', ['day7']));
+        if (btnFullMonth) btnFullMonth.addEventListener('click', () => this.duplicateToFullMonth());
 
         if (btnGranular) {
             btnGranular.addEventListener('click', () => {
@@ -1157,6 +1165,27 @@ const CoachNutritionMaster = {
         }
     },
 
+    duplicateToFullMonth() {
+        // Replicar a 4 semanas completas (período mensual de periodización)
+        const weeklySnapshot = JSON.parse(JSON.stringify(this.dayPlanCache.days));
+        this.dayPlanCache.weeks = {
+            week1: weeklySnapshot,
+            week2: JSON.parse(JSON.stringify(weeklySnapshot)),
+            week3: JSON.parse(JSON.stringify(weeklySnapshot)),
+            week4: JSON.parse(JSON.stringify(weeklySnapshot))
+        };
+        this.dayPlanCache.periodized_month = true;
+
+        const notice = document.getElementById('coachNutriSaveNotice');
+        if (notice) {
+            notice.style.display = 'flex';
+            notice.innerHTML = `<span style="font-size: 16px;">✓</span> <span>Menú semanal replicado a las <strong>4 semanas del mes</strong> (30 días de periodización activa).</span>`;
+        }
+        if (typeof showSensToast === 'function') {
+            showSensToast('Menú duplicado para las 4 semanas del mes.', 'champagne');
+        }
+    },
+
     getDayTitle(dayKey) {
         const m = { day1: 'Lunes', day2: 'Martes', day3: 'Miércoles', day4: 'Jueves', day5: 'Viernes', day6: 'Sábado', day7: 'Domingo' };
         return m[dayKey] || 'Día';
@@ -1166,6 +1195,14 @@ const CoachNutritionMaster = {
     async savePlan() {
         const athId = this.activeAthleteId;
         if (!athId) return;
+
+        const btnSave = document.getElementById('btnSaveCompleteNutritionPlan');
+        const originalBtnText = btnSave ? btnSave.innerHTML : 'Guardar & Sincronizar Plan Nutricional';
+        if (btnSave) {
+            btnSave.disabled = true;
+            btnSave.innerHTML = `Sincronizando con Alumno...`;
+            btnSave.style.opacity = '0.7';
+        }
 
         // Aplanar alimentos para compatibilidad con código anterior
         const allFoods = [];
@@ -1208,8 +1245,34 @@ const CoachNutritionMaster = {
             }
         } catch (e) {}
 
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        // Feedback Visual Inequívoco y Prominente (Point 4)
+        const notice = document.getElementById('coachNutriSaveNotice');
+        if (notice) {
+            notice.style.display = 'flex';
+            notice.innerHTML = `<span style="font-size: 16px;">✓</span> <span>Plan nutricional de <strong>${athId}</strong> sincronizado exitosamente con el portal a las <strong>${timeStr}</strong> • Prescripción activa.</span>`;
+        }
+
+        if (btnSave) {
+            btnSave.disabled = false;
+            btnSave.style.opacity = '1';
+            btnSave.style.background = 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
+            btnSave.style.color = '#FFFFFF';
+            btnSave.innerHTML = `✓ Plan Guardado y Sincronizado`;
+
+            setTimeout(() => {
+                if (btnSave) {
+                    btnSave.style.background = 'linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%)';
+                    btnSave.style.color = '#080809';
+                    btnSave.innerHTML = originalBtnText;
+                }
+            }, 3000);
+        }
+
         if (typeof showSensToast === 'function') {
-            showSensToast(`Plan nutricional de ${athId} guardado con éxito.`, 'champagne');
+            showSensToast(`Plan nutricional guardado y sincronizado (${timeStr}).`, 'champagne');
         }
     },
 

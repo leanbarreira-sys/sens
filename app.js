@@ -10170,7 +10170,763 @@ function syncMemberNutritionPrescription(athId, forcedData = null) {
             });
         }
     }
+
+    // Sincronizar Sección Dinámica de Pauta Nutricional & 500 Alimentos Clínicos
+    renderMemberNutritionPlan(athId, AppState.nutriSelectedDate || AppState.selectedDate || new Date());
+    initUserNutritionFilterAndDateListeners();
+    initUserFoodDetailModal();
+    initUserCustomMealModal(athId);
 }
+
+/**
+ * =============================================================================
+ * SECCIÓN DE RECOMENDACIÓN NUTRICIONAL DEL ATLETA & MASTER 500 FOODS
+ * =============================================================================
+ */
+let userActiveNutriMealSlot = 'desayuno';
+let userActiveFoodForDetail = null;
+let userCustomTrayItems = [];
+
+function renderMemberNutritionPlan(athId, targetDate = new Date()) {
+    const sDate = targetDate || new Date();
+    AppState.nutriSelectedDate = sDate;
+    const isToday = isSameDay(sDate, new Date());
+
+    // 1. Cabecera de Fecha (Estilo Samsung Health)
+    const dateTextEl = document.getElementById('nutriDateText');
+    if (dateTextEl) {
+        const daysShort = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+        const monthsShort = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+        dateTextEl.textContent = isToday
+            ? `Hoy, ${sDate.getDate()} de ${monthsShort[sDate.getMonth()]}`
+            : `${daysShort[sDate.getDay()]}, ${sDate.getDate()} de ${monthsShort[sDate.getMonth()]}`;
+    }
+
+    const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+    const dayOfWeek = sDate.getDay();
+    const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
+
+    const adjustStorageKey = `sens_user_adjusted_meals_${athId}_${dateIso}`;
+    const customStorageKey = `sens_user_logged_meals_${athId}_${dateIso}`;
+
+    let userAdjusted = {};
+    try {
+        userAdjusted = JSON.parse(localStorage.getItem(adjustStorageKey) || '{}');
+    } catch (e) {}
+
+    let userCustomMeals = [];
+    try {
+        userCustomMeals = JSON.parse(localStorage.getItem(customStorageKey) || '[]');
+    } catch (e) {}
+
+    // 2. Obtener Plan del Coach
+    let userPlan = null;
+    try {
+        const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`) ||
+                    localStorage.getItem(`sens_coach_assigned_nutrition_${athId}`);
+        if (raw) userPlan = JSON.parse(raw);
+    } catch (e) {}
+    if (!userPlan && AppState.profile?.prescribed_nutrition) {
+        userPlan = AppState.profile.prescribed_nutrition;
+    }
+
+    // Directiva del Coach y Objetivo
+    const directiveCard = document.getElementById('memberNutriDirectiveCard');
+    const directiveText = document.getElementById('memberNutriDirectiveText');
+    const goalPill = document.getElementById('memberNutriPlanGoalPill');
+
+    const userGoal = userPlan?.goal || AppState.profile?.goal || 'fat_loss';
+    const goalLabels = {
+        fat_loss: 'Déficit Calórico',
+        muscle_gain: 'Superávit Magro',
+        recomp: 'Recomposición',
+        posture_health: 'Longevidad'
+    };
+    if (goalPill) goalPill.textContent = goalLabels[userGoal] || 'Nutrición SENS';
+    if (directiveText) {
+        directiveText.textContent = userPlan?.directive_note || 'Priorizá 35-40g de proteína en cada una de las comidas principales y mantené hidratación constante antes y después de entrenar.';
+    }
+
+    // 3. Estructurar Alimentos del Día
+    const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
+    const mealLabels = {
+        desayuno: 'Desayuno',
+        almuerzo: 'Almuerzo',
+        merienda: 'Merienda',
+        cena: 'Cena',
+        snack: 'Snack'
+    };
+
+    const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
+
+    // Alimentos curados oficiales por defecto si el día no tiene prescripción
+    const defaultMealsFallback = {
+        desayuno: [
+            { id: 'ae856777-a8d3-5238-9385-6bffce376821', codigo: 'NUT-002', name: 'Huevo Entero de Gallina (Poché o Duro)', grams: 120, mealSlot: 'desayuno' },
+            { id: 'ae856777-a8d3-5238-9385-6bffce376838', codigo: 'NUT-019', name: 'Avena Tradicional Arrollada Integral', grams: 60, mealSlot: 'desayuno' }
+        ],
+        almuerzo: [
+            { id: 'ae856777-a8d3-5238-9385-6bffce376820', codigo: 'NUT-001', name: 'Pechuga de Pollo a la Plancha (Sin Piel)', grams: 180, mealSlot: 'almuerzo' },
+            { id: 'ae856777-a8d3-5238-9385-6bffce376850', codigo: 'NUT-031', name: 'Arroz Integral o Yamani Cocido', grams: 150, mealSlot: 'almuerzo' }
+        ],
+        merienda: [
+            { id: 'ae856777-a8d3-5238-9385-6bffce376836', codigo: 'NUT-017', name: 'Yogur Griego Natural sin Azúcar', grams: 170, mealSlot: 'merienda' },
+            { id: 'ae856777-a8d3-5238-9385-6bffce376861', codigo: 'NUT-042', name: 'Almendras o Nueces Naturales', grams: 30, mealSlot: 'merienda' }
+        ],
+        cena: [
+            { id: 'ae856777-a8d3-5238-9385-6bffce376829', codigo: 'NUT-010', name: 'Salmón Rosado a la Plancha', grams: 180, mealSlot: 'cena' },
+            { id: 'ae856777-a8d3-5238-9385-6bffce376865', codigo: 'NUT-046', name: 'Brócoli al Vapor con Aceite de Oliva', grams: 150, mealSlot: 'cena' }
+        ],
+        snack: [
+            { id: 'ae856777-a8d3-5238-9385-6bffce376858', codigo: 'NUT-039', name: 'Manzana Verde o Roja con Canela', grams: 160, mealSlot: 'snack' }
+        ]
+    };
+
+    let allDayFoods = [];
+
+    mealKeys.forEach(mKey => {
+        let foods = dayMeals[mKey]?.foods || dayMeals[mKey] || [];
+        if (!Array.isArray(foods) || foods.length === 0) {
+            foods = defaultMealsFallback[mKey] || [];
+        }
+        foods.forEach(f => {
+            allDayFoods.push(Object.assign({}, f, { mealSlot: mKey }));
+        });
+    });
+
+    // Agregar comidas personalizadas registradas por el usuario para hoy
+    userCustomMeals.forEach(cm => {
+        allDayFoods.push(cm);
+    });
+
+    // 4. Filtrar y Renderizar Cards
+    const foodListEl = document.getElementById('memberNutriFoodList');
+    const activeFilter = AppState.activeNutriFilter || 'todas';
+
+    let displayFoods = allDayFoods;
+    if (activeFilter !== 'todas') {
+        displayFoods = allDayFoods.filter(f => f.mealSlot === activeFilter);
+    }
+
+    if (foodListEl) {
+        if (displayFoods.length === 0) {
+            foodListEl.innerHTML = `
+                <div style="text-align: center; padding: 28px 16px; color: #71717A; font-size: 13px;">
+                    No hay alimentos registrados en esta comida para hoy. Podés cargar una comida personalizada con el botón inferior.
+                </div>
+            `;
+        } else {
+            foodListEl.innerHTML = displayFoods.map(item => {
+                const resolved = (typeof window.getResolvedFood === 'function')
+                    ? window.getResolvedFood(item.id || item.codigo || item, athId)
+                    : item;
+
+                const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
+                const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
+
+                let macros;
+                if (item.isCustom && item.calories !== undefined) {
+                    macros = {
+                        calories: item.calories,
+                        protein: item.protein || 0,
+                        carbs: item.carbs || 0,
+                        fats: item.fats || 0
+                    };
+                } else {
+                    macros = (typeof window.calculateFoodMacros === 'function')
+                        ? window.calculateFoodMacros(resolved, grams)
+                        : { calories: Math.round(grams * 1.5), protein: 20, carbs: 15, fats: 5 };
+                }
+
+                const imgUrl = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+                const foodTitle = item.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
+                const portionText = item.isCustom ? 'Comida Personalizada' : (resolved?.unidades_caseras_total || `${grams}g`);
+
+                return `
+                    <div class="sens-nutri-food-card" data-food-id="${foodKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
+                        <img class="sens-nutri-food-thumb" src="${imgUrl}" alt="${foodTitle}" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                        <div class="sens-nutri-food-info">
+                            <span class="sens-nutri-food-meal-tag">${mealLabels[item.mealSlot] || item.mealSlot}</span>
+                            <div class="sens-nutri-food-title" title="${foodTitle}">${foodTitle}</div>
+                            <div class="sens-nutri-food-meta">${grams}g • ${portionText}</div>
+                            <div class="sens-nutri-food-macros">
+                                <span class="prot">${Math.round(macros.protein)}g P</span>
+                                <span class="carb">${Math.round(macros.carbs)}g C</span>
+                                <span class="fat">${Math.round(macros.fats)}g G</span>
+                            </div>
+                        </div>
+                        <div class="sens-nutri-food-right">
+                            <div class="sens-nutri-kcal-badge">${macros.calories} kcal</div>
+                            <span class="sens-nutri-chevron">›</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    // 5. Recalcular Balance Global del Día (Samsung Health Header)
+    let totalDayKcal = 0;
+    let totalDayProt = 0;
+    let totalDayCarbs = 0;
+    let totalDayFats = 0;
+
+    allDayFoods.forEach(item => {
+        const resolved = (typeof window.getResolvedFood === 'function')
+            ? window.getResolvedFood(item.id || item.codigo || item, athId)
+            : item;
+        const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
+        const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
+
+        if (item.isCustom && item.calories !== undefined) {
+            totalDayKcal += item.calories;
+            totalDayProt += (item.protein || 0);
+            totalDayCarbs += (item.carbs || 0);
+            totalDayFats += (item.fats || 0);
+        } else {
+            const macros = (typeof window.calculateFoodMacros === 'function')
+                ? window.calculateFoodMacros(resolved, grams)
+                : { calories: Math.round(grams * 1.5), protein: 20, carbs: 15, fats: 5 };
+            totalDayKcal += macros.calories;
+            totalDayProt += macros.protein;
+            totalDayCarbs += macros.carbs;
+            totalDayFats += macros.fats;
+        }
+    });
+
+    const targetKcal = userPlan?.target_calories || 1950;
+    const consumedNum = document.getElementById('nutriConsumedNum');
+    const targetKcalEl = document.getElementById('nutriTargetKcal');
+    const optimalRangeEl = document.getElementById('nutriOptimalRangeText');
+    const sliderFill = document.getElementById('nutriSliderFill');
+    const carbsGramsEl = document.getElementById('nutriCarbsGrams');
+    const fatsGramsEl = document.getElementById('nutriFatsGrams');
+    const protGramsEl = document.getElementById('nutriProtGrams');
+
+    if (consumedNum) consumedNum.textContent = totalDayKcal.toLocaleString('es-AR');
+    if (targetKcalEl) targetKcalEl.textContent = `${targetKcal.toLocaleString('es-AR')} kcal`;
+    if (optimalRangeEl) optimalRangeEl.textContent = `${Math.round(targetKcal * 0.9).toLocaleString('es-AR')} - ${Math.round(targetKcal * 1.1).toLocaleString('es-AR')}`;
+    if (sliderFill) {
+        const pct = Math.min(100, Math.round((totalDayKcal / targetKcal) * 77));
+        sliderFill.style.width = `${pct}%`;
+        sliderFill.style.background = totalDayKcal > (targetKcal * 1.1) ? 'linear-gradient(90deg, #F59E0B, #EF4444)' : 'linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%)';
+    }
+    if (carbsGramsEl) carbsGramsEl.innerHTML = `${Math.round(totalDayCarbs)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+    if (fatsGramsEl) fatsGramsEl.innerHTML = `${Math.round(totalDayFats)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+    if (protGramsEl) protGramsEl.innerHTML = `${Math.round(totalDayProt)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+
+    // 6. Click en Food Card abre el Inspector de Alimento (Point 3)
+    if (foodListEl) {
+        foodListEl.querySelectorAll('.sens-nutri-food-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const foodKey = card.getAttribute('data-food-id');
+                const mealSlot = card.getAttribute('data-meal-slot');
+                const item = allDayFoods.find(f => (f.id === foodKey || f.codigo === foodKey || f.name === foodKey));
+                if (item) {
+                    openUserFoodDetailModal(item, mealSlot);
+                }
+            });
+        });
+    }
+}
+
+/**
+ * Abre el Modal de Detalle de Alimento & Ajuste Proporcional de Gramos
+ */
+function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
+    const modal = document.getElementById('userFoodDetailModal');
+    if (!modal) return;
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const sDate = AppState.nutriSelectedDate || new Date();
+    const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+    const adjustStorageKey = `sens_user_adjusted_meals_${athId}_${dateIso}`;
+
+    let userAdjusted = {};
+    try {
+        userAdjusted = JSON.parse(localStorage.getItem(adjustStorageKey) || '{}');
+    } catch (e) {}
+
+    const resolved = (typeof window.getResolvedFood === 'function')
+        ? window.getResolvedFood(foodItem.id || foodItem.codigo || foodItem, athId)
+        : foodItem;
+
+    userActiveFoodForDetail = {
+        item: foodItem,
+        resolved: resolved,
+        mealSlot: mealSlot,
+        athId: athId,
+        dateIso: dateIso
+    };
+
+    const foodKey = resolved?.id || resolved?.codigo || foodItem.id || foodItem.name;
+    const initialGrams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (foodItem.grams || resolved?.defaultGrams || 100);
+
+    // Poblar elementos
+    const catPill = document.getElementById('ufdCategoryPill');
+    const mealPill = document.getElementById('ufdMealPill');
+    const foodImg = document.getElementById('ufdFoodImg');
+    const titleEl = document.getElementById('ufdFoodTitle');
+    const gramInput = document.getElementById('ufdGramInput');
+    const ingrText = document.getElementById('ufdIngredientsText');
+    const stepsText = document.getElementById('ufdStepsText');
+    const tipText = document.getElementById('ufdCoachTipText');
+    const allergensText = document.getElementById('ufdAllergensText');
+
+    if (catPill) catPill.textContent = resolved?.categoria_nutricional || 'Nutrición SENS';
+    if (mealPill) mealPill.textContent = (mealSlot || 'Almuerzo').toUpperCase();
+    if (foodImg) {
+        foodImg.src = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+        foodImg.onerror = () => { foodImg.src = 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'; };
+    }
+    if (titleEl) titleEl.textContent = foodItem.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
+    if (gramInput) gramInput.value = initialGrams;
+
+    if (ingrText) {
+        const ings = resolved?.ingredientes_principales;
+        ingrText.textContent = Array.isArray(ings) ? ings.join(' • ') : (ings || 'Alimento de alta pureza biológica sin conservantes añadidos.');
+    }
+    if (stepsText) {
+        stepsText.textContent = resolved?.pasos_preparacion || 'Cocción a temperatura controlada (vapor, plancha o poché) preservando perfil enzimático.';
+    }
+    if (tipText) {
+        tipText.textContent = resolved?.tip_coach_nico || 'Optimizá la masticación y acompañá con ingesta pausada de agua para facilitar vaciado gástrico.';
+    }
+    if (allergensText) {
+        allergensText.textContent = resolved?.alergenos_sensibilidades || 'Ninguno declarado';
+    }
+
+    const updateLiveCalculations = (grams) => {
+        grams = Math.max(10, Math.min(1200, parseInt(grams, 10) || 100));
+        let macros;
+        if (foodItem.isCustom && foodItem.calories !== undefined) {
+            const factor = grams / (foodItem.grams || 100);
+            macros = {
+                calories: Math.round(foodItem.calories * factor),
+                protein: Math.round((foodItem.protein || 0) * factor * 10) / 10,
+                carbs: Math.round((foodItem.carbs || 0) * factor * 10) / 10,
+                fats: Math.round((foodItem.fats || 0) * factor * 10) / 10
+            };
+        } else {
+            macros = (typeof window.calculateFoodMacros === 'function')
+                ? window.calculateFoodMacros(resolved, grams)
+                : { calories: Math.round(grams * 1.5), protein: 25, carbs: 15, fats: 5 };
+        }
+
+        const calcKcal = document.getElementById('ufdCalcKcal');
+        const calcProt = document.getElementById('ufdCalcProt');
+        const calcCarbs = document.getElementById('ufdCalcCarbs');
+        const calcFats = document.getElementById('ufdCalcFats');
+
+        if (calcKcal) calcKcal.textContent = macros.calories;
+        if (calcProt) calcProt.textContent = `${macros.protein}g`;
+        if (calcCarbs) calcCarbs.textContent = `${macros.carbs}g`;
+        if (calcFats) calcFats.textContent = `${macros.fats}g`;
+    };
+
+    updateLiveCalculations(initialGrams);
+
+    userActiveFoodForDetail.updateLiveCalculations = updateLiveCalculations;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function initUserFoodDetailModal() {
+    const modal = document.getElementById('userFoodDetailModal');
+    const closeBtn = document.getElementById('btnCloseUserFoodDetailModal');
+    const gramInput = document.getElementById('ufdGramInput');
+    const minus50 = document.getElementById('btnUfdMinus50');
+    const minus10 = document.getElementById('btnUfdMinus10');
+    const plus10 = document.getElementById('btnUfdPlus10');
+    const plus50 = document.getElementById('btnUfdPlus50');
+    const confirmBtn = document.getElementById('btnConfirmUfdPortion');
+
+    if (!modal || modal._hasDetailBound) return;
+    modal._hasDetailBound = true;
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    const adjustGrams = (delta) => {
+        if (!gramInput) return;
+        let current = parseInt(gramInput.value, 10) || 100;
+        let next = Math.max(10, Math.min(1200, current + delta));
+        gramInput.value = next;
+        if (userActiveFoodForDetail && userActiveFoodForDetail.updateLiveCalculations) {
+            userActiveFoodForDetail.updateLiveCalculations(next);
+        }
+    };
+
+    if (minus50) minus50.addEventListener('click', () => adjustGrams(-50));
+    if (minus10) minus10.addEventListener('click', () => adjustGrams(-10));
+    if (plus10) plus10.addEventListener('click', () => adjustGrams(10));
+    if (plus50) plus50.addEventListener('click', () => adjustGrams(50));
+
+    if (gramInput) {
+        gramInput.addEventListener('input', (e) => {
+            if (userActiveFoodForDetail && userActiveFoodForDetail.updateLiveCalculations) {
+                userActiveFoodForDetail.updateLiveCalculations(e.target.value);
+            }
+        });
+    }
+
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => {
+            if (!userActiveFoodForDetail) return;
+            const { resolved, item, athId, dateIso } = userActiveFoodForDetail;
+            const newGrams = gramInput ? parseInt(gramInput.value, 10) : 100;
+            const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
+
+            const adjustStorageKey = `sens_user_adjusted_meals_${athId}_${dateIso}`;
+            let userAdjusted = {};
+            try {
+                userAdjusted = JSON.parse(localStorage.getItem(adjustStorageKey) || '{}');
+            } catch (e) {}
+
+            userAdjusted[foodKey] = newGrams;
+            localStorage.setItem(adjustStorageKey, JSON.stringify(userAdjusted));
+
+            closeModal();
+            renderMemberNutritionPlan(athId, AppState.nutriSelectedDate || new Date());
+
+            if (typeof showSensToast === 'function') {
+                showSensToast(`Porción de ${item.name || resolved?.name} ajustada a ${newGrams}g.`, 'champagne');
+            }
+        });
+    }
+}
+
+/**
+ * Inicializa Modal de Carga de Comida Personalizada (Fuera de Plan)
+ */
+function initUserCustomMealModal(athId) {
+    const modal = document.getElementById('userCustomMealModal');
+    const openBtn = document.getElementById('btnOpenCustomMealModal');
+    const closeBtn = document.getElementById('btnCloseUserCustomMealModal');
+    const tabSearch = document.getElementById('tabCustomSearchMode');
+    const tabManual = document.getElementById('tabCustomManualMode');
+    const paneSearch = document.getElementById('paneCustomSearch');
+    const paneManual = document.getElementById('paneCustomManual');
+    const searchInput = document.getElementById('customFoodSearchInput');
+    const searchResults = document.getElementById('customSearchResultsList');
+    const tray = document.getElementById('customSelectedIngredientsTray');
+    const trayList = document.getElementById('customTrayItemsList');
+    const trayTotalKcal = document.getElementById('customTrayTotalKcal');
+    const saveBtn = document.getElementById('btnSaveCustomMealToDay');
+
+    if (!modal) return;
+
+    if (openBtn && !openBtn._hasCustomMealBound) {
+        openBtn._hasCustomMealBound = true;
+        openBtn.addEventListener('click', () => {
+            userCustomTrayItems = [];
+            renderCustomTray();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (searchInput) {
+                searchInput.value = '';
+                renderSearchResults('');
+            }
+        });
+    }
+
+    if (modal._hasCustomLogicBound) return;
+    modal._hasCustomLogicBound = true;
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    // Pestañas de Modo
+    if (tabSearch && tabManual) {
+        tabSearch.addEventListener('click', () => {
+            tabSearch.style.color = '#E5CBA7';
+            tabSearch.style.borderBottomColor = '#E5CBA7';
+            tabManual.style.color = '#71717A';
+            tabManual.style.borderBottomColor = 'transparent';
+            if (paneSearch) paneSearch.style.display = 'block';
+            if (paneManual) paneManual.style.display = 'none';
+        });
+        tabManual.addEventListener('click', () => {
+            tabManual.style.color = '#E5CBA7';
+            tabManual.style.borderBottomColor = '#E5CBA7';
+            tabSearch.style.color = '#71717A';
+            tabSearch.style.borderBottomColor = 'transparent';
+            if (paneManual) paneManual.style.display = 'block';
+            if (paneSearch) paneSearch.style.display = 'none';
+        });
+    }
+
+    // Selector de Momento de Comida
+    const slotPills = modal.querySelectorAll('#customMealSlotRow .sens-nutri-tab-pill');
+    slotPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            slotPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            userActiveNutriMealSlot = pill.getAttribute('data-slot') || 'almuerzo';
+        });
+    });
+
+    // Renderizado de Tray
+    function renderCustomTray() {
+        if (!tray || !trayList) return;
+        if (userCustomTrayItems.length === 0) {
+            tray.style.display = 'none';
+            trayList.innerHTML = '';
+            if (trayTotalKcal) trayTotalKcal.textContent = '0 kcal';
+            return;
+        }
+
+        tray.style.display = 'block';
+        let sumKcal = 0;
+
+        trayList.innerHTML = userCustomTrayItems.map((item, idx) => {
+            const macros = (typeof window.calculateFoodMacros === 'function')
+                ? window.calculateFoodMacros(item.food, item.grams)
+                : { calories: Math.round(item.grams * 1.5) };
+            sumKcal += macros.calories;
+
+            return `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 6px 10px;">
+                    <span style="font-size: 12px; color: #FFF; font-weight: 600;">${item.food.name}</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" class="input-tray-grams" data-tray-idx="${idx}" value="${item.grams}" min="10" max="800" style="width: 55px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15); color: #E5CBA7; font-size: 12px; padding: 2px 4px; border-radius: 4px; text-align: center;">
+                        <span style="font-size: 11px; color: #E5CBA7; font-weight: 700;">${macros.calories} kcal</span>
+                        <button type="button" class="btn-remove-tray-item" data-tray-idx="${idx}" style="background: none; border: none; color: #EF4444; font-size: 14px; cursor: pointer;">&times;</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        if (trayTotalKcal) trayTotalKcal.textContent = `${sumKcal} kcal Totales`;
+
+        // Eventos en inputs de gramos y eliminar
+        trayList.querySelectorAll('.input-tray-grams').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.getAttribute('data-tray-idx'), 10);
+                const g = parseInt(e.target.value, 10) || 50;
+                if (userCustomTrayItems[idx]) {
+                    userCustomTrayItems[idx].grams = g;
+                    renderCustomTray();
+                }
+            });
+        });
+
+        trayList.querySelectorAll('.btn-remove-tray-item').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-tray-idx'), 10);
+                userCustomTrayItems.splice(idx, 1);
+                renderCustomTray();
+            });
+        });
+    }
+
+    // Renderizado de Resultados de Búsqueda (500 Alimentos SENS)
+    function renderSearchResults(query = '') {
+        if (!searchResults) return;
+        const library = (typeof SENS_FOOD_LIBRARY !== 'undefined') ? SENS_FOOD_LIBRARY : [];
+        const q = query.toLowerCase().trim();
+
+        let matches = library;
+        if (q.length > 0) {
+            matches = library.filter(f => {
+                const nameMatch = f.name && f.name.toLowerCase().includes(q);
+                const catMatch = f.categoria_nutricional && f.categoria_nutricional.toLowerCase().includes(q);
+                const mealMatch = f.momento_consumo && f.momento_consumo.toLowerCase().includes(q);
+                return nameMatch || catMatch || mealMatch;
+            });
+        }
+        matches = matches.slice(0, 15);
+
+        searchResults.innerHTML = matches.map(f => {
+            const cal = f.calPorcion || Math.round((f.calPer100 || 150) * 1.5);
+            const prot = f.protPorcion || Math.round((f.protPer100 || 20) * 1.5);
+            const img = f.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+
+            return `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 8px 12px;">
+                    <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                        <img src="${img}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; flex-shrink: 0;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                        <div style="min-width: 0;">
+                            <div style="font-size: 12.5px; font-weight: 700; color: #FFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${f.name}</div>
+                            <div style="font-size: 11px; color: #71717A;">${f.porcion_total_g_ml || 100}g • ${prot}g Prot • ${cal} kcal</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm btn-add-food-to-tray" data-food-id="${f.id || f.codigo}" style="padding: 4px 10px; font-size: 11px; border-color: rgba(229,203,167,0.4); color: #E5CBA7; flex-shrink: 0;">
+                        + Agregar
+                    </button>
+                </div>
+            `;
+        }).join('');
+
+        searchResults.querySelectorAll('.btn-add-food-to-tray').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const fid = btn.getAttribute('data-food-id');
+                const found = library.find(x => (x.id === fid || x.codigo === fid));
+                if (found) {
+                    userCustomTrayItems.push({
+                        food: found,
+                        grams: found.defaultGrams || found.porcion_total_g_ml || 100
+                    });
+                    renderCustomTray();
+                    if (typeof showSensToast === 'function') {
+                        showSensToast(`${found.name} añadido a la bandeja.`, 'champagne');
+                    }
+                }
+            });
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            renderSearchResults(e.target.value);
+        });
+    }
+
+    // Botón Guardar Comida en el Día
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            const activeAthId = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+            const sDate = AppState.nutriSelectedDate || new Date();
+            const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+            const customStorageKey = `sens_user_logged_meals_${activeAthId}_${dateIso}`;
+
+            let userCustomMeals = [];
+            try {
+                userCustomMeals = JSON.parse(localStorage.getItem(customStorageKey) || '[]');
+            } catch (e) {}
+
+            const isManualActive = paneManual && paneManual.style.display === 'block';
+
+            if (isManualActive) {
+                const nameInp = document.getElementById('manualMealNameInput');
+                const kcalInp = document.getElementById('manualMealKcalInput');
+                const protInp = document.getElementById('manualMealProtInput');
+                const carbsInp = document.getElementById('manualMealCarbsInput');
+                const fatsInp = document.getElementById('manualMealFatsInput');
+
+                const mealName = nameInp?.value.trim() || 'Comida Personalizada';
+                const kcal = parseInt(kcalInp?.value, 10) || 450;
+                const prot = parseFloat(protInp?.value) || 30;
+                const carbs = parseFloat(carbsInp?.value) || 40;
+                const fats = parseFloat(fatsInp?.value) || 12;
+
+                const newCustomMeal = {
+                    id: `custom-manual-${Date.now()}`,
+                    name: mealName,
+                    calories: kcal,
+                    protein: prot,
+                    carbs: carbs,
+                    fats: fats,
+                    grams: 100,
+                    isCustom: true,
+                    mealSlot: userActiveNutriMealSlot
+                };
+                userCustomMeals.push(newCustomMeal);
+
+                if (nameInp) nameInp.value = '';
+                if (kcalInp) kcalInp.value = '';
+            } else {
+                // Modo Búsqueda con Tray Multi-ingrediente
+                if (userCustomTrayItems.length === 0) {
+                    if (typeof showSensToast === 'function') {
+                        showSensToast('Por favor seleccioná al menos un alimento o usá la carga rápida de calorías.', 'champagne');
+                    }
+                    return;
+                }
+
+                userCustomTrayItems.forEach(item => {
+                    const macros = (typeof window.calculateFoodMacros === 'function')
+                        ? window.calculateFoodMacros(item.food, item.grams)
+                        : { calories: Math.round(item.grams * 1.5), protein: 20, carbs: 15, fats: 5 };
+
+                    userCustomMeals.push({
+                        id: `custom-food-${item.food.codigo || item.food.id}-${Date.now()}`,
+                        name: item.food.name,
+                        calories: macros.calories,
+                        protein: macros.protein,
+                        carbs: macros.carbs,
+                        fats: macros.fats,
+                        grams: item.grams,
+                        isCustom: true,
+                        mealSlot: userActiveNutriMealSlot,
+                        image: item.food.image
+                    });
+                });
+                userCustomTrayItems = [];
+            }
+
+            localStorage.setItem(customStorageKey, JSON.stringify(userCustomMeals));
+            closeModal();
+            renderMemberNutritionPlan(activeAthId, sDate);
+
+            if (typeof showSensToast === 'function') {
+                showSensToast(`Comida registrada con éxito en ${userActiveNutriMealSlot.toUpperCase()}.`, 'champagne');
+            }
+        });
+    }
+}
+
+/**
+ * Event Listeners de Filtro por Comida y Navegador de Fechas en Vista de Nutrición
+ */
+function initUserNutritionFilterAndDateListeners() {
+    const filterRow = document.getElementById('memberNutriFilterRow');
+    if (filterRow && !filterRow._hasNutriFilterBound) {
+        filterRow._hasNutriFilterBound = true;
+        filterRow.addEventListener('click', (e) => {
+            const btn = e.target.closest('.sens-nutri-tab-pill');
+            if (!btn) return;
+            filterRow.querySelectorAll('.sens-nutri-tab-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            AppState.activeNutriFilter = btn.getAttribute('data-filter') || 'todas';
+            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+            renderMemberNutritionPlan(athId, AppState.nutriSelectedDate || new Date());
+        });
+    }
+
+    const prevDayBtn = document.getElementById('btnNutriPrevDay');
+    const nextDayBtn = document.getElementById('btnNutriNextDay');
+
+    if (prevDayBtn && !prevDayBtn._hasNutriNavBound) {
+        prevDayBtn._hasNutriNavBound = true;
+        prevDayBtn.addEventListener('click', () => {
+            const current = AppState.nutriSelectedDate || new Date();
+            const prev = new Date(current);
+            prev.setDate(prev.getDate() - 1);
+            AppState.nutriSelectedDate = prev;
+            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+            renderMemberNutritionPlan(athId, prev);
+        });
+    }
+
+    if (nextDayBtn && !nextDayBtn._hasNutriNavBound) {
+        nextDayBtn._hasNutriNavBound = true;
+        nextDayBtn.addEventListener('click', () => {
+            const current = AppState.nutriSelectedDate || new Date();
+            const next = new Date(current);
+            next.setDate(next.getDate() + 1);
+            AppState.nutriSelectedDate = next;
+            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+            renderMemberNutritionPlan(athId, next);
+        });
+    }
+}
+
 
 
 function initQuickActionButtons() {
@@ -10977,7 +11733,7 @@ function initWeekStripCalendar() {
     const startWorkoutBtn = document.getElementById('dashStartWorkoutBtn');
     const workoutActivePane = document.getElementById('dashWorkoutActivePane');
     const handleStartWorkout = (e) => {
-        if (e && e.target && e.target.closest('#btnRestSeeStretches')) return;
+        if (e && e.target && (e.target.closest('#btnRestSeeStretches, #dashWorkoutNavArrows, .sens-video-arrow-btn, #dashWorkoutDotsIndicator, .sens-video-dot') || window._dashWorkoutWasSwipe)) return;
         const dayKey = getDayKeyFromDate(AppState.selectedDate || new Date());
         AppState.currentDay = dayKey;
         triggerCardSpringAndNavigate(trainingCard, () => {
@@ -10992,11 +11748,14 @@ function initWeekStripCalendar() {
         });
     }
     if (workoutActivePane) {
-        workoutActivePane.addEventListener('click', handleStartWorkout);
+        workoutActivePane.addEventListener('click', (e) => {
+            if (e.target.closest('#dashWorkoutNavArrows, .sens-video-arrow-btn, #dashWorkoutDotsIndicator, .sens-video-dot') || window._dashWorkoutWasSwipe) return;
+            handleStartWorkout(e);
+        });
     }
     if (trainingCard) {
         trainingCard.addEventListener('click', (e) => {
-            if (e.target.closest('#btnRestSeeStretches, #dashStartWorkoutBtn, #dashWorkoutActivePane')) return;
+            if (e.target.closest('#btnRestSeeStretches, #dashStartWorkoutBtn, #dashWorkoutActivePane, #dashWorkoutNavArrows, .sens-video-arrow-btn, #dashWorkoutDotsIndicator') || window._dashWorkoutWasSwipe) return;
             handleStartWorkout(e);
         });
     }
@@ -11023,7 +11782,7 @@ function initWeekStripCalendar() {
     };
     if (nutriCard) {
         nutriCard.addEventListener('click', (e) => {
-            if (e.target.closest('#dashGoNutriBtn')) return;
+            if (e.target.closest('#dashGoNutriBtn, .sens-5cals-chip')) return;
             handleGoNutri();
         });
     }
@@ -11597,19 +12356,70 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         durationPill.textContent = `~${details.totalKcal} kcal | ~${details.estMinutes} min`;
     }
 
-    // 4. Video de fondo adaptado al primer ejercicio del día
-    let targetVideo = 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4';
-    let targetPoster = '';
+    // 4. Carrusel Interactivo de Videos de Ejercicios de la Rutina de Hoy (Swipe + Flechas + Dots)
+    dashWorkoutCarouselExercises = exercises;
+    dashWorkoutCarouselIndex = 0;
+    dashWorkoutCarouselDetails = details;
+    dashWorkoutCarouselDate = selectedDate;
+    dashWorkoutCarouselAthId = athId;
 
-    const firstEx = exercises[0];
-    const resolvedFirstEx = firstEx ? ((typeof window.getResolvedExercise === 'function') ? window.getResolvedExercise(firstEx, athId) : firstEx) : null;
+    renderDashWorkoutCarouselExercise(0);
+    initDashWorkoutCarouselInteractions();
+}
 
-    if (resolvedFirstEx && (resolvedFirstEx.video_local_path || resolvedFirstEx.video_url || resolvedFirstEx.video)) {
-        targetVideo = resolvedFirstEx.video_local_path || resolvedFirstEx.video_url || resolvedFirstEx.video;
-        targetPoster = resolvedFirstEx.poster_url || '';
+let dashWorkoutCarouselExercises = [];
+let dashWorkoutCarouselIndex = 0;
+let dashWorkoutCarouselDetails = null;
+let dashWorkoutCarouselDate = null;
+let dashWorkoutCarouselAthId = null;
+
+/**
+ * Renderiza el ejercicio activo en el carrusel de video del Dashboard
+ */
+function renderDashWorkoutCarouselExercise(index) {
+    if (!dashWorkoutCarouselExercises || dashWorkoutCarouselExercises.length === 0) return;
+    dashWorkoutCarouselIndex = (index + dashWorkoutCarouselExercises.length) % dashWorkoutCarouselExercises.length;
+    const currEx = dashWorkoutCarouselExercises[dashWorkoutCarouselIndex];
+    const details = dashWorkoutCarouselDetails || { title: 'Entrenamiento', subtitle: '' };
+    const athId = dashWorkoutCarouselAthId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+    const sDate = dashWorkoutCarouselDate || new Date();
+    const isToday = isSameDay(sDate, new Date());
+
+    const videoPlayer = document.getElementById('dashWorkoutVideoPlayer');
+    const videoSource = document.getElementById('dashWorkoutVideoSource');
+    const videoSkeleton = document.getElementById('dashWorkoutVideoSkeleton');
+    const dayDateLabel = document.getElementById('dashWorkoutDayDateLabel');
+    const focusTitle = document.getElementById('dashWorkoutFocusTitle');
+    const subFocus = document.getElementById('dashWorkoutSubFocus');
+    const dotsContainer = document.getElementById('dashWorkoutDotsIndicator');
+    const navArrows = document.getElementById('dashWorkoutNavArrows');
+
+    // 1. Visibilidad de Flechas & Paginador de Puntos
+    if (navArrows) {
+        navArrows.style.display = dashWorkoutCarouselExercises.length > 1 ? 'flex' : 'none';
+    }
+    if (dotsContainer) {
+        if (dashWorkoutCarouselExercises.length > 1) {
+            dotsContainer.innerHTML = dashWorkoutCarouselExercises.map((_, i) =>
+                `<span class="sens-video-dot ${i === dashWorkoutCarouselIndex ? 'active' : ''}" data-idx="${i}" title="Ejercicio ${i + 1}"></span>`
+            ).join('');
+        } else {
+            dotsContainer.innerHTML = '';
+        }
     }
 
-    const videoSkeleton = document.getElementById('dashWorkoutVideoSkeleton');
+    // 2. Resolver Ejercicio y Técnica de Video
+    const resolved = (typeof window.getResolvedExercise === 'function')
+        ? window.getResolvedExercise(currEx, athId)
+        : currEx;
+
+    let targetVideo = 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4';
+    let targetPoster = '';
+    if (resolved && (resolved.video_local_path || resolved.video_url || resolved.video)) {
+        targetVideo = resolved.video_local_path || resolved.video_url || resolved.video;
+        targetPoster = resolved.poster_url || '';
+    }
+
     if (videoPlayer && videoSource) {
         const currentSrc = videoSource.getAttribute('src');
         if (currentSrc !== targetVideo) {
@@ -11626,6 +12436,103 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         if (typeof attachVideoSkeleton === 'function') {
             attachVideoSkeleton(videoPlayer, videoSkeleton);
         }
+    }
+
+    // 3. Sincronizar Textos y Métricas de la Rutina
+    const exName = resolved?.name || currEx?.name || details.title;
+    const seriesCount = currEx?.sets || resolved?.default_sets || 3;
+    const repsCount = currEx?.reps || resolved?.default_reps || 10;
+
+    if (dashWorkoutCarouselExercises.length > 1) {
+        if (dayDateLabel) {
+            dayDateLabel.textContent = isToday
+                ? `Entrenamiento de Hoy • Ej. ${dashWorkoutCarouselIndex + 1}/${dashWorkoutCarouselExercises.length}`
+                : `Entrenamiento • Ej. ${dashWorkoutCarouselIndex + 1}/${dashWorkoutCarouselExercises.length}`;
+        }
+        if (focusTitle) focusTitle.textContent = exName;
+        if (subFocus) subFocus.textContent = `${seriesCount} series × ${repsCount} reps • ${details.title}`;
+    } else {
+        if (dayDateLabel) {
+            dayDateLabel.textContent = isToday ? 'Entrenamiento de Hoy' : `Entrenamiento del ${formatDateDDMM(sDate)}`;
+        }
+        if (focusTitle) focusTitle.textContent = details.title;
+        if (subFocus) subFocus.textContent = details.subtitle;
+    }
+}
+
+/**
+ * Inicializa los eventos táctiles y de botones para el carrusel de video de entrenamiento
+ */
+function initDashWorkoutCarouselInteractions() {
+    const card = document.getElementById('dashTrainingVideoCard');
+    const prevBtn = document.getElementById('dashPrevExBtn');
+    const nextBtn = document.getElementById('dashNextExBtn');
+    const dotsContainer = document.getElementById('dashWorkoutDotsIndicator');
+    if (!card) return;
+
+    if (prevBtn && !prevBtn._hasCarouselBound) {
+        prevBtn._hasCarouselBound = true;
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            renderDashWorkoutCarouselExercise(dashWorkoutCarouselIndex - 1);
+        });
+    }
+
+    if (nextBtn && !nextBtn._hasCarouselBound) {
+        nextBtn._hasCarouselBound = true;
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            renderDashWorkoutCarouselExercise(dashWorkoutCarouselIndex + 1);
+        });
+    }
+
+    if (dotsContainer && !dotsContainer._hasCarouselBound) {
+        dotsContainer._hasCarouselBound = true;
+        dotsContainer.addEventListener('click', (e) => {
+            const dot = e.target.closest('.sens-video-dot');
+            if (dot) {
+                e.stopPropagation();
+                e.preventDefault();
+                const idx = parseInt(dot.getAttribute('data-idx'), 10);
+                if (!isNaN(idx)) renderDashWorkoutCarouselExercise(idx);
+            }
+        });
+    }
+
+    // Soporte de Swipe Táctil Ergonomía Mobile-First (Thumb Zone)
+    if (!card._hasSwipeBound) {
+        card._hasSwipeBound = true;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        card.addEventListener('touchstart', (e) => {
+            if (!e.touches || e.touches.length === 0) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }, { passive: true });
+
+        card.addEventListener('touchend', (e) => {
+            if (!e.changedTouches || e.changedTouches.length === 0) return;
+            const deltaX = e.changedTouches[0].clientX - touchStartX;
+            const deltaY = e.changedTouches[0].clientY - touchStartY;
+            const deltaTime = Date.now() - touchStartTime;
+
+            // Swipe horizontal genuino
+            if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.3 && deltaTime < 650) {
+                window._dashWorkoutWasSwipe = true;
+                setTimeout(() => { window._dashWorkoutWasSwipe = false; }, 350);
+
+                if (deltaX < 0) {
+                    renderDashWorkoutCarouselExercise(dashWorkoutCarouselIndex + 1);
+                } else {
+                    renderDashWorkoutCarouselExercise(dashWorkoutCarouselIndex - 1);
+                }
+            }
+        }, { passive: true });
     }
 }
 
@@ -11656,13 +12563,24 @@ function updateNutriSummaryCardData() {
     const selectedDate = AppState.selectedDate || new Date();
     const isToday = isSameDay(selectedDate, new Date());
 
+    // 1. Obtener plan nutricional del Coach OS (prioridad máxima)
+    let userPlan = null;
+    try {
+        const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`) ||
+                    localStorage.getItem(`sens_coach_assigned_nutrition_${athId}`);
+        if (raw) userPlan = JSON.parse(raw);
+    } catch (e) {}
+    if (!userPlan && profile.prescribed_nutrition) {
+        userPlan = profile.prescribed_nutrition;
+    }
+
     // Eyebrow dinámico de Nutrición
     if (nutriDayLabel) {
         nutriDayLabel.textContent = isToday ? 'Nutrición de Hoy' : `Nutrición del ${formatDateDDMM(selectedDate)}`;
     }
 
-    // 1. Objetivo Biológico del Atleta (SENS Brandbook / Nico Coach)
-    const userGoal = profile.goal || anamnesis.goal || 'fat_loss';
+    // 2. Objetivo Biológico del Atleta (SENS Brandbook / Nico Coach)
+    const userGoal = userPlan?.goal || profile.goal || anamnesis.goal || 'fat_loss';
     if (goalPill) {
         const goalLabels = {
             fat_loss: 'Déficit Calórico',
@@ -11673,39 +12591,47 @@ function updateNutriSummaryCardData() {
         goalPill.textContent = goalLabels[userGoal] || 'Nutrición SENS';
     }
 
-    const rawKcal = profile.daily_calories || anamnesis.daily_calories;
-    const targetKcal = rawKcal ? parseInt(rawKcal, 10) : (isDemo ? 1950 : 0);
-
-    if (!targetKcal || targetKcal <= 0) {
-        if (targetBadge) targetBadge.textContent = '-';
-        if (caloriesHero) caloriesHero.textContent = 'Nutrición SENS';
-        if (subText) subText.textContent = 'Plan nutricional adaptado por Nico';
-        if (calDesayuno) calDesayuno.textContent = '-';
-        if (calAlmuerzo) calAlmuerzo.textContent = '-';
-        if (calMerienda) calMerienda.textContent = '-';
-        if (calCena) calCena.textContent = '-';
-        if (calSnack) calSnack.textContent = '-';
-        return;
+    // 3. Resolución Robusta de Calorías Objetivo (Coach -> Perfil -> Anamnesis -> TDEE Mifflin-St Jeor)
+    let targetKcal = 0;
+    if (userPlan && userPlan.target_calories) {
+        targetKcal = parseInt(userPlan.target_calories, 10);
+    } else if (profile.daily_calories) {
+        targetKcal = parseInt(profile.daily_calories, 10);
+    } else if (anamnesis.daily_calories) {
+        targetKcal = parseInt(anamnesis.daily_calories, 10);
     }
 
-    // 2. Proteínas y Carbohidratos Recomendados en la Pastilla Superior
+    // Si aún no está configurado, calcular científicamente con Mifflin-St Jeor
+    if (!targetKcal || targetKcal <= 0) {
+        const weightVal = parseFloat(profile.current_weight || anamnesis.weight || 75.0);
+        const heightVal = parseFloat(profile.height || anamnesis.height || 175.0);
+        const ageVal = parseInt(profile.age || anamnesis.age || 30, 10);
+        const genderVal = profile.gender || anamnesis.gender || 'male';
+
+        let bmr = (10 * weightVal) + (6.25 * heightVal) - (5 * ageVal);
+        bmr += (genderVal === 'female' ? -161 : 5);
+        const tdee = Math.round(bmr * 1.55);
+
+        if (userGoal === 'fat_loss') targetKcal = Math.round(tdee - 450);
+        else if (userGoal === 'muscle_gain') targetKcal = Math.round(tdee + 350);
+        else targetKcal = Math.round(tdee);
+    }
+
+    // 4. Proteínas y Carbohidratos Recomendados
     const weightRaw = profile.current_weight || anamnesis.weight;
-    const currentWeight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 75.8 : 70.0);
-    // Proteína: ~1.9 - 2.0g/kg para preservar masa muscular (o ~28% de kcal)
-    const recProtein = profile.target_protein ? Math.round(profile.target_protein) : Math.round(Math.max(120, currentWeight * 1.85)); // ~140g
-    // Carbohidratos recomendados: energía limpia (~40% de kcal)
-    const recCarbs = profile.target_carbs ? Math.round(profile.target_carbs) : Math.round((targetKcal * 0.39) / 4); // ~190g
+    const currentWeight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 75.8 : 75.0);
+    const recProtein = userPlan?.macros?.protein || (profile.target_protein ? Math.round(profile.target_protein) : Math.round(Math.max(130, currentWeight * 2.0)));
+    const recCarbs = userPlan?.macros?.carbs || (profile.target_carbs ? Math.round(profile.target_carbs) : Math.round((targetKcal * 0.40) / 4));
 
     if (targetBadge) {
         targetBadge.textContent = `${recProtein}g Prot • ${recCarbs}g Carbs`;
     }
 
-    // 3. Título Hero: Calorías Totales del Día
+    // 5. Título Hero y Subtítulo
     if (caloriesHero) {
         caloriesHero.textContent = `${targetKcal.toLocaleString('es-AR')} kcal Totales`;
     }
 
-    // 4. Subtítulo: Objetivo Biológico y Coaching
     if (subText) {
         const goalSubtexts = {
             fat_loss: 'Déficit calórico estructurado para preservar masa muscular',
@@ -11713,17 +12639,30 @@ function updateNutriSummaryCardData() {
             recomp: 'Aporte óptimo para recomposición magra y rendimiento',
             posture_health: 'Plan antiinflamatorio para longevidad y vitalidad'
         };
-        subText.textContent = goalSubtexts[userGoal] || 'Plan calibrado por Nico para síntesis proteica & energía';
+        subText.textContent = userPlan?.directive_note || goalSubtexts[userGoal] || 'Plan calibrado por Nico para síntesis proteica & energía';
     }
 
-    // 5. Desglose en 5 ingestas: 4 principales + 1 bocadillo (20%, 35%, 15%, 20%, 10%)
-    if (calDesayuno) calDesayuno.textContent = `${Math.round(targetKcal * 0.20)} kcal`;
-    if (calAlmuerzo) calAlmuerzo.textContent = `${Math.round(targetKcal * 0.35)} kcal`;
-    if (calMerienda) calMerienda.textContent = `${Math.round(targetKcal * 0.15)} kcal`;
-    if (calCena) calCena.textContent = `${Math.round(targetKcal * 0.20)} kcal`;
-    if (calSnack) calSnack.textContent = `${Math.round(targetKcal * 0.10)} kcal`;
+    // 6. Determinar día de la semana y calcular calorías reales por comida
+    const dayOfWeek = selectedDate.getDay(); // 0: Dom, 1: Lun, 2: Mar, ...
+    const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
+    const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
 
-    // 6. Lanzar Carrusel Dinámico 4:5 con Rotación de Comidas y Alimentos Oficiales
+    const getMealKcal = (mealKey, defaultPct) => {
+        const foods = dayMeals[mealKey];
+        if (Array.isArray(foods) && foods.length > 0) {
+            const sum = foods.reduce((acc, f) => acc + (f.calories || 0), 0);
+            if (sum > 0) return Math.round(sum);
+        }
+        return Math.round(targetKcal * defaultPct);
+    };
+
+    if (calDesayuno) calDesayuno.textContent = `${getMealKcal('desayuno', 0.20)} kcal`;
+    if (calAlmuerzo) calAlmuerzo.textContent = `${getMealKcal('almuerzo', 0.35)} kcal`;
+    if (calMerienda) calMerienda.textContent = `${getMealKcal('merienda', 0.15)} kcal`;
+    if (calCena) calCena.textContent = `${getMealKcal('cena', 0.20)} kcal`;
+    if (calSnack) calSnack.textContent = `${getMealKcal('snack', 0.10)} kcal`;
+
+    // 7. Lanzar Carrusel Dinámico 4:5 con Rotación de Comidas y Alimentos Oficiales
     if (typeof initDashNutriCarousel === 'function') {
         initDashNutriCarousel();
     }
