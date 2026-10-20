@@ -22,6 +22,10 @@ const CoachNutritionMaster = {
     activeVision: 'wizard', // 'wizard' | 'month' | 'library'
     calendarMonth: new Date().getMonth(),
     calendarYear: new Date().getFullYear(),
+    calendarMonthViewMode: 'grid', // 'grid' | 'list'
+    selectedCalendarDateStr: null,
+    isMultiSelectMode: false,
+    selectedMultiDates: new Set(),
     activeDayKey: 'day1',
     activeMealKey: 'desayuno',
     foodSearchQuery: '',
@@ -1022,11 +1026,25 @@ const CoachNutritionMaster = {
     },
 
     addFoodToActiveMeal(foodId) {
-        const dPlan = this.dayPlanCache.days[this.activeDayKey];
+        let dPlan = null;
+        if (this.activeVision === 'month' && this.selectedCalendarDateStr) {
+            dPlan = this.getDayPlanForDate(this.selectedCalendarDateStr);
+            if (!this.dayPlanCache.calendar_schedule) this.dayPlanCache.calendar_schedule = {};
+            if (!this.dayPlanCache.calendar_schedule[this.selectedCalendarDateStr]) {
+                this.dayPlanCache.calendar_schedule[this.selectedCalendarDateStr] = JSON.parse(JSON.stringify(dPlan));
+                dPlan = this.dayPlanCache.calendar_schedule[this.selectedCalendarDateStr];
+            }
+        } else {
+            dPlan = this.dayPlanCache.days ? this.dayPlanCache.days[this.activeDayKey] : null;
+        }
         if (!dPlan || !dPlan.meals[this.activeMealKey]) return;
 
         const food = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(foodId) : null;
         if (!food) return;
+
+        if (!Array.isArray(dPlan.meals[this.activeMealKey].foods)) {
+            dPlan.meals[this.activeMealKey].foods = [];
+        }
 
         dPlan.meals[this.activeMealKey].foods.push({
             id: food.id,
@@ -1034,7 +1052,11 @@ const CoachNutritionMaster = {
         });
 
         this.closeFoodPickerModal();
-        this.renderStep3();
+        if (this.activeVision === 'month') {
+            this.renderMonthVision();
+        } else {
+            this.renderStep3();
+        }
         if (typeof showSensToast === 'function') {
             showSensToast(`${food.name} agregado a ${this.activeMealKey.toUpperCase()}.`, 'champagne');
         }
@@ -1277,7 +1299,123 @@ const CoachNutritionMaster = {
     },
 
     // -------------------------------------------------------------------------
-    // VISIÓN MENSUAL (Calendario del Mes + Filtro de Alimentos)
+    // HELPERS DE CÁLCULO, FECHAS & MACROS MENSUALES (UX WELLNESS STANDARD)
+    // -------------------------------------------------------------------------
+    getDateKey(dateStr) {
+        if (!dateStr) return 'day1';
+        const parts = dateStr.split('-');
+        const dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        const dayOfWeek = (dateObj.getDay() === 0 ? 7 : dateObj.getDay());
+        return `day${dayOfWeek}`;
+    },
+
+    getDayPlanForDate(dateStr) {
+        if (!this.dayPlanCache) this.loadAthletePlan();
+        if (this.dayPlanCache.calendar_schedule && this.dayPlanCache.calendar_schedule[dateStr]) {
+            return this.dayPlanCache.calendar_schedule[dateStr];
+        }
+        const dayKey = this.getDateKey(dateStr);
+        return (this.dayPlanCache.days && this.dayPlanCache.days[dayKey]) ? this.dayPlanCache.days[dayKey] : null;
+    },
+
+    calculateDayMacros(dPlan) {
+        if (!dPlan) {
+            return {
+                kcal: 2150,
+                actualKcal: 0,
+                targetKcal: 2150,
+                prot: 160,
+                carbs: 220,
+                fats: 70,
+                protPct: 30,
+                carbsPct: 50,
+                fatsPct: 20,
+                totalFoods: 0
+            };
+        }
+
+        let totalKcal = 0;
+        let totalProt = 0;
+        let totalCarbs = 0;
+        let totalFats = 0;
+        let totalFoods = 0;
+
+        if (dPlan.meals) {
+            Object.values(dPlan.meals).forEach(m => {
+                if (Array.isArray(m.foods)) {
+                    m.foods.forEach(f => {
+                        totalFoods++;
+                        const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f) : f;
+                        if (res) {
+                            const grams = parseFloat(f.grams) || 100;
+                            const baseGrams = parseFloat(res.porcion_total_g_ml) || 100;
+                            const ratio = grams / (baseGrams > 0 ? baseGrams : 100);
+                            totalKcal += (res.calorias_kcal || 0) * ratio;
+                            totalProt += (res.proteinas_g || 0) * ratio;
+                            totalCarbs += (res.carbohidratos_g || 0) * ratio;
+                            totalFats += (res.grasas_g || 0) * ratio;
+                        }
+                    });
+                }
+            });
+        }
+
+        totalKcal = Math.round(totalKcal);
+        totalProt = Math.round(totalProt);
+        totalCarbs = Math.round(totalCarbs);
+        totalFats = Math.round(totalFats);
+
+        const targetKcal = dPlan.target_calories || this.dayPlanCache.target_calories || 2150;
+        const displayKcal = totalFoods > 0 ? totalKcal : targetKcal;
+
+        const pKcal = totalProt * 4;
+        const cKcal = totalCarbs * 4;
+        const fKcal = totalFats * 9;
+        const sumKcal = (pKcal + cKcal + fKcal) || displayKcal || 2150;
+
+        let protPct = Math.round((pKcal / sumKcal) * 100) || 30;
+        let fatsPct = Math.round((fKcal / sumKcal) * 100) || 20;
+        let carbsPct = Math.max(0, 100 - protPct - fatsPct);
+
+        if (totalFoods === 0) {
+            protPct = 30;
+            carbsPct = 50;
+            fatsPct = 20;
+        }
+
+        return {
+            kcal: displayKcal,
+            actualKcal: totalKcal,
+            targetKcal: targetKcal,
+            prot: totalProt,
+            carbs: totalCarbs,
+            fats: totalFats,
+            protPct,
+            carbsPct,
+            fatsPct,
+            totalFoods
+        };
+    },
+
+    formatDateSpanish(dateStr) {
+        const parts = dateStr.split('-');
+        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const dayIdx = d.getDay();
+        const dowNumber = (dayIdx === 0 ? 7 : dayIdx);
+        return {
+            dayName: dayNames[dayIdx],
+            dayNum: d.getDate(),
+            monthName: monthNames[d.getMonth()],
+            year: d.getFullYear(),
+            dowNumber,
+            formatted: `${dayNames[dayIdx]} ${d.getDate()} de ${monthNames[d.getMonth()]}`
+        };
+    },
+
+    // -------------------------------------------------------------------------
+    // VISIÓN MENSUAL (Calendario del Mes + Workstation Integrada + Edición Masiva)
     // -------------------------------------------------------------------------
     renderMonthVision() {
         const container = document.getElementById('coachNutritionMonthView');
@@ -1291,82 +1429,495 @@ const CoachNutritionMaster = {
         const startingDay = (firstDay === 0 ? 6 : firstDay - 1); // 0 is Monday
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-        const q = this.monthFoodFilter.toLowerCase().trim();
+        const q = (this.monthFoodFilter || '').toLowerCase().trim();
+        const isMulti = Boolean(this.isMultiSelectMode);
+        const viewMode = this.calendarMonthViewMode || 'grid';
 
-        container.innerHTML = `
-            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 20px;">
-                <!-- Header del Mes -->
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        // Auto-seleccionar primer día si no hay ninguno seleccionado para el workstation
+        if (!this.selectedCalendarDateStr) {
+            const firstDateStr = `${year}-${String(month + 1).padStart(2, '0')}-01`;
+            this.selectedCalendarDateStr = firstDateStr;
+        }
+
+        let html = `
+            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.03);">
+                <!-- Toolbar Principal: Navegación, Toggle Grilla/Lista & Edición Masiva -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #F4F4F5;">
+                    <!-- Navegación de Mes -->
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <button type="button" class="btn btn-outline btn-sm" id="btnNutriPrevMonth" style="padding: 4px 10px;">←</button>
-                        <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #121214;">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnNutriPrevMonth" style="padding: 5px 11px; border-radius: 8px; font-weight: 700; color: #121214;">←</button>
+                        <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #121214; letter-spacing: -0.3px;">
                             ${monthNames[month]} ${year}
                         </h4>
-                        <button type="button" class="btn btn-outline btn-sm" id="btnNutriNextMonth" style="padding: 4px 10px;">→</button>
+                        <button type="button" class="btn btn-outline btn-sm" id="btnNutriNextMonth" style="padding: 5px 11px; border-radius: 8px; font-weight: 700; color: #121214;">→</button>
+                    </div>
+
+                    <!-- Controles Centrales & Switch de Vista -->
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <!-- Toggle de Vista: Grilla vs Lista Semanal (Ergonomía Mobile) -->
+                        <div class="pill-group" style="display: inline-flex; background: #F4F4F5; padding: 3px; border-radius: 10px;">
+                            <button type="button" class="btn-nutri-view-mode ${viewMode === 'grid' ? 'active' : ''}" data-mode="grid" style="border: none; background: ${viewMode === 'grid' ? '#FFFFFF' : 'transparent'}; color: ${viewMode === 'grid' ? '#121214' : '#71717A'}; font-weight: 700; font-size: 11px; padding: 4px 10px; border-radius: 7px; cursor: pointer; box-shadow: ${viewMode === 'grid' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'};">
+                                Grilla 30 Días
+                            </button>
+                            <button type="button" class="btn-nutri-view-mode ${viewMode === 'list' ? 'active' : ''}" data-mode="list" style="border: none; background: ${viewMode === 'list' ? '#FFFFFF' : 'transparent'}; color: ${viewMode === 'list' ? '#121214' : '#71717A'}; font-weight: 700; font-size: 11px; padding: 4px 10px; border-radius: 7px; cursor: pointer; box-shadow: ${viewMode === 'list' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'};">
+                                Lista Semanal
+                            </button>
+                        </div>
+
+                        <!-- Botón Toggle de Edición Masiva -->
+                        <button type="button" class="btn btn-sm ${isMulti ? 'btn-primary' : 'btn-outline'}" id="btnToggleNutriMultiMode" style="font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; ${isMulti ? 'background: #9E7D4B; border-color: #9E7D4B; color: #FFFFFF;' : 'border-color: #E4E4E7; color: #18181B;'}">
+                            <span>${isMulti ? '✓ Modo Masivo Activo' : '☵ Edición Masiva'}</span>
+                        </button>
                     </div>
 
                     <!-- Buscador de Alimentos en el Mes -->
-                    <div style="display: flex; align-items: center; gap: 8px; width: 100%; max-width: 320px;">
-                        <input type="text" id="monthFoodFilterInput" class="input-control" value="${this.monthFoodFilter}" placeholder="Buscar alimento en el mes (ej: Pollo, Avena)..." style="margin-bottom: 0; font-size: 11.5px; height: 32px;">
+                    <div style="display: flex; align-items: center; gap: 8px; width: 100%; max-width: 280px;">
+                        <input type="text" id="monthFoodFilterInput" class="input-control" value="${this.monthFoodFilter}" placeholder="Buscar alimento en el mes..." style="margin-bottom: 0; font-size: 11.5px; height: 32px; border-radius: 8px;">
                     </div>
                 </div>
 
+                <!-- Chips de Selección Rápida en Modo Masivo -->
+                ${isMulti ? `
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; padding: 8px 12px; background: #FFFDF9; border: 1px solid rgba(158, 125, 75, 0.25); border-radius: 10px;">
+                        <span style="font-size: 10.5px; font-weight: 800; color: #9E7D4B; text-transform: uppercase;">Seleccionar en lote:</span>
+                        <button type="button" class="btn-nutri-quick-select pill pill-dark" data-preset="weekdays" style="cursor: pointer; font-size: 10px;">Lunes a Viernes</button>
+                        <button type="button" class="btn-nutri-quick-select pill pill-dark" data-preset="weekends" style="cursor: pointer; font-size: 10px;">Fines de Semana</button>
+                        <button type="button" class="btn-nutri-quick-select pill pill-dark" data-preset="all" style="cursor: pointer; font-size: 10px;">Todo el Mes</button>
+                        <button type="button" class="btn-nutri-quick-select pill pill-outline" data-preset="clear" style="cursor: pointer; font-size: 10px; color: #EF4444; border-color: #FCA5A5;">Limpiar Selección</button>
+                        <span style="margin-left: auto; font-size: 11px; font-weight: 700; color: #18181B;">${this.selectedMultiDates.size} días seleccionados</span>
+                    </div>
+                ` : ''}
+
+                <!-- Vista de Grilla o Lista -->
+                ${viewMode === 'grid' ? this.buildMonthGridHtml(year, month, daysInMonth, startingDay, q) : this.buildMonthListHtml(year, month, daysInMonth, q)}
+
+                <!-- Barra Flotante / Dock de Acciones Masivas -->
+                ${(isMulti && this.selectedMultiDates.size > 0) ? this.buildMultiActionBarHtml() : ''}
+            </div>
+
+            <!-- Panel de Trabajo Integrado del Día (Day Workstation) -->
+            ${(!isMulti && this.selectedCalendarDateStr) ? this.buildDayWorkstationHtml(this.selectedCalendarDateStr) : ''}
+        `;
+
+        container.innerHTML = html;
+        this.bindMonthVisionEvents(container);
+    },
+
+    // -------------------------------------------------------------------------
+    // VISTA GRILLA: 7 COLUMNAS RESPONSIVAS CON MICRO-BARRA DE MACROS
+    // -------------------------------------------------------------------------
+    buildMonthGridHtml(year, month, daysInMonth, startingDay, q) {
+        const todayStr = new Date().toISOString().split('T')[0];
+        let cellsHtml = '';
+
+        // Días previos de padding
+        for (let i = 0; i < startingDay; i++) {
+            cellsHtml += `<div class="coach-month-day-cell is-empty" style="background: #FAFAFA; border: 1px dashed #E4E4E7; border-radius: 10px; opacity: 0.35; min-height: 68px;"></div>`;
+        }
+
+        // Celdas del mes
+        for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+            const isToday = (dateStr === todayStr);
+            const isSelected = (this.selectedCalendarDateStr === dateStr);
+            const isMultiSelected = this.isMultiSelectMode && this.selectedMultiDates.has(dateStr);
+
+            const dPlan = this.getDayPlanForDate(dateStr);
+            const macros = this.calculateDayMacros(dPlan);
+
+            // Búsqueda de alimento
+            let hasFood = false;
+            if (q && dPlan && dPlan.meals) {
+                Object.values(dPlan.meals).forEach(m => {
+                    if (Array.isArray(m.foods)) {
+                        m.foods.forEach(f => {
+                            const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f) : f;
+                            if (res && res.name && res.name.toLowerCase().includes(q)) hasFood = true;
+                        });
+                    }
+                });
+            }
+
+            // Status dot semántico: verde si 5 comidas, ámbar si 1-4, gris si 0
+            let statusDotClass = 'status-dot-pending';
+            let statusTitle = 'Plan base asignado';
+            if (macros.totalFoods >= 5) {
+                statusDotClass = 'status-dot-active';
+                statusTitle = 'Plan nutricional completo con alimentos';
+            } else if (macros.totalFoods === 0) {
+                statusDotClass = 'status-dot-paused';
+                statusTitle = 'Sin alimentos prescriptos';
+            }
+
+            const multiCheckHtml = this.isMultiSelectMode ? `
+                <div class="multi-select-check ${isMultiSelected ? 'checked' : ''}" style="display: block; position: absolute; top: 4px; right: 4px; width: 16px; height: 16px; border-radius: 4px; background: ${isMultiSelected ? '#9E7D4B' : '#FFFFFF'}; border: 1px solid ${isMultiSelected ? '#9E7D4B' : '#D4D4D8'}; color: #FFF; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; z-index: 3;">
+                    ${isMultiSelected ? '✓' : ''}
+                </div>
+            ` : '';
+
+            cellsHtml += `
+                <div class="coach-month-day-cell nutri-day-cell ${hasFood ? 'is-matching-filter' : ''} ${isToday ? 'is-today' : ''} ${isSelected && !this.isMultiSelectMode ? 'is-selected' : ''} ${isMultiSelected ? 'is-multi-selected' : ''}" data-date="${dateStr}">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                        <span class="cell-number ${isToday ? 'today-circle' : ''}" style="font-size: 11px; font-weight: 800; color: #121214;">${dayNum}</span>
+                        <span class="coach-month-kcal-pill">~${macros.kcal}</span>
+                    </div>
+
+                    <!-- Telemetría Semántica: Estado + Conteo de Alimentos -->
+                    <div style="font-size: 9.5px; color: #71717A; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px;">
+                        <span class="coach-month-status-dot ${statusDotClass}" title="${statusTitle}"></span>
+                        <span style="font-weight: 500;">${macros.totalFoods > 0 ? `${macros.totalFoods} alim.` : 'Sin plan'}</span>
+                    </div>
+
+                    <!-- Micro-Barra de Macros Proporcional (Reemplaza los circulitos vacíos) -->
+                    <div class="coach-cal-macro-bar" title="Macros del Día: P: ${macros.prot}g (${macros.protPct}%) • C: ${macros.carbs}g (${macros.carbsPct}%) • G: ${macros.fats}g (${macros.fatsPct}%)">
+                        <div class="macro-seg seg-p" style="width: ${macros.protPct}%;"></div>
+                        <div class="macro-seg seg-c" style="width: ${macros.carbsPct}%;"></div>
+                        <div class="macro-seg seg-f" style="width: ${macros.fatsPct}%;"></div>
+                    </div>
+
+                    ${multiCheckHtml}
+                </div>
+            `;
+        }
+
+        return `
+            <div class="coach-calendar-responsive-wrap">
                 <!-- Cabecera de Días de la Semana -->
-                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; margin-bottom: 6px; font-size: 11px; font-weight: 800; color: #71717A;">
+                <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; text-align: center; margin-bottom: 6px; font-size: 11px; font-weight: 800; color: #71717A; min-width: 520px;">
                     <span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span>
                 </div>
 
                 <!-- Celdas de Días -->
-                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;">
-                    ${Array(startingDay).fill('').map(() => `<div style="min-height: 80px; background: #F8F9FA; border-radius: 8px; opacity: 0.4;"></div>`).join('')}
-                    ${Array(daysInMonth).fill(0).map((_, i) => {
-                        const dayNum = i + 1;
-                        const dateObj = new Date(year, month, dayNum);
-                        const dayOfWeek = (dateObj.getDay() === 0 ? 7 : dateObj.getDay());
-                        const dayKey = `day${dayOfWeek}`;
-                        const dPlan = this.dayPlanCache.days ? this.dayPlanCache.days[dayKey] : null;
-                        const kcal = dPlan ? (dPlan.target_calories || this.dayPlanCache.target_calories || 2150) : 2150;
-
-                        // Verificar si contiene el alimento buscado
-                        let hasFood = false;
-                        if (q && dPlan && dPlan.meals) {
-                            Object.values(dPlan.meals).forEach(m => {
-                                if (Array.isArray(m.foods)) {
-                                    m.foods.forEach(f => {
-                                        const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f) : f;
-                                        if (res && res.name && res.name.toLowerCase().includes(q)) hasFood = true;
-                                    });
-                                }
-                            });
-                        }
-
-                        const highlightStyle = hasFood ? 'border: 2px solid #9E7D4B; background: rgba(229,203,167,0.18);' : 'background: #FFFFFF; border: 1px solid #E4E4E7;';
-
-                        return `
-                            <div style="min-height: 85px; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; ${highlightStyle}" onclick="CoachNutritionMaster.openDayDetailModal('${dayKey}', ${dayNum})">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                    <span style="font-size: 11px; font-weight: 800; color: #121214;">${dayNum}</span>
-                                    <span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 4px;">~${kcal}</span>
-                                </div>
-                                <div style="font-size: 9.5px; color: #71717A; margin-top: 4px;">
-                                    5 comidas
-                                </div>
-                                <div style="margin-top: auto; display: flex; gap: 2px;">
-                                    <span style="width: 5px; height: 5px; border-radius: 50%; background: #9E7D4B;"></span>
-                                    <span style="width: 5px; height: 5px; border-radius: 50%; background: #3B82F6;"></span>
-                                    <span style="width: 5px; height: 5px; border-radius: 50%; background: #F59E0B;"></span>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
+                <div class="coach-nutri-cal-grid">
+                    ${cellsHtml}
                 </div>
             </div>
         `;
+    },
 
+    // -------------------------------------------------------------------------
+    // VISTA LISTA: TARJETAS SEMANALES MODULARES (MOBILE-FIRST 100% APPLE-GRADE)
+    // -------------------------------------------------------------------------
+    buildMonthListHtml(year, month, daysInMonth, q) {
+        let weeksHtml = '';
+        let currentWeekDays = [];
+        let weekNumber = 1;
+
+        for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+            const parts = dateStr.split('-');
+            const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            const dow = (d.getDay() === 0 ? 7 : d.getDay()); // 1 to 7
+
+            currentWeekDays.push({ dayNum, dateStr, dow, d });
+
+            // Cierre de semana los domingos (dow === 7) o el último día del mes
+            if (dow === 7 || dayNum === daysInMonth) {
+                const startDateStr = currentWeekDays[0].dayNum;
+                const endDateStr = currentWeekDays[currentWeekDays.length - 1].dayNum;
+
+                let daysRowsHtml = '';
+                let weekKcalSum = 0;
+
+                currentWeekDays.forEach(item => {
+                    const dPlan = this.getDayPlanForDate(item.dateStr);
+                    const macros = this.calculateDayMacros(dPlan);
+                    weekKcalSum += macros.kcal;
+
+                    const spanish = this.formatDateSpanish(item.dateStr);
+                    const isSelected = (this.selectedCalendarDateStr === item.dateStr);
+                    const isMultiSelected = this.isMultiSelectMode && this.selectedMultiDates.has(item.dateStr);
+
+                    // Conteo y nombres de alimentos
+                    const foodNames = [];
+                    if (dPlan && dPlan.meals) {
+                        Object.values(dPlan.meals).forEach(m => {
+                            if (Array.isArray(m.foods)) {
+                                m.foods.slice(0, 3).forEach(f => {
+                                    const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f) : f;
+                                    if (res && res.name) foodNames.push(res.name);
+                                });
+                            }
+                        });
+                    }
+
+                    const foodsPreview = foodNames.length > 0 ? foodNames.join(', ') : 'Sin alimentos cargados';
+
+                    daysRowsHtml += `
+                        <div class="coach-nutri-day-row ${isSelected && !this.isMultiSelectMode ? 'is-selected' : ''}" data-date="${item.dateStr}">
+                            <div style="display: flex; align-items: center; gap: 10px; min-width: 140px;">
+                                ${this.isMultiSelectMode ? `
+                                    <input type="checkbox" class="multi-select-check-input" ${isMultiSelected ? 'checked' : ''} style="width: 16px; height: 16px; accent-color: #9E7D4B;">
+                                ` : ''}
+                                <div>
+                                    <strong style="font-size: 13px; color: #121214; display: block;">${spanish.dayName} ${spanish.dayNum}</strong>
+                                    <span style="font-size: 11px; color: #71717A;">${spanish.dowNumber <= 5 ? 'Día Laboral' : 'Fin de Semana'}</span>
+                                </div>
+                            </div>
+
+                            <div style="flex: 1; min-width: 160px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
+                                    <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">~${macros.kcal} kcal</span>
+                                    <span style="font-size: 10.5px; color: #52525B; font-weight: 600;">P: ${macros.prot}g • C: ${macros.carbs}g • G: ${macros.fats}g</span>
+                                </div>
+                                <div class="coach-cal-macro-bar" style="max-width: 220px;">
+                                    <div class="macro-seg seg-p" style="width: ${macros.protPct}%;"></div>
+                                    <div class="macro-seg seg-c" style="width: ${macros.carbsPct}%;"></div>
+                                    <div class="macro-seg seg-f" style="width: ${macros.fatsPct}%;"></div>
+                                </div>
+                                <span style="font-size: 10px; color: #71717A; display: block; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;">
+                                    ${foodsPreview}
+                                </span>
+                            </div>
+
+                            <div>
+                                <button type="button" class="btn btn-outline btn-sm btn-select-day-action" data-date="${item.dateStr}" style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-color: #9E7D4B; color: #9E7D4B;">
+                                    ${isSelected ? 'Editando ✓' : 'Editar Día →'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const avgKcal = Math.round(weekKcalSum / currentWeekDays.length);
+
+                weeksHtml += `
+                    <div class="coach-nutri-week-card">
+                        <div class="coach-nutri-week-header">
+                            <span>SEMANA ${weekNumber} (${startDateStr} al ${endDateStr} de ${this.formatDateSpanish(currentWeekDays[0].dateStr).monthName})</span>
+                            <span class="pill pill-champagne" style="font-size: 9.5px;">Promedio: ~${avgKcal} kcal/día</span>
+                        </div>
+                        <div>
+                            ${daysRowsHtml}
+                        </div>
+                    </div>
+                `;
+
+                weekNumber++;
+                currentWeekDays = [];
+            }
+        }
+
+        return `<div>${weeksHtml}</div>`;
+    },
+
+    // -------------------------------------------------------------------------
+    // BARRA FLOTANTE DE ACCIONES MASIVAS
+    // -------------------------------------------------------------------------
+    buildMultiActionBarHtml() {
+        const count = this.selectedMultiDates.size;
+        return `
+            <div class="coach-month-multi-bar" style="margin-top: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800;">${count} DÍAS ELEGIDOS</span>
+                    <strong style="font-size: 13px; color: #FFFFFF;">Acciones Masivas en Lote</strong>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <!-- Copiar Menú de un Día Base -->
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span style="font-size: 11px; color: #D4D4D8;">Copiar menú de:</span>
+                        <select id="bulkCopySourceSelect" style="background: #27272A; border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-size: 11.5px; border-radius: 6px; padding: 4px 8px;">
+                            <option value="day1">Lunes (Día 1)</option>
+                            <option value="day2">Martes (Día 2)</option>
+                            <option value="day3">Miércoles (Día 3)</option>
+                            <option value="day4">Jueves (Día 4)</option>
+                            <option value="day5">Viernes (Día 5)</option>
+                            <option value="day6">Sábado (Día 6)</option>
+                            <option value="day7">Domingo (Día 7)</option>
+                        </select>
+                        <button type="button" class="btn btn-outline btn-sm" id="btnExecuteBulkCopy" style="font-size: 11px; padding: 5px 10px; border-color: #E5CBA7; color: #E5CBA7; font-weight: 700;">
+                            Clonar a Seleccionados
+                        </button>
+                    </div>
+
+                    <!-- Ajustar Calorías en Lote -->
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span style="font-size: 11px; color: #D4D4D8;">Target Kcal:</span>
+                        <input type="number" id="bulkTargetKcalInput" value="${this.dayPlanCache.target_calories || 2150}" step="50" style="width: 75px; background: #27272A; border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-size: 11.5px; border-radius: 6px; padding: 4px 6px; text-align: center;">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnExecuteBulkKcal" style="font-size: 11px; padding: 5px 10px; border-color: #E5CBA7; color: #E5CBA7; font-weight: 700;">
+                            Aplicar Kcal
+                        </button>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveBulkChanges" style="font-size: 11px; font-weight: 800; padding: 6px 14px; background: #9E7D4B; border-color: #9E7D4B; color: #FFF;">
+                        ✓ Guardar en Lote
+                    </button>
+                </div>
+            </div>
+        `;
+    },
+
+    // -------------------------------------------------------------------------
+    // PANEL DE TRABAJO DÍA POR DÍA (DAY WORKSTATION - REEMPLAZA EL POP-UP RÍGIDO)
+    // -------------------------------------------------------------------------
+    buildDayWorkstationHtml(dateStr) {
+        const dPlan = this.getDayPlanForDate(dateStr);
+        const spanish = this.formatDateSpanish(dateStr);
+        const macros = this.calculateDayMacros(dPlan);
+
+        const mealLabels = {
+            desayuno: 'Desayuno',
+            almuerzo: 'Almuerzo',
+            merienda: 'Merienda',
+            cena: 'Cena',
+            snack: 'Snack / Colación'
+        };
+
+        const targetCalories = dPlan ? (dPlan.target_calories || this.dayPlanCache.target_calories || 2150) : 2150;
+
+        let mealsHtml = '';
+        const mealsObj = (dPlan && dPlan.meals) ? dPlan.meals : {};
+
+        Object.keys(mealLabels).forEach(mKey => {
+            const m = mealsObj[mKey] || { target_kcal: 400, foods: [] };
+            const foods = m.foods || [];
+
+            let foodRowsHtml = '';
+            let mealKcalSum = 0;
+
+            foods.forEach((f, fIdx) => {
+                const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f) : f;
+                const grams = parseFloat(f.grams) || 100;
+                const baseGrams = parseFloat(res.porcion_total_g_ml) || 100;
+                const ratio = grams / (baseGrams > 0 ? baseGrams : 100);
+                const itemKcal = Math.round((res.calorias_kcal || 0) * ratio);
+                mealKcalSum += itemKcal;
+
+                const imgSrc = res.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+
+                foodRowsHtml += `
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 8px; margin-bottom: 6px;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+                            <img src="${imgSrc}" alt="${res.name}" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; background: #000; flex-shrink: 0;" />
+                            <div style="min-width: 0;">
+                                <strong style="font-size: 11.5px; color: #121214; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${res.name}</strong>
+                                <span style="font-size: 10px; color: #71717A;">${itemKcal} kcal • P:${Math.round((res.proteinas_g || 0) * ratio)}g C:${Math.round((res.carbohidratos_g || 0) * ratio)}g G:${Math.round((res.grasas_g || 0) * ratio)}g</span>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                            <input type="number" class="input-food-grams-live" data-meal="${mKey}" data-idx="${fIdx}" value="${grams}" step="5" min="5" style="width: 65px; height: 26px; font-size: 11px; text-align: center; border: 1px solid #D4D4D8; border-radius: 6px; font-weight: 700; color: #121214;">
+                            <span style="font-size: 10.5px; color: #71717A;">g</span>
+                            <button type="button" class="btn-delete-food-live" data-meal="${mKey}" data-idx="${fIdx}" title="Eliminar alimento" style="background: none; border: none; color: #EF4444; font-size: 14px; cursor: pointer; padding: 2px 6px;">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            mealsHtml += `
+                <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; padding: 12px; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div>
+                            <strong style="font-size: 12px; text-transform: uppercase; color: #9E7D4B; letter-spacing: 0.5px;">${mealLabels[mKey]}</strong>
+                            <span style="font-size: 10.5px; color: #71717A; margin-left: 6px;">${mealKcalSum} kcal prescriptas</span>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm btn-open-food-modal-workstation" data-meal="${mKey}" style="font-size: 10px; padding: 3px 8px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 700;">
+                            + Agregar Alimento
+                        </button>
+                    </div>
+
+                    <div>
+                        ${foods.length === 0 ? `<div style="font-size: 11px; color: #A1A1AA; font-style: italic; padding: 6px 0;">Sin alimentos prescriptos para esta comida.</div>` : foodRowsHtml}
+                    </div>
+                </div>
+            `;
+        });
+
+        return `
+            <div class="coach-nutri-workstation" id="coachNutritionWorkstation">
+                <!-- Header de Workstation con Navegación Continua (Día por Día) -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #E4E4E7;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">DÍA ${spanish.dowNumber} DE LA SEMANA</span>
+                            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #121214;">
+                                ${spanish.formatted}
+                            </h3>
+                        </div>
+                        <span style="font-size: 11px; color: #71717A;">Editá las calorías, gramajes y alimentos de este día individualmente o replicalo masivamente.</span>
+                    </div>
+
+                    <!-- Navegación Fluida: Anterior / Siguiente -->
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnWorkstationPrevDay" style="font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 8px;">
+                            ← Día Anterior
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" id="btnWorkstationNextDay" style="font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 8px;">
+                            Día Siguiente →
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" id="btnWorkstationReplicateDay" style="font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 8px; border-color: #9E7D4B; color: #9E7D4B;">
+                            Replicar este Día...
+                        </button>
+                        <button type="button" id="btnCloseDayWorkstation" title="Cerrar panel de trabajo" style="background: none; border: 1px solid #E4E4E7; border-radius: 8px; width: 30px; height: 30px; font-size: 16px; color: #71717A; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Control Calórico y Desglose de Macros en Tiempo Real -->
+                <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; padding: 14px; margin-bottom: 18px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <!-- Calorie Stepper Inline -->
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 12px; font-weight: 800; color: #121214;">Meta Calórica del Día:</span>
+                            <button type="button" class="btn btn-outline btn-sm btn-step-day-kcal" data-delta="-100" style="padding: 2px 8px; font-size: 11px; font-weight: 800;">-100</button>
+                            <button type="button" class="btn btn-outline btn-sm btn-step-day-kcal" data-delta="-50" style="padding: 2px 8px; font-size: 11px; font-weight: 800;">-50</button>
+                            <input type="number" id="inputWorkstationDayKcal" value="${targetCalories}" step="50" style="width: 80px; height: 30px; text-align: center; font-size: 13px; font-weight: 800; border-radius: 6px; border: 1px solid #D4D4D8; color: #121214;">
+                            <button type="button" class="btn btn-outline btn-sm btn-step-day-kcal" data-delta="50" style="padding: 2px 8px; font-size: 11px; font-weight: 800;">+50</button>
+                            <button type="button" class="btn btn-outline btn-sm btn-step-day-kcal" data-delta="100" style="padding: 2px 8px; font-size: 11px; font-weight: 800;">+100</button>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #9E7D4B;">kcal</span>
+                        </div>
+
+                        <!-- Telemetría de Macros -->
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 11.5px;">
+                            <span>Alimentos: <strong style="color: #121214;">${macros.actualKcal} kcal</strong></span>
+                            <span>P: <strong style="color: #9E7D4B;">${macros.prot}g</strong></span>
+                            <span>C: <strong style="color: #3B82F6;">${macros.carbs}g</strong></span>
+                            <span>G: <strong style="color: #F59E0B;">${macros.fats}g</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Macro Balance Bar -->
+                    <div class="coach-cal-macro-bar" style="margin-top: 10px; height: 5px;">
+                        <div class="macro-seg seg-p" style="width: ${macros.protPct}%;"></div>
+                        <div class="macro-seg seg-c" style="width: ${macros.carbsPct}%;"></div>
+                        <div class="macro-seg seg-f" style="width: ${macros.fatsPct}%;"></div>
+                    </div>
+                </div>
+
+                <!-- Comidas del Día -->
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    ${mealsHtml}
+                </div>
+
+                <!-- Footer de Guardado y Acciones -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #E4E4E7;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; color: #18181B; cursor: pointer;">
+                        <input type="checkbox" id="chkApplyToAllWeekdays" style="width: 16px; height: 16px; accent-color: #9E7D4B;">
+                        <span>Aplicar cambios también a todos los <strong>${spanish.dayName}s</strong> del mes</span>
+                    </label>
+
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnGoToStep3FromDay" style="font-size: 11px; font-weight: 700; padding: 7px 14px; border-color: #9E7D4B; color: #9E7D4B;">
+                            Abrir en Mesa de Trabajo Avanzada (Paso 3) →
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnSaveWorkstationDayEdits" style="font-size: 11px; font-weight: 800; padding: 7px 18px; background: #9E7D4B; border-color: #9E7D4B; color: #FFF; box-shadow: 0 2px 8px rgba(158, 125, 75, 0.3);">
+                            ✓ Guardar Cambios de este Día
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // -------------------------------------------------------------------------
+    // BINDING DE EVENTOS DE VISIÓN MENSUAL (REACTIVIDAD & EDICIÓN INTEGRADA)
+    // -------------------------------------------------------------------------
+    bindMonthVisionEvents(container) {
+        // 1. Navegación de Mes
         const prevBtn = document.getElementById('btnNutriPrevMonth');
         const nextBtn = document.getElementById('btnNutriNextMonth');
-        const filterInp = document.getElementById('monthFoodFilterInput');
-
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
                 if (this.calendarMonth === 0) {
@@ -1378,7 +1929,6 @@ const CoachNutritionMaster = {
                 this.renderMonthVision();
             });
         }
-
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
                 if (this.calendarMonth === 11) {
@@ -1391,53 +1941,479 @@ const CoachNutritionMaster = {
             });
         }
 
+        // 2. Toggle de Vista: Grilla vs Lista Semanal
+        container.querySelectorAll('.btn-nutri-view-mode').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.calendarMonthViewMode = btn.getAttribute('data-mode') || 'grid';
+                this.renderMonthVision();
+            });
+        });
+
+        // 3. Toggle de Modo Selección Múltiple
+        const toggleMultiBtn = document.getElementById('btnToggleNutriMultiMode');
+        if (toggleMultiBtn) {
+            toggleMultiBtn.addEventListener('click', () => {
+                this.isMultiSelectMode = !this.isMultiSelectMode;
+                if (!this.isMultiSelectMode) this.selectedMultiDates.clear();
+                this.renderMonthVision();
+            });
+        }
+
+        // 4. Filtro Rápido de Alimentos
+        const filterInp = document.getElementById('monthFoodFilterInput');
         if (filterInp) {
             filterInp.addEventListener('input', (e) => {
                 this.monthFoodFilter = e.target.value;
                 this.renderMonthVision();
             });
         }
+
+        // 5. Chips de Selección Rápida en Modo Masivo
+        container.querySelectorAll('.btn-nutri-quick-select').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const preset = chip.getAttribute('data-preset');
+                const daysInMonth = new Date(this.calendarYear, this.calendarMonth + 1, 0).getDate();
+
+                this.selectedMultiDates.clear();
+
+                if (preset === 'weekdays' || preset === 'weekends' || preset === 'all') {
+                    for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+                        const dateStr = `${this.calendarYear}-${String(this.calendarMonth + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+                        const parts = dateStr.split('-');
+                        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                        const dow = (d.getDay() === 0 ? 7 : d.getDay());
+
+                        if (preset === 'weekdays' && dow <= 5) this.selectedMultiDates.add(dateStr);
+                        if (preset === 'weekends' && dow >= 6) this.selectedMultiDates.add(dateStr);
+                        if (preset === 'all') this.selectedMultiDates.add(dateStr);
+                    }
+                }
+                this.renderMonthVision();
+            });
+        });
+
+        // 6. Clic en Celdas de Grilla o Filas de Lista
+        container.querySelectorAll('.coach-month-day-cell.nutri-day-cell, .coach-nutri-day-row').forEach(el => {
+            el.addEventListener('click', (e) => {
+                // Si hizo clic en un botón interno, no propagar
+                if (e.target.closest('button') || e.target.closest('input')) return;
+
+                const dateStr = el.getAttribute('data-date');
+                if (!dateStr) return;
+
+                if (this.isMultiSelectMode) {
+                    if (this.selectedMultiDates.has(dateStr)) {
+                        this.selectedMultiDates.delete(dateStr);
+                    } else {
+                        this.selectedMultiDates.add(dateStr);
+                    }
+                    this.renderMonthVision();
+                } else {
+                    this.selectedCalendarDateStr = dateStr;
+                    this.renderMonthVision();
+                    // Smooth scroll hacia el workstation
+                    setTimeout(() => {
+                        const ws = document.getElementById('coachNutritionWorkstation');
+                        if (ws) ws.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 50);
+                }
+            });
+        });
+
+        // 7. Clic en Botón "Editar Día →" en Vista Lista
+        container.querySelectorAll('.btn-select-day-action').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dateStr = btn.getAttribute('data-date');
+                if (dateStr) {
+                    this.selectedCalendarDateStr = dateStr;
+                    this.renderMonthVision();
+                    setTimeout(() => {
+                        const ws = document.getElementById('coachNutritionWorkstation');
+                        if (ws) ws.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 50);
+                }
+            });
+        });
+
+        // 8. Eventos de la Barra Flotante de Acciones Masivas
+        const btnBulkCopy = document.getElementById('btnExecuteBulkCopy');
+        if (btnBulkCopy) {
+            btnBulkCopy.addEventListener('click', () => {
+                const sel = document.getElementById('bulkCopySourceSelect');
+                const srcDayKey = sel ? sel.value : 'day1';
+                this.executeBulkDayMenuCopy(srcDayKey);
+            });
+        }
+
+        const btnBulkKcal = document.getElementById('btnExecuteBulkKcal');
+        if (btnBulkKcal) {
+            btnBulkKcal.addEventListener('click', () => {
+                const inp = document.getElementById('bulkTargetKcalInput');
+                const val = parseInt(inp ? inp.value : 2150, 10) || 2150;
+                this.executeBulkKcalAdjustment(val);
+            });
+        }
+
+        const btnSaveBulk = document.getElementById('btnSaveBulkChanges');
+        if (btnSaveBulk) {
+            btnSaveBulk.addEventListener('click', async () => {
+                await this.savePlan();
+                if (typeof showSensToast === 'function') {
+                    showSensToast(`✓ Plan masivo actualizado en ${this.selectedMultiDates.size} días.`, 'champagne');
+                }
+                this.isMultiSelectMode = false;
+                this.selectedMultiDates.clear();
+                this.renderMonthVision();
+            });
+        }
+
+        // 9. Eventos del Workstation Día por Día
+        this.bindWorkstationEvents();
     },
 
-    // Modal de Detalle de Día
-    openDayDetailModal(dayKey, dayNum) {
-        const dPlan = this.dayPlanCache.days ? this.dayPlanCache.days[dayKey] : null;
-        if (!dPlan) return;
+    // -------------------------------------------------------------------------
+    // BINDING DE EVENTOS ESPECÍFICOS DEL WORKSTATION DÍA POR DÍA
+    // -------------------------------------------------------------------------
+    bindWorkstationEvents() {
+        const ws = document.getElementById('coachNutritionWorkstation');
+        if (!ws) return;
 
-        let detailHtml = `
-            <div class="sens-modal-backdrop active" id="nutriDayDetailModal" style="display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
-                <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 540px; max-height: 80vh; overflow-y: auto; padding: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        const curDateStr = this.selectedCalendarDateStr;
+        if (!curDateStr) return;
+
+        const daysInMonth = new Date(this.calendarYear, this.calendarMonth + 1, 0).getDate();
+        const curDayNum = parseInt(curDateStr.split('-')[2], 10);
+
+        // A. Navegación Anterior / Siguiente
+        const prevBtn = document.getElementById('btnWorkstationPrevDay');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                const newDayNum = curDayNum > 1 ? curDayNum - 1 : daysInMonth;
+                this.selectedCalendarDateStr = `${this.calendarYear}-${String(this.calendarMonth + 1).padStart(2, '0')}-${String(newDayNum).padStart(2, '0')}`;
+                this.renderMonthVision();
+            });
+        }
+
+        const nextBtn = document.getElementById('btnWorkstationNextDay');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                const newDayNum = curDayNum < daysInMonth ? curDayNum + 1 : 1;
+                this.selectedCalendarDateStr = `${this.calendarYear}-${String(this.calendarMonth + 1).padStart(2, '0')}-${String(newDayNum).padStart(2, '0')}`;
+                this.renderMonthVision();
+            });
+        }
+
+        // B. Cerrar Workstation
+        const closeBtn = document.getElementById('btnCloseDayWorkstation');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.selectedCalendarDateStr = null;
+                this.renderMonthVision();
+            });
+        }
+
+        // C. Replicar este Día
+        const repBtn = document.getElementById('btnWorkstationReplicateDay');
+        if (repBtn) {
+            repBtn.addEventListener('click', () => {
+                this.openReplicateDayDialog(curDateStr);
+            });
+        }
+
+        // D. Steppers de Calorías del Día
+        ws.querySelectorAll('.btn-step-day-kcal').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const delta = parseInt(btn.getAttribute('data-delta'), 10) || 0;
+                const inp = document.getElementById('inputWorkstationDayKcal');
+                if (inp) {
+                    const currentVal = parseInt(inp.value, 10) || 2150;
+                    const newVal = Math.max(1200, currentVal + delta);
+                    inp.value = newVal;
+                    this.updateWorkstationDayTargetKcal(curDateStr, newVal);
+                }
+            });
+        });
+
+        const dayKcalInp = document.getElementById('inputWorkstationDayKcal');
+        if (dayKcalInp) {
+            dayKcalInp.addEventListener('change', () => {
+                const newVal = Math.max(1200, parseInt(dayKcalInp.value, 10) || 2150);
+                this.updateWorkstationDayTargetKcal(curDateStr, newVal);
+            });
+        }
+
+        // E. Edición en Vivo de Gramos de Alimentos
+        ws.querySelectorAll('.input-food-grams-live').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const mealKey = inp.getAttribute('data-meal');
+                const fIdx = parseInt(inp.getAttribute('data-idx'), 10);
+                const newGrams = Math.max(5, parseFloat(inp.value) || 5);
+                this.updateFoodGramsLive(curDateStr, mealKey, fIdx, newGrams);
+            });
+        });
+
+        // F. Eliminar Alimento de la Comida
+        ws.querySelectorAll('.btn-delete-food-live').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mealKey = btn.getAttribute('data-meal');
+                const fIdx = parseInt(btn.getAttribute('data-idx'), 10);
+                this.removeFoodFromMealLive(curDateStr, mealKey, fIdx);
+            });
+        });
+
+        // G. Agregar Alimento (+ Agregar Alimento a comida)
+        ws.querySelectorAll('.btn-open-food-modal-workstation').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mealKey = btn.getAttribute('data-meal');
+                this.openFoodPickerModal(mealKey);
+            });
+        });
+
+        // H. Guardar Cambios de este Día
+        const saveDayBtn = document.getElementById('btnSaveWorkstationDayEdits');
+        if (saveDayBtn) {
+            saveDayBtn.addEventListener('click', async () => {
+                const applyToAllWeekdays = Boolean(document.getElementById('chkApplyToAllWeekdays')?.checked);
+                await this.saveActiveWorkstationDay(curDateStr, applyToAllWeekdays);
+            });
+        }
+
+        // I. Abrir en Mesa de Trabajo Avanzada (Paso 3)
+        const goStep3Btn = document.getElementById('btnGoToStep3FromDay');
+        if (goStep3Btn) {
+            goStep3Btn.addEventListener('click', () => {
+                const dayKey = this.getDateKey(curDateStr);
+                this.activeDayKey = dayKey;
+                this.switchVision('wizard');
+                this.goToStep(3);
+                if (typeof showSensToast === 'function') {
+                    showSensToast(`Mesa de trabajo activa para ${this.getDayTitle(dayKey)}.`, 'champagne');
+                }
+            });
+        }
+    },
+
+    // -------------------------------------------------------------------------
+    // MÉTODOS DE MUTACIÓN Y PERSISTENCIA DEL WORKSTATION DÍA POR DÍA
+    // -------------------------------------------------------------------------
+    ensureDatedPlanInCache(dateStr) {
+        if (!this.dayPlanCache.calendar_schedule) {
+            this.dayPlanCache.calendar_schedule = {};
+        }
+        if (!this.dayPlanCache.calendar_schedule[dateStr]) {
+            const basePlan = this.getDayPlanForDate(dateStr);
+            this.dayPlanCache.calendar_schedule[dateStr] = JSON.parse(JSON.stringify(basePlan));
+        }
+        return this.dayPlanCache.calendar_schedule[dateStr];
+    },
+
+    updateWorkstationDayTargetKcal(dateStr, newKcal) {
+        const dPlan = this.ensureDatedPlanInCache(dateStr);
+        dPlan.target_calories = newKcal;
+        this.renderMonthVision();
+    },
+
+    updateFoodGramsLive(dateStr, mealKey, fIdx, newGrams) {
+        const dPlan = this.ensureDatedPlanInCache(dateStr);
+        if (dPlan.meals && dPlan.meals[mealKey] && dPlan.meals[mealKey].foods && dPlan.meals[mealKey].foods[fIdx]) {
+            dPlan.meals[mealKey].foods[fIdx].grams = newGrams;
+        }
+    },
+
+    removeFoodFromMealLive(dateStr, mealKey, fIdx) {
+        const dPlan = this.ensureDatedPlanInCache(dateStr);
+        if (dPlan.meals && dPlan.meals[mealKey] && Array.isArray(dPlan.meals[mealKey].foods)) {
+            dPlan.meals[mealKey].foods.splice(fIdx, 1);
+            this.renderMonthVision();
+            if (typeof showSensToast === 'function') {
+                showSensToast('Alimento eliminado de la comida.', 'info');
+            }
+        }
+    },
+
+    async saveActiveWorkstationDay(dateStr, applyToAllWeekdays) {
+        const dPlan = this.ensureDatedPlanInCache(dateStr);
+
+        if (applyToAllWeekdays) {
+            const dayKey = this.getDateKey(dateStr);
+            if (this.dayPlanCache.days) {
+                this.dayPlanCache.days[dayKey] = JSON.parse(JSON.stringify(dPlan));
+            }
+        }
+
+        await this.savePlan();
+        const spanish = this.formatDateSpanish(dateStr);
+        const msg = applyToAllWeekdays
+            ? `✓ Menú guardado para el ${spanish.dayNum}/${this.calendarMonth + 1} y replicado a todos los ${spanish.dayName}s.`
+            : `✓ Menú guardado para el día ${spanish.formatted}.`;
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(msg, 'champagne');
+        }
+        this.renderMonthVision();
+    },
+
+    // -------------------------------------------------------------------------
+    // DIÁLOGO DE REPLICACIÓN DE UN DÍA (1-TAP REPLICATION)
+    // -------------------------------------------------------------------------
+    openReplicateDayDialog(sourceDateStr) {
+        const spanish = this.formatDateSpanish(sourceDateStr);
+        const modalId = 'modalNutriReplicateDay';
+        const existing = document.getElementById(modalId);
+        if (existing) existing.remove();
+
+        const modalHtml = `
+            <div class="sens-modal-backdrop active" id="${modalId}" style="display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+                <div style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 16px; width: 100%; max-width: 480px; padding: 22px; color: #FFF; box-shadow: 0 20px 50px rgba(0,0,0,0.85);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <div>
-                            <span class="pill pill-champagne" style="font-size: 9.5px;">PLAN DEL DÍA ${dayNum}</span>
-                            <h3 style="margin: 4px 0 0 0; font-size: 1.2rem; color: #121214;">${dPlan.title} • ~${dPlan.target_calories || 2150} kcal</h3>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">REPLICACIÓN EN 1 TAP</span>
+                            <h3 style="margin: 4px 0 0 0; font-size: 1.2rem; color: #FFFFFF;">Clonar Menú de ${spanish.dayName} ${spanish.dayNum}</h3>
                         </div>
-                        <button type="button" onclick="document.getElementById('nutriDayDetailModal').remove()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #71717A;">✕</button>
+                        <button type="button" onclick="document.getElementById('${modalId}').remove()" style="background: none; border: none; font-size: 20px; color: #A1A1AA; cursor: pointer;">✕</button>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        ${Object.keys(dPlan.meals || {}).map(mKey => {
-                            const m = dPlan.meals[mKey];
-                            const foods = m.foods || [];
-                            return `
-                                <div style="background: #F8F9FA; padding: 10px; border-radius: 8px; border: 1px solid #E4E4E7;">
-                                    <strong style="font-size: 11.5px; text-transform: uppercase; color: #9E7D4B; display: block; margin-bottom: 4px;">${mKey}</strong>
-                                    ${foods.length === 0 ? `<span style="font-size: 11px; color: #A1A1AA;">Sin alimentos prescritos</span>` : `
-                                        <div style="font-size: 11.5px; color: #121214; display: flex; flex-direction: column; gap: 4px;">
-                                            ${foods.map(f => {
-                                                const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f) : f;
-                                                return `<span>• <strong>${res.name}</strong> (${f.grams || 100}g)</span>`;
-                                            }).join('')}
-                                        </div>
-                                    `}
-                                </div>
-                            `;
-                        }).join('')}
+                    <p style="font-size: 12px; color: #A1A1AA; margin: 0 0 16px 0; line-height: 1.4;">
+                        Seleccioná a qué días querés copiar exactamente el menú, alimentos y macros configurados para este día:
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="same_weekdays" style="text-align: left; padding: 10px 14px; border-color: rgba(229,203,167,0.3); color: #FFF; font-weight: 700; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>A todos los <strong>${spanish.dayName}s</strong> del mes</span>
+                            <span style="color: #9E7D4B;">→</span>
+                        </button>
+
+                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="weekdays" style="text-align: left; padding: 10px 14px; border-color: rgba(229,203,167,0.3); color: #FFF; font-weight: 700; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>A todos los días de semana (<strong>Lunes a Viernes</strong>)</span>
+                            <span style="color: #9E7D4B;">→</span>
+                        </button>
+
+                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="weekends" style="text-align: left; padding: 10px 14px; border-color: rgba(229,203,167,0.3); color: #FFF; font-weight: 700; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>A todos los fines de semana (<strong>Sábados y Domingos</strong>)</span>
+                            <span style="color: #9E7D4B;">→</span>
+                        </button>
+
+                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="all_month" style="text-align: left; padding: 10px 14px; border-color: rgba(229,203,167,0.3); color: #FFF; font-weight: 700; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>A <strong>Todo el Mes Completo</strong> (30 días)</span>
+                            <span style="color: #9E7D4B;">→</span>
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 16px; text-align: right;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('${modalId}').remove()" style="border-color: #52525B; color: #A1A1AA;">
+                            Cancelar
+                        </button>
                     </div>
                 </div>
             </div>
         `;
-        document.body.insertAdjacentHTML('beforeend', detailHtml);
+
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        const modalEl = document.getElementById(modalId);
+        if (modalEl) {
+            modalEl.querySelectorAll('.btn-replicate-target').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const targetType = btn.getAttribute('data-target');
+                    modalEl.remove();
+                    await this.executeReplicationTarget(sourceDateStr, targetType);
+                });
+            });
+        }
+    },
+
+    async executeReplicationTarget(sourceDateStr, targetType) {
+        const sourcePlan = this.getDayPlanForDate(sourceDateStr);
+        if (!sourcePlan) return;
+
+        const daysInMonth = new Date(this.calendarYear, this.calendarMonth + 1, 0).getDate();
+        const sourceParts = sourceDateStr.split('-');
+        const sourceD = new Date(parseInt(sourceParts[0], 10), parseInt(sourceParts[1], 10) - 1, parseInt(sourceParts[2], 10));
+        const sourceDow = (sourceD.getDay() === 0 ? 7 : sourceD.getDay());
+
+        if (!this.dayPlanCache.calendar_schedule) {
+            this.dayPlanCache.calendar_schedule = {};
+        }
+
+        let appliedCount = 0;
+
+        for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+            const curDateStr = `${this.calendarYear}-${String(this.calendarMonth + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+            const parts = curDateStr.split('-');
+            const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            const dow = (d.getDay() === 0 ? 7 : d.getDay());
+
+            let shouldApply = false;
+            if (targetType === 'same_weekdays' && dow === sourceDow) shouldApply = true;
+            if (targetType === 'weekdays' && dow <= 5) shouldApply = true;
+            if (targetType === 'weekends' && dow >= 6) shouldApply = true;
+            if (targetType === 'all_month') shouldApply = true;
+
+            if (shouldApply) {
+                this.dayPlanCache.calendar_schedule[curDateStr] = JSON.parse(JSON.stringify(sourcePlan));
+                appliedCount++;
+            }
+        }
+
+        // Si fue a los mismos días de semana, actualizar también el template semanal
+        if (targetType === 'same_weekdays') {
+            const dayKey = `day${sourceDow}`;
+            if (this.dayPlanCache.days) {
+                this.dayPlanCache.days[dayKey] = JSON.parse(JSON.stringify(sourcePlan));
+            }
+        } else if (targetType === 'weekdays') {
+            ['day1', 'day2', 'day3', 'day4', 'day5'].forEach(k => {
+                if (this.dayPlanCache.days) this.dayPlanCache.days[k] = JSON.parse(JSON.stringify(sourcePlan));
+            });
+        } else if (targetType === 'all_month') {
+            ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'].forEach(k => {
+                if (this.dayPlanCache.days) this.dayPlanCache.days[k] = JSON.parse(JSON.stringify(sourcePlan));
+            });
+        }
+
+        await this.savePlan();
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Menú clonado a ${appliedCount} días con éxito.`, 'champagne');
+        }
+        this.renderMonthVision();
+    },
+
+    // -------------------------------------------------------------------------
+    // ACCIONES MASIVAS EN LOTE (BATCH EXECUTION)
+    // -------------------------------------------------------------------------
+    executeBulkDayMenuCopy(sourceDayKey) {
+        const sourcePlan = this.dayPlanCache.days ? this.dayPlanCache.days[sourceDayKey] : null;
+        if (!sourcePlan) return;
+
+        if (!this.dayPlanCache.calendar_schedule) {
+            this.dayPlanCache.calendar_schedule = {};
+        }
+
+        this.selectedMultiDates.forEach(dateStr => {
+            this.dayPlanCache.calendar_schedule[dateStr] = JSON.parse(JSON.stringify(sourcePlan));
+        });
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`Menú de ${this.getDayTitle(sourceDayKey)} copiado a ${this.selectedMultiDates.size} días.`, 'champagne');
+        }
+        this.renderMonthVision();
+    },
+
+    executeBulkKcalAdjustment(newKcal) {
+        if (!this.dayPlanCache.calendar_schedule) {
+            this.dayPlanCache.calendar_schedule = {};
+        }
+
+        this.selectedMultiDates.forEach(dateStr => {
+            const dPlan = this.ensureDatedPlanInCache(dateStr);
+            dPlan.target_calories = newKcal;
+        });
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`Objetivo de ${newKcal} kcal aplicado a ${this.selectedMultiDates.size} días.`, 'champagne');
+        }
+        this.renderMonthVision();
     },
 
     // -------------------------------------------------------------------------

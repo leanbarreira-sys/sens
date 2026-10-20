@@ -19879,6 +19879,188 @@ body.in-portal,
     100% { box-shadow: 0 0 0 rgba(229, 203, 167, 0); }
 }
 
+/* =============================================================================
+   SENS COACH NUTRITION MONTHLY CALENDAR & WORKSTATION 2.0 (Mobile-First / UX Wellness)
+   ============================================================================= */
+.coach-calendar-responsive-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+}
+
+.coach-nutri-cal-grid {
+    display: grid !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 520px;
+    box-sizing: border-box !important;
+}
+
+@media (min-width: 768px) {
+    .coach-nutri-cal-grid {
+        min-width: 0 !important;
+    }
+}
+
+.coach-month-day-cell.nutri-day-cell {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 10px;
+    min-height: 74px;
+    padding: 6px 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    position: relative;
+}
+
+.coach-month-day-cell.nutri-day-cell:hover {
+    border-color: #9E7D4B;
+    background: #FAFAFA;
+}
+
+.coach-month-day-cell.nutri-day-cell.is-selected {
+    border: 2px solid #9E7D4B !important;
+    background: #FFFDF9 !important;
+    box-shadow: 0 0 0 2px rgba(158, 125, 75, 0.25) !important;
+}
+
+.coach-month-day-cell.nutri-day-cell.is-multi-selected {
+    border: 2px solid #9E7D4B !important;
+    background: #FFFDF9 !important;
+    box-shadow: 0 0 0 3px rgba(158, 125, 75, 0.25) !important;
+}
+
+.coach-month-day-cell.nutri-day-cell.is-matching-filter {
+    border: 2px solid #9E7D4B !important;
+    background: rgba(229, 203, 167, 0.18) !important;
+}
+
+.coach-month-day-cell.nutri-day-cell.is-dimmed {
+    opacity: 0.3 !important;
+    filter: grayscale(80%) !important;
+}
+
+.coach-cal-macro-bar {
+    width: 100%;
+    height: 3.5px;
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    background: #E4E4E7;
+    margin-top: 4px;
+}
+
+.coach-cal-macro-bar .macro-seg {
+    height: 100%;
+    transition: width 0.2s ease;
+}
+
+.coach-cal-macro-bar .seg-p {
+    background: #9E7D4B;
+}
+
+.coach-cal-macro-bar .seg-c {
+    background: #3B82F6;
+}
+
+.coach-cal-macro-bar .seg-f {
+    background: #F59E0B;
+}
+
+.coach-month-kcal-pill {
+    font-size: 8.5px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #121214;
+    background: rgba(229, 203, 167, 0.3);
+    border-radius: 4px;
+    padding: 1.5px 4px;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.coach-nutri-workstation {
+    margin-top: 18px;
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    animation: fadeInNutriWorkstation 0.25s ease-out;
+}
+
+@keyframes fadeInNutriWorkstation {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .coach-nutri-workstation {
+        padding: 14px 10px;
+        border-radius: 12px;
+    }
+    .coach-month-day-cell.nutri-day-cell {
+        min-height: 56px;
+        padding: 4px 3px;
+    }
+    .coach-month-kcal-pill {
+        font-size: 7.5px;
+        padding: 1px 2.5px;
+    }
+}
+
+.coach-nutri-week-card {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    overflow: hidden;
+}
+
+.coach-nutri-week-header {
+    background: #F8F9FA;
+    padding: 10px 16px;
+    border-bottom: 1px solid #E4E4E7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 800;
+    font-size: 12px;
+    color: #121214;
+}
+
+.coach-nutri-day-row {
+    padding: 12px 16px;
+    border-bottom: 1px solid #F4F4F5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.15s ease;
+    cursor: pointer;
+}
+
+.coach-nutri-day-row:last-child {
+    border-bottom: none;
+}
+
+.coach-nutri-day-row:hover {
+    background: #FFFDF9;
+}
+
+.coach-nutri-day-row.is-selected {
+    background: rgba(229, 203, 167, 0.15);
+    border-left: 3px solid #9E7D4B;
+}
+
 
 
 
