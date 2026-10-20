@@ -3692,19 +3692,114 @@ function initDiagnosisWizard() {
         });
     };
 
+    // Helper global de posicionamiento inteligente y dinámico de popovers / tooltips (Mobile-First Viewport Clamping)
+    window.positionTooltipPopover = function(popover, triggerBtn) {
+        if (!popover || !triggerBtn) return;
+        const vw = window.innerWidth || document.documentElement.clientWidth;
+        const margin = 12; // Margen de seguridad estricto contra el borde del viewport
+        
+        const btnRect = triggerBtn.getBoundingClientRect();
+        const btnCenter = btnRect.left + btnRect.width / 2;
+        
+        const wrap = triggerBtn.closest('.sens-tooltip-wrap');
+        const wrapRect = wrap ? wrap.getBoundingClientRect() : btnRect;
+        
+        // Ancho óptimo: máximo 310px, o ancho de pantalla menos márgenes
+        const targetW = Math.min(310, Math.max(240, vw - margin * 2));
+        popover.style.setProperty('width', `${targetW}px`, 'important');
+        popover.style.setProperty('max-width', `${targetW}px`, 'important');
+        popover.style.boxSizing = 'border-box';
+        
+        // Posicionamiento horizontal clampeado
+        const idealLeftInViewport = btnCenter - targetW / 2;
+        const clampedLeftInViewport = Math.max(margin, Math.min(idealLeftInViewport, vw - margin - targetW));
+        const offsetLeftFromWrap = clampedLeftInViewport - wrapRect.left;
+        
+        popover.style.setProperty('left', `${Math.round(offsetLeftFromWrap)}px`, 'important');
+        popover.style.setProperty('right', 'auto', 'important');
+        popover.style.setProperty('transform', 'none', 'important');
+        
+        // Flecha apuntando al centro exacto del botón disparador
+        const arrowX = btnCenter - clampedLeftInViewport;
+        const clampedArrowX = Math.max(16, Math.min(arrowX, targetW - 16));
+        popover.style.setProperty('--arrow-x', `${Math.round(clampedArrowX)}px`);
+        
+        // Comprobar espacio vertical disponible arriba
+        const popHeight = popover.offsetHeight || 160;
+        if (btnRect.top - popHeight - 16 < 10) {
+            popover.classList.add('pos-bottom');
+            popover.classList.remove('pos-top');
+        } else {
+            popover.classList.add('pos-top');
+            popover.classList.remove('pos-bottom');
+        }
+    };
+
+    window.closeAllTooltips = function() {
+        document.querySelectorAll('.sens-tooltip-wrap.active').forEach(w => {
+            w.classList.remove('active');
+            const pop = w.querySelector('.sens-tooltip-popover, .sens-streak-rule-popover');
+            if (pop) pop.classList.remove('pos-bottom', 'pos-top');
+        });
+    };
+
     document.addEventListener('click', (e) => {
+        const closeBtn = e.target.closest('.sens-popover-close-btn');
+        if (closeBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.closeAllTooltips();
+            return;
+        }
+
         const tooltipBtn = e.target.closest('.sens-tooltip-btn');
         if (tooltipBtn) {
             e.preventDefault();
             e.stopPropagation();
             const wrap = tooltipBtn.closest('.sens-tooltip-wrap');
             const isActive = wrap.classList.contains('active');
-            document.querySelectorAll('.sens-tooltip-wrap.active').forEach(w => w.classList.remove('active'));
-            if (!isActive) wrap.classList.add('active');
+            window.closeAllTooltips();
+            if (!isActive) {
+                wrap.classList.add('active');
+                const pop = wrap.querySelector('.sens-tooltip-popover, .sens-streak-rule-popover');
+                if (pop) {
+                    window.positionTooltipPopover(pop, tooltipBtn);
+                }
+            }
             return;
         }
+
         if (!e.target.closest('.sens-tooltip-popover, .sens-streak-rule-popover')) {
-            document.querySelectorAll('.sens-tooltip-wrap.active').forEach(w => w.classList.remove('active'));
+            window.closeAllTooltips();
+        }
+    });
+
+    // En dispositivos con cursor (Desktop), posicionar dinámicamente también en mouseenter
+    document.addEventListener('mouseover', (e) => {
+        const wrap = e.target.closest('.sens-tooltip-wrap');
+        if (wrap && !wrap.classList.contains('active')) {
+            const btn = wrap.querySelector('.sens-tooltip-btn');
+            const pop = wrap.querySelector('.sens-tooltip-popover, .sens-streak-rule-popover');
+            if (btn && pop) {
+                window.positionTooltipPopover(pop, btn);
+            }
+        }
+    });
+
+    // Cerrar tooltips al scrollear para paridad nativa iOS / Android
+    window.addEventListener('scroll', () => {
+        if (document.querySelector('.sens-tooltip-wrap.active')) {
+            window.closeAllTooltips();
+        }
+    }, { passive: true });
+
+    // Recalcular posición si cambia el tamaño o la orientación de pantalla
+    window.addEventListener('resize', () => {
+        const active = document.querySelector('.sens-tooltip-wrap.active');
+        if (active) {
+            const btn = active.querySelector('.sens-tooltip-btn');
+            const pop = active.querySelector('.sens-tooltip-popover, .sens-streak-rule-popover');
+            if (btn && pop) window.positionTooltipPopover(pop, btn);
         }
     });
 

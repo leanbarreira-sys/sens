@@ -9945,104 +9945,85 @@ input[type="range"]::-webkit-slider-thumb:hover {
     box-shadow: 0 0 10px rgba(229, 203, 167, 0.5) !important;
 }
 
-.sens-tooltip-popover {
+.sens-tooltip-popover,
+.sens-streak-rule-popover {
     position: absolute;
-    bottom: calc(100% + 10px);
+    bottom: calc(100% + 12px);
     left: 50%;
     transform: translateX(-50%);
-    width: 320px;
+    width: 290px;
+    max-width: calc(100vw - 24px);
     background: #18181C !important;
     border: 1px solid rgba(229, 203, 167, 0.45) !important;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.95), 0 0 16px rgba(229, 203, 167, 0.15) !important;
-    border-radius: 14px;
-    padding: 14px 16px;
-    z-index: 10000 !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.95), 0 0 16px rgba(229, 203, 167, 0.15) !important;
+    border-radius: 14px !important;
+    padding: 13px 15px !important;
+    z-index: 10005 !important;
     display: none;
-    text-align: left;
-    pointer-events: auto;
+    text-align: left !important;
+    pointer-events: auto !important;
     color: #FFFFFF !important;
+    box-sizing: border-box;
 }
 
 .sens-tooltip-wrap.active .sens-tooltip-popover,
-.sens-tooltip-wrap:hover .sens-tooltip-popover,
-.sens-tooltip-wrap:focus-within .sens-tooltip-popover {
+.sens-tooltip-wrap.active .sens-streak-rule-popover {
     display: block !important;
-    animation: fadeIn 0.2s ease;
+    animation: sensFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.sens-tooltip-popover::after {
+@media (hover: hover) and (pointer: fine) {
+    .sens-tooltip-wrap:hover .sens-tooltip-popover,
+    .sens-tooltip-wrap:hover .sens-streak-rule-popover {
+        display: block !important;
+        animation: sensFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+}
+
+.sens-tooltip-popover::after,
+.sens-streak-rule-popover::after {
     content: '';
     position: absolute;
     top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    left: var(--arrow-x, 50%) !important;
+    transform: translateX(-50%) !important;
     border-width: 6px;
     border-style: solid;
     border-color: #18181C transparent transparent transparent;
 }
 
-/* =============================================================================
-   POPOVER DE REGLAS DE RACHA (MÁXIMA LEGIBILIDAD & QUIET LUXURY OBSIDIAN)
-   ============================================================================= */
-.sens-streak-rule-popover {
-    position: absolute;
-    bottom: calc(100% + 12px);
-    width: 270px !important;
-    max-width: 86vw !important;
-    background: #18181C !important;
-    border: 1px solid rgba(229, 203, 167, 0.55) !important;
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.95), 0 0 16px rgba(229, 203, 167, 0.18) !important;
-    border-radius: 14px !important;
-    padding: 14px 16px !important;
-    z-index: 10005 !important;
-    color: #FFFFFF !important;
-    pointer-events: auto !important;
-    text-align: left !important;
+.sens-tooltip-popover.pos-bottom,
+.sens-streak-rule-popover.pos-bottom {
+    bottom: auto !important;
+    top: calc(100% + 12px) !important;
 }
 
-.sens-streak-rule-popover.align-left {
-    left: 0;
-    transform: none;
-}
-.sens-streak-rule-popover.align-left::after {
-    left: 20px;
-    transform: none;
+.sens-tooltip-popover.pos-bottom::after,
+.sens-streak-rule-popover.pos-bottom::after {
+    top: auto !important;
+    bottom: 100% !important;
+    border-color: transparent transparent #18181C transparent !important;
 }
 
-.sens-streak-rule-popover.align-center {
-    left: 50%;
-    transform: translateX(-50%);
-}
-.sens-streak-rule-popover.align-center::after {
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.sens-streak-rule-popover.align-right {
-    right: 0;
-    left: auto;
-    transform: none;
-}
-.sens-streak-rule-popover.align-right::after {
-    right: 20px;
-    left: auto;
-    transform: none;
+.sens-popover-close-btn {
+    background: transparent;
+    border: none;
+    color: #8E8E93;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0 4px;
+    cursor: pointer;
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease;
 }
 
-@media (max-width: 480px) {
-    .sens-streak-rule-popover,
-    .sens-streak-rule-popover.align-left,
-    .sens-streak-rule-popover.align-center,
-    .sens-streak-rule-popover.align-right {
-        left: -12px !important;
-        right: auto !important;
-        transform: none !important;
-        width: calc(100vw - 44px) !important;
-        max-width: 320px !important;
-    }
-    .sens-streak-rule-popover::after {
-        left: 28px !important;
-    }
+.sens-popover-close-btn:hover,
+.sens-popover-close-btn:active {
+    color: #E5CBA7;
 }
 
 .sens-streak-popover-header {
