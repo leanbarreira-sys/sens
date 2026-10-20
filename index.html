@@ -2785,9 +2785,15 @@
                     </div>
                 </div>
 
-                <!-- 3. Card Nutricional con Video de Fondo & Desglose de Calorías -->
+                <!-- 3. Card Nutricional con Carrusel Rotativo 4:5 de Comidas Reales -->
                 <div class="sens-nutri-summary-card" id="dashNutriSummaryCard" style="cursor: pointer;">
-                    <video class="sens-nutri-video-player" muted loop playsinline webkit-playsinline autoplay preload="auto" disablePictureInPicture disableremoteplayback style="background: #080809; object-fit: cover;">
+                    <!-- Carrusel de Imágenes de Alimentos en Alta Definición con Cross-Fade -->
+                    <div class="sens-nutri-carousel-stage" id="dashNutriCarouselStage">
+                        <img id="dashNutriFoodImageA" class="sens-nutri-food-bg active" alt="Comida actual" src="Nutricion/images/nut-002-huevo-entero-de-gallina.webp" onerror="this.onerror=null;this.src='Nutricion/images/nut-002-huevo-entero-de-gallina.webp'">
+                        <img id="dashNutriFoodImageB" class="sens-nutri-food-bg" alt="Siguiente comida" src="Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp" onerror="this.onerror=null;this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                    </div>
+                    <!-- Video Fallback sutil de respaldo -->
+                    <video class="sens-nutri-video-player" id="dashNutriVideoPlayer" muted loop playsinline webkit-playsinline autoplay preload="auto" disablePictureInPicture disableremoteplayback style="background: #080809; object-fit: cover; display: none;">
                         <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
                     </video>
                     <div class="sens-nutri-overlay-gradient"></div>
@@ -2809,24 +2815,24 @@
                                 </svg>
                             </button>
                         </div>
-                        <div class="sens-nutri-5cals-row">
-                            <div class="sens-5cals-chip">
+                        <div class="sens-nutri-5cals-row" id="dashNutri5calsRow">
+                            <div class="sens-5cals-chip highlight" data-meal-key="desayuno" title="Ver Desayuno">
                                 <span class="chip-name">Desayuno</span>
                                 <strong class="chip-val" id="calMealDesayuno">390 kcal</strong>
                             </div>
-                            <div class="sens-5cals-chip highlight">
+                            <div class="sens-5cals-chip" data-meal-key="almuerzo" title="Ver Almuerzo">
                                 <span class="chip-name">Almuerzo</span>
                                 <strong class="chip-val" id="calMealAlmuerzo">683 kcal</strong>
                             </div>
-                            <div class="sens-5cals-chip">
+                            <div class="sens-5cals-chip" data-meal-key="merienda" title="Ver Merienda">
                                 <span class="chip-name">Merienda</span>
                                 <strong class="chip-val" id="calMealMerienda">293 kcal</strong>
                             </div>
-                            <div class="sens-5cals-chip">
+                            <div class="sens-5cals-chip" data-meal-key="cena" title="Ver Cena">
                                 <span class="chip-name">Cena</span>
                                 <strong class="chip-val" id="calMealCena">390 kcal</strong>
                             </div>
-                            <div class="sens-5cals-chip">
+                            <div class="sens-5cals-chip" data-meal-key="snack" title="Ver Snack">
                                 <span class="chip-name">Snack</span>
                                 <strong class="chip-val" id="calMealSnack">195 kcal</strong>
                             </div>
@@ -4639,145 +4645,91 @@
                      ESTACIÓN 3: PRESCRIPCIÓN DE NUTRICIÓN, MACROS & COMIDAS
                      ================================================================= -->
                 <div class="coach-subpane" id="paneNutrition">
-                    <div class="coach-surface-card" style="padding: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
-                            <div>
-                                <span class="pill pill-champagne" style="font-size: 10px;">PRESCRIPCIÓN NUTRICIONAL DE PRECISIÓN</span>
-                                <h3 style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">
-                                    Calorías, Macros, Comidas &amp; Consejos
-                                </h3>
-                                <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">
-                                    Configurá el plan por objetivo y tipo de comida (Desayuno, Almuerzo, Merienda, Cena, Snacks) con cálculo proporcional automático.
-                                </p>
+                    <div class="coach-surface-card-light">
+                        <!-- ENCABEZADO Y SELECTOR TOGGLE DE VISIÓN -->
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                                <div>
+                                    <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;">PRESCRIPCIÓN NUTRICIONAL &amp; PERIODIZACIÓN</span>
+                                    <h3 style="font-size: 1.25rem; font-weight: 800; margin: 4px 0 0 0; color: #121214;">
+                                        Planificador Nutricional de Precisión
+                                    </h3>
+                                    <p style="font-size: 11.5px; color: #52525B; margin: 2px 0 0 0;">
+                                        Cargá masivamente la semana, gestioná el mes completo o explorá los 500 alimentos.
+                                    </p>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet" id="btnCoachNutriAthletePicker" aria-label="Cambiar alumno">
+                                        <span class="status-dot status-dot-active coachSyncStatusDot"></span>
+                                        <span class="pill-athlete-name coachSyncAthleteName">Seleccionar Alumno</span>
+                                        <span class="pill-plan-tag coachSyncAthletePlan">PLAN</span>
+                                        <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                                            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                                <button type="button" class="btn btn-primary btn-sm btn-open-clarity-planner-nutri" id="btnCoachOpenClarityNutri" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; font-size: 11.5px; padding: 7px 15px; border: none; box-shadow: 0 4px 15px rgba(229,203,167,0.35); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                                    <span>Planificador TDEE &amp; Macros (Clarity)</span>
+
+                            <!-- Toggle Superior de Visión (3 Tabs) -->
+                            <div class="coach-vision-toggle-strip" id="coachNutritionVisionToggleStrip">
+                                <button type="button" class="coach-vision-tab-btn active" data-target="wizard">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                    <span>Planif. Masivo</span>
                                 </button>
-                                <input type="hidden" id="coachNutritionAthleteSelector" value="">
-                                <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
-                                    id="btnCoachNutriAthletePicker" aria-label="Cambiar alumno">
-                                    <span class="status-dot status-dot-active coachSyncStatusDot"></span>
-                                    <span class="pill-athlete-name coachSyncAthleteName">Seleccionar Alumno</span>
-                                    <span class="pill-plan-tag coachSyncAthletePlan">PLAN</span>
-                                    <svg class="pill-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
+                                <button type="button" class="coach-vision-tab-btn" data-target="month">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <span>Plan Mensual</span>
+                                </button>
+                                <button type="button" class="coach-vision-tab-btn" data-target="library">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                                    <span>Biblioteca 500 Alimentos</span>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Copiloto Nutricional Automático según Ficha y Objetivo del Alumno -->
-                        <div class="coach-ai-recommendation-banner" id="coachNutritionAiRecBanner" style="margin-bottom: 18px;">
-                            <div class="ai-rec-header">
-                                <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">SUGERENCIA NUTRICIONAL SEGÚN FICHA</span>
-                                <button type="button" class="btn btn-outline btn-sm" id="btnApplySuggestedMacros" style="font-size: 10.5px; padding: 3px 10px;">
-                                    Aplicar Cálculo Sugerido en 1 Tap
-                                </button>
-                            </div>
-                            <p class="ai-rec-body" id="coachNutritionRecBodyText">
-                                Según el peso, nivel de actividad y objetivo de este alumno, se sugiere una ingesta de 2.150 kcal (165g Proteína • 210g Carbohidratos • 70g Grasas • 2.8L Agua).
-                            </p>
-                        </div>
-
-                        <!-- Target Calórico y Presets -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; background: rgba(0,0,0,0.025); border-radius: 14px; padding: 16px; margin-bottom: 20px;">
-                            <div>
-                                <label class="input-label">Meta Calórica Diaria (Kcal)</label>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <input type="number" id="coachTargetKcalInput" class="input-control" value="2200"
-                                        step="50" min="1200" max="5000"
-                                        style="font-size: 1.35rem; font-weight: 800; color: #9E7D4B; margin-bottom: 0;">
-                                    <span style="font-weight: 700; color: var(--text-muted); font-size: 12px;">kcal / día</span>
+                        <!-- VISTA 1: WIZARD NUTRICIONAL EN 4 PASOS -->
+                        <div id="coachNutritionWizardView">
+                            <div class="wizard-stepper-bar">
+                                <div class="wizard-step-node active" id="nutriStepNode1" onclick="CoachNutritionMaster.goToStep(1)">
+                                    <div class="wizard-step-circle">1</div>
+                                    <span class="wizard-step-label">Ficha &amp; Meta</span>
                                 </div>
-                                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;">
-                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
-                                        data-kcal="1800" style="font-size: 10.5px; padding: 4px 8px;">Déficit: 1800</button>
-                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
-                                        data-kcal="2100" style="font-size: 10.5px; padding: 4px 8px;">Recomp: 2100</button>
-                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
-                                        data-kcal="2400" style="font-size: 10.5px; padding: 4px 8px;">Mantenim: 2400</button>
-                                    <button type="button" class="btn btn-outline btn-sm coach-preset-kcal"
-                                        data-kcal="2700" style="font-size: 10.5px; padding: 4px 8px;">Fuerza: 2700</button>
+                                <div class="wizard-step-node" id="nutriStepNode2" onclick="CoachNutritionMaster.goToStep(2)">
+                                    <div class="wizard-step-circle">2</div>
+                                    <span class="wizard-step-label">Macros &amp; Horarios</span>
+                                </div>
+                                <div class="wizard-step-node" id="nutriStepNode3" onclick="CoachNutritionMaster.goToStep(3)">
+                                    <div class="wizard-step-circle">3</div>
+                                    <span class="wizard-step-label">Alimentos &amp; Gramos</span>
+                                </div>
+                                <div class="wizard-step-node" id="nutriStepNode4" onclick="CoachNutritionMaster.goToStep(4)">
+                                    <div class="wizard-step-circle">4</div>
+                                    <span class="wizard-step-label">Duplicar Semanas</span>
                                 </div>
                             </div>
+                            <div id="nutriWizardStepProgressText" style="text-align: center; font-size: 11.5px; font-weight: 700; color: #9E7D4B; margin-top: -12px; margin-bottom: 16px;">
+                                Paso 1 de 4 • Ficha Clínica &amp; Meta Calórica
+                            </div>
 
-                            <div>
-                                <label class="input-label">Distribución de Macronutrientes (Gramos)</label>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                                    <div>
-                                        <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Proteína (g)</span>
-                                        <input type="number" id="coachTargetProtInput" class="input-control" value="160" step="5" style="margin-bottom: 0;">
-                                        <span id="coachProtPctBadge" style="font-size: 10px; color: #9E7D4B; font-weight: 700; display: block; margin-top: 4px;">~29%</span>
-                                    </div>
-                                    <div>
-                                        <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Carbos (g)</span>
-                                        <input type="number" id="coachTargetCarbsInput" class="input-control" value="220" step="5" style="margin-bottom: 0;">
-                                        <span id="coachCarbsPctBadge" style="font-size: 10px; color: #9E7D4B; font-weight: 700; display: block; margin-top: 4px;">~40%</span>
-                                    </div>
-                                    <div>
-                                        <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">Grasas (g)</span>
-                                        <input type="number" id="coachTargetFatsInput" class="input-control" value="70" step="5" style="margin-bottom: 0;">
-                                        <span id="coachFatsPctBadge" style="font-size: 10px; color: #9E7D4B; font-weight: 700; display: block; margin-top: 4px;">~29%</span>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
-                                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Agua Diaria:</span>
-                                    <input type="number" id="coachTargetWaterInput" class="input-control" value="2.8" step="0.2"
-                                        style="width: 80px; margin-bottom: 0; padding: 4px 8px; height: 30px;">
-                                    <span style="font-size: 11px; color: var(--text-secondary);">Litros</span>
-                                </div>
+                            <div class="wizard-pane-step" id="nutriWizardPaneStep1">
+                                <div id="nutriStep1Dossier"></div>
+                            </div>
+                            <div class="wizard-pane-step" id="nutriWizardPaneStep2" style="display: none;">
+                                <div id="nutriStep2Macros"></div>
+                            </div>
+                            <div class="wizard-pane-step" id="nutriWizardPaneStep3" style="display: none;">
+                                <div id="nutriStep3Worktable"></div>
+                            </div>
+                            <div class="wizard-pane-step" id="nutriWizardPaneStep4" style="display: none;">
+                                <div id="nutriStep4Duplicate"></div>
                             </div>
                         </div>
 
-                        <!-- Filtros de Alimentos por Tipo de Comida y Objetivo -->
-                        <div style="margin-bottom: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                                <h4 style="font-size: 1.05rem; font-weight: 800; margin: 0;">
-                                    Alimentos &amp; Comidas Sugeridas (Por Momento y Objetivo)
-                                </h4>
-                                <span style="font-size: 11px; color: var(--text-muted);">
-                                    Tildá qué incluir, ajustá gramos o editá la ficha base del alimento.
-                                </span>
-                            </div>
+                        <!-- VISTA 2: VISIÓN MENSUAL -->
+                        <div id="coachNutritionMonthView" style="display: none;"></div>
 
-                            <!-- Barra de Momento de Comida -->
-                            <div class="coach-horizontal-pills" id="coachNutriMealTypeFilterBar" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px;">
-                                <button type="button" class="pill pill-champagne coach-nutri-meal-pill active" data-meal="all">Todas las Comidas</button>
-                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="desayuno">Desayuno</button>
-                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="almuerzo">Almuerzo</button>
-                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="merienda">Merienda</button>
-                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="cena">Cena</button>
-                                <button type="button" class="pill pill-dark coach-nutri-meal-pill" data-meal="snacks">Snacks / Pre-Post</button>
-                            </div>
-
-                            <div class="coach-food-selection-grid" id="coachFoodSelectionGrid">
-                                <!-- Inyectado dinámicamente con checkboxes, macros, momento de comida, gramos y botón Editar Base -->
-                            </div>
-                        </div>
-
-                        <!-- Nota / Directiva Nutricional de Nico con Chips Rápidos -->
-                        <div style="margin-bottom: 20px;">
-                            <label class="input-label" for="coachNutritionDirectiveInput">
-                                Directiva / Consejo Nutricional de Nico (Visible en el Portal del Alumno)
-                            </label>
-                            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
-                                <button type="button" class="pill pill-dark coach-quick-nutri-chip" data-text="Priorizá 35-40g de proteína en cada una de las 4 comidas principales. Sumá los carbohidratos complejos (arroz, papa o avena) alrededor de tu horario de entrenamiento.">Distribución Proteica 4 Comidas</button>
-                                <button type="button" class="pill pill-dark coach-quick-nutri-chip" data-text="Para maximizar saciedad en déficit, comenzá almuerzo y cena con el plato de hojas verdes + proteína magra, y tomá 500ml de agua 20 minutos antes de comer.">Protocolo Saciedad &amp; Déficit</button>
-                                <button type="button" class="pill pill-dark coach-quick-nutri-chip" data-text="Consumí la merienda o snack pre-entreno 60 minutos antes de la sesión (avena o fruta + proteína) para sostener niveles altos de fuerza.">Timing Pre &amp; Post Entreno</button>
-                            </div>
-                            <textarea id="coachNutritionDirectiveInput" class="input-control" rows="3"
-                                placeholder="Ej: Esta semana priorizá 1.8g de proteína por kg. Consumí los 200g de pollo al mediodía y la avena 60 min antes de la sesión de fuerza."></textarea>
-                        </div>
-
-                        <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                            <button type="button" class="btn btn-primary" id="btnSaveCoachNutritionPrescription"
-                                style="padding: 12px 26px; font-weight: 800; width: 100%; max-width: 340px;">
-                                Guardar Prescripción Nutricional
-                            </button>
-                        </div>
+                        <!-- VISTA 3: BIBLIOTECA DE 500 ALIMENTOS -->
+                        <div id="coachNutritionLibView" style="display: none;"></div>
                     </div>
                 </div>
 
@@ -6427,6 +6379,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Base de Datos Maestra de Nutrición SENS (500 Alimentos Oficiales) -->
+    <script src="nutrition_db.js?v=9.8"></script>
+
+    <!-- Motor de Planificación Nutricional de Precisión Coach OS -->
+    <script src="coach_nutrition_master.js?v=9.8"></script>
 
     <!-- Base de Datos Maestra de Ejercicios SENS (52 Ejercicios Oficiales) -->
     <script src="exercises_db.js?v=9.8"></script>

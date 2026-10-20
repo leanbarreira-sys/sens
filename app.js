@@ -322,43 +322,36 @@ const EXERCISE_CATALOG = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_E
     : [];
 
 // -----------------------------------------------------------------------------
-// CATÁLOGO DE ALIMENTOS BASE & HÁBITOS (Curados por Nico — Por Comida & Objetivo)
+// CATÁLOGO DE ALIMENTOS BASE & HÁBITOS (500 Alimentos SENS Master DB)
 // -----------------------------------------------------------------------------
-const FOOD_CATALOG = [
-    // Proteínas
-    { id: 'fd-p1', name: 'Pechuga de Pollo / Pavo', cat: 'protein', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 165, protPer100: 31, carbsPer100: 0, fatsPer100: 3.6, defaultGrams: 180, portion: '150 - 200g cocido', note: 'Proteína magra de altísimo valor biológico, digestión ágil y nula grasa saturada agregada.' },
-    { id: 'fd-p2', name: 'Huevos de Campo Enteros', cat: 'protein', meals: ['desayuno', 'merienda', 'cena', 'snacks'], goals: ['deficit', 'recomposicion', 'hipertrofia'], baseGrams: 100, calPer100: 143, protPer100: 12.6, carbsPer100: 0.8, fatsPer100: 9.5, defaultGrams: 120, portion: '2 a 4 unidades diarias', note: 'Aporte completo de aminoácidos esenciales, colina para la función cerebral y grasas saludables.' },
-    { id: 'fd-p3', name: 'Carne Vacuna Magra (Lomo, Cuadril)', cat: 'protein', meals: ['almuerzo', 'cena'], goals: ['recomposicion', 'hipertrofia'], baseGrams: 100, calPer100: 195, protPer100: 28, carbsPer100: 0, fatsPer100: 8.5, defaultGrams: 180, portion: '150 - 200g (2-3x sem)', note: 'Rica en hierro hemínico, zinc y creatina natural para soporte de fuerza y masa muscular.' },
-    { id: 'fd-p4', name: 'Atún al Natural / Salmón Blanco', cat: 'protein', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 130, protPer100: 28, carbsPer100: 0, fatsPer100: 1.5, defaultGrams: 150, portion: '1 lata o 150 - 180g filete', note: 'Proteína de fácil absorción y ácidos grasos que favorecen la recuperación tisular.' },
-    { id: 'fd-p5', name: 'Yogur Griego Natural (Sin Azúcar)', cat: 'protein', meals: ['desayuno', 'merienda', 'snacks'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 97, protPer100: 10, carbsPer100: 3.8, fatsPer100: 5, defaultGrams: 170, portion: '150 - 200g', note: 'Rico en caseína de digestión lenta y probióticos para la salud de la microbiota intestinal.' },
-    { id: 'fd-p6', name: 'Tofu Firme Orgánico', cat: 'protein', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 144, protPer100: 15.5, carbsPer100: 2.8, fatsPer100: 8.5, defaultGrams: 200, portion: '180 - 220g salteado', note: 'Excelente fuente de proteína vegetal completa para opciones basadas en plantas.' },
-    { id: 'fd-p7', name: 'Proteína de Suero (Whey Isolate)', cat: 'protein', meals: ['desayuno', 'merienda', 'snacks'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 30, calPer100: 380, protPer100: 85, carbsPer100: 3, fatsPer100: 1.5, defaultGrams: 30, portion: '1 scoop (25-30g)', note: 'Practicidad óptima para alcanzar los gramos diarios de proteína sin sumar grasas extras.' },
+const FOOD_CATALOG = (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0)
+    ? SENS_FOOD_LIBRARY
+    : (typeof window !== 'undefined' && Array.isArray(window.SENS_FOOD_LIBRARY) && window.SENS_FOOD_LIBRARY.length > 0)
+        ? window.SENS_FOOD_LIBRARY
+        : [];
 
-    // Carbohidratos
-    { id: 'fd-c1', name: 'Arroz Integral o Basmati al Vapor', cat: 'carbs', meals: ['almuerzo', 'cena'], goals: ['recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 130, protPer100: 2.7, carbsPer100: 28, fatsPer100: 0.3, defaultGrams: 160, portion: '1 taza cocida (150-180g)', note: 'Energía limpia y sostenida para reponer glucógeno muscular post-entrenamiento.' },
-    { id: 'fd-c2', name: 'Papa y Batata Horneadas con Piel', cat: 'carbs', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 86, protPer100: 1.6, carbsPer100: 20, fatsPer100: 0.1, defaultGrams: 180, portion: '1 unidad mediana (180g)', note: 'Ricas en potasio, almidón resistente y gran poder de saciedad sin pesadez digestiva.' },
-    { id: 'fd-c3', name: 'Avena Arrollada Tradicional', cat: 'carbs', meals: ['desayuno', 'merienda'], goals: ['recomposicion', 'hipertrofia'], baseGrams: 100, calPer100: 379, protPer100: 13.5, carbsPer100: 67, fatsPer100: 6.5, defaultGrams: 50, portion: '40 - 60g en porridge', note: 'Fibra betaglucano que estabiliza la glucemia y brinda saciedad prolongada.' },
-    { id: 'fd-c4', name: 'Quinoa Cocida', cat: 'carbs', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 120, protPer100: 4.4, carbsPer100: 21.3, fatsPer100: 1.9, defaultGrams: 150, portion: '1 taza cocida', note: 'Pseudocereal con perfil balanceado de carbohidratos complejos y micronutrientes.' },
-    { id: 'fd-c5', name: 'Frutas Enteras (Banana, Arándanos)', cat: 'carbs', meals: ['desayuno', 'merienda', 'snacks'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 89, protPer100: 1.1, carbsPer100: 22.8, fatsPer100: 0.3, defaultGrams: 150, portion: '1 a 2 porciones al día', note: 'Antioxidantes naturales, vitaminas y fructosa natural para energía previa a la sesión.' },
-    { id: 'fd-c6', name: 'Pan de Masa Madre Genuino', cat: 'carbs', meals: ['desayuno', 'merienda'], goals: ['recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 245, protPer100: 8.5, carbsPer100: 48, fatsPer100: 1.2, defaultGrams: 70, portion: '1 a 2 rebanadas tostadas', note: 'Fermentación lenta que degrada antinutrientes facilitando la asimilación digestiva.' },
-
-    // Grasas Saludables
-    { id: 'fd-g1', name: 'Palta (Aguacate)', cat: 'healthy_fats', meals: ['desayuno', 'almuerzo', 'merienda', 'cena'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 160, protPer100: 2, carbsPer100: 8.5, fatsPer100: 14.7, defaultGrams: 80, portion: '1/2 unidad al día', note: 'Ácidos grasos monoinsaturados que apoyan la salud cardiovascular y hormonal.' },
-    { id: 'fd-g2', name: 'Aceite de Oliva Extra Virgen (Crudo)', cat: 'healthy_fats', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 15, calPer100: 884, protPer100: 0, carbsPer100: 0, fatsPer100: 100, defaultGrams: 15, portion: '1 cucharada sopera (15ml)', note: 'Polifenoles y grasas antiinflamatorias esenciales para articulaciones.' },
-    { id: 'fd-g3', name: 'Frutos Secos (Nueces, Almendras)', cat: 'healthy_fats', meals: ['desayuno', 'merienda', 'snacks'], goals: ['recomposicion', 'hipertrofia'], baseGrams: 100, calPer100: 607, protPer100: 20, carbsPer100: 16, fatsPer100: 54, defaultGrams: 30, portion: '1 puñado cerrado (30g)', note: 'Densidad energética y magnesio para relajar el sistema neuromuscular.' },
-    { id: 'fd-g4', name: 'Semillas de Chía y Lino Molidas', cat: 'healthy_fats', meals: ['desayuno', 'merienda', 'snacks'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 486, protPer100: 16.5, carbsPer100: 42, fatsPer100: 30.7, defaultGrams: 15, portion: '1 cucharadita en yogur', note: 'Ácido alfa-linolénico (Omega 3 vegetal) y fibra soluble reguladora.' },
-
-    // Hidratación y Vegetales
-    { id: 'fd-h1', name: 'Agua Mineral / Filtrada', cat: 'hydration_veg', meals: ['desayuno', 'almuerzo', 'merienda', 'cena', 'snacks'], goals: ['deficit', 'recomposicion', 'hipertrofia', 'digestivo'], baseGrams: 100, calPer100: 0, protPer100: 0, carbsPer100: 0, fatsPer100: 0, defaultGrams: 500, portion: '35ml/kg (2.5L a 3.5L/día)', note: 'El medio fundamental para el rendimiento muscular y la eliminación de fatiga.' },
-    { id: 'fd-h2', name: 'Vegetales de Hoja Verde (Espinaca, Rúcula)', cat: 'hydration_veg', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 23, protPer100: 2.9, carbsPer100: 3.6, fatsPer100: 0.4, defaultGrams: 120, portion: 'Libre en almuerzo y cena', note: 'Nitratos naturales para vasodilatación y micronutrientes sin calorías vacías.' },
-    { id: 'fd-h3', name: 'Brócoli y Espárragos al Vapor', cat: 'hydration_veg', meals: ['almuerzo', 'cena'], goals: ['deficit', 'recomposicion', 'digestivo'], baseGrams: 100, calPer100: 34, protPer100: 2.8, carbsPer100: 6.6, fatsPer100: 0.4, defaultGrams: 150, portion: '1 taza colmada', note: 'Crucíferas con componentes antioxidantes y soporte a la digestión.' }
-];
+if (typeof window !== 'undefined') {
+    window.FOOD_CATALOG = FOOD_CATALOG;
+    if (typeof window.SENS_FOOD_LIBRARY === 'undefined') {
+        window.SENS_FOOD_LIBRARY = FOOD_CATALOG;
+    }
+}
 
 // Hidratación y gobernanza de Base Maestra vs. Alumno Puntual para Alimentos
 window.getResolvedFood = function(foodOrId, athleteId) {
-    const baseFood = typeof foodOrId === 'string'
-        ? FOOD_CATALOG.find(f => f.id === foodOrId)
-        : foodOrId;
+    if (!foodOrId) return null;
+    const searchId = typeof foodOrId === 'string' ? foodOrId : (foodOrId.id || foodOrId.codigo || '');
+    const searchName = typeof foodOrId === 'string' ? foodOrId : (foodOrId.name || foodOrId.name_es || '');
+    const legacyCode = typeof SENS_LEGACY_FOOD_MAP !== 'undefined' ? SENS_LEGACY_FOOD_MAP[searchId] : null;
+
+    let baseFood = FOOD_CATALOG.find(f => f.id === searchId || f.codigo === searchId || (legacyCode && f.codigo === legacyCode));
+    if (!baseFood && searchName) {
+        const clean = searchName.toLowerCase().trim();
+        baseFood = FOOD_CATALOG.find(f => (f.name && f.name.toLowerCase() === clean) || (f.name_es && f.name_es.toLowerCase() === clean));
+    }
+    if (!baseFood && typeof foodOrId === 'object') {
+        baseFood = foodOrId;
+    }
     if (!baseFood) return null;
 
     let resolved = Object.assign({}, baseFood);
@@ -374,6 +367,8 @@ window.getResolvedFood = function(foodOrId, athleteId) {
             }
         }
     } catch (e) {}
+
+    if (!resolved.image) resolved.image = resolved.image_url || resolved.imagen_path || resolved.thumbnail || '';
     return resolved;
 };
 
@@ -6719,6 +6714,11 @@ function initCoachOS() {
             if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
             if (typeof renderCoachAssignedExercises === 'function') renderCoachAssignedExercises();
         }
+        if (resolvedPaneId === 'paneNutrition') {
+            if (typeof CoachNutritionMaster !== 'undefined' && typeof CoachNutritionMaster.init === 'function') {
+                CoachNutritionMaster.init();
+            }
+        }
         if (resolvedPaneId === 'paneEvolution' && typeof CoachEvolutionEngine !== 'undefined' && typeof CoachEvolutionEngine.renderEvolutionPanel === 'function') {
             CoachEvolutionEngine.renderEvolutionPanel();
         }
@@ -6782,6 +6782,9 @@ function initCoachOS() {
     }
     if (typeof CoachEvolutionEngine !== 'undefined' && typeof CoachEvolutionEngine.init === 'function') {
         CoachEvolutionEngine.init();
+    }
+    if (typeof CoachNutritionMaster !== 'undefined' && typeof CoachNutritionMaster.init === 'function') {
+        CoachNutritionMaster.init();
     }
     if (typeof window.switchCoachSubTab === 'function') {
         window.switchCoachSubTab('paneAthletes');
@@ -7231,9 +7234,16 @@ function syncCoachMasterCard(athId) {
     if (typeof CoachWorkoutsMaster !== 'undefined' && typeof CoachWorkoutsMaster.syncActiveAthlete === 'function') {
         CoachWorkoutsMaster.syncActiveAthlete(athlete.id);
     }
+    if (typeof CoachNutritionMaster !== 'undefined' && typeof CoachNutritionMaster.syncActiveAthlete === 'function') {
+        CoachNutritionMaster.syncActiveAthlete(athlete.id);
+    }
     if (typeof CoachEvolutionEngine !== 'undefined' && typeof CoachEvolutionEngine.syncActiveAthlete === 'function') {
         CoachEvolutionEngine.syncActiveAthlete(athlete.id);
     }
+
+    // Sincronizar selectores de píldora de alumno en cabeceras de módulos (Quiet Luxury)
+    document.querySelectorAll('.coachSyncAthleteName').forEach(el => el.textContent = athlete.full_name);
+    document.querySelectorAll('.coachSyncAthletePlan').forEach(el => el.textContent = planBadgeText);
 }
 
 let coachAthletesTierFilter = 'all';
@@ -11664,7 +11674,255 @@ function updateNutriSummaryCardData() {
     if (calMerienda) calMerienda.textContent = `${Math.round(targetKcal * 0.15)} kcal`;
     if (calCena) calCena.textContent = `${Math.round(targetKcal * 0.20)} kcal`;
     if (calSnack) calSnack.textContent = `${Math.round(targetKcal * 0.10)} kcal`;
+
+    // 6. Lanzar Carrusel Dinámico 4:5 con Rotación de Comidas y Alimentos Oficiales
+    if (typeof initDashNutriCarousel === 'function') {
+        initDashNutriCarousel();
+    }
 }
+
+let dashNutriCarouselTimer = null;
+let dashNutriCurrentMealIndex = 0;
+let dashNutriMealsData = [];
+
+/**
+ * Carrusel Rotativo Automático 4:5 de Nutrición (Quiet Luxury / Senior UX Standards)
+ * Alterna suavemente cada 2.5s entre las 5 ingestas del día (Desayuno, Almuerzo, Merienda, Cena, Snack).
+ * Muestra la imagen HD real del primer alimento prescrito (o fallback de SENS_FOOD_LIBRARY),
+ * resalta la pill correspondiente con sus calorías y sincroniza el copy editorial.
+ */
+function initDashNutriCarousel() {
+    const card = document.getElementById('dashNutriSummaryCard');
+    const imgA = document.getElementById('dashNutriFoodImageA');
+    const imgB = document.getElementById('dashNutriFoodImageB');
+    const chipsRow = document.getElementById('dashNutri5calsRow');
+    if (!card || !imgA || !imgB) return;
+
+    // Obtener plan de nutrición prescrito del alumno activo
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    let userPlan = null;
+    try {
+        const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`) ||
+                    localStorage.getItem(`sens_coach_assigned_nutrition_${athId}`);
+        if (raw) userPlan = JSON.parse(raw);
+    } catch (e) {}
+
+    // Si no está en localStorage, intentar de AppState.profile
+    if (!userPlan && AppState?.profile?.prescribed_nutrition) {
+        userPlan = AppState.profile.prescribed_nutrition;
+    }
+
+    // Determinar día de la semana para nutrición (day1 = Lunes ... day7 = Domingo)
+    const selectedDate = AppState.selectedDate || new Date();
+    const dayOfWeek = selectedDate.getDay(); // 0: Dom, 1: Lun, 2: Mar, ...
+    const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
+    const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
+
+    const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
+    const mealLabels = {
+        desayuno: 'Desayuno',
+        almuerzo: 'Almuerzo',
+        merienda: 'Merienda',
+        cena: 'Cena',
+        snack: 'Snack'
+    };
+
+    // Alimentos representativos base de la Master DB de 500 alimentos si la comida aún no tiene prescripción
+    const fallbackFoodByMeal = {
+        desayuno: {
+            name: 'Huevo Entero de Gallina (Poché o Duro)',
+            image: 'Nutricion/images/nut-002-huevo-entero-de-gallina.webp',
+            portion: '2 unidades (100g)',
+            protein: 26,
+            carbs: 2,
+            fats: 19
+        },
+        almuerzo: {
+            name: 'Pechuga de Pollo a la Plancha',
+            image: 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp',
+            portion: '180g con Arroz Integral',
+            protein: 46,
+            carbs: 45,
+            fats: 6
+        },
+        merienda: {
+            name: 'Yogur Griego Natural sin Azúcar',
+            image: 'Nutricion/images/nut-017-yogur-griego-natural-sin-azucar.webp',
+            portion: '170g con Frutos Secos',
+            protein: 20,
+            carbs: 18,
+            fats: 8
+        },
+        cena: {
+            name: 'Salmón Rosado a la Plancha',
+            image: 'Nutricion/images/nut-010-salmon-rosado-trucha-salmonada-a-la-plancha.webp',
+            portion: '180g con Vegetales Asados',
+            protein: 38,
+            carbs: 12,
+            fats: 16
+        },
+        snack: {
+            name: 'Almendras o Nueces Naturales',
+            image: 'Nutricion/images/nut-042-almendras-o-nueces-naturales.webp',
+            portion: '30g (1 puñado)',
+            protein: 7,
+            carbs: 6,
+            fats: 18
+        }
+    };
+
+    // Estructurar array de 5 ingestas
+    dashNutriMealsData = mealKeys.map(key => {
+        const mealFoods = dayMeals[key] || [];
+        const firstFood = mealFoods.length > 0 ? mealFoods[0] : null;
+        let foodName = '';
+        let foodImage = '';
+        let foodPortion = '';
+        let foodProt = 0;
+        let foodCarbs = 0;
+        let foodFats = 0;
+
+        if (firstFood) {
+            const resolved = (typeof window.getResolvedFood === 'function')
+                ? window.getResolvedFood(firstFood.id || firstFood.codigo || firstFood, athId)
+                : firstFood;
+            foodName = firstFood.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
+            foodImage = resolved?.image || resolved?.image_url || resolved?.imagen_path || firstFood.image || '';
+            foodPortion = firstFood.grams ? `${firstFood.grams}g` : (resolved?.portion || '1 porción');
+            foodProt = firstFood.protein || resolved?.protPer100 || 25;
+            foodCarbs = firstFood.carbs || resolved?.carbsPer100 || 20;
+            foodFats = firstFood.fats || resolved?.fatsPer100 || 10;
+        }
+
+        const fallback = fallbackFoodByMeal[key];
+        if (!foodImage) {
+            foodName = fallback.name;
+            foodImage = fallback.image;
+            foodPortion = fallback.portion;
+            foodProt = fallback.protein;
+            foodCarbs = fallback.carbs;
+            foodFats = fallback.fats;
+        }
+
+        const calEl = document.getElementById(`calMeal${key.charAt(0).toUpperCase() + key.slice(1)}`);
+        const mealKcal = calEl ? parseInt(calEl.textContent, 10) || 0 : 0;
+
+        return {
+            key,
+            label: mealLabels[key],
+            foodName,
+            foodImage,
+            foodPortion,
+            foodProt: Math.round(foodProt),
+            foodCarbs: Math.round(foodCarbs),
+            foodFats: Math.round(foodFats),
+            mealKcal
+        };
+    });
+
+    function showMeal(index, instant = false) {
+        if (!dashNutriMealsData || dashNutriMealsData.length === 0) return;
+        dashNutriCurrentMealIndex = (index + dashNutriMealsData.length) % dashNutriMealsData.length;
+        const item = dashNutriMealsData[dashNutriCurrentMealIndex];
+        if (!item) return;
+
+        // 1. Cross-fade suave entre capas A y B
+        const showingA = imgA.classList.contains('active');
+        const activeImg = showingA ? imgA : imgB;
+        const nextImg = showingA ? imgB : imgA;
+
+        nextImg.src = item.foodImage;
+        nextImg.onerror = () => {
+            nextImg.src = fallbackFoodByMeal[item.key]?.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+        };
+
+        if (instant) {
+            nextImg.classList.add('active');
+            activeImg.classList.remove('active');
+        } else {
+            requestAnimationFrame(() => {
+                nextImg.classList.add('active');
+                activeImg.classList.remove('active');
+            });
+        }
+
+        // 2. Resaltar pill en la fila de 5 comidas
+        document.querySelectorAll('#dashNutri5calsRow .sens-5cals-chip').forEach(chip => {
+            const isMatch = chip.getAttribute('data-meal-key') === item.key;
+            chip.classList.toggle('highlight', isMatch);
+        });
+
+        // 3. Sincronizar textos y métricas editoriales
+        const eyebrow = document.getElementById('dashNutriDayDateLabel');
+        const caloriesHero = document.getElementById('dashNutriCaloriesHero');
+        const subText = document.getElementById('dashNutriSubText');
+        const targetBadge = document.getElementById('dashNutriTargetBadge');
+
+        const sDate = AppState.selectedDate || new Date();
+        const isToday = isSameDay(sDate, new Date());
+
+        if (eyebrow) {
+            eyebrow.textContent = isToday ? `Nutrición de Hoy • ${item.label}` : `Nutrición • ${item.label}`;
+        }
+        if (caloriesHero) {
+            caloriesHero.textContent = `${item.label} • ${item.mealKcal > 0 ? item.mealKcal.toLocaleString('es-AR') + ' kcal' : 'Nutrición SENS'}`;
+        }
+        if (subText) {
+            subText.textContent = `${item.foodName} (${item.foodPortion}) • ${item.foodProt}g Prot`;
+        }
+        if (targetBadge && item.foodProt > 0) {
+            targetBadge.textContent = `${item.foodProt}g Prot • ${item.foodCarbs}g Carbs`;
+        }
+    }
+
+    function startTimer() {
+        stopTimer();
+        dashNutriCarouselTimer = setInterval(() => {
+            showMeal(dashNutriCurrentMealIndex + 1);
+        }, 2500);
+    }
+
+    function stopTimer() {
+        if (dashNutriCarouselTimer) {
+            clearInterval(dashNutriCarouselTimer);
+            dashNutriCarouselTimer = null;
+        }
+    }
+
+    // Interacción al clickear cada pill de comida
+    if (chipsRow && !chipsRow._hasNutriCarouselBound) {
+        chipsRow._hasNutriCarouselBound = true;
+        chipsRow.addEventListener('click', (e) => {
+            const chip = e.target.closest('.sens-5cals-chip');
+            if (!chip) return;
+            e.stopPropagation();
+            const mealKey = chip.getAttribute('data-meal-key');
+            const targetIdx = dashNutriMealsData.findIndex(m => m.key === mealKey);
+            if (targetIdx !== -1) {
+                showMeal(targetIdx);
+                stopTimer();
+                setTimeout(startTimer, 5000);
+            }
+        });
+    }
+
+    // Pausar en hover/touch para lectura cómoda
+    if (!card._hasNutriHoverBound) {
+        card._hasNutriHoverBound = true;
+        card.addEventListener('mouseenter', stopTimer);
+        card.addEventListener('mouseleave', startTimer);
+        card.addEventListener('touchstart', stopTimer, { passive: true });
+        card.addEventListener('touchend', () => {
+            setTimeout(startTimer, 3000);
+        }, { passive: true });
+    }
+
+    // Iniciar con la primera comida (Desayuno) y activar rotador
+    showMeal(0, true);
+    startTimer();
+}
+
+window.initDashNutriCarousel = initDashNutriCarousel;
 
 /**
  * Calcula las métricas metabólicas del día seleccionado (Ecuación real de balance energético)
@@ -19021,12 +19279,14 @@ if (document.readyState === 'loading') {
         try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
         try { initClarityTrainerModule(); } catch (e) {}
         try { CoachWorkoutsMaster.init(); } catch (e) {}
+        try { CoachNutritionMaster.init(); } catch (e) {}
         try { CoachEvolutionEngine.init(); } catch (e) {}
     });
 } else {
     try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
     try { initClarityTrainerModule(); } catch (e) {}
     try { CoachWorkoutsMaster.init(); } catch (e) {}
+    try { CoachNutritionMaster.init(); } catch (e) {}
     try { CoachEvolutionEngine.init(); } catch (e) {}
 }
 

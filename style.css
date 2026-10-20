@@ -12516,6 +12516,44 @@ body.in-portal .sens-nutri-summary-card,
     cursor: pointer;
 }
 
+/* Contenedor y capas del carrusel fotográfico 4:5 de alimentos */
+.sens-nutri-carousel-stage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    background: #09090B !important;
+    border-radius: 20px;
+    pointer-events: none;
+}
+
+.sens-nutri-food-bg {
+    position: absolute;
+    inset: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    object-fit: cover;
+    object-position: center;
+    border-radius: 20px;
+    opacity: 0;
+    transform: scale(1.05) translateZ(0);
+    -webkit-transform: scale(1.05) translateZ(0);
+    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+    pointer-events: none;
+    user-select: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.sens-nutri-food-bg.active {
+    opacity: 1;
+    transform: scale(1.0) translateZ(0);
+    -webkit-transform: scale(1.0) translateZ(0);
+}
+
 .sens-nutri-video-player {
     position: absolute;
     inset: -6px;
@@ -12596,11 +12634,21 @@ body.in-portal .sens-nutri-summary-card,
     text-align: center;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     min-width: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sens-5cals-chip:hover {
+    background: rgba(229, 203, 167, 0.16) !important;
+    border-color: rgba(229, 203, 167, 0.35) !important;
+    transform: translateY(-1px);
 }
 
 .sens-5cals-chip.highlight {
-    background: rgba(229, 203, 167, 0.22) !important;
-    border: none !important;
+    background: rgba(229, 203, 167, 0.28) !important;
+    border: 1px solid rgba(229, 203, 167, 0.6) !important;
+    box-shadow: 0 0 12px rgba(229, 203, 167, 0.25);
+    transform: translateY(-1.5px);
 }
 
 .sens-5cals-chip .chip-name {
