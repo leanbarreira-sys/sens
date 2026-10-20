@@ -2724,8 +2724,16 @@
                 <div class="sens-training-video-card" id="dashTrainingVideoCard">
                     <!-- Estado A: Con Entrenamiento Programado para el Día Seleccionado -->
                     <div class="sens-training-card-active" id="dashWorkoutActivePane">
+                        <!-- Skeleton Loader de Precisión Ultra-Fluido -->
+                        <div class="sens-video-skeleton" id="dashWorkoutVideoSkeleton">
+                            <div class="sens-skeleton-shimmer"></div>
+                            <div class="sens-skeleton-badge">
+                                <span class="sens-skeleton-pulse-dot"></span>
+                                <span>Cargando técnica HD...</span>
+                            </div>
+                        </div>
                         <video class="sens-video-loop-player" id="dashWorkoutVideoPlayer" muted loop playsinline webkit-playsinline autoplay preload="auto" disablePictureInPicture disableremoteplayback style="background: #080809; object-fit: cover;">
-                            <source id="dashWorkoutVideoSource" src="EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4" type="video/mp4">
+                            <source id="dashWorkoutVideoSource" src="EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4" type="video/mp4">
                         </video>
                         <div class="sens-video-overlay-gradient"></div>
                         <div class="sens-video-top-badges">
@@ -3137,9 +3145,17 @@
                     <h3 class="sens-exercise-modal-title" id="modalExName">Sentadilla Copa con Pausa</h3>
 
                     <!-- Video en Bucle de Alta Resolución -->
-                    <div class="sens-exercise-modal-video-wrap">
+                    <div class="sens-exercise-modal-video-wrap" style="position: relative;">
+                        <!-- Skeleton Loader de Técnica Modal -->
+                        <div class="sens-video-skeleton" id="modalExVideoSkeleton">
+                            <div class="sens-skeleton-shimmer"></div>
+                            <div class="sens-skeleton-badge">
+                                <span class="sens-skeleton-pulse-dot"></span>
+                                <span>Cargando técnica HD...</span>
+                            </div>
+                        </div>
                         <video autoplay muted loop playsinline class="sens-exercise-modal-video" id="modalExVideo">
-                            <source src="EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4" type="video/mp4">
+                            <source src="EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4" type="video/mp4">
                         </video>
                         <div class="sens-exercise-modal-video-cue" id="modalExCueText">
                             Pecho erguido, empuje activo desde los talones, 1 segundo de pausa isométrica en el fondo
@@ -5143,8 +5159,16 @@
             <h3 id="videoModalTitle" style="font-size: 1.3rem; margin-bottom: 16px; color: var(--accent-primary);">
                 Demostración Técnica</h3>
             <div
-                style="border-radius: 12px; overflow: hidden; background: #000; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 12px;">
-                <video id="videoModalPlayer" src="EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4" controls autoplay loop playsinline
+                style="position: relative; border-radius: 12px; overflow: hidden; background: #000; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 12px;">
+                <!-- Skeleton Loader de Demostración Modal -->
+                <div class="sens-video-skeleton" id="videoModalPlayerSkeleton">
+                    <div class="sens-skeleton-shimmer"></div>
+                    <div class="sens-skeleton-badge">
+                        <span class="sens-skeleton-pulse-dot"></span>
+                        <span>Cargando video HD...</span>
+                    </div>
+                </div>
+                <video id="videoModalPlayer" src="EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4" controls autoplay loop playsinline
                     style="width: 100%; display: block; max-height: 380px; object-fit: cover;"></video>
             </div>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 14px; text-align: left;">

@@ -545,6 +545,24 @@ function getResolvedExercise(exOrId, athleteId = null) {
     return resolved;
 }
 
+/**
+ * Resuelve la URL de video optimizada y semántica de un ejercicio con retrocompatibilidad
+ */
+function getResolvedExerciseVideoUrl(exerciseOrId) {
+    if (!exerciseOrId) return '';
+    const ex = getResolvedExercise(exerciseOrId);
+    if (!ex) {
+        if (typeof exerciseOrId === 'string' && exerciseOrId.includes('.mp4')) {
+            const rawId = exerciseOrId.split('/').pop().replace('.mp4', '').split('_')[0];
+            const found = SENS_EXERCISE_LIBRARY.find(e => e.id === rawId);
+            if (found) return found.video_url || found.video_local_path;
+            return exerciseOrId;
+        }
+        return '';
+    }
+    return ex.video_url || ex.video_local_path || ex.video || '';
+}
+
 // Hidratar inicialmente todos los ejercicios en memoria
 function hydrateExerciseLibraryInMemory() {
     let globalMap = {};
@@ -582,10 +600,25 @@ if (typeof window !== 'undefined') {
     window.getExerciseLocalized = getExerciseLocalized;
     window.calculateExerciseKcal = calculateExerciseKcal;
     window.getResolvedExercise = getResolvedExercise;
+    window.getResolvedExerciseVideoUrl = getResolvedExerciseVideoUrl;
     window.hydrateExerciseLibraryInMemory = hydrateExerciseLibraryInMemory;
     
     // Retrocompatibilidad con EXERCISE_CATALOG
     window.EXERCISE_CATALOG = SENS_EXERCISE_LIBRARY;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        SENS_EXERCISE_LIBRARY,
+        SENS_LEGACY_EXERCISE_ID_MAP,
+        SENS_TRAINING_TAXONOMY_TREE,
+        getExerciseTaxonomy,
+        getExerciseLocalized,
+        calculateExerciseKcal,
+        getResolvedExercise,
+        getResolvedExerciseVideoUrl,
+        hydrateExerciseLibraryInMemory
+    };
 }
 `;
 

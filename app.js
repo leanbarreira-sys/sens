@@ -400,8 +400,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 90,
                 defaultWeight: 22.5,
                 defaultReps: 10,
-                video_url: 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4',
-                video: 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4',
+                video: 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4'
             },
             {
                 id: '43bad14a-f720-45bd-8e3e-acdb7a2cd3ec',
@@ -412,8 +412,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 75,
                 defaultWeight: 18,
                 defaultReps: 11,
-                video_url: 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4',
-                video: 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec_press-de-banca-plano-con-mancuernas.mp4',
+                video: 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec_press-de-banca-plano-con-mancuernas.mp4'
             },
             {
                 id: '7f93fada-7563-4965-b189-2ffadbd5a967',
@@ -424,8 +424,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 60,
                 defaultWeight: 16,
                 defaultReps: 10,
-                video_url: 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4',
-                video: 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967_remo-con-mancuerna-a-una-mano-en-banco.mp4',
+                video: 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967_remo-con-mancuerna-a-una-mano-en-banco.mp4'
             },
             {
                 id: '9e317f1f-4918-4f3e-9c57-eb0adfe7f004',
@@ -436,8 +436,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 75,
                 defaultWeight: 14,
                 defaultReps: 9,
-                video_url: 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4',
-                video: 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004_press-militar-sentado-con-mancuernas.mp4',
+                video: 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004_press-militar-sentado-con-mancuernas.mp4'
             }
         ]
     },
@@ -455,8 +455,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 90,
                 defaultWeight: 20,
                 defaultReps: 10,
-                video_url: 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4',
-                video: 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4',
+                video: 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4'
             },
             {
                 id: '1c022132-227d-4411-bc96-8e13569090d0',
@@ -467,8 +467,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 90,
                 defaultWeight: 35,
                 defaultReps: 12,
-                video_url: 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4',
-                video: 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0_hip-thrust-con-barra-en-banco.mp4',
+                video: 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0_hip-thrust-con-barra-en-banco.mp4'
             },
             {
                 id: 'f9906ab7-1991-41dd-8fc6-be4262039311',
@@ -479,8 +479,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 60,
                 defaultWeight: 12,
                 defaultReps: 10,
-                video_url: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4',
-                video: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311_estocadas-bulgaras-con-mancuernas.mp4',
+                video: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311_estocadas-bulgaras-con-mancuernas.mp4'
             },
             {
                 id: '3c13bcc2-f7b0-4e61-a85c-899ede97b0a8',
@@ -491,8 +491,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 45,
                 defaultWeight: 16,
                 defaultReps: 15,
-                video_url: 'EJERCICIOS/videos_loop_final/3c13bcc2-f7b0-4e61-a85c-899ede97b0a8.mp4',
-                video: 'EJERCICIOS/videos_loop_final/3c13bcc2-f7b0-4e61-a85c-899ede97b0a8.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/3c13bcc2-f7b0-4e61-a85c-899ede97b0a8_step-up-en-cajon-controlado.mp4',
+                video: 'EJERCICIOS/videos_loop_final/3c13bcc2-f7b0-4e61-a85c-899ede97b0a8_step-up-en-cajon-controlado.mp4'
             }
         ]
     },
@@ -510,8 +510,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 75,
                 defaultWeight: 16,
                 defaultReps: 15,
-                video_url: 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4',
-                video: 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31_kettlebell-swing-estilo-ruso.mp4',
+                video: 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31_kettlebell-swing-estilo-ruso.mp4'
             },
             {
                 id: 'f37de49f-5f7b-4fbf-a392-495f38f7fd1f',
@@ -522,8 +522,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 60,
                 defaultWeight: 0,
                 defaultReps: 10,
-                video_url: 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4',
-                video: 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f_flexiones-de-brazos-push-ups-con-pausa.mp4',
+                video: 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f_flexiones-de-brazos-push-ups-con-pausa.mp4'
             },
             {
                 id: '2ae448e6-0a99-4664-898d-bfbf94080b37',
@@ -534,8 +534,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 60,
                 defaultWeight: 0,
                 defaultReps: 45,
-                video_url: 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4',
-                video: 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37_plancha-frontal-con-retroversion-pelvica-rkc.mp4',
+                video: 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37_plancha-frontal-con-retroversion-pelvica-rkc.mp4'
             },
             {
                 id: 'fe1dba64-4f45-4aa3-bbd2-8266736028a1',
@@ -546,8 +546,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 60,
                 defaultWeight: 0,
                 defaultReps: 5,
-                video_url: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4',
-                video: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1_movilidad-gato-vaca-y-descompresion-espinal.mp4',
+                video: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1_movilidad-gato-vaca-y-descompresion-espinal.mp4'
             }
         ]
     },
@@ -565,8 +565,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 45,
                 defaultWeight: 0,
                 defaultReps: 10,
-                video_url: 'EJERCICIOS/videos_loop_final/69ee9cd0-6a58-4e5c-875a-80e273f430ab.mp4',
-                video: 'EJERCICIOS/videos_loop_final/69ee9cd0-6a58-4e5c-875a-80e273f430ab.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/69ee9cd0-6a58-4e5c-875a-80e273f430ab_deadbug-con-control-lumbar-y-respiracion.mp4',
+                video: 'EJERCICIOS/videos_loop_final/69ee9cd0-6a58-4e5c-875a-80e273f430ab_deadbug-con-control-lumbar-y-respiracion.mp4'
             },
             {
                 id: 'e434ec6f-fe4f-4007-9daf-71ab2e92e53d',
@@ -577,8 +577,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 45,
                 defaultWeight: 0,
                 defaultReps: 12,
-                video_url: 'EJERCICIOS/videos_loop_final/e434ec6f-fe4f-4007-9daf-71ab2e92e53d.mp4',
-                video: 'EJERCICIOS/videos_loop_final/e434ec6f-fe4f-4007-9daf-71ab2e92e53d.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/e434ec6f-fe4f-4007-9daf-71ab2e92e53d_bird-dog-dinamico-controlado.mp4',
+                video: 'EJERCICIOS/videos_loop_final/e434ec6f-fe4f-4007-9daf-71ab2e92e53d_bird-dog-dinamico-controlado.mp4'
             },
             {
                 id: '41743325-8b06-409f-89c1-bb83c2a3b407',
@@ -589,8 +589,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 45,
                 defaultWeight: 0,
                 defaultReps: 10,
-                video_url: 'EJERCICIOS/videos_loop_final/41743325-8b06-409f-89c1-bb83c2a3b407.mp4',
-                video: 'EJERCICIOS/videos_loop_final/41743325-8b06-409f-89c1-bb83c2a3b407.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/41743325-8b06-409f-89c1-bb83c2a3b407_rotaciones-toracicas-en-posicion-cuadrupeda.mp4',
+                video: 'EJERCICIOS/videos_loop_final/41743325-8b06-409f-89c1-bb83c2a3b407_rotaciones-toracicas-en-posicion-cuadrupeda.mp4'
             }
         ]
     },
@@ -608,8 +608,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 75,
                 defaultWeight: 24,
                 defaultReps: 40,
-                video_url: 'EJERCICIOS/videos_loop_final/9ad152e4-49ca-4768-8b9e-b1a059e2c40d.mp4',
-                video: 'EJERCICIOS/videos_loop_final/9ad152e4-49ca-4768-8b9e-b1a059e2c40d.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/9ad152e4-49ca-4768-8b9e-b1a059e2c40d_paseo-del-granjero-con-mancuernas-farmer-walk.mp4',
+                video: 'EJERCICIOS/videos_loop_final/9ad152e4-49ca-4768-8b9e-b1a059e2c40d_paseo-del-granjero-con-mancuernas-farmer-walk.mp4'
             },
             {
                 id: 'f9906ab7-1991-41dd-8fc6-be4262039311',
@@ -620,8 +620,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 90,
                 defaultWeight: 14,
                 defaultReps: 9,
-                video_url: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4',
-                video: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311_estocadas-bulgaras-con-mancuernas.mp4',
+                video: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311_estocadas-bulgaras-con-mancuernas.mp4'
             },
             {
                 id: 'ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb',
@@ -632,8 +632,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 60,
                 defaultWeight: 45,
                 defaultReps: 10,
-                video_url: 'EJERCICIOS/videos_loop_final/ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb.mp4',
-                video: 'EJERCICIOS/videos_loop_final/ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb_jalon-al-pecho-en-polea-con-agarre-neutro.mp4',
+                video: 'EJERCICIOS/videos_loop_final/ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb_jalon-al-pecho-en-polea-con-agarre-neutro.mp4'
             }
         ]
     },
@@ -651,8 +651,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 60,
                 defaultWeight: 0,
                 defaultReps: 35,
-                video_url: 'EJERCICIOS/videos_loop_final/bd12321c-1ad3-489e-ad89-8574e51a9e4b.mp4',
-                video: 'EJERCICIOS/videos_loop_final/bd12321c-1ad3-489e-ad89-8574e51a9e4b.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/bd12321c-1ad3-489e-ad89-8574e51a9e4b_dominadas-asistidas-en-maquina-o-banda.mp4',
+                video: 'EJERCICIOS/videos_loop_final/bd12321c-1ad3-489e-ad89-8574e51a9e4b_dominadas-asistidas-en-maquina-o-banda.mp4'
             },
             {
                 id: 'fe1dba64-4f45-4aa3-bbd2-8266736028a1',
@@ -663,8 +663,8 @@ const WORKOUT_DAYS_DATA = {
                 rest: 45,
                 defaultWeight: 0,
                 defaultReps: 5,
-                video_url: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4',
-                video: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4'
+                video_url: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1_movilidad-gato-vaca-y-descompresion-espinal.mp4',
+                video: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1_movilidad-gato-vaca-y-descompresion-espinal.mp4'
             }
         ]
     },
@@ -4637,9 +4637,9 @@ function initWorkoutManager() {
 // -----------------------------------------------------------------------------
 // GESTOR DE ENTRENAMIENTO VIDEO-FIRST & ALTO IMPACTO (ESTILO PILARES SENS)
 // -----------------------------------------------------------------------------
-const SENS_EXERCISE_MOCKUP_VIDEO = 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4';
+const SENS_EXERCISE_MOCKUP_VIDEO = 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4';
 const SENS_EXERCISE_VIDEOS = [
-    'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4'
+    'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4'
 ];
 
 function hashCode(str) {
@@ -5235,7 +5235,10 @@ function renderWorkoutDay(dayKey) {
 
                 groupedHtml += `
                     <div class="sens-ex-compact-card ${isExDone ? 'completed' : ''}" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}')">
-                        <video autoplay muted loop playsinline class="sens-ex-compact-video">
+                        <div class="sens-video-skeleton compact">
+                            <div class="sens-skeleton-shimmer"></div>
+                        </div>
+                        <video autoplay muted loop playsinline class="sens-ex-compact-video" oncanplay="this.previousElementSibling?.classList.add('is-hidden')">
                             <source src="${exVideoPath}" type="video/mp4">
                         </video>
                         <div class="sens-ex-compact-overlay"></div>
@@ -5327,9 +5330,15 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     if (modalName) modalName.textContent = localizedName;
     if (modalMuscle) modalMuscle.textContent = muscleName;
     if (modalSetsReps) modalSetsReps.innerHTML = `${ex.sets || 4} Series • ${ex.reps || '10-12'} Reps • <span class="sens-tooltip-wrap" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR ${ex.rir !== undefined ? ex.rir : 2} = RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)}. Guardate ${ex.rir !== undefined ? ex.rir : 2} repeticiones antes del fallo muscular.">RIR/RPE Obj: <strong>${ex.rir !== undefined ? ex.rir : 2}</strong> <span class="sens-tooltip-trigger">i</span></span> • ~${kcalData.totalKcal} kcal`;
+    const modalSkeleton = document.getElementById('modalExVideoSkeleton');
     if (modalVideo) {
+        if (modalSkeleton) modalSkeleton.classList.remove('is-hidden');
         modalVideo.src = videoSrc;
+        modalVideo.load();
         modalVideo.play().catch(() => {});
+        if (typeof attachVideoSkeleton === 'function') {
+            attachVideoSkeleton(modalVideo, modalSkeleton);
+        }
     }
     if (modalCue) modalCue.textContent = localizedCue;
     if (modalNotes) {
@@ -5644,9 +5653,15 @@ function openVideoModal(title, cue) {
         if (cueParagraph && cue) {
             cueParagraph.innerHTML = `<strong>Consejo de Nico:</strong> ${cue}`;
         }
+        const videoSkeleton = document.getElementById('videoModalPlayerSkeleton');
         if (videoPlayer) {
+            if (videoSkeleton) videoSkeleton.classList.remove('is-hidden');
             videoPlayer.src = SENS_EXERCISE_MOCKUP_VIDEO;
+            videoPlayer.load();
             videoPlayer.play().catch(() => {});
+            if (typeof attachVideoSkeleton === 'function') {
+                attachVideoSkeleton(videoPlayer, videoSkeleton);
+            }
         }
         modal.classList.add('active');
     }
@@ -11464,6 +11479,34 @@ function getWorkoutSessionDetails(exercises, fallbackTitle = '', athId = null) {
 /**
  * Actualiza la Card de Entrenamiento del Dashboard con video y taxonomía automática
  */
+
+/**
+ * Helper de Gobernanza para Skeletons de Video (Zero CLS / Quiet Luxury)
+ * Muestra el shimmer durante buffering/loadstart y desvanece suavemente en canplay/playing.
+ */
+function attachVideoSkeleton(videoEl, skeletonEl) {
+    if (!videoEl || !skeletonEl) return;
+    if (videoEl._hasSkeletonAttached) return;
+    videoEl._hasSkeletonAttached = true;
+
+    const hide = () => skeletonEl.classList.add('is-hidden');
+    const show = () => skeletonEl.classList.remove('is-hidden');
+
+    if (videoEl.readyState >= 3) {
+        hide();
+    } else {
+        show();
+    }
+
+    videoEl.addEventListener('loadstart', show);
+    videoEl.addEventListener('waiting', show);
+    videoEl.addEventListener('loadeddata', hide);
+    videoEl.addEventListener('canplay', hide);
+    videoEl.addEventListener('playing', hide);
+    videoEl.addEventListener('error', hide);
+}
+window.attachVideoSkeleton = attachVideoSkeleton;
+
 function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     if (!dayKey) {
         dayKey = getDayKeyFromDate(selectedDate);
@@ -11555,7 +11598,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     // 4. Video de fondo adaptado al primer ejercicio del día
-    let targetVideo = 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4';
+    let targetVideo = 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4';
     let targetPoster = '';
 
     const firstEx = exercises[0];
@@ -11566,9 +11609,11 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         targetPoster = resolvedFirstEx.poster_url || '';
     }
 
+    const videoSkeleton = document.getElementById('dashWorkoutVideoSkeleton');
     if (videoPlayer && videoSource) {
         const currentSrc = videoSource.getAttribute('src');
         if (currentSrc !== targetVideo) {
+            if (videoSkeleton) videoSkeleton.classList.remove('is-hidden');
             videoSource.setAttribute('src', targetVideo);
             if (targetPoster) {
                 videoPlayer.setAttribute('poster', targetPoster);
@@ -11577,6 +11622,9 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
             }
             videoPlayer.load();
             videoPlayer.play().catch(() => {});
+        }
+        if (typeof attachVideoSkeleton === 'function') {
+            attachVideoSkeleton(videoPlayer, videoSkeleton);
         }
     }
 }

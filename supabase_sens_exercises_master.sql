@@ -102,7 +102,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Empurre o chão com força distribuindo a pressão uniformemente por todo o pé (tripé plantar: calcanhar, base do primeiro e quinto metatarsos). Suba verticalmente mantendo o peito erguido e os joelhos alinhados para fora, evitando qualquer colapso em valgo (joelhos caindo para dentro).
 
 5. Final e bloqueio: Estenda completamente os quadris e joelhos contraindo os glúteos no topo sem hiperestender a coluna lombar. Expire de forma controlada e retome a posição inicial para a próxima repetição.',
-    0.5, 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4', 90
+    0.5, 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -156,7 +156,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Aplique força explosiva e contínua empurrando o chão através dos calcanhares e do meio do pé. Suba o tronco e o quadril na mesma velocidade sem perder a inclinação. Os joelhos permanecem abertos.
 
 5. Final e bloqueio: Chegue à posição totalmente ereta com extensão simultânea de joelhos e quadris, ativando fortemente quadríceps e glúteos. Expire ao passar pelo ponto crítico e reinicie o bloqueio abdominal.',
-    0.68, 'EJERCICIOS/videos_loop_final/f4f17480-66a9-4446-80cd-8bdf1fbfe13d.mp4', 120
+    0.68, 'EJERCICIOS/videos_loop_final/f4f17480-66a9-4446-80cd-8bdf1fbfe13d_sentadilla-trasera-con-barra.mp4', 120
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -210,7 +210,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Conduza a subida imaginando que puxa os cotovelos para cima enquanto as pernas empurram o solo com potência controlada. Os quadríceps recebem a carga principal.
 
 5. Final e bloqueio: Extensão completa e vertical de quadris e joelhos, alinhando ombros, quadril e calcanhares em um único eixo vertical. Expire brevemente e mantenha os cotovelos altos para a próxima repetição.',
-    0.65, 'EJERCICIOS/videos_loop_final/df7edf45-5d82-42e6-b3ad-fa7704750048.mp4', 120
+    0.65, 'EJERCICIOS/videos_loop_final/df7edf45-5d82-42e6-b3ad-fa7704750048_sentadilla-frontal-con-barra.mp4', 120
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -264,7 +264,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Empurrão): Empurre com firmeza a plataforma através dos calcanhares e do metatarso. Mantenha a cabeça e as costas fixas contra o encosto sem levantar os glúteos do banco.
 
 5. Final e bloqueio: Estenda as pernas quase por completo, parando o movimento 1 ou 2 centímetros antes do bloqueio articular dos joelhos (mantendo tensão muscular contínua nos quadríceps). Expire e prepare-se para a próxima descida.',
-    0.52, 'EJERCICIOS/videos_loop_final/7e524450-6775-42c5-9b29-8fe2620db315.mp4', 90
+    0.52, 'EJERCICIOS/videos_loop_final/7e524450-6775-42c5-9b29-8fe2620db315_prensa-45.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -318,7 +318,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Pressione com força contra o chão concentrando a força no calcanhar e no meio do pé da frente. O pé de trás serve apenas como estabilizador passivo e não deve empurrar.
 
 5. Final e bloqueio: Retorne à posição inicial estendendo por completo o joelho e o quadril da frente sem perder o equilíbrio. Expire ao completar a subida.',
-    0.48, 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4', 90
+    0.48, 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311_estocadas-bulgaras-con-mancuernas.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -372,7 +372,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida controlada): Recue o pé livre e inicie uma descida lenta e exigente (cadência de 3 a 4 segundos), flexionando o joelho e o quadril da perna do caixote. Mantenha controle absoluto até que o pé de baixo toque o solo suavemente como uma pluma, sem impacto.
 
 5. Encerramento: Reestabilize a postura, inspire e repita com a mesma perna antes de alternar.',
-    0.44, 'EJERCICIOS/videos_loop_final/3c13bcc2-f7b0-4e61-a85c-899ede97b0a8.mp4', 75
+    0.44, 'EJERCICIOS/videos_loop_final/3c13bcc2-f7b0-4e61-a85c-899ede97b0a8_step-up-en-cajon-controlado.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -426,7 +426,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Empurre o carrinho para cima aplicando força uniforme por toda a sola do pé, concentrando a contração nos quadríceps (vasto medial e lateral). Mantenha a cabeça neutra contra o encosto.
 
 5. Final e bloqueio: Estenda as pernas até ficar quase totalmente ereto, parando milímetros antes do bloqueio articular dos joelhos para manter a tensão muscular ativa. Expire e continue o ciclo.',
-    0.56, 'EJERCICIOS/videos_loop_final/1fc0b004-9b2b-444c-9da3-2e1718f8add7.mp4', 90
+    0.56, 'EJERCICIOS/videos_loop_final/1fc0b004-9b2b-444c-9da3-2e1718f8add7_sentadilla-hack-en-maquina.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -480,7 +480,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça o rolo de forma lenta e resistida (cadência de 3 segundos), sentindo o alongamento das fibras do quadríceps sob carga.
 
 5. Final do percurso: Pare a descida 2 cm antes que as placas de peso se toquem, preservando a tensão no músculo-alvo durante toda a série.',
-    0.28, 'EJERCICIOS/videos_loop_final/fec2a016-2b22-4bd5-b825-e5555a25f58d.mp4', 60
+    0.28, 'EJERCICIOS/videos_loop_final/fec2a016-2b22-4bd5-b825-e5555a25f58d_extension-de-cuadriceps-en-maquina.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -534,7 +534,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Empurre o chão com o calcanhar e o metatarso do pé direito para impulsionar o corpo para cima e retornar ao centro. A perna esquerda volta a girar apoiando a planta no solo.
 
 5. Final e alternância: Volte à postura neutra ereta, respire e transfira o movimento para a perna oposta de maneira fluida e controlada.',
-    0.38, 'EJERCICIOS/videos_loop_final/f92d44ad-a833-47ae-89d2-a98dcb5fbf24.mp4', 75
+    0.38, 'EJERCICIOS/videos_loop_final/f92d44ad-a833-47ae-89d2-a98dcb5fbf24_sentadilla-cosaca-cossack-squat.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -588,7 +588,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica e transição: Pressione fortemente através do calcanhar da frente e estenda a perna dianteira impulsionando-se para cima e para a frente. A perna de trás desencosta do solo e avança em movimento contínuo.
 
 5. Continuidade: Você pode fazer uma micropausa unindo os pés para reestabilizar o equilíbrio ou passar diretamente a perna esquerda à frente para a próxima passada fluida, mantendo cadência rítmica.',
-    0.48, 'EJERCICIOS/videos_loop_final/3fae9161-55a1-47e0-b25a-b61c15a2e6b4.mp4', 90
+    0.48, 'EJERCICIOS/videos_loop_final/3fae9161-55a1-47e0-b25a-b61c15a2e6b4_zancadas-caminando-con-mancuernas.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -642,7 +642,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Tracionando para cima, empurre o quadril para a frente com força gerada exclusivamente pelos glúteos e isquiotibiais. Os halteres sobem colados às pernas.
 
 5. Final e bloqueio: Chegue à extensão vertical completa contraindo os glúteos ao máximo no topo sem jogar a pelve excessivamente para a frente nem arquear a região lombar. Expire ao completar o bloqueio.',
-    0.5, 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4', 90
+    0.5, 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -696,7 +696,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça o quadril de forma controlada em 2-3 segundos, articulando o quadril em direção ao piso sem que o tronco deslize do banco.
 
 5. Final do percurso: Toque o solo suavemente com as anilhas ou pare a barra a 3 cm do chão mantendo a tensão muscular ativa, e inicie imediatamente a próxima repetição.',
-    0.52, 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4', 90
+    0.52, 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0_hip-thrust-con-barra-en-banco.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -750,7 +750,7 @@ INSERT INTO public.sens_exercises (
 4. Bloqueio superior: Fique completamente ereto travando joelhos e quadris com forte contração de glúteos e quadríceps. Não incline o tronco para trás nem hiperestenda a coluna lombar. Expire com força.
 
 5. Fase excêntrica (Descida): Empurre os quadris para trás primeiro até que a barra passe pelos joelhos; em seguida, flexione as pernas e apoie as anilhas no solo de maneira controlada sem soltar a barra. Reajuste a tensão antes da próxima repetição.',
-    0.72, 'EJERCICIOS/videos_loop_final/2d457641-56ba-4d0c-b8a5-ea07309beff8.mp4', 150
+    0.72, 'EJERCICIOS/videos_loop_final/2d457641-56ba-4d0c-b8a5-ea07309beff8_peso-muerto-convencional-con-barra.mp4', 150
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -804,7 +804,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Extensão controlada): Inspire e resista ao peso descendo em cadência estrita de 3 segundos, estendendo os joelhos milímetro a milímetro.
 
 5. Final do percurso: Pare a extensão pouco antes do bloqueio total articular (evitando hiperestender os joelhos) e sem deixar as placas baterem na pilha de peso. Inicie imediatamente a próxima repetição.',
-    0.28, 'EJERCICIOS/videos_loop_final/c0066fac-b0ea-4f76-a487-37d2ee532879.mp4', 75
+    0.28, 'EJERCICIOS/videos_loop_final/c0066fac-b0ea-4f76-a487-37d2ee532879_curl-femoral-acostado-en-maquina.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -858,7 +858,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Retorno controlado): Inspire e retorne o rolo para cima de maneira bem lenta e uniforme durante 3 segundos completos. Aproveite a vantagem biomecânica do quadril flexionado a 90° para maximizar o alongamento do bíceps femoral e semitendíneo.
 
 5. Final do percurso: Pare as pernas na extensão quase completa sem perder a tensão nas placas e repita.',
-    0.28, 'EJERCICIOS/videos_loop_final/f6b33fda-0d44-42ed-a7a3-3f0612d6b9bf.mp4', 75
+    0.28, 'EJERCICIOS/videos_loop_final/f6b33fda-0d44-42ed-a7a3-3f0612d6b9bf_curl-femoral-sentado-en-maquina.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -912,7 +912,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Pressione o solo com os pés e estenda o quadril impulsionando os glúteos para a frente para erguer o tronco.
 
 5. Final e bloqueio: Chegue à posição totalmente em pé com os glúteos contraídos e o tronco vertical. Expire e reajuste o abdômen antes da próxima repetição.',
-    0.45, 'EJERCICIOS/videos_loop_final/cc956420-a45b-4ef0-b3fc-75eaf1338609.mp4', 90
+    0.45, 'EJERCICIOS/videos_loop_final/cc956420-a45b-4ef0-b3fc-75eaf1338609_buenos-dias-con-barra-ligera.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -966,7 +966,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Empurre o calcanhar direito contra o piso e contraia o glúteo para tracionar o tronco para cima, baixando a perna de trás ao mesmo tempo.
 
 5. Final e bloqueio: Chegue à posição vertical ereta contraindo o glúteo direito sem apoiar o pé esquerdo se buscar maior equilíbrio dinâmico, ou tocando suavemente o solo antes de repetir.',
-    0.42, 'EJERCICIOS/videos_loop_final/9731ed0a-804a-40f8-80d8-9cfa4c601d9c.mp4', 75
+    0.42, 'EJERCICIOS/videos_loop_final/9731ed0a-804a-40f8-80d8-9cfa4c601d9c_peso-muerto-rumano-a-una-pierna.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1020,7 +1020,7 @@ INSERT INTO public.sens_exercises (
 4. Ápice do swing (Topo de flutuação): O kettlebell chega a flutuar na altura do peito ou dos olhos em imponderabilidade momentânea por uma fração de segundo. O corpo deve formar uma prancha vertical perfeita: glúteos firmes, core contraído e expiração forçada.
 
 5. Fase excêntrica e retorno: Deixe o peso cair pela gravidade em arco natural. Não dobre o quadril antes do tempo; aguarde até que os antebraços toquem a parte interna das coxas antes de quebrar o quadril em dobradiça profunda para trás para absorver o peso e encadear o próximo swing.',
-    0.55, 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4', 60
+    0.55, 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31_kettlebell-swing-estilo-ruso.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1074,7 +1074,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Subida): Pressione os calcanhares para trás contra os apoios e contraia os glúteos para puxar o tronco para cima. Suba em movimento fluido de 1-2 segundos.
 
 5. Final e contração: Eleve o tronco até alinhá-lo em linha reta com as pernas (180°). Contraia fortemente os glúteos no topo por 1 segundo. Evite por completo a hiperextensão lombar além da linha neutra.',
-    0.36, 'EJERCICIOS/videos_loop_final/574b4103-d8f9-46c1-a7e9-24dda37f28bf.mp4', 75
+    0.36, 'EJERCICIOS/videos_loop_final/574b4103-d8f9-46c1-a7e9-24dda37f28bf_hiperextensiones-a-45-para-cadena-posterior.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1128,7 +1128,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça a pelve de maneira lenta e controlada em 2 segundos, sentindo o trabalho do glúteo resistindo à gravidade.
 
 5. Final do percurso: Toque levemente o solo com o glúteo sem descarregar o peso corporal no chão e inicie de imediato a próxima repetição.',
-    0.25, 'EJERCICIOS/videos_loop_final/6087e3c8-ed70-4cdb-a146-7b2e8446e21c.mp4', 60
+    0.25, 'EJERCICIOS/videos_loop_final/6087e3c8-ed70-4cdb-a146-7b2e8446e21c_puente-de-gluteos-unilateral-en-suelo.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1182,7 +1182,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça os halteres de forma estritamente controlada em 3 segundos, abrindo o peito e sentindo o alongamento profundo do peitoral maior. Os cotovelos descem mantendo o ângulo de 45-60°.
 
 5. Ponto de inflexão inferior: Desça até que os halteres cheguem à linha do peito ou até que os cotovelos fiquem ligeiramente abaixo do plano do banco; faça uma pausa de 0,5 segundo sob tensão e volte a empurrar.',
-    0.42, 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4', 90
+    0.42, 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec_press-de-banca-plano-con-mancuernas.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1236,7 +1236,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Empurrão): Empurre o chão com os pés transferindo força pelos quadris e pressione a barra para cima e ligeiramente para trás, traçando um ''J invertido'' de volta à linha vertical dos ombros.
 
 5. Final e bloqueio: Estenda os braços por completo na posição inicial, mantendo as escápulas retraídas. Expire ao completar a repetição.',
-    0.46, 'EJERCICIOS/videos_loop_final/76ecb7d1-3d55-488e-be20-e426de097d42.mp4', 120
+    0.46, 'EJERCICIOS/videos_loop_final/76ecb7d1-3d55-488e-be20-e426de097d42_press-de-banca-con-barra.mp4', 120
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1290,7 +1290,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça a barra de forma controlada em 2-3 segundos pela mesma trajetória vertical, recuando levemente o queixo ao passar pelo rosto.
 
 5. Retorno ao rack: Apoie suavemente a barra nas clavículas/deltoides anteriores, restabeleça a rigidez nos glúteos e no core e prepare a próxima repetição.',
-    0.45, 'EJERCICIOS/videos_loop_final/22cc786a-a778-4125-909c-071b187c668f.mp4', 120
+    0.45, 'EJERCICIOS/videos_loop_final/22cc786a-a778-4125-909c-071b187c668f_press-militar-de-pie-con-barra.mp4', 120
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1344,7 +1344,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça os halteres em 3 segundos de maneira controlada e simétrica, resistindo à carga com os deltoides anteriores e mediais.
 
 5. Ponto de inflexão inferior: Desça até que os halteres fiquem novamente na altura do maxilar ou das orelhas (cotovelos ligeiramente abaixo da linha dos ombros para amplitude articular completa) e repita.',
-    0.38, 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4', 90
+    0.38, 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004_press-militar-sentado-con-mancuernas.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1398,7 +1398,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Empurrão): Pressione com força as barras para baixo, estendendo os braços e contraindo peitoral inferior e tríceps em conjunto.
 
 5. Final e bloqueio: Retorne à posição inicial estendendo por completo os cotovelos e deprimindo fortemente as escápulas. Expire ao completar a subida.',
-    0.44, 'EJERCICIOS/videos_loop_final/2e24e227-f97e-486b-8893-53e8805633f5.mp4', 90
+    0.44, 'EJERCICIOS/videos_loop_final/2e24e227-f97e-486b-8893-53e8805633f5_fondos-en-paralelas-asistidos-libres.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1452,7 +1452,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Empurrão explosivo): Expire e empurre o solo com força com toda a superfície das palmas, estendendo os braços e impulsionando o tronco para cima.
 
 5. Final e protração: No topo, estenda os cotovelos e empurre um centímetro extra afastando as escápulas (protração escapular ativa) para ativar o serrátil anterior. Inicie a próxima repetição.',
-    0.35, 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4', 75
+    0.35, 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f_flexiones-de-brazos-push-ups-con-pausa.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1506,7 +1506,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça os pesos em 3 segundos controlados, abrindo os cotovelos no plano escapular (a cerca de 45-60° do tronco). Sinta o alongamento na região subclavicular.
 
 5. Ponto de inflexão inferior: Desça até que os halteres fiquem na altura do peitoral superior/ombros anteriores. Faça uma breve pausa de controle e reinicie o empurrão.',
-    0.42, 'EJERCICIOS/videos_loop_final/071238a5-6f25-4de0-a588-39ed050c5c1f.mp4', 90
+    0.42, 'EJERCICIOS/videos_loop_final/071238a5-6f25-4de0-a588-39ed050c5c1f_press-inclinado-con-mancuernas-30.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1560,7 +1560,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Abertura controlada): Inspire e abra os braços lentamente em arco amplo durante 3 segundos, resistindo à tração dos cabos.
 
 5. Ponto de alongamento máximo: Permita que os cotovelos recuem até ficarem alinhados com o plano do tronco, sentindo uma abertura e alongamento profundo do peitoral sem desconforto na cápsula articular do ombro. Pause e volte a fechar.',
-    0.28, 'EJERCICIOS/videos_loop_final/59993aa5-4125-4f73-a79b-986e8d5d7e51.mp4', 60
+    0.28, 'EJERCICIOS/videos_loop_final/59993aa5-4125-4f73-a79b-986e8d5d7e51_aperturas-en-polea-crossover.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1614,7 +1614,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida resistida): Inspire e desça o braço de maneira extremamente controlada em 3 segundos, sentindo a tensão constante proporcionada pelo cabo.
 
 5. Final do percurso: Desça quase até tocar o quadril sem deixar os pesos baterem na pilha, e inicie de imediato a próxima elevação.',
-    0.22, 'EJERCICIOS/videos_loop_final/71f1e8aa-5b08-4fbe-9c9c-2f6dd535cc60.mp4', 60
+    0.22, 'EJERCICIOS/videos_loop_final/71f1e8aa-5b08-4fbe-9c9c-2f6dd535cc60_elevaciones-laterales-en-polea-a-una-mano.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1668,7 +1668,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça os halteres de forma desacelerada durante 3 segundos, freando a queda dos pesos em todo o percurso.
 
 5. Final do percurso: Pare os halteres antes que encostem nas coxas (a cerca de 10 cm do corpo) para não perder a tensão muscular no deltoide médio, e reinicie o movimento.',
-    0.22, 'EJERCICIOS/videos_loop_final/fd652a0e-feb9-4819-9ab2-62b74dec247d.mp4', 60
+    0.22, 'EJERCICIOS/videos_loop_final/fd652a0e-feb9-4819-9ab2-62b74dec247d_elevaciones-laterales-con-mancuerna.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1722,7 +1722,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Flexão controlada): Inspire e permita que a corda suba de forma suave em 3 segundos, dobrando os cotovelos enquanto as mãos voltam a se aproximar. Os cotovelos permanecem fixos como dobradiças nas costelas.
 
 5. Ponto de alongamento: Permita que os antebraços subam até ultrapassar 90° de flexão (até as mãos ficarem na altura do peito médio/inferior), sentindo o alongamento completo do tríceps antes de empurrar novamente.',
-    0.22, 'EJERCICIOS/videos_loop_final/b30b2c58-0ad3-4f55-abc3-2d2b32704362.mp4', 60
+    0.22, 'EJERCICIOS/videos_loop_final/b30b2c58-0ad3-4f55-abc3-2d2b32704362_extension-de-triceps-en-polea-alta-con-cuerda.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1776,7 +1776,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Extensão): Expire e estenda os cotovelos com força usando exclusivamente os tríceps, retornando os halteres pelo mesmo arco circular.
 
 5. Final e bloqueio: Chegue à extensão completa dos braços mantendo o ângulo recuado de 10-15° (não volte à vertical perpendicular ao solo). Contraia os tríceps por 1 segundo e repita.',
-    0.25, 'EJERCICIOS/videos_loop_final/2c8298a7-f894-461c-8d49-23429e4510bd.mp4', 75
+    0.25, 'EJERCICIOS/videos_loop_final/2c8298a7-f894-461c-8d49-23429e4510bd_press-frances-con-mancuernas-en-banco-plano.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1830,7 +1830,7 @@ INSERT INTO public.sens_exercises (
 4. Ponto de contração máxima: Suba até que o queixo ultrapasse claramente a barra ou o peitoral superior se aproxime dela. Faça uma pausa de meio segundo unindo o meio das costas e contraindo os dorsais.
 
 5. Fase excêntrica (Descida controlada): Inspire e desça lentamente em cadência estrita de 3 segundos, resistindo ao peso até retornar à suspensão completa com cotovelos estendidos. Reinicie a depressão escapular e repita.',
-    0.45, 'EJERCICIOS/videos_loop_final/bd12321c-1ad3-489e-ad89-8574e51a9e4b.mp4', 90
+    0.45, 'EJERCICIOS/videos_loop_final/bd12321c-1ad3-489e-ad89-8574e51a9e4b_dominadas-asistidas-en-maquina-o-banda.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1884,7 +1884,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Retorno resistido): Inspire e permita que a barra suba de forma desacelerada em 3 segundos, estendendo os braços progressivamente.
 
 5. Final do percurso: Deixe que os dorsais alonguem por completo no topo sem soltar a postura de forma brusca, e comece a próxima repetição a partir da tração dos cotovelos.',
-    0.36, 'EJERCICIOS/videos_loop_final/ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb.mp4', 90
+    0.36, 'EJERCICIOS/videos_loop_final/ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb_jalon-al-pecho-en-polea-con-agarre-neutro.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1938,7 +1938,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça o halter em 3 segundos seguindo a mesma curva para a frente e para baixo.
 
 5. Final e alongamento: Ao chegar embaixo, permita que o ombro desça levemente para sentir o alongamento completo do dorsal antes de iniciar a próxima puxada.',
-    0.36, 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4', 75
+    0.36, 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967_remo-con-mancuerna-a-una-mano-en-banco.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -1992,7 +1992,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida controlada): Inspire e estenda os braços de volta em cadência de 3 segundos, resistindo à descida do peso.
 
 5. Final do percurso: Chegue aos braços estendidos sentindo a abertura e o alongamento dos dorsais e romboides, mantendo a postura estrita antes da próxima repetição.',
-    0.46, 'EJERCICIOS/videos_loop_final/2afdedbf-42e1-4b99-a8d9-def165116616.mp4', 90
+    0.46, 'EJERCICIOS/videos_loop_final/2afdedbf-42e1-4b99-a8d9-def165116616_remo-con-barra-inclinado-agarre-prono.mp4', 90
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2046,7 +2046,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Extensão e alongamento): Inspire e estenda os braços lentamente em 3 segundos permitindo que a carga puxe à frente. Permita que as escápulas deslizem em protração controlada para maximizar o alongamento dos dorsais.
 
 5. Reencaixe: Retraia as escápulas, mantenha o tronco a 90° e inicie a próxima repetição de maneira fluida.',
-    0.36, 'EJERCICIOS/videos_loop_final/64060098-2d7b-4754-8ac5-689571904978.mp4', 75
+    0.36, 'EJERCICIOS/videos_loop_final/64060098-2d7b-4754-8ac5-689571904978_remo-en-polea-baja-con-agarre-estrecho-gironda.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2100,7 +2100,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Retorno): Inspire e estenda os braços para a frente de forma suave em 3 segundos, retornando os ombros de forma controlada à posição neutra.
 
 5. Final do percurso: Mantenha os ombros estáveis e a tensão no cabo o tempo todo antes de voltar a tracionar.',
-    0.22, 'EJERCICIOS/videos_loop_final/03affcc3-25de-42a9-acd9-5cc52f73a82a.mp4', 60
+    0.22, 'EJERCICIOS/videos_loop_final/03affcc3-25de-42a9-acd9-5cc52f73a82a_face-pull-en-polea-con-cuerda-a-la-frente.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2154,7 +2154,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça os halteres em cadência controlada de 3 segundos até que os braços fiquem completamente estendidos.
 
 5. Final e alongamento: Permita uma protração escapular suave embaixo para alongar os romboides e dorsais, e puxe novamente do zero.',
-    0.34, 'EJERCICIOS/videos_loop_final/a0117284-adde-42ae-ab2e-ece1d30513dc.mp4', 75
+    0.34, 'EJERCICIOS/videos_loop_final/a0117284-adde-42ae-ab2e-ece1d30513dc_remo-apoyado-en-banco-inclinado-con-mancuernas.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2208,7 +2208,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Subida): Inspire e permita que a barra retorne para cima em arco amplo em 3 segundos lentos e controlados.
 
 5. Ponto de alongamento: Deixe a barra subir acima da linha dos ombros até sentir um alongamento profundo nos dorsais e no redondo maior, parando antes de perder o controle da postura lombar.',
-    0.28, 'EJERCICIOS/videos_loop_final/3f6220f8-7217-44ad-b4ec-d2ebc8293b2c.mp4', 60
+    0.28, 'EJERCICIOS/videos_loop_final/3f6220f8-7217-44ad-b4ec-d2ebc8293b2c_pullover-en-polea-alta-con-barra-recta.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2262,7 +2262,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça os halteres de forma desacelerada durante 3 segundos, revertendo a supinação de forma fluida à medida que desce.
 
 5. Final do percurso: Chegue à extensão completa dos cotovelos com as palmas neutras nas laterais, sentindo o alongamento completo do bíceps sem balançar o tronco para a próxima repetição.',
-    0.22, 'EJERCICIOS/videos_loop_final/dfbdc69a-6846-406e-874e-899f8917a28a.mp4', 60
+    0.22, 'EJERCICIOS/videos_loop_final/dfbdc69a-6846-406e-874e-899f8917a28a_curl-de-biceps-con-mancuernas-supinadas.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2316,7 +2316,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida): Inspire e desça os halteres em cadência controlada de 3 segundos, resistindo à gravidade milímetro a milímetro.
 
 5. Final do percurso: Estenda os braços totalmente na parte baixa sem balançar o quadril nem desencostar os cotovelos das costelas, e inicie imediatamente a próxima repetição.',
-    0.22, 'EJERCICIOS/videos_loop_final/d2a85dba-c813-4d73-b420-9839e8e52b15.mp4', 60
+    0.22, 'EJERCICIOS/videos_loop_final/d2a85dba-c813-4d73-b420-9839e8e52b15_curl-martillo-con-mancuernas-o-cuerda.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2370,7 +2370,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Descida e alongamento): Inspire e desça os halteres de maneira extremamente lenta em 3 a 4 segundos.
 
 5. Final do percurso: Chegue à extensão completa do cotovelo, sentindo um alongamento profundo no bíceps antes de iniciar a próxima contração.',
-    0.24, 'EJERCICIOS/videos_loop_final/7bbc33b7-5a2b-4aa1-ad5f-5e7869eb2221.mp4', 75
+    0.24, 'EJERCICIOS/videos_loop_final/7bbc33b7-5a2b-4aa1-ad5f-5e7869eb2221_curl-en-banco-inclinado-a-45.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2428,7 +2428,7 @@ INSERT INTO public.sens_exercises (
 3. Manutenção e respiração: Mantenha uma contração de corpo inteiro a 100% de intensidade durante 20 a 30 segundos. A cabeça permanece neutra olhando para o espaço entre as mãos. Respire de forma curta e pressurizada pelo diafragma sem relaxar a parede abdominal.
 
 4. Encerramento do exercício: Após cumprir o tempo estrito, relaxe a tensão apoiando suavemente os joelhos no solo com controle.',
-    0.2, 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4', 60
+    0.2, 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37_plancha-frontal-con-retroversion-pelvica-rkc.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2482,7 +2482,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Retorno ao centro): Inspire e retorne o braço direito e a perna esquerda à posição inicial vertical a 90° de maneira controlada.
 
 5. Alternância: Repita imediatamente o movimento estendendo o braço esquerdo e a perna direita, mantendo o ritmo respiratório e a fixação lombar impecável.',
-    0.18, 'EJERCICIOS/videos_loop_final/69ee9cd0-6a58-4e5c-875a-80e273f430ab.mp4', 60
+    0.18, 'EJERCICIOS/videos_loop_final/69ee9cd0-6a58-4e5c-875a-80e273f430ab_deadbug-con-control-lumbar-y-respiracion.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2536,7 +2536,7 @@ INSERT INTO public.sens_exercises (
 4. Fase excêntrica (Retorno ao peito): Inspire e flexione os cotovelos de volta de forma controlada em 2 segundos, trazendo as mãos de volta ao esterno.
 
 5. Continuidade: Complete as repetições estipuladas desse lado e depois gire 180° para trabalhar o lado oposto.',
-    0.2, 'EJERCICIOS/videos_loop_final/1926f876-2f59-409c-ba98-10ed620b95f9.mp4', 60
+    0.2, 'EJERCICIOS/videos_loop_final/1926f876-2f59-409c-ba98-10ed620b95f9_press-pallof-con-banda-o-polea.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2590,7 +2590,7 @@ INSERT INTO public.sens_exercises (
 4. Fase de retorno: Inspire e retorne a mão e o joelho lentamente em direção ao solo com controle absoluto. Você pode tocar suavemente cotovelo e joelho por baixo do tronco antes de apoiar ou alternar o lado.
 
 5. Encerramento: Reestabilize a postura em quatro apoios e execute com o braço esquerdo e a perna direita.',
-    0.16, 'EJERCICIOS/videos_loop_final/e434ec6f-fe4f-4007-9daf-71ab2e92e53d.mp4', 60
+    0.16, 'EJERCICIOS/videos_loop_final/e434ec6f-fe4f-4007-9daf-71ab2e92e53d_bird-dog-dinamico-controlado.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2644,7 +2644,7 @@ INSERT INTO public.sens_exercises (
 4. Giros ou frenagem: Se o espaço exigir virar, faça-o com passos curtos em arco amplo sem cruzar as pernas nem torcer a coluna.
 
 5. Encerramento e descida da carga: Ao finalizar a distância, pare a caminhada com os dois pés paralelos, faça uma dobradiça de quadril com coluna neutra e apoie os pesos no chão suavemente.',
-    0.35, 'EJERCICIOS/videos_loop_final/9ad152e4-49ca-4768-8b9e-b1a059e2c40d.mp4', 60
+    0.35, 'EJERCICIOS/videos_loop_final/9ad152e4-49ca-4768-8b9e-b1a059e2c40d_paseo-del-granjero-con-mancuernas-farmer-walk.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2698,7 +2698,7 @@ INSERT INTO public.sens_exercises (
 4. Fase concêntrica (Tração e flexão abdominal): Expire e puxe a roda de volta em direção aos joelhos contraindo vigorosamente o reto abdominal e os dorsais, como se quisesse levar o umbigo em direção à coluna.
 
 5. Final do percurso: Retorne à postura inicial com a roda abaixo dos ombros sem sentar sobre os calcanhares (mantenha a tensão ativa) e repita.',
-    0.3, 'EJERCICIOS/videos_loop_final/51ffedb6-efaf-4b66-bea3-fa59aa42c948.mp4', 75
+    0.3, 'EJERCICIOS/videos_loop_final/51ffedb6-efaf-4b66-bea3-fa59aa42c948_rueda-abdominal-con-rango-seguro-de-rodillas.mp4', 75
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2758,7 +2758,7 @@ INSERT INTO public.sens_exercises (
 4. Respiração e duração: Sustente essa postura imóvel durante 20 a 45 segundos, respirando com inspirações curtas diafragmáticas mantendo a parede abdominal em tensão máxima.
 
 5. Descida controlada: Desça simultaneamente os calcanhares, ombros e cabeça ao solo de forma suave e controlada.',
-    0.22, 'EJERCICIOS/videos_loop_final/ece92035-6b36-4c50-9abd-dd4b88ace19f.mp4', 60
+    0.22, 'EJERCICIOS/videos_loop_final/ece92035-6b36-4c50-9abd-dd4b88ace19f_hollow-body-hold-isometrico-gimnastico.mp4', 60
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2812,7 +2812,7 @@ INSERT INTO public.sens_exercises (
 4. Fase Gato (Flexão espinhal e expiração): Expire completamente pela boca enquanto empurra o solo com as palmas das mãos. Encaixe a pelve para dentro em retroversão pronunciada, curve toda a coluna em direção ao teto como um gato arrepiado e leve o queixo suavemente em direção ao peito, olhando para o umbigo. Afaste as escápulas ativamente (protração máxima) para descomprimir a região dorsal e lombar.
 
 5. Ritmo e fluidez: Sustente por 2 segundos em máxima flexão dorsal e conecte com a próxima inspiração para a fase Vaca em um ciclo articular rítmico, orgânico e terapêutico.',
-    0.12, 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4', 45
+    0.12, 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1_movilidad-gato-vaca-y-descompresion-espinal.mp4', 45
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
@@ -2866,7 +2866,7 @@ INSERT INTO public.sens_exercises (
 4. Ponto de abertura máxima: Sustente a posição no ponto mais alto durante 1 a 2 segundos, sentindo a abertura peitoral e a ativação da musculatura escapular e dorsal alta.
 
 5. Retorno e alternância: Expire e retorne o cotovelo direito em direção ao solo de forma fluida. Complete as repetições estipuladas e repita o protocolo com o lado esquerdo.',
-    0.12, 'EJERCICIOS/videos_loop_final/41743325-8b06-409f-89c1-bb83c2a3b407.mp4', 45
+    0.12, 'EJERCICIOS/videos_loop_final/41743325-8b06-409f-89c1-bb83c2a3b407_rotaciones-toracicas-en-posicion-cuadrupeda.mp4', 45
 )
 ON CONFLICT (id) DO UPDATE SET
     name_es = EXCLUDED.name_es,
