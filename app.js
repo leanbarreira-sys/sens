@@ -13806,6 +13806,9 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     if (!hasRoutine || exercises.length === 0 || dayData?.modality === 'descanso') {
         if (activePane) activePane.style.display = 'none';
         if (restPane) restPane.style.display = 'block';
+        if (typeof updateHomeCardsStreakPills === 'function') {
+            updateHomeCardsStreakPills(selectedDate, athId);
+        }
         return;
     }
 
@@ -13873,6 +13876,9 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
 
     renderDashWorkoutCarouselExercise(0);
     initDashWorkoutCarouselInteractions();
+    if (typeof updateHomeCardsStreakPills === 'function') {
+        updateHomeCardsStreakPills(selectedDate, athId);
+    }
 }
 
 let dashWorkoutCarouselExercises = [];
@@ -14173,6 +14179,10 @@ function updateNutriSummaryCardData() {
     // 7. Lanzar Carrusel Dinámico 4:5 con Rotación de Comidas y Alimentos Oficiales
     if (typeof initDashNutriCarousel === 'function') {
         initDashNutriCarousel();
+    }
+
+    if (typeof updateHomeCardsStreakPills === 'function') {
+        updateHomeCardsStreakPills(AppState.selectedDate || new Date(), athId);
     }
 }
 
@@ -14616,6 +14626,8 @@ const SensDailyStreakManager = {
         let workoutDone = false;
         let workoutMetric = 'Sesión Programada';
         let isRestDay = false;
+        let totalExercises = 0;
+        let completedExercises = 0;
 
         const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(id) : null;
         const dayWorkout = (workoutData && workoutData[dayKey]) ? workoutData[dayKey] : null;
@@ -14626,15 +14638,19 @@ const SensDailyStreakManager = {
                 workoutDone = true;
                 workoutMetric = 'Descanso Activo';
             } else if (Array.isArray(dayWorkout.exercises) && dayWorkout.exercises.length > 0) {
-                const total = dayWorkout.exercises.length;
-                const completed = dayWorkout.exercises.filter(e => e.completed).length;
-                workoutDone = (completed === total);
-                workoutMetric = workoutDone ? '100% Completado' : `${completed} de ${total} Ejercicios`;
+                totalExercises = dayWorkout.exercises.length;
+                completedExercises = dayWorkout.exercises.filter(e => e.completed).length;
+                workoutDone = (completedExercises === totalExercises);
+                workoutMetric = workoutDone ? '100% Completado' : `${completedExercises} de ${totalExercises} Ejercicios`;
             }
         }
         if (!workoutDone && typeof isDateInCompletedWorkouts === 'function' && isDateInCompletedWorkouts(dateIso)) {
             workoutDone = true;
             workoutMetric = 'Sesión Completada';
+            if (totalExercises === 0) {
+                totalExercises = 5;
+                completedExercises = 5;
+            }
         }
 
         // 2. EVALUAR PILAR NUTRICIÓN
@@ -14739,7 +14755,7 @@ const SensDailyStreakManager = {
         const previous = records[dateIso] || null;
 
         records[dateIso] = {
-            workout: { done: workoutDone, metric: workoutMetric, isRestDay },
+            workout: { done: workoutDone, metric: workoutMetric, isRestDay, completedExercises, totalExercises },
             nutrition: { done: nutriDone, status: nutriStatus, consumed: consumedCals, target: targetCals, metric: nutriMetric },
             cardio: { done: cardioDone, steps, cardioMinutes, cardioType, metric: cardioMetric },
             completedCount,
@@ -15030,6 +15046,7 @@ function updateSensStreakCard(targetDate = null) {
     }
 
     renderStreakWeeklyDots(targetDate);
+    updateHomeCardsStreakPills(targetDate, athId);
 }
 
 window.updateSensStreakCard = updateSensStreakCard;
@@ -15060,6 +15077,163 @@ window.scrollToBalanceCard = function() {
         setTimeout(() => el.classList.remove('sens-card-focus-highlight'), 1200);
     }
 };
+
+window.scrollToStreakCard = function() {
+    const el = document.getElementById('sensStreakCardContainer') || document.querySelector('.sens-streak-hero-card');
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('sens-card-focus-highlight');
+        setTimeout(() => el.classList.remove('sens-card-focus-highlight'), 1200);
+    }
+};
+
+/**
+ * Actualiza los badges de racha en las 3 cards principales del Inicio (Training, Nutrición, Balance):
+ * - Entrenamiento: ej. "2/5 ejercicios" (Champagne Gold), "5/5 ejercicios ✓" (Emerald Green) o "Descanso Activo ✓"
+ * - Nutrición: ej. "800/1.800 cal" (Champagne Gold), "1.850/1.950 cal ✓" (Emerald Green) o "Superado ✕" (Red)
+ * - Balance / Actividad: ej. "200 / 10.000 pasos ó 20/30 min corriendo" (Champagne Gold) o "... ✓" (Emerald Green)
+ */
+function updateHomeCardsStreakPills(targetDate = null, athId = null) {
+    if (!targetDate) targetDate = AppState.selectedDate || new Date();
+    if (!athId) athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+
+    const sDate = (targetDate instanceof Date) ? targetDate : new Date(targetDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const targetMidnight = new Date(sDate);
+    targetMidnight.setHours(0, 0, 0, 0);
+    const isPastDay = targetMidnight < today;
+
+    if (typeof SensDailyStreakManager === 'undefined') return;
+
+    const evalResult = SensDailyStreakManager.evaluateDay(sDate, athId);
+    if (!evalResult || !evalResult.current) return;
+    const dayRec = evalResult.current;
+
+    const updatePill = (elId, statusClass, text, title) => {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        el.className = `sens-card-streak-pill ${statusClass}`;
+        el.setAttribute('title', title || text);
+        el.onclick = () => {
+            if (typeof window.scrollToStreakCard === 'function') {
+                window.scrollToStreakCard();
+            }
+        };
+        el.innerHTML = `<span class="streak-pill-dot"></span><span class="streak-pill-text">${text}</span>`;
+    };
+
+    // 1. Pilar Entrenamiento
+    const wRec = dayRec.workout || {};
+    let wStatus = 'in-progress';
+    let wText = '0/0 ejercicios';
+
+    if (wRec.isRestDay) {
+        wStatus = 'done';
+        wText = 'Descanso Activo ✓';
+    } else if (wRec.done) {
+        wStatus = 'done';
+        const total = wRec.totalExercises || 0;
+        wText = total > 0 ? `${total}/${total} ejercicios ✓` : 'Sesión completada ✓';
+    } else {
+        let completed = wRec.completedExercises;
+        let total = wRec.totalExercises;
+        if (typeof completed !== 'number' || typeof total !== 'number' || (completed === 0 && total === 0)) {
+            const match = String(wRec.metric || '').match(/(\d+)\s*de\s*(\d+)/i);
+            if (match) {
+                completed = parseInt(match[1], 10);
+                total = parseInt(match[2], 10);
+            } else {
+                const dayKey = (typeof getDayKeyFromDate === 'function') ? getDayKeyFromDate(sDate) : 'day1';
+                const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(athId) : null;
+                const dayWorkout = (workoutData && workoutData[dayKey]) ? workoutData[dayKey] : null;
+                if (dayWorkout && Array.isArray(dayWorkout.exercises)) {
+                    total = dayWorkout.exercises.length;
+                    completed = dayWorkout.exercises.filter(e => e.completed).length;
+                } else {
+                    completed = 0;
+                    total = 0;
+                }
+            }
+        }
+        if (isPastDay) {
+            wStatus = 'lost';
+            wText = total > 0 ? `${completed}/${total} ejercicios ✕` : 'Sesión no realizada ✕';
+        } else {
+            wStatus = 'in-progress';
+            wText = total > 0 ? `${completed}/${total} ejercicios` : '0/0 ejercicios';
+        }
+    }
+
+    updatePill('dashWorkoutStreakPill', wStatus, wText, 'Progreso de entrenamiento para la racha diaria');
+    updatePill('dashWorkoutRestStreakPill', 'done', 'Descanso Activo ✓', 'Día de recuperación celular para la racha diaria');
+
+    // 2. Pilar Nutrición
+    const nRec = dayRec.nutrition || {};
+    let nStatus = 'in-progress';
+    let nText = '0/0 cal';
+    const consumed = nRec.consumed || 0;
+    const target = nRec.target || 1950;
+    const consumedStr = consumed.toLocaleString('es-AR');
+    const targetStr = target.toLocaleString('es-AR');
+
+    if (nRec.done) {
+        nStatus = 'done';
+        nText = `${consumedStr}/${targetStr} cal ✓`;
+    } else if (nRec.status === 'exceeded') {
+        nStatus = 'exceeded';
+        nText = `${consumedStr}/${targetStr} cal • Superado ✕`;
+    } else {
+        if (isPastDay) {
+            nStatus = 'lost';
+            nText = consumed > 0 ? `${consumedStr}/${targetStr} cal ✕` : 'Sin registro calórico ✕';
+        } else {
+            nStatus = 'in-progress';
+            nText = `${consumedStr}/${targetStr} cal`;
+        }
+    }
+
+    updatePill('dashNutriStreakPill', nStatus, nText, 'Progreso calórico para la racha diaria (-20% a +10% del objetivo)');
+
+    // 3. Pilar Balance Energético / Actividad
+    const cRec = dayRec.cardio || {};
+    let cStatus = 'in-progress';
+    let cText = '0 / 10.000 pasos';
+
+    const steps = cRec.steps || 0;
+    const cardioMinutes = cRec.cardioMinutes || 0;
+    const cardioType = cRec.cardioType || 'caminata';
+    const targetCardioMin = (cardioType === 'caminata') ? 90 : 30;
+
+    let cardioLabel = 'cardio';
+    if (cardioType === 'running') cardioLabel = 'corriendo';
+    else if (cardioType === 'caminata') cardioLabel = 'caminata';
+    else if (cardioType === 'bici') cardioLabel = 'en bici';
+    else if (cardioType === 'natacion') cardioLabel = 'nadando';
+    else cardioLabel = cardioType;
+
+    const stepsStr = steps.toLocaleString('es-AR');
+
+    if (cRec.done) {
+        cStatus = 'done';
+        if (steps >= 10000) {
+            cText = `${stepsStr}/10.000 pasos ✓`;
+        } else {
+            cText = `${cardioMinutes}/${targetCardioMin} min ${cardioLabel} ✓`;
+        }
+    } else {
+        if (isPastDay) {
+            cStatus = 'lost';
+            cText = `${stepsStr}/10.000 pasos ó ${cardioMinutes}/${targetCardioMin} min ${cardioLabel} ✕`;
+        } else {
+            cText = `${stepsStr}/10.000 pasos ó ${cardioMinutes}/${targetCardioMin} min ${cardioLabel}`;
+        }
+    }
+
+    updatePill('dashActivityStreakPill', cStatus, cText, 'Objetivo de pasos (10k) o cardio (90m caminata / 30m cardio) para la racha diaria');
+    updatePill('dashActivityLoggerStreakPill', cStatus, cText, 'Objetivo de pasos o cardio para la racha diaria');
+}
+window.updateHomeCardsStreakPills = updateHomeCardsStreakPills;
 
 window.stepDailySteps = function(delta) {
     const input = document.getElementById('dashStepsInput');

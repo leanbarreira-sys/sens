@@ -2873,7 +2873,13 @@
                             <button type="button" class="sens-video-arrow-btn" id="dashNextExBtn" aria-label="Siguiente ejercicio" title="Siguiente ejercicio">›</button>
                         </div>
                         <div class="sens-video-top-badges">
-                            <span class="sens-modality-pill auto" id="dashWorkoutModalityPill">Autónomo</span>
+                            <div class="sens-badges-left">
+                                <span class="sens-modality-pill auto" id="dashWorkoutModalityPill">Autónomo</span>
+                                <span class="sens-card-streak-pill in-progress" id="dashWorkoutStreakPill" title="Progreso de racha">
+                                    <span class="streak-pill-dot"></span>
+                                    <span class="streak-pill-text">0/0 ejercicios</span>
+                                </span>
+                            </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <div class="sens-video-dots-indicator" id="dashWorkoutDotsIndicator"></div>
                                 <span class="sens-duration-pill" id="dashWorkoutDurationPill">~340 kcal | ~45 min</span>
@@ -2918,7 +2924,13 @@
                     <!-- Estado B: Día de Descanso (¿Hoy Descansamos? MAKES SENS.) -->
                     <div class="sens-training-card-rest" id="dashWorkoutRestPane" style="display: none;">
                         <div class="sens-rest-card-inner">
-                            <div class="sens-rest-badge">Recuperación Activa</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <div class="sens-rest-badge">Recuperación Activa</div>
+                                <span class="sens-card-streak-pill done" id="dashWorkoutRestStreakPill" title="Progreso de racha">
+                                    <span class="streak-pill-dot"></span>
+                                    <span class="streak-pill-text">Descanso Activo ✓</span>
+                                </span>
+                            </div>
                             <h3 class="sens-rest-title">¿Hoy Descansamos? MAKES SENS.</h3>
                             <p class="sens-rest-desc">
                                 Día de descanso celular y adaptación del sistema nervioso. Hidratate bien, caminá suave y recargá energía para tu próximo estímulo de fuerza con Nico.
@@ -2950,7 +2962,13 @@
                         <button type="button" class="sens-video-arrow-btn" id="dashNextNutriBtn" aria-label="Siguiente comida" title="Siguiente comida">›</button>
                     </div>
                     <div class="sens-nutri-top-badges">
-                        <span class="sens-modality-pill" id="dashNutriGoalPill">Déficit Calórico</span>
+                        <div class="sens-badges-left">
+                            <span class="sens-modality-pill" id="dashNutriGoalPill">Déficit Calórico</span>
+                            <span class="sens-card-streak-pill in-progress" id="dashNutriStreakPill" title="Progreso de racha">
+                                <span class="streak-pill-dot"></span>
+                                <span class="streak-pill-text">0 / 1.950 cal</span>
+                            </span>
+                        </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <div class="sens-video-dots-indicator" id="dashNutriDotsIndicator"></div>
                             <span class="sens-duration-pill" id="dashNutriTargetBadge">140g Prot • 190g Carbs</span>
@@ -3003,7 +3021,13 @@
                             <h3 class="sens-balance-title">Balance Energético</h3>
                             <span class="sens-balance-date-sub" id="dashBalanceDateLabel">15 de Octubre</span>
                         </div>
-                        <span class="sens-balance-goal-pill" id="dashObjectiveGoalPill">Meta: -400 kcal</span>
+                        <div class="sens-balance-header-right">
+                            <span class="sens-balance-goal-pill" id="dashObjectiveGoalPill">Meta: -400 kcal</span>
+                            <span class="sens-card-streak-pill in-progress" id="dashActivityStreakPill" title="Progreso de racha">
+                                <span class="streak-pill-dot"></span>
+                                <span class="streak-pill-text">0 / 10.000 pasos</span>
+                            </span>
+                        </div>
                     </div>
 
                     <!-- Ecuación de Balance: Ingesta vs Gasto TDEE -->
@@ -3051,7 +3075,13 @@
                                 </svg>
                                 <span>Gasto Activo Diario (NEAT &amp; Cardio)</span>
                             </div>
-                            <span class="sens-act-badge" id="dashActiveBurnBadge">+748 kcal activas</span>
+                            <div class="sens-act-header-badges">
+                                <span class="sens-card-streak-pill in-progress" id="dashActivityLoggerStreakPill" title="Progreso de racha">
+                                    <span class="streak-pill-dot"></span>
+                                    <span class="streak-pill-text">0 / 10.000 pasos</span>
+                                </span>
+                                <span class="sens-act-badge" id="dashActiveBurnBadge">+748 kcal activas</span>
+                            </div>
                         </div>
 
                         <!-- Módulo Pasos del Día -->

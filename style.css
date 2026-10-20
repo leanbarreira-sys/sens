@@ -19799,13 +19799,111 @@ body.in-portal,
     border-top: 1px solid rgba(255, 255, 255, 0.06);
     padding-top: 6px;
 }
-    animation: sensPulseDot 2s infinite ease-in-out;
-}
 
 @keyframes sensPulseDot {
     0% { transform: scale(1); }
     50% { transform: scale(1.15); }
     100% { transform: scale(1); }
+}
+
+/* =============================================================================
+   STREAK PILLS EN CARDS DE INICIO (WORKOUT, NUTRICIÓN, BALANCE)
+   Quiet Luxury • Tabular Numbers • Emerald / Champagne / Carmine Status
+   ============================================================================= */
+.sens-card-streak-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5.5px;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.35px;
+    padding: 3.5px 9px;
+    border-radius: 9999px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    pointer-events: auto !important;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sens-card-streak-pill:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.sens-card-streak-pill:active {
+    transform: scale(0.97);
+}
+
+.sens-card-streak-pill .streak-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.sens-card-streak-pill .streak-pill-text {
+    display: inline-block;
+}
+
+/* Estado 1: En Progreso (Champagne Gold SENS) */
+.sens-card-streak-pill.in-progress {
+    background: rgba(229, 203, 167, 0.14) !important;
+    border: 1px solid rgba(229, 203, 167, 0.42) !important;
+    color: #E5CBA7 !important;
+}
+.sens-card-streak-pill.in-progress .streak-pill-dot {
+    background: #E5CBA7;
+    box-shadow: 0 0 6px rgba(229, 203, 167, 0.75);
+    animation: sensPulseDot 2s infinite ease-in-out;
+}
+
+/* Estado 2: Cumplido / Racha Sumada (Emerald Green) */
+.sens-card-streak-pill.done {
+    background: rgba(16, 185, 129, 0.16) !important;
+    border: 1px solid rgba(16, 185, 129, 0.5) !important;
+    color: #10B981 !important;
+}
+.sens-card-streak-pill.done .streak-pill-dot {
+    background: #10B981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.85);
+}
+
+/* Estado 3: Superado / Perdida / No alcanzado (Crimson Red) */
+.sens-card-streak-pill.exceeded,
+.sens-card-streak-pill.missed,
+.sens-card-streak-pill.lost {
+    background: rgba(239, 68, 68, 0.16) !important;
+    border: 1px solid rgba(239, 68, 68, 0.5) !important;
+    color: #F87171 !important;
+}
+.sens-card-streak-pill.exceeded .streak-pill-dot,
+.sens-card-streak-pill.missed .streak-pill-dot,
+.sens-card-streak-pill.lost .streak-pill-dot {
+    background: #EF4444;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.85);
+}
+
+.sens-balance-header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.sens-act-header-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 /* Los 3 Pilares Diarios */
