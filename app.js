@@ -3130,6 +3130,7 @@ function switchPortalView(viewId) {
         }
     }
     if (viewId === 'dashView') {
+        if (typeof refreshAthletePrescribedWorkouts === 'function') refreshAthletePrescribedWorkouts();
         if (typeof renderDashboardData === 'function') renderDashboardData();
         if (typeof syncAllStreakAndPillTelemetry === 'function') {
             syncAllStreakAndPillTelemetry(AppState.selectedDate || new Date());
@@ -5500,13 +5501,25 @@ function saveAthleteDayWorkoutStatus(athId, dayKey, statusUpdate, explicitDate =
         AppState.profile.prescribed_workouts = workoutData;
     }
     
-    // Sincronizar en Supabase
-    if (typeof supabaseClient !== 'undefined' && supabaseClient && AppState.user) {
-        supabaseClient.from('profiles').update({
-            prescribed_workouts: workoutData
-        }).eq('id', athId).then(({ error }) => {
-            if (error) console.warn('Sync workout status error:', error);
-        });
+    // Sincronizar en Supabase SIN pisar la plantilla del coach:
+    // se descarga la versión remota vigente y solo se fusiona el registro de esta fecha.
+    if (typeof supabaseClient !== 'undefined' && supabaseClient && AppState.user && !String(athId).startsWith('mock_')) {
+        (async () => {
+            try {
+                const { data: remote } = await supabaseClient.from('profiles').select('prescribed_workouts').eq('id', athId).maybeSingle();
+                const base = (remote && remote.prescribed_workouts && typeof remote.prescribed_workouts === 'object')
+                    ? remote.prescribed_workouts
+                    : workoutData;
+                if (!base.calendar_schedule) base.calendar_schedule = {};
+                base.calendar_schedule[dateIso] = workoutData.calendar_schedule ? workoutData.calendar_schedule[dateIso] : statusUpdate;
+                const res = await persistPrescribedWorkoutsToSupabase(athId, base);
+                if (!res.ok) console.warn('Sync workout status error:', res.error);
+                localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(base));
+                if (AppState.profile && AppState.profile.id === athId) AppState.profile.prescribed_workouts = base;
+            } catch (e) {
+                console.warn('Sync workout status error:', e);
+            }
+        })();
     }
 }
 
@@ -10291,6 +10304,64 @@ function sanitizeWorkoutDataWithMasterExercises(data, athId) {
     return data;
 }
 
+/**
+ * Persiste prescribed_workouts en Supabase verificando que la fila se haya actualizado realmente.
+ * Supabase/PostgREST devuelve error=null con 0 filas cuando RLS bloquea el UPDATE (fallo silencioso).
+ */
+async function persistPrescribedWorkoutsToSupabase(athId, data, extraFields = {}) {
+    if (typeof supabaseClient === 'undefined' || !supabaseClient || !athId || String(athId).startsWith('mock_')) {
+        return { ok: true, skipped: true };
+    }
+    try {
+        const { data: rows, error } = await supabaseClient
+            .from('profiles')
+            .update({ prescribed_workouts: data, ...extraFields })
+            .eq('id', athId)
+            .select('id');
+        if (error) return { ok: false, error };
+        if (!rows || rows.length === 0) {
+            return { ok: false, error: { message: 'Sin permisos para actualizar el perfil del alumno (RLS). Ejecutá supabase_coach_prescriptions.sql y verificá que tu perfil tenga role = admin/coach.' } };
+        }
+        return { ok: true };
+    } catch (err) {
+        return { ok: false, error: err };
+    }
+}
+window.persistPrescribedWorkoutsToSupabase = persistPrescribedWorkoutsToSupabase;
+
+/**
+ * Descarga la versión más reciente de prescribed_workouts del alumno activo (por si Realtime no llegó).
+ */
+async function refreshAthletePrescribedWorkouts() {
+    try {
+        if (typeof supabaseClient === 'undefined' || !supabaseClient || !AppState.user || isCurrentUserAdmin()) return false;
+        const uid = AppState.user.id;
+        if (!uid || String(uid).startsWith('mock_')) return false;
+        const { data, error } = await supabaseClient.from('profiles').select('prescribed_workouts').eq('id', uid).maybeSingle();
+        if (error || !data || !data.prescribed_workouts || typeof data.prescribed_workouts !== 'object') return false;
+        const prev = JSON.stringify(AppState.profile?.prescribed_workouts || {});
+        const next = JSON.stringify(data.prescribed_workouts);
+        if (prev === next) return false;
+        if (AppState.profile) AppState.profile.prescribed_workouts = data.prescribed_workouts;
+        localStorage.setItem(`sens_prescribed_workouts_${uid}`, next);
+        try { localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile)); } catch (_) {}
+        const d = AppState.selectedDate || new Date();
+        if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+        if (typeof renderWorkoutDay === 'function') renderWorkoutDay(AppState.currentDay || 'day1');
+        if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
+        if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(d);
+        if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(d);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+window.refreshAthletePrescribedWorkouts = refreshAthletePrescribedWorkouts;
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshAthletePrescribedWorkouts();
+});
+
 function getCoachAthleteWorkoutData(athId) {
     // 1. Si es el alumno activo en su portal y tiene los datos en su perfil de Supabase
     if (AppState.profile && AppState.profile.prescribed_workouts && typeof AppState.profile.prescribed_workouts === 'object') {
@@ -10524,20 +10595,11 @@ async function saveCurrentCoachWorkoutDay() {
     }
 
     let supabaseError = null;
-    // Persistir en Supabase en profiles.prescribed_workouts
-    if (supabaseClient && !athId.startsWith('mock_')) {
-        try {
-            const { error } = await supabaseClient.from('profiles').update({
-                prescribed_workouts: data
-            }).eq('id', athId);
-            if (error) {
-                console.warn('Error al guardar entrenamientos en Supabase:', error);
-                supabaseError = error;
-            }
-        } catch (err) {
-            console.warn('Excepción al conectar con Supabase:', err);
-            supabaseError = err;
-        }
+    // Persistir en Supabase en profiles.prescribed_workouts (verificando filas afectadas)
+    const persistRes = await persistPrescribedWorkoutsToSupabase(athId, data);
+    if (!persistRes.ok) {
+        console.warn('Error al guardar entrenamientos en Supabase:', persistRes.error);
+        supabaseError = persistRes.error;
     }
 
     if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
@@ -11315,9 +11377,7 @@ async function applyClarityWorkoutPlan(plan, focusEdit = false) {
     let supabaseError = null;
     if (supabaseClient && !athId.startsWith('mock_')) {
         try {
-            const { error } = await supabaseClient.from('profiles').update({
-                prescribed_workouts: plan
-            }).eq('id', athId);
+            const { error } = await persistPrescribedWorkoutsToSupabase(athId, plan).then(r => ({ error: r.ok ? null : r.error }));
             if (error) supabaseError = error;
         } catch (e) {
             supabaseError = e;
@@ -11520,9 +11580,7 @@ async function executeClarityDuplicateDay(sourceKey, targetKey) {
     let supabaseError = null;
     if (supabaseClient && !athId.startsWith('mock_')) {
         try {
-            const { error } = await supabaseClient.from('profiles').update({
-                prescribed_workouts: data
-            }).eq('id', athId);
+            const { error } = await persistPrescribedWorkoutsToSupabase(athId, data).then(r => ({ error: r.ok ? null : r.error }));
             if (error) supabaseError = error;
         } catch (e) {
             supabaseError = e;
@@ -11574,10 +11632,7 @@ async function executeClarityReplicateMonth(hasOverload = true) {
     let supabaseError = null;
     if (supabaseClient && !athId.startsWith('mock_')) {
         try {
-            const { error } = await supabaseClient.from('profiles').update({
-                prescribed_workouts: data,
-                mesocycle_plan: mesocycleProjection
-            }).eq('id', athId);
+            const { error } = await persistPrescribedWorkoutsToSupabase(athId, data, { mesocycle_plan: mesocycleProjection }).then(r => ({ error: r.ok ? null : r.error }));
             if (error) supabaseError = error;
         } catch (e) {
             supabaseError = e;
@@ -19650,9 +19705,7 @@ const ClarityTrainer = {
         let supabaseError = null;
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                const { error } = await supabaseClient.from('profiles').update({
-                    prescribed_workouts: data
-                }).eq('id', athId);
+                const { error } = await persistPrescribedWorkoutsToSupabase(athId, data).then(r => ({ error: r.ok ? null : r.error }));
                 if (error) supabaseError = error;
             } catch (err) {
                 supabaseError = err;
@@ -19858,7 +19911,7 @@ const ClarityTrainer = {
 
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                await supabaseClient.from('profiles').update({ prescribed_workouts: data }).eq('id', athId);
+                { const _r = await persistPrescribedWorkoutsToSupabase(athId, data); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
             } catch (e) {
                 console.warn('Error al guardar duplicado en Supabase:', e);
             }
@@ -19937,9 +19990,7 @@ const ClarityTrainer = {
         let supabaseError = null;
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                const { error } = await supabaseClient.from('profiles').update({
-                    prescribed_workouts: data
-                }).eq('id', athId);
+                const { error } = await persistPrescribedWorkoutsToSupabase(athId, data).then(r => ({ error: r.ok ? null : r.error }));
                 if (error) supabaseError = error;
             } catch (err) {
                 supabaseError = err;
@@ -20562,9 +20613,7 @@ const CoachQuickAddManager = {
 
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                await supabaseClient.from('profiles').update({
-                    prescribed_workouts: workoutData
-                }).eq('id', athId);
+                { const _r = await persistPrescribedWorkoutsToSupabase(athId, workoutData); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
             } catch (err) {}
         }
 
@@ -21157,9 +21206,7 @@ const CoachMultiDayActionsManager = {
 
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                await supabaseClient.from('profiles').update({
-                    prescribed_workouts: workoutData
-                }).eq('id', athId);
+                { const _r = await persistPrescribedWorkoutsToSupabase(athId, workoutData); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
             } catch (err) {}
         }
     },
@@ -22598,9 +22645,7 @@ const CoachWorkoutsMaster = {
         let supabaseError = null;
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                const { error } = await supabaseClient.from('profiles').update({
-                    prescribed_workouts: baseWorkouts
-                }).eq('id', athId);
+                const { error } = await persistPrescribedWorkoutsToSupabase(athId, baseWorkouts).then(r => ({ error: r.ok ? null : r.error }));
                 if (error) {
                     supabaseError = error;
                     console.error('[SENS Supabase Error] Falló update en profiles.prescribed_workouts:', error);
@@ -22727,9 +22772,7 @@ const CoachWorkoutsMaster = {
 
                 if (supabaseClient && !athId.startsWith('mock_')) {
                     try {
-                        await supabaseClient.from('profiles').update({
-                            prescribed_workouts: workoutData
-                        }).eq('id', athId);
+                        { const _r = await persistPrescribedWorkoutsToSupabase(athId, workoutData); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
                     } catch (err) {}
                 }
 
@@ -23291,9 +23334,7 @@ const CoachWorkoutsMaster = {
         let monthSaveError = null;
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                const { error } = await supabaseClient.from('profiles').update({
-                    prescribed_workouts: workoutData
-                }).eq('id', athId);
+                const { error } = await persistPrescribedWorkoutsToSupabase(athId, workoutData).then(r => ({ error: r.ok ? null : r.error }));
                 if (error) {
                     monthSaveError = error;
                     console.error('[SENS] Error al guardar cambios del mes en Supabase profiles:', error);
@@ -23527,9 +23568,7 @@ const CoachMatrixProgressionView = {
 
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                await supabaseClient.from('profiles').update({
-                    prescribed_workouts: workoutData
-                }).eq('id', athId);
+                { const _r = await persistPrescribedWorkoutsToSupabase(athId, workoutData); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
             } catch (err) {}
         }
 
@@ -23821,9 +23860,7 @@ const CoachMatrixProgressionView = {
 
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                await supabaseClient.from('profiles').update({
-                    prescribed_workouts: workoutData
-                }).eq('id', athId);
+                { const _r = await persistPrescribedWorkoutsToSupabase(athId, workoutData); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
             } catch (err) {}
         }
 
@@ -24349,9 +24386,7 @@ const CoachEvolutionEngine = {
 
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                await supabaseClient.from('profiles').update({
-                    prescribed_workouts: workoutData
-                }).eq('id', athId);
+                { const _r = await persistPrescribedWorkoutsToSupabase(athId, workoutData); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
             } catch (err) {}
         }
 
@@ -24377,9 +24412,7 @@ const CoachEvolutionEngine = {
 
         if (supabaseClient && !athId.startsWith('mock_')) {
             try {
-                await supabaseClient.from('profiles').update({
-                    prescribed_workouts: workoutData
-                }).eq('id', athId);
+                { const _r = await persistPrescribedWorkoutsToSupabase(athId, workoutData); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
             } catch (err) {}
         }
 
