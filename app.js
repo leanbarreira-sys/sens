@@ -16406,6 +16406,16 @@ function updateSensStreakCard(targetDate = null) {
 
 window.updateSensStreakCard = updateSensStreakCard;
 
+window.toggleSensPillarsCollapse = function() {
+    const wrap = document.getElementById('sensStreakPillarsWrap');
+    if (!wrap) return;
+    const isCollapsed = wrap.classList.toggle('is-collapsed');
+    const header = wrap.querySelector('.sens-streak-pillars-header');
+    if (header) {
+        header.setAttribute('aria-expanded', String(!isCollapsed));
+    }
+};
+
 window.scrollToWorkoutCard = function() {
     const el = document.getElementById('dashTrainingVideoCard');
     if (el) {

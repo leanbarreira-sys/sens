@@ -2830,13 +2830,18 @@
                         </div>
                     </div>
 
-                    <!-- Los 3 Pilares Diarios SENS -->
-                    <div class="sens-streak-pillars-wrap">
-                        <div class="sens-streak-pillars-header">
+                    <!-- Los 3 Pilares Diarios SENS (Colapsables por Defecto) -->
+                    <div class="sens-streak-pillars-wrap is-collapsed" id="sensStreakPillarsWrap">
+                        <div class="sens-streak-pillars-header" onclick="window.toggleSensPillarsCollapse && window.toggleSensPillarsCollapse()" role="button" tabindex="0" aria-expanded="false" title="Tocar para ver u ocultar detalle de objetivos">
                             <span class="sens-pillars-title">OBJETIVOS DIARIOS SENS</span>
-                            <span class="sens-pillars-ratio" id="sensPillarsRatio">2 / 3 completados</span>
+                            <div class="sens-pillars-header-right">
+                                <span class="sens-pillars-ratio" id="sensPillarsRatio">2 de 3 completados</span>
+                                <svg class="sens-pillars-toggle-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
                         </div>
-                        <div class="sens-pillars-grid">
+                        <div class="sens-pillars-grid" id="sensPillarsGrid">
                             <!-- Pilar 1: Entrenamiento -->
                             <div class="sens-pillar-item" id="pillarItemWorkout" onclick="window.scrollToWorkoutCard && window.scrollToWorkoutCard()" title="Ver entrenamiento de hoy">
                                 <div class="sens-pillar-chk" id="pillarChkWorkout">
