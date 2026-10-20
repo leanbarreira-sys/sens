@@ -53,6 +53,7 @@ function formatDateKey(d) {
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
+window.getFormattedDateKey = getFormattedDateKey;
 
 function isSameDay(d1, d2) {
     if (!d1 || !d2) return false;
@@ -113,6 +114,33 @@ function isFutureDate(target) {
     return targetMidnight > today;
 }
 
+/**
+ * Calcula el Gasto Energético Basal (BMR) con la fórmula clínica de Mifflin-St Jeor
+ * Hombres: (10 × peso kg) + (6.25 × altura cm) - (5 × edad) + 5
+ * Mujeres: (10 × peso kg) + (6.25 × altura cm) - (5 × edad) - 161
+ */
+function calculateAthleteBMR(athId = null) {
+    const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+    const isDemo = (id === 'usr-vip-001' || id === 'mock_vip');
+    const profile = (AppState.profile && AppState.profile.id === id) ? AppState.profile : (AppState.profile || {});
+    const anamnesis = AppState.anamnesis || {};
+
+    const weightVal = parseFloat(profile.current_weight || profile.weight || anamnesis.weight || (isDemo ? 78.5 : 70.0));
+    const heightVal = parseFloat(profile.height || anamnesis.height || (isDemo ? 178.0 : 175.0));
+    const ageVal = parseInt(profile.age || anamnesis.age || (isDemo ? 38 : 30), 10);
+    const genderRaw = String(profile.gender || anamnesis.gender || 'male').toLowerCase().trim();
+    const isFemale = (genderRaw === 'female' || genderRaw === 'femenino' || genderRaw === 'mujer');
+
+    let bmr = (10 * weightVal) + (6.25 * heightVal) - (5 * ageVal);
+    if (isFemale) {
+        bmr -= 161;
+    } else {
+        bmr += 5;
+    }
+    return Math.max(800, Math.round(bmr));
+}
+window.calculateAthleteBMR = calculateAthleteBMR;
+
 function getAthletePrescribedCalories(athId = null, targetDate = null) {
     const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
     const profile = (AppState.profile && AppState.profile.id === id) ? AppState.profile : (AppState.profile || {});
@@ -143,14 +171,8 @@ function getAthletePrescribedCalories(athId = null, targetDate = null) {
     }
 
     if (!targetKcal || targetKcal <= 0) {
-        const weightVal = parseFloat(profile.current_weight || anamnesis.weight || 75.0);
-        const heightVal = parseFloat(profile.height || anamnesis.height || 175.0);
-        const ageVal = parseInt(profile.age || anamnesis.age || 30, 10);
-        const genderVal = profile.gender || anamnesis.gender || 'male';
         const userGoal = userPlan?.goal || profile.goal || anamnesis.goal || 'fat_loss';
-
-        let bmr = (10 * weightVal) + (6.25 * heightVal) - (5 * ageVal);
-        bmr += (genderVal === 'female' ? -161 : 5);
+        const bmr = calculateAthleteBMR(id);
         const tdee = Math.round(bmr * 1.55);
 
         if (userGoal === 'fat_loss') targetKcal = Math.round(tdee - 450);
@@ -165,15 +187,107 @@ window.getAthletePrescribedCalories = getAthletePrescribedCalories;
 function getAthleteConsumedCalories(athId = null, targetDate = null) {
     const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
     const sDate = targetDate ? (targetDate instanceof Date ? targetDate : new Date(targetDate)) : (AppState.nutriSelectedDate || AppState.selectedDate || new Date());
-    const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+    const dateIso = (typeof getFormattedDateKey === 'function')
+        ? getFormattedDateKey(sDate)
+        : `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
 
+    // 1. Si existe registro persistido para la fecha exacta
     const rawCals = localStorage.getItem(`sens_cals_${dateIso}`);
-    if (rawCals !== null) {
-        return parseInt(rawCals, 10) || 0;
+    if (rawCals !== null && !isNaN(parseInt(rawCals, 10))) {
+        return Math.max(0, parseInt(rawCals, 10));
     }
+
+    // 2. Cálculo dinámico a partir de comidas registradas / alimentos consumidos de esa fecha
+    const consumedFoodsKey = `sens_user_consumed_foods_${id}_${dateIso}`;
+    const customMealsKey = `sens_user_logged_meals_${id}_${dateIso}`;
+    const adjustedMealsKey = `sens_user_adjusted_meals_${id}_${dateIso}`;
+
+    let consumedMap = null;
+    try {
+        const raw = localStorage.getItem(consumedFoodsKey);
+        if (raw) consumedMap = JSON.parse(raw);
+    } catch (e) {}
+
+    let customMeals = [];
+    try {
+        const rawCustom = localStorage.getItem(customMealsKey);
+        if (rawCustom) customMeals = JSON.parse(rawCustom);
+    } catch (e) {}
+
+    let userAdjusted = {};
+    try {
+        const rawAdjust = localStorage.getItem(adjustedMealsKey);
+        if (rawAdjust) userAdjusted = JSON.parse(rawAdjust);
+    } catch (e) {}
+
+    if (consumedMap || (customMeals && customMeals.length > 0)) {
+        let totalConsumed = 0;
+
+        if (Array.isArray(customMeals)) {
+            customMeals.forEach(cm => {
+                const fid = cm.id || cm.codigo || cm.name;
+                const isConsumed = consumedMap ? (consumedMap[fid] !== false) : true;
+                if (isConsumed) {
+                    totalConsumed += (parseInt(cm.calories, 10) || 0);
+                }
+            });
+        }
+
+        if (consumedMap && Object.keys(consumedMap).length > 0) {
+            let userPlan = null;
+            try {
+                const raw = localStorage.getItem(`sens_prescribed_nutrition_${id}`) ||
+                            localStorage.getItem(`sens_coach_assigned_nutrition_${id}`);
+                if (raw) userPlan = JSON.parse(raw);
+            } catch (e) {}
+            if (!userPlan && AppState.profile?.prescribed_nutrition) {
+                userPlan = AppState.profile.prescribed_nutrition;
+            }
+
+            const dayOfWeek = sDate.getDay();
+            const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
+            const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
+
+            const defaultFallback = {
+                desayuno: [{ id: 'ae856777-a8d3-5238-9385-6bffce376821', calories: 180, grams: 120 }, { id: 'ae856777-a8d3-5238-9385-6bffce376838', calories: 220, grams: 60 }],
+                almuerzo: [{ id: 'ae856777-a8d3-5238-9385-6bffce376820', calories: 297, grams: 180 }, { id: 'ae856777-a8d3-5238-9385-6bffce376850', calories: 195, grams: 150 }],
+                merienda: [{ id: 'ae856777-a8d3-5238-9385-6bffce376836', calories: 170, grams: 170 }, { id: 'ae856777-a8d3-5238-9385-6bffce376861', calories: 175, grams: 30 }],
+                cena: [{ id: 'ae856777-a8d3-5238-9385-6bffce376829', calories: 374, grams: 180 }, { id: 'ae856777-a8d3-5238-9385-6bffce376865', calories: 52, grams: 150 }],
+                snack: [{ id: 'ae856777-a8d3-5238-9385-6bffce376858', calories: 83, grams: 160 }]
+            };
+
+            ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'].forEach(mKey => {
+                let foods = dayMeals[mKey]?.foods || dayMeals[mKey] || [];
+                if (!Array.isArray(foods) || foods.length === 0) {
+                    foods = defaultFallback[mKey] || [];
+                }
+                foods.forEach(f => {
+                    const fid = f.id || f.codigo || f.name;
+                    if (consumedMap[fid]) {
+                        const grams = userAdjusted[fid] ? parseInt(userAdjusted[fid], 10) : (f.grams || 100);
+                        const resolved = (typeof window.getResolvedFood === 'function')
+                            ? window.getResolvedFood(fid, id)
+                            : f;
+                        const macros = (typeof window.calculateFoodMacros === 'function')
+                            ? window.calculateFoodMacros(resolved, grams)
+                            : { calories: f.calories || Math.round(grams * 1.5) };
+                        totalConsumed += (macros.calories || 0);
+                    }
+                });
+            });
+        }
+
+        if (totalConsumed > 0) {
+            try { localStorage.setItem(`sens_cals_${dateIso}`, totalConsumed); } catch (e) {}
+            return totalConsumed;
+        }
+    }
+
+    // 3. Fallback para hoy si ya existe en AppState.dailyNutrition
     if (isSameDay(sDate, new Date()) && AppState.dailyNutrition && AppState.dailyNutrition.calories > 0) {
         return parseInt(AppState.dailyNutrition.calories, 10) || 0;
     }
+
     return 0;
 }
 window.getAthleteConsumedCalories = getAthleteConsumedCalories;
@@ -201,6 +315,7 @@ const AppState = {
     stepsChart: null,
     selectedMuscleFilter: 'all'
 };
+window.AppState = AppState;
 
 // Restauración síncrona inmediata desde caché local para render instantáneo sin flashes
 try {
@@ -4624,12 +4739,20 @@ function initWorkoutManager() {
     }
     if (btnWorkoutToday) {
         btnWorkoutToday.addEventListener('click', () => {
-            AppState.selectedDate = new Date();
-            AppState.activeWeekStart = getMonday(new Date());
-            AppState.currentDay = getDayKeyFromDate(new Date());
+            const today = new Date();
+            AppState.selectedDate = today;
+            AppState.nutriSelectedDate = today;
+            AppState.activeWeekStart = getMonday(today);
+            AppState.currentDay = getDayKeyFromDate(today);
             renderDynamicWeekStrip();
             renderWorkoutDaysNav();
+            if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
             renderWorkoutDay(AppState.currentDay);
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(today);
+            if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(today, AppState.currentDay);
+            if (typeof updateNutriSummaryCardData === 'function') updateNutriSummaryCardData();
+            if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(today);
+            if (typeof renderWeeklyBalanceChart === 'function') renderWeeklyBalanceChart(today);
             if (typeof showSensToast === 'function') {
                 showSensToast('Semana actual', 'champagne', 1500);
             }
@@ -5925,6 +6048,7 @@ window.completeAllExerciseSets = function() {
             saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: allExDone });
             AppState.selectedDate = dayDate;
             AppState.currentDay = currentDayKey;
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(dayDate);
             }
@@ -11521,6 +11645,7 @@ function renderNutriDaysNav() {
             renderNutriDaysNav();
             if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
             if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(dayDate);
             }
@@ -13017,17 +13142,23 @@ function initUserNutritionFilterAndDateListeners() {
     if (btnNutriToday && !btnNutriToday._hasNutriNavBound) {
         btnNutriToday._hasNutriNavBound = true;
         btnNutriToday.addEventListener('click', () => {
-            AppState.activeWeekStart = getMonday(new Date());
-            AppState.selectedDate = new Date();
-            AppState.nutriSelectedDate = new Date();
-            AppState.currentDay = getDayKeyFromDate(new Date());
+            const today = new Date();
+            AppState.activeWeekStart = getMonday(today);
+            AppState.selectedDate = today;
+            AppState.nutriSelectedDate = today;
+            AppState.currentDay = getDayKeyFromDate(today);
 
             renderDynamicWeekStrip();
             renderWorkoutDaysNav();
             renderNutriDaysNav();
 
             const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
-            renderMemberNutritionPlan(athId, new Date());
+            renderMemberNutritionPlan(athId, today);
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(today);
+            if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(today, AppState.currentDay);
+            if (typeof updateNutriSummaryCardData === 'function') updateNutriSummaryCardData();
+            if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(today);
+            if (typeof renderWeeklyBalanceChart === 'function') renderWeeklyBalanceChart(today);
             showSensToast('Semana actual', 'champagne', 1500);
         });
     }
@@ -13609,11 +13740,38 @@ function navigateCalendarWeek(direction) {
     }
 
     AppState.activeWeekStart = newMonday;
+
+    // Sincronizar el día seleccionado al mismo día de la semana en la nueva semana activa
+    if (AppState.selectedDate) {
+        const dayOffset = direction === 'next' ? 7 : -7;
+        const newSelDate = new Date(AppState.selectedDate);
+        newSelDate.setDate(newSelDate.getDate() + dayOffset);
+        AppState.selectedDate = newSelDate;
+        AppState.nutriSelectedDate = newSelDate;
+        AppState.currentDay = getDayKeyFromDate(newSelDate);
+    } else {
+        AppState.selectedDate = new Date(newMonday);
+        AppState.nutriSelectedDate = new Date(newMonday);
+        AppState.currentDay = 'day1';
+    }
+
     renderDynamicWeekStrip();
     renderWorkoutDaysNav();
     if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
+    if (typeof updateObjectiveCardData === 'function') {
+        updateObjectiveCardData(AppState.selectedDate);
+    }
+    if (typeof updateDynamicTrainingCard === 'function') {
+        updateDynamicTrainingCard(AppState.selectedDate, AppState.currentDay);
+    }
+    if (typeof updateNutriSummaryCardData === 'function') {
+        updateNutriSummaryCardData();
+    }
+    if (typeof syncAllStreakAndPillTelemetry === 'function') {
+        syncAllStreakAndPillTelemetry(AppState.selectedDate);
+    }
     if (typeof renderWeeklyBalanceChart === 'function') {
-        renderWeeklyBalanceChart(AppState.selectedDate || new Date());
+        renderWeeklyBalanceChart(AppState.selectedDate);
     }
 
     // Trigger de animación slide izquierda/derecha al strip de días en los 3 calendarios (Item 3)
@@ -13820,14 +13978,24 @@ function initWeekStripCalendar() {
 
     if (btnToday) {
         btnToday.addEventListener('click', () => {
-            AppState.selectedDate = new Date();
-            AppState.activeWeekStart = getMonday(new Date());
-            AppState.currentDay = getDayKeyFromDate(new Date());
+            const today = new Date();
+            AppState.selectedDate = today;
+            AppState.nutriSelectedDate = today;
+            AppState.activeWeekStart = getMonday(today);
+            AppState.currentDay = getDayKeyFromDate(today);
             renderDynamicWeekStrip();
             renderWorkoutDaysNav();
-            updateDynamicTrainingCard(AppState.selectedDate);
+            if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
+            updateDynamicTrainingCard(today, AppState.currentDay);
+            updateNutriSummaryCardData();
+            if (typeof updateObjectiveCardData === 'function') {
+                updateObjectiveCardData(today);
+            }
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(today);
+            }
             if (typeof renderWeeklyBalanceChart === 'function') {
-                renderWeeklyBalanceChart(AppState.selectedDate);
+                renderWeeklyBalanceChart(today);
             }
             showSensToast('Semana actual', 'champagne', 1500);
 
@@ -14092,6 +14260,7 @@ function renderDynamicWeekStrip() {
             const dayDate = new Date(AppState.activeWeekStart);
             dayDate.setDate(AppState.activeWeekStart.getDate() + idx);
             AppState.selectedDate = dayDate;
+            AppState.nutriSelectedDate = dayDate;
             AppState.currentDay = 'day' + (idx + 1);
 
             updateDynamicTrainingCard(dayDate, 'day' + (idx + 1));
@@ -14099,6 +14268,8 @@ function renderDynamicWeekStrip() {
             updateObjectiveCardData(dayDate);
             if (typeof updateBiometricsCardData === 'function') updateBiometricsCardData();
             renderWorkoutDaysNav();
+            if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(dayDate);
             }
@@ -14239,12 +14410,15 @@ function renderWorkoutDaysNav() {
             const dayDate = new Date(AppState.activeWeekStart);
             dayDate.setDate(AppState.activeWeekStart.getDate() + idx);
             AppState.selectedDate = dayDate;
+            AppState.nutriSelectedDate = dayDate;
             const dayKey = 'day' + (idx + 1);
             AppState.currentDay = dayKey;
 
             renderWorkoutDay(dayKey);
             renderWorkoutDaysNav();
             if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(dayDate);
             }
@@ -15148,6 +15322,7 @@ function getFormattedDateKey(d) {
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
+window.getFormattedDateKey = getFormattedDateKey;
 
 function getAthleteActivityLog(athId, dateKey) {
     try {
@@ -15185,6 +15360,8 @@ function saveAthleteActivityLog(athId, dateKey, data) {
         localStorage.setItem(`${SENS_ACTIVITY_STORAGE_PREFIX}_${athId}`, JSON.stringify(store));
     } catch (e) {}
 }
+window.saveAthleteActivityLog = saveAthleteActivityLog;
+window.getAthleteActivityLog = getAthleteActivityLog;
 
 /**
  * =============================================================================
@@ -16152,32 +16329,80 @@ window.saveActivityChanges = function(isExplicitSave = false) {
 };
 
 /**
+ * Verifica si una fecha tiene entrenamiento marcado como completado en el historial persistido
+ */
+function isDateInCompletedWorkouts(dateKey) {
+    try {
+        const stored = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
+        if (Array.isArray(stored)) {
+            if (stored.includes(dateKey)) return true;
+            const parts = String(dateKey).split('-');
+            if (parts.length === 3) {
+                const dayNum = parseInt(parts[2], 10);
+                if (stored.includes(dayNum)) return true;
+            }
+        }
+    } catch (e) {}
+    return false;
+}
+window.isDateInCompletedWorkouts = isDateInCompletedWorkouts;
+
+/**
  * Calcula las métricas metabólicas del día seleccionado (Ecuación real de balance energético)
  */
 function getDailyMetabolicMetrics(targetDate) {
     const athId = getActiveAthleteId();
     const isDemo = (athId === 'usr-vip-001' || athId === 'mock_vip');
-    const profile = AppState.profile || {};
+    const profile = (AppState.profile && AppState.profile.id === athId) ? AppState.profile : (AppState.profile || {});
     const anamnesis = AppState.anamnesis || {};
 
     const weightRaw = profile.current_weight || anamnesis.weight;
-    const weight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 76.0 : 70.0);
-    const bmr = Math.round(weight * 22);
+    const weight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 78.5 : 70.0);
+    const bmr = (typeof calculateAthleteBMR === 'function') ? calculateAthleteBMR(athId) : Math.round(weight * 22);
 
     const dateKey = getFormattedDateKey(targetDate);
     const actLog = getAthleteActivityLog(athId, dateKey);
 
     const dayKey = getDayKeyFromDate(targetDate);
     const data = getCoachAthleteWorkoutData(athId);
-    const dayData = (data && data[dayKey]) ? data[dayKey] : {};
+    let dayData = (data && data[dayKey]) ? data[dayKey] : {};
+    if (!dayData || !dayData.exercises) {
+        if (data && data.calendar_schedule && data.calendar_schedule[dateKey]) {
+            dayData = data.calendar_schedule[dateKey];
+        } else if (typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
+            dayData = WORKOUT_DAYS_DATA[dayKey];
+        }
+    }
+
     const hasWorkout = Boolean(dayData.exercises && dayData.exercises.length > 0 && dayData.modality !== 'descanso');
     const isWorkoutDone = Boolean(dayData.completed || isDateInCompletedWorkouts(dateKey));
 
-    // Gasto por entrenamiento de fuerza
-    const workoutBurn = isWorkoutDone ? 380 : (hasWorkout ? 320 : 0);
+    // Gasto por entrenamiento de fuerza REAL (0 si no se entrenó o descanso)
+    let workoutBurn = 0;
+    let completedExCount = 0;
+    let totalExCount = 0;
+
+    if (dayData && Array.isArray(dayData.exercises) && dayData.exercises.length > 0 && dayData.modality !== 'descanso') {
+        totalExCount = dayData.exercises.length;
+        completedExCount = dayData.exercises.filter(e => e.completed).length;
+    }
+
+    if (isWorkoutDone) {
+        workoutBurn = 380;
+    } else if (completedExCount > 0 && totalExCount > 0) {
+        workoutBurn = Math.round((completedExCount / totalExCount) * 380);
+    } else {
+        workoutBurn = 0;
+    }
 
     // Pasos del día (NEAT) - De entrada marca 0 si no se ha guardado
-    const dailySteps = (actLog && actLog.steps !== undefined) ? Number(actLog.steps) : 0;
+    let dailySteps = (actLog && actLog.steps !== undefined) ? Number(actLog.steps) : 0;
+    if (dailySteps === 0) {
+        const legacySteps = localStorage.getItem(`sens_steps_${dateKey}`);
+        if (legacySteps !== null && !isNaN(parseInt(legacySteps, 10))) {
+            dailySteps = Math.max(0, parseInt(legacySteps, 10));
+        }
+    }
     const stepsBurn = Math.round(dailySteps * (weight * 0.00052));
 
     // Cardio del día
@@ -16194,7 +16419,7 @@ function getDailyMetabolicMetrics(targetDate) {
         ? getAthletePrescribedCalories(athId, targetDate)
         : (profile.daily_calories ? parseInt(profile.daily_calories, 10) : 1950);
 
-    let consumedCalories = (typeof getAthleteConsumedCalories === 'function')
+    const consumedCalories = (typeof getAthleteConsumedCalories === 'function')
         ? getAthleteConsumedCalories(athId, targetDate)
         : 0;
 
@@ -16213,6 +16438,8 @@ function getDailyMetabolicMetrics(targetDate) {
         workoutBurn,
         hasWorkout,
         isWorkoutDone,
+        completedExCount,
+        totalExCount,
         activeBurn,
         tdee,
         targetIntake,
