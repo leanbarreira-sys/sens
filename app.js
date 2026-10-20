@@ -314,71 +314,12 @@ const MOCK_USER_PROFILES = {
 };
 
 // -----------------------------------------------------------------------------
-// CATÁLOGO MAESTRO: 52 EJERCICIOS CURADOS POR NICO (5 GRUPOS MUSCULARES)
+// CATÁLOGO MAESTRO: 52 EJERCICIOS CURADOS POR NICO (BASE MAESTRA UNIFICADA)
+// Fuente oficial de verdad: exercises_db.js (SENS_EXERCISE_LIBRARY)
 // -----------------------------------------------------------------------------
-const EXERCISE_CATALOG = [
-    // 1. Dominante de Rodilla (Cuádriceps)
-    { id: 'ex-q1', name: 'Sentadilla Goblet con Mancuerna', muscle_group: 'quadriceps', pattern: 'Squat', rest: 90, cue: 'Codos cerrados pegados al torso, bajada en 3 segundos buscando profundidad cómoda sin redondear lumbares.', video: 'https://www.youtube.com/watch?v=MeIiIdhvXT4' },
-    { id: 'ex-q2', name: 'Sentadilla Trasera con Barra', muscle_group: 'quadriceps', pattern: 'Squat', rest: 120, cue: 'Barra apoyada firme en trapecios, pies al ancho de hombros, empuje uniforme desde el centro del pie.', video: 'https://www.youtube.com/watch?v=bEv6CCg2BC8' },
-    { id: 'ex-q3', name: 'Sentadilla Frontal con Barra', muscle_group: 'quadriceps', pattern: 'Squat', rest: 120, cue: 'Codos altos y pecho orgulloso para mantener el torso vertical durante todo el recorrido.', video: 'https://www.youtube.com/watch?v=uYumuL_G_V0' },
-    { id: 'ex-q4', name: 'Prensa 45°', muscle_group: 'quadriceps', pattern: 'Leg Press', rest: 90, cue: 'Pies a media plataforma, descender hasta 90° sin despegar el sacro del respaldo.', video: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ' },
-    { id: 'ex-q5', name: 'Estocadas Búlgaras con Mancuernas', muscle_group: 'quadriceps', pattern: 'Lunge', rest: 90, cue: 'Pie trasero elevado en banco, ligera inclinación del torso hacia adelante para cargar cuádriceps y glúteo.', video: 'https://www.youtube.com/watch?v=2C-uNgKwPLE' },
-    { id: 'ex-q6', name: 'Step-up en Cajón Controlado', muscle_group: 'quadriceps', pattern: 'Single Leg Step', rest: 75, cue: 'Todo el peso en la pierna de arriba, evitar impulsarse con la punta del pie en el suelo.', video: 'https://www.youtube.com/watch?dQqApCGd5Ss' },
-    { id: 'ex-q7', name: 'Sentadilla Hack en Máquina', muscle_group: 'quadriceps', pattern: 'Hack Squat', rest: 90, cue: 'Espalda totalmente apoyada, control excéntrico en 3 segundos para máximo estímulo de vastos.', video: 'https://www.youtube.com/watch?v=0tn5K9NlCfo' },
-    { id: 'ex-q8', name: 'Extensión de Cuádriceps en Máquina', muscle_group: 'quadriceps', pattern: 'Isolation', rest: 60, cue: 'Pausa isométrica de 1 segundo arriba, bajar sin golpear las placas.', video: 'https://www.youtube.com/watch?v=YyvSfVjQeL0' },
-    { id: 'ex-q9', name: 'Sentadilla Cosaca (Cossack Squat)', muscle_group: 'quadriceps', pattern: 'Mobility Squat', rest: 75, cue: 'Talón del pie flexionado en el suelo, excelente para apertura de cadera y fuerza unilateral.', video: 'https://www.youtube.com/watch?v=tpvgtrbp8ik' },
-    { id: 'ex-q10', name: 'Zancadas Caminando con Mancuernas', muscle_group: 'quadriceps', pattern: 'Lunge', rest: 90, cue: 'Paso amplio, rodilla trasera roza suavemente el suelo con control.', video: 'https://www.youtube.com/watch?v=L8fvypPrzzs' },
-
-    // 2. Dominante de Cadera (Isquiosurales & Glúteos)
-    { id: 'ex-h1', name: 'Peso Muerto Rumano con Mancuernas', muscle_group: 'hamstrings_glutes', pattern: 'Hinge', rest: 90, cue: 'Empujar las caderas hacia atrás como si quisieras tocar la pared con los glúteos. Espalda neutra.', video: 'https://www.youtube.com/watch?v=JCXUYuzwNrM' },
-    { id: 'ex-h2', name: 'Hip Thrust con Barra en Banco', muscle_group: 'hamstrings_glutes', pattern: 'Glute Bridge', rest: 90, cue: 'Mentón pegado al pecho, extender la cadera hasta alinear rodillas y hombros apretando glúteos 2 segundos.', video: 'https://www.youtube.com/watch?v=SEdqd1n0cvg' },
-    { id: 'ex-h3', name: 'Peso Muerto Convencional con Barra', muscle_group: 'hamstrings_glutes', pattern: 'Deadlift', rest: 150, cue: 'Barra pegada a las tibias, dorsales activos antes de despegar el peso del suelo.', video: 'https://www.youtube.com/watch?v=op9kVnSso6Q' },
-    { id: 'ex-h4', name: 'Curl Femoral Acostado en Máquina', muscle_group: 'hamstrings_glutes', pattern: 'Leg Curl', rest: 75, cue: 'Caderas firmes contra el banco, no arquear la columna lumbar al flexionar.', video: 'https://www.youtube.com/watch?v=1Tq3QdYUuHs' },
-    { id: 'ex-h5', name: 'Curl Femoral Sentado en Máquina', muscle_group: 'hamstrings_glutes', pattern: 'Leg Curl', rest: 75, cue: 'Excelente estímulo en rango de estiramiento del isquiosural. Bajar lento en 3 segundos.', video: 'https://www.youtube.com/watch?v=Orxowest56U' },
-    { id: 'ex-h6', name: 'Buenos Días con Barra Ligera', muscle_group: 'hamstrings_glutes', pattern: 'Hinge', rest: 90, cue: 'Ligera flexión de rodilla, bisagra pura de cadera para fortalecer erectores espinales e isquios.', video: 'https://www.youtube.com/watch?v=YA-h3n9L4YU' },
-    { id: 'ex-h7', name: 'Peso Muerto Rumano a Una Pierna', muscle_group: 'hamstrings_glutes', pattern: 'Single Leg Hinge', rest: 75, cue: 'Cadera cuadrada mirando hacia el piso, enfoque en equilibrio y propiocepción.', video: 'https://www.youtube.com/watch?v=18ZkMeqwMaw' },
-    { id: 'ex-h8', name: 'Kettlebell Swing Estilo Ruso', muscle_group: 'hamstrings_glutes', pattern: 'Ballistic Hinge', rest: 60, cue: 'Potencia explosiva desde los glúteos, los brazos solo acompañan la trayectoria de la pesa.', video: 'https://www.youtube.com/watch?v=YSxHifyI6s8' },
-    { id: 'ex-h9', name: 'Hiperextensiones a 45°', muscle_group: 'hamstrings_glutes', pattern: 'Back Extension', rest: 75, cue: 'Redondear ligeramente la zona dorsal alta para enfocar el esfuerzo en glúteos e isquios.', video: 'https://www.youtube.com/watch?v=ph3pddpKzzw' },
-    { id: 'ex-h10', name: 'Puente de Glúteos Unilateral en Suelo', muscle_group: 'hamstrings_glutes', pattern: 'Glute Bridge', rest: 60, cue: 'Excelente ejercicio de activación previa o rehabilitación de cadera.', video: 'https://www.youtube.com/watch?v=AVox3Vpw44U' },
-
-    // 3. Empuje Tren Superior (Pecho, Deltoides & Tríceps)
-    { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', muscle_group: 'push', pattern: 'Horizontal Push', rest: 90, cue: 'Escápulas retraídas y deprimidas, recorrido completo con los codos a 45-60 grados del torso.', video: 'https://www.youtube.com/watch?v=VmB1G1K7v94' },
-    { id: 'ex-p2', name: 'Press de Banca con Barra', muscle_group: 'push', pattern: 'Horizontal Push', rest: 120, cue: 'Pies firmes clavados en el suelo, arco lumbar natural, descenso controlado al esternón.', video: 'https://www.youtube.com/watch?v=rT7DgCr-3pg' },
-    { id: 'ex-p3', name: 'Press Militar de Pie con Barra', muscle_group: 'push', pattern: 'Vertical Push', rest: 120, cue: 'Glúteos y abdomen activos para proteger la zona lumbar, barra pasa cerca de la nariz.', video: 'https://www.youtube.com/watch?v=2yjwXTZQDDI' },
-    { id: 'ex-p4', name: 'Press Militar Sentado con Mancuernas', muscle_group: 'push', pattern: 'Vertical Push', rest: 90, cue: 'Respaldo a 75-80°, empujar hacia arriba sin juntar ni chocar las mancuernas en el tope.', video: 'https://www.youtube.com/watch?v=qEwKCR5JCog' },
-    { id: 'ex-p5', name: 'Fondos en Paralelas Asistidos / Libres', muscle_group: 'push', pattern: 'Vertical Push', rest: 90, cue: 'Ligera inclinación del pecho hacia adelante para enfocar fibras pectorales inferiores.', video: 'https://www.youtube.com/watch?v=2z8JmcrW-As' },
-    { id: 'ex-p6', name: 'Flexiones de Brazos (Push-ups) con Pausa', muscle_group: 'push', pattern: 'Horizontal Push', rest: 75, cue: 'Cuerpo como una tabla sólida, pausa de 1 segundo con el pecho a 2 cm del suelo.', video: 'https://www.youtube.com/watch?v=IODxDxX7oi4' },
-    { id: 'ex-p7', name: 'Press Inclinado con Mancuernas (30°)', muscle_group: 'push', pattern: 'Incline Push', rest: 90, cue: 'Inclinación sutil de 30° para priorizar haz clavicular del pectoral sin sobrecargar el hombro.', video: 'https://www.youtube.com/watch?v=8iPEnn-ltC8' },
-    { id: 'ex-p8', name: 'Aperturas en Polea (Crossover)', muscle_group: 'push', pattern: 'Flye', rest: 60, cue: 'Movimiento de abrazo semicircular con contracción máxima de 1 segundo en el centro.', video: 'https://www.youtube.com/watch?v=taI4XduLpBe' },
-    { id: 'ex-p9', name: 'Elevaciones Laterales en Polea a Una Mano', muscle_group: 'push', pattern: 'Lateral Raise', rest: 60, cue: 'Polea a la altura de la rodilla, elevar el codo alineado en el plano escapular.', video: 'https://www.youtube.com/watch?v=PPrzBWZDOhA' },
-    { id: 'ex-p10', name: 'Elevaciones Laterales con Mancuerna', muscle_group: 'push', pattern: 'Lateral Raise', rest: 60, cue: 'Codos ligeramente flexionados, guiar el movimiento con los codos sin encoger hombros.', video: 'https://www.youtube.com/watch?v=3VcKaXpzqRo' },
-    { id: 'ex-p11', name: 'Extensión de Tríceps en Polea con Cuerda', muscle_group: 'push', pattern: 'Triceps Extension', rest: 60, cue: 'Codos pegados a los costados, separar la cuerda al final de la extensión.', video: 'https://www.youtube.com/watch?v=vB5OHsJ3EME' },
-    { id: 'ex-p12', name: 'Press Francés con Mancuernas en Banco Plano', muscle_group: 'push', pattern: 'Triceps Extension', rest: 75, cue: 'Bajar mancuernas a los costados de las orejas sintiendo el estiramiento de la porción larga.', video: 'https://www.youtube.com/watch?v=d_KZxkY_0cM' },
-
-    // 4. Tracción Tren Superior (Espalda, Romboides & Bíceps)
-    { id: 'ex-t1', name: 'Dominadas Asistidas en Máquina o Banda', muscle_group: 'pull', pattern: 'Vertical Pull', rest: 90, cue: 'Pecho hacia la barra, iniciar el tirón deprimiendo las escápulas antes de flexionar los brazos.', video: 'https://www.youtube.com/watch?v=y3JaVUf0G_s' },
-    { id: 'ex-t2', name: 'Jalón al Pecho en Polea (Agarre Neutro)', muscle_group: 'pull', pattern: 'Vertical Pull', rest: 90, cue: 'Tirar los codos hacia abajo y hacia los bolsillos traseros, manteniendo el pecho abierto.', video: 'https://www.youtube.com/watch?v=CAwf7n6Luuc' },
-    { id: 'ex-t3', name: 'Remo con Mancuerna a Una Mano en Banco', muscle_group: 'pull', pattern: 'Horizontal Pull', rest: 75, cue: 'Espalda paralela al piso, tirar la mancuerna hacia la cadera evitando rotar el tronco.', video: 'https://www.youtube.com/watch?v=pYcpY20QaE8' },
-    { id: 'ex-t4', name: 'Remo con Barra Inclinado (Agarre Prono)', muscle_group: 'pull', pattern: 'Horizontal Pull', rest: 90, cue: 'Torso a 45 grados, barra viaja rozando los muslos hacia el ombligo.', video: 'https://www.youtube.com/watch?v=G8l_8chR5BE' },
-    { id: 'ex-t5', name: 'Remo en Polea Baja con Agarre Estrecho', muscle_group: 'pull', pattern: 'Horizontal Pull', rest: 75, cue: 'Espalda erguida, extender dorsales al frente y traccionar juntando escápulas.', video: 'https://www.youtube.com/watch?v=GZbfZ033f74' },
-    { id: 'ex-t6', name: 'Face Pull en Polea con Cuerda a la Frente', muscle_group: 'pull', pattern: 'Posture / Rear Delt', rest: 60, cue: 'Traccionar hacia la altura de los ojos rotando externamente los hombros. Clave postural.', video: 'https://www.youtube.com/watch?v=rep-qVOkqgk' },
-    { id: 'ex-t7', name: 'Remo Apoyado en Banco Inclinado', muscle_group: 'pull', pattern: 'Chest Supported Row', rest: 75, cue: 'Elimina toda compensación lumbar, puro aislamiento de la espalda media.', video: 'https://www.youtube.com/watch?v=H75im9fAUMc' },
-    { id: 'ex-t8', name: 'Pullover en Polea Alta con Barra Recta', muscle_group: 'pull', pattern: 'Lat Isolation', rest: 60, cue: 'Brazos casi extendidos, llevar la barra hacia los muslos comprimiendo los dorsales.', video: 'https://www.youtube.com/watch?v=fA4hQYk7C9w' },
-    { id: 'ex-t9', name: 'Curl de Bíceps con Mancuernas Supinadas', muscle_group: 'pull', pattern: 'Biceps Curl', rest: 60, cue: 'Rotar la muñeca hacia afuera en la subida para máxima activación del bíceps braquial.', video: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo' },
-    { id: 'ex-t10', name: 'Curl Martillo con Mancuernas o Cuerda', muscle_group: 'pull', pattern: 'Brachialis', rest: 60, cue: 'Palmas mirándose entre sí todo el recorrido, fortalece braquial y antebrazo.', video: 'https://www.youtube.com/watch?v=zC3nLlEvin4' },
-    { id: 'ex-t11', name: 'Curl en Banco Inclinado a 45°', muscle_group: 'pull', pattern: 'Biceps Curl', rest: 75, cue: 'Mancuernas cuelgan por detrás del torso para enfatizar la cabeza larga del bíceps.', video: 'https://www.youtube.com/watch?v=soxrZlIl35U' },
-
-    // 5. Core & Conciencia Postural
-    { id: 'ex-c1', name: 'Plancha Frontal con Retroversión Pélvica', muscle_group: 'core_mobility', pattern: 'Isometric Core', rest: 60, cue: 'Apretar glúteos y cuádriceps, tirar los codos hacia las rodillas isométricamente (20-30s).', video: 'https://www.youtube.com/watch?v=6TKq62P_4gE' },
-    { id: 'ex-c2', name: 'Deadbug con Control Lumbar y Respiración', muscle_group: 'core_mobility', pattern: 'Anti-Extension', rest: 60, cue: 'Espalda baja en contacto continuo con el suelo. Exhalar al extender brazo y pierna contraria.', video: 'https://www.youtube.com/watch?v=g_BYB0R-4Ws' },
-    { id: 'ex-c3', name: 'Press Pallof con Banda o Polea', muscle_group: 'core_mobility', pattern: 'Anti-Rotation', rest: 60, cue: 'Extender los brazos al frente resistiendo la rotación del tronco, mantener 2 segundos.', video: 'https://www.youtube.com/watch?v=AH_QZLm_0-s' },
-    { id: 'ex-c4', name: 'Bird-Dog Dinámico Controlado', muscle_group: 'core_mobility', pattern: 'Cross-Body Stability', rest: 60, cue: 'Extender brazo y pierna opuesta sin arquear la zona lumbar ni balancear la pelvis.', video: 'https://www.youtube.com/watch?v=wiFNA3sqjCA' },
-    { id: 'ex-c5', name: 'Paseo del Granjero con Mancuernas', muscle_group: 'core_mobility', pattern: 'Loaded Carry', rest: 60, cue: 'Caminar erguido con pasos firmes y cadencia controlada manteniendo los hombros neutros.', video: 'https://www.youtube.com/watch?v=Fkzk_RqlYig' },
-    { id: 'ex-c6', name: 'Rueda Abdominal con Rango Seguro', muscle_group: 'core_mobility', pattern: 'Anti-Extension', rest: 75, cue: 'Mantener pelvis en retroversión, rodar hacia adelante hasta donde se mantenga el control.', video: 'https://www.youtube.com/watch?v=rqiTPdK1cjg' },
-    { id: 'ex-c7', name: 'Hollow Body Hold Isométrico', muscle_group: 'core_mobility', pattern: 'Gymnastic Core', rest: 60, cue: 'Curva corporal cóncava con zona lumbar sellada al piso y brazos extendidos atrás.', video: 'https://www.youtube.com/watch?v=44ScXWFaVBs' },
-    { id: 'ex-c8', name: 'Movilidad Gato-Vaca y Descompresión', muscle_group: 'core_mobility', pattern: 'Spinal Mobility', rest: 45, cue: 'Sincronizar inhalación en extensión y exhalación en flexión dorsal completa.', video: 'https://www.youtube.com/watch?v=W_X0R3V3X2Y' },
-    { id: 'ex-c9', name: 'Rotaciones Torácicas Cuadrúpedas', muscle_group: 'core_mobility', pattern: 'Thoracic Mobility', rest: 45, cue: 'Mano en la nuca, abrir el codo hacia el techo buscando rotar la columna dorsal.', video: 'https://www.youtube.com/watch?v=2T_LpL_3c2s' }
-];
+const EXERCISE_CATALOG = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_EXERCISE_LIBRARY.length > 0)
+    ? SENS_EXERCISE_LIBRARY
+    : [];
 
 // -----------------------------------------------------------------------------
 // CATÁLOGO DE ALIMENTOS BASE & HÁBITOS (Curados por Nico — Por Comida & Objetivo)
@@ -448,7 +389,7 @@ window.hydrateFoodCatalogInMemory = function() {
 };
 window.hydrateFoodCatalogInMemory();
 
-// Rutinas Preconfiguradas para SENS TRAIN (Lunes a Domingo)
+// Rutinas Preconfiguradas para SENS TRAIN (Lunes a Domingo) — Conectadas a Base Maestra Oficial
 const WORKOUT_DAYS_DATA = {
     day1: {
         title: 'Lunes: Tren Superior (Empuje / Tirón)',
@@ -456,44 +397,52 @@ const WORKOUT_DAYS_DATA = {
         completed: true,
         exercises: [
             {
-                id: 'ex-101',
-                name: '1. Peso Muerto Rumano con Mancuernas',
+                id: 'aad15275-4bb0-4459-a180-6c9f5dbe6d95',
+                name: 'Peso Muerto Rumano con Mancuernas',
                 notes: 'Foco en bisagra de cadera y activación de isquiosurales y glúteos.',
                 sets: 3,
                 reps: '8-10',
                 rest: 90,
                 defaultWeight: 22.5,
-                defaultReps: 10
+                defaultReps: 10,
+                video_url: 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4',
+                video: 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4'
             },
             {
-                id: 'ex-102',
-                name: '2. Press Plano con Mancuernas en Banco',
+                id: '43bad14a-f720-45bd-8e3e-acdb7a2cd3ec',
+                name: 'Press de Banca Plano con Mancuernas',
                 notes: 'Empuje horizontal controlado con retracción escapular activa.',
                 sets: 3,
                 reps: '10-12',
                 rest: 75,
                 defaultWeight: 18,
-                defaultReps: 11
+                defaultReps: 11,
+                video_url: 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4',
+                video: 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4'
             },
             {
-                id: 'ex-103',
-                name: '3. Remo Unilateral con Mancuerna apoyado',
+                id: '7f93fada-7563-4965-b189-2ffadbd5a967',
+                name: 'Remo con Mancuerna a Una Mano en Banco',
                 notes: 'Tirón horizontal sin rotar el torso. Pausa de 1 seg arriba.',
                 sets: 3,
                 reps: '10-12',
                 rest: 60,
                 defaultWeight: 16,
-                defaultReps: 10
+                defaultReps: 10,
+                video_url: 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4',
+                video: 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4'
             },
             {
-                id: 'ex-104',
-                name: '4. Press Militar con Mancuernas de pie',
+                id: '9e317f1f-4918-4f3e-9c57-eb0adfe7f004',
+                name: 'Press Militar Sentado con Mancuernas',
                 notes: 'Activación del core y glúteos para proteger la zona lumbar.',
                 sets: 3,
                 reps: '8-10',
                 rest: 75,
                 defaultWeight: 14,
-                defaultReps: 9
+                defaultReps: 9,
+                video_url: 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4',
+                video: 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4'
             }
         ]
     },
@@ -503,44 +452,52 @@ const WORKOUT_DAYS_DATA = {
         completed: true,
         exercises: [
             {
-                id: 'ex-201',
-                name: '1. Goblet Squat (Sentadilla profunda asistida)',
+                id: 'c43a4011-a963-48cf-8a07-a9f6a5274d00',
+                name: 'Sentadilla Goblet con Mancuerna',
                 notes: 'Apertura de cadera, talones apoyados, pecho erguido.',
                 sets: 4,
                 reps: '10-12',
                 rest: 90,
                 defaultWeight: 20,
-                defaultReps: 10
+                defaultReps: 10,
+                video_url: 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4',
+                video: 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4'
             },
             {
-                id: 'ex-202',
-                name: '2. Hip Thrust en Banco con Mancuerna / Barra',
+                id: '1c022132-227d-4411-bc96-8e13569090d0',
+                name: 'Hip Thrust con Barra en Banco',
                 notes: 'Extensión completa de cadera con bloqueo glúteo de 1 segundo.',
                 sets: 3,
                 reps: '10-12',
                 rest: 90,
                 defaultWeight: 35,
-                defaultReps: 12
+                defaultReps: 12,
+                video_url: 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4',
+                video: 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4'
             },
             {
-                id: 'ex-203',
-                name: '3. Estocadas Estáticas (Split Squat)',
+                id: 'f9906ab7-1991-41dd-8fc6-be4262039311',
+                name: 'Estocadas Búlgaras con Mancuernas',
                 notes: 'Control en el descenso de rodilla sin golpear el piso.',
                 sets: 3,
                 reps: '10 p/pierna',
                 rest: 60,
                 defaultWeight: 12,
-                defaultReps: 10
+                defaultReps: 10,
+                video_url: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4',
+                video: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4'
             },
             {
-                id: 'ex-204',
-                name: '4. Elevación de Gemelos & Estiramiento Isquiotibial',
+                id: '3c13bcc2-f7b0-4e61-a85c-899ede97b0a8',
+                name: 'Step-up en Cajón Controlado',
                 notes: 'Rango completo de movimiento con pausa en máxima contracción.',
                 sets: 3,
                 reps: '15',
                 rest: 45,
                 defaultWeight: 16,
-                defaultReps: 15
+                defaultReps: 15,
+                video_url: 'EJERCICIOS/videos_loop_final/3c13bcc2-f7b0-4e61-a85c-899ede97b0a8.mp4',
+                video: 'EJERCICIOS/videos_loop_final/3c13bcc2-f7b0-4e61-a85c-899ede97b0a8.mp4'
             }
         ]
     },
@@ -550,44 +507,52 @@ const WORKOUT_DAYS_DATA = {
         completed: true,
         exercises: [
             {
-                id: 'ex-301',
-                name: '1. Kettlebell / Mancuerna Swing',
+                id: 'c27c05f6-481a-4791-ac2f-6518b89d0d31',
+                name: 'Kettlebell Swing Estilo Ruso',
                 notes: 'Potencia de cadera y respiración coordinada.',
                 sets: 3,
                 reps: '12-15',
                 rest: 75,
                 defaultWeight: 16,
-                defaultReps: 15
+                defaultReps: 15,
+                video_url: 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4',
+                video: 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4'
             },
             {
-                id: 'ex-302',
-                name: '2. Push-Ups (Flexiones) con tempo controlado',
+                id: 'f37de49f-5f7b-4fbf-a392-495f38f7fd1f',
+                name: 'Flexiones de Brazos (Push-ups) con Pausa',
                 notes: 'Bajar en 3 segundos, subir explosivo. Opción con rodillas.',
                 sets: 3,
                 reps: '8-12',
                 rest: 60,
                 defaultWeight: 0,
-                defaultReps: 10
+                defaultReps: 10,
+                video_url: 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4',
+                video: 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4'
             },
             {
-                id: 'ex-303',
-                name: '3. Plancha Frontal con Respiración Diafragmática',
+                id: '2ae448e6-0a99-4664-898d-bfbf94080b37',
+                name: 'Plancha Frontal con Retroversión Pélvica (RKC)',
                 notes: 'Retracción abdominal, glúteos activos durante 45 segundos.',
                 sets: 3,
                 reps: '45 seg',
                 rest: 60,
                 defaultWeight: 0,
-                defaultReps: 45
+                defaultReps: 45,
+                video_url: 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4',
+                video: 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4'
             },
             {
-                id: 'ex-304',
-                name: '4. Movilidad Flujo Yoga: Paloma & Perro Boca Abajo',
+                id: 'fe1dba64-4f45-4aa3-bbd2-8266736028a1',
+                name: 'Movilidad Gato-Vaca y Descompresión Espinal',
                 notes: 'Apertura de cadera, extensión torácica y alivio lumbar.',
                 sets: 2,
                 reps: '5 min',
                 rest: 60,
                 defaultWeight: 0,
-                defaultReps: 5
+                defaultReps: 5,
+                video_url: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4',
+                video: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4'
             }
         ]
     },
@@ -597,34 +562,40 @@ const WORKOUT_DAYS_DATA = {
         completed: false,
         exercises: [
             {
-                id: 'ex-401',
-                name: '1. Deadbug con Control Lumbar y Respiración',
+                id: '69ee9cd0-6a58-4e5c-875a-80e273f430ab',
+                name: 'Deadbug con Control Lumbar y Respiración',
                 notes: 'Espalda baja sellada al suelo. 10 repeticiones lentas por pierna.',
                 sets: 3,
                 reps: '10 p/lado',
                 rest: 45,
                 defaultWeight: 0,
-                defaultReps: 10
+                defaultReps: 10,
+                video_url: 'EJERCICIOS/videos_loop_final/69ee9cd0-6a58-4e5c-875a-80e273f430ab.mp4',
+                video: 'EJERCICIOS/videos_loop_final/69ee9cd0-6a58-4e5c-875a-80e273f430ab.mp4'
             },
             {
-                id: 'ex-402',
-                name: '2. Bird-Dog Dinámico Controlado',
+                id: 'e434ec6f-fe4f-4007-9daf-71ab2e92e53d',
+                name: 'Bird-Dog Dinámico Controlado',
                 notes: 'Extender brazo y pierna opuesta sin arquear la zona lumbar.',
                 sets: 3,
                 reps: '12 p/lado',
                 rest: 45,
                 defaultWeight: 0,
-                defaultReps: 12
+                defaultReps: 12,
+                video_url: 'EJERCICIOS/videos_loop_final/e434ec6f-fe4f-4007-9daf-71ab2e92e53d.mp4',
+                video: 'EJERCICIOS/videos_loop_final/e434ec6f-fe4f-4007-9daf-71ab2e92e53d.mp4'
             },
             {
-                id: 'ex-403',
-                name: '3. Rotaciones Torácicas Cuadrúpedas',
+                id: '41743325-8b06-409f-89c1-bb83c2a3b407',
+                name: 'Rotaciones Torácicas en Posición Cuadrúpeda',
                 notes: 'Mano en nuca, abrir codo hacia el techo buscando rotar columna dorsal.',
                 sets: 3,
                 reps: '10 p/lado',
                 rest: 45,
                 defaultWeight: 0,
-                defaultReps: 10
+                defaultReps: 10,
+                video_url: 'EJERCICIOS/videos_loop_final/41743325-8b06-409f-89c1-bb83c2a3b407.mp4',
+                video: 'EJERCICIOS/videos_loop_final/41743325-8b06-409f-89c1-bb83c2a3b407.mp4'
             }
         ]
     },
@@ -634,61 +605,71 @@ const WORKOUT_DAYS_DATA = {
         completed: false,
         exercises: [
             {
-                id: 'ex-501',
-                name: '1. Trap Bar / Mancuernas Farmer Carry',
+                id: '9ad152e4-49ca-4768-8b9e-b1a059e2c40d',
+                name: 'Paseo del Granjero con Mancuernas (Farmer Walk)',
                 notes: 'Paseo del granjero: pasos firmes y postura erguida impecable.',
                 sets: 4,
                 reps: '40 metros',
                 rest: 75,
                 defaultWeight: 24,
-                defaultReps: 40
+                defaultReps: 40,
+                video_url: 'EJERCICIOS/videos_loop_final/9ad152e4-49ca-4768-8b9e-b1a059e2c40d.mp4',
+                video: 'EJERCICIOS/videos_loop_final/9ad152e4-49ca-4768-8b9e-b1a059e2c40d.mp4'
             },
             {
-                id: 'ex-502',
-                name: '2. Sentadilla Búlgara con Mancuernas',
+                id: 'f9906ab7-1991-41dd-8fc6-be4262039311',
+                name: 'Estocadas Búlgaras con Mancuernas',
                 notes: 'Torso ligeramente inclinado al frente para mayor activación glútea.',
                 sets: 3,
                 reps: '8-10 p/pierna',
                 rest: 90,
                 defaultWeight: 14,
-                defaultReps: 9
+                defaultReps: 9,
+                video_url: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4',
+                video: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4'
             },
             {
-                id: 'ex-503',
-                name: '3. Jalón al Pecho con Banda o Polea',
+                id: 'ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb',
+                name: 'Jalón al Pecho en Polea con Agarre Neutro',
                 notes: 'Tracción vertical llevando la barra a la clavícula, pecho abierto.',
                 sets: 3,
                 reps: '10-12',
                 rest: 60,
                 defaultWeight: 45,
-                defaultReps: 10
+                defaultReps: 10,
+                video_url: 'EJERCICIOS/videos_loop_final/ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb.mp4',
+                video: 'EJERCICIOS/videos_loop_final/ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb.mp4'
             }
         ]
     },
     day6: {
-        title: 'Sábado: Cardio Zona 2 & Recuperación',
+        title: 'Sábado: Movilidad Articular & Descompresión',
         modality: 'descanso',
         completed: false,
         exercises: [
             {
-                id: 'ex-601',
-                name: '1. Caminata Inclinada o Trote Regenerativo',
-                notes: 'Ritmo conversacional (Zona 2 cardíaca) durante 35-45 minutos.',
-                sets: 1,
-                reps: '40 min',
-                rest: 0,
-                defaultWeight: 0,
-                defaultReps: 40
-            },
-            {
-                id: 'ex-602',
-                name: '2. Descompresión Espinal y Colgadas en Barra',
-                notes: 'Colgada pasiva en barra (3 series de 30 a 45 segundos) para traccionar vértebras.',
+                id: 'bd12321c-1ad3-489e-ad89-8574e51a9e4b',
+                name: 'Dominadas Asistidas en Máquina o Banda',
+                notes: 'Colgada controlada para traccionar y descomprimir vértebras.',
                 sets: 3,
                 reps: '35 seg',
                 rest: 60,
                 defaultWeight: 0,
-                defaultReps: 35
+                defaultReps: 35,
+                video_url: 'EJERCICIOS/videos_loop_final/bd12321c-1ad3-489e-ad89-8574e51a9e4b.mp4',
+                video: 'EJERCICIOS/videos_loop_final/bd12321c-1ad3-489e-ad89-8574e51a9e4b.mp4'
+            },
+            {
+                id: 'fe1dba64-4f45-4aa3-bbd2-8266736028a1',
+                name: 'Movilidad Gato-Vaca y Descompresión Espinal',
+                notes: 'Descompresión espinal sincronizada con respiración diafragmática.',
+                sets: 2,
+                reps: '5 min',
+                rest: 45,
+                defaultWeight: 0,
+                defaultReps: 5,
+                video_url: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4',
+                video: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4'
             }
         ]
     },
@@ -4661,9 +4642,9 @@ function initWorkoutManager() {
 // -----------------------------------------------------------------------------
 // GESTOR DE ENTRENAMIENTO VIDEO-FIRST & ALTO IMPACTO (ESTILO PILARES SENS)
 // -----------------------------------------------------------------------------
-const SENS_EXERCISE_MOCKUP_VIDEO = 'vid/pilar-2-vitalidad.mp4';
+const SENS_EXERCISE_MOCKUP_VIDEO = 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4';
 const SENS_EXERCISE_VIDEOS = [
-    'vid/pilar-2-vitalidad.mp4'
+    'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4'
 ];
 
 function hashCode(str) {
@@ -5210,7 +5191,7 @@ function renderWorkoutDay(dayKey) {
     });
 
     let groupedHtml = '';
-    const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
+    const activeLang = (typeof localStorage !== 'undefined' ? localStorage.getItem('sens_lang') : null) || 'es';
 
     Object.values(typeGroups).forEach(tg => {
         const muscleKeys = Object.keys(tg.muscles);
@@ -5254,11 +5235,13 @@ function renderWorkoutDay(dayKey) {
                 const cat = item.catalogMatch;
                 const isExDone = Boolean(ex.completed);
                 const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Cuerpo';
+                const exVideoPath = (cat && (cat.video_local_path || cat.video_url || cat.video)) || ex.video || SENS_EXERCISE_MOCKUP_VIDEO;
+                const exTitle = (cat && (cat['name_' + activeLang] || cat.name_es || cat.name)) || ex.name;
 
                 groupedHtml += `
                     <div class="sens-ex-compact-card ${isExDone ? 'completed' : ''}" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}')">
                         <video autoplay muted loop playsinline class="sens-ex-compact-video">
-                            <source src="${videoSrc}" type="video/mp4">
+                            <source src="${exVideoPath}" type="video/mp4">
                         </video>
                         <div class="sens-ex-compact-overlay"></div>
                         <div class="sens-ex-compact-top">
@@ -5270,7 +5253,7 @@ function renderWorkoutDay(dayKey) {
                             </button>
                         </div>
                         <div class="sens-ex-compact-bottom">
-                            <div class="ex-compact-title" title="${cat.name || ex.name}">${cat.name || ex.name}</div>
+                            <div class="ex-compact-title" title="${exTitle}">${exTitle}</div>
                             <div class="ex-compact-meta">
                                 <span>${weightLabel}</span> • <span>RIR ${ex.rir !== undefined ? ex.rir : 2}</span> • <span>${ex.rest || 75}s</span>
                             </div>
@@ -5310,23 +5293,30 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     clearInterval(modalExerciseState.restInterval);
 
     const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
-    const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
-    const catalogMatch = (typeof window.getResolvedExercise === 'function')
-        ? window.getResolvedExercise(rawMatch, athId)
-        : rawMatch;
+    const rawMatch = (typeof window.getResolvedExercise === 'function')
+        ? window.getResolvedExercise(ex.id || ex.name, athId)
+        : (sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex);
+    const catalogMatch = rawMatch || ex;
     const userWeight = parseFloat(AppState.profile?.current_weight || AppState.anamnesis?.weight || 75) || 75;
     const kcalData = (typeof window.calculateExerciseKcal === 'function')
         ? window.calculateExerciseKcal(catalogMatch, ex.sets || 4, ex.reps || '10-12', userWeight)
         : { kcalPerSet: 7, totalKcal: 28 };
 
-    const muscleName = catalogMatch.category || catalogMatch.muscle_group 
-        ? formatMuscleGroup(catalogMatch.category || catalogMatch.muscle_group)
-        : 'Piernas & Glúteos';
-    const cueTechnical = catalogMatch.execution || ex.notes || catalogMatch.cue || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
+    const tax = (typeof getExerciseTaxonomy === 'function')
+        ? getExerciseTaxonomy(catalogMatch)
+        : { muscleLabel: 'Piernas', typeLabel: 'Muscular' };
+    const muscleName = tax.subMuscleLabel 
+        ? `${tax.muscleLabel.toUpperCase()} • ${tax.subMuscleLabel.toUpperCase()}`
+        : (tax.muscleLabel ? tax.muscleLabel.toUpperCase() : 'PIERNAS & GLÚTEOS');
+
+    const currentLang = (typeof localStorage !== 'undefined' ? localStorage.getItem('sens_lang') : null) || 'es';
+    const localizedName = catalogMatch['name_' + currentLang] || catalogMatch.name_es || catalogMatch.name || ex.name;
+    const localizedCue = catalogMatch['cue_technical_' + currentLang] || catalogMatch.cue_technical_es || catalogMatch.cue || ex.notes || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
+    const localizedDetailed = catalogMatch['detailed_movement_' + currentLang] || catalogMatch.detailed_movement_es || catalogMatch.execution || '';
     const commonMistakes = catalogMatch.common_mistakes || 'Evitar rebotes articulares, pérdida de neutralidad lumbar o apnea prolongada.';
     const nicoRecs = ex.notes || catalogMatch.recommendations || `Mantener el pecho erguido, control respiratorio y 1 segundo de pausa isométrica en el punto de máxima contracción. Detener la serie en RIR/RPE ${ex.rir !== undefined ? ex.rir : 2}.`;
 
-    const videoSrc = SENS_EXERCISE_MOCKUP_VIDEO;
+    const videoSrc = (catalogMatch.video_local_path || catalogMatch.video_url || catalogMatch.video || SENS_EXERCISE_MOCKUP_VIDEO);
 
     const backdrop = document.getElementById('sensExerciseModalBackdrop');
     const modalName = document.getElementById('modalExName');
@@ -5339,16 +5329,30 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     const restDisplay = document.getElementById('modalExRestDisplay');
     const btnTut = document.getElementById('btnModalToggleTut');
 
-    if (modalName) modalName.textContent = catalogMatch.name || ex.name;
+    if (modalName) modalName.textContent = localizedName;
     if (modalMuscle) modalMuscle.textContent = muscleName;
     if (modalSetsReps) modalSetsReps.innerHTML = `${ex.sets || 4} Series • ${ex.reps || '10-12'} Reps • <span class="sens-tooltip-wrap" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR ${ex.rir !== undefined ? ex.rir : 2} = RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)}. Guardate ${ex.rir !== undefined ? ex.rir : 2} repeticiones antes del fallo muscular.">RIR/RPE Obj: <strong>${ex.rir !== undefined ? ex.rir : 2}</strong> <span class="sens-tooltip-trigger">i</span></span> • ~${kcalData.totalKcal} kcal`;
     if (modalVideo) {
         modalVideo.src = videoSrc;
         modalVideo.play().catch(() => {});
     }
-    if (modalCue) modalCue.textContent = cueTechnical;
+    if (modalCue) modalCue.textContent = localizedCue;
     if (modalNotes) {
         modalNotes.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <span style="font-size: 11px; font-weight: 800; color: #E5CBA7; text-transform: uppercase;">Idioma de la Ficha:</span>
+                <div style="display: flex; gap: 5px;">
+                    <button type="button" class="pill ${currentLang === 'es' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">ES</button>
+                    <button type="button" class="pill ${currentLang === 'en' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">EN</button>
+                    <button type="button" class="pill ${currentLang === 'pt' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">PT</button>
+                </div>
+            </div>
+            ${localizedDetailed ? `
+                <div style="margin-bottom: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(229,203,167,0.25); border-radius: 8px; padding: 10px;">
+                    <div style="font-size: 11px; font-weight: 800; color: #E5CBA7; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px;">Desglose Biomecánico Paso a Paso:</div>
+                    <div style="font-size: 11.5px; line-height: 1.5; color: #E4E4E7; white-space: pre-line;">${localizedDetailed}</div>
+                </div>
+            ` : ''}
             <div style="margin-bottom: 8px;"><strong style="color: #F4A261;">Cómo NO hacerlo (Errores a evitar):</strong> ${commonMistakes}</div>
             <div><strong style="color: var(--accent-champagne);">Recomendación de Nico:</strong> ${nicoRecs}</div>
         `;
@@ -5384,6 +5388,15 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     if (backdrop) {
         backdrop.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+    }
+};
+
+window.switchModalExerciseLanguage = function(lang, exId, dayKey) {
+    if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('sens_lang', lang);
+    }
+    if (typeof window.openExerciseExecutionModal === 'function') {
+        window.openExerciseExecutionModal(exId, dayKey);
     }
 };
 
@@ -8515,13 +8528,40 @@ function loadCoachAthleteWorkouts(athId) {
     renderCoachAssignedExercises();
 }
 
+function sanitizeWorkoutDataWithMasterExercises(data, athId) {
+    if (!data || typeof data !== 'object') return data;
+    try {
+        Object.keys(data).forEach(dayK => {
+            const dayObj = data[dayK];
+            if (dayObj && Array.isArray(dayObj.exercises)) {
+                dayObj.exercises.forEach(e => {
+                    const resolved = (typeof window.getResolvedExercise === 'function') ? window.getResolvedExercise(e, athId) : null;
+                    if (resolved) {
+                        if (resolved.video_local_path && (!e.video || e.video.includes('vid/pilar') || !e.video_url || e.video_url.includes('vid/pilar'))) {
+                            e.video = resolved.video_local_path;
+                            e.video_url = resolved.video_local_path;
+                        }
+                        if (resolved.id && (!e.id || e.id.startsWith('ex-'))) {
+                            e.id = resolved.id;
+                        }
+                        if (resolved.name_es && (!e.name || /^\d+[\.\s\-]/.test(e.name))) {
+                            e.name = resolved.name_es;
+                        }
+                    }
+                });
+            }
+        });
+    } catch (err) {}
+    return data;
+}
+
 function getCoachAthleteWorkoutData(athId) {
     // 1. Si es el alumno activo en su portal y tiene los datos en su perfil de Supabase
     if (AppState.profile && AppState.profile.prescribed_workouts && typeof AppState.profile.prescribed_workouts === 'object') {
         if (!isCurrentUserAdmin() || AppState.profile.id === athId) {
             const pw = AppState.profile.prescribed_workouts;
             if (Object.keys(pw).length > 0) {
-                return pw;
+                return sanitizeWorkoutDataWithMasterExercises(pw, athId);
             }
         }
     }
@@ -8530,7 +8570,7 @@ function getCoachAthleteWorkoutData(athId) {
     if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
         const cached = window.__coachAthletesCache.find(a => a.id === athId);
         if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object') {
-            return cached.prescribed_workouts;
+            return sanitizeWorkoutDataWithMasterExercises(cached.prescribed_workouts, athId);
         }
     }
 
@@ -8539,7 +8579,7 @@ function getCoachAthleteWorkoutData(athId) {
     if (raw) {
         try {
             const parsed = JSON.parse(raw);
-            if (parsed && typeof parsed === 'object') return parsed;
+            if (parsed && typeof parsed === 'object') return sanitizeWorkoutDataWithMasterExercises(parsed, athId);
         } catch (e) {}
     }
 
@@ -11504,39 +11544,27 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         durationPill.textContent = `${exercises.length} ej • ~${details.estMinutes} min`;
     }
 
-    // 4. Video de fondo adaptado al tipo dominante
-    let targetVideo = 'vid/pilar-1-tecnica.mp4';
-    let targetPoster = 'img/pilar-1-tecnica.jpg';
+    // 4. Video de fondo adaptado al primer ejercicio del día
+    let targetVideo = 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4';
+    let targetPoster = '';
 
     const firstEx = exercises[0];
-    if (firstEx && firstEx.video_url) {
-        targetVideo = firstEx.video_url;
-        targetPoster = firstEx.poster_url || targetPoster;
-    } else if (details.types.includes('yoga') && !details.types.includes('muscular')) {
-        targetVideo = 'vid/pilar-3-movilidad.mp4';
-        targetPoster = 'img/pilar-3-movilidad.jpg';
-    } else if (details.types.includes('cardio') && !details.types.includes('muscular')) {
-        targetVideo = 'vid/pilar-2-vitalidad.mp4';
-        targetPoster = 'img/pilar-2-vitalidad.jpg';
-    } else if (details.types.includes('movilidad') && !details.types.includes('muscular')) {
-        targetVideo = 'vid/pilar-3-movilidad.mp4';
-        targetPoster = 'img/pilar-3-movilidad.jpg';
-    } else if (details.title.toLowerCase().includes('piernas')) {
-        targetVideo = 'vid/pilar-3-movilidad.mp4';
-        targetPoster = 'img/pilar-3-movilidad.jpg';
-    } else if (details.title.toLowerCase().includes('espalda') || details.title.toLowerCase().includes('biceps') || details.title.toLowerCase().includes('bíceps')) {
-        targetVideo = 'vid/pilar-2-vitalidad.mp4';
-        targetPoster = 'img/pilar-2-vitalidad.jpg';
-    } else {
-        targetVideo = 'vid/pilar-1-tecnica.mp4';
-        targetPoster = 'img/pilar-1-tecnica.jpg';
+    const resolvedFirstEx = firstEx ? ((typeof window.getResolvedExercise === 'function') ? window.getResolvedExercise(firstEx, athId) : firstEx) : null;
+
+    if (resolvedFirstEx && (resolvedFirstEx.video_local_path || resolvedFirstEx.video_url || resolvedFirstEx.video)) {
+        targetVideo = resolvedFirstEx.video_local_path || resolvedFirstEx.video_url || resolvedFirstEx.video;
+        targetPoster = resolvedFirstEx.poster_url || '';
     }
 
     if (videoPlayer && videoSource) {
         const currentSrc = videoSource.getAttribute('src');
         if (currentSrc !== targetVideo) {
             videoSource.setAttribute('src', targetVideo);
-            videoPlayer.setAttribute('poster', targetPoster);
+            if (targetPoster) {
+                videoPlayer.setAttribute('poster', targetPoster);
+            } else {
+                videoPlayer.removeAttribute('poster');
+            }
             videoPlayer.load();
             videoPlayer.play().catch(() => {});
         }
@@ -12582,8 +12610,16 @@ window.renderCoachDatabasesTab = function() {
             const groupTag = (ex.group_level2 || ex.category || 'fuerza').replace('_', ' ').toUpperCase();
             const subTag = ex.sub_level3 ? ` • ${ex.sub_level3.toUpperCase()}` : '';
 
+            const videoPath = ex.video_local_path || ex.video_url || '';
             html += `
                 <div class="coach-master-lib-card">
+                    ${videoPath ? `
+                        <div style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: #000; border: 1px solid rgba(229,203,167,0.18);">
+                            <video autoplay muted loop playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover;">
+                                <source src="${videoPath}" type="video/mp4">
+                            </video>
+                        </div>
+                    ` : ''}
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
                         <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                             <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">${typeTag}</span>
@@ -12594,14 +12630,21 @@ window.renderCoachDatabasesTab = function() {
                             ~${kcalData.kcalPerSet} kcal/serie (${kcalData.kcalPerRep} kcal/rep)
                         </span>
                     </div>
-                    <h4 style="font-size: 1rem; font-weight: 800; margin: 0 0 4px 0;">${ex.name}</h4>
+                    <h4 style="font-size: 1rem; font-weight: 800; margin: 0 0 2px 0;">${ex.name_es || ex.name}</h4>
+                    <div style="font-size: 10.5px; color: #A1A1AA; margin-bottom: 8px;">
+                        <span style="color: #E5CBA7;">EN:</span> ${ex.name_en || ex.name} • <span style="color: #E5CBA7;">PT:</span> ${ex.name_pt || ex.name}
+                    </div>
                     <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
                         Músculo: <strong>${ex.primary_muscle || 'Principal'}</strong> • Base: ${ex.sets || 4} series × ${ex.reps || '10'} (~${kcalData.totalKcal} kcal totales)
                     </div>
                     <div style="font-size: 11.5px; line-height: 1.45; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
-                        <div><strong style="color: #9E7D4B;">Cómo hacerlo:</strong> ${ex.execution || 'Ejecución controlada en rango completo.'}</div>
-                        <div><strong style="color: #D97706;">Cómo NO hacerlo:</strong> ${ex.common_mistakes || 'Evitar compensación lumbar e impulso excesivo.'}</div>
-                        <div><strong style="color: #10B981;">Recomendación Nico:</strong> ${ex.recommendations || 'Foco en conexión mente-músculo y RIR 2.'}</div>
+                        <div><strong style="color: #E5CBA7;">Cue Técnico:</strong> ${ex.cue_technical_es || ex.cue || 'Control continuo.'}</div>
+                        ${ex.detailed_movement_es ? `
+                            <details style="background: rgba(255,255,255,0.03); border-radius: 6px; padding: 6px 10px; margin-top: 4px; border: 1px solid rgba(255,255,255,0.06);">
+                                <summary style="font-size: 11px; font-weight: 700; color: #9E7D4B; cursor: pointer;">Ver desglose biomecánico completo (Setup y Fases) ▾</summary>
+                                <div style="font-size: 11px; color: #D1D1D5; margin-top: 6px; white-space: pre-line; line-height: 1.4;">${ex.detailed_movement_es}</div>
+                            </details>
+                        ` : ''}
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06);">
                         <button type="button" class="btn btn-outline btn-sm" onclick="window.openCoachDbItemEditor('exercise', '${ex.id}')" style="font-size: 11px; font-weight: 700; flex: 1;">
@@ -18914,15 +18957,74 @@ const CoachEvolutionEngine = {
     }
 };
 
+function migrateLegacyWorkoutsInLocalStorage() {
+    try {
+        if (typeof localStorage === 'undefined') return;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (!key) continue;
+
+            if (key.startsWith('sens_prescribed_workouts_') || key === 'sens_active_athlete_workout_plan') {
+                const raw = localStorage.getItem(key);
+                if (raw && (raw.includes('ex-101') || raw.includes('ex-q1') || raw.includes('vid/pilar') || raw.includes('1. Peso Muerto') || raw.includes('ex-'))) {
+                    const data = JSON.parse(raw);
+                    let changed = false;
+                    Object.keys(data).forEach(dayK => {
+                        if (data[dayK] && Array.isArray(data[dayK].exercises)) {
+                            data[dayK].exercises.forEach(e => {
+                                const resolved = (typeof window.getResolvedExercise === 'function') ? window.getResolvedExercise(e) : null;
+                                if (resolved && (resolved.video_local_path || resolved.id !== e.id)) {
+                                    e.id = resolved.id;
+                                    e.name = resolved.name_es;
+                                    e.video = resolved.video_local_path;
+                                    e.video_url = resolved.video_local_path;
+                                    changed = true;
+                                }
+                            });
+                        }
+                    });
+                    if (changed) {
+                        localStorage.setItem(key, JSON.stringify(data));
+                    }
+                }
+            } else if (key === 'sens_active_profile') {
+                const raw = localStorage.getItem(key);
+                if (raw && (raw.includes('vid/pilar') || raw.includes('ex-101') || raw.includes('ex-q1'))) {
+                    const profileData = JSON.parse(raw);
+                    if (profileData && profileData.prescribed_workouts && typeof profileData.prescribed_workouts === 'object') {
+                        Object.keys(profileData.prescribed_workouts).forEach(dayK => {
+                            const d = profileData.prescribed_workouts[dayK];
+                            if (d && Array.isArray(d.exercises)) {
+                                d.exercises.forEach(e => {
+                                    const resolved = (typeof window.getResolvedExercise === 'function') ? window.getResolvedExercise(e) : null;
+                                    if (resolved) {
+                                        e.id = resolved.id;
+                                        e.name = resolved.name_es;
+                                        e.video = resolved.video_local_path;
+                                        e.video_url = resolved.video_local_path;
+                                    }
+                                });
+                            }
+                        });
+                        localStorage.setItem(key, JSON.stringify(profileData));
+                    }
+                }
+            }
+        }
+    } catch (e) {}
+}
+
 window.CoachEvolutionEngine = CoachEvolutionEngine;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
+        try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
         try { initClarityTrainerModule(); } catch (e) {}
         try { CoachWorkoutsMaster.init(); } catch (e) {}
         try { CoachEvolutionEngine.init(); } catch (e) {}
     });
 } else {
+    try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
     try { initClarityTrainerModule(); } catch (e) {}
     try { CoachWorkoutsMaster.init(); } catch (e) {}
     try { CoachEvolutionEngine.init(); } catch (e) {}

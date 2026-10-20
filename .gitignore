@@ -3,3 +3,5 @@ package-lock.json
 package.json
 compress.js
 vid/PILARES/
+*.exe
+EJERCICIOS/ffmpeg.exe
