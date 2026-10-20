@@ -14681,6 +14681,8 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     margin-bottom: 14px;
     gap: 4px;
     box-sizing: border-box;
+    min-height: unset !important;
+    height: auto !important;
 }
 
 .sens-triptych-col {
@@ -14690,14 +14692,20 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     align-items: center;
     text-align: center;
     min-width: 0;
+    min-height: unset !important;
+    height: auto !important;
+    box-sizing: border-box;
 }
 
-.sens-triptych-col.hero {
+.sens-triptych-col.sens-triptych-net {
     flex: 1.15;
-    background: rgba(229, 203, 167, 0.07);
+    background: rgba(229, 203, 167, 0.08);
     border: 1px solid rgba(229, 203, 167, 0.25);
     border-radius: 12px;
-    padding: 6px 4px;
+    padding: 8px 6px;
+    box-sizing: border-box;
+    min-height: unset !important;
+    height: auto !important;
 }
 
 .sens-triptych-label {
@@ -14719,8 +14727,9 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     white-space: nowrap;
 }
 
-.sens-triptych-val.hero {
-    font-size: 1.3rem;
+.sens-triptych-val.sens-val-net {
+    font-size: 1.25rem;
+    font-weight: 800;
     color: #E5CBA7;
 }
 

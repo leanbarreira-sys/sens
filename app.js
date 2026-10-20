@@ -17079,7 +17079,7 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
     }
 
     const netBoxEl = document.getElementById('dashBalanceNetBox');
-    const heroCol = netBoxEl?.querySelector('.sens-triptych-col.hero');
+    const netCol = netBoxEl?.querySelector('.sens-triptych-col.sens-triptych-net');
     if (netValEl) {
         const sign = liveNetBalance > 0 ? '+' : '';
         netValEl.innerHTML = `${sign}${liveNetBalance.toLocaleString('es-AR')}<span class="unit">kcal</span>`;
@@ -17091,17 +17091,17 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
             statusTextEl.textContent = isMuscleGain ? 'Superávit Cumplido' : 'Déficit Logrado';
             statusTextEl.style.color = '#E5CBA7';
             if (netValEl) netValEl.style.color = '#E5CBA7';
-            if (heroCol) {
-                heroCol.style.borderColor = 'rgba(229, 203, 167, 0.35)';
-                heroCol.style.background = 'rgba(229, 203, 167, 0.08)';
+            if (netCol) {
+                netCol.style.borderColor = 'rgba(229, 203, 167, 0.35)';
+                netCol.style.background = 'rgba(229, 203, 167, 0.08)';
             }
         } else {
             statusTextEl.textContent = liveNetBalance > 0 ? 'Superávit Elevado' : 'Ajuste Requerido';
             statusTextEl.style.color = '#D97706';
             if (netValEl) netValEl.style.color = '#D97706';
-            if (heroCol) {
-                heroCol.style.borderColor = 'rgba(217, 119, 6, 0.35)';
-                heroCol.style.background = 'rgba(217, 119, 6, 0.08)';
+            if (netCol) {
+                netCol.style.borderColor = 'rgba(217, 119, 6, 0.35)';
+                netCol.style.background = 'rgba(217, 119, 6, 0.08)';
             }
         }
     }
