@@ -19217,17 +19217,12 @@ const CoachWorkoutsMaster = {
     },
 
     getPosterForExercise(ex) {
-        if (!ex) return 'img/pilar-1-tecnica.jpg';
+        if (!ex) return '';
         if (ex.poster_url) return ex.poster_url;
         if (ex.thumbnail) return ex.thumbnail;
         const thumb = this.getThumbnail(ex);
         if (thumb) return thumb;
-
-        const cat = (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : (ex.category || 'fuerza')).toLowerCase();
-        if (cat === 'piernas') return 'img/pilar-1-tecnica.jpg';
-        if (cat === 'pecho' || cat === 'brazos') return 'img/pilar-2-vitalidad.jpg';
-        if (cat === 'espalda' || cat === 'hombros') return 'img/pilar-3-movilidad.jpg';
-        return 'img/pilar-4-adherencia.jpg';
+        return '';
     },
 
     renderStep3Catalog(activeDay) {
@@ -19301,13 +19296,14 @@ const CoachWorkoutsMaster = {
             const isAdded = assignedIds.has(ex.id);
             const posterSrc = this.getPosterForExercise(ex);
             const videoSrc = (ex.video || ex.video_url || '').trim();
+            const iosVideoUrl = videoSrc ? (videoSrc.includes('#') ? videoSrc : `${videoSrc}#t=0.001`) : '';
             const muscleTag = (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : (ex.category || 'fuerza')).toUpperCase();
 
             html += `
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
                     ${videoSrc ? `
-                        <video muted loop playsinline preload="none" poster="${posterSrc}" class="wizard-feed-video-bg">
-                            <source src="${videoSrc}" type="video/mp4">
+                        <video muted loop playsinline webkit-playsinline="true" preload="metadata" src="${iosVideoUrl}" ${posterSrc ? `poster="${posterSrc}"` : ''} class="wizard-feed-video-bg">
+                            <source src="${iosVideoUrl}" type="video/mp4">
                         </video>
                     ` : (posterSrc ? `
                         <img src="${posterSrc}" alt="${ex.name}" class="wizard-feed-video-bg" loading="lazy">
@@ -19334,6 +19330,14 @@ const CoachWorkoutsMaster = {
 
         grid.innerHTML = html;
 
+        // WebKit & iOS Safari optimization: prime muted, inline and metadata loading
+        grid.querySelectorAll('video.wizard-feed-video-bg').forEach(v => {
+            v.muted = true;
+            v.defaultMuted = true;
+            v.playsInline = true;
+            try { v.load(); } catch (e) {}
+        });
+
         // Optimization: IntersectionObserver to play ONLY videos that are actively visible (max 2 decoders concurrently)
         if (this._step3VideoObserver) {
             try { this._step3VideoObserver.disconnect(); } catch (e) {}
@@ -19344,7 +19348,7 @@ const CoachWorkoutsMaster = {
             this._step3VideoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const video = entry.target;
-                    if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
                         const playPromise = video.play();
                         if (playPromise !== undefined) {
                             playPromise.catch(() => {});
@@ -19354,8 +19358,8 @@ const CoachWorkoutsMaster = {
                     }
                 });
             }, {
-                root: grid,
-                threshold: [0, 0.4]
+                root: null,
+                threshold: [0, 0.2]
             });
 
             grid.querySelectorAll('video.wizard-feed-video-bg').forEach(v => {
@@ -19782,11 +19786,15 @@ const CoachWorkoutsMaster = {
         const searchInput = document.getElementById('wizardExSearchInput');
         if (searchInput && !searchInput._hasListener) {
             searchInput._hasListener = true;
+            let searchDebounceTimeout = null;
             searchInput.addEventListener('input', () => {
-                this.searchFilter = searchInput.value;
-                const selectedDays = this.daysConfig.filter(d => d.selected);
-                const activeDay = selectedDays[this.step3ActiveDayIndex];
-                if (activeDay) this.renderStep3Catalog(activeDay);
+                if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+                searchDebounceTimeout = setTimeout(() => {
+                    this.searchFilter = searchInput.value;
+                    const selectedDays = this.daysConfig.filter(d => d.selected);
+                    const activeDay = selectedDays[this.step3ActiveDayIndex];
+                    if (activeDay) this.renderStep3Catalog(activeDay);
+                }, 160);
             });
         }
     },
