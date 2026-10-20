@@ -2822,7 +2822,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="sens-pillar-metric" id="pillarMetricActivity">8.000 pasos • 25m cardio</div>
+                                    <div class="sens-pillar-metric" id="pillarMetricActivity">0 pasos • 0m cardio</div>
                                 </div>
                                 <span class="sens-pillar-pill" id="pillarPillActivity">Pendiente</span>
                             </div>
@@ -3104,12 +3104,12 @@
                             <div class="sens-act-module-top">
                                 <div class="sens-act-label-group">
                                     <span class="sens-act-metric-title">Pasos del Día</span>
-                                    <span class="sens-act-metric-sub" id="dashStepsSubBurn">~320 kcal gastadas</span>
+                                    <span class="sens-act-metric-sub" id="dashStepsSubBurn">~0 kcal gastadas</span>
                                 </div>
                                 <div class="sens-act-stepper-control">
                                     <button type="button" class="sens-act-stepper-btn" onclick="stepDailySteps(-1000)" aria-label="Restar 1000 pasos">−</button>
                                     <div class="sens-act-input-wrap">
-                                        <input type="number" step="500" min="0" max="60000" id="dashStepsInput" class="sens-act-input" value="8000" oninput="handleStepsInputChange(this.value)" onchange="saveActivityChanges()" aria-label="Cantidad de pasos">
+                                        <input type="number" step="500" min="0" max="60000" id="dashStepsInput" class="sens-act-input" value="0" oninput="handleStepsInputChange(this.value)" aria-label="Cantidad de pasos">
                                     </div>
                                     <button type="button" class="sens-act-stepper-btn" onclick="stepDailySteps(1000)" aria-label="Sumar 1000 pasos">+</button>
                                 </div>
@@ -3118,7 +3118,7 @@
                             <div class="sens-act-chips-row">
                                 <button type="button" class="sens-act-quick-chip" onclick="quickSetDailySteps(4000)">4.000</button>
                                 <button type="button" class="sens-act-quick-chip" onclick="quickSetDailySteps(7000)">7.000</button>
-                                <button type="button" class="sens-act-quick-chip active" id="chipSteps10k" onclick="quickSetDailySteps(10000)">10.000 (Meta)</button>
+                                <button type="button" class="sens-act-quick-chip" id="chipSteps10k" onclick="quickSetDailySteps(10000)">10.000 (Meta)</button>
                                 <button type="button" class="sens-act-quick-chip" onclick="quickSetDailySteps(12500)">12.500</button>
                                 <button type="button" class="sens-act-quick-chip" onclick="quickSetDailySteps(15000)">15.000+</button>
                             </div>
@@ -3129,12 +3129,12 @@
                             <div class="sens-act-module-top">
                                 <div class="sens-act-label-group">
                                     <span class="sens-act-metric-title">Cardio &amp; Resistencia</span>
-                                    <span class="sens-act-metric-sub" id="dashCardioSubBurn">~200 kcal gastadas</span>
+                                    <span class="sens-act-metric-sub" id="dashCardioSubBurn">~0 kcal gastadas</span>
                                 </div>
                                 <div class="sens-act-stepper-control">
                                     <button type="button" class="sens-act-stepper-btn" onclick="stepDailyCardio(-5)" aria-label="Restar 5 minutos">−</button>
                                     <div class="sens-act-input-wrap">
-                                        <input type="number" step="5" min="0" max="300" id="dashCardioInput" class="sens-act-input" value="25" oninput="handleCardioInputChange(this.value)" onchange="saveActivityChanges()" aria-label="Minutos de cardio">
+                                        <input type="number" step="5" min="0" max="300" id="dashCardioInput" class="sens-act-input" value="0" oninput="handleCardioInputChange(this.value)" aria-label="Minutos de cardio">
                                         <span class="sens-act-unit-tag">min</span>
                                     </div>
                                     <button type="button" class="sens-act-stepper-btn" onclick="stepDailyCardio(5)" aria-label="Sumar 5 minutos">+</button>
@@ -3159,10 +3159,21 @@
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Botón Prominente de Guardado de Actividad & Gamification (Item 2) -->
+                        <div class="sens-act-save-wrap">
+                            <button type="button" class="btn btn-primary sens-btn-save-activity" id="btnSaveActivityLog" onclick="window.saveActivityChanges(true)">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span id="btnSaveActivityText">Guardar Actividad &amp; Balance</span>
+                            </button>
+                            <span class="sens-act-save-hint" id="sensActSaveHint">Mínimo 10.000 pasos ó 30m cardio para activar racha diaria</span>
+                        </div>
                     </div>
 
-                    <!-- Gráfico Semanal de Balance Energético vs Objetivo -->
-                    <div class="sens-balance-chart-wrap">
+                    <!-- Gráfico Semanal de Balance Energético vs Objetivo (Oculto para simplificar vista de balance) -->
+                    <div class="sens-balance-chart-wrap" style="display: none !important;">
                         <div class="sens-chart-header">
                             <span class="sens-chart-title">Tendencia Semanal vs. Objetivo</span>
                             <span class="sens-chart-meta">Meta: <strong id="dashGraphGoalTarget">-400 kcal/día</strong></span>
@@ -3186,8 +3197,8 @@
                         </div>
                     </div>
 
-                    <!-- Footer -->
-                    <div class="sens-balance-footer">
+                    <!-- Footer Calibrar Pasos (Oculto para simplificar vista de balance) -->
+                    <div class="sens-balance-footer" style="display: none !important;">
                         <div class="sens-balance-footer-info">
                             <span class="sens-footer-sub-label">Calibrar Pasos &amp; Cardio Diario</span>
                         </div>
@@ -6933,6 +6944,7 @@
         <div class="sens-congrats-card">
             <div class="sens-congrats-ring-wrap">
                 <div class="sens-congrats-pulse-ring"></div>
+                <div class="sens-congrats-pulse-ring-outer"></div>
                 <div class="sens-congrats-core-badge" id="sensCongratsBadgeIcon">
                     <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>

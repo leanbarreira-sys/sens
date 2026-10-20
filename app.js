@@ -5690,7 +5690,7 @@ const SensConfetti = {
         this.ctx = this.canvas.getContext('2d');
     },
 
-    burst(particleCount = 130) {
+    burst(particleCount = 280) {
         this.init();
         if (!this.canvas || !this.ctx) return;
 
@@ -5698,26 +5698,34 @@ const SensConfetti = {
         const h = (this.canvas.height = window.innerHeight);
         this.canvas.style.display = 'block';
 
-        const colors = ['#E5CBA7', '#F4E6D2', '#C4A47C', '#D4AF37', '#FFFFFF', '#A67C52'];
+        const colors = [
+            '#E5CBA7', '#F4E6D2', '#D4AF37', '#C4A47C', '#FFFFFF', '#F5DFBB', '#A67C52'
+        ];
         this.particles = [];
 
-        for (let i = 0; i < particleCount; i++) {
-            const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.6;
-            const speed = 7 + Math.random() * 20;
-            this.particles.push({
-                x: w * 0.5 + (Math.random() - 0.5) * 80,
-                y: h * 0.42 + (Math.random() - 0.5) * 50,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed - 7,
-                size: 5 + Math.random() * 8,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                rotation: Math.random() * 360,
-                rotationSpeed: (Math.random() - 0.5) * 14,
-                opacity: 1,
-                drag: 0.985,
-                gravity: 0.42,
-                isStar: Math.random() > 0.6
-            });
+        // Cañón Dual Izquierda & Derecha + Lluvia Central
+        const half = Math.floor(particleCount * 0.42);
+        
+        // Cañón Izquierdo
+        for (let i = 0; i < half; i++) {
+            const angle = -Math.PI * 0.35 + (Math.random() - 0.5) * 0.8;
+            const speed = 12 + Math.random() * 22;
+            this.particles.push(this.createParticle(w * 0.12, h * 0.82, Math.cos(angle) * speed, Math.sin(angle) * speed, colors));
+        }
+
+        // Cañón Derecho
+        for (let i = 0; i < half; i++) {
+            const angle = -Math.PI * 0.65 + (Math.random() - 0.5) * 0.8;
+            const speed = 12 + Math.random() * 22;
+            this.particles.push(this.createParticle(w * 0.88, h * 0.82, Math.cos(angle) * speed, Math.sin(angle) * speed, colors));
+        }
+
+        // Explosión Radial Central
+        const centerCount = particleCount - (half * 2);
+        for (let i = 0; i < centerCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 6 + Math.random() * 16;
+            this.particles.push(this.createParticle(w * 0.5, h * 0.42, Math.cos(angle) * speed, Math.sin(angle) * speed - 6, colors));
         }
 
         if (this.animationId) cancelAnimationFrame(this.animationId);
@@ -5735,11 +5743,14 @@ const SensConfetti = {
                 p.vy *= p.drag;
                 p.vy += p.gravity;
                 p.rotation += p.rotationSpeed;
-                if (elapsed > 1800) {
-                    p.opacity = Math.max(0, p.opacity - 0.025);
+                p.wobble += p.wobbleSpeed;
+                p.x += Math.sin(p.wobble) * 1.2;
+
+                if (elapsed > 2000) {
+                    p.opacity = Math.max(0, p.opacity - 0.022);
                 }
 
-                if (p.opacity > 0 && p.y < h + 60) {
+                if (p.opacity > 0 && p.y < h + 80) {
                     activeCount++;
                     this.ctx.save();
                     this.ctx.globalAlpha = p.opacity;
@@ -5747,17 +5758,23 @@ const SensConfetti = {
                     this.ctx.rotate((p.rotation * Math.PI) / 180);
                     this.ctx.fillStyle = p.color;
 
-                    if (p.isStar) {
+                    if (p.type === 'star') {
                         this.ctx.font = `${p.size * 1.5}px sans-serif`;
                         this.ctx.fillText('★', -p.size * 0.5, p.size * 0.5);
+                    } else if (p.type === 'circle') {
+                        this.ctx.beginPath();
+                        this.ctx.arc(0, 0, p.size * 0.45, 0, Math.PI * 2);
+                        this.ctx.fill();
                     } else {
-                        this.ctx.fillRect(-p.size * 0.5, -p.size * 0.25, p.size, p.size * 0.5);
+                        // Cintas con giro 3D en perspectiva
+                        const tilt = Math.cos(p.wobble);
+                        this.ctx.fillRect(-p.size * 0.5, -p.size * 0.25 * tilt, p.size, p.size * 0.55 * Math.abs(tilt) + 1);
                     }
                     this.ctx.restore();
                 }
             });
 
-            if (activeCount > 0 && elapsed < 3500) {
+            if (activeCount > 0 && elapsed < 4200) {
                 this.animationId = requestAnimationFrame(render);
             } else {
                 this.ctx.clearRect(0, 0, w, h);
@@ -5767,6 +5784,26 @@ const SensConfetti = {
         };
 
         this.animationId = requestAnimationFrame(render);
+    },
+
+    createParticle(x, y, vx, vy, colors) {
+        const types = ['ribbon', 'ribbon', 'star', 'circle'];
+        return {
+            x,
+            y,
+            vx,
+            vy,
+            size: 6 + Math.random() * 9,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * 360,
+            rotationSpeed: (Math.random() - 0.5) * 12,
+            wobble: Math.random() * 10,
+            wobbleSpeed: 0.08 + Math.random() * 0.12,
+            opacity: 1,
+            drag: 0.982,
+            gravity: 0.38,
+            type: types[Math.floor(Math.random() * types.length)]
+        };
     }
 };
 
@@ -5789,37 +5826,104 @@ const SensGamification = {
             const ctx = this.getAudioContext();
             if (!ctx) return;
             const now = ctx.currentTime;
-            const arpeggio = [
-                { f: 523.25, t: 0.00, d: 0.35, g: 0.22 },
-                { f: 659.25, t: 0.11, d: 0.35, g: 0.24 },
-                { f: 783.99, t: 0.22, d: 0.40, g: 0.26 },
-                { f: 1046.50, t: 0.33, d: 1.10, g: 0.32 }
+
+            // Compresor Maestro (impacto acústico grueso, sin saturación ni sonido 'lata')
+            const compressor = ctx.createDynamicsCompressor();
+            compressor.threshold.setValueAtTime(-14, now);
+            compressor.knee.setValueAtTime(10, now);
+            compressor.ratio.setValueAtTime(4, now);
+            compressor.attack.setValueAtTime(0.003, now);
+            compressor.release.setValueAtTime(0.25, now);
+            compressor.connect(ctx.destination);
+
+            // Filtro de Resonancia Acústica (corte dinámico de frecuencias tipo campana de bronce)
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(4200, now);
+            filter.frequency.exponentialRampToValueAtTime(800, now + 2.4);
+            filter.Q.setValueAtTime(2.2, now);
+            filter.connect(compressor);
+
+            // Cola de Reverberación Espacial (sensación de estadio o sala olímpica)
+            const delay = ctx.createDelay();
+            delay.delayTime.setValueAtTime(0.14, now);
+            const delayFeedback = ctx.createGain();
+            delayFeedback.gain.setValueAtTime(0.24, now);
+            const delayDamp = ctx.createBiquadFilter();
+            delayDamp.type = 'lowpass';
+            delayDamp.frequency.setValueAtTime(2200, now);
+
+            filter.connect(delay);
+            delay.connect(delayDamp);
+            delayDamp.connect(delayFeedback);
+            delayFeedback.connect(delay);
+            delayDamp.connect(compressor);
+
+            // Golpe de Fondo (sub-grave atlético que emula el trabado de discos de barra olímpica)
+            const subOsc = ctx.createOscillator();
+            const subGain = ctx.createGain();
+            subOsc.type = 'sine';
+            subOsc.frequency.setValueAtTime(120, now);
+            subOsc.frequency.exponentialRampToValueAtTime(45, now + 0.18);
+            subGain.gain.setValueAtTime(0.35, now);
+            subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+            subOsc.connect(subGain);
+            subGain.connect(compressor);
+            subOsc.start(now);
+            subOsc.stop(now + 0.25);
+
+            // Acorde Ascendente de Triunfo en Tonalidad A Mayor / D Mayor Pentatónica
+            // Sonido rico, musical, de alta lealtad y euforia deportiva
+            const notes = [
+                { f: 440.00, start: 0.00, dur: 1.8, gain: 0.28 }, // A4
+                { f: 554.37, start: 0.09, dur: 1.9, gain: 0.30 }, // C#5
+                { f: 659.25, start: 0.19, dur: 2.1, gain: 0.32 }, // E5
+                { f: 880.00, start: 0.31, dur: 2.6, gain: 0.40 }  // A5 Clímax
             ];
 
-            arpeggio.forEach(n => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(n.f, now + n.t);
-                gain.gain.setValueAtTime(n.g, now + n.t);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + n.t + n.d);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now + n.t);
-                osc.stop(now + n.t + n.d + 0.05);
-            });
+            notes.forEach(note => {
+                const noteTime = now + note.start;
 
-            [523.25, 659.25, 783.99, 1046.50].forEach(f => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(f, now + 0.33);
-                gain.gain.setValueAtTime(0.06, now + 0.33);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now + 0.33);
-                osc.stop(now + 1.65);
+                // 1. Fundamental acampanada
+                const oscFund = ctx.createOscillator();
+                const gainFund = ctx.createGain();
+                oscFund.type = 'sine';
+                oscFund.frequency.setValueAtTime(note.f, noteTime);
+
+                gainFund.gain.setValueAtTime(0.0001, noteTime);
+                gainFund.gain.linearRampToValueAtTime(note.gain, noteTime + 0.012);
+                gainFund.gain.exponentialRampToValueAtTime(0.0001, noteTime + note.dur);
+
+                oscFund.connect(gainFund);
+                gainFund.connect(filter);
+                oscFund.start(noteTime);
+                oscFund.stop(noteTime + note.dur + 0.05);
+
+                // 2. Segundo armónico (2x) - cuerpo de bronce
+                const oscH2 = ctx.createOscillator();
+                const gainH2 = ctx.createGain();
+                oscH2.type = 'sine';
+                oscH2.frequency.setValueAtTime(note.f * 2, noteTime);
+                gainH2.gain.setValueAtTime(0.0001, noteTime);
+                gainH2.gain.linearRampToValueAtTime(note.gain * 0.35, noteTime + 0.01);
+                gainH2.gain.exponentialRampToValueAtTime(0.0001, noteTime + note.dur * 0.7);
+                oscH2.connect(gainH2);
+                gainH2.connect(filter);
+                oscH2.start(noteTime);
+                oscH2.stop(noteTime + note.dur * 0.75);
+
+                // 3. Sobretono modal de campana (2.76x) - brillo de victoria
+                const oscBell = ctx.createOscillator();
+                const gainBell = ctx.createGain();
+                oscBell.type = 'sine';
+                oscBell.frequency.setValueAtTime(note.f * 2.756, noteTime);
+                gainBell.gain.setValueAtTime(0.0001, noteTime);
+                gainBell.gain.linearRampToValueAtTime(note.gain * 0.20, noteTime + 0.008);
+                gainBell.gain.exponentialRampToValueAtTime(0.0001, noteTime + note.dur * 0.5);
+                oscBell.connect(gainBell);
+                gainBell.connect(filter);
+                oscBell.start(noteTime);
+                oscBell.stop(noteTime + note.dur * 0.55);
             });
         } catch (e) {}
     },
@@ -5864,13 +5968,15 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
 
     if (titleEl) titleEl.textContent = title || '¡OBJETIVO CUMPLIDO!';
     if (subtitleEl) subtitleEl.textContent = subtitle || 'Racha SENS Activa';
-    if (quoteEl && quote) quoteEl.textContent = quote;
+    if (quoteEl) {
+        quoteEl.textContent = quote || '"Gran trabajo. Cada hábito ejecutado con intención consolida tu rendimiento y longevidad celular."';
+    }
     if (levelPillEl) levelPillEl.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
     if (bumpNumEl) bumpNumEl.textContent = streakDays;
 
     SensGamification.playCelebrationFanfare();
     SensGamification.playHapticFeedback();
-    SensConfetti.burst(140);
+    SensConfetti.burst(300);
 
     if (overlay) {
         overlay.style.display = 'flex';
@@ -5886,10 +5992,10 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
         if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
         window._sensCelebrationTimer = setTimeout(() => {
             overlay.style.display = 'none';
-        }, 4200);
+        }, 5000);
     } else {
         if (typeof showSensToast === 'function') {
-            showSensToast(`${title}: ${subtitle}`, 'champagne', 3500);
+            showSensToast(`${title}: ${subtitle}`, 'champagne', 4000);
         }
     }
 };
@@ -14663,12 +14769,13 @@ function getAthleteActivityLog(athId, dateKey) {
             }
         }
     } catch (e) {}
-    // Valores predeterminados inteligentes
+    // De entrada marca 0: El usuario debe completar y guardar para activar el balance
     return {
-        steps: 8000,
-        cardioMinutes: 25,
+        steps: 0,
+        cardioMinutes: 0,
         cardioType: 'caminata',
-        cardioRate: 6.5
+        cardioRate: 6.5,
+        isLogged: false
     };
 }
 
@@ -14681,7 +14788,9 @@ function saveAthleteActivityLog(athId, dateKey, data) {
             steps: Number(data.steps) || 0,
             cardioMinutes: Number(data.cardioMinutes) || 0,
             cardioType: data.cardioType || 'caminata',
-            cardioRate: Number(data.cardioRate) || 6.5
+            cardioRate: Number(data.cardioRate) || 6.5,
+            isLogged: true,
+            savedAt: new Date().toISOString()
         };
         localStorage.setItem(`${SENS_ACTIVITY_STORAGE_PREFIX}_${athId}`, JSON.stringify(store));
     } catch (e) {}
@@ -15372,17 +15481,17 @@ window.stepDailySteps = function(delta) {
     const nextVal = Math.max(0, current + delta);
     input.value = nextVal;
     window.handleStepsInputChange(nextVal);
-    window.saveActivityChanges();
+    window.saveActivityChanges(false);
 };
 
 window.quickSetDailySteps = function(steps) {
     const input = document.getElementById('dashStepsInput');
     if (input) input.value = steps;
     window.handleStepsInputChange(steps);
-    window.saveActivityChanges();
     document.querySelectorAll('.sens-act-quick-chip').forEach(c => {
         c.classList.toggle('active', c.textContent.includes(steps >= 1000 ? `${Math.round(steps / 1000)}` : `${steps}`));
     });
+    window.saveActivityChanges(false);
 };
 
 window.handleStepsInputChange = function(val) {
@@ -15394,6 +15503,11 @@ window.handleStepsInputChange = function(val) {
     
     const stepsSubBurn = document.getElementById('dashStepsSubBurn');
     if (stepsSubBurn) stepsSubBurn.textContent = `~${stepsBurn} kcal gastadas`;
+
+    const saveBtnText = document.getElementById('btnSaveActivityText');
+    if (saveBtnText && saveBtnText.textContent !== '✓ Actividad Guardada') {
+        saveBtnText.textContent = 'Guardar Actividad & Balance';
+    }
 };
 
 window.stepDailyCardio = function(delta) {
@@ -15403,7 +15517,7 @@ window.stepDailyCardio = function(delta) {
     const nextVal = Math.max(0, current + delta);
     input.value = nextVal;
     window.handleCardioInputChange(nextVal);
-    window.saveActivityChanges();
+    window.saveActivityChanges(false);
 };
 
 window.handleCardioInputChange = function(val) {
@@ -15414,6 +15528,11 @@ window.handleCardioInputChange = function(val) {
     
     const cardioSubBurn = document.getElementById('dashCardioSubBurn');
     if (cardioSubBurn) cardioSubBurn.textContent = `~${cardioBurn} kcal gastadas`;
+
+    const saveBtnText = document.getElementById('btnSaveActivityText');
+    if (saveBtnText && saveBtnText.textContent !== '✓ Actividad Guardada') {
+        saveBtnText.textContent = 'Guardar Actividad & Balance';
+    }
 };
 
 window.setCardioType = function(type, rate, btn) {
@@ -15426,10 +15545,10 @@ window.setCardioType = function(type, rate, btn) {
     const cardioSubBurn = document.getElementById('dashCardioSubBurn');
     if (cardioSubBurn) cardioSubBurn.textContent = `~${cardioBurn} kcal gastadas`;
     
-    window.saveActivityChanges();
+    window.saveActivityChanges(false);
 };
 
-window.saveActivityChanges = function() {
+window.saveActivityChanges = function(isExplicitSave = false) {
     const targetDate = AppState.selectedDate || new Date();
     const dateKey = getFormattedDateKey(targetDate);
     const athId = getActiveAthleteId();
@@ -15438,35 +15557,73 @@ window.saveActivityChanges = function() {
     const cardioInput = document.getElementById('dashCardioInput');
     const activeBtn = document.querySelector('#dashCardioTypesGrid .sens-cardio-type-btn.active');
     
-    const steps = stepsInput ? (parseInt(stepsInput.value, 10) || 0) : 8000;
-    const cardioMinutes = cardioInput ? (parseInt(cardioInput.value, 10) || 0) : 25;
+    const steps = stepsInput ? (parseInt(stepsInput.value, 10) || 0) : 0;
+    const cardioMinutes = cardioInput ? (parseInt(cardioInput.value, 10) || 0) : 0;
     const cardioType = activeBtn ? activeBtn.getAttribute('data-type') : 'caminata';
     const cardioRate = activeBtn ? parseFloat(activeBtn.getAttribute('data-rate')) || 6.5 : 6.5;
     
-    saveAthleteActivityLog(athId, dateKey, {
-        steps,
-        cardioMinutes,
-        cardioType,
-        cardioRate
-    });
+    if (isExplicitSave) {
+        saveAthleteActivityLog(athId, dateKey, {
+            steps,
+            cardioMinutes,
+            cardioType,
+            cardioRate
+        });
+    }
     
     updateObjectiveCardData(targetDate);
 
-    // Evaluar y celebrar racha aeróbica si califica por primera vez hoy
-    if (typeof SensDailyStreakManager !== 'undefined') {
-        const streakEval = SensDailyStreakManager.evaluateDay(targetDate, athId);
-        if (streakEval?.current?.cardio?.done && !streakEval?.previous?.cardio?.done) {
-            if (typeof window.showSensCelebrationToast === 'function') {
-                window.showSensCelebrationToast('¡Meta Aeróbica Alcanzada!', `Registraste ${steps.toLocaleString('es-AR')} pasos / ${cardioMinutes}m ${cardioType}. ¡Sumaste racha aeróbica!`);
+    if (isExplicitSave) {
+        // Actualizar racha y cards principales
+        if (typeof updateSensStreakCard === 'function') {
+            updateSensStreakCard(targetDate);
+        }
+
+        const saveBtnText = document.getElementById('btnSaveActivityText');
+        if (saveBtnText) {
+            saveBtnText.innerHTML = `✓ Actividad Guardada`;
+            setTimeout(() => {
+                const btn = document.getElementById('btnSaveActivityText');
+                if (btn) btn.textContent = 'Guardar Actividad & Balance';
+            }, 2400);
+        }
+
+        // Evaluar si califica para racha de pasos & cardio (10.000 pasos ó 90m caminata ó 30m otro cardio)
+        const qualifies = (steps >= 10000 || (cardioType === 'caminata' && cardioMinutes >= 90) || (cardioType !== 'caminata' && cardioMinutes >= 30));
+
+        if (qualifies) {
+            const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 1;
+            const evalResult = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.evaluateDay(targetDate, athId) : null;
+            const isAllThreeDone = (evalResult?.current?.completedCount === 3);
+
+            if (isAllThreeDone) {
+                if (typeof window.showSensCelebrationToast === 'function') {
+                    window.showSensCelebrationToast(
+                        '¡DÍA PERFECTO 100%!',
+                        'Fuerza, Nutrición y Balance completados hoy • Racha Máxima',
+                        '"La consistencia implacable en los tres pilares biológicos te posiciona en el 1% de disciplina y rendimiento celular."'
+                    );
+                }
+            } else {
+                if (typeof window.showSensCelebrationToast === 'function') {
+                    window.showSensCelebrationToast(
+                        '¡META AERÓBICA CONQUISTADA!',
+                        `${steps >= 10000 ? `${steps.toLocaleString('es-AR')} Pasos` : `${cardioMinutes}m de ${cardioType}`} • Racha SENS Activa`,
+                        '"El gasto activo diario optimiza tu partición de nutrientes, mejora la sensibilidad a la insulina y eleva tu tasa metabólica."'
+                    );
+                }
             }
+        } else {
+            const missingSteps = Math.max(0, 10000 - steps);
+            const msg = (steps > 0 || cardioMinutes > 0)
+                ? `✓ Actividad guardada (${steps.toLocaleString('es-AR')} pasos • ${cardioMinutes}m). Faltan ${missingSteps.toLocaleString('es-AR')} pasos para sumar racha diaria.`
+                : `✓ Balance guardado. Completá pasos o cardio para sumar a tu racha diaria.`;
+            if (typeof showSensToast === 'function') {
+                showSensToast(msg, 'champagne', 4200);
+            }
+            try { if (navigator.vibrate) navigator.vibrate([30, 40, 30]); } catch (e) {}
         }
     }
-
-    if (typeof updateSensStreakCard === 'function') {
-        updateSensStreakCard(targetDate);
-    }
-    
-    try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
 };
 
 /**
@@ -15494,12 +15651,12 @@ function getDailyMetabolicMetrics(targetDate) {
     // Gasto por entrenamiento de fuerza
     const workoutBurn = isWorkoutDone ? 380 : (hasWorkout ? 320 : 0);
 
-    // Pasos del día (NEAT)
-    const dailySteps = Number(actLog.steps) || 8000;
+    // Pasos del día (NEAT) - De entrada marca 0 si no se ha guardado
+    const dailySteps = (actLog && actLog.steps !== undefined) ? Number(actLog.steps) : 0;
     const stepsBurn = Math.round(dailySteps * (weight * 0.00052));
 
     // Cardio del día
-    const cardioMinutes = Number(actLog.cardioMinutes) || 0;
+    const cardioMinutes = (actLog && actLog.cardioMinutes !== undefined) ? Number(actLog.cardioMinutes) : 0;
     const cardioRate = Number(actLog.cardioRate) || 6.5;
     const cardioBurn = Math.round(cardioMinutes * cardioRate);
 
@@ -15550,7 +15707,7 @@ function getDailyMetabolicMetrics(targetDate) {
  */
 function renderWeeklyBalanceChart(selectedDate = new Date()) {
     const canvas = document.getElementById('dashWeeklyBalanceChart');
-    if (!canvas || typeof Chart === 'undefined') return;
+    if (!canvas || typeof Chart === 'undefined' || canvas.offsetParent === null) return;
 
     if (!AppState.activeWeekStart) {
         AppState.activeWeekStart = getMonday(new Date());
