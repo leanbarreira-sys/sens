@@ -113,6 +113,71 @@ function isFutureDate(target) {
     return targetMidnight > today;
 }
 
+function getAthletePrescribedCalories(athId = null, targetDate = null) {
+    const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+    const profile = (AppState.profile && AppState.profile.id === id) ? AppState.profile : (AppState.profile || {});
+    const anamnesis = AppState.anamnesis || {};
+
+    let userPlan = null;
+    try {
+        if (typeof getCoachAthleteWorkoutData === 'function') {
+            const data = getCoachAthleteWorkoutData(id);
+            if (data && data.prescribed_nutrition) userPlan = data.prescribed_nutrition;
+        }
+        if (!userPlan && profile.prescribed_nutrition) {
+            userPlan = profile.prescribed_nutrition;
+        }
+        if (!userPlan) {
+            const rawPlan = localStorage.getItem(`sens_prescribed_nutrition_${id}`);
+            if (rawPlan) userPlan = JSON.parse(rawPlan);
+        }
+    } catch (e) {}
+
+    let targetKcal = 0;
+    if (userPlan && userPlan.target_calories) {
+        targetKcal = parseInt(userPlan.target_calories, 10);
+    } else if (profile.daily_calories) {
+        targetKcal = parseInt(profile.daily_calories, 10);
+    } else if (anamnesis.daily_calories) {
+        targetKcal = parseInt(anamnesis.daily_calories, 10);
+    }
+
+    if (!targetKcal || targetKcal <= 0) {
+        const weightVal = parseFloat(profile.current_weight || anamnesis.weight || 75.0);
+        const heightVal = parseFloat(profile.height || anamnesis.height || 175.0);
+        const ageVal = parseInt(profile.age || anamnesis.age || 30, 10);
+        const genderVal = profile.gender || anamnesis.gender || 'male';
+        const userGoal = userPlan?.goal || profile.goal || anamnesis.goal || 'fat_loss';
+
+        let bmr = (10 * weightVal) + (6.25 * heightVal) - (5 * ageVal);
+        bmr += (genderVal === 'female' ? -161 : 5);
+        const tdee = Math.round(bmr * 1.55);
+
+        if (userGoal === 'fat_loss') targetKcal = Math.round(tdee - 450);
+        else if (userGoal === 'muscle_gain') targetKcal = Math.round(tdee + 350);
+        else targetKcal = Math.round(tdee);
+    }
+
+    return (targetKcal && targetKcal > 0) ? targetKcal : 1950;
+}
+window.getAthletePrescribedCalories = getAthletePrescribedCalories;
+
+function getAthleteConsumedCalories(athId = null, targetDate = null) {
+    const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+    const sDate = targetDate ? (targetDate instanceof Date ? targetDate : new Date(targetDate)) : (AppState.nutriSelectedDate || AppState.selectedDate || new Date());
+    const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+
+    const rawCals = localStorage.getItem(`sens_cals_${dateIso}`);
+    if (rawCals !== null) {
+        return parseInt(rawCals, 10) || 0;
+    }
+    if (isSameDay(sDate, new Date()) && AppState.dailyNutrition && AppState.dailyNutrition.calories > 0) {
+        return parseInt(AppState.dailyNutrition.calories, 10) || 0;
+    }
+    return 0;
+}
+window.getAthleteConsumedCalories = getAthleteConsumedCalories;
+
 function getWeekRangeLabel(monday) {
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
@@ -5049,11 +5114,16 @@ window.toggleExerciseFinished = function(exId, dayKey) {
             showSensToast('¡Felicitaciones! Completaste todos los ejercicios de la sesión.', 'champagne');
         }
     } else {
+        const wasCompleted = Boolean(day.completed);
         if (day.completed) {
             day.completed = false;
             saveAthleteDayWorkoutStatus(athId, dayKey, { completed: false });
         }
-        if (typeof showSensToast === 'function') {
+        if (wasCompleted) {
+            if (typeof showSensToast === 'function') {
+                showSensToast('Perdiste el objetivo de racha de entrenamiento de hoy (sesión incompleta).', 'warning', 4000);
+            }
+        } else if (typeof showSensToast === 'function') {
             showSensToast(ex.completed ? `✓ ${ex.name} finalizado` : `Ejercicio desmarcado`, 'info');
         }
     }
@@ -5775,15 +5845,22 @@ window.toggleSetCompleted = function(idx) {
             startMasterRestCountdown();
         }
     } else {
+        const wasDayCompleted = Boolean(day && day.completed);
         if (day && Array.isArray(day.exercises)) {
             const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
             if (ex) {
                 const anyDone = modalExerciseState.setsData.some(x => x.completed);
                 ex.completed = Boolean(anyDone);
+                day.completed = false;
                 saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: false });
                 if (typeof syncAllStreakAndPillTelemetry === 'function') {
                     syncAllStreakAndPillTelemetry(dayDate);
                 }
+            }
+        }
+        if (wasDayCompleted) {
+            if (typeof showSensToast === 'function') {
+                showSensToast('Perdiste el objetivo de racha de entrenamiento de hoy (sesión incompleta).', 'warning', 4000);
             }
         }
     }
@@ -5809,9 +5886,11 @@ window.completeAllExerciseSets = function() {
         modalExerciseState.setsData.forEach(s => { s.completed = false; });
         renderModalSeriesList();
 
+        let wasDayCompleted = false;
         if (day && Array.isArray(day.exercises)) {
             const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
             if (ex) {
+                wasDayCompleted = Boolean(day.completed);
                 ex.completed = false;
                 day.completed = false;
                 saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: false });
@@ -5820,7 +5899,13 @@ window.completeAllExerciseSets = function() {
                 }
             }
         }
-        showSensToast('Ejercicio desmarcado.', 'champagne', 2000);
+        if (wasDayCompleted) {
+            if (typeof showSensToast === 'function') {
+                showSensToast('Perdiste el objetivo de racha de entrenamiento de hoy (sesión incompleta).', 'warning', 4000);
+            }
+        } else {
+            showSensToast('Ejercicio desmarcado.', 'champagne', 2000);
+        }
         return;
     }
 
@@ -11595,7 +11680,11 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
             }
         } else if (nutriStatus === 'exceeded') {
             if (typeof showSensToast === 'function') {
-                showSensToast(`Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+                showSensToast(`Perdiste el objetivo de racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+            }
+        } else if (prevStatus === 'on_track' && nutriStatus === 'pending') {
+            if (typeof showSensToast === 'function') {
+                showSensToast(`Perdiste el objetivo de racha nutricional de hoy: calorías consumidas (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron debajo del mínimo óptimo.`, 'warning', 4500);
             }
         }
     } else {
@@ -12866,7 +12955,11 @@ function initUserCustomMealModal(athId) {
                     }
                 } else if (nutriStatus === 'exceeded') {
                     if (typeof showSensToast === 'function') {
-                        showSensToast(`Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+                        showSensToast(`Perdiste el objetivo de racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+                    }
+                } else if (prevStatus === 'on_track' && nutriStatus === 'pending') {
+                    if (typeof showSensToast === 'function') {
+                        showSensToast(`Perdiste el objetivo de racha nutricional de hoy: calorías consumidas (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron debajo del mínimo óptimo.`, 'warning', 4500);
                     }
                 }
             } else {
@@ -15223,18 +15316,23 @@ const SensDailyStreakManager = {
         let targetCals = 1950;
         let consumedCals = 0;
 
-        const metrics = (typeof getDailyMetabolicMetrics === 'function') ? getDailyMetabolicMetrics(sDate) : null;
-        if (metrics && metrics.targetIntake > 0) {
-            targetCals = metrics.targetIntake;
+        if (typeof getAthletePrescribedCalories === 'function') {
+            targetCals = getAthletePrescribedCalories(id, sDate);
         } else if (AppState.profile?.prescribed_nutrition?.target_calories) {
-            targetCals = AppState.profile.prescribed_nutrition.target_calories;
+            targetCals = parseInt(AppState.profile.prescribed_nutrition.target_calories, 10);
+        } else if (AppState.profile?.daily_calories) {
+            targetCals = parseInt(AppState.profile.daily_calories, 10);
         }
 
-        const rawCals = localStorage.getItem(`sens_cals_${dateIso}`);
-        if (rawCals !== null) {
-            consumedCals = parseInt(rawCals, 10) || 0;
-        } else if (isSameDay(sDate, new Date()) && AppState.dailyNutrition?.calories) {
-            consumedCals = parseInt(AppState.dailyNutrition.calories, 10) || 0;
+        if (typeof getAthleteConsumedCalories === 'function') {
+            consumedCals = getAthleteConsumedCalories(id, sDate);
+        } else {
+            const rawCals = localStorage.getItem(`sens_cals_${dateIso}`);
+            if (rawCals !== null) {
+                consumedCals = parseInt(rawCals, 10) || 0;
+            } else if (isSameDay(sDate, new Date()) && AppState.dailyNutrition?.calories) {
+                consumedCals = parseInt(AppState.dailyNutrition.calories, 10) || 0;
+            }
         }
 
         const minTarget = Math.round(targetCals * 0.80);
@@ -15877,29 +15975,32 @@ window.stepDailySteps = function(delta) {
     const current = parseInt(input.value, 10) || 0;
     const nextVal = Math.max(0, current + delta);
     input.value = nextVal;
+    document.querySelectorAll('.sens-act-quick-chip').forEach(c => {
+        const chipVal = parseInt(c.textContent.replace('.', '').replace(',', ''), 10) || 0;
+        c.classList.toggle('active', chipVal > 0 && chipVal === nextVal);
+    });
     window.handleStepsInputChange(nextVal);
-    window.saveActivityChanges(false);
 };
 
 window.quickSetDailySteps = function(steps) {
     const input = document.getElementById('dashStepsInput');
     if (input) input.value = steps;
-    window.handleStepsInputChange(steps);
     document.querySelectorAll('.sens-act-quick-chip').forEach(c => {
-        c.classList.toggle('active', c.textContent.includes(steps >= 1000 ? `${Math.round(steps / 1000)}` : `${steps}`));
+        const chipVal = parseInt(c.textContent.replace('.', '').replace(',', ''), 10) || 0;
+        c.classList.toggle('active', chipVal > 0 && chipVal === steps);
     });
-    window.saveActivityChanges(false);
+    window.handleStepsInputChange(steps);
 };
 
 window.handleStepsInputChange = function(val) {
     const steps = Math.max(0, parseInt(val, 10) || 0);
+    document.querySelectorAll('.sens-act-quick-chip').forEach(c => {
+        const chipVal = parseInt(c.textContent.replace('.', '').replace(',', ''), 10) || 0;
+        c.classList.toggle('active', chipVal > 0 && chipVal === steps);
+    });
+
     const targetDate = AppState.selectedDate || new Date();
-    const metrics = getDailyMetabolicMetrics(targetDate);
-    const weight = metrics.weight || 75;
-    const stepsBurn = Math.round(steps * (weight * 0.00052));
-    
-    const stepsSubBurn = document.getElementById('dashStepsSubBurn');
-    if (stepsSubBurn) stepsSubBurn.textContent = `~${stepsBurn} kcal gastadas`;
+    updateObjectiveCardData(targetDate, true);
 
     const saveBtnText = document.getElementById('btnSaveActivityText');
     if (saveBtnText && saveBtnText.textContent !== '✓ Actividad Guardada') {
@@ -15914,17 +16015,11 @@ window.stepDailyCardio = function(delta) {
     const nextVal = Math.max(0, current + delta);
     input.value = nextVal;
     window.handleCardioInputChange(nextVal);
-    window.saveActivityChanges(false);
 };
 
 window.handleCardioInputChange = function(val) {
-    const mins = Math.max(0, parseInt(val, 10) || 0);
-    const activeBtn = document.querySelector('#dashCardioTypesGrid .sens-cardio-type-btn.active');
-    const rate = activeBtn ? parseFloat(activeBtn.getAttribute('data-rate')) || 6.5 : 6.5;
-    const cardioBurn = Math.round(mins * rate);
-    
-    const cardioSubBurn = document.getElementById('dashCardioSubBurn');
-    if (cardioSubBurn) cardioSubBurn.textContent = `~${cardioBurn} kcal gastadas`;
+    const targetDate = AppState.selectedDate || new Date();
+    updateObjectiveCardData(targetDate, true);
 
     const saveBtnText = document.getElementById('btnSaveActivityText');
     if (saveBtnText && saveBtnText.textContent !== '✓ Actividad Guardada') {
@@ -15934,15 +16029,20 @@ window.handleCardioInputChange = function(val) {
 
 window.setCardioType = function(type, rate, btn) {
     document.querySelectorAll('#dashCardioTypesGrid .sens-cardio-type-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    if (btn) {
+        btn.classList.add('active');
+    } else {
+        const match = document.querySelector(`#dashCardioTypesGrid .sens-cardio-type-btn[data-type="${type}"]`);
+        if (match) match.classList.add('active');
+    }
     
-    const input = document.getElementById('dashCardioInput');
-    const mins = input ? (parseInt(input.value, 10) || 0) : 0;
-    const cardioBurn = Math.round(mins * rate);
-    const cardioSubBurn = document.getElementById('dashCardioSubBurn');
-    if (cardioSubBurn) cardioSubBurn.textContent = `~${cardioBurn} kcal gastadas`;
-    
-    window.saveActivityChanges(false);
+    const targetDate = AppState.selectedDate || new Date();
+    updateObjectiveCardData(targetDate, true);
+
+    const saveBtnText = document.getElementById('btnSaveActivityText');
+    if (saveBtnText && saveBtnText.textContent !== '✓ Actividad Guardada') {
+        saveBtnText.textContent = 'Guardar Actividad & Balance';
+    }
 };
 
 window.saveActivityChanges = function(isExplicitSave = false) {
@@ -15964,6 +16064,15 @@ window.saveActivityChanges = function(isExplicitSave = false) {
     const cardioMinutes = cardioInput ? (parseInt(cardioInput.value, 10) || 0) : 0;
     const cardioType = activeBtn ? activeBtn.getAttribute('data-type') : 'caminata';
     const cardioRate = activeBtn ? parseFloat(activeBtn.getAttribute('data-rate')) || 6.5 : 6.5;
+
+    // Detectar si el atleta ya había cumplido racha de actividad hoy
+    let wasCardioDone = false;
+    if (isExplicitSave && typeof SensDailyStreakManager !== 'undefined') {
+        const records = SensDailyStreakManager.getAllRecords(athId);
+        if (records && records[dateKey] && records[dateKey].cardio && records[dateKey].cardio.done) {
+            wasCardioDone = true;
+        }
+    }
     
     if (isExplicitSave) {
         saveAthleteActivityLog(athId, dateKey, {
@@ -15974,12 +16083,19 @@ window.saveActivityChanges = function(isExplicitSave = false) {
         });
     }
     
-    updateObjectiveCardData(targetDate);
+    updateObjectiveCardData(targetDate, !isExplicitSave);
 
     if (isExplicitSave) {
         // Actualizar racha y cards principales
-        if (typeof updateSensStreakCard === 'function') {
-            updateSensStreakCard(targetDate);
+        if (typeof syncAllStreakAndPillTelemetry === 'function') {
+            syncAllStreakAndPillTelemetry(targetDate);
+        } else {
+            if (typeof updateSensStreakCard === 'function') {
+                updateSensStreakCard(targetDate);
+            }
+            if (typeof updateHomeCardsStreakPills === 'function') {
+                updateHomeCardsStreakPills(targetDate, athId);
+            }
         }
 
         const saveBtnText = document.getElementById('btnSaveActivityText');
@@ -16017,12 +16133,18 @@ window.saveActivityChanges = function(isExplicitSave = false) {
                 }
             }
         } else {
-            const missingSteps = Math.max(0, 10000 - steps);
-            const msg = (steps > 0 || cardioMinutes > 0)
-                ? `✓ Actividad guardada (${steps.toLocaleString('es-AR')} pasos • ${cardioMinutes}m). Faltan ${missingSteps.toLocaleString('es-AR')} pasos para sumar racha diaria.`
-                : `✓ Balance guardado. Completá pasos o cardio para sumar a tu racha diaria.`;
-            if (typeof showSensToast === 'function') {
-                showSensToast(msg, 'champagne', 4200);
+            if (wasCardioDone) {
+                if (typeof showSensToast === 'function') {
+                    showSensToast('Perdiste el objetivo de racha de actividad de hoy (mínimo 10.000 pasos ó 30m cardio).', 'warning', 4500);
+                }
+            } else {
+                const missingSteps = Math.max(0, 10000 - steps);
+                const msg = (steps > 0 || cardioMinutes > 0)
+                    ? `✓ Actividad guardada (${steps.toLocaleString('es-AR')} pasos • ${cardioMinutes}m). Faltan ${missingSteps.toLocaleString('es-AR')} pasos para sumar racha diaria.`
+                    : `✓ Balance guardado. Completá pasos o cardio para sumar a tu racha diaria.`;
+                if (typeof showSensToast === 'function') {
+                    showSensToast(msg, 'champagne', 4200);
+                }
             }
             try { if (navigator.vibrate) navigator.vibrate([30, 40, 30]); } catch (e) {}
         }
@@ -16067,20 +16189,16 @@ function getDailyMetabolicMetrics(targetDate) {
     const activeBurn = workoutBurn + stepsBurn + cardioBurn;
     const tdee = bmr + activeBurn;
 
-    // Ingesta calórica
-    let targetIntake = 0;
-    const rawKcal = profile.daily_calories || anamnesis.daily_calories;
-    targetIntake = rawKcal ? parseInt(rawKcal, 10) : (isDemo ? 1850 : 2000);
+    // Ingesta calórica: objetivo prescripto vs real consumido
+    const prescribedCalories = (typeof getAthletePrescribedCalories === 'function')
+        ? getAthletePrescribedCalories(athId, targetDate)
+        : (profile.daily_calories ? parseInt(profile.daily_calories, 10) : 1950);
 
-    try {
-        const storedCals = localStorage.getItem(`sens_cals_${dateKey}`);
-        if (storedCals) {
-            targetIntake = parseInt(storedCals, 10);
-        } else if (AppState.dailyNutrition && AppState.dailyNutrition.calories > 0 && isSameDay(targetDate, new Date())) {
-            targetIntake = AppState.dailyNutrition.calories;
-        }
-    } catch (e) {}
+    let consumedCalories = (typeof getAthleteConsumedCalories === 'function')
+        ? getAthleteConsumedCalories(athId, targetDate)
+        : 0;
 
+    const targetIntake = consumedCalories;
     const netBalance = targetIntake - tdee;
 
     return {
@@ -16098,9 +16216,12 @@ function getDailyMetabolicMetrics(targetDate) {
         activeBurn,
         tdee,
         targetIntake,
+        prescribedCalories,
+        consumedCalories,
         netBalance
     };
 }
+window.getDailyMetabolicMetrics = getDailyMetabolicMetrics;
 
 /**
  * Renderiza el gráfico semanal interactivo con Chart.js en #dashWeeklyBalanceChart
@@ -16260,7 +16381,7 @@ function renderWeeklyBalanceChart(selectedDate = new Date()) {
 /**
  * Actualiza la Card de Balance Energético con los valores reales del día y el gráfico semanal
  */
-function updateObjectiveCardData(selectedDate = null) {
+function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false) {
     if (!selectedDate) {
         selectedDate = AppState.selectedDate || new Date();
     }
@@ -16273,21 +16394,63 @@ function updateObjectiveCardData(selectedDate = null) {
     const statusTextEl = document.getElementById('dashBalanceStatusText');
     const breakdownEl = document.getElementById('dashBalanceBurnBreakdown');
     const graphGoalTarget = document.getElementById('dashGraphGoalTarget');
-    const consistencyScoreText = document.getElementById('dashConsistencyScoreText');
+    const mealsSubEl = document.getElementById('dashBalanceMealsCount');
     const btnGoTracking = document.getElementById('btnGoTrackingFromBalance');
 
     const metrics = getDailyMetabolicMetrics(selectedDate);
-    const isToday = isSameDay(selectedDate, new Date());
+    const profile = AppState.profile || {};
+    const userGoal = profile.goal || 'fat_loss';
+    const isMuscleGain = userGoal === 'muscle_gain';
+
+    const stepsInput = document.getElementById('dashStepsInput');
+    const cardioInput = document.getElementById('dashCardioInput');
+    const activeBtn = document.querySelector('#dashCardioTypesGrid .sens-cardio-type-btn.active');
+
+    let liveSteps = metrics.dailySteps;
+    let liveCardioMins = metrics.cardioMinutes;
+    let liveCardioType = metrics.cardioType;
+    let liveCardioRate = metrics.cardioRate;
+
+    if (isDraftLiveUpdate) {
+        if (stepsInput) {
+            liveSteps = Math.max(0, parseInt(stepsInput.value, 10) || 0);
+        }
+        if (cardioInput) {
+            liveCardioMins = Math.max(0, parseInt(cardioInput.value, 10) || 0);
+        }
+        if (activeBtn) {
+            liveCardioType = activeBtn.getAttribute('data-type') || 'caminata';
+            liveCardioRate = parseFloat(activeBtn.getAttribute('data-rate')) || 6.5;
+        }
+    } else {
+        if (stepsInput) {
+            stepsInput.value = metrics.dailySteps;
+        }
+        if (cardioInput) {
+            cardioInput.value = metrics.cardioMinutes;
+        }
+        document.querySelectorAll('#dashCardioTypesGrid .sens-cardio-type-btn').forEach(btn => {
+            const type = btn.getAttribute('data-type');
+            btn.classList.toggle('active', type === metrics.cardioType);
+        });
+        document.querySelectorAll('.sens-act-quick-chip').forEach(c => {
+            const chipVal = parseInt(c.textContent.replace('.', '').replace(',', ''), 10) || 0;
+            c.classList.toggle('active', chipVal > 0 && chipVal === metrics.dailySteps);
+        });
+    }
+
+    const weight = metrics.weight || 75;
+    const liveStepsBurn = Math.round(liveSteps * (weight * 0.00052));
+    const liveCardioBurn = Math.round(liveCardioMins * liveCardioRate);
+    const liveActiveBurn = metrics.workoutBurn + liveStepsBurn + liveCardioBurn;
+    const liveTdee = metrics.bmr + liveActiveBurn;
+    const liveNetBalance = metrics.targetIntake - liveTdee;
 
     if (dateLabel) {
         const d = selectedDate || AppState.selectedDate || new Date();
         const formatted = d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
         dateLabel.textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
     }
-
-    const profile = AppState.profile || {};
-    const userGoal = profile.goal || 'fat_loss';
-    const isMuscleGain = userGoal === 'muscle_gain';
 
     if (goalPill) {
         goalPill.textContent = isMuscleGain ? 'Meta: +300 kcal' : 'Meta: -400 kcal';
@@ -16304,56 +16467,56 @@ function updateObjectiveCardData(selectedDate = null) {
         ingestaNum.textContent = metrics.targetIntake.toLocaleString('es-AR');
     }
 
+    if (mealsSubEl) {
+        const athId = getActiveAthleteId();
+        const dateKey = getFormattedDateKey(selectedDate);
+        const logKey = `sens_user_consumed_foods_${athId}_${dateKey}`;
+        let count = 0;
+        try {
+            const logged = JSON.parse(localStorage.getItem(logKey) || '{}');
+            count = Object.keys(logged).length;
+        } catch (e) {}
+        if (count > 0) {
+            mealsSubEl.textContent = `${count} ${count === 1 ? 'alimento registrado' : 'alimentos registrados'}`;
+        } else if (metrics.targetIntake > 0) {
+            mealsSubEl.textContent = 'Consumo registrado';
+        } else {
+            mealsSubEl.textContent = '0 alimentos registrados';
+        }
+    }
+
     if (tdeeNum) {
-        tdeeNum.textContent = metrics.tdee.toLocaleString('es-AR');
+        tdeeNum.textContent = liveTdee.toLocaleString('es-AR');
     }
 
     if (breakdownEl) {
-        breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${metrics.activeBurn.toLocaleString('es-AR')} (Pasos: ${metrics.stepsBurn} • Cardio: ${metrics.cardioBurn} • Entreno: ${metrics.workoutBurn})`;
+        breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${liveActiveBurn.toLocaleString('es-AR')} (Pasos: ${liveStepsBurn} • Cardio: ${liveCardioBurn} • Entreno: ${metrics.workoutBurn})`;
     }
 
     // Actualizar Panel Táctil de Actividad Diaria (Pasos & Cardio)
     const activeBurnBadge = document.getElementById('dashActiveBurnBadge');
     if (activeBurnBadge) {
-        activeBurnBadge.textContent = `+${metrics.activeBurn.toLocaleString('es-AR')} kcal activas`;
+        activeBurnBadge.textContent = `+${liveActiveBurn.toLocaleString('es-AR')} kcal activas`;
     }
 
-    const stepsInput = document.getElementById('dashStepsInput');
-    if (stepsInput && document.activeElement !== stepsInput) {
-        stepsInput.value = metrics.dailySteps;
-    }
     const stepsSubBurn = document.getElementById('dashStepsSubBurn');
     if (stepsSubBurn) {
-        stepsSubBurn.textContent = `~${metrics.stepsBurn} kcal gastadas`;
+        stepsSubBurn.textContent = `~${liveStepsBurn} kcal gastadas`;
     }
 
-    const cardioInput = document.getElementById('dashCardioInput');
-    if (cardioInput && document.activeElement !== cardioInput) {
-        cardioInput.value = metrics.cardioMinutes;
-    }
     const cardioSubBurn = document.getElementById('dashCardioSubBurn');
     if (cardioSubBurn) {
-        cardioSubBurn.textContent = `~${metrics.cardioBurn} kcal gastadas`;
-    }
-
-    document.querySelectorAll('#dashCardioTypesGrid .sens-cardio-type-btn').forEach(btn => {
-        const type = btn.getAttribute('data-type');
-        btn.classList.toggle('active', type === metrics.cardioType);
-    });
-
-    // Actualizar Racha SENS & Cumplimiento de 3 Pilares
-    if (typeof updateSensStreakCard === 'function') {
-        updateSensStreakCard(selectedDate);
+        cardioSubBurn.textContent = `~${liveCardioBurn} kcal gastadas`;
     }
 
     const netBoxEl = document.getElementById('dashBalanceNetBox');
     if (netValEl) {
-        const sign = metrics.netBalance > 0 ? '+' : '';
-        netValEl.innerHTML = `${sign}${metrics.netBalance.toLocaleString('es-AR')} <span class="unit">kcal</span>`;
+        const sign = liveNetBalance > 0 ? '+' : '';
+        netValEl.innerHTML = `${sign}${liveNetBalance.toLocaleString('es-AR')} <span class="unit">kcal</span>`;
     }
 
     if (statusTextEl) {
-        const isOptimal = isMuscleGain ? (metrics.netBalance >= 150) : (metrics.netBalance <= -300);
+        const isOptimal = isMuscleGain ? (liveNetBalance >= 150) : (liveNetBalance <= -300);
         if (isOptimal) {
             statusTextEl.textContent = isMuscleGain ? 'Superávit Cumplido' : 'Déficit Logrado';
             statusTextEl.style.color = '#E5CBA7';
@@ -16363,7 +16526,7 @@ function updateObjectiveCardData(selectedDate = null) {
                 netBoxEl.style.background = 'linear-gradient(135deg, rgba(229, 203, 167, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)';
             }
         } else {
-            statusTextEl.textContent = metrics.netBalance > 0 ? 'Superávit Elevado' : 'Ajuste Requerido';
+            statusTextEl.textContent = liveNetBalance > 0 ? 'Superávit Elevado' : 'Ajuste Requerido';
             statusTextEl.style.color = '#D97706';
             if (netValEl) netValEl.style.color = '#D97706';
             if (netBoxEl) {
@@ -16373,8 +16536,14 @@ function updateObjectiveCardData(selectedDate = null) {
         }
     }
 
-    // Renderizar gráfico semanal
-    renderWeeklyBalanceChart(selectedDate);
+    if (!isDraftLiveUpdate) {
+        // Actualizar Racha SENS & Cumplimiento de 3 Pilares con datos guardados
+        if (typeof updateSensStreakCard === 'function') {
+            updateSensStreakCard(selectedDate);
+        }
+        // Renderizar gráfico semanal
+        renderWeeklyBalanceChart(selectedDate);
+    }
 
     // Sincronizar card de biometría si estuviese visible
     if (typeof updateBiometricsCardData === 'function') {
@@ -16391,6 +16560,7 @@ function updateObjectiveCardData(selectedDate = null) {
         };
     }
 }
+window.updateObjectiveCardData = updateObjectiveCardData;
 
 /**
  * Actualiza la Card de Composición Corporal & Peso (#dashBiometricsCard)
