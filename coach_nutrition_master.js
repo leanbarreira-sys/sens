@@ -1466,7 +1466,7 @@ const CoachNutritionMaster = {
 
                         <!-- Botón Toggle de Edición Masiva -->
                         <button type="button" class="btn btn-sm ${isMulti ? 'btn-primary' : 'btn-outline'}" id="btnToggleNutriMultiMode" style="font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; ${isMulti ? 'background: #9E7D4B; border-color: #9E7D4B; color: #FFFFFF;' : 'border-color: #E4E4E7; color: #18181B;'}">
-                            <span>${isMulti ? '✓ Modo Masivo Activo' : '☵ Edición Masiva'}</span>
+                            <span>${isMulti ? '✓ Modo Masivo Activo' : 'Edición Masiva'}</span>
                         </button>
                     </div>
 

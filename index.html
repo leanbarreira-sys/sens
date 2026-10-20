@@ -2709,7 +2709,7 @@
                                     <span class="sens-streak-hero-num" id="sensStreakHeroNum">0</span>
                                     <span class="sens-streak-hero-unit">DÍAS EN RACHA</span>
                                 </div>
-                                <div class="sens-streak-level-tag" id="sensStreakLevelTag">Nivel 1 • Semilla del Hábito</div>
+                                <div class="sens-streak-level-tag" id="sensStreakLevelTag">Nivel 1 • Inicio del Hábito</div>
                             </div>
                         </div>
                         <span class="sens-streak-status-pill" id="sensStreakStatusPill">En progreso</span>
@@ -2757,11 +2757,16 @@
                                 <div class="sens-pillar-content">
                                     <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
                                         <span class="sens-pillar-heading">Fuerza &amp; Rutina</span>
-                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation(); this.classList.toggle('active');">
-                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha entrenamiento" style="width: 15px; height: 15px; font-size: 9px; line-height: 1;">?</button>
-                                            <div class="sens-tooltip-popover" style="font-size: 11.5px; line-height: 1.4; width: 250px;">
-                                                <strong style="color: #E5CBA7;">Regla — Entrenamiento:</strong><br>
-                                                Solo se activa si completaste todos los ejercicios prescriptos para el día desde tu rutina. En días anteriores sin completar muestra ✕.
+                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
+                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha entrenamiento" title="Ver regla de racha">?</button>
+                                            <div class="sens-tooltip-popover sens-streak-rule-popover align-left">
+                                                <div class="sens-streak-popover-header">
+                                                    <span class="sens-streak-popover-badge">Regla SENS</span>
+                                                    <strong class="sens-streak-popover-title">Entrenamiento</strong>
+                                                </div>
+                                                <p class="sens-streak-popover-text">
+                                                    Solo se activa si completás el <strong>100% de los ejercicios</strong> prescriptos para hoy en tu rutina (o marcás descanso activo). En días anteriores incompletos muestra ✕.
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -2778,11 +2783,16 @@
                                 <div class="sens-pillar-content">
                                     <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
                                         <span class="sens-pillar-heading">Plan Nutricional</span>
-                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation(); this.classList.toggle('active');">
-                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha nutrición" style="width: 15px; height: 15px; font-size: 9px; line-height: 1;">?</button>
-                                            <div class="sens-tooltip-popover" style="font-size: 11.5px; line-height: 1.4; width: 250px;">
-                                                <strong style="color: #E5CBA7;">Regla — Nutrición:</strong><br>
-                                                Tiene racha si queda un 10% arriba o un 20% abajo de las calorías recomendadas. Si superás el +10%, perdés la racha diaria.
+                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
+                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha nutrición" title="Ver regla de racha">?</button>
+                                            <div class="sens-tooltip-popover sens-streak-rule-popover align-center">
+                                                <div class="sens-streak-popover-header">
+                                                    <span class="sens-streak-popover-badge">Regla SENS</span>
+                                                    <strong class="sens-streak-popover-title">Nutrición</strong>
+                                                </div>
+                                                <p class="sens-streak-popover-text">
+                                                    Mantiene la racha si tus calorías consumidas quedan entre <strong>-20% y +10%</strong> de tu meta prescripta. Si superás el <strong>+10%</strong>, perdés la racha diaria.
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -2799,11 +2809,16 @@
                                 <div class="sens-pillar-content">
                                     <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
                                         <span class="sens-pillar-heading">Pasos &amp; Cardio</span>
-                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation(); this.classList.toggle('active');">
-                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha pasos y cardio" style="width: 15px; height: 15px; font-size: 9px; line-height: 1;">?</button>
-                                            <div class="sens-tooltip-popover" style="font-size: 11.5px; line-height: 1.4; width: 250px;">
-                                                <strong style="color: #E5CBA7;">Regla — Pasos &amp; Cardio:</strong><br>
-                                                Se aplica al guardar la info en Balance Energético. Requiere mínimo 10.000 pasos ó 90 min de caminata ó 30 min de otro cardio.
+                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
+                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha pasos y cardio" title="Ver regla de racha">?</button>
+                                            <div class="sens-tooltip-popover sens-streak-rule-popover align-right">
+                                                <div class="sens-streak-popover-header">
+                                                    <span class="sens-streak-popover-badge">Regla SENS</span>
+                                                    <strong class="sens-streak-popover-title">Pasos &amp; Cardio</strong>
+                                                </div>
+                                                <p class="sens-streak-popover-text">
+                                                    Se acredita al guardar tu registro en Balance Energético: requiere mínimo <strong>10.000 pasos</strong> ó <strong>90m caminata</strong> ó <strong>30m cardio</strong>.
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -6665,13 +6680,13 @@
             <!-- Tabs Navigation -->
             <div style="display: flex; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: #121214; padding: 0 16px; overflow-x: auto; scrollbar-width: none;">
                 <button type="button" class="clarity-tab-btn active" data-clarity-tab="tabClarityWorkouts">
-                    <span>⚡ Rutina &amp; Ejercicios</span>
+                    <span>Rutina &amp; Ejercicios</span>
                 </button>
                 <button type="button" class="clarity-tab-btn" data-clarity-tab="tabClarityNutrition">
-                    <span>🥗 Nutrición &amp; TDEE</span>
+                    <span>Nutrición &amp; TDEE</span>
                 </button>
                 <button type="button" class="clarity-tab-btn" data-clarity-tab="tabClarityMass">
-                    <span>📋 Duplicar &amp; Replicar Mesociclo</span>
+                    <span>Duplicar &amp; Replicar Mesociclo</span>
                 </button>
             </div>
 
@@ -6723,7 +6738,7 @@
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary" id="btnClarityGenerateWorkout" style="width: 100%; padding: 10px; font-weight: 800; font-size: 12.5px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
-                            ⚡ Generar Propuesta de Rutina en 1 Segundo
+                            Generar Propuesta de Rutina
                         </button>
                     </div>
 
@@ -6739,7 +6754,7 @@
                     <!-- Botones de Acción para Entrenamientos -->
                     <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
                         <button type="button" class="btn btn-outline" id="btnClarityApplyAndEdit" style="font-size: 12px; padding: 10px 16px;">
-                            ✏️ Aceptar y Editar en Coach OS
+                            Aceptar y Editar en Coach OS
                         </button>
                         <button type="button" class="btn btn-primary" id="btnClarityApplyWorkoutAll" style="font-size: 12px; padding: 10px 20px; font-weight: 800; background: var(--accent-champagne); color: #09090B;">
                             ✓ Aceptar Plan Completo (1-Click)
@@ -6879,7 +6894,7 @@
                             </div>
                         </div>
                         <button type="button" class="btn btn-outline" id="btnClarityExecuteDuplicateDay" style="padding: 10px 18px; font-size: 12px; font-weight: 700; width: 100%;">
-                            📋 Duplicar Día Ahora
+                            Duplicar Día Ahora
                         </button>
                     </div>
 
@@ -6902,7 +6917,7 @@
                             </div>
                         </label>
                         <button type="button" class="btn btn-primary" id="btnClarityExecuteReplicateMonth" style="width: 100%; padding: 12px; font-weight: 800; font-size: 12.5px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
-                            🗓️ Replicar Plan a Todo el Mes (4 Semanas)
+                            Replicar Plan a Todo el Mes (4 Semanas)
                         </button>
                     </div>
 
@@ -6924,7 +6939,7 @@
                     </svg>
                 </div>
             </div>
-            <div class="sens-congrats-level-pill" id="sensCongratsLevelPill">Nivel 1 • Semilla del Hábito</div>
+            <div class="sens-congrats-level-pill" id="sensCongratsLevelPill">Nivel 1 • Inicio del Hábito</div>
             <h3 class="sens-congrats-title" id="sensCongratsTitle">¡OBJETIVO CUMPLIDO!</h3>
             <p class="sens-congrats-subtitle" id="sensCongratsSubtitle">Racha SENS Activa</p>
             <div class="sens-congrats-streak-counter-bump" id="sensCongratsCounterBump">

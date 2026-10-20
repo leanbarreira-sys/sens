@@ -3464,7 +3464,7 @@ function initDiagnosisWizard() {
             if (!isActive) wrap.classList.add('active');
             return;
         }
-        if (!e.target.closest('.sens-tooltip-popover')) {
+        if (!e.target.closest('.sens-tooltip-popover, .sens-streak-rule-popover')) {
             document.querySelectorAll('.sens-tooltip-wrap.active').forEach(w => w.classList.remove('active'));
         }
     });
@@ -5833,11 +5833,11 @@ const SensGamification = {
     },
 
     getStreakLevel(streakDays) {
-        if (streakDays >= 30) return { level: 5, title: 'Longevidad Élite 👑', next: '¡Racha Máxima SENS!' };
-        if (streakDays >= 14) return { level: 4, title: 'Disciplina Olímpica 🏆', next: 'Meta: 30 Días' };
-        if (streakDays >= 7)  return { level: 3, title: 'Dominio Semanal ⚡', next: 'Meta: 14 Días' };
-        if (streakDays >= 3)  return { level: 2, title: 'Fuego Constante 🔥', next: 'Meta: 7 Días' };
-        if (streakDays >= 1)  return { level: 1, title: 'Semilla del Hábito 🌱', next: 'Meta: 3 Días' };
+        if (streakDays >= 30) return { level: 5, title: 'Longevidad Élite', next: 'Racha Máxima SENS' };
+        if (streakDays >= 14) return { level: 4, title: 'Disciplina Olímpica', next: 'Meta: 30 Días' };
+        if (streakDays >= 7)  return { level: 3, title: 'Dominio Semanal', next: 'Meta: 14 Días' };
+        if (streakDays >= 3)  return { level: 2, title: 'Foco Continuo', next: 'Meta: 7 Días' };
+        if (streakDays >= 1)  return { level: 1, title: 'Inicio del Hábito', next: 'Meta: 3 Días' };
         return { level: 0, title: 'Iniciá tu Racha Hoy', next: 'Completá 1 objetivo' };
     }
 };
@@ -11221,7 +11221,7 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
             }
         } else if (nutriStatus === 'exceeded') {
             if (typeof showSensToast === 'function') {
-                showSensToast(`⚠️ Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+                showSensToast(`Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
             }
         }
     }
@@ -12474,7 +12474,7 @@ function initUserCustomMealModal(athId) {
                     }
                 } else if (nutriStatus === 'exceeded') {
                     if (typeof showSensToast === 'function') {
-                        showSensToast(`⚠️ Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+                        showSensToast(`Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
                     }
                 }
             }
@@ -14983,7 +14983,7 @@ window.showStreakMissedDetail = function(dateIso = null) {
                     <span>${r.detail}</span>
                 </div>
             </div>
-        `).join('') + (rec.locked ? `<div style="font-size: 10px; color: #71717A; margin-top: 6px;">🔒 Día finalizado e inmutable. Podés editar cargas y comidas pasadas, pero la racha permanece sellada.</div>` : '');
+        `).join('') + (rec.locked ? `<div style="font-size: 10px; color: #A1A1AA; margin-top: 6px;">Día finalizado e inmutable. Podés editar cargas y comidas pasadas, pero la racha permanece sellada.</div>` : '');
 
         if (tipEl) tipEl.textContent = '"Un día no define tu metabolismo. Enfocate en clavar tu rutina y rango de calorías de hoy para reactivar el fuego."';
     }
@@ -21122,11 +21122,11 @@ const CoachWorkoutsMaster = {
                 title: `Rutina Guardada Solo en Memoria Local`,
                 body: `Se programaron ${newlyScheduledCount + overriddenCount} sesiones en este dispositivo. <strong>Atención: NO se guardó en Supabase</strong> para el alumno debido a un error de base de datos.`,
                 errorNotice: isMissingCol
-                    ? `<strong>Falta Columna en Supabase:</strong> La tabla <code>profiles</code> no tiene la columna <code>prescribed_workouts</code>.<br><br>👉 <strong>Solución:</strong> En tu panel de Supabase, abrí el <em>SQL Editor</em> y ejecutá el script <code>supabase_coach_prescriptions.sql</code> para crear las columnas y sincronizar con tus alumnos en vivo.`
+                    ? `<strong>Falta Columna en Supabase:</strong> La tabla <code>profiles</code> no tiene la columna <code>prescribed_workouts</code>.<br><br><strong>Solución:</strong> En tu panel de Supabase, abrí el <em>SQL Editor</em> y ejecutá el script <code>supabase_coach_prescriptions.sql</code> para crear las columnas y sincronizar con tus alumnos en vivo.`
                     : `<strong>Error de Supabase:</strong> ${supabaseError.message || JSON.stringify(supabaseError)}`
             });
             if (typeof showSensToast === 'function') {
-                showSensToast(`⚠️ Guardada localmente. Error en Supabase: ${isMissingCol ? "falta columna 'prescribed_workouts'" : (supabaseError.message || 'Error de red')}`, 'alert', 7000);
+                showSensToast(`Guardada localmente. Error en Supabase: ${isMissingCol ? "falta columna 'prescribed_workouts'" : (supabaseError.message || 'Error de red')}`, 'alert', 7000);
             }
         } else {
             const toastDetail = (mode === 'fill_empty' && preservedCount > 0)
@@ -21403,28 +21403,28 @@ const CoachWorkoutsMaster = {
             if (hasWorkout) {
                 const modTag = (session.modality === 'presencial') ? 'Presencial' : (session.modality === 'online') ? 'Online' : 'Autónomo';
                 
-                // Emoticones de los grupos musculares (según requerimiento de visualización compacta)
+                // Grupos musculares en chips tipográficos (Quiet Luxury - Cero emoticones)
                 const muscleCategories = new Set(session.exercises.map(ex => getBiomechanicalCategory(ex)));
-                const muscleEmojiMap = {
-                    piernas: '🦵',
-                    espalda: '🔙',
-                    pecho: '💪',
-                    brazos: '🦾',
-                    hombros: '🛡️',
-                    core: '⚡',
-                    movilidad: '🧘',
-                    cardio: '🏃'
+                const muscleTagMap = {
+                    piernas: 'PIERNAS',
+                    espalda: 'ESPALDA',
+                    pecho: 'PECHO',
+                    brazos: 'BRAZOS',
+                    hombros: 'HOMBROS',
+                    core: 'CORE',
+                    movilidad: 'MOVILIDAD',
+                    cardio: 'CARDIO'
                 };
-                const emojis = [];
+                const tags = [];
                 ['piernas', 'espalda', 'pecho', 'brazos', 'hombros', 'core', 'movilidad', 'cardio'].forEach(cat => {
-                    if (muscleCategories.has(cat) && muscleEmojiMap[cat]) emojis.push(muscleEmojiMap[cat]);
+                    if (muscleCategories.has(cat) && muscleTagMap[cat]) tags.push(muscleTagMap[cat]);
                 });
-                if (emojis.length === 0) emojis.push('💪');
-                const emojiDisplay = emojis.slice(0, 2).join(' ');
+                if (tags.length === 0) tags.push('FUERZA');
+                const tagDisplay = tags.slice(0, 2).map(t => `<span class="coach-month-muscle-chip">${t}</span>`).join('');
                 const catNames = Array.from(muscleCategories).map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(' + ');
 
                 bodyHtml = `
-                    <div class="coach-month-emojis" title="${modTag}: ${catNames || 'Fuerza'}">${emojiDisplay}</div>
+                    <div class="coach-month-muscle-row" title="${modTag}: ${catNames || 'Fuerza'}">${tagDisplay}</div>
                     <div class="coach-month-mod-label" title="${session.title || modTag}">${modTag}</div>
                 `;
 
@@ -21802,7 +21802,7 @@ const CoachWorkoutsMaster = {
 
         if (showToast && typeof showSensToast === 'function') {
             if (monthSaveError) {
-                showSensToast(`⚠️ Guardado localmente. Error en Supabase: falta columna 'prescribed_workouts'`, 'alert', 6000);
+                showSensToast(`Guardado localmente. Error en Supabase: falta columna 'prescribed_workouts'`, 'alert', 6000);
             } else {
                 const msg = applyRipple && cascadedSessionsCount > 0
                     ? `✓ Cambios del día ${dateStr} guardados y aplicados en cascada a semanas siguientes.`

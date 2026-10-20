@@ -9865,25 +9865,31 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .sens-tooltip-btn {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 1px solid rgba(229, 203, 167, 0.35);
-    background: rgba(229, 203, 167, 0.08);
-    color: var(--accent-primary);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.2s ease;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(229, 203, 167, 0.45) !important;
+    background: rgba(229, 203, 167, 0.12) !important;
+    color: #E5CBA7 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    flex-shrink: 0 !important;
 }
 
 .sens-tooltip-btn:hover, .sens-tooltip-wrap.active .sens-tooltip-btn {
-    background: var(--accent-primary);
-    color: #080809;
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 10px rgba(229, 203, 167, 0.4);
+    background: #E5CBA7 !important;
+    color: #080809 !important;
+    border-color: #E5CBA7 !important;
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.5) !important;
 }
 
 .sens-tooltip-popover {
@@ -9892,15 +9898,16 @@ input[type="range"]::-webkit-slider-thumb:hover {
     left: 50%;
     transform: translateX(-50%);
     width: 320px;
-    background: #121214;
-    border: 1px solid rgba(229, 203, 167, 0.4);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
-    border-radius: 12px;
+    background: #18181C !important;
+    border: 1px solid rgba(229, 203, 167, 0.45) !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.95), 0 0 16px rgba(229, 203, 167, 0.15) !important;
+    border-radius: 14px;
     padding: 14px 16px;
     z-index: 10000 !important;
     display: none;
     text-align: left;
     pointer-events: auto;
+    color: #FFFFFF !important;
 }
 
 .sens-tooltip-wrap.active .sens-tooltip-popover,
@@ -9918,7 +9925,113 @@ input[type="range"]::-webkit-slider-thumb:hover {
     transform: translateX(-50%);
     border-width: 6px;
     border-style: solid;
-    border-color: #121214 transparent transparent transparent;
+    border-color: #18181C transparent transparent transparent;
+}
+
+/* =============================================================================
+   POPOVER DE REGLAS DE RACHA (MÁXIMA LEGIBILIDAD & QUIET LUXURY OBSIDIAN)
+   ============================================================================= */
+.sens-streak-rule-popover {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    width: 270px !important;
+    max-width: 86vw !important;
+    background: #18181C !important;
+    border: 1px solid rgba(229, 203, 167, 0.55) !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.95), 0 0 16px rgba(229, 203, 167, 0.18) !important;
+    border-radius: 14px !important;
+    padding: 14px 16px !important;
+    z-index: 10005 !important;
+    color: #FFFFFF !important;
+    pointer-events: auto !important;
+    text-align: left !important;
+}
+
+.sens-streak-rule-popover.align-left {
+    left: 0;
+    transform: none;
+}
+.sens-streak-rule-popover.align-left::after {
+    left: 20px;
+    transform: none;
+}
+
+.sens-streak-rule-popover.align-center {
+    left: 50%;
+    transform: translateX(-50%);
+}
+.sens-streak-rule-popover.align-center::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.sens-streak-rule-popover.align-right {
+    right: 0;
+    left: auto;
+    transform: none;
+}
+.sens-streak-rule-popover.align-right::after {
+    right: 20px;
+    left: auto;
+    transform: none;
+}
+
+@media (max-width: 480px) {
+    .sens-streak-rule-popover,
+    .sens-streak-rule-popover.align-left,
+    .sens-streak-rule-popover.align-center,
+    .sens-streak-rule-popover.align-right {
+        left: -12px !important;
+        right: auto !important;
+        transform: none !important;
+        width: calc(100vw - 44px) !important;
+        max-width: 320px !important;
+    }
+    .sens-streak-rule-popover::after {
+        left: 28px !important;
+    }
+}
+
+.sens-streak-popover-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sens-streak-popover-badge {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #E5CBA7;
+    background: rgba(229, 203, 167, 0.15);
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    padding: 2px 7px;
+    border-radius: 999px;
+    line-height: 1;
+}
+
+.sens-streak-popover-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    letter-spacing: 0.2px;
+}
+
+.sens-streak-popover-text {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.55 !important;
+    color: #F4F4F5 !important;
+    margin: 0 !important;
+}
+
+.sens-streak-popover-text strong {
+    color: #E5CBA7 !important;
+    font-weight: 800 !important;
 }
 
 .tooltip-header {
@@ -17446,15 +17559,33 @@ body.in-portal #coachHubView {
     box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
 }
 
-.coach-month-emojis {
-    font-size: 13px !important;
-    line-height: 1.1 !important;
-    text-align: center !important;
+.coach-month-muscle-row {
+    display: flex !important;
+    gap: 2px !important;
+    justify-content: center !important;
+    align-items: center !important;
     margin: 2px 0 1px 0 !important;
-    white-space: nowrap !important;
+    max-width: 100% !important;
     overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    letter-spacing: 1px !important;
+    flex-wrap: nowrap !important;
+}
+
+.coach-month-muscle-chip {
+    font-size: 7.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.3px !important;
+    color: #8C6A38 !important;
+    background: rgba(140, 106, 56, 0.08) !important;
+    border: 1px solid rgba(140, 106, 56, 0.22) !important;
+    border-radius: 3px !important;
+    padding: 1px 3px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    text-transform: uppercase !important;
+}
+
+.coach-month-emojis {
+    display: none !important;
 }
 
 .coach-month-mod-label {
@@ -17501,9 +17632,13 @@ body.in-portal #coachHubView {
         font-size: 10.5px !important;
         font-weight: 700 !important;
     }
+    .coach-month-muscle-chip {
+        font-size: 6.5px !important;
+        padding: 0.5px 2px !important;
+        letter-spacing: 0.1px !important;
+    }
     .coach-month-emojis {
-        font-size: 11px !important;
-        margin: 1px 0 !important;
+        display: none !important;
     }
     .coach-month-mod-label {
         font-size: 7px !important;

@@ -98,7 +98,7 @@ const translations = {
         "feature-trilogy-2": "Trilogy Experience completa",
         "feature-personal-1": "A domicilio / Gym / Online",
         "feature-personal-2": "Entrenamiento O Yoga Personalizado",
-        "coverage-location": "📍 <b data-i18n=\"coverage-title\">ZONA DE COBERTURA EXCLUSIVA:</b><br>CABA (Palermo, Recoleta, Belgrano, Colegiales, Chacarita y Villa Crespo)<br>LA PLATA",
+        "coverage-location": "<b data-i18n=\"coverage-title\">ZONA DE COBERTURA EXCLUSIVA:</b><br>CABA (Palermo, Recoleta, Belgrano, Colegiales, Chacarita y Villa Crespo)<br>LA PLATA",
         "label-no": "No",
         "label-yes": "Sí",
         "label-screens-unit-q": "¿Cuántas horas diarias aprox.?"
@@ -202,7 +202,7 @@ const translations = {
         "feature-trilogy-2": "Complete Trilogy Experience",
         "feature-personal-1": "Home / Gym / Online",
         "feature-personal-2": "Personalized Training OR Yoga",
-        "coverage-location": "📍 <b data-i18n=\"coverage-title\">EXCLUSIVE COVERAGE AREA:</b><br>CABA (Palermo, Recoleta, Belgrano, Colegiales, Chacarita and Villa Crespo)<br>LA PLATA",
+        "coverage-location": "<b data-i18n=\"coverage-title\">EXCLUSIVE COVERAGE AREA:</b><br>CABA (Palermo, Recoleta, Belgrano, Colegiales, Chacarita and Villa Crespo)<br>LA PLATA",
         "label-no": "No",
         "label-yes": "Yes",
         "label-screens-unit-q": "How many hours per day approx.?"
@@ -305,7 +305,7 @@ const translations = {
         "feature-trilogy-2": "Experiência Trilogy completa",
         "feature-personal-1": "Domicílio / Ginásio / Online",
         "feature-personal-2": "Treino OU Yoga Personalizado",
-        "coverage-location": "📍 <b data-i18n=\"coverage-title\">ÁREA DE COBERTURA EXCLUSIVA:</b><br>CABA (Palermo, Recoleta, Belgrano, Colegiales, Chacarita e Villa Crespo)<br>LA PLATA",
+        "coverage-location": "<b data-i18n=\"coverage-title\">ÁREA DE COBERTURA EXCLUSIVA:</b><br>CABA (Palermo, Recoleta, Belgrano, Colegiales, Chacarita e Villa Crespo)<br>LA PLATA",
         "label-no": "Não",
         "label-yes": "Sim",
         "label-screens-unit-q": "Quantas horas por dia aprox.?"
