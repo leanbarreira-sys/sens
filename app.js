@@ -2897,9 +2897,13 @@ function switchPortalView(viewId) {
     }
     if (viewId === 'dashView') {
         if (typeof renderDashboardData === 'function') renderDashboardData();
-        if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
-        if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
-        if (typeof updateSensStreakCard === 'function') updateSensStreakCard(AppState.selectedDate || new Date());
+        if (typeof syncAllStreakAndPillTelemetry === 'function') {
+            syncAllStreakAndPillTelemetry(AppState.selectedDate || new Date());
+        } else {
+            if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
+            if (typeof updateSensStreakCard === 'function') updateSensStreakCard(AppState.selectedDate || new Date());
+        }
         if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation(false);
         if (typeof initDashboardCardsTactileFeedback === 'function') initDashboardCardsTactileFeedback();
     }
@@ -4595,9 +4599,38 @@ function initWorkoutManager() {
             if (e.target && e.target.classList.contains('btn-remove-exercise-admin')) {
                 const exId = e.target.getAttribute('data-ex-id');
                 const currentDay = AppState.currentDay || 'day1';
-                if (WORKOUT_DAYS_DATA[currentDay]) {
+                const athId = getActiveAthleteId();
+                if (WORKOUT_DAYS_DATA[currentDay] && Array.isArray(WORKOUT_DAYS_DATA[currentDay].exercises)) {
                     WORKOUT_DAYS_DATA[currentDay].exercises = WORKOUT_DAYS_DATA[currentDay].exercises.filter(x => x.id !== exId);
-                    renderWorkoutDay(currentDay);
+                }
+                const coachData = getCoachAthleteWorkoutData(athId);
+                if (coachData && coachData[currentDay] && Array.isArray(coachData[currentDay].exercises)) {
+                    coachData[currentDay].exercises = coachData[currentDay].exercises.filter(x => x.id !== exId);
+                    const allDone = coachData[currentDay].exercises.length > 0 && coachData[currentDay].exercises.every(e => e.completed);
+                    coachData[currentDay].completed = allDone;
+                    saveAthleteDayWorkoutStatus(athId, currentDay, { 
+                        exercises: coachData[currentDay].exercises,
+                        completed: allDone
+                    });
+                }
+                const targetD = AppState.selectedDate || new Date();
+                const dateIso = `${targetD.getFullYear()}-${String(targetD.getMonth() + 1).padStart(2, '0')}-${String(targetD.getDate()).padStart(2, '0')}`;
+                if (coachData && coachData.calendar_schedule && coachData.calendar_schedule[dateIso]) {
+                    const session = coachData.calendar_schedule[dateIso];
+                    if (Array.isArray(session.exercises)) {
+                        session.exercises = session.exercises.filter(x => x.id !== exId);
+                        session.completed = session.exercises.length > 0 && session.exercises.every(e => e.completed);
+                        localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(coachData));
+                    }
+                }
+                renderWorkoutDay(currentDay);
+                renderWorkoutDaysNav();
+                if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+                if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                    syncAllStreakAndPillTelemetry(targetD);
+                }
+                if (typeof showSensToast === 'function') {
+                    showSensToast('Ejercicio removido de la rutina.', 'info');
                 }
             }
         });
@@ -4967,11 +5000,15 @@ window.toggleExerciseFinished = function(exId, dayKey) {
     renderWorkoutDay(dayKey);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
-    if (typeof SensDailyStreakManager !== 'undefined') {
-        SensDailyStreakManager.evaluateDay(AppState.selectedDate || new Date(), athId);
-    }
-    if (typeof updateSensStreakCard === 'function') {
-        updateSensStreakCard(AppState.selectedDate || new Date());
+    if (typeof syncAllStreakAndPillTelemetry === 'function') {
+        syncAllStreakAndPillTelemetry(AppState.selectedDate || new Date());
+    } else {
+        if (typeof SensDailyStreakManager !== 'undefined') {
+            SensDailyStreakManager.evaluateDay(AppState.selectedDate || new Date(), athId);
+        }
+        if (typeof updateSensStreakCard === 'function') {
+            updateSensStreakCard(AppState.selectedDate || new Date());
+        }
     }
 };
 
@@ -6349,15 +6386,16 @@ function saveAndFinishExercise(silent = false) {
         if (day && Array.isArray(day.exercises)) {
             const ex = day.exercises.find(e => e.id === currentExId);
             if (ex) {
-                const anyDone = modalExerciseState.setsData.some(s => s.completed);
-                if (anyDone) ex.completed = true;
-                saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises });
-                const allDone = day.exercises.every(e => e.completed);
-                if (allDone && !day.completed) {
-                    day.completed = true;
-                    day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
-                    saveAthleteDayWorkoutStatus(athId, currentDayKey, { completed: true, durationMinutes: day.durationMinutes });
-                }
+                const anyDone = modalExerciseState.setsData && modalExerciseState.setsData.some(s => s.completed);
+                ex.completed = Boolean(anyDone);
+                const allDone = day.exercises.length > 0 && day.exercises.every(e => e.completed);
+                day.completed = allDone;
+                day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
+                saveAthleteDayWorkoutStatus(athId, currentDayKey, { 
+                    exercises: day.exercises,
+                    completed: allDone,
+                    durationMinutes: day.durationMinutes
+                });
                 if (!silent && typeof showSensToast === 'function') {
                     showSensToast(`✓ Progreso de ${ex.name} guardado con éxito.`, 'champagne', 2600);
                 }
@@ -6370,7 +6408,7 @@ function saveAndFinishExercise(silent = false) {
 function handleAttemptExitExerciseModal() {
     const hasCheckedSets = modalExerciseState.setsData && modalExerciseState.setsData.some(s => s.completed);
     if (!hasCheckedSets) {
-        closeExerciseExecutionModalForce();
+        saveAndFinishExercise(true);
         return;
     }
 
@@ -6378,7 +6416,7 @@ function handleAttemptExitExerciseModal() {
     if (exitModal) {
         exitModal.style.display = 'flex';
     } else {
-        closeExerciseExecutionModalForce();
+        saveAndFinishExercise(false);
     }
 }
 
@@ -6401,7 +6439,21 @@ function closeExerciseExecutionModalForce() {
     const modalVideo = document.getElementById('modalExVideo');
     if (modalVideo) modalVideo.pause();
 
-    renderWorkoutDay(AppState.currentDay || 'day1');
+    const currentDayKey = AppState.currentDay || 'day1';
+    renderWorkoutDay(currentDayKey);
+    renderWorkoutDaysNav();
+    if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+
+    if (typeof syncAllStreakAndPillTelemetry === 'function') {
+        syncAllStreakAndPillTelemetry(AppState.selectedDate || new Date());
+    } else {
+        if (typeof SensDailyStreakManager !== 'undefined') {
+            SensDailyStreakManager.evaluateDay(AppState.selectedDate || new Date());
+        }
+        if (typeof updateSensStreakCard === 'function') {
+            updateSensStreakCard(AppState.selectedDate || new Date());
+        }
+    }
 }
 
 window.closeExerciseExecutionModal = function() {
@@ -9602,6 +9654,9 @@ function renderCoachAssignedExercises() {
                 data[coachWorkoutState.activeDay].exercises = data[coachWorkoutState.activeDay].exercises.filter(x => x.id !== exId);
                 localStorage.setItem(`sens_prescribed_workouts_${coachWorkoutState.activeAthleteId}`, JSON.stringify(data));
                 renderCoachAssignedExercises();
+                if (typeof syncAllStreakAndPillTelemetry === 'function' && coachWorkoutState.activeAthleteId === getActiveAthleteId()) {
+                    syncAllStreakAndPillTelemetry(AppState.selectedDate || new Date());
+                }
                 showSensToast('Ejercicio removido de la rutina.', 'info');
             }
         });
@@ -11049,58 +11104,109 @@ let userCustomTrayItems = [];
  */
 function getFoodUnitInfo(food) {
     if (!food) return { hasUnit: false, unitName: 'u', gramsPerUnit: 100, defaultUnits: 1 };
-    const str = (food.unidades_caseras_total || food.portion || '').toLowerCase();
-    const name = (food.name || food.name_es || '').toLowerCase();
+    const str = (food.unidades_caseras_total || food.portion || '').trim();
+    const name = (food.name || food.name_es || '').trim();
+    const baseG = food.baseGrams || food.defaultGrams || food.porcion_total_g_ml || food.grams || 100;
 
-    if (name.includes('huevo') || str.includes('huevo')) {
-        return { hasUnit: true, unitName: 'huevos', gramsPerUnit: 50, defaultUnits: 2 };
-    }
-    if (name.includes('clara') || str.includes('clara')) {
-        return { hasUnit: true, unitName: 'claras', gramsPerUnit: 33, defaultUnits: 4 };
-    }
-    if (name.includes('banana') || str.includes('banana')) {
-        return { hasUnit: true, unitName: 'banana', gramsPerUnit: 120, defaultUnits: 1 };
-    }
-    if (name.includes('manzana') || str.includes('manzana')) {
-        return { hasUnit: true, unitName: 'manzana', gramsPerUnit: 150, defaultUnits: 1 };
-    }
-    if (name.includes('medallón') || str.includes('medallón')) {
-        return { hasUnit: true, unitName: 'medallón', gramsPerUnit: 100, defaultUnits: 1 };
-    }
-    if (name.includes('feta') || str.includes('feta') || name.includes('rebanada') || str.includes('rebanada')) {
-        return { hasUnit: true, unitName: 'fetas', gramsPerUnit: 30, defaultUnits: 2 };
-    }
-    if (name.includes('rodaja') || str.includes('rodaja')) {
-        return { hasUnit: true, unitName: 'rodajas', gramsPerUnit: 35, defaultUnits: 2 };
-    }
-    if (name.includes('scoop') || str.includes('scoop')) {
-        return { hasUnit: true, unitName: 'scoop', gramsPerUnit: 30, defaultUnits: 1 };
-    }
-    if (name.includes('lata') || str.includes('lata')) {
-        return { hasUnit: true, unitName: 'lata', gramsPerUnit: 120, defaultUnits: 1 };
-    }
+    // Helper para normalizar fracciones unicode habituales
+    const cleanStr = str
+        .replace(/½/g, '0.5')
+        .replace(/¾/g, '0.75')
+        .replace(/¼/g, '0.25')
+        .replace(/⅓/g, '0.33')
+        .replace(/⅔/g, '0.67');
 
-    const match = str.match(/^(\d+(?:\.\d+)?)\s+([a-záéíóúñ]+).*?\((\d+)\s*g/i);
-    if (match) {
-        const count = parseFloat(match[1]);
-        const unitWord = match[2].trim();
-        const totalG = parseInt(match[3], 10);
-        if (count > 0 && totalG > 0) {
-            return {
-                hasUnit: true,
-                unitName: unitWord,
-                gramsPerUnit: Math.round(totalG / count),
-                defaultUnits: count
-            };
+    // 1. Intentar parsear unidades caseras descriptivas de la base de datos de 500 alimentos
+    // Ejemplos: '1 pechuga mediana cocida (150 g)', '2 huevos grandes (100 g)', '1 omelette (380 g)', '2 tostones grandes (380 g)', '4 a 5 fetas gruesas (100 g)'
+    if (cleanStr) {
+        // Regex para capturar cantidad (num o rango ej '4 a 5'), palabra de unidad, y total en gramos si existe
+        const match = cleanStr.match(/^(\d+(?:\.\d+)?(?:\s*a\s*\d+(?:\.\d+)?)?)\s+([a-záéíóúñ]+)/i);
+        if (match) {
+            let countStr = match[1];
+            let count = 1;
+            if (countStr.includes('a')) {
+                const parts = countStr.split('a').map(p => parseFloat(p.trim())).filter(n => !isNaN(n));
+                count = parts.length === 2 ? (parts[0] + parts[1]) / 2 : (parts[0] || 1);
+            } else {
+                count = parseFloat(countStr) || 1;
+            }
+
+            let unitWord = match[2].toLowerCase().trim();
+
+            // Descartar conectores o preposiciones accidentales
+            const invalidWords = ['de', 'en', 'con', 'del', 'al', 'para', 'o', 'por'];
+            if (!invalidWords.includes(unitWord) && unitWord.length > 1) {
+                // Normalizar palabras compuestas
+                if (unitWord === 'pan' && (cleanStr.toLowerCase().includes('pan pita') || cleanStr.toLowerCase().includes('pan árabe') || cleanStr.toLowerCase().includes('árabe'))) {
+                    unitWord = 'sándwich';
+                }
+
+                // Buscar gramos totales entre paréntesis ej: (150 g) o (100 g totales) o (120 g peso drenado)
+                const gMatch = cleanStr.match(/\((\d+(?:\.\d+)?)\s*g/i);
+                let totalG = gMatch ? parseFloat(gMatch[1]) : baseG;
+                if (!totalG || totalG <= 0) totalG = baseG;
+
+                const gramsPerUnit = Math.max(5, Math.round(totalG / count));
+
+                return {
+                    hasUnit: true,
+                    unitName: unitWord,
+                    gramsPerUnit: gramsPerUnit,
+                    defaultUnits: count
+                };
+            }
         }
     }
 
-    if (str.includes('unidad') || str.includes('unidades')) {
-        const bg = food.baseGrams || food.defaultGrams || food.porcion_total_g_ml || 100;
-        return { hasUnit: true, unitName: 'unidad', gramsPerUnit: bg, defaultUnits: 1 };
+    // 2. Coincidencias específicas por nombre cuando no hay unidades caseras estructuradas (ej. alimentos personalizados o creados a mano)
+    const nameLower = name.toLowerCase();
+
+    // Huevo puro (estrictamente si empieza con huevo o es huevo duro/poché, NUNCA platos compuestos con huevo)
+    if (/^huevo(s)?\b/i.test(nameLower) || nameLower === 'huevo duro' || nameLower === 'huevo poché') {
+        return { hasUnit: true, unitName: 'huevos', gramsPerUnit: 50, defaultUnits: 2 };
+    }
+    if (/^clara(s)?\b/i.test(nameLower)) {
+        return { hasUnit: true, unitName: 'claras', gramsPerUnit: 33, defaultUnits: 4 };
+    }
+    if (nameLower.includes('banana')) {
+        return { hasUnit: true, unitName: 'banana', gramsPerUnit: 120, defaultUnits: 1 };
+    }
+    if (nameLower.includes('manzana')) {
+        return { hasUnit: true, unitName: 'manzana', gramsPerUnit: 150, defaultUnits: 1 };
+    }
+    if (nameLower.includes('medallón') || nameLower.includes('medallon')) {
+        return { hasUnit: true, unitName: 'medallón', gramsPerUnit: 100, defaultUnits: 1 };
+    }
+    if (nameLower.includes('feta') || nameLower.includes('rebanada')) {
+        return { hasUnit: true, unitName: 'fetas', gramsPerUnit: 30, defaultUnits: 2 };
+    }
+    if (nameLower.includes('rodaja')) {
+        return { hasUnit: true, unitName: 'rodajas', gramsPerUnit: 35, defaultUnits: 2 };
+    }
+    if (nameLower.includes('scoop')) {
+        return { hasUnit: true, unitName: 'scoop', gramsPerUnit: 30, defaultUnits: 1 };
+    }
+    if (nameLower.includes('lata')) {
+        return { hasUnit: true, unitName: 'lata', gramsPerUnit: 120, defaultUnits: 1 };
+    }
+    if (nameLower.includes('omelette')) {
+        return { hasUnit: true, unitName: 'omelette', gramsPerUnit: baseG || 350, defaultUnits: 1 };
+    }
+    if (nameLower.includes('wrap') || nameLower.includes('fajita')) {
+        return { hasUnit: true, unitName: 'wrap', gramsPerUnit: baseG || 300, defaultUnits: 1 };
+    }
+    if (nameLower.includes('tostón') || nameLower.includes('toston')) {
+        return { hasUnit: true, unitName: 'tostones', gramsPerUnit: Math.round(baseG / 2) || 150, defaultUnits: 2 };
+    }
+    if (nameLower.includes('tostada')) {
+        return { hasUnit: true, unitName: 'tostadas', gramsPerUnit: Math.round(baseG / 2) || 150, defaultUnits: 2 };
     }
 
-    return { hasUnit: false, unitName: 'porción', gramsPerUnit: food.baseGrams || food.defaultGrams || 100, defaultUnits: 1 };
+    if (cleanStr.includes('unidad') || cleanStr.includes('unidades')) {
+        return { hasUnit: true, unitName: 'unidad', gramsPerUnit: baseG, defaultUnits: 1 };
+    }
+
+    return { hasUnit: true, unitName: 'porción', gramsPerUnit: baseG, defaultUnits: 1 };
 }
 
 window.getFoodUnitInfo = getFoodUnitInfo;
@@ -11177,6 +11283,9 @@ function renderNutriDaysNav() {
             renderNutriDaysNav();
             if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
             if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(dayDate);
+            }
         });
     });
 }
@@ -11312,10 +11421,9 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
 
     renderMemberNutritionPlan(athId, sDate);
     renderNutriDaysNav();
-    if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
 
-    if (typeof SensDailyStreakManager !== 'undefined') {
-        const streakEval = SensDailyStreakManager.evaluateDay(sDate, athId);
+    if (typeof syncAllStreakAndPillTelemetry === 'function') {
+        const streakEval = syncAllStreakAndPillTelemetry(sDate);
         const nutriStatus = streakEval?.current?.nutrition?.status;
         const prevStatus = streakEval?.previous?.nutrition?.status;
         const consumedKcal = streakEval?.current?.nutrition?.consumed || 0;
@@ -11330,8 +11438,13 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
                 showSensToast(`Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
             }
         }
+    } else {
+        if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(sDate);
+        if (typeof SensDailyStreakManager !== 'undefined') {
+            SensDailyStreakManager.evaluateDay(sDate, athId);
+        }
+        if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
     }
-    if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
 }
 
 window.toggleFoodLoggedStatus = toggleFoodLoggedStatus;
@@ -12102,7 +12215,15 @@ function initUserFoodDetailModal() {
             localStorage.setItem(adjustStorageKey, JSON.stringify(userAdjusted));
 
             closeModal();
-            renderMemberNutritionPlan(athId, AppState.nutriSelectedDate || new Date());
+            const targetD = AppState.nutriSelectedDate || AppState.selectedDate || new Date();
+            renderMemberNutritionPlan(athId, targetD);
+            if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(targetD);
+            } else {
+                if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(targetD);
+                if (typeof updateSensStreakCard === 'function') updateSensStreakCard(targetD);
+            }
 
             if (typeof showSensToast === 'function') {
                 showSensToast(`Porción de ${item.name || resolved?.name} ajustada a ${newGrams}g.`, 'champagne');
@@ -12564,11 +12685,9 @@ function initUserCustomMealModal(athId) {
             closeModal();
             renderMemberNutritionPlan(activeAthId, sDate);
             renderNutriDaysNav();
-            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
 
-            // Evaluar y celebrar estado de racha nutricional
-            if (typeof SensDailyStreakManager !== 'undefined') {
-                const streakEval = SensDailyStreakManager.evaluateDay(sDate, activeAthId);
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                const streakEval = syncAllStreakAndPillTelemetry(sDate);
                 const nutriStatus = streakEval?.current?.nutrition?.status;
                 const prevStatus = streakEval?.previous?.nutrition?.status;
                 const consumedKcal = streakEval?.current?.nutrition?.consumed || 0;
@@ -12583,8 +12702,13 @@ function initUserCustomMealModal(athId) {
                         showSensToast(`Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
                     }
                 }
+            } else {
+                if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(sDate);
+                if (typeof SensDailyStreakManager !== 'undefined') {
+                    SensDailyStreakManager.evaluateDay(sDate, activeAthId);
+                }
+                if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
             }
-            if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
 
             if (typeof showSensToast === 'function') {
                 showSensToast(`Comida registrada con éxito en ${userActiveNutriMealSlot.toUpperCase()}.`, 'champagne');
@@ -13858,6 +13982,9 @@ function renderWorkoutDaysNav() {
             renderWorkoutDay(dayKey);
             renderWorkoutDaysNav();
             if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(dayDate);
+            }
         });
     });
 }
@@ -14869,7 +14996,14 @@ const SensDailyStreakManager = {
         let completedExercises = 0;
 
         const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(id) : null;
-        const dayWorkout = (workoutData && workoutData[dayKey]) ? workoutData[dayKey] : null;
+        let dayWorkout = null;
+        if (workoutData && workoutData.calendar_schedule && workoutData.calendar_schedule[dateIso]) {
+            dayWorkout = workoutData.calendar_schedule[dateIso];
+        } else if (workoutData && workoutData[dayKey]) {
+            dayWorkout = workoutData[dayKey];
+        } else if (typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
+            dayWorkout = WORKOUT_DAYS_DATA[dayKey];
+        }
 
         if (dayWorkout) {
             isRestDay = (dayWorkout.modality === 'descanso');
@@ -14881,6 +15015,9 @@ const SensDailyStreakManager = {
                 completedExercises = dayWorkout.exercises.filter(e => e.completed).length;
                 workoutDone = (completedExercises === totalExercises);
                 workoutMetric = workoutDone ? '100% Completado' : `${completedExercises} de ${totalExercises} Ejercicios`;
+            } else if (dayWorkout.completed) {
+                workoutDone = true;
+                workoutMetric = 'Sesión Completada';
             }
         }
         if (!workoutDone && typeof isDateInCompletedWorkouts === 'function' && isDateInCompletedWorkouts(dateIso)) {
@@ -15167,6 +15304,44 @@ function renderStreakWeeklyDots(targetDate) {
 
     wrap.innerHTML = html;
 }
+
+/**
+ * Sincroniza en tiempo real toda la telemetría de racha, pilares y pills contextuales
+ * de las 3 cards principales (Entrenamiento, Nutrición, Balance / Pasos)
+ */
+function syncAllStreakAndPillTelemetry(targetDate = null) {
+    const d = targetDate || AppState.selectedDate || new Date();
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+
+    // 1. Re-evaluar estado de racha del día
+    let evalResult = null;
+    if (typeof SensDailyStreakManager !== 'undefined') {
+        evalResult = SensDailyStreakManager.evaluateDay(d, athId);
+    }
+
+    // 2. Actualizar la card heroica de racha y los 3 pilares
+    if (typeof updateSensStreakCard === 'function') {
+        updateSensStreakCard(d);
+    }
+
+    // 3. Actualizar los pills contextuales en las cards de Inicio (Training, Nutrición, Balance)
+    if (typeof updateHomeCardsStreakPills === 'function') {
+        updateHomeCardsStreakPills(d, athId);
+    }
+
+    // 4. Actualizar Balance Energético si está activo
+    if (typeof updateObjectiveCardData === 'function') {
+        updateObjectiveCardData(d);
+    }
+
+    // 5. Actualizar card dinámica de entrenamiento
+    if (typeof updateDynamicTrainingCard === 'function') {
+        updateDynamicTrainingCard(d);
+    }
+
+    return evalResult;
+}
+window.syncAllStreakAndPillTelemetry = syncAllStreakAndPillTelemetry;
 
 function updateSensStreakCard(targetDate = null) {
     if (!targetDate) targetDate = AppState.selectedDate || new Date();
