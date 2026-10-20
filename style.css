@@ -13420,7 +13420,7 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         border: none !important;
         border-radius: 36px !important;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
-        z-index: 9990 !important;
+        z-index: 99999 !important;
         overflow: hidden !important;
         pointer-events: auto !important;
         touch-action: manipulation !important;
@@ -13433,6 +13433,11 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         touch-action: manipulation !important;
         -webkit-tap-highlight-color: transparent !important;
         user-select: none !important;
+    }
+
+    body.in-portal #sensFloatingDock .sens-dock-item *,
+    body.in-portal #sensCoachFloatingDock .sens-dock-item * {
+        pointer-events: none !important;
     }
 
     /* Si se está viendo Coach OS, ocultar dock de alumno y mostrar dock de coach */
@@ -13460,7 +13465,7 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         border: 1px solid rgba(229, 203, 167, 0.25) !important;
         border-radius: 36px !important;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65) !important;
-        z-index: 9990 !important;
+        z-index: 99999 !important;
         overflow: hidden !important;
         pointer-events: auto !important;
         touch-action: manipulation !important;

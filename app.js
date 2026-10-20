@@ -2627,6 +2627,15 @@ function initPortalNavigation() {
         });
     });
 
+    const dockItems = document.querySelectorAll('.sens-dock-item[data-dock-tab]');
+    dockItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetViewId = item.getAttribute('data-dock-tab');
+            if (targetViewId) switchPortalView(targetViewId);
+        });
+    });
+
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             if (supabaseClient) supabaseClient.auth.signOut();
@@ -2915,6 +2924,7 @@ function switchPortalView(viewId) {
         window.scrollTo({ top: 0, behavior: 'instant' });
     }
 }
+window.switchPortalView = switchPortalView;
 
 
 function openUserPortal(forceOnboarding = false) {
@@ -16347,58 +16357,82 @@ function initFloatingDock() {
         }
     }
 
+    // Direct event listeners on athlete dock buttons (Fast click / Touchend)
+    if (athleteDock && !athleteDock._hasDockBound) {
+        athleteDock._hasDockBound = true;
+        
+        athleteDock.querySelectorAll('.sens-dock-item[data-dock-tab]').forEach(btn => {
+            const handleNav = (e) => {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                const targetTab = btn.getAttribute('data-dock-tab');
+                if (targetTab && typeof switchPortalView === 'function') {
+                    switchPortalView(targetTab);
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                }
+            };
+            btn.addEventListener('click', handleNav);
+            btn.addEventListener('touchend', (e) => {
+                handleNav(e);
+            }, { passive: false });
+        });
+    }
+
+    // Direct event listeners on coach dock buttons
+    if (coachDock && !coachDock._hasCoachDockBound) {
+        coachDock._hasCoachDockBound = true;
+
+        coachDock.querySelectorAll('.coach-dock-btn[data-coach-subtab]').forEach(btn => {
+            const handleCoachNav = (e) => {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                const subtab = btn.getAttribute('data-coach-subtab');
+                if (subtab && typeof switchCoachSubTab === 'function') {
+                    switchCoachSubTab(subtab);
+                }
+            };
+            btn.addEventListener('click', handleCoachNav);
+            btn.addEventListener('touchend', (e) => {
+                handleCoachNav(e);
+            }, { passive: false });
+        });
+    }
+
+    // Global delegation fallback directly on docks or document
     if (!window._hasSensFloatingDockDelegated) {
         window._hasSensFloatingDockDelegated = true;
 
-        let dockTouchStartX = 0;
-        let dockTouchStartY = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            const item = e.target.closest('#sensFloatingDock .sens-dock-item[data-dock-tab], #sensCoachFloatingDock .coach-dock-btn[data-coach-subtab]');
-            if (item && e.touches && e.touches[0]) {
-                dockTouchStartX = e.touches[0].clientX;
-                dockTouchStartY = e.touches[0].clientY;
+        const onDockClick = (e) => {
+            const athBtn = e.target.closest('#sensFloatingDock .sens-dock-item[data-dock-tab], .sens-floating-dock:not(.coach-mode-dock) .sens-dock-item[data-dock-tab]');
+            if (athBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const tab = athBtn.getAttribute('data-dock-tab');
+                if (tab && typeof switchPortalView === 'function') {
+                    switchPortalView(tab);
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                }
+                return;
             }
-        }, { passive: true, capture: true });
 
-        const handleAthleteDockNavigation = (e) => {
-            const item = e.target.closest('#sensFloatingDock .sens-dock-item[data-dock-tab]');
-            if (!item) return;
-            if (e.type === 'touchend' && e.changedTouches && e.changedTouches[0]) {
-                const dx = Math.abs(e.changedTouches[0].clientX - dockTouchStartX);
-                const dy = Math.abs(e.changedTouches[0].clientY - dockTouchStartY);
-                if (dx > 12 || dy > 12) return; // Arrastre / scroll: no cambiar de pestaña
-            }
-            e.preventDefault();
-            e.stopPropagation();
-            const targetTab = item.getAttribute('data-dock-tab');
-            if (targetTab) {
-                switchPortalView(targetTab);
-                window.scrollTo({ top: 0, behavior: 'instant' });
+            const coachBtn = e.target.closest('#sensCoachFloatingDock .coach-dock-btn[data-coach-subtab], .coach-mode-dock .coach-dock-btn[data-coach-subtab]');
+            if (coachBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const subtab = coachBtn.getAttribute('data-coach-subtab');
+                if (subtab && typeof switchCoachSubTab === 'function') {
+                    switchCoachSubTab(subtab);
+                }
+                return;
             }
         };
 
-        document.addEventListener('click', handleAthleteDockNavigation, { capture: true });
-        document.addEventListener('touchend', handleAthleteDockNavigation, { capture: true });
-
-        const handleCoachDockNavigation = (e) => {
-            const item = e.target.closest('#sensCoachFloatingDock .coach-dock-btn[data-coach-subtab]');
-            if (!item) return;
-            if (e.type === 'touchend' && e.changedTouches && e.changedTouches[0]) {
-                const dx = Math.abs(e.changedTouches[0].clientX - dockTouchStartX);
-                const dy = Math.abs(e.changedTouches[0].clientY - dockTouchStartY);
-                if (dx > 12 || dy > 12) return;
-            }
-            e.preventDefault();
-            e.stopPropagation();
-            const subtab = item.getAttribute('data-coach-subtab');
-            if (subtab && typeof switchCoachSubTab === 'function') {
-                switchCoachSubTab(subtab);
-            }
-        };
-
-        document.addEventListener('click', handleCoachDockNavigation, { capture: true });
-        document.addEventListener('touchend', handleCoachDockNavigation, { capture: true });
+        document.addEventListener('click', onDockClick);
+        document.addEventListener('touchend', onDockClick, { passive: false });
     }
 }
 
