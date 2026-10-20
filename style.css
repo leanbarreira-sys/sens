@@ -12205,14 +12205,15 @@ body.in-portal .sens-week-day-pill.active.is-today .sens-day-num {
 
 
 /* =============================================================================
-   3. CARD DE ENTRENAMIENTO CON VIDEO (QUIET LUXURY INTEGRATION - FULL BLEED)
+   3. CARD DE ENTRENAMIENTO CON VIDEO (QUIET LUXURY INTEGRATION - FULL BLEED 4:5)
    ============================================================================= */
 body.in-portal .sens-training-video-card,
 .sens-training-video-card {
     position: relative;
     width: 100%;
-    min-height: 280px;
-    height: 285px;
+    aspect-ratio: 4 / 5 !important;
+    height: auto !important;
+    min-height: 0 !important;
     border-radius: 20px;
     overflow: hidden;
     background: #09090B !important;
@@ -12490,14 +12491,15 @@ body.in-portal .sens-training-video-card,
 }
 
 /* =============================================================================
-   4. CARD NUTRICIONAL CON VIDEO DE FONDO & LAYER OVERLAY (ESTILO ENTRENAMIENTO)
+   4. CARD NUTRICIONAL CON VIDEO DE FONDO & LAYER OVERLAY (ESTILO ENTRENAMIENTO 4:5)
    ============================================================================= */
 body.in-portal .sens-nutri-summary-card,
 .sens-nutri-summary-card {
     position: relative;
     width: 100%;
-    min-height: 280px;
-    height: 285px;
+    aspect-ratio: 4 / 5 !important;
+    height: auto !important;
+    min-height: 0 !important;
     border-radius: 20px;
     overflow: hidden;
     background: #09090B !important;

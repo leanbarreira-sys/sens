@@ -11359,94 +11359,94 @@ const SENS_TYPE_ICONS = {
 /**
  * Deduce taxonomía, tipos y título dinámico de la sesión
  */
-function getWorkoutSessionDetails(exercises, fallbackTitle = '') {
+function getWorkoutSessionDetails(exercises, fallbackTitle = '', athId = null) {
     if (!Array.isArray(exercises) || exercises.length === 0) {
         return {
             title: fallbackTitle ? fallbackTitle.replace(/^Día\s*\d+:\s*/i, '') : 'Descanso Activo',
             subtitle: 'Recuperación neuromuscular y regeneración tisular',
             types: [],
             totalSets: 0,
+            totalKcal: 0,
             estMinutes: 0
         };
     }
 
     const typesSet = new Set();
-    const muscleList = [];
+    const muscleSetCount = {};
     let totalSets = 0;
+    let totalWorkoutKcal = 0;
+    const userWeight = parseFloat(AppState.profile?.current_weight || AppState.anamnesis?.weight || 75) || 75;
 
     exercises.forEach(ex => {
+        const resolved = (typeof window.getResolvedExercise === 'function') 
+            ? window.getResolvedExercise(ex, athId) 
+            : ex;
+
         const tax = (typeof getExerciseTaxonomy === 'function') 
-            ? getExerciseTaxonomy(ex) 
+            ? getExerciseTaxonomy(resolved) 
             : { type: 'muscular', typeLabel: 'Muscular', muscleGroup: 'piernas', muscleLabel: 'Piernas' };
 
-        typesSet.add(tax.type);
-        if (tax.type === 'muscular') {
-            if (!muscleList.includes(tax.muscleLabel)) {
-                muscleList.push(tax.muscleLabel);
-            }
-        }
+        const type = (tax.type || 'muscular').toLowerCase();
+        typesSet.add(type);
+
         const s = parseInt(ex.sets, 10);
-        totalSets += (!isNaN(s) && s > 0) ? s : 3;
+        const setCount = (!isNaN(s) && s > 0) ? s : 3;
+        totalSets += setCount;
+
+        if (type === 'muscular') {
+            const mLabel = tax.muscleLabel || 'Piernas';
+            muscleSetCount[mLabel] = (muscleSetCount[mLabel] || 0) + setCount;
+        }
+
+        const kcalData = (typeof window.calculateExerciseKcal === 'function')
+            ? window.calculateExerciseKcal(resolved, setCount, ex.reps || 10, userWeight)
+            : { kcalPerSet: 7, totalKcal: setCount * 7 };
+        totalWorkoutKcal += (kcalData.totalKcal || (setCount * 7));
     });
 
-    // Tipos complementarios no-musculares (Cardio, Yoga, Movilidad)
+    // 1. Construir Título Dinámico: Músculos principales o en su defecto tipo
+    const sortedMuscles = Object.keys(muscleSetCount).sort((a, b) => muscleSetCount[b] - muscleSetCount[a]);
+
     const otherTypeLabels = [];
     if (typesSet.has('cardio')) otherTypeLabels.push('Cardio');
     if (typesSet.has('yoga')) otherTypeLabels.push('Yoga');
     if (typesSet.has('movilidad')) otherTypeLabels.push('Movilidad');
 
-    // 1. Construir Título Dinámico
-    let musclePart = '';
-    if (muscleList.length === 1) {
-        musclePart = muscleList[0];
-    } else if (muscleList.length === 2) {
-        musclePart = otherTypeLabels.length > 0 ? `${muscleList[0]}, ${muscleList[1]}` : `${muscleList[0]} y ${muscleList[1]}`;
-    } else if (muscleList.length === 3) {
-        musclePart = otherTypeLabels.length > 0 ? `${muscleList[0]}, ${muscleList[1]}, ${muscleList[2]}` : `${muscleList[0]}, ${muscleList[1]} y ${muscleList[2]}`;
-    } else if (muscleList.length >= 4) {
-        musclePart = 'Full Body Muscular';
-    }
-
     let dynamicTitle = '';
-    if (musclePart) {
-        if (otherTypeLabels.length > 0) {
-            dynamicTitle = `${musclePart} & ${otherTypeLabels.join(' & ')}`;
-        } else {
-            dynamicTitle = musclePart;
-        }
-    } else {
-        if (otherTypeLabels.length > 0) {
-            if (otherTypeLabels.includes('Yoga') && otherTypeLabels.length === 1) {
-                dynamicTitle = 'Sesión Integral de Yoga';
-            } else if (otherTypeLabels.includes('Movilidad') && otherTypeLabels.length === 1) {
-                dynamicTitle = 'Movilidad Articular & Rango';
-            } else if (otherTypeLabels.includes('Cardio') && otherTypeLabels.length === 1) {
-                dynamicTitle = 'Cardio & Resistencia Aeróbica';
-            } else {
-                dynamicTitle = otherTypeLabels.join(' & ');
-            }
-        } else {
-            dynamicTitle = fallbackTitle ? fallbackTitle.replace(/^(Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo|Día\s*\d+)[:\s-]*/i, '') : 'Entrenamiento Funcional';
-        }
+    if (sortedMuscles.length === 1) {
+        dynamicTitle = sortedMuscles[0];
+    } else if (sortedMuscles.length === 2) {
+        dynamicTitle = `${sortedMuscles[0]} y ${sortedMuscles[1]}`;
+    } else if (sortedMuscles.length === 3) {
+        dynamicTitle = `${sortedMuscles[0]}, ${sortedMuscles[1]} y ${sortedMuscles[2]}`;
+    } else if (sortedMuscles.length >= 4) {
+        dynamicTitle = 'Cuerpo Completo';
     }
 
-    // 2. Subtítulo con métricas reales
-    let subtitle = '';
-    if (typesSet.has('yoga') && !musclePart) {
-        subtitle = `Flujo respiratorio • ${exercises.length} asanas guiadas`;
-    } else if (typesSet.has('movilidad') && !musclePart) {
-        subtitle = `Descompresión articular y control postural • ${exercises.length} ejercicios`;
-    } else {
-        subtitle = `Volumen: ${totalSets} series totales • Sobrecarga progresiva`;
+    if (!dynamicTitle) {
+        // En su defecto tipo si no hay grupos musculares
+        if (otherTypeLabels.length === 1) {
+            dynamicTitle = otherTypeLabels[0];
+        } else if (otherTypeLabels.length > 1) {
+            dynamicTitle = otherTypeLabels.join(' y ');
+        } else {
+            dynamicTitle = fallbackTitle ? fallbackTitle.replace(/^(Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo|Día\s*\d+)[:\s-]*/i, '').trim() : 'Entrenamiento Funcional';
+        }
+    } else if (otherTypeLabels.length > 0 && sortedMuscles.length <= 2) {
+        dynamicTitle = `${dynamicTitle} & ${otherTypeLabels.join(' & ')}`;
     }
 
-    const estMinutes = Math.max(20, Math.round(exercises.length * 8.5 + (totalSets > 15 ? 10 : 5)));
+    // 2. Subtítulo con métricas reales: X ejercicios | Y series (sin la palabra Volumen)
+    const subtitle = `${exercises.length} ejercicios | ${totalSets} series`;
+
+    const estMinutes = Math.max(25, Math.round(exercises.length * 8.5 + 5));
 
     return {
         title: dynamicTitle,
         subtitle,
         types: Array.from(typesSet),
         totalSets,
+        totalKcal: Math.round(totalWorkoutKcal),
         estMinutes
     };
 }
@@ -11494,7 +11494,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     if (restPane) restPane.style.display = 'none';
 
     // 1. Obtener detalles de sesión y título dinámico
-    const details = getWorkoutSessionDetails(exercises, dayData.title);
+    const details = getWorkoutSessionDetails(exercises, dayData.title, athId);
 
     if (focusTitle && focusTitle.textContent !== details.title) {
         focusTitle.textContent = details.title;
@@ -11519,7 +11519,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         }).join('');
     }
 
-    // 3. Modality Pill
+    // 3. Modality Pill y Badge de Calorías Totales + Tiempo Promedio
     const modality = dayData.modality;
     if (modalityPill) {
         if (modality === 'presencial') {
@@ -11541,7 +11541,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     if (durationPill) {
-        durationPill.textContent = `${exercises.length} ej • ~${details.estMinutes} min`;
+        durationPill.textContent = `~${details.totalKcal} kcal | ~${details.estMinutes} min`;
     }
 
     // 4. Video de fondo adaptado al primer ejercicio del día
