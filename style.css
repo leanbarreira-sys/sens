@@ -19289,6 +19289,517 @@ body.in-portal,
     border-radius: 0 0 10px 10px;
 }
 
+/* =============================================================================
+   RACHA SENS & GAMIFICACIÓN QUIET LUXURY (BIGG / APPLE HEALTH BENCHMARK)
+   ============================================================================= */
+.sens-streak-card {
+    background: linear-gradient(135deg, #141418 0%, #0D0D10 100%);
+    border: 1px solid rgba(229, 203, 167, 0.22);
+    border-radius: 20px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.sens-streak-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-wrap: nowrap;
+}
+
+.sens-streak-badge-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sens-streak-flame-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(229, 203, 167, 0.1);
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 14px rgba(229, 203, 167, 0.15);
+}
+
+.sens-streak-count-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.sens-streak-hero-num {
+    font-size: 24px;
+    font-weight: 900;
+    color: #E5CBA7;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.sens-streak-hero-unit {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+
+.sens-streak-sub {
+    font-size: 11px;
+    color: #8E8E93;
+    font-weight: 500;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Tira de 7 micro-anillos Lun-Dom */
+.sens-streak-dots-wrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.sens-streak-day-dot-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.sens-streak-dot-name {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: #71717A;
+    text-transform: uppercase;
+}
+
+.sens-streak-dot-ring {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.sens-streak-dot-ring.done {
+    background: #E5CBA7;
+    border-color: #E5CBA7;
+    box-shadow: 0 0 8px rgba(229, 203, 167, 0.5);
+}
+
+.sens-streak-dot-ring.today {
+    border-color: #E5CBA7;
+    box-shadow: 0 0 6px rgba(229, 203, 167, 0.4);
+    animation: sensPulseDot 2s infinite ease-in-out;
+}
+
+@keyframes sensPulseDot {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/* Los 3 Pilares Diarios */
+.sens-streak-pillars-wrap {
+    margin-top: 12px;
+}
+
+.sens-streak-pillars-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.sens-pillars-title {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #A1A1AA;
+    text-transform: uppercase;
+}
+
+.sens-pillars-ratio {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #E5CBA7;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.sens-pillar-item {
+    background: #18181D;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 9px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 82px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.sens-pillar-item:hover {
+    border-color: rgba(229, 203, 167, 0.3);
+    transform: translateY(-1px);
+    background: #1C1C22;
+}
+
+.sens-pillar-item:active {
+    transform: scale(0.97);
+}
+
+.sens-pillar-chk {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    transition: all 0.2s ease;
+    margin-bottom: 4px;
+}
+
+.sens-pillar-chk.done {
+    background: #10B981;
+    border-color: #10B981;
+    color: #080809;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.sens-pillar-heading {
+    font-size: 11px;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+
+.sens-pillar-metric {
+    font-size: 9.5px;
+    color: #8E8E93;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-pillar-pill {
+    align-self: flex-start;
+    font-size: 8.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #71717A;
+    margin-top: 6px;
+}
+
+.sens-pillar-pill.done {
+    background: rgba(16, 185, 129, 0.14);
+    color: #10B981;
+}
+
+@media (max-width: 480px) {
+    .sens-pillars-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    .sens-pillar-item {
+        flex-direction: row;
+        align-items: center;
+        min-height: auto;
+        padding: 8px 10px;
+    }
+    .sens-pillar-chk {
+        margin-bottom: 0;
+        margin-right: 8px;
+    }
+    .sens-pillar-content {
+        flex: 1;
+        min-width: 0;
+    }
+    .sens-pillar-pill {
+        margin-top: 0;
+        margin-left: 8px;
+        align-self: center;
+    }
+}
+
+/* =============================================================================
+   PANEL DE GASTO ACTIVO: PASOS & CARDIO (INTEGRADO EN BALANCE ENERGÉTICO)
+   ============================================================================= */
+.sens-activity-logger-panel {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.sens-act-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 10px;
+}
+
+.sens-act-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.sens-act-badge {
+    font-size: 11px;
+    font-weight: 800;
+    background: rgba(229, 203, 167, 0.12);
+    color: #E5CBA7;
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sens-act-module {
+    background: #111115;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-sizing: border-box;
+}
+
+.sens-act-module-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.sens-act-label-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sens-act-metric-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.sens-act-metric-sub {
+    font-size: 10.5px;
+    color: #8E8E93;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-act-stepper-control {
+    display: flex;
+    align-items: center;
+    background: #0A0A0C;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    height: 36px;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.sens-act-stepper-btn {
+    width: 28px;
+    height: 30px;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: #E5CBA7;
+    font-size: 15px;
+    font-weight: 800;
+    border-radius: 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.sens-act-stepper-btn:active {
+    background: #E5CBA7;
+    color: #080809;
+    transform: scale(0.93);
+}
+
+.sens-act-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+.sens-act-input {
+    width: 62px;
+    border: none !important;
+    background: transparent !important;
+    color: #FFFFFF !important;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    outline: none;
+    box-shadow: none !important;
+    padding: 0;
+    margin: 0;
+    -moz-appearance: textfield;
+}
+
+.sens-act-input::-webkit-outer-spin-button,
+.sens-act-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.sens-act-unit-tag {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #8E8E93;
+    margin-left: 2px;
+}
+
+/* Quick Chips */
+.sens-act-chips-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sens-act-chips-row::-webkit-scrollbar {
+    display: none;
+}
+
+.sens-act-quick-chip {
+    padding: 4px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: #A1A1AA;
+    font-size: 10.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-act-quick-chip:hover {
+    border-color: rgba(229, 203, 167, 0.4);
+    color: #FFFFFF;
+}
+
+.sens-act-quick-chip.active {
+    background: rgba(229, 203, 167, 0.15);
+    border-color: #E5CBA7;
+    color: #E5CBA7;
+    box-shadow: 0 0 10px rgba(229, 203, 167, 0.25);
+}
+
+/* Grid de Modalidades de Cardio */
+.sens-cardio-types-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.sens-cardio-type-btn {
+    padding: 6px 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: #A1A1AA;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-cardio-type-btn:hover {
+    border-color: rgba(229, 203, 167, 0.3);
+    color: #FFFFFF;
+}
+
+.sens-cardio-type-btn.active {
+    background: rgba(229, 203, 167, 0.15);
+    border-color: #E5CBA7;
+    color: #E5CBA7;
+    box-shadow: 0 0 8px rgba(229, 203, 167, 0.2);
+}
+
+/* Regla para ocultar card de biometría y pestaña de progreso en el MVP */
+#dashBiometricsCard,
+.sens-biometrics-card,
+[data-dock-tab="trackingView"],
+[data-portal-tab="trackingView"] {
+    display: none !important;
+}
+
+/* Highlight transitorio al navegar hacia tarjetas */
+.sens-card-focus-highlight {
+    animation: sensCardGlowPulse 1.2s ease-out;
+}
+
+@keyframes sensCardGlowPulse {
+    0% { box-shadow: 0 0 0 rgba(229, 203, 167, 0); }
+    30% { box-shadow: 0 0 28px rgba(229, 203, 167, 0.45); }
+    100% { box-shadow: 0 0 0 rgba(229, 203, 167, 0); }
+}
+
+
 
 
 
