@@ -10727,6 +10727,109 @@ function renderNutriDaysNav() {
 window.renderNutriDaysNav = renderNutriDaysNav;
 
 /**
+ * Helpers Clínicos y de Formato Nutricional SENS
+ */
+function escapeSensHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function getGlobalFoodCatalog() {
+    if (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0) {
+        return SENS_FOOD_LIBRARY;
+    }
+    if (typeof window !== 'undefined' && Array.isArray(window.SENS_FOOD_LIBRARY) && window.SENS_FOOD_LIBRARY.length > 0) {
+        return window.SENS_FOOD_LIBRARY;
+    }
+    if (typeof window !== 'undefined' && Array.isArray(window.FOOD_CATALOG) && window.FOOD_CATALOG.length > 0) {
+        return window.FOOD_CATALOG;
+    }
+    return (typeof FOOD_CATALOG !== 'undefined' && Array.isArray(FOOD_CATALOG)) ? FOOD_CATALOG : [];
+}
+
+function normalizeSensString(str) {
+    if (!str) return '';
+    return str.toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
+
+function parseNumberedList(text) {
+    if (!text || typeof text !== 'string') return [];
+    const trimmed = text.trim();
+    if (/\b\d+\.\s*/.test(trimmed)) {
+        return trimmed.split(/(?=\b\d+\.\s*)/g).map(s => s.trim()).filter(Boolean);
+    }
+    if (trimmed.includes('\n')) return trimmed.split('\n').map(s => s.trim()).filter(Boolean);
+    if (trimmed.includes('•')) return trimmed.split('•').map(s => s.trim()).filter(Boolean);
+    return [trimmed];
+}
+
+function formatIngredientsHtml(ings) {
+    if (!ings) return '<div class="sens-ingredient-item-row"><span class="sens-ingredient-bullet">•</span><span>Alimento de alta pureza biológica sin conservantes añadidos.</span></div>';
+    let list = [];
+    if (Array.isArray(ings)) {
+        list = ings;
+    } else if (typeof ings === 'string') {
+        const trimmed = ings.trim();
+        if (/\b\d+\.\s*/.test(trimmed)) {
+            list = trimmed.split(/(?=\b\d+\.\s*)/g).map(s => s.trim()).filter(Boolean);
+        } else if (trimmed.includes('•')) {
+            list = trimmed.split('•').map(s => s.trim()).filter(Boolean);
+        } else if (trimmed.includes('\n')) {
+            list = trimmed.split('\n').map(s => s.trim()).filter(Boolean);
+        } else if (trimmed.includes(',')) {
+            list = trimmed.split(',').map(s => s.trim()).filter(Boolean);
+        } else {
+            list = [trimmed];
+        }
+    }
+    return list.map((item) => {
+        const clean = item.replace(/^\d+\.\s*/, '').trim();
+        return `
+            <div class="sens-ingredient-item-row">
+                <span class="sens-ingredient-bullet">•</span>
+                <span style="color: #CBD5E1;">${clean}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function formatSingleStepRowHtml(stepText, num = 1) {
+    if (!stepText) return '';
+    const clean = stepText.replace(/^\d+\.\s*/, '').trim();
+    return `
+        <div class="sens-step-item-row" style="border-bottom: none; padding: 2px 0;">
+            <span class="sens-step-badge">${num}</span>
+            <span>${clean}</span>
+        </div>
+    `;
+}
+
+function formatStepsHtml(stepsText) {
+    const list = parseNumberedList(stepsText);
+    if (list.length === 0) {
+        return '<div class="sens-step-item-row"><span class="sens-step-badge">1</span><span>Cocción a temperatura controlada preservando perfil enzimático.</span></div>';
+    }
+    return list.map((step, idx) => {
+        const clean = step.replace(/^\d+\.\s*/, '').trim();
+        return `
+            <div class="sens-step-item-row">
+                <span class="sens-step-badge">${idx + 1}</span>
+                <span>${clean}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+/**
  * Marca o desmarca un alimento como consumido hoy desde la card directa (Item 5)
  */
 function toggleFoodLoggedStatus(foodKey, mealSlot) {
@@ -10746,12 +10849,13 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
         if (typeof showSensToast === 'function') showSensToast('Alimento desmarcado de hoy.', 'info', 1500);
     } else {
         loggedFoods[foodKey] = true;
-        if (typeof showSensToast === 'function') showSensToast('✓ Registrado como consumido.', 'champagne', 2000);
+        if (typeof showSensToast === 'function') showSensToast('✓ Registrado como consumido hoy.', 'champagne', 2000);
     }
     localStorage.setItem(logKey, JSON.stringify(loggedFoods));
 
     renderMemberNutritionPlan(athId, sDate);
     renderNutriDaysNav();
+    if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
 }
 
 window.toggleFoodLoggedStatus = toggleFoodLoggedStatus;
@@ -10760,6 +10864,11 @@ window.toggleFoodLoggedStatus = toggleFoodLoggedStatus;
  * Abre el modal de comida personalizada pre-seleccionando un momento específico de comida
  */
 function openCustomMealModalForSlot(slot) {
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    if (typeof initUserCustomMealModal === 'function') {
+        initUserCustomMealModal(athId);
+    }
+
     const modal = document.getElementById('userCustomMealModal');
     if (!modal) return;
     userCustomTrayItems = [];
@@ -10771,12 +10880,44 @@ function openCustomMealModalForSlot(slot) {
         pill.classList.toggle('active', isMatch);
     });
 
+    // Reset de pestañas Modo Búsqueda vs Manual
+    const tabSearch = document.getElementById('tabCustomSearchMode');
+    const tabManual = document.getElementById('tabCustomManualMode');
+    const paneSearch = document.getElementById('paneCustomSearch');
+    const paneManual = document.getElementById('paneCustomManual');
+    if (tabSearch && tabManual && paneSearch && paneManual) {
+        tabSearch.style.color = '#E5CBA7';
+        tabSearch.style.borderBottomColor = '#E5CBA7';
+        tabManual.style.color = '#71717A';
+        tabManual.style.borderBottomColor = 'transparent';
+        paneSearch.style.display = 'block';
+        paneManual.style.display = 'none';
+    }
+
+    // Reset de Filtros de Calorías
+    const kcalChips = modal.querySelectorAll('#customKcalFilterRow .sens-kcal-chip');
+    kcalChips.forEach(c => c.classList.remove('active'));
+    const allChip = modal.querySelector('#customKcalFilterRow .sens-kcal-chip[data-range="all"]');
+    if (allChip) allChip.classList.add('active');
+
+    const minInput = document.getElementById('customKcalMinInput');
+    const maxInput = document.getElementById('customKcalMaxInput');
+    if (minInput) minInput.value = '';
+    if (maxInput) maxInput.value = '';
+
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
     const searchInput = document.getElementById('customFoodSearchInput');
     if (searchInput) {
         searchInput.value = '';
+    }
+
+    if (typeof window.renderCustomSearchResults === 'function') {
+        window.renderCustomSearchResults('');
+    }
+    if (typeof window.renderCustomTray === 'function') {
+        window.renderCustomTray();
     }
 }
 
@@ -10892,7 +11033,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         allDayFoods.push(cm);
     });
 
-    // 4. Renderizar Subsecciones Visuales con Paridad y Ergonomía (Item 5)
+    // 4. Renderizar Subsecciones Visuales con Container Encompassing Parent Card (Item 1 & 2)
     const foodListEl = document.getElementById('memberNutriFoodList');
     const activeFilter = AppState.activeNutriFilter || 'todas';
     const slotsToRender = activeFilter === 'todas' ? mealKeys : [activeFilter];
@@ -10902,6 +11043,8 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     slotsToRender.forEach(mKey => {
         const slotFoods = allDayFoods.filter(f => f.mealSlot === mKey);
         let slotKcal = 0;
+        let slotConsumedKcal = 0;
+        let slotConsumedCount = 0;
 
         const cardsHtml = slotFoods.map(item => {
             const resolved = (typeof window.getResolvedFood === 'function')
@@ -10927,10 +11070,15 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
             slotKcal += macros.calories;
 
+            const isLogged = item.isCustom ? (userConsumedFoods[foodKey] !== false) : Boolean(userConsumedFoods[foodKey]);
+            if (isLogged) {
+                slotConsumedKcal += macros.calories;
+                slotConsumedCount++;
+            }
+
             const imgUrl = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
             const foodTitle = item.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
             const portionText = item.isCustom ? 'Comida Personalizada' : (resolved?.unidades_caseras_total || `${grams}g`);
-            const isLogged = Boolean(userConsumedFoods[foodKey]);
 
             return `
                 <div class="sens-nutri-food-card ${isLogged ? 'is-logged' : ''}" data-food-id="${foodKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
@@ -10957,6 +11105,10 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             `;
         }).join('');
 
+        const subtotalMeta = slotConsumedCount > 0
+            ? `${slotConsumedKcal.toLocaleString('es-AR')} / ${slotKcal.toLocaleString('es-AR')} kcal • ${slotConsumedCount}/${slotFoods.length} consumidos`
+            : `${slotKcal.toLocaleString('es-AR')} kcal • ${slotFoods.length} items`;
+
         subsectionsHtml += `
             <div class="sens-meal-subsection-block" data-meal-slot="${mKey}">
                 <div class="sens-meal-subsection-header">
@@ -10965,7 +11117,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                             <span class="sens-meal-badge-dot"></span>
                             <h4 class="sens-meal-title">${mealLabels[mKey]}</h4>
                         </div>
-                        <span class="sens-meal-subtotal-meta">${slotKcal.toLocaleString('es-AR')} kcal • ${slotFoods.length} items</span>
+                        <span class="sens-meal-subtotal-meta">${subtotalMeta}</span>
                     </div>
                     <button type="button" class="btn-quick-add-to-meal" data-meal-slot="${mKey}" title="Agregar alimento a ${mealLabels[mKey]}">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -10973,7 +11125,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     </button>
                 </div>
                 <div class="sens-meal-foods-grid">
-                    ${cardsHtml || '<div style="padding: 12px 14px; font-size: 12px; color: #71717A; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.06);">No hay alimentos asignados. Podés agregar con el botón superior.</div>'}
+                    ${cardsHtml || `<div style="padding: 14px; font-size: 12px; color: #71717A; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.06); text-align: center;">No hay alimentos en ${mealLabels[mKey]}. Tocá <strong>+ Agregar</strong> para sumar desde la biblioteca o registrar calorías.</div>`}
                 </div>
             </div>
         `;
@@ -11017,11 +11169,11 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         });
     }
 
-    // 5. Recalcular Balance Global del Día & Sincronizar Hero Card (Items 2 & 4)
-    let totalDayKcal = 0;
-    let totalDayProt = 0;
-    let totalDayCarbs = 0;
-    let totalDayFats = 0;
+    // 5. Recalcular Balance Global del Día & Sincronizar Hero Card (Item 2: ESTRICTAMENTE SOBRE LO CONSUMIDO)
+    let totalConsumedKcal = 0;
+    let totalConsumedProt = 0;
+    let totalConsumedCarbs = 0;
+    let totalConsumedFats = 0;
 
     allDayFoods.forEach(item => {
         const resolved = (typeof window.getResolvedFood === 'function')
@@ -11030,19 +11182,26 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
         const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
 
+        let macros;
         if (item.isCustom && item.calories !== undefined) {
-            totalDayKcal += item.calories;
-            totalDayProt += (item.protein || 0);
-            totalDayCarbs += (item.carbs || 0);
-            totalDayFats += (item.fats || 0);
+            macros = {
+                calories: item.calories,
+                protein: item.protein || 0,
+                carbs: item.carbs || 0,
+                fats: item.fats || 0
+            };
         } else {
-            const macros = (typeof window.calculateFoodMacros === 'function')
+            macros = (typeof window.calculateFoodMacros === 'function')
                 ? window.calculateFoodMacros(resolved, grams)
                 : { calories: Math.round(grams * 1.5), protein: 20, carbs: 15, fats: 5 };
-            totalDayKcal += macros.calories;
-            totalDayProt += macros.protein;
-            totalDayCarbs += macros.carbs;
-            totalDayFats += macros.fats;
+        }
+
+        const isLogged = item.isCustom ? (userConsumedFoods[foodKey] !== false) : Boolean(userConsumedFoods[foodKey]);
+        if (isLogged) {
+            totalConsumedKcal += macros.calories;
+            totalConsumedProt += macros.protein;
+            totalConsumedCarbs += macros.carbs;
+            totalConsumedFats += macros.fats;
         }
     });
 
@@ -11056,12 +11215,15 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     const fatsGramsEl = document.getElementById('nutriFatsGrams');
     const protGramsEl = document.getElementById('nutriProtGrams');
 
-    if (consumedNum) consumedNum.textContent = totalDayKcal.toLocaleString('es-AR');
+    if (consumedNum) consumedNum.textContent = totalConsumedKcal.toLocaleString('es-AR');
     if (targetKcalEl) targetKcalEl.textContent = `${targetKcal.toLocaleString('es-AR')} kcal`;
     if (remainingEl) {
-        const diff = targetKcal - totalDayKcal;
-        if (diff > 0) {
-            remainingEl.textContent = `Restan ${diff.toLocaleString('es-AR')} kcal`;
+        const diff = targetKcal - totalConsumedKcal;
+        if (totalConsumedKcal === 0) {
+            remainingEl.textContent = `Restan ${targetKcal.toLocaleString('es-AR')} kcal para tu objetivo`;
+            remainingEl.style.color = '#A1A1AA';
+        } else if (diff > 0) {
+            remainingEl.textContent = `Restan ${diff.toLocaleString('es-AR')} kcal para tu objetivo`;
             remainingEl.style.color = '#A1A1AA';
         } else if (diff === 0) {
             remainingEl.textContent = 'Meta calórica alcanzada exacta';
@@ -11075,24 +11237,34 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         optimalRangeEl.textContent = `Rango óptimo: ${Math.round(targetKcal * 0.9).toLocaleString('es-AR')} - ${Math.round(targetKcal * 1.1).toLocaleString('es-AR')} kcal`;
     }
     if (sliderFill) {
-        const pct = Math.min(100, Math.round((totalDayKcal / targetKcal) * 100));
+        const pct = targetKcal > 0 ? Math.min(100, Math.round((totalConsumedKcal / targetKcal) * 100)) : 0;
         sliderFill.style.width = `${pct}%`;
-        sliderFill.style.background = totalDayKcal > (targetKcal * 1.1) ? 'linear-gradient(90deg, #F59E0B, #EF4444)' : 'linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%)';
+        sliderFill.style.background = totalConsumedKcal > (targetKcal * 1.1) ? 'linear-gradient(90deg, #F59E0B, #EF4444)' : 'linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%)';
     }
 
-    // Resumen y Desglose de Macronutrientes en Acordeón Integrado (Item 4)
+    // Resumen y Desglose de Macronutrientes en Acordeón Integrado (ESTRICTAMENTE SOBRE LO CONSUMIDO)
     const quickSummary = document.getElementById('nutriMacroQuickSummary');
-    if (quickSummary) {
-        quickSummary.textContent = `${Math.round(totalDayProt)}g Prot • ${Math.round(totalDayCarbs)}g Carbs • ${Math.round(totalDayFats)}g Grasas`;
-    }
-    if (carbsGramsEl) carbsGramsEl.innerHTML = `${Math.round(totalDayCarbs)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
-    if (fatsGramsEl) fatsGramsEl.innerHTML = `${Math.round(totalDayFats)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
-    if (protGramsEl) protGramsEl.innerHTML = `${Math.round(totalDayProt)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+    if (carbsGramsEl) carbsGramsEl.innerHTML = `${Math.round(totalConsumedCarbs)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+    if (fatsGramsEl) fatsGramsEl.innerHTML = `${Math.round(totalConsumedFats)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+    if (protGramsEl) protGramsEl.innerHTML = `${Math.round(totalConsumedProt)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
 
-    const totalMacroGrams = (totalDayCarbs + totalDayProt + totalDayFats) || 1;
-    const carbPct = Math.round((totalDayCarbs / totalMacroGrams) * 100);
-    const protPct = Math.round((totalDayProt / totalMacroGrams) * 100);
-    const fatPct = Math.max(0, 100 - carbPct - protPct);
+    const totalMacroGrams = (totalConsumedCarbs + totalConsumedProt + totalConsumedFats);
+    let carbPct = 0;
+    let protPct = 0;
+    let fatPct = 0;
+
+    if (totalMacroGrams > 0) {
+        carbPct = Math.round((totalConsumedCarbs / totalMacroGrams) * 100);
+        protPct = Math.round((totalConsumedProt / totalMacroGrams) * 100);
+        fatPct = Math.max(0, 100 - carbPct - protPct);
+        if (quickSummary) {
+            quickSummary.textContent = `${Math.round(totalConsumedProt)}g Prot • ${Math.round(totalConsumedCarbs)}g Carbs • ${Math.round(totalConsumedFats)}g Grasas`;
+        }
+    } else {
+        if (quickSummary) {
+            quickSummary.textContent = 'Sin comidas marcadas hoy • Tocá ✓ en cada plato para sumar';
+        }
+    }
 
     const carbsRatioEl = document.getElementById('nutriCarbsRatio');
     const protRatioEl = document.getElementById('nutriProtRatio');
@@ -11114,6 +11286,19 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     if (legCarb) legCarb.textContent = `${carbPct}% Carb`;
     if (legProt) legProt.textContent = `${protPct}% Proteína`;
     if (legFat) legFat.textContent = `${fatPct}% Grasa`;
+
+    // Persistir calorías consumidas del día para sincronía cruzada con Inicio (Balance Energético y Racha)
+    try {
+        localStorage.setItem(`sens_cals_${dateIso}`, totalConsumedKcal);
+        if (isToday) {
+            if (!AppState.dailyNutrition) AppState.dailyNutrition = {};
+            AppState.dailyNutrition.calories = totalConsumedKcal;
+            AppState.dailyNutrition.protein = Math.round(totalConsumedProt);
+            AppState.dailyNutrition.carbs = Math.round(totalConsumedCarbs);
+            AppState.dailyNutrition.fats = Math.round(totalConsumedFats);
+            localStorage.setItem('sens_daily_nutrition', JSON.stringify(AppState.dailyNutrition));
+        }
+    } catch (e) {}
 
     // Toggle del Acordeón de Macronutrientes
     const btnToggleMacro = document.getElementById('btnToggleMacroDrawer');
@@ -11183,11 +11368,13 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
 
     if (ingrText) {
         const ings = resolved?.ingredientes_y_gramajes || resolved?.ingredientes_principales;
-        ingrText.textContent = Array.isArray(ings) ? ings.join(' • ') : (ings || 'Alimento de alta pureza biológica sin conservantes añadidos.');
+        ingrText.innerHTML = formatIngredientsHtml(ings);
     }
 
-    // Pasos de preparación con botón "Ver más / Ver menos" (Item 7)
+    // Pasos de preparación con botón "Ver más / Ver menos" (Item 3: Sin duplicar línea 1 y con enter por paso)
     const fullSteps = resolved?.paso_a_paso_preparacion || resolved?.pasos_preparacion || resolved?.preparacion || 'Cocción a temperatura controlada (vapor, plancha o poché) preservando perfil enzimático.';
+    const stepItems = parseNumberedList(fullSteps);
+
     const previewEl = document.getElementById('ufdStepsPreview');
     const fullEl = document.getElementById('ufdStepsFull');
     const toggleStepsBtn = document.getElementById('btnToggleUfdSteps');
@@ -11196,18 +11383,17 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
 
     if (previewEl && fullEl) {
         fullEl.style.display = 'none';
+        previewEl.style.display = 'block';
         if (stepsToggleText) stepsToggleText.textContent = 'Ver más';
         if (stepsArrow) stepsArrow.textContent = '▾';
 
-        if (fullSteps.length > 90 || fullSteps.includes('2.')) {
-            const firstDot = fullSteps.indexOf('2.');
-            const previewText = firstDot !== -1 ? fullSteps.substring(0, firstDot).trim() : (fullSteps.substring(0, 85) + '...');
-            previewEl.textContent = previewText;
-            fullEl.textContent = fullSteps;
+        if (stepItems.length > 1) {
+            previewEl.innerHTML = formatSingleStepRowHtml(stepItems[0], 1);
+            fullEl.innerHTML = stepItems.map((s, idx) => formatSingleStepRowHtml(s, idx + 1)).join('');
             if (toggleStepsBtn) toggleStepsBtn.style.display = 'inline-flex';
         } else {
-            previewEl.textContent = fullSteps;
-            fullEl.textContent = '';
+            previewEl.innerHTML = formatSingleStepRowHtml(stepItems[0] || fullSteps, 1);
+            fullEl.innerHTML = '';
             if (toggleStepsBtn) toggleStepsBtn.style.display = 'none';
         }
     }
@@ -11215,11 +11401,21 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
     if (toggleStepsBtn && !toggleStepsBtn._hasToggleBound) {
         toggleStepsBtn._hasToggleBound = true;
         toggleStepsBtn.addEventListener('click', () => {
-            if (!fullEl) return;
+            if (!fullEl || !previewEl) return;
             const isClosed = fullEl.style.display === 'none';
-            fullEl.style.display = isClosed ? 'block' : 'none';
-            if (stepsToggleText) stepsToggleText.textContent = isClosed ? 'Ver menos' : 'Ver más';
-            if (stepsArrow) stepsArrow.textContent = isClosed ? '▴' : '▾';
+            if (isClosed) {
+                previewEl.style.display = 'none';
+                fullEl.style.display = 'flex';
+                fullEl.style.flexDirection = 'column';
+                fullEl.style.gap = '8px';
+                if (stepsToggleText) stepsToggleText.textContent = 'Ver menos';
+                if (stepsArrow) stepsArrow.textContent = '▴';
+            } else {
+                previewEl.style.display = 'block';
+                fullEl.style.display = 'none';
+                if (stepsToggleText) stepsToggleText.textContent = 'Ver más';
+                if (stepsArrow) stepsArrow.textContent = '▾';
+            }
         });
     }
 
@@ -11579,19 +11775,22 @@ function initUserCustomMealModal(athId) {
         });
     }
 
-    // Renderizado de Resultados de Búsqueda con Filtro de Calorías e Inspección (Item 8)
+    // Renderizado de Resultados de Búsqueda con Filtro de Calorías e Inspección (Item 4 & 8)
     function renderSearchResults(query = '') {
         if (!searchResults) return;
-        const library = (typeof SENS_FOOD_LIBRARY !== 'undefined') ? SENS_FOOD_LIBRARY : [];
-        const q = query.toLowerCase().trim();
+        const library = getGlobalFoodCatalog();
+        const q = normalizeSensString(query);
 
         let matches = library;
         if (q.length > 0) {
             matches = library.filter(f => {
-                const nameMatch = f.name && f.name.toLowerCase().includes(q);
-                const catMatch = f.categoria_nutricional && f.categoria_nutricional.toLowerCase().includes(q);
-                const mealMatch = f.momento_consumo && f.momento_consumo.toLowerCase().includes(q);
-                return nameMatch || catMatch || mealMatch;
+                const n1 = normalizeSensString(f.name);
+                const n2 = normalizeSensString(f.name_es);
+                const n3 = normalizeSensString(f.name_en);
+                const c1 = normalizeSensString(f.categoria_nutricional);
+                const m1 = normalizeSensString(f.momento_consumo);
+                const t1 = normalizeSensString(f.etiquetas_dieta_filtros);
+                return n1.includes(q) || n2.includes(q) || n3.includes(q) || c1.includes(q) || m1.includes(q) || t1.includes(q);
             });
         }
 
@@ -11616,37 +11815,39 @@ function initUserCustomMealModal(athId) {
         }
 
         matches = matches.filter(f => {
-            const cal = f.calPorcion || f.calories || Math.round((f.calPer100 || 150) * 1.5);
+            const cal = Number(f.calPorcion || f.calories || Math.round((f.calPer100 || 150) * 1.5)) || 0;
             return cal >= minCal && cal <= maxCal;
         });
 
-        matches = matches.slice(0, 25);
+        matches = matches.slice(0, 30);
 
         if (matches.length === 0) {
             searchResults.innerHTML = `
-                <div style="text-align: center; padding: 24px 12px; color: #71717A; font-size: 12px;">
-                    No se encontraron alimentos en este rango calórico o búsqueda. Probá ajustar el filtro.
+                <div style="text-align: center; padding: 24px 14px; color: #A1A1AA; font-size: 12px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed rgba(255,255,255,0.08);">
+                    No se encontraron alimentos para "<strong>${escapeSensHtml(query)}</strong>" en este rango calórico.<br>Probá ajustar el filtro o usar la carga rápida de calorías.
                 </div>
             `;
             return;
         }
 
         searchResults.innerHTML = matches.map(f => {
-            const cal = f.calPorcion || f.calories || Math.round((f.calPer100 || 150) * 1.5);
-            const prot = f.protPorcion || f.protein || Math.round((f.protPer100 || 20) * 1.5);
-            const img = f.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+            const cal = Number(f.calPorcion || f.calories || Math.round((f.calPer100 || 150) * 1.5)) || 0;
+            const prot = Number(f.protPorcion || f.protein || Math.round((f.protPer100 || 20) * 1.5)) || 0;
+            const img = f.image || f.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
             const fid = f.id || f.codigo;
             const steps = f.paso_a_paso_preparacion || f.pasos_preparacion || 'Cocción saludable preservando micronutrientes.';
             const ingrs = f.ingredientes_y_gramajes || f.ingredientes_principales || 'Alimento natural de alta calidad biológica.';
 
             return `
-                <div class="sens-search-result-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; overflow: hidden;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px;">
-                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-                            <img src="${img}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; flex-shrink: 0;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
-                            <div style="min-width: 0;">
+                <div class="sens-search-result-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; overflow: hidden; margin-bottom: 6px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
+                            <img src="${img}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #18181B;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                            <div style="min-width: 0; flex: 1;">
                                 <div style="font-size: 12.5px; font-weight: 700; color: #FFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${f.name}</div>
-                                <div style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums;">${f.porcion_total_g_ml || 100}g • ${prot}g Prot • ${cal} kcal</div>
+                                <div style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums; margin-top: 2px;">
+                                    ${f.porcion_total_g_ml || 100}g • <span style="color: #E5CBA7; font-weight: 700;">${cal} kcal</span> • <span style="color: #38BDF8;">${prot}g Prot</span>
+                                </div>
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
@@ -11658,11 +11859,17 @@ function initUserCustomMealModal(athId) {
                             </button>
                         </div>
                     </div>
-                    <!-- Drawer Desplegable con Pasos e Ingredientes (Item 8) -->
+                    <!-- Drawer Desplegable con Pasos e Ingredientes Formateados (Item 3 & 4) -->
                     <div class="sens-food-inspect-drawer" id="inspectDrawer_${fid}">
-                        <div style="margin-bottom: 4px;"><strong style="color: #FFFFFF;">Ingredientes:</strong> ${ingrs}</div>
-                        <div style="margin-bottom: 4px;"><strong style="color: #FFFFFF;">Preparación:</strong> ${steps}</div>
-                        ${f.tip_coach_nico ? `<div style="color: #E5CBA7;"><strong>Tip de Nico:</strong> ${f.tip_coach_nico}</div>` : ''}
+                        <div style="margin-bottom: 6px;">
+                            <strong style="color: #FFFFFF; font-size: 11.5px; display: block; margin-bottom: 4px;">Ingredientes:</strong>
+                            ${formatIngredientsHtml(ingrs)}
+                        </div>
+                        <div style="margin-bottom: 6px;">
+                            <strong style="color: #FFFFFF; font-size: 11.5px; display: block; margin-bottom: 4px;">Preparación:</strong>
+                            ${formatStepsHtml(steps)}
+                        </div>
+                        ${f.tip_coach_nico ? `<div style="color: #E5CBA7; font-size: 11px; margin-top: 6px;"><strong>Tip de Nico:</strong> ${f.tip_coach_nico}</div>` : ''}
                     </div>
                 </div>
             `;
@@ -11700,6 +11907,9 @@ function initUserCustomMealModal(athId) {
             });
         });
     }
+
+    window.renderCustomSearchResults = renderSearchResults;
+    window.renderCustomTray = renderCustomTray;
 
     // Handlers de Filtros de Calorías (Item 8)
     const applyKcalFilter = () => {
@@ -11838,9 +12048,24 @@ function initUserCustomMealModal(athId) {
             }
 
             localStorage.setItem(customStorageKey, JSON.stringify(userCustomMeals));
+
+            // Asegurar que las comidas registradas por el usuario queden marcadas como consumidas
+            const consumedStorageKey = `sens_user_consumed_foods_${activeAthId}_${dateIso}`;
+            let userConsumedFoods = {};
+            try {
+                userConsumedFoods = JSON.parse(localStorage.getItem(consumedStorageKey) || '{}');
+            } catch (e) {}
+            userCustomMeals.forEach(cm => {
+                if (cm.id && userConsumedFoods[cm.id] === undefined) {
+                    userConsumedFoods[cm.id] = true;
+                }
+            });
+            localStorage.setItem(consumedStorageKey, JSON.stringify(userConsumedFoods));
+
             closeModal();
             renderMemberNutritionPlan(activeAthId, sDate);
             renderNutriDaysNav();
+            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
 
             if (typeof showSensToast === 'function') {
                 showSensToast(`Comida registrada con éxito en ${userActiveNutriMealSlot.toUpperCase()}.`, 'champagne');
