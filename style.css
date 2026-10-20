@@ -9945,6 +9945,10 @@ input[type="range"]::-webkit-slider-thumb:hover {
     box-shadow: 0 0 10px rgba(229, 203, 167, 0.5) !important;
 }
 
+.sens-tooltip-wrap.active {
+    z-index: 10010 !important;
+}
+
 .sens-tooltip-popover,
 .sens-streak-rule-popover {
     position: absolute;

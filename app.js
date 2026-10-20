@@ -3701,6 +3701,9 @@ function initDiagnosisWizard() {
     };
 
     // Helper global de posicionamiento inteligente y dinámico de popovers / tooltips (Mobile-First Viewport Clamping)
+    let tooltipOpenScrollY = 0;
+    let tooltipOpenTimestamp = 0;
+
     window.positionTooltipPopover = function(popover, triggerBtn) {
         if (!popover || !triggerBtn) return;
         const vw = window.innerWidth || document.documentElement.clientWidth;
@@ -3732,9 +3735,10 @@ function initDiagnosisWizard() {
         const clampedArrowX = Math.max(16, Math.min(arrowX, targetW - 16));
         popover.style.setProperty('--arrow-x', `${Math.round(clampedArrowX)}px`);
         
-        // Comprobar espacio vertical disponible arriba
+        // Comprobar espacio vertical disponible arriba considerando topbar y sticky header
         const popHeight = popover.offsetHeight || 160;
-        if (btnRect.top - popHeight - 16 < 10) {
+        const topSafeMargin = (typeof cachedPortalTopbarHeight === 'number' ? cachedPortalTopbarHeight : 48) + 30;
+        if (btnRect.top - popHeight - 16 < topSafeMargin) {
             popover.classList.add('pos-bottom');
             popover.classList.remove('pos-top');
         } else {
@@ -3751,6 +3755,43 @@ function initDiagnosisWizard() {
         });
     };
 
+    window.toggleSensTooltip = function(btnOrWrap, e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+        }
+        const btn = (btnOrWrap && btnOrWrap.classList && btnOrWrap.classList.contains('sens-tooltip-btn'))
+            ? btnOrWrap
+            : (btnOrWrap ? btnOrWrap.querySelector('.sens-tooltip-btn') : null);
+        const wrap = btnOrWrap ? btnOrWrap.closest('.sens-tooltip-wrap') : null;
+        if (!wrap || !btn) return;
+
+        const pop = wrap.querySelector('.sens-tooltip-popover, .sens-streak-rule-popover');
+        const isCurrentlyActive = wrap.classList.contains('active');
+
+        // Cerrar cualquier otro tooltip abierto
+        document.querySelectorAll('.sens-tooltip-wrap.active').forEach(w => {
+            if (w !== wrap) {
+                w.classList.remove('active');
+                const p = w.querySelector('.sens-tooltip-popover, .sens-streak-rule-popover');
+                if (p) p.classList.remove('pos-bottom', 'pos-top');
+            }
+        });
+
+        if (isCurrentlyActive) {
+            wrap.classList.remove('active');
+            if (pop) pop.classList.remove('pos-bottom', 'pos-top');
+        } else {
+            wrap.classList.add('active');
+            tooltipOpenScrollY = window.scrollY || window.pageYOffset || 0;
+            tooltipOpenTimestamp = Date.now();
+            if (pop && typeof window.positionTooltipPopover === 'function') {
+                window.positionTooltipPopover(pop, btn);
+            }
+        }
+    };
+
     document.addEventListener('click', (e) => {
         const closeBtn = e.target.closest('.sens-popover-close-btn');
         if (closeBtn) {
@@ -3762,22 +3803,11 @@ function initDiagnosisWizard() {
 
         const tooltipBtn = e.target.closest('.sens-tooltip-btn');
         if (tooltipBtn) {
-            e.preventDefault();
-            e.stopPropagation();
-            const wrap = tooltipBtn.closest('.sens-tooltip-wrap');
-            const isActive = wrap.classList.contains('active');
-            window.closeAllTooltips();
-            if (!isActive) {
-                wrap.classList.add('active');
-                const pop = wrap.querySelector('.sens-tooltip-popover, .sens-streak-rule-popover');
-                if (pop) {
-                    window.positionTooltipPopover(pop, tooltipBtn);
-                }
-            }
+            window.toggleSensTooltip(tooltipBtn, e);
             return;
         }
 
-        if (!e.target.closest('.sens-tooltip-popover, .sens-streak-rule-popover')) {
+        if (!e.target.closest('.sens-tooltip-wrap')) {
             window.closeAllTooltips();
         }
     });
@@ -3794,9 +3824,12 @@ function initDiagnosisWizard() {
         }
     });
 
-    // Cerrar tooltips al scrollear para paridad nativa iOS / Android
+    // Cerrar tooltips al scrollear de forma intencional (evitando falsos cierres en micro-toques)
     window.addEventListener('scroll', () => {
-        if (document.querySelector('.sens-tooltip-wrap.active')) {
+        if (!document.querySelector('.sens-tooltip-wrap.active')) return;
+        if (Date.now() - tooltipOpenTimestamp < 350) return;
+        const currentY = window.scrollY || window.pageYOffset || 0;
+        if (Math.abs(currentY - tooltipOpenScrollY) > 50) {
             window.closeAllTooltips();
         }
     }, { passive: true });

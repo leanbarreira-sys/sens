@@ -2846,12 +2846,12 @@
                                     <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
                                         <span class="sens-pillar-heading">Fuerza &amp; Rutina</span>
                                         <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
-                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha entrenamiento" title="Ver regla de racha">?</button>
-                                            <div class="sens-tooltip-popover sens-streak-rule-popover">
+                                            <button type="button" class="sens-tooltip-btn" onclick="window.toggleSensTooltip(this, event);" aria-label="Regla de racha entrenamiento" title="Ver regla de racha">?</button>
+                                            <div class="sens-tooltip-popover sens-streak-rule-popover" onclick="event.stopPropagation();">
                                                 <div class="sens-streak-popover-header">
                                                     <span class="sens-streak-popover-badge">Regla SENS</span>
                                                     <strong class="sens-streak-popover-title">Entrenamiento</strong>
-                                                    <button type="button" class="sens-popover-close-btn" aria-label="Cerrar regla">×</button>
+                                                    <button type="button" class="sens-popover-close-btn" onclick="window.closeAllTooltips(); event.stopPropagation();" aria-label="Cerrar regla">×</button>
                                                 </div>
                                                 <p class="sens-streak-popover-text">
                                                     Solo se activa si completás el <strong>100% de los ejercicios</strong> prescriptos para hoy en tu rutina (o marcás descanso activo). En días anteriores incompletos muestra ✕.
@@ -2873,12 +2873,12 @@
                                     <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
                                         <span class="sens-pillar-heading">Plan Nutricional</span>
                                         <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
-                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha nutrición" title="Ver regla de racha">?</button>
-                                            <div class="sens-tooltip-popover sens-streak-rule-popover">
+                                            <button type="button" class="sens-tooltip-btn" onclick="window.toggleSensTooltip(this, event);" aria-label="Regla de racha nutrición" title="Ver regla de racha">?</button>
+                                            <div class="sens-tooltip-popover sens-streak-rule-popover" onclick="event.stopPropagation();">
                                                 <div class="sens-streak-popover-header">
                                                     <span class="sens-streak-popover-badge">Regla SENS</span>
                                                     <strong class="sens-streak-popover-title">Nutrición</strong>
-                                                    <button type="button" class="sens-popover-close-btn" aria-label="Cerrar regla">×</button>
+                                                    <button type="button" class="sens-popover-close-btn" onclick="window.closeAllTooltips(); event.stopPropagation();" aria-label="Cerrar regla">×</button>
                                                 </div>
                                                 <p class="sens-streak-popover-text">
                                                     Mantiene la racha si tus calorías consumidas quedan entre <strong>-20% y +10%</strong> de tu meta prescripta. Si superás el <strong>+10%</strong>, perdés la racha diaria.
@@ -2900,12 +2900,12 @@
                                     <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
                                         <span class="sens-pillar-heading">Pasos &amp; Cardio</span>
                                         <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
-                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha pasos y cardio" title="Ver regla de racha">?</button>
-                                            <div class="sens-tooltip-popover sens-streak-rule-popover">
+                                            <button type="button" class="sens-tooltip-btn" onclick="window.toggleSensTooltip(this, event);" aria-label="Regla de racha pasos y cardio" title="Ver regla de racha">?</button>
+                                            <div class="sens-tooltip-popover sens-streak-rule-popover" onclick="event.stopPropagation();">
                                                 <div class="sens-streak-popover-header">
                                                     <span class="sens-streak-popover-badge">Regla SENS</span>
                                                     <strong class="sens-streak-popover-title">Pasos &amp; Cardio</strong>
-                                                    <button type="button" class="sens-popover-close-btn" aria-label="Cerrar regla">×</button>
+                                                    <button type="button" class="sens-popover-close-btn" onclick="window.closeAllTooltips(); event.stopPropagation();" aria-label="Cerrar regla">×</button>
                                                 </div>
                                                 <p class="sens-streak-popover-text">
                                                     Se acredita al guardar tu registro en Balance Energético: requiere mínimo <strong>10.000 pasos</strong> ó <strong>90m caminata</strong> ó <strong>30m cardio</strong>.
