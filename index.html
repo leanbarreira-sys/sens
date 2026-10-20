@@ -2729,7 +2729,16 @@
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                                 </div>
                                 <div class="sens-pillar-content">
-                                    <div class="sens-pillar-heading">Fuerza &amp; Rutina</div>
+                                    <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
+                                        <span class="sens-pillar-heading">Fuerza &amp; Rutina</span>
+                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation(); this.classList.toggle('active');">
+                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha entrenamiento" style="width: 15px; height: 15px; font-size: 9px; line-height: 1;">?</button>
+                                            <div class="sens-tooltip-popover" style="font-size: 11.5px; line-height: 1.4; width: 250px;">
+                                                <strong style="color: #E5CBA7;">Regla — Entrenamiento:</strong><br>
+                                                Solo se activa si completaste todos los ejercicios prescriptos para el día desde tu rutina. En días anteriores sin completar muestra ✕.
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="sens-pillar-metric" id="pillarMetricWorkout">Sesión Programada</div>
                                 </div>
                                 <span class="sens-pillar-pill" id="pillarPillWorkout">Completado</span>
@@ -2741,7 +2750,16 @@
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                                 </div>
                                 <div class="sens-pillar-content">
-                                    <div class="sens-pillar-heading">Plan Nutricional</div>
+                                    <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
+                                        <span class="sens-pillar-heading">Plan Nutricional</span>
+                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation(); this.classList.toggle('active');">
+                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha nutrición" style="width: 15px; height: 15px; font-size: 9px; line-height: 1;">?</button>
+                                            <div class="sens-tooltip-popover" style="font-size: 11.5px; line-height: 1.4; width: 250px;">
+                                                <strong style="color: #E5CBA7;">Regla — Nutrición:</strong><br>
+                                                Tiene racha si queda un 10% arriba o un 20% abajo de las calorías recomendadas. Si superás el +10%, perdés la racha diaria.
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="sens-pillar-metric" id="pillarMetricNutrition">1.850 / 1.950 kcal</div>
                                 </div>
                                 <span class="sens-pillar-pill" id="pillarPillNutrition">En rango</span>
@@ -2753,7 +2771,16 @@
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                                 </div>
                                 <div class="sens-pillar-content">
-                                    <div class="sens-pillar-heading">Pasos &amp; Cardio</div>
+                                    <div class="sens-pillar-heading-wrap" style="display: flex; align-items: center; gap: 5px;">
+                                        <span class="sens-pillar-heading">Pasos &amp; Cardio</span>
+                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation(); this.classList.toggle('active');">
+                                            <button type="button" class="sens-tooltip-btn" aria-label="Regla de racha pasos y cardio" style="width: 15px; height: 15px; font-size: 9px; line-height: 1;">?</button>
+                                            <div class="sens-tooltip-popover" style="font-size: 11.5px; line-height: 1.4; width: 250px;">
+                                                <strong style="color: #E5CBA7;">Regla — Pasos &amp; Cardio:</strong><br>
+                                                Se aplica al guardar la info en Balance Energético. Requiere mínimo 10.000 pasos ó 90 min de caminata ó 30 min de otro cardio.
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="sens-pillar-metric" id="pillarMetricActivity">8.000 pasos • 25m cardio</div>
                                 </div>
                                 <span class="sens-pillar-pill" id="pillarPillActivity">Pendiente</span>
@@ -3413,19 +3440,6 @@
                             <span>Guardar Progreso &amp; Finalizar</span>
                         </button>
                     </div>
-                </div>
-            </div>
-
-            <!-- Overlay de Felicitación / Animación Congrats (Point 3) -->
-            <div class="sens-congrats-overlay" id="sensCongratsOverlay" style="display: none;">
-                <div class="sens-congrats-card">
-                    <div class="sens-congrats-ring-wrap">
-                        <div class="sens-congrats-pulse-ring"></div>
-                        <div class="sens-congrats-core-badge">✓</div>
-                    </div>
-                    <h3 class="sens-congrats-title">¡EJERCICIO COMPLETADO!</h3>
-                    <p class="sens-congrats-subtitle" id="sensCongratsSubtitle">Todas las Series Registradas</p>
-                    <div class="sens-congrats-quote">"Gran trabajo. Cada repetición con intención consolida tu fuerza y longevidad celular."</div>
                 </div>
             </div>
 
@@ -5900,10 +5914,10 @@
 
             <!-- Pestañas de Modo: Búsqueda vs Manual -->
             <div style="display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 16px;">
-                <button type="button" class="btn-clean" id="tabCustomSearchMode" style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #E5CBA7; border-bottom: 2px solid #E5CBA7; text-align: center; cursor: pointer;">
+                <button type="button" class="btn-clean" id="tabCustomSearchMode" style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #E5CBA7; background: transparent !important; border: none !important; border-bottom: 2px solid #E5CBA7 !important; text-align: center; cursor: pointer;">
                     Buscar en Biblioteca (500 Alimentos)
                 </button>
-                <button type="button" class="btn-clean" id="tabCustomManualMode" style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #71717A; border-bottom: 2px solid transparent; text-align: center; cursor: pointer;">
+                <button type="button" class="btn-clean" id="tabCustomManualMode" style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #71717A; background: transparent !important; border: none !important; border-bottom: 2px solid transparent !important; text-align: center; cursor: pointer;">
                     Carga Rápida de Calorías
                 </button>
             </div>
@@ -6810,6 +6824,19 @@
                 </div>
 
             </div>
+        </div>
+    </div>
+
+    <!-- Overlay Global de Felicitación / Animación Congrats & Racha SENS (Point 3) -->
+    <div class="sens-congrats-overlay" id="sensCongratsOverlay" style="display: none;">
+        <div class="sens-congrats-card">
+            <div class="sens-congrats-ring-wrap">
+                <div class="sens-congrats-pulse-ring"></div>
+                <div class="sens-congrats-core-badge">✓</div>
+            </div>
+            <h3 class="sens-congrats-title" id="sensCongratsTitle">¡OBJETIVO CUMPLIDO!</h3>
+            <p class="sens-congrats-subtitle" id="sensCongratsSubtitle">Racha SENS Activa</p>
+            <div class="sens-congrats-quote" id="sensCongratsQuote">"Gran trabajo. Cada hábito ejecutado con intención consolida tu rendimiento y longevidad celular."</div>
         </div>
     </div>
 

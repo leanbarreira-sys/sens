@@ -9897,13 +9897,16 @@ input[type="range"]::-webkit-slider-thumb:hover {
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
     border-radius: 12px;
     padding: 14px 16px;
-    z-index: 1200;
+    z-index: 10000 !important;
     display: none;
     text-align: left;
+    pointer-events: auto;
 }
 
-.sens-tooltip-wrap.active .sens-tooltip-popover {
-    display: block;
+.sens-tooltip-wrap.active .sens-tooltip-popover,
+.sens-tooltip-wrap:hover .sens-tooltip-popover,
+.sens-tooltip-wrap:focus-within .sens-tooltip-popover {
+    display: block !important;
     animation: fadeIn 0.2s ease;
 }
 
@@ -13298,17 +13301,26 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         max-width: 400px !important;
         box-sizing: border-box !important;
         display: grid !important;
-        grid-template-columns: repeat(5, 1fr) !important;
+        grid-template-columns: repeat(4, 1fr) !important;
         gap: 2px !important;
         padding: 6px 4px !important;
         background: #09090B !important;
         border: none !important;
         border-radius: 36px !important;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
-        z-index: 1000 !important;
+        z-index: 9990 !important;
         overflow: hidden !important;
-        contain: layout style;
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
         will-change: transform;
+    }
+
+    body.in-portal #sensFloatingDock .sens-dock-item {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+        user-select: none !important;
     }
 
     /* Si se está viendo Coach OS, ocultar dock de alumno y mostrar dock de coach */
@@ -13336,13 +13348,19 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         border: 1px solid rgba(229, 203, 167, 0.25) !important;
         border-radius: 36px !important;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65) !important;
-        z-index: 1000 !important;
+        z-index: 9990 !important;
         overflow: hidden !important;
-        contain: layout style;
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
         will-change: transform;
     }
 
     #sensCoachFloatingDock .sens-dock-item {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+        user-select: none !important;
         padding: 6px 1px !important;
         gap: 2px !important;
         min-width: 0 !important;
@@ -19369,6 +19387,43 @@ body.in-portal,
     border-radius: 0 0 10px 10px;
 }
 
+/* Fix Quiet Luxury para botones limpios y resultados de búsqueda en Biblioteca */
+.btn-clean {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+#customSearchResultsList {
+    max-height: 380px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+    padding-right: 4px;
+}
+
+.sens-search-result-card {
+    flex-shrink: 0 !important;
+    min-height: 56px !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    margin-bottom: 2px !important;
+    transition: all 0.2s ease !important;
+    box-sizing: border-box !important;
+}
+
+.sens-search-result-card:hover {
+    border-color: rgba(229, 203, 167, 0.3) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
 /* =============================================================================
    RACHA SENS & GAMIFICACIÓN QUIET LUXURY (BIGG / APPLE HEALTH BENCHMARK)
    ============================================================================= */
@@ -19382,7 +19437,7 @@ body.in-portal,
     box-sizing: border-box;
     width: 100%;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .sens-streak-top-row {
@@ -19471,23 +19526,46 @@ body.in-portal,
 }
 
 .sens-streak-dot-ring {
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     border: 1.5px solid rgba(255, 255, 255, 0.15);
     background: transparent;
     transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8.5px;
+    font-weight: 800;
+    line-height: 1;
 }
 
 .sens-streak-dot-ring.done {
     background: #E5CBA7;
     border-color: #E5CBA7;
+    color: #080809;
     box-shadow: 0 0 8px rgba(229, 203, 167, 0.5);
+}
+
+.sens-streak-dot-ring.missed {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #F87171;
 }
 
 .sens-streak-dot-ring.today {
     border-color: #E5CBA7;
     box-shadow: 0 0 6px rgba(229, 203, 167, 0.4);
+}
+
+.sens-streak-dot-ring.today:not(.done) {
+    animation: sensPulseDot 2s infinite ease-in-out;
+}
+
+.sens-streak-dot-ring.future {
+    opacity: 0.3;
+    border-color: rgba(255, 255, 255, 0.1);
+}
     animation: sensPulseDot 2s infinite ease-in-out;
 }
 
@@ -19576,12 +19654,19 @@ body.in-portal,
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 
+.sens-pillar-heading-wrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 2px;
+}
+
 .sens-pillar-heading {
     font-size: 11px;
     font-weight: 800;
     color: #FFFFFF;
     line-height: 1.2;
-    margin-bottom: 2px;
+    margin-bottom: 0;
 }
 
 .sens-pillar-metric {
@@ -19600,6 +19685,23 @@ body.in-portal,
     text-transform: uppercase;
     letter-spacing: 0.4px;
     padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #8E8E93;
+    transition: all 0.2s ease;
+}
+
+.sens-pillar-pill.done {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.sens-pillar-pill.exceeded {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #F87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.06);
     color: #71717A;

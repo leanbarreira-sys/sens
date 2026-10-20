@@ -2885,17 +2885,26 @@ function switchPortalView(viewId) {
         if (typeof renderWorkoutDay === 'function') renderWorkoutDay(AppState.currentDay || 'day1');
     }
     if (viewId === 'nutritionView') {
-        if (typeof renderNutritionPrescriptionForMember === 'function') {
-            const athId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
+        const athId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
+        if (typeof syncMemberNutritionPrescription === 'function') {
+            syncMemberNutritionPrescription(athId);
+        } else if (typeof renderNutritionPrescriptionForMember === 'function') {
             renderNutritionPrescriptionForMember(athId);
+        }
+        if (typeof initUserCustomMealModal === 'function') {
+            initUserCustomMealModal(athId);
         }
     }
     if (viewId === 'dashView') {
         if (typeof renderDashboardData === 'function') renderDashboardData();
         if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
         if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
+        if (typeof updateSensStreakCard === 'function') updateSensStreakCard(AppState.selectedDate || new Date());
         if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation(false);
         if (typeof initDashboardCardsTactileFeedback === 'function') initDashboardCardsTactileFeedback();
+    }
+    if (typeof initFloatingDock === 'function') {
+        initFloatingDock();
     }
 
     if (window.scrollY > 80) {
@@ -3118,7 +3127,17 @@ function openUserPortal(forceOnboarding = false) {
     } else {
         renderDashboardData();
         renderWorkoutDay(AppState.currentDay || 'day1');
+        const athId = (AppState.user && AppState.user.id) || 'mock_vip';
+        if (typeof syncMemberNutritionPrescription === 'function') {
+            syncMemberNutritionPrescription(athId);
+        }
+        if (typeof initFloatingDock === 'function') {
+            initFloatingDock();
+        }
         switchPortalView('dashView');
+        if (typeof updateSensStreakCard === 'function') {
+            updateSensStreakCard(new Date());
+        }
     }
 
     window.scrollTo(0, 0);
@@ -4926,14 +4945,20 @@ window.toggleExerciseFinished = function(exId, dayKey) {
     saveAthleteDayWorkoutStatus(athId, dayKey, { exercises: day.exercises });
 
     const allDone = day.exercises.every(e => e.completed);
-    if (allDone && !day.completed) {
+    if (allDone) {
         day.completed = true;
         day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
         saveAthleteDayWorkoutStatus(athId, dayKey, { completed: true, durationMinutes: day.durationMinutes });
-        if (typeof showSensToast === 'function') {
+        if (typeof window.showSensCelebrationToast === 'function') {
+            window.showSensCelebrationToast('¡Entrenamiento Completado!', 'Completaste el 100% de los ejercicios de hoy. ¡Racha de fuerza asegurada!');
+        } else if (typeof showSensToast === 'function') {
             showSensToast('¡Felicitaciones! Completaste todos los ejercicios de la sesión.', 'champagne');
         }
     } else {
+        if (day.completed) {
+            day.completed = false;
+            saveAthleteDayWorkoutStatus(athId, dayKey, { completed: false });
+        }
         if (typeof showSensToast === 'function') {
             showSensToast(ex.completed ? `✓ ${ex.name} finalizado` : `Ejercicio desmarcado`, 'info');
         }
@@ -4942,6 +4967,12 @@ window.toggleExerciseFinished = function(exId, dayKey) {
     renderWorkoutDay(dayKey);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+    if (typeof SensDailyStreakManager !== 'undefined') {
+        SensDailyStreakManager.evaluateDay(AppState.selectedDate || new Date(), athId);
+    }
+    if (typeof updateSensStreakCard === 'function') {
+        updateSensStreakCard(AppState.selectedDate || new Date());
+    }
 };
 
 function renderWorkoutDay(dayKey) {
@@ -5612,27 +5643,41 @@ function playChimeSequence(notes = [523.25, 659.25, 783.99, 1046.50]) {
     } catch (e) {}
 }
 
-function triggerCongratsCelebration() {
+window.showSensCelebrationToast = function(title, subtitle, quote) {
     const overlay = document.getElementById('sensCongratsOverlay');
-    const subtitle = document.getElementById('sensCongratsSubtitle');
-    if (!overlay) return;
+    const titleEl = document.getElementById('sensCongratsTitle');
+    const subtitleEl = document.getElementById('sensCongratsSubtitle');
+    const quoteEl = document.getElementById('sensCongratsQuote');
 
-    const total = modalExerciseState.setsData.length;
-    if (subtitle) {
-        subtitle.textContent = `${total} de ${total} Series Registradas • Racha SENS Activa`;
+    if (titleEl) titleEl.textContent = title || '¡OBJETIVO CUMPLIDO!';
+    if (subtitleEl) subtitleEl.textContent = subtitle || 'Racha SENS Activa';
+    if (quoteEl && quote) quoteEl.textContent = quote;
+
+    if (overlay) {
+        overlay.style.display = 'flex';
+        playChimeSequence();
+
+        if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
+        window._sensCelebrationTimer = setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 2800);
+
+        overlay.onclick = () => {
+            if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
+            overlay.style.display = 'none';
+        };
+    } else {
+        if (typeof showSensToast === 'function') {
+            showSensToast(`${title}: ${subtitle}`, 'champagne', 3500);
+        }
     }
+};
 
-    overlay.style.display = 'flex';
-    playChimeSequence();
-
-    const timer = setTimeout(() => {
-        overlay.style.display = 'none';
-    }, 2500);
-
-    overlay.onclick = () => {
-        clearTimeout(timer);
-        overlay.style.display = 'none';
-    };
+function triggerCongratsCelebration(customTitle = null, customSubtitle = null) {
+    const total = modalExerciseState.setsData ? modalExerciseState.setsData.length : 0;
+    const subtitle = customSubtitle || (total > 0 ? `${total} de ${total} Series Registradas • Racha SENS Activa` : 'Racha SENS Activa');
+    const title = customTitle || '¡EJERCICIO COMPLETADO!';
+    window.showSensCelebrationToast(title, subtitle);
 }
 
 /**
@@ -10856,6 +10901,25 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
     renderMemberNutritionPlan(athId, sDate);
     renderNutriDaysNav();
     if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
+
+    if (typeof SensDailyStreakManager !== 'undefined') {
+        const streakEval = SensDailyStreakManager.evaluateDay(sDate, athId);
+        const nutriStatus = streakEval?.current?.nutrition?.status;
+        const prevStatus = streakEval?.previous?.nutrition?.status;
+        const consumedKcal = streakEval?.current?.nutrition?.consumed || 0;
+        const targetKcal = streakEval?.current?.nutrition?.target || 1950;
+
+        if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
+            if (typeof window.showSensCelebrationToast === 'function') {
+                window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron en el rango óptimo (-20% / +10%).`);
+            }
+        } else if (nutriStatus === 'exceeded') {
+            if (typeof showSensToast === 'function') {
+                showSensToast(`⚠️ Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+            }
+        }
+    }
+    if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
 }
 
 window.toggleFoodLoggedStatus = toggleFoodLoggedStatus;
@@ -11658,7 +11722,7 @@ function initUserCustomMealModal(athId) {
     const minInput = document.getElementById('customKcalMinInput');
     const maxInput = document.getElementById('customKcalMaxInput');
     const resetKcalBtn = document.getElementById('btnResetKcalFilter');
-    let activeKcalRange = 'all';
+    window._sensActiveKcalRange = 'all';
 
     if (!modal) return;
 
@@ -11666,17 +11730,23 @@ function initUserCustomMealModal(athId) {
         openBtn._hasCustomMealBound = true;
         openBtn.addEventListener('click', () => {
             userCustomTrayItems = [];
-            renderCustomTray();
+            window.renderCustomTray();
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
             if (searchInput) {
                 searchInput.value = '';
-                renderSearchResults('');
             }
+            window._sensActiveKcalRange = 'all';
+            window.renderCustomSearchResults('');
         });
     }
 
-    if (modal._hasCustomLogicBound) return;
+    if (modal._hasCustomLogicBound) {
+        // Asegurar que siempre se expongan los helpers
+        window.renderCustomSearchResults = window.renderCustomSearchResults || renderSearchResults;
+        window.renderCustomTray = window.renderCustomTray || renderCustomTray;
+        return;
+    }
     modal._hasCustomLogicBound = true;
 
     const closeModal = () => {
@@ -11694,16 +11764,20 @@ function initUserCustomMealModal(athId) {
         tabSearch.addEventListener('click', () => {
             tabSearch.style.color = '#E5CBA7';
             tabSearch.style.borderBottomColor = '#E5CBA7';
+            tabSearch.style.background = 'transparent';
             tabManual.style.color = '#71717A';
             tabManual.style.borderBottomColor = 'transparent';
+            tabManual.style.background = 'transparent';
             if (paneSearch) paneSearch.style.display = 'block';
             if (paneManual) paneManual.style.display = 'none';
         });
         tabManual.addEventListener('click', () => {
             tabManual.style.color = '#E5CBA7';
             tabManual.style.borderBottomColor = '#E5CBA7';
+            tabManual.style.background = 'transparent';
             tabSearch.style.color = '#71717A';
             tabSearch.style.borderBottomColor = 'transparent';
+            tabSearch.style.background = 'transparent';
             if (paneManual) paneManual.style.display = 'block';
             if (paneSearch) paneSearch.style.display = 'none';
         });
@@ -11778,36 +11852,46 @@ function initUserCustomMealModal(athId) {
     // Renderizado de Resultados de Búsqueda con Filtro de Calorías e Inspección (Item 4 & 8)
     function renderSearchResults(query = '') {
         if (!searchResults) return;
-        const library = getGlobalFoodCatalog();
-        const q = normalizeSensString(query);
+        const library = (typeof getGlobalFoodCatalog === 'function') ? getGlobalFoodCatalog() : (window.SENS_FOOD_LIBRARY || []);
+        if (!library || library.length === 0) {
+            searchResults.innerHTML = `
+                <div style="text-align: center; padding: 24px 14px; color: #A1A1AA; font-size: 12px; background: rgba(255,255,255,0.02); border-radius: 10px;">
+                    Cargando biblioteca de alimentos...
+                </div>
+            `;
+            return;
+        }
+        const norm = (str) => (typeof normalizeSensString === 'function') ? normalizeSensString(str) : (str ? str.toString().toLowerCase().trim() : '');
+        const q = norm(query);
 
         let matches = library;
         if (q.length > 0) {
             matches = library.filter(f => {
-                const n1 = normalizeSensString(f.name);
-                const n2 = normalizeSensString(f.name_es);
-                const n3 = normalizeSensString(f.name_en);
-                const c1 = normalizeSensString(f.categoria_nutricional);
-                const m1 = normalizeSensString(f.momento_consumo);
-                const t1 = normalizeSensString(f.etiquetas_dieta_filtros);
-                return n1.includes(q) || n2.includes(q) || n3.includes(q) || c1.includes(q) || m1.includes(q) || t1.includes(q);
+                return norm(f.name).includes(q) ||
+                       norm(f.name_es).includes(q) ||
+                       norm(f.name_en).includes(q) ||
+                       norm(f.categoria_nutricional).includes(q) ||
+                       norm(f.momento_consumo).includes(q) ||
+                       norm(f.etiquetas_dieta_filtros).includes(q) ||
+                       norm(f.codigo).includes(q);
             });
         }
 
         // Filtro por rango de calorías
+        const activeRange = window._sensActiveKcalRange || 'all';
         let minCal = 0;
         let maxCal = 99999;
-        if (activeKcalRange === 'under200') {
+        if (activeRange === 'under200') {
             maxCal = 200;
-        } else if (activeKcalRange === '200-400') {
+        } else if (activeRange === '200-400') {
             minCal = 200;
             maxCal = 400;
-        } else if (activeKcalRange === '400-600') {
+        } else if (activeRange === '400-600') {
             minCal = 400;
             maxCal = 600;
-        } else if (activeKcalRange === 'over600') {
+        } else if (activeRange === 'over600') {
             minCal = 600;
-        } else if (activeKcalRange === 'custom') {
+        } else if (activeRange === 'custom') {
             const minVal = parseInt(minInput?.value, 10);
             const maxVal = parseInt(maxInput?.value, 10);
             if (!isNaN(minVal)) minCal = minVal;
@@ -11815,7 +11899,7 @@ function initUserCustomMealModal(athId) {
         }
 
         matches = matches.filter(f => {
-            const cal = Number(f.calPorcion || f.calories || Math.round((f.calPer100 || 150) * 1.5)) || 0;
+            const cal = Number(f.calories || f.calorias_kcal || f.calPorcion || Math.round((f.calPer100 || 150) * 1.5)) || 0;
             return cal >= minCal && cal <= maxCal;
         });
 
@@ -11831,15 +11915,15 @@ function initUserCustomMealModal(athId) {
         }
 
         searchResults.innerHTML = matches.map(f => {
-            const cal = Number(f.calPorcion || f.calories || Math.round((f.calPer100 || 150) * 1.5)) || 0;
-            const prot = Number(f.protPorcion || f.protein || Math.round((f.protPer100 || 20) * 1.5)) || 0;
+            const cal = Number(f.calories || f.calorias_kcal || f.calPorcion || Math.round((f.calPer100 || 150) * 1.5)) || 0;
+            const prot = Number(f.protein || f.proteinas_g || f.protPorcion || Math.round((f.protPer100 || 20) * 1.5)) || 0;
             const img = f.image || f.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
             const fid = f.id || f.codigo;
             const steps = f.paso_a_paso_preparacion || f.pasos_preparacion || 'Cocción saludable preservando micronutrientes.';
             const ingrs = f.ingredientes_y_gramajes || f.ingredientes_principales || 'Alimento natural de alta calidad biológica.';
 
             return `
-                <div class="sens-search-result-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; overflow: hidden; margin-bottom: 6px;">
+                <div class="sens-search-result-card" style="flex-shrink: 0 !important; min-height: 56px !important; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; margin-bottom: 6px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; gap: 8px;">
                         <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
                             <img src="${img}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #18181B;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
@@ -11911,6 +11995,9 @@ function initUserCustomMealModal(athId) {
     window.renderCustomSearchResults = renderSearchResults;
     window.renderCustomTray = renderCustomTray;
 
+    // Poblar inicialmente la lista de búsqueda
+    renderSearchResults('');
+
     // Handlers de Filtros de Calorías (Item 8)
     const applyKcalFilter = () => {
         const q = searchInput ? searchInput.value : '';
@@ -11921,7 +12008,7 @@ function initUserCustomMealModal(athId) {
         chip.addEventListener('click', () => {
             kcalChips.forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
-            activeKcalRange = chip.getAttribute('data-range') || 'all';
+            window._sensActiveKcalRange = chip.getAttribute('data-range') || 'all';
             if (minInput) minInput.value = '';
             if (maxInput) maxInput.value = '';
             applyKcalFilter();
@@ -11930,12 +12017,12 @@ function initUserCustomMealModal(athId) {
 
     if (minInput) minInput.addEventListener('input', () => {
         kcalChips.forEach(c => c.classList.remove('active'));
-        activeKcalRange = 'custom';
+        window._sensActiveKcalRange = 'custom';
         applyKcalFilter();
     });
     if (maxInput) maxInput.addEventListener('input', () => {
         kcalChips.forEach(c => c.classList.remove('active'));
-        activeKcalRange = 'custom';
+        window._sensActiveKcalRange = 'custom';
         applyKcalFilter();
     });
     if (resetKcalBtn) {
@@ -11943,7 +12030,7 @@ function initUserCustomMealModal(athId) {
             kcalChips.forEach(c => c.classList.remove('active'));
             const allChip = modal.querySelector('#customKcalFilterRow .sens-kcal-chip[data-range="all"]');
             if (allChip) allChip.classList.add('active');
-            activeKcalRange = 'all';
+            window._sensActiveKcalRange = 'all';
             if (minInput) minInput.value = '';
             if (maxInput) maxInput.value = '';
             applyKcalFilter();
@@ -12066,6 +12153,26 @@ function initUserCustomMealModal(athId) {
             renderMemberNutritionPlan(activeAthId, sDate);
             renderNutriDaysNav();
             if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
+
+            // Evaluar y celebrar estado de racha nutricional
+            if (typeof SensDailyStreakManager !== 'undefined') {
+                const streakEval = SensDailyStreakManager.evaluateDay(sDate, activeAthId);
+                const nutriStatus = streakEval?.current?.nutrition?.status;
+                const prevStatus = streakEval?.previous?.nutrition?.status;
+                const consumedKcal = streakEval?.current?.nutrition?.consumed || 0;
+                const targetKcal = streakEval?.current?.nutrition?.target || 1950;
+
+                if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
+                    if (typeof window.showSensCelebrationToast === 'function') {
+                        window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron en el rango óptimo (-20% / +10%).`);
+                    }
+                } else if (nutriStatus === 'exceeded') {
+                    if (typeof showSensToast === 'function') {
+                        showSensToast(`⚠️ Perdiste la racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+                    }
+                }
+            }
+            if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
 
             if (typeof showSensToast === 'function') {
                 showSensToast(`Comida registrada con éxito en ${userActiveNutriMealSlot.toUpperCase()}.`, 'champagne');
@@ -14264,48 +14371,190 @@ function saveAthleteActivityLog(athId, dateKey, data) {
     } catch (e) {}
 }
 
-function calculateAthleteStreakDays(athId, targetDate, isTodayFulfill) {
-    let completedDates = {};
-    try {
-        const raw = localStorage.getItem(`${SENS_STREAK_STORAGE_PREFIX}_${athId}`);
-        if (raw) completedDates = JSON.parse(raw) || {};
-    } catch (e) {}
+/**
+ * =============================================================================
+ * SENS DAILY STREAK ENGINE — TELEMETRÍA OBJETIVA & GAMIFICACIÓN QUIET LUXURY
+ * =============================================================================
+ * Reglas Estrictas:
+ * 1. La racha es diaria y diferenciada por fecha (YYYY-MM-DD).
+ * 2. Solo está activa la de hoy o días anteriores.
+ * 3. Entrenamiento: Solo se activa si completó el 100% de los ejercicios de la sesión (o descanso activo).
+ * 4. Nutrición: Se activa si las calorías consumidas están entre -20% y +10% del objetivo.
+ *    Si supera el +10%, el usuario pierde la racha diaria.
+ * 5. Pasos y Cardio: Se activa al registrar en Balance Energético al menos 10.000 pasos,
+ *    90 min de caminata o 30 min de otro cardio.
+ * 6. En días anteriores sin cumplir, se muestra cruz (✕).
+ * 7. La racha NO se puede completar tocando la racha; solo se gana ejecutando objetivos.
+ */
 
-    const today = new Date();
-    const todayKey = getFormattedDateKey(today);
-    
-    if (isTodayFulfill) {
-        completedDates[todayKey] = true;
+const SensDailyStreakManager = {
+    STORAGE_PREFIX: 'sens_streak_daily_records_v3',
+
+    getStorageKey(athId) {
+        const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+        return `${this.STORAGE_PREFIX}_${id}`;
+    },
+
+    getAllRecords(athId) {
         try {
-            localStorage.setItem(`${SENS_STREAK_STORAGE_PREFIX}_${athId}`, JSON.stringify(completedDates));
+            const raw = localStorage.getItem(this.getStorageKey(athId));
+            return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+            return {};
+        }
+    },
+
+    saveAllRecords(athId, records) {
+        try {
+            localStorage.setItem(this.getStorageKey(athId), JSON.stringify(records));
         } catch (e) {}
-    }
+    },
 
-    let streak = 0;
-    let checkDate = new Date(today);
-    if (completedDates[todayKey]) {
-        streak = 1;
-        checkDate.setDate(checkDate.getDate() - 1);
-    } else {
-        checkDate.setDate(checkDate.getDate() - 1);
-    }
+    evaluateDay(targetDate = new Date(), athId = null) {
+        const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+        const sDate = (targetDate instanceof Date) ? targetDate : new Date(targetDate);
+        const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+        const dayKey = (typeof getDayKeyFromDate === 'function') ? getDayKeyFromDate(sDate) : 'day1';
 
-    for (let i = 0; i < 60; i++) {
-        const key = getFormattedDateKey(checkDate);
-        if (completedDates[key]) {
-            streak++;
+        // 1. EVALUAR PILAR ENTRENAMIENTO
+        // Solo 100% completado desde ejercicios (o descanso)
+        let workoutDone = false;
+        let workoutMetric = 'Sesión Programada';
+        let isRestDay = false;
+
+        const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(id) : null;
+        const dayWorkout = (workoutData && workoutData[dayKey]) ? workoutData[dayKey] : null;
+
+        if (dayWorkout) {
+            isRestDay = (dayWorkout.modality === 'descanso');
+            if (isRestDay) {
+                workoutDone = true;
+                workoutMetric = 'Descanso Activo';
+            } else if (Array.isArray(dayWorkout.exercises) && dayWorkout.exercises.length > 0) {
+                const total = dayWorkout.exercises.length;
+                const completed = dayWorkout.exercises.filter(e => e.completed).length;
+                workoutDone = (completed === total);
+                workoutMetric = workoutDone ? '100% Completado' : `${completed} de ${total} Ejercicios`;
+            }
+        }
+        if (!workoutDone && typeof isDateInCompletedWorkouts === 'function' && isDateInCompletedWorkouts(dateIso)) {
+            workoutDone = true;
+            workoutMetric = 'Sesión Completada';
+        }
+
+        // 2. EVALUAR PILAR NUTRICIÓN
+        // Rango de racha: -20% a +10% del objetivo recomendado. Superar +10% = pérdida de racha.
+        let nutriDone = false;
+        let nutriStatus = 'pending'; // 'pending' | 'on_track' | 'exceeded'
+        let targetCals = 1950;
+        let consumedCals = 0;
+
+        const metrics = (typeof getDailyMetabolicMetrics === 'function') ? getDailyMetabolicMetrics(sDate) : null;
+        if (metrics && metrics.targetIntake > 0) {
+            targetCals = metrics.targetIntake;
+        } else if (AppState.profile?.prescribed_nutrition?.target_calories) {
+            targetCals = AppState.profile.prescribed_nutrition.target_calories;
+        }
+
+        const rawCals = localStorage.getItem(`sens_cals_${dateIso}`);
+        if (rawCals !== null) {
+            consumedCals = parseInt(rawCals, 10) || 0;
+        } else if (isSameDay(sDate, new Date()) && AppState.dailyNutrition?.calories) {
+            consumedCals = parseInt(AppState.dailyNutrition.calories, 10) || 0;
+        }
+
+        const minTarget = Math.round(targetCals * 0.80);
+        const maxTarget = Math.round(targetCals * 1.10);
+
+        if (consumedCals >= minTarget && consumedCals <= maxTarget) {
+            nutriDone = true;
+            nutriStatus = 'on_track';
+        } else if (consumedCals > maxTarget) {
+            nutriDone = false;
+            nutriStatus = 'exceeded';
+        } else {
+            nutriDone = false;
+            nutriStatus = 'pending';
+        }
+
+        const nutriMetric = `${consumedCals.toLocaleString('es-AR')} / ${targetCals.toLocaleString('es-AR')} kcal`;
+
+        // 3. EVALUAR PILAR PASOS & CARDIO
+        // Mínimo 10.000 pasos ó 90 min de caminata ó 30 min de otro cardio
+        let cardioDone = false;
+        let steps = 0;
+        let cardioMinutes = 0;
+        let cardioType = 'caminata';
+
+        const actLog = (typeof getAthleteActivityLog === 'function') ? getAthleteActivityLog(id, dateIso) : null;
+        if (actLog) {
+            steps = Number(actLog.steps) || 0;
+            cardioMinutes = Number(actLog.cardioMinutes) || 0;
+            cardioType = actLog.cardioType || 'caminata';
+        }
+
+        if (steps >= 10000 || (cardioType === 'caminata' && cardioMinutes >= 90) || (cardioType !== 'caminata' && cardioMinutes >= 30)) {
+            cardioDone = true;
+        }
+        const cardioMetric = `${steps.toLocaleString('es-AR')} pasos • ${cardioMinutes}m ${cardioType}`;
+
+        const completedCount = (workoutDone ? 1 : 0) + (nutriDone ? 1 : 0) + (cardioDone ? 1 : 0);
+        const isQualified = (completedCount >= 1);
+
+        const records = this.getAllRecords(id);
+        const previous = records[dateIso] || null;
+
+        records[dateIso] = {
+            workout: { done: workoutDone, metric: workoutMetric, isRestDay },
+            nutrition: { done: nutriDone, status: nutriStatus, consumed: consumedCals, target: targetCals, metric: nutriMetric },
+            cardio: { done: cardioDone, steps, cardioMinutes, cardioType, metric: cardioMetric },
+            completedCount,
+            isQualified,
+            updatedAt: Date.now()
+        };
+        this.saveAllRecords(id, records);
+
+        return {
+            current: records[dateIso],
+            previous
+        };
+    },
+
+    calculateStreak(athId = null) {
+        const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+        const records = this.getAllRecords(id);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        const todayRec = records[todayIso];
+
+        let streak = 0;
+        let checkDate = new Date(today);
+
+        if (todayRec && todayRec.isQualified) {
+            streak = 1;
             checkDate.setDate(checkDate.getDate() - 1);
         } else {
-            break;
+            checkDate.setDate(checkDate.getDate() - 1);
         }
-    }
 
-    if (streak === 0) {
-        streak = isTodayFulfill ? 6 : 5;
-    }
+        for (let i = 0; i < 90; i++) {
+            const iso = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+            const rec = records[iso];
+            if (rec && rec.isQualified) {
+                streak++;
+                checkDate.setDate(checkDate.getDate() - 1);
+            } else {
+                break;
+            }
+        }
 
-    return streak;
-}
+        return streak;
+    }
+};
+
+window.SensDailyStreakManager = SensDailyStreakManager;
 
 function renderStreakWeeklyDots(targetDate) {
     const wrap = document.getElementById('sensStreakDotsWrap');
@@ -14320,28 +14569,48 @@ function renderStreakWeeklyDots(targetDate) {
     today.setHours(0, 0, 0, 0);
 
     const athId = getActiveAthleteId();
-    let completedDates = {};
-    try {
-        const raw = localStorage.getItem(`${SENS_STREAK_STORAGE_PREFIX}_${athId}`);
-        if (raw) completedDates = JSON.parse(raw) || {};
-    } catch (e) {}
+    const records = SensDailyStreakManager.getAllRecords(athId);
 
     let html = '';
     for (let i = 0; i < 7; i++) {
         const d = new Date(AppState.activeWeekStart);
         d.setDate(AppState.activeWeekStart.getDate() + i);
-        const dKey = getFormattedDateKey(d);
-        const dMid = new Date(d);
-        dMid.setHours(0, 0, 0, 0);
+        d.setHours(0, 0, 0, 0);
+        const dIso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
-        const isToday = isSameDay(dMid, today);
-        const isPast = dMid < today;
-        const isDone = Boolean(completedDates[dKey]) || (isPast && i < 5);
+        const isToday = isSameDay(d, today);
+        const isPast = d < today;
+        const isFuture = d > today;
+
+        let rec = records[dIso];
+        if (!rec && !isFuture) {
+            rec = SensDailyStreakManager.evaluateDay(d, athId).current;
+        }
+
+        const isDone = Boolean(rec && rec.isQualified);
+
+        let dotHtml = '';
+        if (isFuture) {
+            dotHtml = `<div class="sens-streak-dot-ring future" title="${dayLabels[i]} ${d.getDate()}: Planificado"></div>`;
+        } else if (isPast) {
+            if (isDone) {
+                dotHtml = `<div class="sens-streak-dot-ring done" title="${dayLabels[i]} ${d.getDate()}: Objetivos cumplidos">✓</div>`;
+            } else {
+                dotHtml = `<div class="sens-streak-dot-ring missed" title="${dayLabels[i]} ${d.getDate()}: Objetivos no completados">✕</div>`;
+            }
+        } else {
+            // Hoy
+            if (isDone) {
+                dotHtml = `<div class="sens-streak-dot-ring done today" title="Hoy: Racha activa">✓</div>`;
+            } else {
+                dotHtml = `<div class="sens-streak-dot-ring today" title="Hoy: En progreso"></div>`;
+            }
+        }
 
         html += `
-            <div class="sens-streak-day-dot-unit" title="${dayLabels[i]} ${d.getDate()}: ${isDone ? 'Objetivos cumplidos' : (isToday ? 'Hoy' : 'Planificado')}">
+            <div class="sens-streak-day-dot-unit">
                 <span class="sens-streak-dot-name" style="${isToday ? 'color: #E5CBA7; font-weight: 800;' : ''}">${dayLabels[i]}</span>
-                <div class="sens-streak-dot-ring ${isDone ? 'done' : ''} ${isToday ? 'today' : ''}"></div>
+                ${dotHtml}
             </div>
         `;
     }
@@ -14352,80 +14621,76 @@ function renderStreakWeeklyDots(targetDate) {
 function updateSensStreakCard(targetDate = null) {
     if (!targetDate) targetDate = AppState.selectedDate || new Date();
     const athId = getActiveAthleteId();
-    const dateKey = getFormattedDateKey(targetDate);
     
-    const metrics = getDailyMetabolicMetrics(targetDate);
-    const dayKey = getDayKeyFromDate(targetDate);
-    const data = getCoachAthleteWorkoutData(athId);
-    const dayData = (data && data[dayKey]) ? data[dayKey] : {};
-    
-    // Pilar 1: Entrenamiento
-    const isWorkoutDone = Boolean(dayData.completed || isDateInCompletedWorkouts(dateKey));
-    const isRestDay = dayData.modality === 'descanso';
-    const p1Done = isWorkoutDone || isRestDay;
-    
-    // Pilar 2: Nutrición
-    const p2Done = metrics.targetIntake > 0 && Math.abs(metrics.netBalance) <= 650;
-    
-    // Pilar 3: Pasos & Cardio
-    const p3Done = metrics.dailySteps >= 7000 || metrics.cardioMinutes >= 20;
-    
+    const evalResult = SensDailyStreakManager.evaluateDay(targetDate, athId);
+    const dayRec = evalResult.current;
+
     // Actualizar UI de los 3 Pilares
+    // 1. Entrenamiento
     const chkWorkout = document.getElementById('pillarChkWorkout');
     const pillWorkout = document.getElementById('pillarPillWorkout');
     const metricWorkout = document.getElementById('pillarMetricWorkout');
-    if (chkWorkout) chkWorkout.className = `sens-pillar-chk ${p1Done ? 'done' : ''}`;
+    const wDone = dayRec.workout.done;
+    if (chkWorkout) chkWorkout.className = `sens-pillar-chk ${wDone ? 'done' : ''}`;
     if (pillWorkout) {
-        pillWorkout.className = `sens-pillar-pill ${p1Done ? 'done' : ''}`;
-        pillWorkout.textContent = p1Done ? (isRestDay ? 'Descanso' : 'Listo') : 'Pendiente';
+        pillWorkout.className = `sens-pillar-pill ${wDone ? 'done' : ''}`;
+        pillWorkout.textContent = wDone ? (dayRec.workout.isRestDay ? 'Descanso' : 'Completado') : 'Pendiente';
     }
     if (metricWorkout) {
-        metricWorkout.textContent = isRestDay ? 'Descanso Activo' : (dayData.title || 'Fuerza Prescrita');
+        metricWorkout.textContent = dayRec.workout.metric;
     }
-    
+
+    // 2. Nutrición
     const chkNutri = document.getElementById('pillarChkNutrition');
     const pillNutri = document.getElementById('pillarPillNutrition');
     const metricNutri = document.getElementById('pillarMetricNutrition');
-    if (chkNutri) chkNutri.className = `sens-pillar-chk ${p2Done ? 'done' : ''}`;
+    const nDone = dayRec.nutrition.done;
+    const nExceeded = (dayRec.nutrition.status === 'exceeded');
+    if (chkNutri) chkNutri.className = `sens-pillar-chk ${nDone ? 'done' : ''}`;
     if (pillNutri) {
-        pillNutri.className = `sens-pillar-pill ${p2Done ? 'done' : ''}`;
-        pillNutri.textContent = p2Done ? 'En rango' : 'Pendiente';
+        pillNutri.className = `sens-pillar-pill ${nDone ? 'done' : (nExceeded ? 'exceeded' : '')}`;
+        pillNutri.textContent = nDone ? 'En rango' : (nExceeded ? 'Perdida (+10%)' : 'Pendiente');
     }
     if (metricNutri) {
-        metricNutri.textContent = `${metrics.targetIntake.toLocaleString('es-AR')} kcal consumidas`;
+        metricNutri.textContent = dayRec.nutrition.metric;
     }
-    
+
+    // 3. Pasos & Cardio
     const chkAct = document.getElementById('pillarChkActivity');
     const pillAct = document.getElementById('pillarPillActivity');
     const metricAct = document.getElementById('pillarMetricActivity');
-    if (chkAct) chkAct.className = `sens-pillar-chk ${p3Done ? 'done' : ''}`;
+    const cDone = dayRec.cardio.done;
+    if (chkAct) chkAct.className = `sens-pillar-chk ${cDone ? 'done' : ''}`;
     if (pillAct) {
-        pillAct.className = `sens-pillar-pill ${p3Done ? 'done' : ''}`;
-        pillAct.textContent = p3Done ? 'Cumplido' : 'Pendiente';
+        pillAct.className = `sens-pillar-pill ${cDone ? 'done' : ''}`;
+        pillAct.textContent = cDone ? 'Cumplido' : 'Pendiente';
     }
     if (metricAct) {
-        metricAct.textContent = `${metrics.dailySteps.toLocaleString('es-AR')} pasos • ${metrics.cardioMinutes}m cardio`;
+        metricAct.textContent = dayRec.cardio.metric;
     }
-    
-    const doneCount = (p1Done ? 1 : 0) + (p2Done ? 1 : 0) + (p3Done ? 1 : 0);
+
+    // Ratio
     const ratioEl = document.getElementById('sensPillarsRatio');
-    if (ratioEl) ratioEl.textContent = `${doneCount} de 3 completados`;
-    
+    if (ratioEl) ratioEl.textContent = `${dayRec.completedCount} de 3 completados`;
+
+    // Racha Hero
     const streakNum = document.getElementById('sensStreakHeroNum');
     const streakSub = document.getElementById('sensStreakSubText');
-    const isTodayFulfill = doneCount >= 2;
-    const streakDays = calculateAthleteStreakDays(athId, targetDate, isTodayFulfill);
+    const streakDays = SensDailyStreakManager.calculateStreak(athId);
     if (streakNum) streakNum.textContent = streakDays;
     if (streakSub) {
-        if (doneCount === 3) {
-            streakSub.textContent = '¡Día 100% completado! Racha asegurada.';
+        if (dayRec.completedCount === 3) {
+            streakSub.textContent = '¡Día 100% completado! Racha perfecta asegurada.';
             streakSub.style.color = '#10B981';
-        } else {
+        } else if (dayRec.completedCount >= 1) {
             streakSub.textContent = 'Racha activa • ¡Seguí sumando hábitos hoy!';
             streakSub.style.color = '#E5CBA7';
+        } else {
+            streakSub.textContent = 'Completá tus objetivos de hoy para mantener la racha.';
+            streakSub.style.color = '#A1A1AA';
         }
     }
-    
+
     renderStreakWeeklyDots(targetDate);
 }
 
@@ -14544,7 +14809,20 @@ window.saveActivityChanges = function() {
     });
     
     updateObjectiveCardData(targetDate);
-    updateSensStreakCard(targetDate);
+
+    // Evaluar y celebrar racha aeróbica si califica por primera vez hoy
+    if (typeof SensDailyStreakManager !== 'undefined') {
+        const streakEval = SensDailyStreakManager.evaluateDay(targetDate, athId);
+        if (streakEval?.current?.cardio?.done && !streakEval?.previous?.cardio?.done) {
+            if (typeof window.showSensCelebrationToast === 'function') {
+                window.showSensCelebrationToast('¡Meta Aeróbica Alcanzada!', `Registraste ${steps.toLocaleString('es-AR')} pasos / ${cardioMinutes}m ${cardioType}. ¡Sumaste racha aeróbica!`);
+            }
+        }
+    }
+
+    if (typeof updateSensStreakCard === 'function') {
+        updateSensStreakCard(targetDate);
+    }
     
     try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
 };
@@ -15074,23 +15352,80 @@ function initQuickBiometricsModal() {
  * MÓDULO D: Floating Dock Inferior Móvil (Estilo BIGG / Samsung Health)
  */
 function initFloatingDock() {
-    const isPortal = document.body.classList.contains('in-portal');
-    document.querySelectorAll('.sens-floating-dock').forEach(dock => {
-        if (!isPortal) {
-            dock.style.display = 'none';
-        }
-    });
+    const isPortal = document.body.classList.contains('in-portal') || document.documentElement.classList.contains('in-portal-mode');
+    const athleteDock = document.getElementById('sensFloatingDock');
+    const coachDock = document.getElementById('sensCoachFloatingDock');
+    const isAdmin = typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin();
+    const inCoach = document.body.classList.contains('in-coach-mode') || document.body.getAttribute('data-active-view') === 'coachHubView';
 
-    const dockItems = document.querySelectorAll('.sens-dock-item[data-dock-tab]');
-    dockItems.forEach(item => {
-        item.addEventListener('click', () => {
+    if (athleteDock) {
+        if (!isPortal || inCoach) {
+            athleteDock.style.display = 'none';
+        } else {
+            athleteDock.style.display = 'grid';
+        }
+    }
+    if (coachDock) {
+        if (isPortal && inCoach && isAdmin) {
+            coachDock.style.display = 'grid';
+        } else {
+            coachDock.style.display = 'none';
+        }
+    }
+
+    if (!window._hasSensFloatingDockDelegated) {
+        window._hasSensFloatingDockDelegated = true;
+
+        let dockTouchStartX = 0;
+        let dockTouchStartY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            const item = e.target.closest('#sensFloatingDock .sens-dock-item[data-dock-tab], #sensCoachFloatingDock .coach-dock-btn[data-coach-subtab]');
+            if (item && e.touches && e.touches[0]) {
+                dockTouchStartX = e.touches[0].clientX;
+                dockTouchStartY = e.touches[0].clientY;
+            }
+        }, { passive: true, capture: true });
+
+        const handleAthleteDockNavigation = (e) => {
+            const item = e.target.closest('#sensFloatingDock .sens-dock-item[data-dock-tab]');
+            if (!item) return;
+            if (e.type === 'touchend' && e.changedTouches && e.changedTouches[0]) {
+                const dx = Math.abs(e.changedTouches[0].clientX - dockTouchStartX);
+                const dy = Math.abs(e.changedTouches[0].clientY - dockTouchStartY);
+                if (dx > 12 || dy > 12) return; // Arrastre / scroll: no cambiar de pestaña
+            }
+            e.preventDefault();
+            e.stopPropagation();
             const targetTab = item.getAttribute('data-dock-tab');
             if (targetTab) {
                 switchPortalView(targetTab);
-                if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+                window.scrollTo({ top: 0, behavior: 'instant' });
             }
-        });
-    });
+        };
+
+        document.addEventListener('click', handleAthleteDockNavigation, { capture: true });
+        document.addEventListener('touchend', handleAthleteDockNavigation, { capture: true });
+
+        const handleCoachDockNavigation = (e) => {
+            const item = e.target.closest('#sensCoachFloatingDock .coach-dock-btn[data-coach-subtab]');
+            if (!item) return;
+            if (e.type === 'touchend' && e.changedTouches && e.changedTouches[0]) {
+                const dx = Math.abs(e.changedTouches[0].clientX - dockTouchStartX);
+                const dy = Math.abs(e.changedTouches[0].clientY - dockTouchStartY);
+                if (dx > 12 || dy > 12) return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            const subtab = item.getAttribute('data-coach-subtab');
+            if (subtab && typeof switchCoachSubTab === 'function') {
+                switchCoachSubTab(subtab);
+            }
+        };
+
+        document.addEventListener('click', handleCoachDockNavigation, { capture: true });
+        document.addEventListener('touchend', handleCoachDockNavigation, { capture: true });
+    }
 }
 
 /**
