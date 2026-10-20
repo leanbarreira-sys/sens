@@ -16824,26 +16824,44 @@ function getDailyMetabolicMetrics(targetDate) {
     const hasWorkout = Boolean(dayData.exercises && dayData.exercises.length > 0 && dayData.modality !== 'descanso');
     const isWorkoutDone = Boolean(execution.completed || isDateInCompletedWorkouts(dateKey));
 
-    // Gasto por entrenamiento de fuerza REAL (0 si no se entrenó o descanso)
+    // Gasto por entrenamiento de fuerza REAL (calculado por cada ejercicio completado o sesión completa)
     let workoutBurn = 0;
     let completedExCount = 0;
     let totalExCount = 0;
 
     if (dayData && Array.isArray(dayData.exercises) && dayData.exercises.length > 0 && dayData.modality !== 'descanso') {
         totalExCount = dayData.exercises.length;
-        if (execution && execution.completedExercises) {
-            completedExCount = dayData.exercises.filter(e => execution.completedExercises[e.id]).length;
-        } else if (isWorkoutDone) {
-            completedExCount = totalExCount;
-        }
-    }
+        let dayTotalWorkoutKcal = 0;
+        let dayDoneWorkoutKcal = 0;
 
-    if (isWorkoutDone) {
-        workoutBurn = 380;
-    } else if (completedExCount > 0 && totalExCount > 0) {
-        workoutBurn = Math.round((completedExCount / totalExCount) * 380);
-    } else {
-        workoutBurn = 0;
+        dayData.exercises.forEach(ex => {
+            const resolved = (typeof window.getResolvedExercise === 'function')
+                ? window.getResolvedExercise(ex, athId)
+                : ex;
+            const s = parseInt(ex.sets, 10);
+            const setCount = (!isNaN(s) && s > 0) ? s : (parseInt(resolved.default_sets, 10) || 3);
+            const repsVal = ex.reps || resolved.default_reps || 10;
+            const kcalData = (typeof window.calculateExerciseKcal === 'function')
+                ? window.calculateExerciseKcal(resolved, setCount, repsVal, weight)
+                : { kcalPerSet: 7, totalKcal: setCount * 7 };
+            const exKcal = (kcalData && typeof kcalData.totalKcal === 'number') ? Math.round(kcalData.totalKcal) : (setCount * 7);
+            dayTotalWorkoutKcal += exKcal;
+
+            const isExDone = execution && execution.completedExercises && execution.completedExercises[ex.id];
+            if (isExDone) {
+                completedExCount++;
+                dayDoneWorkoutKcal += exKcal;
+            }
+        });
+
+        if (isWorkoutDone) {
+            workoutBurn = Math.max(dayTotalWorkoutKcal, dayDoneWorkoutKcal);
+            completedExCount = totalExCount;
+        } else if (completedExCount > 0) {
+            workoutBurn = dayDoneWorkoutKcal;
+        } else {
+            workoutBurn = 0;
+        }
     }
 
     // Pasos del día (NEAT) - De entrada marca 0 si no se ha guardado
@@ -17162,13 +17180,29 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
     }
 
     if (breakdownEl) {
-        breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${liveActiveBurn.toLocaleString('es-AR')}`;
+        const breakdownBasal = document.getElementById('dashBreakdownBasal');
+        const breakdownWorkout = document.getElementById('dashBreakdownWorkout');
+        const breakdownActivity = document.getElementById('dashBreakdownActivity');
+
+        if (breakdownBasal) {
+            breakdownBasal.textContent = metrics.bmr.toLocaleString('es-AR');
+        }
+        if (breakdownWorkout) {
+            breakdownWorkout.textContent = metrics.workoutBurn.toLocaleString('es-AR');
+        }
+        if (breakdownActivity) {
+            breakdownActivity.textContent = (liveStepsBurn + liveCardioBurn).toLocaleString('es-AR');
+        }
+        if (!breakdownBasal) {
+            breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${liveActiveBurn.toLocaleString('es-AR')}`;
+        }
     }
 
     // Actualizar Panel Táctil de Actividad Diaria (Pasos & Cardio)
     const activeBurnBadge = document.getElementById('dashActiveBurnBadge');
     if (activeBurnBadge) {
-        activeBurnBadge.textContent = `+${liveActiveBurn.toLocaleString('es-AR')} kcal`;
+        const livePanelBurn = liveStepsBurn + liveCardioBurn;
+        activeBurnBadge.textContent = `+${livePanelBurn.toLocaleString('es-AR')} kcal`;
     }
 
     const stepsSubBurn = document.getElementById('dashStepsSubBurn');

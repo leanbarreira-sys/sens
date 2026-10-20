@@ -2756,6 +2756,32 @@
                     </div>
                 </div>
 
+                <!-- 0.4. Navegador de Semanas & Strip Calendar Semanal (Dinámico Pasado y Futuro) -->
+                <div class="sens-calendar-sticky-wrapper" id="sensCalendarStickyWrapper">
+                    <div class="sens-week-nav-bar">
+                        <button type="button" class="sens-week-arrow-btn" id="btnWeekPrev" aria-label="Semana anterior" title="Semana anterior">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <div class="sens-week-title-wrap">
+                            <span class="sens-week-range-text" id="sensWeekRangeLabel">Semana de Entrenamiento</span>
+                            <button type="button" class="sens-pill-today" id="btnJumpToToday">Hoy</button>
+                        </div>
+                        <button type="button" class="sens-week-arrow-btn" id="btnWeekNext" aria-label="Semana siguiente" title="Semana siguiente">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="sens-week-strip-wrap" id="portalWeekStrip">
+                        <button type="button" class="sens-week-day-pill" data-day-key="day1"><span class="sens-day-name">LUN</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day2"><span class="sens-day-name">MAR</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day3"><span class="sens-day-name">MIÉ</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day4"><span class="sens-day-name">JUE</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge online">Online</span></div></button>
+                        <button type="button" class="sens-week-day-pill active is-today" data-day-key="day5"><span class="sens-day-name">VIE</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge auto">Aut</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day6"><span class="sens-day-name">SÁB</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div></button>
+                        <button type="button" class="sens-week-day-pill" data-day-key="day7"><span class="sens-day-name">DOM</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div></button>
+                    </div>
+                </div>
+
                 <!-- 0.5. Racha SENS & Gamificación Quiet Luxury (BIGG / Apple Health Benchmark) -->
                 <div class="sens-streak-card" id="sensDailyStreakCard">
                     <!-- Fila 1: Hero Badge + Contador de Racha + Nivel + Status Pill -->
@@ -2892,32 +2918,6 @@
                                 <span class="sens-pillar-pill" id="pillarPillActivity">Pendiente</span>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- 1. Navegador de Semanas & Strip Calendar Semanal (Dinámico Pasado y Futuro) -->
-                <div class="sens-calendar-sticky-wrapper" id="sensCalendarStickyWrapper">
-                    <div class="sens-week-nav-bar">
-                        <button type="button" class="sens-week-arrow-btn" id="btnWeekPrev" aria-label="Semana anterior" title="Semana anterior">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-                        </button>
-                        <div class="sens-week-title-wrap">
-                            <span class="sens-week-range-text" id="sensWeekRangeLabel">Semana de Entrenamiento</span>
-                            <button type="button" class="sens-pill-today" id="btnJumpToToday">Hoy</button>
-                        </div>
-                        <button type="button" class="sens-week-arrow-btn" id="btnWeekNext" aria-label="Semana siguiente" title="Semana siguiente">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                        </button>
-                    </div>
-
-                    <div class="sens-week-strip-wrap" id="portalWeekStrip">
-                        <button type="button" class="sens-week-day-pill" data-day-key="day1"><span class="sens-day-name">LUN</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
-                        <button type="button" class="sens-week-day-pill" data-day-key="day2"><span class="sens-day-name">MAR</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
-                        <button type="button" class="sens-week-day-pill" data-day-key="day3"><span class="sens-day-name">MIÉ</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div></button>
-                        <button type="button" class="sens-week-day-pill" data-day-key="day4"><span class="sens-day-name">JUE</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge online">Online</span></div></button>
-                        <button type="button" class="sens-week-day-pill active is-today" data-day-key="day5"><span class="sens-day-name">VIE</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge auto">Aut</span></div></button>
-                        <button type="button" class="sens-week-day-pill" data-day-key="day6"><span class="sens-day-name">SÁB</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div></button>
-                        <button type="button" class="sens-week-day-pill" data-day-key="day7"><span class="sens-day-name">DOM</span><span class="sens-day-hero-num">–</span><div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div></button>
                     </div>
                 </div>
 
@@ -3125,7 +3125,11 @@
                             <div class="sens-triptych-val" id="dashBalanceTdeeVal">
                                 <span id="dashTdeeNum">2.183</span><span class="unit">kcal</span>
                             </div>
-                            <span class="sens-triptych-sub" id="dashBalanceBurnBreakdown">Basal + Activo</span>
+                            <div class="sens-triptych-breakdown" id="dashBalanceBurnBreakdown">
+                                <div class="sens-breakdown-row"><span class="k">Basal:</span> <span class="v" id="dashBreakdownBasal">1.654</span></div>
+                                <div class="sens-breakdown-row"><span class="k">Entrenamiento:</span> <span class="v" id="dashBreakdownWorkout">0</span></div>
+                                <div class="sens-breakdown-row"><span class="k">Cardio/Pasos:</span> <span class="v" id="dashBreakdownActivity">0</span></div>
+                            </div>
                         </div>
                         <div class="sens-triptych-divider">=</div>
                         <div class="sens-triptych-col sens-triptych-net">

@@ -14731,6 +14731,40 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     max-width: 100%;
 }
 
+.sens-triptych-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5px;
+    margin-top: 3px;
+    width: 100%;
+    max-width: 110px;
+    box-sizing: border-box;
+}
+
+.sens-breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8.5px;
+    line-height: 1.25;
+    letter-spacing: -0.1px;
+    width: 100%;
+}
+
+.sens-breakdown-row .k {
+    color: #71717A;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.sens-breakdown-row .v {
+    color: #D4D4D8;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    margin-left: 4px;
+    white-space: nowrap;
+}
+
 .sens-triptych-divider {
     font-size: 15px;
     font-weight: 700;
