@@ -47,13 +47,22 @@ function formatDateDDMM(d) {
     return `${day}/${month}`;
 }
 
-function formatDateKey(d) {
+function getFormattedDateKey(d) {
+    if (!d) d = new Date();
+    if (typeof d === 'string') {
+        if (d.includes('T')) return d.split('T')[0];
+        return d;
+    }
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
 window.getFormattedDateKey = getFormattedDateKey;
+
+function formatDateKey(d) {
+    return getFormattedDateKey(d);
+}
 
 function isSameDay(d1, d2) {
     if (!d1 || !d2) return false;
@@ -597,7 +606,7 @@ const WORKOUT_DAYS_DATA = {
     day1: {
         title: 'Lunes: Tren Superior (Empuje / Tirón)',
         modality: 'presencial',
-        completed: true,
+        completed: false,
         exercises: [
             {
                 id: 'aad15275-4bb0-4459-a180-6c9f5dbe6d95',
@@ -652,7 +661,7 @@ const WORKOUT_DAYS_DATA = {
     day2: {
         title: 'Martes: Tren Inferior (Fuerza & Cadera)',
         modality: 'online',
-        completed: true,
+        completed: false,
         exercises: [
             {
                 id: 'c43a4011-a963-48cf-8a07-a9f6a5274d00',
@@ -707,7 +716,7 @@ const WORKOUT_DAYS_DATA = {
     day3: {
         title: 'Miércoles: Full Body & Conciencia Postural',
         modality: 'presencial',
-        completed: true,
+        completed: false,
         exercises: [
             {
                 id: 'c27c05f6-481a-4791-ac2f-6518b89d0d31',
@@ -910,6 +919,11 @@ const DEMO_METRICS = {
 // 1. INICIALIZACIÓN AL CARGAR EL DOM
 // =============================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Sanitización inicial de plantillas de entrenamiento para scoping estricto por fecha
+    if (typeof sanitizeWorkoutTemplates === 'function') {
+        sanitizeWorkoutTemplates();
+    }
+
     // 0. Si el usuario está en el portal, restaurar síncronamente antes de inicializar módulos de la landing
     const isSavedPortal = (
         document.documentElement.classList.contains('in-portal-mode') || 
@@ -5041,20 +5055,22 @@ function getAthleteExerciseLogs(athId, exId) {
     }
 }
 
-async function logCompletedSetToDb(athId, exId, setNumber, weightKg, repsCompleted) {
+async function logCompletedSetToDb(athId, exId, setNumber, weightKg, repsCompleted, dateIso = null) {
+    const effectiveIso = dateIso ? (dateIso.includes('T') ? dateIso : `${dateIso}T12:00:00.000Z`) : new Date().toISOString();
     const setLog = {
         user_id: athId,
         exercise_id: exId,
         set_number: setNumber,
         weight_kg: Number(weightKg) || 0,
         reps_completed: Number(repsCompleted) || 0,
-        completed_at: new Date().toISOString()
+        completed_at: effectiveIso
     };
 
     // Cache local
     try {
         const current = getAthleteExerciseLogs(athId, exId);
-        const existingIdx = current.findIndex(s => s.set_number === setNumber);
+        const dayIsoMatch = dateIso ? dateIso.slice(0, 10) : new Date().toISOString().slice(0, 10);
+        const existingIdx = current.findIndex(s => s.set_number === setNumber && s.completed_at && s.completed_at.slice(0, 10) === dayIsoMatch);
         if (existingIdx >= 0) {
             current[existingIdx] = setLog;
         } else {
@@ -5073,10 +5089,204 @@ async function logCompletedSetToDb(athId, exId, setNumber, weightKg, repsComplet
     }
 }
 
+/**
+ * Almacenamiento diario de ejecución de entrenamiento (Scoping estricto por fecha YYYY-MM-DD)
+ * Evita la polución de plantillas semanales recurrentes (day1..day7)
+ */
+function getAthleteWorkoutExecution(athId, targetDate) {
+    if (!athId) athId = getActiveAthleteId();
+    const dateIso = getFormattedDateKey(targetDate || AppState.selectedDate || new Date());
+
+    let executions = {};
+    try {
+        const raw = localStorage.getItem(`sens_daily_workout_execution_${athId}`);
+        if (raw) executions = JSON.parse(raw);
+    } catch (e) {
+        executions = {};
+    }
+
+    if (executions && executions[dateIso]) {
+        return executions[dateIso];
+    }
+
+    // Fallback: calendar_schedule en coach data
+    try {
+        const coachData = getCoachAthleteWorkoutData(athId);
+        if (coachData && coachData.calendar_schedule && coachData.calendar_schedule[dateIso]) {
+            const sched = coachData.calendar_schedule[dateIso];
+            const compMap = {};
+            if (Array.isArray(sched.exercises)) {
+                sched.exercises.forEach(e => {
+                    if (e.id) compMap[e.id] = Boolean(e.completed);
+                });
+            }
+            return {
+                date: dateIso,
+                dayKey: sched.dayKey || null,
+                completed: Boolean(sched.completed),
+                attended: sched.attended !== undefined ? sched.attended : (sched.completed ? true : null),
+                missed: Boolean(sched.missed),
+                durationMinutes: sched.durationMinutes || 0,
+                completedExercises: compMap
+            };
+        }
+    } catch (e) {}
+
+    // Fallback: sens_completed_workout_dates (solo si la fecha exacta coincide)
+    try {
+        const stored = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
+        if (Array.isArray(stored) && stored.includes(dateIso)) {
+            return {
+                date: dateIso,
+                dayKey: null,
+                completed: true,
+                attended: true,
+                missed: false,
+                durationMinutes: 60,
+                completedExercises: {}
+            };
+        }
+    } catch (e) {}
+
+    return {
+        date: dateIso,
+        dayKey: null,
+        completed: false,
+        attended: null,
+        missed: false,
+        durationMinutes: 0,
+        completedExercises: {}
+    };
+}
+window.getAthleteWorkoutExecution = getAthleteWorkoutExecution;
+
+function saveAthleteWorkoutExecution(athId, targetDate, executionUpdate) {
+    if (!athId) athId = getActiveAthleteId();
+    const dateIso = getFormattedDateKey(targetDate || AppState.selectedDate || new Date());
+
+    let executions = {};
+    try {
+        const raw = localStorage.getItem(`sens_daily_workout_execution_${athId}`);
+        if (raw) executions = JSON.parse(raw);
+    } catch (e) {
+        executions = {};
+    }
+
+    const current = executions[dateIso] || {
+        date: dateIso,
+        dayKey: null,
+        completed: false,
+        attended: null,
+        missed: false,
+        durationMinutes: 0,
+        completedExercises: {}
+    };
+
+    const merged = {
+        ...current,
+        ...executionUpdate,
+        date: dateIso,
+        completedExercises: {
+            ...(current.completedExercises || {}),
+            ...(executionUpdate.completedExercises || {})
+        },
+        updatedAt: new Date().toISOString()
+    };
+
+    executions[dateIso] = merged;
+
+    try {
+        localStorage.setItem(`sens_daily_workout_execution_${athId}`, JSON.stringify(executions));
+    } catch (e) {}
+
+    // Sincronizar en sens_completed_workout_dates de forma estricta (solo strings YYYY-MM-DD)
+    try {
+        let stored = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
+        if (!Array.isArray(stored)) stored = [];
+        stored = stored.filter(item => typeof item === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(item));
+
+        if (merged.completed) {
+            if (!stored.includes(dateIso)) stored.push(dateIso);
+        } else {
+            stored = stored.filter(d => d !== dateIso);
+        }
+        localStorage.setItem('sens_completed_workout_dates', JSON.stringify(stored));
+    } catch (e) {}
+
+    return merged;
+}
+window.saveAthleteWorkoutExecution = saveAthleteWorkoutExecution;
+
+/**
+ * Sanitiza plantillas recurrentes (day1..day7) eliminando completed/attended residuales
+ */
+function sanitizeWorkoutTemplates(athId) {
+    if (!athId) athId = getActiveAthleteId();
+    try {
+        const raw = localStorage.getItem(`sens_prescribed_workouts_${athId}`);
+        if (raw) {
+            const data = JSON.parse(raw);
+            let modified = false;
+            ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'].forEach(dk => {
+                if (data[dk]) {
+                    if ('completed' in data[dk]) { delete data[dk].completed; modified = true; }
+                    if ('attended' in data[dk]) { delete data[dk].attended; modified = true; }
+                    if ('missed' in data[dk]) { delete data[dk].missed; modified = true; }
+                    if ('durationMinutes' in data[dk]) { delete data[dk].durationMinutes; modified = true; }
+                    if (Array.isArray(data[dk].exercises)) {
+                        data[dk].exercises.forEach(ex => {
+                            if ('completed' in ex) { delete ex.completed; modified = true; }
+                        });
+                    }
+                }
+            });
+            if (modified) {
+                localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(data));
+            }
+        }
+
+        const rawCompleted = localStorage.getItem('sens_completed_workout_dates');
+        if (rawCompleted) {
+            const parsed = JSON.parse(rawCompleted);
+            if (Array.isArray(parsed)) {
+                const sanitized = parsed.filter(item => typeof item === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(item));
+                localStorage.setItem('sens_completed_workout_dates', JSON.stringify(sanitized));
+            }
+        }
+
+        const streakKey = (typeof SensDailyStreakManager !== 'undefined' && typeof SensDailyStreakManager.getStorageKey === 'function')
+            ? SensDailyStreakManager.getStorageKey(athId)
+            : `sens_streak_daily_records_v3_${athId}`;
+        const rawStreak = localStorage.getItem(streakKey);
+        if (rawStreak) {
+            const streakRecs = JSON.parse(rawStreak);
+            let streakChanged = false;
+            Object.keys(streakRecs).forEach(iso => {
+                const rec = streakRecs[iso];
+                if (rec && rec.workout && rec.workout.done && !rec.workout.isRestDay) {
+                    const exec = getAthleteWorkoutExecution(athId, iso);
+                    if (!exec.completed && exec.attended !== true) {
+                        delete streakRecs[iso];
+                        streakChanged = true;
+                    }
+                }
+            });
+            if (streakChanged) {
+                localStorage.setItem(streakKey, JSON.stringify(streakRecs));
+            }
+        }
+    } catch (e) {
+        console.warn('Error sanitizing workout templates:', e);
+    }
+}
+window.sanitizeWorkoutTemplates = sanitizeWorkoutTemplates;
+
 // Sesión interactiva en Modal de Ejercicio
 let modalExerciseState = {
     exId: null,
     dayKey: null,
+    effectiveDate: null,
+    targetDateStr: null,
     setsData: [],
     tutSeconds: 0,
     tutInterval: null,
@@ -5086,7 +5296,7 @@ let modalExerciseState = {
     isRestRunning: false
 };
 
-function saveAthleteDayWorkoutStatus(athId, dayKey, statusUpdate) {
+function saveAthleteDayWorkoutStatus(athId, dayKey, statusUpdate, explicitDate = null) {
     let workoutData = getCoachAthleteWorkoutData(athId);
     if (!workoutData || typeof workoutData !== 'object') {
         workoutData = {};
@@ -5094,18 +5304,52 @@ function saveAthleteDayWorkoutStatus(athId, dayKey, statusUpdate) {
     if (!workoutData[dayKey]) {
         workoutData[dayKey] = { title: getDayNameFromKey(dayKey), exercises: [] };
     }
-    Object.assign(workoutData[dayKey], statusUpdate);
+
+    const targetDate = explicitDate || (AppState.selectedDate ? new Date(AppState.selectedDate) : getDateFromDayKey(dayKey));
+    const dateIso = getFormattedDateKey(targetDate);
+
+    // Si la actualización incluye estado de ejecución, guardarlo en el store por fecha
+    if ('completed' in statusUpdate || 'attended' in statusUpdate || 'missed' in statusUpdate || 'durationMinutes' in statusUpdate || 'exercises' in statusUpdate) {
+        const completedMap = {};
+        if (Array.isArray(statusUpdate.exercises)) {
+            statusUpdate.exercises.forEach(e => {
+                if (e.id) completedMap[e.id] = Boolean(e.completed);
+            });
+        }
+        saveAthleteWorkoutExecution(athId, targetDate, {
+            dayKey: dayKey,
+            ...(statusUpdate.completed !== undefined ? { completed: Boolean(statusUpdate.completed) } : {}),
+            ...(statusUpdate.attended !== undefined ? { attended: statusUpdate.attended } : {}),
+            ...(statusUpdate.missed !== undefined ? { missed: Boolean(statusUpdate.missed) } : {}),
+            ...(statusUpdate.durationMinutes !== undefined ? { durationMinutes: Number(statusUpdate.durationMinutes) } : {}),
+            ...(Object.keys(completedMap).length > 0 ? { completedExercises: completedMap } : {})
+        });
+    }
+
+    // Para la plantilla recurrente day1..day7: NO persistir flags de completitud
+    const templateCleanUpdate = { ...statusUpdate };
+    delete templateCleanUpdate.completed;
+    delete templateCleanUpdate.attended;
+    delete templateCleanUpdate.missed;
+    delete templateCleanUpdate.durationMinutes;
+    delete templateCleanUpdate.completedAt;
+    if (Array.isArray(templateCleanUpdate.exercises)) {
+        templateCleanUpdate.exercises = templateCleanUpdate.exercises.map(e => {
+            const cleanEx = { ...e };
+            delete cleanEx.completed;
+            return cleanEx;
+        });
+    }
+
+    Object.assign(workoutData[dayKey], templateCleanUpdate);
     
     // Sincronizar en calendar_schedule para coherencia temporal total
     try {
-        const targetDate = getDateFromDayKey(dayKey);
-        const dateIso = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
         if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
         if (!workoutData.calendar_schedule[dateIso]) {
             workoutData.calendar_schedule[dateIso] = { ...workoutData[dayKey] };
-        } else {
-            Object.assign(workoutData.calendar_schedule[dateIso], statusUpdate);
         }
+        Object.assign(workoutData.calendar_schedule[dateIso], statusUpdate);
     } catch (e) {}
 
     // Guardar en localStorage
@@ -5132,7 +5376,7 @@ function saveAthleteDayWorkoutStatus(athId, dayKey, statusUpdate) {
 
 let selectedSessionDuration = 60;
 
-window.showWorkoutTimePicker = function(dayKey, defaultMinutes) {
+window.showWorkoutTimePicker = function(dayKey, defaultMinutes, targetDateStr = null) {
     selectedSessionDuration = defaultMinutes || 60;
     const pendingPane = document.getElementById('workoutAttendancePendingPane');
     const timingPane = document.getElementById('workoutAttendanceTimingPane');
@@ -5144,6 +5388,12 @@ window.showWorkoutTimePicker = function(dayKey, defaultMinutes) {
             if (m === selectedSessionDuration) chip.classList.add('selected');
             else chip.classList.remove('selected');
         });
+        const confirmBtn = timingPane.querySelector('.btn-confirm-time');
+        if (confirmBtn) {
+            confirmBtn.onclick = function() {
+                window.confirmWorkoutSessionAttendance(dayKey, targetDateStr);
+            };
+        }
     }
 };
 
@@ -5159,56 +5409,77 @@ window.selectWorkoutDurationChip = function(minutes) {
     }
 };
 
-window.confirmWorkoutSessionAttendance = function(dayKey) {
+window.confirmWorkoutSessionAttendance = function(dayKey, targetDateStr = null) {
     const athId = getActiveAthleteId();
-    saveAthleteDayWorkoutStatus(athId, dayKey, {
+    const effectiveDate = targetDateStr ? new Date(targetDateStr + 'T12:00:00') : (AppState.selectedDate || getDateFromDayKey(dayKey));
+    const dateIso = getFormattedDateKey(effectiveDate);
+
+    saveAthleteWorkoutExecution(athId, effectiveDate, {
+        dayKey: dayKey,
         completed: true,
         missed: false,
         attended: true,
         durationMinutes: selectedSessionDuration,
         completedAt: new Date().toISOString()
     });
+
     if (typeof showSensToast === 'function') {
         showSensToast(`✓ Sesión registrada: ${selectedSessionDuration} minutos. ¡Excelente trabajo!`, 'champagne');
     }
-    renderWorkoutDay(dayKey);
+    renderWorkoutDay(dayKey, effectiveDate);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
-    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate || new Date(), dayKey);
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(effectiveDate, dayKey);
+    if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(effectiveDate);
 };
 
-window.markWorkoutAttendanceMissed = function(dayKey) {
+window.markWorkoutAttendanceMissed = function(dayKey, targetDateStr = null) {
     const athId = getActiveAthleteId();
-    saveAthleteDayWorkoutStatus(athId, dayKey, {
+    const effectiveDate = targetDateStr ? new Date(targetDateStr + 'T12:00:00') : (AppState.selectedDate || getDateFromDayKey(dayKey));
+    const dateIso = getFormattedDateKey(effectiveDate);
+
+    saveAthleteWorkoutExecution(athId, effectiveDate, {
+        dayKey: dayKey,
         completed: false,
         missed: true,
         attended: false,
         durationMinutes: 0
     });
+
     if (typeof showSensToast === 'function') {
         showSensToast('Marcado como día de descanso / no realizado.', 'info');
     }
-    renderWorkoutDay(dayKey);
+    renderWorkoutDay(dayKey, effectiveDate);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
-    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate || new Date(), dayKey);
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(effectiveDate, dayKey);
+    if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(effectiveDate);
 };
 
-window.resetWorkoutAttendance = function(dayKey) {
+window.resetWorkoutAttendance = function(dayKey, targetDateStr = null) {
     const athId = getActiveAthleteId();
-    saveAthleteDayWorkoutStatus(athId, dayKey, {
+    const effectiveDate = targetDateStr ? new Date(targetDateStr + 'T12:00:00') : (AppState.selectedDate || getDateFromDayKey(dayKey));
+    const dateIso = getFormattedDateKey(effectiveDate);
+
+    saveAthleteWorkoutExecution(athId, effectiveDate, {
+        dayKey: dayKey,
         completed: false,
         missed: false,
         attended: null
     });
-    renderWorkoutDay(dayKey);
+
+    renderWorkoutDay(dayKey, effectiveDate);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
-    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate || new Date(), dayKey);
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(effectiveDate, dayKey);
+    if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(effectiveDate);
 };
 
-window.toggleExerciseFinished = function(exId, dayKey) {
-    if (isFutureDate(dayKey)) {
+window.toggleExerciseFinished = function(exId, dayKey, targetDateStr = null) {
+    const effectiveDate = targetDateStr ? new Date(targetDateStr + 'T12:00:00') : (AppState.selectedDate || getDateFromDayKey(dayKey));
+    const dateIso = getFormattedDateKey(effectiveDate);
+
+    if (isFutureDate(effectiveDate)) {
         if (typeof showSensToast === 'function') {
             showSensToast('No es posible registrar entrenamientos de fechas futuras.', 'champagne', 2500);
         }
@@ -5223,56 +5494,64 @@ window.toggleExerciseFinished = function(exId, dayKey) {
     const ex = day.exercises.find(e => e.id === exId);
     if (!ex) return;
 
-    ex.completed = !ex.completed;
-    saveAthleteDayWorkoutStatus(athId, dayKey, { exercises: day.exercises });
+    const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
+    const completedMap = Object.assign({}, currentExecution.completedExercises || {});
+    const nextState = !completedMap[exId];
+    completedMap[exId] = nextState;
 
-    const allDone = day.exercises.every(e => e.completed);
+    const allDone = day.exercises.length > 0 && day.exercises.every(e => Boolean(completedMap[e.id]));
+    const durationMins = allDone ? (currentExecution.durationMinutes || Math.max(30, day.exercises.length * 9)) : (currentExecution.durationMinutes || 0);
+
+    saveAthleteWorkoutExecution(athId, effectiveDate, {
+        dayKey: dayKey,
+        completedExercises: completedMap,
+        completed: allDone,
+        attended: allDone ? true : currentExecution.attended,
+        durationMinutes: durationMins
+    });
+
     if (allDone) {
-        day.completed = true;
-        day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
-        saveAthleteDayWorkoutStatus(athId, dayKey, { completed: true, durationMinutes: day.durationMinutes });
         if (typeof window.showSensCelebrationToast === 'function') {
             window.showSensCelebrationToast('¡Entrenamiento Completado!', 'Completaste el 100% de los ejercicios de hoy. ¡Racha de fuerza asegurada!');
         } else if (typeof showSensToast === 'function') {
             showSensToast('¡Felicitaciones! Completaste todos los ejercicios de la sesión.', 'champagne');
         }
     } else {
-        const wasCompleted = Boolean(day.completed);
-        if (day.completed) {
-            day.completed = false;
-            saveAthleteDayWorkoutStatus(athId, dayKey, { completed: false });
-        }
+        const wasCompleted = Boolean(currentExecution.completed);
         if (wasCompleted) {
             if (typeof showSensToast === 'function') {
                 showSensToast('Perdiste el objetivo de racha de entrenamiento de hoy (sesión incompleta).', 'warning', 4000);
             }
         } else if (typeof showSensToast === 'function') {
-            showSensToast(ex.completed ? `✓ ${ex.name} finalizado` : `Ejercicio desmarcado`, 'info');
+            showSensToast(nextState ? `✓ ${ex.name} finalizado` : `Ejercicio desmarcado`, 'info');
         }
     }
 
-    const targetDate = getDateFromDayKey(dayKey);
-    AppState.selectedDate = targetDate;
+    AppState.selectedDate = effectiveDate;
     AppState.currentDay = dayKey;
 
-    renderWorkoutDay(dayKey);
+    renderWorkoutDay(dayKey, effectiveDate);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
     if (typeof syncAllStreakAndPillTelemetry === 'function') {
-        syncAllStreakAndPillTelemetry(targetDate);
+        syncAllStreakAndPillTelemetry(effectiveDate);
     } else {
         if (typeof SensDailyStreakManager !== 'undefined') {
-            SensDailyStreakManager.evaluateDay(targetDate, athId);
+            SensDailyStreakManager.evaluateDay(effectiveDate, athId);
         }
         if (typeof updateSensStreakCard === 'function') {
-            updateSensStreakCard(targetDate);
+            updateSensStreakCard(effectiveDate);
         }
     }
 };
 
-function renderWorkoutDay(dayKey) {
+function renderWorkoutDay(dayKey, targetDate = null) {
     AppState.currentDay = dayKey;
     const athId = getActiveAthleteId();
+    const effectiveDate = targetDate ? (targetDate instanceof Date ? targetDate : new Date(targetDate + 'T12:00:00')) : (AppState.selectedDate || getDateFromDayKey(dayKey));
+    const dateIso = getFormattedDateKey(effectiveDate);
+    const execution = getAthleteWorkoutExecution(athId, effectiveDate);
+
     const hasRoutine = athleteHasAssignedRoutine(athId);
     const container = document.getElementById('exercisesContainer');
     const heroTitle = document.getElementById('heroWorkoutTitle');
@@ -5389,31 +5668,31 @@ function renderWorkoutDay(dayKey) {
 
     // Actualizar Cuadro Resumen Compacto
     const dayName = getDayNameFromKey(dayKey);
-    const isToday = isSameDay(AppState.selectedDate || new Date(), new Date());
-    if (summaryDayTag) summaryDayTag.textContent = isToday ? 'Entrenamiento de Hoy' : `Sesión: ${dayName}`;
+    const isToday = isSameDay(effectiveDate, new Date());
+    if (summaryDayTag) summaryDayTag.textContent = isToday ? 'Entrenamiento de Hoy' : `Sesión: ${formatDateDDMM(effectiveDate)}`;
     if (heroTitle) heroTitle.textContent = dayData.title || `Día: ${dayName}`;
 
     const exCountEl = document.getElementById('metricValExercises');
     const minCountEl = document.getElementById('metricValMinutes');
     const kcalCountEl = document.getElementById('metricValKcal');
     if (exCountEl) exCountEl.textContent = allDayExercises.length;
-    if (minCountEl) minCountEl.textContent = dayData.durationMinutes ? `${dayData.durationMinutes} min` : `~${estMinutes} min`;
+    if (minCountEl) minCountEl.textContent = execution.durationMinutes ? `${execution.durationMinutes} min` : `~${estMinutes} min`;
     if (kcalCountEl) kcalCountEl.textContent = `~${totalWorkoutKcal} kcal`;
 
-    // 3. Renderizar Asistencia y Registro de Sesión (Compacto y Ligero)
+    // 3. Renderizar Asistencia y Registro de Sesión (Compacto y Ligero con Scoping por Fecha)
     const attendanceBox = document.getElementById('workoutAttendanceBox');
     if (attendanceBox) {
-        const isCompleted = Boolean(dayData.completed);
-        const isMissed = Boolean(dayData.missed || dayData.attended === false);
+        const isCompleted = Boolean(execution.completed);
+        const isMissed = Boolean(execution.missed || execution.attended === false);
 
         if (isCompleted) {
             attendanceBox.innerHTML = `
                 <div class="workout-attendance-completed">
                     <div class="attendance-done-info">
                         <span class="status-dot status-dot-active" style="background: #10B981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);"></span>
-                        <span style="font-size: 11.5px; font-weight: 700; color: #FFFFFF;">Sesión registrada (${dayData.durationMinutes || estMinutes} min)</span>
+                        <span style="font-size: 11.5px; font-weight: 700; color: #FFFFFF;">Sesión registrada (${execution.durationMinutes || estMinutes} min)</span>
                     </div>
-                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer; text-decoration: underline;">
+                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer; text-decoration: underline;">
                         Cambiar
                     </button>
                 </div>
@@ -5424,7 +5703,7 @@ function renderWorkoutDay(dayKey) {
                     <div class="attendance-missed-info">
                         <span style="font-size: 11.5px; color: #A1A1AA;">✕ Descanso registrado</span>
                     </div>
-                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer;">
+                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer;">
                         Cambiar a completado →
                     </button>
                 </div>
@@ -5434,11 +5713,11 @@ function renderWorkoutDay(dayKey) {
                 <div class="workout-attendance-pending" id="workoutAttendancePendingPane">
                     <span class="attendance-prompt">¿Entrenaste hoy?</span>
                     <div class="attendance-actions-wrap">
-                        <button type="button" class="btn btn-sm btn-workout-attended" onclick="showWorkoutTimePicker('${dayKey}', ${estMinutes})">
+                        <button type="button" class="btn btn-sm btn-workout-attended" onclick="showWorkoutTimePicker('${dayKey}', ${estMinutes}, '${dateIso}')">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                             Sí, asistí
                         </button>
-                        <button type="button" class="btn btn-sm btn-workout-missed" onclick="markWorkoutAttendanceMissed('${dayKey}')">
+                        <button type="button" class="btn btn-sm btn-workout-missed" onclick="markWorkoutAttendanceMissed('${dayKey}', '${dateIso}')">
                             No fui
                         </button>
                     </div>
@@ -5451,7 +5730,7 @@ function renderWorkoutDay(dayKey) {
                         <button type="button" class="workout-time-chip ${estMinutes > 50 && estMinutes <= 65 ? 'selected' : ''}" data-min="60" onclick="selectWorkoutDurationChip(60)">60m</button>
                         <button type="button" class="workout-time-chip ${estMinutes > 65 && estMinutes <= 80 ? 'selected' : ''}" data-min="75" onclick="selectWorkoutDurationChip(75)">75m</button>
                         <button type="button" class="workout-time-chip ${estMinutes > 80 ? 'selected' : ''}" data-min="90" onclick="selectWorkoutDurationChip(90)">90m</button>
-                        <button type="button" class="btn btn-primary btn-sm btn-confirm-time" onclick="confirmWorkoutSessionAttendance('${dayKey}')">Guardar</button>
+                        <button type="button" class="btn btn-primary btn-sm btn-confirm-time" onclick="confirmWorkoutSessionAttendance('${dayKey}', '${dateIso}')">Guardar</button>
                     </div>
                 </div>
             `;
@@ -5532,8 +5811,7 @@ function renderWorkoutDay(dayKey) {
                 </div>
         `;
 
-        const isFuture = isFutureDate(dayKey);
-        const dayName = getDayNameFromKey(dayKey);
+        const isFuture = isFutureDate(effectiveDate);
 
         muscleKeys.forEach(mKey => {
             const list = tg.muscles[mKey];
@@ -5557,13 +5835,13 @@ function renderWorkoutDay(dayKey) {
             list.forEach(item => {
                 const ex = item.ex;
                 const cat = item.catalogMatch;
-                const isExDone = Boolean(ex.completed);
+                const isExDone = Boolean(execution.completedExercises && execution.completedExercises[ex.id]);
                 const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Cuerpo';
                 const exVideoPath = (cat && (cat.video_local_path || cat.video_url || cat.video)) || ex.video || SENS_EXERCISE_MOCKUP_VIDEO;
                 const exTitle = (cat && (cat['name_' + activeLang] || cat.name_es || cat.name)) || ex.name;
 
                 groupedHtml += `
-                    <div class="sens-ex-compact-card ${isExDone ? 'completed' : ''}" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}')">
+                    <div class="sens-ex-compact-card ${isExDone ? 'completed' : ''}" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}', '${dateIso}')">
                         <div class="sens-video-skeleton compact">
                             <div class="sens-skeleton-shimmer"></div>
                         </div>
@@ -5575,7 +5853,7 @@ function renderWorkoutDay(dayKey) {
                             <span class="ex-compact-sets-badge">${ex.sets || 3} × ${ex.reps || 10}</span>
                             <button type="button" class="ex-compact-check-btn ${isExDone ? 'completed' : ''} ${isFuture ? 'is-future' : ''}" 
                                     title="${isFuture ? `Disponible a partir del ${dayName}` : (isExDone ? 'Desmarcar ejercicio' : 'Marcar como finalizado')}" 
-                                    onclick="event.stopPropagation(); toggleExerciseFinished('${ex.id}', '${dayKey}')">
+                                    onclick="event.stopPropagation(); toggleExerciseFinished('${ex.id}', '${dayKey}', '${dateIso}')">
                                 ${isFuture ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` : '✓'}
                             </button>
                         </div>
@@ -5605,15 +5883,20 @@ function renderWorkoutDay(dayKey) {
     container.innerHTML = groupedHtml;
 }
 
-window.openExerciseExecutionModal = function(exId, dayKey) {
+window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null) {
     const athId = getActiveAthleteId();
     const data = getCoachAthleteWorkoutData(athId);
     const day = (data && data[dayKey]) ? data[dayKey] : (WORKOUT_DAYS_DATA[dayKey] || { exercises: [] });
     const ex = day.exercises.find(e => e.id === exId);
     if (!ex) return;
 
+    const effectiveDate = targetDateStr ? (targetDateStr instanceof Date ? targetDateStr : new Date(targetDateStr + 'T12:00:00')) : (AppState.selectedDate || getDateFromDayKey(dayKey));
+    const dateIso = getFormattedDateKey(effectiveDate);
+
     modalExerciseState.exId = exId;
     modalExerciseState.dayKey = dayKey;
+    modalExerciseState.effectiveDate = effectiveDate;
+    modalExerciseState.targetDateStr = dateIso;
     modalExerciseState.tutSeconds = 0;
     modalExerciseState.isTutRunning = false;
     clearInterval(modalExerciseState.tutInterval);
@@ -5679,9 +5962,9 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
                 <span style="font-size: 11px; font-weight: 800; color: #E5CBA7; text-transform: uppercase;">Idioma de la Ficha:</span>
                 <div style="display: flex; gap: 5px;">
-                    <button type="button" class="pill ${currentLang === 'es' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">ES</button>
-                    <button type="button" class="pill ${currentLang === 'en' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">EN</button>
-                    <button type="button" class="pill ${currentLang === 'pt' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">PT</button>
+                    <button type="button" class="pill ${currentLang === 'es' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">ES</button>
+                    <button type="button" class="pill ${currentLang === 'en' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">EN</button>
+                    <button type="button" class="pill ${currentLang === 'pt' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">PT</button>
                 </div>
             </div>
             <div style="margin-bottom: 10px; background: rgba(229,203,167,0.06); border: 1px solid rgba(229,203,167,0.2); border-radius: 8px; padding: 10px;">
@@ -5707,18 +5990,19 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     clearInterval(masterTimerState.interval);
     updateMasterTimerUI();
 
-    // 3. Inicializar Series (In-Video HUD + Steppers)
+    // 3. Inicializar Series con Scoping Estricto por Fecha
     const savedLogs = getAthleteExerciseLogs(athId, exId);
     modalExerciseState.setsData = [];
     const totalSets = ex.sets || 4;
     for (let i = 1; i <= totalSets; i++) {
-        const existing = savedLogs.find(l => l.set_number === i);
+        const existingForDate = savedLogs.find(l => l.set_number === i && l.completed_at && l.completed_at.slice(0, 10) === dateIso);
+        const latestAnyLog = savedLogs.slice().reverse().find(l => l.set_number === i) || savedLogs[savedLogs.length - 1];
         modalExerciseState.setsData.push({
             setNumber: i,
             targetReps: ex.reps || '10-12',
-            weight: existing ? existing.weight_kg : (ex.defaultWeight || 16),
-            reps: existing ? existing.reps_completed : (ex.defaultReps || 10),
-            completed: Boolean(existing)
+            weight: existingForDate ? existingForDate.weight_kg : (latestAnyLog ? latestAnyLog.weight_kg : (ex.defaultWeight || 16)),
+            reps: existingForDate ? existingForDate.reps_completed : (latestAnyLog ? latestAnyLog.reps_completed : (ex.defaultReps || 10)),
+            completed: Boolean(existingForDate)
         });
     }
 
@@ -5788,12 +6072,12 @@ window.toggleModalVideoAspect = function() {
     showSensToast(is916 ? 'Formato 9:16 completo activado' : 'Formato 4:5 compacto', 'champagne', 1400);
 };
 
-window.switchModalExerciseLanguage = function(lang, exId, dayKey) {
+window.switchModalExerciseLanguage = function(lang, exId, dayKey, targetDateStr = null) {
     if (typeof localStorage !== 'undefined') {
         localStorage.setItem('sens_lang', lang);
     }
     if (typeof window.openExerciseExecutionModal === 'function') {
-        window.openExerciseExecutionModal(exId, dayKey);
+        window.openExerciseExecutionModal(exId, dayKey, targetDateStr || modalExerciseState.targetDateStr);
     }
 };
 
@@ -5921,7 +6205,10 @@ window.updateSetReps = function(idx, val) {
 
 window.toggleSetCompleted = function(idx) {
     const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
-    if (isFutureDate(currentDayKey)) {
+    const effectiveDate = modalExerciseState.effectiveDate || AppState.selectedDate || getDateFromDayKey(currentDayKey);
+    const dateIso = modalExerciseState.targetDateStr || getFormattedDateKey(effectiveDate);
+
+    if (isFutureDate(effectiveDate)) {
         if (typeof showSensToast === 'function') {
             showSensToast('No es posible registrar series de fechas futuras.', 'champagne', 2500);
         }
@@ -5934,27 +6221,32 @@ window.toggleSetCompleted = function(idx) {
     renderModalSeriesList();
 
     const athId = getActiveAthleteId();
-    const dayDate = getDateFromDayKey(currentDayKey);
     const data = getCoachAthleteWorkoutData(athId);
     const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
+    const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
 
     if (s.completed) {
-        logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps);
+        logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps, dateIso);
         showSensToast(`Set ${s.setNumber} completado (${s.weight} kg × ${s.reps} reps)`, 'champagne', 2200);
 
         if (day && Array.isArray(day.exercises)) {
-            const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
-            if (ex) {
-                const anyDone = modalExerciseState.setsData.some(x => x.completed);
-                ex.completed = Boolean(anyDone);
-                const allExDone = day.exercises.length > 0 && day.exercises.every(e => e.completed);
-                day.completed = allExDone;
-                saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: allExDone });
-                AppState.selectedDate = dayDate;
-                AppState.currentDay = currentDayKey;
-                if (typeof syncAllStreakAndPillTelemetry === 'function') {
-                    syncAllStreakAndPillTelemetry(dayDate);
-                }
+            const anyDone = modalExerciseState.setsData.some(x => x.completed);
+            const completedMap = Object.assign({}, currentExecution.completedExercises || {});
+            completedMap[modalExerciseState.exId] = Boolean(anyDone);
+            const allExDone = day.exercises.length > 0 && day.exercises.every(e => Boolean(completedMap[e.id]));
+
+            saveAthleteWorkoutExecution(athId, effectiveDate, {
+                dayKey: currentDayKey,
+                completedExercises: completedMap,
+                completed: allExDone,
+                attended: allExDone ? true : currentExecution.attended,
+                durationMinutes: allExDone ? (currentExecution.durationMinutes || Math.max(30, day.exercises.length * 9)) : currentExecution.durationMinutes
+            });
+
+            AppState.selectedDate = effectiveDate;
+            AppState.currentDay = currentDayKey;
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(effectiveDate);
             }
         }
 
@@ -5968,17 +6260,20 @@ window.toggleSetCompleted = function(idx) {
             startMasterRestCountdown();
         }
     } else {
-        const wasDayCompleted = Boolean(day && day.completed);
+        const wasDayCompleted = Boolean(currentExecution.completed);
         if (day && Array.isArray(day.exercises)) {
-            const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
-            if (ex) {
-                const anyDone = modalExerciseState.setsData.some(x => x.completed);
-                ex.completed = Boolean(anyDone);
-                day.completed = false;
-                saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: false });
-                if (typeof syncAllStreakAndPillTelemetry === 'function') {
-                    syncAllStreakAndPillTelemetry(dayDate);
-                }
+            const anyDone = modalExerciseState.setsData.some(x => x.completed);
+            const completedMap = Object.assign({}, currentExecution.completedExercises || {});
+            completedMap[modalExerciseState.exId] = Boolean(anyDone);
+
+            saveAthleteWorkoutExecution(athId, effectiveDate, {
+                dayKey: currentDayKey,
+                completedExercises: completedMap,
+                completed: false
+            });
+
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(effectiveDate);
             }
         }
         if (wasDayCompleted) {
@@ -5991,7 +6286,10 @@ window.toggleSetCompleted = function(idx) {
 
 window.completeAllExerciseSets = function() {
     const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
-    if (isFutureDate(currentDayKey)) {
+    const effectiveDate = modalExerciseState.effectiveDate || AppState.selectedDate || getDateFromDayKey(currentDayKey);
+    const dateIso = modalExerciseState.targetDateStr || getFormattedDateKey(effectiveDate);
+
+    if (isFutureDate(effectiveDate)) {
         if (typeof showSensToast === 'function') {
             showSensToast('No es posible registrar series de fechas futuras.', 'champagne', 2500);
         }
@@ -6001,25 +6299,27 @@ window.completeAllExerciseSets = function() {
     if (!modalExerciseState.setsData || modalExerciseState.setsData.length === 0) return;
     const allDone = modalExerciseState.setsData.every(s => s.completed);
     const athId = getActiveAthleteId();
-    const dayDate = getDateFromDayKey(currentDayKey);
     const data = getCoachAthleteWorkoutData(athId);
     const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
+    const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
 
     if (allDone) {
         modalExerciseState.setsData.forEach(s => { s.completed = false; });
         renderModalSeriesList();
 
-        let wasDayCompleted = false;
+        let wasDayCompleted = Boolean(currentExecution.completed);
         if (day && Array.isArray(day.exercises)) {
-            const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
-            if (ex) {
-                wasDayCompleted = Boolean(day.completed);
-                ex.completed = false;
-                day.completed = false;
-                saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: false });
-                if (typeof syncAllStreakAndPillTelemetry === 'function') {
-                    syncAllStreakAndPillTelemetry(dayDate);
-                }
+            const completedMap = Object.assign({}, currentExecution.completedExercises || {});
+            completedMap[modalExerciseState.exId] = false;
+
+            saveAthleteWorkoutExecution(athId, effectiveDate, {
+                dayKey: currentDayKey,
+                completedExercises: completedMap,
+                completed: false
+            });
+
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(effectiveDate);
             }
         }
         if (wasDayCompleted) {
@@ -6034,24 +6334,29 @@ window.completeAllExerciseSets = function() {
 
     modalExerciseState.setsData.forEach(s => {
         s.completed = true;
-        logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps);
+        logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps, dateIso);
     });
 
     renderModalSeriesList();
 
     if (day && Array.isArray(day.exercises)) {
-        const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
-        if (ex) {
-            ex.completed = true;
-            const allExDone = day.exercises.length > 0 && day.exercises.every(e => e.completed);
-            day.completed = allExDone;
-            saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: allExDone });
-            AppState.selectedDate = dayDate;
-            AppState.currentDay = currentDayKey;
-            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
-            if (typeof syncAllStreakAndPillTelemetry === 'function') {
-                syncAllStreakAndPillTelemetry(dayDate);
-            }
+        const completedMap = Object.assign({}, currentExecution.completedExercises || {});
+        completedMap[modalExerciseState.exId] = true;
+        const allExDone = day.exercises.length > 0 && day.exercises.every(e => Boolean(completedMap[e.id]));
+
+        saveAthleteWorkoutExecution(athId, effectiveDate, {
+            dayKey: currentDayKey,
+            completedExercises: completedMap,
+            completed: allExDone,
+            attended: allExDone ? true : currentExecution.attended,
+            durationMinutes: allExDone ? (currentExecution.durationMinutes || Math.max(30, day.exercises.length * 9)) : currentExecution.durationMinutes
+        });
+
+        AppState.selectedDate = effectiveDate;
+        AppState.currentDay = currentDayKey;
+        if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(effectiveDate);
+        if (typeof syncAllStreakAndPillTelemetry === 'function') {
+            syncAllStreakAndPillTelemetry(effectiveDate);
         }
     }
 
@@ -6735,8 +7040,9 @@ function initBottomSheetPullDownDismiss() {
 function saveAndFinishExercise(silent = false) {
     const currentExId = modalExerciseState.exId;
     const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
-    const isFuture = isFutureDate(currentDayKey);
-    const dayDate = getDateFromDayKey(currentDayKey);
+    const effectiveDate = modalExerciseState.effectiveDate || AppState.selectedDate || getDateFromDayKey(currentDayKey);
+    const dateIso = modalExerciseState.targetDateStr || getFormattedDateKey(effectiveDate);
+    const isFuture = isFutureDate(effectiveDate);
 
     if (currentExId && !isFuture) {
         const athId = getActiveAthleteId();
@@ -6746,22 +7052,27 @@ function saveAndFinishExercise(silent = false) {
             const ex = day.exercises.find(e => e.id === currentExId);
             if (ex) {
                 const anyDone = modalExerciseState.setsData && modalExerciseState.setsData.some(s => s.completed);
-                ex.completed = Boolean(anyDone);
-                const allDone = day.exercises.length > 0 && day.exercises.every(e => e.completed);
-                day.completed = allDone;
-                day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
-                saveAthleteDayWorkoutStatus(athId, currentDayKey, { 
-                    exercises: day.exercises,
+                const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
+                const completedMap = Object.assign({}, currentExecution.completedExercises || {});
+                completedMap[currentExId] = Boolean(anyDone);
+                const allDone = day.exercises.length > 0 && day.exercises.every(e => Boolean(completedMap[e.id]));
+                const durationMins = allDone ? (currentExecution.durationMinutes || Math.max(30, day.exercises.length * 9)) : (currentExecution.durationMinutes || 0);
+
+                saveAthleteWorkoutExecution(athId, effectiveDate, {
+                    dayKey: currentDayKey,
+                    completedExercises: completedMap,
                     completed: allDone,
-                    durationMinutes: day.durationMinutes
+                    attended: allDone ? true : currentExecution.attended,
+                    durationMinutes: durationMins
                 });
+
                 if (!silent && typeof showSensToast === 'function') {
                     showSensToast(`✓ Progreso de ${ex.name} guardado con éxito.`, 'champagne', 2600);
                 }
             }
         }
     }
-    AppState.selectedDate = dayDate;
+    AppState.selectedDate = effectiveDate;
     AppState.currentDay = currentDayKey;
     closeExerciseExecutionModalForce();
 }
@@ -6801,8 +7112,8 @@ function closeExerciseExecutionModalForce() {
     if (modalVideo) modalVideo.pause();
 
     const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
-    const targetDate = getDateFromDayKey(currentDayKey);
-    renderWorkoutDay(currentDayKey);
+    const targetDate = modalExerciseState.effectiveDate || getDateFromDayKey(currentDayKey);
+    renderWorkoutDay(currentDayKey, targetDate);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
 
@@ -7427,9 +7738,7 @@ function updateDashboardRings() {
     const circumference = 150.8; // 2 * PI * 24
 
     // 1. Anillo de Entrenamiento (0% o 100%)
-    const completedWorkouts = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
-    const todayNum = new Date().getDate();
-    const hasTrainedToday = completedWorkouts.includes(todayNum);
+    const hasTrainedToday = typeof isDateInCompletedWorkouts === 'function' ? isDateInCompletedWorkouts(new Date()) : false;
 
     if (workoutCirc) {
         workoutCirc.style.strokeDashoffset = hasTrainedToday ? '0' : String(circumference);
@@ -7574,26 +7883,14 @@ function renderMonthlyCalendar() {
     const startOffset = (firstDayIndex + 6) % 7; // Lunes = 0
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-    const savedWorkouts = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
-    const defaultTrained = [2, 5, 7, 9, 12];
-
-    let cellsHtml = `
-        <div class="month-cal-day-label">L</div>
-        <div class="month-cal-day-label">M</div>
-        <div class="month-cal-day-label">M</div>
-        <div class="month-cal-day-label">J</div>
-        <div class="month-cal-day-label">V</div>
-        <div class="month-cal-day-label">S</div>
-        <div class="month-cal-day-label">D</div>
-    `;
-
     for (let i = 0; i < startOffset; i++) {
         cellsHtml += `<div class="month-cal-cell rest-day" style="opacity: 0.15;"></div>`;
     }
 
     for (let d = 1; d <= daysInMonth; d++) {
         const isToday = (d === todayDate);
-        const isCompleted = savedWorkouts.includes(d) || defaultTrained.includes(d);
+        const cellIso = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const isCompleted = typeof isDateInCompletedWorkouts === 'function' ? isDateInCompletedWorkouts(cellIso) : false;
         const classes = ['month-cal-cell'];
         if (isToday) classes.push('today');
         if (isCompleted) classes.push('completed');
@@ -9827,8 +10124,17 @@ function sanitizeWorkoutDataWithMasterExercises(data, athId) {
     try {
         Object.keys(data).forEach(dayK => {
             const dayObj = data[dayK];
+            if (dayObj && dayK.startsWith('day')) {
+                delete dayObj.completed;
+                delete dayObj.attended;
+                delete dayObj.missed;
+                delete dayObj.durationMinutes;
+            }
             if (dayObj && Array.isArray(dayObj.exercises)) {
                 dayObj.exercises.forEach(e => {
+                    if (dayK.startsWith('day')) {
+                        delete e.completed;
+                    }
                     const resolved = (typeof window.getResolvedExercise === 'function') ? window.getResolvedExercise(e, athId) : null;
                     if (resolved) {
                         if (resolved.video_local_path && (!e.video || e.video.includes('vid/pilar') || !e.video_url || e.video_url.includes('vid/pilar'))) {
@@ -13577,12 +13883,14 @@ function initWorkoutBlockAccordions() {
                 stickyBtn.style.color = '';
             }
 
-            const completed = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
-            const todayNum = new Date().getDate();
-            if (!completed.includes(todayNum)) {
-                completed.push(todayNum);
-                localStorage.setItem('sens_completed_workout_dates', JSON.stringify(completed));
-            }
+            const athId = getActiveAthleteId();
+            const todayDate = AppState.selectedDate || new Date();
+            saveAthleteWorkoutExecution(athId, todayDate, {
+                completed: true,
+                attended: true,
+                durationMinutes: 60,
+                completedAt: new Date().toISOString()
+            });
 
             const weeklyTime = document.getElementById('dashWeeklyTimeNum');
             const weeklySessions = document.getElementById('dashWeeklySessionsCal');
@@ -13757,6 +14065,9 @@ function navigateCalendarWeek(direction) {
 
     renderDynamicWeekStrip();
     renderWorkoutDaysNav();
+    if (typeof renderWorkoutDay === 'function') {
+        renderWorkoutDay(AppState.currentDay, AppState.selectedDate);
+    }
     if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
     if (typeof updateObjectiveCardData === 'function') {
         updateObjectiveCardData(AppState.selectedDate);
@@ -14210,7 +14521,8 @@ function renderDynamicWeekStrip() {
         const dayKey = 'day' + (i + 1);
         const dayData = data[dayKey] || {};
         const modality = dayData.modality;
-        const isCompleted = Boolean(dayData.completed);
+        const execution = getAthleteWorkoutExecution(athId, dayDate);
+        const isCompleted = Boolean(execution && execution.completed);
 
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
@@ -14291,8 +14603,16 @@ const SENS_MUSCLE_MICRO_ICONS = {
 /**
  * Determina el micro-badge con iconos chicos por grupo muscular (hasta 3 iconos por pill)
  */
-function getDayFocusBadge(dayData) {
-    if (dayData && dayData.completed) {
+function getDayFocusBadge(dayData, dayDate = null) {
+    const athId = getActiveAthleteId();
+    let isCompleted = false;
+    if (dayDate) {
+        const execution = getAthleteWorkoutExecution(athId, dayDate);
+        isCompleted = Boolean(execution && execution.completed);
+    } else {
+        isCompleted = Boolean(dayData && dayData.completed);
+    }
+    if (isCompleted) {
         return '<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>';
     }
     const exercises = (dayData && Array.isArray(dayData.exercises)) ? dayData.exercises : [];
@@ -14389,7 +14709,7 @@ function renderWorkoutDaysNav() {
         const dayKey = 'day' + (i + 1);
         const dayData = data[dayKey] || {};
         const heroNum = dayDate.getDate();
-        const badgeHtml = getDayFocusBadge(dayData);
+        const badgeHtml = getDayFocusBadge(dayData, dayDate);
 
         html += `
             <button type="button" class="sens-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
@@ -14414,10 +14734,9 @@ function renderWorkoutDaysNav() {
             const dayKey = 'day' + (idx + 1);
             AppState.currentDay = dayKey;
 
-            renderWorkoutDay(dayKey);
+            renderWorkoutDay(dayKey, dayDate);
             renderWorkoutDaysNav();
             if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
-            if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
             if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(dayDate);
@@ -15438,20 +15757,26 @@ const SensDailyStreakManager = {
         // Una vez finalizado el día (días pasados), la racha queda sellada e inmutable (locked: true).
         // Se pueden editar pesos o comidas retroactivas, pero el estado de la racha de ese día permanece congelado.
         if (isPastDay && existingRecord && existingRecord.locked) {
-            return {
-                current: existingRecord,
-                previous: existingRecord
-            };
+            const execution = getAthleteWorkoutExecution(id, sDate);
+            const hasRealExecution = Boolean(execution && (execution.completed || execution.attended === true));
+            if (!hasRealExecution && existingRecord.workout && existingRecord.workout.done && !existingRecord.workout.isRestDay) {
+                // Registro corrupto por plantilla antigua: forzar re-evaluación limpia
+            } else {
+                return {
+                    current: existingRecord,
+                    previous: existingRecord
+                };
+            }
         }
 
-        // 1. EVALUAR PILAR ENTRENAMIENTO
-        // Solo 100% completado desde ejercicios (o descanso)
+        // 1. EVALUAR PILAR ENTRENAMIENTO (Scoping estricto por fecha)
         let workoutDone = false;
         let workoutMetric = 'Sesión Programada';
         let isRestDay = false;
         let totalExercises = 0;
         let completedExercises = 0;
 
+        const execution = getAthleteWorkoutExecution(id, sDate);
         const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(id) : null;
         let dayWorkout = null;
         if (workoutData && workoutData[dayKey]) {
@@ -15464,19 +15789,37 @@ const SensDailyStreakManager = {
 
         if (dayWorkout) {
             isRestDay = (dayWorkout.modality === 'descanso');
-            if (isRestDay) {
-                workoutDone = true;
-                workoutMetric = 'Descanso Activo';
-            } else if (Array.isArray(dayWorkout.exercises) && dayWorkout.exercises.length > 0) {
+            if (Array.isArray(dayWorkout.exercises) && dayWorkout.exercises.length > 0) {
                 totalExercises = dayWorkout.exercises.length;
-                completedExercises = dayWorkout.exercises.filter(e => e.completed).length;
-                workoutDone = (completedExercises === totalExercises);
-                workoutMetric = workoutDone ? '100% Completado' : `${completedExercises} de ${totalExercises} Ejercicios`;
-            } else if (dayWorkout.completed) {
-                workoutDone = true;
-                workoutMetric = 'Sesión Completada';
+                if (execution && execution.completedExercises) {
+                    completedExercises = dayWorkout.exercises.filter(e => execution.completedExercises[e.id]).length;
+                } else if (execution && execution.completed) {
+                    completedExercises = totalExercises;
+                }
             }
         }
+
+        if (execution && execution.completed) {
+            workoutDone = true;
+            workoutMetric = 'Sesión Completada';
+            if (completedExercises === 0 && totalExercises > 0) completedExercises = totalExercises;
+        } else if (totalExercises > 0 && completedExercises === totalExercises) {
+            workoutDone = true;
+            workoutMetric = '100% Completado';
+        } else if (isRestDay) {
+            // Un día de descanso en el pasado solo califica si el usuario tuvo actividad o nutrición ese día
+            const hasAnyActivity = Boolean((execution && execution.attended !== null) || (execution && execution.completed));
+            if (!isPastDay || hasAnyActivity) {
+                workoutDone = true;
+                workoutMetric = 'Descanso Activo';
+            } else {
+                workoutDone = false;
+                workoutMetric = 'Descanso (Sin registro)';
+            }
+        } else if (totalExercises > 0) {
+            workoutMetric = `${completedExercises} de ${totalExercises} Ejercicios`;
+        }
+
         if (!workoutDone && typeof isDateInCompletedWorkouts === 'function' && isDateInCompletedWorkouts(dateIso)) {
             workoutDone = true;
             workoutMetric = 'Sesión Completada';
@@ -16013,9 +16356,12 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
         const total = (dayWorkout && Array.isArray(dayWorkout.exercises)) ? dayWorkout.exercises.length : 0;
         wStatus = 'in-progress';
         wText = isRest ? 'Descanso Programado' : (total > 0 ? `0/${total} ejercicios` : '0/0 ejercicios');
-    } else if (wRec.isRestDay) {
+    } else if (wRec.isRestDay && wRec.done) {
         wStatus = 'done';
         wText = 'Descanso Activo ✓';
+    } else if (wRec.isRestDay) {
+        wStatus = isPastDay ? 'missed' : 'in-progress';
+        wText = isPastDay ? 'Descanso' : 'Descanso Programado';
     } else if (wRec.done) {
         wStatus = 'done';
         const total = wRec.totalExercises || 0;
@@ -16034,7 +16380,8 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
                 const dayWorkout = (workoutData && workoutData[dayKey]) ? workoutData[dayKey] : null;
                 if (dayWorkout && Array.isArray(dayWorkout.exercises)) {
                     total = dayWorkout.exercises.length;
-                    completed = dayWorkout.exercises.filter(e => e.completed).length;
+                    const exec = getAthleteWorkoutExecution(athId, sDate);
+                    completed = exec.completedExercises ? dayWorkout.exercises.filter(e => exec.completedExercises[e.id]).length : 0;
                 } else {
                     completed = 0;
                     total = 0;
@@ -16333,14 +16680,10 @@ window.saveActivityChanges = function(isExplicitSave = false) {
  */
 function isDateInCompletedWorkouts(dateKey) {
     try {
+        const iso = getFormattedDateKey(dateKey);
         const stored = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
         if (Array.isArray(stored)) {
-            if (stored.includes(dateKey)) return true;
-            const parts = String(dateKey).split('-');
-            if (parts.length === 3) {
-                const dayNum = parseInt(parts[2], 10);
-                if (stored.includes(dayNum)) return true;
-            }
+            if (stored.includes(iso)) return true;
         }
     } catch (e) {}
     return false;
@@ -16361,6 +16704,7 @@ function getDailyMetabolicMetrics(targetDate) {
     const bmr = (typeof calculateAthleteBMR === 'function') ? calculateAthleteBMR(athId) : Math.round(weight * 22);
 
     const dateKey = getFormattedDateKey(targetDate);
+    const execution = getAthleteWorkoutExecution(athId, targetDate);
     const actLog = getAthleteActivityLog(athId, dateKey);
 
     const dayKey = getDayKeyFromDate(targetDate);
@@ -16375,7 +16719,7 @@ function getDailyMetabolicMetrics(targetDate) {
     }
 
     const hasWorkout = Boolean(dayData.exercises && dayData.exercises.length > 0 && dayData.modality !== 'descanso');
-    const isWorkoutDone = Boolean(dayData.completed || isDateInCompletedWorkouts(dateKey));
+    const isWorkoutDone = Boolean(execution.completed || isDateInCompletedWorkouts(dateKey));
 
     // Gasto por entrenamiento de fuerza REAL (0 si no se entrenó o descanso)
     let workoutBurn = 0;
@@ -16384,7 +16728,11 @@ function getDailyMetabolicMetrics(targetDate) {
 
     if (dayData && Array.isArray(dayData.exercises) && dayData.exercises.length > 0 && dayData.modality !== 'descanso') {
         totalExCount = dayData.exercises.length;
-        completedExCount = dayData.exercises.filter(e => e.completed).length;
+        if (execution && execution.completedExercises) {
+            completedExCount = dayData.exercises.filter(e => execution.completedExercises[e.id]).length;
+        } else if (isWorkoutDone) {
+            completedExCount = totalExCount;
+        }
     }
 
     if (isWorkoutDone) {
