@@ -1,0 +1,65 @@
+{
+  "id": "/?pwa=sens",
+  "name": "SENS Train & Wellness",
+  "short_name": "SENS",
+  "description": "Entrenamiento de fuerza, nutrición deportiva y bienestar celular con Nico.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
+  "orientation": "portrait-primary",
+  "background_color": "#080809",
+  "theme_color": "#080809",
+  "lang": "es-AR",
+  "dir": "ltr",
+  "categories": ["health", "fitness", "lifestyle", "sports"],
+  "icons": [
+    {
+      "src": "img/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "img/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "img/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "img/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mi Entrenamiento",
+      "short_name": "Rutinas",
+      "description": "Acceso directo a tus ejercicios del día",
+      "url": "./index.html?tab=workoutView",
+      "icons": [{ "src": "img/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Balance & Nutrición",
+      "short_name": "Nutrición",
+      "description": "Registro calórico y macronutrientes",
+      "url": "./index.html?tab=nutritionView",
+      "icons": [{ "src": "img/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Racha SENS",
+      "short_name": "Racha",
+      "description": "Estado de tus 3 pilares diarios",
+      "url": "./index.html?tab=dashView",
+      "icons": [{ "src": "img/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

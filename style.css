@@ -21061,6 +21061,458 @@ body.in-portal,
     border-left: 3px solid #9E7D4B;
 }
 
+/* =============================================================================
+   SENS PWA ENGINE & MARKETING POPUP (QUIET LUXURY OBSIDIAN & CHAMPAGNE)
+   ============================================================================= */
+
+/* 1. Marketing Install Floating Popup / Toast */
+.sens-pwa-marketing-popup {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: calc(100% - 40px);
+    max-width: 420px;
+    background: rgba(18, 18, 22, 0.96);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    border-radius: 20px;
+    padding: 16px 18px 18px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 28px rgba(229, 203, 167, 0.15);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    z-index: 99999;
+    box-sizing: border-box;
+    display: none;
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.sens-pwa-marketing-popup.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* En mobile con portal activo, sube el banner para no tapar el dock */
+body.in-portal .sens-pwa-marketing-popup {
+    bottom: 84px;
+}
+
+@media (max-width: 480px) {
+    .sens-pwa-marketing-popup {
+        right: 14px;
+        left: 14px;
+        width: calc(100% - 28px);
+        bottom: 20px;
+        padding: 14px 15px 16px;
+    }
+    body.in-portal .sens-pwa-marketing-popup {
+        bottom: 80px;
+    }
+}
+
+.sens-pwa-popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.sens-pwa-popup-eyebrow {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #E5CBA7;
+    background: rgba(229, 203, 167, 0.12);
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    padding: 3px 8px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sens-pwa-popup-close {
+    background: transparent;
+    border: none;
+    color: #8E8E93;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    transition: color 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sens-pwa-popup-close:hover {
+    color: #FFFFFF;
+}
+
+.sens-pwa-popup-body {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.sens-pwa-icon-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: #080809;
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    box-shadow: 0 0 14px rgba(229, 203, 167, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-pwa-icon-box img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.sens-pwa-content-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.sens-pwa-popup-title {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0 0 3px 0;
+    line-height: 1.25;
+}
+
+.sens-pwa-popup-desc {
+    font-size: 11.5px;
+    color: #A1A1AA;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.sens-pwa-perks-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    padding: 6px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sens-pwa-perk-item {
+    font-size: 10px;
+    color: #E4E4E7;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sens-pwa-perk-item svg {
+    color: #E5CBA7;
+    flex-shrink: 0;
+}
+
+.sens-pwa-popup-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-pwa-main-install {
+    flex: 1;
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%) !important;
+    color: #080809 !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    padding: 10px 16px !important;
+    border-radius: 12px !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.3) !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-pwa-main-install:active {
+    transform: scale(0.97);
+}
+
+.btn-pwa-secondary-dismiss {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #A1A1AA;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-pwa-secondary-dismiss:hover {
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Barra de progreso de cuenta regresiva */
+.sens-pwa-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, #E5CBA7 0%, #C4A47C 100%);
+    transform-origin: left center;
+    transition: transform 0.1s linear;
+}
+
+/* 2. Card de PWA en Inicio de Usuario (Dashboard) */
+.sens-pwa-dash-card {
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.08) 0%, rgba(20, 20, 24, 0.6) 100%);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-sizing: border-box;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.sens-pwa-dash-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.sens-pwa-dash-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(229, 203, 167, 0.14);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    color: #E5CBA7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-pwa-dash-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.sens-pwa-dash-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.2;
+}
+
+.sens-pwa-dash-sub {
+    font-size: 10.5px;
+    color: #A1A1AA;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-pwa-dash-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.sens-pwa-dash-btn {
+    background: #E5CBA7 !important;
+    color: #080809 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    padding: 6px 12px !important;
+    border-radius: 999px !important;
+    border: none !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+}
+
+.sens-pwa-dash-close {
+    background: transparent;
+    border: none;
+    color: #71717A;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 4px;
+    line-height: 1;
+}
+
+/* 3. Card de PWA en Ajustes de Perfil de Usuario */
+.sens-pwa-profile-card {
+    background: #141418;
+    border: 1px solid rgba(229, 203, 167, 0.22);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 14px;
+}
+
+.sens-pwa-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sens-pwa-profile-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sens-pwa-profile-desc {
+    font-size: 12px;
+    color: #A1A1AA;
+    line-height: 1.45;
+    margin-bottom: 14px;
+}
+
+/* 4. Bottom Sheet de Instrucciones para iOS Safari */
+.sens-ios-sheet-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 100000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.sens-ios-sheet-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.sens-ios-sheet {
+    background: #141418;
+    border: 1px solid rgba(229, 203, 167, 0.3);
+    border-bottom: none;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 480px;
+    padding: 16px 20px 30px;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.9);
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    color: #FFFFFF;
+}
+
+.sens-ios-sheet-overlay.active .sens-ios-sheet {
+    transform: translateY(0);
+}
+
+.sens-ios-drag-handle {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 auto 16px;
+}
+
+.sens-ios-sheet-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.sens-ios-sheet-sub {
+    font-size: 12px;
+    color: #A1A1AA;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sens-ios-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.sens-ios-step-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 10px 14px;
+}
+
+.sens-ios-step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(229, 203, 167, 0.15);
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    color: #E5CBA7;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-ios-step-text {
+    font-size: 12px;
+    color: #E4E4E7;
+    line-height: 1.35;
+}
+
+.sens-ios-step-text strong {
+    color: #E5CBA7;
+}
+
+.sens-ios-sheet-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%) !important;
+    color: #080809 !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
 
 
 

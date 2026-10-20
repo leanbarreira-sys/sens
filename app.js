@@ -3140,6 +3140,14 @@ function switchPortalView(viewId) {
         }
         if (typeof triggerWelcomeGreetingAnimation === 'function') triggerWelcomeGreetingAnimation(false);
         if (typeof initDashboardCardsTactileFeedback === 'function') initDashboardCardsTactileFeedback();
+        if (typeof SensPwaManager !== 'undefined' && typeof SensPwaManager.checkDashboardCardState === 'function') {
+            SensPwaManager.checkDashboardCardState();
+        }
+    }
+    if (viewId === 'profileSettingsView') {
+        if (typeof SensPwaManager !== 'undefined' && typeof SensPwaManager.updateInstallButtonsState === 'function') {
+            SensPwaManager.updateInstallButtonsState();
+        }
     }
     if (typeof initFloatingDock === 'function') {
         initFloatingDock();
@@ -24362,6 +24370,241 @@ function migrateLegacyWorkoutsInLocalStorage() {
 
 window.CoachEvolutionEngine = CoachEvolutionEngine;
 
+/* =============================================================================
+   SENS PWA ARCHITECTURE & INSTALLATION ENGINE (SR-DIRECTOR-IT-WELLNESS)
+   Cross-Platform: Native Chromium Prompt, iOS Safari Sheet, Engagement Timers
+   ============================================================================= */
+
+const SensPwaManager = {
+    deferredPrompt: null,
+    countdownTimer: null,
+    countdownRemaining: 9000,
+    countdownInterval: 100,
+    isPaused: false,
+
+    init() {
+        this.registerServiceWorker();
+        this.bindEvents();
+        this.checkStandaloneState();
+        this.scheduleMarketingPopup();
+        this.checkDashboardCardState();
+    },
+
+    registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                    .then((reg) => {
+                        console.log('[SENS PWA] Service Worker activo y listo.');
+                    })
+                    .catch((err) => {
+                        console.warn('[SENS PWA] SW registration failed:', err);
+                    });
+            });
+        }
+    },
+
+    bindEvents() {
+        // Capturar evento nativo para Android / Chromium
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            this.deferredPrompt = e;
+            window.deferredPwaPrompt = e;
+            this.updateInstallButtonsState(false);
+        });
+
+        // App instalada con éxito
+        window.addEventListener('appinstalled', () => {
+            this.deferredPrompt = null;
+            window.deferredPwaPrompt = null;
+            localStorage.setItem('sens_pwa_installed', 'true');
+            this.dismissMarketingPopup(false);
+            this.dismissDashboardCard();
+            this.updateInstallButtonsState(true);
+            if (typeof window.showSensToast === 'function') {
+                window.showSensToast('¡App SENS agregada con éxito a tu pantalla de inicio!', 'champagne', 4000);
+            }
+        });
+    },
+
+    isStandalone() {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+               window.navigator.standalone === true ||
+               document.referrer.includes('android-app://');
+    },
+
+    isIos() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    },
+
+    checkStandaloneState() {
+        if (this.isStandalone()) {
+            localStorage.setItem('sens_pwa_installed', 'true');
+            this.updateInstallButtonsState(true);
+        }
+    },
+
+    updateInstallButtonsState(installed = false) {
+        const isAppActive = installed || this.isStandalone() || localStorage.getItem('sens_pwa_installed') === 'true';
+        if (isAppActive) {
+            const badge = document.getElementById('settingsPwaStatusBadge');
+            if (badge) {
+                badge.textContent = 'Instalada ✓';
+                badge.style.background = 'rgba(16, 185, 129, 0.15)';
+                badge.style.color = '#10B981';
+                badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+            }
+            const btnText = document.getElementById('btnProfileInstallText');
+            if (btnText) {
+                btnText.textContent = 'App Instalada en este Celular ✓';
+            }
+            const dashCard = document.getElementById('sensPwaDashCard');
+            if (dashCard) dashCard.style.display = 'none';
+        }
+    },
+
+    scheduleMarketingPopup() {
+        if (this.isStandalone() || localStorage.getItem('sens_pwa_installed') === 'true') {
+            return;
+        }
+
+        const lastSeen = parseInt(localStorage.getItem('sens_pwa_banner_seen') || '0', 10);
+        const cooldown = 72 * 60 * 60 * 1000; // 72 horas de cooldown si fue descartado
+        if (Date.now() - lastSeen < cooldown) {
+            return;
+        }
+
+        // Mostrar popup marketinero tras 5.5s de navegación
+        setTimeout(() => {
+            this.showMarketingPopup();
+        }, 5500);
+    },
+
+    showMarketingPopup() {
+        if (this.isStandalone() || localStorage.getItem('sens_pwa_installed') === 'true') return;
+        const popup = document.getElementById('sensPwaMarketingPopup');
+        if (!popup) return;
+
+        popup.style.display = 'block';
+        requestAnimationFrame(() => {
+            popup.classList.add('visible');
+        });
+
+        // Configurar barra de progreso y auto-dismiss
+        this.countdownRemaining = 9000;
+        const progressBar = document.getElementById('sensPwaProgressBar');
+        if (progressBar) progressBar.style.transform = 'scaleX(1)';
+
+        // Pausar cuenta regresiva si el usuario interactúa
+        popup.onmouseenter = () => { this.isPaused = true; };
+        popup.onmouseleave = () => { this.isPaused = false; };
+        popup.ontouchstart = () => { this.isPaused = true; };
+        popup.ontouchend = () => { this.isPaused = false; };
+
+        clearInterval(this.countdownTimer);
+        this.countdownTimer = setInterval(() => {
+            if (!this.isPaused) {
+                this.countdownRemaining -= this.countdownInterval;
+                const ratio = Math.max(0, this.countdownRemaining / 9000);
+                if (progressBar) {
+                    progressBar.style.transform = `scaleX(${ratio})`;
+                }
+                if (this.countdownRemaining <= 0) {
+                    clearInterval(this.countdownTimer);
+                    this.dismissMarketingPopup(false);
+                }
+            }
+        }, this.countdownInterval);
+    },
+
+    dismissMarketingPopup(remember = true) {
+        clearInterval(this.countdownTimer);
+        const popup = document.getElementById('sensPwaMarketingPopup');
+        if (popup) {
+            popup.classList.remove('visible');
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 350);
+        }
+        if (remember) {
+            localStorage.setItem('sens_pwa_banner_seen', Date.now().toString());
+        }
+    },
+
+    checkDashboardCardState() {
+        if (this.isStandalone() || localStorage.getItem('sens_pwa_installed') === 'true') {
+            return;
+        }
+        if (sessionStorage.getItem('sens_pwa_dash_card_dismissed') === 'true') {
+            return;
+        }
+        const dashCard = document.getElementById('sensPwaDashCard');
+        if (dashCard) {
+            dashCard.style.display = 'flex';
+        }
+    },
+
+    dismissDashboardCard() {
+        const dashCard = document.getElementById('sensPwaDashCard');
+        if (dashCard) {
+            dashCard.style.display = 'none';
+        }
+        sessionStorage.setItem('sens_pwa_dash_card_dismissed', 'true');
+    },
+
+    async triggerInstall() {
+        // En iOS Safari, abrir bottom sheet nativo con pasos visuales
+        if (this.isIos()) {
+            this.openIosSheet();
+            return;
+        }
+
+        // En Android / Chromium si capturamos el evento
+        const promptEvent = this.deferredPrompt || window.deferredPwaPrompt;
+        if (promptEvent) {
+            promptEvent.prompt();
+            const choiceResult = await promptEvent.userChoice;
+            if (choiceResult && choiceResult.outcome === 'accepted') {
+                localStorage.setItem('sens_pwa_installed', 'true');
+                this.dismissMarketingPopup(false);
+                this.dismissDashboardCard();
+            }
+            this.deferredPrompt = null;
+            window.deferredPwaPrompt = null;
+            return;
+        }
+
+        // Fallback para otros navegadores o iOS
+        this.openIosSheet();
+    },
+
+    openIosSheet() {
+        const overlay = document.getElementById('sensIosSheetOverlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
+            requestAnimationFrame(() => {
+                overlay.classList.add('active');
+            });
+        }
+    },
+
+    closeIosSheet() {
+        const overlay = document.getElementById('sensIosSheetOverlay');
+        if (overlay) {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+    }
+};
+
+window.SensPwaManager = SensPwaManager;
+window.triggerPwaInstall = () => SensPwaManager.triggerInstall();
+window.dismissPwaMarketingPopup = (remember) => SensPwaManager.dismissMarketingPopup(remember);
+window.dismissPwaDashCard = () => SensPwaManager.dismissDashboardCard();
+window.closeIosInstallSheet = () => SensPwaManager.closeIosSheet();
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
@@ -24369,6 +24612,7 @@ if (document.readyState === 'loading') {
         try { CoachWorkoutsMaster.init(); } catch (e) {}
         try { CoachNutritionMaster.init(); } catch (e) {}
         try { CoachEvolutionEngine.init(); } catch (e) {}
+        try { SensPwaManager.init(); } catch (e) {}
     });
 } else {
     try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
@@ -24376,5 +24620,6 @@ if (document.readyState === 'loading') {
     try { CoachWorkoutsMaster.init(); } catch (e) {}
     try { CoachNutritionMaster.init(); } catch (e) {}
     try { CoachEvolutionEngine.init(); } catch (e) {}
+    try { SensPwaManager.init(); } catch (e) {}
 }
 

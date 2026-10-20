@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="sensIconGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E5CBA7" stop-opacity="0.18"/>
+      <stop offset="70%" stop-color="#E5CBA7" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#080809" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;700;800&amp;display=swap');
+      .icon-title {
+        font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 78px;
+        font-weight: 300;
+        letter-spacing: 14px;
+        fill: #FFFFFF;
+        text-anchor: middle;
+      }
+      .icon-sub {
+        font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 6.5px;
+        fill: #E5CBA7;
+        text-anchor: middle;
+      }
+    </style>
+  </defs>
+
+  <!-- Solid Obsidian Base -->
+  <rect width="512" height="512" rx="100" fill="#080809"/>
+  <!-- Ambient Inner Glow -->
+  <circle cx="256" cy="256" r="240" fill="url(#sensIconGlow)"/>
+
+  <!-- SENS Fluid Wave Mark -->
+  <g transform="translate(166, 120) scale(1.5)">
+    <!-- Wave 1 (Top) -->
+    <path d="M 0 24 C 38 8, 82 40, 120 24 L 120 44 C 82 60, 38 28, 0 44 Z" fill="#FFFFFF" fill-opacity="0.85"/>
+    <!-- Wave 2 (Middle) -->
+    <path d="M 0 54 C 38 38, 82 70, 120 54 L 120 74 C 82 90, 38 58, 0 74 Z" fill="#E5CBA7" fill-opacity="0.95"/>
+    <!-- Wave 3 (Bottom) -->
+    <path d="M 0 84 C 38 68, 82 100, 120 84 L 120 104 C 82 120, 38 88, 0 104 Z" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Typography -->
+  <text x="263" y="360" class="icon-title">SENS</text>
+  <text x="259" y="405" class="icon-sub">TRAIN &amp; WELLNESS</text>
+</svg>
