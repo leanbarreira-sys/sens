@@ -18076,6 +18076,530 @@ body.in-portal,
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* =============================================================================
+   EXERCISE DETAIL MODAL & 4:5 IN-VIDEO HUD (QUIET LUXURY / SENIOR UX WELLNESS)
+   ============================================================================= */
+
+/* 1. Chips & Pills sin rotura (Solid Surface Elevation) */
+.sens-exercise-modal-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    align-items: center !important;
+    max-width: calc(100% - 44px);
+}
+
+.sens-chip-pill {
+    border: none !important;
+    border-radius: 9999px !important;
+    padding: 5px 12px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px !important;
+    line-height: 1.25 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+    user-select: none !important;
+}
+
+.sens-chip-champagne {
+    background: rgba(229, 203, 167, 0.16) !important;
+    color: #E5CBA7 !important;
+}
+
+.sens-chip-dark {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #F4F4F5 !important;
+}
+
+/* 2. Video 4:5 Aspect Ratio con Hardware Masking y HUD de Series Interno */
+.sens-exercise-modal-video-wrap {
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 4 / 5 !important;
+    max-height: 480px !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    background: #080809 !important;
+    margin: 14px auto 0 !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7) !important;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+.sens-exercise-modal-video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+.sens-invideo-series-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(8, 8, 9, 0) 0%, rgba(8, 8, 9, 0.85) 30%, rgba(8, 8, 9, 0.98) 100%);
+    padding: 16px 14px 12px;
+    z-index: 5;
+}
+
+.sens-invideo-hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.sens-invideo-hud-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #E5CBA7;
+}
+
+.sens-invideo-hud-status {
+    font-size: 11px;
+    font-weight: 700;
+    color: #A1A1AA;
+}
+
+.sens-invideo-chips-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+.sens-invideo-chips-row::-webkit-scrollbar {
+    display: none;
+}
+
+.sens-invideo-set-chip {
+    flex-shrink: 0;
+    min-width: 96px;
+    background: rgba(22, 22, 26, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 7px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.sens-invideo-set-chip:hover {
+    border-color: rgba(229, 203, 167, 0.4);
+    transform: translateY(-1px);
+}
+
+.sens-invideo-set-chip.completed {
+    background: rgba(229, 203, 167, 0.22);
+    border-color: #E5CBA7;
+    box-shadow: 0 0 14px rgba(229, 203, 167, 0.3);
+}
+
+.sens-invideo-set-chip .set-chip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9.5px;
+    font-weight: 800;
+    color: #A1A1AA;
+    letter-spacing: 0.5px;
+}
+
+.sens-invideo-set-chip.completed .set-chip-header {
+    color: #E5CBA7;
+}
+
+.sens-invideo-set-chip .set-chip-check {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: #FFF;
+}
+
+.sens-invideo-set-chip.completed .set-chip-check {
+    background: #E5CBA7;
+    color: #080809;
+    font-weight: 900;
+}
+
+.sens-invideo-set-chip .set-chip-metrics {
+    font-size: 11.5px;
+    color: #FFFFFF;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sens-invideo-set-chip.completed .set-chip-metrics {
+    color: #FFFFFF;
+}
+
+/* 3. Botón de Completar Todo el Ejercicio */
+.sens-btn-complete-all {
+    width: 100%;
+    background: rgba(229, 203, 167, 0.08);
+    border: 1px dashed rgba(229, 203, 167, 0.35);
+    color: #E5CBA7;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    margin: 12px 0 16px;
+    transition: all 0.2s ease;
+}
+
+.sens-btn-complete-all:hover {
+    background: rgba(229, 203, 167, 0.16);
+    border-color: #E5CBA7;
+}
+
+.sens-btn-complete-all.completed {
+    background: rgba(16, 185, 129, 0.14);
+    border: 1px solid #10B981;
+    color: #34D399;
+}
+
+/* 4. Acordeón Colapsable de Técnica & Recomendaciones */
+.sens-accordion-notes-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    margin: 14px 0;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.sens-accordion-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 13px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #E4E4E7;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+}
+
+.sens-accordion-trigger:hover {
+    color: #E5CBA7;
+}
+
+.sens-accordion-trigger .accordion-arrow {
+    font-size: 12px;
+    color: #A1A1AA;
+    transition: transform 0.25s ease;
+}
+
+.sens-accordion-trigger.open .accordion-arrow {
+    transform: rotate(180deg);
+}
+
+.sens-accordion-body {
+    padding: 0 16px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #CBD5E1;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: 4px;
+    padding-top: 12px;
+}
+
+/* 5. Master Timer Unificado (Un Solo Reloj / Senior UX Standard) */
+.sens-master-timer-card {
+    background: #141417;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin: 16px 0;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.sens-master-timer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.sens-timer-mode-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.06);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #E4E4E7;
+}
+
+.sens-timer-mode-pill.in-set {
+    background: rgba(229, 203, 167, 0.16);
+    color: #E5CBA7;
+}
+
+.sens-timer-mode-pill.in-rest {
+    background: rgba(56, 189, 248, 0.16);
+    color: #38BDF8;
+}
+
+.sens-timer-target-sub {
+    font-size: 11px;
+    color: #71717A;
+    font-weight: 600;
+}
+
+.sens-master-timer-digits {
+    font-size: 46px;
+    font-weight: 800;
+    color: #FFFFFF;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1.5px;
+    line-height: 1;
+    margin: 6px 0 14px;
+}
+
+.sens-master-timer-digits.in-rest {
+    color: #E5CBA7;
+    text-shadow: 0 0 20px rgba(229, 203, 167, 0.4);
+}
+
+.sens-master-timer-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 8px;
+}
+
+.sens-btn-timer-primary {
+    padding: 10px 14px !important;
+    font-weight: 800 !important;
+    font-size: 12.5px !important;
+    border-radius: 10px !important;
+}
+
+.sens-btn-timer-secondary {
+    padding: 10px 14px !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
+    border-color: rgba(229, 203, 167, 0.3) !important;
+    color: #E5CBA7 !important;
+}
+
+.sens-master-timer-rest-adjustments {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* 6. Barra Sticky de Guardar Progreso */
+.sens-modal-sticky-save-bar {
+    position: sticky;
+    bottom: -36px;
+    left: 0;
+    right: 0;
+    padding: 14px 0 12px;
+    background: linear-gradient(180deg, rgba(18, 18, 20, 0) 0%, rgba(18, 18, 20, 0.94) 35%, #121214 100%);
+    z-index: 10;
+    margin-top: 24px;
+}
+
+.sens-sticky-save-btn {
+    width: 100% !important;
+    padding: 15px 22px !important;
+    font-size: 14.5px !important;
+    font-weight: 800 !important;
+    border-radius: 14px !important;
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%) !important;
+    color: #080809 !important;
+    border: none !important;
+    box-shadow: 0 6px 24px rgba(229, 203, 167, 0.38) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.sens-sticky-save-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(229, 203, 167, 0.5) !important;
+}
+
+/* 7. Animación de Felicitación (Congrats Quiet Luxury Standard) */
+.sens-congrats-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10005;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: sensFadeIn 0.25s ease;
+}
+
+.sens-congrats-card {
+    background: #141418;
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    border-radius: 24px;
+    padding: 32px 24px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(229, 203, 167, 0.25);
+    animation: sensCongratsPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sensCongratsPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.04); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.sens-congrats-ring-wrap {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sens-congrats-pulse-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid #E5CBA7;
+    animation: sensRingPulse 1.6s infinite ease-out;
+}
+
+@keyframes sensRingPulse {
+    0% { transform: scale(0.85); opacity: 1; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+.sens-congrats-core-badge {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%);
+    color: #080809;
+    font-size: 30px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 25px rgba(229, 203, 167, 0.5);
+}
+
+.sens-congrats-title {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    letter-spacing: 0.8px;
+    margin: 0 0 6px 0;
+}
+
+.sens-congrats-subtitle {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #E5CBA7;
+    margin: 0 0 14px 0;
+}
+
+.sens-congrats-quote {
+    font-size: 12px;
+    color: #A1A1AA;
+    line-height: 1.45;
+    font-style: italic;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 12px;
+}
+
+/* 8. Modal de Confirmación de Salida */
+.sens-exit-confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10006;
+    background: rgba(0, 0, 0, 0.84);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: sensFadeIn 0.2s ease;
+}
+
+.sens-exit-confirm-card {
+    background: #151518;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85);
+}
+
+.sens-exit-confirm-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0 0 8px;
+}
+
+.sens-exit-confirm-desc {
+    font-size: 12.5px;
+    color: #A1A1AA;
+    line-height: 1.45;
+    margin: 0 0 18px;
+}
+
+.sens-exit-confirm-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Soporte de Swipe Down en Bottom Sheet */
+.sens-exercise-modal-sheet {
+    touch-action: pan-y;
+    will-change: transform;
+}
+
+
 
 
 

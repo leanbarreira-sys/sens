@@ -3151,10 +3151,13 @@
                         <span class="sheet-drag-handle"></span>
                     </div>
 
+                    <!-- 1. Fila Superior: Pills Separadas con Solid Surface Elevation (Sin Rotura) -->
                     <div class="sens-exercise-modal-top">
-                        <div class="sens-exercise-modal-tags">
-                            <span class="pill pill-champagne" id="modalExMuscleGroup">PIERNAS &amp; GLÚTEOS</span>
-                            <span class="pill pill-dark" id="modalExTargetSetsReps">4 Series • 10-12 Reps</span>
+                        <div class="sens-exercise-modal-tags" id="modalExTagsContainer">
+                            <span class="sens-chip-pill sens-chip-champagne" id="modalExMuscleGroup">PIERNAS &amp; GLÚTEOS</span>
+                            <span class="sens-chip-pill sens-chip-dark" id="modalExSetsRepsPill">4 Series × 10-12 Reps</span>
+                            <span class="sens-chip-pill sens-chip-dark" id="modalExRirPill">RIR 2 (RPE 8)</span>
+                            <span class="sens-chip-pill sens-chip-dark" id="modalExKcalPill">~28 kcal</span>
                         </div>
                         <button type="button" class="sens-modal-close-btn" id="btnCloseExerciseModal"
                             aria-label="Cerrar modal">✕</button>
@@ -3162,8 +3165,8 @@
 
                     <h3 class="sens-exercise-modal-title" id="modalExName">Sentadilla Copa con Pausa</h3>
 
-                    <!-- Video en Bucle de Alta Resolución -->
-                    <div class="sens-exercise-modal-video-wrap" style="position: relative;">
+                    <!-- 2. Video en Bucle 4:5 con HUD de Series, KG, Reps y Checkmarks Dentro del Video -->
+                    <div class="sens-exercise-modal-video-wrap" id="modalExVideoWrap">
                         <!-- Skeleton Loader de Técnica Modal Puramente Visual -->
                         <div class="sens-video-skeleton compact" id="modalExVideoSkeleton">
                             <div class="sens-skeleton-shimmer"></div>
@@ -3176,61 +3179,73 @@
                         <video autoplay muted loop playsinline class="sens-exercise-modal-video" id="modalExVideo">
                             <source src="EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4" type="video/mp4">
                         </video>
-                        <div class="sens-exercise-modal-video-cue" id="modalExCueText">
-                            Pecho erguido, empuje activo desde los talones, 1 segundo de pausa isométrica en el fondo
-                            sin rebotar.
-                        </div>
-                    </div>
+                        <div class="sens-video-overlay-gradient"></div>
 
-                    <!-- Recomendaciones de Nico -->
-                    <div class="sens-coach-notes-box">
-                        <div class="sens-coach-notes-header">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)"
-                                stroke-width="2">
-                                <path d="M12 2a10 10 0 1 0 10 10H12V2z" />
-                                <circle cx="12" cy="12" r="4" />
-                            </svg>
-                            <span>Recomendaciones de Nico</span>
-                        </div>
-                        <p class="sens-coach-notes-body" id="modalExNotesBody">
-                            Priorizá la profundidad del movimiento manteniendo la curvatura neutra de la espalda baja.
-                            Si sentís molestia en rodilla, abrí la separación de pies a 35°.
-                        </p>
-                    </div>
-
-                    <!-- Dual Timers: Tiempo de Ejercicio (TUT) & Descanso -->
-                    <div class="sens-exercise-timers-grid">
-                        <!-- Timer 1: Duración de Ejercicio -->
-                        <div class="sens-timer-card">
-                            <div class="sens-timer-label">Duración del Ejercicio (TUT)</div>
-                            <div class="sens-timer-digits" id="modalExTutDisplay">00:00</div>
-                            <div class="sens-timer-controls">
-                                <button type="button" class="btn btn-primary btn-sm btn-timer-action"
-                                    id="btnModalToggleTut">Iniciar Ejercicio</button>
-                                <button type="button" class="btn btn-outline btn-sm"
-                                    id="btnModalResetTut">Reiniciar</button>
+                        <!-- HUD In-Video Táctil de Series: Sets, KG, Reps y Checkmarks -->
+                        <div class="sens-invideo-series-overlay" id="modalExInVideoHud">
+                            <div class="sens-invideo-hud-header">
+                                <span class="sens-invideo-hud-title">SERIES DEL EJERCICIO</span>
+                                <span class="sens-invideo-hud-status" id="modalExInVideoStatus">0 / 4 completadas</span>
                             </div>
-                        </div>
-
-                        <!-- Timer 2: Cronómetro de Descanso -->
-                        <div class="sens-timer-card">
-                            <div class="sens-timer-label">Descanso entre Series</div>
-                            <div class="sens-timer-digits text-champagne" id="modalExRestDisplay">01:30</div>
-                            <div class="sens-timer-controls">
-                                <button type="button" class="btn btn-outline btn-sm" id="btnModalStartRest">Iniciar
-                                    Descanso</button>
-                                <button type="button" class="btn btn-outline btn-sm"
-                                    id="btnModalAdd15Rest">+15s</button>
-                                <button type="button" class="btn btn-outline btn-sm text-muted"
-                                    id="btnModalSkipRest">Saltar</button>
+                            <div class="sens-invideo-chips-row" id="modalExInVideoChipsRow">
+                                <!-- Chips inyectados dinámicamente -->
                             </div>
                         </div>
                     </div>
 
-                    <!-- Logger Táctil de Series (Cero Tablas Desktop) -->
+                    <!-- 3. Botón de Completar Todo el Ejercicio con Feedback Inmediato -->
+                    <button type="button" class="sens-btn-complete-all" id="btnQuickCompleteAllSets">
+                        <span style="font-size: 14px; font-weight: 900;">✓</span>
+                        <span>Marcar Todo el Ejercicio como Realizado</span>
+                    </button>
+
+                    <!-- 5. Reloj Maestro Unificado (TUT / Descanso Inteligente - Zero Desorden) -->
+                    <div class="sens-master-timer-card" id="sensMasterTimerCard">
+                        <div class="sens-master-timer-top">
+                            <div class="sens-timer-mode-pill" id="masterTimerModeBadge">
+                                <span class="status-dot-active" id="masterTimerStatusDot"></span>
+                                <span id="masterTimerModeLabel">EN ESPERA</span>
+                            </div>
+                            <span class="sens-timer-target-sub" id="masterTimerTargetSub">Descanso prescrito: 90s</span>
+                        </div>
+                        <div class="sens-master-timer-digits" id="masterTimerDisplay">00:00</div>
+                        <div class="sens-master-timer-actions">
+                            <button type="button" class="btn btn-primary sens-btn-timer-primary" id="btnMasterTimerPrimary">
+                                Iniciar Serie
+                            </button>
+                            <button type="button" class="btn btn-outline sens-btn-timer-secondary" id="btnMasterFinishSetAndRest" title="Finaliza la serie actual e inicia el descanso">
+                                Finalizar Serie &amp; Descansar
+                            </button>
+                        </div>
+                        <div class="sens-master-timer-rest-adjustments" id="masterTimerRestControls" style="display: none;">
+                            <button type="button" class="btn btn-outline btn-xs" id="btnMasterRestMinus15">-15s</button>
+                            <button type="button" class="btn btn-outline btn-xs" id="btnMasterRestPlus15">+15s</button>
+                            <button type="button" class="btn btn-outline btn-xs text-champagne" id="btnMasterSkipRest">Saltar Descanso</button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Descripción Técnica & Recomendaciones Colapsada por Defecto (Acordeón) -->
+                    <div class="sens-accordion-notes-box" id="sensExNotesAccordion">
+                        <button type="button" class="sens-accordion-trigger" id="btnToggleExNotesAccordion">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="16" x2="12" y2="12" />
+                                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                                </svg>
+                                <span>Técnica, Recomendaciones de Nico &amp; Biomecánica</span>
+                            </div>
+                            <span class="accordion-arrow" id="exNotesAccordionArrow">▾</span>
+                        </button>
+                        <div class="sens-accordion-body" id="modalExNotesBody" style="display: none;">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Ajuste Granular de Cargas & Steppers -->
                     <div class="sens-tactile-series-section">
                         <div class="sens-series-section-header">
-                            <h4>Registro Táctil de Cargas</h4>
+                            <h4>Ajuste Granular de Series &amp; Cargas</h4>
                             <span class="sens-series-count" id="modalExSeriesCount">0 de 4 series completadas</span>
                         </div>
                         <div class="sens-tactile-series-list" id="modalExSeriesList">
@@ -3238,11 +3253,40 @@
                         </div>
                     </div>
 
-                    <div style="margin-top: 20px; text-align: center;">
-                        <button type="button" class="btn btn-primary btn-block" id="btnModalFinishExercise"
-                            style="padding: 12px; font-weight: 800; border-radius: 12px;">
-                            Guardar Progreso &amp; Cerrar Ejercicio
+                    <!-- 6. Barra Sticky Inferior de Guardar Progreso -->
+                    <div class="sens-modal-sticky-save-bar">
+                        <button type="button" class="btn btn-primary sens-sticky-save-btn" id="btnModalFinishExercise">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Guardar Progreso &amp; Finalizar</span>
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overlay de Felicitación / Animación Congrats (Point 3) -->
+            <div class="sens-congrats-overlay" id="sensCongratsOverlay" style="display: none;">
+                <div class="sens-congrats-card">
+                    <div class="sens-congrats-ring-wrap">
+                        <div class="sens-congrats-pulse-ring"></div>
+                        <div class="sens-congrats-core-badge">✓</div>
+                    </div>
+                    <h3 class="sens-congrats-title">¡EJERCICIO COMPLETADO!</h3>
+                    <p class="sens-congrats-subtitle" id="sensCongratsSubtitle">Todas las Series Registradas</p>
+                    <div class="sens-congrats-quote">"Gran trabajo. Cada repetición con intención consolida tu fuerza y longevidad celular."</div>
+                </div>
+            </div>
+
+            <!-- Modal de Confirmación de Salida (Point 6) -->
+            <div class="sens-exit-confirm-backdrop" id="sensExitConfirmModal" style="display: none;">
+                <div class="sens-exit-confirm-card">
+                    <h4 class="sens-exit-confirm-title">¿Terminaste tu entrenamiento?</h4>
+                    <p class="sens-exit-confirm-desc">Tenés series o modificaciones registradas en este ejercicio. ¿Deseás guardar tu progreso antes de salir?</p>
+                    <div class="sens-exit-confirm-actions">
+                        <button type="button" class="btn btn-primary" id="btnExitConfirmSave" style="padding: 12px; font-weight: 800;">Guardar Progreso &amp; Salir</button>
+                        <button type="button" class="btn btn-outline" id="btnExitConfirmDiscard" style="padding: 10px; font-size: 12px; color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">Salir sin Guardar</button>
+                        <button type="button" class="btn-clean" id="btnExitConfirmCancel" style="font-size: 12px; color: #71717A; padding: 6px; cursor: pointer;">Continuar Ejercicio</button>
                     </div>
                 </div>
             </div>

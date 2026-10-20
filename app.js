@@ -5319,17 +5319,20 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     const backdrop = document.getElementById('sensExerciseModalBackdrop');
     const modalName = document.getElementById('modalExName');
     const modalMuscle = document.getElementById('modalExMuscleGroup');
-    const modalSetsReps = document.getElementById('modalExTargetSetsReps');
+    const modalSetsReps = document.getElementById('modalExSetsRepsPill');
+    const modalRir = document.getElementById('modalExRirPill');
+    const modalKcal = document.getElementById('modalExKcalPill');
     const modalVideo = document.getElementById('modalExVideo');
-    const modalCue = document.getElementById('modalExCueText');
     const modalNotes = document.getElementById('modalExNotesBody');
-    const tutDisplay = document.getElementById('modalExTutDisplay');
-    const restDisplay = document.getElementById('modalExRestDisplay');
-    const btnTut = document.getElementById('btnModalToggleTut');
 
+    // 1. Pills de Foco y Prescripción sin Rotura (Solid Surface Elevation)
     if (modalName) modalName.textContent = localizedName;
     if (modalMuscle) modalMuscle.textContent = muscleName;
-    if (modalSetsReps) modalSetsReps.innerHTML = `${ex.sets || 4} Series • ${ex.reps || '10-12'} Reps • <span class="sens-tooltip-wrap" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Grado de proximidad al fallo muscular. RIR ${ex.rir !== undefined ? ex.rir : 2} = RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)}. Guardate ${ex.rir !== undefined ? ex.rir : 2} repeticiones antes del fallo muscular.">RIR/RPE Obj: <strong>${ex.rir !== undefined ? ex.rir : 2}</strong> <span class="sens-tooltip-trigger">i</span></span> • ~${kcalData.totalKcal} kcal`;
+    if (modalSetsReps) modalSetsReps.textContent = `${ex.sets || 4} Series × ${ex.reps || '10-12'} Reps`;
+    if (modalRir) modalRir.textContent = `RIR ${ex.rir !== undefined ? ex.rir : 2} (RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)})`;
+    if (modalKcal) modalKcal.textContent = `~${kcalData.totalKcal} kcal`;
+
+    // 2. Video 4:5 y Skeleton
     const modalSkeleton = document.getElementById('modalExVideoSkeleton');
     if (modalVideo) {
         if (modalSkeleton) modalSkeleton.classList.remove('is-hidden');
@@ -5340,7 +5343,8 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
             attachVideoSkeleton(modalVideo, modalSkeleton);
         }
     }
-    if (modalCue) modalCue.textContent = localizedCue;
+
+    // 4. Notas Técnicas Colapsables en Acordeón
     if (modalNotes) {
         modalNotes.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
@@ -5351,28 +5355,30 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
                     <button type="button" class="pill ${currentLang === 'pt' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">PT</button>
                 </div>
             </div>
+            <div style="margin-bottom: 10px; background: rgba(229,203,167,0.06); border: 1px solid rgba(229,203,167,0.2); border-radius: 8px; padding: 10px;">
+                <strong style="color: #E5CBA7; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Cue Técnico de Nico:</strong>
+                <span style="font-size: 12px; color: #FFFFFF;">${localizedCue}</span>
+            </div>
             ${localizedDetailed ? `
-                <div style="margin-bottom: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(229,203,167,0.25); border-radius: 8px; padding: 10px;">
+                <div style="margin-bottom: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
                     <div style="font-size: 11px; font-weight: 800; color: #E5CBA7; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px;">Desglose Biomecánico Paso a Paso:</div>
                     <div style="font-size: 11.5px; line-height: 1.5; color: #E4E4E7; white-space: pre-line;">${localizedDetailed}</div>
                 </div>
             ` : ''}
-            <div style="margin-bottom: 8px;"><strong style="color: #F4A261;">Cómo NO hacerlo (Errores a evitar):</strong> ${commonMistakes}</div>
-            <div><strong style="color: var(--accent-champagne);">Recomendación de Nico:</strong> ${nicoRecs}</div>
+            <div style="margin-bottom: 8px;"><strong style="color: #F87171;">Cómo NO hacerlo (Errores a evitar):</strong> <span style="color:#D4D4D8;">${commonMistakes}</span></div>
+            <div><strong style="color: var(--accent-champagne);">Recomendación de Nico:</strong> <span style="color:#D4D4D8;">${nicoRecs}</span></div>
         `;
     }
-    if (tutDisplay) tutDisplay.textContent = '00:00';
-    if (btnTut) btnTut.textContent = 'Iniciar Serie';
 
-    // Rest seconds
-    modalExerciseState.restSeconds = ex.rest || catalogMatch.rest || 90;
-    if (restDisplay) {
-        const m = Math.floor(modalExerciseState.restSeconds / 60);
-        const s = modalExerciseState.restSeconds % 60;
-        restDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    }
+    // 5. Configurar Master Timer Unificado
+    masterTimerState.mode = 'idle';
+    masterTimerState.tutSeconds = 0;
+    masterTimerState.targetRest = ex.rest || catalogMatch.rest || 90;
+    masterTimerState.restRemaining = masterTimerState.targetRest;
+    clearInterval(masterTimerState.interval);
+    updateMasterTimerUI();
 
-    // Inicializar series
+    // 3. Inicializar Series (In-Video HUD + Steppers)
     const savedLogs = getAthleteExerciseLogs(athId, exId);
     modalExerciseState.setsData = [];
     const totalSets = ex.sets || 4;
@@ -5388,6 +5394,19 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
     }
 
     renderModalSeriesList();
+    initMasterTimerListeners();
+    initExerciseNotesAccordion();
+    initBottomSheetPullDownDismiss();
+    initExitConfirmationListeners();
+
+    // Asegurar botón completar todo
+    const btnCompleteAll = document.getElementById('btnQuickCompleteAllSets');
+    if (btnCompleteAll && !btnCompleteAll._hasBound) {
+        btnCompleteAll._hasBound = true;
+        btnCompleteAll.addEventListener('click', () => {
+            window.completeAllExerciseSets();
+        });
+    }
 
     if (backdrop) {
         backdrop.style.display = 'flex';
@@ -5404,43 +5423,71 @@ window.switchModalExerciseLanguage = function(lang, exId, dayKey) {
     }
 };
 
+/**
+ * Renderiza el HUD de Series tanto dentro del Video 4:5 como en los controles detallados inferiores
+ */
 function renderModalSeriesList() {
+    const invideoList = document.getElementById('modalExInVideoChipsRow');
+    const invideoStatus = document.getElementById('modalExInVideoStatus');
     const list = document.getElementById('modalExSeriesList');
     const countEl = document.getElementById('modalExSeriesCount');
-    if (!list) return;
+
+    if (!modalExerciseState.setsData) return;
 
     const completedCount = modalExerciseState.setsData.filter(s => s.completed).length;
     const totalCount = modalExerciseState.setsData.length;
+
+    if (invideoStatus) invideoStatus.textContent = `${completedCount} / ${totalCount} completadas`;
     if (countEl) countEl.textContent = `${completedCount} de ${totalCount} series completadas`;
 
-    let html = '';
-    modalExerciseState.setsData.forEach((s, idx) => {
-        html += `
+    // 1. In-Video HUD Chips (Dentro del Video 4:5 con diseño Apple Health)
+    if (invideoList) {
+        invideoList.innerHTML = modalExerciseState.setsData.map((s, idx) => `
+            <div class="sens-invideo-set-chip ${s.completed ? 'completed' : ''}" onclick="toggleSetCompleted(${idx})" title="Tocar para marcar Set ${s.setNumber}">
+                <div class="set-chip-header">
+                    <span>SET ${s.setNumber}</span>
+                    <span class="set-chip-check">${s.completed ? '✓' : '○'}</span>
+                </div>
+                <div class="set-chip-metrics">
+                    <strong>${s.weight} kg</strong> × <span>${s.reps} reps</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // 2. Steppers Detallados Inferiores
+    if (list) {
+        list.innerHTML = modalExerciseState.setsData.map((s, idx) => `
             <div class="sens-tactile-set-row ${s.completed ? 'completed' : ''}" data-set-idx="${idx}">
                 <span class="sens-set-label">Set ${s.setNumber}</span>
-                
                 <div class="sens-stepper-wrap">
                     <span style="font-size:10px; color:var(--text-muted); margin-right:2px;">KG:</span>
                     <button type="button" class="sens-stepper-btn" onclick="stepSetWeight(${idx}, -2.5)">-</button>
                     <input type="number" step="0.5" class="sens-stepper-input" value="${s.weight}" onchange="updateSetWeight(${idx}, this.value)">
                     <button type="button" class="sens-stepper-btn" onclick="stepSetWeight(${idx}, 2.5)">+</button>
                 </div>
-
                 <div class="sens-stepper-wrap">
                     <span style="font-size:10px; color:var(--text-muted); margin-right:2px;">REPS:</span>
                     <button type="button" class="sens-stepper-btn" onclick="stepSetReps(${idx}, -1)">-</button>
                     <input type="number" class="sens-stepper-input" value="${s.reps}" onchange="updateSetReps(${idx}, this.value)">
                     <button type="button" class="sens-stepper-btn" onclick="stepSetReps(${idx}, 1)">+</button>
                 </div>
-
                 <button type="button" class="sens-check-set-btn ${s.completed ? 'checked' : ''}" onclick="toggleSetCompleted(${idx})" title="Marcar completado">
                     ✓
                 </button>
             </div>
-        `;
-    });
+        `).join('');
+    }
 
-    list.innerHTML = html;
+    // 3. Estado del Botón Completar Todo
+    const btnCompleteAll = document.getElementById('btnQuickCompleteAllSets');
+    if (btnCompleteAll) {
+        const allDone = totalCount > 0 && completedCount === totalCount;
+        btnCompleteAll.classList.toggle('completed', allDone);
+        btnCompleteAll.innerHTML = allDone
+            ? '<span style="font-size: 14px; font-weight: 900;">✓</span> <span>Ejercicio Completado al 100%</span>'
+            : '<span style="font-size: 14px; font-weight: 900;">✓</span> <span>Marcar Todo el Ejercicio como Realizado</span>';
+    }
 }
 
 window.stepSetWeight = function(idx, delta) {
@@ -5474,133 +5521,451 @@ window.toggleSetCompleted = function(idx) {
     const athId = getActiveAthleteId();
     if (s.completed) {
         logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps);
-        showSensToast(`Set ${s.setNumber} completado (${s.weight} kg × ${s.reps} reps)`, 'champagne', 2400);
-        // Iniciar descanso automático
-        startModalRestTimer();
+        showSensToast(`Set ${s.setNumber} completado (${s.weight} kg × ${s.reps} reps)`, 'champagne', 2200);
+
+        // Si todos los sets están completos, congratular
+        const allDone = modalExerciseState.setsData.every(x => x.completed);
+        if (allDone) {
+            triggerCongratsCelebration();
+        } else {
+            // Iniciar descanso automático en el Master Timer
+            playBeep(620, 0.2);
+            startMasterRestCountdown();
+        }
     }
 };
 
-function startModalRestTimer() {
-    clearInterval(modalExerciseState.restInterval);
-    const restDisplay = document.getElementById('modalExRestDisplay');
-    let remaining = modalExerciseState.restSeconds || 90;
+window.completeAllExerciseSets = function() {
+    if (!modalExerciseState.setsData || modalExerciseState.setsData.length === 0) return;
+    const allDone = modalExerciseState.setsData.every(s => s.completed);
 
-    modalExerciseState.restInterval = setInterval(() => {
-        remaining--;
-        if (remaining <= 0) {
-            clearInterval(modalExerciseState.restInterval);
-            if (restDisplay) restDisplay.textContent = '00:00';
+    if (allDone) {
+        modalExerciseState.setsData.forEach(s => { s.completed = false; });
+        renderModalSeriesList();
+        showSensToast('Ejercicio desmarcado.', 'champagne', 2000);
+        return;
+    }
+
+    const athId = getActiveAthleteId();
+    modalExerciseState.setsData.forEach(s => {
+        s.completed = true;
+        logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps);
+    });
+
+    renderModalSeriesList();
+    triggerCongratsCelebration();
+};
+
+/**
+ * Animación de Felicitación Congrats & Chime Sonoro Sintético
+ */
+function playChimeSequence(notes = [523.25, 659.25, 783.99, 1046.50]) {
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.12);
+            gain.gain.setValueAtTime(0.2, ctx.currentTime + idx * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.12 + 0.4);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + idx * 0.12);
+            osc.stop(ctx.currentTime + idx * 0.12 + 0.45);
+        });
+    } catch (e) {}
+}
+
+function triggerCongratsCelebration() {
+    const overlay = document.getElementById('sensCongratsOverlay');
+    const subtitle = document.getElementById('sensCongratsSubtitle');
+    if (!overlay) return;
+
+    const total = modalExerciseState.setsData.length;
+    if (subtitle) {
+        subtitle.textContent = `${total} de ${total} Series Registradas • Racha SENS Activa`;
+    }
+
+    overlay.style.display = 'flex';
+    playChimeSequence();
+
+    const timer = setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 2500);
+
+    overlay.onclick = () => {
+        clearTimeout(timer);
+        overlay.style.display = 'none';
+    };
+}
+
+/**
+ * Master Timer Unificado (TUT / Descanso / Pausa / Controles WOW)
+ */
+const masterTimerState = {
+    mode: 'idle', // 'idle' | 'in_set' | 'in_rest'
+    tutSeconds: 0,
+    restRemaining: 90,
+    targetRest: 90,
+    interval: null
+};
+
+function updateMasterTimerUI() {
+    const display = document.getElementById('masterTimerDisplay');
+    const modeBadge = document.getElementById('masterTimerModeBadge');
+    const modeLabel = document.getElementById('masterTimerModeLabel');
+    const primaryBtn = document.getElementById('btnMasterTimerPrimary');
+    const restControls = document.getElementById('masterTimerRestControls');
+    const targetSub = document.getElementById('masterTimerTargetSub');
+
+    if (targetSub) {
+        targetSub.textContent = `Descanso prescrito: ${masterTimerState.targetRest}s`;
+    }
+
+    if (masterTimerState.mode === 'in_set') {
+        const m = Math.floor(masterTimerState.tutSeconds / 60);
+        const s = masterTimerState.tutSeconds % 60;
+        if (display) {
+            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            display.classList.remove('in-rest');
+        }
+        if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-set';
+        if (modeLabel) modeLabel.textContent = 'SERIE EN CURSO';
+        if (primaryBtn) primaryBtn.textContent = 'Pausar Serie';
+        if (restControls) restControls.style.display = 'none';
+    } else if (masterTimerState.mode === 'in_rest') {
+        const m = Math.floor(masterTimerState.restRemaining / 60);
+        const s = masterTimerState.restRemaining % 60;
+        if (display) {
+            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            display.classList.add('in-rest');
+        }
+        if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-rest';
+        if (modeLabel) modeLabel.textContent = 'DESCANSO ACTIVO';
+        if (primaryBtn) primaryBtn.textContent = 'Iniciar Nueva Serie';
+        if (restControls) restControls.style.display = 'flex';
+    } else {
+        if (display) {
+            display.textContent = '00:00';
+            display.classList.remove('in-rest');
+        }
+        if (modeBadge) modeBadge.className = 'sens-timer-mode-pill';
+        if (modeLabel) modeLabel.textContent = 'EN ESPERA';
+        if (primaryBtn) primaryBtn.textContent = 'Iniciar Serie';
+        if (restControls) restControls.style.display = 'none';
+    }
+}
+
+function startMasterTutTimer() {
+    clearInterval(masterTimerState.interval);
+    masterTimerState.mode = 'in_set';
+    updateMasterTimerUI();
+
+    masterTimerState.interval = setInterval(() => {
+        masterTimerState.tutSeconds++;
+        updateMasterTimerUI();
+    }, 1000);
+}
+
+function pauseMasterTutTimer() {
+    clearInterval(masterTimerState.interval);
+    const primaryBtn = document.getElementById('btnMasterTimerPrimary');
+    const modeLabel = document.getElementById('masterTimerModeLabel');
+    if (primaryBtn) primaryBtn.textContent = 'Reanudar Serie';
+    if (modeLabel) modeLabel.textContent = 'SERIE EN PAUSA';
+}
+
+function startMasterRestCountdown(seconds = null) {
+    clearInterval(masterTimerState.interval);
+    masterTimerState.mode = 'in_rest';
+    masterTimerState.restRemaining = seconds !== null ? seconds : masterTimerState.targetRest;
+    updateMasterTimerUI();
+
+    masterTimerState.interval = setInterval(() => {
+        masterTimerState.restRemaining--;
+        if (masterTimerState.restRemaining <= 0) {
+            clearInterval(masterTimerState.interval);
+            masterTimerState.mode = 'idle';
+            masterTimerState.tutSeconds = 0;
+            updateMasterTimerUI();
             playBeep(880, 0.4);
-            showSensToast('¡Tiempo de descanso cumplido! A por la siguiente serie.', 'success', 3400);
+            showSensToast('¡Descanso completado! Preparate para tu siguiente serie.', 'champagne', 3500);
         } else {
-            if (restDisplay) {
-                const m = Math.floor(remaining / 60);
-                const s = remaining % 60;
-                restDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (masterTimerState.restRemaining <= 3) {
+                playBeep(580, 0.08);
             }
+            updateMasterTimerUI();
         }
     }, 1000);
 }
 
-window.closeExerciseExecutionModal = function() {
+function initMasterTimerListeners() {
+    const primaryBtn = document.getElementById('btnMasterTimerPrimary');
+    const finishAndRestBtn = document.getElementById('btnMasterFinishSetAndRest');
+    const minus15 = document.getElementById('btnMasterRestMinus15');
+    const plus15 = document.getElementById('btnMasterRestPlus15');
+    const skipRest = document.getElementById('btnMasterSkipRest');
+
+    if (!primaryBtn || primaryBtn._hasTimerBound) return;
+    primaryBtn._hasTimerBound = true;
+
+    primaryBtn.addEventListener('click', () => {
+        if (masterTimerState.mode === 'idle') {
+            startMasterTutTimer();
+        } else if (masterTimerState.mode === 'in_set') {
+            if (primaryBtn.textContent.includes('Pausar')) {
+                pauseMasterTutTimer();
+            } else {
+                startMasterTutTimer();
+            }
+        } else if (masterTimerState.mode === 'in_rest') {
+            clearInterval(masterTimerState.interval);
+            masterTimerState.tutSeconds = 0;
+            startMasterTutTimer();
+        }
+    });
+
+    if (finishAndRestBtn) {
+        finishAndRestBtn.addEventListener('click', () => {
+            const nextSet = modalExerciseState.setsData.find(s => !s.completed);
+            if (nextSet) {
+                nextSet.completed = true;
+                const athId = getActiveAthleteId();
+                logCompletedSetToDb(athId, modalExerciseState.exId, nextSet.setNumber, nextSet.weight, nextSet.reps);
+                renderModalSeriesList();
+                showSensToast(`Set ${nextSet.setNumber} completado (${nextSet.weight} kg × ${nextSet.reps} reps)`, 'champagne', 2200);
+
+                const allDone = modalExerciseState.setsData.every(s => s.completed);
+                if (allDone) {
+                    triggerCongratsCelebration();
+                }
+            }
+            playBeep(620, 0.2);
+            startMasterRestCountdown();
+        });
+    }
+
+    if (minus15) {
+        minus15.addEventListener('click', () => {
+            masterTimerState.restRemaining = Math.max(5, masterTimerState.restRemaining - 15);
+            updateMasterTimerUI();
+        });
+    }
+
+    if (plus15) {
+        plus15.addEventListener('click', () => {
+            masterTimerState.restRemaining += 15;
+            updateMasterTimerUI();
+        });
+    }
+
+    if (skipRest) {
+        skipRest.addEventListener('click', () => {
+            clearInterval(masterTimerState.interval);
+            masterTimerState.mode = 'idle';
+            masterTimerState.tutSeconds = 0;
+            updateMasterTimerUI();
+            showSensToast('Descanso omitido.', 'champagne', 2000);
+        });
+    }
+}
+
+/**
+ * Acordeón de Notas Técnicas Colapsable
+ */
+function initExerciseNotesAccordion() {
+    const trigger = document.getElementById('btnToggleExNotesAccordion');
+    const body = document.getElementById('modalExNotesBody');
+    if (!trigger || !body || trigger._hasAccordionBound) return;
+    trigger._hasAccordionBound = true;
+
+    trigger.addEventListener('click', () => {
+        const isClosed = body.style.display === 'none';
+        body.style.display = isClosed ? 'block' : 'none';
+        trigger.classList.toggle('open', isClosed);
+    });
+}
+
+/**
+ * Gesto Nativo de Swipe-Down para Bajar el Bottom Sheet
+ */
+function initBottomSheetPullDownDismiss() {
+    const sheet = document.getElementById('sensExerciseModalSheet');
+    if (!sheet || sheet._hasPullDownBound) return;
+    sheet._hasPullDownBound = true;
+
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let startTime = 0;
+
+    const onTouchStart = (e) => {
+        if (!e.touches || e.touches.length === 0) return;
+        if (sheet.scrollTop <= 6) {
+            startY = e.touches[0].clientY;
+            currentY = startY;
+            startTime = Date.now();
+            isDragging = true;
+            sheet.style.transition = 'none';
+        }
+    };
+
+    const onTouchMove = (e) => {
+        if (!isDragging || !e.touches || e.touches.length === 0) return;
+        currentY = e.touches[0].clientY;
+        const deltaY = currentY - startY;
+        if (deltaY > 0 && sheet.scrollTop <= 6) {
+            sheet.style.transform = `translateY(${deltaY}px)`;
+        }
+    };
+
+    const onTouchEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        const deltaY = currentY - startY;
+        const deltaTime = Date.now() - startTime;
+        const velocity = deltaY / (deltaTime || 1);
+
+        if (deltaY > 110 || (velocity > 0.45 && deltaY > 40)) {
+            sheet.style.transition = 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
+            sheet.style.transform = 'translateY(100%)';
+            setTimeout(() => {
+                handleAttemptExitExerciseModal();
+            }, 200);
+        } else {
+            sheet.style.transition = 'transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
+            sheet.style.transform = 'translateY(0)';
+        }
+    };
+
+    sheet.addEventListener('touchstart', onTouchStart, { passive: true });
+    sheet.addEventListener('touchmove', onTouchMove, { passive: true });
+    sheet.addEventListener('touchend', onTouchEnd, { passive: true });
+}
+
+/**
+ * Lógica de Guardado y Salida con Confirmación
+ */
+function saveAndFinishExercise(silent = false) {
+    const currentExId = modalExerciseState.exId;
+    const currentDayKey = AppState.currentDay || 'day1';
+    if (currentExId) {
+        const athId = getActiveAthleteId();
+        const data = getCoachAthleteWorkoutData(athId);
+        const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
+        if (day && Array.isArray(day.exercises)) {
+            const ex = day.exercises.find(e => e.id === currentExId);
+            if (ex) {
+                const anyDone = modalExerciseState.setsData.some(s => s.completed);
+                if (anyDone) ex.completed = true;
+                saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises });
+                const allDone = day.exercises.every(e => e.completed);
+                if (allDone && !day.completed) {
+                    day.completed = true;
+                    day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
+                    saveAthleteDayWorkoutStatus(athId, currentDayKey, { completed: true, durationMinutes: day.durationMinutes });
+                }
+                if (!silent && typeof showSensToast === 'function') {
+                    showSensToast(`✓ Progreso de ${ex.name} guardado con éxito.`, 'champagne', 2600);
+                }
+            }
+        }
+    }
+    closeExerciseExecutionModalForce();
+}
+
+function handleAttemptExitExerciseModal() {
+    const hasCheckedSets = modalExerciseState.setsData && modalExerciseState.setsData.some(s => s.completed);
+    if (!hasCheckedSets) {
+        closeExerciseExecutionModalForce();
+        return;
+    }
+
+    const exitModal = document.getElementById('sensExitConfirmModal');
+    if (exitModal) {
+        exitModal.style.display = 'flex';
+    } else {
+        closeExerciseExecutionModalForce();
+    }
+}
+
+function closeExerciseExecutionModalForce() {
+    const exitModal = document.getElementById('sensExitConfirmModal');
+    if (exitModal) exitModal.style.display = 'none';
+
     const backdrop = document.getElementById('sensExerciseModalBackdrop');
+    const sheet = document.getElementById('sensExerciseModalSheet');
+    if (sheet) {
+        sheet.style.transform = '';
+        sheet.style.transition = '';
+    }
     if (backdrop) backdrop.style.display = 'none';
     document.body.style.overflow = '';
-    clearInterval(modalExerciseState.tutInterval);
-    clearInterval(modalExerciseState.restInterval);
+
+    clearInterval(masterTimerState.interval);
+    masterTimerState.mode = 'idle';
+
     const modalVideo = document.getElementById('modalExVideo');
     if (modalVideo) modalVideo.pause();
+
     renderWorkoutDay(AppState.currentDay || 'day1');
+}
+
+window.closeExerciseExecutionModal = function() {
+    handleAttemptExitExerciseModal();
 };
+
+function initExitConfirmationListeners() {
+    const saveBtn = document.getElementById('btnExitConfirmSave');
+    const discardBtn = document.getElementById('btnExitConfirmDiscard');
+    const cancelBtn = document.getElementById('btnExitConfirmCancel');
+    const modal = document.getElementById('sensExitConfirmModal');
+
+    if (!modal || modal._hasExitBound) return;
+    modal._hasExitBound = true;
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            saveAndFinishExercise(false);
+        });
+    }
+
+    if (discardBtn) {
+        discardBtn.addEventListener('click', () => {
+            closeExerciseExecutionModalForce();
+        });
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            const sheet = document.getElementById('sensExerciseModalSheet');
+            if (sheet) {
+                sheet.style.transition = 'transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
+                sheet.style.transform = 'translateY(0)';
+            }
+        });
+    }
+}
 
 // Wire up events del Modal
 document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('btnCloseExerciseModal');
     const finishBtn = document.getElementById('btnModalFinishExercise');
     const backdrop = document.getElementById('sensExerciseModalBackdrop');
-    const btnTut = document.getElementById('btnModalToggleTut');
-    const btnResetTut = document.getElementById('btnModalResetTut');
-    const tutDisplay = document.getElementById('modalExTutDisplay');
-    const btnStartRest = document.getElementById('btnModalStartRest');
-    const btnAdd15Rest = document.getElementById('btnModalAdd15Rest');
-    const btnSkipRest = document.getElementById('btnModalSkipRest');
 
-    if (closeBtn) closeBtn.addEventListener('click', closeExerciseExecutionModal);
+    if (closeBtn) closeBtn.addEventListener('click', () => handleAttemptExitExerciseModal());
     if (finishBtn) {
         finishBtn.addEventListener('click', () => {
-            const currentExId = modalExerciseState.exId;
-            const currentDayKey = AppState.currentDay || 'day1';
-            if (currentExId) {
-                const athId = getActiveAthleteId();
-                const data = getCoachAthleteWorkoutData(athId);
-                const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
-                if (day && Array.isArray(day.exercises)) {
-                    const ex = day.exercises.find(e => e.id === currentExId);
-                    if (ex && !ex.completed) {
-                        ex.completed = true;
-                        saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises });
-                        const allDone = day.exercises.every(e => e.completed);
-                        if (allDone && !day.completed) {
-                            day.completed = true;
-                            day.durationMinutes = day.durationMinutes || Math.max(30, day.exercises.length * 9);
-                            saveAthleteDayWorkoutStatus(athId, currentDayKey, { completed: true, durationMinutes: day.durationMinutes });
-                        }
-                        if (typeof showSensToast === 'function') {
-                            showSensToast(`✓ ${ex.name} finalizado`, 'success', 2200);
-                        }
-                    }
-                }
-            }
-            closeExerciseExecutionModal();
+            saveAndFinishExercise(false);
         });
     }
     if (backdrop) {
         backdrop.addEventListener('click', (e) => {
-            if (e.target === backdrop) closeExerciseExecutionModal();
-        });
-    }
-
-    if (btnTut && tutDisplay) {
-        btnTut.addEventListener('click', () => {
-            if (!modalExerciseState.isTutRunning) {
-                modalExerciseState.isTutRunning = true;
-                btnTut.textContent = 'Pausar Serie';
-                modalExerciseState.tutInterval = setInterval(() => {
-                    modalExerciseState.tutSeconds++;
-                    const m = Math.floor(modalExerciseState.tutSeconds / 60);
-                    const s = modalExerciseState.tutSeconds % 60;
-                    tutDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-                }, 1000);
-            } else {
-                modalExerciseState.isTutRunning = false;
-                btnTut.textContent = 'Reanudar';
-                clearInterval(modalExerciseState.tutInterval);
-            }
-        });
-    }
-
-    if (btnResetTut && tutDisplay && btnTut) {
-        btnResetTut.addEventListener('click', () => {
-            modalExerciseState.isTutRunning = false;
-            clearInterval(modalExerciseState.tutInterval);
-            modalExerciseState.tutSeconds = 0;
-            tutDisplay.textContent = '00:00';
-            btnTut.textContent = 'Iniciar Serie';
-        });
-    }
-
-    if (btnStartRest) btnStartRest.addEventListener('click', startModalRestTimer);
-    if (btnAdd15Rest) {
-        btnAdd15Rest.addEventListener('click', () => {
-            modalExerciseState.restSeconds += 15;
-            startModalRestTimer();
-        });
-    }
-    if (btnSkipRest) {
-        btnSkipRest.addEventListener('click', () => {
-            clearInterval(modalExerciseState.restInterval);
-            const restDisplay = document.getElementById('modalExRestDisplay');
-            if (restDisplay) restDisplay.textContent = '00:00';
+            if (e.target === backdrop) handleAttemptExitExerciseModal();
         });
     }
 });
