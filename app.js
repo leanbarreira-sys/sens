@@ -5439,10 +5439,55 @@ window.openExerciseExecutionModal = function(exId, dayKey) {
         });
     }
 
+    // 5. Configurar estado 9:16 completo en el video modal
+    const videoWrap = document.getElementById('modalExVideoWrap');
+    const aspectBtn = document.getElementById('btnToggleVideoAspect');
+    const aspectLabel = document.getElementById('btnToggleVideoAspectLabel');
+    const prefAspect = (typeof localStorage !== 'undefined' ? localStorage.getItem('sens_pref_video_916') : null);
+    const shouldBe916 = (prefAspect !== 'false'); // Por defecto formato 9:16 completo
+
+    if (videoWrap) {
+        videoWrap.classList.toggle('is-916-expanded', shouldBe916);
+        if (aspectLabel) aspectLabel.textContent = shouldBe916 ? '4:5 Reducir' : '9:16 Completo';
+        if (aspectBtn) aspectBtn.classList.toggle('active', shouldBe916);
+
+        if (!videoWrap._hasAspectClickBound) {
+            videoWrap._hasAspectClickBound = true;
+            videoWrap.addEventListener('click', (e) => {
+                if (e.target.closest('#modalExInVideoHud') || e.target.closest('#btnToggleVideoAspect') || e.target.closest('button')) {
+                    return;
+                }
+                window.toggleModalVideoAspect();
+            });
+        }
+    }
+
     if (backdrop) {
         backdrop.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
+};
+
+window.toggleModalVideoAspect = function() {
+    const wrap = document.getElementById('modalExVideoWrap');
+    const label = document.getElementById('btnToggleVideoAspectLabel');
+    const btn = document.getElementById('btnToggleVideoAspect');
+    if (!wrap) return;
+
+    const is916 = wrap.classList.toggle('is-916-expanded');
+    try {
+        localStorage.setItem('sens_pref_video_916', is916 ? 'true' : 'false');
+    } catch (e) {}
+
+    if (label) {
+        label.textContent = is916 ? '4:5 Reducir' : '9:16 Completo';
+    }
+    if (btn) {
+        btn.classList.toggle('active', is916);
+        btn.setAttribute('title', is916 ? 'Reducir a vista 4:5' : 'Ver video completo en formato 9:16');
+    }
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
+    showSensToast(is916 ? 'Formato 9:16 completo activado' : 'Formato 4:5 compacto', 'champagne', 1400);
 };
 
 window.switchModalExerciseLanguage = function(lang, exId, dayKey) {
@@ -5875,6 +5920,14 @@ function updateMasterTimerUI() {
     const restControls = document.getElementById('masterTimerRestControls');
     const targetSub = document.getElementById('masterTimerTargetSub');
 
+    // In-Video HUD Timer Elements
+    const inVideoDisplay = document.getElementById('invideoTimerDigits');
+    const inVideoDot = document.getElementById('invideoTimerDot');
+    const inVideoLabel = document.getElementById('invideoTimerLabel');
+    const inVideoPrimaryBtn = document.getElementById('btnInVideoTimerPrimary');
+    const inVideoSecondaryBtn = document.getElementById('btnInVideoTimerSecondary');
+    const inVideoSkipBtn = document.getElementById('btnInVideoTimerSkip');
+
     if (targetSub) {
         targetSub.textContent = `Descanso prescrito: ${masterTimerState.targetRest}s`;
     }
@@ -5882,25 +5935,59 @@ function updateMasterTimerUI() {
     if (masterTimerState.mode === 'in_set') {
         const m = Math.floor(masterTimerState.tutSeconds / 60);
         const s = masterTimerState.tutSeconds % 60;
+        const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
         if (display) {
-            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            display.textContent = timeStr;
             display.classList.remove('in-rest');
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-set';
         if (modeLabel) modeLabel.textContent = 'SERIE EN CURSO';
         if (primaryBtn) primaryBtn.textContent = 'Pausar Serie';
         if (restControls) restControls.style.display = 'none';
+
+        // Sincronizar Reloj In-Video
+        if (inVideoDisplay) {
+            inVideoDisplay.textContent = timeStr;
+            inVideoDisplay.classList.remove('in-rest');
+        }
+        if (inVideoDot) inVideoDot.className = 'invideo-timer-mode-dot in-set';
+        if (inVideoLabel) {
+            inVideoLabel.className = 'invideo-timer-label in-set';
+            inVideoLabel.textContent = 'SERIE EN CURSO';
+        }
+        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Pausar';
+        if (inVideoSecondaryBtn) inVideoSecondaryBtn.style.display = 'inline-block';
+        if (inVideoSkipBtn) inVideoSkipBtn.style.display = 'none';
+
     } else if (masterTimerState.mode === 'in_rest') {
         const m = Math.floor(masterTimerState.restRemaining / 60);
         const s = masterTimerState.restRemaining % 60;
+        const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
         if (display) {
-            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            display.textContent = timeStr;
             display.classList.add('in-rest');
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-rest';
         if (modeLabel) modeLabel.textContent = 'DESCANSO ACTIVO';
         if (primaryBtn) primaryBtn.textContent = 'Iniciar Nueva Serie';
         if (restControls) restControls.style.display = 'flex';
+
+        // Sincronizar Reloj In-Video
+        if (inVideoDisplay) {
+            inVideoDisplay.textContent = timeStr;
+            inVideoDisplay.classList.add('in-rest');
+        }
+        if (inVideoDot) inVideoDot.className = 'invideo-timer-mode-dot in-rest';
+        if (inVideoLabel) {
+            inVideoLabel.className = 'invideo-timer-label in-rest';
+            inVideoLabel.textContent = 'DESCANSO';
+        }
+        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Nueva Serie';
+        if (inVideoSecondaryBtn) inVideoSecondaryBtn.style.display = 'none';
+        if (inVideoSkipBtn) inVideoSkipBtn.style.display = 'inline-block';
+
     } else {
         if (display) {
             display.textContent = '00:00';
@@ -5910,6 +5997,20 @@ function updateMasterTimerUI() {
         if (modeLabel) modeLabel.textContent = 'EN ESPERA';
         if (primaryBtn) primaryBtn.textContent = 'Iniciar Serie';
         if (restControls) restControls.style.display = 'none';
+
+        // Sincronizar Reloj In-Video
+        if (inVideoDisplay) {
+            inVideoDisplay.textContent = '00:00';
+            inVideoDisplay.classList.remove('in-rest');
+        }
+        if (inVideoDot) inVideoDot.className = 'invideo-timer-mode-dot';
+        if (inVideoLabel) {
+            inVideoLabel.className = 'invideo-timer-label';
+            inVideoLabel.textContent = 'EN ESPERA';
+        }
+        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Iniciar Serie';
+        if (inVideoSecondaryBtn) inVideoSecondaryBtn.style.display = 'inline-block';
+        if (inVideoSkipBtn) inVideoSkipBtn.style.display = 'none';
     }
 }
 
@@ -6023,6 +6124,35 @@ function initMasterTimerListeners() {
             masterTimerState.tutSeconds = 0;
             updateMasterTimerUI();
             showSensToast('Descanso omitido.', 'champagne', 2000);
+        });
+    }
+
+    // Botones del Timer In-Video sincronizados al 100%
+    const inVideoPrimary = document.getElementById('btnInVideoTimerPrimary');
+    const inVideoSecondary = document.getElementById('btnInVideoTimerSecondary');
+    const inVideoSkip = document.getElementById('btnInVideoTimerSkip');
+
+    if (inVideoPrimary && !inVideoPrimary._hasTimerBound) {
+        inVideoPrimary._hasTimerBound = true;
+        inVideoPrimary.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (primaryBtn) primaryBtn.click();
+        });
+    }
+
+    if (inVideoSecondary && !inVideoSecondary._hasTimerBound) {
+        inVideoSecondary._hasTimerBound = true;
+        inVideoSecondary.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (finishAndRestBtn) finishAndRestBtn.click();
+        });
+    }
+
+    if (inVideoSkip && !inVideoSkip._hasTimerBound) {
+        inVideoSkip._hasTimerBound = true;
+        inVideoSkip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (skipRest) skipRest.click();
         });
     }
 }

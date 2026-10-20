@@ -10817,7 +10817,6 @@ body.in-portal .sens-coach-daily-note-card {
     position: relative;
     border-radius: 14px;
     overflow: hidden;
-    aspect-ratio: 16 / 9;
     background: #000;
     margin-top: 14px;
 }
@@ -18351,10 +18350,11 @@ body.in-portal,
     color: #F4F4F5 !important;
 }
 
-/* 2. Video 4:5 Aspect Ratio con Hardware Masking y HUD de Series Interno */
+/* 2. Video 9:16 / 4:5 Aspect Ratio con Hardware Masking y HUD de Series + Reloj Interno */
 .sens-exercise-modal-video-wrap {
     position: relative !important;
     width: 100% !important;
+    max-width: 480px !important;
     aspect-ratio: 4 / 5 !important;
     max-height: 480px !important;
     border-radius: 20px !important;
@@ -18362,13 +18362,184 @@ body.in-portal,
     background: #080809 !important;
     margin: 14px auto 0 !important;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7) !important;
+    transition: aspect-ratio 0.32s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease !important;
+    cursor: pointer;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+.sens-exercise-modal-video-wrap.is-916-expanded {
+    aspect-ratio: 9 / 16 !important;
+    max-height: 78vh !important;
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(229, 203, 167, 0.35) !important;
+}
+
+.sens-exercise-modal-video-wrap.is-916-expanded .sens-video-skeleton {
+    aspect-ratio: 9 / 16 !important;
 }
 
 .sens-exercise-modal-video {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
+    display: block;
+}
+
+/* Pill de Alternar Formato 9:16 / 4:5 Flotante */
+.sens-video-aspect-pill {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 6;
+    background: rgba(8, 8, 9, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    color: #E5CBA7;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    padding: 4.5px 11px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: auto !important;
+    user-select: none;
+}
+
+.sens-video-aspect-pill:hover,
+.sens-video-aspect-pill.active {
+    background: rgba(229, 203, 167, 0.2);
+    border-color: #E5CBA7;
+    box-shadow: 0 0 14px rgba(229, 203, 167, 0.45);
+    transform: scale(1.03);
+}
+
+.sens-video-aspect-pill:active {
+    transform: scale(0.97);
+}
+
+/* HUD In-Video Reloj Maestro */
+.sens-invideo-timer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    background: rgba(18, 18, 22, 0.88);
+    border: 1px solid rgba(229, 203, 167, 0.28);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 12px;
+    padding: 7px 12px;
+    margin-bottom: 9px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+    pointer-events: auto !important;
+}
+
+.invideo-timer-left {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.invideo-timer-mode-dot {
+    width: 6.5px;
+    height: 6.5px;
+    border-radius: 50%;
+    background: #A1A1AA;
+    flex-shrink: 0;
+}
+
+.invideo-timer-mode-dot.in-set {
+    background: #E5CBA7;
+    box-shadow: 0 0 8px rgba(229, 203, 167, 0.85);
+    animation: sensPulseDot 1.5s infinite ease-in-out;
+}
+
+.invideo-timer-mode-dot.in-rest {
+    background: #10B981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
+    animation: sensPulseDot 1.5s infinite ease-in-out;
+}
+
+.invideo-timer-label {
+    font-size: 9.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #A1A1AA;
+    white-space: nowrap;
+}
+
+.invideo-timer-label.in-set {
+    color: #E5CBA7;
+}
+
+.invideo-timer-label.in-rest {
+    color: #10B981;
+}
+
+.invideo-timer-digits {
+    font-size: 14px;
+    font-weight: 900;
+    color: #FFFFFF;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.3px;
+    line-height: 1;
+}
+
+.invideo-timer-digits.in-rest {
+    color: #10B981;
+}
+
+.invideo-timer-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.sens-invideo-timer-btn {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 5px 9px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    line-height: 1.2;
+    pointer-events: auto !important;
+}
+
+.sens-invideo-timer-btn.primary {
+    background: #E5CBA7;
+    color: #080809;
+}
+.sens-invideo-timer-btn.primary:hover {
+    background: #eed8bc;
+    transform: translateY(-1px);
+}
+
+.sens-invideo-timer-btn.secondary {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+}
+.sens-invideo-timer-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(229, 203, 167, 0.4);
+}
+
+.sens-invideo-timer-btn.subtle {
+    background: transparent;
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    color: #E5CBA7;
+    padding: 4.5px 8px;
 }
 
 .sens-invideo-series-overlay {

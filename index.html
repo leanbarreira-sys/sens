@@ -3399,8 +3399,8 @@
 
                     <h3 class="sens-exercise-modal-title" id="modalExName">Sentadilla Copa con Pausa</h3>
 
-                    <!-- 2. Video en Bucle 4:5 con HUD de Series, KG, Reps y Checkmarks Dentro del Video -->
-                    <div class="sens-exercise-modal-video-wrap" id="modalExVideoWrap">
+                    <!-- 2. Video en Bucle con Formato 9:16 Completo / 4:5 & HUD Táctil de Series + Reloj Maestro -->
+                    <div class="sens-exercise-modal-video-wrap is-916-expanded" id="modalExVideoWrap">
                         <!-- Skeleton Loader de Técnica Modal Puramente Visual -->
                         <div class="sens-video-skeleton compact" id="modalExVideoSkeleton">
                             <div class="sens-skeleton-shimmer"></div>
@@ -3415,8 +3415,37 @@
                         </video>
                         <div class="sens-video-overlay-gradient"></div>
 
-                        <!-- HUD In-Video Táctil de Series: Sets, KG, Reps y Checkmarks -->
+                        <!-- Pill de Alternar Formato 9:16 Completo / 4:5 -->
+                        <button type="button" class="sens-video-aspect-pill active" id="btnToggleVideoAspect" title="Alternar formato de video 9:16 / 4:5" onclick="event.stopPropagation(); window.toggleModalVideoAspect();">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="2" width="14" height="20" rx="3"></rect>
+                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            </svg>
+                            <span id="btnToggleVideoAspectLabel">4:5 Reducir</span>
+                        </button>
+
+                        <!-- HUD In-Video Táctil de Series & Reloj: Sets, KG, Reps, Checkmarks + Timer Unificado -->
                         <div class="sens-invideo-series-overlay" id="modalExInVideoHud">
+                            <!-- Reloj Maestro In-Video (Sincronizado en tiempo real) -->
+                            <div class="sens-invideo-timer-row" id="modalExInVideoTimerRow">
+                                <div class="invideo-timer-left">
+                                    <span class="invideo-timer-mode-dot" id="invideoTimerDot"></span>
+                                    <span class="invideo-timer-label" id="invideoTimerLabel">EN ESPERA</span>
+                                    <strong class="invideo-timer-digits" id="invideoTimerDigits">00:00</strong>
+                                </div>
+                                <div class="invideo-timer-actions">
+                                    <button type="button" class="sens-invideo-timer-btn primary" id="btnInVideoTimerPrimary">
+                                        Iniciar Serie
+                                    </button>
+                                    <button type="button" class="sens-invideo-timer-btn secondary" id="btnInVideoTimerSecondary">
+                                        Fin &amp; Descanso
+                                    </button>
+                                    <button type="button" class="sens-invideo-timer-btn subtle" id="btnInVideoTimerSkip" style="display: none;">
+                                        Saltar
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="sens-invideo-hud-header">
                                 <span class="sens-invideo-hud-title">SERIES DEL EJERCICIO</span>
                                 <span class="sens-invideo-hud-status" id="modalExInVideoStatus">0 / 4 completadas</span>
