@@ -3045,66 +3045,50 @@
                         </div>
                     </div>
 
-                    <!-- Ecuación de Balance: Ingesta vs Gasto TDEE -->
-                    <div class="sens-balance-equation-row">
-                        <!-- Columna 1: Ingesta (Comida) -->
-                        <div class="sens-balance-box">
-                            <div class="sens-balance-box-label">Ingesta (Comida)</div>
-                            <div class="sens-balance-box-val" id="dashBalanceIngestaVal">
-                                <span id="dashIngestaNum">1.850</span> <span class="unit">kcal</span>
+                    <!-- Ecuación Unificada 3-en-1: Ingesta − Gasto = Balance Neto -->
+                    <div class="sens-balance-triptych" id="dashBalanceNetBox">
+                        <div class="sens-triptych-col">
+                            <span class="sens-triptych-label">Ingesta</span>
+                            <div class="sens-triptych-val" id="dashBalanceIngestaVal">
+                                <span id="dashIngestaNum">0</span><span class="unit">kcal</span>
                             </div>
-                            <div class="sens-balance-box-sub" id="dashBalanceMealsCount">4 comidas registradas</div>
+                            <span class="sens-triptych-sub" id="dashBalanceMealsCount">0 comidas</span>
                         </div>
-
-                        <!-- Columna 2: Gasto Total (TDEE) -->
-                        <div class="sens-balance-box">
-                            <div class="sens-balance-box-label">Gasto Total (TDEE)</div>
-                            <div class="sens-balance-box-val" id="dashBalanceTdeeVal">
-                                <span id="dashTdeeNum">2.420</span> <span class="unit">kcal</span>
+                        <div class="sens-triptych-divider">−</div>
+                        <div class="sens-triptych-col">
+                            <span class="sens-triptych-label">Gasto (TDEE)</span>
+                            <div class="sens-triptych-val" id="dashBalanceTdeeVal">
+                                <span id="dashTdeeNum">2.183</span><span class="unit">kcal</span>
                             </div>
-                            <div class="sens-balance-box-sub" id="dashBalanceBurnBreakdown">Basal: 1.672 • Activo: 748</div>
+                            <span class="sens-triptych-sub" id="dashBalanceBurnBreakdown">Basal + Activo</span>
                         </div>
-                    </div>
-
-                    <!-- Hero Metric: Balance Neto -->
-                    <div class="sens-balance-hero-box" id="dashBalanceNetBox">
-                        <div class="sens-balance-hero-left">
-                            <div class="sens-balance-hero-label">Balance Neto Diario</div>
-                            <div class="sens-balance-hero-val" id="dashNetDeficitVal">
-                                −570 <span class="unit">kcal</span>
+                        <div class="sens-triptych-divider">=</div>
+                        <div class="sens-triptych-col hero">
+                            <span class="sens-triptych-label">Balance Neto</span>
+                            <div class="sens-triptych-val hero" id="dashNetDeficitVal">
+                                −2.183<span class="unit">kcal</span>
                             </div>
-                        </div>
-                        <div class="sens-balance-hero-right">
-                            <div class="sens-balance-hero-status" id="dashBalanceStatusText">Déficit Logrado</div>
-                            <div class="sens-balance-hero-sub">Cumpliendo meta biológica</div>
+                            <span class="sens-triptych-badge" id="dashBalanceStatusText">Déficit Logrado</span>
                         </div>
                     </div>
 
                     <!-- Panel Táctil de Gasto Activo: Pasos y Cardio del Día -->
                     <div class="sens-activity-logger-panel" id="sensActivityLoggerPanel">
                         <div class="sens-act-header">
-                            <div class="sens-act-header-title">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <polyline points="12 6 12 12 16 14"/>
-                                </svg>
-                                <span>Gasto Activo Diario (NEAT &amp; Cardio)</span>
-                            </div>
-                            <div class="sens-act-header-badges">
-                                <span class="sens-card-streak-pill in-progress" id="dashActivityLoggerStreakPill" title="Progreso de racha">
-                                    <span class="streak-pill-dot"></span>
-                                    <span class="streak-pill-text">0 / 10.000 pasos</span>
-                                </span>
-                                <span class="sens-act-badge" id="dashActiveBurnBadge">+748 kcal activas</span>
-                            </div>
+                            <span class="sens-act-header-title">Actividad Diaria</span>
+                            <span class="sens-act-badge" id="dashActiveBurnBadge">+0 kcal</span>
+                            <span class="sens-card-streak-pill in-progress" id="dashActivityLoggerStreakPill" style="display: none !important;">
+                                <span class="streak-pill-dot"></span>
+                                <span class="streak-pill-text">0 / 10k pasos</span>
+                            </span>
                         </div>
 
                         <!-- Módulo Pasos del Día -->
                         <div class="sens-act-module">
                             <div class="sens-act-module-top">
                                 <div class="sens-act-label-group">
-                                    <span class="sens-act-metric-title">Pasos del Día</span>
-                                    <span class="sens-act-metric-sub" id="dashStepsSubBurn">~0 kcal gastadas</span>
+                                    <span class="sens-act-metric-title">Pasos</span>
+                                    <span class="sens-act-metric-sub" id="dashStepsSubBurn">~0 kcal</span>
                                 </div>
                                 <div class="sens-act-stepper-control">
                                     <button type="button" class="sens-act-stepper-btn" onclick="stepDailySteps(-1000)" aria-label="Restar 1000 pasos">−</button>
@@ -3121,16 +3105,15 @@
                                 <button type="button" class="sens-act-quick-chip" onclick="quickSetDailySteps(8000)">8.000</button>
                                 <button type="button" class="sens-act-quick-chip" id="chipSteps10k" onclick="quickSetDailySteps(10000)">10.000 (Meta)</button>
                                 <button type="button" class="sens-act-quick-chip" onclick="quickSetDailySteps(12500)">12.500</button>
-                                <button type="button" class="sens-act-quick-chip" onclick="quickSetDailySteps(15000)">15.000+</button>
                             </div>
                         </div>
 
                         <!-- Módulo Cardio del Día -->
-                        <div class="sens-act-module" style="margin-top: 12px;">
+                        <div class="sens-act-module" style="margin-top: 10px;">
                             <div class="sens-act-module-top">
                                 <div class="sens-act-label-group">
-                                    <span class="sens-act-metric-title">Cardio &amp; Resistencia</span>
-                                    <span class="sens-act-metric-sub" id="dashCardioSubBurn">~0 kcal gastadas</span>
+                                    <span class="sens-act-metric-title">Cardio</span>
+                                    <span class="sens-act-metric-sub" id="dashCardioSubBurn">~0 kcal</span>
                                 </div>
                                 <div class="sens-act-stepper-control">
                                     <button type="button" class="sens-act-stepper-btn" onclick="stepDailyCardio(-5)" aria-label="Restar 5 minutos">−</button>
@@ -3144,16 +3127,13 @@
                             <!-- Selector de Modalidad de Cardio -->
                             <div class="sens-cardio-types-grid" id="dashCardioTypesGrid">
                                 <button type="button" class="sens-cardio-type-btn active" data-type="caminata" data-rate="6.5" onclick="setCardioType('caminata', 6.5, this)">
-                                    <span>Caminata activa</span>
+                                    <span>Caminata</span>
                                 </button>
                                 <button type="button" class="sens-cardio-type-btn" data-type="running" data-rate="11.0" onclick="setCardioType('running', 11.0, this)">
                                     <span>Running</span>
                                 </button>
                                 <button type="button" class="sens-cardio-type-btn" data-type="ciclismo" data-rate="8.5" onclick="setCardioType('ciclismo', 8.5, this)">
-                                    <span>Ciclismo</span>
-                                </button>
-                                <button type="button" class="sens-cardio-type-btn" data-type="eliptica" data-rate="8.0" onclick="setCardioType('eliptica', 8.0, this)">
-                                    <span>Elíptica</span>
+                                    <span>Bici</span>
                                 </button>
                                 <button type="button" class="sens-cardio-type-btn" data-type="otro" data-rate="7.5" onclick="setCardioType('otro', 7.5, this)">
                                     <span>Otro</span>
@@ -3169,7 +3149,7 @@
                                 </svg>
                                 <span id="btnSaveActivityText">Guardar Actividad &amp; Balance</span>
                             </button>
-                            <span class="sens-act-save-hint" id="sensActSaveHint">Mínimo 10.000 pasos ó 30m cardio para activar racha diaria</span>
+                            <span class="sens-act-save-hint" id="sensActSaveHint">10.000 pasos ó 30m cardio activan tu racha</span>
                         </div>
                     </div>
 

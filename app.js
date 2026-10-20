@@ -16476,13 +16476,7 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
             const logged = JSON.parse(localStorage.getItem(logKey) || '{}');
             count = Object.keys(logged).length;
         } catch (e) {}
-        if (count > 0) {
-            mealsSubEl.textContent = `${count} ${count === 1 ? 'alimento registrado' : 'alimentos registrados'}`;
-        } else if (metrics.targetIntake > 0) {
-            mealsSubEl.textContent = 'Consumo registrado';
-        } else {
-            mealsSubEl.textContent = '0 alimentos registrados';
-        }
+        mealsSubEl.textContent = count > 0 ? `${count} ${count === 1 ? 'comida' : 'comidas'}` : '0 comidas';
     }
 
     if (tdeeNum) {
@@ -16490,29 +16484,30 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
     }
 
     if (breakdownEl) {
-        breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${liveActiveBurn.toLocaleString('es-AR')} (Pasos: ${liveStepsBurn} • Cardio: ${liveCardioBurn} • Entreno: ${metrics.workoutBurn})`;
+        breakdownEl.textContent = `Basal: ${metrics.bmr.toLocaleString('es-AR')} • Activo: ${liveActiveBurn.toLocaleString('es-AR')}`;
     }
 
     // Actualizar Panel Táctil de Actividad Diaria (Pasos & Cardio)
     const activeBurnBadge = document.getElementById('dashActiveBurnBadge');
     if (activeBurnBadge) {
-        activeBurnBadge.textContent = `+${liveActiveBurn.toLocaleString('es-AR')} kcal activas`;
+        activeBurnBadge.textContent = `+${liveActiveBurn.toLocaleString('es-AR')} kcal`;
     }
 
     const stepsSubBurn = document.getElementById('dashStepsSubBurn');
     if (stepsSubBurn) {
-        stepsSubBurn.textContent = `~${liveStepsBurn} kcal gastadas`;
+        stepsSubBurn.textContent = `~${liveStepsBurn} kcal`;
     }
 
     const cardioSubBurn = document.getElementById('dashCardioSubBurn');
     if (cardioSubBurn) {
-        cardioSubBurn.textContent = `~${liveCardioBurn} kcal gastadas`;
+        cardioSubBurn.textContent = `~${liveCardioBurn} kcal`;
     }
 
     const netBoxEl = document.getElementById('dashBalanceNetBox');
+    const heroCol = netBoxEl?.querySelector('.sens-triptych-col.hero');
     if (netValEl) {
         const sign = liveNetBalance > 0 ? '+' : '';
-        netValEl.innerHTML = `${sign}${liveNetBalance.toLocaleString('es-AR')} <span class="unit">kcal</span>`;
+        netValEl.innerHTML = `${sign}${liveNetBalance.toLocaleString('es-AR')}<span class="unit">kcal</span>`;
     }
 
     if (statusTextEl) {
@@ -16521,17 +16516,17 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
             statusTextEl.textContent = isMuscleGain ? 'Superávit Cumplido' : 'Déficit Logrado';
             statusTextEl.style.color = '#E5CBA7';
             if (netValEl) netValEl.style.color = '#E5CBA7';
-            if (netBoxEl) {
-                netBoxEl.style.borderColor = 'rgba(229, 203, 167, 0.28)';
-                netBoxEl.style.background = 'linear-gradient(135deg, rgba(229, 203, 167, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)';
+            if (heroCol) {
+                heroCol.style.borderColor = 'rgba(229, 203, 167, 0.35)';
+                heroCol.style.background = 'rgba(229, 203, 167, 0.08)';
             }
         } else {
             statusTextEl.textContent = liveNetBalance > 0 ? 'Superávit Elevado' : 'Ajuste Requerido';
             statusTextEl.style.color = '#D97706';
             if (netValEl) netValEl.style.color = '#D97706';
-            if (netBoxEl) {
-                netBoxEl.style.borderColor = 'rgba(217, 119, 6, 0.28)';
-                netBoxEl.style.background = 'linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)';
+            if (heroCol) {
+                heroCol.style.borderColor = 'rgba(217, 119, 6, 0.35)';
+                heroCol.style.background = 'rgba(217, 119, 6, 0.08)';
             }
         }
     }

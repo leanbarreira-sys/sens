@@ -14621,9 +14621,9 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
 .sens-metabolic-balance-card {
     background: radial-gradient(120% 120% at 50% 0%, #16161D 0%, #0D0D11 100%) !important;
     border: 1px solid rgba(229, 203, 167, 0.16) !important;
-    border-radius: 22px !important;
-    padding: 22px !important;
-    margin-bottom: 22px !important;
+    border-radius: 20px !important;
+    padding: 18px 16px 16px !important;
+    margin-bottom: 20px !important;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
     color: #FFFFFF !important;
     cursor: pointer !important;
@@ -14633,9 +14633,9 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
 .sens-balance-title {
@@ -14664,6 +14664,99 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     padding: 4px 12px;
     border-radius: 999px;
     letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+/* =============================================================================
+   SENS BALANCE TRIPTYCH (ECUACIÓN UNIFICADA 3-EN-1 QUIET LUXURY)
+   ============================================================================= */
+.sens-balance-triptych {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(20, 20, 24, 0.6) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 12px 10px;
+    margin-bottom: 14px;
+    gap: 4px;
+    box-sizing: border-box;
+}
+
+.sens-triptych-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 0;
+}
+
+.sens-triptych-col.hero {
+    flex: 1.15;
+    background: rgba(229, 203, 167, 0.07);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    border-radius: 12px;
+    padding: 6px 4px;
+}
+
+.sens-triptych-label {
+    font-size: 9.5px;
+    font-weight: 800;
+    color: #71717A;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+.sens-triptych-val {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sens-triptych-val.hero {
+    font-size: 1.3rem;
+    color: #E5CBA7;
+}
+
+.sens-triptych-val .unit {
+    font-size: 10px;
+    font-weight: 600;
+    color: #8E8E93;
+    margin-left: 2px;
+}
+
+.sens-triptych-sub {
+    font-size: 9.5px;
+    color: #71717A;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.sens-triptych-divider {
+    font-size: 15px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.25);
+    padding: 0 1px;
+    user-select: none;
+    line-height: 1;
+}
+
+.sens-triptych-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 800;
+    color: #E5CBA7;
+    margin-top: 2px;
+    letter-spacing: 0.2px;
     white-space: nowrap;
 }
 
@@ -20506,11 +20599,11 @@ body.in-portal,
    PANEL DE GASTO ACTIVO: PASOS & CARDIO (INTEGRADO EN BALANCE ENERGÉTICO)
    ============================================================================= */
 .sens-activity-logger-panel {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-    margin-bottom: 16px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 0;
     box-sizing: border-box;
 }
 
@@ -20518,15 +20611,15 @@ body.in-portal,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     gap: 10px;
 }
 
 .sens-act-header-title {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 12px;
+    gap: 6px;
+    font-size: 11px;
     font-weight: 800;
     color: #FFFFFF;
     text-transform: uppercase;
@@ -20548,8 +20641,8 @@ body.in-portal,
 .sens-act-module {
     background: #111115;
     border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 14px;
-    padding: 12px 14px;
+    border-radius: 12px;
+    padding: 10px 12px;
     box-sizing: border-box;
 }
 
@@ -20557,7 +20650,7 @@ body.in-portal,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .sens-act-label-group {
@@ -20567,7 +20660,7 @@ body.in-portal,
 }
 
 .sens-act-metric-title {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 800;
     color: #FFFFFF;
 }
@@ -20584,14 +20677,14 @@ body.in-portal,
     background: #0A0A0C;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    height: 36px;
+    height: 34px;
     padding: 2px;
     box-sizing: border-box;
 }
 
 .sens-act-stepper-btn {
     width: 28px;
-    height: 30px;
+    height: 28px;
     border: none;
     background: rgba(255, 255, 255, 0.05);
     color: #E5CBA7;
@@ -20653,7 +20746,7 @@ body.in-portal,
 .sens-act-chips-row {
     display: flex;
     gap: 6px;
-    margin-top: 10px;
+    margin-top: 8px;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -20692,18 +20785,18 @@ body.in-portal,
 /* Grid de Modalidades de Cardio */
 .sens-cardio-types-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 6px;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .sens-cardio-type-btn {
-    padding: 6px 4px;
+    padding: 7px 4px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.03);
     color: #A1A1AA;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     cursor: pointer;
     text-align: center;
@@ -20727,13 +20820,13 @@ body.in-portal,
 
 /* Botón Prominente de Guardado de Actividad & Gamification (Item 2) */
 .sens-act-save-wrap {
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .sens-btn-save-activity {
