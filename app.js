@@ -85,6 +85,34 @@ function getDayShortFromKey(dayKey) {
     return SENS_DAY_MAP[dayKey]?.short || 'LUN';
 }
 
+function getDateFromDayKey(dayKey) {
+    if (!dayKey) return (AppState && AppState.selectedDate) ? new Date(AppState.selectedDate) : new Date();
+    const match = String(dayKey).match(/\d+/);
+    if (!match) return (AppState && AppState.selectedDate) ? new Date(AppState.selectedDate) : new Date();
+    const dayIndex = parseInt(match[0], 10) - 1;
+    const baseMonday = (AppState && AppState.activeWeekStart) ? new Date(AppState.activeWeekStart) : getMonday(new Date());
+    const d = new Date(baseMonday);
+    d.setDate(baseMonday.getDate() + dayIndex);
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
+function isFutureDate(target) {
+    let d = target;
+    if (typeof d === 'string' && d.startsWith('day')) {
+        d = getDateFromDayKey(d);
+    } else if (typeof d === 'string') {
+        d = new Date(d);
+    } else if (!d) {
+        d = (AppState && AppState.selectedDate) ? AppState.selectedDate : new Date();
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const targetMidnight = new Date(d);
+    targetMidnight.setHours(0, 0, 0, 0);
+    return targetMidnight > today;
+}
+
 function getWeekRangeLabel(monday) {
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
@@ -2890,8 +2918,11 @@ function switchPortalView(viewId) {
         }
     }
     if (viewId === 'workoutView') {
+        if (!AppState.currentDay) {
+            AppState.currentDay = getDayKeyFromDate(AppState.selectedDate || new Date());
+        }
         if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
-        if (typeof renderWorkoutDay === 'function') renderWorkoutDay(AppState.currentDay || 'day1');
+        if (typeof renderWorkoutDay === 'function') renderWorkoutDay(AppState.currentDay);
     }
     if (viewId === 'nutritionView') {
         const athId = AppState.activeAthleteId || (AppState.user ? AppState.user.id : 'mock_vip');
@@ -4809,7 +4840,8 @@ function getActiveAthleteId() {
     // 3. Fallbacks
     if (AppState.user && AppState.user.id) return AppState.user.id;
     if (AppState.profile && AppState.profile.id) return AppState.profile.id;
-    return null;
+    if (AppState.activeAthleteId) return AppState.activeAthleteId;
+    return 'mock_vip';
 }
 
 function getAthleteExerciseLogs(athId, exId) {
@@ -4876,6 +4908,18 @@ function saveAthleteDayWorkoutStatus(athId, dayKey, statusUpdate) {
     }
     Object.assign(workoutData[dayKey], statusUpdate);
     
+    // Sincronizar en calendar_schedule para coherencia temporal total
+    try {
+        const targetDate = getDateFromDayKey(dayKey);
+        const dateIso = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
+        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+        if (!workoutData.calendar_schedule[dateIso]) {
+            workoutData.calendar_schedule[dateIso] = { ...workoutData[dayKey] };
+        } else {
+            Object.assign(workoutData.calendar_schedule[dateIso], statusUpdate);
+        }
+    } catch (e) {}
+
     // Guardar en localStorage
     localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
     
@@ -4976,6 +5020,13 @@ window.resetWorkoutAttendance = function(dayKey) {
 };
 
 window.toggleExerciseFinished = function(exId, dayKey) {
+    if (isFutureDate(dayKey)) {
+        if (typeof showSensToast === 'function') {
+            showSensToast('No es posible registrar entrenamientos de fechas futuras.', 'champagne', 2500);
+        }
+        return;
+    }
+
     const athId = getActiveAthleteId();
     const data = getCoachAthleteWorkoutData(athId);
     const day = (data && data[dayKey]) ? data[dayKey] : null;
@@ -5007,17 +5058,21 @@ window.toggleExerciseFinished = function(exId, dayKey) {
         }
     }
 
+    const targetDate = getDateFromDayKey(dayKey);
+    AppState.selectedDate = targetDate;
+    AppState.currentDay = dayKey;
+
     renderWorkoutDay(dayKey);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
     if (typeof syncAllStreakAndPillTelemetry === 'function') {
-        syncAllStreakAndPillTelemetry(AppState.selectedDate || new Date());
+        syncAllStreakAndPillTelemetry(targetDate);
     } else {
         if (typeof SensDailyStreakManager !== 'undefined') {
-            SensDailyStreakManager.evaluateDay(AppState.selectedDate || new Date(), athId);
+            SensDailyStreakManager.evaluateDay(targetDate, athId);
         }
         if (typeof updateSensStreakCard === 'function') {
-            updateSensStreakCard(AppState.selectedDate || new Date());
+            updateSensStreakCard(targetDate);
         }
     }
 };
@@ -5284,6 +5339,9 @@ function renderWorkoutDay(dayKey) {
                 </div>
         `;
 
+        const isFuture = isFutureDate(dayKey);
+        const dayName = getDayNameFromKey(dayKey);
+
         muscleKeys.forEach(mKey => {
             const list = tg.muscles[mKey];
             groupedHtml += `
@@ -5322,10 +5380,10 @@ function renderWorkoutDay(dayKey) {
                         <div class="sens-ex-compact-overlay"></div>
                         <div class="sens-ex-compact-top">
                             <span class="ex-compact-sets-badge">${ex.sets || 3} × ${ex.reps || 10}</span>
-                            <button type="button" class="ex-compact-check-btn ${isExDone ? 'completed' : ''}" 
-                                    title="${isExDone ? 'Desmarcar ejercicio' : 'Marcar como finalizado'}" 
+                            <button type="button" class="ex-compact-check-btn ${isExDone ? 'completed' : ''} ${isFuture ? 'is-future' : ''}" 
+                                    title="${isFuture ? `Disponible a partir del ${dayName}` : (isExDone ? 'Desmarcar ejercicio' : 'Marcar como finalizado')}" 
                                     onclick="event.stopPropagation(); toggleExerciseFinished('${ex.id}', '${dayKey}')">
-                                ✓
+                                ${isFuture ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` : '✓'}
                             </button>
                         </div>
                         <div class="sens-ex-compact-bottom">
@@ -5669,15 +5727,43 @@ window.updateSetReps = function(idx, val) {
 };
 
 window.toggleSetCompleted = function(idx) {
+    const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
+    if (isFutureDate(currentDayKey)) {
+        if (typeof showSensToast === 'function') {
+            showSensToast('No es posible registrar series de fechas futuras.', 'champagne', 2500);
+        }
+        return;
+    }
+
     const s = modalExerciseState.setsData[idx];
     if (!s) return;
     s.completed = !s.completed;
     renderModalSeriesList();
 
     const athId = getActiveAthleteId();
+    const dayDate = getDateFromDayKey(currentDayKey);
+    const data = getCoachAthleteWorkoutData(athId);
+    const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
+
     if (s.completed) {
         logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps);
         showSensToast(`Set ${s.setNumber} completado (${s.weight} kg × ${s.reps} reps)`, 'champagne', 2200);
+
+        if (day && Array.isArray(day.exercises)) {
+            const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
+            if (ex) {
+                const anyDone = modalExerciseState.setsData.some(x => x.completed);
+                ex.completed = Boolean(anyDone);
+                const allExDone = day.exercises.length > 0 && day.exercises.every(e => e.completed);
+                day.completed = allExDone;
+                saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: allExDone });
+                AppState.selectedDate = dayDate;
+                AppState.currentDay = currentDayKey;
+                if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                    syncAllStreakAndPillTelemetry(dayDate);
+                }
+            }
+        }
 
         // Si todos los sets están completos, congratular
         const allDone = modalExerciseState.setsData.every(x => x.completed);
@@ -5688,27 +5774,78 @@ window.toggleSetCompleted = function(idx) {
             playBeep(620, 0.2);
             startMasterRestCountdown();
         }
+    } else {
+        if (day && Array.isArray(day.exercises)) {
+            const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
+            if (ex) {
+                const anyDone = modalExerciseState.setsData.some(x => x.completed);
+                ex.completed = Boolean(anyDone);
+                saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: false });
+                if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                    syncAllStreakAndPillTelemetry(dayDate);
+                }
+            }
+        }
     }
 };
 
 window.completeAllExerciseSets = function() {
+    const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
+    if (isFutureDate(currentDayKey)) {
+        if (typeof showSensToast === 'function') {
+            showSensToast('No es posible registrar series de fechas futuras.', 'champagne', 2500);
+        }
+        return;
+    }
+
     if (!modalExerciseState.setsData || modalExerciseState.setsData.length === 0) return;
     const allDone = modalExerciseState.setsData.every(s => s.completed);
+    const athId = getActiveAthleteId();
+    const dayDate = getDateFromDayKey(currentDayKey);
+    const data = getCoachAthleteWorkoutData(athId);
+    const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
 
     if (allDone) {
         modalExerciseState.setsData.forEach(s => { s.completed = false; });
         renderModalSeriesList();
+
+        if (day && Array.isArray(day.exercises)) {
+            const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
+            if (ex) {
+                ex.completed = false;
+                day.completed = false;
+                saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: false });
+                if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                    syncAllStreakAndPillTelemetry(dayDate);
+                }
+            }
+        }
         showSensToast('Ejercicio desmarcado.', 'champagne', 2000);
         return;
     }
 
-    const athId = getActiveAthleteId();
     modalExerciseState.setsData.forEach(s => {
         s.completed = true;
         logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps);
     });
 
     renderModalSeriesList();
+
+    if (day && Array.isArray(day.exercises)) {
+        const ex = day.exercises.find(e => e.id === modalExerciseState.exId);
+        if (ex) {
+            ex.completed = true;
+            const allExDone = day.exercises.length > 0 && day.exercises.every(e => e.completed);
+            day.completed = allExDone;
+            saveAthleteDayWorkoutStatus(athId, currentDayKey, { exercises: day.exercises, completed: allExDone });
+            AppState.selectedDate = dayDate;
+            AppState.currentDay = currentDayKey;
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(dayDate);
+            }
+        }
+    }
+
     triggerCongratsCelebration();
 };
 
@@ -6388,8 +6525,11 @@ function initBottomSheetPullDownDismiss() {
  */
 function saveAndFinishExercise(silent = false) {
     const currentExId = modalExerciseState.exId;
-    const currentDayKey = AppState.currentDay || 'day1';
-    if (currentExId) {
+    const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
+    const isFuture = isFutureDate(currentDayKey);
+    const dayDate = getDateFromDayKey(currentDayKey);
+
+    if (currentExId && !isFuture) {
         const athId = getActiveAthleteId();
         const data = getCoachAthleteWorkoutData(athId);
         const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
@@ -6412,6 +6552,8 @@ function saveAndFinishExercise(silent = false) {
             }
         }
     }
+    AppState.selectedDate = dayDate;
+    AppState.currentDay = currentDayKey;
     closeExerciseExecutionModalForce();
 }
 
@@ -6449,19 +6591,20 @@ function closeExerciseExecutionModalForce() {
     const modalVideo = document.getElementById('modalExVideo');
     if (modalVideo) modalVideo.pause();
 
-    const currentDayKey = AppState.currentDay || 'day1';
+    const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
+    const targetDate = getDateFromDayKey(currentDayKey);
     renderWorkoutDay(currentDayKey);
     renderWorkoutDaysNav();
     if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
 
     if (typeof syncAllStreakAndPillTelemetry === 'function') {
-        syncAllStreakAndPillTelemetry(AppState.selectedDate || new Date());
+        syncAllStreakAndPillTelemetry(targetDate);
     } else {
         if (typeof SensDailyStreakManager !== 'undefined') {
-            SensDailyStreakManager.evaluateDay(AppState.selectedDate || new Date());
+            SensDailyStreakManager.evaluateDay(targetDate);
         }
         if (typeof updateSensStreakCard === 'function') {
-            updateSensStreakCard(AppState.selectedDate || new Date());
+            updateSensStreakCard(targetDate);
         }
     }
 }
@@ -11409,8 +11552,15 @@ function formatStepsHtml(stepsText) {
  * Marca o desmarca un alimento como consumido hoy desde la card directa (Item 5)
  */
 function toggleFoodLoggedStatus(foodKey, mealSlot) {
-    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
     const sDate = AppState.nutriSelectedDate || new Date();
+    if (isFutureDate(sDate)) {
+        if (typeof showSensToast === 'function') {
+            showSensToast('No es posible registrar comidas de fechas futuras.', 'champagne', 2500);
+        }
+        return;
+    }
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
     const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
     const logKey = `sens_user_consumed_foods_${athId}_${dateIso}`;
 
@@ -12607,8 +12757,15 @@ function initUserCustomMealModal(athId) {
     // Botón Guardar Comida en el Día
     if (saveBtn) {
         saveBtn.addEventListener('click', () => {
-            const activeAthId = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
             const sDate = AppState.nutriSelectedDate || new Date();
+            if (isFutureDate(sDate)) {
+                if (typeof showSensToast === 'function') {
+                    showSensToast('No es posible registrar comidas de fechas futuras.', 'champagne', 2500);
+                }
+                return;
+            }
+
+            const activeAthId = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
             const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
             const customStorageKey = `sens_user_logged_meals_${activeAthId}_${dateIso}`;
 
@@ -13849,6 +14006,9 @@ function renderDynamicWeekStrip() {
             updateObjectiveCardData(dayDate);
             if (typeof updateBiometricsCardData === 'function') updateBiometricsCardData();
             renderWorkoutDaysNav();
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(dayDate);
+            }
         });
     });
 }
@@ -14983,6 +15143,23 @@ const SensDailyStreakManager = {
         const targetMidnight = new Date(sDate);
         targetMidnight.setHours(0, 0, 0, 0);
         const isPastDay = targetMidnight < today;
+        const isFutureDay = targetMidnight > today;
+
+        if (isFutureDay) {
+            return {
+                current: {
+                    workout: { done: false, metric: 'Sesión Programada', isRestDay: false, completedExercises: 0, totalExercises: 0 },
+                    nutrition: { done: false, status: 'pending', consumed: 0, target: 1950, metric: '0 / 1.950 kcal' },
+                    cardio: { done: false, steps: 0, cardioMinutes: 0, cardioType: 'caminata', metric: '0 pasos' },
+                    completedCount: 0,
+                    isQualified: false,
+                    isFuture: true,
+                    locked: true,
+                    updatedAt: Date.now()
+                },
+                previous: null
+            };
+        }
 
         const records = this.getAllRecords(id);
         const existingRecord = records[dateIso];
@@ -15007,10 +15184,10 @@ const SensDailyStreakManager = {
 
         const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(id) : null;
         let dayWorkout = null;
-        if (workoutData && workoutData.calendar_schedule && workoutData.calendar_schedule[dateIso]) {
-            dayWorkout = workoutData.calendar_schedule[dateIso];
-        } else if (workoutData && workoutData[dayKey]) {
+        if (workoutData && workoutData[dayKey]) {
             dayWorkout = workoutData[dayKey];
+        } else if (workoutData && workoutData.calendar_schedule && workoutData.calendar_schedule[dateIso]) {
+            dayWorkout = workoutData.calendar_schedule[dateIso];
         } else if (typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
             dayWorkout = WORKOUT_DAYS_DATA[dayKey];
         }
@@ -15527,6 +15704,7 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     const targetMidnight = new Date(sDate);
     targetMidnight.setHours(0, 0, 0, 0);
     const isPastDay = targetMidnight < today;
+    const isFutureDay = targetMidnight > today;
 
     if (typeof SensDailyStreakManager === 'undefined') return;
 
@@ -15552,7 +15730,15 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     let wStatus = 'in-progress';
     let wText = '0/0 ejercicios';
 
-    if (wRec.isRestDay) {
+    if (isFutureDay) {
+        const dayKey = (typeof getDayKeyFromDate === 'function') ? getDayKeyFromDate(sDate) : 'day1';
+        const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(athId) : null;
+        const dayWorkout = (workoutData && workoutData[dayKey]) ? workoutData[dayKey] : null;
+        const isRest = dayWorkout?.modality === 'descanso';
+        const total = (dayWorkout && Array.isArray(dayWorkout.exercises)) ? dayWorkout.exercises.length : 0;
+        wStatus = 'in-progress';
+        wText = isRest ? 'Descanso Programado' : (total > 0 ? `0/${total} ejercicios` : '0/0 ejercicios');
+    } else if (wRec.isRestDay) {
         wStatus = 'done';
         wText = 'Descanso Activo ✓';
     } else if (wRec.done) {
@@ -15601,7 +15787,10 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     const consumedStr = consumed.toLocaleString('es-AR');
     const targetStr = target.toLocaleString('es-AR');
 
-    if (nRec.done) {
+    if (isFutureDay) {
+        nStatus = 'in-progress';
+        nText = `0 / ${targetStr} cal`;
+    } else if (nRec.done) {
         nStatus = 'done';
         nText = `${consumedStr}/${targetStr} cal ✓`;
     } else if (nRec.status === 'exceeded') {
@@ -15619,10 +15808,10 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
 
     updatePill('dashNutriStreakPill', nStatus, nText, 'Progreso calórico para la racha diaria (-20% a +10% del objetivo)');
 
-    // 3. Pilar Balance Energético / Actividad
+    // 3. Pilar Balance Energético / Actividad (Formato Conciso Quiet Luxury)
     const cRec = dayRec.cardio || {};
     let cStatus = 'in-progress';
-    let cText = '0 / 10.000 pasos';
+    let cText = '0 / 10k pasos';
 
     const steps = cRec.steps || 0;
     const cardioMinutes = cRec.cardioMinutes || 0;
@@ -15630,27 +15819,50 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     const targetCardioMin = (cardioType === 'caminata') ? 90 : 30;
 
     let cardioLabel = 'cardio';
-    if (cardioType === 'running') cardioLabel = 'corriendo';
+    if (cardioType === 'running') cardioLabel = 'running';
     else if (cardioType === 'caminata') cardioLabel = 'caminata';
-    else if (cardioType === 'bici') cardioLabel = 'en bici';
-    else if (cardioType === 'natacion') cardioLabel = 'nadando';
+    else if (cardioType === 'bici') cardioLabel = 'bici';
+    else if (cardioType === 'natacion') cardioLabel = 'natación';
     else cardioLabel = cardioType;
 
-    const stepsStr = steps.toLocaleString('es-AR');
+    const formatSteps = (num) => {
+        if (!num || num === 0) return '0';
+        if (num >= 1000) {
+            const k = (num / 1000).toFixed(1).replace('.0', '');
+            return `${k}k`;
+        }
+        return String(num);
+    };
 
-    if (cRec.done) {
+    const stepsFormatted = formatSteps(steps);
+
+    if (isFutureDay) {
+        cStatus = 'in-progress';
+        cText = '0 / 10k pasos';
+    } else if (cRec.done) {
         cStatus = 'done';
         if (steps >= 10000) {
-            cText = `${stepsStr}/10.000 pasos ✓`;
+            cText = `${stepsFormatted} / 10k pasos ✓`;
         } else {
-            cText = `${cardioMinutes}/${targetCardioMin} min ${cardioLabel} ✓`;
+            cText = `${cardioMinutes}m / ${targetCardioMin}m ${cardioLabel} ✓`;
+        }
+    } else if (isPastDay) {
+        cStatus = 'lost';
+        if (steps > 0) {
+            cText = `${stepsFormatted} / 10k pasos ✕`;
+        } else if (cardioMinutes > 0) {
+            cText = `${cardioMinutes}m / ${targetCardioMin}m ✕`;
+        } else {
+            cText = '0 / 10k pasos ✕';
         }
     } else {
-        if (isPastDay) {
-            cStatus = 'lost';
-            cText = `${stepsStr}/10.000 pasos ó ${cardioMinutes}/${targetCardioMin} min ${cardioLabel} ✕`;
+        cStatus = 'in-progress';
+        if (cardioMinutes > 0 && steps === 0) {
+            cText = `${cardioMinutes}m / ${targetCardioMin}m ${cardioLabel}`;
+        } else if (steps > 0 && cardioMinutes > 0) {
+            cText = `${stepsFormatted} pasos • ${cardioMinutes}m`;
         } else {
-            cText = `${stepsStr}/10.000 pasos ó ${cardioMinutes}/${targetCardioMin} min ${cardioLabel}`;
+            cText = `${stepsFormatted} / 10k pasos`;
         }
     }
 
@@ -15735,6 +15947,12 @@ window.setCardioType = function(type, rate, btn) {
 
 window.saveActivityChanges = function(isExplicitSave = false) {
     const targetDate = AppState.selectedDate || new Date();
+    if (isExplicitSave && isFutureDate(targetDate)) {
+        if (typeof showSensToast === 'function') {
+            showSensToast('No es posible registrar actividad de fechas futuras.', 'champagne', 2500);
+        }
+        return;
+    }
     const dateKey = getFormattedDateKey(targetDate);
     const athId = getActiveAthleteId();
     

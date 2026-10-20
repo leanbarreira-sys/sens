@@ -10687,6 +10687,20 @@ body.in-portal .sens-coach-daily-note-card {
     box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
 }
 
+.ex-compact-check-btn.is-future {
+    opacity: 0.35 !important;
+    cursor: not-allowed !important;
+    background: rgba(18, 18, 20, 0.45) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.35) !important;
+    pointer-events: auto !important;
+}
+
+.ex-compact-check-btn.is-future:hover {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
 .sens-ex-compact-bottom {
     position: absolute;
     bottom: 8px;
@@ -14399,20 +14413,32 @@ body.in-portal .sens-macro-grams-bold {
 }
 
 /* =============================================================================
-   ESTRUCTURA DE BADGES DE VIDEO SIN WRAP (MOBILE PARITY)
+   ESTRUCTURA DE BADGES DE VIDEO Y NUTRICIÓN EN 2 FILAS (QUIET LUXURY MOBILE PARITY)
    ============================================================================= */
-.sens-video-top-badges {
+.sens-video-top-badges,
+.sens-nutri-top-badges {
     position: absolute;
-    top: 14px;
+    top: 13px;
     left: 14px;
     right: 14px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.sens-card-badge-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 3;
+    width: 100%;
     pointer-events: none;
-    flex-wrap: nowrap !important;
-    gap: 6px;
+    min-height: 22px;
+}
+
+.sens-card-badge-row > * {
+    pointer-events: auto;
 }
 
 .sens-badges-left {
@@ -14555,8 +14581,8 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 18px;
-    flex-wrap: nowrap;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .sens-balance-title {
@@ -14581,7 +14607,7 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     font-weight: 700;
     background: rgba(229, 203, 167, 0.12) !important;
     color: #E5CBA7 !important;
-    border: 1px solid rgba(229, 203, 167, 0.3) !important;
+    border: none !important;
     padding: 4px 12px;
     border-radius: 999px;
     letter-spacing: 0.3px;
