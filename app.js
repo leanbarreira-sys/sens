@@ -5455,25 +5455,36 @@ function renderModalSeriesList() {
         `).join('');
     }
 
-    // 2. Steppers Detallados Inferiores
+    // 2. Steppers Detallados Inferiores (Quiet Luxury Touch-First)
     if (list) {
         list.innerHTML = modalExerciseState.setsData.map((s, idx) => `
             <div class="sens-tactile-set-row ${s.completed ? 'completed' : ''}" data-set-idx="${idx}">
-                <span class="sens-set-label">Set ${s.setNumber}</span>
-                <div class="sens-stepper-wrap">
-                    <span style="font-size:10px; color:var(--text-muted); margin-right:2px;">KG:</span>
-                    <button type="button" class="sens-stepper-btn" onclick="stepSetWeight(${idx}, -2.5)">-</button>
-                    <input type="number" step="0.5" class="sens-stepper-input" value="${s.weight}" onchange="updateSetWeight(${idx}, this.value)">
-                    <button type="button" class="sens-stepper-btn" onclick="stepSetWeight(${idx}, 2.5)">+</button>
+                <div class="sens-set-col-label">
+                    <span class="sens-set-tag">SET</span>
+                    <span class="sens-set-num">${s.setNumber}</span>
                 </div>
-                <div class="sens-stepper-wrap">
-                    <span style="font-size:10px; color:var(--text-muted); margin-right:2px;">REPS:</span>
-                    <button type="button" class="sens-stepper-btn" onclick="stepSetReps(${idx}, -1)">-</button>
-                    <input type="number" class="sens-stepper-input" value="${s.reps}" onchange="updateSetReps(${idx}, this.value)">
-                    <button type="button" class="sens-stepper-btn" onclick="stepSetReps(${idx}, 1)">+</button>
+                <div class="sens-set-steppers-wrap">
+                    <div class="sens-stepper-capsule">
+                        <button type="button" class="sens-stepper-btn sens-btn-minus" onclick="stepSetWeight(${idx}, -2.5)" aria-label="Menos peso">−</button>
+                        <div class="sens-stepper-val-box">
+                            <input type="number" step="0.5" class="sens-stepper-input" value="${s.weight}" oninput="updateSetWeight(${idx}, this.value)" onchange="renderModalSeriesList()" aria-label="Kilos">
+                            <span class="sens-stepper-unit">KG</span>
+                        </div>
+                        <button type="button" class="sens-stepper-btn sens-btn-plus" onclick="stepSetWeight(${idx}, 2.5)" aria-label="Más peso">+</button>
+                    </div>
+                    <div class="sens-stepper-capsule">
+                        <button type="button" class="sens-stepper-btn sens-btn-minus" onclick="stepSetReps(${idx}, -1)" aria-label="Menos repeticiones">−</button>
+                        <div class="sens-stepper-val-box">
+                            <input type="number" class="sens-stepper-input" value="${s.reps}" oninput="updateSetReps(${idx}, this.value)" onchange="renderModalSeriesList()" aria-label="Repeticiones">
+                            <span class="sens-stepper-unit">REPS</span>
+                        </div>
+                        <button type="button" class="sens-stepper-btn sens-btn-plus" onclick="stepSetReps(${idx}, 1)" aria-label="Más repeticiones">+</button>
+                    </div>
                 </div>
-                <button type="button" class="sens-check-set-btn ${s.completed ? 'checked' : ''}" onclick="toggleSetCompleted(${idx})" title="Marcar completado">
-                    ✓
+                <button type="button" class="sens-check-set-btn ${s.completed ? 'checked' : ''}" onclick="toggleSetCompleted(${idx})" title="${s.completed ? 'Serie completada' : 'Marcar serie'}" aria-label="Marcar completado">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
                 </button>
             </div>
         `).join('');
@@ -5491,25 +5502,47 @@ function renderModalSeriesList() {
 }
 
 window.stepSetWeight = function(idx, delta) {
-    if (!modalExerciseState.setsData[idx]) return;
-    modalExerciseState.setsData[idx].weight = Math.max(0, modalExerciseState.setsData[idx].weight + delta);
+    if (!modalExerciseState.setsData || !modalExerciseState.setsData[idx]) return;
+    const current = Number(modalExerciseState.setsData[idx].weight) || 0;
+    const nextVal = Math.max(0, Math.round((current + delta) * 10) / 10);
+    modalExerciseState.setsData[idx].weight = nextVal;
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
+    if (typeof playBeep === 'function') playBeep(delta > 0 ? 560 : 460, 0.035);
     renderModalSeriesList();
 };
 
 window.updateSetWeight = function(idx, val) {
-    if (!modalExerciseState.setsData[idx]) return;
-    modalExerciseState.setsData[idx].weight = Math.max(0, Number(val) || 0);
+    if (!modalExerciseState.setsData || !modalExerciseState.setsData[idx]) return;
+    const parsed = parseFloat(val);
+    const validVal = isNaN(parsed) ? 0 : Math.max(0, Math.round(parsed * 10) / 10);
+    modalExerciseState.setsData[idx].weight = validVal;
+    const invideoChips = document.querySelectorAll('#modalExInVideoChipsRow .sens-invideo-set-chip');
+    if (invideoChips && invideoChips[idx]) {
+        const strong = invideoChips[idx].querySelector('.set-chip-metrics strong');
+        if (strong) strong.textContent = `${validVal} kg`;
+    }
 };
 
 window.stepSetReps = function(idx, delta) {
-    if (!modalExerciseState.setsData[idx]) return;
-    modalExerciseState.setsData[idx].reps = Math.max(1, modalExerciseState.setsData[idx].reps + delta);
+    if (!modalExerciseState.setsData || !modalExerciseState.setsData[idx]) return;
+    const current = parseInt(modalExerciseState.setsData[idx].reps, 10) || 10;
+    const nextVal = Math.max(1, current + delta);
+    modalExerciseState.setsData[idx].reps = nextVal;
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
+    if (typeof playBeep === 'function') playBeep(delta > 0 ? 560 : 460, 0.035);
     renderModalSeriesList();
 };
 
 window.updateSetReps = function(idx, val) {
-    if (!modalExerciseState.setsData[idx]) return;
-    modalExerciseState.setsData[idx].reps = Math.max(1, parseInt(val, 10) || 1);
+    if (!modalExerciseState.setsData || !modalExerciseState.setsData[idx]) return;
+    const parsed = parseInt(val, 10);
+    const validVal = isNaN(parsed) ? 1 : Math.max(1, parsed);
+    modalExerciseState.setsData[idx].reps = validVal;
+    const invideoChips = document.querySelectorAll('#modalExInVideoChipsRow .sens-invideo-set-chip');
+    if (invideoChips && invideoChips[idx]) {
+        const span = invideoChips[idx].querySelector('.set-chip-metrics span');
+        if (span) span.textContent = `${validVal} reps`;
+    }
 };
 
 window.toggleSetCompleted = function(idx) {
