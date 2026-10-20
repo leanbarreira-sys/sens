@@ -2823,9 +2823,17 @@
                         <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
                     </video>
                     <div class="sens-nutri-overlay-gradient"></div>
+                    <!-- Flechas Táctiles de Navegación del Carrusel Nutricional (Paridad con Videos de Entrenamiento) -->
+                    <div class="sens-video-nav-arrows" id="dashNutriNavArrows">
+                        <button type="button" class="sens-video-arrow-btn" id="dashPrevNutriBtn" aria-label="Comida anterior" title="Comida anterior">‹</button>
+                        <button type="button" class="sens-video-arrow-btn" id="dashNextNutriBtn" aria-label="Siguiente comida" title="Siguiente comida">›</button>
+                    </div>
                     <div class="sens-nutri-top-badges">
                         <span class="sens-modality-pill" id="dashNutriGoalPill">Déficit Calórico</span>
-                        <span class="sens-duration-pill" id="dashNutriTargetBadge">140g Prot • 190g Carbs</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div class="sens-video-dots-indicator" id="dashNutriDotsIndicator"></div>
+                            <span class="sens-duration-pill" id="dashNutriTargetBadge">140g Prot • 190g Carbs</span>
+                        </div>
                     </div>
                     <div class="sens-nutri-card-content">
                         <div class="sens-card-top-info-row">
@@ -3296,101 +3304,110 @@
                  ===================================================================== -->
             <!-- Sub-vista 1: Nutrición & Hábitos -->
             <section class="portal-view" id="nutritionView">
-                <!-- Navegador de Fecha en Cápsula (Estilo Samsung Health) -->
-                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                    <div class="sens-nutri-date-nav">
-                        <button type="button" id="btnNutriPrevDay"
-                            style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:14px; padding:0 4px;">&lt;</button>
-                        <span style="font-size: 13.5px; font-weight: 700; color: #FFFFFF;" id="nutriDateText">mar, 6 de
-                            oct</span>
-                        <button type="button" id="btnNutriNextDay"
-                            style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:14px; padding:0 4px;">&gt;</button>
+                <!-- 1. Navegador de Semanas & Calendario Semanal de Nutrición (Paridad 1:1 con Inicio y Entrenamiento) -->
+                <div class="sens-calendar-sticky-wrapper" id="nutriCalendarStickyWrapper" style="margin-bottom: 16px;">
+                    <div class="sens-week-nav-bar">
+                        <button type="button" class="sens-week-arrow-btn" id="btnNutriWeekPrev" aria-label="Semana anterior" title="Semana anterior">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <div class="sens-week-title-wrap">
+                            <span class="sens-week-range-text" id="sensNutriWeekRangeLabel">Semana Nutricional</span>
+                            <button type="button" class="sens-pill-today" id="btnNutriJumpToToday">Hoy</button>
+                        </div>
+                        <button type="button" class="sens-week-arrow-btn" id="btnNutriWeekNext" aria-label="Semana siguiente" title="Semana siguiente">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="sens-week-strip-wrap" id="nutriDaysNav">
+                        <!-- Inyectado dinámicamente con los 7 días y micro-iconos por app.js -->
                     </div>
                 </div>
 
-                <!-- 1. Hero Calórico con Zona de Rango Óptimo (Estilo Samsung Health) -->
-                <div class="sens-nutri-target-hero-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <!-- 2. Hero Calórico Primario: "Calorías Consumidas del Día" + Objetivo Claro + Desglose Integrado (Items 2 & 4) -->
+                <div class="sens-nutri-hero-primary-card" id="sensNutriHeroCard">
+                    <!-- Cabecera Editorial con Objetivo Claro -->
+                    <div class="sens-nutri-hero-header">
                         <div>
-                            <div class="sens-nutri-big-num" id="nutriConsumedNum">1,290</div>
-                            <span style="font-size: 14px; font-weight: 600; color: var(--text-muted);">kcal</span>
+                            <span class="sens-card-domain-eyebrow" style="color: #E5CBA7; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Registro Nutricional Diario</span>
+                            <h2 class="sens-nutri-hero-title">Calorías Consumidas del Día</h2>
                         </div>
-                        <div class="sens-nutri-target-labels">
-                            <div
-                                style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #09090B;">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
+                        <span class="pill pill-champagne" id="nutriDailyGoalBadge" style="font-size: 10.5px; padding: 4px 10px;">Meta: Déficit Calórico</span>
+                    </div>
+
+                    <!-- Métricas Tabulares Destacadas -->
+                    <div class="sens-nutri-hero-stats-row">
+                        <div class="sens-nutri-hero-stat-main">
+                            <span class="sens-nutri-hero-val" id="nutriConsumedNum">0</span>
+                            <span class="sens-nutri-hero-unit">kcal consumidas</span>
+                        </div>
+                        <div class="sens-nutri-hero-stat-target">
+                            <span class="sens-nutri-stat-label">Objetivo Diario</span>
+                            <span class="sens-nutri-target-val" id="nutriTargetKcal">1.950 kcal</span>
+                            <span class="sens-nutri-remaining-val" id="nutriRemainingKcal">Restan 1.950 kcal</span>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progreso y Zona de Rango Óptimo -->
+                    <div class="sens-nutri-progress-track-wrap">
+                        <div class="sens-nutri-progress-track">
+                            <div class="sens-nutri-progress-fill" id="nutriSliderFill" style="width: 0%;"></div>
+                            <div class="sens-nutri-optimal-zone" id="nutriOptimalZoneMarker" style="left: 69%; width: 16%;" title="Zona calórica óptima"></div>
+                        </div>
+                        <div class="sens-nutri-progress-labels">
+                            <span>0 kcal</span>
+                            <span id="nutriOptimalRangeText">Rango óptimo: 1.750 - 2.140 kcal</span>
+                            <span id="nutriMaxKcalLabel">2.400 kcal</span>
+                        </div>
+                    </div>
+
+                    <!-- Desglose de Macronutrientes Integrado como Detalle (Item 4) -->
+                    <div class="sens-nutri-macro-accordion-wrap">
+                        <button type="button" class="sens-btn-macro-drawer-toggle" id="btnToggleMacroDrawer">
+                            <div class="sens-macro-toggle-left">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2">
                                     <circle cx="12" cy="12" r="10" />
-                                    <circle cx="12" cy="12" r="6" />
-                                    <circle cx="12" cy="12" r="2" />
+                                    <path d="M12 2a10 10 0 0 1 10 10" />
+                                    <path d="M12 12 21.2 7.8" />
                                 </svg>
-                                <span id="nutriTargetKcal">1,800 kcal</span>
+                                <span>Desglose de Macronutrientes</span>
+                                <span class="sens-macro-toggle-summary" id="nutriMacroQuickSummary">0g Prot • 0g Carbs • 0g Grasas</span>
                             </div>
-                            <div
-                                style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-muted);">
-                                <span
-                                    style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4);"></span>
-                                <span id="nutriOptimalRangeText">1,620 - 1,980</span>
+                            <span class="sens-accordion-chevron" id="macroDrawerChevron">▾</span>
+                        </button>
+
+                        <div class="sens-nutri-macro-drawer-body" id="sensNutriMacroDrawerBody" style="display: none;">
+                            <div class="sens-macros-trio-grid">
+                                <div class="sens-macro-pill-card carb">
+                                    <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Carbohidratos</span>
+                                    <div class="sens-macro-grams-bold" id="nutriCarbsGrams">0<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
+                                    <span class="sens-macro-ratio" id="nutriCarbsRatio">0% del total</span>
+                                </div>
+                                <div class="sens-macro-pill-card prot">
+                                    <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Proteínas</span>
+                                    <div class="sens-macro-grams-bold" id="nutriProtGrams">0<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
+                                    <span class="sens-macro-ratio" id="nutriProtRatio">0% del total</span>
+                                </div>
+                                <div class="sens-macro-pill-card fat">
+                                    <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Grasas</span>
+                                    <div class="sens-macro-grams-bold" id="nutriFatsGrams">0<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
+                                    <span class="sens-macro-ratio" id="nutriFatsRatio">0% del total</span>
+                                </div>
+                            </div>
+
+                            <div class="sens-macro-distribution-footer">
+                                <div class="sens-macro-segmented-bar">
+                                    <div class="sens-macro-seg carb" id="nutriSegCarb" style="width: 45%;"></div>
+                                    <div class="sens-macro-seg prot" id="nutriSegProt" style="width: 30%;"></div>
+                                    <div class="sens-macro-seg fat" id="nutriSegFat" style="width: 25%;"></div>
+                                </div>
+                                <div class="sens-macro-bar-legend">
+                                    <span style="color: #38BDF8;" id="legendCarbPct">45% Carbohidratos</span>
+                                    <span style="color: #E5CBA7;" id="legendProtPct">30% Proteína</span>
+                                    <span style="color: #F59E0B;" id="legendFatPct">25% Grasa</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Dual Slider con Zona Rayada -->
-                    <div class="sens-nutri-range-slider-wrap">
-                        <div class="sens-nutri-dual-slider-track">
-                            <div class="sens-nutri-slider-fill" id="nutriSliderFill" style="width: 55%;"></div>
-                            <div class="sens-nutri-optimal-zone" style="left: 69%; width: 15%;"></div>
-                        </div>
-                        <div class="sens-nutri-target-pin" id="nutriTargetPin" style="left: 77%;"></div>
-                        <div
-                            style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 8px;">
-                            <span>0</span>
-                            <span id="nutriMaxKcalLabel">2,340</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Info Nutrición & Trío de Macro Cards (Estilo Samsung Health) -->
-                <div class="card-panel" style="padding: 22px 24px; margin-bottom: 22px;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <span style="font-size: 15px; font-weight: 800; color: #09090B;">Distribución de Macronutrientes</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#71717A"
-                            stroke-width="2">
-                            <polyline points="9 18 15 12 9 6" />
-                        </svg>
-                    </div>
-
-                    <div class="sens-macros-trio-grid">
-                        <div class="sens-macro-pill-card carb">
-                            <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Carb.</span>
-                            <div class="sens-macro-grams-bold" id="nutriCarbsGrams">160<span
-                                    style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
-                        </div>
-                        <div class="sens-macro-pill-card fat">
-                            <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Grasa</span>
-                            <div class="sens-macro-grams-bold" id="nutriFatsGrams">52<span
-                                    style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
-                        </div>
-                        <div class="sens-macro-pill-card prot">
-                            <span class="sens-macro-title" style="font-size: 12px; font-weight: 700;">Proteína</span>
-                            <div class="sens-macro-grams-bold" id="nutriProtGrams">145<span
-                                    style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span></div>
-                        </div>
-                    </div>
-
-                    <!-- Macro Segmented Bar (Real vs Recomendado) -->
-                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Distribución real vs
-                        recomendada</div>
-                    <div class="sens-macro-segmented-bar">
-                        <div class="sens-macro-seg carb" style="width: 45%;"></div>
-                        <div class="sens-macro-seg fat" style="width: 25%;"></div>
-                        <div class="sens-macro-seg prot" style="width: 30%;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700;">
-                        <span style="color: #38BDF8;">45% Carb</span>
-                        <span style="color: #F59E0B;">25% Grasa</span>
-                        <span style="color: var(--accent-primary);">30% Proteína</span>
                     </div>
                 </div>
 
@@ -5609,7 +5626,9 @@
         <div class="sens-modal-sheet-box">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <span class="pill pill-champagne" id="ufdCategoryPill" style="font-size: 10px; padding: 2px 8px;">Proteína Magra</span>
-                <button type="button" class="btn-clean" id="btnCloseUserFoodDetailModal" style="color: #A1A1AA; font-size: 24px; cursor: pointer; line-height: 1;">&times;</button>
+                <button type="button" class="sens-modal-close-btn" id="btnCloseUserFoodDetailModal" aria-label="Cerrar modal">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
             </div>
 
             <!-- Imagen HD del Alimento -->
@@ -5622,24 +5641,42 @@
                 </div>
             </div>
 
-            <!-- Fila de Ajuste de Gramaje con Stepper Táctil -->
+            <!-- Fila de Ajuste de Gramaje con Stepper Táctil & Toggle de Unidades (Item 5) -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 12px; font-weight: 700; color: #E4E4E7; margin-bottom: 6px;">
-                    Ajustar Porción / Gramos:
-                </label>
-                <div class="sens-gram-stepper-row">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: #E4E4E7; margin: 0;">
+                        Ajustar Porción:
+                    </label>
+                    <div class="sens-unit-toggle-pill-wrap" id="ufdUnitToggleWrap" style="display: none;">
+                        <button type="button" class="sens-unit-pill-btn active" id="btnUfdUnitModeGrams">Gramos (g)</button>
+                        <button type="button" class="sens-unit-pill-btn" id="btnUfdUnitModeUnits">Unidades (u)</button>
+                    </div>
+                </div>
+
+                <!-- Stepper en Modo Gramos -->
+                <div class="sens-gram-stepper-row" id="ufdGramsStepperRow">
                     <button type="button" class="sens-stepper-btn" id="btnUfdMinus50" title="-50g">-50</button>
                     <button type="button" class="sens-stepper-btn" id="btnUfdMinus10" title="-10g">-10</button>
                     <div style="display: flex; align-items: baseline; gap: 4px;">
                         <input type="number" id="ufdGramInput" class="sens-stepper-input" value="150" min="10" max="1000" step="5">
-                        <span style="font-size: 13px; font-weight: 700; color: #A1A1AA;">g</span>
+                        <span style="font-size: 13px; font-weight: 700; color: #A1A1AA;" id="ufdUnitSuffix">g</span>
                     </div>
                     <button type="button" class="sens-stepper-btn" id="btnUfdPlus10" title="+10g">+10</button>
                     <button type="button" class="sens-stepper-btn" id="btnUfdPlus50" title="+50g">+50</button>
                 </div>
 
+                <!-- Stepper en Modo Unidades (Oculto inicialmente) -->
+                <div class="sens-gram-stepper-row" id="ufdUnitsStepperRow" style="display: none;">
+                    <button type="button" class="sens-stepper-btn" id="btnUfdMinusUnit" title="-1 unidad" style="padding: 8px 16px;">-1</button>
+                    <div style="display: flex; align-items: baseline; gap: 4px;">
+                        <input type="number" id="ufdUnitInput" class="sens-stepper-input" value="2" min="0.5" max="20" step="0.5" style="width: 60px;">
+                        <span style="font-size: 13px; font-weight: 700; color: #E5CBA7;" id="ufdUnitNameLabel">u</span>
+                    </div>
+                    <button type="button" class="sens-stepper-btn" id="btnUfdPlusUnit" title="+1 unidad" style="padding: 8px 16px;">+1</button>
+                </div>
+
                 <!-- Recálculo Dinámico de Macros en Vivo -->
-                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; gap: 8px;">
+                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; gap: 8px; margin-top: 10px;">
                     <div>
                         <span style="display: block; font-size: 10px; font-weight: 700; color: #94A3B8;">CALORÍAS</span>
                         <strong id="ufdCalcKcal" style="font-size: 16px; color: #FFFFFF; font-weight: 800;">248</strong>
@@ -5659,15 +5696,22 @@
                 </div>
             </div>
 
-            <!-- Ingredientes y Preparación -->
+            <!-- Ingredientes y Preparación con Despliegue "Ver Más" (Item 7) -->
             <div id="ufdIngredientsWrap" style="margin-bottom: 14px; font-size: 12.5px; color: #CBD5E1; line-height: 1.5; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 10px 12px;">
                 <strong style="color: #FFFFFF; display: block; margin-bottom: 4px;">Ingredientes Principales:</strong>
                 <span id="ufdIngredientsText">-</span>
             </div>
 
             <div id="ufdStepsWrap" style="margin-bottom: 14px; font-size: 12px; color: #94A3B8; line-height: 1.5; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 10px 12px;">
-                <strong style="color: #FFFFFF; display: block; margin-bottom: 4px;">Pasos de Preparación:</strong>
-                <span id="ufdStepsText">-</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #FFFFFF; font-size: 12.5px;">Pasos de Preparación:</strong>
+                    <button type="button" class="sens-btn-disclosure" id="btnToggleUfdSteps">
+                        <span id="ufdStepsToggleText">Ver más</span>
+                        <span id="ufdStepsArrow">▾</span>
+                    </button>
+                </div>
+                <div id="ufdStepsPreview" style="color: #CBD5E1; font-size: 12px; line-height: 1.5;">-</div>
+                <div id="ufdStepsFull" style="display: none; color: #CBD5E1; font-size: 12px; line-height: 1.6; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;"></div>
             </div>
 
             <!-- Tip de Nico & Alérgenos -->
@@ -5694,7 +5738,9 @@
         <div class="sens-modal-sheet-box">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                 <h3 style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 0;">Registrar Comida Personalizada</h3>
-                <button type="button" class="btn-clean" id="btnCloseUserCustomMealModal" style="color: #A1A1AA; font-size: 24px; cursor: pointer; line-height: 1;">&times;</button>
+                <button type="button" class="sens-modal-close-btn" id="btnCloseUserCustomMealModal" aria-label="Cerrar modal">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
             </div>
 
             <!-- Selector de Momento de Ingesta -->
@@ -5719,11 +5765,29 @@
                 </button>
             </div>
 
-            <!-- MODO A: Búsqueda y Selección Multi-ingrediente -->
+            <!-- MODO A: Búsqueda y Selección Multi-ingrediente con Filtro de Calorías (Item 8) -->
             <div id="paneCustomSearch">
-                <input type="text" id="customFoodSearchInput" class="input-control" placeholder="Buscar alimento (ej: Pollo, Avena, Yogur, Palta)..." style="font-size: 13px; margin-bottom: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 10px 14px;">
+                <input type="text" id="customFoodSearchInput" class="input-control" placeholder="Buscar alimento (ej: Pollo, Avena, Yogur, Palta)..." style="font-size: 13px; margin-bottom: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 10px 14px;">
                 
-                <!-- Bandeja de Ingredientes Seleccionados -->
+                <!-- Chips de Rango Calórico (Item 8) -->
+                <div class="sens-kcal-filter-row" id="customKcalFilterRow">
+                    <button type="button" class="sens-kcal-chip active" data-range="all">Todas las Calorías</button>
+                    <button type="button" class="sens-kcal-chip" data-range="under200">&lt; 200 kcal</button>
+                    <button type="button" class="sens-kcal-chip" data-range="200-400">200 - 400 kcal</button>
+                    <button type="button" class="sens-kcal-chip" data-range="400-600">400 - 600 kcal</button>
+                    <button type="button" class="sens-kcal-chip" data-range="over600">&gt; 600 kcal</button>
+                </div>
+
+                <!-- Entradas Exactas de Mín / Máx kcal -->
+                <div class="sens-kcal-range-inputs">
+                    <span style="font-size: 11px; color: #71717A;">Rango exacto:</span>
+                    <input type="number" id="customKcalMinInput" class="sens-kcal-range-input" placeholder="Mín kcal" min="0" max="2500" step="50">
+                    <span style="color: #71717A; font-size: 11px;">–</span>
+                    <input type="number" id="customKcalMaxInput" class="sens-kcal-range-input" placeholder="Máx kcal" min="0" max="2500" step="50">
+                    <button type="button" class="btn btn-outline btn-sm" id="btnResetKcalFilter" style="padding: 4px 8px; font-size: 10.5px; border-color: rgba(255,255,255,0.15); color: #A1A1AA; cursor: pointer;">Limpiar</button>
+                </div>
+
+                <!-- Bandeja de Ingredientes Seleccionados (Item 6: Brand Remove UX) -->
                 <div id="customSelectedIngredientsTray" style="display: none; background: rgba(229, 203, 167, 0.06); border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 12px; padding: 12px; margin-bottom: 12px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <span style="font-size: 11.5px; font-weight: 700; color: #E5CBA7;">Comida compuesta:</span>
@@ -5732,32 +5796,46 @@
                     <div id="customTrayItemsList" style="display: flex; flex-direction: column; gap: 6px;"></div>
                 </div>
 
-                <!-- Resultados de Búsqueda -->
-                <div id="customSearchResultsList" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;"></div>
+                <!-- Resultados de Búsqueda con Inspección de Pasos e Ingredientes (Item 8) -->
+                <div id="customSearchResultsList" style="max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;"></div>
             </div>
 
-            <!-- MODO B: Carga Manual Directa de Calorías y Macros -->
+            <!-- MODO B: Carga Manual Directa Simplificada y de Alta Visibilidad (Item 5) -->
             <div id="paneCustomManual" style="display: none;">
                 <div style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 12px; font-weight: 600; color: #A1A1AA; margin-bottom: 4px;">Nombre del plato / comida:</label>
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #E4E4E7; margin-bottom: 6px;">Nombre del plato:</label>
                     <input type="text" id="manualMealNameInput" class="input-control" placeholder="Ej: Cena con amigos, Plato libre..." style="font-size: 13px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 10px 14px;">
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px;">
+
+                <!-- Presets Rápidos de Calorías para Carga Instantánea -->
+                <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-size: 11.5px; font-weight: 700; color: #A1A1AA; margin-bottom: 6px;">Presets Rápidos:</label>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="manualKcalPresetsWrap">
+                        <button type="button" class="sens-kcal-chip" data-kcal="250">250 kcal</button>
+                        <button type="button" class="sens-kcal-chip" data-kcal="400">400 kcal</button>
+                        <button type="button" class="sens-kcal-chip" data-kcal="550">550 kcal</button>
+                        <button type="button" class="sens-kcal-chip" data-kcal="700">700 kcal</button>
+                        <button type="button" class="sens-kcal-chip" data-kcal="900">900 kcal</button>
+                    </div>
+                </div>
+
+                <!-- Grid de Valores Nutricionales Destacados -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px;">
                     <div>
-                        <label style="display: block; font-size: 11px; font-weight: 600; color: #A1A1AA; margin-bottom: 4px;">Calorías Totales (kcal):</label>
-                        <input type="number" id="manualMealKcalInput" class="input-control" placeholder="550" min="0" style="font-size: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 8px 12px;">
+                        <label style="display: block; font-size: 10px; font-weight: 800; color: #FFFFFF; margin-bottom: 4px; text-transform: uppercase;">Calorías</label>
+                        <input type="number" id="manualMealKcalInput" class="input-control" placeholder="550" min="0" style="font-size: 15px; font-weight: 800; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #FFF; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 11px; font-weight: 600; color: #E5CBA7; margin-bottom: 4px;">Proteína (g):</label>
-                        <input type="number" id="manualMealProtInput" class="input-control" placeholder="35" min="0" style="font-size: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 8px 12px;">
+                        <label style="display: block; font-size: 10px; font-weight: 800; color: #E5CBA7; margin-bottom: 4px; text-transform: uppercase;">Proteína</label>
+                        <input type="number" id="manualMealProtInput" class="input-control" placeholder="35g" min="0" style="font-size: 13.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid rgba(229,203,167,0.3); color: #E5CBA7; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 11px; font-weight: 600; color: #38BDF8; margin-bottom: 4px;">Carbohidratos (g):</label>
-                        <input type="number" id="manualMealCarbsInput" class="input-control" placeholder="50" min="0" style="font-size: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 8px 12px;">
+                        <label style="display: block; font-size: 10px; font-weight: 800; color: #38BDF8; margin-bottom: 4px; text-transform: uppercase;">Carbos</label>
+                        <input type="number" id="manualMealCarbsInput" class="input-control" placeholder="50g" min="0" style="font-size: 13.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid rgba(56,189,248,0.3); color: #38BDF8; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 11px; font-weight: 600; color: #F59E0B; margin-bottom: 4px;">Grasas (g):</label>
-                        <input type="number" id="manualMealFatsInput" class="input-control" placeholder="15" min="0" style="font-size: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 8px 12px;">
+                        <label style="display: block; font-size: 10px; font-weight: 800; color: #F59E0B; margin-bottom: 4px; text-transform: uppercase;">Grasas</label>
+                        <input type="number" id="manualMealFatsInput" class="input-control" placeholder="15g" min="0" style="font-size: 13.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid rgba(245,158,11,0.3); color: #F59E0B; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
                     </div>
                 </div>
             </div>

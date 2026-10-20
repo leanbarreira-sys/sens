@@ -18599,6 +18599,450 @@ body.in-portal,
     will-change: transform;
 }
 
+/* =============================================================================
+   MÓDULO DE NUTRICIÓN SENS: QUIET LUXURY OBSIDIAN & MOBILE-FIRST PARITY
+   ============================================================================= */
+
+/* 1. Hero Calórico Primario con Paridad y Claridad Total */
+.sens-nutri-hero-primary-card {
+    background: #121215;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.sens-nutri-hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.sens-nutri-hero-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 4px 0 0 0;
+    letter-spacing: -0.2px;
+}
+
+.sens-nutri-hero-stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 16px 0 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sens-nutri-hero-stat-main {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.sens-nutri-hero-val {
+    font-size: 2.5rem;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    color: #FFFFFF;
+    letter-spacing: -0.8px;
+    line-height: 1;
+}
+
+.sens-nutri-hero-unit {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.sens-nutri-hero-stat-target {
+    text-align: right;
+}
+
+.sens-nutri-stat-label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #71717A;
+    font-weight: 700;
+}
+
+.sens-nutri-target-val {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #E5CBA7;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-nutri-remaining-val {
+    display: block;
+    font-size: 11.5px;
+    color: #A1A1AA;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* Barra de Progreso y Rango Óptimo */
+.sens-nutri-progress-track-wrap {
+    margin-bottom: 14px;
+}
+
+.sens-nutri-progress-track {
+    position: relative;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.sens-nutri-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%);
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+}
+
+.sens-nutri-optimal-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(45deg, rgba(229, 203, 167, 0.12), rgba(229, 203, 167, 0.12) 4px, rgba(229, 203, 167, 0.25) 4px, rgba(229, 203, 167, 0.25) 8px);
+    border-left: 1px dashed rgba(229, 203, 167, 0.5);
+    border-right: 1px dashed rgba(229, 203, 167, 0.5);
+    pointer-events: none;
+}
+
+.sens-nutri-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #71717A;
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Acordeón Integrado de Desglose de Macronutrientes */
+.sens-nutri-macro-accordion-wrap {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding-top: 12px;
+    margin-top: 12px;
+}
+
+.sens-btn-macro-drawer-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 8px 12px;
+    color: #E4E4E7;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sens-btn-macro-drawer-toggle:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(229, 203, 167, 0.3);
+    color: #FFFFFF;
+}
+
+.sens-macro-toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.sens-macro-toggle-summary {
+    font-size: 11px;
+    font-weight: 600;
+    color: #A1A1AA;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-nutri-macro-drawer-body {
+    margin-top: 12px;
+    animation: sensFadeIn 0.25s ease;
+}
+
+.sens-macro-ratio {
+    display: block;
+    font-size: 10.5px;
+    color: #71717A;
+    margin-top: 2px;
+}
+
+.sens-macro-distribution-footer {
+    margin-top: 12px;
+}
+
+.sens-macro-bar-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 2. Subsecciones Visuales de Comida */
+.sens-meal-subsection-block {
+    margin-bottom: 22px;
+}
+
+.sens-meal-subsection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.sens-meal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.sens-meal-header-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sens-meal-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #E5CBA7;
+    flex-shrink: 0;
+}
+
+.sens-meal-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin: 0;
+}
+
+.sens-meal-subtotal-meta {
+    font-size: 11px;
+    font-weight: 600;
+    color: #A1A1AA;
+    font-variant-numeric: tabular-nums;
+}
+
+.btn-quick-add-to-meal {
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    background: rgba(229, 203, 167, 0.05);
+    color: #E5CBA7;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-quick-add-to-meal:hover {
+    background: rgba(229, 203, 167, 0.15);
+    border-color: #E5CBA7;
+    color: #FFFFFF;
+}
+
+.sens-meal-foods-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Botón Quick Log Directo en Food Card */
+.sens-btn-quick-log {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #A1A1AA;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.sens-btn-quick-log:hover {
+    background: rgba(229, 203, 167, 0.15);
+    border-color: #E5CBA7;
+    color: #FFFFFF;
+}
+
+.sens-btn-quick-log.is-logged {
+    background: rgba(229, 203, 167, 0.2);
+    border-color: #E5CBA7;
+    color: #E5CBA7;
+}
+
+/* 3. Luxury Brand Remove / Cross Buttons (Item 6) */
+.sens-btn-remove-luxury {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #F87171;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.sens-btn-remove-luxury:hover {
+    background: rgba(239, 68, 68, 0.22);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #FFFFFF;
+    transform: scale(1.06);
+}
+
+/* 4. Selector de Gramos vs Unidades en Inspector (Item 5) */
+.sens-unit-toggle-pill-wrap {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    padding: 2px;
+    margin-bottom: 8px;
+}
+
+.sens-unit-pill-btn {
+    background: transparent;
+    border: none;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #A1A1AA;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sens-unit-pill-btn.active {
+    background: #E5CBA7;
+    color: #09090B;
+}
+
+/* 5. Filtros de Calorías y Previsualización en Biblioteca (Item 8) */
+.sens-kcal-filter-row {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 4px 0 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.sens-kcal-filter-row::-webkit-scrollbar {
+    display: none;
+}
+
+.sens-kcal-chip {
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 4px 11px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #A1A1AA;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sens-kcal-chip:hover {
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.sens-kcal-chip.active {
+    background: rgba(229, 203, 167, 0.18);
+    border-color: #E5CBA7;
+    color: #E5CBA7;
+}
+
+.sens-kcal-range-inputs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.sens-kcal-range-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #FFFFFF;
+    font-size: 12px;
+    width: 85px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-btn-disclosure {
+    background: none;
+    border: none;
+    color: #E5CBA7;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sens-btn-disclosure:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+.sens-food-inspect-drawer {
+    display: none;
+    background: rgba(0, 0, 0, 0.45);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 12px;
+    font-size: 11.5px;
+    color: #CBD5E1;
+    line-height: 1.5;
+    border-radius: 0 0 10px 10px;
+}
+
+
 
 
 

@@ -10538,9 +10538,11 @@ function syncMemberNutritionPrescription(athId, forcedData = null) {
 
     // Sincronizar Sección Dinámica de Pauta Nutricional & 500 Alimentos Clínicos
     renderMemberNutritionPlan(athId, AppState.nutriSelectedDate || AppState.selectedDate || new Date());
+    if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
     initUserNutritionFilterAndDateListeners();
     initUserFoodDetailModal();
     initUserCustomMealModal(athId);
+    if (typeof initCalendarSwipeGestures === 'function') initCalendarSwipeGestures();
 }
 
 /**
@@ -10552,20 +10554,205 @@ let userActiveNutriMealSlot = 'desayuno';
 let userActiveFoodForDetail = null;
 let userCustomTrayItems = [];
 
+/**
+ * Determina equivalencia de porción por unidad (huevos, frutas, rodajas, etc.)
+ */
+function getFoodUnitInfo(food) {
+    if (!food) return { hasUnit: false, unitName: 'u', gramsPerUnit: 100, defaultUnits: 1 };
+    const str = (food.unidades_caseras_total || food.portion || '').toLowerCase();
+    const name = (food.name || food.name_es || '').toLowerCase();
+
+    if (name.includes('huevo') || str.includes('huevo')) {
+        return { hasUnit: true, unitName: 'huevos', gramsPerUnit: 50, defaultUnits: 2 };
+    }
+    if (name.includes('clara') || str.includes('clara')) {
+        return { hasUnit: true, unitName: 'claras', gramsPerUnit: 33, defaultUnits: 4 };
+    }
+    if (name.includes('banana') || str.includes('banana')) {
+        return { hasUnit: true, unitName: 'banana', gramsPerUnit: 120, defaultUnits: 1 };
+    }
+    if (name.includes('manzana') || str.includes('manzana')) {
+        return { hasUnit: true, unitName: 'manzana', gramsPerUnit: 150, defaultUnits: 1 };
+    }
+    if (name.includes('medallón') || str.includes('medallón')) {
+        return { hasUnit: true, unitName: 'medallón', gramsPerUnit: 100, defaultUnits: 1 };
+    }
+    if (name.includes('feta') || str.includes('feta') || name.includes('rebanada') || str.includes('rebanada')) {
+        return { hasUnit: true, unitName: 'fetas', gramsPerUnit: 30, defaultUnits: 2 };
+    }
+    if (name.includes('rodaja') || str.includes('rodaja')) {
+        return { hasUnit: true, unitName: 'rodajas', gramsPerUnit: 35, defaultUnits: 2 };
+    }
+    if (name.includes('scoop') || str.includes('scoop')) {
+        return { hasUnit: true, unitName: 'scoop', gramsPerUnit: 30, defaultUnits: 1 };
+    }
+    if (name.includes('lata') || str.includes('lata')) {
+        return { hasUnit: true, unitName: 'lata', gramsPerUnit: 120, defaultUnits: 1 };
+    }
+
+    const match = str.match(/^(\d+(?:\.\d+)?)\s+([a-záéíóúñ]+).*?\((\d+)\s*g/i);
+    if (match) {
+        const count = parseFloat(match[1]);
+        const unitWord = match[2].trim();
+        const totalG = parseInt(match[3], 10);
+        if (count > 0 && totalG > 0) {
+            return {
+                hasUnit: true,
+                unitName: unitWord,
+                gramsPerUnit: Math.round(totalG / count),
+                defaultUnits: count
+            };
+        }
+    }
+
+    if (str.includes('unidad') || str.includes('unidades')) {
+        const bg = food.baseGrams || food.defaultGrams || food.porcion_total_g_ml || 100;
+        return { hasUnit: true, unitName: 'unidad', gramsPerUnit: bg, defaultUnits: 1 };
+    }
+
+    return { hasUnit: false, unitName: 'porción', gramsPerUnit: food.baseGrams || food.defaultGrams || 100, defaultUnits: 1 };
+}
+
+window.getFoodUnitInfo = getFoodUnitInfo;
+
+/**
+ * Renderiza el calendario semanal de nutrición (id="nutriDaysNav")
+ * con paridad total con Inicio y Entrenamiento
+ */
+function renderNutriDaysNav() {
+    const container = document.getElementById('nutriDaysNav');
+    if (!container) return;
+
+    if (!AppState.activeWeekStart) {
+        AppState.activeWeekStart = getMonday(new Date());
+    }
+
+    const rangeLabel = document.getElementById('sensNutriWeekRangeLabel');
+    if (rangeLabel && typeof getWeekRangeLabel === 'function') {
+        rangeLabel.textContent = getWeekRangeLabel(AppState.activeWeekStart);
+    }
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const dayNames = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
+    let html = '';
+
+    for (let i = 0; i < 7; i++) {
+        const dayDate = new Date(AppState.activeWeekStart);
+        dayDate.setDate(AppState.activeWeekStart.getDate() + i);
+
+        const isToday = isSameDay(dayDate, new Date());
+        const isSelected = isSameDay(dayDate, AppState.nutriSelectedDate || AppState.selectedDate || new Date());
+        const dayKey = 'day' + (i + 1);
+        const heroNum = dayDate.getDate();
+
+        const dateIso = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, '0')}-${String(dayDate.getDate()).padStart(2, '0')}`;
+        const hasCustomMeals = Boolean(localStorage.getItem(`sens_user_logged_meals_${athId}_${dateIso}`));
+        const hasAdjustments = Boolean(localStorage.getItem(`sens_user_adjusted_meals_${athId}_${dateIso}`));
+        const hasConsumed = Boolean(localStorage.getItem(`sens_user_consumed_foods_${athId}_${dateIso}`));
+        const isLogged = hasCustomMeals || hasAdjustments || hasConsumed;
+
+        let badgeHtml = '';
+        if (isLogged) {
+            badgeHtml = `<span class="sens-day-badge done" title="Plan nutricional registrado">✓</span>`;
+        } else if (isToday) {
+            badgeHtml = `<span class="sens-day-badge auto" title="Hoy">Hoy</span>`;
+        } else {
+            badgeHtml = `<span class="sens-day-badge rest" title="Pauta activa">–</span>`;
+        }
+
+        html += `
+            <button type="button" class="sens-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
+                <span class="sens-day-name">${dayNames[i]}</span>
+                <span class="sens-day-hero-num">${heroNum}</span>
+                <div class="sens-day-modality-indicator">${badgeHtml}</div>
+            </button>
+        `;
+    }
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.sens-week-day-pill').forEach((pill, idx) => {
+        pill.addEventListener('click', () => {
+            container.querySelectorAll('.sens-week-day-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+
+            const dayDate = new Date(AppState.activeWeekStart);
+            dayDate.setDate(AppState.activeWeekStart.getDate() + idx);
+            AppState.selectedDate = dayDate;
+            AppState.nutriSelectedDate = dayDate;
+            const dayKey = 'day' + (idx + 1);
+            AppState.currentDay = dayKey;
+
+            renderMemberNutritionPlan(athId, dayDate);
+            renderNutriDaysNav();
+            if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+            if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
+        });
+    });
+}
+
+window.renderNutriDaysNav = renderNutriDaysNav;
+
+/**
+ * Marca o desmarca un alimento como consumido hoy desde la card directa (Item 5)
+ */
+function toggleFoodLoggedStatus(foodKey, mealSlot) {
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const sDate = AppState.nutriSelectedDate || new Date();
+    const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+    const logKey = `sens_user_consumed_foods_${athId}_${dateIso}`;
+
+    let loggedFoods = {};
+    try {
+        loggedFoods = JSON.parse(localStorage.getItem(logKey) || '{}');
+    } catch (e) {}
+
+    const isCurrentlyLogged = Boolean(loggedFoods[foodKey]);
+    if (isCurrentlyLogged) {
+        delete loggedFoods[foodKey];
+        if (typeof showSensToast === 'function') showSensToast('Alimento desmarcado de hoy.', 'info', 1500);
+    } else {
+        loggedFoods[foodKey] = true;
+        if (typeof showSensToast === 'function') showSensToast('✓ Registrado como consumido.', 'champagne', 2000);
+    }
+    localStorage.setItem(logKey, JSON.stringify(loggedFoods));
+
+    renderMemberNutritionPlan(athId, sDate);
+    renderNutriDaysNav();
+}
+
+window.toggleFoodLoggedStatus = toggleFoodLoggedStatus;
+
+/**
+ * Abre el modal de comida personalizada pre-seleccionando un momento específico de comida
+ */
+function openCustomMealModalForSlot(slot) {
+    const modal = document.getElementById('userCustomMealModal');
+    if (!modal) return;
+    userCustomTrayItems = [];
+    userActiveNutriMealSlot = slot || 'almuerzo';
+
+    const slotPills = modal.querySelectorAll('#customMealSlotRow .sens-nutri-tab-pill');
+    slotPills.forEach(pill => {
+        const isMatch = pill.getAttribute('data-slot') === userActiveNutriMealSlot;
+        pill.classList.toggle('active', isMatch);
+    });
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    const searchInput = document.getElementById('customFoodSearchInput');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+}
+
+window.openCustomMealModalForSlot = openCustomMealModalForSlot;
+
 function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     const sDate = targetDate || new Date();
     AppState.nutriSelectedDate = sDate;
     const isToday = isSameDay(sDate, new Date());
-
-    // 1. Cabecera de Fecha (Estilo Samsung Health)
-    const dateTextEl = document.getElementById('nutriDateText');
-    if (dateTextEl) {
-        const daysShort = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
-        const monthsShort = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-        dateTextEl.textContent = isToday
-            ? `Hoy, ${sDate.getDate()} de ${monthsShort[sDate.getMonth()]}`
-            : `${daysShort[sDate.getDay()]}, ${sDate.getDate()} de ${monthsShort[sDate.getMonth()]}`;
-    }
 
     const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
     const dayOfWeek = sDate.getDay();
@@ -10573,6 +10760,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
     const adjustStorageKey = `sens_user_adjusted_meals_${athId}_${dateIso}`;
     const customStorageKey = `sens_user_logged_meals_${athId}_${dateIso}`;
+    const consumedStorageKey = `sens_user_consumed_foods_${athId}_${dateIso}`;
 
     let userAdjusted = {};
     try {
@@ -10582,6 +10770,11 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     let userCustomMeals = [];
     try {
         userCustomMeals = JSON.parse(localStorage.getItem(customStorageKey) || '[]');
+    } catch (e) {}
+
+    let userConsumedFoods = {};
+    try {
+        userConsumedFoods = JSON.parse(localStorage.getItem(consumedStorageKey) || '{}');
     } catch (e) {}
 
     // 2. Obtener Plan del Coach
@@ -10599,6 +10792,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     const directiveCard = document.getElementById('memberNutriDirectiveCard');
     const directiveText = document.getElementById('memberNutriDirectiveText');
     const goalPill = document.getElementById('memberNutriPlanGoalPill');
+    const dailyGoalBadge = document.getElementById('nutriDailyGoalBadge');
 
     const userGoal = userPlan?.goal || AppState.profile?.goal || 'fat_loss';
     const goalLabels = {
@@ -10607,7 +10801,9 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         recomp: 'Recomposición',
         posture_health: 'Longevidad'
     };
-    if (goalPill) goalPill.textContent = goalLabels[userGoal] || 'Nutrición SENS';
+    const goalText = goalLabels[userGoal] || 'Nutrición SENS';
+    if (goalPill) goalPill.textContent = goalText;
+    if (dailyGoalBadge) dailyGoalBadge.textContent = `Meta: ${goalText}`;
     if (directiveText) {
         directiveText.textContent = userPlan?.directive_note || 'Priorizá 35-40g de proteína en cada una de las comidas principales y mantené hidratación constante antes y después de entrenar.';
     }
@@ -10619,12 +10815,11 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         almuerzo: 'Almuerzo',
         merienda: 'Merienda',
         cena: 'Cena',
-        snack: 'Snack'
+        snack: 'Snacks'
     };
 
     const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
 
-    // Alimentos curados oficiales por defecto si el día no tiene prescripción
     const defaultMealsFallback = {
         desayuno: [
             { id: 'ae856777-a8d3-5238-9385-6bffce376821', codigo: 'NUT-002', name: 'Huevo Entero de Gallina (Poché o Duro)', grams: 120, mealSlot: 'desayuno' },
@@ -10664,73 +10859,132 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         allDayFoods.push(cm);
     });
 
-    // 4. Filtrar y Renderizar Cards
+    // 4. Renderizar Subsecciones Visuales con Paridad y Ergonomía (Item 5)
     const foodListEl = document.getElementById('memberNutriFoodList');
     const activeFilter = AppState.activeNutriFilter || 'todas';
+    const slotsToRender = activeFilter === 'todas' ? mealKeys : [activeFilter];
 
-    let displayFoods = allDayFoods;
-    if (activeFilter !== 'todas') {
-        displayFoods = allDayFoods.filter(f => f.mealSlot === activeFilter);
-    }
+    let subsectionsHtml = '';
 
-    if (foodListEl) {
-        if (displayFoods.length === 0) {
-            foodListEl.innerHTML = `
-                <div style="text-align: center; padding: 28px 16px; color: #71717A; font-size: 13px;">
-                    No hay alimentos registrados en esta comida para hoy. Podés cargar una comida personalizada con el botón inferior.
-                </div>
-            `;
-        } else {
-            foodListEl.innerHTML = displayFoods.map(item => {
-                const resolved = (typeof window.getResolvedFood === 'function')
-                    ? window.getResolvedFood(item.id || item.codigo || item, athId)
-                    : item;
+    slotsToRender.forEach(mKey => {
+        const slotFoods = allDayFoods.filter(f => f.mealSlot === mKey);
+        let slotKcal = 0;
 
-                const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
-                const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
+        const cardsHtml = slotFoods.map(item => {
+            const resolved = (typeof window.getResolvedFood === 'function')
+                ? window.getResolvedFood(item.id || item.codigo || item, athId)
+                : item;
 
-                let macros;
-                if (item.isCustom && item.calories !== undefined) {
-                    macros = {
-                        calories: item.calories,
-                        protein: item.protein || 0,
-                        carbs: item.carbs || 0,
-                        fats: item.fats || 0
-                    };
-                } else {
-                    macros = (typeof window.calculateFoodMacros === 'function')
-                        ? window.calculateFoodMacros(resolved, grams)
-                        : { calories: Math.round(grams * 1.5), protein: 20, carbs: 15, fats: 5 };
-                }
+            const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
+            const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
 
-                const imgUrl = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
-                const foodTitle = item.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
-                const portionText = item.isCustom ? 'Comida Personalizada' : (resolved?.unidades_caseras_total || `${grams}g`);
+            let macros;
+            if (item.isCustom && item.calories !== undefined) {
+                macros = {
+                    calories: item.calories,
+                    protein: item.protein || 0,
+                    carbs: item.carbs || 0,
+                    fats: item.fats || 0
+                };
+            } else {
+                macros = (typeof window.calculateFoodMacros === 'function')
+                    ? window.calculateFoodMacros(resolved, grams)
+                    : { calories: Math.round(grams * 1.5), protein: 20, carbs: 15, fats: 5 };
+            }
 
-                return `
-                    <div class="sens-nutri-food-card" data-food-id="${foodKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
-                        <img class="sens-nutri-food-thumb" src="${imgUrl}" alt="${foodTitle}" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
-                        <div class="sens-nutri-food-info">
-                            <span class="sens-nutri-food-meal-tag">${mealLabels[item.mealSlot] || item.mealSlot}</span>
-                            <div class="sens-nutri-food-title" title="${foodTitle}">${foodTitle}</div>
-                            <div class="sens-nutri-food-meta">${grams}g • ${portionText}</div>
-                            <div class="sens-nutri-food-macros">
-                                <span class="prot">${Math.round(macros.protein)}g P</span>
-                                <span class="carb">${Math.round(macros.carbs)}g C</span>
-                                <span class="fat">${Math.round(macros.fats)}g G</span>
-                            </div>
-                        </div>
-                        <div class="sens-nutri-food-right">
-                            <div class="sens-nutri-kcal-badge">${macros.calories} kcal</div>
-                            <span class="sens-nutri-chevron">›</span>
+            slotKcal += macros.calories;
+
+            const imgUrl = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+            const foodTitle = item.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
+            const portionText = item.isCustom ? 'Comida Personalizada' : (resolved?.unidades_caseras_total || `${grams}g`);
+            const isLogged = Boolean(userConsumedFoods[foodKey]);
+
+            return `
+                <div class="sens-nutri-food-card ${isLogged ? 'is-logged' : ''}" data-food-id="${foodKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
+                    <img class="sens-nutri-food-thumb" src="${imgUrl}" alt="${foodTitle}" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                    <div class="sens-nutri-food-info">
+                        <span class="sens-nutri-food-meal-tag">${mealLabels[item.mealSlot] || item.mealSlot}</span>
+                        <div class="sens-nutri-food-title" title="${foodTitle}">${foodTitle}</div>
+                        <div class="sens-nutri-food-meta">${grams}g • ${portionText}</div>
+                        <div class="sens-nutri-food-macros">
+                            <span class="prot">${Math.round(macros.protein)}g P</span>
+                            <span class="carb">${Math.round(macros.carbs)}g C</span>
+                            <span class="fat">${Math.round(macros.fats)}g G</span>
                         </div>
                     </div>
-                `;
-            }).join('');
-        }
+                    <div class="sens-nutri-food-right" style="display: flex; align-items: center; gap: 8px;">
+                        <div class="sens-nutri-kcal-badge">${macros.calories} kcal</div>
+                        <button type="button" class="sens-btn-quick-log ${isLogged ? 'is-logged' : ''}" data-food-id="${foodKey}" data-meal-slot="${item.mealSlot}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        subsectionsHtml += `
+            <div class="sens-meal-subsection-block" data-meal-slot="${mKey}">
+                <div class="sens-meal-subsection-header">
+                    <div class="sens-meal-header-left">
+                        <div class="sens-meal-header-title-row">
+                            <span class="sens-meal-badge-dot"></span>
+                            <h4 class="sens-meal-title">${mealLabels[mKey]}</h4>
+                        </div>
+                        <span class="sens-meal-subtotal-meta">${slotKcal.toLocaleString('es-AR')} kcal • ${slotFoods.length} items</span>
+                    </div>
+                    <button type="button" class="btn-quick-add-to-meal" data-meal-slot="${mKey}" title="Agregar alimento a ${mealLabels[mKey]}">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>Agregar</span>
+                    </button>
+                </div>
+                <div class="sens-meal-foods-grid">
+                    ${cardsHtml || '<div style="padding: 12px 14px; font-size: 12px; color: #71717A; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.06);">No hay alimentos asignados. Podés agregar con el botón superior.</div>'}
+                </div>
+            </div>
+        `;
+    });
+
+    if (foodListEl) {
+        foodListEl.innerHTML = subsectionsHtml;
+
+        // Listener: + Agregar en cabecera de subsección
+        foodListEl.querySelectorAll('.btn-quick-add-to-meal').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const slot = btn.getAttribute('data-meal-slot');
+                if (typeof window.openCustomMealModalForSlot === 'function') {
+                    window.openCustomMealModalForSlot(slot);
+                }
+            });
+        });
+
+        // Listener: Botón táctil Quick Log
+        foodListEl.querySelectorAll('.sens-btn-quick-log').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const fid = btn.getAttribute('data-food-id');
+                const slot = btn.getAttribute('data-meal-slot');
+                toggleFoodLoggedStatus(fid, slot);
+            });
+        });
+
+        // Listener: Card de alimento abre el Inspector
+        foodListEl.querySelectorAll('.sens-nutri-food-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.sens-btn-quick-log, .btn-quick-add-to-meal')) return;
+                const foodKey = card.getAttribute('data-food-id');
+                const mealSlot = card.getAttribute('data-meal-slot');
+                const item = allDayFoods.find(f => (f.id === foodKey || f.codigo === foodKey || f.name === foodKey));
+                if (item) {
+                    openUserFoodDetailModal(item, mealSlot);
+                }
+            });
+        });
     }
 
-    // 5. Recalcular Balance Global del Día (Samsung Health Header)
+    // 5. Recalcular Balance Global del Día & Sincronizar Hero Card (Items 2 & 4)
     let totalDayKcal = 0;
     let totalDayProt = 0;
     let totalDayCarbs = 0;
@@ -10762,6 +11016,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     const targetKcal = userPlan?.target_calories || 1950;
     const consumedNum = document.getElementById('nutriConsumedNum');
     const targetKcalEl = document.getElementById('nutriTargetKcal');
+    const remainingEl = document.getElementById('nutriRemainingKcal');
     const optimalRangeEl = document.getElementById('nutriOptimalRangeText');
     const sliderFill = document.getElementById('nutriSliderFill');
     const carbsGramsEl = document.getElementById('nutriCarbsGrams');
@@ -10770,33 +11025,80 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
     if (consumedNum) consumedNum.textContent = totalDayKcal.toLocaleString('es-AR');
     if (targetKcalEl) targetKcalEl.textContent = `${targetKcal.toLocaleString('es-AR')} kcal`;
-    if (optimalRangeEl) optimalRangeEl.textContent = `${Math.round(targetKcal * 0.9).toLocaleString('es-AR')} - ${Math.round(targetKcal * 1.1).toLocaleString('es-AR')}`;
+    if (remainingEl) {
+        const diff = targetKcal - totalDayKcal;
+        if (diff > 0) {
+            remainingEl.textContent = `Restan ${diff.toLocaleString('es-AR')} kcal`;
+            remainingEl.style.color = '#A1A1AA';
+        } else if (diff === 0) {
+            remainingEl.textContent = 'Meta calórica alcanzada exacta';
+            remainingEl.style.color = '#10B981';
+        } else {
+            remainingEl.textContent = `+${Math.abs(diff).toLocaleString('es-AR')} kcal sobre objetivo`;
+            remainingEl.style.color = '#F59E0B';
+        }
+    }
+    if (optimalRangeEl) {
+        optimalRangeEl.textContent = `Rango óptimo: ${Math.round(targetKcal * 0.9).toLocaleString('es-AR')} - ${Math.round(targetKcal * 1.1).toLocaleString('es-AR')} kcal`;
+    }
     if (sliderFill) {
-        const pct = Math.min(100, Math.round((totalDayKcal / targetKcal) * 77));
+        const pct = Math.min(100, Math.round((totalDayKcal / targetKcal) * 100));
         sliderFill.style.width = `${pct}%`;
         sliderFill.style.background = totalDayKcal > (targetKcal * 1.1) ? 'linear-gradient(90deg, #F59E0B, #EF4444)' : 'linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%)';
+    }
+
+    // Resumen y Desglose de Macronutrientes en Acordeón Integrado (Item 4)
+    const quickSummary = document.getElementById('nutriMacroQuickSummary');
+    if (quickSummary) {
+        quickSummary.textContent = `${Math.round(totalDayProt)}g Prot • ${Math.round(totalDayCarbs)}g Carbs • ${Math.round(totalDayFats)}g Grasas`;
     }
     if (carbsGramsEl) carbsGramsEl.innerHTML = `${Math.round(totalDayCarbs)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
     if (fatsGramsEl) fatsGramsEl.innerHTML = `${Math.round(totalDayFats)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
     if (protGramsEl) protGramsEl.innerHTML = `${Math.round(totalDayProt)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
 
-    // 6. Click en Food Card abre el Inspector de Alimento (Point 3)
-    if (foodListEl) {
-        foodListEl.querySelectorAll('.sens-nutri-food-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const foodKey = card.getAttribute('data-food-id');
-                const mealSlot = card.getAttribute('data-meal-slot');
-                const item = allDayFoods.find(f => (f.id === foodKey || f.codigo === foodKey || f.name === foodKey));
-                if (item) {
-                    openUserFoodDetailModal(item, mealSlot);
-                }
-            });
+    const totalMacroGrams = (totalDayCarbs + totalDayProt + totalDayFats) || 1;
+    const carbPct = Math.round((totalDayCarbs / totalMacroGrams) * 100);
+    const protPct = Math.round((totalDayProt / totalMacroGrams) * 100);
+    const fatPct = Math.max(0, 100 - carbPct - protPct);
+
+    const carbsRatioEl = document.getElementById('nutriCarbsRatio');
+    const protRatioEl = document.getElementById('nutriProtRatio');
+    const fatsRatioEl = document.getElementById('nutriFatsRatio');
+    if (carbsRatioEl) carbsRatioEl.textContent = `${carbPct}% del total`;
+    if (protRatioEl) protRatioEl.textContent = `${protPct}% del total`;
+    if (fatsRatioEl) fatsRatioEl.textContent = `${fatPct}% del total`;
+
+    const segCarb = document.getElementById('nutriSegCarb');
+    const segProt = document.getElementById('nutriSegProt');
+    const segFat = document.getElementById('nutriSegFat');
+    if (segCarb) segCarb.style.width = `${carbPct}%`;
+    if (segProt) segProt.style.width = `${protPct}%`;
+    if (segFat) segFat.style.width = `${fatPct}%`;
+
+    const legCarb = document.getElementById('legendCarbPct');
+    const legProt = document.getElementById('legendProtPct');
+    const legFat = document.getElementById('legendFatPct');
+    if (legCarb) legCarb.textContent = `${carbPct}% Carb`;
+    if (legProt) legProt.textContent = `${protPct}% Proteína`;
+    if (legFat) legFat.textContent = `${fatPct}% Grasa`;
+
+    // Toggle del Acordeón de Macronutrientes
+    const btnToggleMacro = document.getElementById('btnToggleMacroDrawer');
+    const macroDrawer = document.getElementById('sensNutriMacroDrawerBody');
+    const chevron = document.getElementById('macroDrawerChevron');
+    if (btnToggleMacro && !btnToggleMacro._hasMacroToggleBound) {
+        btnToggleMacro._hasMacroToggleBound = true;
+        btnToggleMacro.addEventListener('click', () => {
+            if (!macroDrawer) return;
+            const isClosed = macroDrawer.style.display === 'none' || !macroDrawer.style.display;
+            macroDrawer.style.display = isClosed ? 'block' : 'none';
+            if (chevron) chevron.textContent = isClosed ? '▴' : '▾';
         });
     }
 }
 
 /**
- * Abre el Modal de Detalle de Alimento & Ajuste Proporcional de Gramos
+ * Abre el Modal de Detalle de Alimento & Ajuste Proporcional de Gramos / Unidades
  */
 function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
     const modal = document.getElementById('userFoodDetailModal');
@@ -10834,7 +11136,6 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
     const titleEl = document.getElementById('ufdFoodTitle');
     const gramInput = document.getElementById('ufdGramInput');
     const ingrText = document.getElementById('ufdIngredientsText');
-    const stepsText = document.getElementById('ufdStepsText');
     const tipText = document.getElementById('ufdCoachTipText');
     const allergensText = document.getElementById('ufdAllergensText');
 
@@ -10848,17 +11149,80 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
     if (gramInput) gramInput.value = initialGrams;
 
     if (ingrText) {
-        const ings = resolved?.ingredientes_principales;
+        const ings = resolved?.ingredientes_y_gramajes || resolved?.ingredientes_principales;
         ingrText.textContent = Array.isArray(ings) ? ings.join(' • ') : (ings || 'Alimento de alta pureza biológica sin conservantes añadidos.');
     }
-    if (stepsText) {
-        stepsText.textContent = resolved?.pasos_preparacion || 'Cocción a temperatura controlada (vapor, plancha o poché) preservando perfil enzimático.';
+
+    // Pasos de preparación con botón "Ver más / Ver menos" (Item 7)
+    const fullSteps = resolved?.paso_a_paso_preparacion || resolved?.pasos_preparacion || resolved?.preparacion || 'Cocción a temperatura controlada (vapor, plancha o poché) preservando perfil enzimático.';
+    const previewEl = document.getElementById('ufdStepsPreview');
+    const fullEl = document.getElementById('ufdStepsFull');
+    const toggleStepsBtn = document.getElementById('btnToggleUfdSteps');
+    const stepsToggleText = document.getElementById('ufdStepsToggleText');
+    const stepsArrow = document.getElementById('ufdStepsArrow');
+
+    if (previewEl && fullEl) {
+        fullEl.style.display = 'none';
+        if (stepsToggleText) stepsToggleText.textContent = 'Ver más';
+        if (stepsArrow) stepsArrow.textContent = '▾';
+
+        if (fullSteps.length > 90 || fullSteps.includes('2.')) {
+            const firstDot = fullSteps.indexOf('2.');
+            const previewText = firstDot !== -1 ? fullSteps.substring(0, firstDot).trim() : (fullSteps.substring(0, 85) + '...');
+            previewEl.textContent = previewText;
+            fullEl.textContent = fullSteps;
+            if (toggleStepsBtn) toggleStepsBtn.style.display = 'inline-flex';
+        } else {
+            previewEl.textContent = fullSteps;
+            fullEl.textContent = '';
+            if (toggleStepsBtn) toggleStepsBtn.style.display = 'none';
+        }
     }
+
+    if (toggleStepsBtn && !toggleStepsBtn._hasToggleBound) {
+        toggleStepsBtn._hasToggleBound = true;
+        toggleStepsBtn.addEventListener('click', () => {
+            if (!fullEl) return;
+            const isClosed = fullEl.style.display === 'none';
+            fullEl.style.display = isClosed ? 'block' : 'none';
+            if (stepsToggleText) stepsToggleText.textContent = isClosed ? 'Ver menos' : 'Ver más';
+            if (stepsArrow) stepsArrow.textContent = isClosed ? '▴' : '▾';
+        });
+    }
+
     if (tipText) {
         tipText.textContent = resolved?.tip_coach_nico || 'Optimizá la masticación y acompañá con ingesta pausada de agua para facilitar vaciado gástrico.';
     }
     if (allergensText) {
         allergensText.textContent = resolved?.alergenos_sensibilidades || 'Ninguno declarado';
+    }
+
+    // Soporte de Unidades vs Gramos (Item 5)
+    const unitInfo = getFoodUnitInfo(resolved || foodItem);
+    const unitToggleWrap = document.getElementById('ufdUnitToggleWrap');
+    const gramsRow = document.getElementById('ufdGramsStepperRow');
+    const unitsRow = document.getElementById('ufdUnitsStepperRow');
+    const unitInput = document.getElementById('ufdUnitInput');
+    const unitLabel = document.getElementById('ufdUnitNameLabel');
+    const btnModeGrams = document.getElementById('btnUfdUnitModeGrams');
+    const btnModeUnits = document.getElementById('btnUfdUnitModeUnits');
+
+    userActiveFoodForDetail.unitInfo = unitInfo;
+
+    if (unitInfo && unitInfo.hasUnit) {
+        if (unitToggleWrap) unitToggleWrap.style.display = 'inline-flex';
+        if (unitLabel) unitLabel.textContent = unitInfo.unitName;
+        const initialUnits = Math.round((initialGrams / unitInfo.gramsPerUnit) * 10) / 10;
+        if (unitInput) unitInput.value = initialUnits || 1;
+    } else {
+        if (unitToggleWrap) unitToggleWrap.style.display = 'none';
+    }
+
+    if (btnModeGrams && btnModeUnits) {
+        btnModeGrams.classList.add('active');
+        btnModeUnits.classList.remove('active');
+        if (gramsRow) gramsRow.style.display = 'flex';
+        if (unitsRow) unitsRow.style.display = 'none';
     }
 
     const updateLiveCalculations = (grams) => {
@@ -10890,7 +11254,6 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
     };
 
     updateLiveCalculations(initialGrams);
-
     userActiveFoodForDetail.updateLiveCalculations = updateLiveCalculations;
 
     modal.classList.add('active');
@@ -10901,10 +11264,17 @@ function initUserFoodDetailModal() {
     const modal = document.getElementById('userFoodDetailModal');
     const closeBtn = document.getElementById('btnCloseUserFoodDetailModal');
     const gramInput = document.getElementById('ufdGramInput');
+    const unitInput = document.getElementById('ufdUnitInput');
     const minus50 = document.getElementById('btnUfdMinus50');
     const minus10 = document.getElementById('btnUfdMinus10');
     const plus10 = document.getElementById('btnUfdPlus10');
     const plus50 = document.getElementById('btnUfdPlus50');
+    const minusUnit = document.getElementById('btnUfdMinusUnit');
+    const plusUnit = document.getElementById('btnUfdPlusUnit');
+    const btnModeGrams = document.getElementById('btnUfdUnitModeGrams');
+    const btnModeUnits = document.getElementById('btnUfdUnitModeUnits');
+    const gramsRow = document.getElementById('ufdGramsStepperRow');
+    const unitsRow = document.getElementById('ufdUnitsStepperRow');
     const confirmBtn = document.getElementById('btnConfirmUfdPortion');
 
     if (!modal || modal._hasDetailBound) return;
@@ -10920,11 +11290,40 @@ function initUserFoodDetailModal() {
         if (e.target === modal) closeModal();
     });
 
+    // Toggle entre Modo Gramos y Modo Unidades (Item 5)
+    if (btnModeGrams && btnModeUnits) {
+        btnModeGrams.addEventListener('click', () => {
+            btnModeGrams.classList.add('active');
+            btnModeUnits.classList.remove('active');
+            if (gramsRow) gramsRow.style.display = 'flex';
+            if (unitsRow) unitsRow.style.display = 'none';
+        });
+
+        btnModeUnits.addEventListener('click', () => {
+            btnModeUnits.classList.add('active');
+            btnModeGrams.classList.remove('active');
+            if (gramsRow) gramsRow.style.display = 'none';
+            if (unitsRow) unitsRow.style.display = 'flex';
+
+            const uInfo = userActiveFoodForDetail?.unitInfo;
+            if (uInfo && uInfo.hasUnit && gramInput && unitInput) {
+                const currentG = parseInt(gramInput.value, 10) || uInfo.gramsPerUnit;
+                unitInput.value = Math.max(0.5, Math.round((currentG / uInfo.gramsPerUnit) * 10) / 10);
+            }
+        });
+    }
+
     const adjustGrams = (delta) => {
         if (!gramInput) return;
         let current = parseInt(gramInput.value, 10) || 100;
         let next = Math.max(10, Math.min(1200, current + delta));
         gramInput.value = next;
+
+        const uInfo = userActiveFoodForDetail?.unitInfo;
+        if (uInfo && uInfo.hasUnit && unitInput) {
+            unitInput.value = Math.max(0.5, Math.round((next / uInfo.gramsPerUnit) * 10) / 10);
+        }
+
         if (userActiveFoodForDetail && userActiveFoodForDetail.updateLiveCalculations) {
             userActiveFoodForDetail.updateLiveCalculations(next);
         }
@@ -10937,8 +11336,46 @@ function initUserFoodDetailModal() {
 
     if (gramInput) {
         gramInput.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value, 10) || 100;
+            const uInfo = userActiveFoodForDetail?.unitInfo;
+            if (uInfo && uInfo.hasUnit && unitInput) {
+                unitInput.value = Math.max(0.5, Math.round((val / uInfo.gramsPerUnit) * 10) / 10);
+            }
             if (userActiveFoodForDetail && userActiveFoodForDetail.updateLiveCalculations) {
-                userActiveFoodForDetail.updateLiveCalculations(e.target.value);
+                userActiveFoodForDetail.updateLiveCalculations(val);
+            }
+        });
+    }
+
+    // Steppers de Unidades
+    const adjustUnits = (delta) => {
+        if (!unitInput) return;
+        const uInfo = userActiveFoodForDetail?.unitInfo;
+        const gramsPerUnit = (uInfo && uInfo.gramsPerUnit) ? uInfo.gramsPerUnit : 100;
+        let current = parseFloat(unitInput.value) || 1;
+        let next = Math.max(0.5, Math.min(20, Math.round((current + delta) * 10) / 10));
+        unitInput.value = next;
+
+        const newGrams = Math.round(next * gramsPerUnit);
+        if (gramInput) gramInput.value = newGrams;
+
+        if (userActiveFoodForDetail && userActiveFoodForDetail.updateLiveCalculations) {
+            userActiveFoodForDetail.updateLiveCalculations(newGrams);
+        }
+    };
+
+    if (minusUnit) minusUnit.addEventListener('click', () => adjustUnits(-1));
+    if (plusUnit) plusUnit.addEventListener('click', () => adjustUnits(1));
+
+    if (unitInput) {
+        unitInput.addEventListener('input', (e) => {
+            const uInfo = userActiveFoodForDetail?.unitInfo;
+            const gramsPerUnit = (uInfo && uInfo.gramsPerUnit) ? uInfo.gramsPerUnit : 100;
+            const uVal = parseFloat(e.target.value) || 1;
+            const newGrams = Math.round(uVal * gramsPerUnit);
+            if (gramInput) gramInput.value = newGrams;
+            if (userActiveFoodForDetail && userActiveFoodForDetail.updateLiveCalculations) {
+                userActiveFoodForDetail.updateLiveCalculations(newGrams);
             }
         });
     }
@@ -10986,6 +11423,13 @@ function initUserCustomMealModal(athId) {
     const trayList = document.getElementById('customTrayItemsList');
     const trayTotalKcal = document.getElementById('customTrayTotalKcal');
     const saveBtn = document.getElementById('btnSaveCustomMealToDay');
+
+    // Controles de Filtro Calórico (Item 8)
+    const kcalChips = modal ? modal.querySelectorAll('#customKcalFilterRow .sens-kcal-chip') : [];
+    const minInput = document.getElementById('customKcalMinInput');
+    const maxInput = document.getElementById('customKcalMaxInput');
+    const resetKcalBtn = document.getElementById('btnResetKcalFilter');
+    let activeKcalRange = 'all';
 
     if (!modal) return;
 
@@ -11046,7 +11490,7 @@ function initUserCustomMealModal(athId) {
         });
     });
 
-    // Renderizado de Tray
+    // Renderizado de Tray con Botones de Marca SENS (Item 6)
     function renderCustomTray() {
         if (!tray || !trayList) return;
         if (userCustomTrayItems.length === 0) {
@@ -11071,7 +11515,9 @@ function initUserCustomMealModal(athId) {
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <input type="number" class="input-tray-grams" data-tray-idx="${idx}" value="${item.grams}" min="10" max="800" style="width: 55px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15); color: #E5CBA7; font-size: 12px; padding: 2px 4px; border-radius: 4px; text-align: center;">
                         <span style="font-size: 11px; color: #E5CBA7; font-weight: 700;">${macros.calories} kcal</span>
-                        <button type="button" class="btn-remove-tray-item" data-tray-idx="${idx}" style="background: none; border: none; color: #EF4444; font-size: 14px; cursor: pointer;">&times;</button>
+                        <button type="button" class="sens-btn-remove-luxury btn-remove-tray-item" data-tray-idx="${idx}" title="Eliminar de la bandeja">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
                     </div>
                 </div>
             `;
@@ -11100,7 +11546,7 @@ function initUserCustomMealModal(athId) {
         });
     }
 
-    // Renderizado de Resultados de Búsqueda (500 Alimentos SENS)
+    // Renderizado de Resultados de Búsqueda con Filtro de Calorías e Inspección (Item 8)
     function renderSearchResults(query = '') {
         if (!searchResults) return;
         const library = (typeof SENS_FOOD_LIBRARY !== 'undefined') ? SENS_FOOD_LIBRARY : [];
@@ -11115,29 +11561,81 @@ function initUserCustomMealModal(athId) {
                 return nameMatch || catMatch || mealMatch;
             });
         }
-        matches = matches.slice(0, 15);
+
+        // Filtro por rango de calorías
+        let minCal = 0;
+        let maxCal = 99999;
+        if (activeKcalRange === 'under200') {
+            maxCal = 200;
+        } else if (activeKcalRange === '200-400') {
+            minCal = 200;
+            maxCal = 400;
+        } else if (activeKcalRange === '400-600') {
+            minCal = 400;
+            maxCal = 600;
+        } else if (activeKcalRange === 'over600') {
+            minCal = 600;
+        } else if (activeKcalRange === 'custom') {
+            const minVal = parseInt(minInput?.value, 10);
+            const maxVal = parseInt(maxInput?.value, 10);
+            if (!isNaN(minVal)) minCal = minVal;
+            if (!isNaN(maxVal)) maxCal = maxVal;
+        }
+
+        matches = matches.filter(f => {
+            const cal = f.calPorcion || f.calories || Math.round((f.calPer100 || 150) * 1.5);
+            return cal >= minCal && cal <= maxCal;
+        });
+
+        matches = matches.slice(0, 25);
+
+        if (matches.length === 0) {
+            searchResults.innerHTML = `
+                <div style="text-align: center; padding: 24px 12px; color: #71717A; font-size: 12px;">
+                    No se encontraron alimentos en este rango calórico o búsqueda. Probá ajustar el filtro.
+                </div>
+            `;
+            return;
+        }
 
         searchResults.innerHTML = matches.map(f => {
-            const cal = f.calPorcion || Math.round((f.calPer100 || 150) * 1.5);
-            const prot = f.protPorcion || Math.round((f.protPer100 || 20) * 1.5);
+            const cal = f.calPorcion || f.calories || Math.round((f.calPer100 || 150) * 1.5);
+            const prot = f.protPorcion || f.protein || Math.round((f.protPer100 || 20) * 1.5);
             const img = f.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+            const fid = f.id || f.codigo;
+            const steps = f.paso_a_paso_preparacion || f.pasos_preparacion || 'Cocción saludable preservando micronutrientes.';
+            const ingrs = f.ingredientes_y_gramajes || f.ingredientes_principales || 'Alimento natural de alta calidad biológica.';
 
             return `
-                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 8px 12px;">
-                    <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-                        <img src="${img}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; flex-shrink: 0;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
-                        <div style="min-width: 0;">
-                            <div style="font-size: 12.5px; font-weight: 700; color: #FFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${f.name}</div>
-                            <div style="font-size: 11px; color: #71717A;">${f.porcion_total_g_ml || 100}g • ${prot}g Prot • ${cal} kcal</div>
+                <div class="sens-search-result-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                            <img src="${img}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; flex-shrink: 0;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                            <div style="min-width: 0;">
+                                <div style="font-size: 12.5px; font-weight: 700; color: #FFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${f.name}</div>
+                                <div style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums;">${f.porcion_total_g_ml || 100}g • ${prot}g Prot • ${cal} kcal</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                            <button type="button" class="sens-btn-disclosure btn-inspect-food-item" data-food-id="${fid}" title="Ver preparación e ingredientes">
+                                <span>Ver receta ▾</span>
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm btn-add-food-to-tray" data-food-id="${fid}" style="padding: 4px 10px; font-size: 11px; border-color: rgba(229,203,167,0.4); color: #E5CBA7;">
+                                + Agregar
+                            </button>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline btn-sm btn-add-food-to-tray" data-food-id="${f.id || f.codigo}" style="padding: 4px 10px; font-size: 11px; border-color: rgba(229,203,167,0.4); color: #E5CBA7; flex-shrink: 0;">
-                        + Agregar
-                    </button>
+                    <!-- Drawer Desplegable con Pasos e Ingredientes (Item 8) -->
+                    <div class="sens-food-inspect-drawer" id="inspectDrawer_${fid}">
+                        <div style="margin-bottom: 4px;"><strong style="color: #FFFFFF;">Ingredientes:</strong> ${ingrs}</div>
+                        <div style="margin-bottom: 4px;"><strong style="color: #FFFFFF;">Preparación:</strong> ${steps}</div>
+                        ${f.tip_coach_nico ? `<div style="color: #E5CBA7;"><strong>Tip de Nico:</strong> ${f.tip_coach_nico}</div>` : ''}
+                    </div>
                 </div>
             `;
         }).join('');
 
+        // Listeners para agregar a bandeja
         searchResults.querySelectorAll('.btn-add-food-to-tray').forEach(btn => {
             btn.addEventListener('click', () => {
                 const fid = btn.getAttribute('data-food-id');
@@ -11154,6 +11652,59 @@ function initUserCustomMealModal(athId) {
                 }
             });
         });
+
+        // Listeners para ver preparación e ingredientes (Item 8)
+        searchResults.querySelectorAll('.btn-inspect-food-item').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = btn.closest('.sens-search-result-card');
+                const drawer = card ? card.querySelector('.sens-food-inspect-drawer') : null;
+                if (drawer) {
+                    const isHidden = drawer.style.display === 'none' || !drawer.style.display;
+                    drawer.style.display = isHidden ? 'block' : 'none';
+                    btn.innerHTML = isHidden ? '<span>Ver receta ▴</span>' : '<span>Ver receta ▾</span>';
+                }
+            });
+        });
+    }
+
+    // Handlers de Filtros de Calorías (Item 8)
+    const applyKcalFilter = () => {
+        const q = searchInput ? searchInput.value : '';
+        renderSearchResults(q);
+    };
+
+    kcalChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            kcalChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            activeKcalRange = chip.getAttribute('data-range') || 'all';
+            if (minInput) minInput.value = '';
+            if (maxInput) maxInput.value = '';
+            applyKcalFilter();
+        });
+    });
+
+    if (minInput) minInput.addEventListener('input', () => {
+        kcalChips.forEach(c => c.classList.remove('active'));
+        activeKcalRange = 'custom';
+        applyKcalFilter();
+    });
+    if (maxInput) maxInput.addEventListener('input', () => {
+        kcalChips.forEach(c => c.classList.remove('active'));
+        activeKcalRange = 'custom';
+        applyKcalFilter();
+    });
+    if (resetKcalBtn) {
+        resetKcalBtn.addEventListener('click', () => {
+            kcalChips.forEach(c => c.classList.remove('active'));
+            const allChip = modal.querySelector('#customKcalFilterRow .sens-kcal-chip[data-range="all"]');
+            if (allChip) allChip.classList.add('active');
+            activeKcalRange = 'all';
+            if (minInput) minInput.value = '';
+            if (maxInput) maxInput.value = '';
+            applyKcalFilter();
+        });
     }
 
     if (searchInput) {
@@ -11161,6 +11712,24 @@ function initUserCustomMealModal(athId) {
             renderSearchResults(e.target.value);
         });
     }
+
+    // Presets Rápidos en Modo Manual (Item 5)
+    const presetChips = modal.querySelectorAll('#manualKcalPresetsWrap .sens-kcal-chip');
+    presetChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            presetChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            const k = parseInt(chip.getAttribute('data-kcal'), 10) || 500;
+            const kcalInp = document.getElementById('manualMealKcalInput');
+            const protInp = document.getElementById('manualMealProtInput');
+            const carbsInp = document.getElementById('manualMealCarbsInput');
+            const fatsInp = document.getElementById('manualMealFatsInput');
+            if (kcalInp) kcalInp.value = k;
+            if (protInp) protInp.value = Math.round((k * 0.30) / 4);
+            if (carbsInp) carbsInp.value = Math.round((k * 0.45) / 4);
+            if (fatsInp) fatsInp.value = Math.round((k * 0.25) / 9);
+        });
+    });
 
     // Botón Guardar Comida en el Día
     if (saveBtn) {
@@ -11238,6 +11807,7 @@ function initUserCustomMealModal(athId) {
             localStorage.setItem(customStorageKey, JSON.stringify(userCustomMeals));
             closeModal();
             renderMemberNutritionPlan(activeAthId, sDate);
+            renderNutriDaysNav();
 
             if (typeof showSensToast === 'function') {
                 showSensToast(`Comida registrada con éxito en ${userActiveNutriMealSlot.toUpperCase()}.`, 'champagne');
@@ -11247,7 +11817,7 @@ function initUserCustomMealModal(athId) {
 }
 
 /**
- * Event Listeners de Filtro por Comida y Navegador de Fechas en Vista de Nutrición
+ * Event Listeners de Filtro por Comida y Navegador Semanal en Vista de Nutrición (Item 3)
  */
 function initUserNutritionFilterAndDateListeners() {
     const filterRow = document.getElementById('memberNutriFilterRow');
@@ -11264,31 +11834,45 @@ function initUserNutritionFilterAndDateListeners() {
         });
     }
 
-    const prevDayBtn = document.getElementById('btnNutriPrevDay');
-    const nextDayBtn = document.getElementById('btnNutriNextDay');
+    // Botones de Navegación Semanal en Nutrición (Paridad 1:1 con Inicio y Entrenamiento)
+    const btnNutriPrev = document.getElementById('btnNutriWeekPrev');
+    const btnNutriNext = document.getElementById('btnNutriWeekNext');
+    const btnNutriToday = document.getElementById('btnNutriJumpToToday');
 
-    if (prevDayBtn && !prevDayBtn._hasNutriNavBound) {
-        prevDayBtn._hasNutriNavBound = true;
-        prevDayBtn.addEventListener('click', () => {
-            const current = AppState.nutriSelectedDate || new Date();
-            const prev = new Date(current);
-            prev.setDate(prev.getDate() - 1);
-            AppState.nutriSelectedDate = prev;
-            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
-            renderMemberNutritionPlan(athId, prev);
+    if (btnNutriPrev && !btnNutriPrev._hasNutriNavBound) {
+        btnNutriPrev._hasNutriNavBound = true;
+        btnNutriPrev.addEventListener('click', () => {
+            navigateCalendarWeek('prev');
         });
     }
 
-    if (nextDayBtn && !nextDayBtn._hasNutriNavBound) {
-        nextDayBtn._hasNutriNavBound = true;
-        nextDayBtn.addEventListener('click', () => {
-            const current = AppState.nutriSelectedDate || new Date();
-            const next = new Date(current);
-            next.setDate(next.getDate() + 1);
-            AppState.nutriSelectedDate = next;
-            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
-            renderMemberNutritionPlan(athId, next);
+    if (btnNutriNext && !btnNutriNext._hasNutriNavBound) {
+        btnNutriNext._hasNutriNavBound = true;
+        btnNutriNext.addEventListener('click', () => {
+            navigateCalendarWeek('next');
         });
+    }
+
+    if (btnNutriToday && !btnNutriToday._hasNutriNavBound) {
+        btnNutriToday._hasNutriNavBound = true;
+        btnNutriToday.addEventListener('click', () => {
+            AppState.activeWeekStart = getMonday(new Date());
+            AppState.selectedDate = new Date();
+            AppState.nutriSelectedDate = new Date();
+            AppState.currentDay = getDayKeyFromDate(new Date());
+
+            renderDynamicWeekStrip();
+            renderWorkoutDaysNav();
+            renderNutriDaysNav();
+
+            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+            renderMemberNutritionPlan(athId, new Date());
+            showSensToast('Semana actual', 'champagne', 1500);
+        });
+    }
+
+    if (typeof initCalendarSwipeGestures === 'function') {
+        initCalendarSwipeGestures();
     }
 }
 
@@ -11866,40 +12450,45 @@ function navigateCalendarWeek(direction) {
     AppState.activeWeekStart = newMonday;
     renderDynamicWeekStrip();
     renderWorkoutDaysNav();
+    if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
     if (typeof renderWeeklyBalanceChart === 'function') {
         renderWeeklyBalanceChart(AppState.selectedDate || new Date());
     }
 
-    // Trigger de animación slide izquierda/derecha al strip de días
-    const strip = document.getElementById('portalWeekStrip');
-    if (strip) {
-        strip.classList.remove('anim-slide-left', 'anim-slide-right');
-        void strip.offsetWidth;
-        const animClass = direction === 'next' ? 'anim-slide-left' : 'anim-slide-right';
-        strip.classList.add(animClass);
-        strip.addEventListener('animationend', () => {
-            strip.classList.remove(animClass);
-        }, { once: true });
-    }
+    // Trigger de animación slide izquierda/derecha al strip de días en los 3 calendarios (Item 3)
+    ['portalWeekStrip', 'workoutDaysNav', 'nutriDaysNav'].forEach(id => {
+        const strip = document.getElementById(id);
+        if (strip) {
+            strip.classList.remove('anim-slide-left', 'anim-slide-right');
+            void strip.offsetWidth;
+            const animClass = direction === 'next' ? 'anim-slide-left' : 'anim-slide-right';
+            strip.classList.add(animClass);
+            strip.addEventListener('animationend', () => {
+                strip.classList.remove(animClass);
+            }, { once: true });
+        }
+    });
 
-    // Micro-fade para el label de rango de fechas
-    const rangeLabel = document.getElementById('sensWeekRangeLabel');
-    if (rangeLabel) {
-        rangeLabel.classList.remove('anim-fade');
-        void rangeLabel.offsetWidth;
-        rangeLabel.classList.add('anim-fade');
-        rangeLabel.addEventListener('animationend', () => {
+    // Micro-fade para los 3 labels de rango de fechas
+    ['sensWeekRangeLabel', 'sensWorkoutWeekRangeLabel', 'sensNutriWeekRangeLabel'].forEach(id => {
+        const rangeLabel = document.getElementById(id);
+        if (rangeLabel) {
             rangeLabel.classList.remove('anim-fade');
-        }, { once: true });
-    }
+            void rangeLabel.offsetWidth;
+            rangeLabel.classList.add('anim-fade');
+            rangeLabel.addEventListener('animationend', () => {
+                rangeLabel.classList.remove('anim-fade');
+            }, { once: true });
+        }
+    });
 }
 
 /**
- * Inicializa gestos táctiles de swipe horizontal nativos en el calendario semanal
+ * Vincula gestos táctiles de swipe horizontal nativos a cualquier calendario semanal
  */
-function initCalendarSwipeGestures() {
-    const calendarWrapper = document.getElementById('sensCalendarStickyWrapper');
-    if (!calendarWrapper) return;
+function attachCalendarSwipe(calendarWrapper) {
+    if (!calendarWrapper || calendarWrapper._hasSwipeBound) return;
+    calendarWrapper._hasSwipeBound = true;
 
     let touchStartX = 0;
     let touchStartY = 0;
@@ -11945,6 +12534,15 @@ function initCalendarSwipeGestures() {
         touchEndX = 0;
         touchEndY = 0;
     }, { passive: true });
+}
+
+/**
+ * Inicializa gestos táctiles de swipe horizontal nativos en los 3 calendarios semanales (Inicio, Entrenamiento, Nutrición)
+ */
+function initCalendarSwipeGestures() {
+    attachCalendarSwipe(document.getElementById('sensCalendarStickyWrapper'));
+    attachCalendarSwipe(document.getElementById('workoutCalendarStickyWrapper'));
+    attachCalendarSwipe(document.getElementById('nutriCalendarStickyWrapper'));
 }
 
 let cachedPortalTopbarHeight = 48;
@@ -12147,7 +12745,11 @@ function initWeekStripCalendar() {
     };
     if (nutriCard) {
         nutriCard.addEventListener('click', (e) => {
-            if (e.target.closest('#dashGoNutriBtn, .sens-5cals-chip')) return;
+            if (window._dashNutriWasSwipe) {
+                window._dashNutriWasSwipe = false;
+                return;
+            }
+            if (e.target.closest('#dashGoNutriBtn, .sens-5cals-chip, .sens-video-arrow-btn, .sens-video-dots-indicator')) return;
             handleGoNutri();
         });
     }
@@ -13172,6 +13774,43 @@ function initDashNutriCarousel() {
         };
     });
 
+    const dotsWrap = document.getElementById('dashNutriDotsIndicator');
+    if (dotsWrap) {
+        dotsWrap.innerHTML = dashNutriMealsData.map((_, i) => `<span class="sens-video-dot ${i === dashNutriCurrentMealIndex ? 'active' : ''}" data-nutri-idx="${i}"></span>`).join('');
+        dotsWrap.querySelectorAll('.sens-video-dot').forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(dot.getAttribute('data-nutri-idx'), 10);
+                if (!isNaN(idx)) {
+                    showMeal(idx);
+                    stopTimer();
+                    setTimeout(startTimer, 4500);
+                }
+            });
+        });
+    }
+
+    const prevBtn = document.getElementById('dashPrevNutriBtn');
+    const nextBtn = document.getElementById('dashNextNutriBtn');
+    if (prevBtn && !prevBtn._hasNutriNavBound) {
+        prevBtn._hasNutriNavBound = true;
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showMeal(dashNutriCurrentMealIndex - 1);
+            stopTimer();
+            setTimeout(startTimer, 4500);
+        });
+    }
+    if (nextBtn && !nextBtn._hasNutriNavBound) {
+        nextBtn._hasNutriNavBound = true;
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showMeal(dashNutriCurrentMealIndex + 1);
+            stopTimer();
+            setTimeout(startTimer, 4500);
+        });
+    }
+
     function showMeal(index, instant = false) {
         if (!dashNutriMealsData || dashNutriMealsData.length === 0) return;
         dashNutriCurrentMealIndex = (index + dashNutriMealsData.length) % dashNutriMealsData.length;
@@ -13204,7 +13843,14 @@ function initDashNutriCarousel() {
             chip.classList.toggle('highlight', isMatch);
         });
 
-        // 3. Sincronizar textos y métricas editoriales
+        // 3. Actualizar dots indicadores (Item 1)
+        if (dotsWrap) {
+            dotsWrap.querySelectorAll('.sens-video-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === dashNutriCurrentMealIndex);
+            });
+        }
+
+        // 4. Sincronizar textos y métricas editoriales
         const eyebrow = document.getElementById('dashNutriDayDateLabel');
         const caloriesHero = document.getElementById('dashNutriCaloriesHero');
         const subText = document.getElementById('dashNutriSubText');
@@ -13231,7 +13877,7 @@ function initDashNutriCarousel() {
         stopTimer();
         dashNutriCarouselTimer = setInterval(() => {
             showMeal(dashNutriCurrentMealIndex + 1);
-        }, 2500);
+        }, 2800);
     }
 
     function stopTimer() {
@@ -13258,15 +13904,47 @@ function initDashNutriCarousel() {
         });
     }
 
-    // Pausar en hover/touch para lectura cómoda
+    // Soporte de Swipe Táctil Mobile-First & Thumb Zone (Item 1)
+    if (!card._hasNutriSwipeBound) {
+        card._hasNutriSwipeBound = true;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        card.addEventListener('touchstart', (e) => {
+            if (!e.touches || e.touches.length === 0) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+            stopTimer();
+        }, { passive: true });
+
+        card.addEventListener('touchend', (e) => {
+            if (!e.changedTouches || e.changedTouches.length === 0) return;
+            const deltaX = e.changedTouches[0].clientX - touchStartX;
+            const deltaY = e.changedTouches[0].clientY - touchStartY;
+            const deltaTime = Date.now() - touchStartTime;
+
+            // Swipe horizontal genuino
+            if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.3 && deltaTime < 650) {
+                window._dashNutriWasSwipe = true;
+                setTimeout(() => { window._dashNutriWasSwipe = false; }, 350);
+
+                if (deltaX < 0) {
+                    showMeal(dashNutriCurrentMealIndex + 1);
+                } else {
+                    showMeal(dashNutriCurrentMealIndex - 1);
+                }
+            }
+            setTimeout(startTimer, 3500);
+        }, { passive: true });
+    }
+
+    // Pausar en hover
     if (!card._hasNutriHoverBound) {
         card._hasNutriHoverBound = true;
         card.addEventListener('mouseenter', stopTimer);
         card.addEventListener('mouseleave', startTimer);
-        card.addEventListener('touchstart', stopTimer, { passive: true });
-        card.addEventListener('touchend', () => {
-            setTimeout(startTimer, 3000);
-        }, { passive: true });
     }
 
     // Iniciar con la primera comida (Desayuno) y activar rotador
