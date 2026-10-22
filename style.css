@@ -21617,6 +21617,85 @@ body.in-portal .sens-pwa-marketing-popup {
     cursor: pointer !important;
 }
 
+/* =============================================================================
+   GOBERNADOR DE EFICIENCIA ENERGÉTICA, BATERÍA MÓVIL Y FLUIDEZ 120Hz PRO-MOTION
+   Arquitectura Senior Director IT: Cero drenaje GPU/VRAM en móviles y tablets
+   ============================================================================= */
+
+/* 1. Liberar memoria VRAM en móvil evitando promover decenas de tarjetas a texturas GPU permanentes */
+.card-panel,
+.dash-welcome-card,
+.diagnosis-summary-card,
+.biometric-assessment-card,
+.touch-card,
+.kpi-card,
+.exercise-card,
+.btn-primary,
+a.btn-primary,
+button.btn-primary {
+    will-change: auto !important;
+}
+
+/* 2. Animaciones de pulso y brillo 100% compositor-only (transform + opacity, sin repintar box-shadow a 60fps) */
+@keyframes sensFlamePulseGlow {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.92;
+    }
+    50% {
+        transform: scale(1.04);
+        opacity: 1;
+    }
+}
+
+@keyframes sensBadgeGlow {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.94;
+    }
+    50% {
+        transform: scale(1.04);
+        opacity: 1;
+    }
+}
+
+/* 3. Ocultar y congelar skeletons inmediatamente cuando el video ya está listo (cero shimmer invisible en segundo plano) */
+.sens-video-skeleton.is-hidden,
+.hero-skeleton-wrap.is-hidden {
+    display: none !important;
+    animation: none !important;
+}
+
+.sens-video-skeleton.is-hidden .sens-skeleton-shimmer,
+.hero-skeleton-wrap.is-hidden .hero-skeleton-shimmer {
+    animation: none !important;
+}
+
+/* 4. Modo de Reposo Inteligente (sens-power-save): Congela todos los keyframes infinitos en inactividad o pestaña oculta */
+body.sens-power-save *,
+body.sens-power-save *::before,
+body.sens-power-save *::after {
+    animation-play-state: paused !important;
+}
+
+/* 5. Content-visibility y aislamiento de layout para scroll nativo a 120fps sin recalcular nodos fuera de pantalla */
+.coach-master-lib-card,
+.wizard-feed-ex-card,
+.sens-ex-compact-card {
+    contain: layout paint style;
+}
+
+/* 6. Reducción de carga de sombreado gaussiano (backdrop-filter) en pantallas móviles de alta densidad (3x Retina) */
+@media (max-width: 768px) {
+    .glass-panel,
+    .sens-floating-dock,
+    .portal-topbar {
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+}
+
+
 
 
 

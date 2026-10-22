@@ -112,7 +112,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=10.0">
+    <link rel="stylesheet" href="style.css?v=10.1">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -3163,8 +3163,8 @@
                         <img id="dashNutriFoodImageA" class="sens-nutri-food-bg active" alt="Comida actual" src="Nutricion/images/nut-002-huevo-entero-de-gallina.webp" onerror="this.onerror=null;this.src='Nutricion/images/nut-002-huevo-entero-de-gallina.webp'">
                         <img id="dashNutriFoodImageB" class="sens-nutri-food-bg" alt="Siguiente comida" src="Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp" onerror="this.onerror=null;this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                     </div>
-                    <!-- Video Fallback sutil de respaldo -->
-                    <video class="sens-nutri-video-player" id="dashNutriVideoPlayer" muted loop playsinline webkit-playsinline autoplay preload="auto" disablePictureInPicture disableremoteplayback style="background: #080809; object-fit: cover; display: none;">
+                    <!-- Video Fallback sutil de respaldo (sin autoplay ni precarga para ahorro de batería) -->
+                    <video class="sens-nutri-video-player" id="dashNutriVideoPlayer" muted loop playsinline webkit-playsinline preload="none" disablePictureInPicture disableremoteplayback style="background: #080809; object-fit: cover; display: none;">
                         <source src="vid/pilar-4-adherencia.mp4" type="video/mp4">
                     </video>
                     <div class="sens-nutri-overlay-gradient"></div>
@@ -7299,7 +7299,7 @@
     <script src="exercises_db.js?v=9.8"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=10.0"></script>
+    <script src="app.js?v=10.1"></script>
 </body>
 
 </html>

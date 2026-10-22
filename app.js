@@ -1840,13 +1840,19 @@ function initNavbarScroll() {
     const navbar = document.getElementById('globalNavbar');
     ensurePublicNavbarVisibility();
 
+    let navbarScrollScrolledState = null;
+    let navbarScrollTicking = false;
     window.addEventListener('scroll', () => {
-        if (!navbar) return;
-        if (window.scrollY > 40) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
+        if (!navbar || navbarScrollTicking) return;
+        navbarScrollTicking = true;
+        window.requestAnimationFrame(() => {
+            const shouldBeScrolled = window.scrollY > 40;
+            if (shouldBeScrolled !== navbarScrollScrolledState) {
+                navbarScrollScrolledState = shouldBeScrolled;
+                navbar.classList.toggle('scrolled', shouldBeScrolled);
+            }
+            navbarScrollTicking = false;
+        });
     }, { passive: true });
 
     // Menú Móvil & Botón de Cruz para Cerrar
@@ -3141,6 +3147,18 @@ function returnToPublicLanding() {
     if (floatSocial) floatSocial.style.display = 'flex';
     document.getElementById('app-container').classList.remove('active');
     document.getElementById('publicLanding').style.display = 'block';
+    // Pausar videos y timers del portal al volver a la landing y reanudar Hero video
+    const portalEl = document.getElementById('app-container');
+    if (portalEl) {
+        portalEl.querySelectorAll('video').forEach(vid => {
+            try { if (!vid.paused) vid.pause(); } catch (_) {}
+        });
+    }
+    if (typeof window.stopDashNutriCarousel === 'function') window.stopDashNutriCarousel();
+    const heroVid = document.getElementById('heroVideo');
+    if (heroVid && !document.hidden) {
+        try { heroVid.play().catch(() => {}); } catch (_) {}
+    }
 
     // Ocultar terminantemente el dock inferior del portal en la web pública
     document.querySelectorAll('.sens-floating-dock').forEach(dock => {
@@ -3473,8 +3491,16 @@ function switchPortalView(viewId) {
             v.classList.add('active');
         } else {
             v.classList.remove('active');
+            // Pausar inmediatamente todos los decodificadores de video en vistas que pasan a segundo plano
+            v.querySelectorAll('video').forEach(vid => {
+                try { if (!vid.paused) vid.pause(); } catch (_) {}
+            });
         }
     });
+
+    if (viewId !== 'dashView' && typeof window.stopDashNutriCarousel === 'function') {
+        window.stopDashNutriCarousel();
+    }
 
     if (viewId === 'trackingView') {
         setTimeout(initCharts, 100);
@@ -3571,6 +3597,10 @@ function openUserPortal(forceOnboarding = false) {
 
     portal.classList.add('active');
     publicLanding.style.display = 'none';
+    // Pausar video del Hero y carrusel de Pilares cuando el usuario entra al Portal (ahorro inmediato de GPU/batería)
+    publicLanding.querySelectorAll('video').forEach(vid => {
+        try { if (!vid.paused) vid.pause(); } catch (_) {}
+    });
 
     const profile = AppState.profile || {};
     const user = AppState.user || {};
@@ -6379,7 +6409,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         <div class="sens-video-skeleton compact">
                             <div class="sens-skeleton-shimmer"></div>
                         </div>
-                        <video autoplay muted loop playsinline class="sens-ex-compact-video" oncanplay="this.previousElementSibling?.classList.add('is-hidden')">
+                        <video muted loop playsinline preload="none" class="sens-ex-compact-video" oncanplay="this.previousElementSibling?.classList.add('is-hidden')">
                             <source src="${exVideoPath}" type="video/mp4">
                         </video>
                         <div class="sens-ex-compact-overlay"></div>
@@ -6415,6 +6445,9 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     });
 
     container.innerHTML = groupedHtml;
+    if (window.SensBatteryPerfGovernor && typeof window.SensBatteryPerfGovernor.observeVideosInContainer === 'function') {
+        window.SensBatteryPerfGovernor.observeVideosInContainer(container);
+    }
 }
 
 window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null) {
@@ -16136,9 +16169,18 @@ function initDashNutriCarousel() {
 
     function startTimer() {
         stopTimer();
+        if (document.hidden) return;
+        const dashViewEl = document.getElementById('dashView');
+        if (dashViewEl && !dashViewEl.classList.contains('active')) return;
         dashNutriCarouselTimer = setInterval(() => {
+            if (document.hidden) return;
+            const dv = document.getElementById('dashView');
+            if (dv && !dv.classList.contains('active')) {
+                stopTimer();
+                return;
+            }
             showMeal(dashNutriCurrentMealIndex + 1);
-        }, 2800);
+        }, 4200);
     }
 
     function stopTimer() {
@@ -16147,6 +16189,8 @@ function initDashNutriCarousel() {
             dashNutriCarouselTimer = null;
         }
     }
+    window.stopDashNutriCarousel = stopTimer;
+    window.startDashNutriCarousel = startTimer;
 
     // Interacción al clickear cada pill de comida
     if (chipsRow && !chipsRow._hasNutriCarouselBound) {
@@ -18498,7 +18542,7 @@ window.renderCoachDatabasesTab = function() {
                 <div class="coach-master-lib-card">
                     ${videoPath ? `
                         <div style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: #000; border: 1px solid rgba(229,203,167,0.18);">
-                            <video autoplay muted loop playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover;">
+                            <video muted loop playsinline preload="none" style="width: 100%; height: 100%; object-fit: cover;">
                                 <source src="${videoPath}" type="video/mp4">
                             </video>
                         </div>
@@ -18539,6 +18583,9 @@ window.renderCoachDatabasesTab = function() {
         });
 
         grid.innerHTML = html || `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted);">No se encontraron ejercicios para este filtro.</div>`;
+        if (window.SensBatteryPerfGovernor && typeof window.SensBatteryPerfGovernor.observeVideosInContainer === 'function') {
+            window.SensBatteryPerfGovernor.observeVideosInContainer(grid);
+        }
     } else {
         const foodGrid = document.getElementById('coachMasterFoodsGrid');
         if (!foodGrid) return;
@@ -25519,6 +25566,136 @@ window.renderSensUnlockablesModule = function() {
     if (nutriGrid) nutriGrid.innerHTML = html;
 };
 
+// =============================================================================
+// GOBERNADOR DE ENERGÍA, TÉRMICA Y FLUIDEZ 120Hz (SensBatteryPerfGovernor)
+// Arquitectura Senior Director IT: Cero drenaje de batería en idle/background
+// =============================================================================
+const SensBatteryPerfGovernor = {
+    videoObserver: null,
+    idleTimer: null,
+    IDLE_TIMEOUT_MS: 40000, // 40s sin interacción táctil pausa decodificadores de video decorativos
+
+    init() {
+        this.initViewportVideoObserver();
+        this.initVisibilityLifecycle();
+        this.initIdleBatteryGuard();
+    },
+
+    initViewportVideoObserver() {
+        if (!('IntersectionObserver' in window)) return;
+        this.videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (!video || video.id === 'dashNutriVideoPlayer') return;
+
+                // No reproducir si la pestaña está oculta o si el contenedor padre está oculto
+                if (document.hidden || video.offsetParent === null) {
+                    if (!video.paused) {
+                        try { video.pause(); } catch (_) {}
+                    }
+                    return;
+                }
+
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+                    if (video.getAttribute('preload') === 'none') {
+                        video.setAttribute('preload', 'metadata');
+                    }
+                    const p = video.play();
+                    if (p && typeof p.catch === 'function') p.catch(() => {});
+                } else {
+                    if (!video.paused) {
+                        try { video.pause(); } catch (_) {}
+                    }
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '40px 0px',
+            threshold: [0, 0.35]
+        });
+
+        this.observeVideosInContainer(document);
+    },
+
+    observeVideosInContainer(container) {
+        if (!this.videoObserver || !container) return;
+        const videos = container.querySelectorAll('video');
+        videos.forEach(v => {
+            if (v.id === 'dashNutriVideoPlayer' || v.id === 'mktHiddenSourceVideo') return;
+            this.videoObserver.observe(v);
+        });
+    },
+
+    pauseAllActiveVideos() {
+        document.querySelectorAll('video').forEach(v => {
+            try { if (!v.paused) v.pause(); } catch (_) {}
+        });
+    },
+
+    resumeVisibleVideos() {
+        if (document.hidden) return;
+        document.body.classList.remove('sens-power-save');
+        document.querySelectorAll('video').forEach(v => {
+            if (v.id === 'dashNutriVideoPlayer' || v.id === 'mktHiddenSourceVideo') return;
+            if (v.offsetParent === null) return;
+            const rect = v.getBoundingClientRect();
+            const vh = window.innerHeight || document.documentElement.clientHeight;
+            const vw = window.innerWidth || document.documentElement.clientWidth;
+            const isVisible = rect.bottom > 40 && rect.top < (vh - 40) && rect.right > 0 && rect.left < vw;
+            if (isVisible) {
+                try {
+                    const p = v.play();
+                    if (p && typeof p.catch === 'function') p.catch(() => {});
+                } catch (_) {}
+            }
+        });
+    },
+
+    initVisibilityLifecycle() {
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                document.body.classList.add('sens-power-save');
+                this.pauseAllActiveVideos();
+                if (typeof window.stopDashNutriCarousel === 'function') window.stopDashNutriCarousel();
+                if (typeof window.stopCoachMarketingStudio === 'function') window.stopCoachMarketingStudio();
+            } else {
+                this.resetIdleTimer();
+                this.resumeVisibleVideos();
+                const dashView = document.getElementById('dashView');
+                if (dashView && dashView.classList.contains('active') && typeof window.startDashNutriCarousel === 'function') {
+                    window.startDashNutriCarousel();
+                }
+            }
+        });
+    },
+
+    resetIdleTimer() {
+        if (document.body.classList.contains('sens-power-save') && !document.hidden) {
+            document.body.classList.remove('sens-power-save');
+            this.resumeVisibleVideos();
+        }
+        if (this.idleTimer) clearTimeout(this.idleTimer);
+        this.idleTimer = setTimeout(() => {
+            // Si el usuario deja el celular encendido sobre la mesa sin tocarlo por 40s,
+            // congelamos animaciones infinitas y decodificadores de video decorativos
+            const modalOpen = document.getElementById('sensExerciseModalBackdrop')?.classList.contains('active');
+            if (!modalOpen) {
+                document.body.classList.add('sens-power-save');
+                this.pauseAllActiveVideos();
+                if (typeof window.stopDashNutriCarousel === 'function') window.stopDashNutriCarousel();
+            }
+        }, this.IDLE_TIMEOUT_MS);
+    },
+
+    initIdleBatteryGuard() {
+        ['touchstart', 'scroll', 'click', 'keydown'].forEach(evt => {
+            window.addEventListener(evt, () => this.resetIdleTimer(), { passive: true });
+        });
+        this.resetIdleTimer();
+    }
+};
+window.SensBatteryPerfGovernor = SensBatteryPerfGovernor;
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
@@ -25527,6 +25704,7 @@ if (document.readyState === 'loading') {
         try { CoachNutritionMaster.init(); } catch (e) {}
         try { CoachEvolutionEngine.init(); } catch (e) {}
         try { SensPwaManager.init(); } catch (e) {}
+        try { SensBatteryPerfGovernor.init(); } catch (e) {}
         try { if (typeof window.renderSensUnlockablesModule === 'function') window.renderSensUnlockablesModule(); } catch (e) {}
     });
 } else {
@@ -25536,6 +25714,7 @@ if (document.readyState === 'loading') {
     try { CoachNutritionMaster.init(); } catch (e) {}
     try { CoachEvolutionEngine.init(); } catch (e) {}
     try { SensPwaManager.init(); } catch (e) {}
+    try { SensBatteryPerfGovernor.init(); } catch (e) {}
     try { if (typeof window.renderSensUnlockablesModule === 'function') window.renderSensUnlockablesModule(); } catch (e) {}
 }
 
