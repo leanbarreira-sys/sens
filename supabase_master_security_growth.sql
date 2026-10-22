@@ -25,6 +25,9 @@ ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS referred_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS consistency_points INT DEFAULT 0,
   ADD COLUMN IF NOT EXISTS streak_weeks INT DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS weight_kg NUMERIC(5,2),
+  ADD COLUMN IF NOT EXISTS height_cm NUMERIC(5,2),
+  ADD COLUMN IF NOT EXISTS available_days INT DEFAULT 3,
   ADD COLUMN IF NOT EXISTS daily_calorie_target INT,
   ADD COLUMN IF NOT EXISTS daily_protein_target_g INT,
   ADD COLUMN IF NOT EXISTS daily_carbs_target_g INT,
@@ -312,23 +315,43 @@ CREATE POLICY "Admins can manage workouts"
   USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
+-- Asegurar columnas extendidas y compatibilidad en public.exercises (sobre supabase_schema.sql)
+ALTER TABLE public.exercises
+  ADD COLUMN IF NOT EXISTS category TEXT DEFAULT 'strength',
+  ADD COLUMN IF NOT EXISTS movement_pattern TEXT DEFAULT 'Fuerza & Control Motor',
+  ADD COLUMN IF NOT EXISTS cue_technical TEXT DEFAULT 'Controlá la fase excéntrica y mantené estabilidad lumbopélvica.',
+  ADD COLUMN IF NOT EXISTS cue_1 TEXT,
+  ADD COLUMN IF NOT EXISTS cue_2 TEXT,
+  ADD COLUMN IF NOT EXISTS cue_3 TEXT;
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'exercises_muscle_group_check'
+      AND conrelid = 'public.exercises'::regclass
+  ) THEN
+    ALTER TABLE public.exercises DROP CONSTRAINT exercises_muscle_group_check;
+  END IF;
+END $$;
+
 -- Asegurar semilla de los 11 ejercicios maestros en public.exercises si no existen
-INSERT INTO public.exercises (name, muscle_group, category, video_url, cue_1, cue_2, cue_3)
-SELECT v.name, v.muscle_group, v.category, v.video_url, v.cue_1, v.cue_2, v.cue_3
+INSERT INTO public.exercises (name, muscle_group, category, movement_pattern, cue_technical, video_url, cue_1, cue_2, cue_3)
+SELECT v.name, v.muscle_group, v.category, v.movement_pattern, v.cue_1, v.video_url, v.cue_1, v.cue_2, v.cue_3
 FROM (
   VALUES
-    ('Press de Banca Plano con Mancuernas', 'empuje', 'strength', 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4', 'Retraé y deprimí las escápulas contra el banco antes de empujar.', 'Descendé con codos a 45° protegiendo la cápsula anterior del hombro.', 'Exhalá al empujar manteniendo glúteos y pies firmes contra el piso.'),
-    ('Press Militar Sentado con Mancuernas', 'empuje', 'strength', 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4', 'Mantené las costillas bajas (cierre costal) sin hiperextender la zona lumbar.', 'Empujá en el plano escapular (30° hacia adelante, no abierto a 90°).', 'Controlá el descenso en 2 segundos hasta la altura del mentón.'),
-    ('Flexiones de Brazos (Push-ups) con Pausa', 'empuje', 'strength', 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4', 'Alineá cabeza, columna dorsal y pelvis en bloque compacto.', 'Pausa de 1 segundo real a 2 cm del suelo sin perder tensión abdominal.', 'Empujá el piso separando las escápulas al final del recorrido.'),
-    ('Plancha Frontal con Retroversión Pélvica (RKC)', 'core', 'core', 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4', 'Traccioná los codos imaginariamente hacia las puntas de los pies.', 'Contraé glúteos al 100% buscando aplanar la curvatura lumbar.', 'Respirá corto y controlado detrás del escudo abdominal.'),
-    ('Peso Muerto Rumano con Mancuernas', 'cadena_posterior', 'strength', 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4', 'Iniciá el movimiento empujando la cadera estrictamente hacia atrás (bisagra pura).', 'Deslizá las mancuernas pegadas a los muslos manteniendo dorsales activos.', 'Frená el descenso apenas la cadera deje de viajar hacia atrás.'),
-    ('Remo con Mancuerna a Una Mano en Banco', 'traccion', 'strength', 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4', 'Llevá la mancuerna hacia el bolsillo de la cadera en arco, no hacia el hombro.', 'Evitá rotar el torso; columna torácica firme y paralela al piso.', 'Sostené 1 segundo en máxima contracción dorsal antes de bajar.'),
-    ('Kettlebell Swing Estilo Ruso', 'cadena_posterior', 'strength', 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4', 'Es una proyección horizontal explosiva de cadera, no una elevación frontal de hombros.', 'Esperá a que los antebrazos toquen las ingles antes de bisagrar la cadera.', 'Bloqueá rodillas, glúteos y abdomen en plancha vertical al llegar arriba.'),
-    ('Sentadilla Goblet con Mancuerna', 'dominante_rodilla', 'strength', 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4', 'Sostené la carga pegada al esternón con los codos apuntando hacia abajo.', 'Abrí caderas descendiendo entre tus rodillas sin colapsar el arco plantar.', 'Mantené el torso erguido y empujá el suelo con todo el trípode del pie.'),
-    ('Hip Thrust con Barra en Banco', 'cadena_posterior', 'strength', 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4', 'Apoyá el borde inferior de las escápulas en el banco y fijá la mirada al frente.', 'Al subir, las tibias deben quedar a 90° exactos respecto al suelo.', 'Realizá retroversión pélvica arriba sin arquear la columna lumbar.'),
-    ('Estocadas Búlgaras con Mancuernas', 'dominante_rodilla', 'strength', 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4', 'Incliná levemente el torso hacia adelante (15°) para reclutar glúteo mayor.', 'El 85% del peso recae sobre el talón y mediopié de la pierna delantera.', 'Evitá que la rodilla delantera colapse hacia adentro (valgo dinámico).'),
-    ('Movilidad Gato-Vaca y Descompresión Espinal', 'movilidad', 'mobility', 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4', 'Mové vértebra por vértebra iniciando siempre desde la pelvis.', 'Inhalá profundo expandiendo la caja torácica en extensión controlada.', 'Exhalá todo el aire empujando el suelo para separar las escápulas.')
-) AS v(name, muscle_group, category, video_url, cue_1, cue_2, cue_3)
+    ('Press de Banca Plano con Mancuernas', 'push', 'strength', 'Empuje Horizontal', 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4', 'Retraé y deprimí las escápulas contra el banco antes de empujar.', 'Descendé con codos a 45° protegiendo la cápsula anterior del hombro.', 'Exhalá al empujar manteniendo glúteos y pies firmes contra el piso.'),
+    ('Press Militar Sentado con Mancuernas', 'push', 'strength', 'Empuje Vertical', 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4', 'Mantené las costillas bajas (cierre costal) sin hiperextender la zona lumbar.', 'Empujá en el plano escapular (30° hacia adelante, no abierto a 90°).', 'Controlá el descenso en 2 segundos hasta la altura del mentón.'),
+    ('Flexiones de Brazos (Push-ups) con Pausa', 'push', 'strength', 'Empuje Integrado', 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4', 'Alineá cabeza, columna dorsal y pelvis en bloque compacto.', 'Pausa de 1 segundo real a 2 cm del suelo sin perder tensión abdominal.', 'Empujá el piso separando las escápulas al final del recorrido.'),
+    ('Plancha Frontal con Retroversión Pélvica (RKC)', 'core_mobility', 'core', 'Core Anti-Extensión', 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4', 'Traccioná los codos imaginariamente hacia las puntas de los pies.', 'Contraé glúteos al 100% buscando aplanar la curvatura lumbar.', 'Respirá corto y controlado detrás del escudo abdominal.'),
+    ('Peso Muerto Rumano con Mancuernas', 'hamstrings_glutes', 'strength', 'Bisagra de Cadera', 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4', 'Iniciá el movimiento empujando la cadera estrictamente hacia atrás (bisagra pura).', 'Deslizá las mancuernas pegadas a los muslos manteniendo dorsales activos.', 'Frená el descenso apenas la cadera deje de viajar hacia atrás.'),
+    ('Remo con Mancuerna a Una Mano en Banco', 'pull', 'strength', 'Tracción Unilateral', 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4', 'Llevá la mancuerna hacia el bolsillo de la cadera en arco, no hacia el hombro.', 'Evitá rotar el torso; columna torácica firme y paralela al piso.', 'Sostené 1 segundo en máxima contracción dorsal antes de bajar.'),
+    ('Kettlebell Swing Estilo Ruso', 'hamstrings_glutes', 'strength', 'Potencia de Cadera', 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4', 'Es una proyección horizontal explosiva de cadera, no una elevación frontal de hombros.', 'Esperá a que los antebrazos toquen las ingles antes de bisagrar la cadera.', 'Bloqueá rodillas, glúteos y abdomen en plancha vertical al llegar arriba.'),
+    ('Sentadilla Goblet con Mancuerna', 'quadriceps', 'strength', 'Dominante de Rodilla', 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4', 'Sostené la carga pegada al esternón con los codos apuntando hacia abajo.', 'Abrí caderas descendiendo entre tus rodillas sin colapsar el arco plantar.', 'Mantené el torso erguido y empujá el suelo con todo el trípode del pie.'),
+    ('Hip Thrust con Barra en Banco', 'hamstrings_glutes', 'strength', 'Extensión de Cadera', 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4', 'Apoyá el borde inferior de las escápulas en el banco y fijá la mirada al frente.', 'Al subir, las tibias deben quedar a 90° exactos respecto al suelo.', 'Realizá retroversión pélvica arriba sin arquear la columna lumbar.'),
+    ('Estocadas Búlgaras con Mancuernas', 'quadriceps', 'strength', 'Unilateral de Pierna', 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4', 'Incliná levemente el torso hacia adelante (15°) para reclutar glúteo mayor.', 'El 85% del peso recae sobre el talón y mediopié de la pierna delantera.', 'Evitá que la rodilla delantera colapse hacia adentro (valgo dinámico).'),
+    ('Movilidad Gato-Vaca y Descompresión Espinal', 'core_mobility', 'mobility', 'Movilidad Espinal', 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4', 'Mové vértebra por vértebra iniciando siempre desde la pelvis.', 'Inhalá profundo expandiendo la caja torácica en extensión controlada.', 'Exhalá todo el aire empujando el suelo para separar las escápulas.')
+) AS v(name, muscle_group, category, movement_pattern, video_url, cue_1, cue_2, cue_3)
 WHERE NOT EXISTS (
   SELECT 1 FROM public.exercises e WHERE e.name = v.name
 );
@@ -377,8 +400,8 @@ BEGIN
   END IF;
 
   -- 1. Cálculo Mifflin-St Jeor según peso, altura, edad, género y objetivo
-  v_weight := COALESCE(NULLIF(v_profile.weight_kg, 0), 74);
-  v_height := COALESCE(NULLIF(v_profile.height_cm, 0), 174);
+  v_weight := COALESCE(NULLIF(v_profile.current_weight, 0), NULLIF(v_profile.weight_kg, 0), 74);
+  v_height := COALESCE(NULLIF(v_profile.height, 0), NULLIF(v_profile.height_cm, 0), 174);
   v_age    := COALESCE(NULLIF(v_profile.age, 0), 34);
   v_gender := COALESCE(v_profile.gender, 'male');
   v_goal   := COALESCE(v_profile.goal, 'recomp');
@@ -763,6 +786,9 @@ CREATE POLICY "Users can view own rewards"
 -- Evalúa racha, progreso semanal, desbloqueo del Protocolo Post-Oficina (1 sesión),
 -- Permiso Metabólico SENS de Fin de Semana + Guest Pass (3 sesiones en la semana),
 -- y +3 días de acceso si completa Onboarding + 3 sesiones en sus primeros 7 días.
+ALTER TABLE public.workout_logs
+  ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ DEFAULT TIMEZONE('utc', NOW());
+
 CREATE OR REPLACE FUNCTION public.fn_evaluate_workout_streaks_and_unlocks()
 RETURNS TRIGGER AS $$
 DECLARE
