@@ -3170,17 +3170,17 @@ function returnToPublicLanding() {
 }
 
 // =============================================================================
-// GUARDIA DE ESTADO DE SUSCRIPCIÓN / TRIAL 7 DÍAS & VIRAL LOOP (checkUserAccessStatus)
+// RESOLUCIÓN UNIFICADA DEL PLAN DEL USUARIO Y ESCALERA DE 4 NIVELES SENS
 // =============================================================================
-function checkUserAccessStatus(profile) {
+function getSensUserPlanDetails(profile) {
     const p = profile || AppState.profile || {};
     const isAdmin = isCurrentUserAdmin();
     const status = p.subscription_status || 'trial';
-    const planTier = p.plan_tier || 'app_trial';
+    const rawTier = (p.plan_tier || '').toLowerCase();
+    const rawActiveName = String(p.active_plan_name || p.user_type || '').toLowerCase();
     const refCode = p.referral_code || 'SENS-VIP';
     const referralUrl = `https://makesens.online/?ref=${encodeURIComponent(refCode)}`;
 
-    // Calcular días restantes de prueba (7 días por defecto desde trial_ends_at o created_at)
     let trialEndDate = null;
     if (p.trial_ends_at) {
         trialEndDate = new Date(p.trial_ends_at);
@@ -3189,9 +3189,186 @@ function checkUserAccessStatus(profile) {
     } else {
         trialEndDate = new Date(Date.now() + 7 * 86400000);
     }
-
     const msRemaining = trialEndDate.getTime() - Date.now();
     const daysRemaining = Math.max(0, Math.ceil(msRemaining / 86400000));
+
+    let tierKey = 'app_trial';
+    if (rawTier === 'presencial_1on1' || rawTier === 'vip' || rawActiveName.includes('presencial') || rawActiveName.includes('dúo') || rawActiveName.includes('trío')) {
+        tierKey = 'presencial_1on1';
+    } else if (rawTier === 'online_1on1' || rawActiveName.includes('online')) {
+        tierKey = 'online_1on1';
+    } else if (rawTier === 'app_subscribed' || status === 'active' || status === 'vip_manual') {
+        tierKey = 'app_subscribed';
+    }
+
+    const tierCatalog = {
+        app_trial: {
+            key: 'app_trial',
+            shortBadge: `Plan Free (${daysRemaining}d)`,
+            title: `Plan Free • Prueba Autónoma (${daysRemaining} ${daysRemaining === 1 ? 'día restante' : 'días restantes'})`,
+            statusLabel: daysRemaining > 0 ? `${daysRemaining}D GRATIS` : 'FINALIZADO',
+            desc: 'Incluye Rutina Base de 3 Días HD + Cálculo Nutricional Mifflin-St Jeor + Sistema de Rachas.',
+            nextStepHint: 'Escalá a Plan Premium ($24.900/mes o 3 Meses $59.900), Seguimiento Online ($40k-$90k) o Presencial CABA.',
+            ctaLabel: 'Escalar mi Plan / Ver Ventajas →'
+        },
+        app_subscribed: {
+            key: 'app_subscribed',
+            shortBadge: 'Plan App Premium',
+            title: 'Plan App Premium (Autónomo Full)',
+            statusLabel: 'MEMBRESÍA ACTIVA',
+            desc: 'Acceso ilimitado a Rutinas en Video HD, Timer de Hardware, 500 Alimentos y Permiso Social de Fin de Semana.',
+            nextStepHint: '¿Buscás planificación humana a medida? Escalá a Seguimiento Online ($40k-$90k) o Presencial en CABA.',
+            ctaLabel: 'Escalar a Seguimiento 1 a 1 →'
+        },
+        online_1on1: {
+            key: 'online_1on1',
+            shortBadge: 'Seguimiento Online 1:1',
+            title: p.active_plan_name && p.active_plan_name.toLowerCase().includes('online') ? p.active_plan_name : 'Seguimiento Online 1 a 1 con Nico',
+            statusLabel: 'ONLINE ACTIVO',
+            desc: 'Planificación personalizada por Nico, soporte por WhatsApp, corrección técnica y App Premium bonificada.',
+            nextStepHint: 'Podés sumar videollamadas semanales (Online Premium $90k) o sesiones Presenciales en CABA (1a1, Dúo o Trío).',
+            ctaLabel: 'Ver Opciones Presencial / Premium →'
+        },
+        presencial_1on1: {
+            key: 'presencial_1on1',
+            shortBadge: 'Presencial CABA VIP',
+            title: p.active_plan_name && p.active_plan_name.toLowerCase().includes('presencial') ? p.active_plan_name : 'Seguimiento Presencial CABA con Nico',
+            statusLabel: 'VIP CABA ACTIVO',
+            desc: 'Entrenamiento en vivo en Palermo/Belgrano (cuota de gimnasio incluida) + App Premium y Nutrición.',
+            nextStepHint: 'Variantes disponibles por persona: Individual 1a1 ($130k-$260k), Dúo ($100k-$195k) o Trío ($85k-$170k).',
+            ctaLabel: 'Ver Frecuencias 1x / 2x / 3x →'
+        }
+    };
+
+    const currentInfo = tierCatalog[tierKey] || tierCatalog.app_trial;
+    return {
+        ...currentInfo,
+        isAdmin,
+        daysRemaining,
+        referralCode: refCode,
+        referralUrl
+    };
+}
+window.getSensUserPlanDetails = getSensUserPlanDetails;
+
+window.openSensPlansUpgradeModal = function(focusTier = null) {
+    const modal = document.getElementById('sensPlansUpgradeModal');
+    if (!modal) return;
+
+    const dropdown = document.getElementById('userAvatarDropdown');
+    if (dropdown) dropdown.classList.remove('active');
+
+    const info = getSensUserPlanDetails(AppState.profile);
+    const badge = document.getElementById('modalCurrentPlanBadge');
+    if (badge) {
+        badge.textContent = `Tu Plan Actual: ${info.shortBadge}`;
+    }
+
+    // Resaltar el card del plan actual o el enfocado
+    modal.querySelectorAll('.sens-modal-tier-card').forEach(card => {
+        const t = card.getAttribute('data-modal-tier');
+        const isCurrent = (t === info.key);
+        const isFocused = (focusTier && t === focusTier);
+        if (isCurrent) {
+            card.style.borderColor = '#10B981';
+            card.style.boxShadow = '0 0 0 1px rgba(16, 185, 129, 0.35)';
+        } else if (isFocused || t === 'app_subscribed') {
+            card.style.borderColor = 'rgba(229, 203, 167, 0.55)';
+            card.style.boxShadow = '0 10px 26px rgba(0,0,0,0.45)';
+        } else {
+            card.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            card.style.boxShadow = 'none';
+        }
+    });
+
+    const athleteEmail = (AppState.user && AppState.user.email) || (AppState.profile && AppState.profile.email) || '';
+    const athleteName = (AppState.profile && AppState.profile.full_name) || 'Atleta SENS';
+
+    const btnShareRef = document.getElementById('btnModalShareFreeRef');
+    if (btnShareRef) {
+        btnShareRef.onclick = () => {
+            try { navigator.clipboard.writeText(info.referralUrl); } catch (_) {}
+            const waMsg = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico (fuerza, postura y cálculo nutricional). Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${info.referralUrl}`);
+            window.open(`https://wa.me/?text=${waMsg}`, '_blank');
+        };
+    }
+
+    const btnQuart = document.getElementById('btnModalActivateAppQuarterly');
+    if (btnQuart) {
+        btnQuart.onclick = () => {
+            if (SENS_PAYMENT_CONFIG.mercadopagoQuarterlyInitPoint) {
+                window.location.href = SENS_PAYMENT_CONFIG.mercadopagoQuarterlyInitPoint;
+            } else {
+                const msg = encodeURIComponent(`Hola Nico! Quiero escalar mi cuenta (${athleteName} - ${athleteEmail}) al Plan App Premium Trimestral (3 Meses por $59.900 ARS - Ahorro 20%).`);
+                window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
+            }
+        };
+    }
+
+    const btnMonth = document.getElementById('btnModalActivateAppMonthly');
+    if (btnMonth) {
+        btnMonth.onclick = () => {
+            if (SENS_PAYMENT_CONFIG.mercadopagoInitPoint) {
+                window.location.href = SENS_PAYMENT_CONFIG.mercadopagoInitPoint;
+            } else {
+                const msg = encodeURIComponent(`Hola Nico! Quiero escalar mi cuenta (${athleteName} - ${athleteEmail}) al Plan App Premium Mensual ($24.900 ARS / mes).`);
+                window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
+            }
+        };
+    }
+
+    const btnOnlinePrem = document.getElementById('btnModalScaleOnlinePremium');
+    if (btnOnlinePrem) {
+        btnOnlinePrem.onclick = () => {
+            const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero escalar al Seguimiento Online Premium 1 a 1 con videollamadas ($90.000/mes).`);
+            window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
+        };
+    }
+
+    const btnOnlineBasic = document.getElementById('btnModalScaleOnlineBasic');
+    if (btnOnlineBasic) {
+        btnOnlineBasic.onclick = () => {
+            const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero escalar al Seguimiento Online Básico 1 a 1 ($40.000/mes).`);
+            window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
+        };
+    }
+
+    const btnPres1a1 = document.getElementById('btnModalScalePresencial1a1');
+    if (btnPres1a1) {
+        btnPres1a1.onclick = () => {
+            const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero consultar cupos para Seguimiento Presencial Individual 1 a 1 en CABA (1x $130k / 2x $200k / 3x $260k con gimnasio incluido).`);
+            window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
+        };
+    }
+
+    const btnPresGrupo = document.getElementById('btnModalScalePresencialGrupo');
+    if (btnPresGrupo) {
+        btnPresGrupo.onclick = () => {
+            const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero consultar por Seguimiento Presencial en CABA modalidad Dúo ($100k-$195k por persona) o Trío ($85k-$170k por persona).`);
+            window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
+        };
+    }
+
+    modal.style.display = 'flex';
+};
+
+window.closeSensPlansUpgradeModal = function() {
+    const modal = document.getElementById('sensPlansUpgradeModal');
+    if (modal) modal.style.display = 'none';
+};
+
+// =============================================================================
+// GUARDIA DE ESTADO DE SUSCRIPCIÓN / TRIAL 7 DÍAS & VIRAL LOOP (checkUserAccessStatus)
+// =============================================================================
+function checkUserAccessStatus(profile) {
+    const p = profile || AppState.profile || {};
+    const isAdmin = isCurrentUserAdmin();
+    const status = p.subscription_status || 'trial';
+    const planTier = p.plan_tier || 'app_trial';
+    const planDetails = getSensUserPlanDetails(p);
+    const daysRemaining = planDetails.daysRemaining;
+    const refCode = planDetails.referralCode;
+    const referralUrl = planDetails.referralUrl;
 
     let hasActivePremium = false;
     if (
@@ -3210,32 +3387,48 @@ function checkUserAccessStatus(profile) {
     const isTrialActive = !hasActivePremium && daysRemaining > 0 && status !== 'expired' && status !== 'canceled';
     const hasAccess = isAdmin || hasActivePremium || isTrialActive;
 
-    // 1. Renderizar Banner Superior de Membresía & Trial en el Dashboard
+    // Actualizar el badge superior del Topbar (#portalPlanBadgeText)
+    const topbarPlanText = document.getElementById('portalPlanBadgeText');
+    if (topbarPlanText) {
+        topbarPlanText.textContent = isAdmin ? 'Coach OS • Director' : planDetails.shortBadge;
+    }
+
+    // 1. Renderizar Barra Ejecutiva de Plan Actual & Escalera SENS en el Inicio (#dashView)
     const pillContainer = document.getElementById('sensTrialStatusPillContainer');
     if (pillContainer) {
-        if (!isAdmin && isTrialActive) {
+        if (!isAdmin) {
             pillContainer.style.display = 'block';
-            const dayWord = daysRemaining === 1 ? 'DÍA RESTANTE' : 'DÍAS RESTANTES';
             pillContainer.innerHTML = `
-                <div style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.28); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; box-shadow: 0 10px 28px rgba(0,0,0,0.35);">
-                    <div style="display: flex; align-items: center; gap: 11px;">
+                <div style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.34); border-radius: 16px; padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: 0 10px 28px rgba(0,0,0,0.38);">
+                    <div style="display: flex; align-items: center; gap: 11px; flex: 1; min-width: 240px;">
                         <span class="status-dot status-dot-active" style="flex-shrink: 0;"></span>
-                        <div style="font-size: 12.5px; color: #E4E4E7; line-height: 1.4;">
-                            <span style="display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: #080809; background: #E5CBA7; padding: 2px 8px; border-radius: 6px; margin-right: 6px; font-variant-numeric: tabular-nums;">PRUEBA SENS • ${daysRemaining} ${dayWord}</span>
-                            <span style="color: #D4D4D8;">Entrená con un amigo o activá tu membresía para conservar tu progreso.</span>
+                        <div style="font-size: 12px; color: #E4E4E7; line-height: 1.4;">
+                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 2px;">
+                                <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.1px; color: #080809; background: #E5CBA7; padding: 2px 8px; border-radius: 5px; font-variant-numeric: tabular-nums;">TU PLAN: ${escapeHTML(planDetails.shortBadge.toUpperCase())}</span>
+                                <span style="font-size: 11.5px; font-weight: 700; color: #FFFFFF;">${escapeHTML(planDetails.title)}</span>
+                            </div>
+                            <div style="font-size: 11.2px; color: #A1A1AA;">
+                                ${escapeHTML(planDetails.nextStepHint)}
+                            </div>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" id="btnTrialPillShareRef" data-agent-action="share_referral_from_dashboard" style="background: rgba(229,203,167,0.14); color: #E5CBA7; border: 1px solid rgba(229,203,167,0.35); border-radius: 10px; padding: 8px 13px; font-size: 11.5px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-                            <span>Regalar Pase de 14 Días a un Amigo (+7 días gratis para vos)</span>
+                        <button type="button" id="btnTrialPillOpenLadder" data-agent-action="open_plans_upgrade_modal" style="background: #E5CBA7; color: #080809; border: none; border-radius: 10px; padding: 8px 13px; font-size: 11.5px; font-weight: 800; cursor: pointer;">
+                            ${escapeHTML(planDetails.ctaLabel)}
                         </button>
-                        <button type="button" id="btnTrialPillActivatePlan" data-agent-action="open_soft_paywall" style="background: #E5CBA7; color: #080809; border: none; border-radius: 10px; padding: 8px 13px; font-size: 11.5px; font-weight: 800; cursor: pointer;">
-                            Activar Plan
+                        <button type="button" id="btnTrialPillShareRef" data-agent-action="share_referral_from_dashboard" style="background: rgba(229,203,167,0.12); color: #E5CBA7; border: 1px solid rgba(229,203,167,0.35); border-radius: 10px; padding: 8px 11px; font-size: 11px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                            <span>Invitar Amigo (+7 días gratis)</span>
                         </button>
                     </div>
                 </div>
             `;
+
+            const btnLadder = document.getElementById('btnTrialPillOpenLadder');
+            if (btnLadder) {
+                btnLadder.onclick = () => {
+                    window.openSensPlansUpgradeModal();
+                };
+            }
 
             const btnShare = document.getElementById('btnTrialPillShareRef');
             if (btnShare) {
@@ -3243,14 +3436,6 @@ function checkUserAccessStatus(profile) {
                     try { navigator.clipboard.writeText(referralUrl); } catch (_) {}
                     const waMsg = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico (fuerza, postura y cálculo nutricional). Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${referralUrl}`);
                     window.open(`https://wa.me/?text=${waMsg}`, '_blank');
-                };
-            }
-
-            const btnAct = document.getElementById('btnTrialPillActivatePlan');
-            if (btnAct) {
-                btnAct.onclick = () => {
-                    renderSoftPaywallState(p, daysRemaining);
-                    switchPortalView('activationPendingView');
                 };
             }
         } else {
@@ -3262,7 +3447,7 @@ function checkUserAccessStatus(profile) {
     // 2. Mostrar/Ocultar Card de Upsell Nativo al Coaching 1 a 1 con Nico
     const upsellCard = document.getElementById('dashNico1on1UpsellCard');
     if (upsellCard) {
-        const is1on1Tier = (planTier === 'online_1on1' || planTier === 'presencial_1on1' || planTier === 'vip');
+        const is1on1Tier = (planDetails.key === 'online_1on1' || planDetails.key === 'presencial_1on1');
         upsellCard.style.display = (!isAdmin && !is1on1Tier) ? 'flex' : 'none';
     }
 
@@ -8393,20 +8578,55 @@ function renderProfileSettingsData() {
     }
     if (!realName) realName = isAdmin ? 'Nico Coach' : 'Atleta SENS';
 
+    const planDetails = (typeof getSensUserPlanDetails === 'function')
+        ? getSensUserPlanDetails(profile)
+        : { title: profile.active_plan_name || 'Plan Free (7 Días)', statusLabel: 'ACTIVO', desc: '', key: 'app_trial', referralUrl: 'https://makesens.online/' };
+
     let realPlan = '';
     if (isAdmin) {
         realPlan = 'Coach & Director SENS (Coach OS)';
     } else {
-        realPlan = profile.active_plan_name || 'Plan Personalizado SENS';
+        realPlan = planDetails.title;
     }
 
     if (nameEl) nameEl.textContent = realName;
     if (emailEl) emailEl.textContent = realEmail || 'Sin email registrado';
     if (planEl) planEl.textContent = realPlan;
 
+    // Actualizar la Tarjeta Hero de Escalera de Planes en Perfil (#profilePlanLadderHeroCard)
+    const ladderStatusPill = document.getElementById('profileLadderCurrentStatusPill');
+    const ladderTitle = document.getElementById('profileLadderCurrentTitle');
+    const ladderDesc = document.getElementById('profileLadderCurrentDesc');
+    const btnShareGuestPass = document.getElementById('btnProfileShareGuestPass');
+    if (ladderStatusPill) ladderStatusPill.textContent = isAdmin ? 'DIRECTOR SENS' : planDetails.statusLabel;
+    if (ladderTitle) ladderTitle.textContent = realPlan;
+    if (ladderDesc && !isAdmin && planDetails.desc) ladderDesc.textContent = planDetails.desc;
+    if (btnShareGuestPass) {
+        btnShareGuestPass.onclick = () => {
+            try { navigator.clipboard.writeText(planDetails.referralUrl); } catch (_) {}
+            const waMsg = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico (fuerza, postura y cálculo nutricional). Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${planDetails.referralUrl}`);
+            window.open(`https://wa.me/?text=${waMsg}`, '_blank');
+        };
+    }
+
+    // Marcar visualmente cuál de los 4 niveles de la escalera está activo
+    document.querySelectorAll('.sens-profile-tier-box').forEach(box => {
+        const boxTier = box.getAttribute('data-tier-box');
+        if (boxTier === planDetails.key) {
+            box.style.borderColor = '#10B981';
+            box.style.boxShadow = '0 0 0 1px rgba(16, 185, 129, 0.35)';
+        } else if (boxTier === 'app_subscribed') {
+            box.style.borderColor = 'rgba(229, 203, 167, 0.38)';
+            box.style.boxShadow = 'none';
+        } else {
+            box.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            box.style.boxShadow = 'none';
+        }
+    });
+
     if (subBadge) {
-        const isAct = (profile.subscription_status === 'active' || isAdmin);
-        subBadge.textContent = isAct ? 'Membresía Activa' : 'Validación Pendiente';
+        const isAct = (profile.subscription_status === 'active' || isAdmin || planDetails.daysRemaining > 0);
+        subBadge.textContent = isAdmin ? 'Coach OS' : planDetails.statusLabel;
         subBadge.style.background = isAct ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
         subBadge.style.color = isAct ? '#10B981' : '#F59E0B';
         subBadge.style.borderColor = isAct ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
@@ -8785,16 +9005,34 @@ function initTopbarAvatar() {
             fullName = 'Mi Perfil SENS';
         }
 
-        // 3. Resolver Plan
+        // 3. Resolver Plan & Escalera de Beneficios en Menú Avatar y Topbar
+        const planDetails = (typeof getSensUserPlanDetails === 'function')
+            ? getSensUserPlanDetails(profile)
+            : { shortBadge: 'Plan Free (7d)', title: 'Plan Free (Prueba 7 Días)', statusLabel: 'Activo', nextStepHint: 'Escalá a App Premium, Online 1:1 o Presencial CABA.', ctaLabel: 'Escalar mi Plan / Ver Ventajas →' };
+
         let plan = '';
         if (isAdmin && !isInspecting) {
             plan = 'Coach OS • Director';
-        } else if (profile && profile.active_plan_name) {
-            plan = profile.active_plan_name;
-        } else if (profile && profile.user_type) {
-            plan = formatPlanName(profile.user_type);
         } else {
-            plan = 'Plan Personalizado';
+            plan = planDetails.title;
+        }
+
+        const topbarPlanText = document.getElementById('portalPlanBadgeText');
+        if (topbarPlanText) {
+            topbarPlanText.textContent = (isAdmin && !isInspecting) ? 'Coach OS • Director' : planDetails.shortBadge;
+        }
+
+        const statusDotEl = document.getElementById('dropdownPlanStatusDot');
+        const nextHintEl = document.getElementById('dropdownPlanNextStepHint');
+        const openUpgradeBtn = document.getElementById('dropdownOpenUpgradeBtn');
+        if (statusDotEl) statusDotEl.textContent = (isAdmin && !isInspecting) ? 'Director' : planDetails.statusLabel;
+        if (nextHintEl) {
+            nextHintEl.textContent = (isAdmin && !isInspecting)
+                ? 'Panel Maestro activo. Podés inspeccionar alumnos o ver la escalera de planes.'
+                : planDetails.nextStepHint;
+        }
+        if (openUpgradeBtn) {
+            openUpgradeBtn.textContent = (isAdmin && !isInspecting) ? 'Ver Escalera de Planes SENS →' : planDetails.ctaLabel;
         }
 
         // 4. Iniciales
@@ -25667,70 +25905,85 @@ window.renderSensUnlockablesModule = function() {
         } catch (_) {}
     }
 
-    const progressText = `${Math.min(3, weeklyCompleted)} / 3 sesiones esta semana`;
+    const progressText = `${Math.min(3, weeklyCompleted)} / 3 sesiones esta sem.`;
     const dashBadge = document.getElementById('dashWeeklySessionsProgressBadge');
     const nutriBadge = document.getElementById('nutriWeeklySessionsProgressBadge');
     if (dashBadge) dashBadge.textContent = progressText;
     if (nutriBadge) nutriBadge.textContent = progressText;
 
-    const lockSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
-    const unlockSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+    const lockSvg = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+    const unlockSvg = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#080809" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+    const refCode = profile.referral_code || 'SENS-VIP';
+    const referralUrl = `https://makesens.online/?ref=${encodeURIComponent(refCode)}`;
 
     const cards = [
         {
             key: 'weekend_social_refeed',
-            eyebrow: 'Recompensa Semanal (3 sesiones)',
-            title: 'Presupuesto Social de Fin de Semana (+500 kcal libres + Guía de Restaurantes SENS)',
+            eyebrow: '3 Sesiones / Semana',
+            title: 'Permiso Social Fin de Semana (+500 kcal)',
             desc: unlockedWeekendRefeed
-                ? 'Permiso Metabólico Activo: Contás con +500 kcal de margen social para disfrutar una cena afuera priorizando proteína magra sin perder recomposición.'
-                : `Completá ${Math.max(0, 3 - weeklyCompleted)} ${Math.max(0, 3 - weeklyCompleted) === 1 ? 'sesión más' : 'sesiones más'} esta semana para activar tu margen social de +500 kcal + 1 Guest Pass.`,
+                ? 'Activo: +500 kcal libres para tu cena social cuidando proteína.'
+                : `Te ${Math.max(0, 3 - weeklyCompleted) === 1 ? 'falta 1 sesión' : `faltan ${Math.max(0, 3 - weeklyCompleted)} sesiones`} para liberar +500 kcal el fin de semana.`,
             unlocked: unlockedWeekendRefeed,
-            statusLabel: unlockedWeekendRefeed ? 'DESBLOQUEADO' : `${Math.min(3, weeklyCompleted)}/3 SESIONES`
-        },
-        {
-            key: 'protocol_office_decompression',
-            eyebrow: 'Hito Inicial (1 sesión)',
-            title: 'Protocolo de 10 min de Descompresión Lumbar y Cervical Post-Oficina',
-            desc: unlockedOfficeProtocol
-                ? 'Protocolo Desbloqueado: Secuencia guiada de tracción axial suave, apertura torácica y respiración diafragmática para aliviar tensión de escritorio.'
-                : 'Se desbloquea automáticamente al registrar tu 1er entrenamiento de fuerza en la App.',
-            unlocked: unlockedOfficeProtocol,
-            statusLabel: unlockedOfficeProtocol ? 'DESBLOQUEADO' : 'BLOQUEADO'
+            statusLabel: unlockedWeekendRefeed ? 'ACTIVO' : `${Math.min(3, weeklyCompleted)}/3`,
+            actionHtml: ''
         },
         {
             key: 'initial_criterio_3days',
-            eyebrow: 'Recompensa al Criterio (Semana 1)',
-            title: '+3 Días Extra de Acceso Full',
+            eyebrow: 'Premio a la Constancia',
+            title: '+3 Días Gratis de App Full',
             desc: unlockedCriterio3Days
-                ? 'Hito Conquistado: Sumaste +3 días adicionales de acceso completo a tu período de prueba por sostener 3 entrenamientos en tu semana inicial.'
-                : 'Completá tu Evaluación Inicial + 3 entrenamientos en tus primeros 7 días para sumar +3 días gratis automáticamente.',
+                ? 'Sumaste +3 días gratis a tu prueba por cumplir 3 sesiones.'
+                : 'Completá 3 entrenamientos en tu 1ra semana y sumás +3 días gratis.',
             unlocked: unlockedCriterio3Days,
-            statusLabel: unlockedCriterio3Days ? '+3 DÍAS ACTIVOS' : 'EN PROGRESO'
+            statusLabel: unlockedCriterio3Days ? '+3D SUMADOS' : `${Math.min(3, totalCompleted)}/3`,
+            actionHtml: ''
+        },
+        {
+            key: 'viral_guest_pass_7days',
+            eyebrow: 'Growth • Invitar Amigo',
+            title: '+7 Días Gratis para Ambos',
+            desc: 'Regalá 14 días de prueba a un amigo; al entrenar su 1ra sesión ambos suman +7 días gratis.',
+            unlocked: true,
+            statusLabel: '+7 DÍAS / AMIGO',
+            actionHtml: `<button type="button" class="btn-streak-share-guest" data-referral-url="${escapeHTML(referralUrl)}" style="margin-top: 6px; width: 100%; background: #E5CBA7; color: #080809; border: none; border-radius: 8px; padding: 6px 10px; font-size: 10.5px; font-weight: 800; cursor: pointer;">Compartir Pase por WhatsApp →</button>`
         }
     ];
 
     const html = cards.map(c => `
-        <div style="background: #18181B; border: 1px solid ${c.unlocked ? 'rgba(229, 203, 167, 0.55)' : 'rgba(255, 255, 255, 0.07)'}; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; transition: all 0.25s ease;">
+        <div style="background: #18181B; border: 1px solid ${c.unlocked ? 'rgba(229, 203, 167, 0.45)' : 'rgba(255, 255, 255, 0.07)'}; border-radius: 12px; padding: 12px 13px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px;">
             <div>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
-                    <span style="font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: ${c.unlocked ? '#E5CBA7' : '#A1A1AA'};">${escapeHTML(c.eyebrow)}</span>
-                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.8px; color: ${c.unlocked ? '#080809' : '#A1A1AA'}; background: ${c.unlocked ? '#E5CBA7' : 'rgba(255,255,255,0.06)'}; padding: 3px 8px; border-radius: 6px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 4px;">
+                    <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: ${c.unlocked ? '#E5CBA7' : '#A1A1AA'};">${escapeHTML(c.eyebrow)}</span>
+                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 800; letter-spacing: 0.6px; color: ${c.unlocked ? '#080809' : '#A1A1AA'}; background: ${c.unlocked ? '#E5CBA7' : 'rgba(255,255,255,0.06)'}; padding: 2px 7px; border-radius: 5px; font-variant-numeric: tabular-nums;">
                         ${c.unlocked ? unlockSvg : lockSvg}
                         <span>${escapeHTML(c.statusLabel)}</span>
                     </span>
                 </div>
-                <h4 style="font-size: 0.95rem; font-weight: 800; color: ${c.unlocked ? '#FFFFFF' : '#D4D4D8'}; margin: 0 0 6px 0; line-height: 1.35;">
+                <h4 style="font-size: 12.5px; font-weight: 800; color: #FFFFFF; margin: 0 0 3px 0; line-height: 1.3;">
                     ${escapeHTML(c.title)}
                 </h4>
-                <p style="font-size: 11.8px; color: #A1A1AA; margin: 0; line-height: 1.45;">
+                <p style="font-size: 11px; color: #A1A1AA; margin: 0; line-height: 1.38;">
                     ${escapeHTML(c.desc)}
                 </p>
             </div>
+            ${c.actionHtml || ''}
         </div>
     `).join('');
 
     if (dashGrid) dashGrid.innerHTML = html;
     if (nutriGrid) nutriGrid.innerHTML = html;
+
+    document.querySelectorAll('.btn-streak-share-guest').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            const url = btn.getAttribute('data-referral-url') || referralUrl;
+            try { navigator.clipboard.writeText(url); } catch (_) {}
+            const waMsg = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico (fuerza, postura y cálculo nutricional). Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${url}`);
+            window.open(`https://wa.me/?text=${waMsg}`, '_blank');
+        };
+    });
 };
 
 // =============================================================================
