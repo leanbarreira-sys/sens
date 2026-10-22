@@ -6549,13 +6549,22 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
         `;
     }
 
-    // 5. Configurar Master Timer Unificado
-    masterTimerState.mode = 'idle';
-    masterTimerState.tutSeconds = 0;
+    // 5. Configurar Master Timer Unificado (con restauración de sesión activa en segundo plano si corresponde al mismo ejercicio)
     masterTimerState.targetRest = ex.rest || catalogMatch.rest || 90;
-    masterTimerState.restRemaining = masterTimerState.targetRest;
-    clearInterval(masterTimerState.interval);
-    updateMasterTimerUI();
+    const restoredActiveTimer = (typeof restoreMasterTimerFromStorage === 'function')
+        ? restoreMasterTimerFromStorage(exId, dayKey)
+        : false;
+    if (!restoredActiveTimer) {
+        masterTimerState.mode = 'idle';
+        masterTimerState.isPaused = false;
+        masterTimerState.tutSeconds = 0;
+        masterTimerState.tutAccumulatedMs = 0;
+        masterTimerState.tutStartedAtMs = null;
+        masterTimerState.restEndAtMs = null;
+        masterTimerState.restRemaining = masterTimerState.targetRest;
+        clearInterval(masterTimerState.interval);
+        updateMasterTimerUI();
+    }
 
     // 3. Inicializar Series con Scoping Estricto por Fecha
     const savedLogs = getAthleteExerciseLogs(athId, exId);
@@ -7274,14 +7283,130 @@ function triggerCongratsCelebration(customTitle = null, customSubtitle = null) {
 
 /**
  * Master Timer Unificado (TUT / Descanso / Pausa / Controles WOW)
+ * Arquitectura Wall-Clock (Epoch Date.now()): Cero gasto de batería cuando el celular está
+ * apagado o en otra app (Spotify/WhatsApp), manteniendo precisión exacta al milisegundo.
  */
+const SENS_ACTIVE_TIMER_STORAGE_KEY = 'sens_active_workout_timer_v1';
+
 const masterTimerState = {
     mode: 'idle', // 'idle' | 'in_set' | 'in_rest'
+    isPaused: false,
     tutSeconds: 0,
+    tutAccumulatedMs: 0,
+    tutStartedAtMs: null,
     restRemaining: 90,
+    restEndAtMs: null,
     targetRest: 90,
     interval: null
 };
+
+function persistMasterTimerState() {
+    try {
+        if (masterTimerState.mode === 'idle') {
+            localStorage.removeItem(SENS_ACTIVE_TIMER_STORAGE_KEY);
+            return;
+        }
+        const payload = {
+            exId: modalExerciseState?.exId || null,
+            dayKey: modalExerciseState?.dayKey || null,
+            mode: masterTimerState.mode,
+            isPaused: Boolean(masterTimerState.isPaused),
+            tutAccumulatedMs: masterTimerState.tutAccumulatedMs || 0,
+            tutStartedAtMs: masterTimerState.tutStartedAtMs || null,
+            restEndAtMs: masterTimerState.restEndAtMs || null,
+            restRemaining: masterTimerState.restRemaining || 0,
+            targetRest: masterTimerState.targetRest || 90,
+            savedAt: Date.now()
+        };
+        localStorage.setItem(SENS_ACTIVE_TIMER_STORAGE_KEY, JSON.stringify(payload));
+    } catch (_) {}
+}
+
+function syncMasterTimerWithWallClock() {
+    const now = Date.now();
+    if (masterTimerState.mode === 'in_set') {
+        if (!masterTimerState.isPaused && masterTimerState.tutStartedAtMs) {
+            const totalMs = (masterTimerState.tutAccumulatedMs || 0) + Math.max(0, now - masterTimerState.tutStartedAtMs);
+            masterTimerState.tutSeconds = Math.floor(totalMs / 1000);
+        } else {
+            masterTimerState.tutSeconds = Math.floor((masterTimerState.tutAccumulatedMs || 0) / 1000);
+        }
+        updateMasterTimerUI();
+    } else if (masterTimerState.mode === 'in_rest' && masterTimerState.restEndAtMs) {
+        const remainingMs = masterTimerState.restEndAtMs - now;
+        const remainingSec = Math.ceil(remainingMs / 1000);
+        if (remainingSec <= 0) {
+            clearInterval(masterTimerState.interval);
+            masterTimerState.interval = null;
+            masterTimerState.mode = 'idle';
+            masterTimerState.isPaused = false;
+            masterTimerState.tutSeconds = 0;
+            masterTimerState.tutAccumulatedMs = 0;
+            masterTimerState.tutStartedAtMs = null;
+            masterTimerState.restEndAtMs = null;
+            masterTimerState.restRemaining = masterTimerState.targetRest;
+            persistMasterTimerState();
+            updateMasterTimerUI();
+            if (!document.hidden) {
+                playBeep(880, 0.4);
+                showSensToast('¡Descanso completado! Preparate para tu siguiente serie.', 'champagne', 3500);
+            }
+        } else {
+            const prevSec = masterTimerState.restRemaining;
+            masterTimerState.restRemaining = remainingSec;
+            if (!document.hidden && remainingSec <= 3 && remainingSec !== prevSec) {
+                playBeep(580, 0.08);
+            }
+            updateMasterTimerUI();
+        }
+    }
+}
+window.syncMasterTimerWithWallClock = syncMasterTimerWithWallClock;
+
+function restoreMasterTimerFromStorage(exId, dayKey) {
+    try {
+        const raw = localStorage.getItem(SENS_ACTIVE_TIMER_STORAGE_KEY);
+        if (!raw) return false;
+        const saved = JSON.parse(raw);
+        if (!saved || saved.exId !== exId || saved.dayKey !== dayKey) return false;
+        // Expirar si tiene más de 3 horas
+        if (Date.now() - (saved.savedAt || 0) > 3 * 3600 * 1000) {
+            localStorage.removeItem(SENS_ACTIVE_TIMER_STORAGE_KEY);
+            return false;
+        }
+        masterTimerState.mode = saved.mode || 'idle';
+        masterTimerState.isPaused = Boolean(saved.isPaused);
+        masterTimerState.tutAccumulatedMs = saved.tutAccumulatedMs || 0;
+        masterTimerState.tutStartedAtMs = saved.tutStartedAtMs || null;
+        masterTimerState.restEndAtMs = saved.restEndAtMs || null;
+        masterTimerState.restRemaining = saved.restRemaining || masterTimerState.targetRest;
+
+        if (masterTimerState.mode === 'in_set') {
+            syncMasterTimerWithWallClock();
+            if (!masterTimerState.isPaused) {
+                clearInterval(masterTimerState.interval);
+                masterTimerState.interval = setInterval(syncMasterTimerWithWallClock, 500);
+            } else {
+                const primaryBtn = document.getElementById('btnMasterTimerPrimary');
+                const modeLabel = document.getElementById('masterTimerModeLabel');
+                if (primaryBtn) primaryBtn.textContent = 'Reanudar Serie';
+                if (modeLabel) modeLabel.textContent = 'SERIE EN PAUSA';
+            }
+            return true;
+        }
+        if (masterTimerState.mode === 'in_rest') {
+            syncMasterTimerWithWallClock();
+            if (masterTimerState.mode === 'in_rest') {
+                clearInterval(masterTimerState.interval);
+                masterTimerState.interval = setInterval(syncMasterTimerWithWallClock, 500);
+            }
+            return true;
+        }
+        return false;
+    } catch (_) {
+        return false;
+    }
+}
 
 function updateMasterTimerUI() {
     const display = document.getElementById('masterTimerDisplay');
@@ -7387,17 +7512,30 @@ function updateMasterTimerUI() {
 
 function startMasterTutTimer() {
     clearInterval(masterTimerState.interval);
+    if (masterTimerState.mode !== 'in_set') {
+        masterTimerState.tutAccumulatedMs = (masterTimerState.tutSeconds || 0) * 1000;
+    }
     masterTimerState.mode = 'in_set';
-    updateMasterTimerUI();
+    masterTimerState.isPaused = false;
+    masterTimerState.tutStartedAtMs = Date.now();
+    masterTimerState.restEndAtMs = null;
+    persistMasterTimerState();
+    syncMasterTimerWithWallClock();
 
-    masterTimerState.interval = setInterval(() => {
-        masterTimerState.tutSeconds++;
-        updateMasterTimerUI();
-    }, 1000);
+    masterTimerState.interval = setInterval(syncMasterTimerWithWallClock, 500);
 }
 
 function pauseMasterTutTimer() {
     clearInterval(masterTimerState.interval);
+    masterTimerState.interval = null;
+    if (masterTimerState.tutStartedAtMs) {
+        masterTimerState.tutAccumulatedMs = (masterTimerState.tutAccumulatedMs || 0) + Math.max(0, Date.now() - masterTimerState.tutStartedAtMs);
+        masterTimerState.tutStartedAtMs = null;
+    }
+    masterTimerState.isPaused = true;
+    masterTimerState.tutSeconds = Math.floor((masterTimerState.tutAccumulatedMs || 0) / 1000);
+    persistMasterTimerState();
+    updateMasterTimerUI();
     const primaryBtn = document.getElementById('btnMasterTimerPrimary');
     const modeLabel = document.getElementById('masterTimerModeLabel');
     if (primaryBtn) primaryBtn.textContent = 'Reanudar Serie';
@@ -7407,25 +7545,16 @@ function pauseMasterTutTimer() {
 function startMasterRestCountdown(seconds = null) {
     clearInterval(masterTimerState.interval);
     masterTimerState.mode = 'in_rest';
-    masterTimerState.restRemaining = seconds !== null ? seconds : masterTimerState.targetRest;
+    masterTimerState.isPaused = false;
+    masterTimerState.tutStartedAtMs = null;
+    masterTimerState.tutAccumulatedMs = 0;
+    const durationSec = seconds !== null ? seconds : masterTimerState.targetRest;
+    masterTimerState.restRemaining = durationSec;
+    masterTimerState.restEndAtMs = Date.now() + (durationSec * 1000);
+    persistMasterTimerState();
     updateMasterTimerUI();
 
-    masterTimerState.interval = setInterval(() => {
-        masterTimerState.restRemaining--;
-        if (masterTimerState.restRemaining <= 0) {
-            clearInterval(masterTimerState.interval);
-            masterTimerState.mode = 'idle';
-            masterTimerState.tutSeconds = 0;
-            updateMasterTimerUI();
-            playBeep(880, 0.4);
-            showSensToast('¡Descanso completado! Preparate para tu siguiente serie.', 'champagne', 3500);
-        } else {
-            if (masterTimerState.restRemaining <= 3) {
-                playBeep(580, 0.08);
-            }
-            updateMasterTimerUI();
-        }
-    }, 1000);
+    masterTimerState.interval = setInterval(syncMasterTimerWithWallClock, 500);
 }
 
 function initMasterTimerListeners() {
@@ -7477,6 +7606,8 @@ function initMasterTimerListeners() {
     if (minus15) {
         minus15.addEventListener('click', () => {
             masterTimerState.restRemaining = Math.max(5, masterTimerState.restRemaining - 15);
+            masterTimerState.restEndAtMs = Date.now() + (masterTimerState.restRemaining * 1000);
+            persistMasterTimerState();
             updateMasterTimerUI();
         });
     }
@@ -7484,6 +7615,8 @@ function initMasterTimerListeners() {
     if (plus15) {
         plus15.addEventListener('click', () => {
             masterTimerState.restRemaining += 15;
+            masterTimerState.restEndAtMs = Date.now() + (masterTimerState.restRemaining * 1000);
+            persistMasterTimerState();
             updateMasterTimerUI();
         });
     }
@@ -7491,8 +7624,14 @@ function initMasterTimerListeners() {
     if (skipRest) {
         skipRest.addEventListener('click', () => {
             clearInterval(masterTimerState.interval);
+            masterTimerState.interval = null;
             masterTimerState.mode = 'idle';
+            masterTimerState.isPaused = false;
             masterTimerState.tutSeconds = 0;
+            masterTimerState.tutAccumulatedMs = 0;
+            masterTimerState.tutStartedAtMs = null;
+            masterTimerState.restEndAtMs = null;
+            persistMasterTimerState();
             updateMasterTimerUI();
             showSensToast('Descanso omitido.', 'champagne', 2000);
         });
@@ -7673,7 +7812,14 @@ function closeExerciseExecutionModalForce() {
     document.body.style.overflow = '';
 
     clearInterval(masterTimerState.interval);
+    masterTimerState.interval = null;
     masterTimerState.mode = 'idle';
+    masterTimerState.isPaused = false;
+    masterTimerState.tutSeconds = 0;
+    masterTimerState.tutAccumulatedMs = 0;
+    masterTimerState.tutStartedAtMs = null;
+    masterTimerState.restEndAtMs = null;
+    persistMasterTimerState();
 
     const modalVideo = document.getElementById('modalExVideo');
     if (modalVideo) modalVideo.pause();
@@ -7758,19 +7904,23 @@ function startRestTimer(seconds) {
     if (!widget) return;
 
     AppState.remainingSeconds = seconds;
+    AppState.floatingRestEndAtMs = Date.now() + (seconds * 1000);
     widget.classList.add('active');
     updateTimerDisplay();
 
     AppState.activeTimerInterval = setInterval(() => {
-        AppState.remainingSeconds--;
+        const rem = Math.ceil((AppState.floatingRestEndAtMs - Date.now()) / 1000);
+        AppState.remainingSeconds = Math.max(0, rem);
         if (AppState.remainingSeconds <= 0) {
             stopRestTimer();
-            playBeep(880, 0.4); // tono agudo de fin de descanso
-            showSensToast('Descanso completado. Preparate para el próximo set.', 'champagne', 3400);
+            if (!document.hidden) {
+                playBeep(880, 0.4); // tono agudo de fin de descanso
+                showSensToast('Descanso completado. Preparate para el próximo set.', 'champagne', 3400);
+            }
         } else {
             updateTimerDisplay();
         }
-    }, 1000);
+    }, 500);
 }
 
 function stopRestTimer() {
@@ -7778,6 +7928,7 @@ function stopRestTimer() {
         clearInterval(AppState.activeTimerInterval);
         AppState.activeTimerInterval = null;
     }
+    AppState.floatingRestEndAtMs = null;
     const widget = document.getElementById('floatingRestTimer');
     if (widget) widget.classList.remove('active');
 }
@@ -8481,7 +8632,20 @@ function renderMonthlyCalendar() {
 
 let stopwatchInterval = null;
 let stopwatchSeconds = 0;
+let stopwatchAccumulatedMs = 0;
+let stopwatchStartedAtMs = null;
 let stopwatchRunning = false;
+
+function syncWorkoutStopwatchWithWallClock() {
+    const display = document.getElementById('workoutStopwatchDisplay');
+    if (!display || !stopwatchRunning || !stopwatchStartedAtMs) return;
+    const totalMs = stopwatchAccumulatedMs + Math.max(0, Date.now() - stopwatchStartedAtMs);
+    stopwatchSeconds = Math.floor(totalMs / 1000);
+    const mins = String(Math.floor(stopwatchSeconds / 60)).padStart(2, '0');
+    const secs = String(stopwatchSeconds % 60).padStart(2, '0');
+    display.textContent = `${mins}:${secs}`;
+}
+window.syncWorkoutStopwatchWithWallClock = syncWorkoutStopwatchWithWallClock;
 
 function initWorkoutStopwatch() {
     const display = document.getElementById('workoutStopwatchDisplay');
@@ -8491,15 +8655,16 @@ function initWorkoutStopwatch() {
     toggleBtn.addEventListener('click', () => {
         if (!stopwatchRunning) {
             stopwatchRunning = true;
+            stopwatchStartedAtMs = Date.now();
             toggleBtn.textContent = 'Pausar';
             toggleBtn.style.color = '#EF4444';
-            stopwatchInterval = setInterval(() => {
-                stopwatchSeconds++;
-                const mins = String(Math.floor(stopwatchSeconds / 60)).padStart(2, '0');
-                const secs = String(stopwatchSeconds % 60).padStart(2, '0');
-                display.textContent = `${mins}:${secs}`;
-            }, 1000);
+            clearInterval(stopwatchInterval);
+            stopwatchInterval = setInterval(syncWorkoutStopwatchWithWallClock, 500);
         } else {
+            if (stopwatchStartedAtMs) {
+                stopwatchAccumulatedMs += Math.max(0, Date.now() - stopwatchStartedAtMs);
+                stopwatchStartedAtMs = null;
+            }
             stopwatchRunning = false;
             clearInterval(stopwatchInterval);
             toggleBtn.textContent = 'Reanudar';
@@ -8510,6 +8675,8 @@ function initWorkoutStopwatch() {
     display.addEventListener('dblclick', () => {
         clearInterval(stopwatchInterval);
         stopwatchSeconds = 0;
+        stopwatchAccumulatedMs = 0;
+        stopwatchStartedAtMs = null;
         stopwatchRunning = false;
         display.textContent = '00:00';
         toggleBtn.textContent = 'Iniciar';
@@ -25652,21 +25819,48 @@ const SensBatteryPerfGovernor = {
     },
 
     initVisibilityLifecycle() {
+        const onWakeUp = () => {
+            if (document.hidden) return;
+            this.resetIdleTimer();
+            this.resumeVisibleVideos();
+            // Sincronizar de inmediato los cronómetros de entrenamiento/descanso con el reloj de hardware (Epoch Date.now())
+            if (typeof window.syncMasterTimerWithWallClock === 'function') {
+                window.syncMasterTimerWithWallClock();
+            }
+            if (typeof window.syncWorkoutStopwatchWithWallClock === 'function') {
+                window.syncWorkoutStopwatchWithWallClock();
+            }
+            if (AppState.floatingRestEndAtMs && AppState.activeTimerInterval) {
+                const rem = Math.ceil((AppState.floatingRestEndAtMs - Date.now()) / 1000);
+                AppState.remainingSeconds = Math.max(0, rem);
+                if (AppState.remainingSeconds <= 0) {
+                    stopRestTimer();
+                    playBeep(880, 0.4);
+                    showSensToast('Descanso completado. Preparate para el próximo set.', 'champagne', 3400);
+                } else {
+                    updateTimerDisplay();
+                }
+            }
+            const dashView = document.getElementById('dashView');
+            if (dashView && dashView.classList.contains('active') && typeof window.startDashNutriCarousel === 'function') {
+                window.startDashNutriCarousel();
+            }
+        };
+
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 document.body.classList.add('sens-power-save');
                 this.pauseAllActiveVideos();
                 if (typeof window.stopDashNutriCarousel === 'function') window.stopDashNutriCarousel();
                 if (typeof window.stopCoachMarketingStudio === 'function') window.stopCoachMarketingStudio();
+                if (typeof persistMasterTimerState === 'function') persistMasterTimerState();
             } else {
-                this.resetIdleTimer();
-                this.resumeVisibleVideos();
-                const dashView = document.getElementById('dashView');
-                if (dashView && dashView.classList.contains('active') && typeof window.startDashNutriCarousel === 'function') {
-                    window.startDashNutriCarousel();
-                }
+                onWakeUp();
             }
         });
+
+        window.addEventListener('focus', onWakeUp, { passive: true });
+        window.addEventListener('pageshow', onWakeUp, { passive: true });
     },
 
     resetIdleTimer() {
