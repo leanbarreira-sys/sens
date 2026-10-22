@@ -1,0 +1,38 @@
+# ==============================================================================
+# MAKES SENS. (makesens.com.ar / makesens.online) — ROBOTS & GEO AI DIRECTIVES
+# Explicitly allows Search Engines and Autonomous AI Agents
+# ==============================================================================
+
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://makesens.com.ar/sitemap.xml
+Sitemap: https://makesens.online/sitemap.xml
+# LLM Context Standard: https://makesens.com.ar/llms.txt

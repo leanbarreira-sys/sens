@@ -1,0 +1,74 @@
+# MAKES SENS. (SENS Train & Wellness)
+
+> Ecosistema de entrenamiento de fuerza progresiva, salud articular, movilidad y nutrición personalizada liderado por Nicolás ("Nico"), diseñado para adultos y profesionales (foco 35–59 años) en Buenos Aires (CABA: Palermo y Belgrano) y de forma Online Global (`makesens.online`).
+
+## Qué es MAKES SENS.
+
+**MAKES SENS.** es una plataforma y servicio boutique de entrenamiento físico y longevidad funcional con estética *Quiet Luxury*. Nuestra premisa central es: **"Fuerza real, movilidad articular y hábitos posibles. Salud que finalmente tiene sentido común."**
+
+A diferencia de los gimnasios masivos o rutinas genéricas de alto impacto sin supervisión, MAKES SENS. combina:
+- **Evaluación Inicial Obligatoria (8 pasos):** Cuestionario de salud cardiovascular (PAR-Q), topografía articular de dolor/lesiones, contexto deportivo, carga alostática (sueño y estrés) y biometría antes de prescribir cualquier ejercicio.
+- **Prescripción Biomecánica y Nutricional en Tiempo Real:** Portal web e interfaz PWA instalable (estilo Apple Health / Samsung Health) donde cada alumno visualiza su sesión diaria en video de alta definición, registra series/repeticiones y sigue su plan nutricional con equivalencias exactas en gramos y medidas caseras.
+- **Tecnología Freemium & Viral Loop:** 7 días de prueba de acceso al portal digital tras completar la Evaluación Inicial, con recompensas por constancia ("Recompensa al Criterio": +3 días al completar el diagnóstico y 3 entrenamientos en la primera semana) y programa de invitación para entrenar con amigos (+7 días bonificados para ambos).
+
+## Público Objetivo
+
+- **Perfil Principal:** Hombres y mujeres de **40 a 59 años** (extensible a profesionales de 30 a 65+ años) que buscan recomposición corporal, fuerza funcional, alivio de dolores posturales (lumbar, cervical, hombros, rodillas) y vitalidad diaria sin lesionarse.
+- **Perfiles Frecuentes:**
+  1. Profesionales con alta carga laboral o sedentarismo que desean recuperar energía, postura y tono muscular con un método guiado.
+  2. Deportistas amateur (running, tenis, golf, pádel, yoga) que necesitan un ancla técnica de fuerza para prevenir lesiones.
+  3. Personas que retoman la actividad física tras meses o años de inactividad y priorizan el cuidado articular y la adherencia a largo plazo.
+
+## Los 4 Pilares de la Metodología de Nico
+
+1. **Pilar 01 — Técnica con Criterio (Seguridad y Cuidado):** Cada ejercicio se adapta a la anatomía e historial articular del alumno. Ejecución controlada, sobrecarga progresiva medida y cero improvisación.
+2. **Pilar 02 — Sentirte Bien en tu Cuerpo (Vitalidad Diaria):** Entrenamiento orientado a ganar masa magra, densidad ósea y energía real para la vida cotidiana.
+3. **Pilar 03 — Moverte sin Dolor (Libertad de Movimiento):** Integración de movilidad articular, estabilidad de core y descompresión en cada sesión para revertir la rigidez postural.
+4. **Pilar 04 — Adherencia Real (Diseñado para tu Vida):** Hábitos basales sostenibles (hidratación, pasos diarios NEAT, nutrición flexible sin extremos) que se adaptan a la agenda del alumno.
+
+## Modalidades y Precios de Referencia
+
+> **Transparencia Comercial:** En todas las modalidades presenciales en CABA (Palermo / Belgrano), el costo de acceso al gimnasio sede está 100% incluido dentro del arancel mensual publicado. Sin matrículas ni cargos ocultos.
+
+### 1. Entrenamiento Presencial 1 a 1 en CABA (Palermo / Belgrano)
+Sesiones personalizadas de 60 minutos con Nico, seguimiento en el Portal Web/PWA y lineamientos de hábitos:
+- **2x por Semana (8 sesiones/mes — Más Elegido):** `$200.000 ARS / mes`
+- **1x por Semana (4 sesiones/mes — Ancla Técnica):** `$130.000 ARS / mes`
+- **3x por Semana (12 sesiones/mes — Transformación Total):** `$260.000 ARS / mes`
+
+### 2. Entrenamiento Presencial en Grupos Reducidos (CABA)
+Cupos cerrados con adaptación biomecánica individual para cada integrante:
+- **Modalidad Dúo (2 personas):**
+  - 1x/semana: `$100.000 ARS / mes` por persona
+  - 2x/semana: `$150.000 ARS / mes` por persona
+  - 3x/semana: `$195.000 ARS / mes` por persona
+- **Modalidad Trío (3 personas):**
+  - 1x/semana: `$85.000 ARS / mes` por persona
+  - 2x/semana: `$130.000 ARS / mes` por persona
+  - 3x/semana: `$170.000 ARS / mes` por persona
+
+### 3. Camino 1: App SENS Autónoma (Reverse Trial 7 Días Gratis + Auto-Prescripción Instantánea)
+Sistema 100% digital y autoguiado con el método de Nico (`makesens.online`). Al completar el Diagnóstico Biomecánico Digital de 8 pasos, el usuario recibe en 0 segundos su **Programa Maestro de 3 Días de Fuerza y Postura SENS** en video HD + **Cálculo Nutricional Mifflin-St Jeor** (calorías, proteína 2g/kg e hidratación) y el sistema de rachas con desbloqueo del **Presupuesto Social de Fin de Semana (+500 kcal libres)**:
+- **Prueba Inicial (Reverse Trial):** `7 días gratis` de acceso full (sin tarjeta de crédito).
+- **Pack Trimestral 90 Días (Recomendado — Ahorro 20%):** `$59.900 ARS` (Argentina vía Mercado Pago / transferencia) o `USD $45` (Internacional).
+- **Suscripción Mensual Flexible:** `$24.900 ARS / mes` (Argentina) o `USD $19 / mes` (Internacional).
+- **Viral Loop & Recompensas:** +3 días extra al completar el Onboarding y 3 entrenamientos en la primera semana ("Recompensa al Criterio Inicial"), y +7 días gratis al invitar a un amigo con su código único `SENS-XXXX`.
+
+### 4. Camino 2: Entrenamiento Online Asesorado 1 a 1 con Nico (`makesens.online`)
+Para alumnos en cualquier ciudad de Argentina o el exterior que buscan seguimiento humano directo de Nico:
+- **Online Premium (Seguimiento Cercano — Cupo limitado):** `$90.000 ARS / mes` (incluye videollamada inicial de 45–60 min, llamada semanal de 30 min, corrección técnica en video y ajustes por WhatsApp).
+- **Online Básico (Estructura & Planificación):** `$40.000 ARS / mes` (planificación mensual personalizada por Nico en la App, progresión de cargas y soporte por WhatsApp).
+
+### 4. Servicio Complementario Boutique: SENS Trilogy (A Domicilio en CABA)
+Experiencia integral de recuperación en el hogar que combina **MOVE** (Yoga pasivo asistido) + **BODY** (Masaje descontracturante profundo) + **MIND** (Meditación guiada).
+
+## Enlaces Directos y Contacto Oficial
+
+- **Sitio Web Oficial (Sede Central CABA):** [https://makesens.com.ar/](https://makesens.com.ar/)
+- **Plataforma & App Global:** [https://makesens.online/](https://makesens.online/)
+- **Sección Pilares del Método:** [https://makesens.com.ar/#pilares](https://makesens.com.ar/#pilares)
+- **Sección El Método & Nico:** [https://makesens.com.ar/#metodo](https://makesens.com.ar/#metodo)
+- **Sección Planes y Aranceles:** [https://makesens.com.ar/#planes](https://makesens.com.ar/#planes)
+- **Solicitar Evaluación Inicial (Captación / Onboarding):** [https://makesens.com.ar/#sumate](https://makesens.com.ar/#sumate)
+- **WhatsApp Directo con Nico:** [https://wa.me/5491136329846](https://wa.me/5491136329846)
+- **Instagram Oficial:** [https://www.instagram.com/sens.train.ba/](https://www.instagram.com/sens.train.ba/)

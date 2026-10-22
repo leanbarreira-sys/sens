@@ -11,6 +11,119 @@ const SUPABASE_CONFIG = {
     anonKey: window.__SUPABASE_ANON_KEY__ || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxemJra3hpbGp1Y2NlZ2JpcGtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3OTk5MzYsImV4cCI6MjEwNzM3NTkzNn0.UOhfid8S09kdfMqIPRkZiLySKGXYQ2Mb3m_YhCLYgs4'
 };
 
+// Configuración lista para conectar pasarelas de pago (Mercado Pago AR & Internacional USD)
+const SENS_PAYMENT_CONFIG = {
+    mercadopagoPublicKey: window.__MP_PUBLIC_KEY__ || '',
+    mercadopagoInitPoint: window.__MP_SUBSCRIPTION_INIT_POINT__ || '',
+    mercadopagoQuarterlyInitPoint: window.__MP_QUARTERLY_INIT_POINT__ || '',
+    mercadopagoWebhookEndpoint: '/functions/v1/mercadopago-webhook',
+    internationalProvider: window.__INTL_PAYMENT_PROVIDER__ || 'lemonsqueezy',
+    internationalCheckoutUrl: window.__INTL_CHECKOUT_URL__ || '',
+    internationalQuarterlyCheckoutUrl: window.__INTL_QUARTERLY_CHECKOUT_URL__ || '',
+    internationalWebhookEndpoint: '/functions/v1/international-payment-webhook',
+    monthlyPriceARS: 24900,
+    quarterlyPriceARS: 59900,
+    monthlyPriceUSD: 19,
+    quarterlyPriceUSD: 45
+};
+window.SENS_PAYMENT_CONFIG = SENS_PAYMENT_CONFIG;
+
+// Abrir modal de registro / acceso rápido para probar la App SENS Gratis por 7 Días (Camino 1)
+window.openFreeAppTrialModal = function() {
+    try {
+        localStorage.setItem('sens_selected_plan_intent', 'App SENS Autónoma (7 Días Gratis)');
+    } catch (_) {}
+    const authModal = document.getElementById('authModal');
+    if (authModal) {
+        authModal.classList.add('active');
+        const regTab = document.getElementById('tabRegisterBtn');
+        if (regTab) regTab.click();
+        const planSelect = document.getElementById('regPlanSelect');
+        if (planSelect) {
+            let hasAppOpt = false;
+            for (let i = 0; i < planSelect.options.length; i++) {
+                if (planSelect.options[i].value.toLowerCase().includes('app')) {
+                    planSelect.selectedIndex = i;
+                    hasAppOpt = true;
+                    break;
+                }
+            }
+            if (!hasAppOpt) {
+                const opt = document.createElement('option');
+                opt.value = 'App SENS Autónoma (7 Días Gratis -> $24.900 ARS/mes)';
+                opt.textContent = 'App SENS Autónoma — 7 Días Gratis ($24.900/mes o Pack Trimestral $59.900)';
+                planSelect.insertBefore(opt, planSelect.firstChild);
+                planSelect.selectedIndex = 0;
+            }
+        }
+        return;
+    }
+    const clientAccessBtn = document.getElementById('clientAccessBtn');
+    if (clientAccessBtn) clientAccessBtn.click();
+};
+
+// Sanitizador XSS (Anti-Vibecoding Security)
+function escapeHTML(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+window.escapeHTML = escapeHTML;
+window.sanitizeHTML = escapeHTML;
+
+// Generador de huella de dispositivo determinística para antifraude de referidos
+function getSensDeviceHash() {
+    try {
+        let cached = localStorage.getItem('sens_device_hash');
+        if (cached) return cached;
+        const raw = [
+            navigator.userAgent || '',
+            navigator.language || '',
+            screen ? `${screen.width}x${screen.height}x${screen.colorDepth}` : '',
+            Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+        ].join('|');
+        let h1 = 0xdeadbeef ^ raw.length;
+        let h2 = 0x41c6ce57 ^ raw.length;
+        for (let i = 0, ch; i < raw.length; i++) {
+            ch = raw.charCodeAt(i);
+            h1 = Math.imul(h1 ^ ch, 2654435761);
+            h2 = Math.imul(h2 ^ ch, 1597334677);
+        }
+        h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+        h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+        cached = 'dfp_' + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+        localStorage.setItem('sens_device_hash', cached);
+        return cached;
+    } catch (_) {
+        return 'dfp_fallback';
+    }
+}
+window.getSensDeviceHash = getSensDeviceHash;
+
+// Captura automática de código de referido (?ref=SENS-XXXX) en la URL
+(function captureReferralParam() {
+    try {
+        const params = new URLSearchParams(window.location.search || '');
+        const ref = params.get('ref') || params.get('referral');
+        if (ref && /^[A-Za-z0-9\-]{4,20}$/.test(ref.trim())) {
+            localStorage.setItem('sens_pending_referral_code', ref.trim().toUpperCase());
+        }
+    } catch (_) {}
+})();
+
+function generateLocalReferralCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = 'SENS-';
+    for (let i = 0; i < 4; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+}
+
 const isSupabaseConfigured = Boolean(
     window.supabase &&
     SUPABASE_CONFIG.url &&
@@ -1177,7 +1290,7 @@ async function loadCoachAthletesList(forceRefresh = false) {
         if (sel && sel.tagName === 'SELECT') {
             let html = '';
             roster.forEach(ath => {
-                html += `<option value="${ath.id}">${ath.full_name} (${ath.active_plan_name})</option>`;
+                html += `<option value="${escapeHTML(ath.id)}">${escapeHTML(ath.full_name)} (${escapeHTML(ath.active_plan_name)})</option>`;
             });
             sel.innerHTML = html;
         }
@@ -1470,26 +1583,28 @@ function renderExerciseLibraryList() {
             ? window.calculateExerciseKcal(ex, ex.default_sets || 3, ex.default_reps || '10-12')
             : { kcalPerRep: 0.45, kcalPerSet: 5, totalKcal: 15 };
 
-        const cueText = ex.recommendations || ex.cue || 'Ejecución controlada con rango completo.';
-        const execText = ex.execution || '';
-        const mistakesText = ex.common_mistakes || '';
-        const levelLabel = ex.level || 'Intermedio';
+        const cueText = escapeHTML(ex.recommendations || ex.cue || 'Ejecución controlada con rango completo.');
+        const execText = escapeHTML(ex.execution || '');
+        const mistakesText = escapeHTML(ex.common_mistakes || '');
+        const levelLabel = escapeHTML(ex.level || 'Intermedio');
         const restSec = ex.rest || ex.rest_seconds || 90;
         const setsVal = ex.default_sets || ex.sets || 3;
-        const repsVal = ex.default_reps || ex.reps || '10-12';
+        const repsVal = escapeHTML(ex.default_reps || ex.reps || '10-12');
+        const safeExName = escapeHTML(ex.name);
+        const safeExId = escapeHTML(ex.id);
 
         html += `
             <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s ease;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 240px;">
                         <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
-                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800; padding: 2px 7px;">${tax.typeLabel.toUpperCase()}</span>
-                            ${tax.muscleLabel ? `<span class="pill pill-dark" style="font-size: 9px; color: var(--accent-primary); border: none;">${tax.muscleLabel}</span>` : ''}
-                            ${tax.subMuscleLabel ? `<span class="pill pill-dark" style="font-size: 9px; color: #10B981; border: none;">${tax.subMuscleLabel}</span>` : ''}
+                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800; padding: 2px 7px;">${escapeHTML(tax.typeLabel.toUpperCase())}</span>
+                            ${tax.muscleLabel ? `<span class="pill pill-dark" style="font-size: 9px; color: var(--accent-primary); border: none;">${escapeHTML(tax.muscleLabel)}</span>` : ''}
+                            ${tax.subMuscleLabel ? `<span class="pill pill-dark" style="font-size: 9px; color: #10B981; border: none;">${escapeHTML(tax.subMuscleLabel)}</span>` : ''}
                             <span class="pill pill-dark" style="font-size: 9px; color: var(--text-muted); border: none;">${levelLabel}</span>
                             <span style="font-size: 11px; color: #E5CBA7; font-weight: 700; margin-left: auto;">~${kcalData.totalKcal} kcal (${kcalData.kcalPerSet} kcal/serie)</span>
                         </div>
-                        <h4 style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">${ex.name}</h4>
+                        <h4 style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">${safeExName}</h4>
                         ${execText ? `<p style="font-size: 12px; color: var(--text-secondary); margin: 0 0 5px 0; line-height: 1.4;"><strong>Cómo hacerlo:</strong> ${execText}</p>` : ''}
                         ${mistakesText ? `<p style="font-size: 11.5px; color: #FCA5A5; margin: 0 0 6px 0; line-height: 1.35;"><strong>Cómo NO hacerlo:</strong> ${mistakesText}</p>` : ''}
                         <div style="background: rgba(229, 203, 167, 0.06); border-left: 3px solid var(--accent-primary); border-radius: 4px; padding: 6px 10px; font-size: 11.5px; color: var(--text-secondary); line-height: 1.4;">
@@ -1500,11 +1615,11 @@ function renderExerciseLibraryList() {
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; gap: 8px; flex-wrap: wrap;">
                     <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Sugerido: ${setsVal} series × ${repsVal} • Descanso: ${restSec}s</span>
                     <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                        ${isAdmin ? `<button type="button" class="btn btn-outline btn-sm btn-lib-edit-db" data-ex-id="${ex.id}" style="font-size: 11px; padding: 5px 10px; border-color: rgba(229,203,167,0.35); color: #E5CBA7;">Editar Ficha Base</button>` : ''}
-                        <button type="button" class="btn btn-outline btn-sm btn-lib-video" data-video-title="${ex.name}" data-video-cue="${cueText}" style="font-size: 11px; padding: 5px 12px; border-color: rgba(255,255,255,0.2);">
+                        ${isAdmin ? `<button type="button" class="btn btn-outline btn-sm btn-lib-edit-db" data-ex-id="${safeExId}" style="font-size: 11px; padding: 5px 10px; border-color: rgba(229,203,167,0.35); color: #E5CBA7;">Editar Ficha Base</button>` : ''}
+                        <button type="button" class="btn btn-outline btn-sm btn-lib-video" data-video-title="${safeExName}" data-video-cue="${cueText}" style="font-size: 11px; padding: 5px 12px; border-color: rgba(255,255,255,0.2);">
                             ▶ Ver Técnica
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm btn-lib-assign" data-ex-id="${ex.id}" data-ex-name="${ex.name}" style="font-size: 11px; padding: 5px 14px; font-weight: 800;">
+                        <button type="button" class="btn btn-primary btn-sm btn-lib-assign" data-ex-id="${safeExId}" data-ex-name="${safeExName}" style="font-size: 11px; padding: 5px 14px; font-weight: 800;">
                             + Asignar a ${dayName}
                         </button>
                     </div>
@@ -2277,6 +2392,10 @@ function initAuthModal() {
         const password = document.getElementById('regPassword').value;
 
         let newUserId = 'local-user-' + Date.now();
+        const pendingRefCode = localStorage.getItem('sens_pending_referral_code') || '';
+        const deviceHash = getSensDeviceHash();
+        const trialEndsIso = new Date(Date.now() + 7 * 86400000).toISOString();
+        const generatedRefCode = generateLocalReferralCode();
 
         if (supabaseClient) {
             const { data, error } = await supabaseClient.auth.signUp({
@@ -2286,7 +2405,9 @@ function initAuthModal() {
                     data: { 
                         full_name: fullName,
                         role: 'user_normal',
-                        user_type: 'client_presencial_vip'
+                        user_type: 'client_presencial_vip',
+                        referred_by_code: pendingRefCode,
+                        device_hash: deviceHash
                     } 
                 }
             });
@@ -2310,7 +2431,10 @@ function initAuthModal() {
             email: email,
             role: 'user_normal',
             user_type: 'client_presencial_vip',
-            subscription_status: 'pending_activation',
+            subscription_status: 'trial',
+            trial_ends_at: trialEndsIso,
+            referral_code: generatedRefCode,
+            device_hash: deviceHash,
             active_plan_name: 'Presencial Personalizado 1 a 1 (CABA)',
             billing_provider: 'manual',
             onboarding_completed: false,
@@ -2329,6 +2453,15 @@ function initAuthModal() {
         if (supabaseClient && newUserId) {
             try {
                 await supabaseClient.from('profiles').upsert(newProfile);
+                if (pendingRefCode) {
+                    try {
+                        await supabaseClient.rpc('register_referral_use', {
+                            p_referral_code: pendingRefCode,
+                            p_device_hash: deviceHash
+                        });
+                        localStorage.removeItem('sens_pending_referral_code');
+                    } catch (_) {}
+                }
             } catch (err) {
                 console.warn('[SENS] Error al guardar perfil en Supabase:', err);
             }
@@ -2349,7 +2482,7 @@ function initAuthModal() {
             type: 'Nueva Cuenta Creada (Atleta Registrado)',
             athleteName: fullName,
             athleteEmail: email,
-            details: 'El usuario se acaba de registrar en el portal. Su estado inicial es: PENDIENTE DE ACTIVACIÓN.'
+            details: 'El usuario se acaba de registrar en el portal. Su estado inicial es: PRUEBA GRATUITA (7 DÍAS).'
         }).catch(() => {});
 
         // 4. Actualizar lista de atletas de coach si está en memoria
@@ -2482,6 +2615,7 @@ function showAuthModal(show) {
     if (!modal) return;
     if (show) {
         modal.classList.add('active');
+        modal.style.zIndex = '200005';
         clearAuthAlert();
     } else {
         modal.classList.remove('active');
@@ -2493,6 +2627,16 @@ function showAuthModal(show) {
 }
 
 window.openResetPasswordModal = function() {
+    // Asegurar que la pantalla de recuperación sea 100% visible sin quedar atrapada detrás del Hero o del Portal
+    try {
+        document.documentElement.classList.remove('in-portal-mode');
+        document.body.classList.remove('in-portal');
+        const appCont = document.getElementById('app-container');
+        if (appCont) appCont.classList.remove('active');
+        const pubLanding = document.getElementById('publicLanding');
+        if (pubLanding) pubLanding.style.display = 'block';
+    } catch (_) {}
+
     showAuthModal(true);
     const authTabs = document.querySelector('.auth-tabs');
     const tabLogin = document.getElementById('tabLoginBtn');
@@ -2530,6 +2674,15 @@ function checkAuthUrlParameters() {
         const errorDesc = decodeURIComponent(params.get('error_description') || '').replace(/\+/g, ' ');
 
         if (errorCode === 'otp_expired' || errorDesc.toLowerCase().includes('expired') || errorDesc.toLowerCase().includes('invalid')) {
+            try {
+                document.documentElement.classList.remove('in-portal-mode');
+                document.body.classList.remove('in-portal');
+                const appCont = document.getElementById('app-container');
+                if (appCont) appCont.classList.remove('active');
+                const pubLanding = document.getElementById('publicLanding');
+                if (pubLanding) pubLanding.style.display = 'block';
+            } catch (_) {}
+
             showAuthModal(true);
             const authTabs = document.querySelector('.auth-tabs');
             const tabLogin = document.getElementById('tabLoginBtn');
@@ -2537,15 +2690,22 @@ function checkAuthUrlParameters() {
             const paneLogin = document.getElementById('loginForm');
             const paneRegister = document.getElementById('registerForm');
             const paneForgot = document.getElementById('forgotPassForm');
+            const paneUpdatePass = document.getElementById('updatePasswordForm');
 
             if (authTabs) authTabs.style.display = 'flex';
             if (tabLogin) tabLogin.classList.remove('active');
             if (tabRegister) tabRegister.classList.remove('active');
             if (paneLogin) paneLogin.classList.remove('active');
             if (paneRegister) paneRegister.classList.remove('active');
+            if (paneUpdatePass) paneUpdatePass.classList.remove('active');
             if (paneForgot) paneForgot.classList.add('active');
 
-            showAuthAlert('El enlace de recuperación ha expirado o ya fue utilizado. Por favor solicitá uno nuevo ingresando tu email.', 'error');
+            showAuthAlert('El enlace de recuperación ha expirado o ya fue utilizado. Ingresá tu email para recibir un nuevo link al instante.', 'error');
+
+            setTimeout(() => {
+                const forgotInput = document.getElementById('forgotEmail');
+                if (forgotInput) forgotInput.focus();
+            }, 150);
 
             try {
                 history.replaceState(null, '', window.location.pathname);
@@ -2554,14 +2714,14 @@ function checkAuthUrlParameters() {
         }
     }
 
-    // 2. Detección de token de recuperación en Hash (type=recovery)
-    if (hash.includes('type=recovery') || hash.includes('type=invite')) {
-        console.log('[SENS] Hash con type=recovery detectado en URL');
+    // 2. Detección de token de recuperación en Hash o Query (type=recovery)
+    if (hash.includes('type=recovery') || hash.includes('type=invite') || search.includes('type=recovery')) {
+        console.log('[SENS] Parámetro type=recovery detectado en URL');
         setTimeout(() => {
             if (typeof window.openResetPasswordModal === 'function') {
                 window.openResetPasswordModal();
             }
-        }, 300);
+        }, 200);
     }
 }
 
@@ -2915,10 +3075,11 @@ function initPortalNavigation() {
             if (supabaseClient && AppState.user) {
                 await loadProfileFromSupabase(AppState.user.id);
             }
-            if (AppState.profile && AppState.profile.subscription_status === 'active') {
+            const access = checkUserAccessStatus(AppState.profile);
+            if (access.hasAccess) {
                 openUserPortal(false);
             } else {
-                showSensToast('Tu abono continúa en proceso de validación. Podés avisarle a Nico por WhatsApp.', 'alert');
+                showSensToast('Tu suscripción continúa en proceso de validación. Podés confirmar con Nico por WhatsApp.', 'alert');
             }
         });
     }
@@ -2990,13 +3151,231 @@ function returnToPublicLanding() {
     window.scrollTo(0, 0);
 }
 
+// =============================================================================
+// GUARDIA DE ESTADO DE SUSCRIPCIÓN / TRIAL 7 DÍAS & VIRAL LOOP (checkUserAccessStatus)
+// =============================================================================
+function checkUserAccessStatus(profile) {
+    const p = profile || AppState.profile || {};
+    const isAdmin = isCurrentUserAdmin();
+    const status = p.subscription_status || 'trial';
+    const planTier = p.plan_tier || 'app_trial';
+    const refCode = p.referral_code || 'SENS-VIP';
+    const referralUrl = `https://makesens.online/?ref=${encodeURIComponent(refCode)}`;
+
+    // Calcular días restantes de prueba (7 días por defecto desde trial_ends_at o created_at)
+    let trialEndDate = null;
+    if (p.trial_ends_at) {
+        trialEndDate = new Date(p.trial_ends_at);
+    } else if (p.created_at) {
+        trialEndDate = new Date(new Date(p.created_at).getTime() + 7 * 86400000);
+    } else {
+        trialEndDate = new Date(Date.now() + 7 * 86400000);
+    }
+
+    const msRemaining = trialEndDate.getTime() - Date.now();
+    const daysRemaining = Math.max(0, Math.ceil(msRemaining / 86400000));
+
+    let hasActivePremium = false;
+    if (
+        planTier === 'online_1on1' ||
+        planTier === 'presencial_1on1' ||
+        planTier === 'vip' ||
+        status === 'active' ||
+        status === 'vip_manual' ||
+        p.role === 'user_vip'
+    ) {
+        if (!p.premium_until || new Date(p.premium_until).getTime() > Date.now()) {
+            hasActivePremium = true;
+        }
+    }
+
+    const isTrialActive = !hasActivePremium && daysRemaining > 0 && status !== 'expired' && status !== 'canceled';
+    const hasAccess = isAdmin || hasActivePremium || isTrialActive;
+
+    // 1. Renderizar Banner Superior de Membresía & Trial en el Dashboard
+    const pillContainer = document.getElementById('sensTrialStatusPillContainer');
+    if (pillContainer) {
+        if (!isAdmin && isTrialActive) {
+            pillContainer.style.display = 'block';
+            const dayWord = daysRemaining === 1 ? 'DÍA RESTANTE' : 'DÍAS RESTANTES';
+            pillContainer.innerHTML = `
+                <div style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.28); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; box-shadow: 0 10px 28px rgba(0,0,0,0.35);">
+                    <div style="display: flex; align-items: center; gap: 11px;">
+                        <span class="status-dot status-dot-active" style="flex-shrink: 0;"></span>
+                        <div style="font-size: 12.5px; color: #E4E4E7; line-height: 1.4;">
+                            <span style="display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: #080809; background: #E5CBA7; padding: 2px 8px; border-radius: 6px; margin-right: 6px; font-variant-numeric: tabular-nums;">PRUEBA SENS • ${daysRemaining} ${dayWord}</span>
+                            <span style="color: #D4D4D8;">Entrená con un amigo o activá tu membresía para conservar tu progreso.</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" id="btnTrialPillShareRef" data-agent-action="share_referral_from_dashboard" style="background: rgba(229,203,167,0.14); color: #E5CBA7; border: 1px solid rgba(229,203,167,0.35); border-radius: 10px; padding: 8px 13px; font-size: 11.5px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                            <span>Regalar Pase de 14 Días a un Amigo (+7 días gratis para vos)</span>
+                        </button>
+                        <button type="button" id="btnTrialPillActivatePlan" data-agent-action="open_soft_paywall" style="background: #E5CBA7; color: #080809; border: none; border-radius: 10px; padding: 8px 13px; font-size: 11.5px; font-weight: 800; cursor: pointer;">
+                            Activar Plan
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            const btnShare = document.getElementById('btnTrialPillShareRef');
+            if (btnShare) {
+                btnShare.onclick = () => {
+                    try { navigator.clipboard.writeText(referralUrl); } catch (_) {}
+                    const waMsg = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico (fuerza, postura y cálculo nutricional). Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${referralUrl}`);
+                    window.open(`https://wa.me/?text=${waMsg}`, '_blank');
+                };
+            }
+
+            const btnAct = document.getElementById('btnTrialPillActivatePlan');
+            if (btnAct) {
+                btnAct.onclick = () => {
+                    renderSoftPaywallState(p, daysRemaining);
+                    switchPortalView('activationPendingView');
+                };
+            }
+        } else {
+            pillContainer.style.display = 'none';
+            pillContainer.innerHTML = '';
+        }
+    }
+
+    // 2. Mostrar/Ocultar Card de Upsell Nativo al Coaching 1 a 1 con Nico
+    const upsellCard = document.getElementById('dashNico1on1UpsellCard');
+    if (upsellCard) {
+        const is1on1Tier = (planTier === 'online_1on1' || planTier === 'presencial_1on1' || planTier === 'vip');
+        upsellCard.style.display = (!isAdmin && !is1on1Tier) ? 'flex' : 'none';
+    }
+
+    // 3. Renderizar Módulo de Rachas & Recompensas Desbloqueables
+    if (typeof window.renderSensUnlockablesModule === 'function') {
+        window.renderSensUnlockablesModule();
+    }
+
+    // 4. Sincronizar Soft-Paywall cuando los 7 días expiraron o cuando se abre la vista de activación
+    renderSoftPaywallState(p, daysRemaining);
+
+    return {
+        hasAccess,
+        isTrialActive,
+        daysRemaining,
+        referralCode: refCode,
+        referralUrl
+    };
+}
+window.checkUserAccessStatus = checkUserAccessStatus;
+
+function renderSoftPaywallState(profile, daysRemaining) {
+    const p = profile || AppState.profile || {};
+    const refCode = p.referral_code || 'SENS-VIP';
+    const referralUrl = `https://makesens.online/?ref=${encodeURIComponent(refCode)}`;
+    const athleteName = p.full_name || 'Atleta';
+    const athleteEmail = (AppState.user && AppState.user.email) || p.email || '';
+    const athletePlan = p.active_plan_name || 'App SENS Autónoma • Fuerza, Postura & Nutrición';
+
+    const pendingNameEl = document.getElementById('pendingUserName');
+    const pendingPlanEl = document.getElementById('pendingPlanName');
+    const codeBadgeEl = document.getElementById('paywallReferralCodeBadge');
+    const badgeEl = document.getElementById('paywallStatusBadge');
+    const notifyWaBtn = document.getElementById('btnNotifyPaymentWA');
+
+    if (pendingNameEl) pendingNameEl.textContent = athleteName;
+    if (pendingPlanEl) pendingPlanEl.textContent = athletePlan;
+    if (codeBadgeEl) codeBadgeEl.textContent = refCode;
+    if (badgeEl) {
+        badgeEl.textContent = daysRemaining > 0
+            ? `PRUEBA ACTIVA • ${daysRemaining} DÍAS RESTANTES`
+            : 'DÍA 8 • PERÍODO DE PRUEBA FINALIZADO';
+    }
+
+    if (notifyWaBtn) {
+        const msg = encodeURIComponent(`Hola Nico! Completé mi evaluación en SENS (${athleteName} - ${athleteEmail}). Te escribo para confirmar mi suscripción del plan ${athletePlan} y activar mi acceso.`);
+        notifyWaBtn.href = `https://wa.me/5491136329846?text=${msg}`;
+    }
+
+    const btnTrimArs = document.getElementById('btnPaywallTrimestralARS');
+    if (btnTrimArs && !btnTrimArs._boundPaywall) {
+        btnTrimArs._boundPaywall = true;
+        btnTrimArs.addEventListener('click', () => {
+            if (SENS_PAYMENT_CONFIG.mercadopagoQuarterlyInitPoint) {
+                window.location.href = SENS_PAYMENT_CONFIG.mercadopagoQuarterlyInitPoint;
+            } else {
+                const mpWa = encodeURIComponent(`Hola Nico! Quiero activar el Pack Trimestral 90 Días de la App SENS ($${SENS_PAYMENT_CONFIG.quarterlyPriceARS.toLocaleString('es-AR')} ARS) vía Mercado Pago o transferencia. Mi cuenta es: ${athleteEmail}`);
+                window.open(`https://wa.me/5491136329846?text=${mpWa}`, '_blank');
+            }
+        });
+    }
+
+    const btnTrimUsd = document.getElementById('btnPaywallTrimestralUSD');
+    if (btnTrimUsd && !btnTrimUsd._boundPaywall) {
+        btnTrimUsd._boundPaywall = true;
+        btnTrimUsd.addEventListener('click', () => {
+            if (SENS_PAYMENT_CONFIG.internationalQuarterlyCheckoutUrl) {
+                window.location.href = SENS_PAYMENT_CONFIG.internationalQuarterlyCheckoutUrl;
+            } else {
+                const usdWa = encodeURIComponent(`Hola Nico! Quiero activar el Pack Trimestral 90 Días de la App SENS en USD (USD $${SENS_PAYMENT_CONFIG.quarterlyPriceUSD}). Mi cuenta es: ${athleteEmail}`);
+                window.open(`https://wa.me/5491136329846?text=${usdWa}`, '_blank');
+            }
+        });
+    }
+
+    const btnMp = document.getElementById('btnPaywallMercadoPago');
+    if (btnMp && !btnMp._boundPaywall) {
+        btnMp._boundPaywall = true;
+        btnMp.addEventListener('click', () => {
+            if (SENS_PAYMENT_CONFIG.mercadopagoInitPoint) {
+                window.location.href = SENS_PAYMENT_CONFIG.mercadopagoInitPoint;
+            } else {
+                const mpWa = encodeURIComponent(`Hola Nico! Quiero suscribirme al plan mensual de la App SENS en ARS ($${SENS_PAYMENT_CONFIG.monthlyPriceARS.toLocaleString('es-AR')}/mes) vía Mercado Pago. Mi cuenta es: ${athleteEmail}`);
+                window.open(`https://wa.me/5491136329846?text=${mpWa}`, '_blank');
+            }
+        });
+    }
+
+    const btnUsd = document.getElementById('btnPaywallInternationalUSD');
+    if (btnUsd && !btnUsd._boundPaywall) {
+        btnUsd._boundPaywall = true;
+        btnUsd.addEventListener('click', () => {
+            if (SENS_PAYMENT_CONFIG.internationalCheckoutUrl) {
+                window.location.href = SENS_PAYMENT_CONFIG.internationalCheckoutUrl;
+            } else {
+                const usdWa = encodeURIComponent(`Hola Nico! Quiero activar la suscripción mensual internacional de la App SENS en USD (USD $${SENS_PAYMENT_CONFIG.monthlyPriceUSD}/mes). Mi cuenta es: ${athleteEmail}`);
+                window.open(`https://wa.me/5491136329846?text=${usdWa}`, '_blank');
+            }
+        });
+    }
+
+    const btnCopyRef = document.getElementById('btnPaywallCopyReferral');
+    if (btnCopyRef) {
+        btnCopyRef.onclick = () => {
+            try {
+                navigator.clipboard.writeText(referralUrl);
+                showSensToast(`Link de invitación copiado: ${referralUrl}`, 'champagne', 3500);
+            } catch (_) {
+                showSensToast(`Tu código de referido es: ${refCode}`, 'champagne', 3500);
+            }
+        };
+    }
+
+    const btnShareWa = document.getElementById('btnPaywallShareReferralWA');
+    if (btnShareWa) {
+        btnShareWa.onclick = () => {
+            const shareText = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico. Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${referralUrl}`);
+            window.open(`https://wa.me/?text=${shareText}`, '_blank');
+        };
+    }
+}
+
 function switchPortalView(viewId) {
     const isAdmin = isCurrentUserAdmin();
     const profile = AppState.profile;
-    const isPendingActivation = Boolean(
-        !isAdmin && 
-        profile && 
-        profile.subscription_status === 'pending_activation'
+    const accessState = checkUserAccessStatus(profile);
+    const isLockedByAccess = Boolean(
+        !isAdmin &&
+        profile &&
+        !accessState.hasAccess &&
+        viewId !== 'activationPendingView'
     );
 
     // Bloqueo estricto de seguridad: usuarios no administradores jamás pueden acceder a Coach OS
@@ -3006,9 +3385,9 @@ function switchPortalView(viewId) {
         viewId = 'dashView';
     }
 
-    // Bloqueo estricto SOLO si el usuario está explícitamente pendiente de activación por Nico
+    // Bloqueo Soft-Paywall cuando los 7 días de prueba expiraron o está pendiente de activación
     // EXCEPCIÓN VITAL: La Evaluación Inicial obligatoria ('onboardingSection') NUNCA se bloquea por estado de pago
-    if (isPendingActivation && viewId !== 'onboardingSection') {
+    if (isLockedByAccess && viewId !== 'onboardingSection') {
         viewId = 'activationPendingView';
         const subNav = document.getElementById('portalSubNav');
         if (subNav) subNav.style.display = 'none';
@@ -3324,38 +3703,22 @@ function openUserPortal(forceOnboarding = false) {
     }
 
     // -------------------------------------------------------------------------
-    // 2. CONTROL DE MEMBRESÍA & PAGOS (SOLO TRAS FINALIZAR EL ONBOARDING)
+    // 2. CONTROL DE MEMBRESÍA, TRIAL (7 DÍAS) & PAGOS (SOLO TRAS FINALIZAR EL ONBOARDING)
     // -------------------------------------------------------------------------
-    // Bloqueo estricto SOLO si el usuario está explícitamente marcado como 'pending_activation'
-    // Si el perfil aún no terminó de cargar desde Supabase y no hay perfil en cache, NUNCA asumir 'pending_activation'
-    // para evitar un flash erróneo del paywall/activación al refrescar.
-    const isPendingActivation = Boolean(
+    const accessState = checkUserAccessStatus(profile);
+    const isLockedByAccess = Boolean(
         !isAdmin && 
         profile && 
-        profile.subscription_status === 'pending_activation'
+        !accessState.hasAccess
     );
 
-    if (isPendingActivation) {
-        // Redirige al Paywall de Activación y oculta menús y dock
+    if (isLockedByAccess) {
+        // Redirige al Soft-Paywall de Activación y oculta menús y dock
         const subNav = document.getElementById('portalSubNav');
         if (subNav) subNav.style.display = 'none';
         document.querySelectorAll('.sens-floating-dock').forEach(dock => {
             dock.style.display = 'none';
         });
-
-        const pendingNameEl = document.getElementById('pendingUserName');
-        const pendingPlanEl = document.getElementById('pendingPlanName');
-        const notifyWaBtn = document.getElementById('btnNotifyPaymentWA');
-
-        if (pendingNameEl) pendingNameEl.textContent = profile.full_name || 'Atleta';
-        if (pendingPlanEl) pendingPlanEl.textContent = profile.active_plan_name || 'Presencial 1 a 1 VIP (CABA)';
-
-        if (notifyWaBtn) {
-            const athleteName = encodeURIComponent(profile.full_name || 'Nuevo Atleta');
-            const athleteEmail = encodeURIComponent(user.email || '');
-            const athletePlan = encodeURIComponent(profile.active_plan_name || 'Plan SENS');
-            notifyWaBtn.href = `https://wa.me/5491136329846?text=Hola%20Nico!%20Complet%C3%A9%20mi%20evaluaci%C3%B3n%20en%20SENS%20(${athleteName}%20-%20${athleteEmail}).%20Te%20aviso%20para%20confirmar%20mi%20abono%20del%20plan%20${athletePlan}%20y%20activar%20mi%20acceso.`;
-        }
 
         switchPortalView('activationPendingView');
         window.scrollTo(0, 0);
@@ -3404,6 +3767,8 @@ function renderDashboardData() {
     const profile = AppState.profile || {};
     const anamnesis = AppState.anamnesis || {};
 
+    checkUserAccessStatus(profile);
+
     const rawFullName = profile.full_name || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || (AppState.user && AppState.user.email ? AppState.user.email.split('@')[0] : 'Lean');
     const firstName = rawFullName.trim().split(' ')[0] || 'Lean';
 
@@ -3438,20 +3803,20 @@ function renderDashboardData() {
         let tagsHtml = '';
 
         if (profile.current_weight) {
-            tagsHtml += `<span class="diag-tag">Peso: ${profile.current_weight} kg</span>`;
+            tagsHtml += `<span class="diag-tag">Peso: ${escapeHTML(profile.current_weight)} kg</span>`;
         }
         if (anamnesis.weekly_frequency) {
-            tagsHtml += `<span class="diag-tag">Frecuencia: ${anamnesis.weekly_frequency} días/sem</span>`;
+            tagsHtml += `<span class="diag-tag">Frecuencia: ${escapeHTML(anamnesis.weekly_frequency)} días/sem</span>`;
         }
         if (anamnesis.experience_level) {
             const expMap = { beginner: 'Principiante', intermediate: 'Intermedio', advanced: 'Avanzado' };
-            tagsHtml += `<span class="diag-tag">Nivel: ${expMap[anamnesis.experience_level] || anamnesis.experience_level}</span>`;
+            tagsHtml += `<span class="diag-tag">Nivel: ${escapeHTML(expMap[anamnesis.experience_level] || anamnesis.experience_level)}</span>`;
         }
         if (anamnesis.water_liters_baseline) {
-            tagsHtml += `<span class="diag-tag highlight">Agua: ${anamnesis.water_liters_baseline} L/día</span>`;
+            tagsHtml += `<span class="diag-tag highlight">Agua: ${escapeHTML(anamnesis.water_liters_baseline)} L/día</span>`;
         }
         if (anamnesis.daily_step_target) {
-            tagsHtml += `<span class="diag-tag">Pasos: ${anamnesis.daily_step_target.toLocaleString()} /día</span>`;
+            tagsHtml += `<span class="diag-tag">Pasos: ${escapeHTML(anamnesis.daily_step_target.toLocaleString())} /día</span>`;
         }
 
         if (anamnesis.has_medical_flags) {
@@ -3461,7 +3826,7 @@ function renderDashboardData() {
         }
 
         if (Array.isArray(anamnesis.active_injuries) && anamnesis.active_injuries.length > 0) {
-            tagsHtml += `<span class="diag-tag" style="border-color:rgba(229,203,167,0.4); color:var(--accent-primary);">Zonas atendidas: ${anamnesis.active_injuries.join(', ')}</span>`;
+            tagsHtml += `<span class="diag-tag" style="border-color:rgba(229,203,167,0.4); color:var(--accent-primary);">Zonas atendidas: ${escapeHTML(anamnesis.active_injuries.join(', '))}</span>`;
         } else if (profile.full_name) {
             tagsHtml += `<span class="diag-tag">Articulaciones libres de dolor</span>`;
         }
@@ -3978,11 +4343,12 @@ function initDiagnosisWizard() {
     if (enterDashBtn) {
         enterDashBtn.addEventListener('click', () => {
             const isAdmin = isCurrentUserAdmin();
-            const isSubActive = isAdmin || (AppState.profile && AppState.profile.subscription_status === 'active');
-            if (!isSubActive) {
+            const access = checkUserAccessStatus(AppState.profile);
+            if (!isAdmin && !access.hasAccess) {
                 openUserPortal(false);
             } else {
-                document.getElementById('portalSubNav').style.display = 'flex';
+                const subNav = document.getElementById('portalSubNav');
+                if (subNav) subNav.style.display = 'flex';
                 renderDashboardData();
                 renderWorkoutDay(AppState.currentDay || 'day1');
                 switchPortalView('dashView');
@@ -4281,8 +4647,8 @@ async function processDiagnosisSubmission() {
         current_weight: parseFloat(weight) || null,
         height: parseFloat(height) || null,
         daily_step_target: calculatedStepTarget || 8000,
-        role: isVipCandidate ? 'user_vip' : 'user_normal',
         onboarding_completed: true,
+        device_hash: getSensDeviceHash(),
         consent_timestamp: new Date().toISOString(),
         consent_version: 'v3.0_2026',
         active_plan_name: 'Plan Personalizado SENS TRAIN',
@@ -4332,6 +4698,16 @@ async function processDiagnosisSubmission() {
     };
     AppState.anamnesis = cleanAnamnesisPayload;
 
+    // Auto-Prescripción Instantánea en 0 segundos (Fuerza 3 Días + Nutrición Mifflin-St Jeor)
+    // Si Nico aún no le prescribió una rutina manual, el sistema le asigna su plan maestro inmediatamente
+    if (typeof window.assignAutomatedStarterPlanClient === 'function') {
+        try {
+            window.assignAutomatedStarterPlanClient(AppState.profile, cleanAnamnesisPayload);
+        } catch (autoErr) {
+            console.warn('[SENS] Error en auto-prescripción local:', autoErr);
+        }
+    }
+
     const emailKey = AppState.user && AppState.user.email ? AppState.user.email : 'local_user';
     localStorage.setItem(`sens_profile_${emailKey}`, JSON.stringify(AppState.profile));
     localStorage.setItem(`sens_anamnesis_${emailKey}`, JSON.stringify(cleanAnamnesisPayload));
@@ -4341,7 +4717,7 @@ async function processDiagnosisSubmission() {
     } catch (_) {}
     localStorage.removeItem('sens_onboarding_draft');
 
-    // Sincronización robusta con Supabase (actualiza profiles y hace upsert/insert de anamnesis)
+    // Sincronización robusta con Supabase (actualiza profiles, dispara assign_automated_starter_plan y hace upsert/insert de anamnesis)
     if (supabaseClient && AppState.user && AppState.user.id) {
         try {
             const { error: profError } = await supabaseClient
@@ -4349,13 +4725,22 @@ async function processDiagnosisSubmission() {
                 .upsert({
                     id: AppState.user.id,
                     email: AppState.user.email,
-                    ...cleanProfilePayload
+                    ...cleanProfilePayload,
+                    prescribed_workouts: AppState.profile.prescribed_workouts || undefined,
+                    prescribed_nutrition: AppState.profile.prescribed_nutrition || undefined,
+                    daily_calorie_target: AppState.profile.daily_calorie_target || undefined,
+                    daily_protein_target_g: AppState.profile.daily_protein_target_g || undefined,
+                    daily_water_ml: AppState.profile.daily_water_ml || undefined
                 });
             if (profError) {
                 console.error('[SENS] Error al actualizar perfil en Supabase:', profError);
             } else {
                 console.log('[SENS] Perfil y onboarding completado guardados con éxito en Supabase.');
             }
+
+            try {
+                await supabaseClient.rpc('assign_automated_starter_plan', { target_user_id: AppState.user.id });
+            } catch (_) {}
 
             const { data: existingAnam } = await supabaseClient
                 .from('anamnesis')
@@ -8570,22 +8955,22 @@ function renderAthleteBottomSheetList(filter = 'all', searchQuery = '') {
         let statusLabel = isPending ? 'Pendiente' : status === 'paused' ? 'Pausado' : 'Activo';
 
         const quickApproveBtn = isPending
-            ? `<button type="button" class="btn btn-primary btn-sm btn-sheet-quick-approve" data-athlete-id="${ath.id}" style="padding: 3px 8px; font-size: 10px; font-weight: 800; border-radius: 12px; margin-left: 8px;">Aprobar</button>`
+            ? `<button type="button" class="btn btn-primary btn-sm btn-sheet-quick-approve" data-athlete-id="${escapeHTML(ath.id)}" style="padding: 3px 8px; font-size: 10px; font-weight: 800; border-radius: 12px; margin-left: 8px;">Aprobar</button>`
             : '';
 
         html += `
-            <div class="sheet-athlete-item ${isSelected ? 'is-selected' : ''}" data-athlete-id="${ath.id}">
+            <div class="sheet-athlete-item ${isSelected ? 'is-selected' : ''}" data-athlete-id="${escapeHTML(ath.id)}">
                 <div class="sheet-athlete-left">
                     <div class="sheet-athlete-avatar-wrap">
-                        <div class="sheet-athlete-avatar">${initials}</div>
+                        <div class="sheet-athlete-avatar">${escapeHTML(initials)}</div>
                         <span class="status-dot status-dot-${statusClass}"></span>
                     </div>
                     <div class="sheet-athlete-info">
                         <div class="sheet-athlete-name-row">
-                            <span class="sheet-athlete-name">${ath.full_name}</span>
-                            <span class="sheet-plan-badge">${ath.active_plan_name || 'Plan SENS'}</span>
+                            <span class="sheet-athlete-name">${escapeHTML(ath.full_name)}</span>
+                            <span class="sheet-plan-badge">${escapeHTML(ath.active_plan_name || 'Plan SENS')}</span>
                         </div>
-                        <span class="sheet-athlete-sub">${ath.email} • ${statusLabel}</span>
+                        <span class="sheet-athlete-sub">${escapeHTML(ath.email)} • ${statusLabel}</span>
                     </div>
                 </div>
                 <div class="sheet-athlete-right">
@@ -9132,42 +9517,43 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
             ? '<span class="pill pill-dark" style="font-size: 9.5px; padding: 2px 7px;">App SaaS ($19.900)</span>'
             : '<span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">Personalizado 1:1</span>';
 
-        const goalText = ath.primary_goal || 'Rendimiento general y fuerza';
+        const goalText = escapeHTML(ath.primary_goal || 'Rendimiento general y fuerza');
+        const safeAthId = escapeHTML(ath.id);
 
         html += `
-            <div class="coach-athlete-card ${isPend ? 'is-pending' : ''}" data-athlete-id="${ath.id}">
-                <div class="coach-ath-card-head btn-open-athlete-actions-sheet" data-athlete-id="${ath.id}" style="cursor: pointer;">
-                    <div class="coach-ath-avatar-circle">${initials}</div>
+            <div class="coach-athlete-card ${isPend ? 'is-pending' : ''}" data-athlete-id="${safeAthId}">
+                <div class="coach-ath-card-head btn-open-athlete-actions-sheet" data-athlete-id="${safeAthId}" style="cursor: pointer;">
+                    <div class="coach-ath-avatar-circle">${escapeHTML(initials)}</div>
                     <div class="coach-ath-primary-info">
                         <div class="coach-ath-name-row">
-                            <span class="coach-ath-name">${ath.full_name}</span>
+                            <span class="coach-ath-name">${escapeHTML(ath.full_name)}</span>
                             ${statusBadgeHtml}
                         </div>
                         <div class="coach-ath-sub-row">
                             ${planBadgeHtml}
-                            <span class="coach-ath-email">${ath.email}</span>
+                            <span class="coach-ath-email">${escapeHTML(ath.email)}</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="coach-ath-goal-chip btn-open-athlete-actions-sheet" data-athlete-id="${ath.id}" style="cursor: pointer;">
+                <div class="coach-ath-goal-chip btn-open-athlete-actions-sheet" data-athlete-id="${safeAthId}" style="cursor: pointer;">
                     <span class="coach-ath-goal-label">Meta:</span>
                     <span class="coach-ath-goal-text">${goalText}</span>
                 </div>
 
                 <div class="coach-ath-action-row">
                     ${isPend ? `
-                        <button type="button" class="btn-coach-action-primary btn-hub-toggle-status" data-athlete-id="${ath.id}" data-current-status="pending_activation">
+                        <button type="button" class="btn-coach-action-primary btn-hub-toggle-status" data-athlete-id="${safeAthId}" data-current-status="pending_activation">
                             Aprobar Acceso ✓
                         </button>
                     ` : `
-                        <button type="button" class="btn-coach-action-manage btn-open-athlete-actions-sheet" data-athlete-id="${ath.id}">
+                        <button type="button" class="btn-coach-action-manage btn-open-athlete-actions-sheet" data-athlete-id="${safeAthId}">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                             <span>Gestionar Alumno</span>
                             <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                     `}
-                    <button type="button" class="btn-coach-action-portal btn-hub-inspect-student" data-athlete-id="${ath.id}">
+                    <button type="button" class="btn-coach-action-portal btn-hub-inspect-student" data-athlete-id="${safeAthId}">
                         <span>Ver Portal</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </button>
@@ -10393,6 +10779,20 @@ function getCoachAthleteWorkoutData(athId) {
     // 4. Solo perfiles demostrativos heredan la rutina completa preconfigurada
     if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
         return JSON.parse(JSON.stringify(WORKOUT_DAYS_DATA));
+    }
+
+    // 4.5. Si el alumno ya completó su Onboarding y aún no tiene rutina manual de Nico,
+    // auto-prescribir el Programa Maestro de 3 Días de Fuerza y Postura SENS en 0 segundos
+    if (
+        !isCurrentUserAdmin() &&
+        AppState.profile &&
+        AppState.profile.onboarding_completed &&
+        typeof window.assignAutomatedStarterPlanClient === 'function'
+    ) {
+        const autoGenerated = window.assignAutomatedStarterPlanClient(AppState.profile, AppState.anamnesis);
+        if (autoGenerated && autoGenerated.prescribed_workouts) {
+            return sanitizeWorkoutDataWithMasterExercises(autoGenerated.prescribed_workouts, athId);
+        }
     }
 
     // 5. Alumno real sin rutina cargada por Nico todavía: todos los días en null (la línea "–")
@@ -16335,6 +16735,11 @@ function syncAllStreakAndPillTelemetry(targetDate = null) {
         updateDynamicTrainingCard(d);
     }
 
+    // 6. Actualizar Módulo de Rachas & Recompensas Desbloqueables (Presupuesto Social de Fin de Semana)
+    if (typeof window.renderSensUnlockablesModule === 'function') {
+        window.renderSensUnlockablesModule();
+    }
+
     return evalResult;
 }
 window.syncAllStreakAndPillTelemetry = syncAllStreakAndPillTelemetry;
@@ -17720,29 +18125,29 @@ window.openCoachAthleteDossier = function(athId) {
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px;">
             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
                 <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Peso Actual / Meta</span>
-                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${bio.weight} kg <span style="font-size: 12px; color: #E5CBA7;">→ ${bio.targetWeight} kg</span></strong>
+                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${escapeHTML(bio.weight)} kg <span style="font-size: 12px; color: #E5CBA7;">→ ${escapeHTML(bio.targetWeight)} kg</span></strong>
             </div>
             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
                 <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Masa Muscular / Grasa</span>
-                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${bio.muscleMass} kg • ${bio.bodyFat}%</strong>
+                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${escapeHTML(bio.muscleMass)} kg • ${escapeHTML(bio.bodyFat)}%</strong>
             </div>
             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
                 <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Edad &amp; Altura</span>
-                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${bio.age} años • ${bio.height} cm</strong>
+                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${escapeHTML(bio.age)} años • ${escapeHTML(bio.height)} cm</strong>
             </div>
         </div>
         <div style="background: rgba(229, 203, 167, 0.06); border: 1px solid rgba(229, 203, 167, 0.22); border-radius: 12px; padding: 14px;">
             <div style="font-size: 10.5px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; margin-bottom: 4px;">Mapa Articular, Lesiones &amp; Postura (Solo Lectura)</div>
-            <p style="font-size: 12.5px; color: #E4E4E7; margin: 0;">${bio.injuries}</p>
+            <p style="font-size: 12.5px; color: #E4E4E7; margin: 0;">${escapeHTML(bio.injuries)}</p>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
                 <div style="font-size: 10px; font-weight: 800; color: #A1A1AA; text-transform: uppercase; margin-bottom: 4px;">Descanso &amp; Estilo de Vida</div>
-                <p style="font-size: 12px; color: #E4E4E7; margin: 0;">${bio.sleep}</p>
+                <p style="font-size: 12px; color: #E4E4E7; margin: 0;">${escapeHTML(bio.sleep)}</p>
             </div>
             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
                 <div style="font-size: 10px; font-weight: 800; color: #A1A1AA; text-transform: uppercase; margin-bottom: 4px;">Adherencia &amp; Avances</div>
-                <p style="font-size: 12px; color: #10B981; font-weight: 700; margin: 0;">${bio.adherence}</p>
+                <p style="font-size: 12px; color: #10B981; font-weight: 700; margin: 0;">${escapeHTML(bio.adherence)}</p>
             </div>
         </div>
     `;
@@ -24715,6 +25120,405 @@ window.dismissPwaMarketingPopup = (remember) => SensPwaManager.dismissMarketingP
 window.dismissPwaDashCard = () => SensPwaManager.dismissDashboardCard();
 window.closeIosInstallSheet = () => SensPwaManager.closeIosSheet();
 
+/* =============================================================================
+   MOTOR DE AUTO-PRESCRIPCIÓN INSTANTÁNEA (0 SEGUNDOS) & DESBLOQUEOS METABÓLICOS
+   Sincronizado con supabase_master_security_growth.sql
+   ============================================================================= */
+
+window.assignAutomatedStarterPlanClient = function(profileArg, anamnesisArg) {
+    const profile = profileArg || AppState.profile || {};
+    const anamnesis = anamnesisArg || AppState.anamnesis || {};
+    const athId = profile.id || (AppState.user && AppState.user.id) || 'local_user';
+
+    // Si ya tiene una rutina personalizada asignada con ejercicios, respetarla
+    if (
+        profile.prescribed_workouts &&
+        typeof profile.prescribed_workouts === 'object' &&
+        Object.keys(profile.prescribed_workouts).some(
+            k => k.startsWith('day') && Array.isArray(profile.prescribed_workouts[k]?.exercises) && profile.prescribed_workouts[k].exercises.length > 0
+        )
+    ) {
+        return {
+            prescribed_workouts: profile.prescribed_workouts,
+            prescribed_nutrition: profile.prescribed_nutrition
+        };
+    }
+
+    // 1. Cálculo Mifflin-St Jeor según peso, altura, edad, sexo y objetivo
+    const weight = parseFloat(profile.current_weight || profile.weight_kg || anamnesis.weight || 74);
+    const height = parseFloat(profile.height || profile.height_cm || anamnesis.height || 174);
+    const age = parseInt(profile.age || anamnesis.age || 34, 10);
+    const gender = String(profile.gender || anamnesis.gender || 'male').toLowerCase();
+    const goal = String(profile.goal || anamnesis.goal || 'recomp').toLowerCase();
+    const freq = parseInt(anamnesis.weekly_frequency || profile.available_days || 3, 10);
+
+    let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+    bmr += (gender === 'female' || gender === 'mujer' || gender === 'femenino') ? -161 : 5;
+
+    let activityFactor = 1.45;
+    if (freq >= 4) activityFactor = 1.55;
+    else if (freq <= 2) activityFactor = 1.375;
+
+    const tdee = Math.round(bmr * activityFactor);
+    let targetKcal = tdee - 350;
+    if (goal === 'muscle_gain' || goal === 'fuerza' || goal === 'hipertrofia') {
+        targetKcal = tdee + 200;
+    } else if (goal === 'recomp' || goal === 'recomposicion' || goal === 'fat_loss') {
+        targetKcal = Math.max(1450, tdee - 350);
+    } else {
+        targetKcal = Math.max(1500, tdee - 200);
+    }
+
+    const proteinG = Math.round(weight * 2.0);
+    const fatsG = Math.round(weight * 0.9);
+    const carbsG = Math.max(90, Math.round((targetKcal - (proteinG * 4) - (fatsG * 9)) / 4));
+    const waterMl = Math.round((weight * 35) / 100) * 100;
+    const waterLiters = parseFloat((waterMl / 1000).toFixed(1));
+
+    // 2. Programa Maestro de 3 Días de Fuerza y Postura SENS
+    const day1Ex = [
+        {
+            id: '43bad14a-f720-45bd-8e3e-acdb7a2cd3ec',
+            name: 'Press de Banca Plano con Mancuernas',
+            category: 'Pecho & Empuje Horizontal',
+            sets: 3,
+            reps: '8-10',
+            defaultWeight: 15,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/43bad14a-f720-45bd-8e3e-acdb7a2cd3ec.mp4',
+            notes: 'Retraé y deprimí las escápulas contra el banco. Descendé con codos a 45° protegiendo la cápsula anterior del hombro.'
+        },
+        {
+            id: '9e317f1f-4918-4f3e-9c57-eb0adfe7f004',
+            name: 'Press Militar Sentado con Mancuernas',
+            category: 'Hombros & Control Costal',
+            sets: 3,
+            reps: '10',
+            defaultWeight: 10,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/9e317f1f-4918-4f3e-9c57-eb0adfe7f004.mp4',
+            notes: 'Mantené las costillas bajas (cierre costal) sin arquear la zona lumbar. Empujá en el plano escapular (30° hacia adelante).'
+        },
+        {
+            id: 'f37de49f-5f7b-4fbf-a392-495f38f7fd1f',
+            name: 'Flexiones de Brazos (Push-ups) con Pausa',
+            category: 'Empuje Integrado & Serrato',
+            sets: 3,
+            reps: '10-12',
+            defaultWeight: 0,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/f37de49f-5f7b-4fbf-a392-495f38f7fd1f.mp4',
+            notes: 'Alineá cabeza, columna dorsal y pelvis en bloque. Pausa real de 1 segundo abajo sin perder tensión abdominal.'
+        },
+        {
+            id: '2ae448e6-0a99-4664-898d-bfbf94080b37',
+            name: 'Plancha Frontal con Retroversión Pélvica (RKC)',
+            category: 'Core Anti-Extensión',
+            sets: 3,
+            reps: '35s',
+            defaultWeight: 0,
+            rest: 90,
+            rir: 'RIR 1',
+            video: 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/2ae448e6-0a99-4664-898d-bfbf94080b37.mp4',
+            notes: 'Traccioná los codos hacia las puntas de los pies y contraé glúteos al 100% protegiendo la columna lumbar.'
+        }
+    ];
+
+    const day3Ex = [
+        {
+            id: 'aad15275-4bb0-4459-a180-6c9f5dbe6d95',
+            name: 'Peso Muerto Rumano con Mancuernas',
+            category: 'Bisagra de Cadera & Cadena Posterior',
+            sets: 3,
+            reps: '8-10',
+            defaultWeight: 18,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95.mp4',
+            notes: 'Iniciá empujando la cadera estrictamente hacia atrás. Frená el descenso apenas la cadera deje de viajar atrás.'
+        },
+        {
+            id: '7f93fada-7563-4965-b189-2ffadbd5a967',
+            name: 'Remo con Mancuerna a Una Mano en Banco',
+            category: 'Tracción Horizontal & Dorsal',
+            sets: 3,
+            reps: '10 por lado',
+            defaultWeight: 16,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/7f93fada-7563-4965-b189-2ffadbd5a967.mp4',
+            notes: 'Traccioná hacia el bolsillo de la cadera sin rotar el torso. Sostené 1 segundo en máxima contracción escapular.'
+        },
+        {
+            id: 'c27c05f6-481a-4791-ac2f-6518b89d0d31',
+            name: 'Kettlebell Swing Estilo Ruso',
+            category: 'Potencia de Cadera & Glúteos',
+            sets: 3,
+            reps: '15',
+            defaultWeight: 16,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/c27c05f6-481a-4791-ac2f-6518b89d0d31.mp4',
+            notes: 'Proyección horizontal explosiva de cadera, no elevación de hombros. Bloqueá glúteos y abdomen arriba.'
+        },
+        {
+            id: 'fe1dba64-4f45-4aa3-bbd2-8266736028a1',
+            name: 'Movilidad Gato-Vaca y Descompresión Espinal',
+            category: 'Higiene de Columna & Movilidad',
+            sets: 3,
+            reps: '10 ciclos',
+            defaultWeight: 0,
+            rest: 60,
+            rir: 'Fluido',
+            video: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4',
+            notes: 'Mové vértebra por vértebra iniciando desde la pelvis acompañando con respiración nasal profunda.'
+        }
+    ];
+
+    const day5Ex = [
+        {
+            id: 'c43a4011-a963-48cf-8a07-a9f6a5274d00',
+            name: 'Sentadilla Goblet con Mancuerna',
+            category: 'Dominante de Rodilla & Postura',
+            sets: 3,
+            reps: '10',
+            defaultWeight: 16,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00.mp4',
+            notes: 'Sostené la carga pegada al esternón. Descendé profundo manteniendo el torso erguido y todo el trípode del pie apoyado.'
+        },
+        {
+            id: '1c022132-227d-4411-bc96-8e13569090d0',
+            name: 'Hip Thrust con Barra en Banco',
+            category: 'Glúteo Mayor & Estabilidad Pélvica',
+            sets: 3,
+            reps: '10-12',
+            defaultWeight: 35,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/1c022132-227d-4411-bc96-8e13569090d0.mp4',
+            notes: 'Tibias a 90° exactos al llegar arriba. Pausa de 1 segundo en retroversión pélvica sin hiperextender lumbares.'
+        },
+        {
+            id: 'f9906ab7-1991-41dd-8fc6-be4262039311',
+            name: 'Estocadas Búlgaras con Mancuernas',
+            category: 'Fuerza Unilateral & Estabilidad',
+            sets: 3,
+            reps: '8-10 por pierna',
+            defaultWeight: 10,
+            rest: 90,
+            rir: 'RIR 2',
+            video: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/f9906ab7-1991-41dd-8fc6-be4262039311.mp4',
+            notes: 'Incliná levemente el torso (15°) y cargá el 85% del peso sobre el talón delantero evitando valgo de rodilla.'
+        },
+        {
+            id: 'fe1dba64-4f45-4aa3-bbd2-8266736028a1',
+            name: 'Movilidad Gato-Vaca y Descompresión Espinal',
+            category: 'Vuelta a la Calma & Descompresión',
+            sets: 2,
+            reps: '10 ciclos',
+            defaultWeight: 0,
+            rest: 60,
+            rir: 'Fluido',
+            video: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4',
+            video_url: 'EJERCICIOS/videos_loop_final/fe1dba64-4f45-4aa3-bbd2-8266736028a1.mp4',
+            notes: 'Liberá tensión articular de columna tras el bloque de piernas con exhalaciones largas.'
+        }
+    ];
+
+    const prescribedWorkouts = {
+        day1: { title: 'Día 1: Empuje, Postura & Core', modality: 'autonomo', exercises: day1Ex, completed: false },
+        day2: { title: 'Recuperación Activa & Pasos NEAT', modality: 'descanso', exercises: [], completed: false },
+        day3: { title: 'Día 2: Tracción & Cadena Posterior Cuidada', modality: 'autonomo', exercises: day3Ex, completed: false },
+        day4: { title: 'Recuperación Activa & Movilidad', modality: 'descanso', exercises: [], completed: false },
+        day5: { title: 'Día 3: Piernas, Estabilidad & Descompresión', modality: 'autonomo', exercises: day5Ex, completed: false },
+        day6: { title: 'Actividad Recreativa / Caminata', modality: 'descanso', exercises: [], completed: false },
+        day7: { title: 'Descanso Total', modality: 'descanso', exercises: [], completed: false }
+    };
+
+    const prescribedNutrition = {
+        target_calories: targetKcal,
+        target_protein: proteinG,
+        target_carbs: carbsG,
+        target_fats: fatsG,
+        target_water: waterLiters,
+        directive_note: `Prescripción Mifflin-St Jeor (${targetKcal} kcal · ${proteinG}g Proteína · ${waterMl}ml Agua). Completá tus 3 sesiones semanales para desbloquear tu Presupuesto Social de Fin de Semana (+500 kcal libres).`,
+        prescribed_foods: [
+            { id: 'f_pollo', grams: 200 },
+            { id: 'f_huevos', grams: 180 },
+            { id: 'f_yogur', grams: 200 },
+            { id: 'f_arroz', grams: 180 },
+            { id: 'f_palta', grams: 100 }
+        ]
+    };
+
+    if (AppState.profile) {
+        AppState.profile.prescribed_workouts = prescribedWorkouts;
+        AppState.profile.prescribed_nutrition = prescribedNutrition;
+        AppState.profile.daily_calories = targetKcal;
+        AppState.profile.daily_calorie_target = targetKcal;
+        AppState.profile.daily_protein_target_g = proteinG;
+        AppState.profile.daily_carbs_target_g = carbsG;
+        AppState.profile.daily_fats_target_g = fatsG;
+        AppState.profile.daily_water_ml = waterMl;
+    }
+
+    try {
+        localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(prescribedWorkouts));
+        localStorage.setItem(`sens_prescribed_nutrition_${athId}`, JSON.stringify(prescribedNutrition));
+        localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+    } catch (_) {}
+
+    return {
+        prescribed_workouts: prescribedWorkouts,
+        prescribed_nutrition: prescribedNutrition
+    };
+};
+
+// Evaluador y Renderizador del Módulo de Rachas & Recompensas Desbloqueables (Dashboard + Nutrición)
+window.renderSensUnlockablesModule = function() {
+    const dashGrid = document.getElementById('dashUnlockablesCardsGrid');
+    const nutriGrid = document.getElementById('nutriUnlockablesCardsGrid');
+    if (!dashGrid && !nutriGrid) return;
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'local_user';
+    const profile = AppState.profile || {};
+
+    // Contar sesiones de entrenamiento completadas en la semana en curso e históricas
+    let weeklyCompleted = parseInt(profile.weekly_workouts_completed || 0, 10);
+    let totalCompleted = 0;
+
+    try {
+        const storedDates = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]');
+        if (Array.isArray(storedDates)) {
+            totalCompleted = Math.max(totalCompleted, storedDates.length);
+            const mon = getMonday(new Date());
+            const sun = new Date(mon);
+            sun.setDate(mon.getDate() + 6);
+            sun.setHours(23, 59, 59, 999);
+            const weekMatches = storedDates.filter(iso => {
+                const d = new Date(iso + 'T12:00:00');
+                return d >= mon && d <= sun;
+            });
+            weeklyCompleted = Math.max(weeklyCompleted, weekMatches.length);
+        }
+    } catch (_) {}
+
+    if (typeof SensDailyStreakManager !== 'undefined') {
+        try {
+            const recs = SensDailyStreakManager.getAllRecords(athId) || {};
+            const mon = getMonday(new Date());
+            let recWeekCount = 0;
+            let recTotalCount = 0;
+            Object.keys(recs).forEach(iso => {
+                const r = recs[iso];
+                if (r && r.workout && r.workout.done && !r.workout.isRestDay) {
+                    recTotalCount++;
+                    const d = new Date(iso + 'T12:00:00');
+                    if (d >= mon) recWeekCount++;
+                }
+            });
+            weeklyCompleted = Math.max(weeklyCompleted, recWeekCount);
+            totalCompleted = Math.max(totalCompleted, recTotalCount);
+        } catch (_) {}
+    }
+
+    const unlockedOfficeProtocol = totalCompleted >= 1;
+    const unlockedWeekendRefeed = Boolean(profile.weekend_refeed_unlocked) || weeklyCompleted >= 3;
+    const unlockedCriterio3Days = Boolean(profile.onboarding_completed && totalCompleted >= 3);
+
+    // Si acaba de alcanzar las 3 sesiones en su primera semana, otorgar +3 días extra localmente (idempotente)
+    if (unlockedCriterio3Days && AppState.profile && !localStorage.getItem(`sens_criterio_3d_awarded_${athId}`)) {
+        try {
+            localStorage.setItem(`sens_criterio_3d_awarded_${athId}`, 'true');
+            const currentEnd = AppState.profile.trial_ends_at ? new Date(AppState.profile.trial_ends_at) : new Date(Date.now() + 7 * 86400000);
+            const extendedEnd = new Date(Math.max(currentEnd.getTime(), Date.now()) + 3 * 86400000);
+            AppState.profile.trial_ends_at = extendedEnd.toISOString();
+            localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+        } catch (_) {}
+    }
+
+    const progressText = `${Math.min(3, weeklyCompleted)} / 3 sesiones esta semana`;
+    const dashBadge = document.getElementById('dashWeeklySessionsProgressBadge');
+    const nutriBadge = document.getElementById('nutriWeeklySessionsProgressBadge');
+    if (dashBadge) dashBadge.textContent = progressText;
+    if (nutriBadge) nutriBadge.textContent = progressText;
+
+    const lockSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+    const unlockSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+    const cards = [
+        {
+            key: 'weekend_social_refeed',
+            eyebrow: 'Recompensa Semanal (3 sesiones)',
+            title: 'Presupuesto Social de Fin de Semana (+500 kcal libres + Guía de Restaurantes SENS)',
+            desc: unlockedWeekendRefeed
+                ? 'Permiso Metabólico Activo: Contás con +500 kcal de margen social para disfrutar una cena afuera priorizando proteína magra sin perder recomposición.'
+                : `Completá ${Math.max(0, 3 - weeklyCompleted)} ${Math.max(0, 3 - weeklyCompleted) === 1 ? 'sesión más' : 'sesiones más'} esta semana para activar tu margen social de +500 kcal + 1 Guest Pass.`,
+            unlocked: unlockedWeekendRefeed,
+            statusLabel: unlockedWeekendRefeed ? 'DESBLOQUEADO' : `${Math.min(3, weeklyCompleted)}/3 SESIONES`
+        },
+        {
+            key: 'protocol_office_decompression',
+            eyebrow: 'Hito Inicial (1 sesión)',
+            title: 'Protocolo de 10 min de Descompresión Lumbar y Cervical Post-Oficina',
+            desc: unlockedOfficeProtocol
+                ? 'Protocolo Desbloqueado: Secuencia guiada de tracción axial suave, apertura torácica y respiración diafragmática para aliviar tensión de escritorio.'
+                : 'Se desbloquea automáticamente al registrar tu 1er entrenamiento de fuerza en la App.',
+            unlocked: unlockedOfficeProtocol,
+            statusLabel: unlockedOfficeProtocol ? 'DESBLOQUEADO' : 'BLOQUEADO'
+        },
+        {
+            key: 'initial_criterio_3days',
+            eyebrow: 'Recompensa al Criterio (Semana 1)',
+            title: '+3 Días Extra de Acceso Full',
+            desc: unlockedCriterio3Days
+                ? 'Hito Conquistado: Sumaste +3 días adicionales de acceso completo a tu período de prueba por sostener 3 entrenamientos en tu semana inicial.'
+                : 'Completá tu Evaluación Inicial + 3 entrenamientos en tus primeros 7 días para sumar +3 días gratis automáticamente.',
+            unlocked: unlockedCriterio3Days,
+            statusLabel: unlockedCriterio3Days ? '+3 DÍAS ACTIVOS' : 'EN PROGRESO'
+        }
+    ];
+
+    const html = cards.map(c => `
+        <div style="background: #18181B; border: 1px solid ${c.unlocked ? 'rgba(229, 203, 167, 0.55)' : 'rgba(255, 255, 255, 0.07)'}; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; transition: all 0.25s ease;">
+            <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: ${c.unlocked ? '#E5CBA7' : '#A1A1AA'};">${escapeHTML(c.eyebrow)}</span>
+                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.8px; color: ${c.unlocked ? '#080809' : '#A1A1AA'}; background: ${c.unlocked ? '#E5CBA7' : 'rgba(255,255,255,0.06)'}; padding: 3px 8px; border-radius: 6px;">
+                        ${c.unlocked ? unlockSvg : lockSvg}
+                        <span>${escapeHTML(c.statusLabel)}</span>
+                    </span>
+                </div>
+                <h4 style="font-size: 0.95rem; font-weight: 800; color: ${c.unlocked ? '#FFFFFF' : '#D4D4D8'}; margin: 0 0 6px 0; line-height: 1.35;">
+                    ${escapeHTML(c.title)}
+                </h4>
+                <p style="font-size: 11.8px; color: #A1A1AA; margin: 0; line-height: 1.45;">
+                    ${escapeHTML(c.desc)}
+                </p>
+            </div>
+        </div>
+    `).join('');
+
+    if (dashGrid) dashGrid.innerHTML = html;
+    if (nutriGrid) nutriGrid.innerHTML = html;
+};
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
@@ -24723,6 +25527,7 @@ if (document.readyState === 'loading') {
         try { CoachNutritionMaster.init(); } catch (e) {}
         try { CoachEvolutionEngine.init(); } catch (e) {}
         try { SensPwaManager.init(); } catch (e) {}
+        try { if (typeof window.renderSensUnlockablesModule === 'function') window.renderSensUnlockablesModule(); } catch (e) {}
     });
 } else {
     try { migrateLegacyWorkoutsInLocalStorage(); } catch (e) {}
@@ -24731,5 +25536,6 @@ if (document.readyState === 'loading') {
     try { CoachNutritionMaster.init(); } catch (e) {}
     try { CoachEvolutionEngine.init(); } catch (e) {}
     try { SensPwaManager.init(); } catch (e) {}
+    try { if (typeof window.renderSensUnlockablesModule === 'function') window.renderSensUnlockablesModule(); } catch (e) {}
 }
 

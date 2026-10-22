@@ -92,7 +92,10 @@
     <script>
         (function() {
             try {
-                if (localStorage.getItem('sens_in_portal') === 'true' || localStorage.getItem('sens_active_user')) {
+                var h = window.location.hash || '';
+                var s = window.location.search || '';
+                var isAuthFlow = h.indexOf('type=recovery') !== -1 || h.indexOf('type=invite') !== -1 || h.indexOf('error=') !== -1 || s.indexOf('error=') !== -1;
+                if (!isAuthFlow && (localStorage.getItem('sens_in_portal') === 'true' || localStorage.getItem('sens_active_user'))) {
                     document.documentElement.classList.add('in-portal-mode');
                     document.addEventListener('DOMContentLoaded', function() {
                         if (document.body) document.body.classList.add('in-portal');
@@ -109,7 +112,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=9.8">
+    <link rel="stylesheet" href="style.css?v=10.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -139,18 +142,18 @@
 
             <div class="nav-actions-desktop">
                 <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Tengo%20una%20consulta%20sobre%20SENS."
-                    class="help-link" target="_blank" rel="noopener">
+                    class="help-link" target="_blank" rel="noopener" data-agent-action="contact_coach_whatsapp">
                     <span class="agent-status-dot"></span><span>WhatsApp Nico</span>
                 </a>
-                <button type="button" class="btn btn-outline btn-sm btn-pwa-trigger" onclick="triggerPwaInstall()" id="navInstallAppBtn" style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary); display: inline-flex; align-items: center; gap: 6px;">
+                <button type="button" class="btn btn-outline btn-sm btn-pwa-trigger" onclick="triggerPwaInstall()" id="navInstallAppBtn" data-agent-action="install_pwa_app" style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary); display: inline-flex; align-items: center; gap: 6px;">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     <span>Instalar App</span>
                 </button>
-                <button class="btn btn-outline btn-sm" id="navClientAccessBtn">Acceso Clientes</button>
+                <button class="btn btn-outline btn-sm" id="navClientAccessBtn" data-agent-action="open_client_portal_auth">Acceso Clientes</button>
             </div>
 
             <div class="nav-actions-mobile">
-                <button class="btn btn-primary btn-sm" id="navClientAccessBtnMobile">Acceso</button>
+                <button class="btn btn-primary btn-sm" id="navClientAccessBtnMobile" data-agent-action="open_client_portal_auth">Acceso</button>
                 <button class="menu-toggle" id="menuToggle" aria-label="Abrir Menú">
                     <span></span>
                     <span></span>
@@ -240,17 +243,19 @@
                     <p class="hero-description-train">
                         Sentite bien en tu cuerpo. Fuerza progresiva, movilidad articular y hábitos personalizados en CABA y Online.
                     </p>
-                    <div class="hero-cta-group">
-                        <a href="#sumate" class="btn hero-btn-apple-dark">
-                            Agendar Evaluación
+                    <div class="hero-cta-group" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                        <button type="button" class="btn btn-primary" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" data-agent-action="start_free_7day_app_trial" style="padding: 13px 22px; font-weight: 800;">
+                            Probar la App SENS Gratis (7 Días) →
+                        </button>
+                        <a href="#sumate" class="btn hero-btn-apple-dark" data-agent-action="schedule_initial_assessment">
+                            Entrenar 1 a 1 con Nico
                         </a>
-                        <a href="#planes" class="btn btn-outline hero-btn-secondary">
+                        <a href="#planes" class="btn btn-outline hero-btn-secondary" data-agent-action="view_pricing_plans">
                             Ver Planes &amp; Aranceles
                         </a>
-                        <button type="button" class="btn btn-outline btn-pwa-trigger" onclick="triggerPwaInstall()" style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary); display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 18px;">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            <span>Instalar App SENS</span>
-                        </button>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 11.5px; color: rgba(255,255,255,0.75); letter-spacing: 0.3px;">
+                        <strong style="color: var(--accent-primary);">Camino 1:</strong> Sistema 100% digital y autoguiado con el método de Nico (7 días sin cargo) · <strong style="color: var(--accent-primary);">Camino 2:</strong> Seguimiento humano 1 a 1 en CABA y Online.
                     </div>
                 </div>
             </div>
@@ -496,11 +501,58 @@
         <!-- Precios & Modalidades (Con Diferencial Real por Frecuencia & Sin Costo Gym) -->
         <section class="section-sens" id="planes">
             <div class="section-head" style="margin-bottom: 20px;">
-                <span class="section-eyebrow">Precios</span>
-                <h2 class="section-main-title">ELEGÍ TU MODALIDAD <span class="text-champagne"></span></h2>
+                <span class="section-eyebrow">Dos Caminos, Un Mismo Criterio</span>
+                <h2 class="section-main-title">ELEGÍ TU MODALIDAD <span class="text-champagne">SENS</span></h2>
                 <p class="section-lead" style="font-size: 0.95rem; margin-bottom: 0;">
-                    Elegí la que mejor encaja en tu rutina.
+                    Probá gratis la App Autónoma por 7 días o postulate para entrenar 1 a 1 con Nico en CABA y Online.
                 </p>
+            </div>
+
+            <!-- CAMINO 1: APP SENS AUTÓNOMA (REVERSE TRIAL 7 DÍAS GRATIS) -->
+            <div class="sens-autonomous-app-showcase" id="sensAutonomousAppShowcase" style="max-width: 980px; margin: 0 auto 32px; background: #121214; border-radius: 22px; padding: 28px 26px; box-shadow: 0 20px 50px rgba(0,0,0,0.55); border: 1px solid rgba(229, 203, 167, 0.25);">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 260px;">
+                        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                            <span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px;">CAMINO 1 • ACCESO INMEDIATO 7 DÍAS GRATIS</span>
+                        </div>
+                        <h3 style="font-size: 1.45rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0; line-height: 1.2;">
+                            Probar la App SENS Gratis (7 Días)
+                        </h3>
+                        <p style="font-size: 13px; color: #E5CBA7; font-weight: 600; margin: 0 0 12px 0;">
+                            Sistema 100% digital y autoguiado con el método de Nico
+                        </p>
+                        <p style="font-size: 13px; color: #A1A1AA; line-height: 1.55; margin: 0 0 16px 0;">
+                            Iniciá tu Diagnóstico Biomecánico Digital ahora mismo y recibí en 0 segundos tu <strong>Programa Maestro de 3 Días de Fuerza y Postura</strong> en video HD + tu <strong>Cálculo Nutricional Mifflin-St Jeor</strong> y sistema de rachas con desbloqueo de fin de semana.
+                        </p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #D4D4D8;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Rutina de 3 Días al instante</span>
+                            <span style="display: inline-flex; align-items: center; gap: 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Calorías, Proteína y Agua calculadas</span>
+                            <span style="display: inline-flex; align-items: center; gap: 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Sin tarjeta para iniciar</span>
+                        </div>
+                    </div>
+
+                    <div style="background: #18181B; border-radius: 16px; padding: 20px 22px; min-width: 270px; flex: 0 1 320px; display: flex; flex-direction: column; gap: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <div>
+                                <span style="font-size: 10px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; letter-spacing: 1px; display: block;">Pack Trimestral 90 Días</span>
+                                <strong style="font-size: 1.35rem; color: #FFFFFF; font-variant-numeric: tabular-nums;">$59.900 <span style="font-size: 11px; font-weight: 500; color: #A1A1AA;">ARS</span></strong>
+                            </div>
+                            <span style="font-size: 11px; color: #10B981; font-weight: 700;">Ahorrás 20%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                            <span style="font-size: 12px; color: #A1A1AA;">Suscripción Mensual App:</span>
+                            <strong style="font-size: 13px; color: #FFFFFF; font-variant-numeric: tabular-nums;">$24.900 ARS / mes <span style="color: #71717A; font-weight: 400;">(USD $19)</span></strong>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-full" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" data-agent-action="start_free_7day_app_trial" style="margin-top: 4px; padding: 13px 18px; font-size: 13px; font-weight: 800;">
+                            Comenzar 7 Días Gratis →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Encabezado Camino 2: Seguimiento Humano 1 a 1 con Nico -->
+            <div style="text-align: center; margin-bottom: 14px;">
+                <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-primary);">CAMINO 2 • ENTRENAMIENTO PERSONALIZADO 1 A 1 CON NICO (PRESENCIAL CABA &amp; ONLINE VIP)</span>
             </div>
 
             <!-- Selector Segmentado de Modalidades (Estilo Apple / Brandbook) -->
@@ -572,7 +624,7 @@
                                             en Portal Web y lineamientos de hábitos</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
-                                    data-plan="Presencial 1a1 - 2x/Semana ($200.000)">Agendar Evaluación</a>
+                                    data-plan="Presencial 1a1 - 2x/Semana ($200.000)" data-agent-action="select_plan_presencial_1a1_2x">Agendar Evaluación</a>
                             </div>
                         </div>
 
@@ -608,7 +660,7 @@
                                             para tus días de práctica autónoma</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial 1a1 - 1x/Semana ($130.000)">Elegir 1x por Semana</a>
+                                    data-plan="Presencial 1a1 - 1x/Semana ($130.000)" data-agent-action="select_plan_presencial_1a1_1x">Elegir 1x por Semana</a>
                             </div>
                         </div>
 
@@ -644,7 +696,7 @@
                                             cercano en cada etapa del proceso</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial 1a1 - 3x/Semana ($260.000)">Elegir 3x por Semana</a>
+                                    data-plan="Presencial 1a1 - 3x/Semana ($260.000)" data-agent-action="select_plan_presencial_1a1_3x">Elegir 3x por Semana</a>
                             </div>
                         </div>
                     </div>
@@ -696,7 +748,7 @@
                                             proceso en Portal Web SENS</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
-                                    data-plan="Presencial Grupo - Dúo">Consultar Dúo</a>
+                                    data-plan="Presencial Grupo - Dúo" data-agent-action="select_plan_presencial_duo">Consultar Dúo</a>
                             </div>
                         </div>
 
@@ -733,7 +785,7 @@
                                             para cada alumno</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial Grupo - Trío">Consultar Trío</a>
+                                    data-plan="Presencial Grupo - Trío" data-agent-action="select_plan_presencial_trio">Consultar Trío</a>
                             </div>
                         </div>
                     </div>
@@ -790,7 +842,7 @@
                                             WhatsApp y acceso al Portal Web</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
-                                    data-plan="Online Premium ($90.000)">Postularme a Premium</a>
+                                    data-plan="Online Premium ($90.000)" data-agent-action="select_plan_online_premium">Postularme a Premium</a>
                             </div>
                         </div>
 
@@ -826,7 +878,7 @@
                                             hábitos diarios y soporte por WhatsApp</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Online Básico ($40.000)">Elegir Online Básico</a>
+                                    data-plan="Online Básico ($40.000)" data-agent-action="select_plan_online_basic">Elegir Online Básico</a>
                             </div>
                         </div>
                     </div>
@@ -858,7 +910,7 @@
                     No cobramos a ciegas. Coordinamos una evaluación inicial para conocer tu punto de partida, articular
                     y definir el plan ideal para vos.
                 </p>
-                <a href="#sumate" class="btn btn-primary btn-sm" style="padding: 12px 26px;">
+                <a href="#sumate" class="btn btn-primary btn-sm" style="padding: 12px 26px;" data-agent-action="schedule_initial_assessment">
                     Solicitar Evaluación Inicial →
                 </a>
             </div>
@@ -880,6 +932,15 @@
 
             <div class="lead-intake-card"
                 style="max-width: 680px; margin: 0 auto; background: #121214; border: none; border-radius: 20px; padding: 36px 30px; box-shadow: 0 16px 40px rgba(0,0,0,0.5);">
+                <div style="background: rgba(229, 203, 167, 0.08); border-radius: 14px; padding: 16px 18px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                    <div>
+                        <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #E5CBA7; display: block; margin-bottom: 2px;">CAMINO 1 • ACCESO INMEDIATO</span>
+                        <strong style="font-size: 13.5px; color: #FFFFFF;">¿Querés empezar hoy mismo en la App Autónoma (7 Días Gratis)?</strong>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" data-agent-action="start_free_7day_app_trial" style="padding: 9px 14px; font-size: 11.5px; font-weight: 800;">
+                        Crear Cuenta Gratis →
+                    </button>
+                </div>
                 <form id="publicLeadForm" onsubmit="return false;">
                     <div style="margin-bottom: 22px;">
                         <label class="input-label"
@@ -938,7 +999,7 @@
                         </select>
                     </div>
 
-                    <button type="button" id="btnSubmitLead" class="btn btn-primary btn-full"
+                    <button type="button" id="btnSubmitLead" class="btn btn-primary btn-full" data-agent-action="submit_initial_assessment_lead"
                         style="padding: 16px 20px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);">
                         Solicitar Evaluación Inicial con Nico →
                     </button>
@@ -1021,10 +1082,10 @@
     <!-- Barra Rápida Flotante en Móviles -->
     <div class="mobile-quick-bar">
         <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20agendar%20una%20Evaluaci%C3%B3n%20Inicial%20en%20SENS%20TRAIN."
-            target="_blank" rel="noopener" class="btn btn-primary mobile-quick-main-cta">
+            target="_blank" rel="noopener" class="btn btn-primary mobile-quick-main-cta" data-agent-action="schedule_initial_assessment_whatsapp">
             ¿Entrenamos juntos? Agendar →
         </a>
-        <button class="btn btn-outline" id="mobileQuickAccessBtn">
+        <button class="btn btn-outline" id="mobileQuickAccessBtn" data-agent-action="open_client_portal_auth">
             Acceso
         </button>
     </div>
@@ -2671,53 +2732,116 @@
                  VISTA DE ACTIVACIÓN / PAYWALL DE MEMBRESÍA (#activationPendingView)
                  ===================================================================== -->
             <section class="portal-view" id="activationPendingView">
-                <div class="dash-welcome-card"
-                    style="text-align: center; max-width: 680px; margin: 40px auto; padding: 42px 30px; border: 1px solid rgba(229, 203, 167, 0.35); box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+                <div class="dash-welcome-card sens-soft-paywall-card" id="sensSoftPaywallCard"
+                    style="text-align: center; max-width: 740px; margin: 32px auto; padding: 38px 28px; background: #121214; color: #FFFFFF; border-radius: 22px; box-shadow: 0 24px 60px rgba(0,0,0,0.65);">
                     <div style="display: flex; justify-content: center; margin-bottom: 16px;">
-                        <span class="pill pill-champagne"
-                            style="font-size: 11px; letter-spacing: 1.5px; font-weight: 700;">ACCESO EN
-                            VALIDACIÓN</span>
+                        <span class="pill pill-champagne" id="paywallStatusBadge"
+                            style="font-size: 10.5px; letter-spacing: 1.5px; font-weight: 800; text-transform: uppercase;">DÍA 8 • PERÍODO DE PRUEBA FINALIZADO</span>
                     </div>
-                    <h2 class="dash-heading" style="font-size: 1.8rem; margin-bottom: 14px;">
-                        Hola <span id="pendingUserName">Atleta</span>. <strong>Tu cuenta está en proceso de
-                            activación.</strong>
+                    <h2 class="dash-heading" id="paywallMainHeading" style="font-size: 1.75rem; margin-bottom: 12px; color: #FFFFFF;">
+                        Hola <span id="pendingUserName">Atleta</span>. <strong style="color: #E5CBA7;">Continuá tu evolución en SENS.</strong>
                     </h2>
-                    <p class="dash-sub"
-                        style="font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 24px;">
-                        Para calibrar tu entrenamiento de fuerza y darte acceso completo al portal y seguimiento
-                        personalizado de Nico, confirmamos la activación de tu abono mensual.
+                    <p class="dash-sub" id="paywallMainSub"
+                        style="font-size: 0.94rem; line-height: 1.6; color: #A1A1AA; max-width: 580px; margin: 0 auto 24px;">
+                        Completaste tus 7 días de prueba en la App SENS. Elegí tu plan para conservar tu progreso, tus desbloqueos metabólicos y tu rutina de fuerza, o invitá a un amigo para desbloquear +7 días sin cargo.
                     </p>
 
                     <div
-                        style="background: #F4F4F5; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 12px; padding: 22px; text-align: left; margin-bottom: 28px;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                            <span
-                                style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #9E7D4B; font-weight: 700;">Plan
-                                Seleccionado</span>
-                            <span class="pill pill-dark" id="pendingPlanName" style="background: #09090B; color: #FFFFFF;">Presencial 1 a 1 VIP (CABA)</span>
+                        style="background: #18181B; border-radius: 14px; padding: 16px 20px; text-align: left; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #E5CBA7; font-weight: 700; display: block; margin-bottom: 4px;">Modalidad Seleccionada</span>
+                            <strong id="pendingPlanName" style="font-size: 0.98rem; color: #FFFFFF;">App SENS Autónoma • Fuerza, Postura &amp; Nutrición</strong>
                         </div>
-                        <p style="font-size: 12.5px; color: #52525B; margin: 0; line-height: 1.6;">
-                            Incluye sesiones 1 a 1 en CABA (Palermo/Belgrano), programación adaptada a tu biomecánica,
-                            pautas de hábitos basales y seguimiento continuo con Nico.
-                        </p>
+                        <span style="font-size: 12px; color: #A1A1AA; font-variant-numeric: tabular-nums;">Mensual $24.900 ARS / Trimestral $59.900 ARS</span>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <a href="#" id="btnNotifyPaymentWA" class="btn btn-primary btn-full" target="_blank"
-                            rel="noopener" style="padding: 14px 20px; font-size: 14px;">
-                            Confirmar Abono con Nico por WhatsApp →
+                    <!-- Opciones de Suscripción Quiet Luxury (Pack Trimestral Recomendado vs Mensual) -->
+                    <div id="sensPaywallOptionsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; text-align: left; margin-bottom: 24px;">
+                        <!-- Opción 1: Pack Trimestral 90 Días (Recomendado) -->
+                        <div style="background: #18181B; border: 1px solid rgba(229, 203, 167, 0.45); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; position: relative;">
+                            <div>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                                    <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #080809; background: #E5CBA7; padding: 3px 9px; border-radius: 6px;">RECOMENDADO • 90 DÍAS</span>
+                                    <span style="font-size: 11px; font-weight: 700; color: #10B981;">Ahorrás 20%</span>
+                                </div>
+                                <h4 style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">Pack Trimestral (3 Meses)</h4>
+                                <div style="font-size: 1.45rem; font-weight: 800; color: #FFFFFF; font-variant-numeric: tabular-nums; margin-bottom: 4px;">
+                                    $59.900 <span style="font-size: 12px; font-weight: 500; color: #A1A1AA;">ARS</span>
+                                    <span style="font-size: 12px; font-weight: 600; color: #E5CBA7; margin-left: 6px;">/ USD $45</span>
+                                </div>
+                                <p style="font-size: 12px; color: #A1A1AA; margin: 0; line-height: 1.45;">
+                                    Ciclo completo de 12 semanas de recomposición corporal, progresión de cargas y presupuesto social de fin de semana.
+                                </p>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <button type="button" class="btn btn-primary btn-full" id="btnPaywallTrimestralARS" data-agent-action="subscribe_quarterly_ars" style="padding: 12px 16px; font-size: 12.5px; font-weight: 800;">
+                                    Activar Pack Trimestral ($59.900 ARS) →
+                                </button>
+                                <button type="button" class="btn btn-outline btn-full" id="btnPaywallTrimestralUSD" data-agent-action="subscribe_quarterly_usd" style="padding: 10px 14px; font-size: 11.5px; font-weight: 700; border-color: rgba(229,203,167,0.35); color: #E5CBA7;">
+                                    Abonar en USD ($45 Internacional)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Opción 2: Suscripción Mensual Flexible -->
+                        <div style="background: #18181B; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
+                            <div>
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                                    <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #E5CBA7;">MENSUAL FLEXIBLE • 30 DÍAS</span>
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                </div>
+                                <h4 style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">Membresía Mensual</h4>
+                                <div style="font-size: 1.45rem; font-weight: 800; color: #FFFFFF; font-variant-numeric: tabular-nums; margin-bottom: 4px;">
+                                    $24.900 <span style="font-size: 12px; font-weight: 500; color: #A1A1AA;">ARS / mes</span>
+                                    <span style="font-size: 12px; font-weight: 600; color: #E5CBA7; margin-left: 6px;">/ USD $19</span>
+                                </div>
+                                <p style="font-size: 12px; color: #A1A1AA; margin: 0; line-height: 1.45;">
+                                    Acceso completo mes a mes sin permanencia. Vía Mercado Pago (Argentina) o tarjeta internacional (USD $19).
+                                </p>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <button type="button" class="btn btn-outline btn-full" id="btnPaywallMercadoPago" data-agent-action="subscribe_ars_mercadopago" style="padding: 12px 16px; font-size: 12.5px; font-weight: 800; color: #FFFFFF; border-color: rgba(255,255,255,0.22);">
+                                    Suscribirme Mensual ($24.900 ARS) →
+                                </button>
+                                <button type="button" class="btn btn-outline btn-full" id="btnPaywallInternationalUSD" data-agent-action="subscribe_usd_international" style="padding: 10px 14px; font-size: 11.5px; font-weight: 700; border-color: rgba(229,203,167,0.35); color: #E5CBA7;">
+                                    Suscribirme en USD ($19 / mes)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opción 3: Viral Loop / Invitar a un amigo (+7 días ambos) -->
+                    <div style="background: rgba(229, 203, 167, 0.07); border-radius: 16px; padding: 20px 22px; text-align: left; margin-bottom: 24px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #E5CBA7;">REGALAR PASE DE 14 DÍAS A UN AMIGO • +7 DÍAS GRATIS PARA VOS</span>
+                            </div>
+                            <span id="paywallReferralCodeBadge" style="font-size: 11px; font-weight: 800; color: #FFFFFF; background: #080809; padding: 4px 10px; border-radius: 8px; font-variant-numeric: tabular-nums; letter-spacing: 1px;">SENS-VIP</span>
+                        </div>
+                        <p style="font-size: 12.5px; color: #D4D4D8; margin: 0 0 14px 0; line-height: 1.5;">
+                            Compartí tu link único de invitación. Cuando tu amigo complete el Onboarding, 1 sesión de fuerza y 1 registro diario, ambos suman <strong style="color: #E5CBA7;">+7 días reales de acceso completo</strong> (máximo 4 amigos por mes).
+                        </p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button type="button" class="btn btn-outline btn-sm" id="btnPaywallCopyReferral" data-agent-action="copy_referral_link" style="flex: 1; min-width: 160px; padding: 11px 14px; font-size: 12px; color: #FFFFFF; border-color: rgba(255,255,255,0.2);">
+                                Copiar Link de Invitación
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnPaywallShareReferralWA" data-agent-action="share_referral_whatsapp" style="flex: 1; min-width: 160px; padding: 11px 14px; font-size: 12px; font-weight: 800;">
+                                Regalar Pase por WhatsApp →
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <a href="#" id="btnNotifyPaymentWA" class="btn btn-outline btn-full" target="_blank"
+                            rel="noopener" style="padding: 13px 20px; font-size: 13px; color: #E5CBA7; border-color: rgba(229,203,167,0.3);">
+                            Ya aboné o entreno 1 a 1 con Nico • Validar por WhatsApp →
                         </a>
                         <button type="button" class="btn btn-outline btn-full" id="btnRefreshActivationStatus"
-                            style="font-size: 12px;">
-                            Ya aboné / Verificar activación de cuenta ↻
+                            style="font-size: 12px; color: #A1A1AA; border-color: rgba(255,255,255,0.12);">
+                            Verificar estado de mi suscripción
                         </button>
                     </div>
-
-                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 20px; line-height: 1.5;">
-                        ¿Tenés dudas o necesitás coordinar días y horarios de entrenamiento? Nico responde directamente
-                        en WhatsApp.
-                    </p>
                 </div>
             </section>
 
@@ -2734,6 +2858,9 @@
                         MAKES SENS.
                     </div>
                 </div>
+
+                <!-- 0.1. Pill Sutil de Prueba Gratuita (7 Días) & Viral Loop (Inyectada por checkUserAccessStatus) -->
+                <div id="sensTrialStatusPillContainer" style="display: none; margin-bottom: 14px;"></div>
 
                 <!-- 0.2. Acceso Rápido PWA para Alumno (Instalar en Pantalla de Inicio) -->
                 <div class="sens-pwa-dash-card" id="sensPwaDashCard" style="display: none;">
@@ -3337,6 +3464,20 @@
                     </div>
                 </div>
 
+                <!-- 5.5. Módulo de Rachas & Recompensas Desbloqueables (Presupuesto Social de Fin de Semana & Hitos) -->
+                <div class="sens-unlockables-module-card" id="dashUnlockablesModule" style="background: #121214; border-radius: 20px; padding: 22px 20px; margin-bottom: 18px; box-shadow: 0 12px 32px rgba(0,0,0,0.45);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;">
+                        <div>
+                            <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #E5CBA7; display: block; margin-bottom: 3px;">RECOMPENSAS AL CRITERIO SENS</span>
+                            <h3 style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin: 0;">Progreso Semanal &amp; Desbloqueos</h3>
+                        </div>
+                        <span id="dashWeeklySessionsProgressBadge" style="font-size: 11.5px; font-weight: 800; color: #080809; background: #E5CBA7; padding: 5px 12px; border-radius: 999px; font-variant-numeric: tabular-nums;">0 / 3 sesiones esta semana</span>
+                    </div>
+                    <div id="dashUnlockablesCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px;">
+                        <!-- Inyectado dinámicamente por renderSensUnlockablesModule() en app.js -->
+                    </div>
+                </div>
+
                 <!-- 6. Sección Tienda Oficial MercadoLibre (Equipamiento & Suplementos) -->
                 <div class="sens-store-banner-card" id="dashStoreCard">
                     <div class="sens-store-banner-left">
@@ -3356,6 +3497,27 @@
                     <button type="button" class="btn btn-primary btn-sm btn-store-entry" id="btnDashOpenStore">
                         Ver Tienda →
                     </button>
+                </div>
+
+                <!-- 7. Card de Upsell Nativo al Coaching 1 a 1 con Nico (Solo para usuarios en app_trial o app_subscribed) -->
+                <div class="sens-nico-1on1-upsell-card" id="dashNico1on1UpsellCard" style="background: #141417; border: 1px solid rgba(229, 203, 167, 0.28); border-radius: 20px; padding: 22px 22px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 240px;">
+                        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(229, 203, 167, 0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <div>
+                            <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; color: #E5CBA7; display: block; margin-bottom: 3px;">COACHING HUMANO VIP • CUPOS LIMITADOS</span>
+                            <div style="font-size: 0.98rem; font-weight: 700; color: #FFFFFF; line-height: 1.35;">
+                                ¿Buscás seguimiento humano 1 a 1 con Nico en Palermo/Belgrano o por videollamada?
+                            </div>
+                            <div style="font-size: 12px; color: #A1A1AA; margin-top: 3px;">
+                                Corrección biomecánica en vivo, planificación a medida y contacto directo semanal.
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Estoy%20usando%20la%20App%20SENS%20y%20quiero%20consultar%20disponibilidad%20de%20cupos%20para%20entrenamiento%201%20a%201." target="_blank" rel="noopener" class="btn btn-outline btn-sm" data-agent-action="inquire_nico_1on1_upsell" style="border-color: rgba(229, 203, 167, 0.5); color: #E5CBA7; font-weight: 700; padding: 11px 16px; white-space: nowrap;">
+                        Consultar disponibilidad de cupos →
+                    </a>
                 </div>
             </section>
 
@@ -3731,6 +3893,20 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- 2.5. Módulo de Presupuesto Social de Fin de Semana & Desbloqueos en Nutrición -->
+                <div class="sens-unlockables-module-card" id="nutriUnlockablesModule" style="background: #121214; border-radius: 20px; padding: 20px; margin: 18px 0; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+                        <div>
+                            <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #E5CBA7; display: block; margin-bottom: 2px;">PERMISO METABÓLICO DE FIN DE SEMANA</span>
+                            <h3 style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF; margin: 0;">Presupuesto Social &amp; Recompensas</h3>
+                        </div>
+                        <span id="nutriWeeklySessionsProgressBadge" style="font-size: 11px; font-weight: 800; color: #080809; background: #E5CBA7; padding: 4px 11px; border-radius: 999px; font-variant-numeric: tabular-nums;">0 / 3 sesiones esta semana</span>
+                    </div>
+                    <div id="nutriUnlockablesCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px;">
+                        <!-- Inyectado dinámicamente por renderSensUnlockablesModule() en app.js -->
                     </div>
                 </div>
 
@@ -7123,7 +7299,7 @@
     <script src="exercises_db.js?v=9.8"></script>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=9.8"></script>
+    <script src="app.js?v=10.0"></script>
 </body>
 
 </html>
