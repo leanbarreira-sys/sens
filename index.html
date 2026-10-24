@@ -257,10 +257,14 @@
                     <!-- Tira Horizontal Apple-Style de los 4 Escalones SENS (Cero Ocupación Vertical) -->
                     <div class="sens-hero-pills-container">
                         <div class="sens-hero-pills-header">
-                            <span>Explorá los 4 Planes SENS</span>
-                            <span class="sens-hero-pills-cue">Deslizá ›</span>
+                            <span class="sens-hero-pills-title">Planes y Membresías</span>
+                            <div class="sens-hero-pills-nav">
+                                <button type="button" class="sens-hero-pills-arrow" onclick="scrollHeroPills(-1)" aria-label="Anterior">‹</button>
+                                <span class="sens-hero-pills-counter" id="heroPillsCounter">1 de 4</span>
+                                <button type="button" class="sens-hero-pills-arrow" onclick="scrollHeroPills(1)" aria-label="Siguiente">›</button>
+                            </div>
                         </div>
-                        <div class="sens-hero-compact-pills">
+                        <div class="sens-hero-compact-pills" id="sensHeroCompactPills">
                             <button type="button" class="hero-plan-pill free" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()">
                                 1. Plan Free • 7 Días $0
                             </button>
