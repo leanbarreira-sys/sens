@@ -2099,7 +2099,18 @@ function initPricingTabs() {
             c.classList.remove('active');
         });
 
-        if (currentMode === 'online') {
+        if (currentMode === 'app') {
+            if (subSelector) subSelector.style.display = 'none';
+            const appTab = document.getElementById('tab-app');
+            if (appTab) {
+                appTab.style.display = 'block';
+                appTab.classList.add('active');
+                const innerCarousel = appTab.querySelector('.pricing-carousel');
+                if (innerCarousel) innerCarousel.scrollLeft = 0;
+                const dots = document.querySelectorAll('#appDots .carousel-dot');
+                dots.forEach((dot, idx) => dot.classList.toggle('active', idx === 0));
+            }
+        } else if (currentMode === 'online') {
             if (subSelector) subSelector.style.display = 'none';
             const onlineTab = document.getElementById('tab-online');
             if (onlineTab) {
@@ -3399,25 +3410,19 @@ function checkUserAccessStatus(profile) {
         if (!isAdmin) {
             pillContainer.style.display = 'block';
             pillContainer.innerHTML = `
-                <div style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.34); border-radius: 16px; padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: 0 10px 28px rgba(0,0,0,0.38);">
-                    <div style="display: flex; align-items: center; gap: 11px; flex: 1; min-width: 240px;">
-                        <span class="status-dot status-dot-active" style="flex-shrink: 0;"></span>
-                        <div style="font-size: 12px; color: #E4E4E7; line-height: 1.4;">
-                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 2px;">
-                                <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.1px; color: #080809; background: #E5CBA7; padding: 2px 8px; border-radius: 5px; font-variant-numeric: tabular-nums;">TU PLAN: ${escapeHTML(planDetails.shortBadge.toUpperCase())}</span>
-                                <span style="font-size: 11.5px; font-weight: 700; color: #FFFFFF;">${escapeHTML(planDetails.title)}</span>
-                            </div>
-                            <div style="font-size: 11.2px; color: #A1A1AA;">
-                                ${escapeHTML(planDetails.nextStepHint)}
-                            </div>
-                        </div>
+                <div class="sens-plan-status-strip">
+                    <div class="sens-plan-status-left">
+                        <span class="status-dot status-dot-active"></span>
+                        <span class="sens-plan-tier-badge">${escapeHTML(planDetails.shortBadge.toUpperCase())}</span>
+                        <strong class="sens-plan-title-compact">${escapeHTML(planDetails.title)}</strong>
+                        <span class="sens-plan-days-tag">${planDetails.key.includes('trial') ? '• 7 días gratis' : ''}</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" id="btnTrialPillOpenLadder" data-agent-action="open_plans_upgrade_modal" style="background: #E5CBA7; color: #080809; border: none; border-radius: 10px; padding: 8px 13px; font-size: 11.5px; font-weight: 800; cursor: pointer;">
-                            ${escapeHTML(planDetails.ctaLabel)}
+                    <div class="sens-plan-status-right">
+                        <button type="button" class="btn-sens-plan-upgrade" id="btnTrialPillOpenLadder" data-agent-action="open_plans_upgrade_modal">
+                            Escalar Plan ↑
                         </button>
-                        <button type="button" id="btnTrialPillShareRef" data-agent-action="share_referral_from_dashboard" style="background: rgba(229,203,167,0.12); color: #E5CBA7; border: 1px solid rgba(229,203,167,0.35); border-radius: 10px; padding: 8px 11px; font-size: 11px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-                            <span>Invitar Amigo (+7 días gratis)</span>
+                        <button type="button" class="btn-sens-plan-share" id="btnTrialPillShareRef" data-agent-action="share_referral_from_dashboard" title="Regalar pase de 14 días y sumar +7 días para vos">
+                            +7d Gratis
                         </button>
                     </div>
                 </div>
@@ -7624,7 +7629,10 @@ function updateMasterTimerUI() {
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-set';
         if (modeLabel) modeLabel.textContent = 'SERIE EN CURSO';
-        if (primaryBtn) primaryBtn.textContent = 'Pausar Serie';
+        if (primaryBtn) {
+            primaryBtn.textContent = 'Finalizar Serie ✓';
+            primaryBtn.classList.add('btn-master-finalizar-set');
+        }
         if (restControls) restControls.style.display = 'none';
 
         // Sincronizar Reloj In-Video
@@ -7637,7 +7645,7 @@ function updateMasterTimerUI() {
             inVideoLabel.className = 'invideo-timer-label in-set';
             inVideoLabel.textContent = 'SERIE EN CURSO';
         }
-        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Pausar';
+        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Finalizar Serie ✓';
         if (inVideoSecondaryBtn) inVideoSecondaryBtn.style.display = 'inline-block';
         if (inVideoSkipBtn) inVideoSkipBtn.style.display = 'none';
 
@@ -7652,7 +7660,10 @@ function updateMasterTimerUI() {
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-rest';
         if (modeLabel) modeLabel.textContent = 'DESCANSO ACTIVO';
-        if (primaryBtn) primaryBtn.textContent = 'Iniciar Nueva Serie';
+        if (primaryBtn) {
+            primaryBtn.textContent = 'Iniciar Nueva Serie →';
+            primaryBtn.classList.remove('btn-master-finalizar-set');
+        }
         if (restControls) restControls.style.display = 'flex';
 
         // Sincronizar Reloj In-Video
@@ -7665,7 +7676,7 @@ function updateMasterTimerUI() {
             inVideoLabel.className = 'invideo-timer-label in-rest';
             inVideoLabel.textContent = 'DESCANSO';
         }
-        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Nueva Serie';
+        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Nueva Serie →';
         if (inVideoSecondaryBtn) inVideoSecondaryBtn.style.display = 'none';
         if (inVideoSkipBtn) inVideoSkipBtn.style.display = 'inline-block';
 
@@ -7676,7 +7687,10 @@ function updateMasterTimerUI() {
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill';
         if (modeLabel) modeLabel.textContent = 'EN ESPERA';
-        if (primaryBtn) primaryBtn.textContent = 'Iniciar Serie';
+        if (primaryBtn) {
+            primaryBtn.textContent = 'Iniciar Serie';
+            primaryBtn.classList.remove('btn-master-finalizar-set');
+        }
         if (restControls) restControls.style.display = 'none';
 
         // Sincronizar Reloj In-Video
@@ -7752,16 +7766,34 @@ function initMasterTimerListeners() {
     if (!primaryBtn || primaryBtn._hasTimerBound) return;
     primaryBtn._hasTimerBound = true;
 
+    function executeFinishSetAndStartRest() {
+        const nextSet = (modalExerciseState && Array.isArray(modalExerciseState.setsData))
+            ? modalExerciseState.setsData.find(s => !s.completed)
+            : null;
+        if (nextSet) {
+            nextSet.completed = true;
+            const athId = getActiveAthleteId();
+            logCompletedSetToDb(athId, modalExerciseState.exId, nextSet.setNumber, nextSet.weight, nextSet.reps);
+            renderModalSeriesList();
+            showSensToast(`Set ${nextSet.setNumber} completado (${nextSet.weight} kg × ${nextSet.reps} reps)`, 'champagne', 2200);
+
+            const allDone = modalExerciseState.setsData.every(s => s.completed);
+            if (allDone) {
+                triggerCongratsCelebration();
+            }
+        }
+        playBeep(620, 0.2);
+        startMasterRestCountdown();
+    }
+
     primaryBtn.addEventListener('click', () => {
         if (masterTimerState.mode === 'idle') {
             startMasterTutTimer();
         } else if (masterTimerState.mode === 'in_set') {
-            if (primaryBtn.textContent.includes('Pausar')) {
-                pauseMasterTutTimer();
-            } else {
-                startMasterTutTimer();
-            }
+            // Flujo Senior: INICIAR SERIE -> FINALIZAR SERIE -> AUTOMÁTICAMENTE DESCANSO
+            executeFinishSetAndStartRest();
         } else if (masterTimerState.mode === 'in_rest') {
+            // DESCANSO -> INICIAR NUEVA SERIE
             clearInterval(masterTimerState.interval);
             masterTimerState.tutSeconds = 0;
             startMasterTutTimer();
@@ -7770,21 +7802,7 @@ function initMasterTimerListeners() {
 
     if (finishAndRestBtn) {
         finishAndRestBtn.addEventListener('click', () => {
-            const nextSet = modalExerciseState.setsData.find(s => !s.completed);
-            if (nextSet) {
-                nextSet.completed = true;
-                const athId = getActiveAthleteId();
-                logCompletedSetToDb(athId, modalExerciseState.exId, nextSet.setNumber, nextSet.weight, nextSet.reps);
-                renderModalSeriesList();
-                showSensToast(`Set ${nextSet.setNumber} completado (${nextSet.weight} kg × ${nextSet.reps} reps)`, 'champagne', 2200);
-
-                const allDone = modalExerciseState.setsData.every(s => s.completed);
-                if (allDone) {
-                    triggerCongratsCelebration();
-                }
-            }
-            playBeep(620, 0.2);
-            startMasterRestCountdown();
+            executeFinishSetAndStartRest();
         });
     }
 
@@ -8821,20 +8839,28 @@ function renderMonthlyCalendar() {
     const startOffset = (firstDayIndex + 6) % 7; // Lunes = 0
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
+    let cellsHtml = '';
+
     for (let i = 0; i < startOffset; i++) {
         cellsHtml += `<div class="month-cal-cell rest-day" style="opacity: 0.15;"></div>`;
     }
 
+    const selectedD = AppState.selectedDate ? new Date(AppState.selectedDate) : now;
+    const isSelectedMonth = (selectedD.getFullYear() === currentYear && selectedD.getMonth() === currentMonth);
+    const selectedDayNum = isSelectedMonth ? selectedD.getDate() : todayDate;
+
     for (let d = 1; d <= daysInMonth; d++) {
         const isToday = (d === todayDate);
+        const isSelected = (d === selectedDayNum);
         const cellIso = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         const isCompleted = typeof isDateInCompletedWorkouts === 'function' ? isDateInCompletedWorkouts(cellIso) : false;
         const classes = ['month-cal-cell'];
         if (isToday) classes.push('today');
         if (isCompleted) classes.push('completed');
+        if (isSelected) classes.push('selected-cal-day');
 
         cellsHtml += `
-            <div class="${classes.join(' ')}" data-cal-day="${d}" title="${isCompleted ? 'Día Entrenado' : (isToday ? 'Hoy' : 'Día de Descanso')}" style="cursor:pointer;">
+            <div class="${classes.join(' ')}" data-cal-day="${d}" data-iso="${cellIso}" title="${isCompleted ? 'Día Entrenado' : (isToday ? 'Hoy' : 'Sesión de Entrenamiento')}" style="cursor:pointer; touch-action: manipulation;">
                 <span>${d}</span>
             </div>
         `;
@@ -8844,8 +8870,28 @@ function renderMonthlyCalendar() {
 
     calGrid.querySelectorAll('.month-cal-cell[data-cal-day]').forEach(cell => {
         cell.addEventListener('click', () => {
-            const d = cell.getAttribute('data-cal-day');
-            showSensToast(`Visualizando registro del ${d} de ${monthNames[currentMonth]}`, 'champagne', 2200);
+            const d = parseInt(cell.getAttribute('data-cal-day'), 10);
+            const targetDate = new Date(currentYear, currentMonth, d, 12, 0, 0);
+            AppState.selectedDate = targetDate;
+            AppState.currentDay = getDayKeyFromDate(targetDate);
+
+            calGrid.querySelectorAll('.month-cal-cell').forEach(c => c.classList.remove('selected-cal-day'));
+            cell.classList.add('selected-cal-day');
+
+            if (typeof renderWorkoutDay === 'function') {
+                renderWorkoutDay(AppState.currentDay, targetDate);
+            }
+            if (typeof renderDynamicWeekStrip === 'function') {
+                renderDynamicWeekStrip();
+            }
+            if (typeof updateDynamicTrainingCard === 'function') {
+                updateDynamicTrainingCard(targetDate);
+            }
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(targetDate);
+            }
+
+            showSensToast(`Sesión del ${d} de ${monthNames[currentMonth]} cargada.`, 'champagne', 2000);
         });
     });
 }
@@ -10729,8 +10775,10 @@ function renderCoachFoodSelectionGrid(prescribedList = []) {
         snacks: 'Snacks'
     };
 
+    const displayFoods = resolvedFoods.slice(0, 45);
+
     let html = '';
-    resolvedFoods.forEach(f => {
+    displayFoods.forEach(f => {
         const isChecked = prescribedMap.has(f.id);
         const grams = isChecked ? prescribedMap.get(f.id) : (f.defaultGrams || 100);
         const cal = Math.round((grams * (f.calPer100 || 0)) / 100);
@@ -10769,40 +10817,198 @@ function renderCoachFoodSelectionGrid(prescribedList = []) {
         `;
     });
 
+    if (resolvedFoods.length > 45) {
+        html += `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 12px; font-size: 11.5px; color: var(--text-muted);">
+                Mostrando los 45 alimentos más frecuentes de la categoría seleccionada (${resolvedFoods.length} totales en catálogo).
+            </div>
+        `;
+    }
+
     container.innerHTML = html;
 
-    container.querySelectorAll('.btn-coach-stepper').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const foodId = btn.getAttribute('data-food-id');
-            const delta = parseInt(btn.getAttribute('data-delta'), 10);
-            const input = container.querySelector(`.coach-food-grams[data-food-id="${foodId}"]`);
-            if (input) {
-                let current = parseInt(input.value, 10) || 100;
-                current = Math.max(20, current + delta);
-                input.value = current;
-                recalcCoachFoodItem(foodId, current);
+    // Delegación de Eventos de Alta Velocidad (Cero Lag en iPhone / iOS)
+    if (!container._hasDelegatedListeners) {
+        container._hasDelegatedListeners = true;
+
+        container.addEventListener('click', (e) => {
+            const stepper = e.target.closest('.btn-coach-stepper');
+            if (stepper) {
+                const foodId = stepper.getAttribute('data-food-id');
+                const delta = parseInt(stepper.getAttribute('data-delta'), 10);
+                const input = container.querySelector(`.coach-food-grams[data-food-id="${foodId}"]`);
+                if (input) {
+                    let current = parseInt(input.value, 10) || 100;
+                    current = Math.max(20, current + delta);
+                    input.value = current;
+                    recalcCoachFoodItem(foodId, current);
+                }
             }
         });
-    });
 
-    container.querySelectorAll('.coach-food-grams').forEach(inp => {
-        inp.addEventListener('input', () => {
-            const foodId = inp.getAttribute('data-food-id');
-            const grams = parseInt(inp.value, 10) || 0;
-            recalcCoachFoodItem(foodId, grams);
-        });
-    });
-
-    container.querySelectorAll('.coach-food-cb').forEach(cb => {
-        cb.addEventListener('change', () => {
-            const item = cb.closest('.coach-food-item');
-            if (item) {
-                item.style.background = cb.checked ? 'rgba(229, 203, 167, 0.08)' : 'var(--bg-surface)';
-                item.style.borderColor = cb.checked ? 'rgba(229, 203, 167, 0.4)' : 'var(--border-subtle)';
+        container.addEventListener('input', (e) => {
+            const inp = e.target.closest('.coach-food-grams');
+            if (inp) {
+                const foodId = inp.getAttribute('data-food-id');
+                const grams = parseInt(inp.value, 10) || 0;
+                recalcCoachFoodItem(foodId, grams);
             }
         });
-    });
+
+        container.addEventListener('change', (e) => {
+            const cb = e.target.closest('.coach-food-cb');
+            if (cb) {
+                const item = cb.closest('.coach-food-item');
+                if (item) {
+                    item.style.background = cb.checked ? 'rgba(229, 203, 167, 0.08)' : 'var(--bg-surface)';
+                    item.style.borderColor = cb.checked ? 'rgba(229, 203, 167, 0.4)' : 'var(--border-subtle)';
+                }
+            }
+        });
+    }
 }
+
+// -----------------------------------------------------------------------------
+// PRESCRIBIREMOS MASIVAMENTE EN 1 TAP PARA NICO (Coach OS Smart Automation)
+// -----------------------------------------------------------------------------
+window.applyCoachInstantNutritionPlan = function(athId) {
+    if (!athId) {
+        const sel = document.getElementById('coachNutritionAthleteSelector') || document.getElementById('coachWorkoutAthleteSelector');
+        athId = sel ? sel.value : (AppState.activeAthleteId || 'mock_vip');
+    }
+    const roster = typeof getConsolidatedCoachAthletes === 'function' ? getConsolidatedCoachAthletes() : [];
+    const athlete = roster.find(a => a.id === athId) || AppState.profile || {};
+    const weight = parseFloat(athlete.current_weight || athlete.weight || 75) || 75;
+    const height = parseFloat(athlete.height_cm || athlete.height || 175) || 175;
+    const age = parseInt(athlete.age || 35, 10) || 35;
+    const goal = athlete.fitness_goal || 'recomposicion';
+
+    let bmr = Math.round((10 * weight) + (6.25 * height) - (5 * age) + 5);
+    let tdee = Math.round(bmr * 1.45);
+    let targetKcal = tdee;
+    if (goal === 'deficit' || goal === 'recomposicion') targetKcal = Math.round(tdee - 350);
+    else if (goal === 'fuerza' || goal === 'hipertrofia') targetKcal = Math.round(tdee + 250);
+    targetKcal = Math.max(1600, Math.min(3200, targetKcal));
+
+    const targetProt = Math.round(weight * 2.0);
+    const targetFats = Math.round(weight * 0.9);
+    const targetCarbs = Math.max(100, Math.round((targetKcal - (targetProt * 4) - (targetFats * 9)) / 4));
+    const targetWater = Math.round((weight * 0.035) * 10) / 10;
+
+    const stapleFoods = [
+        { id: 'ae856777-a8d3-5238-9385-6bffce376821', name: 'Huevos enteros de gallina', grams: 120, cat: 'proteina', cal: 180, protein: 15.6, carbs: 1.3, fats: 12 },
+        { id: 'ae856777-a8d3-5238-9385-6bffce376838', name: 'Avena tradicional en copos', grams: 60, cat: 'carbohidrato', cal: 220, protein: 8, carbs: 36, fats: 4 },
+        { id: 'ae856777-a8d3-5238-9385-6bffce376820', name: 'Pechuga de pollo a la plancha', grams: 200, cat: 'proteina', cal: 330, protein: 62, carbs: 0, fats: 7 },
+        { id: 'ae856777-a8d3-5238-9385-6bffce376850', name: 'Arroz blanco cocido', grams: 180, cat: 'carbohidrato', cal: 234, protein: 4.8, carbs: 50, fats: 0.5 },
+        { id: 'ae856777-a8d3-5238-9385-6bffce376865', name: 'Brócoli al vapor', grams: 150, cat: 'vegetales', cal: 52, protein: 4.2, carbs: 10, fats: 0.6 },
+        { id: 'ae856777-a8d3-5238-9385-6bffce376829', name: 'Bife de lomo / cuadril magro', grams: 180, cat: 'proteina', cal: 374, protein: 46, carbs: 0, fats: 20 },
+        { id: 'ae856777-a8d3-5238-9385-6bffce376851', name: 'Batata / boniato al horno', grams: 180, cat: 'carbohidrato', cal: 155, protein: 3, carbs: 36, fats: 0.2 },
+        { id: 'ae856777-a8d3-5238-9385-6bffce376858', name: 'Yogur natural sin azúcar', grams: 170, cat: 'lacteos', cal: 110, protein: 17, carbs: 6, fats: 2 },
+        { id: 'ae856777-a8d3-5238-9385-6bffce376861', name: 'Nueces / almendras', grams: 25, cat: 'grasas', cal: 165, protein: 5, carbs: 3, fats: 16 }
+    ];
+
+    const prescriptionData = {
+        target_calories: targetKcal,
+        target_protein: targetProt,
+        target_carbs: targetCarbs,
+        target_fats: targetFats,
+        target_water: targetWater,
+        directive_note: `Pauta SENS ${goal.toUpperCase()}: ${targetKcal} kcal calculadas con Mifflin-St Jeor. Priorizá ${targetProt}g de proteína distribuidos en 4 tomas y ${targetWater}L de hidratación.`,
+        prescribed_foods: stapleFoods,
+        updated_at: new Date().toISOString()
+    };
+
+    localStorage.setItem(`sens_prescribed_nutrition_${athId}`, JSON.stringify(prescriptionData));
+    if (supabaseClient && !String(athId).startsWith('mock_')) {
+        supabaseClient.from('profiles').update({ prescribed_nutrition: prescriptionData }).eq('id', athId).then(() => {});
+    }
+
+    if (typeof loadCoachAthleteNutrition === 'function') loadCoachAthleteNutrition(athId);
+    if (typeof syncMemberNutritionPrescription === 'function') syncMemberNutritionPrescription(athId, prescriptionData);
+
+    showSensToast(`¡Plan de ${targetKcal} kcal y macros prescripto con éxito para ${athlete.full_name || 'el alumno'}!`, 'champagne', 3000);
+};
+
+window.applyCoachInstantWorkoutPlan = function(athId) {
+    if (!athId) {
+        const sel = document.getElementById('coachWorkoutAthleteSelector');
+        athId = sel ? sel.value : (coachWorkoutState.activeAthleteId || 'mock_vip');
+    }
+    const routine = {
+        day1: {
+            title: 'Lunes: Empuje, Postura & Core',
+            modality: 'presencial',
+            completed: false,
+            exercises: [
+                { id: 'ex-p1', name: 'Press de Banca Plano con Mancuernas', sets: 4, reps: '8-10', rest: 90, defaultWeight: 20, notes: 'Escápulas retraídas' },
+                { id: 'ex-p4', name: 'Press Militar Sentado con Mancuernas', sets: 3, reps: '10', rest: 75, defaultWeight: 14, notes: 'Core firme y pecho alto' },
+                { id: 'ex-c1', name: 'Plancha Frontal Activa', sets: 3, reps: '45s', rest: 60, defaultWeight: 0, notes: 'Glúteos apretados y abdomen tenso' }
+            ]
+        },
+        day2: {
+            title: 'Martes: Descanso Activo / Pasos',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        },
+        day3: {
+            title: 'Miércoles: Tracción & Cadena Posterior Cuidada',
+            modality: 'presencial',
+            completed: false,
+            exercises: [
+                { id: 'ex-t1', name: 'Remo con Mancuerna a Una Mano', sets: 4, reps: '10', rest: 75, defaultWeight: 18, notes: 'Codo pegado al torso sin rotar' },
+                { id: 'ex-t2', name: 'Peso Muerto Rumano con Mancuernas', sets: 4, reps: '10-12', rest: 90, defaultWeight: 22, notes: 'Bisagra pura de cadera' },
+                { id: 'ex-t3', name: 'Face Pull con Banda Elástica', sets: 3, reps: '15', rest: 60, defaultWeight: 5, notes: 'Salud escapular y rotadores externos' }
+            ]
+        },
+        day4: {
+            title: 'Jueves: Descanso Activo',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        },
+        day5: {
+            title: 'Viernes: Piernas, Estabilidad & Descompresión',
+            modality: 'presencial',
+            completed: false,
+            exercises: [
+                { id: 'ex-l1', name: 'Sentadilla Goblet con Mancuerna', sets: 4, reps: '10-12', rest: 90, defaultWeight: 18, notes: 'Profundidad controlada sin dolor' },
+                { id: 'ex-l2', name: 'Estocadas Búlgaras en Banco', sets: 3, reps: '10 c/u', rest: 75, defaultWeight: 10, notes: 'Torso levemente inclinado' },
+                { id: 'ex-m1', name: 'Descompresión Lumbar en Colchoneta', sets: 2, reps: '60s', rest: 60, defaultWeight: 0, notes: 'Respiración diafragmática post-oficina' }
+            ]
+        },
+        day6: {
+            title: 'Sábado: Descanso Activo / Pasos',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        },
+        day7: {
+            title: 'Domingo: Descanso Total',
+            modality: 'descanso',
+            completed: false,
+            exercises: []
+        }
+    };
+
+    localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(routine));
+    if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached) cached.prescribed_workouts = routine;
+    }
+    persistPrescribedWorkoutsToSupabase(athId, routine);
+
+    if (AppState.user && (AppState.user.id === athId || athId === 'mock_vip')) {
+        if (AppState.profile) AppState.profile.prescribed_workouts = routine;
+        Object.assign(WORKOUT_DAYS_DATA, routine);
+    }
+
+    if (typeof loadCoachAthleteWorkouts === 'function') loadCoachAthleteWorkouts(athId);
+    if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
+    if (typeof renderCoachAssignedExercises === 'function') renderCoachAssignedExercises();
+
+    showSensToast('¡Rutina Maestra de Fuerza y Postura SENS prescripta en 1 tap y sincronizada!', 'champagne', 3000);
+};
 
 function recalcCoachFoodItem(foodId, grams) {
     const food = FOOD_CATALOG.find(f => f.id === foodId);
@@ -11187,31 +11393,45 @@ document.addEventListener('visibilitychange', () => {
 });
 
 function getCoachAthleteWorkoutData(athId) {
-    // 1. Si es el alumno activo en su portal y tiene los datos en su perfil de Supabase
+    if (!athId) athId = getActiveAthleteId();
+
+    // 1. Revisar primero en localStorage (fuente de verdad inmediata y sin lag de red)
+    const rawLocal = localStorage.getItem(`sens_prescribed_workouts_${athId}`);
+    if (rawLocal) {
+        try {
+            const parsed = JSON.parse(rawLocal);
+            if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+                // Mantener sincronizado el cache en memoria de Coach OS
+                if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+                    const cached = window.__coachAthletesCache.find(a => a.id === athId);
+                    if (cached) cached.prescribed_workouts = parsed;
+                }
+                return sanitizeWorkoutDataWithMasterExercises(parsed, athId);
+            }
+        } catch (e) {}
+    }
+
+    // 2. Si es el alumno activo en su portal y tiene los datos en su perfil de Supabase
     if (AppState.profile && AppState.profile.prescribed_workouts && typeof AppState.profile.prescribed_workouts === 'object') {
         if (!isCurrentUserAdmin() || AppState.profile.id === athId) {
             const pw = AppState.profile.prescribed_workouts;
             if (Object.keys(pw).length > 0) {
+                try { localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(pw)); } catch (_) {}
                 return sanitizeWorkoutDataWithMasterExercises(pw, athId);
             }
         }
     }
 
-    // 2. Si está en cache de atletas de Coach OS
+    // 3. Si está en cache de atletas de Coach OS
     if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
         const cached = window.__coachAthletesCache.find(a => a.id === athId);
         if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object') {
-            return sanitizeWorkoutDataWithMasterExercises(cached.prescribed_workouts, athId);
+            const cp = cached.prescribed_workouts;
+            if (Object.keys(cp).length > 0) {
+                try { localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(cp)); } catch (_) {}
+                return sanitizeWorkoutDataWithMasterExercises(cp, athId);
+            }
         }
-    }
-
-    // 3. Revisar en localStorage por si se guardó recientemente
-    const raw = localStorage.getItem(`sens_prescribed_workouts_${athId}`);
-    if (raw) {
-        try {
-            const parsed = JSON.parse(raw);
-            if (parsed && typeof parsed === 'object') return sanitizeWorkoutDataWithMasterExercises(parsed, athId);
-        } catch (e) {}
     }
 
     // 4. Solo perfiles demostrativos heredan la rutina completa preconfigurada
@@ -25920,70 +26140,120 @@ window.renderSensUnlockablesModule = function() {
     const cards = [
         {
             key: 'weekend_social_refeed',
+            shortLabel: 'Refeed +500 kcal',
             eyebrow: '3 Sesiones / Semana',
             title: 'Permiso Social Fin de Semana (+500 kcal)',
             desc: unlockedWeekendRefeed
-                ? 'Activo: +500 kcal libres para tu cena social cuidando proteína.'
-                : `Te ${Math.max(0, 3 - weeklyCompleted) === 1 ? 'falta 1 sesión' : `faltan ${Math.max(0, 3 - weeklyCompleted)} sesiones`} para liberar +500 kcal el fin de semana.`,
+                ? 'Activo: Tenés +500 kcal libres para tu cena social del fin de semana manteniendo proteína.'
+                : `Te ${Math.max(0, 3 - weeklyCompleted) === 1 ? 'falta 1 sesión' : `faltan ${Math.max(0, 3 - weeklyCompleted)} sesiones`} esta semana para liberar tu margen social de +500 kcal.`,
             unlocked: unlockedWeekendRefeed,
-            statusLabel: unlockedWeekendRefeed ? 'ACTIVO' : `${Math.min(3, weeklyCompleted)}/3`,
-            actionHtml: ''
+            statusLabel: unlockedWeekendRefeed ? 'DESBLOQUEADO ✓' : `${Math.min(3, weeklyCompleted)}/3 sesiones`,
+            ctaText: 'Ver Guía de Cena Social SENS'
         },
         {
             key: 'initial_criterio_3days',
+            shortLabel: '+3 Días Gratis',
             eyebrow: 'Premio a la Constancia',
             title: '+3 Días Gratis de App Full',
             desc: unlockedCriterio3Days
-                ? 'Sumaste +3 días gratis a tu prueba por cumplir 3 sesiones.'
-                : 'Completá 3 entrenamientos en tu 1ra semana y sumás +3 días gratis.',
+                ? '¡Felicitaciones! Sumaste +3 días extra a tu prueba gratuita por cumplir 3 sesiones en la semana.'
+                : 'Completá 3 entrenamientos durante tu primera semana de prueba y sumás automáticamente +3 días gratis.',
             unlocked: unlockedCriterio3Days,
-            statusLabel: unlockedCriterio3Days ? '+3D SUMADOS' : `${Math.min(3, totalCompleted)}/3`,
-            actionHtml: ''
+            statusLabel: unlockedCriterio3Days ? '+3 DÍAS ACREDITADOS' : `${Math.min(3, totalCompleted)}/3 completados`,
+            ctaText: 'Ver Mi Plan y Días Restantes'
         },
         {
             key: 'viral_guest_pass_7days',
+            shortLabel: 'Regalar 14d (+7d Vos)',
             eyebrow: 'Growth • Invitar Amigo',
             title: '+7 Días Gratis para Ambos',
-            desc: 'Regalá 14 días de prueba a un amigo; al entrenar su 1ra sesión ambos suman +7 días gratis.',
+            desc: 'Regalale un Pase de 14 Días a un amigo. Cuando complete su 1er entrenamiento, ambos suman +7 días gratis reales en la App.',
             unlocked: true,
-            statusLabel: '+7 DÍAS / AMIGO',
-            actionHtml: `<button type="button" class="btn-streak-share-guest" data-referral-url="${escapeHTML(referralUrl)}" style="margin-top: 6px; width: 100%; background: #E5CBA7; color: #080809; border: none; border-radius: 8px; padding: 6px 10px; font-size: 10.5px; font-weight: 800; cursor: pointer;">Compartir Pase por WhatsApp →</button>`
+            statusLabel: '+7 DÍAS POR AMIGO',
+            ctaText: 'Compartir Pase por WhatsApp →'
         }
     ];
 
-    const html = cards.map(c => `
-        <div style="background: #18181B; border: 1px solid ${c.unlocked ? 'rgba(229, 203, 167, 0.45)' : 'rgba(255, 255, 255, 0.07)'}; border-radius: 12px; padding: 12px 13px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px;">
-            <div>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 4px;">
-                    <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: ${c.unlocked ? '#E5CBA7' : '#A1A1AA'};">${escapeHTML(c.eyebrow)}</span>
-                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 800; letter-spacing: 0.6px; color: ${c.unlocked ? '#080809' : '#A1A1AA'}; background: ${c.unlocked ? '#E5CBA7' : 'rgba(255,255,255,0.06)'}; padding: 2px 7px; border-radius: 5px; font-variant-numeric: tabular-nums;">
-                        ${c.unlocked ? unlockSvg : lockSvg}
-                        <span>${escapeHTML(c.statusLabel)}</span>
-                    </span>
-                </div>
-                <h4 style="font-size: 12.5px; font-weight: 800; color: #FFFFFF; margin: 0 0 3px 0; line-height: 1.3;">
-                    ${escapeHTML(c.title)}
-                </h4>
-                <p style="font-size: 11px; color: #A1A1AA; margin: 0; line-height: 1.38;">
-                    ${escapeHTML(c.desc)}
-                </p>
-            </div>
-            ${c.actionHtml || ''}
-        </div>
-    `).join('');
+    window._sensRewardsCache = cards;
 
-    if (dashGrid) dashGrid.innerHTML = html;
-    if (nutriGrid) nutriGrid.innerHTML = html;
+    // Renderizado Compacto en Micro-Chips (Zero Bloat - Foco en Flujo de Inicio)
+    const chipsContainer = document.getElementById('dashUnlockablesChipsStrip') || document.getElementById('dashUnlockablesCardsGrid');
+    if (chipsContainer) {
+        chipsContainer.innerHTML = cards.map(c => `
+            <button type="button" class="sens-unlock-micro-chip ${c.unlocked ? 'unlocked' : ''}" onclick="window.openSensRewardDeepDiveSheet('${c.key}')" title="Tocar para ver detalle y beneficios">
+                <span class="sens-unlock-chip-icon">
+                    ${c.unlocked ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>` : `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`}
+                </span>
+                <span>${escapeHTML(c.shortLabel)}</span>
+            </button>
+        `).join('');
+    }
 
-    document.querySelectorAll('.btn-streak-share-guest').forEach(btn => {
-        btn.onclick = (e) => {
-            e.stopPropagation();
-            const url = btn.getAttribute('data-referral-url') || referralUrl;
-            try { navigator.clipboard.writeText(url); } catch (_) {}
-            const waMsg = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico (fuerza, postura y cálculo nutricional). Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${url}`);
-            window.open(`https://wa.me/?text=${waMsg}`, '_blank');
-        };
-    });
+    if (nutriGrid) {
+        nutriGrid.innerHTML = chipsContainer ? chipsContainer.innerHTML : '';
+    }
+};
+
+window.openSensRewardDeepDiveSheet = function(rewardKey) {
+    const sheet = document.getElementById('rewardDeepDiveBottomSheet');
+    if (!sheet) return;
+    const cards = window._sensRewardsCache || [];
+    const reward = cards.find(c => c.key === rewardKey) || cards[0];
+    if (!reward) return;
+
+    const titleEl = document.getElementById('rewardSheetTitle');
+    const eyebrowEl = document.getElementById('rewardSheetEyebrow');
+    const descEl = document.getElementById('rewardSheetDesc');
+    const statusTag = document.getElementById('rewardSheetStatusTag');
+    const actionWrap = document.getElementById('rewardSheetActionContainer');
+
+    if (titleEl) titleEl.textContent = reward.title;
+    if (eyebrowEl) eyebrowEl.textContent = reward.eyebrow;
+    if (descEl) descEl.textContent = reward.desc;
+    if (statusTag) {
+        statusTag.textContent = reward.statusLabel;
+        statusTag.style.background = reward.unlocked ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.08)';
+        statusTag.style.color = reward.unlocked ? '#34D399' : '#A1A1AA';
+    }
+
+    if (actionWrap) {
+        const refCode = AppState.profile?.referral_code || 'SENS-VIP';
+        const referralUrl = `https://makesens.online/?ref=${encodeURIComponent(refCode)}`;
+        if (reward.key === 'viral_guest_pass_7days') {
+            actionWrap.innerHTML = `
+                <button type="button" class="btn btn-primary btn-full" onclick="window.shareSensReferralCode && window.shareSensReferralCode()" style="padding: 12px; font-weight: 800; font-size: 13px;">
+                    Compartir Pase por WhatsApp (+7d para vos) →
+                </button>
+            `;
+        } else if (reward.key === 'weekend_social_refeed') {
+            actionWrap.innerHTML = `
+                <button type="button" class="btn btn-outline btn-full" onclick="window.closeSensRewardDeepDiveSheet(); if(typeof switchPortalView==='function') switchPortalView('nutritionView');" style="padding: 11px; font-weight: 700; font-size: 12px; border-color: rgba(229,203,167,0.4); color: #E5CBA7;">
+                    Ver en Nutrición & Hábitos →
+                </button>
+            `;
+        } else {
+            actionWrap.innerHTML = `
+                <button type="button" class="btn btn-outline btn-full" onclick="window.closeSensRewardDeepDiveSheet(); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();" style="padding: 11px; font-weight: 700; font-size: 12px; border-color: rgba(229,203,167,0.4); color: #E5CBA7;">
+                    Ver Estado de Membresía y Días →
+                </button>
+            `;
+        }
+    }
+
+    sheet.classList.add('active');
+};
+
+window.closeSensRewardDeepDiveSheet = function() {
+    const sheet = document.getElementById('rewardDeepDiveBottomSheet');
+    if (sheet) sheet.classList.remove('active');
+};
+
+window.shareSensReferralCode = function() {
+    const refCode = AppState.profile?.referral_code || 'SENS-VIP';
+    const referralUrl = `https://makesens.online/?ref=${encodeURIComponent(refCode)}`;
+    try { navigator.clipboard.writeText(referralUrl); } catch (_) {}
+    const waMsg = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico (fuerza, postura y cálculo nutricional). Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${referralUrl}`);
+    window.open(`https://wa.me/?text=${waMsg}`, '_blank');
 };
 
 // =============================================================================

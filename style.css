@@ -6399,11 +6399,14 @@ input[type="range"]::-moz-range-track {
    12. OPTIMIZACIÓN UX MOBILE & ESTILO COMPACTO — CUESTIONARIO Y PORTAL
    ========================================================================== */
 @media (max-width: 768px) {
-    /* Barra Superior del Portal en Mobile */
+    /* Barra Superior del Portal en Mobile con Safe Area para Dynamic Island / Notch de iPhone 15/16 */
     .portal-topbar {
-        padding: 8px 12px !important;
+        padding-top: max(10px, env(safe-area-inset-top, 10px)) !important;
+        padding-bottom: 8px !important;
+        padding-left: max(12px, env(safe-area-inset-left, 12px)) !important;
+        padding-right: max(12px, env(safe-area-inset-right, 12px)) !important;
+        min-height: calc(52px + env(safe-area-inset-top, 0px)) !important;
         gap: 8px !important;
-        min-height: 48px;
     }
     .portal-brand {
         gap: 6px !important;
@@ -16701,7 +16704,7 @@ body.in-portal #coachHubView {
 
 @media (max-width: 600px) {
     #coachHubView {
-        padding: 12px 8px 120px 8px !important;
+        padding: max(16px, env(safe-area-inset-top, 16px)) max(10px, env(safe-area-inset-left, 10px)) calc(120px + env(safe-area-inset-bottom, 20px)) max(10px, env(safe-area-inset-right, 10px)) !important;
     }
     .coach-hub-header {
         margin-bottom: 8px !important;
@@ -21694,6 +21697,231 @@ body.sens-power-save *::after {
         -webkit-backdrop-filter: blur(10px) !important;
     }
 }
+
+/* =============================================================================
+   ARQUITECTURA MÓVIL SENIOR (iOS 120Hz PRO-MOTION & ERGONOMÍA QUIET LUXURY)
+   ============================================================================= */
+
+/* Universal: Eliminación de retardo de 300ms y toques fantasma en Safari iOS / iPhone 15 */
+button,
+a,
+input,
+select,
+textarea,
+.btn,
+.pill,
+.sens-week-day-pill,
+.coach-week-day-pill,
+.sens-dock-item,
+.portal-nav-item,
+.coach-subnav-btn,
+.coach-modality-btn,
+.coach-food-cb,
+.btn-coach-stepper {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* 1. Tarjeta / Tira Compacta del Plan Actual en Dashboard (Cero Sobrecarga Visual) */
+.sens-plan-status-strip {
+    background: #121214;
+    border: 1px solid rgba(229, 203, 167, 0.28);
+    border-radius: 14px;
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    margin-bottom: 12px;
+}
+
+.sens-plan-status-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.sens-plan-tier-badge {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #080809;
+    background: #E5CBA7;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sens-plan-title-compact {
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF;
+    white-space: nowrap;
+}
+
+.sens-plan-days-tag {
+    font-size: 11px;
+    color: #A1A1AA;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sens-plan-status-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+}
+
+.btn-sens-plan-upgrade {
+    background: #E5CBA7;
+    color: #080809;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 11px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-sens-plan-upgrade:active {
+    transform: scale(0.96);
+}
+
+.btn-sens-plan-share {
+    background: rgba(229, 203, 167, 0.12);
+    color: #E5CBA7;
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    border-radius: 8px;
+    padding: 6px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* 2. Tira Horizontal Compacta de Micro-Chips de Recompensas en Racha */
+.sens-streak-unlock-chips-strip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sens-streak-unlock-chips-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.sens-unlock-micro-chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #D4D4D8;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: all 0.2s ease;
+}
+
+.sens-unlock-micro-chip:active {
+    transform: scale(0.95);
+}
+
+.sens-unlock-micro-chip.unlocked {
+    background: rgba(229, 203, 167, 0.14);
+    border-color: rgba(229, 203, 167, 0.45);
+    color: #E5CBA7;
+}
+
+.sens-unlock-micro-chip.bonus {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.35);
+    color: #34D399;
+}
+
+.sens-unlock-chip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 3. Bottom Sheet de Deep-Dive de Recompensas */
+.sens-reward-deepdive-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(8, 8, 9, 0.82);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sens-reward-deepdive-sheet.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sens-reward-sheet-card {
+    background: #141418;
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 500px;
+    padding: 16px 20px max(24px, env(safe-area-inset-bottom, 24px));
+    box-sizing: border-box;
+    box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.85);
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sens-reward-deepdive-sheet.active .sens-reward-sheet-card {
+    transform: translateY(0);
+}
+
+.sens-reward-sheet-handle {
+    width: 38px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    margin: 0 auto 14px;
+}
+
+/* 4. Botón Maestro de Finalizar Serie (Flujo Rápido sin Pausas Inútiles) */
+.btn-master-finalizar-set {
+    background: #E5CBA7 !important;
+    color: #080809 !important;
+    border: 1px solid #F2DEBE !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 18px rgba(229, 203, 167, 0.35) !important;
+}
+
+.btn-master-finalizar-set:active {
+    transform: scale(0.97) !important;
+}
+
 
 
 

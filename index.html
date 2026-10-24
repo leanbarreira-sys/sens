@@ -241,52 +241,32 @@
                 </div>
                 <div class="sens-hero-followup play-entrance" id="sensHeroFollowup">
                     <p class="hero-description-train">
-                        Fuerza progresiva, postura sin dolor y nutrición inteligente en CABA y Online. Elegí tu nivel de acompañamiento y escalá a tu ritmo.
+                        Fuerza progresiva, postura sin dolor y nutrición inteligente. Probalo gratis 7 días en la App o entrená 1 a 1 con Nico en CABA y Online.
                     </p>
                     <div class="hero-cta-group" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                         <button type="button" class="btn btn-primary" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" data-agent-action="start_free_7day_app_trial" style="padding: 13px 22px; font-weight: 800;">
-                            Empezar Plan Free (7 Días Gratis) →
+                            Probar App 7 Días Gratis →
                         </button>
                         <a href="#planes" class="btn hero-btn-apple-dark" data-agent-action="view_pricing_plans">
-                            Comparar los 4 Planes SENS
+                            Ver los 4 Planes SENS
                         </a>
                         <a href="#sumate" class="btn btn-outline hero-btn-secondary" data-agent-action="schedule_initial_assessment">
-                            Entrenar con Nico (Online / CABA)
+                            Entrenar con Nico
                         </a>
                     </div>
-                    <!-- Matriz Ejecutiva 4 Perfiles en Hero (Lectura en 5 segundos) -->
-                    <div class="sens-hero-tiers-strip" style="margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; max-width: 760px;">
-                        <div onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" style="cursor: pointer; background: rgba(18, 18, 20, 0.86); border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 12px; padding: 9px 11px; text-align: left;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                                <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 1px; color: #E5CBA7; text-transform: uppercase;">1. PLAN FREE</span>
-                                <span style="font-size: 10px; font-weight: 800; color: #10B981; font-variant-numeric: tabular-nums;">7 Días $0</span>
-                            </div>
-                            <div style="font-size: 11px; color: #F4F4F5; font-weight: 700;">App + Rutina 3 Días</div>
-                            <div style="font-size: 10px; color: #A1A1AA;">Ideal para probar hoy</div>
-                        </div>
-                        <a href="#planes" style="text-decoration: none; background: rgba(18, 18, 20, 0.86); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 9px 11px; text-align: left;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                                <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 1px; color: #E5CBA7; text-transform: uppercase;">2. APP PREMIUM</span>
-                                <span style="font-size: 10px; font-weight: 800; color: #FFFFFF; font-variant-numeric: tabular-nums;">$24.9k / $59.9k</span>
-                            </div>
-                            <div style="font-size: 11px; color: #F4F4F5; font-weight: 700;">Mensual o 3 Meses (-20%)</div>
-                            <div style="font-size: 10px; color: #A1A1AA;">Autónomo 100% digital</div>
+                    <!-- Tira Horizontal Apple-Style de los 4 Escalones SENS (Cero Ocupación Vertical) -->
+                    <div class="sens-hero-compact-pills" style="margin-top: 14px; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; -ms-overflow-style: none;">
+                        <button type="button" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" style="flex-shrink: 0; background: rgba(229, 203, 167, 0.16); color: #E5CBA7; border: none; border-radius: 999px; padding: 6px 13px; font-size: 11px; font-weight: 700; cursor: pointer; font-variant-numeric: tabular-nums;">
+                            1. Plan Free • 7 Días $0
+                        </button>
+                        <a href="#planes" onclick="setTimeout(()=>{const b=document.getElementById('btnModeApp');if(b)b.click();},100);" style="flex-shrink: 0; text-decoration: none; background: rgba(24, 24, 27, 0.85); color: #F4F4F5; border: none; border-radius: 999px; padding: 6px 13px; font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums;">
+                            2. App Premium • $24.9k / 3M $59.9k
                         </a>
-                        <a href="#planes" onclick="setTimeout(()=>{const b=document.getElementById('btnModeOnline');if(b)b.click();},150);" style="text-decoration: none; background: rgba(18, 18, 20, 0.86); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 9px 11px; text-align: left;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                                <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 1px; color: #E5CBA7; text-transform: uppercase;">3. ONLINE 1 A 1</span>
-                                <span style="font-size: 10px; font-weight: 800; color: #FFFFFF; font-variant-numeric: tabular-nums;">$40k a $90k</span>
-                            </div>
-                            <div style="font-size: 11px; color: #F4F4F5; font-weight: 700;">Básico o Videollamadas</div>
-                            <div style="font-size: 10px; color: #A1A1AA;">Plan a medida con Nico</div>
+                        <a href="#planes" onclick="setTimeout(()=>{const b=document.getElementById('btnModeOnline');if(b)b.click();},100);" style="flex-shrink: 0; text-decoration: none; background: rgba(24, 24, 27, 0.85); color: #F4F4F5; border: none; border-radius: 999px; padding: 6px 13px; font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums;">
+                            3. Online 1:1 • Con Nico
                         </a>
-                        <a href="#planes" onclick="setTimeout(()=>{const b=document.getElementById('btnModePresencial');if(b)b.click();},150);" style="text-decoration: none; background: rgba(18, 18, 20, 0.86); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 9px 11px; text-align: left;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                                <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 1px; color: #E5CBA7; text-transform: uppercase;">4. PRESENCIAL CABA</span>
-                                <span style="font-size: 10px; font-weight: 800; color: #FFFFFF; font-variant-numeric: tabular-nums;">Desde $85k</span>
-                            </div>
-                            <div style="font-size: 11px; color: #F4F4F5; font-weight: 700;">1 a 1, Dúo o Trío</div>
-                            <div style="font-size: 10px; color: #A1A1AA;">Palermo/Belgrano (Gym incl.)</div>
+                        <a href="#planes" onclick="setTimeout(()=>{const b=document.getElementById('btnModePresencial');if(b)b.click();},100);" style="flex-shrink: 0; text-decoration: none; background: rgba(24, 24, 27, 0.85); color: #F4F4F5; border: none; border-radius: 999px; padding: 6px 13px; font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums;">
+                            4. Presencial CABA • 1:1
                         </a>
                     </div>
                 </div>
@@ -532,132 +512,22 @@
 
         <!-- Precios & Modalidades (Con Diferencial Real por Frecuencia & Sin Costo Gym) -->
         <section class="section-sens" id="planes">
-            <div class="section-head" style="margin-bottom: 22px;">
-                <span class="section-eyebrow">Escalera de Valor SENS • 4 Niveles Claros</span>
+            <div class="section-head" style="margin-bottom: 18px;">
+                <span class="section-eyebrow">Escalera SENS • Sin Costos Ocultos</span>
                 <h2 class="section-main-title">ELEGÍ TU PLAN &amp; <span class="text-champagne">CÓMO ESCALAR</span></h2>
-                <p class="section-lead" style="font-size: 0.94rem; margin-bottom: 0; max-width: 680px;">
-                    Empezá hoy sin cargo o escalá según el nivel de personalización humana que buscás: desde App Autónoma hasta Seguimiento 1 a 1 con Nico.
+                <p class="section-lead" style="font-size: 0.92rem; margin-bottom: 0; max-width: 600px;">
+                    Empezá hoy gratis en la App Autónoma o sumate al seguimiento humano 1 a 1 con Nico en CABA y Online.
                 </p>
             </div>
 
-            <!-- MATRIZ EJECUTIVA DE PERFILES Y VENTAJAS (4 ESCALONES SENS) -->
-            <div class="sens-four-tiers-overview-grid" style="max-width: 1040px; margin: 0 auto 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px;">
-                <!-- NIVEL 1: PLAN FREE -->
-                <div style="background: #121214; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
-                    <div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #A1A1AA; text-transform: uppercase;">NIVEL 1 • INICIO</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #10B981; background: rgba(16, 185, 129, 0.14); padding: 3px 8px; border-radius: 999px;">7 DÍAS SIN CARGO</span>
-                        </div>
-                        <h3 style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0;">Plan Free (App Trial)</h3>
-                        <div style="font-size: 1.35rem; font-weight: 800; color: #E5CBA7; font-variant-numeric: tabular-nums; margin-bottom: 8px;">$0 <span style="font-size: 11px; font-weight: 500; color: #A1A1AA;">/ 7 días (+3 días bonus)</span></div>
-                        <p style="font-size: 12px; color: #D4D4D8; margin: 0 0 10px 0; line-height: 1.45;">
-                            <strong>Perfil:</strong> Quienes quieren probar el sistema hoy mismo sin tarjeta.
-                        </p>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 11.5px; color: #A1A1AA; display: flex; flex-direction: column; gap: 6px;">
-                            <li>✓ Rutina base de 3 días en video HD</li>
-                            <li>✓ Calorías y macros Mifflin-St Jeor</li>
-                            <li>✓ +7 días gratis por cada amigo invitado</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline btn-full btn-sm" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" style="border-color: rgba(229, 203, 167, 0.45); color: #E5CBA7; font-weight: 800;">
-                        Activar 7 Días Gratis →
-                    </button>
-                </div>
-
-                <!-- NIVEL 2: PLAN APP PREMIUM (MENSUAL O 3 MESES) -->
-                <div style="background: #141417; border: 1px solid rgba(229, 203, 167, 0.4); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; box-shadow: 0 14px 34px rgba(0,0,0,0.4);">
-                    <div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #E5CBA7; text-transform: uppercase;">NIVEL 2 • AUTÓNOMO</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #080809; background: #E5CBA7; padding: 3px 8px; border-radius: 999px;">MENSUAL O 3 MESES</span>
-                        </div>
-                        <h3 style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0;">Plan App Premium</h3>
-                        <div style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; font-variant-numeric: tabular-nums; margin-bottom: 2px;">
-                            $24.900 <span style="font-size: 11px; font-weight: 500; color: #A1A1AA;">/ mes</span>
-                        </div>
-                        <div style="font-size: 11.5px; color: #10B981; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 8px;">
-                            Pack 3 Meses: $59.900 ARS (Ahorrás 20%)
-                        </div>
-                        <p style="font-size: 12px; color: #D4D4D8; margin: 0 0 10px 0; line-height: 1.45;">
-                            <strong>Perfil:</strong> Autónomos que entrenan por su cuenta con estructura y métricas.
-                        </p>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 11.5px; color: #A1A1AA; display: flex; flex-direction: column; gap: 6px;">
-                            <li>✓ Acceso ilimitado a Rutinas, Videos y Timer</li>
-                            <li>✓ Nutrición completa + 500 alimentos</li>
-                            <li>✓ Rachas y Permiso Social (+500 kcal fin de sem.)</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-full btn-sm" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" style="font-weight: 800;">
-                        Elegir App Premium →
-                    </button>
-                </div>
-
-                <!-- NIVEL 3: SEGUIMIENTO ONLINE 1 A 1 -->
-                <div style="background: #121214; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
-                    <div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #E5CBA7; text-transform: uppercase;">NIVEL 3 • DISTANCIA</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #E5CBA7; background: rgba(229, 203, 167, 0.14); padding: 3px 8px; border-radius: 999px;">2 VARIANTES</span>
-                        </div>
-                        <h3 style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0;">Seguimiento Online</h3>
-                        <div style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; font-variant-numeric: tabular-nums; margin-bottom: 2px;">
-                            $40.000 <span style="font-size: 11px; font-weight: 500; color: #A1A1AA;">Básico / mes</span>
-                        </div>
-                        <div style="font-size: 11.5px; color: #E5CBA7; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 8px;">
-                            Online Premium (Videollamadas): $90.000 / mes
-                        </div>
-                        <p style="font-size: 12px; color: #D4D4D8; margin: 0 0 10px 0; line-height: 1.45;">
-                            <strong>Perfil:</strong> Buscan planificación humana a medida de Nico desde cualquier ciudad.
-                        </p>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 11.5px; color: #A1A1AA; display: flex; flex-direction: column; gap: 6px;">
-                            <li>✓ Incluye App Premium 100% bonificada</li>
-                            <li>✓ Rutina diseñada a medida por Nico</li>
-                            <li>✓ Soporte WhatsApp y corrección por video</li>
-                        </ul>
-                    </div>
-                    <a href="#planes" onclick="const b=document.getElementById('btnModeOnline');if(b)b.click();" class="btn btn-outline btn-full btn-sm" style="border-color: rgba(229, 203, 167, 0.45); color: #E5CBA7; font-weight: 800; text-align: center;">
-                        Ver Online Básico / Premium →
-                    </a>
-                </div>
-
-                <!-- NIVEL 4: SEGUIMIENTO PRESENCIAL CABA (POR PERSONA) -->
-                <div style="background: #121214; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
-                    <div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #E5CBA7; text-transform: uppercase;">NIVEL 4 • CABA VIP</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #E5CBA7; background: rgba(229, 203, 167, 0.14); padding: 3px 8px; border-radius: 999px;">GYM INCLUIDO</span>
-                        </div>
-                        <h3 style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0;">Presencial con Nico</h3>
-                        <div style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; font-variant-numeric: tabular-nums; margin-bottom: 2px;">
-                            Desde $85.000 <span style="font-size: 11px; font-weight: 500; color: #A1A1AA;">/ persona</span>
-                        </div>
-                        <div style="font-size: 11px; color: #E5CBA7; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 8px;">
-                            1a1 ($130k-$260k) • Dúo ($100k-$195k) • Trío ($85k-$170k)
-                        </div>
-                        <p style="font-size: 12px; color: #D4D4D8; margin: 0 0 10px 0; line-height: 1.45;">
-                            <strong>Perfil:</strong> Máxima exigencia técnica y cuidado articular en vivo en Palermo/Belgrano.
-                        </p>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 11.5px; color: #A1A1AA; display: flex; flex-direction: column; gap: 6px;">
-                            <li>✓ 1x, 2x o 3x por semana (1a1, Dúo o Trío)</li>
-                            <li>✓ Cuota de gimnasio sede 100% incluida</li>
-                            <li>✓ App Premium + Seguimiento total incluidos</li>
-                        </ul>
-                    </div>
-                    <a href="#planes" onclick="const b=document.getElementById('btnModePresencial');if(b)b.click();" class="btn btn-outline btn-full btn-sm" style="border-color: rgba(229, 203, 167, 0.45); color: #E5CBA7; font-weight: 800; text-align: center;">
-                        Ver Variantes Presenciales →
-                    </a>
-                </div>
-            </div>
-
-            <!-- DETALLE DE ARANCELES PRESENCIAL Y ONLINE -->
-            <div style="text-align: center; margin-bottom: 14px;">
-                <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-primary);">EXPLORAR VARIANTES DE SEGUIMIENTO HUMANO (ONLINE &amp; PRESENCIAL POR PERSONA)</span>
-            </div>
-
-            <!-- Selector Segmentado de Modalidades (Estilo Apple / Brandbook) -->
-            <div class="pricing-selector-container" style="margin-bottom: 22px;">
+            <!-- Selector Segmentado Unificado de 3 Caminos (App Free & Premium / Online 1:1 / Presencial CABA) -->
+            <div class="pricing-selector-container" style="margin-bottom: 20px;">
                 <div class="pricing-main-nav" role="tablist" aria-label="Modalidad Principal">
+                    <button class="pricing-main-btn" data-mode="app" role="tab" aria-selected="false"
+                        id="btnModeApp">
+                        <span class="btn-text">App SENS</span>
+                        <span class="btn-badge">Free 7d / Premium</span>
+                    </button>
                     <button class="pricing-main-btn active" data-mode="presencial" role="tab" aria-selected="true"
                         id="btnModePresencial">
                         <span class="btn-text">Presencial (CABA)</span>
@@ -665,12 +535,12 @@
                     </button>
                     <button class="pricing-main-btn" data-mode="online" role="tab" aria-selected="false"
                         id="btnModeOnline">
-                        <span class="btn-text">Online Asesorado</span>
-                        <span class="btn-badge">A tu ritmo</span>
+                        <span class="btn-text">Online 1 a 1</span>
+                        <span class="btn-badge">Con Nico</span>
                     </button>
                 </div>
 
-                <!-- Selector Nivel 2: Sub-selector Presencial (Visible por defecto) -->
+                <!-- Selector Nivel 2: Sub-selector Presencial (Visible en modo Presencial) -->
                 <div class="presencial-sub-selector-container" id="presencialSubSelector" style="display: flex;">
                     <div class="pricing-sub-nav" role="tablist" aria-label="Tipo de Presencial">
                         <button class="pricing-sub-btn active" data-sub="presencial-ind" role="tab" aria-selected="true"
@@ -679,8 +549,81 @@
                         </button>
                         <button class="pricing-sub-btn" data-sub="presencial-grupos" role="tab" aria-selected="false"
                             id="btnSubGrupos">
-                            Grupos Reducidos (Dúos / Tríos)
+                            Grupos por Persona (Dúos / Tríos)
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- VISTA 0: APP SENS (PLAN FREE 7D + PREMIUM MENSUAL Y 3 MESES) -->
+            <!-- ============================================================ -->
+            <div class="pricing-tab-content" id="tab-app" style="display:none;">
+                <div class="touch-carousel-wrap">
+                    <div class="touch-carousel pricing-carousel" id="appCarousel">
+                        <!-- 1. Plan App Premium Trimestral (3 Meses - Ahorro 20%) -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card highlight">
+                                <span class="train-plan-badge">AHORRO 20% • RECOMENDADO</span>
+                                <span class="plan-purpose-tag">NIVEL 2B • HÁBITO CONSOLIDADO (90 DÍAS)</span>
+                                <h3 class="plan-title">App Premium • 3 Meses</h3>
+                                <div class="plan-concept-tagline">Para sostener un ciclo completo de recomposición corporal y fuerza con acceso ilimitado a la plataforma.</div>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$59.900</span>
+                                    <span class="plan-period">/ 3 meses (USD $45)</span>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>Acceso ilimitado a Rutinas en Video HD y Timer</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>Nutrición Mifflin-St Jeor + 500 alimentos</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>Rachas y Permiso Social (+500 kcal fin de semana)</span></li>
+                                </ul>
+                                <button type="button" class="btn btn-primary btn-full" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" data-agent-action="start_free_7day_app_trial">Empezar 7 Días Gratis →</button>
+                            </div>
+                        </div>
+
+                        <!-- 2. Plan Free (Prueba 7 Días) -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card">
+                                <span class="plan-purpose-tag">NIVEL 1 • PUNTO DE PARTIDA</span>
+                                <h3 class="plan-title">Plan Free (7 Días)</h3>
+                                <div class="plan-concept-tagline">Ideal para probar el método hoy mismo sin tarjeta y recibir tu diagnóstico y rutina en 0 segundos.</div>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$0</span>
+                                    <span class="plan-period">/ 7 días (+3 días bonus)</span>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>Programa Maestro de 3 Días de Fuerza y Postura</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>+3 días gratis al cumplir 3 sesiones en semana 1</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>+7 días gratis por cada amigo invitado</span></li>
+                                </ul>
+                                <button type="button" class="btn btn-outline btn-full" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()" data-agent-action="start_free_7day_app_trial">Crear Cuenta Gratis</button>
+                            </div>
+                        </div>
+
+                        <!-- 3. Plan App Premium Mensual -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card">
+                                <span class="plan-purpose-tag">NIVEL 2A • FLEXIBILIDAD MENSUAL</span>
+                                <h3 class="plan-title">App Premium • Mensual</h3>
+                                <div class="plan-concept-tagline">Para personas autónomas que entrenan en su gimnasio o casa con estructura profesional mes a mes.</div>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$24.900</span>
+                                    <span class="plan-period">/ mes (USD $19)</span>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>Renovación mensual flexible sin permanencia</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>Videos técnicos de Nico + Registro de cargas</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12" /></svg><span>Podés escalar a Online 1:1 cuando quieras</span></li>
+                                </ul>
+                                <button type="button" class="btn btn-outline btn-full" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()">Elegir Mensual</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-dots" id="appDots">
+                        <div class="carousel-dot active" data-index="0"></div>
+                        <div class="carousel-dot" data-index="1"></div>
+                        <div class="carousel-dot" data-index="2"></div>
                     </div>
                 </div>
             </div>
@@ -3166,16 +3109,9 @@
                         </div>
                     </div>
 
-                    <!-- Recompensas & Desbloqueos Integrados en Racha (Foco en Growth & Constancia) -->
-                    <div class="sens-streak-rewards-integrated" id="dashUnlockablesModule" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
-                            <div>
-                                <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #E5CBA7; display: block;">TUS RECOMPENSAS POR MANTENER LA RACHA</span>
-                                <div style="font-size: 11.5px; color: #D4D4D8;">Entrená 3 veces por semana o invitá amigos para desbloquear beneficios reales:</div>
-                            </div>
-                            <span id="dashWeeklySessionsProgressBadge" style="font-size: 10.5px; font-weight: 800; color: #080809; background: #E5CBA7; padding: 4px 10px; border-radius: 999px; font-variant-numeric: tabular-nums;">0 / 3 sesiones esta sem.</span>
-                        </div>
-                        <div id="dashUnlockablesCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 9px;">
+                    <!-- Recompensas & Desbloqueos Compactos (Quiet Luxury - Deep-Dive en Bottom Sheet) -->
+                    <div class="sens-streak-rewards-compact" id="dashUnlockablesModule">
+                        <div class="sens-streak-unlock-chips-strip" id="dashUnlockablesChipsStrip">
                             <!-- Inyectado dinámicamente por renderSensUnlockablesModule() en app.js -->
                         </div>
                     </div>
@@ -4957,10 +4893,15 @@
                                         Cargá masivamente la semana o gestioná el mes completo desde el calendario.
                                     </p>
                                 </div>
-                                <button type="button" class="btn btn-outline btn-sm" id="btnOpenCoachTemplatesModal" style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; padding: 5px 12px; font-size: 11px; border-radius: 8px; background: #FFFFFF; display: inline-flex; align-items: center; gap: 4px;">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                                    <span>Plantillas de Nico</span>
-                                </button>
+                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnQuickAssignStarterRoutine" onclick="window.applyCoachInstantWorkoutPlan && window.applyCoachInstantWorkoutPlan()" style="font-weight: 800; padding: 6px 13px; font-size: 11px; border-radius: 8px; background: #9E7D4B; color: #FFFFFF; border: none; cursor: pointer;">
+                                        ⚡ Auto-Asignar Rutina 3 Días
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-sm" id="btnOpenCoachTemplatesModal" style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; padding: 5px 12px; font-size: 11px; border-radius: 8px; background: #FFFFFF; display: inline-flex; align-items: center; gap: 4px;">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                        <span>Plantillas</span>
+                                    </button>
+                                </div>
                             </div>
                             
                             <!-- Toggle Superior: Creación Masiva Paso a Paso vs Visión Mensual vs Visión por Músculo (3 Tabs 100% responsive) -->
@@ -5432,7 +5373,10 @@
                                         Cargá masivamente la semana, gestioná el mes completo o explorá los 500 alimentos.
                                     </p>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnQuickAssignStarterNutrition" onclick="window.applyCoachInstantNutritionPlan && window.applyCoachInstantNutritionPlan()" style="font-weight: 800; padding: 6px 13px; font-size: 11px; border-radius: 8px; background: #9E7D4B; color: #FFFFFF; border: none; cursor: pointer;">
+                                        ⚡ Auto-Asignar Plan Nutricional
+                                    </button>
                                     <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet" id="btnCoachNutriAthletePicker" aria-label="Cambiar alumno">
                                         <span class="status-dot status-dot-active coachSyncStatusDot"></span>
                                         <span class="pill-athlete-name coachSyncAthleteName">Seleccionar Alumno</span>
@@ -7651,8 +7595,51 @@
     <!-- Base de Datos Maestra de Ejercicios SENS (52 Ejercicios Oficiales) -->
     <script src="exercises_db.js?v=9.8"></script>
 
+    <!-- =========================================================================
+         BOTTOM SHEET NATIVO: DEEP-DIVE DE RECOMPENSAS Y DESBLOQUEOS
+         ========================================================================= -->
+    <div class="sens-reward-deepdive-sheet" id="rewardDeepDiveBottomSheet" onclick="if(event.target===this) window.closeSensRewardDeepDiveSheet && window.closeSensRewardDeepDiveSheet();">
+        <div class="sens-reward-sheet-card">
+            <div class="sens-reward-sheet-handle"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div id="rewardSheetIconWrap" style="width: 38px; height: 38px; border-radius: 12px; background: rgba(229, 203, 167, 0.16); display: flex; align-items: center; justify-content: center; color: #E5CBA7; font-weight: 800;">
+                        ★
+                    </div>
+                    <div>
+                        <span id="rewardSheetEyebrow" style="font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #E5CBA7; display: block;">RECOMPENSA SENS</span>
+                        <h3 id="rewardSheetTitle" style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin: 0; line-height: 1.25;">Permiso Social Fin de Semana</h3>
+                    </div>
+                </div>
+                <button type="button" onclick="window.closeSensRewardDeepDiveSheet && window.closeSensRewardDeepDiveSheet()" aria-label="Cerrar" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #FFFFFF; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer; flex-shrink: 0;">✕</button>
+            </div>
+            <div id="rewardSheetStatusTag" style="display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; margin-bottom: 12px; background: rgba(16, 185, 129, 0.15); color: #34D399;">
+                DESBLOQUEADO
+            </div>
+            <p id="rewardSheetDesc" style="font-size: 12.5px; color: #D4D4D8; line-height: 1.45; margin-bottom: 16px;">
+                Explicación de la recompensa.
+            </p>
+            <div id="rewardSheetActionContainer">
+                <!-- Botón dinámico inyectado por app.js -->
+            </div>
+        </div>
+    </div>
+
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=10.3"></script>
+    <script src="app.js?v=10.4"></script>
+
+    <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
+    <script>
+        (function() {
+            setTimeout(function() {
+                var s = document.getElementById('heroSkeleton');
+                if (s && !s.classList.contains('fade-out')) {
+                    s.classList.add('fade-out');
+                    setTimeout(function() { if (s && s.parentNode) s.style.display = 'none'; }, 400);
+                }
+            }, 350);
+        })();
+    </script>
 </body>
 
 </html>
