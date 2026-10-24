@@ -18037,19 +18037,144 @@ body.in-portal #coachHubView {
     border: 1px solid #FCA5A5;
 }
 
-/* Micro-indicador de estado en calendario mensual */
+/* Micro-indicador de estado en calendario mensual (Sincronizado con Alumno) */
 .coach-month-status-dot {
-    width: 6px;
-    height: 6px;
+    width: 6.5px;
+    height: 6.5px;
     border-radius: 50%;
     display: inline-block;
     flex-shrink: 0;
 }
-.coach-month-status-dot.conforme {
+.coach-month-status-dot.conforme,
+.coach-month-status-dot.completed {
     background: #10B981;
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.45);
+}
+.coach-month-status-dot.scheduled {
+    background: #E5CBA7;
+    box-shadow: 0 0 5px rgba(229, 203, 167, 0.4);
 }
 .coach-month-status-dot.desvio {
     background: #F59E0B;
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.45);
+}
+.coach-month-status-dot.unlogged {
+    background: #71717A;
+}
+.coach-month-status-dot.missed {
+    background: #EF4444;
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.45);
+}
+
+/* Barra de Referencia / Leyenda del Calendario Mensual */
+.coach-cal-legend-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+}
+.coach-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    color: #52525B;
+    font-weight: 600;
+}
+.coach-legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.coach-legend-dot.completed {
+    background: #10B981;
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.45);
+}
+.coach-legend-dot.scheduled {
+    background: #E5CBA7;
+    box-shadow: 0 0 5px rgba(229, 203, 167, 0.4);
+}
+.coach-legend-dot.desvio {
+    background: #F59E0B;
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.45);
+}
+.coach-legend-dot.unlogged {
+    background: #71717A;
+}
+
+/* Filas táctiles de selección múltiple de ejercicios en lote */
+.sens-batch-check-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    background: #18181B;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    margin-bottom: 6px;
+    user-select: none;
+}
+.sens-batch-check-row:hover {
+    background: #202024;
+    border-color: rgba(229, 203, 167, 0.3);
+}
+.sens-batch-check-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #E5CBA7;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Tarjeta individual de movimiento en cola para agregado masivo */
+.coach-batch-add-item {
+    background: #18181B;
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Tarjeta de Directivas y Sugerencias Clínicas de Nico en Evolución */
+.coach-directive-station-card {
+    background: #F8F9FA;
+    border: 1px solid rgba(229, 203, 167, 0.5);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.coach-suggestion-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #FFFFFF;
+    color: #18181B;
+    border: 1px solid #E4E4E7;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+.coach-suggestion-chip:active {
+    transform: scale(0.96);
+    background: #F4F4F5;
+}
+.coach-suggestion-chip:hover {
+    border-color: #E5CBA7;
+    color: #9E7D4B;
 }
 
 /* Modo Selección Múltiple en Calendario - Quiet Luxury Apple-Grade */

@@ -4790,6 +4790,31 @@
                             </div>
                         </div>
 
+                        <!-- ESTACIÓN DE SUGERENCIAS Y DIRECTIVAS DE NICO (SE MUESTRA AL ALUMNO EN SU PORTAL) -->
+                        <div class="coach-directive-station-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">DIRECTIVA &amp; SUGERENCIAS CLÍNICAS DE NICO</span>
+                                    <span style="font-size: 11px; color: #71717A;" id="evoDirectiveUpdatedTime">Visible en la pantalla de inicio del alumno</span>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" id="btnSaveCoachDirective" onclick="CoachEvolutionEngine.saveCoachDirective()" style="font-size: 11px; padding: 6px 14px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 8px; cursor: pointer;">
+                                    Guardar Directiva / Sugerencia
+                                </button>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <textarea id="coachDirectiveTextarea" class="input-control" rows="3" placeholder="Escribí aquí las sugerencias clínicas, foco técnico o indicaciones de carga para este alumno (ej: Priorizar pausa de 1s en sentadilla; mantener cadencia controlada y RIR 2)..." style="width: 100%; font-size: 13px; line-height: 1.5; background: #FFFFFF; color: #18181B; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px 12px; box-sizing: border-box; resize: vertical;"></textarea>
+                            </div>
+                            <!-- Chips táctiles de sugerencias rápidas -->
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+                                <span style="font-size: 10px; font-weight: 700; color: #71717A; text-transform: uppercase;">Atajos de Nico:</span>
+                                <button type="button" class="coach-suggestion-chip" onclick="CoachEvolutionEngine.appendSuggestionText('Cadencia controlada 3-0-1-0 sin acelerar la fase excéntrica.')">Cadencia 3-0-1-0</button>
+                                <button type="button" class="coach-suggestion-chip" onclick="CoachEvolutionEngine.appendSuggestionText('Priorizar rango completo y pausa de 1s en estiramiento articular.')">Pausa 1s en estiramiento</button>
+                                <button type="button" class="coach-suggestion-chip" onclick="CoachEvolutionEngine.appendSuggestionText('Subir +2.5kg en primer serie si RIR resultante es > 2.')">Sobrecarga +2.5kg</button>
+                                <button type="button" class="coach-suggestion-chip" onclick="CoachEvolutionEngine.appendSuggestionText('Mantener descarga activa: no superar RIR 3 en series principales.')">Descarga activa (RIR 3)</button>
+                                <button type="button" class="coach-suggestion-chip" onclick="CoachEvolutionEngine.appendSuggestionText('Priorizar 7.5h de sueño y consumo proteico de 1.8g/kg.')">Recuperación &amp; Sueño</button>
+                            </div>
+                        </div>
+
                         <!-- 1. ALERTAS & SUGERENCIAS ORIENTATIVAS DE TOMA DE DECISIONES -->
                         <div id="coachEvolutionAlertsContainer" style="margin-bottom: 18px;">
                             <!-- Inyectado dinámicamente con alertas basadas en tendencias reales -->
@@ -4889,6 +4914,20 @@
                                         <!-- Inyectado dinámicamente -->
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- 7. HISTORIAL DE ENTRENAMIENTOS & FEEDBACK DEL ALUMNO (Últimas Sesiones) -->
+                        <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 16px; margin-top: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <div>
+                                    <strong style="font-size: 13px; color: #121214;">Historial de Entrenamientos &amp; Feedback del Alumno</strong>
+                                    <div style="font-size: 11px; color: #71717A;">Registro de cumplimiento, RPE percibido y notas reportadas por el alumno.</div>
+                                </div>
+                                <span class="pill pill-champagne" style="font-size: 9.5px;" id="evoHistorySessionsCount">Últimos 14 días</span>
+                            </div>
+                            <div id="evoStudentHistoryList" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Inyectado dinámicamente con las sesiones ejecutadas y sensaciones -->
                             </div>
                         </div>
                     </div>
@@ -5203,6 +5242,14 @@
                                         <span>Lote</span>
                                     </button>
                                 </div>
+                            </div>
+
+                            <!-- Leyenda de Estados del Calendario (Sincronizado con Alumno) -->
+                            <div class="coach-cal-legend-bar">
+                                <div class="coach-legend-item"><span class="coach-legend-dot completed"></span><span>Completado por el alumno</span></div>
+                                <div class="coach-legend-item"><span class="coach-legend-dot scheduled"></span><span>Planificado</span></div>
+                                <div class="coach-legend-item"><span class="coach-legend-dot desvio"></span><span>Desvío de Cargas</span></div>
+                                <div class="coach-legend-item"><span class="coach-legend-dot unlogged"></span><span>Sin Registrar (Pasado)</span></div>
                             </div>
 
                             <!-- Filtro de Músculo en Calendario Mensual (Scroll Horizontal Táctil) -->
@@ -5998,58 +6045,44 @@
                     </button>
                 </div>
 
-                <!-- Panel 2: Agregar Ejercicio Ad-hoc -->
+                <!-- Panel 2: Agregar Movimientos en Lote (Multi-Movimiento) -->
                 <div class="multi-tab-pane" id="multiTabPaneAdd" style="display: none;">
                     <p style="font-size: 12px; color: #D4D4D8; margin-bottom: 12px;">
-                        Sumá un ejercicio accesorio o trabajo específico simultáneamente a todas las fechas seleccionadas.
+                        Sumá uno o varios ejercicios simultáneamente a todas las fechas seleccionadas con sus series, repeticiones y cargas personalizadas.
                     </p>
-                    <div style="margin-bottom: 12px;">
-                        <label class="input-label" style="font-size: 11.5px; color: #E5CBA7;">Seleccionar ejercicio del catálogo:</label>
-                        <button type="button" class="sens-tactile-select-trigger" id="triggerMultiSelectAddEx" onclick="CoachMultiDayActionsManager.openTactilePicker('add')">
-                            <span class="trigger-text" id="labelMultiSelectAddEx">Seleccionar ejercicio del catálogo...</span>
-                            <span class="trigger-chevron">▾</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #E5CBA7;">Movimientos en cola para agregar:</span>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="CoachMultiDayActionsManager.openTactilePicker('add')" style="font-size: 10.5px; padding: 4px 10px; color: #09090B; background: #E5CBA7; font-weight: 800; border: none; border-radius: 6px; cursor: pointer;">
+                            + Sumar Movimiento del Catálogo
                         </button>
-                        <input type="hidden" id="multiSelectAddEx" value="">
                     </div>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
-                        <div>
-                            <label class="input-label" style="font-size: 10.5px; color: #E5CBA7;">Series</label>
-                            <input type="number" id="multiAddSets" value="3" min="1" max="10" class="input-control" style="width: 55px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
-                        </div>
-                        <div>
-                            <label class="input-label" style="font-size: 10.5px; color: #E5CBA7;">Reps</label>
-                            <input type="text" id="multiAddReps" value="10-12" class="input-control" style="width: 70px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
-                        </div>
-                        <div>
-                            <label class="input-label" style="font-size: 10.5px; color: #E5CBA7;">Peso (kg)</label>
-                            <input type="number" id="multiAddWeight" value="20" step="0.5" class="input-control" style="width: 65px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
-                        </div>
-                        <div>
-                            <label class="input-label" style="font-size: 10.5px; color: #E5CBA7; display: inline-flex; align-items: center; gap: 3px;" title="RIR (Repeticiones en Reserva) / RPE (Esfuerzo Percibido): Repeticiones en reserva antes del fallo técnico. RIR 2 = RPE 8.">RIR/RPE Obj <span class="sens-tooltip-trigger" style="color: #FFFFFF; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.15);">i</span></label>
-                            <input type="number" id="multiAddRir" value="2" min="0" max="5" step="0.5" class="input-control" style="width: 55px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
-                        </div>
+                    <!-- Lista de movimientos agregados al lote -->
+                    <div id="sensBatchAddQueueContainer" style="max-height: 220px; overflow-y: auto; margin-bottom: 14px;">
+                        <!-- Inyectado dinámicamente con las cards de movimientos a agregar -->
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm" id="btnExecuteMultiAdd" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer;">
-                        Agregar Movimiento a Todos los Días Seleccionados
+                    <button type="button" class="btn btn-primary btn-sm" id="btnExecuteMultiAdd" onclick="CoachMultiDayActionsManager.executeAddQueue()" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer;">
+                        Agregar Movimientos a Todos los Días Seleccionados
                     </button>
                 </div>
 
-                <!-- Panel 3: Eliminar Ejercicio en Lote -->
+                <!-- Panel 3: Eliminar Ejercicios en Lote (Multi-Selección con Checkboxes) -->
                 <div class="multi-tab-pane" id="multiTabPaneDelete" style="display: none;">
-                    <p style="font-size: 12px; color: #D4D4D8; margin-bottom: 12px;">
-                        Remové un ejercicio en un solo paso de todas las fechas marcadas.
+                    <p style="font-size: 12px; color: #D4D4D8; margin-bottom: 10px;">
+                        Marcá uno o varios ejercicios para eliminarlos simultáneamente de todas las fechas seleccionadas.
                     </p>
-                    <div style="margin-bottom: 14px;">
-                        <label class="input-label" style="font-size: 11.5px; color: #E5CBA7;">Ejercicio a eliminar de los días seleccionados:</label>
-                        <button type="button" class="sens-tactile-select-trigger" id="triggerMultiSelectDeleteEx" onclick="CoachMultiDayActionsManager.openTactilePicker('delete')">
-                            <span class="trigger-text" id="labelMultiSelectDeleteEx">Seleccionar ejercicio a eliminar...</span>
-                            <span class="trigger-chevron">▾</span>
-                        </button>
-                        <input type="hidden" id="multiSelectDeleteEx" value="">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #E5CBA7;">Ejercicios presentes en los días seleccionados:</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="CoachMultiDayActionsManager.toggleAllDeleteCheckboxes(true)" style="font-size: 10px; padding: 2px 7px; color: #E5CBA7; border-color: rgba(229,203,167,0.3); background: #18181B;">Marcar Todos</button>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="CoachMultiDayActionsManager.toggleAllDeleteCheckboxes(false)" style="font-size: 10px; padding: 2px 7px; color: #A1A1AA; border-color: #3F3F46; background: #18181B;">Desmarcar</button>
+                        </div>
+                    </div>
+                    <div id="sensMultiDeleteListContainer" style="max-height: 200px; overflow-y: auto; padding-right: 4px; margin-bottom: 14px;">
+                        <!-- Inyectado dinámicamente con checkboxes de cada ejercicio -->
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-outline btn-sm" id="btnExecuteMultiDelete" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15); color: #FCA5A5; font-weight: 800; padding: 9px 16px; border-radius: 8px; cursor: pointer;">
-                            Eliminar Ejercicio de los Días Seleccionados
+                        <button type="button" class="btn btn-outline btn-sm" id="btnExecuteMultiDelete" onclick="CoachMultiDayActionsManager.executeDeleteSelected()" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15); color: #FCA5A5; font-weight: 800; padding: 9px 16px; border-radius: 8px; cursor: pointer;">
+                            Eliminar Ejercicios Marcados
                         </button>
                     </div>
 
@@ -6062,17 +6095,33 @@
                     </div>
                 </div>
 
-                <!-- Panel 4: Ajuste Masivo de Cargas / RIR -->
+                <!-- Panel 4: Ajuste Masivo de Cargas / RIR (Con Filtro Opcional de Ejercicios) -->
                 <div class="multi-tab-pane" id="multiTabPaneAdjust" style="display: none;">
                     <p style="font-size: 12px; color: #D4D4D8; margin-bottom: 12px;">
                         Aplicá un delta de carga (±kg) o ajustá el RIR/RPE objetivo a todos los ejercicios de los días seleccionados.
                     </p>
+                    <div style="background: #18181B; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Alcance del ajuste:</div>
+                        <div style="display: flex; gap: 14px; align-items: center; font-size: 12px;">
+                            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="multiAdjustScope" value="all" checked onchange="CoachMultiDayActionsManager.toggleAdjustScopeUI('all')">
+                                <span>Todos los ejercicios</span>
+                            </label>
+                            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="multiAdjustScope" value="selected" onchange="CoachMultiDayActionsManager.toggleAdjustScopeUI('selected')">
+                                <span>Solo ejercicios seleccionados</span>
+                            </label>
+                        </div>
+                        <div id="sensAdjustExChecklistWrap" style="display: none; margin-top: 10px; max-height: 140px; overflow-y: auto;">
+                            <!-- Inyectado dinámicamente con checkboxes de ejercicios para ajuste -->
+                        </div>
+                    </div>
                     <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;">
                         <div style="flex: 1; min-width: 160px;">
                             <label class="input-label" style="font-size: 11px; color: #E5CBA7;">Delta de Carga (kg):</label>
                             <div style="display: flex; gap: 6px; align-items: center;">
                                 <input type="number" id="multiAdjustKg" value="2.5" step="0.5" class="input-control" style="width: 70px; height: 34px; font-size: 12px; margin: 0; background: #18181B; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);">
-                                <button type="button" class="btn btn-outline btn-sm" id="btnMultiApplyKg" style="font-size: 11px; padding: 7px 12px; font-weight: 700; color: #E5CBA7; border-color: rgba(229, 203, 167, 0.4); background: #18181B;">Sumar kg</button>
+                                <button type="button" class="btn btn-outline btn-sm" id="btnMultiApplyKg" onclick="CoachMultiDayActionsManager.executeAdjustKg()" style="font-size: 11px; padding: 7px 12px; font-weight: 700; color: #E5CBA7; border-color: rgba(229, 203, 167, 0.4); background: #18181B;">Aplicar kg</button>
                             </div>
                         </div>
                         <div style="flex: 1; min-width: 160px;">
@@ -6084,7 +6133,7 @@
                                     <option value="3">RIR 3 / RPE 7 (Adaptación)</option>
                                     <option value="4">RIR 4 / RPE 6 (Descarga)</option>
                                 </select>
-                                <button type="button" class="btn btn-primary btn-sm" id="btnMultiApplyRir" style="font-size: 11px; padding: 7px 14px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 8px;">Fijar RIR/RPE</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="btnMultiApplyRir" onclick="CoachMultiDayActionsManager.executeAdjustRir()" style="font-size: 11px; padding: 7px 14px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 8px;">Fijar RIR/RPE</button>
                             </div>
                         </div>
                     </div>

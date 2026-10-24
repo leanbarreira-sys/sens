@@ -22001,10 +22001,11 @@ const CoachMultiDayActionsManager = {
             modal.classList.remove('active');
             modal.style.display = 'none';
         }
+        this.closeTactilePicker();
     },
 
     populateExerciseSelectors() {
-        const athId = this.activeAthleteId;
+        const athId = this.activeAthleteId || (typeof CoachWorkoutsMaster !== 'undefined' ? CoachWorkoutsMaster.activeAthleteId : null) || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null) || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || 'mock_vip';
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
         const datedSchedule = workoutData.calendar_schedule || {};
 
@@ -22052,7 +22053,7 @@ const CoachMultiDayActionsManager = {
             cat: (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : 'fuerza').toUpperCase()
         }));
 
-        // Actualizar triggers táctiles por defecto
+        // Actualizar triggers táctiles por defecto para reemplazo
         const curr = this.cachedCurrentExercises;
         const cat = this.cachedCatalog;
 
@@ -22069,15 +22070,12 @@ const CoachMultiDayActionsManager = {
 
         if (curr.length > 0) {
             setField('multiSelectCurrentEx', 'labelMultiSelectCurrentEx', curr[0]);
-            setField('multiSelectDeleteEx', 'labelMultiSelectDeleteEx', curr[0]);
         } else {
             setField('multiSelectCurrentEx', 'labelMultiSelectCurrentEx', null);
-            setField('multiSelectDeleteEx', 'labelMultiSelectDeleteEx', null);
         }
 
         if (cat.length > 0) {
             setField('multiSelectNewEx', 'labelMultiSelectNewEx', cat[0]);
-            setField('multiSelectAddEx', 'labelMultiSelectAddEx', cat[0]);
         }
     },
 
@@ -22091,7 +22089,7 @@ const CoachMultiDayActionsManager = {
         if (titleEl) {
             if (targetType === 'current') titleEl.textContent = 'Seleccionar Ejercicio a Reemplazar';
             else if (targetType === 'new') titleEl.textContent = 'Seleccionar Nuevo Ejercicio Sustituto';
-            else if (targetType === 'add') titleEl.textContent = 'Seleccionar Ejercicio para Agregar';
+            else if (targetType === 'add') titleEl.textContent = 'Sumar Ejercicio al Lote';
             else if (targetType === 'delete') titleEl.textContent = 'Seleccionar Ejercicio a Eliminar';
         }
 
@@ -22114,7 +22112,7 @@ const CoachMultiDayActionsManager = {
         const listEl = document.getElementById('sensBatchPickerList');
         if (!listEl) return;
 
-        const isCurrentOrDelete = (this.currentPickerTarget === 'current' || this.currentPickerTarget === 'delete');
+        const isCurrentOrDelete = (this.currentPickerTarget === 'current');
         const sourceList = isCurrentOrDelete ? this.cachedCurrentExercises : this.cachedCatalog;
 
         const q = (query || '').toLowerCase().trim();
@@ -22157,23 +22155,312 @@ const CoachMultiDayActionsManager = {
             const l = document.getElementById('labelMultiSelectCurrentEx');
             if (h) h.value = id;
             if (l) l.textContent = text;
+            this.closeTactilePicker();
         } else if (target === 'new') {
             const h = document.getElementById('multiSelectNewEx');
             const l = document.getElementById('labelMultiSelectNewEx');
             if (h) h.value = id;
             if (l) l.textContent = text;
+            this.closeTactilePicker();
         } else if (target === 'add') {
-            const h = document.getElementById('multiSelectAddEx');
-            const l = document.getElementById('labelMultiSelectAddEx');
-            if (h) h.value = id;
-            if (l) l.textContent = text;
-        } else if (target === 'delete') {
-            const h = document.getElementById('multiSelectDeleteEx');
-            const l = document.getElementById('labelMultiSelectDeleteEx');
-            if (h) h.value = id;
-            if (l) l.textContent = text;
+            const exists = this.addedExercisesQueue.some(item => item.id === id);
+            if (!exists) {
+                this.addedExercisesQueue.push({
+                    id,
+                    name,
+                    cat: cat || 'FUERZA',
+                    sets: 3,
+                    reps: '10-12',
+                    weight: 20,
+                    rir: 2
+                });
+                this.renderAddQueue();
+                if (typeof showSensToast === 'function') {
+                    showSensToast(`✓ Se sumó ${name} al lote.`, 'champagne');
+                }
+            } else if (typeof showSensToast === 'function') {
+                showSensToast('Este ejercicio ya fue agregado al lote.', 'warning');
+            }
+            this.closeTactilePicker();
         }
-        this.closeTactilePicker();
+    },
+
+    // --- COLA DE AGREGADO MULTI-EJERCICIO ---
+    renderAddQueue() {
+        const container = document.getElementById('sensBatchAddQueueContainer');
+        const btnExec = document.getElementById('btnExecuteMultiAdd');
+        if (!container) return;
+
+        if (!this.addedExercisesQueue || this.addedExercisesQueue.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 20px 14px; background: #18181B; border: 1px dashed rgba(255,255,255,0.15); border-radius: 10px; color: #A1A1AA; font-size: 12px;">
+                    Tocá <strong>"+ Sumar Movimiento del Catálogo"</strong> para añadir uno o varios ejercicios que se agregarán en bloque a los ${this.selectedDates.length} días.
+                </div>
+            `;
+            if (btnExec) btnExec.textContent = `Agregar Movimientos a los ${this.selectedDates.length} Días Seleccionados`;
+            return;
+        }
+
+        let html = '';
+        this.addedExercisesQueue.forEach((ex, idx) => {
+            html += `
+                <div class="coach-batch-add-item">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="pill pill-champagne" style="font-size: 8.5px; padding: 2px 6px;">${ex.cat}</span>
+                            <strong style="color: #FFFFFF; font-size: 12.5px;">${ex.name}</strong>
+                        </div>
+                        <button type="button" onclick="CoachMultiDayActionsManager.removeAddQueueItem(${idx})" style="background: none; border: none; color: #EF4444; font-size: 15px; cursor: pointer; padding: 2px 6px;" title="Quitar">✕</button>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                        <div>
+                            <span style="font-size: 10px; color: #A1A1AA;">Series</span>
+                            <input type="number" min="1" max="10" value="${ex.sets}" onchange="CoachMultiDayActionsManager.updateAddQueueItem(${idx}, 'sets', this.value)" class="input-control" style="width: 50px; height: 30px; font-size: 11px; margin: 0; background: #09090B; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 0 4px; text-align: center;">
+                        </div>
+                        <div>
+                            <span style="font-size: 10px; color: #A1A1AA;">Reps</span>
+                            <input type="text" value="${ex.reps}" onchange="CoachMultiDayActionsManager.updateAddQueueItem(${idx}, 'reps', this.value)" class="input-control" style="width: 65px; height: 30px; font-size: 11px; margin: 0; background: #09090B; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 0 4px; text-align: center;">
+                        </div>
+                        <div>
+                            <span style="font-size: 10px; color: #A1A1AA;">Peso (kg)</span>
+                            <input type="number" step="0.5" value="${ex.weight}" onchange="CoachMultiDayActionsManager.updateAddQueueItem(${idx}, 'weight', this.value)" class="input-control" style="width: 60px; height: 30px; font-size: 11px; margin: 0; background: #09090B; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 0 4px; text-align: center;">
+                        </div>
+                        <div>
+                            <span style="font-size: 10px; color: #A1A1AA;">RIR Obj</span>
+                            <input type="number" min="0" max="5" step="0.5" value="${ex.rir}" onchange="CoachMultiDayActionsManager.updateAddQueueItem(${idx}, 'rir', this.value)" class="input-control" style="width: 50px; height: 30px; font-size: 11px; margin: 0; background: #09090B; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 0 4px; text-align: center;">
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        if (btnExec) {
+            btnExec.textContent = `Agregar ${this.addedExercisesQueue.length} Movimiento${this.addedExercisesQueue.length > 1 ? 's' : ''} a los ${this.selectedDates.length} Días Seleccionados`;
+        }
+    },
+
+    removeAddQueueItem(idx) {
+        this.addedExercisesQueue.splice(idx, 1);
+        this.renderAddQueue();
+    },
+
+    updateAddQueueItem(idx, field, val) {
+        if (!this.addedExercisesQueue[idx]) return;
+        if (field === 'sets') this.addedExercisesQueue[idx].sets = parseInt(val, 10) || 3;
+        else if (field === 'reps') this.addedExercisesQueue[idx].reps = String(val).trim() || '10-12';
+        else if (field === 'weight') this.addedExercisesQueue[idx].weight = parseFloat(val) || 20;
+        else if (field === 'rir') this.addedExercisesQueue[idx].rir = parseFloat(val) || 2;
+    },
+
+    async executeAddQueue() {
+        if (this.addedExercisesQueue.length === 0) {
+            if (typeof showSensToast === 'function') showSensToast('Sumá al menos un ejercicio del catálogo antes de confirmar.', 'warning');
+            return;
+        }
+
+        const athId = this.activeAthleteId || (typeof CoachWorkoutsMaster !== 'undefined' ? CoachWorkoutsMaster.activeAthleteId : null) || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null) || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || 'mock_vip';
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+        const datedSchedule = workoutData.calendar_schedule;
+
+        let totalAdded = 0;
+        this.selectedDates.forEach(dStr => {
+            const parts = dStr.split('-');
+            let dayKey = null;
+            if (parts.length === 3) {
+                const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                const dayIdx = d.getDay();
+                dayKey = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
+            }
+
+            if (!datedSchedule[dStr]) {
+                let baseExercises = [];
+                if (dayKey && workoutData[dayKey] && Array.isArray(workoutData[dayKey].exercises)) {
+                    baseExercises = JSON.parse(JSON.stringify(workoutData[dayKey].exercises));
+                }
+                datedSchedule[dStr] = {
+                    dateStr: dStr,
+                    dayOfWeek: 'Día',
+                    title: 'Entrenamiento Prescripto',
+                    modality: 'presencial',
+                    completed: false,
+                    exercises: baseExercises
+                };
+            }
+            const session = datedSchedule[dStr];
+            if (!Array.isArray(session.exercises)) session.exercises = [];
+
+            this.addedExercisesQueue.forEach(item => {
+                const exists = session.exercises.some(e => e.id === item.id || e.name === item.name);
+                if (!exists) {
+                    session.exercises.push({
+                        id: item.id,
+                        name: item.name,
+                        sets: item.sets,
+                        reps: item.reps,
+                        defaultWeight: item.weight,
+                        rir: item.rir,
+                        rest: 75,
+                        notes: 'Agregado en bloque por Coach Nico'
+                    });
+                    totalAdded++;
+                }
+
+                // Sincronizar plantilla semanal
+                if (dayKey && workoutData[dayKey]) {
+                    if (!Array.isArray(workoutData[dayKey].exercises)) workoutData[dayKey].exercises = [];
+                    const tExists = workoutData[dayKey].exercises.some(e => e.id === item.id || e.name === item.name);
+                    if (!tExists) {
+                        workoutData[dayKey].exercises.push({
+                            id: item.id,
+                            name: item.name,
+                            sets: item.sets,
+                            reps: item.reps,
+                            defaultWeight: item.weight,
+                            rir: item.rir,
+                            rest: 75,
+                            notes: 'Agregado en bloque por Coach Nico'
+                        });
+                    }
+                }
+            });
+        });
+
+        workoutData.calendar_schedule = datedSchedule;
+        await this.persistWorkoutData(workoutData);
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Se agregaron ${this.addedExercisesQueue.length} ejercicios a las ${this.selectedDates.length} sesiones.`, 'champagne');
+        }
+        this.refreshViews();
+    },
+
+    // --- CHECKLIST MULTI-EJERCICIO PARA ELIMINACIÓN ---
+    renderDeleteExercisesList() {
+        const container = document.getElementById('sensMultiDeleteListContainer');
+        if (!container) return;
+        if (!this.cachedCurrentExercises || this.cachedCurrentExercises.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 18px; color: #71717A; font-size: 12px;">No hay ejercicios prescriptos en los días seleccionados.</div>';
+            this.updateDeleteSelectedCount();
+            return;
+        }
+
+        let html = '';
+        this.cachedCurrentExercises.forEach(ex => {
+            html += `
+                <label class="sens-batch-check-row">
+                    <input type="checkbox" class="sens-batch-delete-checkbox" value="${ex.id}" onchange="CoachMultiDayActionsManager.updateDeleteSelectedCount()">
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                        <span class="pill pill-champagne" style="font-size: 8.5px; padding: 2px 6px;">${ex.cat}</span>
+                        <strong style="color: #FFFFFF; font-size: 12px;">${ex.name}</strong>
+                    </div>
+                    <span style="font-size: 10.5px; color: #A1A1AA; font-variant-numeric: tabular-nums;">en ${ex.count} de ${this.selectedDates.length} días</span>
+                </label>
+            `;
+        });
+        container.innerHTML = html;
+        this.updateDeleteSelectedCount();
+    },
+
+    toggleAllDeleteCheckboxes(selectAll) {
+        const cbs = document.querySelectorAll('.sens-batch-delete-checkbox');
+        cbs.forEach(cb => { cb.checked = Boolean(selectAll); });
+        this.updateDeleteSelectedCount();
+    },
+
+    updateDeleteSelectedCount() {
+        const checked = document.querySelectorAll('.sens-batch-delete-checkbox:checked');
+        const btn = document.getElementById('btnExecuteMultiDelete');
+        if (!btn) return;
+        if (checked.length > 0) {
+            btn.textContent = `Eliminar ${checked.length} Ejercicio${checked.length > 1 ? 's' : ''} de los ${this.selectedDates.length} Días`;
+        } else {
+            btn.textContent = 'Eliminar Ejercicios Marcados';
+        }
+    },
+
+    async executeDeleteSelected() {
+        const checkedBoxes = Array.from(document.querySelectorAll('.sens-batch-delete-checkbox:checked'));
+        if (checkedBoxes.length === 0) {
+            if (typeof showSensToast === 'function') showSensToast('Marcá al menos un ejercicio para eliminar del lote.', 'warning');
+            return;
+        }
+        const checkedIds = checkedBoxes.map(cb => cb.value);
+
+        const athId = this.activeAthleteId || (typeof CoachWorkoutsMaster !== 'undefined' ? CoachWorkoutsMaster.activeAthleteId : null) || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null) || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || 'mock_vip';
+        const workoutData = getCoachAthleteWorkoutData(athId) || {};
+        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+        const datedSchedule = workoutData.calendar_schedule;
+
+        let totalRemoved = 0;
+        this.selectedDates.forEach(dStr => {
+            const parts = dStr.split('-');
+            let dayKey = null;
+            if (parts.length === 3) {
+                const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                const dayIdx = d.getDay();
+                dayKey = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
+            }
+
+            let session = datedSchedule[dStr];
+            if (!session || !Array.isArray(session.exercises) || session.exercises.length === 0) {
+                if (dayKey && workoutData[dayKey] && Array.isArray(workoutData[dayKey].exercises) && workoutData[dayKey].exercises.length > 0) {
+                    datedSchedule[dStr] = JSON.parse(JSON.stringify(workoutData[dayKey]));
+                    datedSchedule[dStr].dateStr = dStr;
+                    session = datedSchedule[dStr];
+                }
+            }
+            if (session && Array.isArray(session.exercises)) {
+                const initLen = session.exercises.length;
+                session.exercises = session.exercises.filter(e => !checkedIds.includes(e.id) && !checkedIds.includes(e.name));
+                totalRemoved += (initLen - session.exercises.length);
+            }
+
+            // Sincronizar plantilla semanal
+            if (dayKey && workoutData[dayKey] && Array.isArray(workoutData[dayKey].exercises)) {
+                workoutData[dayKey].exercises = workoutData[dayKey].exercises.filter(e => !checkedIds.includes(e.id) && !checkedIds.includes(e.name));
+            }
+        });
+
+        workoutData.calendar_schedule = datedSchedule;
+        await this.persistWorkoutData(workoutData);
+        this.closeModal();
+
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Se eliminaron ${checkedIds.length} ejercicios de las sesiones marcadas.`, 'champagne');
+        }
+        this.refreshViews();
+    },
+
+    // --- CHECKLIST MULTI-EJERCICIO PARA AJUSTE ---
+    toggleAdjustScopeUI(scope) {
+        this.adjustScope = scope;
+        const wrap = document.getElementById('sensAdjustExChecklistWrap');
+        if (wrap) {
+            wrap.style.display = scope === 'selected' ? 'block' : 'none';
+        }
+    },
+
+    renderAdjustExercisesList() {
+        const wrap = document.getElementById('sensAdjustExChecklistWrap');
+        if (!wrap) return;
+        if (!this.cachedCurrentExercises || this.cachedCurrentExercises.length === 0) {
+            wrap.innerHTML = '<div style="color: #71717A; font-size: 11px; padding: 4px;">Sin ejercicios específicos para seleccionar.</div>';
+            return;
+        }
+
+        let html = '';
+        this.cachedCurrentExercises.forEach(ex => {
+            html += `
+                <label class="sens-batch-check-row" style="padding: 6px 10px; margin-bottom: 4px;">
+                    <input type="checkbox" class="sens-batch-adjust-checkbox" value="${ex.id}" checked>
+                    <span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 5px;">${ex.cat}</span>
+                    <span style="color: #FFFFFF; font-size: 11.5px; font-weight: 600;">${ex.name}</span>
+                </label>
+            `;
+        });
+        wrap.innerHTML = html;
     },
 
     async executeReplace() {
@@ -22257,140 +22544,6 @@ const CoachMultiDayActionsManager = {
         this.refreshViews();
     },
 
-    async executeAdd() {
-        const addExId = document.getElementById('multiSelectAddEx')?.value;
-        const sets = parseInt(document.getElementById('multiAddSets')?.value, 10) || 3;
-        const reps = document.getElementById('multiAddReps')?.value.trim() || '10-12';
-        const weight = parseFloat(document.getElementById('multiAddWeight')?.value) || 20;
-        const rir = parseFloat(document.getElementById('multiAddRir')?.value) || 2;
-
-        if (!addExId) return;
-
-        let catalog = (typeof EXERCISES_DB !== 'undefined' && Array.isArray(EXERCISES_DB)) ? EXERCISES_DB : [];
-        const exData = catalog.find(e => e.id === addExId) || { id: addExId, name: 'Movimiento Ad-hoc' };
-
-        const athId = this.activeAthleteId || (typeof CoachWorkoutsMaster !== 'undefined' ? CoachWorkoutsMaster.activeAthleteId : null) || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null) || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || 'mock_vip';
-        const workoutData = getCoachAthleteWorkoutData(athId) || {};
-        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
-        const datedSchedule = workoutData.calendar_schedule;
-
-        let addedCount = 0;
-        this.selectedDates.forEach(dStr => {
-            const parts = dStr.split('-');
-            let dayKey = null;
-            if (parts.length === 3) {
-                const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-                const dayIdx = d.getDay();
-                dayKey = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
-            }
-
-            if (!datedSchedule[dStr]) {
-                let baseExercises = [];
-                if (dayKey && workoutData[dayKey] && Array.isArray(workoutData[dayKey].exercises)) {
-                    baseExercises = JSON.parse(JSON.stringify(workoutData[dayKey].exercises));
-                }
-                datedSchedule[dStr] = {
-                    dateStr: dStr,
-                    dayOfWeek: 'Día',
-                    title: 'Entrenamiento Prescripto',
-                    modality: 'presencial',
-                    completed: false,
-                    exercises: baseExercises
-                };
-            }
-            const session = datedSchedule[dStr];
-            if (!Array.isArray(session.exercises)) session.exercises = [];
-            const exists = session.exercises.some(e => e.id === addExId || e.name === exData.name);
-            if (!exists) {
-                session.exercises.push({
-                    ...exData,
-                    sets,
-                    reps,
-                    defaultWeight: weight,
-                    rir,
-                    rest: 75,
-                    notes: 'Movimiento ad-hoc masivo'
-                });
-                addedCount++;
-            }
-
-            // Sincronizar plantilla semanal
-            if (dayKey && workoutData[dayKey]) {
-                if (!Array.isArray(workoutData[dayKey].exercises)) workoutData[dayKey].exercises = [];
-                const tExists = workoutData[dayKey].exercises.some(e => e.id === addExId || e.name === exData.name);
-                if (!tExists) {
-                    workoutData[dayKey].exercises.push({
-                        ...exData,
-                        sets,
-                        reps,
-                        defaultWeight: weight,
-                        rir,
-                        rest: 75,
-                        notes: 'Movimiento ad-hoc masivo'
-                    });
-                }
-            }
-        });
-
-        workoutData.calendar_schedule = datedSchedule;
-        await this.persistWorkoutData(workoutData);
-        this.closeModal();
-
-        if (typeof showSensToast === 'function') {
-            showSensToast(`✓ Se agregó ${exData.name} a ${addedCount} sesiones.`, 'champagne');
-        }
-        this.refreshViews();
-    },
-
-    async executeDelete() {
-        const deleteExId = document.getElementById('multiSelectDeleteEx')?.value;
-        if (!deleteExId) return;
-
-        const athId = this.activeAthleteId || (typeof CoachWorkoutsMaster !== 'undefined' ? CoachWorkoutsMaster.activeAthleteId : null) || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null) || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || 'mock_vip';
-        const workoutData = getCoachAthleteWorkoutData(athId) || {};
-        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
-        const datedSchedule = workoutData.calendar_schedule;
-
-        let deletedCount = 0;
-        this.selectedDates.forEach(dStr => {
-            const parts = dStr.split('-');
-            let dayKey = null;
-            if (parts.length === 3) {
-                const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-                const dayIdx = d.getDay();
-                dayKey = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
-            }
-
-            let session = datedSchedule[dStr];
-            if (!session || !Array.isArray(session.exercises) || session.exercises.length === 0) {
-                if (dayKey && workoutData[dayKey] && Array.isArray(workoutData[dayKey].exercises) && workoutData[dayKey].exercises.length > 0) {
-                    datedSchedule[dStr] = JSON.parse(JSON.stringify(workoutData[dayKey]));
-                    datedSchedule[dStr].dateStr = dStr;
-                    session = datedSchedule[dStr];
-                }
-            }
-            if (session && Array.isArray(session.exercises)) {
-                const initLen = session.exercises.length;
-                session.exercises = session.exercises.filter(e => e.id !== deleteExId && e.name !== deleteExId);
-                if (session.exercises.length < initLen) deletedCount++;
-            }
-
-            // Sincronizar plantilla semanal
-            if (dayKey && workoutData[dayKey] && Array.isArray(workoutData[dayKey].exercises)) {
-                workoutData[dayKey].exercises = workoutData[dayKey].exercises.filter(e => e.id !== deleteExId && e.name !== deleteExId);
-            }
-        });
-
-        workoutData.calendar_schedule = datedSchedule;
-        await this.persistWorkoutData(workoutData);
-        this.closeModal();
-
-        if (typeof showSensToast === 'function') {
-            showSensToast(`✓ Se eliminó el ejercicio de ${deletedCount} sesiones.`, 'champagne');
-        }
-        this.refreshViews();
-    },
-
     async executeDeleteAllSessionsInDates() {
         if (!this.selectedDates || this.selectedDates.length === 0) return;
 
@@ -22435,6 +22588,12 @@ const CoachMultiDayActionsManager = {
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
         const datedSchedule = workoutData.calendar_schedule || {};
 
+        const scopeRadio = document.querySelector('input[name="multiAdjustScope"]:checked');
+        const isSelectedOnly = scopeRadio && scopeRadio.value === 'selected';
+        const targetIds = isSelectedOnly
+            ? Array.from(document.querySelectorAll('.sens-batch-adjust-checkbox:checked')).map(cb => cb.value)
+            : null;
+
         let count = 0;
         this.selectedDates.forEach(dStr => {
             const parts = dStr.split('-');
@@ -22456,16 +22615,20 @@ const CoachMultiDayActionsManager = {
 
             if (session && Array.isArray(session.exercises)) {
                 session.exercises.forEach(ex => {
-                    const prevW = parseFloat(ex.defaultWeight) || 0;
-                    ex.defaultWeight = Math.max(0, Math.round((prevW + deltaKg) * 10) / 10);
-                    count++;
+                    if (!targetIds || targetIds.includes(ex.id) || targetIds.includes(ex.name)) {
+                        const prevW = parseFloat(ex.defaultWeight) || 0;
+                        ex.defaultWeight = Math.max(0, Math.round((prevW + deltaKg) * 10) / 10);
+                        count++;
+                    }
                 });
             }
 
             if (dayKey && workoutData[dayKey] && Array.isArray(workoutData[dayKey].exercises)) {
                 workoutData[dayKey].exercises.forEach(ex => {
-                    const prevW = parseFloat(ex.defaultWeight) || 0;
-                    ex.defaultWeight = Math.max(0, Math.round((prevW + deltaKg) * 10) / 10);
+                    if (!targetIds || targetIds.includes(ex.id) || targetIds.includes(ex.name)) {
+                        const prevW = parseFloat(ex.defaultWeight) || 0;
+                        ex.defaultWeight = Math.max(0, Math.round((prevW + deltaKg) * 10) / 10);
+                    }
                 });
             }
         });
@@ -22486,6 +22649,12 @@ const CoachMultiDayActionsManager = {
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
         const datedSchedule = workoutData.calendar_schedule || {};
 
+        const scopeRadio = document.querySelector('input[name="multiAdjustScope"]:checked');
+        const isSelectedOnly = scopeRadio && scopeRadio.value === 'selected';
+        const targetIds = isSelectedOnly
+            ? Array.from(document.querySelectorAll('.sens-batch-adjust-checkbox:checked')).map(cb => cb.value)
+            : null;
+
         let count = 0;
         this.selectedDates.forEach(dStr => {
             const parts = dStr.split('-');
@@ -22507,14 +22676,18 @@ const CoachMultiDayActionsManager = {
 
             if (session && Array.isArray(session.exercises)) {
                 session.exercises.forEach(ex => {
-                    ex.rir = targetRir;
-                    count++;
+                    if (!targetIds || targetIds.includes(ex.id) || targetIds.includes(ex.name)) {
+                        ex.rir = targetRir;
+                        count++;
+                    }
                 });
             }
 
             if (dayKey && workoutData[dayKey] && Array.isArray(workoutData[dayKey].exercises)) {
                 workoutData[dayKey].exercises.forEach(ex => {
-                    ex.rir = targetRir;
+                    if (!targetIds || targetIds.includes(ex.id) || targetIds.includes(ex.name)) {
+                        ex.rir = targetRir;
+                    }
                 });
             }
         });
@@ -22571,6 +22744,9 @@ const CoachMultiDayActionsManager = {
         }
         if (typeof CoachMatrixProgressionView !== 'undefined' && typeof CoachMatrixProgressionView.render === 'function') {
             CoachMatrixProgressionView.render();
+        }
+        if (typeof CoachEvolutionEngine !== 'undefined' && typeof CoachEvolutionEngine.renderEvolutionPanel === 'function') {
+            CoachEvolutionEngine.renderEvolutionPanel();
         }
         if (typeof renderCoachAssignedExercises === 'function') {
             renderCoachAssignedExercises();
@@ -24290,6 +24466,14 @@ const CoachWorkoutsMaster = {
         });
     },
 
+    resolveAthleteId() {
+        return this.activeAthleteId ||
+            (typeof coachWorkoutState !== 'undefined' && coachWorkoutState.activeAthleteId) ||
+            (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) ||
+            (AppState && AppState.profile && AppState.profile.id) ||
+            'mock_vip';
+    },
+
     renderMonthCalendar() {
         const grid = document.getElementById('coachMonthGridContainer');
         const titleEl = document.getElementById('coachMonthTitleLabel');
@@ -24300,7 +24484,7 @@ const CoachWorkoutsMaster = {
             titleEl.textContent = `${monthNames[this.calendarMonth]} ${this.calendarYear}`;
         }
 
-        const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
+        const athId = this.resolveAthleteId();
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
         const datedSchedule = workoutData.calendar_schedule || {};
 
@@ -24341,6 +24525,8 @@ const CoachWorkoutsMaster = {
             let statusDotHtml = '';
 
             if (hasWorkout) {
+                const exCount = session.exercises.length;
+                const totalSets = session.exercises.reduce((acc, e) => acc + (parseInt(e.sets, 10) || 3), 0);
                 const modTag = (session.modality === 'presencial') ? 'Presencial' : (session.modality === 'online') ? 'Online' : 'Autónomo';
                 
                 // Grupos musculares en chips tipográficos (Quiet Luxury - Cero emoticones)
@@ -24365,26 +24551,38 @@ const CoachWorkoutsMaster = {
 
                 bodyHtml = `
                     <div class="coach-month-muscle-row" title="${modTag}: ${catNames || 'Fuerza'}">${tagDisplay}</div>
-                    <div class="coach-month-mod-label" title="${session.title || modTag}">${modTag}</div>
+                    <div class="coach-month-ex-meta" style="font-size: 10px; font-weight: 700; color: #E5CBA7; margin-top: 3px; font-variant-numeric: tabular-nums;">${exCount} ej • ${totalSets} series</div>
+                    <div class="coach-month-mod-label" title="${session.title || modTag}">${session.title ? session.title : modTag}</div>
                 `;
 
-                // Micro-indicador de estado (Conforme al plan vs Desvío)
-                const hasCompletedOrLogged = session.completed || (dateStr <= todayStr);
-                if (hasCompletedOrLogged && Array.isArray(session.exercises)) {
+                // Micro-indicador de estado sincronizado estrictamente con la ejecución real del alumno
+                const exec = (typeof getAthleteWorkoutExecution === 'function') ? getAthleteWorkoutExecution(athId, curDate) : null;
+                const isCompleted = Boolean(exec && (exec.completed || exec.attended));
+                const isMissed = Boolean(exec && exec.missed);
+
+                if (isCompleted) {
                     let hasDeviation = false;
-                    for (const ex of session.exercises) {
-                        const log = getStudentExerciseLog(athId, dateStr, ex);
-                        if (log && log.hasLog) {
-                            const delta = calculateExerciseDelta(ex, log);
-                            if (delta.status === 'warning' || delta.status === 'negative') {
-                                hasDeviation = true;
-                                break;
+                    if (Array.isArray(session.exercises)) {
+                        for (const ex of session.exercises) {
+                            const log = getStudentExerciseLog(athId, dateStr, ex);
+                            if (log && log.hasLog) {
+                                const delta = calculateExerciseDelta(ex, log);
+                                if (delta.status === 'warning' || delta.status === 'negative') {
+                                    hasDeviation = true;
+                                    break;
+                                }
                             }
                         }
                     }
                     statusDotHtml = hasDeviation
-                        ? `<span class="coach-month-status-dot desvio" title="Desvío detectado en la sesión del alumno"></span>`
-                        : `<span class="coach-month-status-dot conforme" title="Ejecución conforme al plan prescripto"></span>`;
+                        ? `<span class="coach-month-status-dot desvio" title="Sesión completada con desvío en cargas/RIR"></span>`
+                        : `<span class="coach-month-status-dot completed" title="Sesión completada y registrada por el alumno"></span>`;
+                } else if (isMissed) {
+                    statusDotHtml = `<span class="coach-month-status-dot missed" title="Sesión no realizada / ausente"></span>`;
+                } else if (dateStr < todayStr) {
+                    statusDotHtml = `<span class="coach-month-status-dot unlogged" title="Fecha pasada sin registro del alumno"></span>`;
+                } else {
+                    statusDotHtml = `<span class="coach-month-status-dot scheduled" title="Sesión programada pendiente"></span>`;
                 }
             }
 
@@ -24394,15 +24592,12 @@ const CoachWorkoutsMaster = {
                 </div>
             ` : '';
 
-            const modClass = session && session.modality ? session.modality : 'presencial';
-
             html += `
                 <div class="coach-month-day-cell ${hasWorkout ? 'has-workout' : ''} ${isToday ? 'is-today' : ''} ${isSelected && !this.isMultiSelectMode ? 'is-selected' : ''} ${isMultiSelected ? 'is-multi-selected' : ''}" data-date="${dateStr}">
                     <div class="cell-top-bar">
                         <span class="cell-number ${isToday ? 'today-circle' : ''}">${dayNum}</span>
-                        <div style="display: flex; align-items: center; gap: 3px;">
+                        <div style="display: flex; align-items: center; gap: 4px;">
                             ${statusDotHtml}
-                            ${hasWorkout ? `<span class="coach-cal-mod-dot ${modClass}"></span>` : ''}
                             ${multiCheckHtml}
                         </div>
                     </div>
@@ -25336,6 +25531,90 @@ const CoachEvolutionEngine = {
                 this.programMesocycleDeload();
             });
         }
+
+        const btnSaveDirective = document.getElementById('btnSaveCoachDirective');
+        if (btnSaveDirective && !btnSaveDirective._hasListener) {
+            btnSaveDirective._hasListener = true;
+            btnSaveDirective.addEventListener('click', () => {
+                this.saveCoachDirective();
+            });
+        }
+
+        document.querySelectorAll('#paneEvolution .coach-suggestion-chip').forEach(chip => {
+            if (!chip._hasListener) {
+                chip._hasListener = true;
+                chip.addEventListener('click', () => {
+                    const text = chip.getAttribute('data-suggest');
+                    if (text) this.appendSuggestionText(text);
+                });
+            }
+        });
+    },
+
+    appendSuggestionText(text) {
+        const textarea = document.getElementById('coachDirectiveTextarea');
+        if (!textarea) return;
+        const curVal = textarea.value.trim();
+        if (!curVal) {
+            textarea.value = text;
+        } else if (!curVal.includes(text)) {
+            textarea.value = `${curVal}\n• ${text}`;
+        }
+        textarea.focus();
+    },
+
+    async saveCoachDirective() {
+        const athId = this.activeAthleteId || this.getActiveAthleteId() || 'mock_vip';
+        const textarea = document.getElementById('coachDirectiveTextarea');
+        if (!textarea) return;
+        const text = textarea.value.trim();
+        const nowFormatted = new Intl.DateTimeFormat('es-AR', {
+            day: '2-digit',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(new Date());
+
+        try {
+            localStorage.setItem(`sens_coach_directive_${athId}`, text);
+            localStorage.setItem(`sens_coach_directive_time_${athId}`, nowFormatted);
+            localStorage.setItem('sens_active_directive_note', text);
+
+            if (typeof AppState !== 'undefined' && AppState.profile && (AppState.profile.id === athId || athId === 'mock_vip')) {
+                AppState.profile.directive_note = text;
+            }
+
+            if (window.__coachAthletesCache) {
+                const cached = window.__coachAthletesCache.find(a => a.id === athId);
+                if (cached) cached.directive_note = text;
+            }
+
+            if (typeof supabaseClient !== 'undefined' && supabaseClient && !String(athId).startsWith('mock_')) {
+                try {
+                    await supabaseClient.from('profiles').update({ directive_note: text }).eq('id', athId);
+                } catch (e) {
+                    console.warn('Error saving directive note to Supabase:', e);
+                }
+            }
+        } catch (e) {
+            console.warn('Directive storage error:', e);
+        }
+
+        const updatedTimeEl = document.getElementById('evoDirectiveUpdatedTime');
+        if (updatedTimeEl) {
+            updatedTimeEl.textContent = text ? `Actualizado ${nowFormatted}` : 'Sin directiva activa este mes';
+        }
+
+        if (typeof showSensToast === 'function') {
+            showSensToast('Directiva clínica de Nico guardada. El alumno la verá en su panel.', 'champagne');
+        }
+
+        // Sincronizar vista de rutina activa del alumno en tiempo real si está en memoria
+        if (typeof renderWorkoutDay === 'function') {
+            try {
+                renderWorkoutDay(AppState.currentDay || 'day1', AppState.selectedDate || new Date());
+            } catch (e) {}
+        }
     },
 
     syncActiveAthlete(athId) {
@@ -25758,6 +26037,151 @@ const CoachEvolutionEngine = {
                 `;
             });
             recoveryGrid.innerHTML = recHtml;
+        }
+
+        // 8. Inyectar Directiva Clínica & Sugerencias de Nico
+        const directiveTextarea = document.getElementById('coachDirectiveTextarea');
+        if (directiveTextarea) {
+            const savedDirective = (athlete && athlete.directive_note)
+                || (typeof AppState !== 'undefined' && AppState.profile && AppState.profile.directive_note)
+                || localStorage.getItem(`sens_coach_directive_${athlete.id}`)
+                || localStorage.getItem('sens_active_directive_note')
+                || '';
+            directiveTextarea.value = savedDirective;
+        }
+        const updatedTimeEl = document.getElementById('evoDirectiveUpdatedTime');
+        if (updatedTimeEl) {
+            const savedTime = localStorage.getItem(`sens_coach_directive_time_${athlete.id}`);
+            if (savedTime) {
+                updatedTimeEl.textContent = `Actualizado ${savedTime}`;
+            } else {
+                updatedTimeEl.textContent = (directiveTextarea && directiveTextarea.value.trim()) ? 'Directiva clínica activa' : 'Sin directiva activa este mes';
+            }
+        }
+
+        // Re-vincular chips y botón de guardado en el DOM
+        const btnSaveDirective = document.getElementById('btnSaveCoachDirective');
+        if (btnSaveDirective && !btnSaveDirective._hasListener) {
+            btnSaveDirective._hasListener = true;
+            btnSaveDirective.addEventListener('click', () => {
+                this.saveCoachDirective();
+            });
+        }
+        document.querySelectorAll('#paneEvolution .coach-suggestion-chip').forEach(chip => {
+            if (!chip._hasListener) {
+                chip._hasListener = true;
+                chip.addEventListener('click', () => {
+                    const text = chip.getAttribute('data-suggest');
+                    if (text) this.appendSuggestionText(text);
+                });
+            }
+        });
+
+        // 9. Inyectar Historial Reciente de Entrenamientos & Feedback del Alumno
+        const historyList = document.getElementById('evoStudentHistoryList');
+        if (historyList) {
+            const datedSchedule = workoutData.calendar_schedule || {};
+            const recentDays = [];
+            const _today = new Date();
+            const todayStr = `${_today.getFullYear()}-${String(_today.getMonth() + 1).padStart(2, '0')}-${String(_today.getDate()).padStart(2, '0')}`;
+
+            // 14 días hacia atrás hasta hoy
+            for (let offset = 14; offset >= 0; offset--) {
+                const d = new Date();
+                d.setDate(d.getDate() - offset);
+                const dIso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                
+                let session = datedSchedule[dIso];
+                if (!session) {
+                    const dayIdx = d.getDay();
+                    const key = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
+                    const weeklyDay = workoutData[key];
+                    if (weeklyDay && Array.isArray(weeklyDay.exercises) && weeklyDay.exercises.length > 0) {
+                        session = weeklyDay;
+                    }
+                }
+
+                if (session && Array.isArray(session.exercises) && session.exercises.length > 0) {
+                    const exec = (typeof getAthleteWorkoutExecution === 'function') ? getAthleteWorkoutExecution(athlete.id, d) : null;
+                    recentDays.push({
+                        dateObj: d,
+                        dateIso: dIso,
+                        isToday: (dIso === todayStr),
+                        session,
+                        exec
+                    });
+                }
+            }
+
+            if (recentDays.length === 0) {
+                historyList.innerHTML = `
+                    <div style="background: #18181B; border: 1px dashed rgba(229, 203, 167, 0.2); border-radius: 12px; padding: 24px 16px; text-align: center;">
+                        <span style="font-size: 11.5px; color: #A1A1AA;">No se encontraron entrenamientos programados o ejecutados en los últimos 14 días para este alumno.</span>
+                    </div>
+                `;
+            } else {
+                const dayFormatter = new Intl.DateTimeFormat('es-AR', { weekday: 'short', day: 'numeric', month: 'short' });
+                let histHtml = '';
+
+                // Ordenar del más reciente al más antiguo
+                recentDays.reverse().forEach(item => {
+                    const formattedDate = dayFormatter.format(item.dateObj);
+                    const isDone = Boolean(item.exec && (item.exec.completed || item.exec.attended));
+                    const isMissed = Boolean(item.exec && item.exec.missed);
+                    const isPast = (item.dateIso < todayStr);
+
+                    let badgeHtml = '';
+                    if (isDone) {
+                        let hasDev = false;
+                        for (const ex of item.session.exercises) {
+                            const log = getStudentExerciseLog(athlete.id, item.dateIso, ex);
+                            if (log && log.hasLog) {
+                                const delta = calculateExerciseDelta(ex, log);
+                                if (delta.status === 'warning' || delta.status === 'negative') {
+                                    hasDev = true;
+                                    break;
+                                }
+                            }
+                        }
+                        badgeHtml = hasDev
+                            ? `<span class="pill" style="font-size: 9px; padding: 2px 7px; background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.4);">Completada con Desvío</span>`
+                            : `<span class="pill" style="font-size: 9px; padding: 2px 7px; background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4);">100% Cumplida</span>`;
+                    } else if (isMissed) {
+                        badgeHtml = `<span class="pill" style="font-size: 9px; padding: 2px 7px; background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.4);">No Realizada</span>`;
+                    } else if (isPast) {
+                        badgeHtml = `<span class="pill" style="font-size: 9px; padding: 2px 7px; background: rgba(113, 113, 122, 0.15); color: #71717A; border: 1px solid rgba(113, 113, 122, 0.3);">Sin Registro</span>`;
+                    } else {
+                        badgeHtml = `<span class="pill pill-champagne" style="font-size: 9px; padding: 2px 7px;">Programada</span>`;
+                    }
+
+                    const exCount = item.session.exercises.length;
+                    const totalSets = item.session.exercises.reduce((acc, e) => acc + (parseInt(e.sets, 10) || 3), 0);
+                    const title = item.session.title || 'Sesión de Entrenamiento';
+                    const modTag = (item.session.modality === 'presencial') ? 'Presencial' : (item.session.modality === 'online') ? 'Online' : 'Autónomo';
+                    const durationText = item.exec && item.exec.durationMinutes ? `${item.exec.durationMinutes} min` : `${Math.round(totalSets * 2.8)} min est.`;
+
+                    histHtml += `
+                        <div style="background: #18181B; border: 1px solid rgba(229, 203, 167, 0.15); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <strong style="font-size: 12.5px; color: #FFFFFF; text-transform: capitalize;">${formattedDate}</strong>
+                                    ${item.isToday ? '<span class="pill pill-champagne" style="font-size: 8px; padding: 1px 5px;">HOY</span>' : ''}
+                                </div>
+                                ${badgeHtml}
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 11px;">
+                                <span style="color: #E4E4E7; font-weight: 600;">${title} (${modTag})</span>
+                                <span style="color: #A1A1AA; font-variant-numeric: tabular-nums;">${exCount} ejercicios • ${totalSets} series • ${durationText}</span>
+                            </div>
+                            <div style="font-size: 10px; color: #71717A; line-height: 1.3;">
+                                ${item.session.exercises.slice(0, 4).map(e => e.name || e.name_es || 'Ejercicio').join(' • ')}${item.session.exercises.length > 4 ? ` • +${item.session.exercises.length - 4} más` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                historyList.innerHTML = histHtml;
+            }
         }
     },
 
