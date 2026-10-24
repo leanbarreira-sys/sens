@@ -1921,6 +1921,7 @@ function initCarousels() {
     setupCarouselSwipe('pricingCarousel', 'pricingDots');
     setupCarouselSwipe('groupsCarousel', 'groupsDots');
     setupCarouselSwipe('onlineCarousel', 'onlineDots');
+    setupCarouselSwipe('appCarousel', 'appDots');
 }
 
 function setupCarouselSwipe(carouselId, dotsContainerId) {
@@ -1952,6 +1953,12 @@ function setupCarouselSwipe(carouselId, dotsContainerId) {
         });
         scrollTicking = false;
     }
+
+    if (carousel._hasSwipeInit) {
+        updateActiveDot();
+        return;
+    }
+    carousel._hasSwipeInit = true;
 
     carousel.addEventListener('scroll', () => {
         if (!scrollTicking) {
@@ -2109,6 +2116,7 @@ function initPricingTabs() {
                 if (innerCarousel) innerCarousel.scrollLeft = 0;
                 const dots = document.querySelectorAll('#appDots .carousel-dot');
                 dots.forEach((dot, idx) => dot.classList.toggle('active', idx === 0));
+                setTimeout(() => { setupCarouselSwipe('appCarousel', 'appDots'); }, 50);
             }
         } else if (currentMode === 'online') {
             if (subSelector) subSelector.style.display = 'none';
@@ -2120,6 +2128,7 @@ function initPricingTabs() {
                 if (innerCarousel) innerCarousel.scrollLeft = 0;
                 const dots = document.querySelectorAll('#onlineDots .carousel-dot');
                 dots.forEach((dot, idx) => dot.classList.toggle('active', idx === 0));
+                setTimeout(() => { setupCarouselSwipe('onlineCarousel', 'onlineDots'); }, 50);
             }
         } else {
             // Modo Presencial
@@ -2132,8 +2141,10 @@ function initPricingTabs() {
                 const innerCarousel = targetEl.querySelector('.pricing-carousel');
                 if (innerCarousel) innerCarousel.scrollLeft = 0;
                 const activeDotsId = currentSub === 'presencial-ind' ? '#pricingDots' : '#groupsDots';
+                const activeCarouselId = currentSub === 'presencial-ind' ? 'pricingCarousel' : 'groupsCarousel';
                 const dots = document.querySelectorAll(activeDotsId + ' .carousel-dot');
                 dots.forEach((dot, idx) => dot.classList.toggle('active', idx === 0));
+                setTimeout(() => { setupCarouselSwipe(activeCarouselId, activeDotsId.replace('#', '')); }, 50);
             }
         }
     }
@@ -21898,6 +21909,9 @@ window.calculateExerciseDelta = calculateExerciseDelta;
 const CoachMultiDayActionsManager = {
     selectedDates: [],
     activeAthleteId: null,
+    currentPickerTarget: null,
+    cachedCurrentExercises: [],
+    cachedCatalog: [],
 
     init() {
         const modal = document.getElementById('modalCoachMultiDayActions');
@@ -21920,16 +21934,8 @@ const CoachMultiDayActionsManager = {
             if (!btn._hasListener) {
                 btn._hasListener = true;
                 btn.addEventListener('click', () => {
-                    tabBtns.forEach(b => {
-                        b.classList.remove('active', 'btn-primary');
-                        b.classList.add('btn-outline');
-                        b.style.background = '#FFFFFF';
-                        b.style.color = '#18181B';
-                    });
-                    btn.classList.add('active', 'btn-primary');
-                    btn.classList.remove('btn-outline');
-                    btn.style.background = '#9E7D4B';
-                    btn.style.color = '#FFFFFF';
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
 
                     const tabKey = btn.getAttribute('data-tab');
                     const panes = document.querySelectorAll('.multi-tab-pane');
@@ -21981,7 +21987,7 @@ const CoachMultiDayActionsManager = {
 
     openModal(selectedDates, athId) {
         this.selectedDates = Array.isArray(selectedDates) ? selectedDates : [];
-        this.activeAthleteId = athId || CoachWorkoutsMaster.activeAthleteId || coachWorkoutState.activeAthleteId;
+        this.activeAthleteId = athId || (typeof CoachWorkoutsMaster !== 'undefined' ? CoachWorkoutsMaster.activeAthleteId : null) || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null);
 
         const modal = document.getElementById('modalCoachMultiDayActions');
         if (!modal || this.selectedDates.length === 0) {
@@ -22016,36 +22022,34 @@ const CoachMultiDayActionsManager = {
         // Recolectar ejercicios presentes en los días seleccionados
         const currentExercisesMap = {};
         this.selectedDates.forEach(dStr => {
-            const session = datedSchedule[dStr];
+            let session = datedSchedule[dStr];
+            if (!session || !Array.isArray(session.exercises) || session.exercises.length === 0) {
+                const parts = dStr.split('-');
+                if (parts.length === 3) {
+                    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    const dayIdx = d.getDay();
+                    const key = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
+                    const weeklyDay = workoutData[key];
+                    if (weeklyDay && Array.isArray(weeklyDay.exercises) && weeklyDay.exercises.length > 0) {
+                        session = weeklyDay;
+                    }
+                }
+            }
             if (session && Array.isArray(session.exercises)) {
                 session.exercises.forEach(ex => {
-                    if (!currentExercisesMap[ex.id]) {
-                        currentExercisesMap[ex.id] = { id: ex.id, name: ex.name, count: 0 };
+                    const exId = ex.id || ex.name;
+                    if (!currentExercisesMap[exId]) {
+                        const cat = (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : 'fuerza').toUpperCase();
+                        currentExercisesMap[exId] = { id: exId, name: ex.name, cat, count: 0 };
                     }
-                    currentExercisesMap[ex.id].count++;
+                    currentExercisesMap[exId].count++;
                 });
             }
         });
 
-        const currentExList = Object.values(currentExercisesMap);
-        const selCurrent = document.getElementById('multiSelectCurrentEx');
-        const selDelete = document.getElementById('multiSelectDeleteEx');
-
-        let currentOptionsHtml = '';
-        if (currentExList.length === 0) {
-            currentOptionsHtml = '<option value="">(No hay ejercicios programados en estos días)</option>';
-        } else {
-            currentExList.forEach(e => {
-                currentOptionsHtml += `<option value="${e.id}">${e.name} (${e.count} de ${this.selectedDates.length} días)</option>`;
-            });
-        }
-        if (selCurrent) selCurrent.innerHTML = currentOptionsHtml;
-        if (selDelete) selDelete.innerHTML = currentOptionsHtml;
+        this.cachedCurrentExercises = Object.values(currentExercisesMap);
 
         // Recolectar catálogo completo para sustitución y agregado
-        const selNew = document.getElementById('multiSelectNewEx');
-        const selAdd = document.getElementById('multiSelectAddEx');
-
         let catalog = [];
         if (typeof EXERCISES_DB !== 'undefined' && Array.isArray(EXERCISES_DB)) {
             catalog = EXERCISES_DB;
@@ -22053,17 +22057,134 @@ const CoachMultiDayActionsManager = {
             catalog = CoachWorkoutsMaster.getAllExercises();
         }
 
-        let catOptionsHtml = '';
-        if (catalog.length > 0) {
-            catalog.forEach(ex => {
-                const cat = getBiomechanicalCategory(ex).toUpperCase();
-                catOptionsHtml += `<option value="${ex.id}">[${cat}] ${ex.name}</option>`;
-            });
+        this.cachedCatalog = catalog.map(ex => ({
+            id: ex.id,
+            name: ex.name,
+            cat: (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : 'fuerza').toUpperCase()
+        }));
+
+        // Actualizar triggers táctiles por defecto
+        const curr = this.cachedCurrentExercises;
+        const cat = this.cachedCatalog;
+
+        const setField = (hiddenId, labelId, item) => {
+            const h = document.getElementById(hiddenId);
+            const l = document.getElementById(labelId);
+            if (h && l && item) {
+                h.value = item.id;
+                l.textContent = `[${item.cat}] ${item.name}${item.count !== undefined ? ` (${item.count} de ${this.selectedDates.length} días)` : ''}`;
+            } else if (l) {
+                l.textContent = '(Sin ejercicios en días seleccionados)';
+            }
+        };
+
+        if (curr.length > 0) {
+            setField('multiSelectCurrentEx', 'labelMultiSelectCurrentEx', curr[0]);
+            setField('multiSelectDeleteEx', 'labelMultiSelectDeleteEx', curr[0]);
         } else {
-            catOptionsHtml = '<option value="ex-sq-01">Sentadilla Trasera con Barra</option><option value="ex-bp-01">Press de Banca Plano</option><option value="ex-dl-01">Peso Muerto Rumano</option>';
+            setField('multiSelectCurrentEx', 'labelMultiSelectCurrentEx', null);
+            setField('multiSelectDeleteEx', 'labelMultiSelectDeleteEx', null);
         }
-        if (selNew) selNew.innerHTML = catOptionsHtml;
-        if (selAdd) selAdd.innerHTML = catOptionsHtml;
+
+        if (cat.length > 0) {
+            setField('multiSelectNewEx', 'labelMultiSelectNewEx', cat[0]);
+            setField('multiSelectAddEx', 'labelMultiSelectAddEx', cat[0]);
+        }
+    },
+
+    openTactilePicker(targetType) {
+        this.currentPickerTarget = targetType;
+        const sheet = document.getElementById('sensBatchExPickerSheet');
+        const titleEl = document.getElementById('sensBatchPickerTitle');
+        const searchInput = document.getElementById('sensBatchExSearchInput');
+        if (!sheet) return;
+
+        if (titleEl) {
+            if (targetType === 'current') titleEl.textContent = 'Seleccionar Ejercicio a Reemplazar';
+            else if (targetType === 'new') titleEl.textContent = 'Seleccionar Nuevo Ejercicio Sustituto';
+            else if (targetType === 'add') titleEl.textContent = 'Seleccionar Ejercicio para Agregar';
+            else if (targetType === 'delete') titleEl.textContent = 'Seleccionar Ejercicio a Eliminar';
+        }
+
+        if (searchInput) searchInput.value = '';
+        this.renderTactilePickerItems();
+        sheet.classList.add('active');
+        sheet.style.display = 'flex';
+    },
+
+    closeTactilePicker() {
+        const sheet = document.getElementById('sensBatchExPickerSheet');
+        if (sheet) {
+            sheet.classList.remove('active');
+            sheet.style.display = 'none';
+        }
+        this.currentPickerTarget = null;
+    },
+
+    renderTactilePickerItems(query = '') {
+        const listEl = document.getElementById('sensBatchPickerList');
+        if (!listEl) return;
+
+        const isCurrentOrDelete = (this.currentPickerTarget === 'current' || this.currentPickerTarget === 'delete');
+        const sourceList = isCurrentOrDelete ? this.cachedCurrentExercises : this.cachedCatalog;
+
+        const q = (query || '').toLowerCase().trim();
+        const filtered = sourceList.filter(item => {
+            if (!q) return true;
+            return item.name.toLowerCase().includes(q) || (item.cat && item.cat.toLowerCase().includes(q));
+        });
+
+        if (filtered.length === 0) {
+            listEl.innerHTML = `<div style="text-align: center; padding: 24px; color: #71717A; font-size: 13px;">No se encontraron ejercicios ${q ? `para "${q}"` : 'en las sesiones seleccionadas'}.</div>`;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(item => {
+            const countTag = item.count !== undefined ? `<span style="font-size: 10.5px; color: #E5CBA7; font-weight: 700; margin-left: 8px;">(${item.count}/${this.selectedDates.length} días)</span>` : '';
+            html += `
+                <div class="sens-batch-picker-item" onclick="CoachMultiDayActionsManager.selectTactilePickerItem('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.cat || 'FUERZA'}', ${item.count !== undefined ? item.count : 'null'})">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="pill pill-champagne" style="font-size: 9px; padding: 2px 6px;">${item.cat || 'FUERZA'}</span>
+                        <strong style="color: #FFFFFF; font-size: 12.5px;">${item.name}</strong>
+                    </div>
+                    <div>${countTag}</div>
+                </div>
+            `;
+        });
+        listEl.innerHTML = html;
+    },
+
+    filterTactilePickerList(query) {
+        this.renderTactilePickerItems(query);
+    },
+
+    selectTactilePickerItem(id, name, cat, count) {
+        const target = this.currentPickerTarget;
+        const text = `[${cat}] ${name}${count !== null && count !== undefined ? ` (${count} de ${this.selectedDates.length} días)` : ''}`;
+
+        if (target === 'current') {
+            const h = document.getElementById('multiSelectCurrentEx');
+            const l = document.getElementById('labelMultiSelectCurrentEx');
+            if (h) h.value = id;
+            if (l) l.textContent = text;
+        } else if (target === 'new') {
+            const h = document.getElementById('multiSelectNewEx');
+            const l = document.getElementById('labelMultiSelectNewEx');
+            if (h) h.value = id;
+            if (l) l.textContent = text;
+        } else if (target === 'add') {
+            const h = document.getElementById('multiSelectAddEx');
+            const l = document.getElementById('labelMultiSelectAddEx');
+            if (h) h.value = id;
+            if (l) l.textContent = text;
+        } else if (target === 'delete') {
+            const h = document.getElementById('multiSelectDeleteEx');
+            const l = document.getElementById('labelMultiSelectDeleteEx');
+            if (h) h.value = id;
+            if (l) l.textContent = text;
+        }
+        this.closeTactilePicker();
     },
 
     async executeReplace() {
@@ -22079,13 +22200,27 @@ const CoachMultiDayActionsManager = {
 
         const athId = this.activeAthleteId;
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
-        const datedSchedule = workoutData.calendar_schedule || {};
+        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+        const datedSchedule = workoutData.calendar_schedule;
 
         let modifiedDays = 0;
         this.selectedDates.forEach(dStr => {
-            const session = datedSchedule[dStr];
+            let session = datedSchedule[dStr];
+            if (!session || !Array.isArray(session.exercises) || session.exercises.length === 0) {
+                const parts = dStr.split('-');
+                if (parts.length === 3) {
+                    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    const dayIdx = d.getDay();
+                    const key = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
+                    const weeklyDay = workoutData[key];
+                    if (weeklyDay && Array.isArray(weeklyDay.exercises) && weeklyDay.exercises.length > 0) {
+                        datedSchedule[dStr] = JSON.parse(JSON.stringify(weeklyDay));
+                        session = datedSchedule[dStr];
+                    }
+                }
+            }
             if (session && Array.isArray(session.exercises)) {
-                const idx = session.exercises.findIndex(e => e.id === currentExId);
+                const idx = session.exercises.findIndex(e => e.id === currentExId || e.name === currentExId);
                 if (idx >= 0) {
                     const prev = session.exercises[idx];
                     session.exercises[idx] = {
@@ -22131,18 +22266,29 @@ const CoachMultiDayActionsManager = {
         let addedCount = 0;
         this.selectedDates.forEach(dStr => {
             if (!datedSchedule[dStr]) {
+                const parts = dStr.split('-');
+                let baseExercises = [];
+                if (parts.length === 3) {
+                    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    const dayIdx = d.getDay();
+                    const key = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
+                    const weeklyDay = workoutData[key];
+                    if (weeklyDay && Array.isArray(weeklyDay.exercises)) {
+                        baseExercises = JSON.parse(JSON.stringify(weeklyDay.exercises));
+                    }
+                }
                 datedSchedule[dStr] = {
                     dateStr: dStr,
                     dayOfWeek: 'Día',
                     title: 'Entrenamiento Prescripto',
                     modality: 'presencial',
                     completed: false,
-                    exercises: []
+                    exercises: baseExercises
                 };
             }
             const session = datedSchedule[dStr];
             if (!Array.isArray(session.exercises)) session.exercises = [];
-            const exists = session.exercises.some(e => e.id === addExId);
+            const exists = session.exercises.some(e => e.id === addExId || e.name === exData.name);
             if (!exists) {
                 session.exercises.push({
                     ...exData,
@@ -22172,14 +22318,28 @@ const CoachMultiDayActionsManager = {
 
         const athId = this.activeAthleteId;
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
-        const datedSchedule = workoutData.calendar_schedule || {};
+        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+        const datedSchedule = workoutData.calendar_schedule;
 
         let deletedCount = 0;
         this.selectedDates.forEach(dStr => {
-            const session = datedSchedule[dStr];
+            let session = datedSchedule[dStr];
+            if (!session || !Array.isArray(session.exercises) || session.exercises.length === 0) {
+                const parts = dStr.split('-');
+                if (parts.length === 3) {
+                    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    const dayIdx = d.getDay();
+                    const key = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
+                    const weeklyDay = workoutData[key];
+                    if (weeklyDay && Array.isArray(weeklyDay.exercises) && weeklyDay.exercises.length > 0) {
+                        datedSchedule[dStr] = JSON.parse(JSON.stringify(weeklyDay));
+                        session = datedSchedule[dStr];
+                    }
+                }
+            }
             if (session && Array.isArray(session.exercises)) {
                 const initLen = session.exercises.length;
-                session.exercises = session.exercises.filter(e => e.id !== deleteExId);
+                session.exercises = session.exercises.filter(e => e.id !== deleteExId && e.name !== deleteExId);
                 if (session.exercises.length < initLen) deletedCount++;
             }
         });
@@ -23897,20 +24057,46 @@ const CoachWorkoutsMaster = {
             btnMultiToggle._hasListener = true;
             btnMultiToggle.addEventListener('click', () => {
                 this.isMultiSelectMode = !this.isMultiSelectMode;
+                const gridEl = document.getElementById('coachMonthGridContainer');
                 if (this.isMultiSelectMode) {
                     btnMultiToggle.classList.add('active');
-                    btnMultiToggle.style.background = '#9E7D4B';
-                    btnMultiToggle.style.color = '#FFFFFF';
+                    if (gridEl) gridEl.classList.add('is-multi-selecting');
                     if (multiBar) multiBar.style.display = 'flex';
                     const detailCard = document.getElementById('coachMonthDayDetailCard');
                     if (detailCard) detailCard.style.display = 'none';
                 } else {
                     btnMultiToggle.classList.remove('active');
-                    btnMultiToggle.style.background = '#FFFFFF';
-                    btnMultiToggle.style.color = '#9E7D4B';
+                    if (gridEl) gridEl.classList.remove('is-multi-selecting');
                     if (multiBar) multiBar.style.display = 'none';
                     this.selectedMultiDates.clear();
                 }
+                this.updateMultiSelectUI();
+                this.renderMonthCalendar();
+            });
+        }
+
+        // Seleccionar Todo el Mes en Lote
+        const btnSelectAllDays = document.getElementById('btnSelectAllMonthDays');
+        if (btnSelectAllDays && !btnSelectAllDays._hasListener) {
+            btnSelectAllDays._hasListener = true;
+            btnSelectAllDays.addEventListener('click', () => {
+                const daysInMonth = new Date(this.calendarYear, this.calendarMonth + 1, 0).getDate();
+                const mStr = String(this.calendarMonth + 1).padStart(2, '0');
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dStr = String(d).padStart(2, '0');
+                    this.selectedMultiDates.add(`${this.calendarYear}-${mStr}-${dStr}`);
+                }
+                this.updateMultiSelectUI();
+                this.renderMonthCalendar();
+            });
+        }
+
+        // Limpiar Selección
+        const btnClearDays = document.getElementById('btnClearMonthDays');
+        if (btnClearDays && !btnClearDays._hasListener) {
+            btnClearDays._hasListener = true;
+            btnClearDays.addEventListener('click', () => {
+                this.selectedMultiDates.clear();
                 this.updateMultiSelectUI();
                 this.renderMonthCalendar();
             });
@@ -23921,11 +24107,9 @@ const CoachWorkoutsMaster = {
             btnCancelMulti._hasListener = true;
             btnCancelMulti.addEventListener('click', () => {
                 this.isMultiSelectMode = false;
-                if (btnMultiToggle) {
-                    btnMultiToggle.classList.remove('active');
-                    btnMultiToggle.style.background = '#FFFFFF';
-                    btnMultiToggle.style.color = '#9E7D4B';
-                }
+                const gridEl = document.getElementById('coachMonthGridContainer');
+                if (btnMultiToggle) btnMultiToggle.classList.remove('active');
+                if (gridEl) gridEl.classList.remove('is-multi-selecting');
                 if (multiBar) multiBar.style.display = 'none';
                 this.selectedMultiDates.clear();
                 this.updateMultiSelectUI();
@@ -23953,11 +24137,13 @@ const CoachWorkoutsMaster = {
                 btn.addEventListener('click', () => {
                     const targetDow = parseInt(btn.getAttribute('data-dow'), 10);
                     const daysInMonth = new Date(this.calendarYear, this.calendarMonth + 1, 0).getDate();
+                    const mStr = String(this.calendarMonth + 1).padStart(2, '0');
                     const matchingDates = [];
                     for (let d = 1; d <= daysInMonth; d++) {
                         const dateObj = new Date(this.calendarYear, this.calendarMonth, d);
                         if (dateObj.getDay() === targetDow) {
-                            matchingDates.push(dateObj.toISOString().split('T')[0]);
+                            const dStr = String(d).padStart(2, '0');
+                            matchingDates.push(`${this.calendarYear}-${mStr}-${dStr}`);
                         }
                     }
                     const allSelected = matchingDates.every(dStr => this.selectedMultiDates.has(dStr));
