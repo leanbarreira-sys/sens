@@ -6617,7 +6617,9 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                 const cat = item.catalogMatch;
                 const isExDone = Boolean(execution.completedExercises && execution.completedExercises[ex.id]);
                 const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Cuerpo';
-                const exVideoPath = (cat && (cat.video_local_path || cat.video_url || cat.video)) || ex.video || SENS_EXERCISE_MOCKUP_VIDEO;
+                const media = (typeof resolveExerciseMediaUrl === 'function')
+                    ? resolveExerciseMediaUrl(cat?.video_local_path || cat?.video_url || cat?.video || ex.video)
+                    : { url: ex.video || SENS_EXERCISE_MOCKUP_VIDEO, isVideo: true, isGif: false };
                 const exTitle = (cat && (cat['name_' + activeLang] || cat.name_es || cat.name)) || ex.name;
 
                 groupedHtml += `
@@ -6625,9 +6627,13 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         <div class="sens-video-skeleton compact">
                             <div class="sens-skeleton-shimmer"></div>
                         </div>
-                        <video muted loop playsinline preload="none" class="sens-ex-compact-video" oncanplay="this.previousElementSibling?.classList.add('is-hidden')">
-                            <source src="${exVideoPath}" type="video/mp4">
-                        </video>
+                        ${media.isVideo ? `
+                            <video muted loop playsinline preload="none" class="sens-ex-compact-video" oncanplay="this.previousElementSibling?.classList.add('is-hidden')">
+                                <source src="${media.url}" type="video/mp4">
+                            </video>
+                        ` : `
+                            <img src="${media.url}" alt="${exTitle}" loading="lazy" class="sens-ex-compact-video" onload="this.previousElementSibling?.classList.add('is-hidden')" style="object-fit: cover; width: 100%; height: 100%;" />
+                        `}
                         <div class="sens-ex-compact-overlay"></div>
                         <div class="sens-ex-compact-top">
                             <span class="ex-compact-sets-badge">${ex.sets || 3} × ${ex.reps || 10}</span>

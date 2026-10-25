@@ -3,13 +3,14 @@
    Cache-First for Static Assets | Network-First for Navigation | Offline Support
    ============================================================================= */
 
-const CACHE_NAME = 'sens-pwa-v2.3.0';
+const CACHE_NAME = 'sens-pwa-v2.5.0';
 
 const PRECACHE_ASSETS = [
     './',
     './index.html',
     './style.css',
     './app.js',
+    './exercises_db.js',
     './manifest.json',
     './img/logo-blanco.png',
     './img/icons/icon-192.png',
