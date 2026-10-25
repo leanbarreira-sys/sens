@@ -20737,6 +20737,56 @@ let mktStudioState = {
 };
 
 window.initCoachMarketingStudio = function() {
+    // Switcher Mobile: 1. Diseñar & Editar vs 2. Ver Preview & Descargar
+    function setMktMobileView(tab) {
+        const switcher = document.getElementById('mktMobileSwitcher');
+        const layout = document.querySelector('.sens-mkt-studio-layout');
+        if (switcher) {
+            switcher.querySelectorAll('.sens-mkt-switch-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-tab') === tab);
+            });
+        }
+        if (layout) {
+            layout.classList.toggle('mobile-view-editor', tab === 'editor');
+            layout.classList.toggle('mobile-view-preview', tab === 'preview');
+        }
+        if (tab === 'preview') {
+            const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
+            if (hiddenVideo && typeof mktStudioState !== 'undefined' && mktStudioState.mediaType === 'video') {
+                hiddenVideo.play().catch(() => {});
+            }
+            if (typeof renderMarketingCanvasFrame === 'function') {
+                renderMarketingCanvasFrame();
+            }
+        }
+    }
+    window.setMktMobileView = setMktMobileView;
+
+    const switchBtns = document.querySelectorAll('#mktMobileSwitcher .sens-mkt-switch-btn');
+    switchBtns.forEach(btn => {
+        btn.onclick = () => {
+            const tab = btn.getAttribute('data-tab') || 'editor';
+            setMktMobileView(tab);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    });
+
+    const btnGoPreview = document.getElementById('btnMktGoToPreview');
+    if (btnGoPreview) {
+        btnGoPreview.onclick = () => {
+            setMktMobileView('preview');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    }
+
+    const btnGoEdit = document.getElementById('btnMktGoToEdit');
+    if (btnGoEdit) {
+        btnGoEdit.onclick = () => {
+            setMktMobileView('editor');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    }
+
     const tplGrid = document.getElementById('mktTemplateSelectorGrid');
     const formatBtns = document.querySelectorAll('#mktFormatSelectorGrid .sens-mkt-format-btn');
     const sceneBtns = document.querySelectorAll('#mktVideoScenesTimelineBar .sens-mkt-scene-btn');
@@ -21350,6 +21400,15 @@ function loadActiveSceneOrSlideIntoInputs() {
 }
 
 window.renderCoachMarketingStudio = function() {
+    if (window.innerWidth <= 960) {
+        const layout = document.querySelector('.sens-mkt-studio-layout');
+        if (layout && !layout.classList.contains('mobile-view-editor') && !layout.classList.contains('mobile-view-preview')) {
+            if (typeof window.setMktMobileView === 'function') {
+                window.setMktMobileView('editor');
+            }
+        }
+    }
+
     const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
     if (hiddenVideo && mktStudioState.mediaType === 'video') {
         hiddenVideo.play().catch(() => {});

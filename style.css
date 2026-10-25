@@ -16224,11 +16224,77 @@ body.in-portal #coachHubView {
     margin-top: 14px;
 }
 
+/* Switcher Mobile y Botones de Salto */
+.sens-mkt-mobile-switcher {
+    display: none !important;
+}
+.sens-mkt-btn-go-preview {
+    display: none !important;
+}
+.sens-mkt-back-to-edit {
+    display: none !important;
+}
+
 @media (max-width: 960px) {
-    .sens-mkt-studio-layout {
+    #paneMarketing {
+        padding-bottom: 120px !important;
+    }
+    .sens-mkt-mobile-switcher {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        background: #F3F1ED;
+        padding: 4px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+        border: 1px solid rgba(18, 18, 20, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 25;
+        box-shadow: 0 2px 10px rgba(18, 18, 20, 0.04);
+    }
+    .sens-mkt-switch-btn {
+        border: none;
+        background: transparent;
+        padding: 10px 8px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #575659;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         display: flex;
-        flex-direction: column-reverse !important; /* Mobile-First: Preview siempre arriba */
-        gap: 14px;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+    }
+    .sens-mkt-switch-btn.active {
+        background: #FFFFFF;
+        color: #121214;
+        font-weight: 800;
+        box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08);
+    }
+    .sens-mkt-studio-layout {
+        display: block !important;
+    }
+    .sens-mkt-studio-layout.mobile-view-editor .sens-mkt-controls-col {
+        display: block !important;
+    }
+    .sens-mkt-studio-layout.mobile-view-editor .sens-mkt-preview-col {
+        display: none !important;
+    }
+    .sens-mkt-studio-layout.mobile-view-editor .sens-mkt-btn-go-preview {
+        display: block !important;
+    }
+    .sens-mkt-studio-layout.mobile-view-preview .sens-mkt-controls-col {
+        display: none !important;
+    }
+    .sens-mkt-studio-layout.mobile-view-preview .sens-mkt-preview-col {
+        display: flex !important;
+        position: static !important;
+    }
+    .sens-mkt-studio-layout.mobile-view-preview .sens-mkt-back-to-edit {
+        display: block !important;
     }
     .sens-mkt-preview-sticky {
         position: static !important;

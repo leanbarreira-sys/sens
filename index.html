@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.8">
+    <link rel="stylesheet" href="style.css?v=11.9">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6721,7 +6721,17 @@
                             </div>
                         </div>
 
-                        <div class="sens-mkt-studio-layout">
+                        <!-- Mobile Segmented Switcher (Solo visible en dispositivos móviles / tablets) -->
+                        <div class="sens-mkt-mobile-switcher" id="mktMobileSwitcher">
+                            <button type="button" class="sens-mkt-switch-btn active" data-tab="editor" id="mktSwitchTabEditor">
+                                <span>✏️ 1. Diseñar &amp; Editar</span>
+                            </button>
+                            <button type="button" class="sens-mkt-switch-btn" data-tab="preview" id="mktSwitchTabPreview">
+                                <span>👁️ 2. Ver Preview &amp; Descargar</span>
+                            </button>
+                        </div>
+
+                        <div class="sens-mkt-studio-layout mobile-view-editor">
                             <!-- COLUMNA IZQUIERDA / CONTROLES SIMPLIFICADOS (3 PASOS DIRECTOS) -->
                             <div class="sens-mkt-controls-col">
                                 <!-- Paso 1: Formato y Estilo Viral -->
@@ -6956,11 +6966,23 @@
                                         </div>
                                     </details>
                                 </div>
+
+                                <!-- Botón Mobile para saltar directo a Vista Previa -->
+                                <button type="button" class="btn btn-primary btn-full sens-mkt-btn-go-preview" id="btnMktGoToPreview"
+                                    style="margin-top: 12px; font-weight: 800; padding: 13px; font-size: 13px; background: #E5CBA7; color: #2A241C; border: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(229, 203, 167, 0.28);">
+                                    👁️ Ver Vista Previa y Descargar HD →
+                                </button>
                             </div>
 
                             <!-- COLUMNA DERECHA / PREVIEW EN VIVO 1080p Y EXPORTACIÓN -->
                             <div class="sens-mkt-preview-col">
                                 <div class="sens-mkt-preview-sticky">
+                                    <!-- Botón Mobile para volver a editar -->
+                                    <button type="button" class="btn btn-outline btn-full btn-sm sens-mkt-back-to-edit" id="btnMktGoToEdit"
+                                        style="margin-bottom: 12px; font-weight: 700; font-size: 12px; border-color: rgba(18, 18, 20, 0.15); color: #121214; border-radius: 10px; background: #FAF9F6; padding: 9px 12px;">
+                                        ← Volver a Modificar Textos o Estilo
+                                    </button>
+
                                     <div
                                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
                                         <span
@@ -9363,7 +9385,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=12.2"></script>
+    <script src="app.js?v=12.3"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
