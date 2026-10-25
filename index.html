@@ -6092,17 +6092,12 @@
                                 </div>
                             </div>
 
-                            <!-- Leyenda de Estados del Calendario (Sincronizado con Alumno) -->
-                            <div class="coach-cal-legend-bar">
-                                <div class="coach-legend-item"><span
-                                        class="coach-legend-dot completed"></span><span>Completado por el alumno</span>
-                                </div>
-                                <div class="coach-legend-item"><span
-                                        class="coach-legend-dot scheduled"></span><span>Planificado</span></div>
-                                <div class="coach-legend-item"><span class="coach-legend-dot desvio"></span><span>Desvío
-                                        de Cargas</span></div>
-                                <div class="coach-legend-item"><span class="coach-legend-dot unlogged"></span><span>Sin
-                                        Registrar (Pasado)</span></div>
+                            <!-- Leyenda de Estados del Calendario (Quiet Luxury Compacta) -->
+                            <div class="coach-cal-legend-bar coach-cal-legend-bar-compact">
+                                <div class="coach-legend-item"><span class="coach-legend-dot completed"></span><span>Completado</span></div>
+                                <div class="coach-legend-item"><span class="coach-legend-dot scheduled"></span><span>Planificado</span></div>
+                                <div class="coach-legend-item"><span class="coach-legend-dot desvio"></span><span>Desvío</span></div>
+                                <div class="coach-legend-item"><span class="coach-legend-dot unlogged"></span><span>Sin registrar</span></div>
                             </div>
 
                             <!-- Filtro de Músculo en Calendario Mensual (Scroll Horizontal Táctil) -->
@@ -6121,6 +6116,7 @@
                                 <button type="button" class="coach-muscle-filter-chip"
                                     data-muscle="hombros">Hombros</button>
                                 <button type="button" class="coach-muscle-filter-chip" data-muscle="core">Core</button>
+                                <button type="button" class="coach-muscle-filter-chip" data-muscle="descanso">Descanso</button>
                             </div>
 
                             <!-- Grilla de Días de la Semana -->
@@ -9307,7 +9303,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=11.1"></script>
+    <script src="app.js?v=11.2"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

@@ -17818,6 +17818,78 @@ body.in-portal #coachHubView {
     text-transform: uppercase !important;
 }
 
+/* Nuevo Bloque V2 Quiet Luxury para Celdas Mensuales */
+.coach-month-cell-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: center;
+    width: 100%;
+    margin-top: 2px;
+}
+
+.coach-month-muscle-pill-v2 {
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    color: #9E7D4B;
+    background: rgba(158, 125, 75, 0.1);
+    border: 1px solid rgba(158, 125, 75, 0.25);
+    border-radius: 4px;
+    padding: 2px 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    line-height: 1.1;
+    display: block;
+}
+
+.coach-month-count-micro {
+    font-size: 8.5px;
+    color: #71717A;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+}
+
+.coach-month-rest-label {
+    font-size: 8px;
+    color: #A1A1AA;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    margin-top: 4px;
+}
+
+.coach-cal-legend-bar-compact {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    padding: 5px 10px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E4E4E7 !important;
+    border-radius: 20px !important;
+    margin-bottom: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+}
+
+.coach-cal-legend-bar-compact .coach-legend-item {
+    font-size: 9.5px !important;
+    white-space: nowrap !important;
+    gap: 4px !important;
+}
+
 .coach-month-emojis {
     display: none !important;
 }
@@ -17841,13 +17913,14 @@ body.in-portal #coachHubView {
 }
 
 .coach-month-day-cell.is-dimmed {
-    opacity: 0.3 !important;
+    opacity: 0.25 !important;
     filter: grayscale(80%) !important;
 }
 
 .coach-month-day-cell.is-matching-filter {
     border: 2px solid #9E7D4B !important;
     background: #FFFDF9 !important;
+    box-shadow: 0 0 0 2px rgba(158, 125, 75, 0.2) !important;
 }
 
 @media (max-width: 600px) {
@@ -17857,14 +17930,21 @@ body.in-portal #coachHubView {
         width: 100% !important;
     }
     .coach-month-day-cell {
-        min-height: 48px !important;
-        padding: 3px 2px !important;
-        border-radius: 6px !important;
+        min-height: 52px !important;
+        padding: 4px 2px !important;
+        border-radius: 8px !important;
         min-width: 0 !important;
     }
     .coach-month-day-cell .cell-number {
-        font-size: 10.5px !important;
-        font-weight: 700 !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+    }
+    .coach-month-muscle-pill-v2 {
+        font-size: 7.5px !important;
+        padding: 1.5px 2px !important;
+    }
+    .coach-month-count-micro {
+        font-size: 8px !important;
     }
     .coach-month-muscle-chip {
         font-size: 6.5px !important;

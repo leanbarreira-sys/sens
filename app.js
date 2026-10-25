@@ -15902,7 +15902,13 @@ function renderDynamicWeekStrip() {
         const isToday = isSameDay(dayDate, new Date());
         const isSelected = isSameDay(dayDate, AppState.selectedDate || new Date());
         const dayKey = 'day' + (i + 1);
-        const dayData = data[dayKey] || {};
+        const dateKey = formatDateKey(dayDate);
+        let dayData = (data && data.calendar_schedule && data.calendar_schedule[dateKey])
+            ? data.calendar_schedule[dateKey]
+            : ((data && data[dayKey]) ? data[dayKey] : {});
+        if (dayData && dayData.isRestDay) {
+            dayData = { title: 'Descanso', exercises: [], isRestDay: true };
+        }
         const modality = dayData.modality;
         const execution = getAthleteWorkoutExecution(athId, dayDate);
         const isCompleted = Boolean(execution && execution.completed);
@@ -22209,6 +22215,7 @@ const CoachMultiDayActionsManager = {
     currentPickerTarget: null,
     cachedCurrentExercises: [],
     cachedCatalog: [],
+    addedExercisesQueue: [],
 
     init() {
         const modal = document.getElementById('modalCoachMultiDayActions');
@@ -22239,6 +22246,10 @@ const CoachMultiDayActionsManager = {
                     panes.forEach(p => p.style.display = 'none');
                     const activePane = document.getElementById(`multiTabPane${tabKey.charAt(0).toUpperCase() + tabKey.slice(1)}`);
                     if (activePane) activePane.style.display = 'block';
+
+                    if (tabKey === 'add') this.renderAddQueue();
+                    if (tabKey === 'delete') this.renderDeleteExercisesList();
+                    if (tabKey === 'adjust') this.renderAdjustExercisesList();
                 });
             }
         });
@@ -22252,13 +22263,13 @@ const CoachMultiDayActionsManager = {
         const btnAdd = document.getElementById('btnExecuteMultiAdd');
         if (btnAdd && !btnAdd._hasListener) {
             btnAdd._hasListener = true;
-            btnAdd.addEventListener('click', () => this.executeAdd());
+            btnAdd.addEventListener('click', () => this.executeAddQueue());
         }
 
         const btnDelete = document.getElementById('btnExecuteMultiDelete');
         if (btnDelete && !btnDelete._hasListener) {
             btnDelete._hasListener = true;
-            btnDelete.addEventListener('click', () => this.executeDelete());
+            btnDelete.addEventListener('click', () => this.executeDeleteSelected());
         }
 
         const btnDeleteSessions = document.getElementById('btnExecuteMultiDeleteSessions');
@@ -22282,9 +22293,18 @@ const CoachMultiDayActionsManager = {
         }
     },
 
+    executeAdd() {
+        return this.executeAddQueue();
+    },
+
+    executeDelete() {
+        return this.executeDeleteSelected();
+    },
+
     openModal(selectedDates, athId) {
         this.selectedDates = Array.isArray(selectedDates) ? selectedDates : [];
         this.activeAthleteId = athId || (typeof CoachWorkoutsMaster !== 'undefined' ? CoachWorkoutsMaster.activeAthleteId : null) || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null) || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || 'mock_vip';
+        this.addedExercisesQueue = [];
 
         const modal = document.getElementById('modalCoachMultiDayActions');
         if (!modal || this.selectedDates.length === 0) {
@@ -22298,6 +22318,9 @@ const CoachMultiDayActionsManager = {
         if (subEl) subEl.textContent = `${this.selectedDates.slice(0, 4).join(', ')}${this.selectedDates.length > 4 ? ` y ${this.selectedDates.length - 4} días más` : ''}`;
 
         this.populateExerciseSelectors();
+        this.renderAddQueue();
+        this.renderDeleteExercisesList();
+        this.renderAdjustExercisesList();
 
         modal.classList.add('active');
         modal.style.display = 'flex';
@@ -24630,30 +24653,39 @@ const CoachWorkoutsMaster = {
                 const dateStr = this.selectedCalendarDateStr;
                 if (!dateStr) return;
 
-                const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
+                const athId = this.resolveAthleteId();
                 if (!athId) return;
 
                 const workoutData = getCoachAthleteWorkoutData(athId) || {};
-                const datedSchedule = workoutData.calendar_schedule || {};
+                if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+                const datedSchedule = workoutData.calendar_schedule;
 
-                if (!datedSchedule[dateStr] || !datedSchedule[dateStr].exercises || datedSchedule[dateStr].exercises.length === 0) {
-                    if (typeof showSensToast === 'function') showSensToast('Este día ya está libre.', 'info');
-                    return;
+                const parts = dateStr.split('-');
+                let dayKey = null;
+                if (parts.length === 3) {
+                    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    const dayIdx = d.getDay();
+                    dayKey = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
                 }
 
-                delete datedSchedule[dateStr];
+                datedSchedule[dateStr] = {
+                    dateStr: dateStr,
+                    dayOfWeek: dayKey ? getDayNameFromKey(dayKey) : 'Día',
+                    title: 'Descanso',
+                    isRestDay: true,
+                    completed: false,
+                    exercises: []
+                };
                 workoutData.calendar_schedule = datedSchedule;
 
-                localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
-                if (window.__coachAthletesCache) {
-                    const cached = window.__coachAthletesCache.find(a => a.id === athId);
-                    if (cached) cached.prescribed_workouts = workoutData;
-                }
-
-                if (supabaseClient && !athId.startsWith('mock_')) {
-                    try {
-                        { const _r = await persistPrescribedWorkoutsToSupabase(athId, workoutData); if (!_r.ok) { console.warn('Supabase workouts sync:', _r.error); if (typeof showSensToast === 'function') showSensToast('No se pudo sincronizar la rutina con el alumno: ' + (_r.error && _r.error.message || ''), 'alert', 6000); } }
-                    } catch (err) {}
+                if (typeof CoachMultiDayActionsManager !== 'undefined') {
+                    await CoachMultiDayActionsManager.persistWorkoutData(workoutData);
+                } else {
+                    localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+                    localStorage.setItem('sens_prescribed_workouts', JSON.stringify(workoutData));
+                    if (supabaseClient && !athId.startsWith('mock_')) {
+                        try { await persistPrescribedWorkoutsToSupabase(athId, workoutData); } catch (err) {}
+                    }
                 }
 
                 if (typeof showSensToast === 'function') {
@@ -24662,6 +24694,9 @@ const CoachWorkoutsMaster = {
 
                 this.renderMonthCalendar();
                 this.renderMonthDayDetail(dateStr);
+                if (typeof CoachMultiDayActionsManager !== 'undefined') {
+                    CoachMultiDayActionsManager.refreshViews();
+                }
             });
         }
 
@@ -24853,6 +24888,8 @@ const CoachWorkoutsMaster = {
                 if (weeklyDay && weeklyDay.exercises && weeklyDay.exercises.length > 0) {
                     session = weeklyDay;
                 }
+            } else if (session.isRestDay) {
+                session = null;
             }
 
             const hasWorkout = Boolean(session && session.exercises && session.exercises.length > 0);
@@ -24867,8 +24904,8 @@ const CoachWorkoutsMaster = {
                 const totalSets = session.exercises.reduce((acc, e) => acc + (parseInt(e.sets, 10) || 3), 0);
                 const modTag = (session.modality === 'presencial') ? 'Presencial' : (session.modality === 'online') ? 'Online' : 'Autónomo';
                 
-                // Grupos musculares en chips tipográficos (Quiet Luxury - Cero emoticones)
-                const muscleCategories = new Set(session.exercises.map(ex => getBiomechanicalCategory(ex)));
+                // Grupos musculares en chips tipográficos V2 (Quiet Luxury - Cero emoticones)
+                const muscleCategories = Array.from(new Set(session.exercises.map(ex => getBiomechanicalCategory(ex))));
                 const muscleTagMap = {
                     piernas: 'PIERNAS',
                     espalda: 'ESPALDA',
@@ -24879,24 +24916,21 @@ const CoachWorkoutsMaster = {
                     movilidad: 'MOVILIDAD',
                     cardio: 'CARDIO'
                 };
-                const tags = [];
-                ['piernas', 'espalda', 'pecho', 'brazos', 'hombros', 'core', 'movilidad', 'cardio'].forEach(cat => {
-                    if (muscleCategories.has(cat) && muscleTagMap[cat]) tags.push(muscleTagMap[cat]);
-                });
-                if (tags.length === 0) tags.push('FUERZA');
-                const tagDisplay = tags.slice(0, 2).map(t => `<span class="coach-month-muscle-chip">${t}</span>`).join('');
-                const catNames = Array.from(muscleCategories).map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(' + ');
+                const tags = muscleCategories.map(cat => muscleTagMap[cat] || cat.toUpperCase()).filter(Boolean);
+                const tagLabel = tags.length > 0 ? (tags.length === 1 ? tags[0] : `${tags[0].slice(0, 4)}+${tags[1].slice(0, 3)}`) : 'FUERZA';
+                const catNames = muscleCategories.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(' + ');
 
                 bodyHtml = `
-                    <div class="coach-month-muscle-row" title="${modTag}: ${catNames || 'Fuerza'}">${tagDisplay}</div>
-                    <div class="coach-month-ex-meta" style="font-size: 10px; font-weight: 700; color: #E5CBA7; margin-top: 3px; font-variant-numeric: tabular-nums;">${exCount} ej • ${totalSets} series</div>
-                    <div class="coach-month-mod-label" title="${session.title || modTag}">${session.title ? session.title : modTag}</div>
+                    <div class="coach-month-cell-content">
+                        <span class="coach-month-muscle-pill-v2" title="${modTag}: ${catNames || 'Fuerza'}">${tagLabel}</span>
+                        <span class="coach-month-count-micro">${exCount} ej</span>
+                    </div>
                 `;
 
                 // Micro-indicador de estado sincronizado estrictamente con la ejecución real del alumno
                 const exec = (typeof getAthleteWorkoutExecution === 'function') ? getAthleteWorkoutExecution(athId, curDate) : null;
-                const isCompleted = Boolean(exec && (exec.completed || exec.attended));
-                const isMissed = Boolean(exec && exec.missed);
+                const isCompleted = Boolean(exec && (exec.completed || exec.attended)) && (dateStr <= todayStr);
+                const isMissed = Boolean(exec && exec.missed) && (dateStr <= todayStr);
 
                 if (isCompleted) {
                     let hasDeviation = false;
@@ -24913,15 +24947,21 @@ const CoachWorkoutsMaster = {
                         }
                     }
                     statusDotHtml = hasDeviation
-                        ? `<span class="coach-month-status-dot desvio" title="Sesión completada con desvío en cargas/RIR"></span>`
-                        : `<span class="coach-month-status-dot completed" title="Sesión completada y registrada por el alumno"></span>`;
+                        ? `<span class="coach-month-status-dot desvio" title="Completado con desvío en cargas/RIR"></span>`
+                        : `<span class="coach-month-status-dot completed" title="Completado por el alumno"></span>`;
                 } else if (isMissed) {
-                    statusDotHtml = `<span class="coach-month-status-dot missed" title="Sesión no realizada / ausente"></span>`;
+                    statusDotHtml = `<span class="coach-month-status-dot missed" title="No realizado / ausente"></span>`;
                 } else if (dateStr < todayStr) {
-                    statusDotHtml = `<span class="coach-month-status-dot unlogged" title="Fecha pasada sin registro del alumno"></span>`;
+                    statusDotHtml = `<span class="coach-month-status-dot unlogged" title="Pasado sin registro"></span>`;
                 } else {
-                    statusDotHtml = `<span class="coach-month-status-dot scheduled" title="Sesión programada pendiente"></span>`;
+                    statusDotHtml = `<span class="coach-month-status-dot scheduled" title="Planificado"></span>`;
                 }
+            } else {
+                bodyHtml = `
+                    <div class="coach-month-cell-content">
+                        <span class="coach-month-rest-label">Descanso</span>
+                    </div>
+                `;
             }
 
             const multiCheckHtml = this.isMultiSelectMode ? `
@@ -24931,7 +24971,7 @@ const CoachWorkoutsMaster = {
             ` : '';
 
             html += `
-                <div class="coach-month-day-cell ${hasWorkout ? 'has-workout' : ''} ${isToday ? 'is-today' : ''} ${isSelected && !this.isMultiSelectMode ? 'is-selected' : ''} ${isMultiSelected ? 'is-multi-selected' : ''}" data-date="${dateStr}">
+                <div class="coach-month-day-cell ${hasWorkout ? 'has-workout' : 'is-rest-day'} ${isToday ? 'is-today' : ''} ${isSelected && !this.isMultiSelectMode ? 'is-selected' : ''} ${isMultiSelected ? 'is-multi-selected' : ''}" data-date="${dateStr}">
                     <div class="cell-top-bar">
                         <span class="cell-number ${isToday ? 'today-circle' : ''}">${dayNum}</span>
                         <div style="display: flex; align-items: center; gap: 4px;">
@@ -24974,7 +25014,7 @@ const CoachWorkoutsMaster = {
 
     applyMonthMuscleFilter() {
         const filterCat = this.monthMuscleFilter || 'all';
-        const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
+        const athId = this.resolveAthleteId();
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
         const datedSchedule = workoutData.calendar_schedule || {};
 
@@ -24988,11 +25028,30 @@ const CoachWorkoutsMaster = {
                 const dayIndex = d.getDay();
                 const key = dayIndex === 0 ? 'day7' : `day${dayIndex}`;
                 session = workoutData[key];
+            } else if (session.isRestDay) {
+                session = null;
             }
 
             const hasWorkout = Boolean(session && session.exercises && session.exercises.length > 0);
-            if (!hasWorkout || filterCat === 'all') {
+            if (filterCat === 'all') {
                 cell.classList.remove('is-matching-filter', 'is-dimmed');
+                return;
+            }
+
+            if (filterCat === 'descanso') {
+                if (!hasWorkout) {
+                    cell.classList.add('is-matching-filter');
+                    cell.classList.remove('is-dimmed');
+                } else {
+                    cell.classList.add('is-dimmed');
+                    cell.classList.remove('is-matching-filter');
+                }
+                return;
+            }
+
+            if (!hasWorkout) {
+                cell.classList.add('is-dimmed');
+                cell.classList.remove('is-matching-filter');
                 return;
             }
 
@@ -25013,6 +25072,10 @@ const CoachWorkoutsMaster = {
             c.classList.toggle('is-selected', c.getAttribute('data-date') === dateStr);
         });
         this.renderMonthDayDetail(dateStr);
+        const detailCard = document.getElementById('coachMonthDayDetailCard');
+        if (detailCard && window.innerWidth < 768) {
+            detailCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
     },
 
     renderMonthDayDetail(dateStr) {
@@ -25024,9 +25087,10 @@ const CoachWorkoutsMaster = {
 
         detailCard.style.display = 'block';
 
-        const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
+        const athId = this.resolveAthleteId();
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
-        const datedSchedule = workoutData.calendar_schedule || {};
+        if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+        const datedSchedule = workoutData.calendar_schedule;
 
         let session = datedSchedule[dateStr];
         if (!session) {
@@ -25034,7 +25098,15 @@ const CoachWorkoutsMaster = {
             const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
             const dayIndex = d.getDay();
             const key = dayIndex === 0 ? 'day7' : `day${dayIndex}`;
-            session = workoutData[key];
+            const weeklyDay = workoutData[key];
+            if (weeklyDay && Array.isArray(weeklyDay.exercises) && weeklyDay.exercises.length > 0) {
+                session = JSON.parse(JSON.stringify(weeklyDay));
+                session.dateStr = dateStr;
+                datedSchedule[dateStr] = session;
+                workoutData.calendar_schedule = datedSchedule;
+            }
+        } else if (session.isRestDay) {
+            session = null;
         }
 
         if (!session || !session.exercises || session.exercises.length === 0) {
@@ -25042,7 +25114,7 @@ const CoachWorkoutsMaster = {
             if (badgeEl) badgeEl.textContent = 'Descanso';
             listEl.innerHTML = `
                 <div style="padding: 18px; text-align: center; color: #71717A; font-size: 12.5px;">
-                    No hay entrenamientos cargados para el día <strong>${dateStr}</strong>.
+                    No hay entrenamientos cargados para el día <strong>${dateStr}</strong> (Día Libre / Descanso).
                     <div style="margin-top: 8px;">
                         <button type="button" class="btn btn-outline btn-sm btn-quick-add-from-empty" style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700;">
                             + Agregar Ejercicio a este Día
@@ -25217,13 +25289,52 @@ const CoachWorkoutsMaster = {
         const dateStr = this.selectedCalendarDateStr;
         if (!dateStr) return;
 
-        const athId = this.activeAthleteId || coachWorkoutState.activeAthleteId;
+        const athId = this.resolveAthleteId();
         if (!athId) return;
 
         const workoutData = getCoachAthleteWorkoutData(athId) || {};
         if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
         const datedSchedule = workoutData.calendar_schedule;
+
+        // Asegurar que el día existe en calendar_schedule
+        if (!datedSchedule[dateStr]) {
+            const parts = dateStr.split('-');
+            const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            const dayIndex = d.getDay();
+            const key = dayIndex === 0 ? 'day7' : `day${dayIndex}`;
+            const weeklyDay = workoutData[key];
+            datedSchedule[dateStr] = {
+                dateStr: dateStr,
+                dayOfWeek: key ? getDayNameFromKey(key) : 'Día',
+                title: (weeklyDay && weeklyDay.title) || `Entrenamiento del ${dateStr}`,
+                modality: (weeklyDay && weeklyDay.modality) || 'presencial',
+                completed: false,
+                exercises: (weeklyDay && Array.isArray(weeklyDay.exercises)) ? JSON.parse(JSON.stringify(weeklyDay.exercises)) : []
+            };
+        }
+
         const currentSession = datedSchedule[dateStr];
+
+        // Scrapear los inputs del DOM activamente
+        const rows = document.querySelectorAll('#monthDetailExercisesList .coach-compare-row');
+        rows.forEach(row => {
+            const idx = parseInt(row.getAttribute('data-idx'), 10);
+            if (currentSession.exercises && currentSession.exercises[idx]) {
+                const setsInp = row.querySelector('.month-inp-sets');
+                const repsInp = row.querySelector('.month-inp-reps');
+                const weightInp = row.querySelector('.month-inp-weight');
+                const rirInp = row.querySelector('.month-inp-rir');
+                const restInp = row.querySelector('.month-inp-rest');
+                const notesInp = row.querySelector('.month-inp-notes');
+
+                if (setsInp) currentSession.exercises[idx].sets = parseInt(setsInp.value, 10) || 3;
+                if (repsInp) currentSession.exercises[idx].reps = repsInp.value.trim() || '10-12';
+                if (weightInp) currentSession.exercises[idx].defaultWeight = parseFloat(weightInp.value) || 0;
+                if (rirInp) currentSession.exercises[idx].rir = parseFloat(rirInp.value) || 2;
+                if (restInp) currentSession.exercises[idx].rest = parseInt(restInp.value, 10) || 75;
+                if (notesInp) currentSession.exercises[idx].notes = notesInp.value;
+            }
+        });
 
         // Cascada: Aplicar a Semanas Siguientes del Mesociclo (Inline Ripple Update)
         const applyRipple = document.getElementById('monthDetailApplyRipple')?.checked === true;
@@ -25237,7 +25348,7 @@ const CoachWorkoutsMaster = {
                 futureDates.forEach(fDate => {
                     const fSession = datedSchedule[fDate];
                     if (fSession && Array.isArray(fSession.exercises)) {
-                        const targetEx = fSession.exercises.find(e => e.id === modEx.id);
+                        const targetEx = fSession.exercises.find(e => e.id === modEx.id || e.name === modEx.name);
                         if (targetEx) {
                             targetEx.sets = modEx.sets;
                             targetEx.reps = modEx.reps;
@@ -25251,42 +25362,39 @@ const CoachWorkoutsMaster = {
             });
         }
 
-        localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
-        if (window.__coachAthletesCache) {
-            const cached = window.__coachAthletesCache.find(a => a.id === athId);
-            if (cached) cached.prescribed_workouts = workoutData;
-        }
+        workoutData.calendar_schedule = datedSchedule;
 
-        let monthSaveError = null;
-        if (supabaseClient && !athId.startsWith('mock_')) {
-            try {
-                const { error } = await persistPrescribedWorkoutsToSupabase(athId, workoutData).then(r => ({ error: r.ok ? null : r.error }));
-                if (error) {
-                    monthSaveError = error;
-                    console.error('[SENS] Error al guardar cambios del mes en Supabase profiles:', error);
-                }
-            } catch (err) {
-                monthSaveError = err;
-                console.error('[SENS] Excepción al actualizar Supabase:', err);
+        if (typeof CoachMultiDayActionsManager !== 'undefined') {
+            await CoachMultiDayActionsManager.persistWorkoutData(workoutData);
+        } else {
+            localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+            localStorage.setItem('sens_prescribed_workouts', JSON.stringify(workoutData));
+            if (supabaseClient && !athId.startsWith('mock_')) {
+                try { await persistPrescribedWorkoutsToSupabase(athId, workoutData); } catch (_) {}
             }
         }
 
         if (showToast && typeof showSensToast === 'function') {
-            if (monthSaveError) {
-                showSensToast(`Guardado localmente. Error en Supabase: falta columna 'prescribed_workouts'`, 'alert', 6000);
-            } else {
-                const msg = applyRipple && cascadedSessionsCount > 0
-                    ? `✓ Cambios del día ${dateStr} guardados y aplicados en cascada a semanas siguientes.`
-                    : `✓ Cambios del día ${dateStr} guardados exitosamente.`;
-                showSensToast(msg, 'champagne');
-            }
+            const msg = applyRipple && cascadedSessionsCount > 0
+                ? `✓ Cambios del día ${dateStr} guardados y aplicados en cascada a semanas siguientes.`
+                : `✓ Cambios del día ${dateStr} guardados exitosamente.`;
+            showSensToast(msg, 'champagne');
         }
+
         this.renderMonthCalendar();
+        this.renderMonthDayDetail(dateStr);
+        if (typeof CoachMultiDayActionsManager !== 'undefined') {
+            CoachMultiDayActionsManager.refreshViews();
+        }
     },
 
     getThumbnail(ex) {
         if (ex.poster_url) return ex.poster_url;
         if (ex.thumbnail) return ex.thumbnail;
+        if (ex.video_local_path && typeof resolveExerciseMediaUrl === 'function') {
+            const resolved = resolveExerciseMediaUrl(ex.video_local_path);
+            if (resolved && resolved.type === 'gif') return resolved.src;
+        }
         const url = ex.video_url || ex.video || '';
         if (url.includes('youtube.com') || url.includes('youtu.be')) {
             let videoId = '';
