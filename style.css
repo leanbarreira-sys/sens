@@ -16604,14 +16604,13 @@ body.in-portal #coachHubView {
     background: #080809 !important;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(18, 18, 20, 0.08) !important;
     position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    display: block !important;
+    box-sizing: border-box !important;
     transition: max-width 0.25s cubic-bezier(0.16, 1, 0.3, 1), aspect-ratio 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .sens-mkt-canvas-stage.is-916 {
-    max-width: 270px !important;
+    max-width: 280px !important;
     aspect-ratio: 9 / 16 !important;
 }
 
@@ -16621,12 +16620,14 @@ body.in-portal #coachHubView {
 }
 
 #sensMarketingCanvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
     display: block !important;
     border-radius: inherit !important;
+    pointer-events: none !important;
 }
 
 /* 7. Bottom Sheet Nativo de Acciones del Alumno (Apple Health Grade) */

@@ -20491,66 +20491,69 @@ function saveCoachDbItemEditorChanges() {
 const SENS_MARKETING_TEMPLATES = [
     {
         id: 'tpl_hook_bold_statement',
-        name: '1. Hook Bold Statement (Centro-Alto 82px)',
-        badge: 'HOOK BOLD',
-        desc: 'Titular masivo centrado con overlay completo. Máximo impacto stop-scroll en los primeros 3s.',
+        name: '1. Hook Bold Statement (Centro 82px)',
+        badge: 'HOOK DISRUPTIVO',
+        desc: 'Titular monumental centrado de alto impacto stop-scroll. Diseñado para frenar el dedo en 0.2s.',
         spatialArchetype: 'hero_center_big',
         overlayMode: 'full_wash',
+        overlayTitle: 'Filtro Focal Completo (Optimizado para Titular Centrado 82px)',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'BIOMECÁNICA SENS', headline: 'DEJÁ DE REBOTAR ABAJO EN SENTADILLA', sub: 'Usar inercia destruye tus tendones y desactiva el estímulo muscular real.', c1: 'Cadencia 3-1-1-0', c2: 'Fuerza Real', c3: '' },
-            { eyebrow: 'EL SECRETO TÉCNICO', headline: '3 SEGUNDOS DE DESCENSO CONTROLADO', sub: 'Mantené la tensión excéntrica y pausá 1 segundo en el punto más profundo.', c1: 'Cero Lesiones', c2: '+Reclutamiento', c3: '' },
-            { eyebrow: 'MAKES SENS', headline: '¿QUERÉS ENTRENAR CON SENTIDO?', sub: 'Diagnóstico articular presencial en CABA o programación guiada desde la App.', c1: 'Presencial / App', c2: 'Escribime SENS →', c3: '' }
+            { eyebrow: 'VERDAD BIOLÓGICA • SENS', headline: 'ENTRENÁS DURO. PARECÉS EL MISMO.', sub: 'El 92% fatiga el músculo equivocado por un error de 3cm en la cadera.', c1: 'Cadencia 3-1-1-0', c2: 'Fuerza Real', c3: '' },
+            { eyebrow: 'EL SECRETO TÉCNICO', headline: 'MENOS SERIES BASURA. MÁS TENSIÓN REAL.', sub: 'Controlá la bajada 3 segundos y frená abajo. El músculo crece bajo tensión, no con inercia.', c1: 'Cero Lesiones', c2: 'RIR 2 Clínico', c3: '' },
+            { eyebrow: 'MAKES SENS • CABA & APP', headline: '¿QUERÉS DEJAR DE ADIVINAR EN EL GYM?', sub: 'Evaluación articular presencial 1:1 en Buenos Aires o programación guiada en la App.', c1: 'Cupos Limitados', c2: 'Escribime SENS →', c3: '' }
         ],
         slides: [
-            { eyebrow: 'STOP-SCROLL • 1/4', headline: 'DEJÁ DE REBOTAR ABAJO AL ENTRENAR', sub: 'Por qué subir kilos con inercia te estanca y sobrecarga tus articulaciones.', c1: 'Biomecánica', c2: 'Fuerza Real', c3: '' },
-            { eyebrow: 'EL PROBLEMA • 2/4', headline: 'LA INERCIA ANULA LA TENSIÓN MUSCULAR', sub: 'Cuando rebotás en el fondo, el tendón absorbe el impacto y el músculo no trabaja.', c1: 'Evitá Rebotes', c2: 'Cuidá Rodillas', c3: '' },
-            { eyebrow: 'SOLUCIÓN SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + PAUSA ISOMÉTRICA', sub: '3 segundos al bajar, 1 segundo abajo y subida explosiva exhalando.', c1: '+Estímulo', c2: '~42 kcal / 4 sets', c3: '' },
+            { eyebrow: 'STOP-SCROLL • 1/4', headline: 'ENTRENÁS DURO. PARECÉS EL MISMO.', sub: 'Por qué pasar 2 horas en el gimnasio no te está dando la estructura que buscás.', c1: 'Biomecánica', c2: 'Fuerza Real', c3: '' },
+            { eyebrow: 'EL ERROR • 2/4', headline: 'LEVANTAR KILOS CON INERCIA Y REBOTE', sub: 'Cuando rebotás en el fondo, el tendón absorbe el impacto y el músculo no trabaja.', c1: 'Evitá Rebotes', c2: 'Cuidá Rodillas', c3: '' },
+            { eyebrow: 'MÉTODO SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + PAUSA ISOMÉTRICA', sub: '3 segundos al bajar, 1 segundo abajo y subida explosiva exhalando.', c1: '+Tensión Real', c2: '~42 kcal / 4 sets', c3: '' },
             { eyebrow: 'TU PLAN • 4/4', headline: '¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA o desde la App SENS.', c1: 'Cupos Activos', c2: 'Link en Bio →', c3: '' }
         ],
-        caption: 'El 90% comete este error en el gimnasio por priorizar ego antes que biomecánica.\n\nEn SENS trabajamos con cadencia controlada (3-1-1-0) y selección clínica de ejercicios para que construyas fuerza real sin dolor articular.\n\nComentá "SENS" o escribime por mensaje directo para evaluar tu caso (Presencial CABA, Online 1:1 o Suscripción App).'
+        caption: 'El 92% de las personas en el gimnasio entrena duro pero parece exactamente igual mes tras mes...\n\n¿Por qué? Porque confunden sudar y mover kilos con generar tensión mecánica real en las fibras correctas.\n\nEn SENS eliminamos las series basura, calibramos la cadencia (3-1-1-0) y medimos cada repetición para que tu tiempo rinda de verdad.\n\nComentá "SENS" o escribime por mensaje directo para coordinar tu evaluación inicial (Presencial CABA o App SENS).'
     },
     {
         id: 'tpl_lower_third_pro',
         name: '2. Lower-Third Biomecánico (Video Focus)',
-        badge: 'LOWER-THIRD',
+        badge: 'ANÁLISIS MOTOR',
         desc: '70% de pantalla libre para video de ejecución motora. Titular y técnica protegidos al pie.',
         spatialArchetype: 'lower_third_clean',
         overlayMode: 'lower_third',
+        overlayTitle: 'Gradiente Inferior Limpio (Video 70% Despejado)',
         defaultLayers: { branding: false, eyebrow: true, headline: true, subtitle: false, chips: true },
         scenes: [
-            { eyebrow: 'AJUSTE DE DORSAL', headline: 'NO TIRES DE BRAZOS EN DOMINADAS', sub: '', c1: 'Depresión Escapular', c2: 'Makes Sens →', c3: '' },
-            { eyebrow: 'TRAYECTORIA ÓPTIMA', headline: 'LLEVÁ LA BARRA A LA CLAVÍCULA', sub: '', c1: 'Cero Balanceo', c2: 'Tensión Máxima', c3: '' },
-            { eyebrow: 'PROGRAMACIÓN SENS', headline: 'CONSTRUÍ FUERZA REAL SIN DOLOR', sub: '', c1: 'Plan Personalizado', c2: 'Escribime SENS →', c3: '' }
+            { eyebrow: 'ANÁLISIS MOTOR', headline: 'DEJÁ DE TIRAR CON LOS BRAZOS', sub: '', c1: 'Depresión Escapular', c2: 'Dorsal Ancho', c3: '' },
+            { eyebrow: 'EJECUCIÓN PERFECTA', headline: 'CLAVÁ LOS HOMBROS HACIA ABAJO', sub: '', c1: 'Cero Balanceo', c2: 'Tensión Máxima', c3: '' },
+            { eyebrow: 'METODOLOGÍA SENS', headline: 'CONSTRUÍ UN CUERPO QUE RINDE', sub: '', c1: 'App SENS', c2: 'Escribime TÉCNICA →', c3: '' }
         ],
         slides: [
-            { eyebrow: 'TRACCIÓN • 1/4', headline: 'EL SECRETO DE LAS DOMINADAS PERFECTAS', sub: 'Cómo activar dorsales al 100% sin sobrecargar trapecios ni antebrazos.', c1: 'Dorsal Ancho', c2: 'Biomecánica', c3: '' },
-            { eyebrow: 'ERROR TÍPICO • 2/4', headline: 'FLEXIONAR CODOS SIN CLAVAR ESCÁPULAS', sub: 'Causa compensaciones cervicales y te impide progresar en repeticiones.', c1: 'Evitá Lesiones', c2: 'Control Motor', c3: '' },
-            { eyebrow: 'EJECUCIÓN • 3/4', headline: 'DEPRESIÓN ESCAPULAR + PECHO ARRIBA', sub: 'Sentí cómo la espalda tracciona antes de que los brazos intervengan.', c1: 'Técnica SENS', c2: 'RIR 2', c3: '' },
-            { eyebrow: 'PROGRESÁ • 4/4', headline: 'EVALUACIÓN Y RUTINA EN LA APP SENS', sub: 'Subí tu video para corrección biomecánica directa por Nico.', c1: 'App SENS', c2: 'Escribime SENS →', c3: '' }
+            { eyebrow: 'TRACCIÓN • 1/4', headline: 'POR QUÉ TU ESPALDA SIGUE PLANA', sub: 'El error en dominadas y remos que el 90% comete sin darse cuenta.', c1: 'Dorsal Ancho', c2: 'Biomecánica', c3: '' },
+            { eyebrow: 'EL VICIO • 2/4', headline: 'FLEXIONAR CODOS SIN CLAVAR ESCÁPULAS', sub: 'Fatiga tus antebrazos y bíceps pero deja dormido el dorsal ancho.', c1: 'Evitá Compensar', c2: 'Control Motor', c3: '' },
+            { eyebrow: 'CORRECCIÓN • 3/4', headline: 'DEPRESIÓN ESCAPULAR + PECHO ARRIBA', sub: 'Iniciá cada repetición bajando los hombros hacia los bolsillos.', c1: 'Técnica SENS', c2: 'RIR 2 Clínico', c3: '' },
+            { eyebrow: 'FEEDBACK • 4/4', headline: 'SUBÍ TU VIDEO A LA APP SENS', sub: 'Corrección biomecánica directa por Nico Maralle en tu celular.', c1: 'App SENS', c2: 'Escribime TÉCNICA →', c3: '' }
         ],
-        caption: 'Pequeños ajustes biomecánicos generan grandes cambios en tu estructura física.\n\nGuardá este video para tu próxima sesión de tracción y probá iniciar cada repetición deprimiendo las escápulas.\n\n¿Querés que armemos tu programación completa? Escribime "SENS" por DM.'
+        caption: 'Si hacés dominadas o jalones y solo sentís los antebrazos y el cuello, estás tirando con los músculos equivocados...\n\nLa espalda solo se activa cuando aprendés a deprimir y fijar las escápulas antes de que los brazos doblen.\n\nGuardá este video para tu próxima sesión de tracción y probá este ajuste.\n\nEscribime "TÉCNICA" por DM si querés que analice tu ejecución.'
     },
     {
         id: 'tpl_magazine_split',
         name: '3. Portada Revista Split (Top & Bottom)',
-        badge: 'REVISTA SPLIT',
-        desc: 'Titular arriba y rationale al pie. Centro de la imagen 100% libre para ver al atleta.',
+        badge: 'PORTADA REVISTA',
+        desc: 'Titular editorial arriba y rationale al pie. Centro de la imagen 100% libre para ver al atleta.',
         spatialArchetype: 'magazine_split',
-        overlayMode: 'cinematic',
+        overlayMode: 'magazine_split',
+        overlayTitle: 'Doble Viñeta Top/Bottom (Portada Revista Split)',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'PORTADA EDITORIAL', headline: 'EL ERROR #1 QUE FRENA TUS PIERNAS', sub: 'Levantar kilos sin control de cadera fatiga tus articulaciones y anula el glúteo.', c1: 'Piernas Fuertes', c2: 'Ciencia SENS', c3: '' },
-            { eyebrow: 'AJUSTE CLÍNICO', headline: 'TRÍPODE PLANTAR + PECHO ALTO', sub: 'Distribuí el peso entre talón, base del dedo gordo y quinto metatarsiano.', c1: 'Control Motor', c2: 'RIR 2 Seguro', c3: '' },
-            { eyebrow: 'PLAN PERSONALIZADO', headline: 'POTENCIÁ TU ESTRUCTURA FÍSICA', sub: 'Diagnóstico 360° en CABA o modalidad Online con seguimiento diario en la App.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
+            { eyebrow: 'PORTADA EDITORIAL • 2026', headline: 'EL 89% ENTRENA COMO EN 1995', sub: 'Volumen excesivo, máquinas obsoletas y cero control de tempo. La ciencia del movimiento cambió.', c1: 'Quiet Luxury', c2: 'Ciencia SENS', c3: '' },
+            { eyebrow: 'PARADIGMA SENS', headline: 'CALIDAD NEUROMUSCULAR > VOLUMEN CIEGO', sub: '3 series intensas al fallo técnico superan a 2 horas de series vacías con el celular en la mano.', c1: 'Sobrecarga Medida', c2: 'Alta Eficiencia', c3: '' },
+            { eyebrow: 'PROGRAMA EXCLUSIVO', headline: 'EVALUÁ TU ESTRUCTURA FÍSICA', sub: 'Diagnóstico lumbopélvico presencial en CABA o seguimiento online con Nico.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
         ],
         slides: [
-            { eyebrow: 'PORTADA SENS • 1/4', headline: 'CÓMO CONSTRUIR PIERNAS SIN DOLOR', sub: 'La guía biomecánica definitiva para entrenar tren inferior con inteligencia.', c1: 'Tren Inferior', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'ANATOMÍA • 2/4', headline: 'NO ES BAJAR MÁS, ES BAJAR MEJOR', sub: 'Tu anatomía de cadera define tu profundidad óptima: no fuerces retroversión pélvica.', c1: 'Movilidad', c2: 'Columna Neutra', c3: '' },
-            { eyebrow: 'EJECUCIÓN • 3/4', headline: 'ESTABILIZÁ RODILLAS EN LÍNEA CON PIES', sub: 'Evitá el valgo dinámico activando glúteo medio desde el inicio del movimiento.', c1: 'Glúteo Activo', c2: '~45 kcal / 4 sets', c3: '' },
-            { eyebrow: 'ACCESO • 4/4', headline: 'RUTINAS EN VIDEO Y GUÍA EN LA APP SENS', sub: 'Accedé hoy a toda nuestra biblioteca técnica por $19.900 al mes.', c1: 'App SENS', c2: 'Link en Bio →', c3: '' }
+            { eyebrow: 'PORTADA SENS • 1/4', headline: 'EL 89% DE LOS PLANES ESTÁ OBSOLETO', sub: 'Por qué las rutinas de culturismo tradicional no funcionan para profesionales ocupados.', c1: 'Entrenamiento', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'EL MITO • 2/4', headline: 'MÁS SERIES NO ES MÁS MÚSCULO', sub: 'El exceso de volumen genera fatiga sistémica sin añadir estímulo de crecimiento.', c1: 'Fatiga vs Estímulo', c2: 'SNC Seguro', c3: '' },
+            { eyebrow: 'EL MÉTODO • 3/4', headline: 'SERIES EFECTIVAS EN RIR 1-2', sub: 'Llegar cerca del límite con técnica intachable produce 3x más resultados en la mitad del tiempo.', c1: 'Precisión', c2: 'Longevidad', c3: '' },
+            { eyebrow: 'ACCESO • 4/4', headline: 'PLANES A MEDIDA EN LA APP SENS', sub: 'Accedé a la plataforma con rutinas personalizadas por $19.900 al mes.', c1: 'App SENS', c2: 'Link en Bio →', c3: '' }
         ],
-        caption: 'La verdadera técnica no se improvisa: se calibra centímetro a centímetro.\n\nGuardá esta portada para tu próximo entrenamiento de piernas y probá enfocar tu trípode plantar.\n\nEscribime "SENS" por DM para diseñar tu programación personalizada.'
+        caption: 'El mito de que necesitás pasar 2 horas todos los días en el gimnasio fue creado en los años 90 por culturistas farmacológicos...\n\nPara quien trabaja, tiene familia y busca un físico atlético, funcional y con articulaciones sanas, la respuesta es simple: calidad neuromuscular extrema, cadencia controlada y sobrecarga progresiva medida.\n\nEscribime "SENS" por DM para diseñar tu programación personalizada.'
     },
     {
         id: 'tpl_glass_card',
@@ -20559,82 +20562,86 @@ const SENS_MARKETING_TEMPLATES = [
         desc: 'Placa oscura translúcida con borde de titanio. Contraste absoluto sobre fondos con luz.',
         spatialArchetype: 'glass_card',
         overlayMode: 'cinematic',
+        overlayTitle: 'Placa Frosted Obsidian + Contraste Suave',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'CHECKLIST POSTURAL', headline: 'SI TRABAJÁS SENTADO MÁS DE 7 HORAS', sub: 'Tu cadera se acorta, tus glúteos se apagan y la columna lumbar termina pagando el precio.', c1: 'Columna Sana', c2: 'Movilidad 90/90', c3: '' },
-            { eyebrow: 'PROTOCOLO SENS', headline: 'ESTABILIDAD LUMBOPÉLVICA ACTIVA', sub: '3 minutos de activación de core anti-rotación y movilidad torácica antes de cargar peso.', c1: 'Core Anti-Rotación', c2: 'Cero Dolor', c3: '' },
-            { eyebrow: 'PROGRAMA SENS', headline: 'RECUPERÁ TU AGILIDAD Y FUERZA', sub: 'Sesiones personalizadas en CABA y programas adaptados a profesionales en la App.', c1: 'Presencial / Online', c2: 'Escribime SENS →', c3: '' }
+            { eyebrow: 'DIAGNÓSTICO ERGONÓMICO', headline: 'SI PASÁS +7 HORAS SENTADO, TU POSTURA ESTÁ MURIENDO', sub: 'Amnesia glútea, acortamiento de psoas y fatiga cervical. El chasis humano no fue hecho para una silla.', c1: 'Salud Lumbar', c2: 'Movilidad 90/90', c3: '' },
+            { eyebrow: 'PROTOCOLO DE RESCATE', headline: 'RESET POSTURAL EN 8 MINUTOS', sub: 'Descompresión torácica, activación de core anti-rotación y extensión de cadera antes de tocar peso.', c1: 'Core Activo', c2: 'Cero Dolor', c3: '' },
+            { eyebrow: 'SESIONES SENS', headline: 'RECUPERÁ TU AGILIDAD DE ATLETA', sub: 'Programas pensados para fundadores, programadores y ejecutivos de alta exigencia.', c1: 'Presencial / Online', c2: 'Escribime POSTURA →', c3: '' }
         ],
         slides: [
-            { eyebrow: 'POSTURA & SALUD • 1/4', headline: 'SI PASÁS 8 HORAS SENTADO, LEÉ ESTO', sub: 'Por qué estirar solo no alcanza para quitar la tensión lumbar del día a día.', c1: 'Ergonomía', c2: 'Salud Lumbar', c3: '' },
-            { eyebrow: 'CAUSA RAÍZ • 2/4', headline: 'AMNESIA GLÚTEA Y RIGIDEZ DE CADERA', sub: 'Cuando la cadera no extiende, tu zona lumbar compensa arqueándose en cada paso.', c1: 'Biomecánica', c2: 'Causa Real', c3: '' },
-            { eyebrow: 'SOLUCIÓN • 3/4', headline: 'BIRD-DOG + BISAGRA DE CADERA', sub: 'Fortalecé tu faja natural y aprendé a doblarte desde la cadera y no de la cintura.', c1: 'Fuerza Segura', c2: 'Longevidad', c3: '' },
+            { eyebrow: 'POSTURA & SALUD • 1/4', headline: 'SI TRABAJÁS SENTADO, LEÉ ESTO', sub: 'Por qué elongar 5 minutos no revierte 8 horas de compresión discal diaria.', c1: 'Ergonomía', c2: 'Salud Lumbar', c3: '' },
+            { eyebrow: 'CAUSA RAÍZ • 2/4', headline: 'AMNESIA GLÚTEA Y RIGIDEZ DE PSOAS', sub: 'Cuando la cadera no extiende, tu zona lumbar compensa arqueándose en cada paso.', c1: 'Biomecánica', c2: 'Causa Real', c3: '' },
+            { eyebrow: 'SOLUCIÓN • 3/4', headline: 'BIRD-DOG + BISAGRA DE CADERA PURA', sub: 'Reactivá tu faja abdominal profunda y aprendé a moverte desde la articulación coxofemoral.', c1: 'Fuerza Segura', c2: 'Longevidad', c3: '' },
             { eyebrow: 'EVALUACIÓN • 4/4', headline: 'DIAGNÓSTICO 360° DE MOVIMIENTO', sub: 'Coordiná tu sesión presencial en CABA o plan online personalizado.', c1: 'Nico Maralle', c2: 'Escribime POSTURA →', c3: '' }
         ],
-        caption: 'Entrenar no debería causarte dolor: debería devolverte la agilidad que el sedentarismo te quita.\n\nSi trabajás en oficina o remoto frente a la pantalla, tu cuerpo necesita un estímulo que combine fuerza estructural con descompresión articular.\n\nEscribime "POSTURA" para evaluar tu caso.'
+        caption: 'El sedentarismo de escritorio no solo arruina tu postura: desconecta tus glúteos y transfiere todo el estrés a tu columna lumbar y tu cuello...\n\nIr a levantar peso al gimnasio con una cadera bloqueada es receta para una hernia discal.\n\nEn SENS aplicamos protocolos de movilidad articular y activación neuromuscular previa para que entrenes pesado sin una pizca de dolor.\n\nEscribime "POSTURA" por DM para evaluar tu caso.'
     },
     {
         id: 'tpl_stat_monumental',
         name: '5. Spotlight Métrica Única (140px Display)',
         badge: 'MÉTRICA 140PX',
-        desc: 'Dato o tempo numérico masivo (ej: 3-1-1-0 o 84%). Enfoque de autoridad científica.',
+        desc: 'Dato o tempo numérico masivo (ej: 0.00% o 3-1-1-0). Enfoque de autoridad científica irrefutable.',
         spatialArchetype: 'stat_monumental',
         overlayMode: 'cinematic',
+        overlayTitle: 'Viñeta Profunda para Cifra Monumental 140px',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'GASTO ENERGÉTICO REAL', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA?', sub: 'Cada serie multiarticular pesada cerca del fallo (RIR 2) oxida energía y dispara el efecto EPOC.', c1: '~11 KCAL', c2: '~44 kcal / 4 sets', c3: '+EPOC 24hs' },
-            { eyebrow: 'CADENCIA CONTROLADA', headline: 'TEMPO EXACTO POR REPETICIÓN', sub: '3 segundos excéntricos, 1 segundo isométrica y subida explosiva reclutan el doble de fibras.', c1: '3-1-1-0', c2: 'Fuerza Base', c3: 'Máxima Tensión' },
-            { eyebrow: 'APP & COACHING SENS', headline: 'KCAL Y MACROS MEDIDOS EN TU CELULAR', sub: 'Registro por serie, cronómetro de descanso y catálogo nutricional interactivo en la App.', c1: '$19.900', c2: 'Makes Sens', c3: 'Probala Hoy →' }
+            { eyebrow: 'MITO FISIOLÓGICO DERRIBADO', headline: '0.00% DE GRASA QUEMADA SUDANDO EN LA CINTA', sub: 'El sudor es solo pérdida de agua por termorregulación. La grasa se oxida construyendo masa muscular y EPOC.', c1: '0.00%', c2: '~11 kcal / serie', c3: '+EPOC 24hs' },
+            { eyebrow: 'GASTO REAL MEDIDO', headline: '4 SERIES PESADAS = MÁS METABOLISMO POR 36HS', sub: 'El estímulo de fuerza crea microroturas que demandan energía continua durante la recuperación.', c1: '3-1-1-0', c2: 'Fuerza Base', c3: 'Metabolismo Basal' },
+            { eyebrow: 'TECNOLOGÍA SENS', headline: 'MÉTODOS CIENTÍFICOS EN TU CELULAR', sub: 'Registro de kcal por serie, control de descanso y nutrición de precisión en la App.', c1: '$19.900', c2: 'Makes Sens', c3: 'Probala Hoy →' }
         ],
         slides: [
-            { eyebrow: 'METABOLISMO • 1/4', headline: '¿CUÁNTA ENERGÍA GASTA UNA SERIE?', sub: 'Desmitificando el cardio eterno vs. el entrenamiento de fuerza inteligente.', c1: '~11 KCAL', c2: 'Ciencia SENS', c3: '' },
-            { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cargas progresivas y tempo controlado.', c1: '~0.9 kcal / rep', c2: 'Alta Demanda', c3: '' },
-            { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO OXIDA CALORÍAS DURMIENDO', sub: 'Preservar masa magra eleva tu tasa metabólica basal y evita el temido efecto rebote.', c1: 'Metabolismo', c2: 'Sostenible', c3: '' },
-            { eyebrow: 'LLEVALA EN TU CELU • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN LA APP', sub: 'Activá tu suscripción mensual por $19.900 y entrená sabiendo qué hacer.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
+            { eyebrow: 'METABOLISMO • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'Desmitificando el cardio eterno frente a la hipertrofia inteligente.', c1: '0.00%', c2: 'Ciencia SENS', c3: '' },
+            { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cargas progresivas y tempo controlado.', c1: '~11 KCAL', c2: 'Alta Demanda', c3: '' },
+            { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO OXIDA CALORÍAS DURMIENDO', sub: 'Cada kilo de masa muscular magra eleva tu tasa metabólica basal las 24 horas del día.', c1: 'Metabolismo', c2: 'Sostenible', c3: '' },
+            { eyebrow: 'EN TU CELU • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN LA APP', sub: 'Activá tu suscripción mensual por $19.900 y entrená sabiendo qué hacer.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
         ],
-        caption: '¿Sabías que una serie de sentadillas o peso muerto con cadencia 3-1-1-0 gasta entre 8 y 12 kcal reales, además de mantener tu metabolismo elevado durante las siguientes 24 horas?\n\nEn la plataforma SENS medimos el gasto calórico de cada ejercicio para que tu esfuerzo rinda al máximo.\n\nSumate desde el link de la bio.'
+        caption: '¿Sabías que una serie de sentadillas o peso muerto con cadencia 3-1-1-0 gasta entre 8 y 12 kcal mecánicas, pero eleva tu metabolismo basal durante las 36 horas siguientes?\n\nEn SENS no te mandamos a correr 45 minutos aburrido en una cinta. Diseñamos estímulos de fuerza que convierten tu cuerpo en un motor metabólico eficiente.\n\nSumate desde el link de la bio o escribime "SENS".'
     },
     {
         id: 'tpl_quote_editorial',
-        name: '6. Cita Editorial Minimalista (Comillas SENS)',
+        name: '6. Cita Editorial Disruptiva (Comillas SENS)',
         badge: 'CITA EDITORIAL',
-        desc: 'Comillas monumentales champagne y tipografía limpia. Cero cajas o pills compitiendo.',
+        desc: 'Comillas monumentales champagne y tipografía pura. Filosofía de alto impacto sin adornos.',
         spatialArchetype: 'quote_editorial',
         overlayMode: 'full_wash',
+        overlayTitle: 'Lienzo Oscuro Minimalista para Cita Editorial',
         defaultLayers: { branding: true, eyebrow: false, headline: true, subtitle: true, chips: false },
         scenes: [
-            { eyebrow: '', headline: 'EL MEJOR PLAN NO ES EL PERFECTO, ES EL QUE PODÉS CUMPLIR UN MARTES A LA NOCHE.', sub: '— NICO MARALLE • MAKES SENS', c1: '', c2: '', c3: '' },
-            { eyebrow: '', headline: 'ENTRENAR 3 DÍAS DURANTE 12 MESES SUPERA A ENTRENAR 6 DÍAS DURANTE 2 SEMANAS.', sub: '— LA CONSTANCIA SIEMPRE LE GANA A LA INTENSIDAD', c1: '', c2: '', c3: '' },
-            { eyebrow: '', headline: 'NO VIVAS PARA EL GIMNASIO: ENTRENA PARA TENER MÁS ENERGÍA EN EL RESTO DE TU VIDA.', sub: '— HEY, ¿ENTRENAMOS JUNTOS? MAKES SENS.', c1: '', c2: '', c3: '' }
+            { eyebrow: '', headline: 'NO TE FALTA MOTIVACIÓN. TE FALTA UN SISTEMA QUE RESPETE TU TIEMPO.', sub: '— NICO MARALLE • MAKES SENS', c1: '', c2: '', c3: '' },
+            { eyebrow: '', headline: 'UN PLAN MEDIOCRE CUMPLIDO 1 AÑO SUPERA AL PLAN PERFECTO ABANDONADO EN 2 SEMANAS.', sub: '— LA ADHERENCIA ES LA ÚNICA MÉTRICA REAL', c1: '', c2: '', c3: '' },
+            { eyebrow: '', headline: 'NO ENTRENES PARA SOBREVIVIR EN EL GIMNASIO. ENTRENÁ PARA DOMINAR EN TU VIDA.', sub: '— HEY, ¿ENTRENAMOS JUNTOS? MAKES SENS.', c1: '', c2: '', c3: '' }
         ],
         slides: [
-            { eyebrow: 'MENTALIDAD • 1/4', headline: 'POR QUÉ LA CONSTANCIA LE GANA A LA INTENSIDAD', sub: 'Construir un cuerpo fuerte y sano es un juego de adherencia a largo plazo.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'LA TRAMPA • 2/4', headline: 'EL "TODO O NADA" QUE TE HACE ABANDONAR', sub: 'Creer que por faltar un día arruinaste la semana te lleva a reiniciar siempre de cero.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'EL MÉTODO • 3/4', headline: 'MÍNIMO INNEGOCIABLE: 3 SESIONES + PROTEÍNA', sub: 'Cuando tenés claridad en las pocas cosas que importan, progresar se vuelve natural.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'SUMATE HOY • 4/4', headline: 'DISEÑEMOS UN PLAN QUE ENCAJE EN TU VIDA', sub: 'Presencial CABA, Online o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
+            { eyebrow: 'MENTALIDAD • 1/4', headline: 'LA DISCIPLINA ES UNA CONSECUENCIA DEL DISEÑO', sub: 'Cuando el plan encaja en tu rutina diaria, ser constante deja de ser un esfuerzo titánico.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'LA TRAMPA • 2/4', headline: 'EL "TODO O NADA" QUE TE HACE ABANDONAR SIEMPRE', sub: 'Creer que faltar un día arruina la semana es el veneno mental que te mantiene reiniciando.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'EL SISTEMA • 3/4', headline: 'MÍNIMO INNEGOCIABLE: 3 SESIONES + PROTEÍNA', sub: 'Menos variables, ejecutadas con maestría y sin excusas.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'COMENZÁ HOY • 4/4', headline: 'DISEÑEMOS UN PLAN QUE ENCAJE EN TU VIDA', sub: 'Presencial CABA, Online 1:1 o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
         ],
-        caption: 'No buscamos que vivas adentro de un gimnasio ni que peses cada gramo de lechuga.\n\nBuscamos que el entrenamiento y la nutrición te den más fuerza, mejor postura y seguridad para rendir en tu trabajo, tu familia y tus proyectos.\n\nHey, ¿entrenamos juntos? Makes Sens.'
+        caption: 'No buscamos que vivas adentro de un gimnasio ni que peses cada hoja de lechuga.\n\nBuscamos que el entrenamiento y la nutrición te den más energía, postura impecable y fuerza mental para rendir en tus proyectos, tu empresa y tu familia.\n\nHey, ¿entrenamos juntos? Makes Sens.'
     },
     {
         id: 'tpl_story_cupos_vip',
         name: '7. Conversión Directa / Cupos Story (9:16)',
-        badge: 'STORY CUPOS',
+        badge: 'STORY VIP',
         desc: 'Zona central despejada para stickers de Instagram y llamado directo a mensaje privado.',
         spatialArchetype: 'story_callout',
         overlayMode: 'cinematic',
+        overlayTitle: 'Callout Inferior + Espacio Libre para Stickers IG',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'AGENDA MARZO ABIERTA', headline: 'SE ABRIERON 3 CUPOS PARA PLAN 1:1', sub: 'Seguimiento personalizado para transformar tu fuerza, postura y energía diaria.', c1: 'Solo 3 Lugares', c2: '', c3: 'Escribime PLAN →' },
-            { eyebrow: 'QUÉ INCLUYE', headline: 'DIAGNÓSTICO 360° + RUTINA + NUTRICIÓN', sub: 'Adaptado a tu agenda, tus gustos de comida y tu historial articular.', c1: 'Presencial / Online', c2: '', c3: 'Cero Improvisar' },
-            { eyebrow: 'POSTULATE HOY', headline: 'ENVIAME UN DM CON LA PALABRA "PLAN"', sub: 'Coordinamos una breve evaluación inicial para definir el formato ideal.', c1: 'Nico Maralle', c2: '', c3: 'Mensaje Directo →' }
+            { eyebrow: 'AGENDA PRIVADA • CABA & ONLINE', headline: 'SOLO 3 LUGARES PARA SEGUIMIENTO 1:1', sub: 'No es masivo. Planificación biomecánica y nutricional personalizada para quienes buscan resultados definitivos.', c1: 'Solo 3 Lugares', c2: '', c3: 'Escribime PLAN →' },
+            { eyebrow: 'PROCESO DE ADMISIÓN', headline: 'DIAGNÓSTICO 360° + AJUSTES CADA 7 DÍAS', sub: 'Monitoreo diario de fatiga, corrección en video y periodización adaptada a tu agenda.', c1: 'Fuerza & Estructura', c2: '', c3: '100% a Medida' },
+            { eyebrow: 'POSTULATE HOY', headline: 'ESCRIBIME "PLAN" POR MENSAJE DIRECTO', sub: 'Evaluamos tu historial articular y diseñamos tu plan de acción inmediato.', c1: 'Nico Maralle', c2: '', c3: 'Mensaje Directo →' }
         ],
         slides: [
-            { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO 1:1', sub: 'Para quienes buscan acompañamiento directo paso a paso.', c1: 'Solo 3 Lugares', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'PASO 1 • 2/4', headline: 'EVALUACIÓN DE POSTURA, FUERZA Y HÁBITOS', sub: 'Detectamos qué te frenó hasta hoy y diseñamos una hoja de ruta realista.', c1: 'Ficha 360°', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'PASO 2 • 3/4', headline: 'EJECUCIÓN GUIADA Y AJUSTES SEMANALES', sub: 'Monitoreamos tus cargas, tu nutrición y tu recuperación semana a semana.', c1: '100% a Medida', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O WHATSAPP', sub: 'Los lugares presenciales en CABA se asignan por orden de consulta.', c1: 'Nico Maralle', c2: '', c3: 'Escribime PLAN →' }
+            { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO 1:1', sub: 'Para profesionales que buscan acompañamiento directo paso a paso.', c1: 'Solo 3 Lugares', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'PASO 1 • 2/4', headline: 'EVALUACIÓN DE POSTURA, FUERZA Y HÁBITOS', sub: 'Detectamos qué te frenó hasta hoy y diseñamos una hoja de ruta clínica realista.', c1: 'Ficha 360°', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'PASO 2 • 3/4', headline: 'EJECUCIÓN GUIADA Y AJUSTES SEMANALES', sub: 'Monitoreamos tus cargas, tu nutrición y tu recuperación semana a semana en la App.', c1: 'Cero Improvisar', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O WHATSAPP', sub: 'Los cupos presenciales en CABA se asignan por estricto orden de consulta.', c1: 'Nico Maralle', c2: '', c3: 'Escribime PLAN →' }
         ],
-        caption: 'Abrimos 3 lugares este mes para seguimiento personalizado 1 a 1 (tanto en modalidad Presencial en CABA como Online Premium).\n\nSi querés dejar de adivinar en el gimnasio y seguir un plan biomecánico y nutricional diseñado específicamente para tu cuerpo y tu agenda, escribime "PLAN" por mensaje directo o WhatsApp.'
+        caption: 'Abrimos 3 lugares este mes para seguimiento personalizado 1 a 1 (Presencial CABA o Programa Online Premium).\n\nSi querés dejar de adivinar en el gimnasio y seguir un plan biomecánico y nutricional diseñado específicamente para tu cuerpo y tu agenda, escribime "PLAN" por DM o WhatsApp.'
     },
     {
         id: 'tpl_carrusel_swipe_guide',
@@ -20643,19 +20650,20 @@ const SENS_MARKETING_TEMPLATES = [
         desc: 'Secuencia pedagógica de 4 pasos para feed. Reflujo bottom-up sin saturación.',
         spatialArchetype: 'editorial_bottom',
         overlayMode: 'cinematic',
+        overlayTitle: 'Gradiente Progresivo Inferior para Swipe Feed',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: false },
         scenes: [
-            { eyebrow: 'FISIOLOGÍA REAL', headline: 'TRANSPIRAR MÁS NO ES QUEMAR GRASA', sub: 'El sudor es solo pérdida de agua por termorregulación, no oxidación de lípidos.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'LO QUE SÍ FUNCIONA', headline: 'FUERZA PESADA + DÉFICIT SUAVE', sub: 'Construir masa magra eleva tu metabolismo basal aún mientras dormís.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'MÉTODO SENS', headline: 'UN SISTEMA CLARO TODO EL AÑO', sub: 'Presencial en CABA, Seguimiento Online o Suscripción en la App.', c1: '', c2: '', c3: '' }
+            { eyebrow: 'REGLA INQUEBRANTABLE', headline: 'EL DOLOR AL ENTRENAR NO ES PROGRESO', sub: 'Es aviso de lesión. La verdadera fuerza se construye con articulaciones sanas y control motor.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'EL GRAN ERROR', headline: 'FORZAR RANGOS QUE TU CADERA NO TIENE', sub: 'Bajar más de lo que tu morfología permite solo redondea tu columna y descarga el glúteo.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'MÉTODO SENS', headline: 'CADENCIA CONTROLADA + RANGO ACTIVO', sub: 'El estímulo hipertrófico máximo ocurre en estiramiento con carga, no al rebotar.', c1: '', c2: '', c3: '' }
         ],
         slides: [
-            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'La diferencia fisiológica entre terminar agotado y entrenar de verdad.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'EL ERROR • 2/4', headline: 'CASTIGARTE CON CARDIO EXTREMO DIARIO', sub: 'Aumenta el hambre reactiva, fatiga tus rodillas y destruye tu masa muscular.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'EL SISTEMA • 3/4', headline: 'SOBRECARGA PROGRESIVA + NEAT + PROTEÍNA', sub: '3 pilares medibles desde el dashboard de nuestra plataforma.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App $19.900/mes.', c1: '', c2: '', c3: '' }
+            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'EL DOLOR AL ENTRENAR NO ES PROGRESO', sub: 'La diferencia entre terminar destruido y construir adaptación neuromuscular real.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'EL ERROR • 2/4', headline: 'FORZAR PROFUNDIDAD A COSTA DE TU LUMBAR', sub: 'Cuando la pelvis retrovierte (butt-wink), tus discos intervertebrales sufren una cizalla peligrosa.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'LA SOLUCIÓN • 3/4', headline: 'ENCONTRÁ TU RANGO ACTIVO INDIVIDUAL', sub: 'Pausá exactamente antes de que la pelvis bascule. Ese es tu rango de máxima tensión y cero dolor.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'PROGRAMÁ BIEN • 4/4', headline: 'ENTRENÁ CON UN SISTEMA QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App $19.900/mes.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
         ],
-        caption: 'Salir agotado no siempre es sinónimo de haber entrenado bien.\n\nLa recomposición corporal ocurre cuando combinás estímulo mecánico real en tus músculos, pasos diarios constantes y un déficit calórico moderado con suficiente proteína.\n\nEso hacemos todos los días en SENS.'
+        caption: 'El dogma del "no pain no gain" lesionó a más personas de las que ayudó.\n\nEl dolor agudo en una articulación no es debilidad abandonando el cuerpo: es tu sistema nervioso avisándote que estás destruyendo tejido conectivo.\n\nEn SENS entrenamos con inteligencia biomecánica para que levantes más peso, progreses año tras año y tus rodillas y espalda sigan impecables a los 60 años.\n\nComentá "SENS" o escribime por DM.'
     },
     {
         id: 'tpl_como_no_vs_si',
@@ -20664,40 +20672,42 @@ const SENS_MARKETING_TEMPLATES = [
         desc: 'Bloque doble: corrección de error biomecánico con ✕ en alerta y ✓ en Champagne Gold.',
         spatialArchetype: 'split_comparative',
         overlayMode: 'cinematic',
+        overlayTitle: 'Doble Tarjeta Técnica (✕ Alerta vs ✓ Champagne)',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'COMPARATIVA BIOMECÁNICA', headline: 'REBOTAR AL BAJAR vs PAUSA 1S EN EL FONDO', sub: 'El rebote transfiere el impacto a tus ligamentos; la pausa activa 100% tus fibras.', c1: '✕ Sin Control', c2: '✓ Método SENS', c3: '' },
-            { eyebrow: 'TRAYECTORIA DE BARRA', headline: 'BARRA SE VA HACIA ADELANTE vs PEGADA AL CENTRO', sub: 'Desplazar la carga hacia la punta sobrecarga lumbar; mantené el trípode plantar.', c1: '✕ Inestabilidad', c2: '✓ Eje Vertical', c3: '' },
-            { eyebrow: 'PROGRAMÁ CON CIENCIA', headline: 'IMPROVISAR PESOS vs SOBRECARGA MEDIDA EN APP', sub: 'Registrá cada kilo y repetición para progresar sin fatiga residual acumulada.', c1: 'Cupos Presenciales', c2: 'Escribime SENS →', c3: '' }
+            { eyebrow: 'CORRECCIÓN BIOMECÁNICA', headline: 'REBOTAR EN LA SENTADILLA', sub: 'Pausar 1s en el fondo con cadencia 3-1-1-0 recluta 2.4x más fibras y salva tus meniscos.', c1: '✕ CÓMO NO: Con inercia', c2: '✓ MÉTODO SENS: Pausa 1s', c3: 'RIR 2 Seguro' },
+            { eyebrow: 'TRAYECTORIA DE BARRA', headline: 'ABRIR CODOS A 90° EN BANCO', sub: 'Cerrá a 45° con retracción escapular activa para aislar el pectoral y proteger el manguito rotador.', c1: '✕ CÓMO NO: Codos en T', c2: '✓ MÉTODO SENS: Codos 45°', c3: 'Cero Dolor' },
+            { eyebrow: 'SOBRECARGA MEDIDA', headline: 'SUBIR PESO SIN CONTROL DE FORMA', sub: 'Registrá cada kilo y repetición en la App SENS. La sobrecarga progresiva es técnica, no ego.', c1: '✕ CÓMO NO: Ego Lifting', c2: '✓ MÉTODO SENS: Sobrecarga', c3: 'Escribime SENS →' }
         ],
         slides: [
-            { eyebrow: 'ANÁLISIS TÉCNICO • 1/4', headline: 'CÓMO NO VS CÓMO SÍ EN PRESS BANCA', sub: 'El error en la retracción escapular que te provoca dolor de hombro.', c1: '✕ Codos 90°', c2: '✓ Codos 45°', c3: '' },
-            { eyebrow: 'EL ERROR • 2/4', headline: '✕ ABRIR LOS CODOS EN T INESTABLE', sub: 'Aumenta el estrés sobre el manguito rotador y frena tu ganancia de fuerza.', c1: 'Estrés Articular', c2: 'Riesgo Alto', c3: '' },
-            { eyebrow: 'LA CORRECCIÓN • 3/4', headline: '✓ RETRACCIÓN ESCAPULAR + ARCO SEGURO', sub: 'Clavá los omóplatos en el banco y descendé con los codos en 45 grados.', c1: '+Estabilidad', c2: '+Reclutamiento', c3: '' },
+            { eyebrow: 'ANÁLISIS CLÍNICO • 1/4', headline: 'CÓMO NO VS CÓMO SÍ EN PRESS BANCA', sub: 'El error en la trayectoria que te provoca pinzamiento subacromial de hombro.', c1: '✕ Codos 90°', c2: '✓ Codos 45°', c3: '' },
+            { eyebrow: 'EL ERROR • 2/4', headline: '✕ ABRIR LOS CODOS EN T INESTABLE', sub: 'Aumenta el torque lesivo sobre el labrum y disminuye la activación del pectoral mayor.', c1: 'Estrés Articular', c2: 'Riesgo Alto', c3: '' },
+            { eyebrow: 'LA CORRECCIÓN • 3/4', headline: '✓ RETRACCIÓN ESCAPULAR + CODOS A 45°', sub: 'Clavá los omóplatos en el banco y descendé con una trayectoria en diagonal limpia.', c1: '+Estabilidad', c2: '+Reclutamiento', c3: '' },
             { eyebrow: 'ENTRENÁ BIEN • 4/4', headline: 'MÉTODO SENS PRESENCIAL Y EN APP', sub: 'Corrección de técnica personalizada y plan a tu medida con Nico.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
         ],
-        caption: 'La diferencia entre progresar y lesionarte en el gimnasio está en los pequeños detalles de trayectoria y cadencia.\n\nEn SENS desglosamos cada movimiento biomecánico para que levantes más peso con cero dolor articular.\n\nComentá "TÉCNICA" o escribime para evaluar tu caso.'
+        caption: 'La diferencia entre romperte el hombro o construir un torso fuerte está en 45 grados de ángulo de codo...\n\nEn SENS desarmamos cada movimiento básico para que entrenes con biomecánica de precisión, no con hábitos prestados de internet.\n\nComentá "TÉCNICA" o escribime para evaluar tu caso.'
     },
     {
         id: 'tpl_presencial_caba_vip',
         name: '10. Apertura Turnos Presenciales CABA (Quiet Luxury)',
-        badge: 'TURNO PRESENCIAL',
-        desc: 'Convocatoria exclusiva para entrenamiento 1:1 en estudio CABA. Elegancia y sobriedad.',
+        badge: 'CONVOCATORIA VIP',
+        desc: 'Convocatoria exclusiva para entrenamiento 1:1 en estudio CABA. Elegancia y sobriedad editorial.',
         spatialArchetype: 'hero_center_big',
         overlayMode: 'full_wash',
+        overlayTitle: 'Filtro Focal de Alta Gama para Convocatoria VIP',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'ENTRENAMIENTO EXCLUSIVO CABA', headline: 'DIAGNÓSTICO ARTICULAR Y FUERZA 1:1', sub: 'Sesiones personalizadas en estudio con evaluación motora computarizada.', c1: 'Solo 4 Cupos', c2: 'Palermo / Belgrano', c3: 'Escribime CABA →' },
-            { eyebrow: 'METODOLOGÍA SENS', headline: 'CERO IMPROVISACIÓN • RESULTADOS REALES', sub: 'Planificación de fuerza, análisis de cadencia y plan nutricional adaptado a tu vida.', c1: 'Nico Maralle', c2: 'Ciencia del Movimiento', c3: '' },
-            { eyebrow: 'POSTULACIÓN DIRECTA', headline: 'RESERVÁ TU SESIÓN DIAGNÓSTICO', sub: 'Escribime por mensaje directo con la palabra "CABA" para coordinar tu horario.', c1: 'Makes Sens', c2: 'Mensaje Directo →', c3: '' }
+            { eyebrow: 'EXCLUSIVO BUENOS AIRES • 2026', headline: 'PRECIO ALTO. CUPO CERRADO. SOLO 4 HOMBRES.', sub: 'Entrenamiento 1:1 de precisión biomecánica en estudio privado (Palermo / Belgrano).', c1: 'Solo 4 Lugares', c2: 'Escribime CABA →', c3: '' },
+            { eyebrow: 'ESTÁNDAR DE ÉLITE', headline: 'CERO MÁQUINAS VACÍAS. CERO IMPROVISACIÓN.', sub: 'Testeo de rangos articulares, corrección electromotora y nutrición medida al gramo.', c1: 'Diagnóstico 360°', c2: 'Nico Maralle', c3: '' },
+            { eyebrow: 'POSTULACIÓN DIRECTA', headline: 'ESCRIBIME "CABA" POR MENSAJE PRIVADO', sub: 'Las admisiones se evalúan por orden de contacto y compatibilidad de horarios.', c1: 'Makes Sens', c2: 'Mensaje Directo →', c3: '' }
         ],
         slides: [
-            { eyebrow: 'CABA 2026 • 1/4', headline: 'APERTURA DE CUPOS PRESENCIALES', sub: 'Entrenamiento 1 a 1 de alta gama en Buenos Aires con Nico Maralle.', c1: 'Solo 4 Cupos', c2: 'Presencial CABA', c3: '' },
-            { eyebrow: 'DIAGNÓSTICO • 2/4', headline: 'EVALUACIÓN BIOMECÁNICA INICIAL', sub: 'Testeo de movilidad de cadera, tobillo, columna y patrones de fuerza fundamentales.', c1: 'Ficha Clínica', c2: 'Cero Lesiones', c3: '' },
+            { eyebrow: 'CABA 2026 • 1/4', headline: 'APERTURA DE CUPOS PRESENCIALES 1:1', sub: 'Entrenamiento personal de alta gama en Buenos Aires con Nico Maralle.', c1: 'Solo 4 Cupos', c2: 'Presencial CABA', c3: '' },
+            { eyebrow: 'DIAGNÓSTICO • 2/4', headline: 'EVALUACIÓN BIOMECÁNICA COMPUTARIZADA', sub: 'Testeo de movilidad de cadera, tobillo, columna y patrones de fuerza fundamentales.', c1: 'Ficha Clínica', c2: 'Cero Lesiones', c3: '' },
             { eyebrow: 'PROGRAMACIÓN • 3/4', headline: 'SEGUIMIENTO DIARIO EN LA APP SENS', sub: 'Cada sesión presencial se complementa con tu dashboard de progreso en la App.', c1: 'Dashboard SENS', c2: '100% Personalizado', c3: '' },
-            { eyebrow: 'ACCESO • 4/4', headline: 'ESCRIBIME "CABA" POR MENSAJE DIRECTO', sub: 'Cupos limitados por disponibilidad horaria. Hace sentido.', c1: 'Nico Maralle', c2: 'Escribime CABA →', c3: '' }
+            { eyebrow: 'ACCESO • 4/4', headline: 'ESCRIBIME "CABA" POR MENSAJE DIRECTO', sub: 'Cupos estrictamente limitados por disponibilidad horaria. Hace sentido.', c1: 'Nico Maralle', c2: 'Escribime CABA →', c3: '' }
         ],
-        caption: 'Abrimos la agenda para nuevas incorporaciones presenciales 1 a 1 en Buenos Aires (Palermo / Belgrano).\n\nCada proceso inicia con una evaluación biomecánica completa para calibrar rangos articulares y diseñar una periodización científica que se adapte a tus horarios.\n\nEscribime "CABA" por mensaje directo para coordinar tu entrevista inicial.'
+        caption: 'Abrimos la agenda para nuevas admisiones presenciales 1 a 1 en Buenos Aires (estudio privado en Palermo / Belgrano).\n\nCada proceso inicia con una evaluación biomecánica exhaustiva para calibrar rangos articulares y diseñar una periodización científica adaptada a tus objetivos y horarios.\n\nEscribime "CABA" por mensaje directo para coordinar tu entrevista inicial.'
     }
 ];
 
@@ -20940,9 +20950,12 @@ window.initCoachMarketingStudio = function() {
     const defaultMediaBtn = document.getElementById('btnMktUseDefaultMedia');
     const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
 
-    if (hiddenVideo && !hiddenVideo.getAttribute('src')) {
-        hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
-        hiddenVideo.load();
+    if (hiddenVideo) {
+        hiddenVideo.crossOrigin = 'anonymous';
+        if (!hiddenVideo.getAttribute('src')) {
+            hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
+            hiddenVideo.load();
+        }
     }
 
     if (fileInput) {
@@ -20966,6 +20979,7 @@ window.initCoachMarketingStudio = function() {
             if (file.type.startsWith('video/')) {
                 mktStudioState.mediaType = 'video';
                 if (hiddenVideo) {
+                    hiddenVideo.crossOrigin = 'anonymous';
                     hiddenVideo.src = url;
                     hiddenVideo.play().catch(() => {});
                 }
@@ -20973,6 +20987,7 @@ window.initCoachMarketingStudio = function() {
             } else {
                 mktStudioState.mediaType = 'image';
                 const img = new Image();
+                img.crossOrigin = 'anonymous';
                 img.onload = () => {
                     mktStudioState.customImageObj = img;
                     renderMarketingCanvasFrame();
@@ -20990,6 +21005,7 @@ window.initCoachMarketingStudio = function() {
             const statusPill = document.getElementById('mktMediaFileStatusPill');
             if (statusPill) statusPill.style.display = 'none';
             if (hiddenVideo) {
+                hiddenVideo.crossOrigin = 'anonymous';
                 hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
                 hiddenVideo.play().catch(() => {});
             }
@@ -21002,18 +21018,6 @@ window.initCoachMarketingStudio = function() {
     const panYSlider = document.getElementById('mktMediaPanYSlider');
     const opacitySlider = document.getElementById('mktOverlayOpacitySlider');
     const zoomLabel = document.getElementById('mktZoomValLabel');
-    const overlayBtns = document.querySelectorAll('#mktOverlayModeGrid .sens-overlay-mode-btn');
-
-    if (overlayBtns.length > 0) {
-        overlayBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                overlayBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                mktStudioState.overlayMode = btn.getAttribute('data-overlay-mode') || 'cinematic';
-                renderMarketingCanvasFrame();
-            });
-        });
-    }
 
     if (zoomSlider) {
         zoomSlider.addEventListener('input', () => {
@@ -21057,29 +21061,89 @@ window.initCoachMarketingStudio = function() {
         });
     }
 
+    // Helper Universal para Exportación de Canvas (Web Share en Mobile, Blob Download en Desktop)
+    async function exportMarketingCanvasPiece(canvas, fileName) {
+        return new Promise((resolve) => {
+            try {
+                canvas.toBlob(async (blob) => {
+                    if (!blob) {
+                        showSensToast('Error al generar el archivo de imagen.', 'error');
+                        resolve(false);
+                        return;
+                    }
+
+                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || ('ontouchstart' in window);
+                    const file = new File([blob], fileName, { type: 'image/png' });
+
+                    // Si es mobile y soporta Web Share con archivos, abrir Share Sheet nativo (Guardar en Fotos / Compartir a IG)
+                    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                files: [file],
+                                title: 'SENS Studio HD',
+                                text: 'Pieza editorial SENS generada en alta definición.'
+                            });
+                            showSensToast('¡Pieza compartida / guardada en Fotos con éxito!', 'champagne');
+                            resolve(true);
+                            return;
+                        } catch (shareErr) {
+                            if (shareErr.name === 'AbortError') {
+                                resolve(true);
+                                return;
+                            }
+                        }
+                    }
+
+                    // Descarga estándar mediante Object URL insertado en DOM
+                    const objectUrl = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.style.display = 'none';
+                    link.href = objectUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    setTimeout(() => {
+                        if (link.parentNode) link.parentNode.removeChild(link);
+                        URL.revokeObjectURL(objectUrl);
+                    }, 1000);
+
+                    showSensToast('Pieza descargada en alta definición (PNG 1080px).', 'champagne');
+                    resolve(true);
+                }, 'image/png', 1.0);
+            } catch (err) {
+                console.error('Error al exportar canvas:', err);
+                if (err.name === 'SecurityError' || String(err).includes('Tainted')) {
+                    showSensToast('Restricción CORS del navegador. Usá una imagen o video cargado desde tu dispositivo.', 'error', 6000);
+                } else {
+                    showSensToast('Error al exportar la imagen: ' + (err.message || 'error desconocido'), 'error');
+                }
+                resolve(false);
+            }
+        });
+    }
+
     // Exportar PNG actual, Secuencia Completa o Video Animado WebM
     const btnExportPng = document.getElementById('btnMktExportPng');
     const btnExportPack = document.getElementById('btnMktExportAllPack');
     const btnRecordVideo = document.getElementById('btnMktRecordVideoWebm');
 
     if (btnExportPng) {
-        btnExportPng.addEventListener('click', () => {
+        btnExportPng.addEventListener('click', async () => {
+            const canvas = document.getElementById('sensMarketingCanvas');
+            if (!canvas) return;
             const prevGuides = mktStudioState.showSafeZoneGuides;
             mktStudioState.showSafeZoneGuides = false;
             renderMarketingCanvasFrame();
-            const canvas = document.getElementById('sensMarketingCanvas');
-            if (!canvas) {
-                mktStudioState.showSafeZoneGuides = prevGuides;
-                return;
-            }
-            const link = document.createElement('a');
-            const suffix = mktStudioState.format === 'carousel_4_5' ? `slide-${mktStudioState.slideIdx + 1}` : `escena-${mktStudioState.sceneIdx + 1}`;
-            link.download = `SENS-${mktStudioState.templateId}-${suffix}.png`;
-            link.href = canvas.toDataURL('image/png', 1.0);
-            link.click();
+
+            const suffix = mktStudioState.format === 'carousel_4_5'
+                ? `slide-${mktStudioState.slideIdx + 1}`
+                : `escena-${mktStudioState.sceneIdx + 1}`;
+            const fileName = `SENS-${mktStudioState.templateId}-${suffix}.png`;
+
+            await exportMarketingCanvasPiece(canvas, fileName);
+
             mktStudioState.showSafeZoneGuides = prevGuides;
             renderMarketingCanvasFrame();
-            showSensToast('Pieza descargada en alta definición (PNG sin guías).', 'champagne');
         });
     }
 
@@ -21091,22 +21155,22 @@ window.initCoachMarketingStudio = function() {
             mktStudioState.showSafeZoneGuides = false;
             const isCarousel = mktStudioState.format === 'carousel_4_5';
             const totalFrames = isCarousel ? 4 : 3;
-            showSensToast(`Generando las ${totalFrames} piezas de la secuencia...`, 'champagne');
+            showSensToast(`Generando las ${totalFrames} piezas de la secuencia en HD...`, 'champagne');
 
             for (let i = 0; i < totalFrames; i++) {
                 if (isCarousel) mktStudioState.slideIdx = i;
                 else mktStudioState.sceneIdx = i;
                 loadActiveSceneOrSlideIntoInputs();
                 renderMarketingCanvasFrame();
-                await new Promise(r => setTimeout(r, 220));
-                const link = document.createElement('a');
-                link.download = `SENS-${mktStudioState.templateId}-${isCarousel ? 'Slide' : 'Escena'}-${i + 1}.png`;
-                link.href = canvas.toDataURL('image/png', 1.0);
-                link.click();
+                await new Promise(r => setTimeout(r, 260));
+
+                const fileName = `SENS-${mktStudioState.templateId}-${isCarousel ? 'Slide' : 'Escena'}-${i + 1}.png`;
+                await exportMarketingCanvasPiece(canvas, fileName);
+                await new Promise(r => setTimeout(r, 200));
             }
             mktStudioState.showSafeZoneGuides = prevGuides;
             renderMarketingCanvasFrame();
-            showSensToast(`Secuencia completa de ${totalFrames} piezas descargada.`, 'champagne');
+            showSensToast(`Secuencia completa de ${totalFrames} piezas procesada.`, 'champagne');
         });
     }
 
@@ -21130,9 +21194,15 @@ window.initCoachMarketingStudio = function() {
                 const blob = new Blob(chunks, { type: 'video/webm' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
+                a.style.display = 'none';
                 a.href = url;
                 a.download = `SENS-Reel-${mktStudioState.templateId}.webm`;
+                document.body.appendChild(a);
                 a.click();
+                setTimeout(() => {
+                    if (a.parentNode) a.parentNode.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 1000);
                 mktStudioState.showSafeZoneGuides = prevGuides;
                 renderMarketingCanvasFrame();
                 showSensToast('Video Reel con cambios de texto por segundo descargado.', 'champagne');
@@ -21213,9 +21283,10 @@ function applyMarketingTemplateToInputs() {
     }
     if (tpl.overlayMode) {
         mktStudioState.overlayMode = tpl.overlayMode;
-        document.querySelectorAll('#mktOverlayModeGrid .sens-overlay-mode-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-overlay-mode') === tpl.overlayMode);
-        });
+    }
+    const overlayNotice = document.getElementById('mktLockedOverlayDescription');
+    if (overlayNotice) {
+        overlayNotice.textContent = tpl.overlayTitle || 'Overlay Arquitectónico SENS Calibrado';
     }
     loadActiveSceneOrSlideIntoInputs();
 }
@@ -21334,103 +21405,104 @@ window.stopCoachMarketingStudio = function() {
 };
 
 function renderMarketingCanvasFrame() {
-    const canvas = document.getElementById('sensMarketingCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const W = canvas.width;
-    const H = canvas.height;
-    const is45 = (H <= 1400); // 1350 vs 1920
-    const is916 = !is45;
+    try {
+        const canvas = document.getElementById('sensMarketingCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        const is45 = (H <= 1400); // 1350 vs 1920
+        const is916 = !is45;
 
-    const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
-    const op = (mktStudioState.overlayOpacity || 80) / 100;
-    const layers = mktStudioState.layers || { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true };
+        const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
+        const op = (mktStudioState.overlayOpacity || 80) / 100;
+        const layers = mktStudioState.layers || { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true };
 
-    // =========================================================================
-    // REGLAS MATEMÁTICAS INNEGOCIABLES DE SAFE ZONES (TIKTOK / INSTAGRAM REELS & FEED)
-    // Vertical 9:16: Top 220px (tabs/perfil), Bottom 340px (caption/audio), Right 140px (dock likes), Left 72px
-    // Feed 4:5: Top/Bottom 96px, Left/Right 72px
-    // =========================================================================
-    const topSafeY = is916 ? 220 : 96;
-    const bottomSafeY = is916 ? 1580 : 1254; // H - 340 en 9:16, H - 96 en 4:5
-    const leftSafeX = 72;
-    const rightSafeX = is916 ? 940 : 1008; // W - 140 en 9:16, W - 72 en 4:5
-    const safeWidth = rightSafeX - leftSafeX; // 868px en 9:16, 936px en 4:5
-    const safeCenterX = leftSafeX + (safeWidth / 2);
-    const contentTopY = layers.branding ? (topSafeY + (is45 ? 60 : 72)) : (topSafeY + 16);
+        // =========================================================================
+        // REGLAS MATEMÁTICAS INNEGOCIABLES DE SAFE ZONES (TIKTOK / INSTAGRAM REELS & FEED)
+        // Vertical 9:16: Top 220px (tabs/perfil), Bottom 340px (caption/audio), Right 140px (dock likes), Left 72px
+        // Feed 4:5: Top/Bottom 96px, Left/Right 72px
+        // =========================================================================
+        const topSafeY = is916 ? 220 : 96;
+        const bottomSafeY = is916 ? 1580 : 1254; // H - 340 en 9:16, H - 96 en 4:5
+        const leftSafeX = 72;
+        const rightSafeX = is916 ? 940 : 1008; // W - 140 en 9:16, W - 72 en 4:5
+        const safeWidth = rightSafeX - leftSafeX; // 868px en 9:16, 936px en 4:5
+        const safeCenterX = leftSafeX + (safeWidth / 2);
+        const contentTopY = layers.branding ? (topSafeY + (is45 ? 60 : 72)) : (topSafeY + 16);
 
-    // 1. Fondo Base Obsidian
-    ctx.fillStyle = '#080809';
-    ctx.fillRect(0, 0, W, H);
+        // 1. Fondo Base Obsidian
+        ctx.fillStyle = '#080809';
+        ctx.fillRect(0, 0, W, H);
 
-    // 2. Dibujar Video o Imagen con Zoom y Encuadre
-    const sourceMedia = mktStudioState.mediaType === 'image' && mktStudioState.customImageObj
-        ? mktStudioState.customImageObj
-        : document.getElementById('mktHiddenSourceVideo');
+        // 2. Dibujar Video o Imagen con Zoom y Encuadre
+        const sourceMedia = mktStudioState.mediaType === 'image' && mktStudioState.customImageObj
+            ? mktStudioState.customImageObj
+            : document.getElementById('mktHiddenSourceVideo');
 
-    if (sourceMedia) {
-        const mW = sourceMedia.videoWidth || sourceMedia.naturalWidth || 1080;
-        const mH = sourceMedia.videoHeight || sourceMedia.naturalHeight || 1920;
-        if (mW > 0 && mH > 0) {
-            const scale = Math.max(W / mW, H / mH) * (mktStudioState.zoom / 100);
-            const drawW = mW * scale;
-            const drawH = mH * scale;
-            const dx = (W - drawW) / 2;
-            const dy = ((H - drawH) / 2) + (mktStudioState.panY * 8);
-            try {
-                ctx.drawImage(sourceMedia, dx, dy, drawW, drawH);
-            } catch (_) {}
+        if (sourceMedia) {
+            const mW = sourceMedia.videoWidth || sourceMedia.naturalWidth || 1080;
+            const mH = sourceMedia.videoHeight || sourceMedia.naturalHeight || 1920;
+            if (mW > 0 && mH > 0) {
+                const scale = Math.max(W / mW, H / mH) * (mktStudioState.zoom / 100);
+                const drawW = mW * scale;
+                const drawH = mH * scale;
+                const dx = (W - drawW) / 2;
+                const dy = ((H - drawH) / 2) + (mktStudioState.panY * 8);
+                try {
+                    ctx.drawImage(sourceMedia, dx, dy, drawW, drawH);
+                } catch (_) {}
+            }
         }
-    }
 
-    // 3. Sistema de Overlays Adaptables (Full Wash, Lower Third, Magazine Split o Gradiente Cinematográfico)
-    const overlayMode = mktStudioState.overlayMode || tpl.overlayMode || 'cinematic';
-    const spatialArchetype = tpl.spatialArchetype || 'editorial_bottom';
+        // 3. Sistema de Overlays Arquitectónicos (Estrictamente gobernado por el Template)
+        const overlayMode = tpl.overlayMode || 'cinematic';
+        const spatialArchetype = tpl.spatialArchetype || 'editorial_bottom';
 
-    if (overlayMode === 'full_wash') {
-        // Tinte uniforme cinematográfico en toda la imagen para máxima legibilidad de tipografías gigantes
-        ctx.fillStyle = `rgba(8, 8, 9, ${(op * 0.72).toFixed(2)})`;
-        ctx.fillRect(0, 0, W, H);
-        const radGrad = ctx.createRadialGradient(W / 2, H / 2, W * 0.25, W / 2, H / 2, W * 0.85);
-        radGrad.addColorStop(0, 'rgba(8, 8, 9, 0)');
-        radGrad.addColorStop(1, `rgba(8, 8, 9, ${(op * 0.40).toFixed(2)})`);
-        ctx.fillStyle = radGrad;
-        ctx.fillRect(0, 0, W, H);
-    } else if (overlayMode === 'lower_third') {
-        const grad = ctx.createLinearGradient(0, 0, 0, H);
-        grad.addColorStop(0, 'rgba(8, 8, 9, 0)');
-        grad.addColorStop(0.52, 'rgba(8, 8, 9, 0)');
-        grad.addColorStop(0.70, `rgba(8, 8, 9, ${(op * 0.70).toFixed(2)})`);
-        grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, H);
-    } else if (spatialArchetype === 'magazine_split') {
-        // Gradiente dual: Oscuro arriba para titular, claro al centro para sujeto, oscuro abajo
-        const grad = ctx.createLinearGradient(0, 0, 0, H);
-        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.88).toFixed(2)})`);
-        grad.addColorStop(0.30, `rgba(8, 8, 9, ${(op * 0.55).toFixed(2)})`);
-        grad.addColorStop(0.50, `rgba(8, 8, 9, ${(op * 0.15).toFixed(2)})`);
-        grad.addColorStop(0.70, `rgba(8, 8, 9, ${(op * 0.45).toFixed(2)})`);
-        grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, H);
-    } else {
-        // Cinematic gradient clásico
-        const grad = ctx.createLinearGradient(0, 0, 0, H);
-        if (is45) {
-            grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.42 : 0.15)).toFixed(2)})`);
-            grad.addColorStop(0.35, `rgba(8, 8, 9, ${(op * 0.18).toFixed(2)})`);
-            grad.addColorStop(0.60, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+        if (overlayMode === 'full_wash') {
+            // Tinte cinematográfico de alto contraste en toda la imagen para máxima legibilidad de tipografías 82px
+            ctx.fillStyle = `rgba(8, 8, 9, ${Math.min(0.92, op * 0.82).toFixed(2)})`;
+            ctx.fillRect(0, 0, W, H);
+            const radGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.75);
+            radGrad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.45).toFixed(2)})`);
+            radGrad.addColorStop(1, 'rgba(8, 8, 9, 0)');
+            ctx.fillStyle = radGrad;
+            ctx.fillRect(0, 0, W, H);
+        } else if (overlayMode === 'lower_third') {
+            const grad = ctx.createLinearGradient(0, 0, 0, H);
+            grad.addColorStop(0, 'rgba(8, 8, 9, 0)');
+            grad.addColorStop(0.50, 'rgba(8, 8, 9, 0)');
+            grad.addColorStop(0.70, `rgba(8, 8, 9, ${(op * 0.72).toFixed(2)})`);
             grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+        } else if (overlayMode === 'magazine_split' || spatialArchetype === 'magazine_split') {
+            // Gradiente dual: Oscuro arriba para titular 72px, claro al centro para sujeto/atleta, oscuro abajo para rationale
+            const grad = ctx.createLinearGradient(0, 0, 0, H);
+            grad.addColorStop(0, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.05).toFixed(2)})`);
+            grad.addColorStop(0.28, `rgba(8, 8, 9, ${(op * 0.65).toFixed(2)})`);
+            grad.addColorStop(0.48, `rgba(8, 8, 9, ${(op * 0.12).toFixed(2)})`);
+            grad.addColorStop(0.68, `rgba(8, 8, 9, ${(op * 0.55).toFixed(2)})`);
+            grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
         } else {
-            grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.50 : 0.20)).toFixed(2)})`);
-            grad.addColorStop(0.40, `rgba(8, 8, 9, ${(op * 0.22).toFixed(2)})`);
-            grad.addColorStop(0.68, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
-            grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+            // Cinematic gradient clásico adaptable
+            const grad = ctx.createLinearGradient(0, 0, 0, H);
+            if (is45) {
+                grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.45 : 0.20)).toFixed(2)})`);
+                grad.addColorStop(0.35, `rgba(8, 8, 9, ${(op * 0.20).toFixed(2)})`);
+                grad.addColorStop(0.60, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+                grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+            } else {
+                grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.52 : 0.22)).toFixed(2)})`);
+                grad.addColorStop(0.40, `rgba(8, 8, 9, ${(op * 0.24).toFixed(2)})`);
+                grad.addColorStop(0.68, `rgba(8, 8, 9, ${(op * 0.88).toFixed(2)})`);
+                grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+            }
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
         }
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, H);
-    }
 
     // 4. Header Superior de Marca SENS (Protegido dentro de la Safe Zone)
     if (layers.branding) {
@@ -22068,6 +22140,9 @@ function renderMarketingCanvasFrame() {
         ctx.fillText(`✓ SAFE ZONE ACTIVA (${safeW} × ${safeH} px)`, leftInset + 14, topInset + 26);
 
         ctx.restore();
+    }
+    } catch (renderErr) {
+        console.error('Error renderMarketingCanvasFrame:', renderErr);
     }
 }
 

@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.6">
+    <link rel="stylesheet" href="style.css?v=11.7">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6841,22 +6841,23 @@
                                                 value="80" style="width: 100%;">
                                         </div>
                                     </div>
-                                    <!-- Selector de Estilo de Overlay / Contraste de Imagen -->
+                                    <!-- Sistema de Overlay Arquitectónico (Bloqueado y Sincronizado por Template) -->
                                     <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.06);">
-                                        <label style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 5px;">
-                                            Estilo de Overlay / Contraste de Imagen:
-                                        </label>
-                                        <div class="sens-mkt-overlay-mode-grid" id="mktOverlayModeGrid">
-                                            <button type="button" class="sens-overlay-mode-btn active" data-overlay-mode="cinematic">
-                                                Gradiente Suave
-                                            </button>
-                                            <button type="button" class="sens-overlay-mode-btn" data-overlay-mode="full_wash">
-                                                Filtro Completo (Full Wash)
-                                            </button>
-                                            <button type="button" class="sens-overlay-mode-btn" data-overlay-mode="lower_third">
-                                                Solo al Pie (Acción)
-                                            </button>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                            <label style="font-size: 10.5px; font-weight: 700; color: var(--text-muted);">
+                                                Overlay Arquitectónico SENS:
+                                            </label>
+                                            <span style="font-size: 9.5px; font-weight: 700; color: #9E7D4B; background: #F7EFE4; padding: 2px 8px; border-radius: 6px;">
+                                                🔒 Calibrado por Template
+                                            </span>
                                         </div>
+                                        <div id="mktLockedOverlayNotice" style="font-size: 11px; font-weight: 600; color: #121214; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); padding: 8px 12px; border-radius: 10px; display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 14px;">🎯</span>
+                                            <span id="mktLockedOverlayDescription">Filtro Focal Completo (Optimizado para Titular Centrado 82px)</span>
+                                        </div>
+                                        <p style="font-size: 9.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.35;">
+                                            El overlay se calibra automáticamente con la posición del texto para garantizar 100% de contraste editorial y legibilidad en Instagram y TikTok sin romper la composición.
+                                        </p>
                                     </div>
                                 </div>
 
@@ -7066,7 +7067,7 @@
                                     <div class="sens-mkt-canvas-stage is-916" id="mktCanvasStageWrap">
                                         <canvas id="sensMarketingCanvas" width="1080" height="1920"></canvas>
                                         <!-- Elementos multimedia ocultos que alimentan el canvas en RAM -->
-                                        <video id="mktHiddenSourceVideo" muted loop playsinline src=""
+                                        <video id="mktHiddenSourceVideo" muted loop playsinline crossorigin="anonymous" src=""
                                             style="display: none;"></video>
                                     </div>
 
@@ -9445,7 +9446,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=12.0"></script>
+    <script src="app.js?v=12.1"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
