@@ -20484,117 +20484,173 @@ function saveCoachDbItemEditorChanges() {
 }
 
 // =============================================================================
-// ESTACIÓN 5: GROWTH MARKETING STUDIO SENS (ARQUETIPOS DEL BRANDBOOK)
+// ESTACIÓN 5: GROWTH MARKETING STUDIO SENS (8 ARQUETIPOS ESPACIALES & BRANDBOOK)
+// Diseñado bajo dirección creativa de lujo: Tipografías masivas, composición espacial diversa,
+// overlays adaptables y 100% de legibilidad en cualquier foto o video.
 // =============================================================================
 const SENS_MARKETING_TEMPLATES = [
     {
-        id: 'tpl_editorial_minimalist',
-        name: '1. Minimalist Editorial (Sin Pills)',
-        badge: 'ESTILO EDITORIAL',
-        desc: 'Pureza visual total. Cero cajas que tapen el video o foto.',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: false },
+        id: 'tpl_hero_center_big',
+        name: '1. Hero Center Display (Texto Gigante 82px)',
+        badge: 'GIGANTE CENTRADO',
+        desc: 'Titular masivo centrado con overlay completo. Máximo impacto viral en feed.',
+        spatialArchetype: 'hero_center_big',
+        overlayMode: 'full_wash',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'BIOMECÁNICA SENS', headline: 'EL ERROR #1 AL HACER SENTADILLA', sub: 'Si tus talones se despegan o rebotás abajo, perdés tensión muscular y sobrecargás la rodilla.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'CONTROL MOTOR', headline: 'BAJÁ EN 3 SEGUNDOS CONTROLADOS', sub: 'Mantené el trípode plantar firme, pecho alto y pausa 1 segundo en el punto más bajo.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'MAKES SENS', headline: '¿QUERÉS ENTRENAR SIN DOLOR?', sub: 'Escribime SENS por mensaje directo y evaluamos tu caso (Presencial CABA o App).', c1: '', c2: '', c3: '' }
+            { eyebrow: 'BIOMECÁNICA SENS', headline: 'DEJÁ DE REBOTAR ABAJO EN SENTADILLA', sub: 'Usar inercia destruye tus tendones y desactiva el estímulo muscular real.', c1: 'Cadencia 3-1-1-0', c2: 'Fuerza Real', c3: '' },
+            { eyebrow: 'EL SECRETO TÉCNICO', headline: '3 SEGUNDOS DE DESCENSO CONTROLADO', sub: 'Mantené la tensión excéntrica y pausá 1 segundo en el punto más profundo.', c1: 'Cero Lesiones', c2: '+Reclutamiento', c3: '' },
+            { eyebrow: 'MAKES SENS', headline: '¿QUERÉS ENTRENAR CON SENTIDO?', sub: 'Diagnóstico articular presencial en CABA o programación guiada desde la App.', c1: 'Presencial / App', c2: 'Escribime SENS →', c3: '' }
         ],
         slides: [
-            { eyebrow: 'DESLIZÁ • 1/4', headline: 'EL ERROR #1 QUE FRENA TUS PIERNAS', sub: 'Por qué subir kilos sin control excéntrico te estanca y fatiga tus articulaciones.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'EL PROBLEMA • 2/4', headline: 'REBOTAR ABAJO MATA LA TENSIÓN', sub: 'Cuando usás inercia en vez de control muscular, el tendón absorbe el impacto y el músculo no estimula.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'SOLUCIÓN SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + RANGO PROFUNDO', sub: '3 segundos al bajar, 1 segundo de pausa abajo y subida explosiva exhalando.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'TU PLAN • 4/4', headline: '¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA, Online o desde la App SENS.', c1: '', c2: '', c3: '' }
+            { eyebrow: 'STOP-SCROLL • 1/4', headline: 'DEJÁ DE REBOTAR ABAJO AL ENTRENAR', sub: 'Por qué subir kilos con inercia te estanca y sobrecarga tus articulaciones.', c1: 'Biomecánica', c2: 'Fuerza Real', c3: '' },
+            { eyebrow: 'EL PROBLEMA • 2/4', headline: 'LA INERCIA ANULA LA TENSIÓN MUSCULAR', sub: 'Cuando rebotás en el fondo, el tendón absorbe el impacto y el músculo no trabaja.', c1: 'Evitá Rebotes', c2: 'Cuidá Rodillas', c3: '' },
+            { eyebrow: 'SOLUCIÓN SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + PAUSA ISOMÉTRICA', sub: '3 segundos al bajar, 1 segundo abajo y subida explosiva exhalando.', c1: '+Estímulo', c2: '~42 kcal / 4 sets', c3: '' },
+            { eyebrow: 'TU PLAN • 4/4', headline: '¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA o desde la App SENS.', c1: 'Cupos Activos', c2: 'Link en Bio →', c3: '' }
         ],
         caption: 'El 90% comete este error en el gimnasio por priorizar ego antes que biomecánica.\n\nEn SENS trabajamos con cadencia controlada (3-1-1-0) y selección clínica de ejercicios para que construyas fuerza real sin dolor articular.\n\nComentá "SENS" o escribime por mensaje directo para evaluar tu caso (Presencial CABA, Online 1:1 o Suscripción App).'
     },
     {
-        id: 'tpl_lower_third_pro',
-        name: '2. Lower-Third Video Focus (Acción)',
-        badge: 'LOWER-THIRD PRO',
-        desc: '75% del video despejado. Texto al pie con 1 pill de foco.',
-        defaultLayers: { branding: false, eyebrow: true, headline: true, subtitle: false, chips: true },
+        id: 'tpl_magazine_split',
+        name: '2. Portada Revista Split (Top & Bottom)',
+        badge: 'REVISTA SPLIT',
+        desc: 'Titular arriba y rationale al pie. Centro de la imagen 100% libre para ver al atleta.',
+        spatialArchetype: 'magazine_split',
+        overlayMode: 'cinematic',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'CLAVE BIOMECÁNICA', headline: 'DEPRIMÍ ESCÁPULAS AL TRACCIONAR', sub: '', c1: 'Foco: Dorsal & Espalda', c2: '', c3: '' },
-            { eyebrow: 'AJUSTE DE TÉCNICA', headline: 'LLEVÁ LOS CODOS A LA CADERA', sub: '', c1: 'Pausa 1s • Cero Tensión Cervical', c2: '', c3: '' },
-            { eyebrow: 'ENTRENAMIENTO SENS', headline: 'PROBALO EN TU PRÓXIMA SESIÓN', sub: '', c1: 'Escribime SENS →', c2: '', c3: '' }
+            { eyebrow: 'PORTADA EDITORIAL', headline: 'EL ERROR #1 QUE FRENA TUS PIERNAS', sub: 'Levantar kilos sin control de cadera fatiga tus articulaciones y anula el glúteo.', c1: 'Piernas Fuertes', c2: 'Ciencia SENS', c3: '' },
+            { eyebrow: 'AJUSTE CLÍNICO', headline: 'TRÍPODE PLANTAR + PECHO ALTO', sub: 'Distribuí el peso entre talón, base del dedo gordo y quinto metatarsiano.', c1: 'Control Motor', c2: 'RIR 2 Seguro', c3: '' },
+            { eyebrow: 'PLAN PERSONALIZADO', headline: 'POTENCIÁ TU ESTRUCTURA FÍSICA', sub: 'Diagnóstico 360° en CABA o modalidad Online con seguimiento diario en la App.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
         ],
         slides: [
-            { eyebrow: 'GUÍA PRÁCTICA • 1/4', headline: 'CÓMO NO VS. CÓMO SÍ ENTRENAR ESPALDA', sub: 'El ajuste de 2 centímetros que cambia por completo tu postura.', c1: 'Espalda Sana', c2: '', c3: '' },
-            { eyebrow: 'CÓMO NO • 2/4', headline: 'ENCOGER HOMBROS Y ARQUEAR CUELLO', sub: 'Genera sobrecarga cervical y cero estímulo en los dorsales.', c1: 'Error Frecuente', c2: '', c3: '' },
-            { eyebrow: 'CÓMO SÍ • 3/4', headline: 'DEPRESIÓN ESCAPULAR + CODOS ABAJO', sub: 'Inhalá al estirar, exhalá llevando los codos hacia tu cadera con control.', c1: 'Dorsal Activo', c2: '', c3: '' },
-            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App $19.900/mes.', c1: 'Makes Sens →', c2: '', c3: '' }
+            { eyebrow: 'PORTADA SENS • 1/4', headline: 'CÓMO CONSTRUIR PIERNAS SIN DOLOR', sub: 'La guía biomecánica definitiva para entrenar tren inferior con inteligencia.', c1: 'Tren Inferior', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'ANATOMÍA • 2/4', headline: 'NO ES BAJAR MÁS, ES BAJAR MEJOR', sub: 'Tu anatomía de cadera define tu profundidad óptima: no fuerces retroversión pélvica.', c1: 'Movilidad', c2: 'Columna Neutra', c3: '' },
+            { eyebrow: 'EJECUCIÓN • 3/4', headline: 'ESTABILIZÁ RODILLAS EN LÍNEA CON PIES', sub: 'Evitá el valgo dinámico activando glúteo medio desde el inicio del movimiento.', c1: 'Glúteo Activo', c2: '~45 kcal / 4 sets', c3: '' },
+            { eyebrow: 'ACCESO • 4/4', headline: 'RUTINAS EN VIDEO Y GUÍA EN LA APP SENS', sub: 'Accedé hoy a toda nuestra biblioteca técnica por $19.900 al mes.', c1: 'App SENS', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: 'La verdadera técnica no se improvisa: se calibra centímetro a centímetro.\n\nGuardá esta portada para tu próximo entrenamiento de piernas y probá enfocar tu trípode plantar.\n\nEscribime "SENS" por DM para diseñar tu programación personalizada.'
+    },
+    {
+        id: 'tpl_glass_card',
+        name: '3. Tarjeta Glassmorphic (Placa de Lujo)',
+        badge: 'GLASS LUXURY',
+        desc: 'Contenido dentro de una placa de vidrio oscuro flotante. Legibilidad 100% garantizada.',
+        spatialArchetype: 'glass_card',
+        overlayMode: 'cinematic',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'CHECKLIST POSTURAL', headline: 'SI TRABAJÁS SENTADO MÁS DE 7 HORAS', sub: 'Tu cadera se acorta, tus glúteos se apagan y la columna lumbar termina pagando el precio.', c1: 'Columna Sana', c2: 'Movilidad 90/90', c3: '' },
+            { eyebrow: 'PROTOCOLO SENS', headline: 'ESTABILIDAD LUMBOPÉLVICA ACTIVA', sub: '3 minutos de activación de core anti-rotación y movilidad torácica antes de cargar peso.', c1: 'Core Anti-Rotación', c2: 'Cero Dolor', c3: '' },
+            { eyebrow: 'PROGRAMA SENS', headline: 'RECUPERÁ TU AGILIDAD Y FUERZA', sub: 'Sesiones personalizadas en CABA y programas adaptados a profesionales en la App.', c1: 'Presencial / Online', c2: 'Escribime SENS →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'POSTURA & SALUD • 1/4', headline: 'SI PASÁS 8 HORAS SENTADO, LEÉ ESTO', sub: 'Por qué estirar solo no alcanza para quitar la tensión lumbar del día a día.', c1: 'Ergonomía', c2: 'Salud Lumbar', c3: '' },
+            { eyebrow: 'CAUSA RAÍZ • 2/4', headline: 'AMNESIA GLÚTEA Y RIGIDEZ DE CADERA', sub: 'Cuando la cadera no extiende, tu zona lumbar compensa arqueándose en cada paso.', c1: 'Biomecánica', c2: 'Causa Real', c3: '' },
+            { eyebrow: 'SOLUCIÓN • 3/4', headline: 'BIRD-DOG + BISAGRA DE CADERA', sub: 'Fortalecé tu faja natural y aprendé a doblarte desde la cadera y no de la cintura.', c1: 'Fuerza Segura', c2: 'Longevidad', c3: '' },
+            { eyebrow: 'EVALUACIÓN • 4/4', headline: 'DIAGNÓSTICO 360° DE MOVIMIENTO', sub: 'Coordiná tu sesión presencial en CABA o plan online personalizado.', c1: 'Nico Maralle', c2: 'Escribime POSTURA →', c3: '' }
+        ],
+        caption: 'Entrenar no debería causarte dolor: debería devolverte la agilidad que el sedentarismo te quita.\n\nSi trabajás en oficina o remoto frente a la pantalla, tu cuerpo necesita un estímulo que combine fuerza estructural con descompresión articular.\n\nEscribime "POSTURA" para evaluar tu caso.'
+    },
+    {
+        id: 'tpl_stat_monumental',
+        name: '4. Métrica Monumental (Número 140px)',
+        badge: 'NÚMERO HERO',
+        desc: 'Dato fisiológico o calórico en tamaño monumental (140px) con respaldo SENS.',
+        spatialArchetype: 'stat_monumental',
+        overlayMode: 'cinematic',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'GASTO ENERGÉTICO REAL', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA?', sub: 'Cada serie multiarticular pesada cerca del fallo (RIR 2) oxida energía y dispara el efecto EPOC.', c1: '~11 KCAL', c2: '~44 kcal / 4 sets', c3: '+EPOC 24hs' },
+            { eyebrow: 'CADENCIA CONTROLADA', headline: 'TEMPO EXACTO POR REPETICIÓN', sub: '3 segundos excéntricos, 1 segundo isométrica y subida explosiva reclutan el doble de fibras.', c1: '3-1-1-0', c2: 'Fuerza Base', c3: 'Máxima Tensión' },
+            { eyebrow: 'APP & COACHING SENS', headline: 'KCAL Y MACROS MEDIDOS EN TU CELULAR', sub: 'Registro por serie, cronómetro de descanso y catálogo nutricional interactivo en la App.', c1: '$19.900', c2: 'Makes Sens', c3: 'Probala Hoy →' }
+        ],
+        slides: [
+            { eyebrow: 'METABOLISMO • 1/4', headline: '¿CUÁNTA ENERGÍA GASTA UNA SERIE?', sub: 'Desmitificando el cardio eterno vs. el entrenamiento de fuerza inteligente.', c1: '~11 KCAL', c2: 'Ciencia SENS', c3: '' },
+            { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cargas progresivas y tempo controlado.', c1: '~0.9 kcal / rep', c2: 'Alta Demanda', c3: '' },
+            { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO OXIDA CALORÍAS DURMIENDO', sub: 'Preservar masa magra eleva tu tasa metabólica basal y evita el temido efecto rebote.', c1: 'Metabolismo', c2: 'Sostenible', c3: '' },
+            { eyebrow: 'LLEVALA EN TU CELU • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN LA APP', sub: 'Activá tu suscripción mensual por $19.900 y entrená sabiendo qué hacer.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: '¿Sabías que una serie de sentadillas o peso muerto con cadencia 3-1-1-0 gasta entre 8 y 12 kcal reales, además de mantener tu metabolismo elevado durante las siguientes 24 horas?\n\nEn la plataforma SENS medimos el gasto calórico de cada ejercicio para que tu esfuerzo rinda al máximo.\n\nSumate desde el link de la bio.'
+    },
+    {
+        id: 'tpl_quote_editorial',
+        name: '5. Quote Filosófico (Comillas Gigantes)',
+        badge: 'QUOTE EDITORIAL',
+        desc: 'Frase de mentalidad con comillas champagne de 140px y firma de Nico.',
+        spatialArchetype: 'quote_editorial',
+        overlayMode: 'full_wash',
+        defaultLayers: { branding: true, eyebrow: false, headline: true, subtitle: true, chips: false },
+        scenes: [
+            { eyebrow: '', headline: 'EL MEJOR PLAN NO ES EL PERFECTO, ES EL QUE PODÉS CUMPLIR UN MARTES A LA NOCHE.', sub: '— NICO MARALLE • MAKES SENS', c1: '', c2: '', c3: '' },
+            { eyebrow: '', headline: 'ENTRENAR 3 DÍAS DURANTE 12 MESES SUPERA A ENTRENAR 6 DÍAS DURANTE 2 SEMANAS.', sub: '— LA CONSTANCIA SIEMPRE LE GANA A LA INTENSIDAD', c1: '', c2: '', c3: '' },
+            { eyebrow: '', headline: 'NO VIVAS PARA EL GIMNASIO: ENTRENA PARA TENER MÁS ENERGÍA EN EL RESTO DE TU VIDA.', sub: '— HEY, ¿ENTRENAMOS JUNTOS? MAKES SENS.', c1: '', c2: '', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'MENTALIDAD • 1/4', headline: 'POR QUÉ LA CONSTANCIA LE GANA A LA INTENSIDAD', sub: 'Construir un cuerpo fuerte y sano es un juego de adherencia a largo plazo.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'LA TRAMPA • 2/4', headline: 'EL "TODO O NADA" QUE TE HACE ABANDONAR', sub: 'Creer que por faltar un día arruinaste la semana te lleva a reiniciar siempre de cero.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'EL MÉTODO • 3/4', headline: 'MÍNIMO INNEGOCIABLE: 3 SESIONES + PROTEÍNA', sub: 'Cuando tenés claridad en las pocas cosas que importan, progresar se vuelve natural.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'SUMATE HOY • 4/4', headline: 'DISEÑEMOS UN PLAN QUE ENCAJE EN TU VIDA', sub: 'Presencial CABA, Online o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: 'No buscamos que vivas adentro de un gimnasio ni que peses cada gramo de lechuga.\n\nBuscamos que el entrenamiento y la nutrición te den más fuerza, mejor postura y seguridad para rendir en tu trabajo, tu familia y tus proyectos.\n\nHey, ¿entrenamos juntos? Makes Sens.'
+    },
+    {
+        id: 'tpl_lower_third_clean',
+        name: '6. Lower-Third Masivo (Acción Limpia)',
+        badge: 'LOWER-THIRD',
+        desc: '70% del video despejado para ver técnica. Titular extra-bold al pie.',
+        spatialArchetype: 'lower_third_clean',
+        overlayMode: 'lower_third',
+        defaultLayers: { branding: false, eyebrow: true, headline: true, subtitle: false, chips: true },
+        scenes: [
+            { eyebrow: 'BIOMECÁNICA SENS', headline: 'DEPRIMÍ ESCÁPULAS AL TRACCIONAR', sub: '', c1: 'Foco: Dorsal & Espalda', c2: '', c3: '' },
+            { eyebrow: 'CORRECCIÓN EN VIVO', headline: 'LLEVÁ LOS CODOS HACIA TU CADERA', sub: '', c1: 'Pausa 1s • Cero Tensión Cervical', c2: '', c3: '' },
+            { eyebrow: 'SISTEMA SENS', headline: 'ENTRENÁ CON PROPÓSITO', sub: '', c1: 'Escribime SENS →', c2: '', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'GUÍA RÁPIDA • 1/4', headline: 'CÓMO NO VS. CÓMO SÍ ENTRENAR ESPALDA', sub: 'El ajuste de 2 centímetros que cambia por completo tu postura.', c1: 'Espalda Sana', c2: '', c3: '' },
+            { eyebrow: 'CÓMO NO • 2/4', headline: 'ENCOGER HOMBROS Y TRACCIONAR CON BRAZOS', sub: 'Sobrecarga cervical y nula activación en dorsales.', c1: 'Error Frecuente', c2: '', c3: '' },
+            { eyebrow: 'CÓMO SÍ • 3/4', headline: 'DEPRESIÓN ESCAPULAR + CODOS ABAJO', sub: 'Inhalá al estirar, exhalá llevando los codos a la cadera.', c1: 'Dorsal Activo', c2: '', c3: '' },
+            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App.', c1: 'Makes Sens →', c2: '', c3: '' }
         ],
         caption: 'Pequeños ajustes biomecánicos generan grandes cambios en tu estructura física.\n\nGuardá este video para tu próxima sesión de tracción y probá iniciar cada repetición deprimiendo las escápulas.\n\n¿Querés que armemos tu programación completa? Escribime "SENS" por DM.'
     },
     {
-        id: 'tpl_hook_bold_dos_tonos',
-        name: '3. Titular Bold Dos Tonos (Retención)',
-        badge: 'ALTA RETENCIÓN',
-        desc: 'Contraste tipográfico Blanco + Champagne para frenar el feed.',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        id: 'tpl_editorial_bottom',
+        name: '7. Minimalist Editorial (Sin Pills)',
+        badge: 'EDITORIAL MINIMAL',
+        desc: 'Pureza visual clásica al pie. Cero cajas, solo tipografía pura y elegante.',
+        spatialArchetype: 'editorial_bottom',
+        overlayMode: 'cinematic',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: false },
         scenes: [
-            { eyebrow: 'FISIOLOGÍA REAL', headline: 'TRANSPIRAR MÁS NO ES QUEMAR MÁS GRASA', sub: 'El sudor es solo pérdida de agua por termorregulación, no oxidación de lípidos.', c1: 'Fisiología Real', c2: '', c3: 'Mirá por qué →' },
-            { eyebrow: 'LO QUE SÍ FUNCIONA', headline: 'FUERZA PESADA + DÉFICIT SUAVE + PASOS', sub: 'Músculo activo eleva tu metabolismo basal y protege tu estructura articular.', c1: 'Recomposición', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'SISTEMA SENS', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial en CABA, Seguimiento Online o Suscripción mensual en la App.', c1: 'Makes Sens', c2: '', c3: 'Link en Bio →' }
+            { eyebrow: 'FISIOLOGÍA REAL', headline: 'TRANSPIRAR MÁS NO ES QUEMAR GRASA', sub: 'El sudor es solo pérdida de agua por termorregulación, no oxidación de lípidos.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'LO QUE SÍ FUNCIONA', headline: 'FUERZA PESADA + DÉFICIT SUAVE', sub: 'Construir masa magra eleva tu metabolismo basal aún mientras dormís.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'MÉTODO SENS', headline: 'UN SISTEMA CLARO TODO EL AÑO', sub: 'Presencial en CABA, Seguimiento Online o Suscripción en la App.', c1: '', c2: '', c3: '' }
         ],
         slides: [
-            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'La diferencia entre terminar agotado y entrenar de verdad.', c1: 'Fisiología', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'EL ERROR • 2/4', headline: 'CASTIGARTE CON CARDIO EXTREMO DIARIO', sub: 'Aumenta el hambre reactiva, fatiga tus articulaciones y reduce tu masa muscular.', c1: 'Fatiga Central', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'EL SISTEMA • 3/4', headline: 'SOBRECARGA PROGRESIVA + NEAT + PROTEÍNA', sub: '3 pilares medibles desde el dashboard de nuestra plataforma.', c1: 'Sostenible', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App.', c1: 'SENS Train', c2: '', c3: 'Link en Bio →' }
+            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'La diferencia fisiológica entre terminar agotado y entrenar de verdad.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'EL ERROR • 2/4', headline: 'CASTIGARTE CON CARDIO EXTREMO DIARIO', sub: 'Aumenta el hambre reactiva, fatiga tus rodillas y destruye tu masa muscular.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'EL SISTEMA • 3/4', headline: 'SOBRECARGA PROGRESIVA + NEAT + PROTEÍNA', sub: '3 pilares medibles desde el dashboard de nuestra plataforma.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App $19.900/mes.', c1: '', c2: '', c3: '' }
         ],
         caption: 'Salir agotado no siempre es sinónimo de haber entrenado bien.\n\nLa recomposición corporal ocurre cuando combinás estímulo mecánico real en tus músculos, pasos diarios constantes y un déficit calórico moderado con suficiente proteína.\n\nEso hacemos todos los días en SENS.'
     },
     {
-        id: 'tpl_stat_metrica_hero',
-        name: '4. Ficha de Datos & Kcal (Autoridad)',
-        badge: 'MÉTRICA HERO',
-        desc: 'Destaca un número clínico real (~11 kcal, 3-0-1-0) con respaldo SENS.',
+        id: 'tpl_story_callout',
+        name: '8. Story Cupos & Stickers (Formato 9:16)',
+        badge: 'STORY CONVERSIÓN',
+        desc: 'Zona segura para stickers de Instagram y llamado directo a mensaje privado.',
+        spatialArchetype: 'story_callout',
+        overlayMode: 'cinematic',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'CIENCIA & METABOLISMO', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA?', sub: 'Cada serie multiarticular cerca del fallo (RIR 2) dispara tu gasto energético y el efecto EPOC.', c1: '~11 kcal / serie', c2: '', c3: '+Efecto EPOC 24hs' },
-            { eyebrow: 'DATOS CLÍNICOS', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios pesados de piernas y espalda con cadencia estricta 3-1-1-0.', c1: 'Cadencia 3-1-1-0', c2: '', c3: 'Fuerza Estructural' },
-            { eyebrow: 'APP SENS', headline: 'KCAL Y MACROS MEDIDOS EN TU CELULAR', sub: 'Seguimiento por serie, descansos automáticos y catálogo nutricional flexible.', c1: 'App $19.900/mes', c2: '', c3: 'Escribime SENS →' }
+            { eyebrow: 'AGENDA MARZO ABIERTA', headline: 'SE ABRIERON 3 CUPOS PARA PLAN 1:1', sub: 'Seguimiento personalizado para transformar tu fuerza, postura y energía diaria.', c1: 'Solo 3 Lugares', c2: '', c3: 'Escribime PLAN →' },
+            { eyebrow: 'QUÉ INCLUYE', headline: 'DIAGNÓSTICO 360° + RUTINA + NUTRICIÓN', sub: 'Adaptado a tu agenda, tus gustos de comida y tu historial articular.', c1: 'Presencial / Online', c2: '', c3: 'Cero Improvisar' },
+            { eyebrow: 'POSTULATE HOY', headline: 'ENVIAME UN DM CON LA PALABRA "PLAN"', sub: 'Coordinamos una breve evaluación inicial para definir el formato ideal.', c1: 'Nico Maralle', c2: '', c3: 'Mensaje Directo →' }
         ],
         slides: [
-            { eyebrow: 'DATOS REALES • 1/4', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA?', sub: 'Desmitificando el cardio eterno vs. el entrenamiento de fuerza inteligente.', c1: '~11 kcal / serie', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cadencia controlada y cargas progresivas.', c1: '~0.9 kcal / rep', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO QUEMA CALORÍAS AÚN DURMIENDO', sub: 'Preservar y construir tejido magro es la clave número 1 para no sufrir efecto rebote.', c1: 'Salud Hormonal', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'SUMATE A SENS • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN TU CELULAR', sub: 'Elegí tu modalidad: Presencial CABA, Online 1:1 o Suscripción App.', c1: 'Makes Sens', c2: '', c3: 'Link en Bio →' }
-        ],
-        caption: '¿Sabías cuánta energía demanda una serie de fuerza multiarticular ejecutada con tempo controlado?\n\nEn la plataforma SENS cada ejercicio y cada comida tienen sus métricas exactas para que avances sin adivinar.\n\nSumate hoy desde el link de la bio.'
-    },
-    {
-        id: 'tpl_carrusel_secuencia_swipe',
-        name: '5. Secuencia Revista Carrusel (4:5)',
-        badge: 'CARRUSEL SWIPE',
-        desc: 'Diseño editorial de 4 diapositivas para lecturas y alto guardado.',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'GUÍA TÉCNICA', headline: 'CÓMO ENTRENAR ESPALDA SIN DOLOR CERVICAL', sub: 'El ajuste de 2 centímetros en tus escápulas que cambia por completo tu postura.', c1: 'Espalda Sana', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'EL ERROR TÍPICO', headline: 'ENCOGER HOMBROS AL TRACCIONAR', sub: 'Sobrecarga cervical y nula activación del dorsal.', c1: 'Error Común', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'MÉTODO SENS', headline: 'DEPRESIÓN ESCAPULAR + CONTROL', sub: 'Inhalá al estirar, exhalá llevando los codos a la cadera.', c1: 'Técnica SENS', c2: '', c3: 'Deslizá →' }
-        ],
-        slides: [
-            { eyebrow: 'GUÍA PRÁCTICA • 1/4', headline: 'CÓMO NO VS. CÓMO SÍ ENTRENAR ESPALDA', sub: 'El ajuste de 2 centímetros que cambia por completo tu postura.', c1: 'Espalda Sana', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'CÓMO NO • 2/4', headline: 'ENCOGER HOMBROS Y ARQUEAR CUELLO', sub: 'Genera sobrecarga cervical y cero estímulo en los dorsales.', c1: 'Error Frecuente', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'CÓMO SÍ • 3/4', headline: 'DEPRESIÓN ESCAPULAR + CODOS ABAJO', sub: 'Inhalá al estirar, exhalá llevando los codos hacia tu cadera con control.', c1: 'Dorsal Activo', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: '', c3: 'Link en Bio →' }
-        ],
-        caption: 'Pequeños ajustes biomecánicos generan grandes cambios en tu estructura física.\n\nGuardá este post para tu próxima sesión de tracción y probá iniciar cada repetición deprimiendo las escápulas.\n\n¿Querés que armemos tu programación completa? Escribime "SENS" por DM.'
-    },
-    {
-        id: 'tpl_story_cupos_vip',
-        name: '6. Story Cupos & Conversión Directa',
-        badge: 'CONVERSIÓN DIRECTA',
-        desc: 'Story limpia de 9:16 para abrir cupos 1:1 o Suscripción App.',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'AGENDA DEL MES ABIERTA', headline: 'SE ABRIERON 3 LUGARES PARA PLAN 1:1', sub: 'Seguimiento personalizado para transformar tu fuerza, postura y composición corporal.', c1: 'Solo 3 Cupos', c2: '', c3: 'Escribime PLAN →' },
-            { eyebrow: 'QUÉ INCLUYE', headline: 'DIAGNÓSTICO 360° + RUTINA + NUTRICIÓN', sub: 'Adaptado a tus horarios de trabajo, tu historial articular y tus objetivos reales.', c1: 'Plan a Medida', c2: '', c3: 'Cero Dietas Raras' },
-            { eyebrow: 'RESERVÁ TU LUGAR', headline: 'ESCRIBIME "PLAN" POR PRIVADO', sub: 'Coordinamos una breve evaluación para definir si arrancamos presencial u online.', c1: 'Presencial / VIP', c2: '', c3: 'Mensaje Directo →' }
-        ],
-        slides: [
-            { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO 1:1', sub: 'Para quienes buscan acompañamiento directo paso a paso.', c1: 'Solo 3 Cupos', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO 1:1', sub: 'Para quienes buscan acompañamiento directo paso a paso.', c1: 'Solo 3 Lugares', c2: '', c3: 'Deslizá →' },
             { eyebrow: 'PASO 1 • 2/4', headline: 'EVALUACIÓN DE POSTURA, FUERZA Y HÁBITOS', sub: 'Detectamos qué te frenó hasta hoy y diseñamos una hoja de ruta realista.', c1: 'Ficha 360°', c2: '', c3: 'Deslizá →' },
             { eyebrow: 'PASO 2 • 3/4', headline: 'EJECUCIÓN GUIADA Y AJUSTES SEMANALES', sub: 'Monitoreamos tus cargas, tu nutrición y tu recuperación semana a semana.', c1: '100% a Medida', c2: '', c3: 'Deslizá →' },
             { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O WHATSAPP', sub: 'Los lugares presenciales en CABA se asignan por orden de consulta.', c1: 'Nico Maralle', c2: '', c3: 'Escribime PLAN →' }
@@ -20605,13 +20661,14 @@ const SENS_MARKETING_TEMPLATES = [
 
 let mktStudioState = {
     format: 'reel_video_9_16', // 'reel_video_9_16', 'carousel_4_5', 'post_4_5', 'story_9_16'
-    templateId: 'tpl_editorial_minimalist',
+    templateId: 'tpl_hero_center_big',
     sceneIdx: 0,
     slideIdx: 0,
     autoCycleScenes: true,
     zoom: 105,
     panY: 0,
     overlayOpacity: 80,
+    overlayMode: 'full_wash', // 'cinematic' | 'full_wash' | 'lower_third'
     mediaType: 'video', // 'video' | 'image'
     customImageObj: null,
     objectUrlCache: null,
@@ -20622,7 +20679,7 @@ let mktStudioState = {
         eyebrow: true,
         headline: true,
         subtitle: true,
-        chips: false
+        chips: true
     }
 };
 
@@ -20902,6 +20959,18 @@ window.initCoachMarketingStudio = function() {
     const panYSlider = document.getElementById('mktMediaPanYSlider');
     const opacitySlider = document.getElementById('mktOverlayOpacitySlider');
     const zoomLabel = document.getElementById('mktZoomValLabel');
+    const overlayBtns = document.querySelectorAll('#mktOverlayModeGrid .sens-overlay-mode-btn');
+
+    if (overlayBtns.length > 0) {
+        overlayBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                overlayBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                mktStudioState.overlayMode = btn.getAttribute('data-overlay-mode') || 'cinematic';
+                renderMarketingCanvasFrame();
+            });
+        });
+    }
 
     if (zoomSlider) {
         zoomSlider.addEventListener('input', () => {
@@ -21072,6 +21141,12 @@ function applyMarketingTemplateToInputs() {
         mktStudioState.layers = { ...tpl.defaultLayers };
         syncMarketingLayersUI();
     }
+    if (tpl.overlayMode) {
+        mktStudioState.overlayMode = tpl.overlayMode;
+        document.querySelectorAll('#mktOverlayModeGrid .sens-overlay-mode-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-overlay-mode') === tpl.overlayMode);
+        });
+    }
     loadActiveSceneOrSlideIntoInputs();
 }
 
@@ -21220,30 +21295,54 @@ function renderMarketingCanvasFrame() {
         }
     }
 
-    // 3. Gradiente Cinematográfico Quiet Luxury
-    const op = (mktStudioState.overlayOpacity || 80) / 100;
-    const layers = mktStudioState.layers || { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true };
-    const isLowerThird = (mktStudioState.templateId === 'tpl_lower_third_pro');
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    // 3. Sistema de Overlays Adaptables (Full Wash, Lower Third, Magazine Split o Gradiente Cinematográfico)
+    const overlayMode = mktStudioState.overlayMode || tpl.overlayMode || 'cinematic';
+    const spatialArchetype = tpl.spatialArchetype || 'editorial_bottom';
 
-    if (isLowerThird) {
+    if (overlayMode === 'full_wash') {
+        // Tinte uniforme cinematográfico en toda la imagen para máxima legibilidad de tipografías gigantes
+        ctx.fillStyle = `rgba(8, 8, 9, ${(op * 0.72).toFixed(2)})`;
+        ctx.fillRect(0, 0, W, H);
+        const radGrad = ctx.createRadialGradient(W / 2, H / 2, W * 0.25, W / 2, H / 2, W * 0.85);
+        radGrad.addColorStop(0, 'rgba(8, 8, 9, 0)');
+        radGrad.addColorStop(1, `rgba(8, 8, 9, ${(op * 0.40).toFixed(2)})`);
+        ctx.fillStyle = radGrad;
+        ctx.fillRect(0, 0, W, H);
+    } else if (overlayMode === 'lower_third') {
+        const grad = ctx.createLinearGradient(0, 0, 0, H);
         grad.addColorStop(0, 'rgba(8, 8, 9, 0)');
         grad.addColorStop(0.55, 'rgba(8, 8, 9, 0)');
         grad.addColorStop(0.72, `rgba(8, 8, 9, ${(op * 0.65).toFixed(2)})`);
         grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
-    } else if (is45) {
-        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.42 : 0.15)).toFixed(2)})`);
-        grad.addColorStop(0.35, `rgba(8, 8, 9, ${(op * 0.18).toFixed(2)})`);
-        grad.addColorStop(0.60, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+    } else if (spatialArchetype === 'magazine_split') {
+        // Gradiente dual: Oscuro arriba para titular, claro al centro para sujeto, oscuro abajo
+        const grad = ctx.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.88).toFixed(2)})`);
+        grad.addColorStop(0.30, `rgba(8, 8, 9, ${(op * 0.55).toFixed(2)})`);
+        grad.addColorStop(0.50, `rgba(8, 8, 9, ${(op * 0.15).toFixed(2)})`);
+        grad.addColorStop(0.70, `rgba(8, 8, 9, ${(op * 0.45).toFixed(2)})`);
         grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
     } else {
-        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.50 : 0.20)).toFixed(2)})`);
-        grad.addColorStop(0.40, `rgba(8, 8, 9, ${(op * 0.22).toFixed(2)})`);
-        grad.addColorStop(0.68, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
-        grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+        // Cinematic gradient clásico
+        const grad = ctx.createLinearGradient(0, 0, 0, H);
+        if (is45) {
+            grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.42 : 0.15)).toFixed(2)})`);
+            grad.addColorStop(0.35, `rgba(8, 8, 9, ${(op * 0.18).toFixed(2)})`);
+            grad.addColorStop(0.60, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+            grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+        } else {
+            grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.50 : 0.20)).toFixed(2)})`);
+            grad.addColorStop(0.40, `rgba(8, 8, 9, ${(op * 0.22).toFixed(2)})`);
+            grad.addColorStop(0.68, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+            grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+        }
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
     }
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
 
     // 4. Header Superior de Marca SENS (Si la capa está activa)
     if (layers.branding) {
@@ -21252,7 +21351,6 @@ function renderMarketingCanvasFrame() {
         const brandY = is45 ? 54 : 70;
         const barH = is45 ? 44 : 50;
 
-        // Chip minimalista de superficie sólida elevada (Sin wireframe dorado estridente)
         ctx.fillStyle = 'rgba(12, 12, 15, 0.72)';
         roundRectCanvas(ctx, brandX, brandY, 218, barH, 12);
         ctx.fill();
@@ -21262,13 +21360,11 @@ function renderMarketingCanvasFrame() {
         ctx.textBaseline = 'middle';
         ctx.fillText('MAKES SENS', brandX + 22, brandY + (barH / 2));
 
-        // Punto de acento discreto en Champagne Gold
         ctx.fillStyle = '#E5CBA7';
         ctx.beginPath();
         ctx.arc(brandX + 172, brandY + (barH / 2), 4, 0, Math.PI * 2);
         ctx.fill();
 
-        // Indicador de secuencia / escena a la derecha
         const topRightText = mktStudioState.format === 'carousel_4_5'
             ? `${mktStudioState.slideIdx + 1} / 4`
             : mktStudioState.format === 'reel_video_9_16'
@@ -21287,7 +21383,7 @@ function renderMarketingCanvasFrame() {
         ctx.restore();
     }
 
-    // 5. Bloque Inferior con Reflujo Dinámico Bottom-Up
+    // Datos de entrada de texto
     const rawEyebrow = (document.getElementById('mktInputEyebrow')?.value || '').trim();
     const rawHeadline = (document.getElementById('mktInputHeadline')?.value || '').trim();
     const rawSub = (document.getElementById('mktInputSubtitle')?.value || '').trim();
@@ -21301,75 +21397,471 @@ function renderMarketingCanvasFrame() {
     const hasHead = layers.headline && rawHeadline.length > 0;
     const hasEye = layers.eyebrow && rawEyebrow.length > 0;
 
-    const bottomBaseY = is45 ? (H - 80) : (H - 120);
-    const chipHeight = is45 ? 46 : 52;
-    let currentY = bottomBaseY;
+    // =========================================================================
+    // 5. RENDERIZADO POR ARQUETIPO ESPACIAL (8 COMPOSICIONES CREATIVAS)
+    // =========================================================================
 
-    // A) Chips / Pills Inferiores (Superficie elevada sólida, cero wireframe)
-    if (hasChips) {
-        currentY = bottomBaseY - chipHeight;
-        let chipX = 70;
-        ctx.font = `700 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
-        chips.forEach((ch, idx) => {
-            const isHighlight = (idx === chips.length - 1 && chips.length > 1) || (chips.length === 1 && ch.includes('→'));
-            const padX = is45 ? 18 : 22;
-            const w = ctx.measureText(ch).width + (padX * 2);
+    ctx.save();
 
-            ctx.fillStyle = isHighlight ? '#E5CBA7' : 'rgba(20, 20, 24, 0.82)';
-            roundRectCanvas(ctx, chipX, currentY, w, chipHeight, 10);
-            ctx.fill();
-
-            ctx.fillStyle = isHighlight ? '#121214' : '#FAF9F6';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(ch, chipX + padX, currentY + (chipHeight / 2));
-            chipX += w + 12;
-        });
-        currentY -= (is45 ? 24 : 32);
-    }
-
-    // B) Bajada / Rationale Biológico
-    if (hasSub) {
+    if (spatialArchetype === 'hero_center_big') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 1: TITULAR GIGANTE CENTRADO (HERO CENTER DISPLAY 82px)
+        // ---------------------------------------------------------------------
+        ctx.textAlign = 'center';
+        const headFontSize = is45 ? 64 : 82;
+        const headLineHeight = is45 ? 72 : 94;
         const subFontSize = is45 ? 26 : 32;
         const subLineHeight = is45 ? 38 : 46;
-        ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const maxSubLines = is45 ? 2 : 3;
-        const subLines = wrapCanvasText(ctx, rawSub, W - 140).slice(0, maxSubLines);
-        const subStartY = currentY - (subLines.length * subLineHeight);
-        ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-        ctx.textBaseline = 'top';
-        subLines.forEach((line, i) => {
-            ctx.fillText(line, 70, subStartY + (i * subLineHeight));
-        });
-        currentY = subStartY - (is45 ? 22 : 30);
-    }
 
-    // C) Titular de Alto Impacto (Dos Tonos: Blanco puro + Champagne Gold)
-    if (hasHead) {
-        const headFontSize = is45 ? 52 : 64;
-        const headLineHeight = is45 ? 60 : 74;
         ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const maxHeadLines = is45 ? 2 : 3;
-        const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), W - 140).slice(0, maxHeadLines);
-        const headStartY = currentY - (headLines.length * headLineHeight);
-        ctx.textBaseline = 'top';
-        headLines.forEach((line, i) => {
-            const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-            ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-            ctx.fillText(line, 70, headStartY + (i * headLineHeight));
-        });
-        currentY = headStartY - (is45 ? 20 : 26);
-    }
+        const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), W - 160).slice(0, 3) : [];
+        ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const subLines = hasSub ? wrapCanvasText(ctx, rawSub, W - 200).slice(0, 3) : [];
 
-    // D) Eyebrow Kicker Editorial (Sin caja innecesaria, pura elegancia tipográfica)
-    if (hasEye) {
-        const eyeFontSize = is45 ? 20 : 23;
-        ctx.font = `800 ${eyeFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const hHead = headLines.length * headLineHeight;
+        const hSub = subLines.length * subLineHeight;
+        const hChips = hasChips ? (is45 ? 46 : 52) + 24 : 0;
+        const hEye = hasEye ? (is45 ? 36 : 44) : 0;
+        const totalH = hHead + (hSub ? hSub + 28 : 0) + (hEye ? hEye + 16 : 0) + hChips;
+
+        let curY = Math.max(is45 ? 180 : 260, Math.round((H - totalH) / 2));
+
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'top';
+            ctx.fillText(`• ${rawEyebrow.toUpperCase()} •`, W / 2, curY);
+            curY += is45 ? 36 : 44;
+        }
+
+        if (hasHead) {
+            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.textBaseline = 'top';
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, W / 2, curY + (i * headLineHeight));
+            });
+            curY += hHead + 28;
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.94)';
+            ctx.textBaseline = 'top';
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, W / 2, curY + (i * subLineHeight));
+            });
+            curY += hSub + 24;
+        }
+
+        if (hasChips) {
+            drawCenteredChipsRow(ctx, chips, W / 2, curY, is45);
+        }
+
+    } else if (spatialArchetype === 'magazine_split') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 2: PORTADA DE REVISTA SPLIT (TITULAR TOP + RATIONALE BOTTOM)
+        // ---------------------------------------------------------------------
+        let topY = is45 ? 135 : 170;
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 19 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'top';
+            ctx.fillText(rawEyebrow.toUpperCase(), 70, topY);
+            topY += is45 ? 34 : 42;
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 54 : 68;
+            const headLineHeight = is45 ? 62 : 78;
+            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.textBaseline = 'top';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), W - 140).slice(0, 3);
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, 70, topY + (i * headLineHeight));
+            });
+        }
+
+        const bottomBaseY = is45 ? (H - 75) : (H - 110);
+        const chipHeight = is45 ? 46 : 52;
+        let curY = bottomBaseY;
+
+        if (hasChips) {
+            curY = bottomBaseY - chipHeight;
+            drawLeftChipsRow(ctx, chips, 70, curY, is45);
+            curY -= (is45 ? 24 : 32);
+        }
+
+        if (hasSub) {
+            const subFontSize = is45 ? 26 : 31;
+            const subLineHeight = is45 ? 38 : 45;
+            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const subLines = wrapCanvasText(ctx, rawSub, W - 140).slice(0, is45 ? 2 : 3);
+            const subStartY = curY - (subLines.length * subLineHeight);
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, 70, subStartY + (i * subLineHeight));
+            });
+        }
+
+    } else if (spatialArchetype === 'glass_card') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 3: TARJETA FLOTANTE GLASSMORPHIC (PLACA DE LUJO)
+        // ---------------------------------------------------------------------
+        const cardW = W - 140;
+        const padX = 46;
+        const padY = 40;
+        const innerW = cardW - (padX * 2);
+
+        const headFontSize = is45 ? 46 : 58;
+        const headLineHeight = is45 ? 54 : 68;
+        const subFontSize = is45 ? 24 : 30;
+        const subLineHeight = is45 ? 34 : 42;
+
+        ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), innerW).slice(0, 3) : [];
+        ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const subLines = hasSub ? wrapCanvasText(ctx, rawSub, innerW).slice(0, 3) : [];
+
+        const hEye = hasEye ? (is45 ? 30 : 36) : 0;
+        const hHead = headLines.length * headLineHeight;
+        const hSub = subLines.length * subLineHeight;
+        const hChips = hasChips ? (is45 ? 44 : 50) + 20 : 0;
+        const cardH = (padY * 2) + hEye + hHead + (hSub ? hSub + 20 : 0) + hChips;
+
+        const cardX = 70;
+        const cardY = is45 ? (H - cardH - 55) : (H - cardH - 95);
+
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.60)';
+        ctx.shadowBlur = 35;
+        ctx.shadowOffsetY = 12;
+        ctx.fillStyle = 'rgba(13, 13, 17, 0.88)';
+        roundRectCanvas(ctx, cardX, cardY, cardW, cardH, 22);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+        ctx.lineWidth = 1.5;
+        roundRectCanvas(ctx, cardX, cardY, cardW, cardH, 22);
+        ctx.stroke();
+
+        let inY = cardY + padY;
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'top';
+            ctx.fillText(rawEyebrow.toUpperCase(), cardX + padX, inY);
+            inY += is45 ? 30 : 36;
+        }
+
+        if (hasHead) {
+            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.textBaseline = 'top';
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, cardX + padX, inY + (i * headLineHeight));
+            });
+            inY += hHead + 20;
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, cardX + padX, inY + (i * subLineHeight));
+            });
+            inY += hSub + 20;
+        }
+
+        if (hasChips) {
+            drawLeftChipsRow(ctx, chips, cardX + padX, inY, is45);
+        }
+
+    } else if (spatialArchetype === 'stat_monumental') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 4: MÉTRICA MONUMENTAL (NÚMERO HERO 140px DISPLAY)
+        // ---------------------------------------------------------------------
+        const bottomBaseY = is45 ? (H - 75) : (H - 110);
+        let curY = bottomBaseY;
+
+        if (hasChips) {
+            const chipHeight = is45 ? 46 : 52;
+            curY = bottomBaseY - chipHeight;
+            drawLeftChipsRow(ctx, chips, 70, curY, is45);
+            curY -= (is45 ? 24 : 32);
+        }
+
+        if (hasSub) {
+            const subFontSize = is45 ? 26 : 31;
+            const subLineHeight = is45 ? 38 : 45;
+            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const subLines = wrapCanvasText(ctx, rawSub, W - 140).slice(0, 2);
+            const subStartY = curY - (subLines.length * subLineHeight);
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, 70, subStartY + (i * subLineHeight));
+            });
+            curY = subStartY - (is45 ? 20 : 28);
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 48 : 58;
+            const headLineHeight = is45 ? 56 : 68;
+            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), W - 140).slice(0, 2);
+            const headStartY = curY - (headLines.length * headLineHeight);
+            ctx.textBaseline = 'top';
+            headLines.forEach((line, i) => {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText(line, 70, headStartY + (i * headLineHeight));
+            });
+            curY = headStartY - (is45 ? 16 : 24);
+        }
+
+        const statNumber = c1 || rawEyebrow || '3-1-1-0';
+        const statFontSize = is45 ? 115 : 148;
+        ctx.font = `900 ${statFontSize}px "Plus Jakarta Sans", sans-serif`;
         ctx.fillStyle = '#E5CBA7';
         ctx.textBaseline = 'bottom';
-        ctx.fillText(rawEyebrow.toUpperCase(), 70, currentY);
+        ctx.fillText(statNumber.toUpperCase(), 70, curY);
+
+        if (hasEye && rawEyebrow !== statNumber) {
+            ctx.font = `800 ${is45 ? 19 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.85)';
+            ctx.fillText(rawEyebrow.toUpperCase(), 70, curY - (is45 ? 120 : 155));
+        }
+
+    } else if (spatialArchetype === 'quote_editorial') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 5: QUOTE FILOSÓFICO (COMILLAS MONUMENTALES 140px)
+        // ---------------------------------------------------------------------
+        ctx.textAlign = 'center';
+        const quoteFontSize = is45 ? 44 : 56;
+        const quoteLineHeight = is45 ? 56 : 72;
+        const authorFontSize = is45 ? 22 : 26;
+
+        ctx.font = `700 ${quoteFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const quoteLines = wrapCanvasText(ctx, `"${rawHeadline}"`, W - 180).slice(0, 4);
+        const hQuote = quoteLines.length * quoteLineHeight;
+        const markH = is45 ? 90 : 120;
+        const totalH = markH + hQuote + (hasSub ? 60 : 0);
+
+        let curY = Math.max(is45 ? 180 : 250, Math.round((H - totalH) / 2));
+
+        ctx.font = `800 ${is45 ? 110 : 150}px "Plus Jakarta Sans", Georgia, serif`;
+        ctx.fillStyle = 'rgba(229, 203, 167, 0.45)';
+        ctx.textBaseline = 'top';
+        ctx.fillText('“', W / 2, curY);
+        curY += is45 ? 85 : 110;
+
+        ctx.font = `700 ${quoteFontSize}px "Plus Jakarta Sans", sans-serif`;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.textBaseline = 'top';
+        quoteLines.forEach((line, i) => {
+            ctx.fillText(line, W / 2, curY + (i * quoteLineHeight));
+        });
+        curY += hQuote + (is45 ? 28 : 36);
+
+        if (hasSub) {
+            ctx.font = `600 ${authorFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.fillText(rawSub.toUpperCase(), W / 2, curY);
+        }
+
+    } else if (spatialArchetype === 'story_callout') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 6: STORY CUPOS & STICKERS (ZONA DE CONVERSIÓN SEGURA 9:16)
+        // ---------------------------------------------------------------------
+        const safeStartY = is45 ? 220 : 320;
+        let curY = safeStartY;
+
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
+            const badgeW = ctx.measureText(rawEyebrow).width + 36;
+            ctx.fillStyle = '#E5CBA7';
+            roundRectCanvas(ctx, 70, curY, badgeW, 44, 10);
+            ctx.fill();
+            ctx.fillStyle = '#121214';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(rawEyebrow.toUpperCase(), 88, curY + 22);
+            curY += 64;
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 52 : 66;
+            const headLineHeight = is45 ? 60 : 76;
+            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.textBaseline = 'top';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), W - 140).slice(0, 3);
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, 70, curY + (i * headLineHeight));
+            });
+            curY += (headLines.length * headLineHeight) + 26;
+        }
+
+        if (hasSub) {
+            const subFontSize = is45 ? 26 : 31;
+            const subLineHeight = is45 ? 38 : 45;
+            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            const subLines = wrapCanvasText(ctx, rawSub, W - 140).slice(0, 3);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, 70, curY + (i * subLineHeight));
+            });
+            curY += (subLines.length * subLineHeight) + 28;
+        }
+
+        if (hasChips) {
+            drawLeftChipsRow(ctx, chips, 70, curY, is45);
+        }
+
+    } else if (spatialArchetype === 'lower_third_clean') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 7: LOWER-THIRD MASIVO (ACCIÓN 70% LIMPIA)
+        // ---------------------------------------------------------------------
+        const bottomBaseY = is45 ? (H - 75) : (H - 110);
+        const chipHeight = is45 ? 46 : 52;
+        let curY = bottomBaseY;
+
+        if (hasChips) {
+            curY = bottomBaseY - chipHeight;
+            drawLeftChipsRow(ctx, chips, 70, curY, is45);
+            curY -= (is45 ? 24 : 30);
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 56 : 72;
+            const headLineHeight = is45 ? 64 : 80;
+            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), W - 140).slice(0, 2);
+            const headStartY = curY - (headLines.length * headLineHeight);
+            ctx.textBaseline = 'top';
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, 70, headStartY + (i * headLineHeight));
+            });
+            curY = headStartY - (is45 ? 18 : 24);
+        }
+
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(rawEyebrow.toUpperCase(), 70, curY);
+        }
+
+    } else {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 8: EDITORIAL BOTTOM CLASSIC (REFLUJO BOTTOM-UP QUIET LUXURY)
+        // ---------------------------------------------------------------------
+        const bottomBaseY = is45 ? (H - 80) : (H - 120);
+        const chipHeight = is45 ? 46 : 52;
+        let curY = bottomBaseY;
+
+        if (hasChips) {
+            curY = bottomBaseY - chipHeight;
+            drawLeftChipsRow(ctx, chips, 70, curY, is45);
+            curY -= (is45 ? 24 : 32);
+        }
+
+        if (hasSub) {
+            const subFontSize = is45 ? 26 : 32;
+            const subLineHeight = is45 ? 38 : 46;
+            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const maxSubLines = is45 ? 2 : 3;
+            const subLines = wrapCanvasText(ctx, rawSub, W - 140).slice(0, maxSubLines);
+            const subStartY = curY - (subLines.length * subLineHeight);
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, 70, subStartY + (i * subLineHeight));
+            });
+            curY = subStartY - (is45 ? 22 : 30);
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 52 : 64;
+            const headLineHeight = is45 ? 60 : 74;
+            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const maxHeadLines = is45 ? 2 : 3;
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), W - 140).slice(0, maxHeadLines);
+            const headStartY = curY - (headLines.length * headLineHeight);
+            ctx.textBaseline = 'top';
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, 70, headStartY + (i * headLineHeight));
+            });
+            curY = headStartY - (is45 ? 20 : 26);
+        }
+
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(rawEyebrow.toUpperCase(), 70, curY);
+        }
     }
 
     ctx.restore();
+}
+
+function drawLeftChipsRow(ctx, chips, startX, y, is45) {
+    const chipHeight = is45 ? 46 : 52;
+    let chipX = startX;
+    ctx.font = `700 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
+    ctx.textAlign = 'left';
+    chips.forEach((ch, idx) => {
+        const isHighlight = (idx === chips.length - 1 && chips.length > 1) || (chips.length === 1 && ch.includes('→'));
+        const padX = is45 ? 18 : 22;
+        const w = ctx.measureText(ch).width + (padX * 2);
+
+        ctx.fillStyle = isHighlight ? '#E5CBA7' : 'rgba(20, 20, 24, 0.82)';
+        roundRectCanvas(ctx, chipX, y, w, chipHeight, 10);
+        ctx.fill();
+
+        ctx.fillStyle = isHighlight ? '#121214' : '#FAF9F6';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(ch, chipX + padX, y + (chipHeight / 2));
+        chipX += w + 12;
+    });
+}
+
+function drawCenteredChipsRow(ctx, chips, centerX, y, is45) {
+    const chipHeight = is45 ? 46 : 52;
+    ctx.font = `700 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
+    const padX = is45 ? 18 : 22;
+
+    const widths = chips.map(ch => ctx.measureText(ch).width + (padX * 2));
+    const totalW = widths.reduce((a, b) => a + b, 0) + ((chips.length - 1) * 12);
+    let chipX = centerX - (totalW / 2);
+
+    chips.forEach((ch, idx) => {
+        const isHighlight = (idx === chips.length - 1 && chips.length > 1) || (chips.length === 1 && ch.includes('→'));
+        const w = widths[idx];
+
+        ctx.fillStyle = isHighlight ? '#E5CBA7' : 'rgba(20, 20, 24, 0.82)';
+        roundRectCanvas(ctx, chipX, y, w, chipHeight, 10);
+        ctx.fill();
+
+        ctx.fillStyle = isHighlight ? '#121214' : '#FAF9F6';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'left';
+        ctx.fillText(ch, chipX + padX, y + (chipHeight / 2));
+        chipX += w + 12;
+    });
 }
 
 function roundRectCanvas(ctx, x, y, w, h, r) {
@@ -21396,7 +21888,7 @@ function wrapCanvasText(ctx, text, maxWidth) {
         }
     });
     if (current) lines.push(current);
-    return lines.slice(0, 3);
+    return lines.slice(0, 4);
 }
 
 // =============================================================================

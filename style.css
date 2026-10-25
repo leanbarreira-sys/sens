@@ -16436,6 +16436,39 @@ body.in-portal #coachHubView {
     filter: grayscale(0.85);
 }
 
+/* Selector de Estilo de Overlay & Contraste SENS */
+.sens-mkt-overlay-mode-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 5px;
+}
+
+.sens-overlay-mode-btn {
+    padding: 7px 6px;
+    border-radius: 9px;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    background: #FFFFFF !important;
+    font-size: 10px;
+    font-weight: 700;
+    color: #575659 !important;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: center;
+}
+
+.sens-overlay-mode-btn:hover {
+    background: #F3F1ED !important;
+    border-color: rgba(18, 18, 20, 0.18) !important;
+}
+
+.sens-overlay-mode-btn.active {
+    background: #121214 !important;
+    border-color: #121214 !important;
+    color: #E5CBA7 !important;
+    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.15) !important;
+}
+
 /* Paso 5: Líneas de tiempo & Diapositivas */
 .sens-mkt-timeline-bar {
     background: #F3F1ED !important;

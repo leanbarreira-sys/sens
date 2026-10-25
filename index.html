@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.4">
+    <link rel="stylesheet" href="style.css?v=11.5">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6841,6 +6841,23 @@
                                                 value="80" style="width: 100%;">
                                         </div>
                                     </div>
+                                    <!-- Selector de Estilo de Overlay / Contraste de Imagen -->
+                                    <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.06);">
+                                        <label style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 5px;">
+                                            Estilo de Overlay / Contraste de Imagen:
+                                        </label>
+                                        <div class="sens-mkt-overlay-mode-grid" id="mktOverlayModeGrid">
+                                            <button type="button" class="sens-overlay-mode-btn active" data-overlay-mode="cinematic">
+                                                Gradiente Suave
+                                            </button>
+                                            <button type="button" class="sens-overlay-mode-btn" data-overlay-mode="full_wash">
+                                                Filtro Completo (Full Wash)
+                                            </button>
+                                            <button type="button" class="sens-overlay-mode-btn" data-overlay-mode="lower_third">
+                                                Solo al Pie (Acción)
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Paso 5: Editor Guiado Modular con Toggles de Capas y Guardrails -->
@@ -9422,7 +9439,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=11.8"></script>
+    <script src="app.js?v=11.9"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
