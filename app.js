@@ -21718,6 +21718,75 @@ window.initCoachMarketingStudio = function() {
         });
     }
 
+    // Scroll Suave al Visor en Vivo desde Paso 2
+    const btnScrollVisor = document.getElementById('btnMktScrollToVisor');
+    if (btnScrollVisor) {
+        btnScrollVisor.addEventListener('click', () => {
+            const visorEl = document.getElementById('mktLiveVisorBlock');
+            if (visorEl) {
+                visorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    }
+
+    // Selector de Tamaño del Visor en Vivo (Normal vs Grande)
+    const sizeBtns = document.querySelectorAll('#mktVisorSizeToggle .sens-mkt-size-btn[data-size]');
+    const visorBox = document.getElementById('mktVisorCanvasBox');
+    sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sizeBtns.forEach(b => {
+                b.classList.remove('active');
+                b.style.background = 'transparent';
+                b.style.color = '#FAF9F6';
+            });
+            btn.classList.add('active');
+            btn.style.background = '#E5CBA7';
+            btn.style.color = '#121214';
+            const sz = btn.getAttribute('data-size');
+            if (visorBox) {
+                visorBox.classList.toggle('size-normal', sz === 'normal');
+                visorBox.classList.toggle('size-large', sz === 'large');
+            }
+        });
+    });
+
+    // Lightbox Modal en Pantalla Completa
+    const lightboxModal = document.getElementById('mktCanvasLightboxModal');
+    const openLightbox = () => {
+        if (!lightboxModal) return;
+        lightboxModal.style.display = 'flex';
+        requestAnimationFrame(() => {
+            lightboxModal.classList.add('is-open');
+            renderMarketingCanvasFrame();
+        });
+    };
+    const closeLightbox = () => {
+        if (!lightboxModal) return;
+        lightboxModal.classList.remove('is-open');
+        setTimeout(() => {
+            lightboxModal.style.display = 'none';
+        }, 220);
+    };
+
+    if (visorBox) visorBox.addEventListener('click', openLightbox);
+    const btnOpenLb = document.getElementById('btnMktOpenLightbox');
+    if (btnOpenLb) btnOpenLb.addEventListener('click', openLightbox);
+
+    const btnCloseLb = document.getElementById('btnMktCloseLightbox');
+    if (btnCloseLb) btnCloseLb.addEventListener('click', closeLightbox);
+
+    const btnStayLb = document.getElementById('btnMktLightboxStay');
+    if (btnStayLb) btnStayLb.addEventListener('click', closeLightbox);
+
+    const btnConfirmLb = document.getElementById('btnMktLightboxConfirm');
+    if (btnConfirmLb) {
+        btnConfirmLb.addEventListener('click', () => {
+            closeLightbox();
+            setMktMobileView('preview');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
     updateMarketingFormatLayout();
     applyMarketingTemplateToInputs();
 };
@@ -21728,6 +21797,8 @@ function updateMarketingFormatLayout() {
     const resLabel = document.getElementById('mktPreviewResolutionLabel');
     const scenesBar = document.getElementById('mktVideoScenesTimelineBar');
     const slidesBar = document.getElementById('mktCarouselSlidesBar');
+    const visorBox = document.getElementById('mktVisorCanvasBox');
+    const visorFmtBadge = document.getElementById('mktLiveVisorFormatBadge');
     const f = mktStudioState.format;
 
     const is916 = (f === 'reel_video_9_16' || f === 'story_9_16');
@@ -21738,6 +21809,15 @@ function updateMarketingFormatLayout() {
     if (stage) {
         stage.classList.toggle('is-916', is916);
         stage.classList.toggle('is-45', !is916);
+    }
+    if (visorBox) {
+        visorBox.classList.toggle('is-916', is916);
+        visorBox.classList.toggle('is-45', !is916);
+    }
+    if (visorFmtBadge) {
+        visorFmtBadge.textContent = is916
+            ? '9:16 Reel / Story (1080×1920)'
+            : '4:5 Feed (1080×1350)';
     }
     if (resLabel) {
         resLabel.textContent = is916
@@ -21788,6 +21868,10 @@ function applyMarketingTemplateToInputs() {
     const overlayNotice = document.getElementById('mktLockedOverlayDescription');
     if (overlayNotice) {
         overlayNotice.textContent = tpl.overlayTitle || 'Overlay Arquitectónico SENS Calibrado';
+    }
+    const tplTitle = document.getElementById('mktLiveVisorTplTitle');
+    if (tplTitle && tpl) {
+        tplTitle.textContent = `${tpl.id}. ${tpl.name}`;
     }
     loadActiveSceneOrSlideIntoInputs();
 }
@@ -23269,11 +23353,37 @@ function renderMarketingCanvasFrame() {
     // Mirroring frame to the Mini-Visor en Vivo in Editor
     const miniCanvas = document.getElementById('mktMiniFramingCanvas');
     if (miniCanvas) {
+        const targetW = 540;
+        const targetH = is45 ? 675 : 960;
+        if (miniCanvas.width !== targetW || miniCanvas.height !== targetH) {
+            miniCanvas.width = targetW;
+            miniCanvas.height = targetH;
+        }
         const mCtx = miniCanvas.getContext('2d');
-        mCtx.clearRect(0, 0, miniCanvas.width, miniCanvas.height);
+        mCtx.clearRect(0, 0, targetW, targetH);
         try {
-            mCtx.drawImage(canvas, 0, 0, miniCanvas.width, miniCanvas.height);
+            mCtx.drawImage(canvas, 0, 0, targetW, targetH);
         } catch (_) {}
+    }
+
+    // Mirroring frame to the Lightbox Modal if active
+    const lbModal = document.getElementById('mktCanvasLightboxModal');
+    if (lbModal && (lbModal.style.display !== 'none' || lbModal.classList.contains('is-open'))) {
+        const lbCanvas = document.getElementById('mktLightboxCanvas');
+        if (lbCanvas) {
+            const targetW = 540;
+            const targetH = is45 ? 675 : 960;
+            if (lbCanvas.width !== targetW || lbCanvas.height !== targetH) {
+                lbCanvas.width = targetW;
+                lbCanvas.height = targetH;
+                lbCanvas.style.aspectRatio = is45 ? '4/5' : '9/16';
+            }
+            const lbCtx = lbCanvas.getContext('2d');
+            lbCtx.clearRect(0, 0, targetW, targetH);
+            try {
+                lbCtx.drawImage(canvas, 0, 0, targetW, targetH);
+            } catch (_) {}
+        }
     }
     } catch (renderErr) {
         console.error('Error renderMarketingCanvasFrame:', renderErr);

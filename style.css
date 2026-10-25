@@ -16816,6 +16816,85 @@ body.in-portal #coachHubView {
     pointer-events: none !important;
 }
 
+/* =========================================================================
+   VISOR EN VIVO INTERACTIVO (EDITOR STAGE & LIGHTBOX HD)
+   ========================================================================= */
+.sens-mkt-live-visor-block {
+    background: #0C0C0F !important;
+    border: 1.5px solid #E5CBA7 !important;
+    border-radius: 16px !important;
+    color: #FAF9F6 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+    padding: 14px !important;
+    margin-top: 14px !important;
+}
+
+.sens-mkt-visor-canvas-box {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #080809;
+    border: 1.5px solid rgba(229, 203, 167, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.sens-mkt-visor-canvas-box:hover {
+    transform: translateY(-2px);
+    border-color: #E5CBA7;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
+}
+
+/* Modo 9:16 - Normal */
+.sens-mkt-visor-canvas-box.is-916.size-normal canvas {
+    width: 175px !important;
+    height: 311px !important;
+    display: block;
+}
+
+/* Modo 9:16 - Grande */
+.sens-mkt-visor-canvas-box.is-916.size-large canvas {
+    width: 260px !important;
+    height: 462px !important;
+    display: block;
+}
+
+/* Modo 4:5 - Normal */
+.sens-mkt-visor-canvas-box.is-45.size-normal canvas {
+    width: 195px !important;
+    height: 244px !important;
+    display: block;
+}
+
+/* Modo 4:5 - Grande */
+.sens-mkt-visor-canvas-box.is-45.size-large canvas {
+    width: 280px !important;
+    height: 350px !important;
+    display: block;
+}
+
+/* Lightbox Modal HD */
+.sens-mkt-lightbox-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(8, 8, 9, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sens-mkt-lightbox-modal.is-open {
+    display: flex !important;
+    opacity: 1 !important;
+}
+
 /* 7. Bottom Sheet Nativo de Acciones del Alumno (Apple Health Grade) */
 .coach-sheet-action-item {
     width: 100%;

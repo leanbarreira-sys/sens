@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=12.0">
+    <link rel="stylesheet" href="style.css?v=12.1">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6867,15 +6867,16 @@
                                             </div>
                                         </div>
 
-                                        <!-- Mini-Visor en Vivo de Encuadre Directo en el Editor -->
-                                        <div style="margin-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.08); padding-top: 10px; display: flex; align-items: center; gap: 12px;">
-                                            <canvas id="mktMiniFramingCanvas" width="108" height="192" style="width: 52px; height: 92px; border-radius: 8px; border: 1.5px solid #E5CBA7; background: #080809; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.18); display: block;"></canvas>
-                                            <div>
-                                                <div style="font-size: 11px; font-weight: 800; color: #121214;">Mini-Visor en Vivo</div>
-                                                <p style="font-size: 10px; color: #575659; margin: 2px 0 0 0; line-height: 1.35;">
-                                                    Comprobá cómo queda tu foto con el template y la oscuridad antes de pasar a la pestaña de descarga.
-                                                </p>
+                                        <!-- Acceso Directo y Estado del Visor en Vivo -->
+                                        <div style="margin-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.08); padding-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);"></span>
+                                                <span style="font-size: 11px; font-weight: 700; color: #121214;">Encuadre sincronizado en tiempo real</span>
                                             </div>
+                                            <button type="button" class="btn btn-outline btn-sm" id="btnMktScrollToVisor"
+                                                style="font-size: 10.5px; padding: 4px 10px; border-color: #E5CBA7; color: #121214; font-weight: 800; background: #FAF9F6; border-radius: 8px; cursor: pointer;">
+                                                👁️ Ver en Visor en Vivo ↓
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -7050,6 +7051,46 @@
                                     </details>
                                 </div>
 
+                                <!-- BLOQUE PROTAGONISTA: VISOR EN VIVO ANTES DE DESCARGAR -->
+                                <div class="sens-mkt-control-block sens-mkt-live-visor-block" id="mktLiveVisorBlock">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                                        <div>
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #22c55e;"></span>
+                                                <span style="font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #E5CBA7;">VISOR EN VIVO (TIEMPO REAL)</span>
+                                            </div>
+                                            <strong style="font-size: 13.5px; color: #FFFFFF; display: block; margin-top: 2px;" id="mktLiveVisorTplTitle">1. Hook Bold Statement</strong>
+                                            <span style="font-size: 10px; color: rgba(255,255,255,0.6);" id="mktLiveVisorFormatBadge">9:16 Reel / Story (1080×1920)</span>
+                                        </div>
+
+                                        <!-- Selector de Tamaño del Visor -->
+                                        <div class="sens-mkt-visor-size-toggle" id="mktVisorSizeToggle" style="display: flex; gap: 4px; background: rgba(255,255,255,0.08); padding: 3px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.12);">
+                                            <button type="button" class="btn btn-sm sens-mkt-size-btn active" data-size="normal" style="font-size: 10.5px; padding: 4px 9px; border: none; border-radius: 6px; font-weight: 700; background: #E5CBA7; color: #121214; cursor: pointer; transition: all 0.2s;">
+                                                Normal
+                                            </button>
+                                            <button type="button" class="btn btn-sm sens-mkt-size-btn" data-size="large" style="font-size: 10.5px; padding: 4px 9px; border: none; border-radius: 6px; font-weight: 700; background: transparent; color: #FAF9F6; cursor: pointer; transition: all 0.2s;">
+                                                Grande 🔍
+                                            </button>
+                                            <button type="button" class="btn btn-sm sens-mkt-size-btn" id="btnMktOpenLightbox" style="font-size: 10.5px; padding: 4px 9px; border: none; border-radius: 6px; font-weight: 700; background: transparent; color: #E5CBA7; cursor: pointer; transition: all 0.2s;">
+                                                ⛶ Pantalla Completa
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Stage del Canvas Interactivo -->
+                                    <div class="sens-mkt-visor-stage-wrap" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 0;">
+                                        <div class="sens-mkt-visor-canvas-box size-normal is-916" id="mktVisorCanvasBox" title="Toca para ampliar en pantalla completa">
+                                            <canvas id="mktMiniFramingCanvas" width="540" height="960"></canvas>
+                                            <div class="sens-mkt-visor-badge-tap" style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.78); color: #E5CBA7; font-size: 9.5px; font-weight: 800; padding: 3px 8px; border-radius: 6px; pointer-events: none; backdrop-filter: blur(4px); border: 1px solid rgba(229, 203, 167, 0.3);">
+                                                🔍 Tocar para ampliar
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 8px; text-align: center;">
+                                            Cualquier cambio de texto, encuadre o template se refleja en vivo en este visor.
+                                        </span>
+                                    </div>
+                                </div>
+
                                 <!-- Botón Mobile para saltar directo a Vista Previa -->
                                 <button type="button" class="btn btn-primary btn-full sens-mkt-btn-go-preview" id="btnMktGoToPreview"
                                     style="margin-top: 12px; font-weight: 800; padding: 13px; font-size: 13px; background: #E5CBA7; color: #2A241C; border: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(229, 203, 167, 0.28);">
@@ -7109,6 +7150,25 @@
                                             Grabar Video Animado con Cambios de Texto por Segundos
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Lightbox de Inspección HD en Vivo -->
+                        <div class="sens-mkt-lightbox-modal" id="mktCanvasLightboxModal">
+                            <div style="position: relative; max-width: 94vw; max-height: 94vh; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                                <button type="button" id="btnMktCloseLightbox" style="position: absolute; top: -38px; right: 0; background: transparent; border: none; color: #FFFFFF; font-size: 28px; cursor: pointer; padding: 4px 8px; line-height: 1;" title="Cerrar">✕</button>
+                                <div style="font-size: 11px; font-weight: 800; color: #E5CBA7; letter-spacing: 0.1em; text-transform: uppercase;">
+                                    INSPECCIÓN EN PANTALLA COMPLETA
+                                </div>
+                                <canvas id="mktLightboxCanvas" width="540" height="960" style="max-height: 74vh; max-width: 86vw; aspect-ratio: 9/16; border-radius: 14px; border: 1.5px solid #E5CBA7; box-shadow: 0 16px 48px rgba(0,0,0,0.9); display: block; background: #080809;"></canvas>
+                                <div style="display: flex; gap: 8px; width: 100%; max-width: 380px;">
+                                    <button type="button" class="btn btn-outline" id="btnMktLightboxStay" style="flex: 1; border-color: rgba(255,255,255,0.25); color: #FFFFFF; font-weight: 700; font-size: 11.5px; padding: 10px; border-radius: 10px;">
+                                        ← Seguir Editando
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="btnMktLightboxConfirm" style="flex: 1.5; background: #E5CBA7; color: #121214; font-weight: 800; font-size: 11.5px; padding: 10px; border-radius: 10px; border: none; box-shadow: 0 4px 14px rgba(229, 203, 167, 0.3);">
+                                        👁️ Ir a Descargar HD →
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -9468,7 +9528,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=12.4"></script>
+    <script src="app.js?v=12.5"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
