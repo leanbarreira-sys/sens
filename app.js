@@ -1919,14 +1919,30 @@ function initNavbarScroll() {
 window.scrollHeroPills = function(dir) {
     const el = document.getElementById('sensHeroCompactPills');
     if (!el) return;
-    const scrollAmount = Math.max(160, Math.floor(el.clientWidth * 0.75));
-    el.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
+    const pills = el.querySelectorAll('.hero-plan-pill');
+    if (!pills.length) return;
+    const scrollLeft = el.scrollLeft;
+    let targetIdx = 0;
+    let minDiff = Infinity;
+    pills.forEach((p, idx) => {
+        const diff = Math.abs(p.offsetLeft - el.offsetLeft - scrollLeft);
+        if (diff < minDiff) {
+            minDiff = diff;
+            targetIdx = idx;
+        }
+    });
+    const nextIdx = Math.max(0, Math.min(pills.length - 1, targetIdx + dir));
+    const targetLeft = pills[nextIdx].offsetLeft - el.offsetLeft;
+    el.scrollTo({ left: targetLeft, behavior: 'smooth' });
 };
 
 function initHeroPillsCarousel() {
     const el = document.getElementById('sensHeroCompactPills');
     const counter = document.getElementById('heroPillsCounter');
-    if (!el || el._hasInitHeroPills) return;
+    if (!el) return;
+    // Asegurar que el carrusel de planes inicie siempre en el primer pill (scrollLeft 0)
+    el.scrollLeft = 0;
+    if (el._hasInitHeroPills) return;
     el._hasInitHeroPills = true;
 
     const pills = el.querySelectorAll('.hero-plan-pill');
@@ -1950,6 +1966,18 @@ function initHeroPillsCarousel() {
     el.addEventListener('scroll', () => {
         window.requestAnimationFrame(updateCounter);
     }, { passive: true });
+    updateCounter();
+}
+
+function initHeroScrollObserver() {
+    const hero = document.getElementById('sensTrainHero');
+    if (!hero) return;
+    const checkScroll = () => {
+        const isPast = window.scrollY > (hero.offsetHeight * 0.4);
+        document.body.classList.toggle('scrolled-past-hero', isPast);
+    };
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
 }
 
 function initCarousels() {
@@ -1959,6 +1987,7 @@ function initCarousels() {
     setupCarouselSwipe('onlineCarousel', 'onlineDots');
     setupCarouselSwipe('appCarousel', 'appDots');
     initHeroPillsCarousel();
+    initHeroScrollObserver();
 }
 
 function setupCarouselSwipe(carouselId, dotsContainerId) {

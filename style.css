@@ -1950,6 +1950,15 @@ body.in-portal #homeFloatingSocial,
         bottom: calc(75px + env(safe-area-inset-bottom, 0px));
         right: 12px;
         gap: 8px;
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease !important;
+    }
+
+    /* En mobile, cuando el usuario está en el hero de inicio, ocultar botones flotantes para despejar los planes y el carrusel */
+    body:not(.scrolled-past-hero) #homeFloatingSocial {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+        transform: translateY(16px) scale(0.9) !important;
     }
 
     .social-btn {
@@ -2768,28 +2777,34 @@ a.hero-btn-apple-dark:active {
 @media (max-width: 768px) {
     /* Ajuste Hero Mobile: Tipografía y Espaciado Compacto (Apple-Style Minimal & Despejado) */
     .sens-train-hero {
-        padding: 105px 5% calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 85px 16px calc(76px + env(safe-area-inset-bottom, 0px)) !important;
         min-height: 100vh !important;
         min-height: 100svh !important;
         justify-content: flex-end !important;
         align-items: center !important;
         text-align: center !important;
+        box-sizing: border-box !important;
     }
     .hero-train-content {
-        max-width: 325px !important;
+        width: 100% !important;
+        max-width: min(390px, 94vw) !important;
         margin: 0 auto !important;
+        padding: 0 4px !important;
+        box-sizing: border-box !important;
         text-align: center !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
     }
     .hero-skeleton-wrap {
-        padding: 105px 5% calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 85px 16px calc(76px + env(safe-area-inset-bottom, 0px)) !important;
         justify-content: flex-end !important;
         align-items: center !important;
+        box-sizing: border-box !important;
     }
     .hero-skeleton-content {
-        max-width: 325px !important;
+        width: 100% !important;
+        max-width: min(390px, 94vw) !important;
         margin: 0 auto !important;
         text-align: center !important;
         display: flex !important;
@@ -2824,8 +2839,8 @@ a.hero-btn-apple-dark:active {
     .hero-description-train {
         font-size: 0.84rem !important;
         line-height: 1.45 !important;
-        margin: 0 auto 14px !important;
-        max-width: 320px !important;
+        margin: 0 auto 12px !important;
+        max-width: 340px !important;
     }
     .hero-cta-group {
         display: flex !important;
@@ -2833,13 +2848,21 @@ a.hero-btn-apple-dark:active {
         align-items: center !important;
         gap: 8px !important;
         width: 100% !important;
-        max-width: 270px !important;
+        max-width: 290px !important;
         margin: 0 auto !important;
+    }
+    .hero-cta-group .btn.btn-primary {
+        width: 100% !important;
+        max-width: 290px !important;
+        padding: 12px 18px !important;
+        font-size: 11.5px !important;
+        letter-spacing: 0.5px !important;
+        font-weight: 800 !important;
     }
     .hero-btn-apple-dark {
         width: 100% !important;
-        max-width: 270px !important;
-        padding: 13px 20px !important;
+        max-width: 290px !important;
+        padding: 12px 18px !important;
         font-size: 11px !important;
         letter-spacing: 1.2px !important;
         border-radius: 28px !important;
@@ -2848,10 +2871,10 @@ a.hero-btn-apple-dark:active {
         background: transparent !important;
         border: none !important;
         color: var(--accent-primary) !important;
-        font-size: 11.5px !important;
+        font-size: 11px !important;
         text-transform: uppercase !important;
         letter-spacing: 1.2px !important;
-        padding: 5px 12px !important;
+        padding: 4px 12px !important;
         font-weight: 600 !important;
         text-decoration: none !important;
         box-shadow: none !important;
@@ -18464,33 +18487,43 @@ body.in-portal #coachHubView {
 /* Hero Carousel Pills Strip (Alta Visibilidad y Deslizamiento Táctil Apple-Style) */
 .sens-hero-pills-container {
     width: 100% !important;
-    max-width: 480px !important;
-    margin: 16px auto 0 auto !important;
+    max-width: 440px !important;
+    margin: 14px auto 0 auto !important;
     text-align: left !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    z-index: 15 !important;
 }
 @media (max-width: 768px) {
     .sens-hero-pills-container {
-        width: calc(100% + 24px) !important;
-        margin: 16px -12px 0 -12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 10px 0 0 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
     }
 }
 .sens-hero-pills-header {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 0 4px 6px 4px !important;
+    padding: 0 2px 6px 2px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 .sens-hero-pills-title {
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.05em !important;
-    color: #A1A1AA !important;
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+    color: #D4D4D8 !important;
     text-transform: uppercase !important;
+    white-space: nowrap !important;
 }
 .sens-hero-pills-nav {
     display: inline-flex !important;
     align-items: center !important;
     gap: 8px !important;
+    white-space: nowrap !important;
 }
 .sens-hero-pills-counter {
     font-size: 10.5px !important;
@@ -18502,11 +18535,13 @@ body.in-portal #coachHubView {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 24px !important;
-    height: 24px !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    min-height: 26px !important;
     border-radius: 999px !important;
     background: #18181B !important;
-    border: 1px solid rgba(229, 203, 167, 0.3) !important;
+    border: 1px solid rgba(229, 203, 167, 0.4) !important;
     color: #E5CBA7 !important;
     font-size: 15px !important;
     line-height: 1 !important;
@@ -18516,20 +18551,23 @@ body.in-portal #coachHubView {
 }
 .sens-hero-pills-arrow:active {
     transform: scale(0.92) !important;
-    background: rgba(229, 203, 167, 0.2) !important;
+    background: rgba(229, 203, 167, 0.25) !important;
 }
 .sens-hero-compact-pills {
     display: flex !important;
     align-items: center !important;
     gap: 10px !important;
     overflow-x: auto !important;
-    padding: 4px 4px 10px 4px !important;
+    padding: 4px 2px 10px 2px !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     -webkit-overflow-scrolling: touch !important;
     scroll-snap-type: x mandatory !important;
+    scroll-padding-left: 2px !important;
     touch-action: pan-x pan-y !important;
     overscroll-behavior-x: contain !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
 }
 .sens-hero-compact-pills::-webkit-scrollbar {
     display: none !important;
@@ -18540,9 +18578,9 @@ body.in-portal #coachHubView {
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
-    padding: 8px 15px !important;
+    padding: 8px 14px !important;
     border-radius: 999px !important;
-    font-size: 12px !important;
+    font-size: 11.5px !important;
     font-weight: 700 !important;
     font-variant-numeric: tabular-nums !important;
     text-decoration: none !important;
@@ -18550,6 +18588,7 @@ body.in-portal #coachHubView {
     border: none !important;
     white-space: nowrap !important;
     transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease !important;
+    -webkit-tap-highlight-color: transparent !important;
 }
 .sens-hero-compact-pills .hero-plan-pill:active {
     transform: scale(0.96) !important;
@@ -18557,12 +18596,12 @@ body.in-portal #coachHubView {
 .sens-hero-compact-pills .hero-plan-pill.free {
     background: rgba(229, 203, 167, 0.18) !important;
     color: #E5CBA7 !important;
-    border: 1px solid rgba(229, 203, 167, 0.4) !important;
+    border: 1px solid rgba(229, 203, 167, 0.5) !important;
 }
 .sens-hero-compact-pills .hero-plan-pill.standard {
-    background: rgba(24, 24, 27, 0.9) !important;
+    background: rgba(24, 24, 27, 0.92) !important;
     color: #F4F4F5 !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 /* Tabla comparativa Plan vs Real en Detalle del Día */
