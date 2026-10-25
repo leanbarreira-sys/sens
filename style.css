@@ -16408,12 +16408,12 @@ body.in-portal #coachHubView {
     color: #121214;
 }
 
-/* Paso 2: Plantillas */
+/* Paso 2: Plantillas Visuales */
 .sens-mkt-templates-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    max-height: 320px;
+    max-height: 420px;
     overflow-y: auto;
     padding-right: 4px;
     -webkit-overflow-scrolling: touch;
@@ -16421,13 +16421,14 @@ body.in-portal #coachHubView {
 
 @media (max-width: 480px) {
     .sens-mkt-templates-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
     }
 }
 
 .sens-mkt-tpl-card {
     text-align: left;
-    padding: 10px 12px;
+    padding: 8px 10px;
     border-radius: 12px;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
     background: #FFFFFF !important;
@@ -16439,6 +16440,26 @@ body.in-portal #coachHubView {
     box-shadow: 0 1px 3px rgba(18, 18, 20, 0.02);
 }
 
+.sens-mkt-tpl-thumb {
+    width: 100%;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #080809;
+    border: 1px solid rgba(18, 18, 20, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sens-mkt-tpl-thumb svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
 .sens-mkt-tpl-card:hover {
     border-color: #B38E5D !important;
     background: #FAF9F6 !important;
@@ -16447,18 +16468,23 @@ body.in-portal #coachHubView {
 .sens-mkt-tpl-card.active {
     border-color: #B38E5D !important;
     background: #FAF9F6 !important;
-    box-shadow: 0 3px 12px rgba(179, 142, 93, 0.16), 0 0 0 1px #B38E5D !important;
+    box-shadow: 0 3px 12px rgba(179, 142, 93, 0.16), 0 0 0 1.5px #B38E5D !important;
+}
+
+.sens-mkt-tpl-card.active .sens-mkt-tpl-thumb {
+    border-color: #E5CBA7;
+    box-shadow: 0 0 0 1px #E5CBA7;
 }
 
 .sens-mkt-tpl-card .tpl-badge,
 .sens-mkt-tpl-card .sens-mkt-tpl-cat {
-    font-size: 8.5px;
+    font-size: 8px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: #B38E5D !important;
     background: #F7EFE4 !important;
-    padding: 2px 7px;
+    padding: 2px 6px;
     border-radius: 4px;
     display: inline-block;
     width: fit-content;
@@ -16466,18 +16492,80 @@ body.in-portal #coachHubView {
 
 .sens-mkt-tpl-card strong,
 .sens-mkt-tpl-card .sens-mkt-tpl-name {
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 700;
     color: #121214 !important;
     display: block;
-    line-height: 1.35;
+    line-height: 1.25;
 }
 
 .sens-mkt-tpl-desc {
-    font-size: 10px;
+    font-size: 9.5px;
     color: #575659 !important;
-    line-height: 1.35;
+    line-height: 1.25;
+    margin-top: 1px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Grupos de Botones Táctiles de Ajuste / Calibración de Encuadre */
+.sens-mkt-adjust-btn-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.sens-mkt-adjust-btn {
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    background: #FFFFFF !important;
+    border-radius: 9px;
+    padding: 7px 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.sens-mkt-adjust-btn span {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #121214;
+    line-height: 1.2;
+}
+
+.sens-mkt-adjust-btn small {
+    font-size: 8px;
+    color: #71717A;
+    line-height: 1.15;
     margin-top: 2px;
+}
+
+.sens-mkt-adjust-btn:hover {
+    border-color: #B38E5D !important;
+    background: #FAF9F6 !important;
+}
+
+.sens-mkt-adjust-btn.active {
+    background: #121214 !important;
+    border-color: #121214 !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.18);
+}
+
+.sens-mkt-adjust-btn.active span {
+    color: #E5CBA7 !important;
+    font-weight: 800;
+}
+
+.sens-mkt-adjust-btn.active small {
+    color: #FFFFFF !important;
+    opacity: 0.88;
+}
 }
 
 /* Selector Modular de Capas Visibles SENS */

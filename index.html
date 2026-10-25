@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.9">
+    <link rel="stylesheet" href="style.css?v=12.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6757,11 +6757,11 @@
                                     </div>
 
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin: 12px 0 6px 0;">
-                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">ESTILO / ARQUETIPO (10 CDUs BRANDBOOK)</span>
+                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">ESTILO / ARQUETIPO (20 TEMPLATES BRANDBOOK)</span>
                                         <span style="font-size: 9.5px; color: #9E7D4B; font-weight: 700; background: #F7EFE4; padding: 2px 6px; border-radius: 4px;">Overlay Automático</span>
                                     </div>
                                     <div class="sens-mkt-templates-grid" id="mktTemplateSelectorGrid">
-                                        <!-- Inyectado dinámicamente con los 10 estilos -->
+                                        <!-- Inyectado dinámicamente con los 20 estilos visuales -->
                                     </div>
                                 </div>
 
@@ -6784,6 +6784,99 @@
                                             <span>✓</span>
                                             <span id="mktMediaFileStatusText">Foto/Video cargado</span>
                                         </span>
+                                    </div>
+
+                                    <!-- CALIBRACIÓN VISUAL INTUITIVA (Sin Sliders Confusos + Mini-Visor en Vivo) -->
+                                    <div class="sens-mkt-photo-adjustments-card" id="mktPhotoAdjustmentsBlock" style="margin-top: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 12px; padding: 12px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                            <span style="font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #9E7D4B;">
+                                                CALIBRAR ENCUADRE DE LA IMAGEN
+                                            </span>
+                                            <span style="font-size: 9px; color: #71717A; font-weight: 600;">Ajuste en 1 Tap</span>
+                                        </div>
+
+                                        <!-- 1. Posición / Encuadre Vertical -->
+                                        <div style="margin-bottom: 10px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                                <label style="font-size: 11px; font-weight: 700; color: #121214; margin: 0;">
+                                                    1. Posición de la Foto / Video:
+                                                </label>
+                                                <span id="mktPanYFeedbackLabel" style="font-size: 10px; color: #9E7D4B; font-weight: 800;">Centrado</span>
+                                            </div>
+                                            <div class="sens-mkt-adjust-btn-group" id="mktPanYButtonGroup">
+                                                <button type="button" class="sens-mkt-adjust-btn" data-val="-25">
+                                                    <span>Subir Foto</span>
+                                                    <small>Muestra torso/cabeza</small>
+                                                </button>
+                                                <button type="button" class="sens-mkt-adjust-btn active" data-val="0">
+                                                    <span>Centrado</span>
+                                                    <small>Posición estándar</small>
+                                                </button>
+                                                <button type="button" class="sens-mkt-adjust-btn" data-val="25">
+                                                    <span>Bajar Foto</span>
+                                                    <small>Muestra piernas/suelo</small>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- 2. Zoom / Escala -->
+                                        <div style="margin-bottom: 10px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                                <label style="font-size: 11px; font-weight: 700; color: #121214; margin: 0;">
+                                                    2. Zoom de Cámara:
+                                                </label>
+                                                <span id="mktZoomFeedbackLabel" style="font-size: 10px; color: #9E7D4B; font-weight: 800;">108% (Foco SENS)</span>
+                                            </div>
+                                            <div class="sens-mkt-adjust-btn-group" id="mktZoomButtonGroup">
+                                                <button type="button" class="sens-mkt-adjust-btn" data-val="100">
+                                                    <span>100%</span>
+                                                    <small>Completo</small>
+                                                </button>
+                                                <button type="button" class="sens-mkt-adjust-btn active" data-val="108">
+                                                    <span>108%</span>
+                                                    <small>Foco SENS</small>
+                                                </button>
+                                                <button type="button" class="sens-mkt-adjust-btn" data-val="125">
+                                                    <span>125%</span>
+                                                    <small>Primer Plano</small>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- 3. Contraste / Oscuridad de Fondo -->
+                                        <div style="margin-bottom: 10px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                                <label style="font-size: 11px; font-weight: 700; color: #121214; margin: 0;">
+                                                    3. Oscuridad de Fondo (Legibilidad):
+                                                </label>
+                                                <span id="mktOpacityFeedbackLabel" style="font-size: 10px; color: #9E7D4B; font-weight: 800;">80% (Equilibrado)</span>
+                                            </div>
+                                            <div class="sens-mkt-adjust-btn-group" id="mktOpacityButtonGroup">
+                                                <button type="button" class="sens-mkt-adjust-btn" data-val="65">
+                                                    <span>65% Suave</span>
+                                                    <small>Más foto</small>
+                                                </button>
+                                                <button type="button" class="sens-mkt-adjust-btn active" data-val="80">
+                                                    <span>80% Óptimo</span>
+                                                    <small>Equilibrado</small>
+                                                </button>
+                                                <button type="button" class="sens-mkt-adjust-btn" data-val="92">
+                                                    <span>92% Fuerte</span>
+                                                    <small>Máximo contraste</small>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mini-Visor en Vivo de Encuadre Directo en el Editor -->
+                                        <div style="margin-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.08); padding-top: 10px; display: flex; align-items: center; gap: 12px;">
+                                            <canvas id="mktMiniFramingCanvas" width="108" height="192" style="width: 52px; height: 92px; border-radius: 8px; border: 1.5px solid #E5CBA7; background: #080809; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.18); display: block;"></canvas>
+                                            <div>
+                                                <div style="font-size: 11px; font-weight: 800; color: #121214;">Mini-Visor en Vivo</div>
+                                                <p style="font-size: 10px; color: #575659; margin: 2px 0 0 0; line-height: 1.35;">
+                                                    Comprobá cómo queda tu foto con el template y la oscuridad antes de pasar a la pestaña de descarga.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -6872,7 +6965,7 @@
                                     <!-- Acordeón Desplegable para Opciones Avanzadas (Sin Saturar la Pantalla) -->
                                     <details class="sens-mkt-accordion-details">
                                         <summary class="sens-mkt-accordion-summary">
-                                            <span>⚙️ Opciones Avanzadas (Kicker, Zoom, Encuadre, Chips y Caption)</span>
+                                            <span>⚙️ Opciones Avanzadas (Kicker Eyebrow, Chips y Caption)</span>
                                         </summary>
                                         <div style="padding-top: 10px; display: flex; flex-direction: column; gap: 10px;">
                                             <div class="sens-mkt-input-wrap" id="mktWrapEyebrow">
@@ -6884,21 +6977,11 @@
                                                     value="VERDAD BIOLÓGICA • SENS" style="margin-bottom: 0; font-size: 12px;">
                                             </div>
 
-                                            <!-- Sliders de Encuadre / Zoom / Oscuridad de Overlay -->
-                                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                                                <div>
-                                                    <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block;">Zoom (<span id="mktZoomValLabel">105%</span>)</label>
-                                                    <input type="range" id="mktMediaZoomSlider" min="100" max="160" value="105" style="width: 100%;">
-                                                </div>
-                                                <div>
-                                                    <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block;">Encuadre Y</label>
-                                                    <input type="range" id="mktMediaPanYSlider" min="-40" max="40" value="0" style="width: 100%;">
-                                                </div>
-                                                <div>
-                                                    <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block;">Intensidad</label>
-                                                    <input type="range" id="mktOverlayOpacitySlider" min="50" max="95" value="80" style="width: 100%;">
-                                                </div>
-                                            </div>
+                                            <!-- Inputs de respaldo para compatibilidad de estado -->
+                                            <input type="hidden" id="mktMediaZoomSlider" value="108">
+                                            <input type="hidden" id="mktMediaPanYSlider" value="0">
+                                            <input type="hidden" id="mktOverlayOpacitySlider" value="80">
+                                            <span id="mktZoomValLabel" style="display: none;">108%</span>
 
                                             <div id="mktLockedOverlayNotice" style="font-size: 10.5px; font-weight: 600; color: #121214; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); padding: 6px 10px; border-radius: 8px; display: flex; align-items: center; gap: 6px;">
                                                 <span>🔒</span>
@@ -9385,7 +9468,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=12.3"></script>
+    <script src="app.js?v=12.4"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

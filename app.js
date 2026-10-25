@@ -20491,12 +20491,12 @@ function saveCoachDbItemEditorChanges() {
 const SENS_MARKETING_TEMPLATES = [
     {
         id: 'tpl_hook_bold_statement',
-        name: '1. Hook Bold Statement (Centro 82px)',
+        name: '1. Hook Bold Statement (Centro 94px)',
         badge: 'HOOK DISRUPTIVO',
-        desc: 'Titular monumental centrado de alto impacto stop-scroll. Diseñado para frenar el dedo en 0.2s.',
+        desc: 'Titular monumental centrado de alto impacto stop-scroll. Frena el dedo en 0.2s.',
         spatialArchetype: 'hero_center_big',
         overlayMode: 'full_wash',
-        overlayTitle: 'Filtro Focal Completo (Optimizado para Titular Centrado 82px)',
+        overlayTitle: 'Filtro Focal Completo (Optimizado para Titular Centrado 94px)',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
             { eyebrow: 'VERDAD BIOLÓGICA • SENS', headline: 'ENTRENÁS DURO. PARECÉS EL MISMO.', sub: 'El 92% fatiga el músculo equivocado por un error de 3cm en la cadera.', c1: 'Cadencia 3-1-1-0', c2: 'Fuerza Real', c3: '' },
@@ -20515,7 +20515,7 @@ const SENS_MARKETING_TEMPLATES = [
         id: 'tpl_lower_third_pro',
         name: '2. Lower-Third Biomecánico (Video Focus)',
         badge: 'ANÁLISIS MOTOR',
-        desc: '70% de pantalla libre para video de ejecución motora. Titular y técnica protegidos al pie.',
+        desc: '70% de pantalla libre para video de ejecución motora. Titular protegido al pie.',
         spatialArchetype: 'lower_third_clean',
         overlayMode: 'lower_third',
         overlayTitle: 'Gradiente Inferior Limpio (Video 70% Despejado)',
@@ -20537,7 +20537,7 @@ const SENS_MARKETING_TEMPLATES = [
         id: 'tpl_magazine_split',
         name: '3. Portada Revista Split (Top & Bottom)',
         badge: 'PORTADA REVISTA',
-        desc: 'Titular editorial arriba y rationale al pie. Centro de la imagen 100% libre para ver al atleta.',
+        desc: 'Titular editorial arriba y rationale al pie. Centro 100% libre para ver al atleta.',
         spatialArchetype: 'magazine_split',
         overlayMode: 'magazine_split',
         overlayTitle: 'Doble Viñeta Top/Bottom (Portada Revista Split)',
@@ -20557,7 +20557,7 @@ const SENS_MARKETING_TEMPLATES = [
     },
     {
         id: 'tpl_glass_card',
-        name: '4. Tarjeta Glassmorphic (Placa de Lujo)',
+        name: '4. Tarjeta Glassmorphic (Placa Titanio)',
         badge: 'TARJETA GLASS',
         desc: 'Placa oscura translúcida con borde de titanio. Contraste absoluto sobre fondos con luz.',
         spatialArchetype: 'glass_card',
@@ -20579,16 +20579,16 @@ const SENS_MARKETING_TEMPLATES = [
     },
     {
         id: 'tpl_stat_monumental',
-        name: '5. Spotlight Métrica Única (140px Display)',
-        badge: 'MÉTRICA 140PX',
-        desc: 'Dato o tempo numérico masivo (ej: 0.00% o 3-1-1-0). Enfoque de autoridad científica irrefutable.',
+        name: '5. Spotlight Cifra Única (172px Display)',
+        badge: 'MÉTRICA 172PX',
+        desc: 'Dato o tempo numérico masivo (ej: 0.00% o 3-1-1-0). Autoridad científica irrefutable.',
         spatialArchetype: 'stat_monumental',
         overlayMode: 'cinematic',
-        overlayTitle: 'Viñeta Profunda para Cifra Monumental 140px',
+        overlayTitle: 'Viñeta Profunda para Cifra Monumental 172px',
         defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'MITO FISIOLÓGICO DERRIBADO', headline: '0.00% DE GRASA QUEMADA SUDANDO EN LA CINTA', sub: 'El sudor es solo pérdida de agua por termorregulación. La grasa se oxida construyendo masa muscular y EPOC.', c1: '0.00%', c2: '~11 kcal / serie', c3: '+EPOC 24hs' },
-            { eyebrow: 'GASTO REAL MEDIDO', headline: '4 SERIES PESADAS = MÁS METABOLISMO POR 36HS', sub: 'El estímulo de fuerza crea microroturas que demandan energía continua durante la recuperación.', c1: '3-1-1-0', c2: 'Fuerza Base', c3: 'Metabolismo Basal' },
+            { eyebrow: 'MITO FISIOLÓGICO DERRIBADO', headline: 'DE GRASA QUEMADA SUDANDO EN LA CINTA', sub: 'El sudor es solo pérdida de agua por termorregulación. La grasa se oxida construyendo masa muscular y EPOC.', c1: '0.00%', c2: '~11 kcal / serie', c3: '+EPOC 24hs' },
+            { eyebrow: 'GASTO REAL MEDIDO', headline: 'SERIES PESADAS = MÁS METABOLISMO POR 36HS', sub: 'El estímulo de fuerza crea microtensiones que demandan energía continua durante la recuperación.', c1: '3-1-1-0', c2: 'Fuerza Base', c3: 'Metabolismo Basal' },
             { eyebrow: 'TECNOLOGÍA SENS', headline: 'MÉTODOS CIENTÍFICOS EN TU CELULAR', sub: 'Registro de kcal por serie, control de descanso y nutrición de precisión en la App.', c1: '$19.900', c2: 'Makes Sens', c3: 'Probala Hoy →' }
         ],
         slides: [
@@ -20601,9 +20601,9 @@ const SENS_MARKETING_TEMPLATES = [
     },
     {
         id: 'tpl_quote_editorial',
-        name: '6. Cita Editorial Disruptiva (Comillas SENS)',
+        name: '6. Cita Editorial Viral (Comillas SENS)',
         badge: 'CITA EDITORIAL',
-        desc: 'Comillas monumentales champagne y tipografía pura. Filosofía de alto impacto sin adornos.',
+        desc: 'Comillas monumentales champagne y tipografía pura. Filosofía de alto impacto.',
         spatialArchetype: 'quote_editorial',
         overlayMode: 'full_wash',
         overlayTitle: 'Lienzo Oscuro Minimalista para Cita Editorial',
@@ -20623,9 +20623,9 @@ const SENS_MARKETING_TEMPLATES = [
     },
     {
         id: 'tpl_story_cupos_vip',
-        name: '7. Conversión Directa / Cupos Story (9:16)',
+        name: '7. Conversión Directa / Cupos Story',
         badge: 'STORY VIP',
-        desc: 'Zona central despejada para stickers de Instagram y llamado directo a mensaje privado.',
+        desc: 'Zona central despejada para stickers nativos y llamado directo a mensaje privado.',
         spatialArchetype: 'story_callout',
         overlayMode: 'cinematic',
         overlayTitle: 'Callout Inferior + Espacio Libre para Stickers IG',
@@ -20645,9 +20645,9 @@ const SENS_MARKETING_TEMPLATES = [
     },
     {
         id: 'tpl_carrusel_swipe_guide',
-        name: '8. Carrusel de Secuencia Swipe (4:5 Feed)',
+        name: '8. Carrusel Secuencia Swipe (4:5 Feed)',
         badge: 'CARRUSEL SWIPE',
-        desc: 'Secuencia pedagógica de 4 pasos para feed. Reflujo bottom-up sin saturación.',
+        desc: 'Secuencia pedagógica de 4 pasos para feed. Retención y guardados máximos.',
         spatialArchetype: 'editorial_bottom',
         overlayMode: 'cinematic',
         overlayTitle: 'Gradiente Progresivo Inferior para Swipe Feed',
@@ -20667,9 +20667,9 @@ const SENS_MARKETING_TEMPLATES = [
     },
     {
         id: 'tpl_como_no_vs_si',
-        name: '9. Cómo NO vs. Cómo SÍ (Split Técnico)',
+        name: '9. Cómo NO vs. Cómo SÍ (Split Box)',
         badge: 'COMPARATIVA TÉCNICA',
-        desc: 'Bloque doble: corrección de error biomecánico con ✕ en alerta y ✓ en Champagne Gold.',
+        desc: 'Bloque doble: error biomecánico con ✕ en alerta y solución ✓ en Champagne Gold.',
         spatialArchetype: 'split_comparative',
         overlayMode: 'cinematic',
         overlayTitle: 'Doble Tarjeta Técnica (✕ Alerta vs ✓ Champagne)',
@@ -20689,9 +20689,9 @@ const SENS_MARKETING_TEMPLATES = [
     },
     {
         id: 'tpl_presencial_caba_vip',
-        name: '10. Apertura Turnos Presenciales CABA (Quiet Luxury)',
+        name: '10. Turnos Presenciales CABA (Quiet Luxury)',
         badge: 'CONVOCATORIA VIP',
-        desc: 'Convocatoria exclusiva para entrenamiento 1:1 en estudio CABA. Elegancia y sobriedad editorial.',
+        desc: 'Convocatoria exclusiva para entrenamiento 1:1 en Palermo/Belgrano. Sobriedad editorial.',
         spatialArchetype: 'hero_center_big',
         overlayMode: 'full_wash',
         overlayTitle: 'Filtro Focal de Alta Gama para Convocatoria VIP',
@@ -20708,8 +20708,398 @@ const SENS_MARKETING_TEMPLATES = [
             { eyebrow: 'ACCESO • 4/4', headline: 'ESCRIBIME "CABA" POR MENSAJE DIRECTO', sub: 'Cupos estrictamente limitados por disponibilidad horaria. Hace sentido.', c1: 'Nico Maralle', c2: 'Escribime CABA →', c3: '' }
         ],
         caption: 'Abrimos la agenda para nuevas admisiones presenciales 1 a 1 en Buenos Aires (estudio privado en Palermo / Belgrano).\n\nCada proceso inicia con una evaluación biomecánica exhaustiva para calibrar rangos articulares y diseñar una periodización científica adaptada a tus objetivos y horarios.\n\nEscribime "CABA" por mensaje directo para coordinar tu entrevista inicial.'
+    },
+    {
+        id: 'tpl_kinetic_brutalism',
+        name: '11. Nike Brutalism Kinetic (96px Shock)',
+        badge: 'NIKE BRUTALISM',
+        desc: 'Tipografía ultra pesada escalonada con sombras duras. Máxima agresividad visual y CTR.',
+        spatialArchetype: 'kinetic_brutalism',
+        overlayMode: 'full_wash',
+        overlayTitle: 'Filtro Dinámico Brutalista para Impacto Inmediato',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'ESTÁNDAR NO NEGOCIABLE', headline: 'O ENTRENÁS CON SENTIDO O SOS TURISTA DEL GYM', sub: 'El progreso muscular no negocia con tu pereza ni con tus repeticiones a medias.', c1: '0% Excusas', c2: 'Fuerza Real', c3: '' },
+            { eyebrow: 'LA VERDAD MECÁNICA', headline: 'CADA SERIE QUE NO QUEMA ES TIEMPO PERDIDO', sub: 'Si no estás a 2 repeticiones del fallo técnico real, tu cuerpo no tiene motivo biológico para cambiar.', c1: 'RIR 1-2', c2: 'Sobrecarga', c3: '' },
+            { eyebrow: 'MAKES SENS', headline: 'SUBÍ TU NIVEL HOY. NO ESPERES EL LUNES.', sub: 'Entrenamiento guiado por Nico Maralle en Buenos Aires o en la App SENS.', c1: 'Comenzar →', c2: 'Makes Sens', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'BRUTALISMO • 1/4', headline: 'DEJÁ DE PASEAR POR EL GIMNASIO', sub: 'Entrenar no es mirar el celular entre descansos de 6 minutos.', c1: 'Foco Total', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'ESTÍMULO • 2/4', headline: 'EL MÚSCULO REQUIERE TENSIÓN MECÁNICA', sub: 'Llevar cada repetición con cadencia precisa es la única forma de estimular síntesis proteica.', c1: '3-1-1-0', c2: 'Ciencia SENS', c3: '' },
+            { eyebrow: 'SISTEMA • 3/4', headline: 'MÉTODOS PROBADOS EN 500+ ATLETAS', sub: 'Rutinas medidas al detalle con registro de sobrecarga progresiva en la App.', c1: 'App SENS', c2: 'RIR 2 Clínico', c3: '' },
+            { eyebrow: 'UNIRTE • 4/4', headline: 'DESCARGÁ LA APP SENS O CONSULTÁ 1:1', sub: 'Subí tu estándar hoy mismo. Link en bio o mensaje privado.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: 'O entrenás con sentido biomecánico o sos un turista del gimnasio que gasta 2 horas al día para seguir igual...\n\nEn SENS no hay lugar para repeticiones a medias ni para series con el celular en la mano. Medimos cada serie, calibramos el tempo y te exigimos lo que tu cuerpo es capaz de dar.\n\nComentá "SENS" o escribime por mensaje directo para sumarte hoy.'
+    },
+    {
+        id: 'tpl_polaroid_luxury',
+        name: '12. Polaroid Titanio & Firma Nico',
+        badge: 'POLAROID LUXURY',
+        desc: 'Marco fotográfico análogo de ultra lujo con paspartú titanio y firma editorial.',
+        spatialArchetype: 'polaroid_luxury',
+        overlayMode: 'cinematic',
+        overlayTitle: 'Paspartú Titanio Editorial con Sello de Autor',
+        defaultLayers: { branding: false, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'CÓDIGO POSTURAL', headline: 'EL CUERPO HABLA ANTES DE QUE DIGAS UNA PALABRA', sub: 'Hombros atrás, caja torácica erguida y mirada al frente. El estándar físico que impone respeto.', c1: 'Postura', c2: 'Estructura', c3: '' },
+            { eyebrow: 'BIOMECÁNICA SENS', headline: 'UNA BUENA POSTURA CURA EL 80% DE TUS DOLORES', sub: 'Descompresión lumbar, activación de serrato anterior y glúteo medio en cada paso.', c1: 'Cero Dolor', c2: 'Columna Sana', c3: '' },
+            { eyebrow: 'DIAGNÓSTICO', headline: 'EVALUÁ TU ALINEACIÓN CON NICO', sub: 'Sesiones presenciales en CABA o corrección por video en la App SENS.', c1: 'Turnos Activos', c2: 'Link en Bio →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'ESTÉTICA • 1/4', headline: 'EL LENGUAJE SILENCIOSO DE TU POSTURA', sub: 'Por qué un cuerpo encorvado transmite debilidad antes de que hables.', c1: 'Presencia', c2: 'Estructura', c3: '' },
+            { eyebrow: 'CADENA POSTERIOR • 2/4', headline: 'LOS MÚSCULOS QUE SOSTIENEN TU REPUTACIÓN', sub: 'Dorsales, romboides y erectores espinales trabajados con tensión real.', c1: 'Cadena Posterior', c2: 'SNC Seguro', c3: '' },
+            { eyebrow: 'MÉTODO • 3/4', headline: '3 MOVIMIENTOS CLAVE DE APERTURA TORÁCICA', sub: 'Band pull-aparts, face-pulls y extensiones con bisagra de cadera pura.', c1: 'Movilidad', c2: 'Control Motor', c3: '' },
+            { eyebrow: 'SENS APP • 4/4', headline: 'PLANES DE POSTURA Y FUERZA EN LA APP', sub: 'Accedé por $19.900 al mes o postulate para seguimiento 1:1 en CABA.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: 'Tu cuerpo habla antes de que pronuncies una sola palabra...\n\nUna postura encorvada, con hombros caídos y cabeza adelantada, no solo sabotea tu presencia ejecutiva: destruye tus discos vertebrales y pinza tus hombros.\n\nEn SENS construimos físicos atléticos desde la estructura ósea hacia afuera.\n\nEscribime "POSTURA" por DM para diseñar tu plan personalizado.'
+    },
+    {
+        id: 'tpl_cinematic_letterbox',
+        name: '13. Cine 2.39:1 Letterbox (Subtítulos Oro)',
+        badge: 'LETTERBOX CINE',
+        desc: 'Barras negras panorámicas arriba y abajo con subtítulo centrado en champagne. Estética documental.',
+        spatialArchetype: 'cinematic_letterbox',
+        overlayMode: 'lower_third',
+        overlayTitle: 'Franjas Cinemascope 2.39:1 con Subtitulado Oro',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: false },
+        scenes: [
+            { eyebrow: 'DOCUMENTAL SENS', headline: 'EL DÍA QUE DECIDÍS DEJAR DE SER DÉBIL', sub: 'Todo cambio físico duradero empieza cuando decidís subir tus mínimos innegociables.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'PROCESO BIOLÓGICO', headline: 'LA INCOMODIDAD ES LA SEÑAL DE ADAPTACIÓN', sub: 'Tus tendones y tu sistema nervioso se reconfiguran únicamente bajo tensión mecánica.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'TU HISTORIA', headline: 'ESCRIBÍ TU MEJOR VERSIÓN FÍSICA', sub: 'Seguimiento biomecánico integral con Nico Maralle.', c1: '', c2: '', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'ESCENA 01 • 1/4', headline: 'EL PUNTO DE INFLEXIÓN FÍSICO', sub: 'Cansarte de mirarte al espejo y ver el mismo cuerpo año tras año.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'ESCENA 02 • 2/4', headline: 'LA TRAMPA DE LA COMODIDAD MODERNA', sub: 'Sillón, delivery y horas frente a la pantalla. El antídoto es el esfuerzo medido.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'ESCENA 03 • 3/4', headline: 'EL MÉTODO: RIGOR Y CONSTANCIA SENS', sub: '3 días de fuerza semanal, proteína alta y descanso inviolable.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'ESCENA 04 • 4/4', headline: 'COMENZÁ TU PROCESO CON NICO', sub: 'Presencial en Buenos Aires o en la App SENS.', c1: '', c2: '', c3: '' }
+        ],
+        caption: 'El cambio físico no empieza el día que comprás la membresía del gimnasio. Empieza el día que decidís que tu estándar actual es inaceptable.\n\nEn SENS te damos la metodología, la biomecánica y el acompañamiento para que esa decisión se convierta en una estructura física real y duradera.\n\nEscribime "SENS" por DM o postulate desde el link de la bio.'
+    },
+    {
+        id: 'tpl_biomechanical_hud',
+        name: '14. HUD Telemetría & Retícula F1',
+        badge: 'BIOMECÁNICA HUD',
+        desc: 'Retícula de calibración biomecánica con coordenadas, ángulos articulares y vector de fuerza.',
+        spatialArchetype: 'biomechanical_hud',
+        overlayMode: 'cinematic',
+        overlayTitle: 'Visor Articular Telemetría F1 con Mira Centrada',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'TELEMETRÍA MOTOR', headline: 'ÁNGULO TIBIAL 45°: MÁXIMA TENSIÓN', sub: 'Alineá rodilla con segundo metatarso y bloqueá la cadera. Cero meniscos en riesgo.', c1: 'Ángulo 45°', c2: 'Fuerza Segura', c3: '' },
+            { eyebrow: 'CINEMÁTICA', headline: 'CADENCIA 3-1-1-0 EN SENTADILLA', sub: '3 segundos concéntricos controlados multiplican el reclutamiento de vasto medial.', c1: 'Cadencia 3s', c2: 'Control', c3: '' },
+            { eyebrow: 'CALIBRACIÓN', headline: 'SUBÍ TU VIDEO PARA ANÁLISIS ARTICULAR', sub: 'Corrección motora directa por Nico en tu celular.', c1: 'Feedback HD', c2: 'App SENS →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'TELEMETRÍA • 1/4', headline: 'CALIBRACIÓN BIOMECÁNICA DEL MOVIMIENTO', sub: 'El análisis milimétrico de la trayectoria que previene cirugías de menisco.', c1: 'Biomecánica', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'ERROR VECTOR • 2/4', headline: 'COLAPSO EN VALGO DINÁMICO DE RODILLA', sub: 'Cuando la rodilla cae hacia adentro, el ligamento cruzado absorbe 3x más carga destructiva.', c1: 'Peligro Articular', c2: 'Valgo Rodilla', c3: '' },
+            { eyebrow: 'AJUSTE SENS • 3/4', headline: 'ROTACIÓN EXTERNA DE FÉMUR + GLÚTEO MEDIO', sub: 'Atornillá los pies al suelo y abrí las rodillas activamente durante todo el descenso.', c1: 'Estabilidad', c2: 'RIR 2 Clínico', c3: '' },
+            { eyebrow: 'EVALUATE • 4/4', headline: 'ANALIZÁ TU TÉCNICA CON NICO MARALLE', sub: 'Presencial CABA o corrección por video en la App SENS.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: 'Una sentadilla bien hecha es la mejor medicina para tus rodillas; una sentadilla con colapso en valgo es la antesala de una rotura de meniscos...\n\nEn SENS calibramos tus ángulos de palanca, la movilidad de tu tobillo y la activación glútea para que levantes pesado con total seguridad articular.\n\nComentá "TÉCNICA" para coordinar tu evaluación biomecánica.'
+    },
+    {
+        id: 'tpl_interrogation_shock',
+        name: '15. Interrogación Directa (Signo ? Shock)',
+        badge: 'SHOCK MENTAL',
+        desc: 'Pregunta filosa que expone una contradicción mental con marca de agua monumental de interrogación.',
+        spatialArchetype: 'interrogation_shock',
+        overlayMode: 'full_wash',
+        overlayTitle: 'Lienzo de Contraste Fuerte con Marca de Agua de Interrogación',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'CONTRADICCIÓN HABITUAL', headline: '¿CUÁNTOS MESES MÁS VAS A SEGUIR DICIENDO "EL LUNES"? ARRANCO', sub: 'El tiempo no se detiene a esperar que tengas ganas. La disciplina empieza sin motivación.', c1: 'Pará el Reloj', c2: 'Decidí Hoy', c3: '' },
+            { eyebrow: 'EL COSTO REAL', headline: 'CADA MES QUE POSTERGÁS TE CUESTA EL DOBLE RECUPERAR', sub: 'Perder masa muscular ralentiza tu metabolismo y deteriora tu postura año a año.', c1: 'Metabolismo', c2: 'No Esperes', c3: '' },
+            { eyebrow: 'SOLUCIÓN SENS', headline: 'EMPEZÁ HOY CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial en Buenos Aires o personalizado en la App SENS.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'PREGUNTA INCÓMODA • 1/4', headline: '¿CUÁNDO FUE LA ÚLTIMA VEZ QUE TE SENTISTE ÁGIL?', sub: 'La sensación de pesadez y falta de energía no es vejez: es falta de entrenamiento neuromuscular.', c1: 'Reflexión', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'LA EXCUSA • 2/4', headline: '"NO TENGO TIEMPO PORQUE TRABAJO MUCHO"', sub: 'Nadie te pide 3 horas diarias. 45 minutos intensos y enfocados 3 veces por semana son suficientes.', c1: 'Gestión de Tiempo', c2: 'Alta Eficiencia', c3: '' },
+            { eyebrow: 'EL CAMBIO • 3/4', headline: 'UN SISTEMA QUE SE ADAPTA A TU AGENDA', sub: 'Rutinas flexibles que podés hacer en tu gimnasio, en casa o de viaje.', c1: 'Flexibilidad', c2: 'Sostenible', c3: '' },
+            { eyebrow: 'DECISIÓN • 4/4', headline: 'HACE SENTIDO COMENZAR HOY MISMO', sub: 'Descargá la App SENS o escribime para cupos 1:1.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: '¿Cuántos meses más vas a seguir diciendo "el próximo lunes arranco"?\n\nEl tiempo no se congela mientras buscás el momento perfecto. Tu metabolismo sigue desacelerando y tus articulaciones siguen perdiendo rango móvil.\n\nEl mejor momento para empezar fue hace 5 años; el segundo mejor momento es hoy.\n\nEscribime "SENS" por DM o entrá al link de la bio.'
+    },
+    {
+        id: 'tpl_equation_formula',
+        name: '16. Fórmula Exacta Recomposición [A + B = C]',
+        badge: 'FÓRMULA EXACTA',
+        desc: 'Estructura matemática de bloques aditivos que desmitifica la complejidad del cambio físico.',
+        spatialArchetype: 'equation_formula',
+        overlayMode: 'cinematic',
+        overlayTitle: 'Esquema Matemático con Operadores Aditivos Champagne',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'MATEMÁTICA BIOLÓGICA', headline: 'CADENCIA 3s + RIR 2 + SUEÑO 8H = FÍSICO ATLETA', sub: 'Dejá de buscar el suplemento mágico. Estas tres variables garantizan el 95% de los resultados.', c1: '3-1-1-0', c2: 'RIR 2', c3: '8h Sueño' },
+            { eyebrow: 'NUTRICIÓN MEDIDA', headline: 'PROTEÍNA 1.8G + DÉFICIT 300KCAL = DEFINICIÓN PURA', sub: 'Protegé tu masa muscular mientras oxidás tejido adiposo sin pasar hambre.', c1: '1.8g / kg', c2: '-300 kcal', c3: 'Grasa Cero' },
+            { eyebrow: 'MÉTODO MAKES SENS', headline: 'APLICÁ LA FÓRMULA EXACTA EN TU DÍA A DÍA', sub: 'Calculá tus macros y registrá tus series en la App SENS.', c1: 'Calculadora', c2: 'App SENS →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'LA FÓRMULA • 1/4', headline: 'LA ECUACIÓN DEL CAMBIO FÍSICO REAL', sub: 'Por qué no necesitás rutinas complejas de 18 ejercicios distintos.', c1: 'Fórmula SENS', c2: 'Simplicidad', c3: '' },
+            { eyebrow: 'VARIABLE 1 • 2/4', headline: 'TENSIÓN MECÁNICA: CADENCIA 3-1-1-0', sub: 'Bajar lento y frenar el rebote recluta las fibras tipo II responsables de la hipertrofia.', c1: 'Cadencia 3s', c2: 'Tensión Pura', c3: '' },
+            { eyebrow: 'VARIABLE 2 • 3/4', headline: 'NUTRICIÓN: PROTEÍNA MEDIDA AL GRAMO', sub: 'Garantizar el umbral de leucina en cada comida para sintetizar músculo nuevo.', c1: 'Proteína Limpia', c2: 'Metabolismo', c3: '' },
+            { eyebrow: 'RESULTADO • 4/4', headline: 'APLICÁ LA FÓRMULA EN LA APP SENS', sub: 'Todo calculado y guiado en tu bolsillo por $19.900 al mes.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: 'La recomposición corporal no es magia ni suerte genética: es una fórmula matemática y biológica exacta.\n\nTensión mecánica (cadencia 3-1-1-0) + Proximidad al fallo (RIR 1-2) + Proteína adecuada (1.8g/kg) = Físico atlético garantizado.\n\nEn la App SENS tenés todo el sistema calculado para tu peso y objetivos.\n\nDescargala desde el link de la bio o escribime "SENS".'
+    },
+    {
+        id: 'tpl_scarcity_countdown',
+        name: '17. Urgencia 24hs / Reloj Cuenta Regresiva',
+        badge: 'URGENCIA 24HS',
+        desc: 'Pill de cronómetro de alta tensión para cierres de mes y aperturas limitadas de cupos VIP.',
+        spatialArchetype: 'scarcity_countdown',
+        overlayMode: 'cinematic',
+        overlayTitle: 'Borde de Alta Tensión y Reloj Regresivo 23:59:59',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'CIERRE DE AGENDA', headline: 'AGENDA CERRADA EN 24 HORAS: SOLO 2 CUPOS', sub: 'Para garantizar el estándar de atención 1:1, cerramos admisiones hasta el próximo mes.', c1: '⏳ 23:59:59', c2: 'Solo 2', c3: 'DM "PLAN"' },
+            { eyebrow: 'QUIÉN CLASIFICA', headline: 'BUSCAMOS ATLETAS Y PROFESIONALES COMPROMETIDOS', sub: 'Cero improvisación. Planificación clínica semanal adaptada a tu rutina real.', c1: 'Compromiso', c2: '100% Medido', c3: '' },
+            { eyebrow: 'RESERVÁ TU LUGAR', headline: 'ENVIAME "PLAN" ANTES DE LAS 00:00', sub: 'Se asignan en estricto orden de mensaje directo.', c1: 'Nico Maralle', c2: 'Escribime YA →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'ÚLTIMA LLAMADA • 1/4', headline: 'CIERRE DEFINITIVO DE ADMISIONES DEL MES', sub: 'Solo 2 plazas disponibles para seguimiento 1 a 1.', c1: 'Solo 2 Cupos', c2: '24 Horas', c3: '' },
+            { eyebrow: 'EL COMPROMISO • 2/4', headline: 'ACOMPAÑAMIENTO DIARIO PASO A PASO', sub: 'Nico Maralle revisa cada uno de tus entrenamientos y comidas en tiempo real.', c1: 'Cero Bots', c2: 'Humano 1:1', c3: '' },
+            { eyebrow: 'LOS RESULTADOS • 3/4', headline: 'CAMBIO VISIBLE EN LAS PRIMERAS 4 SEMANAS', sub: 'Sin dietas líquidas ni pasar hambre. Fuerza pura y salud metabólica.', c1: 'Adherencia', c2: 'Garantizado', c3: '' },
+            { eyebrow: 'ACTUÁ HOY • 4/4', headline: 'ESCRIBIME "PLAN" ANTES DE QUE SE AGOTEN', sub: 'Coordinamos tu entrevista de admisión por WhatsApp.', c1: 'Nico Maralle', c2: 'Escribime PLAN →', c3: '' }
+        ],
+        caption: 'En menos de 24 horas cerramos oficialmente las admisiones para el programa de entrenamiento personal 1:1 de este mes.\n\nSolo quedan 2 cupos disponibles para mantener la calidad y el seguimiento exhaustivo que caracteriza a Makes Sens.\n\nSi querés asegurar tu lugar, enviame la palabra "PLAN" por mensaje directo ahora mismo.'
+    },
+    {
+        id: 'tpl_podcast_soundwave',
+        name: '18. Podcast Soundwave / Píldora de Voz Oro',
+        badge: 'AUDIO RECORD',
+        desc: 'Onda sonora animada en champagne con tarjeta de transcripción de sabiduría técnica.',
+        spatialArchetype: 'podcast_soundwave',
+        overlayMode: 'cinematic',
+        overlayTitle: 'Visualizador de Frecuencia Sonora reactivo en Champagne',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'AUDIO CLAVE • NICO', headline: 'SI NO PODÉS FRENAR LA BAJADA, EL PESO TE CONTROLA A VOS', sub: 'La fase excéntrica es donde se construye el 70% de la masa muscular. No la regales cayendo.', c1: '🎙️ Play Audio', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'CONTROL NEURONAL', headline: 'EL MÚSCULO NO SABE KILOS, SOLO SIENTE TENSIÓN', sub: 'Mover 100kg rebotando crea menos estímulo que 70kg con 3 segundos de descenso controlado.', c1: 'Tensión Real', c2: 'Cero Ego', c3: '' },
+            { eyebrow: 'SENS PODCAST', headline: 'ESCUCHÁ MÁS CLAVES TÉCNICAS EN LA APP', sub: 'Audios y masterclasses semanales con Nico Maralle.', c1: 'App SENS', c2: 'Link en Bio →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'PÍLDORA DE VOZ • 1/4', headline: 'EL SECRETO QUE NADIE TE CUENTA DEL TEMPO', sub: 'Por qué bajar rápido es el error número 1 de quienes no crecen en el gimnasio.', c1: 'Audio Master', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'FISIOLOGÍA • 2/4', headline: 'MICRORROTURAS EN ELONGACIÓN CONTROLADA', sub: 'El daño mecánico constructivo ocurre al frenar la carga, no al empujarla con inercia.', c1: 'Fase Excéntrica', c2: 'Ciencia SENS', c3: '' },
+            { eyebrow: 'PRUEBA ESTO • 3/4', headline: '3 SEGUNDOS DE BAJADA EN TU PRÓXIMO EJERCICIO', sub: 'Vas a tener que bajar un 20% el peso, pero vas a sentir el músculo como nunca antes.', c1: 'Prueba Práctica', c2: 'RIR 2', c3: '' },
+            { eyebrow: 'MÁS AUDIOS • 4/4', headline: 'BIBLIOTECA COMPLETA DE AUDIO EN LA APP', sub: 'Explicaciones paso a paso de cada movimiento por Nico Maralle.', c1: 'App SENS', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: 'Si no podés frenar la bajada del peso durante 3 segundos, no estás levantando el peso: el peso te está tirando a vos...\n\nLa fase excéntrica lenta no solo construye 70% más masa muscular por serie: fortalece tus tendones y previene desgarros.\n\nGuardá este video y probalo en tu próximo entrenamiento.'
+    },
+    {
+        id: 'tpl_minimal_monochrome',
+        name: '19. Monocromo Suizo (Quiet Luxury Puro)',
+        badge: 'SUIZO LUXURY',
+        desc: 'Línea de 1px champagne, espacio negativo masivo y tipografía sans-serif de precisión helvética.',
+        spatialArchetype: 'minimal_monochrome',
+        overlayMode: 'full_wash',
+        overlayTitle: 'Lienzo Suizo Minimalista con Línea Capilar Champagne',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'ESTÁNDAR EDITORIAL', headline: 'PRECISIÓN NEUROMUSCULAR SOBRE VOLUMEN CIEGO', sub: 'El verdadero lujo físico es entrenar 45 minutos y tener un cuerpo que responde con potencia.', c1: 'Quiet Luxury', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'LONGEVIDAD', headline: 'CONSTRUIR FUERZA HOY PARA VIVIR SIN DOLOR A LOS 70', sub: 'La masa muscular es el seguro de vida biológico más importante que podés construir.', c1: 'Longevidad', c2: 'Salud Real', c3: '' },
+            { eyebrow: 'SENS METHOD', headline: 'DISEÑEMOS TU PROGRAMA PERSONALIZADO', sub: 'Presencial CABA o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'FILOSOFÍA • 1/4', headline: 'LA BELLEZA DEL ESFUERZO PRECISO', sub: 'Cero gritos, cero payasadas. Solo biomecánica intachable y consistencia diaria.', c1: 'Quiet Luxury', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'ARQUITECTURA • 2/4', headline: 'DISEÑO DE UN CUERPO QUE DURA DÉCADAS', sub: 'Entrenar pensando en la postura, la densidad ósea y la agilidad de los próximos 30 años.', c1: 'Anti-Aging', c2: 'Fuerza Vital', c3: '' },
+            { eyebrow: 'ADHERENCIA • 3/4', headline: 'UN PLAN QUE CONVIVE CON TU VIDA', sub: 'La sostenibilidad en el tiempo es lo que separa a los profesionales de los novatos.', c1: 'Hábitos SENS', c2: 'Longevidad', c3: '' },
+            { eyebrow: 'ACCESO • 4/4', headline: 'EXPERIMENTÁ EL ESTÁNDAR MAKES SENS', sub: 'Sumate a la App o consultá por plazas presenciales con Nico.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
+        ],
+        caption: 'En un mundo de gimnasios ruidosos y modas pasajeras de redes sociales, en SENS elegimos el camino del rigor silencioso y la precisión biomecánica.\n\nEntrenar 45 minutos con intensidad calculada para tener un cuerpo estético, fuerte y preparado para rendir en tu vida real.\n\nHace sentido. Escribime "SENS" por DM.'
+    },
+    {
+        id: 'tpl_checklist_protocol',
+        name: '20. Checklist Protocolo 3 Innegociables',
+        badge: 'CHECKLIST PROTOCOLO',
+        desc: 'Lista de 3 reglas tácticas verificadas con status dots dorados para guardar en feed.',
+        spatialArchetype: 'checklist_protocol',
+        overlayMode: 'cinematic',
+        overlayTitle: 'Protocolo de 3 Filas de Chequeo Clínico SENS',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
+        scenes: [
+            { eyebrow: 'PROTOCOLO BIOLÓGICO', headline: '3 INNEGOCIABLES PARA OXIDAR GRASA DE VERDAD', sub: '1. 140g Proteína limpia • 2. 4 Series Pesadas RIR 2 • 3. 8.000 Pasos diarios.', c1: '140g Prot', c2: 'RIR 2', c3: '8k Pasos' },
+            { eyebrow: 'EL ERROR COMÚN', headline: 'HACER CARDIO INTERMINABLE SIN TOCAR UNA PESA', sub: 'El cardio quema calorías en el momento; la masa muscular quema calorías las 24 horas del día.', c1: 'Fuerza Primero', c2: 'Metabolismo', c3: '' },
+            { eyebrow: 'SEGUIMIENTO SENS', headline: 'MONITOREÁ TUS HÁBITOS EN LA APP', sub: 'Rings de actividad y registro de comidas en Makes Sens.', c1: 'App SENS', c2: 'Comenzar →', c3: '' }
+        ],
+        slides: [
+            { eyebrow: 'CHECKLIST • 1/4', headline: 'LOS 3 HÁBITOS QUE TRANSFORMAN TU CUERPO', sub: 'Olvidate de los suplementos milagrosos. Enfocate únicamente en cumplir estos tres.', c1: 'Protocolo', c2: 'Makes Sens', c3: '' },
+            { eyebrow: 'HÁBITO 1 • 2/4', headline: '1.4G A 1.8G DE PROTEÍNA POR KILO', sub: 'Mantiene saciedad, frena antojos nocturnos y construye músculo metabólicamente activo.', c1: 'Proteína', c2: 'Saciedad', c3: '' },
+            { eyebrow: 'HÁBITO 2 • 3/4', headline: 'ENTRENAMIENTO DE FUERZA CON SOBRECARGA', sub: '3 a 4 sesiones semanales levantando con cadencia 3-1-1-0 y proximidad al fallo.', c1: 'Fuerza Pura', c2: 'RIR 1-2', c3: '' },
+            { eyebrow: 'HÁBITO 3 • 4/4', headline: '8.000 PASOS DIARIOS DE MOVILIDAD NEAT', sub: 'El gasto calórico silencioso que mantiene tu sensibilidad a la insulina alta.', c1: 'NEAT Alto', c2: 'App SENS →', c3: '' }
+        ],
+        caption: 'Dejá de complicarte con dietas extremas y rutinas de 2 horas. El cambio físico definitivo se resume en tres hábitos innegociables cumplidos con rigor durante 6 meses:\n\n1. 140g de proteína limpia diaria\n2. 4 sesiones de fuerza pesada con cadencia 3-1-1-0\n3. 8.000 pasos de movimiento diario\n\nEn la App SENS monitoreamos tus tres hábitos día a día para que no tengas que adivinar.\n\nGuardá este post y escribime "SENS" por DM.'
     }
 ];
+
+
+function getMarketingTemplateThumbSvg(t) {
+    const arch = t.spatialArchetype || 'hero_center_big';
+    let innerSvg = '';
+    switch(arch) {
+        case 'hero_center_big':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0C0C0F"/>' +
+                       '<rect x="8" y="7" width="26" height="5" rx="2.5" fill="#E5CBA7" opacity="0.8"/>' +
+                       '<rect x="18" y="24" width="64" height="6" rx="2" fill="#FFFFFF"/>' +
+                       '<rect x="25" y="33" width="50" height="6" rx="2" fill="#E5CBA7"/>' +
+                       '<rect x="30" y="44" width="40" height="3" rx="1.5" fill="#A1A1AA"/>' +
+                       '<rect x="34" y="52" width="32" height="4" rx="2" fill="rgba(229,203,167,0.3)"/>';
+            break;
+        case 'lower_third_clean':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#141418"/>' +
+                       '<circle cx="50" cy="22" r="10" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>' +
+                       '<path d="M0 34 L100 34 L100 68 L0 68 Z" fill="url(#gradLowerThumb)"/>' +
+                       '<rect x="10" y="44" width="18" height="3" rx="1.5" fill="#E5CBA7"/>' +
+                       '<rect x="10" y="50" width="56" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="58" width="40" height="4" rx="1.5" fill="rgba(229,203,167,0.4)"/>';
+            break;
+        case 'magazine_split':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
+                       '<rect x="8" y="8" width="22" height="3" rx="1" fill="#E5CBA7"/>' +
+                       '<rect x="8" y="14" width="58" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="8" y="21" width="46" height="5" rx="1.5" fill="#E5CBA7"/>' +
+                       '<rect x="8" y="52" width="70" height="3" rx="1" fill="#A1A1AA"/>' +
+                       '<rect x="8" y="57" width="50" height="3" rx="1" fill="#71717A"/>';
+            break;
+        case 'glass_card':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0C0C0F"/>' +
+                       '<rect x="8" y="20" width="84" height="40" rx="4" fill="rgba(24,24,28,0.92)" stroke="rgba(255,255,255,0.2)" stroke-width="0.8"/>' +
+                       '<rect x="14" y="26" width="20" height="3" rx="1" fill="#E5CBA7"/>' +
+                       '<rect x="14" y="32" width="60" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="14" y="38" width="48" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="14" y="46" width="40" height="3" rx="1" fill="#A1A1AA"/>';
+            break;
+        case 'stat_monumental':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
+                       '<text x="12" y="38" font-family="sans-serif" font-weight="900" font-size="24" fill="#E5CBA7">0.0%</text>' +
+                       '<rect x="12" y="44" width="58" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="12" y="51" width="42" height="3" rx="1" fill="#A1A1AA"/>' +
+                       '<rect x="12" y="57" width="30" height="3" rx="1" fill="rgba(229,203,167,0.4)"/>';
+            break;
+        case 'quote_editorial':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
+                       '<text x="50" y="24" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="24" fill="rgba(229,203,167,0.5)">“</text>' +
+                       '<rect x="18" y="28" width="64" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="24" y="35" width="52" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="32" y="45" width="36" height="3" rx="1" fill="#E5CBA7"/>';
+            break;
+        case 'story_callout':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0D0D11"/>' +
+                       '<rect x="10" y="8" width="36" height="6" rx="3" fill="#E5CBA7"/>' +
+                       '<rect x="10" y="18" width="70" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="25" width="54" height="5" rx="1.5" fill="#E5CBA7"/>' +
+                       '<rect x="25" y="48" width="50" height="12" rx="3" fill="none" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2,2" stroke-width="0.8"/>';
+            break;
+        case 'editorial_bottom':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
+                       '<text x="78" y="14" font-family="sans-serif" font-weight="700" font-size="7" fill="#E5CBA7">01/04</text>' +
+                       '<rect x="10" y="38" width="22" height="3" rx="1" fill="#E5CBA7"/>' +
+                       '<rect x="10" y="44" width="68" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="52" width="52" height="4" rx="1" fill="#A1A1AA"/>';
+            break;
+        case 'split_comparative':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#09090C"/>' +
+                       '<rect x="8" y="8" width="84" height="23" rx="3" fill="rgba(24,18,20,0.9)" stroke="rgba(235,87,87,0.6)" stroke-width="0.8"/>' +
+                       '<text x="14" y="18" font-family="sans-serif" font-weight="900" font-size="6" fill="#FF8A8A">✕ CÓMO NO</text>' +
+                       '<rect x="14" y="21" width="50" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="8" y="36" width="84" height="24" rx="3" fill="rgba(18,22,20,0.9)" stroke="rgba(229,203,167,0.8)" stroke-width="0.8"/>' +
+                       '<text x="14" y="46" font-family="sans-serif" font-weight="900" font-size="6" fill="#E5CBA7">✓ CÓMO SÍ</text>' +
+                       '<rect x="14" y="49" width="56" height="4" rx="1" fill="#FFFFFF"/>';
+            break;
+        case 'kinetic_brutalism':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#050507"/>' +
+                       '<rect x="8" y="12" width="76" height="9" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="16" y="25" width="76" height="9" rx="1" fill="#E5CBA7"/>' +
+                       '<rect x="10" y="38" width="68" height="9" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="8" y="52" width="36" height="4" rx="1" fill="#A1A1AA"/>';
+            break;
+        case 'polaroid_luxury':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
+                       '<rect x="12" y="6" width="76" height="56" rx="2" fill="#FAF9F6"/>' +
+                       '<rect x="16" y="10" width="68" height="36" rx="1" fill="#141418"/>' +
+                       '<rect x="20" y="50" width="46" height="4" rx="1" fill="#121214"/>' +
+                       '<rect x="20" y="56" width="28" height="2" rx="0.5" fill="#9E7D4B"/>';
+            break;
+        case 'cinematic_letterbox':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#1A1A22"/>' +
+                       '<rect x="0" y="0" width="100" height="14" fill="#000000"/>' +
+                       '<rect x="0" y="54" width="100" height="14" fill="#000000"/>' +
+                       '<circle cx="50" cy="34" r="8" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>' +
+                       '<rect x="25" y="59" width="50" height="4" rx="1" fill="#E5CBA7"/>';
+            break;
+        case 'biomechanical_hud':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#08080B"/>' +
+                       '<path d="M12 16 L12 10 L18 10 M82 10 L88 10 L88 16 M12 52 L12 58 L18 58 M82 58 L88 58 L88 52" stroke="#E5CBA7" stroke-width="1.2" fill="none"/>' +
+                       '<circle cx="50" cy="32" r="7" fill="none" stroke="rgba(229,203,167,0.4)" stroke-width="1" stroke-dasharray="2,2"/>' +
+                       '<rect x="18" y="44" width="52" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<rect x="18" y="50" width="38" height="3" rx="1" fill="#E5CBA7"/>';
+            break;
+        case 'interrogation_shock':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#08080A"/>' +
+                       '<text x="64" y="54" font-family="sans-serif" font-weight="900" font-size="52" fill="rgba(229,203,167,0.18)">?</text>' +
+                       '<rect x="10" y="16" width="60" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="24" width="50" height="5" rx="1.5" fill="#E5CBA7"/>' +
+                       '<rect x="10" y="32" width="44" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="46" width="34" height="3" rx="1" fill="#A1A1AA"/>';
+            break;
+        case 'equation_formula':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
+                       '<rect x="8" y="18" width="22" height="12" rx="2" fill="rgba(255,255,255,0.08)"/>' +
+                       '<text x="34" y="28" font-family="sans-serif" font-weight="900" font-size="10" fill="#E5CBA7">+</text>' +
+                       '<rect x="42" y="18" width="22" height="12" rx="2" fill="rgba(255,255,255,0.08)"/>' +
+                       '<text x="68" y="28" font-family="sans-serif" font-weight="900" font-size="10" fill="#E5CBA7">=</text>' +
+                       '<rect x="76" y="18" width="18" height="12" rx="2" fill="rgba(229,203,167,0.25)"/>' +
+                       '<rect x="10" y="42" width="68" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="50" width="48" height="3" rx="1" fill="#A1A1AA"/>';
+            break;
+        case 'scarcity_countdown':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0E"/>' +
+                       '<rect x="22" y="8" width="56" height="8" rx="4" fill="#14141A" stroke="#E5CBA7" stroke-width="0.8"/>' +
+                       '<text x="50" y="14" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="5" fill="#E5CBA7">23 : 59 : 59</text>' +
+                       '<rect x="10" y="24" width="76" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="32" width="60" height="5" rx="1.5" fill="#E5CBA7"/>' +
+                       '<rect x="10" y="46" width="46" height="3" rx="1" fill="#A1A1AA"/>';
+            break;
+        case 'podcast_soundwave':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0C0C10"/>' +
+                       '<g fill="#E5CBA7">' +
+                       '<rect x="32" y="18" width="3" height="8" rx="1.5"/>' +
+                       '<rect x="38" y="14" width="3" height="16" rx="1.5"/>' +
+                       '<rect x="44" y="10" width="3" height="24" rx="1.5"/>' +
+                       '<rect x="50" y="12" width="3" height="20" rx="1.5"/>' +
+                       '<rect x="56" y="15" width="3" height="14" rx="1.5"/>' +
+                       '<rect x="62" y="19" width="3" height="6" rx="1.5"/>' +
+                       '</g>' +
+                       '<rect x="12" y="42" width="76" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="20" y="50" width="60" height="3" rx="1" fill="#A1A1AA"/>';
+            break;
+        case 'minimal_monochrome':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#080809"/>' +
+                       '<rect x="10" y="16" width="28" height="2" fill="#E5CBA7"/>' +
+                       '<line x1="10" y1="24" x2="90" y2="24" stroke="rgba(229,203,167,0.3)" stroke-width="0.8"/>' +
+                       '<rect x="10" y="32" width="70" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="40" width="56" height="5" rx="1.5" fill="#FFFFFF"/>' +
+                       '<rect x="10" y="52" width="40" height="2.5" fill="#71717A"/>';
+            break;
+        case 'checklist_protocol':
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
+                       '<rect x="10" y="10" width="54" height="4" rx="1" fill="#E5CBA7"/>' +
+                       '<circle cx="14" cy="24" r="2.5" fill="#E5CBA7"/>' +
+                       '<rect x="22" y="22" width="58" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<circle cx="14" cy="36" r="2.5" fill="#E5CBA7"/>' +
+                       '<rect x="22" y="34" width="64" height="4" rx="1" fill="#FFFFFF"/>' +
+                       '<circle cx="14" cy="48" r="2.5" fill="#E5CBA7"/>' +
+                       '<rect x="22" y="46" width="50" height="4" rx="1" fill="#FFFFFF"/>';
+            break;
+        default:
+            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
+                       '<rect x="15" y="24" width="70" height="6" rx="2" fill="#FFFFFF"/>' +
+                       '<rect x="25" y="34" width="50" height="5" rx="2" fill="#E5CBA7"/>';
+            break;
+    }
+
+    return '<svg viewBox="0 0 100 68" width="100%" height="68" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block; border-radius:6px;"><defs><linearGradient id="gradLowerThumb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#080809" stop-opacity="0"/><stop offset="100%" stop-color="#080809" stop-opacity="1"/></linearGradient></defs>' + innerSvg + '</svg>';
+}
+
 
 let mktStudioState = {
     format: 'reel_video_9_16', // 'reel_video_9_16', 'carousel_4_5', 'post_4_5', 'story_9_16'
@@ -20788,6 +21178,64 @@ window.initCoachMarketingStudio = function() {
     }
 
     const tplGrid = document.getElementById('mktTemplateSelectorGrid');
+    // Calibración Táctil de Encuadre, Zoom y Contraste (Sin Sliders Confusos)
+    const panBtns = document.querySelectorAll('#mktPanYButtonGroup .sens-mkt-adjust-btn');
+    const panLabel = document.getElementById('mktPanYFeedbackLabel');
+    if (panBtns.length > 0) {
+        panBtns.forEach(btn => {
+            btn.onclick = () => {
+                panBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const val = parseInt(btn.getAttribute('data-val'), 10) || 0;
+                mktStudioState.panY = val;
+                if (panLabel) {
+                    panLabel.textContent = val < 0 ? 'Subido (Torso)' : (val > 0 ? 'Bajado (Piernas)' : 'Centrado');
+                }
+                const panSlider = document.getElementById('mktMediaPanYSlider');
+                if (panSlider) panSlider.value = val;
+                renderMarketingCanvasFrame();
+            };
+        });
+    }
+
+    const zoomBtns = document.querySelectorAll('#mktZoomButtonGroup .sens-mkt-adjust-btn');
+    const zoomFeedbackEl = document.getElementById('mktZoomFeedbackLabel');
+    if (zoomBtns.length > 0) {
+        zoomBtns.forEach(btn => {
+            btn.onclick = () => {
+                zoomBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const val = parseInt(btn.getAttribute('data-val'), 10) || 108;
+                mktStudioState.zoom = val;
+                if (zoomFeedbackEl) {
+                    zoomFeedbackEl.textContent = val + '% ' + (val === 100 ? '(Completo)' : (val === 108 ? '(Foco SENS)' : '(Primer Plano)'));
+                }
+                const zoomSlider = document.getElementById('mktMediaZoomSlider');
+                if (zoomSlider) zoomSlider.value = val;
+                renderMarketingCanvasFrame();
+            };
+        });
+    }
+
+    const opBtns = document.querySelectorAll('#mktOpacityButtonGroup .sens-mkt-adjust-btn');
+    const opFeedbackEl = document.getElementById('mktOpacityFeedbackLabel');
+    if (opBtns.length > 0) {
+        opBtns.forEach(btn => {
+            btn.onclick = () => {
+                opBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const val = parseInt(btn.getAttribute('data-val'), 10) || 80;
+                mktStudioState.overlayOpacity = val;
+                if (opFeedbackEl) {
+                    opFeedbackEl.textContent = val + '% ' + (val === 65 ? '(Suave)' : (val === 80 ? '(Equilibrado)' : '(Máximo Contraste)'));
+                }
+                const opSlider = document.getElementById('mktOverlayOpacitySlider');
+                if (opSlider) opSlider.value = val;
+                renderMarketingCanvasFrame();
+            };
+        });
+    }
+
     const formatBtns = document.querySelectorAll('#mktFormatSelectorGrid .sens-mkt-format-btn');
     const sceneBtns = document.querySelectorAll('#mktVideoScenesTimelineBar .sens-mkt-scene-btn');
     const slideBtns = document.querySelectorAll('#mktCarouselSlidesBar .sens-mkt-slide-btn');
@@ -20819,6 +21267,9 @@ window.initCoachMarketingStudio = function() {
         SENS_MARKETING_TEMPLATES.forEach((t, idx) => {
             html += `
                 <button type="button" class="sens-mkt-tpl-card ${idx === 0 ? 'active' : ''}" data-tpl-id="${t.id}">
+                    <div class="sens-mkt-tpl-thumb">
+                        ${getMarketingTemplateThumbSvg(t)}
+                    </div>
                     <span class="sens-mkt-tpl-cat">${t.badge}</span>
                     <strong class="sens-mkt-tpl-name">${t.name}</strong>
                     <span class="sens-mkt-tpl-desc">${t.desc || ''}</span>
@@ -22148,6 +22599,548 @@ function renderMarketingCanvasFrame() {
             ctx.fillText(c3, leftSafeX + cardPad + 18, chipY + (is45 ? 20 : 23));
         }
 
+    } else if (spatialArchetype === 'kinetic_brutalism') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 11: NIKE BRUTALISM KINETIC (96px SHOCK)
+        // ---------------------------------------------------------------------
+        ctx.textAlign = 'left';
+        const headFontSize = is45 ? 76 : 96;
+        const headLineHeight = is45 ? 84 : 106;
+        const subFontSize = is45 ? 26 : 31;
+        const subLineHeight = is45 ? 38 : 45;
+
+        ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3) : [];
+        const hHead = headLines.length * headLineHeight;
+
+        let curY = contentTopY + 20;
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'top';
+            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
+            curY += is45 ? 36 : 46;
+        }
+
+        if (hasHead) {
+            ctx.save();
+            ctx.translate(leftSafeX, curY);
+            ctx.scale(kineticSlam, kineticSlam);
+            ctx.translate(-leftSafeX, -curY);
+
+            ctx.shadowColor = '#000000';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 6;
+            ctx.shadowOffsetY = 6;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.textBaseline = 'top';
+
+            headLines.forEach((line, i) => {
+                const staggerX = leftSafeX + (i * (is45 ? 20 : 32));
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, staggerX, curY + (i * headLineHeight));
+            });
+            ctx.restore();
+            curY += hHead + (is45 ? 28 : 36);
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX, curY + (i * subLineHeight));
+            });
+            curY += (subLines.length * subLineHeight) + 24;
+        }
+
+        if (hasChips) {
+            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
+        }
+
+    } else if (spatialArchetype === 'polaroid_luxury') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 12: POLAROID TITANIO & FIRMA NICO
+        // ---------------------------------------------------------------------
+        const frameX = leftSafeX - 12;
+        const frameY = contentTopY;
+        const frameW = safeWidth + 24;
+        const frameH = bottomSafeY - contentTopY;
+
+        ctx.strokeStyle = 'rgba(229, 203, 167, 0.65)';
+        ctx.lineWidth = 2.5;
+        roundRectCanvas(ctx, frameX, frameY, frameW, frameH, 18);
+        ctx.stroke();
+
+        let curY = bottomSafeY - (is45 ? 180 : 220);
+
+        if (hasHead) {
+            const headFontSize = is45 ? 52 : 68;
+            const headLineHeight = is45 ? 60 : 78;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,0.95)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 6;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 20).slice(0, 2);
+            headLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
+            });
+            ctx.restore();
+            curY += (headLines.length * headLineHeight) + 16;
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${is45 ? 24 : 29}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'top';
+            const subLines = wrapCanvasText(ctx, rawSub, safeWidth - 20).slice(0, 2);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX, curY + (i * (is45 ? 34 : 40)));
+            });
+            curY += (subLines.length * (is45 ? 34 : 40)) + 14;
+        }
+
+        ctx.font = `800 ${is45 ? 16 : 19}px "Plus Jakarta Sans", sans-serif`;
+        ctx.fillStyle = 'rgba(244, 244, 246, 0.70)';
+        ctx.fillText('— NICO MARALLE // MAKES SENS', leftSafeX, curY);
+
+    } else if (spatialArchetype === 'cinematic_letterbox') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 13: CINE 2.39:1 LETTERBOX (SUBTÍTULOS ORO)
+        // ---------------------------------------------------------------------
+        const barH = is45 ? 120 : 160;
+        ctx.fillStyle = '#080809';
+        ctx.fillRect(0, 0, W, barH);
+        ctx.fillRect(0, H - barH, W, barH);
+
+        ctx.strokeStyle = 'rgba(229, 203, 167, 0.35)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, barH);
+        ctx.lineTo(W, barH);
+        ctx.moveTo(0, H - barH);
+        ctx.lineTo(W, H - barH);
+        ctx.stroke();
+
+        ctx.textAlign = 'center';
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 17 : 20}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(rawEyebrow.toUpperCase(), W / 2, barH / 2);
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 54 : 70;
+            const headLineHeight = is45 ? 64 : 82;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.98)';
+            ctx.shadowBlur = 24;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'middle';
+            const headLines = wrapCanvasText(ctx, `“${rawHeadline.toUpperCase()}”`, safeWidth).slice(0, 2);
+            const startHeadY = (H - barH) + (barH / 2) - ((headLines.length - 1) * (headLineHeight / 2));
+            headLines.forEach((line, i) => {
+                ctx.fillText(line, W / 2, startHeadY + (i * headLineHeight));
+            });
+            ctx.restore();
+        }
+
+    } else if (spatialArchetype === 'biomechanical_hud') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 14: HUD TELEMETRÍA & RETÍCULA F1
+        // ---------------------------------------------------------------------
+        const retLen = is45 ? 26 : 36;
+        ctx.strokeStyle = '#E5CBA7';
+        ctx.lineWidth = 2.5;
+
+        ctx.beginPath();
+        ctx.moveTo(leftSafeX, contentTopY + retLen);
+        ctx.lineTo(leftSafeX, contentTopY);
+        ctx.lineTo(leftSafeX + retLen, contentTopY);
+
+        ctx.moveTo(rightSafeX - retLen, contentTopY);
+        ctx.lineTo(rightSafeX, contentTopY);
+        ctx.lineTo(rightSafeX, contentTopY + retLen);
+
+        ctx.moveTo(leftSafeX, bottomSafeY - retLen);
+        ctx.lineTo(leftSafeX, bottomSafeY);
+        ctx.lineTo(leftSafeX + retLen, bottomSafeY);
+
+        ctx.moveTo(rightSafeX - retLen, bottomSafeY);
+        ctx.lineTo(rightSafeX, bottomSafeY);
+        ctx.lineTo(rightSafeX, bottomSafeY - retLen);
+        ctx.stroke();
+
+        const crossY = contentTopY + (is45 ? 120 : 160);
+        ctx.beginPath();
+        ctx.arc(safeCenterX, crossY, is45 ? 18 : 24, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(229, 203, 167, 0.40)';
+        ctx.stroke();
+
+        let curY = bottomSafeY - (is45 ? 200 : 250);
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillText(`// TELEMETRÍA • ${rawEyebrow.toUpperCase()}`, leftSafeX + 10, curY);
+            curY += is45 ? 32 : 40;
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 58 : 74;
+            const headLineHeight = is45 ? 66 : 84;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 24;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.textBaseline = 'top';
+            ctx.textAlign = 'left';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 20).slice(0, 2);
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, leftSafeX + 10, curY + (i * headLineHeight));
+            });
+            ctx.restore();
+            curY += (headLines.length * headLineHeight) + 18;
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${is45 ? 24 : 29}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            const subLines = wrapCanvasText(ctx, rawSub, safeWidth - 20).slice(0, 2);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX + 10, curY + (i * (is45 ? 34 : 42)));
+            });
+        }
+
+    } else if (spatialArchetype === 'interrogation_shock') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 15: INTERROGACIÓN DIRECTA (SIGNO ? SHOCK)
+        // ---------------------------------------------------------------------
+        ctx.save();
+        ctx.font = `900 ${is45 ? 320 : 440}px "Plus Jakarta Sans", sans-serif`;
+        ctx.fillStyle = 'rgba(229, 203, 167, 0.08)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('?', safeCenterX, (contentTopY + bottomSafeY) / 2);
+        ctx.restore();
+
+        ctx.textAlign = 'center';
+        let curY = contentTopY + (is45 ? 60 : 100);
+
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 19 : 23}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'top';
+            ctx.fillText(`• ${rawEyebrow.toUpperCase()} •`, safeCenterX, curY);
+            curY += is45 ? 40 : 52;
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 66 : 86;
+            const headLineHeight = is45 ? 74 : 96;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,0.95)';
+            ctx.shadowBlur = 26;
+            ctx.shadowOffsetY = 6;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.textBaseline = 'top';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 30).slice(0, 3);
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, safeCenterX, curY + (i * headLineHeight));
+            });
+            ctx.restore();
+            curY += (headLines.length * headLineHeight) + (is45 ? 24 : 32);
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${is45 ? 26 : 31}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.94)';
+            ctx.textBaseline = 'top';
+            const subLines = wrapCanvasText(ctx, rawSub, safeWidth - 40).slice(0, 3);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, safeCenterX, curY + (i * (is45 ? 38 : 46)));
+            });
+        }
+
+    } else if (spatialArchetype === 'equation_formula') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 16: FÓRMULA EXACTA RECOMPOSICIÓN [A + B = C]
+        // ---------------------------------------------------------------------
+        let curY = contentTopY + 30;
+
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
+            curY += is45 ? 36 : 46;
+        }
+
+        const headFontSize = is45 ? 60 : 76;
+        const headLineHeight = is45 ? 70 : 88;
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.95)';
+        ctx.shadowBlur = 24;
+        ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
+        headLines.forEach((line, i) => {
+            ctx.fillStyle = line.includes('=') ? '#E5CBA7' : '#FFFFFF';
+            ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
+        });
+        ctx.restore();
+        curY += (headLines.length * headLineHeight) + 26;
+
+        if (hasSub) {
+            ctx.font = `500 ${is45 ? 26 : 31}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX, curY + (i * (is45 ? 38 : 45)));
+            });
+            curY += (subLines.length * (is45 ? 38 : 45)) + 24;
+        }
+
+        if (hasChips) {
+            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
+        }
+
+    } else if (spatialArchetype === 'scarcity_countdown') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 17: URGENCIA 24HS / RELOJ CUENTA REGRESIVA
+        // ---------------------------------------------------------------------
+        let curY = contentTopY + 20;
+
+        const pillW = is45 ? 240 : 280;
+        const pillH = is45 ? 44 : 52;
+        ctx.fillStyle = '#14141B';
+        roundRectCanvas(ctx, leftSafeX, curY, pillW, pillH, 12);
+        ctx.fill();
+        ctx.strokeStyle = '#E5CBA7';
+        ctx.lineWidth = 1.5;
+        roundRectCanvas(ctx, leftSafeX, curY, pillW, pillH, 12);
+        ctx.stroke();
+
+        ctx.font = `800 ${is45 ? 17 : 20}px "Plus Jakarta Sans", sans-serif`;
+        ctx.fillStyle = '#E5CBA7';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('⏳ 23 : 59 : 59 • URGENTE', leftSafeX + (pillW / 2), curY + (pillH / 2));
+        curY += pillH + (is45 ? 28 : 36);
+
+        if (hasHead) {
+            const headFontSize = is45 ? 62 : 78;
+            const headLineHeight = is45 ? 70 : 88;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,0.95)';
+            ctx.shadowBlur = 24;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
+            headLines.forEach((line, i) => {
+                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
+            });
+            ctx.restore();
+            curY += (headLines.length * headLineHeight) + 24;
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${is45 ? 26 : 31}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+            ctx.textBaseline = 'top';
+            ctx.textAlign = 'left';
+            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX, curY + (i * (is45 ? 38 : 45)));
+            });
+        }
+
+    } else if (spatialArchetype === 'podcast_soundwave') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 18: PODCAST SOUNDWAVE / PÍLDORA DE VOZ ORO
+        // ---------------------------------------------------------------------
+        let curY = contentTopY + 30;
+
+        const waveCount = 12;
+        const waveSpacing = 14;
+        const totalWaveW = waveCount * waveSpacing;
+        const startWaveX = safeCenterX - (totalWaveW / 2);
+        const waveCenterY = curY + 24;
+
+        ctx.fillStyle = '#E5CBA7';
+        for (let wI = 0; wI < waveCount; wI++) {
+            const h = 10 + Math.abs(Math.sin(nowSec * 5 + wI * 0.7)) * (is45 ? 28 : 42);
+            roundRectCanvas(ctx, startWaveX + (wI * waveSpacing), waveCenterY - (h / 2), 5, h, 2.5);
+            ctx.fill();
+        }
+        curY += (is45 ? 65 : 85);
+
+        ctx.textAlign = 'center';
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'top';
+            ctx.fillText(`🎙️ ${rawEyebrow.toUpperCase()}`, safeCenterX, curY);
+            curY += is45 ? 34 : 44;
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 58 : 74;
+            const headLineHeight = is45 ? 68 : 86;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,0.95)';
+            ctx.shadowBlur = 24;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textBaseline = 'top';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 20).slice(0, 3);
+            headLines.forEach((line, i) => {
+                ctx.fillText(line, safeCenterX, curY + (i * headLineHeight));
+            });
+            ctx.restore();
+            curY += (headLines.length * headLineHeight) + 24;
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${is45 ? 25 : 30}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textBaseline = 'top';
+            const subLines = wrapCanvasText(ctx, rawSub, safeWidth - 30).slice(0, 3);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, safeCenterX, curY + (i * (is45 ? 36 : 44)));
+            });
+        }
+
+    } else if (spatialArchetype === 'minimal_monochrome') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 19: MONOCROMO SUIZO (QUIET LUXURY PURO)
+        // ---------------------------------------------------------------------
+        let curY = contentTopY + 20;
+
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
+            curY += is45 ? 32 : 40;
+        }
+
+        ctx.strokeStyle = 'rgba(229, 203, 167, 0.45)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(leftSafeX, curY);
+        ctx.lineTo(rightSafeX, curY);
+        ctx.stroke();
+        curY += is45 ? 30 : 40;
+
+        if (hasHead) {
+            const headFontSize = is45 ? 64 : 80;
+            const headLineHeight = is45 ? 72 : 90;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
+            headLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
+            });
+            curY += (headLines.length * headLineHeight) + 26;
+        }
+
+        if (hasSub) {
+            ctx.font = `500 ${is45 ? 26 : 31}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.88)';
+            ctx.textBaseline = 'top';
+            ctx.textAlign = 'left';
+            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
+            subLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX, curY + (i * (is45 ? 38 : 45)));
+            });
+        }
+
+    } else if (spatialArchetype === 'checklist_protocol') {
+        // ---------------------------------------------------------------------
+        // ARQUETIPO 20: CHECKLIST PROTOCOLO 3 INNEGOCIABLES
+        // ---------------------------------------------------------------------
+        let curY = contentTopY + 20;
+
+        if (hasEye) {
+            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#E5CBA7';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
+            curY += is45 ? 34 : 44;
+        }
+
+        if (hasHead) {
+            const headFontSize = is45 ? 58 : 74;
+            const headLineHeight = is45 ? 66 : 84;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,0.95)';
+            ctx.shadowBlur = 24;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 2);
+            headLines.forEach((line, i) => {
+                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
+            });
+            ctx.restore();
+            curY += (headLines.length * headLineHeight) + 26;
+        }
+
+        const checkItems = [
+            c1 || '1. 140g Proteína Diaria',
+            c2 || '2. 4 Series Pesadas RIR 2',
+            c3 || '3. 8.000 Pasos de Movilidad'
+        ];
+
+        checkItems.forEach(item => {
+            const rowH = is45 ? 48 : 56;
+            ctx.fillStyle = 'rgba(16, 17, 22, 0.92)';
+            roundRectCanvas(ctx, leftSafeX, curY, safeWidth, rowH, 12);
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(229, 203, 167, 0.40)';
+            ctx.lineWidth = 1.2;
+            roundRectCanvas(ctx, leftSafeX, curY, safeWidth, rowH, 12);
+            ctx.stroke();
+
+            ctx.fillStyle = '#E5CBA7';
+            ctx.beginPath();
+            ctx.arc(leftSafeX + (is45 ? 22 : 26), curY + (rowH / 2), is45 ? 6 : 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.font = `700 ${is45 ? 20 : 24}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'left';
+            ctx.fillText(item, leftSafeX + (is45 ? 42 : 50), curY + (rowH / 2));
+
+            curY += rowH + 10;
+        });
     } else {
         // ---------------------------------------------------------------------
         // ARQUETIPO 8: EDITORIAL BOTTOM CLASSIC / CARRUSEL SWIPE (78px DISPLAY)
@@ -22272,6 +23265,15 @@ function renderMarketingCanvasFrame() {
         ctx.fillText(`✓ SAFE ZONE ACTIVA (${safeW} × ${safeH} px)`, leftInset + 14, topInset + 26);
 
         ctx.restore();
+    }
+    // Mirroring frame to the Mini-Visor en Vivo in Editor
+    const miniCanvas = document.getElementById('mktMiniFramingCanvas');
+    if (miniCanvas) {
+        const mCtx = miniCanvas.getContext('2d');
+        mCtx.clearRect(0, 0, miniCanvas.width, miniCanvas.height);
+        try {
+            mCtx.drawImage(canvas, 0, 0, miniCanvas.width, miniCanvas.height);
+        } catch (_) {}
     }
     } catch (renderErr) {
         console.error('Error renderMarketingCanvasFrame:', renderErr);
