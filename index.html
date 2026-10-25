@@ -3485,7 +3485,12 @@
                                     <span class="sens-card-domain-eyebrow" id="dashWorkoutDayDateLabel">Entrenamiento de
                                         Hoy</span>
                                     <h3 class="sens-card-title-white" id="dashWorkoutFocusTitle">Piernas</h3>
-                                    <p class="sens-card-sub-white" id="dashWorkoutSubFocus">5 ejercicios | 15 series</p>
+                                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                        <p class="sens-card-sub-white" id="dashWorkoutSubFocus" style="margin: 0;">5 ejercicios | 15 series</p>
+                                        <button type="button" class="btn-reschedule-home-chip" onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))" style="font-size: 10px; color: #E5CBA7; background: rgba(0,0,0,0.45); border: 1px solid rgba(229,203,167,0.3); border-radius: 6px; padding: 2px 7px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; font-weight: 700;">
+                                            ⇄ Pasar a otro día
+                                        </button>
+                                    </div>
                                 </div>
                                 <button type="button" class="sens-btn-circle-arrow" id="dashStartWorkoutBtn"
                                     aria-label="Ir al entrenamiento de hoy" title="Comenzar entrenamiento">
@@ -3564,10 +3569,15 @@
                                 Día de descanso celular y adaptación del sistema nervioso. Hidratate bien, caminá suave
                                 y recargá energía para tu próximo estímulo de fuerza con Nico.
                             </p>
-                            <div class="sens-rest-actions">
+                            <div class="sens-rest-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches"
                                     style="font-size: 11.5px; border-color: rgba(229, 203, 167, 0.4); color: #E5CBA7;">
                                     Ver estiramientos de movilidad →
+                                </button>
+                                <button type="button" class="btn btn-outline btn-sm" id="btnRestBringWorkout"
+                                    onclick="openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))"
+                                    style="font-size: 11.5px; border-color: rgba(255, 255, 255, 0.25); color: #FFFFFF; font-weight: 700;">
+                                    ⇄ Traer entrenamiento a hoy
                                 </button>
                             </div>
                         </div>
@@ -7111,6 +7121,52 @@
         </div>
     </div>
 
+    <!-- Modal de Reprogramación / Pasar Entrenamiento de un Día a Otro -->
+    <div class="modal-overlay" id="modalMoveWorkoutSession" style="display: none; z-index: 10050;">
+        <div class="modal-card coach-batch-modal-card"
+            style="max-width: 520px; max-height: 90vh; display: flex; flex-direction: column; background: #121214; color: #FFFFFF; border-radius: 16px; border: 1px solid rgba(229, 203, 167, 0.35); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);">
+            <div
+                style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 14px;">
+                <div>
+                    <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">FLEXIBILIDAD DE PLANIFICACIÓN</span>
+                    <h3 id="moveWorkoutModalTitle"
+                        style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 3px 0 0 0;">Pasar Entrenamiento a Otro Día</h3>
+                    <p id="moveWorkoutModalSubtitle" style="font-size: 11.5px; color: #A1A1AA; margin: 2px 0 0 0;">
+                        Mové la sesión a otra fecha para no perder el estímulo prescripto.
+                    </p>
+                </div>
+                <button type="button" class="modal-close-btn" id="btnCloseMoveWorkoutModal" onclick="closeMoveWorkoutModal()"
+                    style="position: static; font-size: 24px; color: #A1A1AA; cursor: pointer; background: transparent; border: none;">&times;</button>
+            </div>
+
+            <!-- Resumen de la sesión a mover -->
+            <div id="moveWorkoutSourceSummary" style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.2); border-radius: 10px; padding: 10px 12px; margin-bottom: 14px;">
+                <!-- Inyectado dinámicamente -->
+            </div>
+
+            <div style="font-size: 10.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Atajos Rápidos:
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+                <button type="button" class="btn btn-outline btn-sm" id="btnQuickMoveTomorrow"
+                    style="font-size: 11px; padding: 6px 14px; border-color: rgba(229, 203, 167, 0.4); color: #E5CBA7; font-weight: 700; background: #18181B; border-radius: 8px;">
+                    Pasar a Mañana →
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" id="btnQuickMoveDayAfter"
+                    style="font-size: 11px; padding: 6px 14px; border-color: rgba(255, 255, 255, 0.2); color: #D4D4D8; font-weight: 700; background: #18181B; border-radius: 8px;">
+                    Pasar a Pasado Mañana →
+                </button>
+            </div>
+
+            <div style="font-size: 10.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                O elegí una fecha de la semana:
+            </div>
+            <div id="moveWorkoutTargetDaysList" style="overflow-y: auto; max-height: 240px; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; margin-bottom: 10px;">
+                <!-- Inyectado dinámicamente con los días de la semana -->
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de Acciones en Lote para Múltiples Días Seleccionados (Calendario Mensual) -->
     <div class="modal-overlay" id="modalCoachMultiDayActions">
         <div class="modal-card coach-batch-modal-card"
@@ -9303,7 +9359,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=11.2"></script>
+    <script src="app.js?v=11.3"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

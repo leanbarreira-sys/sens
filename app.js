@@ -6252,6 +6252,279 @@ window.resetWorkoutAttendance = function(dayKey, targetDateStr = null) {
     if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(effectiveDate);
 };
 
+// =============================================================================
+// REPROGRAMACIÓN DINÁMICA: PASAR ENTRENAMIENTO DE UN DÍA A OTRO
+// =============================================================================
+window.moveWorkoutSession = async function(sourceDateIso, targetDateIso, mode = 'auto') {
+    if (!sourceDateIso || !targetDateIso || sourceDateIso === targetDateIso) return;
+
+    const athId = getActiveAthleteId();
+    const workoutData = getCoachAthleteWorkoutData(athId) || {};
+    if (!workoutData.calendar_schedule) workoutData.calendar_schedule = {};
+    const datedSchedule = workoutData.calendar_schedule;
+
+    // 1. Obtener la sesión origen
+    let sourceSession = datedSchedule[sourceDateIso];
+    const sParts = sourceDateIso.split('-');
+    const sD = new Date(parseInt(sParts[0], 10), parseInt(sParts[1], 10) - 1, parseInt(sParts[2], 10));
+    const sDayIdx = sD.getDay();
+    const sDayKey = sDayIdx === 0 ? 'day7' : `day${sDayIdx}`;
+
+    if (!sourceSession || !Array.isArray(sourceSession.exercises) || sourceSession.exercises.length === 0) {
+        if (workoutData[sDayKey] && Array.isArray(workoutData[sDayKey].exercises) && workoutData[sDayKey].exercises.length > 0) {
+            sourceSession = JSON.parse(JSON.stringify(workoutData[sDayKey]));
+        }
+    }
+
+    if (!sourceSession || !Array.isArray(sourceSession.exercises) || sourceSession.exercises.length === 0) {
+        if (typeof showSensToast === 'function') {
+            showSensToast('No hay ejercicios en la fecha origen para mover.', 'warning');
+        }
+        return;
+    }
+
+    // 2. Obtener la sesión destino existente (si hay)
+    let targetSession = datedSchedule[targetDateIso];
+    const tParts = targetDateIso.split('-');
+    const tD = new Date(parseInt(tParts[0], 10), parseInt(tParts[1], 10) - 1, parseInt(tParts[2], 10));
+    const tDayIdx = tD.getDay();
+    const tDayKey = tDayIdx === 0 ? 'day7' : `day${tDayIdx}`;
+
+    if (!targetSession) {
+        if (workoutData[tDayKey] && Array.isArray(workoutData[tDayKey].exercises) && workoutData[tDayKey].exercises.length > 0) {
+            targetSession = JSON.parse(JSON.stringify(workoutData[tDayKey]));
+        }
+    }
+
+    const targetHasExercises = Boolean(targetSession && Array.isArray(targetSession.exercises) && targetSession.exercises.length > 0 && !targetSession.isRestDay);
+
+    // Si el destino ya tiene ejercicios y el modo es 'swap' (intercambiar):
+    if (targetHasExercises && mode === 'swap') {
+        datedSchedule[targetDateIso] = {
+            ...sourceSession,
+            dateStr: targetDateIso,
+            dayOfWeek: (typeof getDayNameFromKey === 'function') ? getDayNameFromKey(tDayKey) : 'Día',
+            completed: false,
+            isRestDay: false
+        };
+        datedSchedule[sourceDateIso] = {
+            ...targetSession,
+            dateStr: sourceDateIso,
+            dayOfWeek: (typeof getDayNameFromKey === 'function') ? getDayNameFromKey(sDayKey) : 'Día',
+            completed: false,
+            isRestDay: false
+        };
+    } else {
+        // Modo estándar: Mover al destino y dejar el origen como descanso
+        datedSchedule[targetDateIso] = {
+            ...sourceSession,
+            dateStr: targetDateIso,
+            dayOfWeek: (typeof getDayNameFromKey === 'function') ? getDayNameFromKey(tDayKey) : 'Día',
+            completed: false,
+            isRestDay: false
+        };
+        datedSchedule[sourceDateIso] = {
+            dateStr: sourceDateIso,
+            dayOfWeek: (typeof getDayNameFromKey === 'function') ? getDayNameFromKey(sDayKey) : 'Día',
+            title: 'Descanso',
+            isRestDay: true,
+            completed: false,
+            exercises: []
+        };
+    }
+
+    // Reset de ejecuciones de asistencia para ambas fechas
+    saveAthleteWorkoutExecution(athId, sD, {
+        completed: false,
+        missed: false,
+        attended: null,
+        durationMinutes: 0
+    });
+    saveAthleteWorkoutExecution(athId, tD, {
+        completed: false,
+        missed: false,
+        attended: null,
+        durationMinutes: 0
+    });
+
+    workoutData.calendar_schedule = datedSchedule;
+
+    // Persistir en LocalStorage, AppState y Supabase
+    if (typeof CoachMultiDayActionsManager !== 'undefined') {
+        await CoachMultiDayActionsManager.persistWorkoutData(workoutData);
+    } else {
+        localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(workoutData));
+        localStorage.setItem('sens_prescribed_workouts', JSON.stringify(workoutData));
+        if (supabaseClient && !athId.startsWith('mock_')) {
+            try { await persistPrescribedWorkoutsToSupabase(athId, workoutData); } catch (_) {}
+        }
+    }
+
+    // Navegar automáticamente a la fecha destino
+    const targetDateObj = new Date(targetDateIso + 'T12:00:00');
+    AppState.selectedDate = targetDateObj;
+    AppState.nutriSelectedDate = targetDateObj;
+    const targetDayKey = getDayKeyFromDate(targetDateObj);
+    AppState.currentDay = targetDayKey;
+
+    // Cerrar modal
+    if (typeof closeMoveWorkoutModal === 'function') closeMoveWorkoutModal();
+
+    if (typeof showSensToast === 'function') {
+        const dFmt = `${tParts[2]}/${tParts[1]}`;
+        const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const dName = dayNames[tD.getDay()];
+        showSensToast(`✓ Entrenamiento pasado con éxito al ${dName} ${dFmt}.`, 'champagne');
+    }
+
+    // Refrescar vistas
+    renderWorkoutDay(targetDayKey, targetDateObj);
+    renderWorkoutDaysNav();
+    if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+    if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(targetDateObj, targetDayKey);
+    if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(targetDateObj);
+    if (typeof CoachWorkoutsMaster !== 'undefined') CoachWorkoutsMaster.renderMonthCalendar();
+};
+
+window.openMoveWorkoutModal = function(sourceDateIso) {
+    if (!sourceDateIso) sourceDateIso = getFormattedDateKey(AppState.selectedDate || new Date());
+    const modal = document.getElementById('modalMoveWorkoutSession');
+    if (!modal) return;
+
+    const athId = getActiveAthleteId();
+    const workoutData = getCoachAthleteWorkoutData(athId) || {};
+    const datedSchedule = workoutData.calendar_schedule || {};
+
+    let sourceSession = datedSchedule[sourceDateIso];
+    const sParts = sourceDateIso.split('-');
+    const sDate = new Date(parseInt(sParts[0], 10), parseInt(sParts[1], 10) - 1, parseInt(sParts[2], 10));
+    const sDayIdx = sDate.getDay();
+    const sDayKey = sDayIdx === 0 ? 'day7' : `day${sDayIdx}`;
+
+    if (!sourceSession || !Array.isArray(sourceSession.exercises) || sourceSession.exercises.length === 0) {
+        if (workoutData[sDayKey] && Array.isArray(workoutData[sDayKey].exercises) && workoutData[sDayKey].exercises.length > 0) {
+            sourceSession = workoutData[sDayKey];
+        }
+    }
+
+    const exCount = (sourceSession && Array.isArray(sourceSession.exercises)) ? sourceSession.exercises.length : 0;
+    const sessionTitle = (sourceSession && sourceSession.title) || 'Entrenamiento';
+
+    const summaryEl = document.getElementById('moveWorkoutSourceSummary');
+    if (summaryEl) {
+        const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const dayName = dayNames[sDate.getDay()];
+        summaryEl.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                <div>
+                    <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase; font-weight: 700;">Sesión a Reprogramar</span>
+                    <h4 style="font-size: 13px; font-weight: 800; color: #FFFFFF; margin: 2px 0 0 0;">${sessionTitle}</h4>
+                    <span style="font-size: 11px; color: #E5CBA7;">${dayName} ${sParts[2]}/${sParts[1]} • ${exCount} ejercicios</span>
+                </div>
+                <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">REUBICAR</span>
+            </div>
+        `;
+    }
+
+    // Configurar atajos
+    const btnTomorrow = document.getElementById('btnQuickMoveTomorrow');
+    const btnDayAfter = document.getElementById('btnQuickMoveDayAfter');
+    
+    const d1 = new Date(sDate);
+    d1.setDate(d1.getDate() + 1);
+    const d1Iso = getFormattedDateKey(d1);
+    
+    const d2 = new Date(sDate);
+    d2.setDate(d2.getDate() + 2);
+    const d2Iso = getFormattedDateKey(d2);
+
+    if (btnTomorrow) {
+        btnTomorrow.textContent = `Mañana (${d1.getDate()}/${d1.getMonth() + 1}) →`;
+        btnTomorrow.onclick = () => window.moveWorkoutSession(sourceDateIso, d1Iso, 'replace');
+    }
+    if (btnDayAfter) {
+        btnDayAfter.textContent = `Pasado Mañana (${d2.getDate()}/${d2.getMonth() + 1}) →`;
+        btnDayAfter.onclick = () => window.moveWorkoutSession(sourceDateIso, d2Iso, 'replace');
+    }
+
+    // Lista de fechas de los próximos 7 días a partir de hoy
+    const listEl = document.getElementById('moveWorkoutTargetDaysList');
+    if (listEl) {
+        let html = '';
+        const today = new Date();
+        const dayNamesShort = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
+
+        for (let offset = 0; offset < 7; offset++) {
+            const curD = new Date(today);
+            curD.setDate(today.getDate() + offset);
+            const curIso = getFormattedDateKey(curD);
+            if (curIso === sourceDateIso) continue;
+
+            let curSession = datedSchedule[curIso];
+            if (!curSession) {
+                const dayIdx = curD.getDay();
+                const key = dayIdx === 0 ? 'day7' : `day${dayIdx}`;
+                curSession = workoutData[key];
+            }
+
+            const hasWk = Boolean(curSession && Array.isArray(curSession.exercises) && curSession.exercises.length > 0 && !curSession.isRestDay);
+            const title = hasWk ? (curSession.title || 'Entrenamiento') : 'Día Libre / Descanso';
+            const dow = dayNamesShort[curD.getDay()];
+            const isToday = offset === 0;
+
+            html += `
+                <div class="sens-move-day-row" style="background: #18181B; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 36px; height: 36px; border-radius: 8px; background: ${hasWk ? 'rgba(229,203,167,0.15)' : 'rgba(255,255,255,0.06)'}; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="font-size: 8.5px; font-weight: 800; color: ${hasWk ? '#E5CBA7' : '#A1A1AA'};">${dow}</span>
+                            <span style="font-size: 12px; font-weight: 800; color: #FFFFFF;">${curD.getDate()}</span>
+                        </div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <strong style="font-size: 12px; color: #FFFFFF;">${isToday ? 'Hoy: ' : ''}${title}</strong>
+                                ${hasWk ? `<span class="pill pill-champagne" style="font-size: 8px; padding: 1px 4px;">Ocupado</span>` : `<span class="pill pill-dark" style="font-size: 8px; padding: 1px 4px; color: #10B981; border-color: rgba(16,185,129,0.3);">Libre</span>`}
+                            </div>
+                            <span style="font-size: 10.5px; color: #71717A;">${hasWk ? `${curSession.exercises.length} ejercicios planificados` : 'Disponible para tu sesión'}</span>
+                        </div>
+                    </div>
+                    <div>
+                        ${hasWk ? `
+                            <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 10px; padding: 4px 8px; color: #E5CBA7; border-color: rgba(229,203,167,0.4); font-weight: 700; border-radius: 6px; cursor: pointer;" title="Intercambia los entrenamientos de ambos días">
+                                ⇄ Intercambiar
+                            </button>
+                        ` : `
+                            <button type="button" class="btn btn-primary btn-xs" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'replace')" style="font-size: 10px; padding: 5px 12px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 6px; cursor: pointer;">
+                                Mover aquí →
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+        listEl.innerHTML = html;
+    }
+
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+};
+
+window.closeMoveWorkoutModal = function() {
+    const modal = document.getElementById('modalMoveWorkoutSession');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+    }
+};
+
+window.moveWorkoutToTomorrow = function(sourceDateIso) {
+    if (!sourceDateIso) sourceDateIso = getFormattedDateKey(AppState.selectedDate || new Date());
+    const sourceDate = new Date(sourceDateIso + 'T12:00:00');
+    const tomorrow = new Date(sourceDate);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const targetDateIso = getFormattedDateKey(tomorrow);
+    window.moveWorkoutSession(sourceDateIso, targetDateIso, 'replace');
+};
+
 window.toggleExerciseFinished = function(exId, dayKey, targetDateStr = null) {
     const effectiveDate = targetDateStr ? new Date(targetDateStr + 'T12:00:00') : (AppState.selectedDate || getDateFromDayKey(dayKey));
     const dateIso = getFormattedDateKey(effectiveDate);
@@ -6479,19 +6752,35 @@ function renderWorkoutDay(dayKey, targetDate = null) {
             `;
         } else if (isMissed) {
             attendanceBox.innerHTML = `
-                <div class="workout-attendance-missed">
-                    <div class="attendance-missed-info">
+                <div class="workout-attendance-missed" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
                         <span style="font-size: 11.5px; color: #A1A1AA;">✕ Descanso registrado</span>
+                        <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer;">
+                            Cambiar a completado →
+                        </button>
                     </div>
-                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer;">
-                        Cambiar a completado →
-                    </button>
+                    ${allDayExercises.length > 0 ? `
+                    <div style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                        <span style="font-size: 11px; color: #E5CBA7; font-weight: 600;">¿Querés reprogramar este entrenamiento?</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="btn btn-outline btn-xs btn-move-tomorrow" onclick="moveWorkoutToTomorrow('${dateIso}')" style="font-size: 10px; padding: 4px 8px; color: #E5CBA7; border-color: rgba(229,203,167,0.4); font-weight: 700; border-radius: 6px; background: #18181B;">Pasar a Mañana →</button>
+                            <button type="button" class="btn btn-primary btn-xs btn-move-custom" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 10px; padding: 4px 8px; background: #E5CBA7; color: #09090B; font-weight: 800; border: none; border-radius: 6px;">Elegir Fecha</button>
+                        </div>
+                    </div>` : ''}
                 </div>
             `;
         } else {
             attendanceBox.innerHTML = `
                 <div class="workout-attendance-pending" id="workoutAttendancePendingPane">
-                    <span class="attendance-prompt">¿Entrenaste hoy?</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
+                        <span class="attendance-prompt" style="font-size: 12px; font-weight: 800; color: #FFFFFF;">¿Entrenaste hoy?</span>
+                        ${allDayExercises.length > 0 ? `
+                        <button type="button" class="btn-link-subtle" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 11px; color: #E5CBA7; background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 700;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                            Pasar a otro día
+                        </button>
+                        ` : ''}
+                    </div>
                     <div class="attendance-actions-wrap">
                         <button type="button" class="btn btn-sm btn-workout-attended" onclick="showWorkoutTimePicker('${dayKey}', ${estMinutes}, '${dateIso}')">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -6529,12 +6818,70 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         }
     }
 
+    // 4.5. Detección de sesión no completada de ayer para recuperación/reprogramación
+    let missedRecoveryHtml = '';
+    const todayIso = getFormattedDateKey(new Date());
+    if (dateIso === todayIso) {
+        const yDate = new Date();
+        yDate.setDate(yDate.getDate() - 1);
+        const yDateIso = getFormattedDateKey(yDate);
+        const yDayKey = getDayKeyFromDate(yDate);
+        const yDayData = (data && data.calendar_schedule && data.calendar_schedule[yDateIso])
+            ? data.calendar_schedule[yDateIso]
+            : (data && data[yDayKey] ? data[yDayKey] : null);
+
+        const yAttendanceKey = `attendance_${athId}_${yDateIso}`;
+        let yAttendance = {};
+        try {
+            yAttendance = JSON.parse(localStorage.getItem(yAttendanceKey) || '{}');
+        } catch (_) {}
+
+        const yHasExercises = yDayData && !yDayData.isRestDay && Array.isArray(yDayData.exercises) && yDayData.exercises.length > 0;
+        const yWasMissed = yAttendance.attended === false || yAttendance.missed === true;
+        const yWasNotCompleted = !yAttendance.completed && !yAttendance.attended;
+
+        if (yHasExercises && (yWasMissed || yWasNotCompleted)) {
+            missedRecoveryHtml = `
+                <div class="sens-missed-recovery-banner" style="background: linear-gradient(135deg, rgba(229, 203, 167, 0.12), rgba(18, 18, 20, 0.95)); border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 14px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(229, 203, 167, 0.15); display: flex; align-items: center; justify-content: center; color: #E5CBA7; flex-shrink: 0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; font-weight: 800; color: #FFFFFF;">¿No pudiste entrenar ayer?</div>
+                            <div style="font-size: 11px; color: #A1A1AA;">Tenías asignado <strong style="color: #E5CBA7;">${yDayData.title || 'Entrenamiento'}</strong> (${yDayData.exercises.length} ejercicios). Podés traerlo a hoy o reprogramarlo.</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="font-size: 11px; padding: 6px 12px; border-color: rgba(229,203,167,0.5); color: #E5CBA7; font-weight: 700; border-radius: 8px; background: rgba(0,0,0,0.4); cursor: pointer;">
+                            Traer sesión de ayer a hoy →
+                        </button>
+                        <button type="button" class="btn btn-primary btn-xs" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="font-size: 11px; padding: 6px 12px; background: #E5CBA7; color: #09090B; font-weight: 800; border: none; border-radius: 8px; cursor: pointer;">
+                            Reprogramar ayer
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
     // 5. Estado Vacío si no hay ejercicios para el filtro
     if (exercisesToShow.length === 0) {
-        container.innerHTML = `
+        container.innerHTML = missedRecoveryHtml + `
             <div style="background:#121214; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:32px 20px; text-align:center; margin-bottom:24px;">
-                <p style="color:var(--text-muted); margin-bottom:12px;">No hay ejercicios asignados en este grupo para ${dayData.title || dayName}.</p>
-                ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()">+ Asignar ejercicios desde el catálogo (Nico)</button>` : ''}
+                <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(229, 203, 167, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; color: #E5CBA7;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">Día de Descanso &amp; Recuperación</h4>
+                <p style="color:var(--text-muted); font-size: 12px; margin-bottom: 14px; max-width: 380px; margin-left: auto; margin-right: auto;">
+                    No tenés ejercicios asignados para esta fecha. Si querés entrenar hoy, podés pasar un entrenamiento de otro día de tu semana.
+                </p>
+                <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 11.5px; border-color: rgba(229, 203, 167, 0.4); color: #E5CBA7; font-weight: 700; border-radius: 8px;">
+                        ⇄ Traer entrenamiento a esta fecha
+                    </button>
+                    ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()">+ Asignar ejercicios desde el catálogo (Nico)</button>` : ''}
+                </div>
             </div>
         `;
         return;
@@ -6666,7 +7013,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         groupedHtml += `</div>`;
     });
 
-    container.innerHTML = groupedHtml;
+    container.innerHTML = missedRecoveryHtml + groupedHtml;
     if (window.SensBatteryPerfGovernor && typeof window.SensBatteryPerfGovernor.observeVideosInContainer === 'function') {
         window.SensBatteryPerfGovernor.observeVideosInContainer(container);
     }
@@ -16101,7 +16448,39 @@ function renderWorkoutDaysNav() {
             ? data.calendar_schedule[dKey]
             : (data && data[dayKey] ? data[dayKey] : {});
         const heroNum = dayDate.getDate();
-        const badgeHtml = getDayFocusBadge(dayData, dayDate);
+
+        // Estado limpio y consistente con la sección de Inicio (Cero píldoras de tipo de ejercicio)
+        const modality = dayData.modality;
+        const execution = getAthleteWorkoutExecution(athId, dayDate);
+        const isCompleted = Boolean(execution && execution.completed);
+
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const dayDateStart = new Date(dayDate);
+        dayDateStart.setHours(0, 0, 0, 0);
+        const isPast = dayDateStart < todayStart;
+        const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0) && !dayData.isRestDay;
+
+        let badgeHtml = '';
+        if (isCompleted) {
+            badgeHtml = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
+        } else if (isPast) {
+            if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
+                badgeHtml = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
+            } else {
+                badgeHtml = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
+            }
+        } else if (modality === 'presencial') {
+            badgeHtml = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
+        } else if (modality === 'online') {
+            badgeHtml = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
+        } else if (modality === 'autonomo') {
+            badgeHtml = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
+        } else if (hasExercises) {
+            badgeHtml = `<span class="sens-day-badge plan" style="background: rgba(229,203,167,0.15); color: #E5CBA7; font-weight: 700; font-size: 8.5px; border-radius: 4px; padding: 1px 4px;" title="Rutina planificada">Plan</span>`;
+        } else {
+            badgeHtml = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
+        }
 
         html += `
             <button type="button" class="sens-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
@@ -16304,8 +16683,12 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     const athId = getActiveAthleteId();
     const hasRoutine = athleteHasAssignedRoutine(athId);
     const data = getCoachAthleteWorkoutData(athId);
-    const dayData = (data && data[dayKey]) ? data[dayKey] : null;
-    const exercises = (dayData && Array.isArray(dayData.exercises)) ? dayData.exercises : [];
+    const dateIso = getFormattedDateKey(selectedDate);
+    const dayData = (data && data.calendar_schedule && data.calendar_schedule[dateIso])
+        ? data.calendar_schedule[dateIso]
+        : ((data && data[dayKey]) ? data[dayKey] : null);
+    const isRest = dayData?.isRestDay || dayData?.modality === 'descanso';
+    const exercises = (!isRest && dayData && Array.isArray(dayData.exercises)) ? dayData.exercises : [];
     const isToday = isSameDay(selectedDate, new Date());
 
     // Label de fecha/dominio superior (Eyebrow Champagne)
@@ -16314,7 +16697,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     // Caso A: Descanso o sin ejercicios asignados
-    if (!hasRoutine || exercises.length === 0 || dayData?.modality === 'descanso') {
+    if (!hasRoutine || exercises.length === 0 || isRest) {
         if (activePane) activePane.style.display = 'none';
         if (restPane) restPane.style.display = 'block';
         if (typeof updateHomeCardsStreakPills === 'function') {
