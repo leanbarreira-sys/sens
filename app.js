@@ -16372,8 +16372,8 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         durationPill.textContent = `~${details.totalKcal} kcal | ~${details.estMinutes} min`;
     }
 
-    // 4. Carrusel Interactivo de Videos de Ejercicios de la Rutina de Hoy (Swipe + Flechas + Dots)
-    dashWorkoutCarouselExercises = exercises;
+    // 4. Carrusel Heroico en Inicio: Videos Exclusivos de Nico (100% MP4s Editados de VIDEOS-NICO)
+    dashWorkoutCarouselSlides = getHomeHeroNicoSlides(exercises, athId);
     dashWorkoutCarouselIndex = 0;
     dashWorkoutCarouselDetails = details;
     dashWorkoutCarouselDate = selectedDate;
@@ -16386,21 +16386,153 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 }
 
-let dashWorkoutCarouselExercises = [];
+let dashWorkoutCarouselSlides = [];
 let dashWorkoutCarouselIndex = 0;
 let dashWorkoutCarouselDetails = null;
 let dashWorkoutCarouselDate = null;
 let dashWorkoutCarouselAthId = null;
 
 /**
- * Renderiza el ejercicio activo en el carrusel de video del Dashboard
+ * Catálogo Curado de Videos de Nico (VIDEOS-NICO) por Grupo Muscular para el Hero de Inicio
+ */
+const SENS_NICO_HERO_VIDEOS = {
+    pecho: [
+        { file: '43bad14a-f720-45bd-8e3e-acdb7a2cd3ec_press-de-banca-plano-con-mancuernas.mp4', title: 'Pectorales', subtitle: 'Empuje Horizontal y Fuerza Pectoral', exName: 'Press de Banca Plano con Mancuernas' },
+        { file: '76ecb7d1-3d55-488e-be20-e426de097d42_press-de-banca-con-barra.mp4', title: 'Pectorales', subtitle: 'Fuerza Máxima de Pecho', exName: 'Press de Banca con Barra' },
+        { file: '071238a5-6f25-4de0-a588-39ed050c5c1f_press-inclinado-con-mancuernas-30.mp4', title: 'Pecho Superior', subtitle: 'Haz Clavicular de Pectoral', exName: 'Press Inclinado con Mancuernas' }
+    ],
+    espalda: [
+        { file: '7f93fada-7563-4965-b189-2ffadbd5a967_remo-con-mancuerna-a-una-mano-en-banco.mp4', title: 'Espalda & Dorsales', subtitle: 'Tracción Horizontal Unilateral', exName: 'Remo con Mancuerna a Una Mano' },
+        { file: 'ee1f1f57-4094-49f1-864b-e1e8c2d3bfbb_jalon-al-pecho-en-polea-con-agarre-neutro.mp4', title: 'Dorsales & Amplitud', subtitle: 'Tracción Vertical Controlada', exName: 'Jalón al Pecho en Polea' },
+        { file: '2afdedbf-42e1-4b99-a8d9-def165116616_remo-con-barra-inclinado-agarre-prono.mp4', title: 'Espalda Media & Densidad', subtitle: 'Tracción con Barra', exName: 'Remo con Barra Inclinado' }
+    ],
+    piernas: [
+        { file: 'c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4', title: 'Piernas & Cuádriceps', subtitle: 'Patrón de Sentadilla y Control de Rodilla', exName: 'Sentadilla Goblet con Mancuerna' },
+        { file: 'aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4', title: 'Isquios & Glúteos', subtitle: 'Bisagra de Cadera y Cadena Posterior', exName: 'Peso Muerto Rumano' },
+        { file: '1c022132-227d-4411-bc96-8e13569090d0_hip-thrust-con-barra-en-banco.mp4', title: 'Glúteos & Cadera', subtitle: 'Empuje de Cadera y Bloqueo Glúteo', exName: 'Hip Thrust con Barra' },
+        { file: '7e524450-6775-42c5-9b29-8fe2620db315_prensa-45.mp4', title: 'Cuádriceps & Tren Inferior', subtitle: 'Empuje en Prensa Inclinada 45°', exName: 'Prensa 45°' }
+    ],
+    hombros: [
+        { file: '9e317f1f-4918-4f3e-9c57-eb0adfe7f004_press-militar-sentado-con-mancuernas.mp4', title: 'Hombros & Deltoides', subtitle: 'Empuje Vertical Escapular', exName: 'Press Militar con Mancuernas' },
+        { file: 'fd652a0e-feb9-4819-9ab2-62b74dec247d_elevaciones-laterales-con-mancuerna.mp4', title: 'Deltoides Lateral', subtitle: 'Abducción y Amplitud de Hombros', exName: 'Elevaciones Laterales con Mancuerna' },
+        { file: '03affcc3-25de-42a9-acd9-5cc52f73a82a_face-pull-en-polea-con-cuerda-a-la-frente.mp4', title: 'Salud Escapular & Deltoides', subtitle: 'Retracción y Rotación Externa', exName: 'Face Pull en Polea' }
+    ],
+    biceps: [
+        { file: 'dfbdc69a-6846-406e-874e-899f8917a28a_curl-de-biceps-con-mancuernas-supinadas.mp4', title: 'Bíceps & Flexores', subtitle: 'Flexión de Codo con Supinación', exName: 'Curl de Bíceps con Mancuernas' },
+        { file: 'd2a85dba-c813-4d73-b420-9839e8e52b15_curl-martillo-con-mancuernas-o-cuerda.mp4', title: 'Bíceps & Braquial', subtitle: 'Agarre Neutro y Grosor', exName: 'Curl Martillo con Mancuernas' }
+    ],
+    triceps: [
+        { file: 'b30b2c58-0ad3-4f55-abc3-2d2b32704362_extension-de-triceps-en-polea-alta-con-cuerda.mp4', title: 'Tríceps & Brazos', subtitle: 'Extensión en Polea Alta', exName: 'Extensión de Tríceps con Cuerda' },
+        { file: '2c8298a7-f894-461c-8d49-23429e4510bd_press-frances-con-mancuernas-en-banco-plano.mp4', title: 'Tríceps & Extensores', subtitle: 'Extensión en Banco Plano', exName: 'Press Francés con Mancuernas' }
+    ],
+    abdominales: [
+        { file: '2ae448e6-0a99-4664-898d-bfbf94080b37_plancha-frontal-con-retroversion-pelvica-rkc.mp4', title: 'Core & Abdomen', subtitle: 'Estabilidad Antiextensión Lumbar', exName: 'Plancha Frontal RKC' },
+        { file: '69ee9cd0-6a58-4e5c-875a-80e273f430ab_deadbug-con-control-lumbar-y-respiracion.mp4', title: 'Core & Estabilidad', subtitle: 'Control Lumbo-Pélvico Coordinado', exName: 'Deadbug con Control Lumbar' },
+        { file: '1926f876-2f59-409c-ba98-10ed620b95f9_press-pallof-con-banda-o-polea.mp4', title: 'Core Antirrotación', subtitle: 'Control de Torso en Polea', exName: 'Press Pallof con Polea' }
+    ],
+    antebrazos: [
+        { file: '9ad152e4-49ca-4768-8b9e-b1a059e2c40d_paseo-del-granjero-con-mancuernas-farmer-walk.mp4', title: 'Antebrazos & Agarre', subtitle: 'Fuerza de Agarre y Estabilidad de Carga', exName: 'Paseo del Granjero' }
+    ],
+    zona_lumbar: [
+        { file: 'e434ec6f-fe4f-4007-9daf-71ab2e92e53d_bird-dog-dinamico-controlado.mp4', title: 'Zona Lumbar & Movilidad', subtitle: 'Control de Cadena Posterior', exName: 'Bird-Dog Dinámico' },
+        { file: 'fe1dba64-4f45-4aa3-bbd2-8266736028a1_movilidad-gato-vaca-y-descompresion-espinal.mp4', title: 'Movilidad Espinal', subtitle: 'Descompresión y Rango Articular', exName: 'Gato-Vaca & Descompresión' }
+    ]
+};
+
+function getHomeHeroNicoSlides(exercises, athId) {
+    if (!Array.isArray(exercises) || exercises.length === 0) {
+        return [{
+            muscleKey: 'piernas',
+            title: 'Entrenamiento del Día',
+            subtitle: 'Preparación y técnica biomecánica',
+            videoPath: 'EJERCICIOS/exercises-final/videos/VIDEOS-NICO/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4'
+        }];
+    }
+
+    const detectedMuscles = new Map();
+    exercises.forEach(ex => {
+        const resolved = (typeof window.getResolvedExercise === 'function')
+            ? window.getResolvedExercise(ex, athId)
+            : ex;
+        const tax = (typeof getExerciseTaxonomy === 'function')
+            ? getExerciseTaxonomy(resolved)
+            : null;
+
+        let m = (tax?.muscleGroup || resolved?.nivel_2_grupo_muscular || resolved?.category || 'piernas').toLowerCase().trim();
+        let sub = (tax?.subMuscle || resolved?.nivel_3_submusculo_piernas || '').toLowerCase().trim();
+
+        if (m.includes('pecho') || m.includes('chest') || m.includes('push')) m = 'pecho';
+        else if (m.includes('espalda') || m.includes('back') || m.includes('pull')) m = 'espalda';
+        else if (m.includes('hombro') || m.includes('shoulder')) m = 'hombros';
+        else if (m.includes('bicep') || m.includes('bícep')) m = 'biceps';
+        else if (m.includes('tricep') || m.includes('trícep')) m = 'triceps';
+        else if (m.includes('abdom') || m.includes('core')) m = 'abdominales';
+        else if (m.includes('antebrazo') || m.includes('forearm')) m = 'antebrazos';
+        else if (m.includes('lumbar')) m = 'zona_lumbar';
+        else if (m.includes('pierna') || m.includes('leg') || m.includes('glute') || m.includes('quad')) m = 'piernas';
+        else m = 'piernas';
+
+        if (!detectedMuscles.has(m)) {
+            detectedMuscles.set(m, { count: 0, subMuscles: new Set() });
+        }
+        const data = detectedMuscles.get(m);
+        data.count++;
+        if (sub) data.subMuscles.add(sub);
+    });
+
+    const slides = [];
+    detectedMuscles.forEach((data, muscleKey) => {
+        const candidates = SENS_NICO_HERO_VIDEOS[muscleKey] || SENS_NICO_HERO_VIDEOS.piernas;
+
+        if (muscleKey === 'piernas' && data.subMuscles.size > 1) {
+            const hasQuads = data.subMuscles.has('cuadriceps');
+            const hasPosterior = data.subMuscles.has('isquios') || data.subMuscles.has('gluteos');
+
+            if (hasQuads) {
+                const vid = candidates.find(c => c.file.includes('sentadilla') || c.file.includes('prensa')) || candidates[0];
+                slides.push({
+                    muscleKey: 'cuadriceps',
+                    title: 'Cuádriceps & Tren Inferior',
+                    subtitle: `${data.count} ejercicios en sesión • ${vid.subtitle}`,
+                    videoPath: `EJERCICIOS/exercises-final/videos/VIDEOS-NICO/${vid.file}`
+                });
+            }
+            if (hasPosterior) {
+                const vid = candidates.find(c => c.file.includes('peso-muerto') || c.file.includes('hip-thrust')) || candidates[1];
+                slides.push({
+                    muscleKey: 'gluteos_isquios',
+                    title: 'Glúteos & Cadena Posterior',
+                    subtitle: `${data.count} ejercicios en sesión • ${vid.subtitle}`,
+                    videoPath: `EJERCICIOS/exercises-final/videos/VIDEOS-NICO/${vid.file}`
+                });
+            }
+            return;
+        }
+
+        const selectedVid = candidates[0];
+        slides.push({
+            muscleKey,
+            title: selectedVid.title,
+            subtitle: `${data.count} ejercicio${data.count > 1 ? 's' : ''} en sesión • ${selectedVid.subtitle}`,
+            videoPath: `EJERCICIOS/exercises-final/videos/VIDEOS-NICO/${selectedVid.file}`
+        });
+    });
+
+    return slides.length > 0 ? slides : [{
+        muscleKey: 'piernas',
+        title: 'Entrenamiento del Día',
+        subtitle: `${exercises.length} ejercicios prescriptos`,
+        videoPath: 'EJERCICIOS/exercises-final/videos/VIDEOS-NICO/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4'
+    }];
+}
+
+/**
+ * Renderiza el grupo muscular / video de Nico activo en el carrusel del Dashboard
  */
 function renderDashWorkoutCarouselExercise(index) {
-    if (!dashWorkoutCarouselExercises || dashWorkoutCarouselExercises.length === 0) return;
-    dashWorkoutCarouselIndex = (index + dashWorkoutCarouselExercises.length) % dashWorkoutCarouselExercises.length;
-    const currEx = dashWorkoutCarouselExercises[dashWorkoutCarouselIndex];
-    const details = dashWorkoutCarouselDetails || { title: 'Entrenamiento', subtitle: '' };
-    const athId = dashWorkoutCarouselAthId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+    if (!dashWorkoutCarouselSlides || dashWorkoutCarouselSlides.length === 0) return;
+    dashWorkoutCarouselIndex = (index + dashWorkoutCarouselSlides.length) % dashWorkoutCarouselSlides.length;
+    const slide = dashWorkoutCarouselSlides[dashWorkoutCarouselIndex];
     const sDate = dashWorkoutCarouselDate || new Date();
     const isToday = isSameDay(sDate, new Date());
 
@@ -16413,42 +16545,27 @@ function renderDashWorkoutCarouselExercise(index) {
     const dotsContainer = document.getElementById('dashWorkoutDotsIndicator');
     const navArrows = document.getElementById('dashWorkoutNavArrows');
 
-    // 1. Visibilidad de Flechas & Paginador de Puntos
+    // 1. Visibilidad de Flechas & Paginador de Puntos (Solo si hay múltiples grupos en el día)
     if (navArrows) {
-        navArrows.style.display = dashWorkoutCarouselExercises.length > 1 ? 'flex' : 'none';
+        navArrows.style.display = dashWorkoutCarouselSlides.length > 1 ? 'flex' : 'none';
     }
     if (dotsContainer) {
-        if (dashWorkoutCarouselExercises.length > 1) {
-            dotsContainer.innerHTML = dashWorkoutCarouselExercises.map((_, i) =>
-                `<span class="sens-video-dot ${i === dashWorkoutCarouselIndex ? 'active' : ''}" data-idx="${i}" title="Ejercicio ${i + 1}"></span>`
+        if (dashWorkoutCarouselSlides.length > 1) {
+            dotsContainer.innerHTML = dashWorkoutCarouselSlides.map((s, i) =>
+                `<span class="sens-video-dot ${i === dashWorkoutCarouselIndex ? 'active' : ''}" data-idx="${i}" title="${s.title}"></span>`
             ).join('');
         } else {
             dotsContainer.innerHTML = '';
         }
     }
 
-    // 2. Resolver Ejercicio y Técnica de Video
-    const resolved = (typeof window.getResolvedExercise === 'function')
-        ? window.getResolvedExercise(currEx, athId)
-        : currEx;
-
-    let targetVideo = 'EJERCICIOS/videos_loop_final/aad15275-4bb0-4459-a180-6c9f5dbe6d95_peso-muerto-rumano-con-mancuernas.mp4';
-    let targetPoster = '';
-    if (resolved && (resolved.video_local_path || resolved.video_url || resolved.video)) {
-        targetVideo = resolved.video_local_path || resolved.video_url || resolved.video;
-        targetPoster = resolved.poster_url || '';
-    }
-
+    // 2. Video de Nico (Siempre MP4 editado de alta calidad desde VIDEOS-NICO)
+    const targetVideo = slide.videoPath;
     if (videoPlayer && videoSource) {
         const currentSrc = videoSource.getAttribute('src');
         if (currentSrc !== targetVideo) {
             if (videoSkeleton) videoSkeleton.classList.remove('is-hidden');
             videoSource.setAttribute('src', targetVideo);
-            if (targetPoster) {
-                videoPlayer.setAttribute('poster', targetPoster);
-            } else {
-                videoPlayer.removeAttribute('poster');
-            }
             videoPlayer.load();
             videoPlayer.play().catch(() => {});
         }
@@ -16457,26 +16574,18 @@ function renderDashWorkoutCarouselExercise(index) {
         }
     }
 
-    // 3. Sincronizar Textos y Métricas de la Rutina
-    const exName = resolved?.name || currEx?.name || details.title;
-    const seriesCount = currEx?.sets || resolved?.default_sets || 3;
-    const repsCount = currEx?.reps || resolved?.default_reps || 10;
-
-    if (dashWorkoutCarouselExercises.length > 1) {
-        if (dayDateLabel) {
+    // 3. Sincronizar Textos y Foco Muscular en el Hero de Inicio
+    if (dayDateLabel) {
+        if (dashWorkoutCarouselSlides.length > 1) {
             dayDateLabel.textContent = isToday
-                ? `Entrenamiento de Hoy • Ej. ${dashWorkoutCarouselIndex + 1}/${dashWorkoutCarouselExercises.length}`
-                : `Entrenamiento • Ej. ${dashWorkoutCarouselIndex + 1}/${dashWorkoutCarouselExercises.length}`;
-        }
-        if (focusTitle) focusTitle.textContent = exName;
-        if (subFocus) subFocus.textContent = `${seriesCount} series × ${repsCount} reps • ${details.title}`;
-    } else {
-        if (dayDateLabel) {
+                ? `Entrenamiento de Hoy • Grupo ${dashWorkoutCarouselIndex + 1}/${dashWorkoutCarouselSlides.length}`
+                : `Entrenamiento • Grupo ${dashWorkoutCarouselIndex + 1}/${dashWorkoutCarouselSlides.length}`;
+        } else {
             dayDateLabel.textContent = isToday ? 'Entrenamiento de Hoy' : `Entrenamiento del ${formatDateDDMM(sDate)}`;
         }
-        if (focusTitle) focusTitle.textContent = details.title;
-        if (subFocus) subFocus.textContent = details.subtitle;
     }
+    if (focusTitle) focusTitle.textContent = slide.title;
+    if (subFocus) subFocus.textContent = slide.subtitle;
 }
 
 /**
