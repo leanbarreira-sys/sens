@@ -16375,6 +16375,67 @@ body.in-portal #coachHubView {
     line-height: 1.35;
 }
 
+.sens-mkt-tpl-desc {
+    font-size: 10px;
+    color: #575659 !important;
+    line-height: 1.35;
+    margin-top: 2px;
+}
+
+/* Selector Modular de Capas Visibles SENS */
+.sens-mkt-layers-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.sens-layer-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 11px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    background: #FFFFFF !important;
+    color: #575659 !important;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+}
+
+.sens-layer-toggle:hover {
+    background: #F3F1ED !important;
+    border-color: rgba(18, 18, 20, 0.18) !important;
+}
+
+.sens-layer-toggle.active {
+    background: #121214 !important;
+    border-color: #121214 !important;
+    color: #FAF9F6 !important;
+    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.15);
+}
+
+.sens-layer-toggle.active .sens-layer-check {
+    color: #E5CBA7 !important;
+    font-weight: 900;
+}
+
+.sens-layer-toggle:not(.active) .sens-layer-check {
+    opacity: 0.35;
+}
+
+.sens-mkt-input-wrap {
+    transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.sens-mkt-input-wrap.is-layer-hidden {
+    opacity: 0.42;
+    filter: grayscale(0.85);
+}
+
 /* Paso 5: Líneas de tiempo & Diapositivas */
 .sens-mkt-timeline-bar {
     background: #F3F1ED !important;

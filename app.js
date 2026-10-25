@@ -20484,210 +20484,120 @@ function saveCoachDbItemEditorChanges() {
 }
 
 // =============================================================================
-// ESTACIÓN 5: GROWTH MARKETING STUDIO SENS (PLUG & PLAY APB • 12 TEMPLATES)
+// ESTACIÓN 5: GROWTH MARKETING STUDIO SENS (ARQUETIPOS DEL BRANDBOOK)
 // =============================================================================
 const SENS_MARKETING_TEMPLATES = [
     {
-        id: 'tpl_error_biomecanico',
-        name: '1. El Error #1 (Stop-Scroll)',
-        badge: 'ALTA RETENCIÓN',
+        id: 'tpl_editorial_minimalist',
+        name: '1. Minimalist Editorial (Sin Pills)',
+        badge: 'ESTILO EDITORIAL',
+        desc: 'Pureza visual total. Cero cajas que tapen el video o foto.',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: false },
         scenes: [
-            { eyebrow: 'BIOMECÁNICA SENS', headline: 'EL ERROR #1 AL HACER SENTADILLA', sub: 'Si tus talones se despegan o rebotás abajo, perdés tensión muscular y sobrecargás la rodilla.', c1: 'Foco: Cuádriceps', c2: '~11 kcal / serie', c3: 'Miralo hasta el final' },
-            { eyebrow: 'CORRECCIÓN TÉCNICA', headline: 'BAJÁ EN 3 SEGUNDOS CONTROLADOS', sub: 'Mantené el trípode plantar firme, pecho alto y pausa 1 segundo en el punto más bajo.', c1: 'Cadencia 3-1-1-0', c2: 'RIR 2 Seguro', c3: 'Cero dolor lumbar' },
-            { eyebrow: 'ENTRENÁ CON SENTIDO', headline: '¿QUERÉS ENTRENAR SIN DOLOR?', sub: 'Diagnóstico biomecánico + Plan personalizado Presencial CABA, Online o App.', c1: 'Presencial CABA', c2: 'Online / App', c3: 'Escribime SENS →' }
+            { eyebrow: 'BIOMECÁNICA SENS', headline: 'EL ERROR #1 AL HACER SENTADILLA', sub: 'Si tus talones se despegan o rebotás abajo, perdés tensión muscular y sobrecargás la rodilla.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'CONTROL MOTOR', headline: 'BAJÁ EN 3 SEGUNDOS CONTROLADOS', sub: 'Mantené el trípode plantar firme, pecho alto y pausa 1 segundo en el punto más bajo.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'MAKES SENS', headline: '¿QUERÉS ENTRENAR SIN DOLOR?', sub: 'Escribime SENS por mensaje directo y evaluamos tu caso (Presencial CABA o App).', c1: '', c2: '', c3: '' }
         ],
         slides: [
-            { eyebrow: 'DESLIZÁ • 1/4', headline: 'EL ERROR #1 QUE FRENA TUS PIERNAS', sub: 'Por qué subir kilos sin control excéntrico te estanca y fatiga tus articulaciones.', c1: 'Biomecánica', c2: 'Fuerza Real', c3: 'Deslizá →' },
-            { eyebrow: 'EL PROBLEMA • 2/4', headline: 'REBOTAR ABAJO MATA LA TENSIÓN', sub: 'Cuando usás inercia en vez de control muscular, el tendón absorbe el impacto y el músculo no estimula.', c1: 'Evitá rebotes', c2: 'Cuidá rodillas', c3: 'Deslizá →' },
-            { eyebrow: 'SOLUCIÓN SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + RANGO PROFUNDO', sub: '3 segundos al bajar, 1 segundo de pausa abajo y subida explosiva exhalando.', c1: '+Reclutamiento', c2: '~42 kcal totales', c3: 'Deslizá →' },
-            { eyebrow: 'TU PLAN • 4/4', headline: ' ¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA, Online o desde la App SENS.', c1: 'Cupos Activos', c2: 'Plan a Medida', c3: 'Link en Bio →' }
+            { eyebrow: 'DESLIZÁ • 1/4', headline: 'EL ERROR #1 QUE FRENA TUS PIERNAS', sub: 'Por qué subir kilos sin control excéntrico te estanca y fatiga tus articulaciones.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'EL PROBLEMA • 2/4', headline: 'REBOTAR ABAJO MATA LA TENSIÓN', sub: 'Cuando usás inercia en vez de control muscular, el tendón absorbe el impacto y el músculo no estimula.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'SOLUCIÓN SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + RANGO PROFUNDO', sub: '3 segundos al bajar, 1 segundo de pausa abajo y subida explosiva exhalando.', c1: '', c2: '', c3: '' },
+            { eyebrow: 'TU PLAN • 4/4', headline: '¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA, Online o desde la App SENS.', c1: '', c2: '', c3: '' }
         ],
         caption: 'El 90% comete este error en el gimnasio por priorizar ego antes que biomecánica.\n\nEn SENS trabajamos con cadencia controlada (3-1-1-0) y selección clínica de ejercicios para que construyas fuerza real sin dolor articular.\n\nComentá "SENS" o escribime por mensaje directo para evaluar tu caso (Presencial CABA, Online 1:1 o Suscripción App).'
     },
     {
-        id: 'tpl_vs_ejecucion',
-        name: '2. Cómo NO vs. Cómo SÍ',
-        badge: 'GUARDADOS ALTOS',
+        id: 'tpl_lower_third_pro',
+        name: '2. Lower-Third Video Focus (Acción)',
+        badge: 'LOWER-THIRD PRO',
+        desc: '75% del video despejado. Texto al pie con 1 pill de foco.',
+        defaultLayers: { branding: false, eyebrow: true, headline: true, subtitle: false, chips: true },
         scenes: [
-            { eyebrow: 'CÓMO NO VS. CÓMO SÍ', headline: 'DEJÁ DE TIRAR CON LOS BRAZOS EN ESPALDA', sub: 'Si encogés los hombros al traccionar, llevás toda la tensión al trapecio y cuello.', c1: 'Espalda & Dorsal', c2: '~9 kcal / serie', c3: 'Fijate la diferencia' },
-            { eyebrow: 'TÉCNICA CORRECTA', headline: 'INICIÁ EL MOVIMIENTO DEPRIMIENDO ESCÁPULAS', sub: 'Pensá en llevar los codos hacia el bolsillo trasero del pantalón manteniendo el pecho abierto.', c1: 'Control Escapular', c2: 'Pausa 1s atrás', c3: 'Postura Sólida' },
-            { eyebrow: 'MÉTODO MAKES SENS', headline: 'TRANSFORMÁ TU POSTURA Y FUERZA', sub: 'Entrenamiento inteligente adaptado a tu estructura corporal.', c1: '1:1 & Dúo CABA', c2: 'App Generalista', c3: 'Escribime SENS →' }
+            { eyebrow: 'CLAVE BIOMECÁNICA', headline: 'DEPRIMÍ ESCÁPULAS AL TRACCIONAR', sub: '', c1: 'Foco: Dorsal & Espalda', c2: '', c3: '' },
+            { eyebrow: 'AJUSTE DE TÉCNICA', headline: 'LLEVÁ LOS CODOS A LA CADERA', sub: '', c1: 'Pausa 1s • Cero Tensión Cervical', c2: '', c3: '' },
+            { eyebrow: 'ENTRENAMIENTO SENS', headline: 'PROBALO EN TU PRÓXIMA SESIÓN', sub: '', c1: 'Escribime SENS →', c2: '', c3: '' }
         ],
         slides: [
-            { eyebrow: 'GUÍA PRÁCTICA • 1/4', headline: 'CÓMO NO VS. CÓMO SÍ ENTRENAR ESPALDA', sub: 'El ajuste de 2 centímetros que cambia por completo tu postura.', c1: 'Espalda Sana', c2: 'Técnica SENS', c3: 'Deslizá →' },
-            { eyebrow: 'CÓMO NO • 2/4', headline: 'ENCOGER HOMBROS Y ARQUEAR CUELLO', sub: 'Genera sobrecarga cervical y cero estímulo en los dorsales.', c1: 'Error Frecuente', c2: 'Tensión Cervical', c3: 'Deslizá →' },
-            { eyebrow: 'CÓMO SÍ • 3/4', headline: 'DEPRESIÓN ESCAPULAR + CODOS ABAJO', sub: 'Inhalá al estirar, exhalá llevando los codos hacia tu cadera con control.', c1: 'Dorsal Activo', c2: '~36 kcal / 4 sets', c3: 'Deslizá →' },
-            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Makes Sens', c3: 'Escribime SENS →' }
+            { eyebrow: 'GUÍA PRÁCTICA • 1/4', headline: 'CÓMO NO VS. CÓMO SÍ ENTRENAR ESPALDA', sub: 'El ajuste de 2 centímetros que cambia por completo tu postura.', c1: 'Espalda Sana', c2: '', c3: '' },
+            { eyebrow: 'CÓMO NO • 2/4', headline: 'ENCOGER HOMBROS Y ARQUEAR CUELLO', sub: 'Genera sobrecarga cervical y cero estímulo en los dorsales.', c1: 'Error Frecuente', c2: '', c3: '' },
+            { eyebrow: 'CÓMO SÍ • 3/4', headline: 'DEPRESIÓN ESCAPULAR + CODOS ABAJO', sub: 'Inhalá al estirar, exhalá llevando los codos hacia tu cadera con control.', c1: 'Dorsal Activo', c2: '', c3: '' },
+            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App $19.900/mes.', c1: 'Makes Sens →', c2: '', c3: '' }
         ],
-        caption: 'Pequeños ajustes biomecánicos generan grandes cambios en tu estructura física.\n\nGuardá este post para tu próxima sesión de tracción y probá iniciar cada repetición deprimiendo las escápulas.\n\n¿Querés que armemos tu programación completa? Escribime "SENS" por DM.'
+        caption: 'Pequeños ajustes biomecánicos generan grandes cambios en tu estructura física.\n\nGuardá este video para tu próxima sesión de tracción y probá iniciar cada repetición deprimiendo las escápulas.\n\n¿Querés que armemos tu programación completa? Escribime "SENS" por DM.'
     },
     {
-        id: 'tpl_gasto_kcal',
-        name: '3. Gasto Real de Kcal por Serie',
-        badge: 'VIRAL / DATOS',
+        id: 'tpl_hook_bold_dos_tonos',
+        name: '3. Titular Bold Dos Tonos (Retención)',
+        badge: 'ALTA RETENCIÓN',
+        desc: 'Contraste tipográfico Blanco + Champagne para frenar el feed.',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'CIENCIA & METABOLISMO', headline: '¿CUÁNTAS KCAL GASTA REALMENTE ESTE EJERCICIO?', sub: 'No necesitás saltar sin sentido: la fuerza multiarticular pesada dispara tu gasto energético.', c1: '~11 kcal / serie', c2: '~44 kcal / 4 sets', c3: '+Efecto EPOC 24hs' },
-            { eyebrow: 'POR QUÉ FUNCIONA', headline: 'MÁS MASA MUSCULAR = MAYOR METABOLISMO BASAL', sub: 'Cada serie controlada cerca del fallo técnico (RIR 2) oxida energía durante y después de entrenar.', c1: 'Recomposición', c2: 'Fuerza Base', c3: 'Sin impacto lesivo' },
-            { eyebrow: 'APP & COACHING SENS', headline: 'CONOCÉ EL GASTO DE CADA RUTINA EN NUESTRA APP', sub: 'Seguimiento de series, pesos, descansos y calorías por ejercicio.', c1: 'App $19.900/mes', c2: 'Coaching 1:1', c3: 'Probala Hoy →' }
+            { eyebrow: 'FISIOLOGÍA REAL', headline: 'TRANSPIRAR MÁS NO ES QUEMAR MÁS GRASA', sub: 'El sudor es solo pérdida de agua por termorregulación, no oxidación de lípidos.', c1: 'Fisiología Real', c2: '', c3: 'Mirá por qué →' },
+            { eyebrow: 'LO QUE SÍ FUNCIONA', headline: 'FUERZA PESADA + DÉFICIT SUAVE + PASOS', sub: 'Músculo activo eleva tu metabolismo basal y protege tu estructura articular.', c1: 'Recomposición', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'SISTEMA SENS', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial en CABA, Seguimiento Online o Suscripción mensual en la App.', c1: 'Makes Sens', c2: '', c3: 'Link en Bio →' }
         ],
         slides: [
-            { eyebrow: 'DATOS REALES • 1/4', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA BIEN HECHA?', sub: 'Desmitificando el cardio eterno vs. el entrenamiento de fuerza inteligente.', c1: 'Metabolismo', c2: 'Ciencia SENS', c3: 'Deslizá →' },
-            { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cadencia controlada y cargas progresivas.', c1: '~0.9 kcal / rep', c2: 'Alta Demanda', c3: 'Deslizá →' },
-            { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO QUEMA CALORÍAS AÚN DURMIENDO', sub: 'Preservar y construir tejido magro es la clave número 1 para no sufrir efecto rebote.', c1: 'Sostenible', c2: 'Salud Hormonal', c3: 'Deslizá →' },
-            { eyebrow: 'SUMATE A SENS • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN TU CELULAR', sub: 'Elegí tu modalidad: Presencial CABA, Online 1:1 o Suscripción App.', c1: 'Makes Sens', c2: 'Acceso Inmediato', c3: 'Link en Bio →' }
-        ],
-        caption: '¿Sabías cuánta energía demanda una serie de fuerza multiarticular ejecutada con tempo controlado?\n\nEn la plataforma SENS cada ejercicio y cada comida tienen sus métricas exactas para que avances sin adivinar.\n\nSumate hoy desde el link de la bio.'
-    },
-    {
-        id: 'tpl_nutri_regla3',
-        name: '4. Hack Nutricional & Proteína',
-        badge: 'NUTRICIÓN SIMPLE',
-        scenes: [
-            { eyebrow: 'NUTRICIÓN SIN EXTREMOS', headline: 'EL CAMBIO Nº1 PARA DEFINIR SIN PASAR HAMBRE', sub: 'Si llegás a la noche con ansiedad, te está faltando proteína en desayuno y almuerzo.', c1: '35-40g Prot / comida', c2: 'Alta Saciedad', c3: 'Cero Dietas Raras' },
-            { eyebrow: 'FÓRMULA PRÁCTICA', headline: 'COMBINÁ PROTEÍNA MAGRA + FIBRA + CARBO TIMING', sub: 'Huevos o yogur griego a la mañana, pollo o corte magro al mediodía y carbohidratos cerca de entrenar.', c1: 'Energía Estable', c2: 'Mejor Digestión', c3: 'Regla de 3 Simple' },
-            { eyebrow: 'PORTAL NUTRICIONAL SENS', headline: 'TU PLAN DE COMIDAS Y EQUIVALENCIAS AL INSTANTE', sub: 'Desayuno, almuerzo, merienda, cena y snacks adaptados a tus calorías.', c1: 'Fácil de Cumplir', c2: '100% Flexible', c3: 'Escribime SENS →' }
-        ],
-        slides: [
-            { eyebrow: 'NUTRICIÓN REAL • 1/4', headline: 'CÓMO LLEGAR A TU PROTEÍNA DIARIA SIN COMPLICARTE', sub: 'Sin suplementos obligatorios ni comidas aburridas.', c1: 'Saciedad', c2: 'Recomposición', c3: 'Deslizá →' },
-            { eyebrow: 'EL ERROR • 2/4', headline: 'DESAYUNAR SOLO TOSTADAS Y CAFÉ', sub: 'Dispara tu glucosa a la mañana y te deja sin energía ni saciedad a las 3 horas.', c1: 'Pico de Insulina', c2: 'Hambre Temprana', c3: 'Deslizá →' },
-            { eyebrow: 'EL AJUSTE • 3/4', headline: 'SUMÁ 30G DE PROTEÍNA EN CADA COMIDA', sub: '3 huevos + fruta, 180g de pechuga o lomo al almuerzo, yogur + avena en merienda.', c1: '~160g Prot / día', c2: 'Masa Magra', c3: 'Deslizá →' },
-            { eyebrow: 'TU PLAN EN SENS • 4/4', headline: 'CALCULADORA DE PORCIONES EN VIVO EN LA APP', sub: 'Intercambiá alimentos por comida y objetivo con un toque.', c1: 'Desayuno a Cena', c2: 'Makes Sens', c3: 'Link en Bio →' }
-        ],
-        caption: 'La mejor nutrición no es la más restrictiva, sino la que podés sostener un martes a las 9 de la noche después de trabajar.\n\nEn SENS diseñamos tu estructura por momento de comida (Desayuno, Almuerzo, Merienda, Cena y Snacks) con equivalencias automáticas.\n\nEscribime "NUTRI" o entrá al link de mi perfil.'
-    },
-    {
-        id: 'tpl_oficina_postura',
-        name: '5. Dolor Lumbar & Oficina (+8hs Sentado)',
-        badge: 'ALTA CONVERSIÓN',
-        scenes: [
-            { eyebrow: 'SALUD ARTICULAR & POSTURA', headline: '¿PASÁS MÁS DE 7 HORAS SENTADO POR DÍA?', sub: 'Tu cadera se acorta, tus glúteos se apagan y tu zona lumbar termina pagando el precio.', c1: 'Zona Lumbar', c2: 'Movilidad Cadera', c3: 'Probá esta secuencia' },
-            { eyebrow: 'PROTOCOLO DE 5 MINUTOS', headline: 'MOVILIDAD 90/90 + EXTENSIÓN TORÁCICA + CORE', sub: 'Descomprimí la columna antes de entrenar fuerza para volver a moverte libre de dolor.', c1: '0 Dolor Articular', c2: '~5 kcal / serie', c3: 'Longevidad Activa' },
-            { eyebrow: 'ESPECIALIDAD SENS', headline: 'ENTRENAMIENTO PENSADO PARA PROFESIONALES', sub: 'Devolvéle movilidad, fuerza y energía a tu cuerpo en 3 sesiones semanales.', c1: 'CABA & Online', c2: 'Diagnóstico 360°', c3: 'Agendá tu Lugar →' }
-        ],
-        slides: [
-            { eyebrow: 'POSTURA & SALUD • 1/4', headline: 'SI TRABAJÁS SENTADO 8 HORAS, NECESITÁS ESTO', sub: 'Por qué estirar el isquio no alcanza para quitar la tensión lumbar.', c1: 'Columna Sana', c2: 'Movilidad SENS', c3: 'Deslizá →' },
-            { eyebrow: 'CAUSA REAL • 2/4', headline: 'AMNESIA GLÚTEA Y RIGIDEZ DE CADERA', sub: 'Cuando la cadera y la espalda alta no se mueven, la zona lumbar compensa en cada movimiento.', c1: 'Causa Raíz', c2: 'Biomecánica', c3: 'Deslizá →' },
-            { eyebrow: 'LA SOLUCIÓN • 3/4', headline: 'ESTABILIDAD LUMBOPÉLVICA + FUERZA PROGRESIVA', sub: 'Bird-Dog, Pallof Press y bisagra de cadera controlada fortalecen tu faja natural.', c1: 'Core Anti-Rotación', c2: 'Fuerza Segura', c3: 'Deslizá →' },
-            { eyebrow: 'EVALUACIÓN • 4/4', headline: 'HACÉ TU DIAGNÓSTICO DE MOVIMIENTO EN SENS', sub: 'Adaptamos cada ejercicio a tu historial articular.', c1: 'Presencial / Online', c2: 'Makes Sens', c3: 'Escribime SENS →' }
-        ],
-        caption: 'Entrenar no debería doler: debería quitarte los dolores del día a día.\n\nSi trabajás muchas horas frente a la computadora, tu rutina tiene que combinar fuerza estructural con movilidad torácica y estabilidad lumbopélvica.\n\nEscribime "POSTURA" para evaluar tu caso.'
-    },
-    {
-        id: 'tpl_mito_cardio',
-        name: '6. Mito Derribado: Sudar vs. Oxidar Grasa',
-        badge: 'DEBATE & ALCANCE',
-        scenes: [
-            { eyebrow: 'MITO VS. REALIDAD', headline: 'TRANSPIRAR MÁS NO SIGNIFICA QUEMAR MÁS GRASA', sub: 'Abrigar de más o hacer saltos sin descanso solo te deshidrata y eleva tu cortisol.', c1: 'Fisiología Real', c2: 'Cero Humo', c3: 'Leé por qué' },
-            { eyebrow: 'LO QUE SÍ FUNCIONA', headline: 'FUERZA PROGRESIVA + PASOS DIARIOS + DÉFICIT SUAVE', sub: 'Construí músculo en 3-4 sesiones por semana y mantené 8.000 a 10.000 pasos diarios.', c1: '8k-10k Pasos', c2: 'Déficit 300 kcal', c3: 'Resultados Reales' },
-            { eyebrow: 'MÉTODO MAKES SENS', headline: 'UN SISTEMA CLARO QUE PODÉS SOSTENER TODO EL AÑO', sub: 'Sin rutinas improvisadas ni dietas extremas.', c1: 'Ciencia Aplicada', c2: 'Seguimiento Real', c3: 'Sumate a SENS →' }
-        ],
-        slides: [
-            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'La diferencia entre terminar agotado y entrenar de verdad.', c1: 'Fisiología', c2: 'Makes Sens', c3: 'Deslizá →' },
-            { eyebrow: 'EL ERROR • 2/4', headline: 'CASTIGARTE CON CARDIO EXTREMO TODOS LOS DÍAS', sub: 'Aumenta el hambre reactiva, fatiga tus rodillas y reduce tu masa muscular.', c1: 'Fatiga Central', c2: 'Efecto Rebote', c3: 'Deslizá →' },
-            { eyebrow: 'EL SISTEMA • 3/4', headline: 'SOBRECARGA PROGRESIVA + NEAT + PROTEÍNA', sub: '3 pilares medibles desde el dashboard de nuestra plataforma.', c1: 'Medible', c2: 'Sostenible', c3: 'Deslizá →' },
-            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App.', c1: 'Nico Maralle', c2: 'SENS Train', c3: 'Link en Bio →' }
+            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'La diferencia entre terminar agotado y entrenar de verdad.', c1: 'Fisiología', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'EL ERROR • 2/4', headline: 'CASTIGARTE CON CARDIO EXTREMO DIARIO', sub: 'Aumenta el hambre reactiva, fatiga tus articulaciones y reduce tu masa muscular.', c1: 'Fatiga Central', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'EL SISTEMA • 3/4', headline: 'SOBRECARGA PROGRESIVA + NEAT + PROTEÍNA', sub: '3 pilares medibles desde el dashboard de nuestra plataforma.', c1: 'Sostenible', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App.', c1: 'SENS Train', c2: '', c3: 'Link en Bio →' }
         ],
         caption: 'Salir agotado no siempre es sinónimo de haber entrenado bien.\n\nLa recomposición corporal ocurre cuando combinás estímulo mecánico real en tus músculos, pasos diarios constantes y un déficit calórico moderado con suficiente proteína.\n\nEso hacemos todos los días en SENS.'
     },
     {
-        id: 'tpl_rutina_express',
-        name: '7. Rutina Eficiente 45 Minutos',
-        badge: 'AGENDA OCUPADA',
+        id: 'tpl_stat_metrica_hero',
+        name: '4. Ficha de Datos & Kcal (Autoridad)',
+        badge: 'MÉTRICA HERO',
+        desc: 'Destaca un número clínico real (~11 kcal, 3-0-1-0) con respaldo SENS.',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'EFICIENCIA PURA', headline: 'NO NECESITÁS 2 HORAS EN EL GIMNASIO PARA VER CAMBIOS', sub: 'Con 45 minutos bien estructurados y descansos medidos lográs el doble de estímulo.', c1: '45 Minutos', c2: '~185 kcal sesión', c3: 'Alta Densidad' },
-            { eyebrow: 'ESTRUCTURA SENS', headline: '1 EMPUJE + 1 TRACCIÓN + 1 DOMINANTE DE CADERA + CORE', sub: '4 ejercicios multiarticulares a RIR 2 con cronómetro de descanso integrado en la app.', c1: '4 Básicos Clave', c2: 'Descanso 75-90s', c3: 'Cero Tiempo Muerto' },
-            { eyebrow: 'TU RUTINA EN EL BOLSILLO', headline: 'ENTRÁ AL GIMNASIO SABIENDO EXACTAMENTE QUÉ HACER', sub: 'Videos demostrativos, pesos sugeridos y registro por serie.', c1: 'App SENS $19.900', c2: 'Planes 1:1', c3: 'Empezá Hoy →' }
+            { eyebrow: 'CIENCIA & METABOLISMO', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA?', sub: 'Cada serie multiarticular cerca del fallo (RIR 2) dispara tu gasto energético y el efecto EPOC.', c1: '~11 kcal / serie', c2: '', c3: '+Efecto EPOC 24hs' },
+            { eyebrow: 'DATOS CLÍNICOS', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios pesados de piernas y espalda con cadencia estricta 3-1-1-0.', c1: 'Cadencia 3-1-1-0', c2: '', c3: 'Fuerza Estructural' },
+            { eyebrow: 'APP SENS', headline: 'KCAL Y MACROS MEDIDOS EN TU CELULAR', sub: 'Seguimiento por serie, descansos automáticos y catálogo nutricional flexible.', c1: 'App $19.900/mes', c2: '', c3: 'Escribime SENS →' }
         ],
         slides: [
-            { eyebrow: 'SIN EXCUSAS • 1/4', headline: 'LA RUTINA DE 45 MINUTOS PARA GENTE SIN TIEMPO', sub: 'Cómo entrenar todo el cuerpo con máxima eficiencia.', c1: '45 Minutos', c2: 'Full Body SENS', c3: 'Deslizá →' },
-            { eyebrow: 'BLOQUE A • 2/4', headline: 'SENTADILLA GOBLET + REMO CON MANCUERNA', sub: '4 series de 10 reps alternando tren inferior y tracción horizontal.', c1: '~72 kcal bloque', c2: 'Postura & Piernas', c3: 'Deslizá →' },
-            { eyebrow: 'BLOQUE B • 3/4', headline: 'PESO MUERTO RUMANO + PRESS INCLINADO + CORE', sub: 'Cadena posterior firme, empuje seguro para el hombro y estabilidad media.', c1: '~85 kcal bloque', c2: 'Estímulo Completo', c3: 'Deslizá →' },
-            { eyebrow: 'LLEVALA EN TU CELU • 4/4', headline: 'TODAS TUS SERIES Y VIDEOS EN LA APP SENS', sub: 'Activá tu cuenta hoy mismo y entrená con sentido.', c1: 'Makes Sens', c2: '100% Guiado', c3: 'Link en Bio →' }
+            { eyebrow: 'DATOS REALES • 1/4', headline: '¿CUÁNTO GASTA UNA SERIE DE FUERZA?', sub: 'Desmitificando el cardio eterno vs. el entrenamiento de fuerza inteligente.', c1: '~11 kcal / serie', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cadencia controlada y cargas progresivas.', c1: '~0.9 kcal / rep', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO QUEMA CALORÍAS AÚN DURMIENDO', sub: 'Preservar y construir tejido magro es la clave número 1 para no sufrir efecto rebote.', c1: 'Salud Hormonal', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'SUMATE A SENS • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN TU CELULAR', sub: 'Elegí tu modalidad: Presencial CABA, Online 1:1 o Suscripción App.', c1: 'Makes Sens', c2: '', c3: 'Link en Bio →' }
         ],
-        caption: 'La falta de tiempo no se resuelve entrenando más rápido y mal, sino eligiendo los ejercicios con mayor retorno por minuto invertido.\n\nGuardá esta estructura de 45 minutos o tenela lista con videos y cronómetro dentro de la App SENS.'
+        caption: '¿Sabías cuánta energía demanda una serie de fuerza multiarticular ejecutada con tempo controlado?\n\nEn la plataforma SENS cada ejercicio y cada comida tienen sus métricas exactas para que avances sin adivinar.\n\nSumate hoy desde el link de la bio.'
     },
     {
-        id: 'tpl_gluteos_isquios',
-        name: '8. Especial Piernas: Glúteos vs. Isquios',
-        badge: 'HIPERTROFIA',
+        id: 'tpl_carrusel_secuencia_swipe',
+        name: '5. Secuencia Revista Carrusel (4:5)',
+        badge: 'CARRUSEL SWIPE',
+        desc: 'Diseño editorial de 4 diapositivas para lecturas y alto guardado.',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'BIOMECÁNICA DE PIERNAS', headline: '¿SENTÍS EL PESO MUERTO EN LA CINTURA Y NO EN GLÚTEOS?', sub: 'Este ajuste en el ángulo de tu tibia y cadera cambia el 100% del reclutamiento.', c1: 'Glúteos & Isquios', c2: '~11 kcal / serie', c3: 'Mirá el ángulo' },
-            { eyebrow: 'EL AJUSTE CLAVE', headline: 'LLEVÁ LA CADERA ATRÁS COMO CERRANDO UNA PUERTA', sub: 'Frená apenas tu cadera deje de viajar hacia atrás: bajar más solo dobla tu columna lumbar.', c1: 'Bisagra Pura', c2: 'Barra Pegada', c3: 'Tensión Continua' },
-            { eyebrow: 'ENTRENO PERSONALIZADO', headline: 'APRENDÉ LA TÉCNICA PERFECTA CON SEGUIMIENTO', sub: 'Corrección presencial en CABA o por video en modalidad Online.', c1: 'Presencial / Dúo', c2: 'Online VIP', c3: 'Escribime SENS →' }
+            { eyebrow: 'GUÍA TÉCNICA', headline: 'CÓMO ENTRENAR ESPALDA SIN DOLOR CERVICAL', sub: 'El ajuste de 2 centímetros en tus escápulas que cambia por completo tu postura.', c1: 'Espalda Sana', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'EL ERROR TÍPICO', headline: 'ENCOGER HOMBROS AL TRACCIONAR', sub: 'Sobrecarga cervical y nula activación del dorsal.', c1: 'Error Común', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'MÉTODO SENS', headline: 'DEPRESIÓN ESCAPULAR + CONTROL', sub: 'Inhalá al estirar, exhalá llevando los codos a la cadera.', c1: 'Técnica SENS', c2: '', c3: 'Deslizá →' }
         ],
         slides: [
-            { eyebrow: 'TREN INFERIOR • 1/4', headline: 'CÓMO ENFOCAR GLÚTEOS O ISQUIOS SEGÚN TU TÉCNICA', sub: 'Dominá la bisagra de cadera sin sobrecargar la espalda baja.', c1: 'Piernas SENS', c2: 'Biomecánica', c3: 'Deslizá →' },
-            { eyebrow: 'FOCO ISQUIOS • 2/4', headline: 'TIBIAS CASI VERTICALES Y RODILLAS SEMI-RÍGIDAS', sub: 'Mayor estiramiento de los isquiotibiales en el descenso controlado.', c1: 'Isquiotibiales', c2: '3s al bajar', c3: 'Deslizá →' },
-            { eyebrow: 'FOCO GLÚTEOS • 3/4', headline: 'LEVE FLEXIÓN DE RODILLA + EMPUJE DE CADERA', sub: 'Combinado con Hip Thrust con pausa isométrica de 2 segundos arriba.', c1: 'Glúteo Mayor', c2: '~45 kcal / 4 sets', c3: 'Deslizá →' },
-            { eyebrow: 'ENTRENA EN SENS • 4/4', headline: 'PROGRAMACIÓN ESPECÍFICA SEGÚN TU OBJETIVO', sub: 'Sumate a los entrenamientos presenciales u online.', c1: 'Makes Sens', c2: 'Resultados', c3: 'Escribime SENS →' }
+            { eyebrow: 'GUÍA PRÁCTICA • 1/4', headline: 'CÓMO NO VS. CÓMO SÍ ENTRENAR ESPALDA', sub: 'El ajuste de 2 centímetros que cambia por completo tu postura.', c1: 'Espalda Sana', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'CÓMO NO • 2/4', headline: 'ENCOGER HOMBROS Y ARQUEAR CUELLO', sub: 'Genera sobrecarga cervical y cero estímulo en los dorsales.', c1: 'Error Frecuente', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'CÓMO SÍ • 3/4', headline: 'DEPRESIÓN ESCAPULAR + CODOS ABAJO', sub: 'Inhalá al estirar, exhalá llevando los codos hacia tu cadera con control.', c1: 'Dorsal Activo', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'EMPEZÁ HOY • 4/4', headline: 'ENTRENÁ CON PRECISIÓN EN SENS', sub: 'Presencial en CABA, Seguimiento Online o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: '', c3: 'Link en Bio →' }
         ],
-        caption: 'La diferencia entre sentir un ejercicio en la espalda baja o sentirlo al 100% en glúteos e isquiotibiales está en entender dónde termina tu rango real de cadera.\n\nGuardá este post para tu próximo día de piernas.'
+        caption: 'Pequeños ajustes biomecánicos generan grandes cambios en tu estructura física.\n\nGuardá este post para tu próxima sesión de tracción y probá iniciar cada repetición deprimiendo las escápulas.\n\n¿Querés que armemos tu programación completa? Escribime "SENS" por DM.'
     },
     {
-        id: 'tpl_progreso_habitos',
-        name: '9. Constancia > Perfección (Mindset)',
-        badge: 'CONEXIÓN & MARCA',
+        id: 'tpl_story_cupos_vip',
+        name: '6. Story Cupos & Conversión Directa',
+        badge: 'CONVERSIÓN DIRECTA',
+        desc: 'Story limpia de 9:16 para abrir cupos 1:1 o Suscripción App.',
+        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
         scenes: [
-            { eyebrow: 'FILOSOFÍA MAKES SENS', headline: 'EL MEJOR PLAN NO ES EL PERFECTO, ES EL QUE CUMPLÍS', sub: 'Entrenar 3 veces por semana durante 12 meses supera a entrenar 6 días durante 2 semanas.', c1: 'Adherencia 90%', c2: 'Hábitos Reales', c3: 'Largo Plazo' },
-            { eyebrow: 'SISTEMA DE HÁBITOS', headline: 'MEDIMOS TU PROGRESO MÁS ALLÁ DE LA BALANZA', sub: 'Fuerza en cada ejercicio, centímetros, energía diaria, calidad de sueño y composición corporal.', c1: 'Más Fuerza', c2: 'Mejor Postura', c3: 'Menos Estrés' },
-            { eyebrow: 'HEY, ¿ENTRENAMOS JUNTOS?', headline: 'EMPEZÁ TU PROCESO HOY CON SENS', sub: 'Elegí el plan que mejor se adapte a tu rutina actual.', c1: 'Presencial CABA', c2: 'Online & App', c3: 'Hablemos Hoy →' }
+            { eyebrow: 'AGENDA DEL MES ABIERTA', headline: 'SE ABRIERON 3 LUGARES PARA PLAN 1:1', sub: 'Seguimiento personalizado para transformar tu fuerza, postura y composición corporal.', c1: 'Solo 3 Cupos', c2: '', c3: 'Escribime PLAN →' },
+            { eyebrow: 'QUÉ INCLUYE', headline: 'DIAGNÓSTICO 360° + RUTINA + NUTRICIÓN', sub: 'Adaptado a tus horarios de trabajo, tu historial articular y tus objetivos reales.', c1: 'Plan a Medida', c2: '', c3: 'Cero Dietas Raras' },
+            { eyebrow: 'RESERVÁ TU LUGAR', headline: 'ESCRIBIME "PLAN" POR PRIVADO', sub: 'Coordinamos una breve evaluación para definir si arrancamos presencial u online.', c1: 'Presencial / VIP', c2: '', c3: 'Mensaje Directo →' }
         ],
         slides: [
-            { eyebrow: 'MENTALIDAD SENS • 1/4', headline: 'POR QUÉ LA CONSTANCIA SIEMPRE LE GANA A LA INTENSIDAD', sub: 'Construir un cuerpo fuerte y sano es un juego de adherencia.', c1: 'Makes Sens', c2: 'Estilo de Vida', c3: 'Deslizá →' },
-            { eyebrow: 'LA TRAMPA • 2/4', headline: 'EL "TODO O NADA" QUE TE HACE ABANDONAR', sub: 'Creer que por perder un día o tener una cena social arruinaste la semana.', c1: 'Cero Culpa', c2: 'Equilibrio', c3: 'Deslizá →' },
-            { eyebrow: 'EL MÉTODO • 3/4', headline: 'MÍNIMO INNEGOCIABLE: 3 SESIONES + PROTEÍNA + PASOS', sub: 'Cuando tenés claridad en lo que importa, mantenerte en ruta es simple.', c1: 'Claridad Total', c2: 'Dashboard SENS', c3: 'Deslizá →' },
-            { eyebrow: 'SUMATE HOY • 4/4', headline: 'HEY, ¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Escribime y diseñamos tu plan a medida.', c1: 'Nico Maralle', c2: 'CABA & Online', c3: 'Link en Bio →' }
-        ],
-        caption: 'No buscamos que vivas para contar calorías ni que pases tu vida adentro de un gimnasio.\n\nBuscamos que el entrenamiento y la nutrición te den más energía, mejor postura y confianza para todo el resto de tu vida.\n\nHey, ¿entrenamos juntos? Makes Sens.'
-    },
-    {
-        id: 'tpl_duo_presencial',
-        name: '10. Entrenamiento Dúo / Grupal CABA',
-        badge: 'CUPOS PRESENCIAL',
-        scenes: [
-            { eyebrow: 'PRESENCIAL EN CABA', headline: 'ENTRENÁ CON UN AMIGO O PAREJA CON PLAN 100% PROPIO', sub: 'Compartís el horario y la motivación, pero cada uno tiene su ficha clínica, cargas y objetivos en la App.', c1: 'Modalidad Dúo/Trío', c2: 'Ficha Individual', c3: 'Beneficio en Valor' },
-            { eyebrow: 'CÓMO FUNCIONA', headline: 'SUPERVISIÓN TÉCNICA EN VIVO + PORTAL DIGITAL SENS', sub: 'Corregimos cada serie en persona y llevás el registro de tus avances y nutrición en el celular.', c1: 'CABA Presencial', c2: 'App Incluida', c3: '1, 2 o 3 veces/sem' },
-            { eyebrow: 'CUPOS LIMITADOS', headline: 'RESERVÁ SU HORARIO DE PRUEBA ESTA SEMANA', sub: 'Consultá disponibilidad de turnos en CABA por WhatsApp.', c1: 'Atención VIP', c2: 'Turnos Abiertos', c3: 'Escribime DÚO →' }
-        ],
-        slides: [
-            { eyebrow: 'FORMATO DÚO/TRÍO • 1/4', headline: 'ENTRENAR DE A DOS, PERO CON PLAN 100% PERSONALIZADO', sub: 'La combinación ideal entre motivación compartida y precisión clínica.', c1: 'Presencial CABA', c2: 'Dúo & Trío', c3: 'Deslizá →' },
-            { eyebrow: 'DIFERENCIAL • 2/4', headline: 'NO HACEN LA MISMA RUTINA GENÉRICA', sub: 'Cada alumno tiene su propia evaluación articular, sus pesos y sus metas nutricionales.', c1: 'Ficha 360° Propia', c2: 'Cargas a Medida', c3: 'Deslizá →' },
-            { eyebrow: 'INVERSIÓN • 3/4', headline: 'ACCEDÉ AL SEGUIMIENTO PRESENCIAL CON VALOR PREFERENCIAL', sub: '1, 2 o 3 sesiones semanales en CABA con acceso total a la App SENS.', c1: 'Desde $85.000', c2: 'Portal Completo', c3: 'Deslizá →' },
-            { eyebrow: 'COORDINEMOS • 4/4', headline: 'ETIQUETÁ A ESA PERSONA Y ARRANCAMOS ESTA SEMANA', sub: 'Escribime por DM o WhatsApp para ver horarios disponibles.', c1: 'Cupos CABA', c2: 'Makes Sens', c3: 'Escribime DÚO →' }
-        ],
-        caption: 'Entrenar acompañado multiplica tu constancia, pero no significa hacer la misma rutina genérica.\n\nEn el formato Dúo y Trío Presencial en CABA cada uno tiene su evaluación inicial, su progresión de cargas y su plan nutricional individual dentro de la App SENS.\n\nEscribime "DÚO" para consultar horarios disponibles.'
-    },
-    {
-        id: 'tpl_lanzamiento_app',
-        name: '11. Suscripción App SENS ($19.900/mes)',
-        badge: 'OFERTA ESCALABLE',
-        scenes: [
-            { eyebrow: 'NUEVO • SUSCRIPCIÓN APP SENS', headline: 'TODA LA METODOLOGÍA SENS EN TU CELULAR POR $19.900/MES', sub: 'Si entrenás por tu cuenta en el gimnasio y no sabés qué rutina ni qué macros seguir, esto es para vos.', c1: '$19.900 / mes', c2: 'Rutina + Macros', c3: 'Acceso Inmediato' },
-            { eyebrow: 'QUÉ INCLUYE TU ACCESO', headline: 'RUTINAS EN VIDEO + KCAL POR SERIE + NUTRICIÓN POR COMIDA', sub: 'Diagnóstico inicial automático, cronómetro de descanso, registro de pesos y catálogo nutricional.', c1: 'Videos HD', c2: 'Regla de 3 Nutri', c3: 'Sin Permanencia' },
-            { eyebrow: 'ACTIVÁ TU CUENTA HOY', headline: 'MENOS DE LO QUE CUESTA UNA CENA AFUERA AL MES', sub: 'Entrá al link de la bio, completá tu diagnóstico en 2 minutos y empezá hoy.', c1: 'Alta en 2 Min', c2: 'Makes Sens', c3: 'Link en Bio →' }
-        ],
-        slides: [
-            { eyebrow: 'NUEVO ACCESO • 1/4', headline: 'ENTRENÁ CON EL SISTEMA SENS DESDE CUALQUIER GIMNASIO', sub: 'Suscripción mensual accesible con toda nuestra biblioteca técnica y nutricional.', c1: '$19.900 / mes', c2: 'App WebMobile', c3: 'Deslizá →' },
-            { eyebrow: 'ENTRENAMIENTO • 2/4', headline: 'VIDEOS EN BUCLE, KCAL POR SERIE Y CRONÓMETRO', sub: 'Sabé exactamente cómo hacer cada ejercicio, cómo NO hacerlo y cuánto descansar.', c1: 'Mapa Muscular', c2: 'Registro de Kg', c3: 'Deslizá →' },
-            { eyebrow: 'NUTRICIÓN • 3/4', headline: 'COMIDAS POR OBJETIVO CON CÁLCULO DE PORCIONES', sub: 'Desayuno, almuerzo, merienda, cena y snacks ajustados a tu meta calórica.', c1: 'Macros Claros', c2: 'Agua & Pasos', c3: 'Deslizá →' },
-            { eyebrow: 'EMPEZÁ AHORA • 4/4', headline: 'ACTIVÁ TU SUSCRIPCIÓN MENSUAL POR $19.900', sub: 'Sin contratos largos. Entrá desde el link de la bio.', c1: 'Makes Sens', c2: 'Alta Inmediata', c3: 'Link en Bio →' }
-        ],
-        caption: 'Muchos me escriben desde distintas ciudades o buscan una opción accesible para entrenar en su propio gimnasio con una estructura profesional.\n\nCon la Suscripción App SENS ($19.900/mes) tenés acceso completo al diagnóstico inicial, rutinas por objetivo con videos demostrativos, cálculo de calorías por serie y catálogo nutricional interactivo.\n\nEntrá al link de la bio y activá tu cuenta hoy.'
-    },
-    {
-        id: 'tpl_cupos_vip',
-        name: '12. Apertura de Cupos 1:1 (Urgencia)',
-        badge: 'CIERRE DE VENTAS',
-        scenes: [
-            { eyebrow: 'AGENDA DEL MES ABIERTA', headline: 'SE ABRIERON 3 LUGARES PARA ENTRENAMIENTO 1:1', sub: 'Seguimiento personalizado conmigo para transformar tu fuerza, composición corporal y postura.', c1: 'Solo 3 Cupos', c2: 'CABA & Online VIP', c3: 'Atención 1 a 1' },
-            { eyebrow: 'QUÉ VAMOS A TRABAJAR', headline: 'DIAGNÓSTICO 360° + RUTINA A MEDIDA + NUTRICIÓN REAL', sub: 'Adaptado 100% a tus horarios, tus gustos alimenticios y tu historial articular.', c1: 'Plan Integral', c2: 'Feedback Directo', c3: 'Portal Exclusivo' },
-            { eyebrow: 'POSTULATE HOY', headline: 'ESCRIBIME "PLAN" POR MENSAJE DIRECTO O WHATSAPP', sub: 'Coordinamos una breve evaluación para definir el mejor formato para vos.', c1: 'Presencial CABA', c2: 'Online Premium', c3: 'Escribime PLAN →' }
-        ],
-        slides: [
-            { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO PERSONALIZADO 1:1', sub: 'Para quienes buscan acompañamiento directo paso a paso.', c1: 'Presencial CABA', c2: 'Online VIP', c3: 'Deslizá →' },
-            { eyebrow: 'PASO 1 • 2/4', headline: 'EVALUACIÓN DE POSTURA, FUERZA Y HÁBITOS ACTUALES', sub: 'Detectamos qué te frenó hasta hoy y diseñamos una hoja de ruta realista.', c1: 'Ficha 360°', c2: 'Sin Improvisar', c3: 'Deslizá →' },
-            { eyebrow: 'PASO 2 • 3/4', headline: 'EJECUCIÓN GUIADA Y AJUSTES SEMANALES EN LA APP', sub: 'Monitoreamos tus cargas, tu nutrición y tu recuperación semana a semana.', c1: '100% a Medida', c2: 'Contacto Directo', c3: 'Deslizá →' },
-            { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O TOCÁ EL LINK DE WHATSAPP', sub: 'Los lugares presenciales en CABA se asignan por orden de consulta.', c1: 'Nico Maralle', c2: 'Makes Sens', c3: 'Escribime PLAN →' }
+            { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO 1:1', sub: 'Para quienes buscan acompañamiento directo paso a paso.', c1: 'Solo 3 Cupos', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'PASO 1 • 2/4', headline: 'EVALUACIÓN DE POSTURA, FUERZA Y HÁBITOS', sub: 'Detectamos qué te frenó hasta hoy y diseñamos una hoja de ruta realista.', c1: 'Ficha 360°', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'PASO 2 • 3/4', headline: 'EJECUCIÓN GUIADA Y AJUSTES SEMANALES', sub: 'Monitoreamos tus cargas, tu nutrición y tu recuperación semana a semana.', c1: '100% a Medida', c2: '', c3: 'Deslizá →' },
+            { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O WHATSAPP', sub: 'Los lugares presenciales en CABA se asignan por orden de consulta.', c1: 'Nico Maralle', c2: '', c3: 'Escribime PLAN →' }
         ],
         caption: 'Abrimos 3 lugares este mes para seguimiento personalizado 1 a 1 (tanto en modalidad Presencial en CABA como Online Premium).\n\nSi querés dejar de adivinar en el gimnasio y seguir un plan biomecánico y nutricional diseñado específicamente para tu cuerpo y tu agenda, escribime "PLAN" por mensaje directo o WhatsApp.'
     }
@@ -20695,7 +20605,7 @@ const SENS_MARKETING_TEMPLATES = [
 
 let mktStudioState = {
     format: 'reel_video_9_16', // 'reel_video_9_16', 'carousel_4_5', 'post_4_5', 'story_9_16'
-    templateId: 'tpl_error_biomecanico',
+    templateId: 'tpl_editorial_minimalist',
     sceneIdx: 0,
     slideIdx: 0,
     autoCycleScenes: true,
@@ -20706,7 +20616,14 @@ let mktStudioState = {
     customImageObj: null,
     objectUrlCache: null,
     rafId: null,
-    cycleTimer: null
+    cycleTimer: null,
+    layers: {
+        branding: true,
+        eyebrow: true,
+        headline: true,
+        subtitle: true,
+        chips: false
+    }
 };
 
 window.initCoachMarketingStudio = function() {
@@ -20715,6 +20632,7 @@ window.initCoachMarketingStudio = function() {
     const sceneBtns = document.querySelectorAll('#mktVideoScenesTimelineBar .sens-mkt-scene-btn');
     const slideBtns = document.querySelectorAll('#mktCarouselSlidesBar .sens-mkt-slide-btn');
     const autoCycleCheck = document.getElementById('mktAutoCycleScenesCheck');
+    const layersBar = document.getElementById('mktLayersToggleBar');
 
     const inpEyebrow = document.getElementById('mktInputEyebrow');
     const inpHeadline = document.getElementById('mktInputHeadline');
@@ -20723,6 +20641,19 @@ window.initCoachMarketingStudio = function() {
     const inpC2 = document.getElementById('mktInputChip2');
     const inpC3 = document.getElementById('mktInputChip3');
 
+    // Toggles Modulares de Capas SENS
+    if (layersBar) {
+        layersBar.querySelectorAll('.sens-layer-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const layerKey = btn.getAttribute('data-layer');
+                if (!layerKey) return;
+                mktStudioState.layers[layerKey] = !mktStudioState.layers[layerKey];
+                syncMarketingLayersUI();
+                renderMarketingCanvasFrame();
+            });
+        });
+    }
+
     if (tplGrid) {
         let html = '';
         SENS_MARKETING_TEMPLATES.forEach((t, idx) => {
@@ -20730,6 +20661,7 @@ window.initCoachMarketingStudio = function() {
                 <button type="button" class="sens-mkt-tpl-card ${idx === 0 ? 'active' : ''}" data-tpl-id="${t.id}">
                     <span class="sens-mkt-tpl-cat">${t.badge}</span>
                     <strong class="sens-mkt-tpl-name">${t.name}</strong>
+                    <span class="sens-mkt-tpl-desc">${t.desc || ''}</span>
                 </button>
             `;
         });
@@ -21107,10 +21039,39 @@ function updateMarketingFormatLayout() {
     renderMarketingCanvasFrame();
 }
 
+function syncMarketingLayersUI() {
+    const bar = document.getElementById('mktLayersToggleBar');
+    if (bar && mktStudioState.layers) {
+        bar.querySelectorAll('.sens-layer-toggle').forEach(btn => {
+            const layerKey = btn.getAttribute('data-layer');
+            const isActive = !!mktStudioState.layers[layerKey];
+            btn.classList.toggle('active', isActive);
+            const check = btn.querySelector('.sens-layer-check');
+            if (check) check.textContent = isActive ? '✓' : '—';
+        });
+    }
+
+    const wrapEyebrow = document.getElementById('mktWrapEyebrow');
+    const wrapHeadline = document.getElementById('mktWrapHeadline');
+    const wrapSub = document.getElementById('mktWrapSubtitle');
+    const wrapChips = document.getElementById('mktWrapChips');
+
+    if (mktStudioState.layers) {
+        if (wrapEyebrow) wrapEyebrow.classList.toggle('is-layer-hidden', !mktStudioState.layers.eyebrow);
+        if (wrapHeadline) wrapHeadline.classList.toggle('is-layer-hidden', !mktStudioState.layers.headline);
+        if (wrapSub) wrapSub.classList.toggle('is-layer-hidden', !mktStudioState.layers.subtitle);
+        if (wrapChips) wrapChips.classList.toggle('is-layer-hidden', !mktStudioState.layers.chips);
+    }
+}
+
 function applyMarketingTemplateToInputs() {
     const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
     const capOutput = document.getElementById('mktCaptionOutput');
     if (capOutput) capOutput.value = tpl.caption || '';
+    if (tpl.defaultLayers) {
+        mktStudioState.layers = { ...tpl.defaultLayers };
+        syncMarketingLayersUI();
+    }
     loadActiveSceneOrSlideIntoInputs();
 }
 
@@ -21259,121 +21220,154 @@ function renderMarketingCanvasFrame() {
         }
     }
 
-    // 3. Gradiente Cinematográfico Quiet Luxury (Ajustado dinámicamente según 9:16 o 4:5)
+    // 3. Gradiente Cinematográfico Quiet Luxury
     const op = (mktStudioState.overlayOpacity || 80) / 100;
+    const layers = mktStudioState.layers || { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true };
+    const isLowerThird = (mktStudioState.templateId === 'tpl_lower_third_pro');
     const grad = ctx.createLinearGradient(0, 0, 0, H);
-    if (is45) {
-        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.45).toFixed(2)})`);
+
+    if (isLowerThird) {
+        grad.addColorStop(0, 'rgba(8, 8, 9, 0)');
+        grad.addColorStop(0.55, 'rgba(8, 8, 9, 0)');
+        grad.addColorStop(0.72, `rgba(8, 8, 9, ${(op * 0.65).toFixed(2)})`);
+        grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+    } else if (is45) {
+        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.42 : 0.15)).toFixed(2)})`);
         grad.addColorStop(0.35, `rgba(8, 8, 9, ${(op * 0.18).toFixed(2)})`);
-        grad.addColorStop(0.62, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+        grad.addColorStop(0.60, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
         grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
     } else {
-        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.55).toFixed(2)})`);
-        grad.addColorStop(0.42, `rgba(8, 8, 9, ${(op * 0.25).toFixed(2)})`);
-        grad.addColorStop(0.72, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
-        grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.12).toFixed(2)})`);
+        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.50 : 0.20)).toFixed(2)})`);
+        grad.addColorStop(0.40, `rgba(8, 8, 9, ${(op * 0.22).toFixed(2)})`);
+        grad.addColorStop(0.68, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+        grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
     }
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W, H);
 
-    // 4. Header Superior de Marca SENS (Identidad Inalterable)
-    ctx.save();
-    ctx.fillStyle = 'rgba(18, 18, 22, 0.85)';
-    ctx.strokeStyle = 'rgba(229, 203, 167, 0.45)';
-    ctx.lineWidth = 2;
-    roundRectCanvas(ctx, 64, 64, 290, 56, 28);
-    ctx.fill();
-    ctx.stroke();
+    // 4. Header Superior de Marca SENS (Si la capa está activa)
+    if (layers.branding) {
+        ctx.save();
+        const brandX = 70;
+        const brandY = is45 ? 54 : 70;
+        const barH = is45 ? 44 : 50;
 
-    ctx.fillStyle = '#E5CBA7';
-    ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('MAKES SENS • STUDIO', 94, 93);
-
-    // Indicador de secuencia arriba a la derecha
-    const topRightText = mktStudioState.format === 'carousel_4_5'
-        ? `${mktStudioState.slideIdx + 1} / 4`
-        : mktStudioState.format === 'reel_video_9_16'
-            ? (mktStudioState.sceneIdx === 0 ? 'HOOK 0-3s' : mktStudioState.sceneIdx === 1 ? 'CLAVE TÉCNICA' : 'PLAN SENS')
-            : ' @SENS.TRAIN.BA';
-    ctx.font = '700 21px "Plus Jakarta Sans", sans-serif';
-    const trWidth = ctx.measureText(topRightText).width + 52;
-    ctx.fillStyle = 'rgba(18, 18, 22, 0.85)';
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
-    roundRectCanvas(ctx, W - 64 - trWidth, 64, trWidth, 56, 28);
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(topRightText, W - 64 - trWidth + 26, 93);
-
-    // 5. Bloque Inferior Estilo Card de Entrenamiento SENS (Escalado editorial según ratio)
-    const eyebrow = (document.getElementById('mktInputEyebrow')?.value || 'BIOMECÁNICA SENS').toUpperCase();
-    const headline = (document.getElementById('mktInputHeadline')?.value || 'ENTRENÁ CON SENTIDO').toUpperCase();
-    const sub = document.getElementById('mktInputSubtitle')?.value || '';
-    const c1 = document.getElementById('mktInputChip1')?.value || '';
-    const c2 = document.getElementById('mktInputChip2')?.value || '';
-    const c3 = document.getElementById('mktInputChip3')?.value || '';
-
-    const bottomBaseY = is45 ? (H - 85) : (H - 110);
-    const chipHeight = is45 ? 50 : 58;
-    const chipY = bottomBaseY - chipHeight;
-
-    // Chips inferiores (3 píldoras estilo tarjeta de ejercicio)
-    const chips = [c1, c2, c3].filter(Boolean);
-    let chipX = 64;
-    ctx.font = `800 ${is45 ? 19 : 22}px "Plus Jakarta Sans", sans-serif`;
-    chips.forEach((ch, idx) => {
-        const isLast = (idx === chips.length - 1);
-        const w = ctx.measureText(ch).width + (is45 ? 40 : 48);
-        ctx.fillStyle = isLast ? '#E5CBA7' : 'rgba(24, 24, 28, 0.9)';
-        ctx.strokeStyle = isLast ? '#E5CBA7' : 'rgba(229, 203, 167, 0.35)';
-        ctx.lineWidth = 2;
-        roundRectCanvas(ctx, chipX, chipY, w, chipHeight, chipHeight / 2);
+        // Chip minimalista de superficie sólida elevada (Sin wireframe dorado estridente)
+        ctx.fillStyle = 'rgba(12, 12, 15, 0.72)';
+        roundRectCanvas(ctx, brandX, brandY, 218, barH, 12);
         ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = isLast ? '#080809' : '#FFFFFF';
-        ctx.fillText(ch, chipX + (is45 ? 20 : 24), chipY + (chipHeight / 2));
-        chipX += w + 14;
-    });
 
-    // Subtítulo / Bajada explicativa
-    const subFontSize = is45 ? 26 : 32;
-    const subLineHeight = is45 ? 36 : 44;
-    ctx.fillStyle = 'rgba(244, 244, 245, 0.92)';
-    ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-    const maxSubLines = is45 ? 2 : 3;
-    const subLines = wrapCanvasText(ctx, sub, W - 128).slice(0, maxSubLines);
-    let currentY = chipY - (is45 ? 28 : 36) - (subLines.length * subLineHeight);
-    subLines.forEach((line, i) => {
-        ctx.fillText(line, 64, currentY + (i * subLineHeight));
-    });
+        ctx.font = `800 ${is45 ? 16 : 18}px "Plus Jakarta Sans", sans-serif`;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('MAKES SENS', brandX + 22, brandY + (barH / 2));
 
-    // Titular Principal (con última línea destacada en Champagne Gold)
-    const headFontSize = is45 ? 50 : 62;
-    const headLineHeight = is45 ? 58 : 72;
-    ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-    const maxHeadLines = is45 ? 2 : 3;
-    const headLines = wrapCanvasText(ctx, headline, W - 128).slice(0, maxHeadLines);
-    const headStartY = currentY - (is45 ? 24 : 32) - (headLines.length * headLineHeight);
-    headLines.forEach((line, i) => {
-        ctx.fillStyle = (i === headLines.length - 1 && headLines.length > 1) ? '#E5CBA7' : '#FFFFFF';
-        ctx.fillText(line, 64, headStartY + (i * headLineHeight));
-    });
+        // Punto de acento discreto en Champagne Gold
+        ctx.fillStyle = '#E5CBA7';
+        ctx.beginPath();
+        ctx.arc(brandX + 172, brandY + (barH / 2), 4, 0, Math.PI * 2);
+        ctx.fill();
 
-    // Píldora Eyebrow Champagne encima del titular
-    const eyeFontSize = is45 ? 19 : 22;
-    const eyeHeight = is45 ? 44 : 50;
-    const eyeY = headStartY - (is45 ? 62 : 74);
-    ctx.font = `800 ${eyeFontSize}px "Plus Jakarta Sans", sans-serif`;
-    const eyeW = ctx.measureText(eyebrow).width + (is45 ? 36 : 44);
-    ctx.fillStyle = 'rgba(229, 203, 167, 0.16)';
-    ctx.strokeStyle = '#E5CBA7';
-    ctx.lineWidth = 2;
-    roundRectCanvas(ctx, 64, eyeY, eyeW, eyeHeight, eyeHeight / 2);
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = '#E5CBA7';
-    ctx.fillText(eyebrow, 64 + (is45 ? 18 : 22), eyeY + (eyeHeight / 2));
+        // Indicador de secuencia / escena a la derecha
+        const topRightText = mktStudioState.format === 'carousel_4_5'
+            ? `${mktStudioState.slideIdx + 1} / 4`
+            : mktStudioState.format === 'reel_video_9_16'
+                ? (mktStudioState.sceneIdx === 0 ? 'HOOK 0-3s' : mktStudioState.sceneIdx === 1 ? 'MÉTODO SENS' : 'PLAN VIP')
+                : 'SENS TRAIN';
+
+        if (topRightText) {
+            ctx.font = `700 ${is45 ? 15 : 17}px "Plus Jakarta Sans", sans-serif`;
+            const trW = ctx.measureText(topRightText).width + 36;
+            ctx.fillStyle = 'rgba(12, 12, 15, 0.72)';
+            roundRectCanvas(ctx, W - 70 - trW, brandY, trW, barH, 12);
+            ctx.fill();
+            ctx.fillStyle = '#FAF9F6';
+            ctx.fillText(topRightText, W - 70 - trW + 18, brandY + (barH / 2));
+        }
+        ctx.restore();
+    }
+
+    // 5. Bloque Inferior con Reflujo Dinámico Bottom-Up
+    const rawEyebrow = (document.getElementById('mktInputEyebrow')?.value || '').trim();
+    const rawHeadline = (document.getElementById('mktInputHeadline')?.value || '').trim();
+    const rawSub = (document.getElementById('mktInputSubtitle')?.value || '').trim();
+    const c1 = (document.getElementById('mktInputChip1')?.value || '').trim();
+    const c2 = (document.getElementById('mktInputChip2')?.value || '').trim();
+    const c3 = (document.getElementById('mktInputChip3')?.value || '').trim();
+
+    const chips = (layers.chips ? [c1, c2, c3].filter(Boolean) : []);
+    const hasChips = chips.length > 0;
+    const hasSub = layers.subtitle && rawSub.length > 0;
+    const hasHead = layers.headline && rawHeadline.length > 0;
+    const hasEye = layers.eyebrow && rawEyebrow.length > 0;
+
+    const bottomBaseY = is45 ? (H - 80) : (H - 120);
+    const chipHeight = is45 ? 46 : 52;
+    let currentY = bottomBaseY;
+
+    // A) Chips / Pills Inferiores (Superficie elevada sólida, cero wireframe)
+    if (hasChips) {
+        currentY = bottomBaseY - chipHeight;
+        let chipX = 70;
+        ctx.font = `700 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
+        chips.forEach((ch, idx) => {
+            const isHighlight = (idx === chips.length - 1 && chips.length > 1) || (chips.length === 1 && ch.includes('→'));
+            const padX = is45 ? 18 : 22;
+            const w = ctx.measureText(ch).width + (padX * 2);
+
+            ctx.fillStyle = isHighlight ? '#E5CBA7' : 'rgba(20, 20, 24, 0.82)';
+            roundRectCanvas(ctx, chipX, currentY, w, chipHeight, 10);
+            ctx.fill();
+
+            ctx.fillStyle = isHighlight ? '#121214' : '#FAF9F6';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(ch, chipX + padX, currentY + (chipHeight / 2));
+            chipX += w + 12;
+        });
+        currentY -= (is45 ? 24 : 32);
+    }
+
+    // B) Bajada / Rationale Biológico
+    if (hasSub) {
+        const subFontSize = is45 ? 26 : 32;
+        const subLineHeight = is45 ? 38 : 46;
+        ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const maxSubLines = is45 ? 2 : 3;
+        const subLines = wrapCanvasText(ctx, rawSub, W - 140).slice(0, maxSubLines);
+        const subStartY = currentY - (subLines.length * subLineHeight);
+        ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
+        ctx.textBaseline = 'top';
+        subLines.forEach((line, i) => {
+            ctx.fillText(line, 70, subStartY + (i * subLineHeight));
+        });
+        currentY = subStartY - (is45 ? 22 : 30);
+    }
+
+    // C) Titular de Alto Impacto (Dos Tonos: Blanco puro + Champagne Gold)
+    if (hasHead) {
+        const headFontSize = is45 ? 52 : 64;
+        const headLineHeight = is45 ? 60 : 74;
+        ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const maxHeadLines = is45 ? 2 : 3;
+        const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), W - 140).slice(0, maxHeadLines);
+        const headStartY = currentY - (headLines.length * headLineHeight);
+        ctx.textBaseline = 'top';
+        headLines.forEach((line, i) => {
+            const isAccent = (i === headLines.length - 1 && headLines.length > 1);
+            ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
+            ctx.fillText(line, 70, headStartY + (i * headLineHeight));
+        });
+        currentY = headStartY - (is45 ? 20 : 26);
+    }
+
+    // D) Eyebrow Kicker Editorial (Sin caja innecesaria, pura elegancia tipográfica)
+    if (hasEye) {
+        const eyeFontSize = is45 ? 20 : 23;
+        ctx.font = `800 ${eyeFontSize}px "Plus Jakarta Sans", sans-serif`;
+        ctx.fillStyle = '#E5CBA7';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(rawEyebrow.toUpperCase(), 70, currentY);
+    }
 
     ctx.restore();
 }

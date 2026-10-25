@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.3">
+    <link rel="stylesheet" href="style.css?v=11.4">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6758,17 +6758,15 @@
                                     </div>
                                 </div>
 
-                                <!-- Paso 2: 12 Plantillas de Alto Engagement & Conversión -->
+                                <!-- Paso 2: Arquetipos Visuales del Brandbook SENS (CDUs) -->
                                 <div class="sens-mkt-control-block">
                                     <div
                                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">PASO 2 • ELEGÍ EL
-                                            TEMPLATE (12 FÓRMULAS VIRALES)</span>
-                                        <span style="font-size: 10px; color: #B38E5D; background: #F7EFE4; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em;">Estética 100%
-                                            Bloqueada</span>
+                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">PASO 2 • ARQUETIPOS DE DISEÑO (CDUs DEL BRANDBOOK SENS)</span>
+                                        <span style="font-size: 10px; color: #B38E5D; background: #F7EFE4; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em;">Formatos Visuales Bloqueados</span>
                                     </div>
                                     <div class="sens-mkt-templates-grid" id="mktTemplateSelectorGrid">
-                                        <!-- Inyectado dinámicamente con las 12 plantillas de Growth Marketing -->
+                                        <!-- Inyectado dinámicamente con los Arquetipos Visuales del Brandbook -->
                                     </div>
                                 </div>
 
@@ -6845,16 +6843,40 @@
                                     </div>
                                 </div>
 
-                                <!-- Paso 5: Editor Guiado con Guardrails de Caracteres (Con Soporte Multi-Escena por Segundos y Multi-Slide Carrusel) -->
+                                <!-- Paso 5: Editor Guiado Modular con Toggles de Capas y Guardrails -->
                                 <div class="sens-mkt-control-block">
                                     <div
                                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">PASO 5 • TEXTOS
-                                            GUIADOS (CON LÍMITE ESTÉTICO)</span>
+                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">PASO 5 • EDICIÓN MODULAR &amp; CAPAS</span>
                                         <button type="button" class="btn btn-outline btn-sm" id="btnMktNextHookIdea"
                                             style="font-size: 10.5px; padding: 3px 9px; border-color: #9E7D4B; color: #9E7D4B;">
-                                            Sugerir Otro Hook Viral ↻
+                                            Siguiente Arquetipo Brandbook ↻
                                         </button>
+                                    </div>
+
+                                    <!-- Barra de Selección Modular de Capas (Toggles Activo / Inactivo) -->
+                                    <div style="background: #F3F1ED; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 14px; padding: 10px 12px; margin-bottom: 12px;">
+                                        <div style="font-size: 10.5px; font-weight: 800; color: #9E7D4B; margin-bottom: 7px; letter-spacing: 0.05em; display: flex; justify-content: space-between; align-items: center;">
+                                            <span>CAPAS ACTIVAS DEL BRANDBOOK (TOCÁ PARA MOSTRAR / OCULTAR):</span>
+                                            <span style="font-size: 9.5px; color: var(--text-muted); font-weight: 600;">Reflujo dinámico</span>
+                                        </div>
+                                        <div class="sens-mkt-layers-bar" id="mktLayersToggleBar">
+                                            <button type="button" class="sens-layer-toggle active" data-layer="branding" title="Header superior con wordmark MAKES SENS">
+                                                <span class="sens-layer-check">✓</span> Header SENS
+                                            </button>
+                                            <button type="button" class="sens-layer-toggle active" data-layer="eyebrow" title="Kicker superior tipográfico en Champagne Gold">
+                                                <span class="sens-layer-check">✓</span> Eyebrow Kicker
+                                            </button>
+                                            <button type="button" class="sens-layer-toggle active" data-layer="headline" title="Titular principal de alto impacto con dos tonos">
+                                                <span class="sens-layer-check">✓</span> Titular Hook
+                                            </button>
+                                            <button type="button" class="sens-layer-toggle active" data-layer="subtitle" title="Bajada explicativa con rationale biológico o indicación">
+                                                <span class="sens-layer-check">✓</span> Bajada Rationale
+                                            </button>
+                                            <button type="button" class="sens-layer-toggle active" data-layer="chips" title="Pills/Chips inferiores con foco biomecánico o métrica">
+                                                <span class="sens-layer-check">✓</span> Pills / Chips
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <!-- Selector de Escena por Segundos (Para Videos Multi-Escena) -->
@@ -6911,13 +6933,12 @@
                                         </div>
                                     </div>
 
-                                    <!-- Campos con Límite Estricto de Caracteres -->
+                                    <!-- Campos con Límite Estricto de Caracteres & Envoltorios de Capa -->
                                     <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
-                                        <div>
+                                        <div class="sens-mkt-input-wrap" id="mktWrapEyebrow">
                                             <div
                                                 style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px;">
-                                                <label class="input-label" style="margin:0;">Etiqueta Superior (Eyebrow
-                                                    Champagne)</label>
+                                                <label class="input-label" style="margin:0;">Etiqueta Kicker (Eyebrow Champagne)</label>
                                                 <span id="mktCharCountBadge"
                                                     style="color: var(--text-muted); font-variant-numeric: tabular-nums;">16/26</span>
                                             </div>
@@ -6925,11 +6946,10 @@
                                                 value="BIOMECÁNICA SENS" style="margin-bottom: 0;">
                                         </div>
 
-                                        <div>
+                                        <div class="sens-mkt-input-wrap" id="mktWrapHeadline">
                                             <div
                                                 style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px;">
-                                                <label class="input-label" style="margin:0;">Titular de Alto Impacto /
-                                                    Hook</label>
+                                                <label class="input-label" style="margin:0;">Titular de Alto Impacto / Hook</label>
                                                 <span id="mktCharCountHeadline"
                                                     style="color: var(--text-muted); font-variant-numeric: tabular-nums;">34/52</span>
                                             </div>
@@ -6938,11 +6958,10 @@
                                                 style="margin-bottom: 0; font-weight: 800;">
                                         </div>
 
-                                        <div>
+                                        <div class="sens-mkt-input-wrap" id="mktWrapSubtitle">
                                             <div
                                                 style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px;">
-                                                <label class="input-label" style="margin:0;">Bajada / Explicación
-                                                    Corta</label>
+                                                <label class="input-label" style="margin:0;">Bajada / Rationale Biológico</label>
                                                 <span id="mktCharCountSub"
                                                     style="color: var(--text-muted); font-variant-numeric: tabular-nums;">68/110</span>
                                             </div>
@@ -6951,33 +6970,38 @@
                                                 style="margin-bottom: 0;">Bajar en 3 segundos controlados recluta el doble de fibras que rebotar con exceso de peso.</textarea>
                                         </div>
 
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                                            <div>
-                                                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
-                                                    <label class="input-label" style="font-size: 10px; margin: 0;">Chip 1 (Foco)</label>
-                                                    <span id="mktCharCountC1" class="sens-char-counter">16/20</span>
-                                                </div>
-                                                <input type="text" id="mktInputChip1" class="input-control"
-                                                    maxlength="20" value="Foco: Cuádriceps"
-                                                    style="margin-bottom: 0; font-size: 12px;">
+                                        <div class="sens-mkt-input-wrap" id="mktWrapChips">
+                                            <div style="font-size: 11px; font-weight: 700; color: #575659; margin-bottom: 4px;">
+                                                Pills / Chips Inferiores (Dejar en blanco si se prefiere formato limpio)
                                             </div>
-                                            <div>
-                                                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
-                                                    <label class="input-label" style="font-size: 10px; margin: 0;">Chip 2 (Métrica)</label>
-                                                    <span id="mktCharCountC2" class="sens-char-counter">15/20</span>
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                                        <label class="input-label" style="font-size: 10px; margin: 0;">Chip 1 (Foco)</label>
+                                                        <span id="mktCharCountC1" class="sens-char-counter">16/20</span>
+                                                    </div>
+                                                    <input type="text" id="mktInputChip1" class="input-control"
+                                                        maxlength="20" value="Foco: Cuádriceps"
+                                                        style="margin-bottom: 0; font-size: 12px;">
                                                 </div>
-                                                <input type="text" id="mktInputChip2" class="input-control"
-                                                    maxlength="20" value="~11 kcal / serie"
-                                                    style="margin-bottom: 0; font-size: 12px;">
-                                            </div>
-                                            <div>
-                                                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
-                                                    <label class="input-label" style="font-size: 10px; margin: 0;">Chip 3 (CTA)</label>
-                                                    <span id="mktCharCountC3" class="sens-char-counter">16/22</span>
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                                        <label class="input-label" style="font-size: 10px; margin: 0;">Chip 2 (Métrica)</label>
+                                                        <span id="mktCharCountC2" class="sens-char-counter">15/20</span>
+                                                    </div>
+                                                    <input type="text" id="mktInputChip2" class="input-control"
+                                                        maxlength="20" value="~11 kcal / serie"
+                                                        style="margin-bottom: 0; font-size: 12px;">
                                                 </div>
-                                                <input type="text" id="mktInputChip3" class="input-control"
-                                                    maxlength="22" value="Escribime SENS →"
-                                                    style="margin-bottom: 0; font-size: 12px;">
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                                        <label class="input-label" style="font-size: 10px; margin: 0;">Chip 3 (CTA)</label>
+                                                        <span id="mktCharCountC3" class="sens-char-counter">16/22</span>
+                                                    </div>
+                                                    <input type="text" id="mktInputChip3" class="input-control"
+                                                        maxlength="22" value="Escribime SENS →"
+                                                        style="margin-bottom: 0; font-size: 12px;">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -9398,7 +9422,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=11.7"></script>
+    <script src="app.js?v=11.8"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
