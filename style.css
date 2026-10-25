@@ -17294,15 +17294,17 @@ body.in-portal #coachHubView {
     white-space: nowrap !important;
     flex-wrap: nowrap !important;
     -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x !important;
+    overscroll-behavior-x: contain !important;
     scrollbar-width: none !important;
-    padding: 4px 2px 8px 2px !important;
+    padding: 4px 4px 8px 4px !important;
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
 }
 
 #wizardStep3DayPillsStrip::-webkit-scrollbar {
-    display: none;
+    display: none !important;
 }
 
 .wizard-day-pill-btn {
@@ -17321,6 +17323,10 @@ body.in-portal #coachHubView {
     background: #F4F4F5 !important;
     color: #52525B !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
 
 .wizard-day-pill-btn .pill-day-name {
@@ -17372,19 +17378,21 @@ body.in-portal #coachHubView {
     white-space: nowrap !important;
     flex-wrap: nowrap !important;
     -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x !important;
+    overscroll-behavior-x: contain !important;
     scrollbar-width: none !important;
-    padding: 2px 2px 10px 2px !important;
+    padding: 4px 4px 10px 4px !important;
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
 }
 
 #wizardCatalogMuscleFilterStrip::-webkit-scrollbar {
-    display: none;
+    display: none !important;
 }
 
 .coach-muscle-filter-chip {
-    padding: 5px 12px !important;
+    padding: 6px 14px !important;
     border-radius: 16px !important;
     font-size: 11px !important;
     font-weight: 700 !important;
@@ -17395,6 +17403,10 @@ body.in-portal #coachHubView {
     background: #FFFFFF !important;
     color: #52525B !important;
     transition: all 0.15s ease !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
 
 .coach-muscle-filter-chip:hover {
@@ -19188,11 +19200,11 @@ body.in-portal,
     width: 100% !important;
     max-width: 480px !important;
     aspect-ratio: 4 / 5 !important;
-    max-height: 480px !important;
+    max-height: 42vh !important;
     border-radius: 20px !important;
     overflow: hidden !important;
     background: #080809 !important;
-    margin: 14px auto 0 !important;
+    margin: 12px auto 0 !important;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7) !important;
     transition: aspect-ratio 0.32s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease !important;
     cursor: pointer;
@@ -19201,7 +19213,7 @@ body.in-portal,
 
 .sens-exercise-modal-video-wrap.is-916-expanded {
     aspect-ratio: 9 / 16 !important;
-    max-height: 78vh !important;
+    max-height: 48vh !important;
     box-shadow: 0 14px 44px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(229, 203, 167, 0.35) !important;
 }
 
@@ -19569,13 +19581,20 @@ body.in-portal,
 
 /* 5. Master Timer Unificado (Un Solo Reloj / Senior UX Standard) */
 .sens-master-timer-card {
-    background: #141417;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 18px;
-    padding: 18px 20px;
-    margin: 16px 0;
+    background: rgba(18, 18, 22, 0.94) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(229, 203, 167, 0.25) !important;
+    border-radius: 18px !important;
+    padding: 14px 18px !important;
+    margin: -32px auto 14px auto !important;
+    position: relative !important;
+    z-index: 5 !important;
+    width: calc(100% - 12px) !important;
+    max-width: 480px !important;
+    box-sizing: border-box !important;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 1px rgba(229, 203, 167, 0.4) !important;
 }
 
 .sens-master-timer-top {

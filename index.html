@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.1">
+    <link rel="stylesheet" href="style.css?v=11.2">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -5888,7 +5888,7 @@
                                             editar. El catálogo ya viene prefiltrado por los músculos elegidos.</p>
                                     </div>
                                     <div id="wizardStep3DayPillsStrip"
-                                        style="display: flex; gap: 6px; overflow-x: auto; padding: 2px;">
+                                        style="display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; touch-action: pan-x; padding: 2px;">
                                         <!-- Inyectado dinámicamente con los días activos para alternar -->
                                     </div>
                                 </div>
@@ -5962,7 +5962,7 @@
 
                                     <!-- Sub-Filtros de Grupos Musculares -->
                                     <div id="wizardCatalogMuscleFilterStrip"
-                                        style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 10px 0;">
+                                        style="display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; touch-action: pan-x; padding: 2px 0 10px 0;">
                                         <!-- Inyectado dinámicamente con chips: Todos del día, Piernas, Espalda, etc. -->
                                     </div>
 
@@ -9386,7 +9386,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=11.5"></script>
+    <script src="app.js?v=11.6"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

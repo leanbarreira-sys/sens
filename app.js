@@ -1235,7 +1235,30 @@ function initLeadCapture() {
 // =============================================================================
 // GESTOR DE ROLES Y ATLETAS PARA PANEL DE COACH (NICO)
 // =============================================================================
+const SENS_COACH_ATHLETES_CACHE_KEY = 'sens_coach_athletes_cache_v1';
+
+function getStoredCoachAthletes() {
+    try {
+        const stored = localStorage.getItem(SENS_COACH_ATHLETES_CACHE_KEY);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+    } catch (_) {}
+    return null;
+}
+
 async function loadCoachAthletesList(forceRefresh = false) {
+    // Inicializar caché en memoria desde localStorage si está vacío
+    if (!window.__coachAthletesCache || window.__coachAthletesCache.length === 0) {
+        const fromStorage = getStoredCoachAthletes();
+        if (fromStorage && fromStorage.length > 0) {
+            window.__coachAthletesCache = fromStorage;
+        } else if (typeof getConsolidatedCoachAthletes === 'function') {
+            window.__coachAthletesCache = getConsolidatedCoachAthletes();
+        }
+    }
+
     if (!isCurrentUserAdmin()) {
         return window.__coachAthletesCache || [];
     }
@@ -1247,6 +1270,8 @@ async function loadCoachAthletesList(forceRefresh = false) {
 
     window._isFetchingCoachAthletes = (async () => {
         let dbAthletes = [];
+        const prevCache = window.__coachAthletesCache || getStoredCoachAthletes() || [];
+
         if (supabaseClient) {
             // Asegurar rol admin solo una vez por sesión (cero mutaciones innecesarias en cada lectura)
             if (AppState.user && AppState.user.id && !window.__sensAdminRoleSynced) {
@@ -1266,14 +1291,27 @@ async function loadCoachAthletesList(forceRefresh = false) {
                     .order('created_at', { ascending: false });
                 if (!error && data && data.length > 0) {
                     dbAthletes = data;
+                    try {
+                        localStorage.setItem(SENS_COACH_ATHLETES_CACHE_KEY, JSON.stringify(dbAthletes));
+                    } catch (_) {}
+                } else if (prevCache.length > 0) {
+                    console.warn('[CoachAthletes] Supabase retornó 0 filas; preservando caché persistente de', prevCache.length, 'atletas.');
+                    dbAthletes = prevCache;
                 }
             } catch (e) {
                 console.warn('Error al cargar atletas de Supabase para coach:', e);
+                if (prevCache.length > 0) dbAthletes = prevCache;
             }
+        } else if (prevCache.length > 0) {
+            dbAthletes = prevCache;
+        }
+
+        // Si dbAthletes sigue vacío, recurrir a los atletas consolidados locales
+        if (dbAthletes.length === 0 && typeof getConsolidatedCoachAthletes === 'function') {
+            dbAthletes = getConsolidatedCoachAthletes();
         }
 
         // Cache diffing: verificar si la lista cambió para no provocar layout thrashing en la UI
-        const prevCache = window.__coachAthletesCache || [];
         const isDataChanged = forceRefresh || prevCache.length !== dbAthletes.length || JSON.stringify(prevCache) !== JSON.stringify(dbAthletes);
         window.__coachAthletesCache = dbAthletes;
 
@@ -3041,6 +3079,9 @@ async function checkExistingSession() {
                     if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
                     if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
                     setupRealtimeProfileSubscription(session.user.id);
+                    if (isCurrentUserAdmin() && typeof loadCoachAthletesList === 'function') {
+                        loadCoachAthletesList(true);
+                    }
                 }
             } else if (event === 'SIGNED_OUT') {
                 AppState.user = null;
@@ -6879,15 +6920,14 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         }
     }
 
-    // 4. Card de Indicación Técnica / Nota de Nico
+    // 4. Card de Indicación Técnica / Nota de Nico (Solo visible si Nico escribe algo específico)
     if (coachCard && coachBody) {
         const dayNote = dayData.notes || dayData.coachNotes || dayData.coach_notes || (AppState.profile?.directive_note);
         if (dayNote && dayNote.trim().length > 0) {
             coachCard.style.display = 'block';
             coachBody.textContent = dayNote.trim();
         } else {
-            coachCard.style.display = 'block';
-            coachBody.textContent = 'Enfoque biomecánico en cadencia 3-0-1-0 y rango completo sin dolor articular. Finalizá cada serie en RIR 2.';
+            coachCard.style.display = 'none';
         }
     }
 
@@ -23879,6 +23919,32 @@ const CoachMultiDayActionsManager = {
 window.CoachMultiDayActionsManager = CoachMultiDayActionsManager;
 
 // =============================================================================
+// HELPER: SCROLL HORIZONTAL FLUIDO (TOUCH & POINTER DRAG)
+// =============================================================================
+window.enableHorizontalDragScroll = function(el) {
+    if (!el || el.__dragScrollAttached) return;
+    el.__dragScrollAttached = true;
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    el.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - el.offsetLeft;
+        scrollLeft = el.scrollLeft;
+    });
+    el.addEventListener('mouseleave', () => { isDown = false; });
+    el.addEventListener('mouseup', () => { isDown = false; });
+    el.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        el.scrollLeft = scrollLeft - walk;
+    });
+};
+
+// =============================================================================
 // MOTOR DETERMINISTA: COACH WORKOUTS MASTER (WIZARD & CALENDARIO)
 // =============================================================================
 const CoachWorkoutsMaster = {
@@ -23905,6 +23971,42 @@ const CoachWorkoutsMaster = {
     // Modo de selección masiva en calendario mensual
     isMultiSelectMode: false,
     selectedMultiDates: new Set(),
+
+    persistWizardDraft() {
+        try {
+            if (!this.activeAthleteId) return;
+            const payload = {
+                step: this.currentStep,
+                activeDayIndex: this.step3ActiveDayIndex,
+                subFilter: this.step3MuscleSubFilter,
+                draft: this.wizardDraft,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('sens_coach_wizard_draft_' + this.activeAthleteId, JSON.stringify(payload));
+        } catch (_) {}
+    },
+
+    restoreWizardDraft() {
+        try {
+            if (!this.activeAthleteId) return false;
+            const raw = localStorage.getItem('sens_coach_wizard_draft_' + this.activeAthleteId);
+            if (!raw) return false;
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.draft && (Date.now() - (parsed.timestamp || 0) < 24 * 60 * 60 * 1000)) {
+                this.wizardDraft = Object.assign({}, this.wizardDraft, parsed.draft);
+                return true;
+            }
+        } catch (_) {}
+        return false;
+    },
+
+    clearWizardDraft() {
+        try {
+            if (this.activeAthleteId) {
+                localStorage.removeItem('sens_coach_wizard_draft_' + this.activeAthleteId);
+            }
+        } catch (_) {}
+    },
 
     init() {
         this.bindVisionToggle();
@@ -23935,6 +24037,7 @@ const CoachWorkoutsMaster = {
     syncActiveAthlete(athId) {
         this.activeAthleteId = athId;
         this.generateUpcomingDays();
+        this.restoreWizardDraft();
         if (this.currentStep === 2) {
             this.renderStep2();
         } else if (this.currentStep === 3) {
@@ -24406,9 +24509,19 @@ const CoachWorkoutsMaster = {
                     if (this.step3ActiveDayIndex === newIdx) return;
                     this.step3ActiveDayIndex = newIdx;
                     this.step3MuscleSubFilter = 'day_muscles';
+                    this._catalogRenderLimit = 50;
                     this.renderStep3();
+                    setTimeout(() => {
+                        const activeBtn = pillsStrip.querySelector('.wizard-day-pill-btn.active');
+                        if (activeBtn) {
+                            try { activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch (_) {}
+                        }
+                    }, 40);
                 });
             });
+            if (typeof window.enableHorizontalDragScroll === 'function') {
+                window.enableHorizontalDragScroll(pillsStrip);
+            }
         }
 
         // Render Sub-filtros de músculo para el catálogo (siempre visible con acceso a todo el catálogo)
@@ -24441,11 +24554,17 @@ const CoachWorkoutsMaster = {
             filterStrip.querySelectorAll('[data-muscle-sub]').forEach(chip => {
                 chip.addEventListener('click', () => {
                     this.step3MuscleSubFilter = chip.getAttribute('data-muscle-sub');
+                    this._catalogRenderLimit = 50;
                     filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(c => c.classList.remove('active'));
                     chip.classList.add('active');
+                    try { chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch (_) {}
                     this.renderStep3Catalog(activeDay);
                 });
             });
+
+            if (typeof window.enableHorizontalDragScroll === 'function') {
+                window.enableHorizontalDragScroll(filterStrip);
+            }
         }
 
         this.renderStep3Catalog(activeDay);
@@ -24527,8 +24646,14 @@ const CoachWorkoutsMaster = {
             return;
         }
 
+        // Virtualización de catálogo en iOS/Mobile: max 50 cards iniciales para prevenir crash de memoria
+        const PAGE_SIZE = 50;
+        const currentLimit = this._catalogRenderLimit || PAGE_SIZE;
+        const visibleList = filtered.slice(0, currentLimit);
+        const hasMore = filtered.length > currentLimit;
+
         let html = '';
-        filtered.forEach(ex => {
+        visibleList.forEach(ex => {
             const isAdded = assignedIds.has(ex.id);
             const media = (typeof resolveExerciseMediaUrl === 'function')
                 ? resolveExerciseMediaUrl(ex.video_local_path)
@@ -24537,17 +24662,33 @@ const CoachWorkoutsMaster = {
             const muscleTag = (tax.muscleLabel || ex.nivel_2_grupo_muscular || 'FUERZA').toUpperCase();
             const exName = ex.name_es || ex.name;
 
+            // Senior IT WebKit Optimization:
+            // Cero inicialización de decodificadores AVPlayer masivos en tarjetas de catálogo.
+            // Los GIFs renderizan como <img> nativo y los videos MP4 muestran un preview estilizado con badge HD.
+            // Al tocar la tarjeta, se abre el modal individual con el video reproduciéndose a máxima calidad sin lag.
+            let mediaHtml = '';
+            if (media.url) {
+                if (media.isGif) {
+                    mediaHtml = `<img src="${media.url}" alt="${exName}" class="wizard-feed-video-bg" loading="lazy" decoding="async">`;
+                } else if (media.isVideo) {
+                    mediaHtml = `
+                        <div class="wizard-feed-video-preview-wrap" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 35%, #23232c 0%, #0d0d11 100%); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(229, 203, 167, 0.16); border: 1px solid rgba(229, 203, 167, 0.35); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="#E5CBA7" stroke="none"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                            </div>
+                            <span style="font-size: 8px; font-weight: 800; color: #E5CBA7; margin-top: 5px; letter-spacing: 0.5px; text-transform: uppercase;">Video HD</span>
+                        </div>
+                    `;
+                } else {
+                    mediaHtml = `<div class="wizard-feed-video-placeholder"></div>`;
+                }
+            } else {
+                mediaHtml = `<div class="wizard-feed-video-placeholder"></div>`;
+            }
+
             html += `
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
-                    ${media.url ? (media.isVideo ? `
-                        <video muted loop playsinline webkit-playsinline="true" preload="metadata" src="${media.url}" class="wizard-feed-video-bg">
-                            <source src="${media.url}" type="video/mp4">
-                        </video>
-                    ` : `
-                        <img src="${media.url}" alt="${exName}" class="wizard-feed-video-bg" loading="lazy">
-                    `) : `
-                        <div class="wizard-feed-video-placeholder"></div>
-                    `}
+                    ${mediaHtml}
                     <div class="wizard-feed-card-gradient"></div>
                     <div class="wizard-feed-top-pills">
                         <span class="pill pill-champagne" style="font-size: 8px; font-weight: 800; padding: 2px 6px;">${muscleTag}</span>
@@ -24566,59 +24707,28 @@ const CoachWorkoutsMaster = {
             `;
         });
 
+        if (hasMore) {
+            html += `
+                <div style="grid-column: 1 / -1; padding: 14px; text-align: center;">
+                    <button type="button" id="btnWizardLoadMoreExercises" class="btn btn-outline" style="font-size: 11px; padding: 8px 18px; border-color: #E5CBA7; color: #121214; background: #FFFFFF; font-weight: 700;">
+                        Mostrar más ejercicios (${filtered.length - visibleList.length} restantes) ↓
+                    </button>
+                </div>
+            `;
+        }
+
         grid.innerHTML = html;
 
-        // WebKit & iOS Safari optimization: prime muted, inline and metadata loading
-        grid.querySelectorAll('video.wizard-feed-video-bg').forEach(v => {
-            v.muted = true;
-            v.defaultMuted = true;
-            v.playsInline = true;
-            try { v.load(); } catch (e) {}
-        });
-
-        // Optimization: IntersectionObserver to play ONLY videos that are actively visible (max 2 decoders concurrently)
-        if (this._step3VideoObserver) {
-            try { this._step3VideoObserver.disconnect(); } catch (e) {}
-            this._step3VideoObserver = null;
-        }
-
-        if ('IntersectionObserver' in window) {
-            this._step3VideoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const video = entry.target;
-                    if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
-                        const playPromise = video.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(() => {});
-                        }
-                    } else {
-                        video.pause();
-                    }
-                });
-            }, {
-                root: null,
-                threshold: [0, 0.2]
-            });
-
-            grid.querySelectorAll('video.wizard-feed-video-bg').forEach(v => {
-                this._step3VideoObserver.observe(v);
+        const loadMoreBtn = document.getElementById('btnWizardLoadMoreExercises');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => {
+                this._catalogRenderLimit = (this._catalogRenderLimit || PAGE_SIZE) + PAGE_SIZE;
+                this.renderStep3Catalog(activeDay);
             });
         }
 
-        // Desktop hover preview & Click para ver detalle completo del ejercicio
+        // Al tocar la card (fuera del botón "+ Agregar"), abre la vista técnica profunda
         grid.querySelectorAll('.wizard-feed-ex-card').forEach(card => {
-            const vid = card.querySelector('video.wizard-feed-video-bg');
-            if (vid) {
-                card.addEventListener('mouseenter', () => {
-                    const p = vid.play();
-                    if (p !== undefined) p.catch(() => {});
-                });
-                card.addEventListener('mouseleave', () => {
-                    if (!this._step3VideoObserver) vid.pause();
-                });
-            }
-
-            // Al tocar la card (fuera del botón "+ Agregar"), abre la vista técnica profunda
             card.addEventListener('click', (e) => {
                 if (e.target.closest('.btn-wizard-add-ex')) return;
                 const exId = card.getAttribute('data-ex-id');
@@ -24780,6 +24890,7 @@ const CoachWorkoutsMaster = {
                 const idx = parseInt(btn.getAttribute('data-idx'), 10);
                 const removedEx = exercises[idx];
                 exercises.splice(idx, 1);
+                this.persistWizardDraft();
                 if (removedEx && removedEx.id) {
                     this.updateCardAddedState(removedEx.id, false);
                 }
@@ -24825,6 +24936,8 @@ const CoachWorkoutsMaster = {
             video: exObj.video || exObj.video_url || '',
             poster_url: exObj.poster_url || exObj.thumbnail || ''
         });
+
+        this.persistWizardDraft();
 
         // In-place UI updates without reloading the video feed
         this.updateCardAddedState(exObj.id, true);
@@ -25425,6 +25538,8 @@ const CoachWorkoutsMaster = {
                 showSensToast(toastDetail, 'champagne');
             }
         }
+
+        this.clearWizardDraft();
 
         if (typeof this.renderMonthCalendar === 'function') {
             this.renderMonthCalendar();
