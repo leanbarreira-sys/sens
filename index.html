@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.2">
+    <link rel="stylesheet" href="style.css?v=11.3">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6761,10 +6761,10 @@
                                 <!-- Paso 2: 12 Plantillas de Alto Engagement & Conversión -->
                                 <div class="sens-mkt-control-block">
                                     <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
                                         <span class="sens-mkt-step-badge" style="margin-bottom: 0;">PASO 2 • ELEGÍ EL
                                             TEMPLATE (12 FÓRMULAS VIRALES)</span>
-                                        <span style="font-size: 10.5px; color: #9E7D4B; font-weight: 700;">Estética 100%
+                                        <span style="font-size: 10px; color: #B38E5D; background: #F7EFE4; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em;">Estética 100%
                                             Bloqueada</span>
                                     </div>
                                     <div class="sens-mkt-templates-grid" id="mktTemplateSelectorGrid">
@@ -6802,15 +6802,21 @@
                                         SESIÓN)</span>
                                     <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
                                         <label for="mktMediaFileInput" class="btn btn-primary btn-sm"
-                                            style="cursor: pointer; font-weight: 800; flex: 1; text-align: center;">
+                                            style="cursor: pointer; font-weight: 800; flex: 1; text-align: center; background: #E5CBA7; color: #2A241C; border: none; padding: 10px 14px; border-radius: 10px;">
                                             Subir Foto o Video del Celular
                                         </label>
                                         <input type="file" id="mktMediaFileInput" accept="image/*,video/*"
                                             style="display: none;">
                                         <button type="button" class="btn btn-outline btn-sm" id="btnMktUseDefaultMedia"
-                                            style="font-size: 11px;">
+                                            style="font-size: 11px; padding: 9px 12px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214;">
                                             Usar Fondo SENS Oficial
                                         </button>
+                                    </div>
+                                    <div id="mktMediaFileStatusPill" style="margin-top: 8px; display: none;">
+                                        <span style="font-size: 10.5px; font-weight: 700; color: #1B7A36; background: #EBF7EE; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+                                            <span style="font-size: 12px;">✓</span>
+                                            <span id="mktMediaFileStatusText">Foto/Video cargado en memoria</span>
+                                        </span>
                                     </div>
                                     <!-- Sliders de Encuadre / Zoom / Oscuridad de Overlay -->
                                     <div
@@ -6947,22 +6953,28 @@
 
                                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
                                             <div>
-                                                <label class="input-label" style="font-size: 10.5px;">Chip 1
-                                                    (Foco)</label>
+                                                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                                    <label class="input-label" style="font-size: 10px; margin: 0;">Chip 1 (Foco)</label>
+                                                    <span id="mktCharCountC1" class="sens-char-counter">16/20</span>
+                                                </div>
                                                 <input type="text" id="mktInputChip1" class="input-control"
                                                     maxlength="20" value="Foco: Cuádriceps"
                                                     style="margin-bottom: 0; font-size: 12px;">
                                             </div>
                                             <div>
-                                                <label class="input-label" style="font-size: 10.5px;">Chip 2
-                                                    (Métrica)</label>
+                                                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                                    <label class="input-label" style="font-size: 10px; margin: 0;">Chip 2 (Métrica)</label>
+                                                    <span id="mktCharCountC2" class="sens-char-counter">15/20</span>
+                                                </div>
                                                 <input type="text" id="mktInputChip2" class="input-control"
                                                     maxlength="20" value="~11 kcal / serie"
                                                     style="margin-bottom: 0; font-size: 12px;">
                                             </div>
                                             <div>
-                                                <label class="input-label" style="font-size: 10.5px;">Chip 3 /
-                                                    CTA</label>
+                                                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                                    <label class="input-label" style="font-size: 10px; margin: 0;">Chip 3 (CTA)</label>
+                                                    <span id="mktCharCountC3" class="sens-char-counter">16/22</span>
+                                                </div>
                                                 <input type="text" id="mktInputChip3" class="input-control"
                                                     maxlength="22" value="Escribime SENS →"
                                                     style="margin-bottom: 0; font-size: 12px;">
@@ -7004,7 +7016,7 @@
                                     </div>
 
                                     <!-- Contenedor del Canvas de Alta Resolución (1080x1350 o 1080x1920) -->
-                                    <div class="sens-mkt-canvas-stage" id="mktCanvasStageWrap">
+                                    <div class="sens-mkt-canvas-stage is-916" id="mktCanvasStageWrap">
                                         <canvas id="sensMarketingCanvas" width="1080" height="1920"></canvas>
                                         <!-- Elementos multimedia ocultos que alimentan el canvas en RAM -->
                                         <video id="mktHiddenSourceVideo" muted loop playsinline src=""
@@ -9386,7 +9398,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=11.6"></script>
+    <script src="app.js?v=11.7"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

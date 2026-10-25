@@ -20728,8 +20728,8 @@ window.initCoachMarketingStudio = function() {
         SENS_MARKETING_TEMPLATES.forEach((t, idx) => {
             html += `
                 <button type="button" class="sens-mkt-tpl-card ${idx === 0 ? 'active' : ''}" data-tpl-id="${t.id}">
-                    <span class="tpl-badge">${t.badge}</span>
-                    <strong>${t.name}</strong>
+                    <span class="sens-mkt-tpl-cat">${t.badge}</span>
+                    <strong class="sens-mkt-tpl-name">${t.name}</strong>
                 </button>
             `;
         });
@@ -20781,7 +20781,7 @@ window.initCoachMarketingStudio = function() {
         });
     }
 
-    // Inputs en tiempo real con guardado en la escena/slide activa y contadores de caracteres
+    // Inputs en tiempo real con guardado en la escena/slide activa y contadores de caracteres con guardrails
     const syncInputsToActiveFrame = () => {
         const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
         const frame = mktStudioState.format === 'carousel_4_5'
@@ -20797,12 +20797,20 @@ window.initCoachMarketingStudio = function() {
             frame.c3 = (inpC3?.value || '').slice(0, 22);
         }
 
-        const cBadge = document.getElementById('mktCharCountBadge');
-        const cHead = document.getElementById('mktCharCountHeadline');
-        const cSub = document.getElementById('mktCharCountSub');
-        if (cBadge && inpEyebrow) cBadge.textContent = `${inpEyebrow.value.length}/26`;
-        if (cHead && inpHeadline) cHead.textContent = `${inpHeadline.value.length}/52`;
-        if (cSub && inpSub) cSub.textContent = `${inpSub.value.length}/110`;
+        const updateCounter = (el, val, max) => {
+            if (!el) return;
+            const len = (val || '').length;
+            el.textContent = `${len}/${max}`;
+            el.classList.toggle('is-warning', len >= Math.floor(max * 0.85) && len < max);
+            el.classList.toggle('is-max', len >= max);
+        };
+
+        updateCounter(document.getElementById('mktCharCountBadge'), inpEyebrow?.value, 26);
+        updateCounter(document.getElementById('mktCharCountHeadline'), inpHeadline?.value, 52);
+        updateCounter(document.getElementById('mktCharCountSub'), inpSub?.value, 110);
+        updateCounter(document.getElementById('mktCharCountC1'), inpC1?.value, 20);
+        updateCounter(document.getElementById('mktCharCountC2'), inpC2?.value, 20);
+        updateCounter(document.getElementById('mktCharCountC3'), inpC3?.value, 22);
 
         renderMarketingCanvasFrame();
     };
@@ -20900,6 +20908,11 @@ window.initCoachMarketingStudio = function() {
     const defaultMediaBtn = document.getElementById('btnMktUseDefaultMedia');
     const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
 
+    if (hiddenVideo && !hiddenVideo.getAttribute('src')) {
+        hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
+        hiddenVideo.load();
+    }
+
     if (fileInput) {
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files && e.target.files[0];
@@ -20910,13 +20923,21 @@ window.initCoachMarketingStudio = function() {
             const url = URL.createObjectURL(file);
             mktStudioState.objectUrlCache = url;
 
+            const statusPill = document.getElementById('mktMediaFileStatusPill');
+            const statusText = document.getElementById('mktMediaFileStatusText');
+            if (statusPill && statusText) {
+                statusPill.style.display = 'block';
+                const cleanName = file.name.length > 25 ? (file.name.slice(0, 22) + '...') : file.name;
+                statusText.textContent = `✓ ${cleanName} cargado en memoria`;
+            }
+
             if (file.type.startsWith('video/')) {
                 mktStudioState.mediaType = 'video';
                 if (hiddenVideo) {
                     hiddenVideo.src = url;
                     hiddenVideo.play().catch(() => {});
                 }
-                showSensToast('Video cargado en memoria local (0 bytes en servidor).', 'champagne');
+                showSensToast('Video cargado y centrado automáticamente (0 bytes en servidor).', 'champagne');
             } else {
                 mktStudioState.mediaType = 'image';
                 const img = new Image();
@@ -20925,7 +20946,7 @@ window.initCoachMarketingStudio = function() {
                     renderMarketingCanvasFrame();
                 };
                 img.src = url;
-                showSensToast('Imagen cargada en memoria local (0 bytes en servidor).', 'champagne');
+                showSensToast('Imagen cargada y centrada automáticamente (0 bytes en servidor).', 'champagne');
             }
         });
     }
@@ -20934,6 +20955,8 @@ window.initCoachMarketingStudio = function() {
         defaultMediaBtn.addEventListener('click', () => {
             mktStudioState.mediaType = 'video';
             mktStudioState.customImageObj = null;
+            const statusPill = document.getElementById('mktMediaFileStatusPill');
+            if (statusPill) statusPill.style.display = 'none';
             if (hiddenVideo) {
                 hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
                 hiddenVideo.play().catch(() => {});
@@ -21059,6 +21082,7 @@ window.initCoachMarketingStudio = function() {
 
 function updateMarketingFormatLayout() {
     const canvas = document.getElementById('sensMarketingCanvas');
+    const stage = document.getElementById('mktCanvasStageWrap');
     const resLabel = document.getElementById('mktPreviewResolutionLabel');
     const scenesBar = document.getElementById('mktVideoScenesTimelineBar');
     const slidesBar = document.getElementById('mktCarouselSlidesBar');
@@ -21069,6 +21093,10 @@ function updateMarketingFormatLayout() {
         canvas.width = 1080;
         canvas.height = is916 ? 1920 : 1350;
     }
+    if (stage) {
+        stage.classList.toggle('is-916', is916);
+        stage.classList.toggle('is-45', !is916);
+    }
     if (resLabel) {
         resLabel.textContent = is916
             ? 'VISTA PREVIA EN VIVO • 1080×1920 (9:16)'
@@ -21076,6 +21104,7 @@ function updateMarketingFormatLayout() {
     }
     if (scenesBar) scenesBar.style.display = (f === 'reel_video_9_16') ? 'block' : 'none';
     if (slidesBar) slidesBar.style.display = (f === 'carousel_4_5') ? 'block' : 'none';
+    renderMarketingCanvasFrame();
 }
 
 function applyMarketingTemplateToInputs() {
@@ -21106,6 +21135,21 @@ function loadActiveSceneOrSlideIntoInputs() {
     if (inpC1) inpC1.value = frame.c1 || '';
     if (inpC2) inpC2.value = frame.c2 || '';
     if (inpC3) inpC3.value = frame.c3 || '';
+
+    const updateCounter = (el, val, max) => {
+        if (!el) return;
+        const len = (val || '').length;
+        el.textContent = `${len}/${max}`;
+        el.classList.toggle('is-warning', len >= Math.floor(max * 0.85) && len < max);
+        el.classList.toggle('is-max', len >= max);
+    };
+
+    updateCounter(document.getElementById('mktCharCountBadge'), inpEyebrow?.value, 26);
+    updateCounter(document.getElementById('mktCharCountHeadline'), inpHeadline?.value, 52);
+    updateCounter(document.getElementById('mktCharCountSub'), inpSub?.value, 110);
+    updateCounter(document.getElementById('mktCharCountC1'), inpC1?.value, 20);
+    updateCounter(document.getElementById('mktCharCountC2'), inpC2?.value, 20);
+    updateCounter(document.getElementById('mktCharCountC3'), inpC3?.value, 22);
 
     if (indicator) {
         if (isCarousel) {
@@ -21189,6 +21233,7 @@ function renderMarketingCanvasFrame() {
     const ctx = canvas.getContext('2d');
     const W = canvas.width;
     const H = canvas.height;
+    const is45 = (H <= 1400); // 1350 vs 1920
 
     // 1. Fondo Base Obsidian
     ctx.fillStyle = '#080809';
@@ -21214,29 +21259,36 @@ function renderMarketingCanvasFrame() {
         }
     }
 
-    // 3. Gradiente Cinematográfico Quiet Luxury (Bloqueado para legibilidad perfecta)
+    // 3. Gradiente Cinematográfico Quiet Luxury (Ajustado dinámicamente según 9:16 o 4:5)
     const op = (mktStudioState.overlayOpacity || 80) / 100;
     const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.55).toFixed(2)})`);
-    grad.addColorStop(0.42, `rgba(8, 8, 9, ${(op * 0.25).toFixed(2)})`);
-    grad.addColorStop(0.72, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
-    grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.12).toFixed(2)})`);
+    if (is45) {
+        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.45).toFixed(2)})`);
+        grad.addColorStop(0.35, `rgba(8, 8, 9, ${(op * 0.18).toFixed(2)})`);
+        grad.addColorStop(0.62, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+        grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
+    } else {
+        grad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.55).toFixed(2)})`);
+        grad.addColorStop(0.42, `rgba(8, 8, 9, ${(op * 0.25).toFixed(2)})`);
+        grad.addColorStop(0.72, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
+        grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.12).toFixed(2)})`);
+    }
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W, H);
 
     // 4. Header Superior de Marca SENS (Identidad Inalterable)
     ctx.save();
-    ctx.fillStyle = 'rgba(18, 18, 22, 0.82)';
+    ctx.fillStyle = 'rgba(18, 18, 22, 0.85)';
     ctx.strokeStyle = 'rgba(229, 203, 167, 0.45)';
     ctx.lineWidth = 2;
-    roundRectCanvas(ctx, 64, 68, 290, 56, 28);
+    roundRectCanvas(ctx, 64, 64, 290, 56, 28);
     ctx.fill();
     ctx.stroke();
 
     ctx.fillStyle = '#E5CBA7';
     ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
     ctx.textBaseline = 'middle';
-    ctx.fillText('MAKES SENS • STUDIO', 94, 97);
+    ctx.fillText('MAKES SENS • STUDIO', 94, 93);
 
     // Indicador de secuencia arriba a la derecha
     const topRightText = mktStudioState.format === 'carousel_4_5'
@@ -21246,15 +21298,15 @@ function renderMarketingCanvasFrame() {
             : ' @SENS.TRAIN.BA';
     ctx.font = '700 21px "Plus Jakarta Sans", sans-serif';
     const trWidth = ctx.measureText(topRightText).width + 52;
-    ctx.fillStyle = 'rgba(18, 18, 22, 0.82)';
+    ctx.fillStyle = 'rgba(18, 18, 22, 0.85)';
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
-    roundRectCanvas(ctx, W - 64 - trWidth, 68, trWidth, 56, 28);
+    roundRectCanvas(ctx, W - 64 - trWidth, 64, trWidth, 56, 28);
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(topRightText, W - 64 - trWidth + 26, 97);
+    ctx.fillText(topRightText, W - 64 - trWidth + 26, 93);
 
-    // 5. Bloque Inferior Estilo Card de Entrenamiento SENS
+    // 5. Bloque Inferior Estilo Card de Entrenamiento SENS (Escalado editorial según ratio)
     const eyebrow = (document.getElementById('mktInputEyebrow')?.value || 'BIOMECÁNICA SENS').toUpperCase();
     const headline = (document.getElementById('mktInputHeadline')?.value || 'ENTRENÁ CON SENTIDO').toUpperCase();
     const sub = document.getElementById('mktInputSubtitle')?.value || '';
@@ -21262,57 +21314,66 @@ function renderMarketingCanvasFrame() {
     const c2 = document.getElementById('mktInputChip2')?.value || '';
     const c3 = document.getElementById('mktInputChip3')?.value || '';
 
-    const bottomBaseY = H - 110;
+    const bottomBaseY = is45 ? (H - 85) : (H - 110);
+    const chipHeight = is45 ? 50 : 58;
+    const chipY = bottomBaseY - chipHeight;
 
     // Chips inferiores (3 píldoras estilo tarjeta de ejercicio)
     const chips = [c1, c2, c3].filter(Boolean);
     let chipX = 64;
-    const chipY = bottomBaseY - 64;
-    ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
+    ctx.font = `800 ${is45 ? 19 : 22}px "Plus Jakarta Sans", sans-serif`;
     chips.forEach((ch, idx) => {
         const isLast = (idx === chips.length - 1);
-        const w = ctx.measureText(ch).width + 48;
+        const w = ctx.measureText(ch).width + (is45 ? 40 : 48);
         ctx.fillStyle = isLast ? '#E5CBA7' : 'rgba(24, 24, 28, 0.9)';
         ctx.strokeStyle = isLast ? '#E5CBA7' : 'rgba(229, 203, 167, 0.35)';
         ctx.lineWidth = 2;
-        roundRectCanvas(ctx, chipX, chipY, w, 58, 29);
+        roundRectCanvas(ctx, chipX, chipY, w, chipHeight, chipHeight / 2);
         ctx.fill();
         ctx.stroke();
         ctx.fillStyle = isLast ? '#080809' : '#FFFFFF';
-        ctx.fillText(ch, chipX + 24, chipY + 30);
-        chipX += w + 16;
+        ctx.fillText(ch, chipX + (is45 ? 20 : 24), chipY + (chipHeight / 2));
+        chipX += w + 14;
     });
 
     // Subtítulo / Bajada explicativa
+    const subFontSize = is45 ? 26 : 32;
+    const subLineHeight = is45 ? 36 : 44;
     ctx.fillStyle = 'rgba(244, 244, 245, 0.92)';
-    ctx.font = '500 32px "Plus Jakarta Sans", sans-serif';
-    const subLines = wrapCanvasText(ctx, sub, W - 128);
-    let currentY = chipY - 36 - (subLines.length * 44);
+    ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
+    const maxSubLines = is45 ? 2 : 3;
+    const subLines = wrapCanvasText(ctx, sub, W - 128).slice(0, maxSubLines);
+    let currentY = chipY - (is45 ? 28 : 36) - (subLines.length * subLineHeight);
     subLines.forEach((line, i) => {
-        ctx.fillText(line, 64, currentY + (i * 44));
+        ctx.fillText(line, 64, currentY + (i * subLineHeight));
     });
 
     // Titular Principal (con última línea destacada en Champagne Gold)
-    ctx.font = '800 62px "Plus Jakarta Sans", sans-serif';
-    const headLines = wrapCanvasText(ctx, headline, W - 128);
-    const headStartY = currentY - 32 - (headLines.length * 72);
+    const headFontSize = is45 ? 50 : 62;
+    const headLineHeight = is45 ? 58 : 72;
+    ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+    const maxHeadLines = is45 ? 2 : 3;
+    const headLines = wrapCanvasText(ctx, headline, W - 128).slice(0, maxHeadLines);
+    const headStartY = currentY - (is45 ? 24 : 32) - (headLines.length * headLineHeight);
     headLines.forEach((line, i) => {
         ctx.fillStyle = (i === headLines.length - 1 && headLines.length > 1) ? '#E5CBA7' : '#FFFFFF';
-        ctx.fillText(line, 64, headStartY + (i * 72));
+        ctx.fillText(line, 64, headStartY + (i * headLineHeight));
     });
 
     // Píldora Eyebrow Champagne encima del titular
-    const eyeY = headStartY - 76;
-    ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
-    const eyeW = ctx.measureText(eyebrow).width + 44;
+    const eyeFontSize = is45 ? 19 : 22;
+    const eyeHeight = is45 ? 44 : 50;
+    const eyeY = headStartY - (is45 ? 62 : 74);
+    ctx.font = `800 ${eyeFontSize}px "Plus Jakarta Sans", sans-serif`;
+    const eyeW = ctx.measureText(eyebrow).width + (is45 ? 36 : 44);
     ctx.fillStyle = 'rgba(229, 203, 167, 0.16)';
     ctx.strokeStyle = '#E5CBA7';
     ctx.lineWidth = 2;
-    roundRectCanvas(ctx, 64, eyeY, eyeW, 50, 25);
+    roundRectCanvas(ctx, 64, eyeY, eyeW, eyeHeight, eyeHeight / 2);
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = '#E5CBA7';
-    ctx.fillText(eyebrow, 86, eyeY + 26);
+    ctx.fillText(eyebrow, 64 + (is45 ? 18 : 22), eyeY + (eyeHeight / 2));
 
     ctx.restore();
 }

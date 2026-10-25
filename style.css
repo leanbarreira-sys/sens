@@ -2,6 +2,42 @@
    1. DESIGN TOKENS & CORE VARIABLES (Onyx & Champagne - Brandbook v6.0)
    ========================================= */
 :root {
+    /* --- PALETA BASE & SUPERFICIES (MODO LIGHT QUIET LUXURY) --- */
+    --sens-bg-canvas: #FAF9F6;              /* Lienzo general: alabastro/lino cálido */
+    --sens-bg-surface: #FFFFFF;             /* Contenedores y cards: blanco puro */
+    --sens-bg-surface-subtle: #F3F1ED;      /* Fondos secundarios, pills y chips */
+    --sens-bg-surface-inset: #ECEAE4;       /* Inputs, slots y áreas de contraste suave */
+
+    /* --- TEXTO & CONTRASTE EDITORIAL --- */
+    --sens-text-primary: #121214;          /* Carbón profundo / tinta negra */
+    --sens-text-secondary: #575659;        /* Gris visón cálido para bajadas y descripciones */
+    --sens-text-muted: #8E8D90;            /* Micro-labels, disclaimers y placeholders */
+
+    /* --- ACENTOS & IDENTIDAD SENS --- */
+    --sens-accent-gold: #E5CBA7;           /* Champagne / arena dorada para CTAs principales */
+    --sens-accent-gold-hover: #D8BD97;     /* Hover de botones dorados */
+    --sens-accent-gold-light: #F7EFE4;     /* Chips recomendados y acentos suaves */
+    --sens-accent-gold-text: #2A241C;      /* Texto de alto contraste sobre botón champagne */
+    --sens-accent-green: #25D366;          /* WhatsApp icon */
+    --sens-accent-tag-bg: #EBF7EE;         /* Badge 'Óptimo' background */
+    --sens-accent-tag-text: #1B7A36;       /* Badge 'Óptimo' texto */
+
+    /* --- BORDES & DELINEADO TÁCTIL (HAIRLINE BORDERS) --- */
+    --sens-border-hairline: rgba(18, 18, 20, 0.08); /* Bordes sutiles sin sombras toscas */
+    --sens-border-subtle: rgba(18, 18, 20, 0.12);
+    --sens-border-focus: #121214;
+
+    /* --- SOMBRAS ORGÁNICAS (QUIET LUXURY SHADOWS) --- */
+    --sens-shadow-sm: 0 1px 3px rgba(18, 18, 20, 0.03);
+    --sens-shadow-card: 0 4px 20px -2px rgba(18, 18, 20, 0.04), 0 2px 6px -1px rgba(18, 18, 20, 0.02);
+    --sens-shadow-floating: 0 10px 30px -4px rgba(18, 18, 20, 0.08);
+
+    /* --- RADIOS --- */
+    --sens-radius-sm: 8px;
+    --sens-radius-md: 14px;
+    --sens-radius-lg: 20px;
+    --sens-radius-full: 9999px;
+
     /* Paleta Onyx & Champagne */
     --bg-base: #080809;        /* Negro Onyx profundo (70%) */
     --bg-surface: #121214;     /* Superficies, cards, modales (20%) */
@@ -16167,42 +16203,59 @@ body.in-portal #coachHubView {
     }
 }
 
-/* 6. Growth Marketing Studio (Plug & Play 1080x1350 / 1080x1920) */
+/* 6. Growth Marketing Studio (Light Quiet Luxury • 1080x1350 / 1080x1920) */
+#paneMarketing {
+    background: transparent !important;
+}
+
+#paneMarketing .coach-surface-card {
+    background: var(--sens-bg-surface, #FFFFFF) !important;
+    border: 1px solid var(--sens-border-hairline, rgba(18, 18, 20, 0.08)) !important;
+    border-radius: 20px !important;
+    box-shadow: var(--sens-shadow-card, 0 4px 20px -2px rgba(18, 18, 20, 0.04)) !important;
+    padding: 20px !important;
+}
+
 .sens-mkt-studio-layout {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 20px;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 22px;
     align-items: start;
+    margin-top: 14px;
 }
 
 @media (max-width: 960px) {
     .sens-mkt-studio-layout {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 }
 
-.sens-mkt-step-card {
-    background: #141417 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 16px;
-    padding: 14px 16px;
-    margin-bottom: 14px;
+.sens-mkt-control-block {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 16px 18px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.02) !important;
 }
 
-.sens-mkt-step-title {
-    display: block;
-    font-size: 10.5px;
+.sens-mkt-step-badge {
+    display: inline-block;
+    font-size: 0.6875rem;
     font-weight: 800;
-    letter-spacing: 0.9px;
     text-transform: uppercase;
-    color: #E5CBA7 !important;
-    margin-bottom: 10px;
+    letter-spacing: 0.12em;
+    color: var(--sens-text-muted, #8E8D90) !important;
+    margin-bottom: 12px;
 }
 
+/* Paso 1: Formatos */
 .sens-mkt-format-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: 10px;
 }
 
 @media (max-width: 480px) {
@@ -16213,48 +16266,59 @@ body.in-portal #coachHubView {
 
 .sens-mkt-format-btn {
     text-align: left;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    background: #18181B !important;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(18, 18, 20, 0.08) !important;
+    background: #FFFFFF !important;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
+    box-shadow: 0 1px 3px rgba(18, 18, 20, 0.02);
+}
+
+.sens-mkt-format-btn:hover {
+    border-color: #B38E5D !important;
+    background: #FAF9F6 !important;
 }
 
 .sens-mkt-format-btn strong {
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 800;
-    color: #FFFFFF !important;
+    color: #121214 !important;
 }
 
 .sens-mkt-format-btn span {
-    font-size: 10.5px;
-    color: #71717A !important;
+    font-size: 11px;
+    color: #575659 !important;
+    line-height: 1.3;
 }
 
 .sens-mkt-format-btn.active {
-    background: rgba(229, 203, 167, 0.12) !important;
-    border-color: #E5CBA7 !important;
+    background: #FAF9F6 !important;
+    border-color: #B38E5D !important;
+    box-shadow: 0 4px 14px rgba(179, 142, 93, 0.18), 0 0 0 1px #B38E5D !important;
 }
 
 .sens-mkt-format-btn.active strong {
-    color: #E5CBA7 !important;
+    color: #121214 !important;
 }
 
 .sens-mkt-format-btn.active span {
-    color: #D4D4D8 !important;
+    color: #B38E5D !important;
+    font-weight: 700;
 }
 
+/* Paso 2: Plantillas */
 .sens-mkt-templates-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    max-height: 280px;
+    max-height: 320px;
     overflow-y: auto;
     padding-right: 4px;
+    -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 480px) {
@@ -16267,150 +16331,208 @@ body.in-portal #coachHubView {
     text-align: left;
     padding: 10px 12px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    background: #18181B !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    background: #FFFFFF !important;
     cursor: pointer;
     transition: all 0.18s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 1px 3px rgba(18, 18, 20, 0.02);
+}
+
+.sens-mkt-tpl-card:hover {
+    border-color: #B38E5D !important;
+    background: #FAF9F6 !important;
 }
 
 .sens-mkt-tpl-card.active {
-    border-color: #E5CBA7 !important;
-    background: rgba(229, 203, 167, 0.14) !important;
+    border-color: #B38E5D !important;
+    background: #FAF9F6 !important;
+    box-shadow: 0 3px 12px rgba(179, 142, 93, 0.16), 0 0 0 1px #B38E5D !important;
 }
 
-.sens-mkt-tpl-cat {
-    font-size: 9px;
+.sens-mkt-tpl-card .tpl-badge,
+.sens-mkt-tpl-card .sens-mkt-tpl-cat {
+    font-size: 8.5px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: #E5CBA7 !important;
-    display: block;
+    letter-spacing: 0.08em;
+    color: #B38E5D !important;
+    background: #F7EFE4 !important;
+    padding: 2px 7px;
+    border-radius: 4px;
+    display: inline-block;
+    width: fit-content;
 }
 
-.sens-mkt-tpl-name {
-    font-size: 12px;
-    font-weight: 800;
-    color: #FFFFFF !important;
+.sens-mkt-tpl-card strong,
+.sens-mkt-tpl-card .sens-mkt-tpl-name {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #121214 !important;
     display: block;
-    margin-top: 2px;
+    line-height: 1.35;
 }
 
-.sens-mkt-tpl-desc {
-    font-size: 10.5px;
-    color: #A1A1AA !important;
-    display: block;
-    margin-top: 2px;
+/* Paso 5: Líneas de tiempo & Diapositivas */
+.sens-mkt-timeline-bar {
+    background: #F3F1ED !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
 }
 
-.sens-mkt-timeline-bar,
-.sens-mkt-carousel-bar {
+.sens-mkt-scene-tabs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
 }
 
-.sens-mkt-carousel-bar {
+#mktCarouselSlidesBar .sens-mkt-scene-tabs {
     grid-template-columns: repeat(4, 1fr);
 }
 
-.mkt-scene-btn,
-.mkt-slide-btn {
+.sens-mkt-scene-btn,
+.sens-mkt-slide-btn {
     padding: 8px 6px;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    background: #18181B !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    background: #FFFFFF !important;
     font-size: 11px;
     font-weight: 700;
-    color: #A1A1AA !important;
+    color: #575659 !important;
     cursor: pointer;
     transition: all 0.18s ease;
-}
-
-.mkt-scene-btn.active,
-.mkt-slide-btn.active {
-    background: #09090B !important;
-    color: #E5CBA7 !important;
-    border-color: #E5CBA7 !important;
-}
-
-.sens-mkt-upload-zone {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 20px;
-    border: 1.5px dashed rgba(229, 203, 167, 0.35) !important;
-    border-radius: 14px;
-    background: #141417 !important;
-    cursor: pointer;
+    gap: 2px;
     text-align: center;
-    color: #FFFFFF !important;
-    transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.sens-mkt-upload-zone:hover {
-    border-color: #E5CBA7 !important;
-    background: #18181B !important;
-}
-
-.sens-mkt-upload-zone span {
-    font-size: 12px;
-    font-weight: 700;
-    color: #FFFFFF !important;
-}
-
-.sens-mkt-upload-zone small {
+.sens-mkt-scene-btn strong,
+.sens-mkt-slide-btn strong {
     font-size: 10.5px;
-    color: #71717A !important;
+    font-weight: 800;
+    color: #121214 !important;
 }
 
-.sens-mkt-preview-column {
+.sens-mkt-scene-btn span,
+.sens-mkt-slide-btn span {
+    font-size: 9.5px;
+    color: #8E8D90 !important;
+}
+
+.sens-mkt-scene-btn.active,
+.sens-mkt-slide-btn.active {
+    background: #121214 !important;
+    border-color: #121214 !important;
+    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.2) !important;
+}
+
+.sens-mkt-scene-btn.active strong,
+.sens-mkt-slide-btn.active strong {
+    color: #E5CBA7 !important;
+}
+
+.sens-mkt-scene-btn.active span,
+.sens-mkt-slide-btn.active span {
+    color: #FFFFFF !important;
+    opacity: 0.9;
+}
+
+/* Inputs y Controles con Guardrails */
+.sens-mkt-control-block .input-control {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    border-radius: 10px !important;
+    color: #121214 !important;
+    font-size: 12.5px !important;
+    padding: 8px 12px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.sens-mkt-control-block .input-control:focus {
+    border-color: #B38E5D !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(179, 142, 93, 0.15) !important;
+}
+
+.sens-mkt-control-block .input-label {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #575659 !important;
+}
+
+.sens-char-counter {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #8E8D90 !important;
+    font-variant-numeric: tabular-nums !important;
+    transition: color 0.15s ease !important;
+}
+
+.sens-char-counter.is-warning {
+    color: #D97706 !important;
+}
+
+.sens-char-counter.is-max {
+    color: #DC2626 !important;
+}
+
+/* Columna de Vista Previa HD y Canvas a Escala Móvil */
+.sens-mkt-preview-col {
     position: sticky;
     top: 16px;
-}
-
-.sens-mkt-preview-frame-wrap {
-    background: #141417 !important;
-    border: 1px solid rgba(229, 203, 167, 0.25) !important;
-    border-radius: 20px;
-    padding: 14px;
-    color: #FFFFFF;
-}
-
-.sens-mkt-preview-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: #E5CBA7 !important;
-    margin-bottom: 10px;
+}
+
+.sens-mkt-preview-sticky {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.04);
 }
 
 .sens-mkt-canvas-stage {
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #080809;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100% !important;
+    margin: 0 auto !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    background: #080809 !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(18, 18, 20, 0.08) !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: max-width 0.25s cubic-bezier(0.16, 1, 0.3, 1), aspect-ratio 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-#mktStudioCanvas {
-    width: 100%;
-    height: auto;
-    display: block;
+.sens-mkt-canvas-stage.is-916 {
+    max-width: 270px !important;
+    aspect-ratio: 9 / 16 !important;
 }
 
-.sens-mkt-caption-box {
-    margin-top: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 10px 12px;
+.sens-mkt-canvas-stage.is-45 {
+    max-width: 320px !important;
+    aspect-ratio: 4 / 5 !important;
+}
+
+#sensMarketingCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+    border-radius: inherit !important;
 }
 
 /* 7. Bottom Sheet Nativo de Acciones del Alumno (Apple Health Grade) */
