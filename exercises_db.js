@@ -48572,6 +48572,73 @@ function hydrateExerciseLibraryInMemory() {
     });
 }
 
+function getBiomechanicalCategory(ex) {
+    if (!ex) return 'core';
+    const mg2 = (ex.nivel_2_grupo_muscular || ex.group_level2 || ex.category || ex.muscle_group || ex.primary_muscle || '').toLowerCase().trim();
+    if (mg2 === 'piernas') return 'piernas';
+    if (mg2 === 'pecho') return 'pecho';
+    if (mg2 === 'espalda') return 'espalda';
+    if (mg2 === 'hombros') return 'hombros';
+    if (['biceps', 'triceps', 'antebrazos', 'brazos'].includes(mg2)) return 'brazos';
+    if (['abdominales', 'zona_lumbar', 'core'].includes(mg2)) return 'core';
+
+    if (typeof getExerciseTaxonomy === 'function') {
+        const tax = getExerciseTaxonomy(ex);
+        if (tax && tax.muscleGroup) {
+            const tg = tax.muscleGroup.toLowerCase();
+            if (tg === 'piernas') return 'piernas';
+            if (tg === 'pecho') return 'pecho';
+            if (tg === 'espalda') return 'espalda';
+            if (tg === 'hombros') return 'hombros';
+            if (['biceps', 'triceps', 'antebrazos'].includes(tg)) return 'brazos';
+            if (['abdominales', 'zona_lumbar'].includes(tg)) return 'core';
+        }
+    }
+
+    const name = (ex.name_es || ex.name || '').toLowerCase();
+    const mg = (ex.muscle_group || ex.primary_muscle || '').toLowerCase();
+    const pat = (ex.pattern || '').toLowerCase();
+
+    if (mg.includes('quad') || mg.includes('hamstring') || mg.includes('glute') || mg.includes('pierna') || mg.includes('pantorrilla') ||
+        pat.includes('squat') || pat.includes('leg') || pat.includes('hinge') || pat.includes('lunge') || pat.includes('deadlift') ||
+        name.includes('sentadilla') || name.includes('prensa') || name.includes('estocada') || name.includes('hip thrust') ||
+        name.includes('búlgara') || name.includes('bulgara') || name.includes('femoral') || name.includes('cuádriceps') ||
+        name.includes('cuadriceps') || name.includes('isquio') || name.includes('glúteo') || name.includes('gluteo') ||
+        name.includes('peso muerto') || name.includes('step-up') || name.includes('cosaca') || name.includes('hack') ||
+        name.includes('gemelo') || name.includes('pantorrilla') || name.includes('zancada')) {
+        return 'piernas';
+    }
+    if (mg.includes('biceps') || mg.includes('triceps') || mg.includes('brazo') ||
+        pat.includes('biceps') || pat.includes('triceps') || pat.includes('brachialis') ||
+        name.includes('curl') || name.includes('bíceps') || name.includes('biceps') ||
+        name.includes('tríceps') || name.includes('triceps') || name.includes('francés') ||
+        name.includes('frances') || name.includes('martillo') || name.includes('antebrazo') ||
+        (name.includes('cuerda') && mg.includes('push'))) {
+        return 'brazos';
+    }
+    if (mg.includes('shoulder') || mg.includes('deltoid') || mg.includes('hombro') ||
+        pat.includes('overhead') || pat.includes('lateral raise') || pat.includes('rear delt') ||
+        name.includes('militar') || name.includes('lateral') || name.includes('hombro') ||
+        name.includes('deltoide') || name.includes('face pull') || name.includes('pájaro') || name.includes('pajaro')) {
+        return 'hombros';
+    }
+    if (mg.includes('chest') || mg.includes('pectoral') || (mg.includes('push') && !mg.includes('shoulder')) ||
+        pat.includes('horizontal push') || pat.includes('incline push') || pat.includes('flye') ||
+        name.includes('banca') || name.includes('pecho') || name.includes('pectoral') ||
+        name.includes('apertura') || name.includes('crossover') || name.includes('flexiones') ||
+        name.includes('push-up') || name.includes('fondos')) {
+        return 'pecho';
+    }
+    if (mg.includes('pull') || mg.includes('back') || mg.includes('dorsal') ||
+        pat.includes('vertical pull') || pat.includes('horizontal pull') || pat.includes('lat isolation') || pat.includes('row') ||
+        name.includes('remo') || name.includes('jalón') || name.includes('jalon') ||
+        name.includes('dominada') || name.includes('espalda') || name.includes('dorsal') ||
+        name.includes('pullover') || name.includes('trapecio')) {
+        return 'espalda';
+    }
+    return 'core';
+}
+
 hydrateExerciseLibraryInMemory();
 
 // Exportaciones globales para navegador y Node.js
@@ -48585,6 +48652,7 @@ if (typeof window !== 'undefined') {
     window.calculateExerciseSetKcal = calculateExerciseSetKcal;
     window.calculateExerciseKcal = calculateExerciseKcal;
     window.getExerciseTaxonomy = getExerciseTaxonomy;
+    window.getBiomechanicalCategory = getBiomechanicalCategory;
     window.getExerciseLocalized = getExerciseLocalized;
     window.getResolvedExercise = getResolvedExercise;
     window.getResolvedExerciseVideoUrl = getResolvedExerciseVideoUrl;
@@ -48603,6 +48671,7 @@ if (typeof module !== 'undefined' && module.exports) {
         calculateExerciseSetKcal,
         calculateExerciseKcal,
         getExerciseTaxonomy,
+        getBiomechanicalCategory,
         getExerciseLocalized,
         getResolvedExercise,
         getResolvedExerciseVideoUrl,
