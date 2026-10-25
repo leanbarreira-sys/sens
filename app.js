@@ -21504,26 +21504,45 @@ function renderMarketingCanvasFrame() {
             ctx.fillRect(0, 0, W, H);
         }
 
-    // 4. Header Superior de Marca SENS (Protegido dentro de la Safe Zone)
+    // =========================================================================
+    // MOTOR CINÉTICO DE ANIMACIÓN VIRAL (ALTO CTR & ALTO VTR)
+    // Dynamic Scene Progress, Kinetic Entrance Slam & Live Audio Indicator
+    // =========================================================================
+    const nowSec = performance.now() / 1000;
+    const sceneCycleDuration = 3.2;
+    const sceneProgress = (nowSec % sceneCycleDuration) / sceneCycleDuration;
+    const entranceProgress = Math.min(1.0, sceneProgress / 0.18); // primeros 0.58s
+    const kineticSlam = 1.0 + (0.045 * Math.pow(1.0 - entranceProgress, 2));
+
+    // 4. Header Superior de Marca SENS + Live Audio Bars + Scene Progress Bar
     if (layers.branding) {
         ctx.save();
         const brandX = leftSafeX;
         const brandY = topSafeY + 4;
         const barH = is45 ? 44 : 50;
 
-        ctx.fillStyle = 'rgba(12, 12, 15, 0.78)';
-        roundRectCanvas(ctx, brandX, brandY, 218, barH, 12);
+        ctx.fillStyle = 'rgba(12, 12, 15, 0.85)';
+        roundRectCanvas(ctx, brandX, brandY, 236, barH, 12);
         ctx.fill();
 
-        ctx.font = `800 ${is45 ? 16 : 18}px "Plus Jakarta Sans", sans-serif`;
+        ctx.font = `800 ${is45 ? 15 : 17}px "Plus Jakarta Sans", sans-serif`;
         ctx.fillStyle = '#FFFFFF';
         ctx.textBaseline = 'middle';
-        ctx.fillText('MAKES SENS', brandX + 22, brandY + (barH / 2));
+        ctx.fillText('MAKES SENS', brandX + 20, brandY + (barH / 2));
 
+        // Animated Live Audio Equalizer Bars (High CTR / Sound cue)
+        const eqX = brandX + 172;
+        const eqCenterY = brandY + (barH / 2);
         ctx.fillStyle = '#E5CBA7';
-        ctx.beginPath();
-        ctx.arc(brandX + 172, brandY + (barH / 2), 4, 0, Math.PI * 2);
-        ctx.fill();
+        const barHeights = [
+            6 + 5 * Math.sin(nowSec * 8),
+            11 + 7 * Math.sin(nowSec * 12 + 1),
+            9 + 6 * Math.sin(nowSec * 6 + 2),
+            5 + 4 * Math.sin(nowSec * 9 + 0.5)
+        ];
+        barHeights.forEach((bh, bIdx) => {
+            ctx.fillRect(eqX + (bIdx * 6), eqCenterY - (bh / 2), 3, bh);
+        });
 
         const topRightText = mktStudioState.format === 'carousel_4_5'
             ? `${mktStudioState.slideIdx + 1} / 4`
@@ -21534,13 +21553,24 @@ function renderMarketingCanvasFrame() {
         if (topRightText) {
             ctx.font = `700 ${is45 ? 15 : 17}px "Plus Jakarta Sans", sans-serif`;
             const trW = ctx.measureText(topRightText).width + 36;
-            const trX = rightSafeX - trW; // Finaliza estrictamente dentro del margen lateral seguro
-            ctx.fillStyle = 'rgba(12, 12, 15, 0.78)';
+            const trX = rightSafeX - trW;
+            ctx.fillStyle = 'rgba(12, 12, 15, 0.85)';
             roundRectCanvas(ctx, trX, brandY, trW, barH, 12);
             ctx.fill();
             ctx.fillStyle = '#FAF9F6';
             ctx.fillText(topRightText, trX + 18, brandY + (barH / 2));
         }
+
+        // High VTR Dynamic Story/Reel Scene Progress Bar along topSafeY
+        if (is916) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            roundRectCanvas(ctx, leftSafeX, topSafeY - 8, safeWidth, 3, 2);
+            ctx.fill();
+            ctx.fillStyle = '#E5CBA7';
+            roundRectCanvas(ctx, leftSafeX, topSafeY - 8, Math.max(12, safeWidth * sceneProgress), 3, 2);
+            ctx.fill();
+        }
+
         ctx.restore();
     }
 
@@ -21561,24 +21591,25 @@ function renderMarketingCanvasFrame() {
 
     // =========================================================================
     // 5. RENDERIZADO POR ARQUETIPO ESPACIAL (10 CDUs Y BRANDBOOK SENS)
+    // Letras Más Grandes en Márgenes Correctos & Contraste Editorial Superior
     // =========================================================================
 
     ctx.save();
 
     if (spatialArchetype === 'hero_center_big') {
         // ---------------------------------------------------------------------
-        // ARQUETIPO 1 & 10: TITULAR GIGANTE CENTRADO (HERO CENTER DISPLAY 80px)
+        // ARQUETIPO 1 & 10: TITULAR MONUMENTAL CENTRADO (HERO CENTER DISPLAY 94px)
         // ---------------------------------------------------------------------
         ctx.textAlign = 'center';
-        const headFontSize = is45 ? 62 : 78;
-        const headLineHeight = is45 ? 70 : 90;
-        const subFontSize = is45 ? 25 : 31;
-        const subLineHeight = is45 ? 36 : 44;
+        const headFontSize = is45 ? 74 : 94; // Monumental 94px!
+        const headLineHeight = is45 ? 82 : 104;
+        const subFontSize = is45 ? 26 : 32;
+        const subLineHeight = is45 ? 38 : 46;
 
-        ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 40).slice(0, 3) : [];
+        ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 30).slice(0, 3) : [];
         ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const subLines = hasSub ? wrapCanvasText(ctx, rawSub, safeWidth - 60).slice(0, 3) : [];
+        const subLines = hasSub ? wrapCanvasText(ctx, rawSub, safeWidth - 50).slice(0, 3) : [];
 
         const hHead = headLines.length * headLineHeight;
         const hSub = subLines.length * subLineHeight;
@@ -21589,7 +21620,7 @@ function renderMarketingCanvasFrame() {
         let curY = Math.max(contentTopY + 20, Math.min(bottomSafeY - totalH, Math.round((contentTopY + bottomSafeY - totalH) / 2)));
 
         if (hasEye) {
-            ctx.font = `800 ${is45 ? 19 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
             ctx.fillStyle = '#E5CBA7';
             ctx.textBaseline = 'top';
             ctx.fillText(`• ${rawEyebrow.toUpperCase()} •`, safeCenterX, curY);
@@ -21597,13 +21628,22 @@ function renderMarketingCanvasFrame() {
         }
 
         if (hasHead) {
-            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.save();
+            ctx.translate(safeCenterX, curY + (hHead / 2));
+            ctx.scale(kineticSlam, kineticSlam);
+            ctx.translate(-safeCenterX, -(curY + (hHead / 2)));
+
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 24;
+            ctx.shadowOffsetY = 6;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
             ctx.textBaseline = 'top';
             headLines.forEach((line, i) => {
                 const isAccent = (i === headLines.length - 1 && headLines.length > 1);
                 ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
                 ctx.fillText(line, safeCenterX, curY + (i * headLineHeight));
             });
+            ctx.restore();
             curY += hHead + 28;
         }
 
@@ -21623,11 +21663,11 @@ function renderMarketingCanvasFrame() {
 
     } else if (spatialArchetype === 'magazine_split') {
         // ---------------------------------------------------------------------
-        // ARQUETIPO 3: PORTADA DE REVISTA SPLIT (TITULAR TOP + RATIONALE BOTTOM)
+        // ARQUETIPO 3: PORTADA DE REVISTA SPLIT (TITULAR TOP 84px + RATIONALE BOTTOM)
         // ---------------------------------------------------------------------
         let topY = contentTopY;
         if (hasEye) {
-            ctx.font = `800 ${is45 ? 19 : 22}px "Plus Jakarta Sans", sans-serif`;
+            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
             ctx.fillStyle = '#E5CBA7';
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
@@ -21636,9 +21676,16 @@ function renderMarketingCanvasFrame() {
         }
 
         if (hasHead) {
-            const headFontSize = is45 ? 54 : 68;
-            const headLineHeight = is45 ? 62 : 78;
-            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const headFontSize = is45 ? 68 : 84;
+            const headLineHeight = is45 ? 76 : 94;
+            ctx.save();
+            ctx.translate(leftSafeX, topY);
+            ctx.scale(kineticSlam, kineticSlam);
+            ctx.translate(-leftSafeX, -topY);
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 5;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
             ctx.textBaseline = 'top';
             ctx.textAlign = 'left';
             const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
@@ -21647,6 +21694,7 @@ function renderMarketingCanvasFrame() {
                 ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
                 ctx.fillText(line, leftSafeX, topY + (i * headLineHeight));
             });
+            ctx.restore();
         }
 
         const chipHeight = is45 ? 46 : 52;
@@ -21674,19 +21722,19 @@ function renderMarketingCanvasFrame() {
 
     } else if (spatialArchetype === 'glass_card') {
         // ---------------------------------------------------------------------
-        // ARQUETIPO 4: TARJETA FLOTANTE GLASSMORPHIC (PLACA DE LUJO)
+        // ARQUETIPO 4: TARJETA FLOTANTE GLASSMORPHIC (PLACA DE LUJO 68px)
         // ---------------------------------------------------------------------
         const cardW = safeWidth;
         const padX = is45 ? 36 : 46;
         const padY = is45 ? 32 : 40;
         const innerW = cardW - (padX * 2);
 
-        const headFontSize = is45 ? 46 : 58;
-        const headLineHeight = is45 ? 54 : 68;
-        const subFontSize = is45 ? 24 : 30;
-        const subLineHeight = is45 ? 34 : 42;
+        const headFontSize = is45 ? 54 : 68;
+        const headLineHeight = is45 ? 62 : 78;
+        const subFontSize = is45 ? 25 : 31;
+        const subLineHeight = is45 ? 36 : 44;
 
-        ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+        ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
         const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), innerW).slice(0, 3) : [];
         ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
         const subLines = hasSub ? wrapCanvasText(ctx, rawSub, innerW).slice(0, 3) : [];
@@ -21701,15 +21749,15 @@ function renderMarketingCanvasFrame() {
         const cardY = bottomSafeY - cardH;
 
         ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.70)';
         ctx.shadowBlur = 35;
         ctx.shadowOffsetY = 12;
-        ctx.fillStyle = 'rgba(13, 13, 17, 0.90)';
+        ctx.fillStyle = 'rgba(13, 13, 17, 0.92)';
         roundRectCanvas(ctx, cardX, cardY, cardW, cardH, 22);
         ctx.fill();
         ctx.restore();
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
         ctx.lineWidth = 1.5;
         roundRectCanvas(ctx, cardX, cardY, cardW, cardH, 22);
         ctx.stroke();
@@ -21725,7 +21773,7 @@ function renderMarketingCanvasFrame() {
         }
 
         if (hasHead) {
-            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
             ctx.textBaseline = 'top';
             ctx.textAlign = 'left';
             headLines.forEach((line, i) => {
@@ -21753,7 +21801,7 @@ function renderMarketingCanvasFrame() {
 
     } else if (spatialArchetype === 'stat_monumental') {
         // ---------------------------------------------------------------------
-        // ARQUETIPO 5: SPOTLIGHT MÉTRICA ÚNICA (140px DISPLAY)
+        // ARQUETIPO 5: SPOTLIGHT MÉTRICA ÚNICA (172px MONUMENTAL DISPLAY)
         // ---------------------------------------------------------------------
         let curY = bottomSafeY;
         const chipHeight = is45 ? 46 : 52;
@@ -21780,9 +21828,9 @@ function renderMarketingCanvasFrame() {
         }
 
         if (hasHead) {
-            const headFontSize = is45 ? 48 : 58;
-            const headLineHeight = is45 ? 56 : 68;
-            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const headFontSize = is45 ? 54 : 66;
+            const headLineHeight = is45 ? 62 : 76;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
             ctx.textAlign = 'left';
             const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 2);
             const headStartY = curY - (headLines.length * headLineHeight);
@@ -21794,60 +21842,70 @@ function renderMarketingCanvasFrame() {
             curY = headStartY - (is45 ? 16 : 24);
         }
 
-        const statNumber = c1 || rawEyebrow || '3-1-1-0';
-        const statFontSize = is45 ? 115 : 148;
+        const statNumber = c1 || rawEyebrow || '0.00%';
+        const statFontSize = is45 ? 130 : 172;
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+        ctx.shadowBlur = 28;
+        ctx.shadowOffsetY = 8;
         ctx.font = `900 ${statFontSize}px "Plus Jakarta Sans", sans-serif`;
         ctx.fillStyle = '#E5CBA7';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
         ctx.fillText(statNumber.toUpperCase(), leftSafeX, curY);
+        ctx.restore();
 
         if (hasEye && rawEyebrow !== statNumber) {
-            ctx.font = `800 ${is45 ? 19 : 22}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.85)';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY - (is45 ? 120 : 155));
+            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = 'rgba(244, 244, 246, 0.90)';
+            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY - (is45 ? 130 : 175));
         }
 
     } else if (spatialArchetype === 'quote_editorial') {
         // ---------------------------------------------------------------------
-        // ARQUETIPO 6: CITA EDITORIAL MINIMALISTA (COMILLAS SENS)
+        // ARQUETIPO 6: CITA EDITORIAL VIRAL (COMILLAS SENS 70px)
         // ---------------------------------------------------------------------
         ctx.textAlign = 'center';
-        const quoteFontSize = is45 ? 44 : 56;
-        const quoteLineHeight = is45 ? 56 : 72;
+        const quoteFontSize = is45 ? 52 : 68;
+        const quoteLineHeight = is45 ? 62 : 80;
         const authorFontSize = is45 ? 22 : 26;
 
-        ctx.font = `700 ${quoteFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const quoteLines = wrapCanvasText(ctx, `"${rawHeadline}"`, safeWidth - 40).slice(0, 4);
+        ctx.font = `800 ${quoteFontSize}px "Plus Jakarta Sans", sans-serif`;
+        const quoteLines = wrapCanvasText(ctx, `"${rawHeadline}"`, safeWidth - 30).slice(0, 4);
         const hQuote = quoteLines.length * quoteLineHeight;
         const markH = is45 ? 90 : 120;
         const totalH = markH + hQuote + (hasSub ? 60 : 0);
 
         let curY = Math.max(contentTopY + 20, Math.min(bottomSafeY - totalH, Math.round((contentTopY + bottomSafeY - totalH) / 2)));
 
-        ctx.font = `800 ${is45 ? 110 : 150}px "Plus Jakarta Sans", Georgia, serif`;
-        ctx.fillStyle = 'rgba(229, 203, 167, 0.45)';
+        ctx.font = `900 ${is45 ? 120 : 160}px "Plus Jakarta Sans", Georgia, serif`;
+        ctx.fillStyle = 'rgba(229, 203, 167, 0.50)';
         ctx.textBaseline = 'top';
         ctx.fillText('“', safeCenterX, curY);
         curY += is45 ? 85 : 110;
 
-        ctx.font = `700 ${quoteFontSize}px "Plus Jakarta Sans", sans-serif`;
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+        ctx.shadowBlur = 24;
+        ctx.shadowOffsetY = 6;
+        ctx.font = `800 ${quoteFontSize}px "Plus Jakarta Sans", sans-serif`;
         ctx.fillStyle = '#FFFFFF';
         ctx.textBaseline = 'top';
         quoteLines.forEach((line, i) => {
             ctx.fillText(line, safeCenterX, curY + (i * quoteLineHeight));
         });
+        ctx.restore();
         curY += hQuote + (is45 ? 28 : 36);
 
         if (hasSub) {
-            ctx.font = `600 ${authorFontSize}px "Plus Jakarta Sans", sans-serif`;
+            ctx.font = `700 ${authorFontSize}px "Plus Jakarta Sans", sans-serif`;
             ctx.fillStyle = '#E5CBA7';
             ctx.fillText(rawSub.toUpperCase(), safeCenterX, curY);
         }
 
     } else if (spatialArchetype === 'story_callout') {
         // ---------------------------------------------------------------------
-        // ARQUETIPO 7: CONVERSIÓN DIRECTA / CUPOS STORY (9:16)
+        // ARQUETIPO 7: CONVERSIÓN DIRECTA / CUPOS STORY (9:16 - 74px)
         // ---------------------------------------------------------------------
         let curY = contentTopY + 20;
 
@@ -21865,9 +21923,13 @@ function renderMarketingCanvasFrame() {
         }
 
         if (hasHead) {
-            const headFontSize = is45 ? 52 : 66;
-            const headLineHeight = is45 ? 60 : 76;
-            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const headFontSize = is45 ? 58 : 74;
+            const headLineHeight = is45 ? 66 : 84;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 22;
+            ctx.shadowOffsetY = 5;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
             ctx.textBaseline = 'top';
             ctx.textAlign = 'left';
             const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
@@ -21876,6 +21938,7 @@ function renderMarketingCanvasFrame() {
                 ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
                 ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
             });
+            ctx.restore();
             curY += (headLines.length * headLineHeight) + 26;
         }
 
@@ -21899,7 +21962,7 @@ function renderMarketingCanvasFrame() {
 
     } else if (spatialArchetype === 'lower_third_clean') {
         // ---------------------------------------------------------------------
-        // ARQUETIPO 2: LOWER-THIRD BIOMECÁNICO (VIDEO FOCUS)
+        // ARQUETIPO 2: LOWER-THIRD BIOMECÁNICO (VIDEO FOCUS 80px)
         // ---------------------------------------------------------------------
         const chipHeight = is45 ? 46 : 52;
         let curY = bottomSafeY;
@@ -21911,9 +21974,13 @@ function renderMarketingCanvasFrame() {
         }
 
         if (hasHead) {
-            const headFontSize = is45 ? 56 : 72;
-            const headLineHeight = is45 ? 64 : 80;
-            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const headFontSize = is45 ? 64 : 80;
+            const headLineHeight = is45 ? 72 : 90;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 24;
+            ctx.shadowOffsetY = 6;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
             ctx.textAlign = 'left';
             const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 2);
             const headStartY = curY - (headLines.length * headLineHeight);
@@ -21923,6 +21990,7 @@ function renderMarketingCanvasFrame() {
                 ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
                 ctx.fillText(line, leftSafeX, headStartY + (i * headLineHeight));
             });
+            ctx.restore();
             curY = headStartY - (is45 ? 18 : 24);
         }
 
@@ -21954,14 +22022,14 @@ function renderMarketingCanvasFrame() {
         const errHeadline = rawHeadline || 'Error técnico habitual';
         const cardPad = is45 ? 24 : 32;
 
-        ctx.font = `800 ${is45 ? 34 : 44}px "Plus Jakarta Sans", sans-serif`;
+        ctx.font = `900 ${is45 ? 36 : 48}px "Plus Jakarta Sans", sans-serif`;
         const errLines = wrapCanvasText(ctx, errHeadline.toUpperCase(), safeWidth - (cardPad * 2)).slice(0, 2);
-        const errCardH = (cardPad * 2) + 32 + (errLines.length * (is45 ? 42 : 54));
+        const errCardH = (cardPad * 2) + 32 + (errLines.length * (is45 ? 44 : 56));
 
-        ctx.fillStyle = 'rgba(18, 16, 18, 0.90)';
+        ctx.fillStyle = 'rgba(18, 16, 18, 0.92)';
         roundRectCanvas(ctx, leftSafeX, curY, safeWidth, errCardH, 16);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(235, 87, 87, 0.45)';
+        ctx.strokeStyle = 'rgba(235, 87, 87, 0.50)';
         ctx.lineWidth = 1.5;
         roundRectCanvas(ctx, leftSafeX, curY, safeWidth, errCardH, 16);
         ctx.stroke();
@@ -21972,10 +22040,10 @@ function renderMarketingCanvasFrame() {
         ctx.textBaseline = 'top';
         ctx.fillText(errTag.toUpperCase(), leftSafeX + cardPad, curY + cardPad);
 
-        ctx.font = `800 ${is45 ? 32 : 42}px "Plus Jakarta Sans", sans-serif`;
+        ctx.font = `900 ${is45 ? 34 : 46}px "Plus Jakarta Sans", sans-serif`;
         ctx.fillStyle = '#FAF9F6';
         errLines.forEach((line, i) => {
-            ctx.fillText(line, leftSafeX + cardPad, curY + cardPad + 36 + (i * (is45 ? 42 : 54)));
+            ctx.fillText(line, leftSafeX + cardPad, curY + cardPad + 36 + (i * (is45 ? 44 : 56)));
         });
 
         curY += errCardH + (is45 ? 18 : 24);
@@ -21984,15 +22052,15 @@ function renderMarketingCanvasFrame() {
         const solTag = c2 || '✓ MÉTODO SENS:';
         const solText = rawSub || 'Corrección técnica con sentido';
 
-        ctx.font = `600 ${is45 ? 24 : 30}px "Plus Jakarta Sans", sans-serif`;
+        ctx.font = `600 ${is45 ? 25 : 32}px "Plus Jakarta Sans", sans-serif`;
         const solLines = wrapCanvasText(ctx, solText, safeWidth - (cardPad * 2)).slice(0, 3);
         const hasC3 = Boolean(c3);
-        const solCardH = (cardPad * 2) + 36 + (solLines.length * (is45 ? 36 : 44)) + (hasC3 ? (is45 ? 54 : 62) : 0);
+        const solCardH = (cardPad * 2) + 36 + (solLines.length * (is45 ? 38 : 46)) + (hasC3 ? (is45 ? 54 : 62) : 0);
 
-        ctx.fillStyle = 'rgba(16, 17, 22, 0.94)';
+        ctx.fillStyle = 'rgba(16, 17, 22, 0.95)';
         roundRectCanvas(ctx, leftSafeX, curY, safeWidth, solCardH, 16);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(229, 203, 167, 0.65)';
+        ctx.strokeStyle = 'rgba(229, 203, 167, 0.70)';
         ctx.lineWidth = 2;
         roundRectCanvas(ctx, leftSafeX, curY, safeWidth, solCardH, 16);
         ctx.stroke();
@@ -22003,14 +22071,14 @@ function renderMarketingCanvasFrame() {
         ctx.textBaseline = 'top';
         ctx.fillText(solTag.toUpperCase(), leftSafeX + cardPad, curY + cardPad);
 
-        ctx.font = `600 ${is45 ? 24 : 29}px "Plus Jakarta Sans", sans-serif`;
+        ctx.font = `600 ${is45 ? 25 : 31}px "Plus Jakarta Sans", sans-serif`;
         ctx.fillStyle = '#FAF9F6';
         solLines.forEach((line, i) => {
-            ctx.fillText(line, leftSafeX + cardPad, curY + cardPad + 38 + (i * (is45 ? 36 : 44)));
+            ctx.fillText(line, leftSafeX + cardPad, curY + cardPad + 38 + (i * (is45 ? 38 : 46)));
         });
 
         if (hasC3) {
-            const chipY = curY + cardPad + 44 + (solLines.length * (is45 ? 36 : 44));
+            const chipY = curY + cardPad + 44 + (solLines.length * (is45 ? 38 : 46));
             ctx.font = `800 ${is45 ? 16 : 19}px "Plus Jakarta Sans", sans-serif`;
             const chipW = ctx.measureText(c3).width + 36;
             ctx.fillStyle = '#E5CBA7';
@@ -22023,7 +22091,7 @@ function renderMarketingCanvasFrame() {
 
     } else {
         // ---------------------------------------------------------------------
-        // ARQUETIPO 8: EDITORIAL BOTTOM CLASSIC / CARRUSEL SWIPE (QUIET LUXURY)
+        // ARQUETIPO 8: EDITORIAL BOTTOM CLASSIC / CARRUSEL SWIPE (78px DISPLAY)
         // ---------------------------------------------------------------------
         const chipHeight = is45 ? 46 : 52;
         let curY = bottomSafeY;
@@ -22051,9 +22119,13 @@ function renderMarketingCanvasFrame() {
         }
 
         if (hasHead) {
-            const headFontSize = is45 ? 52 : 64;
-            const headLineHeight = is45 ? 60 : 74;
-            ctx.font = `800 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+            const headFontSize = is45 ? 62 : 78;
+            const headLineHeight = is45 ? 70 : 88;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 22;
+            ctx.shadowOffsetY = 6;
+            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
             ctx.textAlign = 'left';
             const maxHeadLines = is45 ? 2 : 3;
             const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, maxHeadLines);
@@ -22064,6 +22136,7 @@ function renderMarketingCanvasFrame() {
                 ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
                 ctx.fillText(line, leftSafeX, headStartY + (i * headLineHeight));
             });
+            ctx.restore();
             curY = headStartY - (is45 ? 20 : 26);
         }
 
