@@ -1594,7 +1594,7 @@ function renderExerciseLibraryList() {
         const safeExId = escapeHTML(ex.id);
 
         html += `
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s ease;">
+            <div class="sens-lib-card-item" data-lib-ex-id="${safeExId}" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s ease; cursor: pointer;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 240px;">
                         <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
@@ -1616,7 +1616,7 @@ function renderExerciseLibraryList() {
                     <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Sugerido: ${setsVal} series × ${repsVal} • Descanso: ${restSec}s</span>
                     <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                         ${isAdmin ? `<button type="button" class="btn btn-outline btn-sm btn-lib-edit-db" data-ex-id="${safeExId}" style="font-size: 11px; padding: 5px 10px; border-color: rgba(229,203,167,0.35); color: #E5CBA7;">Editar Ficha Base</button>` : ''}
-                        <button type="button" class="btn btn-outline btn-sm btn-lib-video" data-video-title="${safeExName}" data-video-cue="${cueText}" style="font-size: 11px; padding: 5px 12px; border-color: rgba(255,255,255,0.2);">
+                        <button type="button" class="btn btn-outline btn-sm btn-lib-video" data-ex-id="${safeExId}" data-video-title="${safeExName}" data-video-cue="${cueText}" style="font-size: 11px; padding: 5px 12px; border-color: rgba(255,255,255,0.2);">
                             ▶ Ver Técnica
                         </button>
                         <button type="button" class="btn btn-primary btn-sm btn-lib-assign" data-ex-id="${safeExId}" data-ex-name="${safeExName}" style="font-size: 11px; padding: 5px 14px; font-weight: 800;">
@@ -1630,8 +1630,26 @@ function renderExerciseLibraryList() {
 
     listContainer.innerHTML = html;
 
+    listContainer.querySelectorAll('.sens-lib-card-item').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('a')) return;
+            const exId = card.getAttribute('data-lib-ex-id');
+            const assignBtn = card.querySelector('.btn-lib-assign');
+            if (typeof window.openCoachExercisePreviewModal === 'function') {
+                window.openCoachExercisePreviewModal(exId, {
+                    onAdd: () => {
+                        if (assignBtn) assignBtn.click();
+                    },
+                    isAdded: false,
+                    dayLabel: dayName
+                });
+            }
+        });
+    });
+
     listContainer.querySelectorAll('.btn-lib-edit-db').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const exId = btn.getAttribute('data-ex-id');
             if (typeof window.openCoachDbItemEditor === 'function') {
                 window.openCoachDbItemEditor('exercise', exId);
@@ -1640,10 +1658,20 @@ function renderExerciseLibraryList() {
     });
 
     listContainer.querySelectorAll('.btn-lib-video').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const title = btn.getAttribute('data-video-title');
-            const cue = btn.getAttribute('data-video-cue');
-            openVideoModal(title, cue);
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const card = btn.closest('.sens-lib-card-item');
+            const exId = card ? card.getAttribute('data-lib-ex-id') : btn.getAttribute('data-ex-id');
+            const assignBtn = card ? card.querySelector('.btn-lib-assign') : null;
+            if (typeof window.openCoachExercisePreviewModal === 'function') {
+                window.openCoachExercisePreviewModal(exId, {
+                    onAdd: () => {
+                        if (assignBtn) assignBtn.click();
+                    },
+                    isAdded: false,
+                    dayLabel: dayName
+                });
+            }
         });
     });
 
@@ -7066,15 +7094,73 @@ function renderWorkoutDay(dayKey, targetDate = null) {
 
 window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null) {
     const athId = getActiveAthleteId();
-    const data = getCoachAthleteWorkoutData(athId);
-    const day = (data && data[dayKey]) ? data[dayKey] : (WORKOUT_DAYS_DATA[dayKey] || { exercises: [] });
-    const ex = day.exercises.find(e => e.id === exId);
-    if (!ex) return;
-
+    const data = getCoachAthleteWorkoutData(athId) || {};
     const effectiveDate = targetDateStr ? (targetDateStr instanceof Date ? targetDateStr : new Date(targetDateStr + 'T12:00:00')) : (AppState.selectedDate || getDateFromDayKey(dayKey));
     const dateIso = getFormattedDateKey(effectiveDate);
 
-    modalExerciseState.exId = exId;
+    // Búsqueda jerárquica y resiliente de la sesión y del ejercicio:
+    // 1. En calendar_schedule de la fecha efectiva (ej. sesión de hoy o reprogramada)
+    // 2. En la clave semanal dayKey
+    // 3. En cualquier día del atleta en calendar_schedule o semanal
+    // 4. En el catálogo maestro si es una asignación ad-hoc
+    let day = (data.calendar_schedule && data.calendar_schedule[dateIso])
+        ? data.calendar_schedule[dateIso]
+        : ((data && data[dayKey]) ? data[dayKey] : null);
+
+    if (!day && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
+        day = WORKOUT_DAYS_DATA[dayKey];
+    }
+
+    let ex = (day && Array.isArray(day.exercises))
+        ? day.exercises.find(e => e.id === exId || (e.name && e.name.toLowerCase() === String(exId).toLowerCase()))
+        : null;
+
+    if (!ex && data.calendar_schedule) {
+        for (const dKey of Object.keys(data.calendar_schedule)) {
+            const dObj = data.calendar_schedule[dKey];
+            if (dObj && Array.isArray(dObj.exercises)) {
+                const found = dObj.exercises.find(e => e.id === exId || (e.name && e.name.toLowerCase() === String(exId).toLowerCase()));
+                if (found) { ex = found; if (!day) day = dObj; break; }
+            }
+        }
+    }
+
+    if (!ex) {
+        for (const k of Object.keys(data)) {
+            if (k !== 'calendar_schedule' && data[k] && Array.isArray(data[k].exercises)) {
+                const found = data[k].exercises.find(e => e.id === exId || (e.name && e.name.toLowerCase() === String(exId).toLowerCase()));
+                if (found) { ex = found; if (!day) day = data[k]; break; }
+            }
+        }
+    }
+
+    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_EXERCISE_LIBRARY.length > 0)
+        ? SENS_EXERCISE_LIBRARY
+        : (typeof EXERCISE_CATALOG !== 'undefined' ? EXERCISE_CATALOG : []);
+    const rawMatch = (typeof window.getResolvedExercise === 'function')
+        ? window.getResolvedExercise(exId, athId)
+        : (sourceLib.find(c => c.id === exId || (c.name && c.name.toLowerCase() === String(exId).toLowerCase())) || null);
+
+    if (!ex && rawMatch) {
+        ex = {
+            id: rawMatch.id,
+            name: rawMatch.name_es || rawMatch.name,
+            sets: rawMatch.default_sets || 3,
+            reps: rawMatch.default_reps || '10-12',
+            rest: rawMatch.default_rest_seconds || 75,
+            defaultWeight: 15,
+            defaultReps: 10,
+            notes: rawMatch.recommendations || rawMatch.cue,
+            video: rawMatch.video_local_path || rawMatch.video || ''
+        };
+        if (day && Array.isArray(day.exercises)) {
+            day.exercises.push(ex);
+        }
+    }
+
+    if (!ex) return;
+
+    modalExerciseState.exId = ex.id || exId;
     modalExerciseState.dayKey = dayKey;
     modalExerciseState.effectiveDate = effectiveDate;
     modalExerciseState.targetDateStr = dateIso;
@@ -7083,10 +7169,6 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
     clearInterval(modalExerciseState.tutInterval);
     clearInterval(modalExerciseState.restInterval);
 
-    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
-    const rawMatch = (typeof window.getResolvedExercise === 'function')
-        ? window.getResolvedExercise(ex.id || ex.name, athId)
-        : (sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex);
     const catalogMatch = rawMatch || ex;
     const userWeight = parseFloat(AppState.profile?.current_weight || AppState.anamnesis?.weight || 75) || 75;
     const kcalData = (typeof window.calculateExerciseKcal === 'function')
@@ -7127,14 +7209,6 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
     if (modalSetsReps) modalSetsReps.textContent = `${ex.sets || 4} Series × ${ex.reps || '10-12'} Reps`;
     if (modalRir) modalRir.textContent = `RIR ${ex.rir !== undefined ? ex.rir : 2} (RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)})`;
     if (modalKcal) modalKcal.textContent = `~${kcalData.totalKcal} kcal`;
-
-    // 2. Coach Cue Banner en tiempo real justo debajo del video
-    const cueBanner = document.getElementById('modalExCoachCueBanner');
-    const cueBannerText = document.getElementById('modalExCoachCueText');
-    if (cueBanner && cueBannerText) {
-        cueBannerText.textContent = localizedCue;
-        cueBanner.style.display = 'flex';
-    }
 
     // 3. Media 4:5 y Skeleton (Soporte Dual Video MP4 y GIF optimizado)
     const modalSkeleton = document.getElementById('modalExVideoSkeleton');
@@ -7357,9 +7431,34 @@ window.toggleDeepBiomechanics = function() {
 /**
  * Renderiza el HUD de Series tanto dentro del Video 4:5 como en los controles detallados inferiores
  */
+function triggerAutosaveIndicator() {
+    const el = document.getElementById('modalExAutosaveIndicator');
+    if (!el) return;
+    el.classList.add('is-saving');
+    const label = el.querySelector('span:last-child');
+    if (label) label.textContent = 'Guardando cambios...';
+    clearTimeout(el._autosaveTimer);
+    el._autosaveTimer = setTimeout(() => {
+        el.classList.remove('is-saving');
+        if (label) label.textContent = 'Progreso autoguardado';
+    }, 650);
+}
+
+function persistExerciseDraftLocally() {
+    if (!modalExerciseState.exId) return;
+    const athId = getActiveAthleteId();
+    const dateIso = modalExerciseState.targetDateStr || getFormattedDateKey(new Date());
+    const key = `sens_ex_draft_${athId}_${dateIso}_${modalExerciseState.exId}`;
+    try {
+        localStorage.setItem(key, JSON.stringify(modalExerciseState.setsData || []));
+    } catch (_) {}
+    triggerAutosaveIndicator();
+}
+
+/**
+ * Renderiza el HUD de Series en los controles detallados inferiores con autoguardado en tiempo real
+ */
 function renderModalSeriesList() {
-    const invideoList = document.getElementById('modalExInVideoChipsRow');
-    const invideoStatus = document.getElementById('modalExInVideoStatus');
     const list = document.getElementById('modalExSeriesList');
     const countEl = document.getElementById('modalExSeriesCount');
 
@@ -7368,25 +7467,9 @@ function renderModalSeriesList() {
     const completedCount = modalExerciseState.setsData.filter(s => s.completed).length;
     const totalCount = modalExerciseState.setsData.length;
 
-    if (invideoStatus) invideoStatus.textContent = `${completedCount} / ${totalCount} completadas`;
     if (countEl) countEl.textContent = `${completedCount} de ${totalCount} series completadas`;
 
-    // 1. In-Video HUD Chips (Dentro del Video 4:5 con diseño Apple Health)
-    if (invideoList) {
-        invideoList.innerHTML = modalExerciseState.setsData.map((s, idx) => `
-            <div class="sens-invideo-set-chip ${s.completed ? 'completed' : ''}" onclick="toggleSetCompleted(${idx})" title="Tocar para marcar Set ${s.setNumber}">
-                <div class="set-chip-header">
-                    <span>SET ${s.setNumber}</span>
-                    <span class="set-chip-check">${s.completed ? '✓' : '○'}</span>
-                </div>
-                <div class="set-chip-metrics">
-                    <strong>${s.weight} kg</strong> × <span>${s.reps} reps</span>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // 2. Steppers Detallados Inferiores (Quiet Luxury Touch-First)
+    // Steppers Detallados Inferiores (Quiet Luxury Touch-First)
     if (list) {
         list.innerHTML = modalExerciseState.setsData.map((s, idx) => `
             <div class="sens-tactile-set-row ${s.completed ? 'completed' : ''}" data-set-idx="${idx}">
@@ -7421,7 +7504,7 @@ function renderModalSeriesList() {
         `).join('');
     }
 
-    // 3. Estado del Botón Completar Todo
+    // Estado del Botón Completar Todo
     const btnCompleteAll = document.getElementById('btnQuickCompleteAllSets');
     if (btnCompleteAll) {
         const allDone = totalCount > 0 && completedCount === totalCount;
@@ -7437,6 +7520,7 @@ window.stepSetWeight = function(idx, delta) {
     const current = Number(modalExerciseState.setsData[idx].weight) || 0;
     const nextVal = Math.max(0, Math.round((current + delta) * 10) / 10);
     modalExerciseState.setsData[idx].weight = nextVal;
+    persistExerciseDraftLocally();
     try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
     if (typeof playBeep === 'function') playBeep(delta > 0 ? 560 : 460, 0.035);
     renderModalSeriesList();
@@ -7447,11 +7531,7 @@ window.updateSetWeight = function(idx, val) {
     const parsed = parseFloat(val);
     const validVal = isNaN(parsed) ? 0 : Math.max(0, Math.round(parsed * 10) / 10);
     modalExerciseState.setsData[idx].weight = validVal;
-    const invideoChips = document.querySelectorAll('#modalExInVideoChipsRow .sens-invideo-set-chip');
-    if (invideoChips && invideoChips[idx]) {
-        const strong = invideoChips[idx].querySelector('.set-chip-metrics strong');
-        if (strong) strong.textContent = `${validVal} kg`;
-    }
+    persistExerciseDraftLocally();
 };
 
 window.stepSetReps = function(idx, delta) {
@@ -7459,6 +7539,7 @@ window.stepSetReps = function(idx, delta) {
     const current = parseInt(modalExerciseState.setsData[idx].reps, 10) || 10;
     const nextVal = Math.max(1, current + delta);
     modalExerciseState.setsData[idx].reps = nextVal;
+    persistExerciseDraftLocally();
     try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
     if (typeof playBeep === 'function') playBeep(delta > 0 ? 560 : 460, 0.035);
     renderModalSeriesList();
@@ -7469,11 +7550,7 @@ window.updateSetReps = function(idx, val) {
     const parsed = parseInt(val, 10);
     const validVal = isNaN(parsed) ? 1 : Math.max(1, parsed);
     modalExerciseState.setsData[idx].reps = validVal;
-    const invideoChips = document.querySelectorAll('#modalExInVideoChipsRow .sens-invideo-set-chip');
-    if (invideoChips && invideoChips[idx]) {
-        const span = invideoChips[idx].querySelector('.set-chip-metrics span');
-        if (span) span.textContent = `${validVal} reps`;
-    }
+    persistExerciseDraftLocally();
 };
 
 window.toggleSetCompleted = function(idx) {
@@ -7494,8 +7571,10 @@ window.toggleSetCompleted = function(idx) {
     renderModalSeriesList();
 
     const athId = getActiveAthleteId();
-    const data = getCoachAthleteWorkoutData(athId);
-    const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
+    const data = getCoachAthleteWorkoutData(athId) || {};
+    const day = (data.calendar_schedule && data.calendar_schedule[dateIso]) 
+        ? data.calendar_schedule[dateIso] 
+        : ((data && data[currentDayKey]) ? data[currentDayKey] : null);
     const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
 
     const targetEx = day?.exercises?.find(e => e.id === modalExerciseState.exId);
@@ -7588,8 +7667,10 @@ window.completeAllExerciseSets = function() {
     if (!modalExerciseState.setsData || modalExerciseState.setsData.length === 0) return;
     const allDone = modalExerciseState.setsData.every(s => s.completed);
     const athId = getActiveAthleteId();
-    const data = getCoachAthleteWorkoutData(athId);
-    const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
+    const data = getCoachAthleteWorkoutData(athId) || {};
+    const day = (data.calendar_schedule && data.calendar_schedule[dateIso]) 
+        ? data.calendar_schedule[dateIso] 
+        : ((data && data[currentDayKey]) ? data[currentDayKey] : null);
     const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
 
     if (allDone) {
@@ -8132,14 +8213,6 @@ function updateMasterTimerUI() {
     const restControls = document.getElementById('masterTimerRestControls');
     const targetSub = document.getElementById('masterTimerTargetSub');
 
-    // In-Video HUD Timer Elements
-    const inVideoDisplay = document.getElementById('invideoTimerDigits');
-    const inVideoDot = document.getElementById('invideoTimerDot');
-    const inVideoLabel = document.getElementById('invideoTimerLabel');
-    const inVideoPrimaryBtn = document.getElementById('btnInVideoTimerPrimary');
-    const inVideoSecondaryBtn = document.getElementById('btnInVideoTimerSecondary');
-    const inVideoSkipBtn = document.getElementById('btnInVideoTimerSkip');
-
     if (targetSub) {
         targetSub.textContent = `Descanso prescrito: ${masterTimerState.targetRest}s`;
     }
@@ -8161,20 +8234,6 @@ function updateMasterTimerUI() {
         }
         if (restControls) restControls.style.display = 'none';
 
-        // Sincronizar Reloj In-Video
-        if (inVideoDisplay) {
-            inVideoDisplay.textContent = timeStr;
-            inVideoDisplay.classList.remove('in-rest');
-        }
-        if (inVideoDot) inVideoDot.className = 'invideo-timer-mode-dot in-set';
-        if (inVideoLabel) {
-            inVideoLabel.className = 'invideo-timer-label in-set';
-            inVideoLabel.textContent = 'SERIE EN CURSO';
-        }
-        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Finalizar Serie ✓';
-        if (inVideoSecondaryBtn) inVideoSecondaryBtn.style.display = 'inline-block';
-        if (inVideoSkipBtn) inVideoSkipBtn.style.display = 'none';
-
     } else if (masterTimerState.mode === 'in_rest') {
         const m = Math.floor(masterTimerState.restRemaining / 60);
         const s = masterTimerState.restRemaining % 60;
@@ -8192,20 +8251,6 @@ function updateMasterTimerUI() {
         }
         if (restControls) restControls.style.display = 'flex';
 
-        // Sincronizar Reloj In-Video
-        if (inVideoDisplay) {
-            inVideoDisplay.textContent = timeStr;
-            inVideoDisplay.classList.add('in-rest');
-        }
-        if (inVideoDot) inVideoDot.className = 'invideo-timer-mode-dot in-rest';
-        if (inVideoLabel) {
-            inVideoLabel.className = 'invideo-timer-label in-rest';
-            inVideoLabel.textContent = 'DESCANSO';
-        }
-        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Nueva Serie →';
-        if (inVideoSecondaryBtn) inVideoSecondaryBtn.style.display = 'none';
-        if (inVideoSkipBtn) inVideoSkipBtn.style.display = 'inline-block';
-
     } else {
         if (display) {
             display.textContent = '00:00';
@@ -8218,20 +8263,6 @@ function updateMasterTimerUI() {
             primaryBtn.classList.remove('btn-master-finalizar-set');
         }
         if (restControls) restControls.style.display = 'none';
-
-        // Sincronizar Reloj In-Video
-        if (inVideoDisplay) {
-            inVideoDisplay.textContent = '00:00';
-            inVideoDisplay.classList.remove('in-rest');
-        }
-        if (inVideoDot) inVideoDot.className = 'invideo-timer-mode-dot';
-        if (inVideoLabel) {
-            inVideoLabel.className = 'invideo-timer-label';
-            inVideoLabel.textContent = 'EN ESPERA';
-        }
-        if (inVideoPrimaryBtn) inVideoPrimaryBtn.textContent = 'Iniciar Serie';
-        if (inVideoSecondaryBtn) inVideoSecondaryBtn.style.display = 'inline-block';
-        if (inVideoSkipBtn) inVideoSkipBtn.style.display = 'none';
     }
 }
 
@@ -8481,8 +8512,15 @@ function saveAndFinishExercise(silent = false) {
 
     if (currentExId && !isFuture) {
         const athId = getActiveAthleteId();
-        const data = getCoachAthleteWorkoutData(athId);
-        const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
+        const data = getCoachAthleteWorkoutData(athId) || {};
+        let day = (data.calendar_schedule && data.calendar_schedule[dateIso])
+            ? data.calendar_schedule[dateIso]
+            : ((data && data[currentDayKey]) ? data[currentDayKey] : null);
+
+        if (!day && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[currentDayKey]) {
+            day = WORKOUT_DAYS_DATA[currentDayKey];
+        }
+
         if (day && Array.isArray(day.exercises)) {
             const ex = day.exercises.find(e => e.id === currentExId);
             if (ex) {
@@ -8502,7 +8540,7 @@ function saveAndFinishExercise(silent = false) {
                 });
 
                 if (!silent && typeof showSensToast === 'function') {
-                    showSensToast(`✓ Progreso de ${ex.name} guardado con éxito.`, 'champagne', 2600);
+                    showSensToast(`✓ Progreso de ${ex.name} guardado con éxito.`, 'champagne', 2200);
                 }
             }
         }
@@ -8513,18 +8551,8 @@ function saveAndFinishExercise(silent = false) {
 }
 
 function handleAttemptExitExerciseModal() {
-    const hasCheckedSets = modalExerciseState.setsData && modalExerciseState.setsData.some(s => s.completed);
-    if (!hasCheckedSets) {
-        saveAndFinishExercise(true);
-        return;
-    }
-
-    const exitModal = document.getElementById('sensExitConfirmModal');
-    if (exitModal) {
-        exitModal.style.display = 'flex';
-    } else {
-        saveAndFinishExercise(false);
-    }
+    // Autoguardado silencioso instantáneo sin diálogos obstructivos
+    saveAndFinishExercise(false);
 }
 
 function closeExerciseExecutionModalForce() {
@@ -8539,6 +8567,11 @@ function closeExerciseExecutionModalForce() {
     }
     if (backdrop) backdrop.style.display = 'none';
     document.body.style.overflow = '';
+
+    // Si había un estado de historial creado para este modal, limpiarlo
+    if (window.history.state && window.history.state.sensModal === 'exerciseExecution') {
+        try { window.history.back(); } catch (_) {}
+    }
 
     clearInterval(masterTimerState.interval);
     masterTimerState.interval = null;
@@ -8608,6 +8641,220 @@ function initExitConfirmationListeners() {
     }
 }
 
+// =============================================================================
+// POPSTATE NAVIGATION GUARD: PREVIENE CIERRE ACCIDENTAL DE APP / PWA AL IR ATRÁS
+// =============================================================================
+window.addEventListener('popstate', (e) => {
+    const coachPreview = document.getElementById('sensCoachExercisePreviewModal');
+    if (coachPreview && coachPreview.style.display === 'flex') {
+        window.closeCoachExercisePreviewModal();
+        return;
+    }
+    const backdrop = document.getElementById('sensExerciseModalBackdrop');
+    if (backdrop && backdrop.style.display === 'flex') {
+        saveAndFinishExercise(true);
+        return;
+    }
+});
+
+// =============================================================================
+// MODAL DE VISTA PREVIA TÉCNICA DE EJERCICIO PARA COACH (SIN SERIES)
+// =============================================================================
+window.openCoachExercisePreviewModal = function(exId, options = {}) {
+    const modal = document.getElementById('sensCoachExercisePreviewModal');
+    if (!modal) return;
+
+    const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_EXERCISE_LIBRARY.length > 0)
+        ? SENS_EXERCISE_LIBRARY
+        : (typeof EXERCISE_CATALOG !== 'undefined' ? EXERCISE_CATALOG : []);
+    const rawMatch = sourceLib.find(c => c.id === exId || (c.name && c.name.toLowerCase() === String(exId).toLowerCase())) || {};
+    const athId = options.athId || (typeof CoachWorkoutsMaster !== 'undefined' && CoachWorkoutsMaster.activeAthleteId) || (typeof coachWorkoutState !== 'undefined' && coachWorkoutState.activeAthleteId) || getActiveAthleteId();
+    const ex = (typeof window.getResolvedExercise === 'function')
+        ? window.getResolvedExercise(rawMatch, athId)
+        : rawMatch;
+
+    const tax = (typeof getExerciseTaxonomy === 'function')
+        ? getExerciseTaxonomy(ex)
+        : { muscleLabel: 'Piernas', typeLabel: 'Muscular' };
+    const currentLang = (typeof localStorage !== 'undefined' ? localStorage.getItem('sens_lang') : null) || 'es';
+    const localizedName = ex['name_' + currentLang] || ex.name_es || ex.name || 'Ejercicio';
+    const localizedDetailed = ex['detailed_movement_' + currentLang] || ex.detailed_movement_es || ex.execution || '';
+    const commonMistakes = ex.common_mistakes || 'Evitar rebotes articulares, pérdida de neutralidad lumbar o apnea.';
+    const nicoRecs = ex.recommendations || ex.notes || 'Mantener control respiratorio y cadencia 3-0-1-0 sin balanceos.';
+
+    const userWeight = 75;
+    const kcalData = (typeof window.calculateExerciseKcal === 'function')
+        ? window.calculateExerciseKcal(ex, ex.default_sets || 3, ex.default_reps || '10-12', userWeight)
+        : { totalKcal: 24 };
+
+    const muscleEl = document.getElementById('coachPreviewMuscleGroup');
+    const setsEl = document.getElementById('coachPreviewSetsRepsPill');
+    const restEl = document.getElementById('coachPreviewRestPill');
+    const kcalEl = document.getElementById('coachPreviewKcalPill');
+    const titleEl = document.getElementById('coachPreviewModalTitle');
+    const video = document.getElementById('coachPreviewVideo');
+    const gif = document.getElementById('coachPreviewGif');
+    const skeleton = document.getElementById('coachPreviewVideoSkeleton');
+    const notes = document.getElementById('coachPreviewNotesBody');
+    const addBtn = document.getElementById('btnCoachPreviewAdd');
+    const addLabel = document.getElementById('btnCoachPreviewAddLabel');
+
+    if (muscleEl) muscleEl.textContent = (tax.muscleLabel || 'FUERZA').toUpperCase();
+    if (setsEl) setsEl.textContent = `${ex.default_sets || ex.sets || 3} Series × ${ex.default_reps || ex.reps || '10-12'} Reps`;
+    if (restEl) restEl.textContent = `${ex.default_rest_seconds || ex.rest || 75}s descanso`;
+    if (kcalEl) kcalEl.textContent = `~${kcalData.totalKcal} kcal`;
+    if (titleEl) titleEl.textContent = localizedName;
+
+    const mediaInfo = (typeof resolveExerciseMediaUrl === 'function')
+        ? resolveExerciseMediaUrl(ex.video_local_path || ex.video_url || ex.video)
+        : { url: ex.video_local_path || ex.video || '', isVideo: true, isGif: false };
+
+    if (mediaInfo.isVideo) {
+        if (gif) gif.style.display = 'none';
+        if (video) {
+            video.style.display = 'block';
+            if (skeleton) skeleton.classList.remove('is-hidden');
+            video.src = mediaInfo.url;
+            video.load();
+            video.play().catch(() => {});
+            if (typeof attachVideoSkeleton === 'function') {
+                attachVideoSkeleton(video, skeleton);
+            }
+        }
+    } else {
+        if (video) {
+            video.pause();
+            video.style.display = 'none';
+        }
+        if (gif) {
+            gif.style.display = 'block';
+            gif.src = mediaInfo.url;
+            if (skeleton) skeleton.classList.add('is-hidden');
+        }
+    }
+
+    const localizedSummary = ex['summary_detailed_movement_' + currentLang] || ex.summary_detailed_movement_es || '';
+    const parsedSteps = (typeof parseExerciseSummarySteps === 'function' && localizedSummary)
+        ? parseExerciseSummarySteps(localizedSummary)
+        : [];
+
+    let stepsCardsHtml = '';
+    if (parsedSteps.length > 0) {
+        stepsCardsHtml = `
+            <div class="sens-summary-steps-grid">
+                ${parsedSteps.map(st => `
+                    <div class="sens-summary-step-card">
+                        <div class="sens-step-badge">${st.step}</div>
+                        <div class="sens-step-body">
+                            <strong class="sens-step-label">${st.label}</strong>
+                            <p class="sens-step-text">${st.text}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else if (localizedSummary) {
+        stepsCardsHtml = `<div style="font-size: 12px; color: #E4E4E7; line-height: 1.5; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px;">${localizedSummary}</div>`;
+    }
+
+    if (notes) {
+        notes.innerHTML = `
+            <div style="margin-bottom: 14px;">
+                <div style="font-size: 11.5px; font-weight: 800; color: #E5CBA7; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    Técnica en 3 Pasos Clave
+                </div>
+                ${stepsCardsHtml}
+            </div>
+
+            ${localizedDetailed ? `
+                <div style="margin-bottom: 14px;">
+                    <button type="button" class="sens-btn-deep-biomechanics" onclick="window.toggleCoachPreviewDeepBiomechanics()" id="btnToggleCoachPreviewDeepBiomechanics">
+                        <span>Ver Biomecánica Avanzada (Setup & Fases)</span>
+                        <svg id="iconCoachPreviewDeepBiomechanics" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div id="coachPreviewDeepBiomechanics" class="sens-deep-biomechanics-body" style="display: none;">
+                        <div style="font-size: 11.5px; line-height: 1.6; color: #D4D4D8; white-space: pre-line;">${localizedDetailed}</div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <div style="margin-bottom: 10px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; padding: 10px;">
+                <strong style="color: #F87171; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Cómo NO hacerlo:</strong>
+                <span style="font-size: 11.5px; color: #E4E4E7; line-height: 1.45;">${commonMistakes}</span>
+            </div>
+
+            <div style="background: rgba(229, 203, 167, 0.07); border: 1px solid rgba(229, 203, 167, 0.22); border-radius: 8px; padding: 10px;">
+                <strong style="color: #E5CBA7; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Recomendación de Nico:</strong>
+                <span style="font-size: 11.5px; color: #E4E4E7; line-height: 1.45;">${nicoRecs}</span>
+            </div>
+        `;
+    }
+
+    if (addBtn) {
+        if (options.isAdded) {
+            addBtn.disabled = true;
+            addBtn.style.opacity = '0.6';
+            if (addLabel) addLabel.textContent = '✓ Ya Agregado';
+        } else {
+            addBtn.disabled = false;
+            addBtn.style.opacity = '1';
+            const labelText = options.dayLabel ? `+ Agregar a ${options.dayLabel}` : '+ Agregar a la Sesión';
+            if (addLabel) addLabel.textContent = labelText;
+            addBtn.onclick = () => {
+                if (typeof options.onAdd === 'function') {
+                    options.onAdd();
+                }
+                addBtn.disabled = true;
+                addBtn.style.opacity = '0.6';
+                if (addLabel) addLabel.textContent = '✓ Agregado';
+                if (typeof showSensToast === 'function') {
+                    showSensToast(`✓ ${localizedName} agregado a la sesión.`, 'champagne');
+                }
+            };
+        }
+    }
+
+    if (!window.history.state || window.history.state.sensModal !== 'coachExercisePreview') {
+        try { window.history.pushState({ sensModal: 'coachExercisePreview' }, ''); } catch (_) {}
+    }
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+};
+
+window.closeCoachExercisePreviewModal = function() {
+    const modal = document.getElementById('sensCoachExercisePreviewModal');
+    if (!modal) return;
+    const video = document.getElementById('coachPreviewVideo');
+    if (video) video.pause();
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+};
+
+window.toggleCoachPreviewDeepBiomechanics = function() {
+    const el = document.getElementById('coachPreviewDeepBiomechanics');
+    const icon = document.getElementById('iconCoachPreviewDeepBiomechanics');
+    if (!el) return;
+    const isHidden = (el.style.display === 'none' || !el.style.display);
+    el.style.display = isHidden ? 'block' : 'none';
+    if (icon) {
+        icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        icon.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+    }
+};
+
+window.toggleCoachPreviewVideoAspect = function() {
+    const wrap = document.getElementById('coachPreviewVideoWrap');
+    const label = document.getElementById('btnToggleCoachPreviewVideoAspectLabel');
+    const btn = document.getElementById('btnToggleCoachPreviewVideoAspect');
+    if (!wrap) return;
+
+    const is916 = wrap.classList.toggle('is-916-expanded');
+    if (label) label.textContent = is916 ? '4:5 Reducir' : '9:16 Completo';
+    if (btn) btn.classList.toggle('active', is916);
+};
+
 // Wire up events del Modal
 document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('btnCloseExerciseModal');
@@ -8623,6 +8870,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (backdrop) {
         backdrop.addEventListener('click', (e) => {
             if (e.target === backdrop) handleAttemptExitExerciseModal();
+        });
+    }
+
+    // Coach Preview Modal listeners
+    const coachCloseBtn = document.getElementById('btnCloseCoachPreviewModal');
+    const coachBottomClose = document.getElementById('btnCoachPreviewClose');
+    const coachModal = document.getElementById('sensCoachExercisePreviewModal');
+    if (coachCloseBtn) coachCloseBtn.addEventListener('click', window.closeCoachExercisePreviewModal);
+    if (coachBottomClose) coachBottomClose.addEventListener('click', window.closeCoachExercisePreviewModal);
+    if (coachModal) {
+        coachModal.addEventListener('click', (e) => {
+            if (e.target === coachModal) window.closeCoachExercisePreviewModal();
+        });
+    }
+    const coachAspectBtn = document.getElementById('btnToggleCoachPreviewVideoAspect');
+    if (coachAspectBtn) {
+        coachAspectBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.toggleCoachPreviewVideoAspect();
         });
     }
 });
@@ -22391,7 +22657,7 @@ const CoachQuickAddManager = {
             const bioCat = getBiomechanicalCategory(ex).toUpperCase();
 
             html += `
-                <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <div class="sens-coach-quick-card-row" data-quick-card="${ex.id}" style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; transition: all 0.18s ease;">
                     <div style="display: flex; align-items: center; gap: 10px; min-width: 140px; flex: 1;">
                         <div style="width: 36px; height: 36px; border-radius: 6px; overflow: hidden; background: #18181B; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
                             ${thumb ? `<img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"><polygon points="10 8 16 12 10 16 10 8"/></svg>`}
@@ -22410,12 +22676,37 @@ const CoachQuickAddManager = {
 
         list.innerHTML = html;
 
+        list.querySelectorAll('[data-quick-card]').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-quick-select-ex')) return;
+                const exId = card.getAttribute('data-quick-card');
+                const exObj = sourceLib.find(x => x.id === exId);
+                if (exObj && typeof window.openCoachExercisePreviewModal === 'function') {
+                    window.openCoachExercisePreviewModal(exObj.id, {
+                        onAdd: async () => {
+                            await this.addExerciseToSession(exObj);
+                            const btn = card.querySelector('.btn-quick-select-ex');
+                            if (btn) {
+                                btn.textContent = '✓ Agregado';
+                                btn.disabled = true;
+                            }
+                        },
+                        isAdded: false,
+                        dayLabel: this.targetDateStr
+                    });
+                }
+            });
+        });
+
         list.querySelectorAll('.btn-quick-select-ex').forEach(btn => {
-            btn.addEventListener('click', async () => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
                 const exId = btn.getAttribute('data-ex-id');
                 const exObj = sourceLib.find(x => x.id === exId);
                 if (exObj) {
                     await this.addExerciseToSession(exObj);
+                    btn.textContent = '✓ Agregado';
+                    btn.disabled = true;
                 }
             });
         });
@@ -24314,7 +24605,7 @@ const CoachWorkoutsMaster = {
             });
         }
 
-        // Desktop hover preview support
+        // Desktop hover preview & Click para ver detalle completo del ejercicio
         grid.querySelectorAll('.wizard-feed-ex-card').forEach(card => {
             const vid = card.querySelector('video.wizard-feed-video-bg');
             if (vid) {
@@ -24326,6 +24617,30 @@ const CoachWorkoutsMaster = {
                     if (!this._step3VideoObserver) vid.pause();
                 });
             }
+
+            // Al tocar la card (fuera del botón "+ Agregar"), abre la vista técnica profunda
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-wizard-add-ex')) return;
+                const exId = card.getAttribute('data-ex-id');
+                const exObj = sourceLib.find(x => x.id === exId);
+                if (exObj && typeof window.openCoachExercisePreviewModal === 'function') {
+                    const isAdded = assignedIds.has(exObj.id);
+                    window.openCoachExercisePreviewModal(exObj.id, {
+                        onAdd: () => {
+                            this.addExerciseToActiveDay(activeDay, exObj);
+                            card.classList.add('is-added');
+                            const btn = card.querySelector('.btn-wizard-add-ex');
+                            if (btn) {
+                                btn.classList.remove('not-added');
+                                btn.classList.add('added');
+                                btn.textContent = '✓ Agregado';
+                            }
+                        },
+                        isAdded: isAdded,
+                        dayLabel: activeDay.label
+                    });
+                }
+            });
         });
 
         // Click handler for "+ Agregar" (updates in-place without rebuilding DOM)

@@ -19660,6 +19660,41 @@ body.in-portal,
     border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* Indicador de Autoguardado Continuo (Senior UX / Apple Health Standard) */
+.sens-autosave-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #A1A1AA;
+    letter-spacing: 0.3px;
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+    transition: all 0.25s ease;
+}
+
+.sens-autosave-indicator .autosave-dot {
+    width: 6.5px;
+    height: 6.5px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    display: inline-block;
+    transition: all 0.25s ease;
+}
+
+.sens-autosave-indicator.is-saving {
+    color: #E5CBA7;
+}
+
+.sens-autosave-indicator.is-saving .autosave-dot {
+    background: #E5CBA7;
+    box-shadow: 0 0 8px rgba(229, 203, 167, 0.7);
+    transform: scale(1.25);
+}
+
 /* 6. Barra Sticky de Guardar Progreso */
 .sens-modal-sticky-save-bar {
     position: sticky;

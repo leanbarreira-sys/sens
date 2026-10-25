@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.0">
+    <link rel="stylesheet" href="style.css?v=11.1">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4169,62 +4169,9 @@
                             </svg>
                             <span id="btnToggleVideoAspectLabel">4:5 Reducir</span>
                         </button>
-
-                        <!-- HUD In-Video Táctil de Series & Reloj: Sets, KG, Reps, Checkmarks + Timer Unificado -->
-                        <div class="sens-invideo-series-overlay" id="modalExInVideoHud">
-                            <!-- Reloj Maestro In-Video (Sincronizado en tiempo real) -->
-                            <div class="sens-invideo-timer-row" id="modalExInVideoTimerRow">
-                                <div class="invideo-timer-left">
-                                    <span class="invideo-timer-mode-dot" id="invideoTimerDot"></span>
-                                    <span class="invideo-timer-label" id="invideoTimerLabel">EN ESPERA</span>
-                                    <strong class="invideo-timer-digits" id="invideoTimerDigits">00:00</strong>
-                                </div>
-                                <div class="invideo-timer-actions">
-                                    <button type="button" class="sens-invideo-timer-btn primary"
-                                        id="btnInVideoTimerPrimary">
-                                        Iniciar Serie
-                                    </button>
-                                    <button type="button" class="sens-invideo-timer-btn secondary"
-                                        id="btnInVideoTimerSecondary">
-                                        Fin &amp; Descanso
-                                    </button>
-                                    <button type="button" class="sens-invideo-timer-btn subtle" id="btnInVideoTimerSkip"
-                                        style="display: none;">
-                                        Saltar
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="sens-invideo-hud-header">
-                                <span class="sens-invideo-hud-title">SERIES DEL EJERCICIO</span>
-                                <span class="sens-invideo-hud-status" id="modalExInVideoStatus">0 / 4 completadas</span>
-                            </div>
-                            <div class="sens-invideo-chips-row" id="modalExInVideoChipsRow">
-                                <!-- Chips inyectados dinámicamente -->
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- Banner Técnico / Coach Pill: Clave propioceptiva inmediata visible en la pantalla activa -->
-                    <div class="sens-coach-cue-banner" id="modalExCoachCueBanner">
-                        <div class="cue-icon-wrap">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                            </svg>
-                        </div>
-                        <div class="cue-content">
-                            <span class="cue-tag">FOCO BIOMECÁNICO • NICO</span>
-                            <p class="cue-text" id="modalExCueText">Codos cerrados pegados al torso, bajada en 3 segundos buscando profundidad cómoda sin redondear lumbares.</p>
-                        </div>
-                    </div>
-
-                    <!-- 3. Botón de Completar Todo el Ejercicio con Feedback Inmediato -->
-                    <button type="button" class="sens-btn-complete-all" id="btnQuickCompleteAllSets">
-                        <span style="font-size: 14px; font-weight: 900;">✓</span>
-                        <span>Marcar Todo el Ejercicio como Realizado</span>
-                    </button>
-
-                    <!-- 5. Reloj Maestro Unificado (TUT / Descanso Inteligente - Zero Desorden) -->
+                    <!-- 1. Reloj Maestro Unificado (Un Solo Reloj de Alta Legibilidad / Senior UX Standard) -->
                     <div class="sens-master-timer-card" id="sensMasterTimerCard">
                         <div class="sens-master-timer-top">
                             <div class="sens-timer-mode-pill" id="masterTimerModeBadge">
@@ -4253,7 +4200,23 @@
                         </div>
                     </div>
 
-                    <!-- 4. Descripción Técnica & Recomendaciones Colapsada por Defecto (Acordeón) -->
+                    <!-- 2. Series del Ejercicio Inmediatamente Debajo del Reloj (Mobile-First Touch Ergonomics) -->
+                    <div class="sens-tactile-series-section">
+                        <div class="sens-series-section-header">
+                            <h4>Ajuste Granular de Series &amp; Cargas</h4>
+                            <span class="sens-series-count" id="modalExSeriesCount">0 de 4 series completadas</span>
+                        </div>
+                        <div class="sens-tactile-series-list" id="modalExSeriesList">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                        <!-- Botón de Completar Todo el Ejercicio con Feedback Inmediato -->
+                        <button type="button" class="sens-btn-complete-all" id="btnQuickCompleteAllSets">
+                            <span style="font-size: 14px; font-weight: 900;">✓</span>
+                            <span>Marcar Todo el Ejercicio como Realizado</span>
+                        </button>
+                    </div>
+
+                    <!-- 3. Técnica, Recomendaciones de Nico & Biomecánica (Acordeón sin desorden visual) -->
                     <div class="sens-accordion-notes-box" id="sensExNotesAccordion">
                         <button type="button" class="sens-accordion-trigger" id="btnToggleExNotesAccordion">
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -4272,19 +4235,12 @@
                         </div>
                     </div>
 
-                    <!-- Ajuste Granular de Cargas & Steppers -->
-                    <div class="sens-tactile-series-section">
-                        <div class="sens-series-section-header">
-                            <h4>Ajuste Granular de Series &amp; Cargas</h4>
-                            <span class="sens-series-count" id="modalExSeriesCount">0 de 4 series completadas</span>
-                        </div>
-                        <div class="sens-tactile-series-list" id="modalExSeriesList">
-                            <!-- Inyectado dinámicamente -->
-                        </div>
-                    </div>
-
-                    <!-- 6. Barra Sticky Inferior de Guardar Progreso -->
+                    <!-- 4. Barra Sticky Inferior con Autoguardado Continuo (Zero-Data-Loss) -->
                     <div class="sens-modal-sticky-save-bar">
+                        <div class="sens-autosave-indicator" id="modalExAutosaveIndicator">
+                            <span class="autosave-dot"></span>
+                            <span>Progreso autoguardado</span>
+                        </div>
                         <button type="button" class="btn sens-sticky-save-btn" id="btnModalFinishExercise">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -4292,6 +4248,77 @@
                             </svg>
                             <span>Guardar Progreso &amp; Finalizar</span>
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Bottom Sheet: Vista Previa Técnica de Ejercicio para Coach (Sin Series) -->
+            <div class="sens-exercise-modal-backdrop" id="sensCoachExercisePreviewModal" style="display: none;">
+                <div class="sens-exercise-modal-sheet" id="sensCoachExercisePreviewSheet">
+                    <div class="sheet-drag-handle-wrap" id="coachPreviewDragHandle">
+                        <span class="sheet-drag-handle"></span>
+                    </div>
+
+                    <div class="sens-exercise-modal-top">
+                        <div class="sens-exercise-modal-tags" id="coachPreviewTagsContainer">
+                            <span class="sens-chip-pill sens-chip-champagne" id="coachPreviewMuscleGroup">PIERNAS</span>
+                            <span class="sens-chip-pill sens-chip-dark" id="coachPreviewSetsRepsPill">3 Series × 10-12 Reps</span>
+                            <span class="sens-chip-pill sens-chip-dark" id="coachPreviewRestPill">75s descanso</span>
+                            <span class="sens-chip-pill sens-chip-dark" id="coachPreviewKcalPill">~24 kcal</span>
+                        </div>
+                        <button type="button" class="sens-modal-close-btn" id="btnCloseCoachPreviewModal" aria-label="Cerrar vista previa">✕</button>
+                    </div>
+
+                    <h3 class="sens-exercise-modal-title" id="coachPreviewModalTitle">Nombre del Ejercicio</h3>
+
+                    <!-- Video en Bucle con Formato 9:16 / 4:5 -->
+                    <div class="sens-exercise-modal-video-wrap is-916-expanded" id="coachPreviewVideoWrap">
+                        <div class="sens-video-skeleton compact" id="coachPreviewVideoSkeleton">
+                            <div class="sens-skeleton-shimmer"></div>
+                        </div>
+                        <video autoplay muted loop playsinline class="sens-exercise-modal-video" id="coachPreviewVideo">
+                            <source src="" type="video/mp4">
+                        </video>
+                        <img class="sens-exercise-modal-video" id="coachPreviewGif" style="display: none; object-fit: cover; width: 100%; height: 100%;" alt="">
+                        <div class="sens-video-overlay-gradient"></div>
+
+                        <button type="button" class="sens-video-aspect-pill active" id="btnToggleCoachPreviewVideoAspect" title="Alternar formato de video 9:16 / 4:5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="2" width="14" height="20" rx="3"></rect>
+                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            </svg>
+                            <span id="btnToggleCoachPreviewVideoAspectLabel">4:5 Reducir</span>
+                        </button>
+                    </div>
+
+                    <!-- Técnica, Recomendaciones de Nico & Biomecánica (Mismo detalle rico que el atleta) -->
+                    <div class="sens-accordion-notes-box" style="margin-top: 14px;">
+                        <div class="sens-accordion-trigger" style="cursor: default; pointer-events: none;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="16" x2="12" y2="12" />
+                                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                                </svg>
+                                <span>Técnica Biomecánica &amp; Recomendaciones</span>
+                            </div>
+                        </div>
+                        <div class="sens-accordion-body" id="coachPreviewNotesBody" style="display: block; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px;">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Barra Sticky Inferior de Acción para Coach -->
+                    <div class="sens-modal-sticky-save-bar">
+                        <div style="display: flex; gap: 10px; width: 100%;">
+                            <button type="button" class="btn btn-outline" id="btnCoachPreviewClose" style="flex: 1; padding: 13px; font-weight: 700; border-color: rgba(255,255,255,0.2); color: #E4E4E7; border-radius: 14px; background: rgba(255,255,255,0.04);">
+                                Cerrar
+                            </button>
+                            <button type="button" class="btn sens-sticky-save-btn" id="btnCoachPreviewAdd" style="flex: 2; padding: 13px !important;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <span id="btnCoachPreviewAddLabel">+ Agregar a la Sesión</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -9359,7 +9386,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=11.4"></script>
+    <script src="app.js?v=11.5"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
