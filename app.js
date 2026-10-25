@@ -6709,7 +6709,9 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
     const commonMistakes = catalogMatch.common_mistakes || 'Evitar rebotes articulares, pérdida de neutralidad lumbar o apnea prolongada.';
     const nicoRecs = ex.notes || catalogMatch.recommendations || `Mantener el pecho erguido, control respiratorio y 1 segundo de pausa isométrica en el punto de máxima contracción. Detener la serie en RIR/RPE ${ex.rir !== undefined ? ex.rir : 2}.`;
 
-    const videoSrc = (catalogMatch.video_local_path || catalogMatch.video_url || catalogMatch.video || SENS_EXERCISE_MOCKUP_VIDEO);
+    const mediaInfo = (typeof resolveExerciseMediaUrl === 'function')
+        ? resolveExerciseMediaUrl(catalogMatch.video_local_path || catalogMatch.video_url || catalogMatch.video)
+        : { url: catalogMatch.video_local_path || catalogMatch.video_url || catalogMatch.video || SENS_EXERCISE_MOCKUP_VIDEO, isVideo: true, isGif: false };
 
     const backdrop = document.getElementById('sensExerciseModalBackdrop');
     const modalName = document.getElementById('modalExName');
@@ -6718,6 +6720,7 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
     const modalRir = document.getElementById('modalExRirPill');
     const modalKcal = document.getElementById('modalExKcalPill');
     const modalVideo = document.getElementById('modalExVideo');
+    const modalGif = document.getElementById('modalExGif');
     const modalNotes = document.getElementById('modalExNotesBody');
 
     // 1. Pills de Foco y Prescripción sin Rotura (Solid Surface Elevation)
@@ -6727,41 +6730,109 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
     if (modalRir) modalRir.textContent = `RIR ${ex.rir !== undefined ? ex.rir : 2} (RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)})`;
     if (modalKcal) modalKcal.textContent = `~${kcalData.totalKcal} kcal`;
 
-    // 2. Video 4:5 y Skeleton
+    // 2. Coach Cue Banner en tiempo real justo debajo del video
+    const cueBanner = document.getElementById('modalExCoachCueBanner');
+    const cueBannerText = document.getElementById('modalExCoachCueText');
+    if (cueBanner && cueBannerText) {
+        cueBannerText.textContent = localizedCue;
+        cueBanner.style.display = 'flex';
+    }
+
+    // 3. Media 4:5 y Skeleton (Soporte Dual Video MP4 y GIF optimizado)
     const modalSkeleton = document.getElementById('modalExVideoSkeleton');
-    if (modalVideo) {
-        if (modalSkeleton) modalSkeleton.classList.remove('is-hidden');
-        modalVideo.src = videoSrc;
-        modalVideo.load();
-        modalVideo.play().catch(() => {});
-        if (typeof attachVideoSkeleton === 'function') {
-            attachVideoSkeleton(modalVideo, modalSkeleton);
+    if (mediaInfo.isVideo) {
+        if (modalGif) modalGif.style.display = 'none';
+        if (modalVideo) {
+            modalVideo.style.display = 'block';
+            if (modalSkeleton) modalSkeleton.classList.remove('is-hidden');
+            modalVideo.src = mediaInfo.url;
+            modalVideo.load();
+            modalVideo.play().catch(() => {});
+            if (typeof attachVideoSkeleton === 'function') {
+                attachVideoSkeleton(modalVideo, modalSkeleton);
+            }
+        }
+    } else {
+        if (modalVideo) {
+            modalVideo.pause();
+            modalVideo.style.display = 'none';
+        }
+        if (modalGif) {
+            modalGif.style.display = 'block';
+            modalGif.src = mediaInfo.url;
+            if (modalSkeleton) modalSkeleton.classList.add('is-hidden');
         }
     }
 
-    // 4. Notas Técnicas Colapsables en Acordeón
+    // 4. Notas Técnicas y Divulgación Progresiva (Técnica en 3 Pasos + Biomecánica Avanzada secundaria)
+    const localizedSummary = catalogMatch['summary_detailed_movement_' + currentLang] || catalogMatch.summary_detailed_movement_es || '';
+    const parsedSteps = (typeof parseExerciseSummarySteps === 'function' && localizedSummary)
+        ? parseExerciseSummarySteps(localizedSummary)
+        : [];
+
+    let stepsCardsHtml = '';
+    if (parsedSteps.length > 0) {
+        stepsCardsHtml = `
+            <div class="sens-summary-steps-grid">
+                ${parsedSteps.map(st => `
+                    <div class="sens-summary-step-card">
+                        <div class="sens-step-badge">${st.step}</div>
+                        <div class="sens-step-body">
+                            <strong class="sens-step-label">${st.label}</strong>
+                            <p class="sens-step-text">${st.text}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else if (localizedSummary) {
+        stepsCardsHtml = `
+            <div style="font-size: 12px; color: #E4E4E7; line-height: 1.5; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px;">
+                ${localizedSummary}
+            </div>
+        `;
+    }
+
     if (modalNotes) {
         modalNotes.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                <span style="font-size: 11px; font-weight: 800; color: #E5CBA7; text-transform: uppercase;">Idioma de la Ficha:</span>
-                <div style="display: flex; gap: 5px;">
-                    <button type="button" class="pill ${currentLang === 'es' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">ES</button>
-                    <button type="button" class="pill ${currentLang === 'en' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">EN</button>
-                    <button type="button" class="pill ${currentLang === 'pt' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 2px 8px; cursor: pointer;">PT</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; letter-spacing: 0.5px;">Idioma / Language:</span>
+                <div style="display: flex; gap: 6px;">
+                    <button type="button" class="pill ${currentLang === 'es' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 3px 9px; cursor: pointer;">ES</button>
+                    <button type="button" class="pill ${currentLang === 'en' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 3px 9px; cursor: pointer;">EN</button>
+                    <button type="button" class="pill ${currentLang === 'pt' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 3px 9px; cursor: pointer;">PT</button>
                 </div>
             </div>
-            <div style="margin-bottom: 10px; background: rgba(229,203,167,0.06); border: 1px solid rgba(229,203,167,0.2); border-radius: 8px; padding: 10px;">
-                <strong style="color: #E5CBA7; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Cue Técnico de Nico:</strong>
-                <span style="font-size: 12px; color: #FFFFFF;">${localizedCue}</span>
+
+            <div style="margin-bottom: 14px;">
+                <div style="font-size: 11.5px; font-weight: 800; color: #E5CBA7; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    Técnica en 3 Pasos Clave
+                </div>
+                ${stepsCardsHtml}
             </div>
+
             ${localizedDetailed ? `
-                <div style="margin-bottom: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
-                    <div style="font-size: 11px; font-weight: 800; color: #E5CBA7; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px;">Desglose Biomecánico Paso a Paso:</div>
-                    <div style="font-size: 11.5px; line-height: 1.5; color: #E4E4E7; white-space: pre-line;">${localizedDetailed}</div>
+                <div style="margin-bottom: 14px;">
+                    <button type="button" class="sens-btn-deep-biomechanics" onclick="window.toggleDeepBiomechanics()" id="btnToggleDeepBiomechanics">
+                        <span>Ver Biomecánica Avanzada (Setup & Fases)</span>
+                        <svg id="iconDeepBiomechanics" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div id="modalExDeepBiomechanics" class="sens-deep-biomechanics-body" style="display: none;">
+                        <div style="font-size: 11.5px; line-height: 1.6; color: #D4D4D8; white-space: pre-line;">${localizedDetailed}</div>
+                    </div>
                 </div>
             ` : ''}
-            <div style="margin-bottom: 8px;"><strong style="color: #F87171;">Cómo NO hacerlo (Errores a evitar):</strong> <span style="color:#D4D4D8;">${commonMistakes}</span></div>
-            <div><strong style="color: var(--accent-champagne);">Recomendación de Nico:</strong> <span style="color:#D4D4D8;">${nicoRecs}</span></div>
+
+            <div style="margin-bottom: 10px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; padding: 10px;">
+                <strong style="color: #F87171; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Cómo NO hacerlo (Errores a evitar):</strong>
+                <span style="font-size: 11.5px; color: #E4E4E7; line-height: 1.45;">${commonMistakes}</span>
+            </div>
+
+            <div style="background: rgba(229, 203, 167, 0.07); border: 1px solid rgba(229, 203, 167, 0.22); border-radius: 8px; padding: 10px;">
+                <strong style="color: #E5CBA7; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Recomendación de Nico:</strong>
+                <span style="font-size: 11.5px; color: #E4E4E7; line-height: 1.45;">${nicoRecs}</span>
+            </div>
         `;
     }
 
@@ -6870,6 +6941,18 @@ window.switchModalExerciseLanguage = function(lang, exId, dayKey, targetDateStr 
     }
     if (typeof window.openExerciseExecutionModal === 'function') {
         window.openExerciseExecutionModal(exId, dayKey, targetDateStr || modalExerciseState.targetDateStr);
+    }
+};
+
+window.toggleDeepBiomechanics = function() {
+    const el = document.getElementById('modalExDeepBiomechanics');
+    const icon = document.getElementById('iconDeepBiomechanics');
+    if (!el) return;
+    const isHidden = (el.style.display === 'none' || !el.style.display);
+    el.style.display = isHidden ? 'block' : 'none';
+    if (icon) {
+        icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        icon.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
     }
 };
 
@@ -7017,9 +7100,19 @@ window.toggleSetCompleted = function(idx) {
     const day = (data && data[currentDayKey]) ? data[currentDayKey] : null;
     const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
 
+    const targetEx = day?.exercises?.find(e => e.id === modalExerciseState.exId);
+    const catalogMatch = (typeof window.getResolvedExercise === 'function')
+        ? window.getResolvedExercise(modalExerciseState.exId || targetEx?.name, athId)
+        : targetEx;
+    const userWeight = parseFloat(AppState.profile?.current_weight || AppState.anamnesis?.weight || 75) || 75;
+    const restSec = (targetEx && targetEx.rest) || (catalogMatch && catalogMatch.default_rest_seconds) || 90;
+    const setCalData = (typeof window.calculateExerciseSetKcal === 'function')
+        ? window.calculateExerciseSetKcal(catalogMatch, s.reps, userWeight, restSec)
+        : { kcalSerie: 7 };
+
     if (s.completed) {
         logCompletedSetToDb(athId, modalExerciseState.exId, s.setNumber, s.weight, s.reps, dateIso);
-        showSensToast(`Set ${s.setNumber} completado (${s.weight} kg × ${s.reps} reps)`, 'champagne', 2200);
+        showSensToast(`Set ${s.setNumber} completado (${s.weight} kg × ${s.reps} reps • ~${setCalData.kcalSerie} kcal)`, 'champagne', 2200);
 
         if (day && Array.isArray(day.exercises)) {
             const anyDone = modalExerciseState.setsData.some(x => x.completed);
@@ -7037,6 +7130,9 @@ window.toggleSetCompleted = function(idx) {
 
             AppState.selectedDate = effectiveDate;
             AppState.currentDay = currentDayKey;
+            if (typeof updateObjectiveCardData === 'function') {
+                updateObjectiveCardData(effectiveDate);
+            }
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(effectiveDate);
             }
@@ -7064,6 +7160,9 @@ window.toggleSetCompleted = function(idx) {
                 completed: false
             });
 
+            if (typeof updateObjectiveCardData === 'function') {
+                updateObjectiveCardData(effectiveDate);
+            }
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(effectiveDate);
             }
@@ -7110,6 +7209,9 @@ window.completeAllExerciseSets = function() {
                 completed: false
             });
 
+            if (typeof updateObjectiveCardData === 'function') {
+                updateObjectiveCardData(effectiveDate);
+            }
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(effectiveDate);
             }
@@ -18052,13 +18154,24 @@ function getDailyMetabolicMetrics(targetDate) {
             if (isExDone) {
                 completedExCount++;
                 dayDoneWorkoutKcal += exKcal;
+            } else {
+                const savedLogs = (typeof getAthleteExerciseLogs === 'function') ? getAthleteExerciseLogs(athId, ex.id) : [];
+                const doneSets = savedLogs.filter(l => l.completed_at && l.completed_at.slice(0, 10) === dateKey);
+                if (doneSets.length > 0) {
+                    doneSets.forEach(l => {
+                        const setCal = (typeof calculateExerciseSetKcal === 'function')
+                            ? calculateExerciseSetKcal(resolved, l.reps_completed, weight, resolved.default_rest_seconds || 90)
+                            : { kcalSerie: 7 };
+                        dayDoneWorkoutKcal += (setCal.kcalSerie || 7);
+                    });
+                }
             }
         });
 
         if (isWorkoutDone) {
             workoutBurn = Math.max(dayTotalWorkoutKcal, dayDoneWorkoutKcal);
             completedExCount = totalExCount;
-        } else if (completedExCount > 0) {
+        } else if (dayDoneWorkoutKcal > 0) {
             workoutBurn = dayDoneWorkoutKcal;
         } else {
             workoutBurn = 0;
@@ -19001,7 +19114,7 @@ window.initCoachDatabasesTab = function() {
         });
     });
 
-    // Nivel 1: Por Tipo (Muscular, Cardio, Yoga, Movilidad)
+    // Nivel 1: Por Tipo (Todos, Muscular, Movilidad, Cardio)
     document.querySelectorAll('#coachTaxLevel1TypeBar .tax-l1-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('#coachTaxLevel1TypeBar .tax-l1-btn').forEach(b => {
@@ -19016,26 +19129,15 @@ window.initCoachDatabasesTab = function() {
             const l3Box = document.getElementById('coachTaxLevel3LegsBox');
             const showMuscles = (coachMasterLibState.exType === 'all' || coachMasterLibState.exType === 'muscular');
             if (l2Box) l2Box.style.display = showMuscles ? 'flex' : 'none';
-            if (!showMuscles && l3Box) l3Box.style.display = 'none';
-            window.renderCoachDatabasesTab();
-        });
-    });
-
-    // Nivel 2: Dentro de Muscular (Piernas, Bíceps, Tríceps, Pecho, Espalda, Abdominales, Hombros, Zona Lumbar, Antebrazos)
-    document.querySelectorAll('#coachTaxLevel2MuscleBar .tax-l2-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('#coachTaxLevel2MuscleBar .tax-l2-btn').forEach(b => {
-                b.classList.remove('active', 'pill-champagne');
-                b.classList.add('pill-dark');
-            });
-            btn.classList.remove('pill-dark');
-            btn.classList.add('active', 'pill-champagne');
-            coachMasterLibState.exMuscle = btn.getAttribute('data-muscle') || 'all';
-            coachMasterLibState.exLegsSub = 'all';
-
-            const l3Box = document.getElementById('coachTaxLevel3LegsBox');
-            if (l3Box) {
-                l3Box.style.display = coachMasterLibState.exMuscle === 'piernas' ? 'flex' : 'none';
+            if (!showMuscles) {
+                coachMasterLibState.exMuscle = 'all';
+                coachMasterLibState.exLegsSub = 'all';
+                if (l3Box) l3Box.style.display = 'none';
+                document.querySelectorAll('#coachTaxLevel2MuscleBar .tax-l2-btn').forEach((b, i) => {
+                    b.classList.toggle('active', i === 0);
+                    b.classList.toggle('pill-champagne', i === 0);
+                    b.classList.toggle('pill-dark', i !== 0);
+                });
                 document.querySelectorAll('#coachTaxLevel3LegsBar .tax-l3-btn').forEach((b, i) => {
                     b.classList.toggle('active', i === 0);
                     b.classList.toggle('pill-champagne', i === 0);
@@ -19046,7 +19148,38 @@ window.initCoachDatabasesTab = function() {
         });
     });
 
-    // Nivel 3: Dentro de Piernas (Cuádriceps, Isquios, Abductores, Glúteos, Gemelos, Sóleo)
+    // Nivel 2: Dentro de Muscular (Piernas, Espalda, Abdominales, Pecho, Bíceps, Hombros, Tríceps, Antebrazos, Zona Lumbar)
+    document.querySelectorAll('#coachTaxLevel2MuscleBar .tax-l2-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#coachTaxLevel2MuscleBar .tax-l2-btn').forEach(b => {
+                b.classList.remove('active', 'pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('active', 'pill-champagne');
+            coachMasterLibState.exMuscle = btn.getAttribute('data-muscle') || 'all';
+
+            // Regla crítica de UI/Estado: Nivel 3 SOLO debe mostrarse y activarse cuando nivel_2_grupo_muscular === 'piernas'.
+            // Si el usuario cambia de 'piernas' a cualquier otro grupo muscular, auto-resetear a 'all' / null para evitar pantallas vacías.
+            const l3Box = document.getElementById('coachTaxLevel3LegsBox');
+            if (coachMasterLibState.exMuscle === 'piernas') {
+                if (l3Box) l3Box.style.display = 'flex';
+            } else {
+                coachMasterLibState.exLegsSub = 'all';
+                if (l3Box) {
+                    l3Box.style.display = 'none';
+                    document.querySelectorAll('#coachTaxLevel3LegsBar .tax-l3-btn').forEach((b, i) => {
+                        b.classList.toggle('active', i === 0);
+                        b.classList.toggle('pill-champagne', i === 0);
+                        b.classList.toggle('pill-dark', i !== 0);
+                    });
+                }
+            }
+            window.renderCoachDatabasesTab();
+        });
+    });
+
+    // Nivel 3: Submúsculos de Piernas (Cuádriceps, Isquios, Glúteos, Gemelos, Abductores, Aductores)
     document.querySelectorAll('#coachTaxLevel3LegsBar .tax-l3-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('#coachTaxLevel3LegsBar .tax-l3-btn').forEach(b => {
@@ -19159,46 +19292,58 @@ window.renderCoachDatabasesTab = function() {
         const resolvedList = sourceLib.map(ex => (typeof window.getResolvedExercise === 'function') ? window.getResolvedExercise(ex, athId) : ex);
 
         const filtered = resolvedList.filter(ex => {
-            if (coachMasterLibState.exType !== 'all' && ex.type_level1 !== coachMasterLibState.exType) return false;
+            const exType = (ex.nivel_1_tipo || ex.type_level1 || 'muscular').toLowerCase().trim();
+            const exMuscle = (ex.nivel_2_grupo_muscular || ex.group_level2 || '').toLowerCase().trim();
+            const exSub = (ex.nivel_3_submusculo_piernas || ex.sub_level3 || '').toLowerCase().trim();
+
+            if (coachMasterLibState.exType !== 'all' && exType !== coachMasterLibState.exType) return false;
             if ((coachMasterLibState.exType === 'all' || coachMasterLibState.exType === 'muscular') && coachMasterLibState.exMuscle !== 'all') {
-                if (ex.group_level2 !== coachMasterLibState.exMuscle) return false;
+                if (exMuscle !== coachMasterLibState.exMuscle) return false;
                 if (coachMasterLibState.exMuscle === 'piernas' && coachMasterLibState.exLegsSub !== 'all') {
-                    const sub = (ex.sub_level3 || '').toLowerCase();
-                    const targetSub = coachMasterLibState.exLegsSub.toLowerCase();
-                    if (targetSub === 'isquios' && !sub.includes('isquio')) return false;
-                    else if ((targetSub === 'gemelos' || targetSub === 'soleo') && !sub.includes('gemelo') && !sub.includes('soleo')) return false;
-                    else if (targetSub !== 'isquios' && targetSub !== 'gemelos' && targetSub !== 'soleo' && sub !== targetSub) return false;
+                    if (exSub !== coachMasterLibState.exLegsSub.toLowerCase().trim()) return false;
                 }
             }
             if (coachMasterLibState.exSearch) {
                 const q = coachMasterLibState.exSearch;
-                const hay = `${ex.name} ${ex.primary_muscle || ''} ${ex.execution || ''} ${ex.recommendations || ''}`.toLowerCase();
+                const hay = `${ex.name_es || ''} ${ex.name_en || ''} ${ex.name_pt || ''} ${ex.name || ''} ${ex.cue_technical_es || ''} ${ex.summary_detailed_movement_es || ''} ${ex.detailed_movement_es || ''}`.toLowerCase();
                 if (!hay.includes(q)) return false;
             }
             return true;
         });
 
         if (countLabel) {
-            countLabel.textContent = `Mostrando ${filtered.length} ejercicios del mapa biomecánico SENS`;
+            countLabel.textContent = `Mostrando ${filtered.length} de 1.376 ejercicios del catálogo único SENS`;
         }
 
         let html = '';
         filtered.forEach(ex => {
             const kcalData = (typeof window.calculateExerciseKcal === 'function')
-                ? window.calculateExerciseKcal(ex, ex.sets || 4, ex.reps || '10', 75)
-                : { kcalPerRep: 0.65, kcalPerSet: 7, totalKcal: 28 };
-            const typeTag = (ex.type_level1 || 'muscular').toUpperCase();
-            const groupTag = (ex.group_level2 || ex.category || 'fuerza').replace('_', ' ').toUpperCase();
-            const subTag = ex.sub_level3 ? ` • ${ex.sub_level3.toUpperCase()}` : '';
+                ? window.calculateExerciseKcal(ex, ex.sets || 4, ex.reps || 10, 75)
+                : { kcalPerRep: 0.45, kcalPerSet: 7, totalKcal: 28 };
+            const tax = (typeof getExerciseTaxonomy === 'function') ? getExerciseTaxonomy(ex) : { typeLabel: 'Muscular', muscleLabel: 'Piernas' };
+            const typeTag = (tax.typeLabel || ex.nivel_1_tipo || 'Muscular').toUpperCase();
+            const groupTag = (tax.muscleLabel || ex.nivel_2_grupo_muscular || 'Piernas').toUpperCase();
+            const subTag = tax.subMuscleLabel ? ` • ${tax.subMuscleLabel.toUpperCase()}` : (ex.nivel_3_submusculo_piernas ? ` • ${ex.nivel_3_submusculo_piernas.toUpperCase()}` : '');
 
-            const videoPath = ex.video_local_path || ex.video_url || '';
+            const media = (typeof resolveExerciseMediaUrl === 'function')
+                ? resolveExerciseMediaUrl(ex.video_local_path)
+                : { url: ex.video_local_path, isVideo: true, isGif: false };
+
+            const parsedSteps = (typeof parseExerciseSummarySteps === 'function' && ex.summary_detailed_movement_es)
+                ? parseExerciseSummarySteps(ex.summary_detailed_movement_es)
+                : [];
+
             html += `
                 <div class="coach-master-lib-card">
-                    ${videoPath ? `
+                    ${media.url ? `
                         <div style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: #000; border: 1px solid rgba(229,203,167,0.18);">
-                            <video muted loop playsinline preload="none" style="width: 100%; height: 100%; object-fit: cover;">
-                                <source src="${videoPath}" type="video/mp4">
-                            </video>
+                            ${media.isVideo ? `
+                                <video muted loop playsinline preload="none" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <source src="${media.url}" type="video/mp4">
+                                </video>
+                            ` : `
+                                <img src="${media.url}" alt="${ex.name_es || ex.name}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" />
+                            `}
                         </div>
                     ` : ''}
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
@@ -19207,7 +19352,7 @@ window.renderCoachDatabasesTab = function() {
                             <span class="pill pill-dark" style="font-size: 9px;">${groupTag}${subTag}</span>
                             ${ex._hasAthleteOverride ? `<span class="pill pill-champagne" style="font-size: 8.5px; background: rgba(16,185,129,0.18); color: #10B981;">Personalizado Alumno</span>` : ''}
                         </div>
-                        <span class="pill pill-dark" style="font-size: 9.5px; color: #E5CBA7; border: 1px solid rgba(229,203,167,0.35);">
+                        <span class="pill pill-dark" style="font-size: 9.5px; color: #E5CBA7; border: 1px solid rgba(229,203,167,0.35); font-variant-numeric: tabular-nums;">
                             ~${kcalData.kcalPerSet} kcal/serie (${kcalData.kcalPerRep} kcal/rep)
                         </span>
                     </div>
@@ -19216,14 +19361,33 @@ window.renderCoachDatabasesTab = function() {
                         <span style="color: #E5CBA7;">EN:</span> ${ex.name_en || ex.name} • <span style="color: #E5CBA7;">PT:</span> ${ex.name_pt || ex.name}
                     </div>
                     <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
-                        Músculo: <strong>${ex.primary_muscle || 'Principal'}</strong> • Base: ${ex.sets || 4} series × ${ex.reps || '10'} (~${kcalData.totalKcal} kcal totales)
+                        Músculo: <strong>${tax.muscleLabel || 'Principal'}</strong> • Base: ${ex.sets || 4} series × ${ex.reps || 10} reps (~${kcalData.totalKcal} kcal totales • ${ex.default_rest_seconds || 90}s descanso)
                     </div>
                     <div style="font-size: 11.5px; line-height: 1.45; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
-                        <div><strong style="color: #E5CBA7;">Cue Técnico:</strong> ${ex.cue_technical_es || ex.cue || 'Control continuo.'}</div>
+                        <div class="sens-coach-cue-banner" style="margin: 4px 0 8px 0; padding: 8px 10px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.2" style="flex-shrink:0;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            <div class="sens-coach-cue-content">
+                                <span class="sens-coach-cue-label">Cue Biomecánico Nico</span>
+                                <span class="sens-coach-cue-text">${ex.cue_technical_es || ex.cue || 'Control continuo del movimiento.'}</span>
+                            </div>
+                        </div>
+                        ${parsedSteps.length > 0 ? `
+                            <div class="sens-summary-steps-grid" style="margin-bottom: 6px;">
+                                ${parsedSteps.map(st => `
+                                    <div class="sens-summary-step-card" style="padding: 6px 8px;">
+                                        <div class="sens-step-badge" style="width: 18px; height: 18px; font-size: 10px;">${st.step}</div>
+                                        <div class="sens-step-body">
+                                            <strong class="sens-step-label" style="font-size: 10.5px;">${st.label}</strong>
+                                            <p class="sens-step-text" style="font-size: 10.5px;">${st.text}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
                         ${ex.detailed_movement_es ? `
                             <details style="background: rgba(255,255,255,0.03); border-radius: 6px; padding: 6px 10px; margin-top: 4px; border: 1px solid rgba(255,255,255,0.06);">
-                                <summary style="font-size: 11px; font-weight: 700; color: #9E7D4B; cursor: pointer;">Ver desglose biomecánico completo (Setup y Fases) ▾</summary>
-                                <div style="font-size: 11px; color: #D1D1D5; margin-top: 6px; white-space: pre-line; line-height: 1.4;">${ex.detailed_movement_es}</div>
+                                <summary style="font-size: 11px; font-weight: 700; color: #9E7D4B; cursor: pointer;">Ver biomecánica avanzada (Setup & Fases) ▾</summary>
+                                <div style="font-size: 11px; color: #D1D1D5; margin-top: 6px; white-space: pre-line; line-height: 1.45;">${ex.detailed_movement_es}</div>
                             </details>
                         ` : ''}
                     </div>
@@ -22070,17 +22234,23 @@ const CoachMultiDayActionsManager = {
 
         // Recolectar catálogo completo para sustitución y agregado
         let catalog = [];
-        if (typeof EXERCISES_DB !== 'undefined' && Array.isArray(EXERCISES_DB)) {
+        if (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY)) {
+            catalog = SENS_EXERCISE_LIBRARY;
+        } else if (typeof EXERCISES_DB !== 'undefined' && Array.isArray(EXERCISES_DB)) {
             catalog = EXERCISES_DB;
         } else if (typeof CoachWorkoutsMaster !== 'undefined' && typeof CoachWorkoutsMaster.getAllExercises === 'function') {
             catalog = CoachWorkoutsMaster.getAllExercises();
         }
 
-        this.cachedCatalog = catalog.map(ex => ({
-            id: ex.id,
-            name: ex.name,
-            cat: (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : 'fuerza').toUpperCase()
-        }));
+        this.cachedCatalog = catalog.map(ex => {
+            const tax = (typeof getExerciseTaxonomy === 'function') ? getExerciseTaxonomy(ex) : null;
+            const cat = tax?.muscleLabel || ex.primary_muscle || ex.nivel_2_grupo_muscular || 'FUERZA';
+            return {
+                id: ex.id,
+                name: ex.name_es || ex.name,
+                cat: String(cat).toUpperCase()
+            };
+        });
 
         // Actualizar triggers táctiles por defecto para reemplazo
         const curr = this.cachedCurrentExercises;
@@ -22155,16 +22325,33 @@ const CoachMultiDayActionsManager = {
             return;
         }
 
+        const addedSet = new Set((this.addedExercisesQueue || []).map(x => x.id));
+
         let html = '';
+        if (this.currentPickerTarget === 'add') {
+            html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; margin-bottom: 8px; background: rgba(229,203,167,0.08); border: 1px solid rgba(229,203,167,0.25); border-radius: 8px;">
+                    <span style="font-size: 11px; color: #E5CBA7; font-weight: 700;">Selección múltiple (${this.addedExercisesQueue.length} agregados)</span>
+                    <button type="button" class="btn btn-champagne btn-xs" onclick="CoachMultiDayActionsManager.closeTactilePicker()" style="font-size: 10px; padding: 4px 10px; font-weight: 800; cursor: pointer;">
+                        Listo (${this.addedExercisesQueue.length})
+                    </button>
+                </div>
+            `;
+        }
+
         filtered.forEach(item => {
+            const isAdded = this.currentPickerTarget === 'add' && addedSet.has(item.id);
             const countTag = item.count !== undefined ? `<span style="font-size: 10.5px; color: #E5CBA7; font-weight: 700; margin-left: 8px;">(${item.count}/${this.selectedDates.length} días)</span>` : '';
             html += `
-                <div class="sens-batch-picker-item" onclick="CoachMultiDayActionsManager.selectTactilePickerItem('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.cat || 'FUERZA'}', ${item.count !== undefined ? item.count : 'null'})">
+                <div class="sens-batch-picker-item ${isAdded ? 'is-selected-batch' : ''}" style="${isAdded ? 'border: 1px solid #10B981; background: rgba(16,185,129,0.08);' : ''}" onclick="CoachMultiDayActionsManager.selectTactilePickerItem('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.cat || 'FUERZA'}', ${item.count !== undefined ? item.count : 'null'})">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="pill pill-champagne" style="font-size: 9px; padding: 2px 6px;">${item.cat || 'FUERZA'}</span>
+                        <span class="pill ${isAdded ? 'pill-champagne' : 'pill-dark'}" style="font-size: 9px; padding: 2px 6px;">${item.cat || 'FUERZA'}</span>
                         <strong style="color: #FFFFFF; font-size: 12.5px;">${item.name}</strong>
                     </div>
-                    <div>${countTag}</div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        ${isAdded ? `<span style="font-size: 11px; color: #10B981; font-weight: 800;">✓ Sumado</span>` : ''}
+                        ${countTag}
+                    </div>
                 </div>
             `;
         });
@@ -22205,12 +22392,17 @@ const CoachMultiDayActionsManager = {
                 });
                 this.renderAddQueue();
                 if (typeof showSensToast === 'function') {
-                    showSensToast(`✓ Se sumó ${name} al lote.`, 'champagne');
+                    showSensToast(`✓ Se sumó ${name} (${this.addedExercisesQueue.length} en lote). Podés seguir sumando más ejercicios.`, 'champagne', 2200);
                 }
-            } else if (typeof showSensToast === 'function') {
-                showSensToast('Este ejercicio ya fue agregado al lote.', 'warning');
+            } else {
+                this.addedExercisesQueue = this.addedExercisesQueue.filter(item => item.id !== id);
+                this.renderAddQueue();
+                if (typeof showSensToast === 'function') {
+                    showSensToast(`Se quitó ${name} del lote.`, 'warning', 1800);
+                }
             }
-            this.closeTactilePicker();
+            const searchInput = document.getElementById('sensBatchExSearchInput');
+            this.renderTactilePickerItems(searchInput ? searchInput.value : '');
         }
     },
 
@@ -23393,31 +23585,33 @@ const CoachWorkoutsMaster = {
         let html = '';
         filtered.forEach(ex => {
             const isAdded = assignedIds.has(ex.id);
-            const posterSrc = this.getPosterForExercise(ex);
-            const videoSrc = (ex.video || ex.video_url || '').trim();
-            const iosVideoUrl = videoSrc ? (videoSrc.includes('#') ? videoSrc : `${videoSrc}#t=0.001`) : '';
-            const muscleTag = (typeof getBiomechanicalCategory === 'function' ? getBiomechanicalCategory(ex) : (ex.category || 'fuerza')).toUpperCase();
+            const media = (typeof resolveExerciseMediaUrl === 'function')
+                ? resolveExerciseMediaUrl(ex.video_local_path)
+                : { url: ex.video_local_path || ex.video || '', isVideo: true, isGif: false };
+            const tax = (typeof getExerciseTaxonomy === 'function') ? getExerciseTaxonomy(ex) : { muscleLabel: 'FUERZA' };
+            const muscleTag = (tax.muscleLabel || ex.nivel_2_grupo_muscular || 'FUERZA').toUpperCase();
+            const exName = ex.name_es || ex.name;
 
             html += `
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
-                    ${videoSrc ? `
-                        <video muted loop playsinline webkit-playsinline="true" preload="metadata" src="${iosVideoUrl}" ${posterSrc ? `poster="${posterSrc}"` : ''} class="wizard-feed-video-bg">
-                            <source src="${iosVideoUrl}" type="video/mp4">
+                    ${media.url ? (media.isVideo ? `
+                        <video muted loop playsinline webkit-playsinline="true" preload="metadata" src="${media.url}" class="wizard-feed-video-bg">
+                            <source src="${media.url}" type="video/mp4">
                         </video>
-                    ` : (posterSrc ? `
-                        <img src="${posterSrc}" alt="${ex.name}" class="wizard-feed-video-bg" loading="lazy">
                     ` : `
+                        <img src="${media.url}" alt="${exName}" class="wizard-feed-video-bg" loading="lazy">
+                    `) : `
                         <div class="wizard-feed-video-placeholder"></div>
-                    `)}
+                    `}
                     <div class="wizard-feed-card-gradient"></div>
                     <div class="wizard-feed-top-pills">
                         <span class="pill pill-champagne" style="font-size: 8px; font-weight: 800; padding: 2px 6px;">${muscleTag}</span>
                         <span class="pill" style="font-size: 8px; font-weight: 700; background: rgba(18, 18, 20, 0.85); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); padding: 2px 6px;">${ex.sets || 3}x${ex.reps || '10-12'}</span>
                     </div>
                     <div class="wizard-feed-content">
-                        <h4 class="wizard-feed-title" title="${ex.name}" style="color: #FFFFFF !important; font-size: 11.5px !important; font-weight: 800 !important; line-height: 1.25 !important; margin: 0 0 3px 0 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85) !important;">${ex.name}</h4>
+                        <h4 class="wizard-feed-title" title="${exName}" style="color: #FFFFFF !important; font-size: 11.5px !important; font-weight: 800 !important; line-height: 1.25 !important; margin: 0 0 3px 0 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85) !important;">${exName}</h4>
                         <div class="wizard-feed-meta" style="color: #E4E4E7 !important; font-size: 9.5px !important; text-shadow: 0 1px 3px rgba(0,0,0,0.9) !important; font-weight: 500;">
-                            <span>${ex.rest || 90}s descanso</span>
+                            <span>${ex.default_rest_seconds || ex.rest || 90}s descanso</span>
                         </div>
                         <button type="button" class="wizard-feed-add-btn btn-wizard-add-ex ${isAdded ? 'added' : 'not-added'}" data-ex-id="${ex.id}">
                             ${isAdded ? '✓ Agregado' : '+ Agregar'}

@@ -4145,6 +4145,7 @@
                                 src="EJERCICIOS/videos_loop_final/c43a4011-a963-48cf-8a07-a9f6a5274d00_sentadilla-goblet-con-mancuerna.mp4"
                                 type="video/mp4">
                         </video>
+                        <img class="sens-exercise-modal-video" id="modalExGif" style="display: none; object-fit: cover; width: 100%; height: 100%;" alt="">
                         <div class="sens-video-overlay-gradient"></div>
 
                         <!-- Pill de Alternar Formato 9:16 Completo / 4:5 -->
@@ -4191,6 +4192,19 @@
                             <div class="sens-invideo-chips-row" id="modalExInVideoChipsRow">
                                 <!-- Chips inyectados dinámicamente -->
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Banner Técnico / Coach Pill: Clave propioceptiva inmediata visible en la pantalla activa -->
+                    <div class="sens-coach-cue-banner" id="modalExCoachCueBanner">
+                        <div class="cue-icon-wrap">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="cue-content">
+                            <span class="cue-tag">FOCO BIOMECÁNICO • NICO</span>
+                            <p class="cue-text" id="modalExCueText">Codos cerrados pegados al torso, bajada en 3 segundos buscando profundidad cómoda sin redondear lumbares.</p>
                         </div>
                     </div>
 
@@ -6527,7 +6541,7 @@
                                 </button>
                             </div>
 
-                            <!-- NIVEL 1: POR TIPO (Muscular, Cardio, Yoga, Movilidad) -->
+                            <!-- NIVEL 1: POR TIPO (Muscular, Movilidad, Cardio) -->
                             <div class="coach-taxonomy-level-box">
                                 <span class="taxonomy-level-label">1. Por Tipo:</span>
                                 <div class="coach-horizontal-pills" id="coachTaxLevel1TypeBar">
@@ -6536,11 +6550,9 @@
                                     <button type="button" class="pill pill-dark tax-l1-btn"
                                         data-type="muscular">Muscular</button>
                                     <button type="button" class="pill pill-dark tax-l1-btn"
-                                        data-type="cardio">Cardio</button>
-                                    <button type="button" class="pill pill-dark tax-l1-btn"
-                                        data-type="yoga">Yoga</button>
-                                    <button type="button" class="pill pill-dark tax-l1-btn"
                                         data-type="movilidad">Movilidad</button>
+                                    <button type="button" class="pill pill-dark tax-l1-btn"
+                                        data-type="cardio">Cardio</button>
                                 </div>
                             </div>
 
@@ -6553,25 +6565,25 @@
                                     <button type="button" class="pill pill-dark tax-l2-btn"
                                         data-muscle="piernas">Piernas ▾</button>
                                     <button type="button" class="pill pill-dark tax-l2-btn"
-                                        data-muscle="biceps">Bíceps</button>
-                                    <button type="button" class="pill pill-dark tax-l2-btn"
-                                        data-muscle="triceps">Tríceps</button>
-                                    <button type="button" class="pill pill-dark tax-l2-btn"
-                                        data-muscle="pecho">Pecho</button>
-                                    <button type="button" class="pill pill-dark tax-l2-btn"
                                         data-muscle="espalda">Espalda</button>
                                     <button type="button" class="pill pill-dark tax-l2-btn"
                                         data-muscle="abdominales">Abdominales</button>
                                     <button type="button" class="pill pill-dark tax-l2-btn"
+                                        data-muscle="pecho">Pecho</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn"
+                                        data-muscle="biceps">Bíceps</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn"
                                         data-muscle="hombros">Hombros</button>
                                     <button type="button" class="pill pill-dark tax-l2-btn"
-                                        data-muscle="zona_lumbar">Zona Lumbar</button>
+                                        data-muscle="triceps">Tríceps</button>
                                     <button type="button" class="pill pill-dark tax-l2-btn"
                                         data-muscle="antebrazos">Antebrazos</button>
+                                    <button type="button" class="pill pill-dark tax-l2-btn"
+                                        data-muscle="zona_lumbar">Zona Lumbar</button>
                                 </div>
                             </div>
 
-                            <!-- NIVEL 3: DENTRO DE PIERNAS (Cuádriceps, Isquios, Abductores, Glúteos, Gemelos, Sóleo) -->
+                            <!-- NIVEL 3: DENTRO DE PIERNAS (Cuádriceps, Isquios, Glúteos, Gemelos, Abductores, Aductores) -->
                             <div class="coach-taxonomy-level-box sub-level-legs" id="coachTaxLevel3LegsBox"
                                 style="display: none;">
                                 <span class="taxonomy-level-label">3. Foco Piernas:</span>
@@ -6583,13 +6595,13 @@
                                     <button type="button" class="pill pill-dark tax-l3-btn"
                                         data-submuscle="isquios">Isquios</button>
                                     <button type="button" class="pill pill-dark tax-l3-btn"
-                                        data-submuscle="abductores">Abductores</button>
-                                    <button type="button" class="pill pill-dark tax-l3-btn"
                                         data-submuscle="gluteos">Glúteos</button>
                                     <button type="button" class="pill pill-dark tax-l3-btn"
                                         data-submuscle="gemelos">Gemelos</button>
                                     <button type="button" class="pill pill-dark tax-l3-btn"
-                                        data-submuscle="soleo">Sóleo</button>
+                                        data-submuscle="abductores">Abductores</button>
+                                    <button type="button" class="pill pill-dark tax-l3-btn"
+                                        data-submuscle="aductores">Aductores</button>
                                 </div>
                             </div>
 
