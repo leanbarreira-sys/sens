@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=11.5">
+    <link rel="stylesheet" href="style.css?v=11.6">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -7044,16 +7044,22 @@
                             <div class="sens-mkt-preview-col">
                                 <div class="sens-mkt-preview-sticky">
                                     <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
                                         <span
                                             style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);"
                                             id="mktPreviewResolutionLabel">
                                             VISTA PREVIA EN VIVO • 1080×1920 (9:16)
                                         </span>
-                                        <span class="pill pill-champagne" id="mktActiveSceneIndicator"
-                                            style="font-size: 9.5px; padding: 2px 8px;">
-                                            Escena 1: 0s–3s (Hook)
-                                        </span>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 10px; font-weight: 700; color: #9E7D4B; background: #F7EFE4; padding: 2px 7px; border-radius: 6px; user-select: none;" title="Mostrar márgenes seguros de TikTok e Instagram (340px bottom, 220px top, 140px right)">
+                                                <input type="checkbox" id="mktToggleSafeZoneGuides" style="accent-color: #9E7D4B;">
+                                                <span>Safe Zones UI</span>
+                                            </label>
+                                            <span class="pill pill-champagne" id="mktActiveSceneIndicator"
+                                                style="font-size: 9.5px; padding: 2px 8px;">
+                                                Escena 1: 0s–3s (Hook)
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <!-- Contenedor del Canvas de Alta Resolución (1080x1350 o 1080x1920) -->
@@ -9439,7 +9445,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=11.9"></script>
+    <script src="app.js?v=12.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
