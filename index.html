@@ -3420,8 +3420,8 @@
                         </div>
                     </div>
 
-                    <!-- Recompensas & Desbloqueos Compactos (Quiet Luxury - Deep-Dive en Bottom Sheet) -->
-                    <div class="sens-streak-rewards-compact" id="dashUnlockablesModule">
+                    <!-- Recompensas & Desbloqueos Compactos (Estructura preservada, oculta en front-end) -->
+                    <div class="sens-streak-rewards-compact" id="dashUnlockablesModule" style="display: none !important;">
                         <div class="sens-streak-unlock-chips-strip" id="dashUnlockablesChipsStrip">
                             <!-- Inyectado dinámicamente por renderSensUnlockablesModule() en app.js -->
                         </div>
@@ -4477,9 +4477,9 @@
                     </div>
                 </div>
 
-                <!-- 2.5. Módulo de Presupuesto Social de Fin de Semana & Desbloqueos en Nutrición -->
+                <!-- 2.5. Módulo de Presupuesto Social de Fin de Semana & Desbloqueos en Nutrición (Estructura preservada, oculta en front-end) -->
                 <div class="sens-unlockables-module-card" id="nutriUnlockablesModule"
-                    style="background: #121214; border-radius: 20px; padding: 20px; margin: 18px 0; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+                    style="display: none !important; background: #121214; border-radius: 20px; padding: 20px; margin: 18px 0; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
                     <div
                         style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
                         <div>
@@ -4563,31 +4563,6 @@
                         </svg>
                         <span>Cargar Comida Personalizada (Fuera de Plan / Búsqueda o Calorías)</span>
                     </button>
-                </div>
-
-                <!-- 4. Hábitos Esenciales & Alimentos Base Curados por Nico -->
-                <div class="card-panel" style="margin-top: 24px; padding: 22px 24px;">
-                    <span class="pill pill-champagne" style="font-size: 10px;">DIRECTIVA DE NICO</span>
-                    <h3 style="font-size: 1.15rem; font-weight: 700; color: #FFFFFF; margin-top: 6px;">Hábitos
-                        Nutricionales Clave</h3>
-                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
-                        "Priorizá llegar a tu meta de proteína diaria repartida en las comidas principales y mantener
-                        hidratación constante antes de entrenar."
-                    </p>
-                    <div class="selection-group">
-                        <label class="selection-item">
-                            <input type="checkbox" id="habitProtein" checked>
-                            <div class="custom-box"></div>
-                            <span class="selection-label"><strong>Proteína en cada comida:</strong> Mínimo 30g por
-                                ingesta principal</span>
-                        </label>
-                        <label class="selection-item">
-                            <input type="checkbox" id="habitWater" checked>
-                            <div class="custom-box"></div>
-                            <span class="selection-label"><strong>Hidratación consciente:</strong> Al menos 2.5 litros
-                                de agua al día</span>
-                        </label>
-                    </div>
                 </div>
             </section>
 
@@ -7997,7 +7972,7 @@
             </div>
 
             <!-- Botones de Acción: Intercambiar Equivalente + Guardar Ajuste -->
-            <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px;">
+            <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-bottom: 24px;">
                 <button type="button" class="btn btn-outline" id="btnOpenUfdSwapModal"
                     style="padding: 13px 10px; font-weight: 700; font-size: 12.5px; border-color: rgba(229,203,167,0.4); color: #E5CBA7; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
                     <span>🔄 Intercambiar</span>
@@ -8043,7 +8018,7 @@
         <div class="sens-modal-sheet-box" style="max-height: 88vh; overflow-y: auto;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div>
-                    <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #E5CBA7; letter-spacing: 0.5px;">PAUTA ACTIVA</span>
+                    <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #E5CBA7; letter-spacing: 0.5px;">PLAN NUTRICIONAL ACTIVO</span>
                     <h3 style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 2px 0 0 0;">🛒 Lista de Supermercado</h3>
                 </div>
                 <button type="button" class="sens-modal-close-btn" id="btnCloseUserShoppingListModal" aria-label="Cerrar modal">
@@ -8053,18 +8028,40 @@
                     </svg>
                 </button>
             </div>
+
+            <!-- Selector de Días para la Compra -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px;">
+                <label style="display: block; font-size: 11px; font-weight: 700; color: #CBD5E1; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    Días a incluir en la compra:
+                </label>
+                <!-- Presets Rápidos -->
+                <div class="sens-nutri-filter-scroll" id="shoppingDaysPresetRow" style="margin-bottom: 10px;">
+                    <button type="button" class="sens-nutri-tab-pill" data-preset="1">Hoy (1 día)</button>
+                    <button type="button" class="sens-nutri-tab-pill active" data-preset="3">Próximos 3 días</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-preset="7">Semana Completa (7 días)</button>
+                </div>
+                <!-- Toggle Individual por Día -->
+                <div style="display: flex; gap: 4px;" id="shoppingDayPillsRow">
+                    <button type="button" class="sens-day-pill-toggle active" data-day="day1">Lun</button>
+                    <button type="button" class="sens-day-pill-toggle active" data-day="day2">Mar</button>
+                    <button type="button" class="sens-day-pill-toggle active" data-day="day3">Mié</button>
+                    <button type="button" class="sens-day-pill-toggle" data-day="day4">Jue</button>
+                    <button type="button" class="sens-day-pill-toggle" data-day="day5">Vie</button>
+                    <button type="button" class="sens-day-pill-toggle" data-day="day6">Sáb</button>
+                    <button type="button" class="sens-day-pill-toggle" data-day="day7">Dom</button>
+                </div>
+            </div>
+
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 8px; flex-wrap: wrap;">
-                <span id="shoppingListMetaCount" style="font-size: 11.5px; color: #A1A1AA;">Generada automáticamente</span>
+                <span id="shoppingListMetaCount" style="font-size: 11.5px; color: #A1A1AA;">Calculando ingredientes...</span>
                 <button type="button" class="btn btn-outline btn-sm" id="btnCopyShoppingListWhatsApp"
-                    style="border-color: #25D366; color: #25D366; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(37,211,102,0.08);">
+                    style="border-color: #25D366; color: #25D366; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(37,211,102,0.08); cursor: pointer;">
                     <span>📋 Copiar WhatsApp</span>
                 </button>
             </div>
-            <div id="shoppingListContainer" style="display: flex; flex-direction: column; gap: 12px;">
+            <div id="shoppingListContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
                 <!-- Grupos por góndola inyectados por app.js -->
             </div>
-        </div>
-    </div>
         </div>
     </div>
 
@@ -8220,7 +8217,7 @@
 
             <!-- Botón Guardar Comida en el Día -->
             <button type="button" class="btn btn-primary" id="btnSaveCustomMealToDay"
-                style="width: 100%; padding: 14px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; border-radius: 12px; cursor: pointer;">
+                style="width: 100%; padding: 14px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; border-radius: 12px; cursor: pointer; margin-top: 10px; margin-bottom: 24px;">
                 Guardar Comida en el Día
             </button>
         </div>
@@ -9665,7 +9662,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=12.7"></script>
+    <script src="app.js?v=12.8"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

@@ -14815,7 +14815,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 /**
  * Abre el Modal de Detalle de Alimento & Ajuste Proporcional de Gramos / Unidades
  */
-function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
+function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo', isFromSearch = false) {
     const modal = document.getElementById('userFoodDetailModal');
     if (!modal) return;
 
@@ -14838,11 +14838,18 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
         resolved: resolved,
         mealSlot: mealSlot,
         athId: athId,
-        dateIso: dateIso
+        dateIso: dateIso,
+        isFromSearch: Boolean(isFromSearch)
     };
 
     const foodKey = resolved?.id || resolved?.codigo || foodItem.id || foodItem.name;
-    const initialGrams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (foodItem.grams || resolved?.defaultGrams || 100);
+    const initialGrams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (foodItem.grams || resolved?.porcion_total_g_ml || resolved?.defaultGrams || 100);
+
+    // Ajustar texto del botón principal si viene desde el buscador de comidas personalizadas
+    const confirmBtn = document.getElementById('btnConfirmUfdPortion');
+    if (confirmBtn) {
+        confirmBtn.textContent = isFromSearch ? 'Registrar en mi Día' : 'Guardar Ajuste de Porción';
+    }
 
     // Poblar elementos
     const catPill = document.getElementById('ufdCategoryPill');
@@ -15031,6 +15038,7 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo') {
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('sens-modal-open');
 }
 
 function initUserFoodDetailModal() {
@@ -15056,6 +15064,11 @@ function initUserFoodDetailModal() {
     const closeModal = () => {
         modal.classList.remove('active');
         document.body.style.overflow = '';
+        setTimeout(() => {
+            if (!document.querySelector('.sens-modal-sheet-wrap.active')) {
+                document.body.classList.remove('sens-modal-open');
+            }
+        }, 50);
     };
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
@@ -15156,18 +15169,62 @@ function initUserFoodDetailModal() {
     if (confirmBtn) {
         confirmBtn.addEventListener('click', () => {
             if (!userActiveFoodForDetail) return;
-            const { resolved, item, athId, dateIso } = userActiveFoodForDetail;
+            const { resolved, item, athId, dateIso, isFromSearch, mealSlot } = userActiveFoodForDetail;
             const newGrams = gramInput ? parseInt(gramInput.value, 10) : 100;
             const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
 
-            const adjustStorageKey = `sens_user_adjusted_meals_${athId}_${dateIso}`;
-            let userAdjusted = {};
-            try {
-                userAdjusted = JSON.parse(localStorage.getItem(adjustStorageKey) || '{}');
-            } catch (e) {}
+            if (isFromSearch) {
+                // Registrar comida seleccionada directamente en el día
+                const customStorageKey = `sens_user_logged_meals_${athId}_${dateIso}`;
+                let userCustomMeals = [];
+                try {
+                    userCustomMeals = JSON.parse(localStorage.getItem(customStorageKey) || '[]');
+                } catch (e) {}
 
-            userAdjusted[foodKey] = newGrams;
-            localStorage.setItem(adjustStorageKey, JSON.stringify(userAdjusted));
+                const macros = (typeof window.calculateFoodMacros === 'function')
+                    ? window.calculateFoodMacros(resolved, newGrams)
+                    : { calories: Math.round(newGrams * 1.5), protein: 20, carbs: 15, fats: 5 };
+
+                const newId = `custom-food-${resolved?.codigo || resolved?.id || Date.now()}-${Date.now()}`;
+                userCustomMeals.push({
+                    id: newId,
+                    codigo: resolved?.codigo,
+                    name: resolved?.nombre_alimento_o_plato || resolved?.name,
+                    calories: macros.calories,
+                    protein: macros.protein,
+                    carbs: macros.carbs,
+                    fats: macros.fats,
+                    grams: newGrams,
+                    isCustom: true,
+                    mealSlot: mealSlot || 'almuerzo',
+                    image: resolved?.image || resolved?.imagen_url
+                });
+                localStorage.setItem(customStorageKey, JSON.stringify(userCustomMeals));
+
+                // Marcar automáticamente como consumida
+                const consumedStorageKey = `sens_user_consumed_foods_${athId}_${dateIso}`;
+                let userConsumedFoods = {};
+                try {
+                    userConsumedFoods = JSON.parse(localStorage.getItem(consumedStorageKey) || '{}');
+                } catch (e) {}
+                userConsumedFoods[newId] = true;
+                localStorage.setItem(consumedStorageKey, JSON.stringify(userConsumedFoods));
+
+                // Cerrar modal de búsqueda personalizada
+                const customModal = document.getElementById('userCustomMealModal');
+                if (customModal) {
+                    customModal.classList.remove('active');
+                }
+            } else {
+                const adjustStorageKey = `sens_user_adjusted_meals_${athId}_${dateIso}`;
+                let userAdjusted = {};
+                try {
+                    userAdjusted = JSON.parse(localStorage.getItem(adjustStorageKey) || '{}');
+                } catch (e) {}
+
+                userAdjusted[foodKey] = newGrams;
+                localStorage.setItem(adjustStorageKey, JSON.stringify(userAdjusted));
+            }
 
             closeModal();
             const targetD = AppState.nutriSelectedDate || AppState.selectedDate || new Date();
@@ -15181,7 +15238,11 @@ function initUserFoodDetailModal() {
             }
 
             if (typeof showSensToast === 'function') {
-                showSensToast(`Porción de ${item.name || resolved?.name} ajustada a ${newGrams}g.`, 'champagne');
+                const foodTitle = item.name || resolved?.nombre_alimento_o_plato || resolved?.name;
+                const msg = isFromSearch
+                    ? `${foodTitle} registrado en ${(mealSlot || 'Almuerzo').toUpperCase()} (${newGrams}g).`
+                    : `Porción de ${foodTitle} ajustada a ${newGrams}g.`;
+                showSensToast(msg, 'champagne');
             }
         });
     }
@@ -15232,6 +15293,7 @@ function initUserCustomMealModal(athId) {
             userCustomTrayItems = [];
             window.renderCustomTray();
             modal.classList.add('active');
+            document.body.classList.add('sens-modal-open');
             document.body.style.overflow = 'hidden';
             if (searchInput) {
                 searchInput.value = '';
@@ -15252,6 +15314,11 @@ function initUserCustomMealModal(athId) {
     const closeModal = () => {
         modal.classList.remove('active');
         document.body.style.overflow = '';
+        setTimeout(() => {
+            if (!document.querySelector('.sens-modal-sheet-wrap.active')) {
+                document.body.classList.remove('sens-modal-open');
+            }
+        }, 50);
     };
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
@@ -15460,10 +15527,10 @@ function initUserCustomMealModal(athId) {
             return `
                 <div class="sens-search-result-card" style="flex-shrink: 0 !important; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; margin-bottom: 6px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; gap: 8px;">
-                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
-                            <img src="${img}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #18181B;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                        <div class="sens-search-card-click-trigger" data-food-id="${fid}" style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; cursor: pointer;" title="Toca para ver foto grande y desglose completo">
+                            <img src="${img}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #18181B; border: 1px solid rgba(255,255,255,0.1);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                             <div style="min-width: 0; flex: 1;">
-                                <div style="font-size: 12.5px; font-weight: 700; color: #FFF; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.25;">${foodName}</div>
+                                <div style="font-size: 13px; font-weight: 700; color: #FFF; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.25;">${foodName}</div>
                                 <div style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums; margin-top: 2px;">
                                     ${f.porcion_total_g_ml || 100}g • <span style="color: #E5CBA7; font-weight: 700;">${cal} kcal</span> • <span style="color: #38BDF8;">${prot}g Prot</span>
                                     ${f.apto_vianda_fria ? ' • <span style="color: #93C5FD;">❄️ Vianda</span>' : ''}
@@ -15471,26 +15538,13 @@ function initUserCustomMealModal(athId) {
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
-                            <button type="button" class="sens-btn-disclosure btn-inspect-food-item" data-food-id="${fid}" title="Ver preparación e ingredientes">
-                                <span>Ver receta ▾</span>
+                            <button type="button" class="btn btn-outline btn-sm btn-inspect-food-item" data-food-id="${fid}" style="padding: 4px 8px; font-size: 11px; border-color: rgba(229,203,167,0.35); color: #E5CBA7;" title="Ver foto y desglose completo">
+                                <span>Detalle ↗</span>
                             </button>
-                            <button type="button" class="btn btn-outline btn-sm btn-add-food-to-tray" data-food-id="${fid}" style="padding: 4px 10px; font-size: 11px; border-color: rgba(229,203,167,0.4); color: #E5CBA7;">
+                            <button type="button" class="btn btn-outline btn-sm btn-add-food-to-tray" data-food-id="${fid}" style="padding: 4px 10px; font-size: 11px; border-color: rgba(255,255,255,0.2); color: #FFFFFF;" title="Añadir a comida compuesta">
                                 + Agregar
                             </button>
                         </div>
-                    </div>
-                    <!-- Drawer Desplegable con Pasos e Ingredientes Formateados -->
-                    <div class="sens-food-inspect-drawer" id="inspectDrawer_${fid}">
-                        <div style="margin-bottom: 6px;">
-                            <strong style="color: #FFFFFF; font-size: 11.5px; display: block; margin-bottom: 4px;">Ingredientes:</strong>
-                            ${formatIngredientsHtml(ingrs)}
-                        </div>
-                        <div style="margin-bottom: 6px;">
-                            <strong style="color: #FFFFFF; font-size: 11.5px; display: block; margin-bottom: 4px;">Preparación:</strong>
-                            ${formatStepsHtml(steps)}
-                        </div>
-                        ${f.truco_del_chef ? `<div style="color: #E5CBA7; font-size: 11px; margin-top: 6px; background: rgba(229,203,167,0.08); padding: 6px 8px; border-radius: 6px;">👨‍🍳 <strong>Truco del Chef:</strong> ${f.truco_del_chef}</div>` : ''}
-                        ${f.tip_nutricionista_deportivo || f.tip_coach_nico ? `<div style="color: #38BDF8; font-size: 11px; margin-top: 6px;">🧬 <strong>Tip Nutricionista:</strong> ${f.tip_nutricionista_deportivo || f.tip_coach_nico}</div>` : ''}
                     </div>
                 </div>
             `;
@@ -15498,7 +15552,8 @@ function initUserCustomMealModal(athId) {
 
         // Listeners para agregar a bandeja
         searchResults.querySelectorAll('.btn-add-food-to-tray').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const fid = btn.getAttribute('data-food-id');
                 const found = library.find(x => (x.id === fid || x.codigo === fid));
                 if (found) {
@@ -15508,22 +15563,21 @@ function initUserCustomMealModal(athId) {
                     });
                     renderCustomTray();
                     if (typeof showSensToast === 'function') {
-                        showSensToast(`${found.name} añadido a la bandeja.`, 'champagne');
+                        showSensToast(`${found.name || found.nombre_alimento_o_plato} añadido a la bandeja.`, 'champagne');
                     }
                 }
             });
         });
 
-        // Listeners para ver preparación e ingredientes (Item 8)
-        searchResults.querySelectorAll('.btn-inspect-food-item').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+        // Listeners para ver desglose completo con foto grande (Item C)
+        searchResults.querySelectorAll('.sens-search-card-click-trigger, .btn-inspect-food-item').forEach(el => {
+            el.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const card = btn.closest('.sens-search-result-card');
-                const drawer = card ? card.querySelector('.sens-food-inspect-drawer') : null;
-                if (drawer) {
-                    const isHidden = drawer.style.display === 'none' || !drawer.style.display;
-                    drawer.style.display = isHidden ? 'block' : 'none';
-                    btn.innerHTML = isHidden ? '<span>Ver receta ▴</span>' : '<span>Ver receta ▾</span>';
+                const fid = el.getAttribute('data-food-id');
+                const found = library.find(x => (x.id === fid || x.codigo === fid));
+                if (found) {
+                    closeModal();
+                    openUserFoodDetailModal(found, userActiveNutriMealSlot, true);
                 }
             });
         });
@@ -15981,6 +16035,11 @@ function openFoodSwapModal(foodItem, mealSlot) {
 
                 modal.classList.remove('active');
                 document.body.style.overflow = '';
+                setTimeout(() => {
+                    if (!document.querySelector('.sens-modal-sheet-wrap.active')) {
+                        document.body.classList.remove('sens-modal-open');
+                    }
+                }, 50);
                 renderMemberNutritionPlan(athId, sDate);
 
                 if (typeof showSensToast === 'function') {
@@ -15991,6 +16050,7 @@ function openFoodSwapModal(foodItem, mealSlot) {
     }
 
     modal.classList.add('active');
+    document.body.classList.add('sens-modal-open');
     document.body.style.overflow = 'hidden';
 }
 
@@ -16003,6 +16063,11 @@ function initUserFoodSwapModal() {
     const closeModal = () => {
         modal.classList.remove('active');
         document.body.style.overflow = '';
+        setTimeout(() => {
+            if (!document.querySelector('.sens-modal-sheet-wrap.active')) {
+                document.body.classList.remove('sens-modal-open');
+            }
+        }, 50);
     };
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
@@ -16012,17 +16077,41 @@ function initUserFoodSwapModal() {
 }
 
 // =========================================================================
-// EXPERIENCIA 4: MODAL DE LISTA DE SUPERMERCADO INTELIGENTE
+// EXPERIENCIA 4: MODAL DE LISTA DE SUPERMERCADO INTELIGENTE (MULTI-DÍA & GÓNDOLAS REALES)
 // =========================================================================
-function openShoppingListModal(athId) {
+
+function mapToCanonicalAisle(rawGondola) {
+    const g = (rawGondola || '').toLowerCase();
+    if (g.includes('verduler') || g.includes('fruta') || g.includes('vegetal')) {
+        return '🥬 Verdulería y Frutas';
+    }
+    if (g.includes('carnicer') || g.includes('pescader') || g.includes('granja') || g.includes('carne') || g.includes('pollo') || g.includes('pescado')) {
+        return '🥩 Carnicería y Pescadería';
+    }
+    if (g.includes('lácteo') || g.includes('lacteo') || g.includes('huevo') || g.includes('queso') || g.includes('fiambrer')) {
+        return '🥛 Lácteos y Huevos';
+    }
+    if (g.includes('congelado')) {
+        return '❄️ Congelados y Especiales';
+    }
+    if (g.includes('suplemento') || g.includes('dietética') || g.includes('dietetica') || g.includes('semilla') || g.includes('frutos secos')) {
+        return '🥜 Dietética, Semillas y Suplementos';
+    }
+    return '🌾 Almacén y Despensa';
+}
+
+function renderShoppingListForSelectedDays(athId) {
     const modal = document.getElementById('userShoppingListModal');
     const container = document.getElementById('shoppingListContainer');
     const metaCount = document.getElementById('shoppingListMetaCount');
     if (!modal || !container) return;
 
     const activeAthId = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
-    const sDate = AppState.nutriSelectedDate || new Date();
-    const dayKey = getDayKeyFromDate(sDate);
+
+    // Días seleccionados (por defecto los 3 primeros o los que estén marcados)
+    const selectedDays = window._sensSelectedShoppingDays && window._sensSelectedShoppingDays.length > 0
+        ? window._sensSelectedShoppingDays
+        : ['day1', 'day2', 'day3'];
 
     const planStorageKey = `sens_user_nutrition_plan_${activeAthId}`;
     let userPlan = null;
@@ -16032,8 +16121,6 @@ function openShoppingListModal(athId) {
     } catch (e) {}
 
     const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
-    const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
-
     const defaultMealsFallback = {
         desayuno: [
             { codigo: 'NUT-002', grams: 120 },
@@ -16056,20 +16143,24 @@ function openShoppingListModal(athId) {
         ]
     };
 
-    let plannedFoods = [];
-    mealKeys.forEach(mKey => {
-        let foods = dayMeals[mKey]?.foods || dayMeals[mKey] || [];
-        if (!Array.isArray(foods) || foods.length === 0) {
-            foods = defaultMealsFallback[mKey] || [];
-        }
-        foods.forEach(f => {
-            const resolved = window.getResolvedFood(f, activeAthId);
-            if (resolved) {
-                plannedFoods.push({
-                    item: resolved,
-                    grams: f.grams || resolved.porcion_total_g_ml || 100
-                });
+    // Recolectar alimentos planificados para TODOS los días seleccionados
+    let allPlannedFoods = [];
+    selectedDays.forEach(dKey => {
+        const dayMeals = userPlan?.days?.[dKey]?.meals || defaultMealsFallback;
+        mealKeys.forEach(mKey => {
+            let foods = dayMeals[mKey]?.foods || dayMeals[mKey] || [];
+            if (!Array.isArray(foods) || foods.length === 0) {
+                foods = defaultMealsFallback[mKey] || [];
             }
+            foods.forEach(f => {
+                const resolved = window.getResolvedFood(f, activeAthId);
+                if (resolved) {
+                    allPlannedFoods.push({
+                        item: resolved,
+                        grams: f.grams || resolved.porcion_total_g_ml || 100
+                    });
+                }
+            });
         });
     });
 
@@ -16077,35 +16168,55 @@ function openShoppingListModal(athId) {
         '🥬 Verdulería y Frutas',
         '🥩 Carnicería y Pescadería',
         '🥛 Lácteos y Huevos',
-        '🌾 Almacén y Legumbres',
+        '🌾 Almacén y Despensa',
+        '🥜 Dietética, Semillas y Suplementos',
         '❄️ Congelados y Especiales'
     ];
 
-    const grouped = (typeof window.buildWeeklyShoppingList === 'function')
-        ? window.buildWeeklyShoppingList(plannedFoods)
+    // Llamar a buildWeeklyShoppingList para consolidar
+    const rawGrouped = (typeof window.buildWeeklyShoppingList === 'function')
+        ? window.buildWeeklyShoppingList(allPlannedFoods)
         : {};
+
+    // Mapear góndolas del CSV a las categorías canónicas
+    const canonicalGrouped = {};
+    for (const [rawAisle, items] of Object.entries(rawGrouped)) {
+        const canon = mapToCanonicalAisle(rawAisle);
+        if (!canonicalGrouped[canon]) canonicalGrouped[canon] = [];
+        items.forEach(it => {
+            const existing = canonicalGrouped[canon].find(x => x.ingrediente.toLowerCase() === it.ingrediente.toLowerCase() && x.unidad === it.unidad);
+            if (existing) {
+                existing.cantidadTotal += it.cantidadTotal;
+            } else {
+                canonicalGrouped[canon].push({ ...it });
+            }
+        });
+    }
+
+    // Guardar para exportación de WhatsApp
+    window._sensLastShoppingGrouped = canonicalGrouped;
 
     let totalItemsCount = 0;
     let html = '';
 
     aisleOrder.forEach(aisle => {
-        const items = grouped[aisle] || [];
+        const items = canonicalGrouped[aisle] || [];
         if (items.length > 0) {
             totalItemsCount += items.length;
             html += `
-                <div class="sens-shopping-aisle-block">
-                    <div class="sens-shopping-aisle-header">
-                        <strong style="font-size: 13px; color: #E5CBA7;">${aisle}</strong>
-                        <span style="font-size: 11px; color: #71717A;">${items.length} ${items.length === 1 ? 'ítem' : 'ítems'}</span>
+                <div class="sens-shopping-aisle-block" style="margin-bottom: 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; overflow: hidden;">
+                    <div class="sens-shopping-aisle-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <strong style="font-size: 13px; color: #E5CBA7; font-weight: 700;">${aisle}</strong>
+                        <span style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums;">${items.length} ${items.length === 1 ? 'ítem' : 'ítems'}</span>
                     </div>
                     <div style="display: flex; flex-direction: column;">
                         ${items.map(it => {
                             const unitText = it.unidad === 'u' ? 'unidades' : it.unidad;
                             return `
-                                <label class="sens-shopping-item-row" style="cursor: pointer;">
-                                    <input type="checkbox" class="sens-shopping-checkbox" style="accent-color: #E5CBA7; width: 16px; height: 16px;">
-                                    <span style="flex: 1;">${it.ingrediente}</span>
-                                    <strong style="color: #FFF; font-variant-numeric: tabular-nums;">${it.cantidadTotal} ${unitText}</strong>
+                                <label class="sens-shopping-item-row" style="cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.03); user-select: none;">
+                                    <input type="checkbox" class="sens-shopping-checkbox" style="accent-color: #E5CBA7; width: 17px; height: 17px; cursor: pointer;">
+                                    <span style="flex: 1; font-size: 13px; color: #E4E4E7;">${escapeSensHtml(it.ingrediente)}</span>
+                                    <strong style="color: #FFF; font-size: 12.5px; font-variant-numeric: tabular-nums;">${it.cantidadTotal} ${unitText}</strong>
                                 </label>
                             `;
                         }).join('')}
@@ -16116,11 +16227,12 @@ function openShoppingListModal(athId) {
     });
 
     if (totalItemsCount === 0) {
-        container.innerHTML = `<div style="padding: 20px; color: #A1A1AA; font-size: 12.5px; text-align: center;">No hay ingredientes calculables para el plan actual.</div>`;
+        container.innerHTML = `<div style="padding: 24px; color: #A1A1AA; font-size: 12.5px; text-align: center; background: rgba(255,255,255,0.02); border-radius: 12px;">No hay ingredientes calculables para los días seleccionados.</div>`;
     } else {
         container.innerHTML = html;
         if (metaCount) {
-            metaCount.textContent = `${totalItemsCount} ingredientes consolidados por góndola`;
+            const daysLabel = selectedDays.length === 1 ? '1 día' : `${selectedDays.length} días`;
+            metaCount.textContent = `${totalItemsCount} ingredientes consolidados (${daysLabel} de plan)`;
         }
 
         container.querySelectorAll('.sens-shopping-checkbox').forEach(cb => {
@@ -16128,16 +16240,149 @@ function openShoppingListModal(athId) {
                 const row = e.target.closest('.sens-shopping-item-row');
                 if (row) {
                     row.classList.toggle('is-checked', e.target.checked);
+                    const span = row.querySelector('span');
+                    if (span) {
+                        span.style.textDecoration = e.target.checked ? 'line-through' : 'none';
+                        span.style.opacity = e.target.checked ? '0.45' : '1';
+                    }
                 }
             });
         });
     }
+}
 
+function openShoppingListModal(athId) {
+    const modal = document.getElementById('userShoppingListModal');
+    if (!modal) return;
+    const activeAthId = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+
+    // Inicializar días seleccionados si no existen
+    if (!window._sensSelectedShoppingDays || window._sensSelectedShoppingDays.length === 0) {
+        window._sensSelectedShoppingDays = ['day1', 'day2', 'day3'];
+    }
+
+    // Actualizar visualmente los pills
+    const dayPills = modal.querySelectorAll('#shoppingDayPillsRow .sens-day-pill-toggle');
+    dayPills.forEach(pill => {
+        const d = pill.getAttribute('data-day');
+        pill.classList.toggle('active', window._sensSelectedShoppingDays.includes(d));
+    });
+
+    const presetPills = modal.querySelectorAll('#shoppingDaysPresetRow .sens-nutri-tab-pill');
+    presetPills.forEach(pill => {
+        const p = parseInt(pill.getAttribute('data-preset'), 10);
+        pill.classList.toggle('active', window._sensSelectedShoppingDays.length === p);
+    });
+
+    renderShoppingListForSelectedDays(activeAthId);
+
+    modal.classList.add('active');
+    document.body.classList.add('sens-modal-open');
+    document.body.style.overflow = 'hidden';
+}
+
+function initUserShoppingListModal() {
+    const modal = document.getElementById('userShoppingListModal');
+    const closeBtn = document.getElementById('btnCloseUserShoppingListModal');
+    const openBtn = document.getElementById('btnOpenShoppingListModal');
+    if (!modal || modal._hasShopBound) return;
+    modal._hasShopBound = true;
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            if (!document.querySelector('.sens-modal-sheet-wrap.active')) {
+                document.body.classList.remove('sens-modal-open');
+            }
+        }, 50);
+    };
+
+    if (openBtn) {
+        openBtn.addEventListener('click', () => {
+            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+            openShoppingListModal(athId);
+        });
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    // Presets de Días (1 día, 3 días, 7 días)
+    const presetPills = modal.querySelectorAll('#shoppingDaysPresetRow .sens-nutri-tab-pill');
+    const dayPills = modal.querySelectorAll('#shoppingDayPillsRow .sens-day-pill-toggle');
+
+    presetPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            presetPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            const count = parseInt(pill.getAttribute('data-preset'), 10);
+            const allDays = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
+            window._sensSelectedShoppingDays = allDays.slice(0, count);
+
+            dayPills.forEach(dp => {
+                const d = dp.getAttribute('data-day');
+                dp.classList.toggle('active', window._sensSelectedShoppingDays.includes(d));
+            });
+
+            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+            renderShoppingListForSelectedDays(athId);
+        });
+    });
+
+    // Toggles Individuales de Días (Lun..Dom)
+    dayPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            const d = pill.getAttribute('data-day');
+            if (!window._sensSelectedShoppingDays) window._sensSelectedShoppingDays = ['day1', 'day2', 'day3'];
+
+            if (window._sensSelectedShoppingDays.includes(d)) {
+                if (window._sensSelectedShoppingDays.length > 1) {
+                    window._sensSelectedShoppingDays = window._sensSelectedShoppingDays.filter(x => x !== d);
+                    pill.classList.remove('active');
+                } else {
+                    if (typeof showSensToast === 'function') {
+                        showSensToast('Mantené al menos 1 día seleccionado para la lista.', 'champagne', 2000);
+                    }
+                    return;
+                }
+            } else {
+                window._sensSelectedShoppingDays.push(d);
+                pill.classList.add('active');
+            }
+
+            // Actualizar pills de presets si coincide
+            presetPills.forEach(pp => {
+                const count = parseInt(pp.getAttribute('data-preset'), 10);
+                pp.classList.toggle('active', window._sensSelectedShoppingDays.length === count);
+            });
+
+            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+            renderShoppingListForSelectedDays(athId);
+        });
+    });
+
+    // Botón de WhatsApp
     const btnWp = document.getElementById('btnCopyShoppingListWhatsApp');
     if (btnWp && !btnWp._hasWpBound) {
         btnWp._hasWpBound = true;
         btnWp.addEventListener('click', () => {
-            let wpText = `🛒 *LISTA DE SUPERMERCADO SENS*\n_Pauta nutricional activa_\n\n`;
+            const grouped = window._sensLastShoppingGrouped || {};
+            const daysCount = (window._sensSelectedShoppingDays || []).length;
+            const daysLabel = daysCount === 1 ? '1 día' : `${daysCount} días`;
+
+            let wpText = `🛒 *LISTA DE SUPERMERCADO SENS*\n_Pauta nutricional activa (${daysLabel})_\n\n`;
+            const aisleOrder = [
+                '🥬 Verdulería y Frutas',
+                '🥩 Carnicería y Pescadería',
+                '🥛 Lácteos y Huevos',
+                '🌾 Almacén y Despensa',
+                '🥜 Dietética, Semillas y Suplementos',
+                '❄️ Congelados y Especiales'
+            ];
+
             aisleOrder.forEach(aisle => {
                 const items = grouped[aisle] || [];
                 if (items.length > 0) {
@@ -16164,34 +16409,6 @@ function openShoppingListModal(athId) {
             }
         });
     }
-
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function initUserShoppingListModal() {
-    const modal = document.getElementById('userShoppingListModal');
-    const closeBtn = document.getElementById('btnCloseUserShoppingListModal');
-    const openBtn = document.getElementById('btnOpenShoppingListModal');
-    if (!modal || modal._hasShopBound) return;
-    modal._hasShopBound = true;
-
-    const closeModal = () => {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    };
-
-    if (openBtn) {
-        openBtn.addEventListener('click', () => {
-            const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
-            openShoppingListModal(athId);
-        });
-    }
-
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
 }
 
 
