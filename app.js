@@ -21106,7 +21106,7 @@ let mktStudioState = {
     templateId: 'tpl_hook_bold_statement',
     sceneIdx: 0,
     slideIdx: 0,
-    autoCycleScenes: true,
+    autoCycleScenes: false,
     showSafeZoneGuides: false,
     zoom: 105,
     panY: 0,
@@ -21449,10 +21449,13 @@ window.initCoachMarketingStudio = function() {
     // Carga Efímera en RAM de Foto o Video (0 Bytes en Supabase)
     const fileInput = document.getElementById('mktMediaFileInput');
     const defaultMediaBtn = document.getElementById('btnMktUseDefaultMedia');
+    const btnToggleVideoPlay = document.getElementById('btnMktToggleVideoPlay');
     const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
 
     if (hiddenVideo) {
-        hiddenVideo.crossOrigin = 'anonymous';
+        hiddenVideo.muted = true;
+        hiddenVideo.loop = true;
+        hiddenVideo.playsInline = true;
         if (!hiddenVideo.getAttribute('src')) {
             hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
             hiddenVideo.load();
@@ -21469,24 +21472,43 @@ window.initCoachMarketingStudio = function() {
             const url = URL.createObjectURL(file);
             mktStudioState.objectUrlCache = url;
 
+            const isVideo = (file.type && file.type.startsWith('video/')) || /\.(mp4|mov|webm|m4v|avi|ogv|3gp)$/i.test(file.name);
             const statusPill = document.getElementById('mktMediaFileStatusPill');
             const statusText = document.getElementById('mktMediaFileStatusText');
             if (statusPill && statusText) {
                 statusPill.style.display = 'block';
                 const cleanName = file.name.length > 25 ? (file.name.slice(0, 22) + '...') : file.name;
-                statusText.textContent = `✓ ${cleanName} cargado en memoria`;
+                statusText.textContent = `✓ ${isVideo ? '🎬 Video' : '🖼️ Foto'}: ${cleanName} cargado`;
             }
 
-            if (file.type.startsWith('video/')) {
+            if (isVideo) {
                 mktStudioState.mediaType = 'video';
-                if (hiddenVideo) {
-                    hiddenVideo.crossOrigin = 'anonymous';
-                    hiddenVideo.src = url;
-                    hiddenVideo.play().catch(() => {});
+                mktStudioState.customImageObj = null;
+                if (btnToggleVideoPlay) {
+                    btnToggleVideoPlay.style.display = 'inline-flex';
+                    btnToggleVideoPlay.textContent = '⏸️ Pausar Video';
                 }
-                showSensToast('Video cargado y centrado automáticamente (0 bytes en servidor).', 'champagne');
+                if (hiddenVideo) {
+                    hiddenVideo.src = url;
+                    hiddenVideo.muted = true;
+                    hiddenVideo.loop = true;
+                    hiddenVideo.playsInline = true;
+                    hiddenVideo.load();
+                    hiddenVideo.play().catch(() => {});
+                    hiddenVideo.onloadeddata = () => {
+                        renderMarketingCanvasFrame();
+                        if (!mktStudioState.rafId) {
+                            window.renderCoachMarketingStudio();
+                        }
+                    };
+                }
+                showSensToast('🎬 ¡Video cargado con éxito! Se reproduce en vivo en el visor.', 'champagne');
             } else {
                 mktStudioState.mediaType = 'image';
+                if (btnToggleVideoPlay) btnToggleVideoPlay.style.display = 'none';
+                if (hiddenVideo && !hiddenVideo.paused) {
+                    try { hiddenVideo.pause(); } catch (_) {}
+                }
                 const img = new Image();
                 img.crossOrigin = 'anonymous';
                 img.onload = () => {
@@ -21494,7 +21516,20 @@ window.initCoachMarketingStudio = function() {
                     renderMarketingCanvasFrame();
                 };
                 img.src = url;
-                showSensToast('Imagen cargada y centrada automáticamente (0 bytes en servidor).', 'champagne');
+                showSensToast('🖼️ Imagen cargada y centrada automáticamente.', 'champagne');
+            }
+            updateMarketingFormatLayout();
+        });
+    }
+
+    if (btnToggleVideoPlay && hiddenVideo) {
+        btnToggleVideoPlay.addEventListener('click', () => {
+            if (hiddenVideo.paused) {
+                hiddenVideo.play().catch(() => {});
+                btnToggleVideoPlay.textContent = '⏸️ Pausar Video';
+            } else {
+                hiddenVideo.pause();
+                btnToggleVideoPlay.textContent = '▶️ Reproducir Video';
             }
         });
     }
@@ -21505,11 +21540,19 @@ window.initCoachMarketingStudio = function() {
             mktStudioState.customImageObj = null;
             const statusPill = document.getElementById('mktMediaFileStatusPill');
             if (statusPill) statusPill.style.display = 'none';
+            if (btnToggleVideoPlay) {
+                btnToggleVideoPlay.style.display = 'inline-flex';
+                btnToggleVideoPlay.textContent = '⏸️ Pausar Video';
+            }
             if (hiddenVideo) {
-                hiddenVideo.crossOrigin = 'anonymous';
                 hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
+                hiddenVideo.muted = true;
+                hiddenVideo.loop = true;
+                hiddenVideo.playsInline = true;
+                hiddenVideo.load();
                 hiddenVideo.play().catch(() => {});
             }
+            updateMarketingFormatLayout();
             showSensToast('Fondo oficial SENS restaurado.', 'info');
         });
     }
@@ -21540,15 +21583,33 @@ window.initCoachMarketingStudio = function() {
         });
     }
 
-    // Copiar Caption IG / TikTok
+    // Copiar & Editar Caption IG / TikTok
     const copyCapBtn = document.getElementById('btnMktCopyCaption');
+    const capEl = document.getElementById('mktCaptionOutput');
+    if (capEl) {
+        capEl.addEventListener('input', () => {
+            const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId);
+            if (tpl) tpl.caption = capEl.value;
+        });
+    }
     if (copyCapBtn) {
         copyCapBtn.addEventListener('click', () => {
-            const capEl = document.getElementById('mktCaptionOutput');
             if (capEl && navigator.clipboard) {
                 navigator.clipboard.writeText(capEl.value);
                 showSensToast('Caption copiado al portapapeles listo para Instagram / TikTok.', 'champagne');
             }
+        });
+    }
+
+    // Toggle de Opciones Avanzadas (Sin Accordion <details> para evitar bloqueos)
+    const btnToggleAdv = document.getElementById('btnToggleMktAdvanced');
+    const advContent = document.getElementById('mktAdvancedContent');
+    const advArrow = document.getElementById('mktAdvancedToggleArrow');
+    if (btnToggleAdv && advContent) {
+        btnToggleAdv.addEventListener('click', () => {
+            const isHidden = advContent.style.display === 'none';
+            advContent.style.display = isHidden ? 'flex' : 'none';
+            if (advArrow) advArrow.textContent = isHidden ? '▲ Ocultar' : '▼ Mostrar';
         });
     }
 
@@ -21676,45 +21737,157 @@ window.initCoachMarketingStudio = function() {
     }
 
     if (btnRecordVideo) {
-        btnRecordVideo.addEventListener('click', () => {
+        btnRecordVideo.addEventListener('click', async () => {
             const canvas = document.getElementById('sensMarketingCanvas');
             if (!canvas || typeof canvas.captureStream !== 'function' || typeof MediaRecorder === 'undefined') {
-                showSensToast('Usá el botón "Descargar Secuencia Completa" en este navegador.', 'info');
+                showSensToast('Tu navegador no soporta grabación directa de video. Podés descargar la portada en HD (PNG).', 'info');
                 return;
             }
+
+            const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
+            const progressBar = document.getElementById('mktVideoRenderProgressBar');
+            const progressFill = document.getElementById('mktVideoRenderProgressFill');
+            const progressLabel = document.getElementById('mktVideoRenderStatusLabel');
+            const progressPercent = document.getElementById('mktVideoRenderPercent');
+
+            // MIME Type seguro para Safari iOS y Chrome Android
+            let mimeType = '';
+            const candidates = [
+                'video/mp4;codecs=avc1',
+                'video/mp4',
+                'video/webm;codecs=vp9,opus',
+                'video/webm;codecs=vp8,opus',
+                'video/webm'
+            ];
+            for (const c of candidates) {
+                if (MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(c)) {
+                    mimeType = c;
+                    break;
+                }
+            }
+
+            const isMp4 = mimeType.includes('mp4');
+            const ext = isMp4 ? 'mp4' : 'webm';
+
+            let totalDuration = 9;
+            if (mktStudioState.mediaType === 'video' && hiddenVideo && hiddenVideo.duration && !isNaN(hiddenVideo.duration) && isFinite(hiddenVideo.duration)) {
+                totalDuration = Math.max(4, Math.min(15, Math.round(hiddenVideo.duration)));
+            }
+
             const prevGuides = mktStudioState.showSafeZoneGuides;
             mktStudioState.showSafeZoneGuides = false;
             renderMarketingCanvasFrame();
 
-            showSensToast('Grabando Reel de 9 segundos (3s Hook • 3s Valor • 3s CTA)...', 'champagne', 9000);
-            const stream = canvas.captureStream(30);
-            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-            const chunks = [];
-            recorder.ondataavailable = (ev) => { if (ev.data.size > 0) chunks.push(ev.data); };
-            recorder.onstop = () => {
-                const blob = new Blob(chunks, { type: 'video/webm' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = `SENS-Reel-${mktStudioState.templateId}.webm`;
-                document.body.appendChild(a);
-                a.click();
+            if (progressBar) progressBar.style.display = 'block';
+            btnRecordVideo.disabled = true;
+            btnRecordVideo.style.opacity = '0.7';
+            btnRecordVideo.innerHTML = `<span>⏳</span><span>Grabando Video HD...</span>`;
+
+            try {
+                const stream = canvas.captureStream(30);
+                const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+                const chunks = [];
+                recorder.ondataavailable = (ev) => { if (ev.data && ev.data.size > 0) chunks.push(ev.data); };
+
+                if (hiddenVideo) {
+                    hiddenVideo.currentTime = 0;
+                    hiddenVideo.play().catch(() => {});
+                }
+
+                const startTime = Date.now();
+                const sceneStep = totalDuration / 3;
+
+                const progressTimer = setInterval(() => {
+                    const elapsed = (Date.now() - startTime) / 1000;
+                    const pct = Math.min(99, Math.round((elapsed / totalDuration) * 100));
+
+                    if (progressFill) progressFill.style.width = `${pct}%`;
+                    if (progressPercent) progressPercent.textContent = `${pct}%`;
+                    if (progressLabel) progressLabel.textContent = `🎬 Grabando Reel HD... (${elapsed.toFixed(1)}s / ${totalDuration}s)`;
+
+                    if (mktStudioState.format === 'reel_video_9_16') {
+                        if (elapsed < sceneStep && mktStudioState.sceneIdx !== 0) {
+                            mktStudioState.sceneIdx = 0;
+                            loadActiveSceneOrSlideIntoInputs();
+                        } else if (elapsed >= sceneStep && elapsed < sceneStep * 2 && mktStudioState.sceneIdx !== 1) {
+                            mktStudioState.sceneIdx = 1;
+                            loadActiveSceneOrSlideIntoInputs();
+                        } else if (elapsed >= sceneStep * 2 && mktStudioState.sceneIdx !== 2) {
+                            mktStudioState.sceneIdx = 2;
+                            loadActiveSceneOrSlideIntoInputs();
+                        }
+                    }
+                }, 100);
+
+                recorder.onstop = async () => {
+                    clearInterval(progressTimer);
+                    if (progressFill) progressFill.style.width = '100%';
+                    if (progressPercent) progressPercent.textContent = '100%';
+                    if (progressLabel) progressLabel.textContent = '✓ Guardando archivo...';
+
+                    const finalMime = mimeType || 'video/mp4';
+                    const blob = new Blob(chunks, { type: finalMime });
+                    const fileName = `SENS-Reel-${mktStudioState.templateId}.${ext}`;
+                    const file = new File([blob], fileName, { type: finalMime });
+
+                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || ('ontouchstart' in window);
+                    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                files: [file],
+                                title: 'SENS Video Reel HD',
+                                text: 'Video Reel de alto impacto generado con SENS Studio.'
+                            });
+                            showSensToast('¡Video guardado en tu galería con éxito!', 'champagne');
+                        } catch (shareErr) {
+                            if (shareErr.name !== 'AbortError') {
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = url;
+                                a.download = fileName;
+                                document.body.appendChild(a);
+                                a.click();
+                                setTimeout(() => { if (a.parentNode) a.parentNode.removeChild(a); URL.revokeObjectURL(url); }, 1500);
+                            }
+                        }
+                    } else {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        setTimeout(() => { if (a.parentNode) a.parentNode.removeChild(a); URL.revokeObjectURL(url); }, 1500);
+                        showSensToast(`Video ${ext.toUpperCase()} descargado en alta definición.`, 'champagne');
+                    }
+
+                    setTimeout(() => {
+                        if (progressBar) progressBar.style.display = 'none';
+                        btnRecordVideo.disabled = false;
+                        btnRecordVideo.style.opacity = '1';
+                        btnRecordVideo.innerHTML = `<span id="mktVideoExportIcon">🎬</span><span id="mktVideoExportText">Descargar Video Reel HD (MP4 / WebM)</span>`;
+                        mktStudioState.showSafeZoneGuides = prevGuides;
+                        renderMarketingCanvasFrame();
+                    }, 800);
+                };
+
+                recorder.start();
                 setTimeout(() => {
-                    if (a.parentNode) a.parentNode.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }, 1000);
+                    if (recorder.state === 'recording') recorder.stop();
+                }, totalDuration * 1000);
+
+            } catch (recErr) {
+                console.error('Error recording video:', recErr);
+                if (progressBar) progressBar.style.display = 'none';
+                btnRecordVideo.disabled = false;
+                btnRecordVideo.style.opacity = '1';
+                btnRecordVideo.innerHTML = `<span id="mktVideoExportIcon">🎬</span><span id="mktVideoExportText">Descargar Video Reel HD (MP4 / WebM)</span>`;
                 mktStudioState.showSafeZoneGuides = prevGuides;
                 renderMarketingCanvasFrame();
-                showSensToast('Video Reel con cambios de texto por segundo descargado.', 'champagne');
-            };
-
-            mktStudioState.sceneIdx = 0;
-            loadActiveSceneOrSlideIntoInputs();
-            recorder.start();
-            setTimeout(() => { mktStudioState.sceneIdx = 1; loadActiveSceneOrSlideIntoInputs(); }, 3000);
-            setTimeout(() => { mktStudioState.sceneIdx = 2; loadActiveSceneOrSlideIntoInputs(); }, 6000);
-            setTimeout(() => { recorder.stop(); }, 9000);
+                showSensToast('Error en la grabación. Podés descargar la portada en HD (PNG).', 'error');
+            }
         });
     }
 
@@ -21826,6 +21999,32 @@ function updateMarketingFormatLayout() {
     }
     if (scenesBar) scenesBar.style.display = (f === 'reel_video_9_16') ? 'block' : 'none';
     if (slidesBar) slidesBar.style.display = (f === 'carousel_4_5') ? 'block' : 'none';
+
+    const isVideo = (f === 'reel_video_9_16') || (mktStudioState.mediaType === 'video');
+    const btnRecord = document.getElementById('btnMktRecordVideoWebm');
+    const btnExportPng = document.getElementById('btnMktExportPng');
+    const btnExportPack = document.getElementById('btnMktExportAllPack');
+    if (btnRecord && btnExportPng) {
+        if (isVideo) {
+            btnRecord.style.background = '#E5CBA7';
+            btnRecord.style.color = '#121214';
+            btnRecord.style.boxShadow = '0 4px 16px rgba(229, 203, 167, 0.35)';
+            btnExportPng.style.background = '#FFFFFF';
+            btnExportPng.style.color = '#121214';
+            btnExportPng.style.boxShadow = 'none';
+        } else {
+            btnRecord.style.background = '#FFFFFF';
+            btnRecord.style.color = '#121214';
+            btnRecord.style.boxShadow = 'none';
+            btnExportPng.style.background = '#E5CBA7';
+            btnExportPng.style.color = '#121214';
+            btnExportPng.style.boxShadow = '0 4px 16px rgba(229, 203, 167, 0.35)';
+        }
+    }
+    if (btnExportPack) {
+        btnExportPack.style.display = (f === 'carousel_4_5' || f === 'reel_video_9_16') ? 'block' : 'none';
+    }
+
     renderMarketingCanvasFrame();
 }
 
@@ -21953,6 +22152,8 @@ window.renderCoachMarketingStudio = function() {
     mktStudioState.cycleTimer = setInterval(() => {
         const pane = document.getElementById('paneMarketing');
         if (!pane || !pane.classList.contains('active')) return;
+        const layout = document.querySelector('.sens-mkt-studio-layout');
+        if (layout && layout.classList.contains('mobile-view-editor')) return; // Nunca alterar inputs mientras el coach edita
         if (mktStudioState.format === 'reel_video_9_16' && mktStudioState.autoCycleScenes) {
             const activeEl = document.activeElement;
             const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');

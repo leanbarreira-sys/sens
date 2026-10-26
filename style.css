@@ -16237,7 +16237,11 @@ body.in-portal #coachHubView {
 
 @media (max-width: 960px) {
     #paneMarketing {
-        padding-bottom: 120px !important;
+        padding-bottom: 160px !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    .sens-mkt-controls-col {
+        padding-bottom: 110px !important;
     }
     .sens-mkt-mobile-switcher {
         display: grid !important;

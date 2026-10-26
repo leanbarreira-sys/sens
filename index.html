@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=12.1">
+    <link rel="stylesheet" href="style.css?v=12.2">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6773,10 +6773,14 @@
                                             style="cursor: pointer; font-weight: 800; flex: 1; text-align: center; background: #E5CBA7; color: #2A241C; border: none; padding: 8px 12px; border-radius: 10px; font-size: 11.5px;">
                                             📹 Subir Foto o Video del Celular
                                         </label>
-                                        <input type="file" id="mktMediaFileInput" accept="image/*,video/*" style="display: none;">
+                                        <input type="file" id="mktMediaFileInput" accept="video/*,video/mp4,video/quicktime,video/webm,image/*" style="display: none;">
                                         <button type="button" class="btn btn-outline btn-sm" id="btnMktUseDefaultMedia"
                                             style="font-size: 10.5px; padding: 8px 11px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214;">
                                             Fondo SENS Oficial
+                                        </button>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktToggleVideoPlay"
+                                            style="font-size: 10.5px; padding: 8px 10px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214; display: none;">
+                                            ⏸️ Pausar Video
                                         </button>
                                     </div>
                                     <div id="mktMediaFileStatusPill" style="margin-top: 6px; display: none;">
@@ -6896,7 +6900,7 @@
                                         <div style="font-size: 9.5px; font-weight: 800; color: #9E7D4B; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
                                             <span>LÍNEA DE TIEMPO DEL VIDEO:</span>
                                             <label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-weight: 700;">
-                                                <input type="checkbox" id="mktAutoCycleScenesCheck" checked style="accent-color: #9E7D4B;">
+                                                <input type="checkbox" id="mktAutoCycleScenesCheck" style="accent-color: #9E7D4B;">
                                                 <span>Rotar en vivo</span>
                                             </label>
                                         </div>
@@ -6963,12 +6967,14 @@
                                         </div>
                                     </div>
 
-                                    <!-- Acordeón Desplegable para Opciones Avanzadas (Sin Saturar la Pantalla) -->
-                                    <details class="sens-mkt-accordion-details">
-                                        <summary class="sens-mkt-accordion-summary">
+                                    <!-- Opciones Avanzadas (Sin Accordion <details> para evitar bloqueos táctiles en mobile) -->
+                                    <div class="sens-mkt-advanced-wrap" style="margin-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.08); padding-top: 10px;">
+                                        <button type="button" class="btn btn-outline btn-full btn-sm" id="btnToggleMktAdvanced"
+                                            style="font-size: 11px; font-weight: 700; color: #575659; border-color: rgba(18, 18, 20, 0.12); padding: 7px 10px; border-radius: 9px; display: flex; align-items: center; justify-content: space-between; background: #FAF9F6; margin-bottom: 10px; cursor: pointer;">
                                             <span>⚙️ Opciones Avanzadas (Kicker Eyebrow, Chips y Caption)</span>
-                                        </summary>
-                                        <div style="padding-top: 10px; display: flex; flex-direction: column; gap: 10px;">
+                                            <span id="mktAdvancedToggleArrow">▲ Ocultar</span>
+                                        </button>
+                                        <div id="mktAdvancedContent" style="display: flex; flex-direction: column; gap: 10px;">
                                             <div class="sens-mkt-input-wrap" id="mktWrapEyebrow">
                                                 <div style="display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 2px;">
                                                     <label class="input-label" style="margin:0;">Etiqueta Kicker (Eyebrow)</label>
@@ -7037,18 +7043,18 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Caption para Copiar y Pegar -->
+                                            <!-- Caption para Copiar y Pegar (Editable) -->
                                             <div style="border-top: 1px solid rgba(18, 18, 20, 0.06); padding-top: 8px;">
                                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                                    <span style="font-size: 10px; font-weight: 700; color: var(--text-muted);">CAPTION IG / TIKTOK:</span>
+                                                    <span style="font-size: 10px; font-weight: 700; color: var(--text-muted);">CAPTION IG / TIKTOK (EDITABLE):</span>
                                                     <button type="button" class="btn btn-outline btn-sm" id="btnMktCopyCaption" style="font-size: 9.5px; padding: 2px 7px; font-weight: 800;">
                                                         Copiar Texto
                                                     </button>
                                                 </div>
-                                                <textarea id="mktCaptionOutput" class="input-control" rows="3" readonly style="font-size: 11px; margin-bottom: 0;"></textarea>
+                                                <textarea id="mktCaptionOutput" class="input-control" rows="3" placeholder="Escribí o ajustá el caption de tu pieza..." style="font-size: 11px; margin-bottom: 0;"></textarea>
                                             </div>
                                         </div>
-                                    </details>
+                                    </div>
                                 </div>
 
                                 <!-- BLOQUE PROTAGONISTA: VISOR EN VIVO ANTES DE DESCARGAR -->
@@ -7129,26 +7135,42 @@
                                     <!-- Contenedor del Canvas de Alta Resolución (1080x1350 o 1080x1920) -->
                                     <div class="sens-mkt-canvas-stage is-916" id="mktCanvasStageWrap">
                                         <canvas id="sensMarketingCanvas" width="1080" height="1920"></canvas>
-                                        <!-- Elementos multimedia ocultos que alimentan el canvas en RAM -->
-                                        <video id="mktHiddenSourceVideo" muted loop playsinline crossorigin="anonymous" src=""
-                                            style="display: none;"></video>
+                                        <!-- Elementos multimedia ocultos que alimentan el canvas en RAM (Sin display:none para mantener activo el decodificador de video) -->
+                                        <video id="mktHiddenSourceVideo" muted loop playsinline webkit-playsinline preload="auto"
+                                            style="position: fixed; top: -9999px; left: -9999px; width: 4px; height: 4px; opacity: 0; pointer-events: none; z-index: -100;"></video>
                                     </div>
 
                                     <!-- Botones de Exportación en Alta Definición -->
-                                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
-                                        <button type="button" class="btn btn-primary btn-full" id="btnMktExportPng"
-                                            style="font-weight: 800; padding: 12px;">
-                                            Descargar Pieza Actual en HD (PNG)
+                                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;" id="mktExportActionsWrap">
+                                        <!-- Botón Principal de Video HD (Con animación y soporte MP4/WebM nativo) -->
+                                        <button type="button" class="btn btn-primary btn-full sens-mkt-btn-record-video" id="btnMktRecordVideoWebm"
+                                            style="font-weight: 800; padding: 13px; font-size: 13px; background: #E5CBA7; color: #121214; border: none; border-radius: 12px; box-shadow: 0 4px 16px rgba(229, 203, 167, 0.35); display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                                            <span id="mktVideoExportIcon">🎬</span>
+                                            <span id="mktVideoExportText">Descargar Video Reel HD (MP4 / WebM)</span>
                                         </button>
+
+                                        <!-- Botón Secundario de Imagen HD (PNG) -->
+                                        <button type="button" class="btn btn-outline btn-full" id="btnMktExportPng"
+                                            style="font-weight: 700; padding: 10px; font-size: 12px; border-color: rgba(18, 18, 20, 0.18); color: #121214; background: #FFFFFF; border-radius: 10px;">
+                                            📸 Descargar Portada / Foto en HD (PNG)
+                                        </button>
+
+                                        <!-- Botón Secuencia Completa (Todas las diapositivas o escenas) -->
                                         <button type="button" class="btn btn-outline btn-full" id="btnMktExportAllPack"
-                                            style="font-weight: 800; padding: 11px; border-color: #9E7D4B; color: #9E7D4B;">
-                                            Descargar Secuencia Completa (Todas las Escenas / Slides)
+                                            style="font-weight: 700; padding: 9px; font-size: 11.5px; border-color: #9E7D4B; color: #9E7D4B; background: transparent; border-radius: 10px;">
+                                            📦 Descargar Secuencia Completa (Todas las Escenas / Slides)
                                         </button>
-                                        <button type="button" class="btn btn-outline btn-full"
-                                            id="btnMktRecordVideoWebm"
-                                            style="font-weight: 700; padding: 10px; font-size: 12px;">
-                                            Grabar Video Animado con Cambios de Texto por Segundos
-                                        </button>
+
+                                        <!-- Barra de Progreso de Renderizado de Video (Visible solo durante grabación) -->
+                                        <div id="mktVideoRenderProgressBar" style="display: none; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.1); border-radius: 10px; padding: 8px 12px; margin-top: 4px;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #121214; margin-bottom: 4px;">
+                                                <span id="mktVideoRenderStatusLabel">🎬 Renderizando video HD...</span>
+                                                <span id="mktVideoRenderPercent">0%</span>
+                                            </div>
+                                            <div style="width: 100%; height: 6px; background: rgba(18, 18, 20, 0.08); border-radius: 3px; overflow: hidden;">
+                                                <div id="mktVideoRenderProgressFill" style="width: 0%; height: 100%; background: #E5CBA7; transition: width 0.15s ease;"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -9528,7 +9550,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=12.5"></script>
+    <script src="app.js?v=12.6"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
