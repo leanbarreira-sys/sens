@@ -680,37 +680,34 @@ window.getResolvedFood = function(foodOrId, athleteId) {
 
     if (typeof foodOrId === 'string') {
         const trimmed = foodOrId.trim();
-        if (/^NUT-\d{3}$/i.test(trimmed)) {
-            searchCode = trimmed.toUpperCase();
-        } else if (/^[0-9a-f]{8}-[0-9a-f]{4}/i.test(trimmed)) {
+        const codeMatch = trimmed.match(/NUT-\d+/i);
+        if (codeMatch) {
+            searchCode = codeMatch[0].toUpperCase();
+        }
+        if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(trimmed)) {
             searchId = trimmed;
-        } else {
-            searchId = trimmed;
-            searchCode = trimmed.toUpperCase();
+        } else if (!searchCode) {
             searchName = trimmed.toLowerCase();
         }
     } else if (typeof foodOrId === 'object') {
         searchCode = (foodOrId.codigo || foodOrId.code || '').trim().toUpperCase();
         searchId = (foodOrId.id || '').trim();
-        searchName = (foodOrId.name || foodOrId.nombre || foodOrId.nombre_alimento_o_plato || foodOrId.name_es || '').trim().toLowerCase();
+        searchName = (foodOrId.nombre_alimento_o_plato || foodOrId.name || foodOrId.nombre || foodOrId.name_es || '').trim().toLowerCase();
+        if (!searchCode && searchId && /^NUT-\d+/i.test(searchId)) {
+            searchCode = searchId.toUpperCase();
+        }
     }
 
-    const legacyCode = (typeof SENS_LEGACY_FOOD_MAP !== 'undefined') ? (SENS_LEGACY_FOOD_MAP[searchId] || SENS_LEGACY_FOOD_MAP[searchCode]) : null;
-
     let baseFood = null;
-    // 1. Match por código exacto (NUT-001 ... NUT-500)
+    // 1. Match por código exacto (NUT-001 ... NUT-500) — Máxima prioridad inmutable
     if (searchCode) {
         baseFood = catalog.find(f => f.codigo && f.codigo.toUpperCase() === searchCode);
     }
-    // 2. Match por legacyCode si existía
-    if (!baseFood && legacyCode) {
-        baseFood = catalog.find(f => f.codigo && f.codigo.toUpperCase() === legacyCode.toUpperCase());
-    }
-    // 3. Match por ID exacto (UUID)
+    // 2. Match por ID exacto (UUID)
     if (!baseFood && searchId) {
         baseFood = catalog.find(f => f.id === searchId || (f.codigo && f.codigo.toUpperCase() === searchId.toUpperCase()));
     }
-    // 4. Match por nombre normalizado (sin acentos)
+    // 3. Match por nombre normalizado (sin acentos)
     if (!baseFood && searchName) {
         const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
         const targetClean = norm(searchName);
@@ -724,7 +721,7 @@ window.getResolvedFood = function(foodOrId, athleteId) {
         });
     }
 
-    // Si aún no se encuentra y se pasó un objeto, usar el objeto
+    // 4. Si aún no se encuentra y se pasó un objeto, usar el objeto
     if (!baseFood && typeof foodOrId === 'object') {
         baseFood = foodOrId;
     }
@@ -744,13 +741,18 @@ window.getResolvedFood = function(foodOrId, athleteId) {
         }
     } catch (e) {}
 
-    // Normalizar imagen exacta al 100% de la base de datos
+    // Normalizar imagen exacta al 100% de la base de datos de 500 WebP
     if (!resolved.image) {
         resolved.image = resolved.imagen_url || resolved.image_url || resolved.imagen_path || resolved.thumbnail || '';
     }
-    if (!resolved.image && resolved.codigo) {
-        resolved.image = `Nutricion/images/${resolved.codigo.toLowerCase()}-pechuga-de-pollo-a-la-plancha.webp`;
+    if ((!resolved.image || resolved.image.includes('nut-001-pechuga-de-pollo-a-la-plancha.webp') && resolved.codigo && resolved.codigo !== 'NUT-001') && resolved.codigo) {
+        const catalogMatch = catalog.find(f => f.codigo && f.codigo.toUpperCase() === resolved.codigo.toUpperCase());
+        if (catalogMatch && catalogMatch.imagen_url) {
+            resolved.image = catalogMatch.imagen_url;
+        }
     }
+    resolved.imagen_url = resolved.image;
+
     // Normalizar nombre
     if (!resolved.name) {
         resolved.name = resolved.nombre_alimento_o_plato || resolved.name_es || 'Alimento SENS';
@@ -14454,6 +14456,31 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         userPlan = AppState.profile.prescribed_nutrition;
     }
 
+    // Auto-sanitización y vinculación con la Base de 500 Alimentos (garantiza fotos WebP reales en todo momento)
+    const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
+    if (userPlan && userPlan.days) {
+        Object.keys(userPlan.days).forEach(dKey => {
+            const d = userPlan.days[dKey];
+            if (d && d.meals) {
+                mealKeys.forEach(mKey => {
+                    const slot = d.meals[mKey];
+                    const foods = Array.isArray(slot?.foods) ? slot.foods : (Array.isArray(slot) ? slot : null);
+                    if (foods) {
+                        foods.forEach(f => {
+                            const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : null;
+                            if (res) {
+                                f.id = res.id;
+                                f.codigo = res.codigo;
+                                f.name = res.nombre_alimento_o_plato || res.name;
+                                f.image = res.imagen_url || res.image;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     // Directiva del Coach y Objetivo
     const directiveCard = document.getElementById('memberNutriDirectiveCard');
     const directiveText = document.getElementById('memberNutriDirectiveText');
@@ -14475,7 +14502,6 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     }
 
     // 3. Estructurar Alimentos del Día
-    const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
     const mealLabels = {
         desayuno: 'Desayuno',
         almuerzo: 'Almuerzo',
@@ -14488,23 +14514,23 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
     const defaultMealsFallback = {
         desayuno: [
-            { id: 'd679f46e-bed8-5759-8669-62707b9a3110', codigo: 'NUT-002', name: 'Huevo Entero de Gallina (Cocido / Duro o Poché)', grams: 120, mealSlot: 'desayuno' },
-            { id: '4078a6ff-82ba-524f-9e66-eb1f07f9c8d6', codigo: 'NUT-022', name: 'Avena Arrollada Tradicional (En Crudo para Cocinar o Remojar)', grams: 60, mealSlot: 'desayuno' }
+            { id: 'd679f46e-bed8-5759-8669-62707b9a3110', codigo: 'NUT-002', name: 'Huevo Entero de Gallina (Cocido / Duro o Poché)', image: 'Nutricion/images/nut-002-huevo-entero-de-gallina.webp', grams: 120, mealSlot: 'desayuno' },
+            { id: 'ab477ed5-01b7-5ed0-b2ba-309a145d4550', codigo: 'NUT-022', name: 'Avena Arrollada Tradicional (En Crudo para Cocinar o Remojar)', image: 'Nutricion/images/nut-022-avena-arrollada-tradicional.webp', grams: 60, mealSlot: 'desayuno' }
         ],
         almuerzo: [
-            { id: 'ca13a4ce-6902-5e92-9f37-a1288c5efba7', codigo: 'NUT-001', name: 'Pechuga de Pollo a la Plancha (Sin Piel)', grams: 180, mealSlot: 'almuerzo' },
-            { id: 'b0336ba1-3ca9-59cb-9477-9be70ff4e207', codigo: 'NUT-024', name: 'Arroz Integral o Yamaní Cocido', grams: 150, mealSlot: 'almuerzo' }
+            { id: 'ae856777-a8d3-5238-9385-6bffce376820', codigo: 'NUT-001', name: 'Pechuga de Pollo a la Plancha (Sin Piel)', image: 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp', grams: 180, mealSlot: 'almuerzo' },
+            { id: 'ad77e728-2da8-5d10-90d2-58ddd37ce9d2', codigo: 'NUT-024', name: 'Arroz Integral o Yamaní Cocido', image: 'Nutricion/images/nut-024-arroz-integral-o-yamani-cocido.webp', grams: 150, mealSlot: 'almuerzo' }
         ],
         merienda: [
-            { id: '3df96120-ef81-5a02-b481-9b19dfb40d04', codigo: 'NUT-017', name: 'Yogur Griego Natural Sin Azúcar (Descremado / Skyr)', grams: 170, mealSlot: 'merienda' },
-            { id: '900b9983-cff8-5c4f-a2e6-a81d4a0e7a2b', codigo: 'NUT-042', name: 'Almendras o Nueces Naturales (Peladas)', grams: 30, mealSlot: 'merienda' }
+            { id: '5f2ed125-2184-5830-86a6-a1e33c94581c', codigo: 'NUT-017', name: 'Yogur Griego Natural Sin Azúcar (Descremado / Skyr)', image: 'Nutricion/images/nut-017-yogur-griego-natural-sin-azucar.webp', grams: 170, mealSlot: 'merienda' },
+            { id: '46a1db17-597b-53d7-ab86-cc681f75d218', codigo: 'NUT-042', name: 'Almendras o Nueces Naturales (Peladas)', image: 'Nutricion/images/nut-042-almendras-o-nueces-naturales.webp', grams: 30, mealSlot: 'merienda' }
         ],
         cena: [
-            { id: 'c2feec03-75b2-5f65-8b1e-62e92c2daffb', codigo: 'NUT-010', name: 'Salmón Rosado / Trucha Salmonada a la Plancha', grams: 180, mealSlot: 'cena' },
-            { id: '8fe4c4aa-56a9-5fe4-a4f0-466f8e705b74', codigo: 'NUT-038', name: 'Brócoli Cocido al Vapor (Al Dente)', grams: 150, mealSlot: 'cena' }
+            { id: 'da2fd14d-6afa-5d65-bb77-cf335f72d636', codigo: 'NUT-010', name: 'Salmón Rosado / Trucha Salmonada a la Plancha', image: 'Nutricion/images/nut-010-salmon-rosado-trucha-salmonada-a-la-plancha.webp', grams: 180, mealSlot: 'cena' },
+            { id: '2294c1d4-d80a-50d6-8382-fde68052d415', codigo: 'NUT-038', name: 'Brócoli Cocido al Vapor (Al Dente)', image: 'Nutricion/images/nut-038-brocoli-cocido-al-vapor.webp', grams: 150, mealSlot: 'cena' }
         ],
         snack: [
-            { id: 'b3531f8f-fa19-5d2f-a6ce-a13a078426c6', codigo: 'NUT-035', name: 'Manzana Roja o Verde con Cáscara', grams: 160, mealSlot: 'snack' }
+            { id: '74f7cbc6-7d44-50fc-9b58-7efc3b091185', codigo: 'NUT-035', name: 'Manzana Roja o Verde con Cáscara', image: 'Nutricion/images/nut-035-manzana-roja-o-verde-con-cascara.webp', grams: 160, mealSlot: 'snack' }
         ]
     };
 
@@ -14540,7 +14566,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
         const cardsHtml = slotFoods.map(item => {
             const resolved = (typeof window.getResolvedFood === 'function')
-                ? window.getResolvedFood(item.id || item.codigo || item, athId)
+                ? window.getResolvedFood(item, athId)
                 : item;
 
             const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
@@ -14669,7 +14695,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
     allDayFoods.forEach(item => {
         const resolved = (typeof window.getResolvedFood === 'function')
-            ? window.getResolvedFood(item.id || item.codigo || item, athId)
+            ? window.getResolvedFood(item, athId)
             : item;
         const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
         const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
@@ -14816,6 +14842,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
  * Abre el Modal de Detalle de Alimento & Ajuste Proporcional de Gramos / Unidades
  */
 function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo', isFromSearch = false) {
+    window.openUserFoodDetailModal = openUserFoodDetailModal;
     const modal = document.getElementById('userFoodDetailModal');
     if (!modal) return;
 
@@ -14830,7 +14857,7 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo', isFromSearch =
     } catch (e) {}
 
     const resolved = (typeof window.getResolvedFood === 'function')
-        ? window.getResolvedFood(foodItem.id || foodItem.codigo || foodItem, athId)
+        ? window.getResolvedFood(foodItem, athId)
         : foodItem;
 
     userActiveFoodForDetail = {
@@ -15934,7 +15961,8 @@ function renderSmartMacroRecommender(allDayFoods, athId, targetKcal, consumedKca
 // =========================================================================
 // EXPERIENCIA 1: MODAL DE INTERCAMBIO POR EQUIVALENTE (SWAP INTELIGENTE)
 // =========================================================================
-function openFoodSwapModal(foodItem, mealSlot) {
+function openFoodSwapModal(foodItem, mealSlot, onSwapCallback = null) {
+    window.openFoodSwapModal = openFoodSwapModal;
     const modal = document.getElementById('userFoodSwapModal');
     const nameEl = document.getElementById('swapCurrentFoodName');
     const listEl = document.getElementById('userFoodSwapList');
@@ -16006,6 +16034,18 @@ function openFoodSwapModal(foodItem, mealSlot) {
                 const swapCode = btn.getAttribute('data-swap-code');
                 const selectedAlt = alternatives.find(a => (a.codigo === swapCode || a.id === swapCode));
                 if (!selectedAlt) return;
+
+                if (typeof onSwapCallback === 'function') {
+                    onSwapCallback(selectedAlt);
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                    setTimeout(() => {
+                        if (!document.querySelector('.sens-modal-sheet-wrap.active')) {
+                            document.body.classList.remove('sens-modal-open');
+                        }
+                    }, 50);
+                    return;
+                }
 
                 const sDate = AppState.nutriSelectedDate || new Date();
                 const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
@@ -18499,7 +18539,7 @@ function initDashNutriCarousel() {
 
         if (firstFood) {
             const resolved = (typeof window.getResolvedFood === 'function')
-                ? window.getResolvedFood(firstFood.id || firstFood.codigo || firstFood, athId)
+                ? window.getResolvedFood(firstFood, athId)
                 : firstFood;
             foodName = firstFood.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
             foodImage = resolved?.image || resolved?.image_url || resolved?.imagen_path || firstFood.image || '';

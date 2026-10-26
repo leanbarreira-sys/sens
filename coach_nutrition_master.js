@@ -625,13 +625,46 @@ const CoachNutritionMaster = {
         const container = document.getElementById('nutriStep3Worktable');
         if (!container) return;
 
-        const dayKey = this.activeDayKey;
+        const dayKey = this.activeDayKey || 'day1';
         const currentDayPlan = this.dayPlanCache.days[dayKey] || { title: 'Lunes', meals: {} };
         const dayKcal = this.dayPlanCache.target_calories || 2150;
+        const targetProt = this.dayPlanCache.target_protein || Math.round((dayKcal * 0.3) / 4);
 
-        // Calcular totales acumulados en este día
-        let dayTotals = { calories: 0, protein: 0, carbs: 0, fats: 0 };
         const mealsList = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
+        const allDays = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
+        const dayNames = {
+            day1: 'LUN', day2: 'MAR', day3: 'MIÉ', day4: 'JUE',
+            day5: 'VIE', day6: 'SÁB', day7: 'DOM'
+        };
+
+        // Calcular estado de completitud día a día para toda la semana
+        const dayStats = {};
+        allDays.forEach(k => {
+            const dp = this.dayPlanCache.days ? this.dayPlanCache.days[k] : null;
+            let kCal = 0;
+            let kProt = 0;
+            let foodCount = 0;
+            if (dp && dp.meals) {
+                mealsList.forEach(mk => {
+                    const m = dp.meals[mk];
+                    if (m && Array.isArray(m.foods)) {
+                        m.foods.forEach(f => {
+                            const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f) : f;
+                            const mac = (typeof window.calculateFoodMacros === 'function')
+                                ? window.calculateFoodMacros(res, f.grams)
+                                : { calories: 150, protein: 15 };
+                            kCal += mac.calories;
+                            kProt += mac.protein;
+                            foodCount++;
+                        });
+                    }
+                });
+            }
+            dayStats[k] = { kcal: kCal, prot: Math.round(kProt), count: foodCount };
+        });
+
+        // Totales acumulados en el día activo
+        let dayTotals = { calories: 0, protein: 0, carbs: 0, fats: 0 };
         mealsList.forEach(mKey => {
             const m = currentDayPlan.meals[mKey];
             if (m && Array.isArray(m.foods)) {
@@ -648,45 +681,104 @@ const CoachNutritionMaster = {
             }
         });
 
-        const dayNames = {
-            day1: 'LUN', day2: 'MAR', day3: 'MIÉ', day4: 'JUE',
-            day5: 'VIE', day6: 'SÁB', day7: 'DOM'
-        };
+        const calPct = Math.min(100, Math.round((dayTotals.calories / (dayKcal || 1)) * 100));
+        const protPct = Math.min(100, Math.round((dayTotals.protein / (targetProt || 1)) * 100));
 
         container.innerHTML = `
-            <!-- Barra de Selección de Día -->
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
-                <div class="coach-horizontal-pills" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;">
-                    ${Object.keys(dayNames).map(k => `
-                        <button type="button" class="pill ${k === this.activeDayKey ? 'pill-champagne active' : 'pill-dark'} nutri-day-pill" data-day="${k}" style="cursor: pointer; border: none; font-weight: 800;">
-                            ${dayNames[k]}
+            <!-- Barra Superior: Selección de Día con Progreso Visual Día a Día -->
+            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 14px 16px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                    <div>
+                        <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #9E7D4B; letter-spacing: 0.5px;">PROGRESO SEMANAL DÍA A DÍA</span>
+                        <h4 style="margin: 2px 0 0 0; font-size: 1.05rem; font-weight: 800; color: #121214;">Elegí el día para estructurar o editar</h4>
+                    </div>
+                    <!-- Acciones Masivas Rápidas -->
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnCopyDayToAllWeek" style="font-size: 11px; padding: 6px 12px; font-weight: 700; border-color: rgba(158,125,75,0.4); color: #9E7D4B; display: inline-flex; align-items: center; gap: 5px;">
+                            <span>📋 Copiar este día a toda la semana</span>
                         </button>
-                    `).join('')}
-                </div>
-
-                <!-- Botón Mágico: Autollenar Sugerencias que Llenan las Calorías -->
-                <button type="button" class="btn btn-primary btn-sm" id="btnAutoFillSmartMenu" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; font-weight: 800; font-size: 11px; padding: 7px 16px; border: none; display: inline-flex; align-items: center; gap: 6px;">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                    <span>Autollenar Menú Óptimo (~${dayKcal} kcal)</span>
-                </button>
-            </div>
-
-            <!-- Resumen de Balance Calórico del Día -->
-            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <div>
-                    <span style="font-size: 10px; text-transform: uppercase; color: #71717A; font-weight: 700;">Balance del Día (${currentDayPlan.title})</span>
-                    <div style="display: flex; align-items: baseline; gap: 6px;">
-                        <span style="font-size: 1.25rem; font-weight: 800; color: #121214;">${dayTotals.calories}</span>
-                        <span style="font-size: 11.5px; color: #71717A;">/ ${dayKcal} kcal</span>
-                        <span class="pill ${Math.abs(dayTotals.calories - dayKcal) <= 100 ? 'pill-champagne' : 'pill-dark'}" style="font-size: 9.5px; padding: 2px 7px;">
-                            ${dayTotals.calories >= dayKcal ? 'Completo' : `Faltan ${Math.max(0, dayKcal - dayTotals.calories)} kcal`}
-                        </span>
+                        <button type="button" class="btn btn-outline btn-sm" id="btnAutoFillFullWeek" style="font-size: 11px; padding: 6px 12px; font-weight: 700; border-color: #CBD5E1; color: #334155; display: inline-flex; align-items: center; gap: 5px;">
+                            <span>🌟 Llenar semana completa</span>
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnAutoFillSmartMenu" style="background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; font-weight: 800; font-size: 11px; padding: 6px 14px; border: none; display: inline-flex; align-items: center; gap: 5px;">
+                            <span>⚡ Autollenar hoy (~${dayKcal} kcal)</span>
+                        </button>
                     </div>
                 </div>
-                <div style="display: flex; gap: 12px; font-size: 11px; color: #52525B;">
-                    <span>Prot: <strong>${Math.round(dayTotals.protein)}g</strong></span>
-                    <span>Carbs: <strong>${Math.round(dayTotals.carbs)}g</strong></span>
-                    <span>Grasas: <strong>${Math.round(dayTotals.fats)}g</strong></span>
+
+                <!-- Pastillas de Día con Estado de Calorías y Checkmark -->
+                <div class="coach-horizontal-pills" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;">
+                    ${allDays.map(k => {
+                        const st = dayStats[k];
+                        const isComplete = st.kcal >= (dayKcal * 0.9) && st.kcal <= (dayKcal * 1.15);
+                        const isUnder = st.kcal > 0 && st.kcal < (dayKcal * 0.9);
+                        const isEmpty = st.count === 0;
+
+                        let statusColor = '#94A3B8';
+                        let statusText = 'Vacío';
+                        if (isComplete) {
+                            statusColor = '#10B981';
+                            statusText = `✓ ${st.kcal}`;
+                        } else if (isUnder) {
+                            statusColor = '#D97706';
+                            statusText = `${st.kcal} kcal`;
+                        } else if (st.kcal > 0) {
+                            statusColor = '#EF4444';
+                            statusText = `${st.kcal} kcal`;
+                        }
+
+                        const isActive = k === this.activeDayKey;
+
+                        return `
+                            <button type="button" class="nutri-day-pill" data-day="${k}" style="cursor: pointer; border: 1.5px solid ${isActive ? '#9E7D4B' : '#E4E4E7'}; background: ${isActive ? '#FDFBF7' : '#FFFFFF'}; border-radius: 10px; padding: 8px 6px; display: flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.15s ease;">
+                                <strong style="font-size: 12px; color: ${isActive ? '#9E7D4B' : '#121214'};">${dayNames[k]}</strong>
+                                <span style="font-size: 10px; font-weight: 800; color: ${statusColor}; font-variant-numeric: tabular-nums;">${statusText}</span>
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <!-- Resumen de Balance Calórico & Proteico del Día Activo con Barras de Progreso -->
+            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 14px 18px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+                    <div>
+                        <span style="font-size: 10px; text-transform: uppercase; color: #71717A; font-weight: 700;">BALANCE ACTIVO • ${currentDayPlan.title.toUpperCase()}</span>
+                        <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 2px;">
+                            <span style="font-size: 1.35rem; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums;">${dayTotals.calories}</span>
+                            <span style="font-size: 12px; color: #71717A;">/ ${dayKcal} kcal</span>
+                            <span class="pill ${calPct >= 90 && calPct <= 115 ? 'pill-champagne' : 'pill-dark'}" style="font-size: 10px; padding: 2px 8px; font-weight: 800;">
+                                ${calPct >= 90 ? 'Meta Alcanzada' : `Faltan ${Math.max(0, dayKcal - dayTotals.calories)} kcal`}
+                            </span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 14px; font-size: 12px; color: #52525B; font-variant-numeric: tabular-nums;">
+                        <span>Proteína: <strong style="color: #0284C7;">${Math.round(dayTotals.protein)}g</strong> / ${targetProt}g</span>
+                        <span>Carbos: <strong style="color: #121214;">${Math.round(dayTotals.carbs)}g</strong></span>
+                        <span>Grasas: <strong style="color: #121214;">${Math.round(dayTotals.fats)}g</strong></span>
+                    </div>
+                </div>
+
+                <!-- Barras de Progreso Duales (Calorías & Proteína) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 10.5px; color: #71717A; margin-bottom: 4px;">
+                            <span>Volumen Calórico</span>
+                            <strong>${calPct}%</strong>
+                        </div>
+                        <div style="height: 6px; background: #F4F4F5; border-radius: 999px; overflow: hidden;">
+                            <div style="height: 100%; width: ${calPct}%; background: linear-gradient(90deg, #E5CBA7 0%, #9E7D4B 100%); border-radius: 999px; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 10.5px; color: #71717A; margin-bottom: 4px;">
+                            <span>Objetivo Proteico</span>
+                            <strong>${protPct}%</strong>
+                        </div>
+                        <div style="height: 6px; background: #F4F4F5; border-radius: 999px; overflow: hidden;">
+                            <div style="height: 100%; width: ${protPct}%; background: linear-gradient(90deg, #38BDF8 0%, #0284C7 100%); border-radius: 999px; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -695,11 +787,12 @@ const CoachNutritionMaster = {
                 ${mealsList.map(mKey => this.renderMealSection(mKey, currentDayPlan.meals[mKey], dayKcal)).join('')}
             </div>
 
+            <!-- Navegación Inferior -->
             <div style="display: flex; justify-content: space-between; gap: 12px;">
                 <button type="button" class="btn btn-outline" onclick="CoachNutritionMaster.goToStep(2)">
                     ← Volver a Macros
                 </button>
-                <button type="button" class="btn btn-primary" onclick="CoachNutritionMaster.goToStep(4)" style="font-weight: 800; padding: 12px 28px;">
+                <button type="button" class="btn btn-primary" onclick="CoachNutritionMaster.goToStep(4)" style="font-weight: 800; padding: 12px 28px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none;">
                     Siguiente: Duplicar Semanas →
                 </button>
             </div>
@@ -729,21 +822,21 @@ const CoachNutritionMaster = {
         });
 
         return `
-            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; overflow: hidden;">
+            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
                 <div style="background: #F8F9FA; padding: 10px 14px; border-bottom: 1px solid #E4E4E7; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span style="font-size: 12px; font-weight: 800; color: #121214; text-transform: uppercase;">${title}</span>
                         <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">${mealCalories} kcal • ${Math.round(mealProt)}g Prot</span>
                     </div>
-                    <button type="button" class="btn btn-outline btn-sm btn-open-food-modal" data-meal="${mealKey}" style="font-size: 10.5px; padding: 4px 10px; border-color: #9E7D4B; color: #9E7D4B;">
-                        + Agregar Alimento
+                    <button type="button" class="btn btn-outline btn-sm btn-open-food-modal" data-meal="${mealKey}" style="font-size: 11px; padding: 5px 12px; font-weight: 700; border-color: #9E7D4B; color: #9E7D4B; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>+ Agregar Alimento</span>
                     </button>
                 </div>
 
                 <div style="padding: 10px 14px;">
                     ${foods.length === 0 ? `
-                        <div style="text-align: center; padding: 14px; font-size: 11.5px; color: #A1A1AA;">
-                            No hay alimentos asignados. Hacé clic en "+ Agregar Alimento" o usá el botón de "Autollenar Menú".
+                        <div style="text-align: center; padding: 16px; font-size: 11.5px; color: #A1A1AA; background: #FAFAFA; border: 1px dashed #E4E4E7; border-radius: 8px;">
+                            No hay alimentos asignados. Tocá en <strong>+ Agregar Alimento</strong> o usá el botón de <strong>Autollenar</strong>.
                         </div>
                     ` : `
                         <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -762,33 +855,42 @@ const CoachNutritionMaster = {
             ? window.calculateFoodMacros(food, grams) 
             : { calories: 150, protein: 12, carbs: 15, fats: 4 };
 
-        const imgSrc = food.image_url || food.imagen_path || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+        const imgSrc = food.image || food.imagen_url || food.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+        const foodName = food.nombre_alimento_o_plato || food.name || 'Alimento SENS';
 
         return `
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px; background: #F8F9FA; border-radius: 8px; border: 1px solid #E4E4E7; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; background: #FFFFFF; border-radius: 10px; border: 1px solid #E4E4E7; flex-wrap: wrap;">
                 <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 180px;">
-                    <img src="${imgSrc}" alt="${food.name}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; background: #000; flex-shrink: 0;" />
-                    <div>
-                        <strong style="font-size: 12px; color: #121214; display: block; line-height: 1.2;">${food.name}</strong>
-                        <span style="font-size: 10px; color: #71717A;">${food.unidades_caseras_total || food.portion || ''}</span>
+                    <img src="${imgSrc}" alt="${foodName}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: #18181B; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.08);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'" />
+                    <div style="min-width: 0; flex: 1;">
+                        <strong style="font-size: 12.5px; color: #121214; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25;">${foodName}</strong>
+                        <span style="font-size: 10.5px; color: #71717A; display: block; margin-top: 1px;">${food.unidades_caseras_total || food.portion || `${grams}g`}</span>
                     </div>
                 </div>
 
-                <!-- Input Gramos Táctil con cálculo en vivo -->
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <!-- Input Gramos Táctil con cálculo en vivo & Acciones Rápidas -->
+                <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
                     <div style="position: relative; width: 85px;">
                         <input type="number" class="input-control food-grams-input" 
                             data-meal="${mealKey}" data-index="${idx}" value="${grams}" step="10" min="10" max="1000"
-                            style="font-size: 12px; font-weight: 700; padding: 4px 22px 4px 8px; height: 30px; margin-bottom: 0;">
+                            style="font-size: 12.5px; font-weight: 700; padding: 4px 22px 4px 8px; height: 32px; margin-bottom: 0; border-radius: 6px; text-align: center;">
                         <span style="position: absolute; right: 6px; top: 7px; font-size: 9.5px; color: #71717A;">g</span>
                     </div>
 
-                    <div style="min-width: 80px; text-align: right; font-size: 11px;">
-                        <strong style="color: #9E7D4B;">${macros.calories} kcal</strong>
-                        <div style="font-size: 9.5px; color: #71717A;">${macros.protein}g P • ${macros.carbs}g C</div>
+                    <div style="min-width: 75px; text-align: right; font-size: 11px;">
+                        <strong style="color: #9E7D4B; font-size: 12px;">${macros.calories} kcal</strong>
+                        <div style="font-size: 10px; color: #0284C7; font-weight: 700;">${macros.protein}g Prot</div>
                     </div>
 
-                    <button type="button" class="btn-remove-meal-food" data-meal="${mealKey}" data-index="${idx}" style="background: none; border: none; color: #EF4444; font-size: 14px; cursor: pointer; padding: 4px;">
+                    <button type="button" class="btn btn-outline btn-sm btn-coach-swap-food" data-meal="${mealKey}" data-index="${idx}" title="Intercambiar por un equivalente con similares calorías y proteínas" style="font-size: 10px; padding: 4px 8px; border-color: rgba(158,125,75,0.4); color: #9E7D4B; border-radius: 6px; font-weight: 700;">
+                        🔄 Swap
+                    </button>
+
+                    <button type="button" class="btn btn-outline btn-sm btn-coach-inspect-food" data-food-id="${food.id || food.codigo}" data-meal="${mealKey}" title="Ver preparación, receta e imagen HD" style="font-size: 10px; padding: 4px 8px; border-color: #E4E4E7; color: #52525B; border-radius: 6px;">
+                        Detalle ↗
+                    </button>
+
+                    <button type="button" class="btn-remove-meal-food" data-meal="${mealKey}" data-index="${idx}" title="Eliminar plato" style="background: none; border: none; color: #EF4444; font-size: 15px; cursor: pointer; padding: 4px;">
                         ✕
                     </button>
                 </div>
@@ -805,11 +907,27 @@ const CoachNutritionMaster = {
             });
         });
 
-        // Botón Autollenar Sugerencias
+        // Botón Autollenar Menú de Hoy
         const btnAuto = document.getElementById('btnAutoFillSmartMenu');
         if (btnAuto) {
             btnAuto.addEventListener('click', () => {
                 this.autoFillDayMenu(this.activeDayKey);
+            });
+        }
+
+        // Botón Copiar Día a Toda la Semana
+        const btnCopyDay = document.getElementById('btnCopyDayToAllWeek');
+        if (btnCopyDay) {
+            btnCopyDay.addEventListener('click', () => {
+                this.copyDayToAllWeek(this.activeDayKey);
+            });
+        }
+
+        // Botón Autollenar Semana Completa
+        const btnAutoWeek = document.getElementById('btnAutoFillFullWeek');
+        if (btnAutoWeek) {
+            btnAutoWeek.addEventListener('click', () => {
+                this.autoFillFullWeek();
             });
         }
 
@@ -847,6 +965,42 @@ const CoachNutritionMaster = {
                 this.openFoodPickerModal(meal);
             });
         });
+
+        // Intercambiar alimento (Swap inteligente de 1 click)
+        document.querySelectorAll('.btn-coach-swap-food').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const meal = btn.getAttribute('data-meal');
+                const idx = parseInt(btn.getAttribute('data-index'), 10);
+                const dPlan = this.dayPlanCache.days[this.activeDayKey];
+                if (!dPlan || !dPlan.meals[meal]) return;
+                const currentItem = dPlan.meals[meal].foods[idx];
+                if (!currentItem) return;
+
+                if (typeof window.openFoodSwapModal === 'function') {
+                    window.openFoodSwapModal(currentItem, meal, (selectedAlt) => {
+                        dPlan.meals[meal].foods[idx] = {
+                            id: selectedAlt.id,
+                            codigo: selectedAlt.codigo,
+                            name: selectedAlt.nombre_alimento_o_plato || selectedAlt.name,
+                            image: selectedAlt.imagen_url || selectedAlt.image,
+                            grams: selectedAlt.defaultGrams || selectedAlt.porcion_total_g_ml || 100
+                        };
+                        this.renderStep3();
+                        if (typeof showSensToast === 'function') {
+                            showSensToast(`Plato reemplazado por "${selectedAlt.nombre_alimento_o_plato || selectedAlt.name}".`, 'champagne');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Ver detalle del alimento
+        document.querySelectorAll('.btn-coach-inspect-food').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const fid = btn.getAttribute('data-food-id');
+                this.inspectFood(fid);
+            });
+        });
     },
 
     // Autollenar Menú Inteligente que Llena el Volumen Calórico
@@ -857,41 +1011,93 @@ const CoachNutritionMaster = {
 
         const targetKcal = this.dayPlanCache.target_calories || 2150;
         const ath = this.getAthleteProfile();
+        const goal = ath?.goal || this.dayPlanCache.goal || 'fat_loss';
 
-        // Alimentos insignia por momento de la base de 500
+        // Menús optimizados por objetivo con la base de 500 alimentos
         const sampleMenus = {
             fat_loss: {
                 desayuno: [
-                    { code: 'NUT-002', grams: 100 }, // Huevos enteros
-                    { code: 'NUT-003', grams: 150 }, // Claras
-                    { code: 'NUT-038', grams: 45 }   // Avena
+                    { code: 'NUT-002', grams: 100 }, // Huevo Entero de Gallina
+                    { code: 'NUT-003', grams: 100 }, // Claras de Huevo Cocidas
+                    { code: 'NUT-022', grams: 45 }   // Avena Arrollada Tradicional
                 ],
                 almuerzo: [
-                    { code: 'NUT-001', grams: 180 }, // Pechuga pollo
-                    { code: 'NUT-037', grams: 140 }, // Arroz basmati
-                    { code: 'NUT-082', grams: 10 }   // Aceite oliva
+                    { code: 'NUT-001', grams: 180 }, // Pechuga de Pollo a la Plancha
+                    { code: 'NUT-024', grams: 140 }, // Arroz Integral o Yamaní
+                    { code: 'NUT-038', grams: 150 }  // Brócoli Cocido al Vapor
                 ],
                 merienda: [
-                    { code: 'NUT-007', grams: 170 }, // Yogur griego
-                    { code: 'NUT-085', grams: 25 }   // Frutos secos
+                    { code: 'NUT-017', grams: 170 }, // Yogur Griego Natural Sin Azúcar
+                    { code: 'NUT-042', grams: 25 }   // Almendras o Nueces
                 ],
                 cena: [
-                    { code: 'NUT-004', grams: 160 }, // Lomo vacuno magro
-                    { code: 'NUT-040', grams: 180 }, // Batata al horno
-                    { code: 'NUT-120', grams: 120 }  // Vegetales verdes
+                    { code: 'NUT-010', grams: 180 }, // Salmón Rosado a la Plancha
+                    { code: 'NUT-038', grams: 150 }, // Vegetales al vapor
+                    { code: 'NUT-024', grams: 100 }  // Arroz Integral
                 ],
                 snack: [
-                    { code: 'NUT-010', grams: 30 }   // Whey protein
+                    { code: 'NUT-035', grams: 160 }  // Manzana Roja o Verde
+                ]
+            },
+            muscle_gain: {
+                desayuno: [
+                    { code: 'NUT-002', grams: 150 }, // 3 Huevos
+                    { code: 'NUT-022', grams: 80 },  // Avena
+                    { code: 'NUT-042', grams: 30 }   // Frutos secos
+                ],
+                almuerzo: [
+                    { code: 'NUT-006', grams: 200 }, // Bife de Cuadril Magro
+                    { code: 'NUT-024', grams: 200 }, // Arroz Integral
+                    { code: 'NUT-038', grams: 150 }  // Brócoli
+                ],
+                merienda: [
+                    { code: 'NUT-017', grams: 200 }, // Yogur Griego
+                    { code: 'NUT-011', grams: 35 },  // Whey Protein
+                    { code: 'NUT-035', grams: 160 }  // Manzana
+                ],
+                cena: [
+                    { code: 'NUT-001', grams: 200 }, // Pechuga de Pollo
+                    { code: 'NUT-024', grams: 180 }, // Arroz o Papa al vapor
+                    { code: 'NUT-082', grams: 12 }   // Aceite de oliva
+                ],
+                snack: [
+                    { code: 'NUT-042', grams: 35 }   // Frutos secos
+                ]
+            },
+            recomp: {
+                desayuno: [
+                    { code: 'NUT-002', grams: 100 }, // Huevos
+                    { code: 'NUT-003', grams: 80 },  // Claras
+                    { code: 'NUT-022', grams: 50 }   // Avena
+                ],
+                almuerzo: [
+                    { code: 'NUT-001', grams: 180 }, // Pechuga de Pollo
+                    { code: 'NUT-024', grams: 160 }, // Arroz Integral
+                    { code: 'NUT-038', grams: 150 }  // Brócoli
+                ],
+                merienda: [
+                    { code: 'NUT-017', grams: 170 }, // Yogur Griego
+                    { code: 'NUT-042', grams: 25 }   // Frutos secos
+                ],
+                cena: [
+                    { code: 'NUT-004', grams: 180 }, // Lomo Vacuno Magro
+                    { code: 'NUT-038', grams: 150 }  // Vegetales al vapor
+                ],
+                snack: [
+                    { code: 'NUT-035', grams: 160 }  // Manzana
                 ]
             }
         };
 
-        const template = sampleMenus.fat_loss;
+        const template = sampleMenus[goal] || sampleMenus.fat_loss;
         Object.keys(template).forEach(mKey => {
             dPlan.meals[mKey].foods = template[mKey].map(item => {
                 const food = SENS_FOOD_LIBRARY.find(f => f.codigo === item.code) || SENS_FOOD_LIBRARY[0];
                 return {
                     id: food.id,
+                    codigo: food.codigo,
+                    name: food.nombre_alimento_o_plato || food.name,
+                    image: food.imagen_url || food.image,
                     grams: item.grams
                 };
             });
@@ -903,9 +1109,53 @@ const CoachNutritionMaster = {
         }
     },
 
-    // Modal de Selección de Alimentos (Catálogo de 500)
+    // Copiar Menú de un Día a Toda la Semana (7 Días)
+    copyDayToAllWeek(srcKey = null) {
+        const key = srcKey || this.activeDayKey || 'day1';
+        const src = this.dayPlanCache.days[key];
+        if (!src) return;
+
+        const allDays = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
+        allDays.forEach(d => {
+            if (d !== key) {
+                this.dayPlanCache.days[d] = JSON.parse(JSON.stringify(src));
+                this.dayPlanCache.days[d].title = this.getDayTitle(d);
+            }
+        });
+
+        this.renderStep3();
+        if (typeof showSensToast === 'function') {
+            showSensToast(`Menú de ${src.title} copiado a toda la semana (7 días).`, 'champagne', 3000);
+        }
+    },
+
+    // Autollenar Semana Completa con Variedad Óptima
+    autoFillFullWeek() {
+        const allDays = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
+        allDays.forEach(d => {
+            this.autoFillDayMenu(d);
+        });
+        this.renderStep3();
+        if (typeof showSensToast === 'function') {
+            showSensToast('Semana completa autollenada con menús óptimos de la Base de 500.', 'champagne', 3500);
+        }
+    },
+
+    // Modal de Selección de Alimentos (Catálogo de 500 con TODOS los filtros de usuario)
     openFoodPickerModal(targetMeal) {
         this.activeMealKey = targetMeal;
+
+        // Preselección quirúrgica del filtro de momento de comida
+        if (targetMeal === 'desayuno' || targetMeal === 'merienda') {
+            this.foodMealFilter = 'desayuno_merienda';
+        } else if (targetMeal === 'almuerzo' || targetMeal === 'cena') {
+            this.foodMealFilter = 'almuerzo_cena';
+        } else if (targetMeal === 'snack') {
+            this.foodMealFilter = 'snack';
+        } else {
+            this.foodMealFilter = 'all';
+        }
+
         let modal = document.getElementById('coachFoodPickerModal');
         if (!modal) {
             this.createFoodPickerModal();
@@ -914,36 +1164,63 @@ const CoachNutritionMaster = {
         if (modal) {
             modal.classList.add('active');
             modal.style.display = 'flex';
+            document.body.classList.add('sens-modal-open');
             this.renderFoodPickerGrid();
         }
     },
 
     createFoodPickerModal() {
+        const existing = document.getElementById('coachFoodPickerModal');
+        if (existing) existing.remove();
+
         const modalHtml = `
-            <div class="sens-modal-backdrop" id="coachFoodPickerModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
-                <div class="sens-modal-content" style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.3); border-radius: 16px; width: 100%; max-width: 680px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
-                    <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
+            <div class="sens-modal-backdrop sens-modal-sheet-wrap" id="coachFoodPickerModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100000; align-items: center; justify-content: center; padding: 16px;">
+                <div class="sens-modal-content" style="background: #111115; border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 18px; width: 100%; max-width: 760px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.85);">
+                    <!-- Header -->
+                    <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
                         <div>
-                            <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">BASE MAESTRA SENS (500 ALIMENTOS)</span>
-                            <h3 style="margin: 4px 0 0 0; font-size: 1.15rem; color: #FFFFFF;" id="foodPickerModalTitle">Agregar a Desayuno</h3>
+                            <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;">BIBLIOTECA 500 ALIMENTOS SENS</span>
+                            <h3 style="margin: 4px 0 0 0; font-size: 1.2rem; color: #FFFFFF; font-weight: 800;" id="foodPickerModalTitle">Agregar Alimento</h3>
                         </div>
-                        <button type="button" class="modal-close-btn" onclick="CoachNutritionMaster.closeFoodPickerModal()" style="background: none; border: none; color: #FFF; font-size: 20px; cursor: pointer;">✕</button>
+                        <button type="button" class="modal-close-btn" onclick="CoachNutritionMaster.closeFoodPickerModal()" style="background: none; border: none; color: #FFF; font-size: 20px; cursor: pointer; padding: 4px;" aria-label="Cerrar modal">✕</button>
                     </div>
 
-                    <!-- Buscador & Filtros -->
-                    <div style="padding: 12px 20px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 8px;">
-                        <input type="text" id="foodPickerSearchInput" class="input-control" placeholder="Buscar entre 500 alimentos por nombre o ingrediente..." style="margin-bottom: 0; font-size: 12.5px;">
-                        <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;">
-                            <button type="button" class="pill pill-champagne food-cat-filter active" data-cat="all">Todos</button>
-                            <button type="button" class="pill pill-dark food-cat-filter" data-cat="protein">Proteínas</button>
-                            <button type="button" class="pill pill-dark food-cat-filter" data-cat="carbs">Carbohidratos</button>
-                            <button type="button" class="pill pill-dark food-cat-filter" data-cat="healthy_fats">Grasas</button>
-                            <button type="button" class="pill pill-dark food-cat-filter" data-cat="hydration_veg">Vegetales</button>
+                    <!-- Buscador & Filtros Completos (Momento, Tipo, Calorías, Objetivo) -->
+                    <div style="padding: 14px 20px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Input de Búsqueda -->
+                        <input type="text" id="foodPickerSearchInput" class="input-control" placeholder="Buscar entre 500 alimentos por nombre, código (NUT-001), ingredientes, dieta..." style="margin-bottom: 0; font-size: 13px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #FFF; border-radius: 10px; padding: 10px 14px;">
+
+                        <!-- Filtro 1: Momento del Día -->
+                        <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;" id="coachFoodMealFilterRow">
+                            <button type="button" class="pill pill-champagne food-filter-pill active" data-filter-group="meal" data-val="active">Apto para esta comida</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="all">Todos los momentos</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="desayuno_merienda">Desayuno / Merienda</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="almuerzo_cena">Almuerzo / Cena</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="snack">Snack</button>
                         </div>
+
+                        <!-- Filtro 2: Tipo de Ítem & Calorías -->
+                        <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;" id="coachFoodTypeAndKcalRow">
+                            <button type="button" class="pill pill-champagne food-filter-pill active" data-filter-group="type" data-val="all">Todos los tipos</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="Receta">Recetas</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="Alimento Base">Alimentos Base</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="vianda">❄️ Vianda Fría</button>
+                            <span style="border-left: 1px solid rgba(255,255,255,0.15); margin: 0 4px;"></span>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="under200">&lt; 200 kcal</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="200-400">200-400 kcal</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="400-600">400-600 kcal</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="over600">&gt; 600 kcal</button>
+                        </div>
+                    </div>
+
+                    <!-- Header de Resultados -->
+                    <div style="padding: 8px 20px; font-size: 11px; color: #71717A; display: flex; justify-content: space-between; background: rgba(0,0,0,0.2);">
+                        <span id="foodPickerCountBadge">Cargando catálogo...</span>
+                        <span>Clic en "Detalle" para ver foto HD y receta</span>
                     </div>
 
                     <!-- Grid de Resultados -->
-                    <div id="foodPickerResultsGrid" style="flex: 1; overflow-y: auto; padding: 16px 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                    <div id="foodPickerResultsGrid" style="flex: 1; overflow-y: auto; padding: 14px 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px;">
                         <!-- Inyectado dinámicamente -->
                     </div>
                 </div>
@@ -959,15 +1236,44 @@ const CoachNutritionMaster = {
             });
         }
 
-        document.querySelectorAll('.food-cat-filter').forEach(btn => {
+        // Delegación de eventos para los filtros
+        document.querySelectorAll('#coachFoodPickerModal .food-filter-pill').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.food-cat-filter').forEach(b => {
-                    b.classList.remove('pill-champagne', 'active');
-                    b.classList.add('pill-dark');
+                const grp = btn.getAttribute('data-filter-group');
+                const val = btn.getAttribute('data-val');
+
+                const siblings = btn.parentElement.querySelectorAll(`[data-filter-group="${grp}"]`);
+                siblings.forEach(s => {
+                    s.classList.remove('pill-champagne', 'active');
+                    s.classList.add('pill-dark');
                 });
                 btn.classList.remove('pill-dark');
                 btn.classList.add('pill-champagne', 'active');
-                this.foodCategoryFilter = btn.getAttribute('data-cat') || 'all';
+
+                if (grp === 'meal') {
+                    if (val === 'active') {
+                        if (this.activeMealKey === 'desayuno' || this.activeMealKey === 'merienda') {
+                            this.foodMealFilter = 'desayuno_merienda';
+                        } else if (this.activeMealKey === 'almuerzo' || this.activeMealKey === 'cena') {
+                            this.foodMealFilter = 'almuerzo_cena';
+                        } else if (this.activeMealKey === 'snack') {
+                            this.foodMealFilter = 'snack';
+                        } else {
+                            this.foodMealFilter = 'all';
+                        }
+                    } else {
+                        this.foodMealFilter = val;
+                    }
+                } else if (grp === 'type') {
+                    this.foodItemTypeFilter = val;
+                } else if (grp === 'kcal') {
+                    this.foodKcalFilter = val === this.foodKcalFilter ? 'all' : val;
+                    if (this.foodKcalFilter === 'all') {
+                        btn.classList.remove('pill-champagne', 'active');
+                        btn.classList.add('pill-dark');
+                    }
+                }
+
                 this.renderFoodPickerGrid();
             });
         });
@@ -978,48 +1284,107 @@ const CoachNutritionMaster = {
         if (modal) {
             modal.classList.remove('active');
             modal.style.display = 'none';
+            document.body.classList.remove('sens-modal-open');
+        }
+    },
+
+    inspectFood(foodId) {
+        const catalog = (typeof SENS_FOOD_LIBRARY !== 'undefined') ? SENS_FOOD_LIBRARY : (window.SENS_FOOD_LIBRARY || []);
+        const found = (typeof window.getResolvedFood === 'function')
+            ? window.getResolvedFood(foodId)
+            : catalog.find(x => (x.id === foodId || x.codigo === foodId));
+
+        if (found && typeof window.openUserFoodDetailModal === 'function') {
+            window.openUserFoodDetailModal(found, this.activeMealKey || 'almuerzo', true);
         }
     },
 
     renderFoodPickerGrid() {
         const grid = document.getElementById('foodPickerResultsGrid');
-        if (!grid || typeof SENS_FOOD_LIBRARY === 'undefined') return;
+        const catalog = (typeof SENS_FOOD_LIBRARY !== 'undefined') ? SENS_FOOD_LIBRARY : (window.SENS_FOOD_LIBRARY || []);
+        if (!grid || !catalog || catalog.length === 0) return;
 
         const title = document.getElementById('foodPickerModalTitle');
-        if (title) title.textContent = `Agregar a ${this.activeMealKey.toUpperCase()}`;
+        if (title) title.textContent = `Agregar Alimento a ${this.activeMealKey ? this.activeMealKey.toUpperCase() : 'COMIDA'}`;
 
-        const q = this.foodSearchQuery;
-        const cat = this.foodCategoryFilter;
+        const q = this.foodSearchQuery || '';
+        const mealFilter = this.foodMealFilter || 'all';
+        const typeFilter = this.foodItemTypeFilter || 'all';
+        const kcalFilter = this.foodKcalFilter || 'all';
 
-        const filtered = SENS_FOOD_LIBRARY.filter(f => {
-            if (cat !== 'all' && f.cat !== cat) return false;
-            if (q) {
-                const hay = `${f.name} ${f.name_en || ''} ${f.categoria_nutricional || ''} ${f.ingredientes_y_gramajes || ''}`.toLowerCase();
-                if (!hay.includes(q)) return false;
+        const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        const qNorm = norm(q);
+
+        let filtered = catalog.filter(f => {
+            // 1. Filtro por Momento de Comida
+            if (mealFilter === 'desayuno_merienda' && !f.desayuno_merienda) return false;
+            if (mealFilter === 'almuerzo_cena' && !f.almuerzo_cena) return false;
+            if (mealFilter === 'snack' && !f.snack) return false;
+
+            // 2. Filtro por Tipo de Ítem
+            if (typeFilter === 'Receta' && f.tipo_item !== 'Receta') return false;
+            if (typeFilter === 'Alimento Base' && f.tipo_item !== 'Alimento Base') return false;
+            if (typeFilter === 'vianda' && !f.apto_vianda_fria) return false;
+
+            // 3. Filtro por Rango Calórico
+            const cal = Number(f.calorias_kcal !== undefined ? f.calorias_kcal : (f.calories || 0)) || 0;
+            if (kcalFilter === 'under200' && cal >= 200) return false;
+            if (kcalFilter === '200-400' && (cal < 200 || cal > 400)) return false;
+            if (kcalFilter === '400-600' && (cal < 400 || cal > 600)) return false;
+            if (kcalFilter === 'over600' && cal <= 600) return false;
+
+            // 4. Búsqueda por Texto
+            if (qNorm) {
+                const hay = norm(`${f.name} ${f.nombre_alimento_o_plato || ''} ${f.codigo || ''} ${f.categoria_nutricional || ''} ${f.etiquetas_dieta_filtros || ''} ${f.ingredientes_y_gramajes || ''}`);
+                if (!hay.includes(qNorm)) return false;
             }
-            return true;
-        }).slice(0, 60); // Mostrar hasta 60 en viewport
 
-        if (filtered.length === 0) {
-            grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #71717A;">No se encontraron alimentos para este filtro.</div>`;
+            return true;
+        });
+
+        const countBadge = document.getElementById('foodPickerCountBadge');
+        if (countBadge) {
+            countBadge.textContent = `${filtered.length} alimentos coinciden con los filtros`;
+        }
+
+        const toShow = filtered.slice(0, 80);
+
+        if (toShow.length === 0) {
+            grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 36px 16px; color: #71717A; font-size: 13px;">No se encontraron alimentos para los filtros seleccionados.<br>Probá cambiar el momento o limpiar el buscador.</div>`;
             return;
         }
 
-        grid.innerHTML = filtered.map(f => {
-            const imgSrc = f.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+        grid.innerHTML = toShow.map(f => {
+            const imgSrc = f.imagen_url || f.image || f.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+            const cal = Number(f.calorias_kcal !== undefined ? f.calorias_kcal : (f.calories || 0)) || 0;
+            const prot = Number(f.proteinas_g !== undefined ? f.proteinas_g : (f.protein || 0)) || 0;
+            const carbs = Number(f.carbohidratos_g !== undefined ? f.carbohidratos_g : (f.carbs || 0)) || 0;
+            const fats = Number(f.grasas_g !== undefined ? f.grasas_g : (f.fats || 0)) || 0;
+            const foodName = f.nombre_alimento_o_plato || f.name || 'Alimento SENS';
+
             return `
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                     <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;">
-                        <img src="${imgSrc}" alt="${f.name}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: #000; flex-shrink: 0;" />
-                        <div style="min-width: 0;">
-                            <strong style="font-size: 12px; color: #FFFFFF; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</strong>
-                            <span style="font-size: 10px; color: #9E7D4B; display: block;">${f.calorias_kcal} kcal • ${f.portion || (f.porcion_total_g_ml + 'g')}</span>
-                            <span style="font-size: 9.5px; color: #71717A;">P: ${f.proteinas_g}g • C: ${f.carbohidratos_g}g • G: ${f.grasas_g}g</span>
+                        <img src="${imgSrc}" alt="${foodName}" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #18181B; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'" />
+                        <div style="min-width: 0; flex: 1;">
+                            <strong style="font-size: 12.5px; color: #FFFFFF; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25;">${foodName}</strong>
+                            <div style="font-size: 11px; color: #71717A; margin-top: 2px; font-variant-numeric: tabular-nums;">
+                                ${f.porcion_total_g_ml || 100}g • <span style="color: #E5CBA7; font-weight: 700;">${cal} kcal</span> • <span style="color: #38BDF8; font-weight: 700;">${prot}g P</span>
+                                ${f.apto_vianda_fria ? ' • <span style="color: #93C5FD;">❄️</span>' : ''}
+                            </div>
+                            <div style="font-size: 9.5px; color: #A1A1AA; margin-top: 1px;">
+                                C: ${carbs}g • G: ${fats}g • ${f.codigo || ''}
+                            </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline btn-sm" onclick="CoachNutritionMaster.addFoodToActiveMeal('${f.id}')" style="font-size: 10px; padding: 5px 9px; flex-shrink: 0; border-color: #9E7D4B; color: #E5CBA7;">
-                        + Añadir
-                    </button>
+                    <div style="display: flex; flex-direction: column; gap: 5px; flex-shrink: 0;">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="CoachNutritionMaster.addFoodToActiveMeal('${f.id}')" style="font-size: 11px; padding: 5px 12px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; border-radius: 6px; cursor: pointer;">
+                            + Añadir
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="CoachNutritionMaster.inspectFood('${f.id}')" style="font-size: 10px; padding: 3px 8px; border-color: rgba(255,255,255,0.2); color: #E4E4E7; border-radius: 6px; cursor: pointer;">
+                            Detalle ↗
+                        </button>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -1048,6 +1413,9 @@ const CoachNutritionMaster = {
 
         dPlan.meals[this.activeMealKey].foods.push({
             id: food.id,
+            codigo: food.codigo,
+            name: food.nombre_alimento_o_plato || food.name,
+            image: food.imagen_url || food.image,
             grams: food.defaultGrams || food.porcion_total_g_ml || 100
         });
 
@@ -1058,7 +1426,7 @@ const CoachNutritionMaster = {
             this.renderStep3();
         }
         if (typeof showSensToast === 'function') {
-            showSensToast(`${food.name} agregado a ${this.activeMealKey.toUpperCase()}.`, 'champagne');
+            showSensToast(`${food.nombre_alimento_o_plato || food.name} añadido a ${this.activeMealKey.toUpperCase()}.`, 'champagne');
         }
     },
 
@@ -1242,14 +1610,23 @@ const CoachNutritionMaster = {
         });
         this.dayPlanCache.prescribed_foods = allFoods;
 
-        // 1. Guardar en LocalStorage
+        // 1. Guardar en LocalStorage sincronizado en todas las claves de acceso
         if (typeof localStorage !== 'undefined') {
             localStorage.setItem(`sens_prescribed_nutrition_${athId}`, JSON.stringify(this.dayPlanCache));
+            localStorage.setItem(`sens_user_nutrition_plan_${athId}`, JSON.stringify(this.dayPlanCache));
+            localStorage.setItem(`sens_coach_assigned_nutrition_${athId}`, JSON.stringify(this.dayPlanCache));
         }
 
         // 2. Sincronizar en Memoria del Portal
         if (typeof syncMemberNutritionPrescription === 'function') {
             syncMemberNutritionPrescription(athId, this.dayPlanCache);
+        }
+        if (typeof renderMemberNutritionPlan === 'function') {
+            const sDate = (typeof AppState !== 'undefined' && AppState.nutriSelectedDate) || new Date();
+            renderMemberNutritionPlan(athId, sDate);
+        }
+        if (typeof renderNutriDaysNav === 'function') {
+            renderNutriDaysNav();
         }
         if (typeof updateNutriSummaryCardData === 'function') {
             updateNutriSummaryCardData();
