@@ -19446,13 +19446,16 @@ body.in-portal,
 }
 
 .sens-nutri-food-title {
-    font-size: 13.5px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.28;
     color: #FFFFFF;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 }
 
 .sens-nutri-food-meta {
@@ -23083,6 +23086,110 @@ textarea,
     margin-bottom: 10px;
     box-sizing: border-box;
 }
+
+/* ==========================================================================
+   SENS NUTRITION V2 — DARK LUXURY 500 FOODS & UX COMPONENTS
+   ========================================================= */
+.sens-chef-trick-card {
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.08) 0%, rgba(20, 20, 24, 0.6) 100%);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.sens-food-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #F4F4F5;
+}
+.sens-food-badge-pill.champagne {
+    border-color: rgba(229, 203, 167, 0.4);
+    color: #E5CBA7;
+}
+
+.sens-swap-item-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+.sens-swap-item-card:hover {
+    background: rgba(229, 203, 167, 0.05);
+    border-color: rgba(229, 203, 167, 0.3);
+}
+
+.sens-shopping-aisle-block {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 14px;
+}
+.sens-shopping-aisle-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.sens-shopping-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 13px;
+    color: #E4E4E7;
+}
+.sens-shopping-item-row:last-child {
+    border-bottom: none;
+}
+.sens-shopping-item-row.is-checked {
+    opacity: 0.45;
+    text-decoration: line-through;
+}
+
+.sens-smart-recommender-card {
+    background: linear-gradient(135deg, rgba(229, 203, 167, 0.06) 0%, rgba(18, 18, 22, 0.7) 100%);
+    border: 1px solid rgba(229, 203, 167, 0.22);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.sens-recom-dish-chip {
+    flex: 0 0 200px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.sens-recom-dish-chip:hover {
+    border-color: #E5CBA7;
+    background: rgba(229, 203, 167, 0.08);
+}
+
 
 
 

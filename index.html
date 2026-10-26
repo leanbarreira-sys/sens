@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=12.2">
+    <link rel="stylesheet" href="style.css?v=12.7">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4509,14 +4509,34 @@
                             <h3 style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 4px 0 0 0;">
                                 Recomendación Nutricional & Plan</h3>
                         </div>
-                        <span class="pill pill-champagne" id="memberNutriPlanGoalPill"
-                            style="font-size: 10px; padding: 3px 8px;">Déficit Calórico</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button type="button" class="btn btn-outline btn-sm" id="btnOpenShoppingListModal"
+                                style="border-color: rgba(229,203,167,0.35); color: #E5CBA7; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 5px; background: rgba(229,203,167,0.06);">
+                                <span>🛒 Lista del Súper</span>
+                            </button>
+                            <span class="pill pill-champagne" id="memberNutriPlanGoalPill"
+                                style="font-size: 10px; padding: 3px 8px;">Déficit Calórico</span>
+                        </div>
                     </div>
 
                     <div class="sens-nutri-directive-card" id="memberNutriDirectiveCard">
                         <strong>Directiva del Coach:</strong> <span id="memberNutriDirectiveText">Priorizá 35-40g de
                             proteína en cada una de las comidas principales y mantené hidratación constante antes y
                             después de entrenar.</span>
+                    </div>
+
+                    <!-- EXPERIENCIA 2: Recomendador Automático Inteligente "Clavar mis Macros" -->
+                    <div class="sens-smart-recommender-card" id="sensSmartMacroRecommender" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span style="font-size: 15px;">✨</span>
+                                <strong style="font-size: 12px; color: #E5CBA7; text-transform: uppercase; letter-spacing: 0.5px;">¿Qué comer ahora para clavar mis macros?</strong>
+                            </div>
+                            <span id="recommenderRemainingMeta" style="font-size: 11px; font-weight: 700; color: #CBD5E1; font-variant-numeric: tabular-nums;">-</span>
+                        </div>
+                        <div id="smartRecommenderSuggestions" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
+                            <!-- Sugerencias inyectadas por app.js -->
+                        </div>
                     </div>
 
                     <!-- Filtros Horizontales por Momento de Consumo -->
@@ -7844,14 +7864,17 @@
                 </button>
             </div>
 
-            <!-- Imagen HD del Alimento -->
-            <div class="sens-sheet-header-img">
+            <!-- Imagen HD del Alimento con Badges Flotantes -->
+            <div class="sens-sheet-header-img" style="position: relative;">
                 <img id="ufdFoodImg" src="Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp" alt="Alimento">
                 <div class="sens-sheet-header-img-gradient"></div>
+                <div style="position: absolute; top: 12px; left: 14px; right: 14px; display: flex; gap: 6px; flex-wrap: wrap;" id="ufdBadgesRow">
+                    <!-- Badges inyectados dinámicamente: Receta/Base, Vianda, Costo, Tiempo -->
+                </div>
                 <div style="position: absolute; bottom: 12px; left: 14px; right: 14px;">
                     <span id="ufdMealPill"
                         style="display: inline-block; font-size: 10px; font-weight: 800; text-transform: uppercase; color: #E5CBA7; margin-bottom: 4px;">Almuerzo</span>
-                    <h3 id="ufdFoodTitle" style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 0;">
+                    <h3 id="ufdFoodTitle" style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 0; line-height: 1.25;">
                         Pechuga de Pollo a la Plancha</h3>
                 </div>
             </div>
@@ -7924,7 +7947,7 @@
                 style="margin-bottom: 14px; font-size: 12.5px; color: #CBD5E1; line-height: 1.5; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 10px 12px;">
                 <strong style="color: #FFFFFF; display: block; margin-bottom: 6px; font-size: 12px;">Ingredientes
                     Principales:</strong>
-                <div id="ufdIngredientsText" style="display: flex; flex-direction: column; gap: 3px;">-</div>
+                <div id="ufdIngredientsText" style="display: flex; flex-direction: column; gap: 4px;">-</div>
             </div>
 
             <div id="ufdStepsWrap"
@@ -7942,9 +7965,29 @@
                 </div>
             </div>
 
-            <!-- Tip de Nico & Alérgenos -->
-            <div class="sens-nutri-directive-card" id="ufdTipWrap" style="margin-bottom: 16px;">
-                <strong>Tip de Nico:</strong> <span id="ufdCoachTipText">-</span>
+            <!-- TRUCO DEL CHEF (NUEVO SENS V2) -->
+            <div class="sens-chef-trick-card" id="ufdChefTrickWrap" style="margin-bottom: 14px; display: none;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                    <span style="font-size: 14px;">👨‍🍳</span>
+                    <strong style="color: #E5CBA7; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;">Truco del Chef SENS</strong>
+                </div>
+                <p id="ufdChefTrickText" style="margin: 0; font-size: 12px; color: #F4F4F5; line-height: 1.5;">-</p>
+            </div>
+
+            <!-- Tip del Coach / Nutricionista Deportivo -->
+            <div class="sens-nutri-directive-card" id="ufdTipWrap" style="margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                    <span style="font-size: 13px;">🧬</span>
+                    <strong style="color: #38BDF8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;">Tip Nutricionista Deportivo</strong>
+                </div>
+                <p id="ufdCoachTipText" style="margin: 0; font-size: 12px; color: #E4E4E7; line-height: 1.5;">-</p>
+            </div>
+
+            <!-- Reemplazos Equivalentes & Micronutrientes -->
+            <div id="ufdEquivalentsWrap"
+                style="margin-bottom: 14px; font-size: 11.5px; color: #94A3B8; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 10px 12px; display: none;">
+                <strong style="color: #FFFFFF; font-size: 11.5px; display: block; margin-bottom: 4px;">Reemplazos Equivalentes:</strong>
+                <span id="ufdEquivalentsText" style="color: #CBD5E1; line-height: 1.4;">-</span>
             </div>
 
             <div id="ufdAllergensWrap"
@@ -7953,11 +7996,75 @@
                 <span id="ufdAllergensText" style="font-weight: 700; color: #E4E4E7;">Ninguno declarado</span>
             </div>
 
-            <!-- Botón de Confirmación -->
-            <button type="button" class="btn btn-primary" id="btnConfirmUfdPortion"
-                style="width: 100%; padding: 14px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; border-radius: 12px;">
-                Guardar Ajuste de Porción
-            </button>
+            <!-- Botones de Acción: Intercambiar Equivalente + Guardar Ajuste -->
+            <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px;">
+                <button type="button" class="btn btn-outline" id="btnOpenUfdSwapModal"
+                    style="padding: 13px 10px; font-weight: 700; font-size: 12.5px; border-color: rgba(229,203,167,0.4); color: #E5CBA7; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <span>🔄 Intercambiar</span>
+                </button>
+                <button type="button" class="btn btn-primary" id="btnConfirmUfdPortion"
+                    style="padding: 13px 14px; font-weight: 800; font-size: 12.5px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; border-radius: 12px;">
+                    Guardar Porción
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         EXPERIENCIA 1: MODAL DE INTERCAMBIO POR EQUIVALENTE (SWAP INTELIGENTE)
+         ========================================================================= -->
+    <div class="sens-modal-sheet-wrap" id="userFoodSwapModal">
+        <div class="sens-modal-sheet-box" style="max-height: 85vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div>
+                    <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #E5CBA7; letter-spacing: 0.5px;">REEMPLAZO EQUIVALENTE</span>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 2px 0 0 0;">Intercambiar Plato</h3>
+                </div>
+                <button type="button" class="sens-modal-close-btn" id="btnCloseUserFoodSwapModal" aria-label="Cerrar modal">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <p style="font-size: 12px; color: #A1A1AA; margin-bottom: 12px;">
+                Opciones con similar perfil calórico y proteico para <strong id="swapCurrentFoodName" style="color: #FFF;">-</strong>:
+            </p>
+            <div id="userFoodSwapList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+                <!-- Opciones inyectadas dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         EXPERIENCIA 4: MODAL DE LISTA DE SUPERMERCADO INTELIGENTE POR GÓNDOLA
+         ========================================================================= -->
+    <div class="sens-modal-sheet-wrap" id="userShoppingListModal">
+        <div class="sens-modal-sheet-box" style="max-height: 88vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div>
+                    <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #E5CBA7; letter-spacing: 0.5px;">PAUTA ACTIVA</span>
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 2px 0 0 0;">🛒 Lista de Supermercado</h3>
+                </div>
+                <button type="button" class="sens-modal-close-btn" id="btnCloseUserShoppingListModal" aria-label="Cerrar modal">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 8px; flex-wrap: wrap;">
+                <span id="shoppingListMetaCount" style="font-size: 11.5px; color: #A1A1AA;">Generada automáticamente</span>
+                <button type="button" class="btn btn-outline btn-sm" id="btnCopyShoppingListWhatsApp"
+                    style="border-color: #25D366; color: #25D366; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(37,211,102,0.08);">
+                    <span>📋 Copiar WhatsApp</span>
+                </button>
+            </div>
+            <div id="shoppingListContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Grupos por góndola inyectados por app.js -->
+            </div>
+        </div>
+    </div>
         </div>
     </div>
 
@@ -8007,8 +8114,16 @@
 
             <!-- MODO A: Búsqueda y Selección Multi-ingrediente con Filtro de Calorías (Item 8) -->
             <div id="paneCustomSearch">
+                <!-- Selector Segmentado: Todos vs Recetas vs Alimentos Base -->
+                <div class="sens-nutri-filter-scroll" id="customSearchTypeRow" style="margin-bottom: 10px;">
+                    <button type="button" class="sens-nutri-tab-pill active" data-type="all">Todos (500)</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-type="Receta">Recetas (380)</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-type="Alimento Base">Alimentos Base (120)</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-type="vianda">❄️ Vianda Fría (289)</button>
+                </div>
+
                 <input type="text" id="customFoodSearchInput" class="input-control"
-                    placeholder="Buscar alimento (ej: Pollo, Avena, Yogur, Palta)..."
+                    placeholder="Buscar alimento o receta (ej: Pollo, Omelette, Bowl, Avena)..."
                     style="font-size: 13px; margin-bottom: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 10px 14px;">
 
                 <!-- Chips de Rango Calórico (Item 8) -->
@@ -9500,7 +9615,7 @@
     </div>
 
     <!-- Base de Datos Maestra de Nutrición SENS (500 Alimentos Oficiales) -->
-    <script src="nutrition_db.js?v=9.8"></script>
+    <script src="nutrition_db.js?v=10.0"></script>
 
     <!-- Motor de Planificación Nutricional de Precisión Coach OS -->
     <script src="coach_nutrition_master.js?v=9.8"></script>
@@ -9550,7 +9665,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=12.6"></script>
+    <script src="app.js?v=12.7"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
