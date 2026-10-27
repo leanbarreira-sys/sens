@@ -12066,18 +12066,16 @@ function renderCoachDynamicWeekStrip() {
             statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
         } else if (isPast) {
             if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
-                statusBadge = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
+                statusBadge = `<span class="sens-day-badge missed" title="No registrado">✕</span>`;
             } else {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
-        } else if (modality === 'presencial') {
-            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
-        } else if (modality === 'online') {
-            statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
-        } else if (modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
+        } else if (isToday) {
+            statusBadge = `<span class="sens-day-badge today" title="Hoy">Hoy</span>`;
+        } else if (hasExercises || modality === 'presencial' || modality === 'online' || modality === 'autonomo') {
+            statusBadge = `<span class="sens-day-badge future-routine" title="Rutina programada">Rutina</span>`;
         } else {
-            statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
+            statusBadge = `<span class="sens-day-badge future-rest" title="Descanso">Descanso</span>`;
         }
 
         const dateFormatted = formatDateDDMM(dayDate);
@@ -14144,7 +14142,7 @@ function renderNutriDaysNav() {
         if (isLogged) {
             badgeHtml = `<span class="sens-day-badge done" title="Plan nutricional registrado">✓</span>`;
         } else if (isToday) {
-            badgeHtml = `<span class="sens-day-badge auto" title="Hoy">Hoy</span>`;
+            badgeHtml = `<span class="sens-day-badge today" title="Hoy">Hoy</span>`;
         } else {
             badgeHtml = `<span class="sens-day-badge rest" title="Pauta activa">–</span>`;
         }
@@ -17519,18 +17517,16 @@ function renderDynamicWeekStrip() {
             statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
         } else if (isPast) {
             if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
-                statusBadge = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
+                statusBadge = `<span class="sens-day-badge missed" title="No registrado">✕</span>`;
             } else {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
-        } else if (modality === 'presencial') {
-            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
-        } else if (modality === 'online') {
-            statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
-        } else if (modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
+        } else if (isToday) {
+            statusBadge = `<span class="sens-day-badge today" title="Hoy">Hoy</span>`;
+        } else if (hasExercises || modality === 'presencial' || modality === 'online' || modality === 'autonomo') {
+            statusBadge = `<span class="sens-day-badge future-routine" title="Rutina programada">Rutina</span>`;
         } else {
-            statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
+            statusBadge = `<span class="sens-day-badge future-rest" title="Descanso">Descanso</span>`;
         }
 
         const heroNum = dayDate.getDate();
@@ -17717,16 +17713,12 @@ function renderWorkoutDaysNav() {
             } else {
                 badgeHtml = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
-        } else if (modality === 'presencial') {
-            badgeHtml = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
-        } else if (modality === 'online') {
-            badgeHtml = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
-        } else if (modality === 'autonomo') {
-            badgeHtml = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
-        } else if (hasExercises) {
-            badgeHtml = `<span class="sens-day-badge plan" style="background: rgba(229,203,167,0.15); color: #E5CBA7; font-weight: 700; font-size: 8.5px; border-radius: 4px; padding: 1px 4px;" title="Rutina planificada">Plan</span>`;
+        } else if (isToday) {
+            badgeHtml = `<span class="sens-day-badge today" title="Hoy">Hoy</span>`;
+        } else if (hasExercises || modality === 'presencial' || modality === 'online' || modality === 'autonomo') {
+            badgeHtml = `<span class="sens-day-badge future-routine" title="Rutina programada">Rutina</span>`;
         } else {
-            badgeHtml = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
+            badgeHtml = `<span class="sens-day-badge future-rest" title="Descanso">Descanso</span>`;
         }
 
         html += `

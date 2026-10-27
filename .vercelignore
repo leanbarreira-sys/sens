@@ -1,0 +1,31 @@
+# Vercel Deployment Ignore
+# Evita subir archivos pesados de desarrollo, backups y bases de datos a Vercel
+
+# Dumps SQL y scripts de backend/database
+*.sql
+supabase/
+
+# Documentos pesados y brandbooks
+*.pdf
+*.docx
+Brandbook - nuevo.pdf
+Bienvenida - datos/
+
+# Archivos de datos brutos y CSVs de procesamiento
+*.csv
+Nutricion/*.csv
+EJERCICIOS/*.csv
+EJERCICIOS/exercises-final/*.csv
+
+# Scripts y utilidades locales de desarrollo
+scripts/
+build_sens_exercise_master.js
+compress.js
+*.exe
+
+# Herramientas de agentes e instrucciones internas
+.agents/
+ARCHITECTURE_AND_GUARDRAILS*.md
+documento-maestro.md
+rules.md
+stitch_sens_quiet_luxury_design_system/

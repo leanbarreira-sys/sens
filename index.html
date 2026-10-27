@@ -75,8 +75,8 @@
     <style>
         html,
         body {
-            background-color: #080809 !important;
-            color: #FFFFFF !important;
+            background-color: #FAF9F6 !important;
+            color: #121214 !important;
             margin: 0;
             padding: 0;
         }
@@ -87,8 +87,8 @@
 
         html.in-portal-mode,
         html.in-portal-mode body {
-            background-color: #F8F9FA !important;
-            color: #09090B !important;
+            background-color: #FAF9F6 !important;
+            color: #121214 !important;
         }
     </style>
 
@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=12.7">
+    <link rel="stylesheet" href="style.css?v=12.9">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -431,7 +431,7 @@
 
         <!-- Sección Método & Quién es Nico -->
         <section class="section-sens" id="metodo"
-            style="background: rgba(18, 18, 20, 0.45); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            style="background: var(--sens-bg-canvas); border-top: 1px solid var(--sens-border-hairline); border-bottom: 1px solid var(--sens-border-hairline);">
             <div class="method-layout">
                 <div>
                     <span class="section-eyebrow">El Método</span>
@@ -499,19 +499,19 @@
                     <div
                         style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:24px;">
                         <div
-                            style="background:#141416; border:none; border-radius:12px; padding:18px; box-shadow:0 4px 16px rgba(0,0,0,0.25);">
+                            style="background: var(--sens-bg-surface); border: 1px solid var(--sens-border-hairline); border-radius: 12px; padding: 18px; box-shadow: var(--sens-shadow-sm);">
                             <span
-                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Antes
+                                style="font-size:10px; font-weight:800; color:var(--sens-text-muted); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Antes
                                 de SENS</span>
-                            <p style="font-size:0.86rem; color:var(--text-secondary); margin:0; line-height:1.45;">
+                            <p style="font-size:0.86rem; color:var(--sens-text-secondary); margin:0; line-height:1.45;">
                                 Rutinas genéricas, molestias articulares o frustración por falta de constancia.</p>
                         </div>
                         <div
-                            style="background:#18181C; border:none; border-radius:12px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.35);">
+                            style="background: var(--sens-bg-surface); border: 1px solid rgba(229, 203, 167, 0.4); border-radius: 12px; padding: 18px; box-shadow: var(--sens-shadow-sm);">
                             <span
-                                style="font-size:10px; font-weight:800; color:var(--accent-primary); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Con
+                                style="font-size:10px; font-weight:800; color:var(--sens-accent-bronze); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Con
                                 SENS</span>
-                            <p style="font-size:0.86rem; color:var(--text-primary); margin:0; line-height:1.45;">Postura
+                            <p style="font-size:0.86rem; color:var(--sens-text-primary); margin:0; line-height:1.45;">Postura
                                 erguida, más energía diaria, cuerpo ágil y un hábito que disfrutas sostener.</p>
                         </div>
                     </div>
@@ -3204,12 +3204,12 @@
                         </button>
                         <button type="button" class="sens-week-day-pill" data-day-key="day4"><span
                                 class="sens-day-name">JUE</span><span class="sens-day-hero-num">–</span>
-                            <div class="sens-day-modality-indicator"><span class="sens-day-badge online">Online</span>
+                            <div class="sens-day-modality-indicator"><span class="sens-day-badge future-routine">Rutina</span>
                             </div>
                         </button>
                         <button type="button" class="sens-week-day-pill active is-today" data-day-key="day5"><span
                                 class="sens-day-name">VIE</span><span class="sens-day-hero-num">–</span>
-                            <div class="sens-day-modality-indicator"><span class="sens-day-badge auto">Aut</span></div>
+                            <div class="sens-day-modality-indicator"><span class="sens-day-badge today">Hoy</span></div>
                         </button>
                         <button type="button" class="sens-week-day-pill" data-day-key="day6"><span
                                 class="sens-day-name">SÁB</span><span class="sens-day-hero-num">–</span>

@@ -1,85 +1,483 @@
-/* =========================================
-   1. DESIGN TOKENS & CORE VARIABLES (Onyx & Champagne - Brandbook v6.0)
-   ========================================= */
+/* ==============================================================================
+   1. SENS DESIGN TOKENS — MODO LIGHT QUIET LUXURY (MASTER TOKENS)
+   ============================================================================== */
 :root {
-    /* --- PALETA BASE & SUPERFICIES (MODO LIGHT QUIET LUXURY) --- */
-    --sens-bg-canvas: #FAF9F6;              /* Lienzo general: alabastro/lino cálido */
-    --sens-bg-surface: #FFFFFF;             /* Contenedores y cards: blanco puro */
-    --sens-bg-surface-subtle: #F3F1ED;      /* Fondos secundarios, pills y chips */
-    --sens-bg-surface-inset: #ECEAE4;       /* Inputs, slots y áreas de contraste suave */
+  /* --- PALETA BASE & SUPERFICIES (LIGHT QUIET LUXURY) --- */
+  --sens-bg-canvas: #FAF9F6;              /* Fondo general: alabastro/lino cálido */
+  --sens-bg-surface: #FFFFFF;             /* Tarjetas, modales, drawers: blanco puro */
+  --sens-bg-surface-subtle: #F3F1ED;      /* Fondos secundarios, pills inactivas, rows alternas */
+  --sens-bg-surface-inset: #ECEAE4;       /* Inputs, campos de texto, slots sombreados */
+  --sens-bg-surface-hover: #F8F6F2;
 
-    /* --- TEXTO & CONTRASTE EDITORIAL --- */
-    --sens-text-primary: #121214;          /* Carbón profundo / tinta negra */
-    --sens-text-secondary: #575659;        /* Gris visón cálido para bajadas y descripciones */
-    --sens-text-muted: #8E8D90;            /* Micro-labels, disclaimers y placeholders */
+  /* --- TEXTO & CONTRASTE EDITORIAL --- */
+  --sens-text-primary: #121214;          /* Carbón profundo / tinta negra */
+  --sens-text-secondary: #575659;        /* Gris visón cálido para bajadas y descripciones */
+  --sens-text-muted: #8E8D90;            /* Micro-labels, disclaimers y placeholders */
+  --sens-text-inverse: #FFFFFF;          /* Solo sobre botones oscuros o fotos */
 
-    /* --- ACENTOS & IDENTIDAD SENS --- */
-    --sens-accent-gold: #E5CBA7;           /* Champagne / arena dorada para CTAs principales */
-    --sens-accent-gold-hover: #D8BD97;     /* Hover de botones dorados */
-    --sens-accent-gold-light: #F7EFE4;     /* Chips recomendados y acentos suaves */
-    --sens-accent-gold-text: #2A241C;      /* Texto de alto contraste sobre botón champagne */
-    --sens-accent-green: #25D366;          /* WhatsApp icon */
-    --sens-accent-tag-bg: #EBF7EE;         /* Badge 'Óptimo' background */
-    --sens-accent-tag-text: #1B7A36;       /* Badge 'Óptimo' texto */
+  /* --- ACENTOS & IDENTIDAD SENS --- */
+  --sens-accent-gold: #E5CBA7;           /* Champagne / arena dorada para CTAs primarios */
+  --sens-accent-gold-hover: #D8BD97;     /* Hover de botones dorados */
+  --sens-accent-gold-light: #F7EFE4;     /* Chips destacados y badges suaves */
+  --sens-accent-gold-text: #2A241C;      /* Texto de alto contraste sobre botón champagne */
+  --sens-accent-bronze: #B38E5D;         /* Destacados tipográficos */
+  --sens-accent-green: #25D366;          /* WhatsApp */
+  --sens-accent-tag-bg: #EBF7EE;         /* Badge 'Óptimo' / éxito background */
+  --sens-accent-tag-text: #1B7A36;       /* Badge 'Óptimo' texto */
 
-    /* --- BORDES & DELINEADO TÁCTIL (HAIRLINE BORDERS) --- */
-    --sens-border-hairline: rgba(18, 18, 20, 0.08); /* Bordes sutiles sin sombras toscas */
-    --sens-border-subtle: rgba(18, 18, 20, 0.12);
-    --sens-border-focus: #121214;
+  /* --- BORDES CAPILARES (HAIRLINE BORDERS) --- */
+  --sens-border-hairline: rgba(18, 18, 20, 0.08); /* Bordes sutiles de cards */
+  --sens-border-subtle: rgba(18, 18, 20, 0.12);   /* Bordes de inputs y divisores */
+  --sens-border-focus: #121214;                   /* Estado focus */
 
-    /* --- SOMBRAS ORGÁNICAS (QUIET LUXURY SHADOWS) --- */
-    --sens-shadow-sm: 0 1px 3px rgba(18, 18, 20, 0.03);
-    --sens-shadow-card: 0 4px 20px -2px rgba(18, 18, 20, 0.04), 0 2px 6px -1px rgba(18, 18, 20, 0.02);
-    --sens-shadow-floating: 0 10px 30px -4px rgba(18, 18, 20, 0.08);
+  /* --- SOMBRAS ORGÁNICAS (QUIET LUXURY SHADOWS) --- */
+  --sens-shadow-sm: 0 1px 3px rgba(18, 18, 20, 0.03);
+  --sens-shadow-card: 0 4px 20px -2px rgba(18, 18, 20, 0.04), 0 2px 6px -1px rgba(18, 18, 20, 0.02);
+  --sens-shadow-floating: 0 10px 30px -4px rgba(18, 18, 20, 0.08);
 
-    /* --- RADIOS --- */
-    --sens-radius-sm: 8px;
-    --sens-radius-md: 14px;
-    --sens-radius-lg: 20px;
-    --sens-radius-full: 9999px;
+  /* --- TIPOGRAFÍA --- */
+  --sens-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-main: var(--sens-font-sans);
+  --font-heading: var(--sens-font-sans);
+  --font-body: var(--sens-font-sans);
+  --font-display: var(--sens-font-sans);
 
-    /* Paleta Onyx & Champagne */
-    --bg-base: #080809;        /* Negro Onyx profundo (70%) */
-    --bg-surface: #121214;     /* Superficies, cards, modales (20%) */
-    --bg-elevated: #1A1A1D;    /* Elementos flotantes, inputs, dropdowns */
-    
-    /* Acento Champagne / Oro Blanco (2% - Impacto y marca) */
-    --accent-primary: #E5CBA7; 
-    --accent-hover: #F2DEBE;
-    --accent-glow: rgba(229, 203, 167, 0.18);
-    
-    /* Jerarquía de Texto */
-    --text-primary: #FFFFFF;   /* Titulares y máxima legibilidad */
-    --text-secondary: #D1D1D5; /* Descripciones y cuerpo */
-    --text-muted: #7A7A80;     /* Metadatos, placeholders */
-    
-    /* Bordes y Glassmorphism */
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(229, 203, 167, 0.4);
-    --glass-bg: rgba(18, 18, 20, 0.85);
-    --border-glass: rgba(255, 255, 255, 0.08);
-    
-    /* Feedback */
-    --success: #4CAF50;
-    --danger: #F44336;
-    
-    /* Tipografía Oficial SENS (Plus Jakarta Sans - Swiss Neogrotesque, Lining Figures & Quiet Luxury) */
-    --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    
-    /* Transiciones & Sombras */
-    --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.6);
-    --shadow-glow: 0 4px 20px var(--accent-glow);
+  /* --- RADIOS DE ESQUINA --- */
+  --sens-radius-sm: 8px;
+  --sens-radius-md: 14px;
+  --sens-radius-lg: 20px;
+  --sens-radius-full: 9999px;
 
-    /* Aliases de compatibilidad */
-    --bg-pure: var(--bg-base);
-    --text-main: var(--text-primary);
-    --accent: var(--accent-primary);
+  /* --- COMPATIBILIDAD CON TOKENS HISTÓRICOS (MAPEADOS A LIGHT LUXURY) --- */
+  --bg-base: var(--sens-bg-canvas);
+  --bg-surface: var(--sens-bg-surface);
+  --bg-elevated: var(--sens-bg-surface-subtle);
+  --bg-glass: rgba(255, 255, 255, 0.88);
+  --glass-bg: rgba(255, 255, 255, 0.88);
+
+  --accent-primary: var(--sens-accent-gold);
+  --accent-hover: var(--sens-accent-gold-hover);
+  --accent-glow: rgba(229, 203, 167, 0.25);
+  --accent: var(--sens-accent-gold);
+  --accent-gray: var(--sens-text-secondary);
+
+  --text-primary: var(--sens-text-primary);
+  --text-secondary: var(--sens-text-secondary);
+  --text-muted: var(--sens-text-muted);
+
+  --border-subtle: var(--sens-border-subtle);
+  --border-strong: var(--sens-border-focus);
+  --border-glass: var(--sens-border-hairline);
+
+  --shadow-card: var(--sens-shadow-card);
+  --shadow-glow: var(--sens-shadow-floating);
+
+  --bg-pure: var(--sens-bg-canvas);
+  --text-main: var(--sens-text-primary);
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --success: #1B7A36;
+  --danger: #D32F2F;
 }
+
+/* ==============================================================================
+   2. HOJA DE ESTILOS DE RESET & RESCATE GLOBAL (COMPATIBILIDAD INSTANTÁNEA)
+   ============================================================================== */
+
+/* 3.1. Fondo y cuerpo global */
+html, body, #root, #__next, .app-container, main {
+  background-color: var(--sens-bg-canvas) !important;
+  color: var(--sens-text-primary) !important;
+  font-family: var(--sens-font-sans) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 3.2. Mapeo específico de tarjetas y contenedores (Zero Wildcards para evitar cuadros anidados) */
+.card,
+.container-card,
+.sens-card,
+.sens-streak-card,
+.sens-plan-status-strip,
+.sens-week-strip-wrap,
+.sens-macro-ring-card,
+.sens-nutri-plan-section,
+.sens-nutri-directive-card,
+.sens-smart-recommender-card,
+.routine-day-card,
+.pricing-card,
+.train-plan-card,
+.coach-card,
+.wizard-card,
+.modal-content,
+.modal-dialog,
+.dialog-card,
+.sens-profile-tier-box,
+.sens-modal-tier-card,
+.sens-unlockables-module-card,
+.coach-directive-station-card,
+.sens-rings-card,
+.sens-habit-track-card,
+.sens-biometrics-summary-card,
+.sens-weekly-workouts-card,
+.sens-block-accordion,
+.sens-nutri-target-hero-card,
+.sens-meal-group-card,
+.sens-pillar-item,
+.sens-workout-summary-card,
+.sens-workout-attendance-box,
+.workout-attendance-pending,
+.presencial-attendance-card,
+.user-avatar-dropdown,
+.coach-tier-mini-card,
+.coach-goal-prescription-box,
+.coach-taxonomy-level-box,
+.coach-lib-item-card,
+.coach-kcal-sim-bar,
+.native-bottom-sheet {
+  background-color: var(--sens-bg-surface) !important;
+  color: var(--sens-text-primary) !important;
+  border: 1px solid var(--sens-border-hairline) !important;
+  box-shadow: var(--sens-shadow-card) !important;
+}
+
+/* Tarjetas con Fondo de Video / Media (Mantienen estética Onyx Oscura con Texto Blanco Nítido) */
+.sens-training-card,
+#dashTrainingVideoCard,
+.sens-training-video-card {
+  background-color: #080809 !important;
+  border: 1px solid var(--sens-border-subtle) !important;
+  box-shadow: var(--sens-shadow-card) !important;
+}
+
+/* Reset total para sub-elementos internos de cards: CERO cajas o bordes en textos, stacks, filas o títulos */
+.sens-card-info-stack,
+.sens-card-domain-eyebrow,
+.sens-card-title-white,
+.sens-card-sub-white,
+.sens-training-card-content,
+.sens-card-top-info-row,
+.sens-card-badge-row,
+.sens-streak-top-row,
+.sens-streak-sub-row,
+.sens-streak-weekly-row,
+.sens-streak-count-col,
+.sens-streak-count-row,
+.sens-streak-badge-wrap,
+.sens-nutri-plan-header,
+.sens-nutri-plan-header * {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 3.3. Títulos y tipografía */
+h1, h2, h3, h4, h5, h6, .heading, [class*="title"], [class*="heading"] {
+  color: var(--sens-text-primary);
+  letter-spacing: -0.02em;
+}
+
+p, span, .text, [class*="subtitle"], [class*="desc"] {
+  color: var(--sens-text-secondary);
+}
+
+/* Micro-etiquetas y kickers */
+.kicker, .badge-kicker, [class*="kicker"], [class*="category-tag"] {
+  font-size: 0.6875rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: var(--sens-text-muted) !important;
+}
+
+/* 3.4. Botones Primarios (Champagne) */
+.btn-primary, button[type="submit"], [class*="btn-primary"], [class*="button-primary"] {
+  background-color: var(--sens-accent-gold) !important;
+  color: var(--sens-accent-gold-text) !important;
+  font-weight: 700 !important;
+  border: none !important;
+  border-radius: var(--sens-radius-sm) !important;
+  letter-spacing: 0.04em !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover, button[type="submit"]:hover {
+  background-color: var(--sens-accent-gold-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* Botones Secundarios / Outlines */
+.btn-secondary, .btn-outline, [class*="btn-outline"], [class*="btn-secondary"] {
+  background-color: transparent !important;
+  color: var(--sens-text-primary) !important;
+  border: 1px solid var(--sens-border-subtle) !important;
+  border-radius: var(--sens-radius-sm) !important;
+  font-weight: 700 !important;
+}
+
+.btn-secondary:hover, .btn-outline:hover {
+  background-color: var(--sens-bg-surface-subtle) !important;
+  border-color: var(--sens-text-primary) !important;
+}
+
+/* 3.5. Inputs, formularios y selects */
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"],
+input[type="number"], select, textarea, .input-field, [class*="input"] {
+  background-color: var(--sens-bg-surface) !important;
+  color: var(--sens-text-primary) !important;
+  border: 1px solid var(--sens-border-subtle) !important;
+  border-radius: var(--sens-radius-sm) !important;
+  padding: 0.875rem 1rem !important;
+  font-family: inherit !important;
+  outline: none !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--sens-text-muted) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--sens-border-focus) !important;
+}
+
+/* 3.6. Pills, Chips, Tabs y Segmented Controls */
+.tabs, .segmented-control, [class*="segmented"], [class*="pill-group"] {
+  background-color: var(--sens-bg-surface-subtle) !important;
+  border-radius: var(--sens-radius-full) !important;
+  padding: 4px !important;
+}
+
+.tab, .segment, [class*="tab-item"] {
+  color: var(--sens-text-secondary) !important;
+  border-radius: var(--sens-radius-full) !important;
+}
+
+.tab.active, .segment.active, [class*="tab-item"].active {
+  background-color: var(--sens-bg-surface) !important;
+  color: var(--sens-text-primary) !important;
+  box-shadow: var(--sens-shadow-sm) !important;
+  font-weight: 700 !important;
+}
+
+/* 3.7. Tablas, Listas de Ejercicios y Logs de Entrenamiento */
+.table, .list-group, [class*="exercise-list"], [class*="workout-row"] {
+  background-color: var(--sens-bg-surface) !important;
+  border-color: var(--sens-border-hairline) !important;
+}
+
+tr, [class*="list-item"] {
+  border-bottom: 1px solid var(--sens-border-hairline) !important;
+  color: var(--sens-text-primary) !important;
+}
+
+tr:nth-child(even), [class*="list-item"]:nth-child(even) {
+  background-color: var(--sens-bg-surface-subtle) !important;
+}
+
+/* 3.8. Modales, Drawers y Overlays */
+.modal-overlay, .modal-backdrop, .dialog-backdrop {
+  background: rgba(18, 18, 20, 0.45) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.modal-content, .modal-dialog, .modal-card, [class*="modal-body"], [class*="modal-container"] {
+  background-color: var(--sens-bg-surface) !important;
+  color: var(--sens-text-primary) !important;
+  border: 1px solid var(--sens-border-hairline) !important;
+  box-shadow: var(--sens-shadow-floating) !important;
+}
+
+/* 3.9. Logo & Icon Inversion */
+.brand-logo-img,
+.brand-logo-img-footer,
+.brand-logo-img-modal,
+.brand-logo-img-portal,
+img[src*="logo-blanco"] {
+  filter: invert(1) brightness(0.12) !important;
+}
+
+/* 3.10. Navbar & Sticky Footers */
+.navbar {
+  background: linear-gradient(to bottom, rgba(250, 249, 246, 0.95), rgba(250, 249, 246, 0.85)) !important;
+  border-bottom: 1px solid var(--sens-border-hairline) !important;
+}
+
+.navbar.scrolled {
+  background: rgba(250, 249, 246, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid var(--sens-border-hairline) !important;
+}
+
+.navbar .nav-link {
+  color: var(--sens-text-primary) !important;
+}
+
+.mobile-quick-bar {
+  background: rgba(250, 249, 246, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-top: 1px solid var(--sens-border-hairline) !important;
+  box-shadow: 0 -4px 20px rgba(18, 18, 20, 0.06) !important;
+}
+
+.mobile-menu-overlay {
+  background: var(--sens-bg-canvas) !important;
+  color: var(--sens-text-primary) !important;
+}
+
+/* Background simple gradient replacement */
+.bg-gradient {
+  background: radial-gradient(circle at 50% 0%, rgba(243, 241, 237, 0.8) 0%, rgba(250, 249, 246, 1) 70%) !important;
+}
+
+/* Hero / Fotos de Entrenadores Overlay (Dark Onyx Gradient Cinematic - Restaura contraste con video) */
+.hero-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(180deg, rgba(8, 8, 9, 0.45) 0%, rgba(8, 8, 9, 0.78) 55%, rgba(8, 8, 9, 0.98) 100%) !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+
+.wellness-editorial-overlay {
+  background: linear-gradient(180deg, rgba(8, 8, 9, 0.35) 0%, rgba(8, 8, 9, 0.75) 60%, rgba(8, 8, 9, 0.95) 100%) !important;
+}
+
+/* Tipografía de Alto Contraste para Hero sobre Fondo Oscuro */
+.hero-train-content,
+.hero-content {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.sens-hero-welcome-question {
+  color: #E5CBA7 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
+.sens-hero-welcome-slogan,
+.hero-title,
+.hero-title * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95) !important;
+}
+
+.hero-description-train,
+.hero-apple-eyebrow {
+  color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85) !important;
+}
+
+.hero-plan-pill.standard {
+  background: rgba(18, 18, 20, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #FFFFFF !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.hero-btn-apple-dark {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Portal topbar */
+.portal-topbar {
+  background: var(--sens-bg-surface) !important;
+  border-bottom: 1px solid var(--sens-border-hairline) !important;
+}
+
+.portal-nav-bar {
+  background: var(--sens-bg-surface) !important;
+  border-bottom: 1px solid var(--sens-border-hairline) !important;
+}
+
+/* 3.11. Rescate de estilos inline oscuros (Dark-to-Light Salvage) */
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #121214"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#121214"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #080809"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#080809"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #0E0E11"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#0E0E11"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #141417"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#141417"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #121216"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#121216"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #1A1A1D"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#1A1A1D"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #080809"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#080809"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #121214"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#121214"] {
+  background: var(--sens-bg-surface) !important;
+  background-color: var(--sens-bg-surface) !important;
+  color: var(--sens-text-primary) !important;
+  border: 1px solid var(--sens-border-hairline) !important;
+  box-shadow: var(--sens-shadow-card) !important;
+}
+
+/* Reemplazo de texto inline blanco por color primario (Excluyendo Hero, Video Cards, Badges y Botones oscuros) */
+:not(.hero-overlay):not(.hero-train-content):not(.hero-train-content *):not(.hero-content):not(.hero-content *):not(.sens-training-card-content):not(.sens-training-card-content *):not(.sens-movement-video-wrap):not(.sens-movement-video-wrap *):not(.btn-primary):not(.btn-workout-attended):not(.pill-champagne):not(.pill-champagne *):not([class*="badge-"]):not(.sens-chip-champagne)[style*="color: #FFFFFF"],
+:not(.hero-overlay):not(.hero-train-content):not(.hero-train-content *):not(.hero-content):not(.hero-content *):not(.sens-training-card-content):not(.sens-training-card-content *):not(.sens-movement-video-wrap):not(.sens-movement-video-wrap *):not(.btn-primary):not(.btn-workout-attended):not(.pill-champagne):not(.pill-champagne *):not([class*="badge-"]):not(.sens-chip-champagne)[style*="color:#FFFFFF"],
+:not(.hero-overlay):not(.hero-train-content):not(.hero-train-content *):not(.hero-content):not(.hero-content *):not(.sens-training-card-content):not(.sens-training-card-content *):not(.sens-movement-video-wrap):not(.sens-movement-video-wrap *):not(.btn-primary):not(.btn-workout-attended):not(.pill-champagne):not(.pill-champagne *):not([class*="badge-"]):not(.sens-chip-champagne)[style*="color: #fff"],
+:not(.hero-overlay):not(.hero-train-content):not(.hero-train-content *):not(.hero-content):not(.hero-content *):not(.sens-training-card-content):not(.sens-training-card-content *):not(.sens-movement-video-wrap):not(.sens-movement-video-wrap *):not(.btn-primary):not(.btn-workout-attended):not(.pill-champagne):not(.pill-champagne *):not([class*="badge-"]):not(.sens-chip-champagne)[style*="color:#fff"] {
+  color: var(--sens-text-primary) !important;
+}
+
+/* Protección de Texto en Tarjetas con Video (Portal Workout Focus Video Card) */
+.sens-training-card-content .sens-card-domain-eyebrow {
+  color: #E5CBA7 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95) !important;
+}
+
+.sens-training-card-content .sens-card-title-white,
+.sens-training-card-content #dashWorkoutFocusTitle {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95) !important;
+}
+
+.sens-training-card-content .sens-card-sub-white,
+.sens-training-card-content #dashWorkoutSubFocus {
+  color: rgba(255, 255, 255, 0.92) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
+.sens-training-card-content .btn-reschedule-home-chip,
+.sens-training-card-content [onclick*="openRescheduleModal"] {
+  color: #E5CBA7 !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
+}
+
+.sens-card-cta-gold {
+  color: #E5CBA7 !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Preservar alto contraste en botones dorados o badges oscuros específicos */
+.btn-primary,
+.btn-primary *,
+[class*="btn-primary"] *,
+.pill-champagne,
+.pill-champagne *,
+.tag-champagne,
+[style*="background: #E5CBA7"],
+[style*="background:#E5CBA7"] {
+  color: var(--sens-accent-gold-text) !important;
+}
+
+.badge-tag-optimo {
+  background: var(--sens-accent-tag-bg) !important;
+  color: var(--sens-accent-tag-text) !important;
+}
+
 
 * {
     margin: 0;
@@ -4453,10 +4851,10 @@ video.ig-img {
     width: 100%;
     max-width: 680px;
     margin: 20px auto 40px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
+    background: var(--sens-bg-surface);
+    border: 1px solid var(--sens-border-hairline);
     border-radius: 20px;
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
+    box-shadow: var(--sens-shadow-floating);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -4475,8 +4873,8 @@ video.ig-img {
 /* Encabezado del Wizard */
 .wizard-header {
     padding: 24px 30px 16px;
-    background: rgba(18, 18, 20, 0.95);
-    border-bottom: 1px solid var(--border-subtle);
+    background: var(--sens-bg-surface);
+    border-bottom: 1px solid var(--sens-border-hairline);
     position: relative;
 }
 
@@ -4750,8 +5148,8 @@ video.ig-img {
     display: flex;
     gap: 14px;
     align-items: flex-start;
-    background: rgba(229, 203, 167, 0.04);
-    border-left: 3px solid var(--accent-primary);
+    background: var(--sens-bg-surface-subtle);
+    border-left: 3px solid var(--sens-accent-gold);
     padding: 16px;
     border-radius: 0 12px 12px 0;
     margin-bottom: 24px;
@@ -4764,12 +5162,12 @@ video.ig-img {
 
 .legal-text {
     font-size: 13px;
-    color: #B5B5BC;
+    color: var(--sens-text-secondary);
     line-height: 1.5;
 }
 
 .legal-text strong {
-    color: var(--text-primary);
+    color: var(--sens-text-primary);
 }
 
 /* Touch Cards (Gamified Ergonomics - Mínimo 44x44px target) */
@@ -4785,18 +5183,19 @@ video.ig-img {
     gap: 16px;
     padding: 16px 20px;
     min-height: 56px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
+    background: var(--sens-bg-surface);
+    border: 1px solid var(--sens-border-hairline);
     border-radius: 14px;
     cursor: pointer;
+    box-shadow: var(--sens-shadow-sm);
     transition: var(--transition);
     user-select: none;
     position: relative;
 }
 
 .touch-card:hover {
-    border-color: rgba(229, 203, 167, 0.35);
-    background: rgba(26, 26, 29, 0.95);
+    border-color: var(--sens-accent-gold);
+    background: var(--sens-bg-surface-hover);
     transform: translateY(-2px);
 }
 
@@ -6295,15 +6694,16 @@ input[type="range"]::-moz-range-track {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    background: #141417 !important;
-    border: 1px solid rgba(229, 203, 167, 0.35) !important;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7);
+    background: #FFFFFF !important;
+    border: 1px solid var(--sens-border-subtle) !important;
+    box-shadow: var(--sens-shadow-floating) !important;
     border-radius: 12px;
     padding: 16px 20px;
     display: none;
     align-items: center;
     gap: 18px;
     z-index: 2000;
+    color: var(--sens-text-primary) !important;
     animation: slideUpTimer 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -7333,11 +7733,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
     top: calc(100% + 10px);
     right: 0;
     width: 270px;
-    background: #141417 !important;
-    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    background: #FFFFFF !important;
+    border: 1px solid var(--sens-border-subtle) !important;
     border-radius: 16px;
     padding: 12px;
-    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    box-shadow: var(--sens-shadow-floating) !important;
     z-index: 10005 !important;
     display: none;
     overflow: visible !important;
@@ -7568,14 +7968,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%) translateY(120px);
-    background: #141417 !important;
+    background: #FFFFFF !important;
     border: 1px solid var(--accent-primary);
     border-radius: 40px;
     padding: 10px 24px;
     display: flex;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(229, 203, 167, 0.25);
+    box-shadow: var(--sens-shadow-floating) !important;
     z-index: 1500;
     transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -8359,14 +8759,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
     width: 100%;
     max-width: 520px;
     max-height: 82vh;
-    background: #121216;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-bottom: none;
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-subtle) !important;
+    border-bottom: none !important;
     border-radius: 22px 22px 0 0;
     z-index: 10000;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.85);
+    box-shadow: var(--sens-shadow-floating) !important;
     transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.32s ease;
     overscroll-behavior: contain;
     visibility: hidden;
@@ -8598,8 +8998,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .sheet-footer {
     padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    background: #121216;
+    border-top: 1px solid var(--sens-border-hairline) !important;
+    background: var(--sens-bg-surface) !important;
 }
 
 
@@ -8827,20 +9227,23 @@ input[type="range"]::-webkit-slider-thumb:hover {
     align-items: center;
     justify-content: center;
     gap: 2px;
-    padding: 8px 2px 6px 2px;
-    border-radius: 14px;
-    background: transparent;
-    border: 1.5px solid transparent;
-    color: var(--text-muted);
+    padding: 10px 4px 8px 4px;
+    border-radius: 16px;
+    background: #FFFFFF !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    box-shadow: var(--sens-shadow-sm) !important;
+    color: var(--sens-text-muted);
     cursor: pointer;
     font-family: var(--font-main);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     min-width: 0;
+    text-align: center;
 }
 
 .sens-week-day-pill:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: #FFFFFF;
+    background: var(--sens-bg-surface-hover) !important;
+    border-color: var(--sens-border-subtle) !important;
+    transform: translateY(-1px);
 }
 
 .sens-week-day-name,
@@ -8851,6 +9254,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     line-height: 1;
+    color: var(--sens-text-secondary);
+    margin-bottom: 2px;
 }
 
 .sens-day-hero-num,
@@ -8858,36 +9263,38 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .sens-day-num {
     font-family: var(--font-heading);
     font-variant-numeric: tabular-nums lining-nums;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
     line-height: 1.15;
-    margin: 3px 0 4px 0;
+    margin: 2px 0 4px 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
 .sens-week-day-pill.active {
-    background: #09090B !important;
-    border: 1.5px solid #9E7D4B !important;
-    box-shadow: 0 8px 24px rgba(9, 9, 11, 0.28), 0 0 0 1px rgba(158, 125, 75, 0.35) !important;
-    transform: translateY(-2px) !important;
+    background: #E5CBA7 !important;
+    border: 1px solid rgba(184, 147, 96, 0.45) !important;
+    box-shadow: 0 8px 20px rgba(251, 222, 185, 0.45) !important;
+    transform: scale(1.04) translateY(-1px) !important;
+    z-index: 2;
 }
 
 .sens-week-day-pill.active .sens-week-day-num,
 .sens-week-day-pill.active .sens-day-hero-num,
 .sens-week-day-pill.active .sens-day-num {
     background: transparent !important;
-    color: #FFFFFF !important;
+    color: #2A241C !important;
+    -webkit-text-fill-color: #2A241C !important;
     box-shadow: none !important;
     font-weight: 800 !important;
 }
 
 .sens-week-day-pill.active .sens-week-day-name,
 .sens-week-day-pill.active .sens-day-name {
-    color: #E5CBA7 !important;
+    color: #564428 !important;
     font-weight: 700 !important;
 }
 
@@ -10229,17 +10636,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 /* 2. Cuadro Resumen Compacto de Sesión & Registro de Asistencia (Ligero, Menos Pesado) */
 .sens-workout-summary-card {
-    background: #141417;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
     border-radius: 16px;
     padding: 12px 14px;
     margin-bottom: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--sens-shadow-card) !important;
 }
 
 body.in-portal .sens-workout-summary-card {
-    background: #141417 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
 }
 
 .sens-workout-summary-top {
@@ -10249,7 +10656,7 @@ body.in-portal .sens-workout-summary-card {
     flex-wrap: wrap;
     gap: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--sens-border-hairline);
 }
 
 .sens-workout-summary-info {
@@ -10263,14 +10670,14 @@ body.in-portal .sens-workout-summary-card {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    color: #B89360;
+    color: var(--sens-accent-gold-text);
 }
 
 .sens-workout-summary-title {
     font-family: var(--font-heading);
     font-size: 1rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--sens-text-primary) !important;
     margin: 0;
     line-height: 1.25;
 }
@@ -10843,7 +11250,6 @@ body.in-portal .sens-coach-daily-note-card {
     display: flex;
     align-items: center;
     gap: 2px;
-}
 }
 
 /* Grilla de Cards de Video (Estilo Pilares) */
@@ -13762,85 +14168,122 @@ body.in-portal .sens-dock-item.active svg,
     font-weight: 700;
     line-height: 1;
     letter-spacing: 0.3px;
-    padding: 2.5px 6px;
-    border-radius: 4px;
-    max-width: 100%;
-    white-space: nowrap;
-    border: none !important;
-}
-
-.sens-day-badge.presencial {
-    background: rgba(158, 125, 75, 0.12) !important;
-    color: #9E7D4B !important;
-    border: none !important;
-}
-
-.sens-day-badge.online {
-    background: #F4F4F5 !important;
-    color: #18181B !important;
-    border: none !important;
-}
-
-.sens-day-badge.auto {
-    background: #F4F4F5 !important;
-    color: #71717A !important;
     border: none !important;
 }
 
 .sens-day-badge.done {
-    background: #E4E4E7 !important;
-    color: #09090B !important;
-    border: none !important;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #EAF6EE !important;
+    color: #1E7B42 !important;
+    font-size: 11px;
     font-weight: 800;
-    font-size: 10px;
-    min-width: 18px;
-    padding: 2.5px 5px;
+    box-shadow: 0 1px 3px rgba(30, 123, 66, 0.15);
+}
+
+.sens-day-badge.missed {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #F3F1ED !important;
+    color: #575659 !important;
+    font-size: 11px;
+    font-weight: 700;
 }
 
 .sens-day-badge.rest {
-    color: #A1A1AA !important;
-    font-size: 11px;
-    font-weight: 600;
+    color: #8E8D90 !important;
+    font-size: 12px;
+    font-weight: 500;
     background: transparent !important;
-    border: none !important;
-    padding: 0;
+}
+
+.sens-day-badge.today {
+    padding: 2.5px 6px;
+    border-radius: 9999px;
+    background: #FFFFFF !important;
+    color: #2A241C !important;
+    font-size: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.sens-day-badge.future-routine {
+    padding: 2.5px 6px;
+    border-radius: 9999px;
+    background: #F7EFE4 !important;
+    color: #8C6A38 !important;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.sens-day-badge.future-rest {
+    padding: 2.5px 6px;
+    border-radius: 9999px;
+    background: #F3F1ED !important;
+    color: #8E8D90 !important;
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.sens-day-badge.presencial {
+    padding: 2px 6px;
+    border-radius: 9999px;
+    background: #F7EFE4 !important;
+    color: #8C6A38 !important;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.sens-day-badge.online {
+    padding: 2px 6px;
+    border-radius: 9999px;
+    background: #F3F1ED !important;
+    color: #575659 !important;
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.sens-day-badge.auto {
+    padding: 2px 6px;
+    border-radius: 9999px;
+    background: #F3F1ED !important;
+    color: #575659 !important;
+    font-size: 8px;
+    font-weight: 600;
 }
 
 /* Active pill variations */
-body.in-portal .sens-week-day-pill.active .sens-day-badge.presencial {
-    background: #E5CBA7 !important;
-    color: #09090B !important;
-    border: none !important;
-    font-weight: 800 !important;
-}
-
-body.in-portal .sens-week-day-pill.active .sens-day-badge.online {
-    background: rgba(255, 255, 255, 0.2) !important;
-    color: #FFFFFF !important;
-    border: none !important;
-    font-weight: 700 !important;
-}
-
-body.in-portal .sens-week-day-pill.active .sens-day-badge.auto {
-    background: rgba(255, 255, 255, 0.15) !important;
-    color: #FFFFFF !important;
-    border: none !important;
-}
-
 body.in-portal .sens-week-day-pill.active .sens-day-badge.done {
-    background: #E5CBA7 !important;
-    color: #09090B !important;
-    border: none !important;
-    font-weight: 800 !important;
+    background: #FFFFFF !important;
+    color: #1E7B42 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.today {
+    background: #FFFFFF !important;
+    color: #2A241C !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.presencial,
+body.in-portal .sens-week-day-pill.active .sens-day-badge.online,
+body.in-portal .sens-week-day-pill.active .sens-day-badge.auto {
+    background: rgba(255, 255, 255, 0.4) !important;
+    color: #2A241C !important;
 }
 
 body.in-portal .sens-week-day-pill.active .sens-day-badge.rest,
 .sens-week-day-pill.active .sens-day-badge.rest {
-    color: #71717A !important;
+    color: #564428 !important;
     border: none !important;
     background: transparent !important;
     font-weight: 700 !important;
-    font-size: 13px !important;
 }
 
 /* Leyenda de Modalidades debajo del Calendario */
@@ -14393,29 +14836,30 @@ body.in-portal .tape-input-control,
     color: rgba(255, 255, 255, 0.65) !important;
 }
 
-/* 3. Filas Agrupadas de Comida & Tarjetas Nutricionales Oscuras */
+/* 3. Filas Agrupadas de Comida & Tarjetas Nutricionales */
 body.in-portal .sens-meal-group-card,
 .sens-meal-group-card {
-    background: #121216 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    color: #FFFFFF !important;
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    color: var(--sens-text-primary) !important;
+    box-shadow: var(--sens-shadow-sm) !important;
 }
 
 body.in-portal .sens-meal-group-header,
 .sens-meal-group-header {
-    color: #FFFFFF !important;
+    color: var(--sens-text-primary) !important;
     font-weight: 800 !important;
 }
 
 body.in-portal .sens-meal-name,
 .sens-meal-name {
-    color: #FFFFFF !important;
+    color: var(--sens-text-primary) !important;
     font-weight: 700 !important;
 }
 
 body.in-portal .sens-meal-desc,
 .sens-meal-desc {
-    color: rgba(255, 255, 255, 0.72) !important;
+    color: var(--sens-text-secondary) !important;
 }
 
 body.in-portal .sens-nutri-date-nav,
@@ -15860,18 +16304,19 @@ body.in-portal #coachHubView {
 }
 
 .coach-tier-mini-card {
-    background: #141417 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
     border-radius: 12px;
     padding: 12px;
     display: flex;
     flex-direction: column;
     gap: 3px;
+    box-shadow: var(--sens-shadow-sm);
 }
 
 .coach-tier-mini-card.highlight-saas {
-    border-color: rgba(229, 203, 167, 0.35) !important;
-    background: linear-gradient(145deg, #16161A 0%, rgba(229, 203, 167, 0.08) 100%) !important;
+    border-color: rgba(229, 203, 167, 0.6) !important;
+    background: linear-gradient(145deg, #FFFFFF 0%, rgba(229, 203, 167, 0.12) 100%) !important;
 }
 
 .tier-mini-tag {
@@ -15879,13 +16324,13 @@ body.in-portal #coachHubView {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: #E5CBA7 !important;
+    color: var(--sens-accent-gold-text) !important;
 }
 
 .coach-tier-mini-card strong {
     font-size: 12px;
     font-weight: 800;
-    color: #FFFFFF !important;
+    color: var(--sens-text-primary) !important;
 }
 
 .tier-mini-price {
@@ -15897,16 +16342,17 @@ body.in-portal #coachHubView {
 
 .coach-tier-mini-card small {
     font-size: 10px;
-    color: #71717A !important;
+    color: var(--sens-text-secondary) !important;
     line-height: 1.3;
 }
 
 /* 6. Clinical Copilot & Goal Prescription Box */
 .coach-goal-prescription-box {
-    background: #141417 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
     border-radius: 16px;
     padding: 14px 16px;
+    box-shadow: var(--sens-shadow-sm);
 }
 
 .coach-ai-recommendation-banner {
@@ -15952,11 +16398,12 @@ body.in-portal #coachHubView {
 
 /* 7. Taxonomy Level Box */
 .coach-taxonomy-level-box {
-    background: #141417 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
     border-radius: 14px;
     padding: 12px 14px;
     margin-bottom: 12px;
+    box-shadow: var(--sens-shadow-sm);
 }
 
 .coach-taxonomy-level-label {
@@ -15965,7 +16412,7 @@ body.in-portal #coachHubView {
     font-weight: 800;
     letter-spacing: 0.9px;
     text-transform: uppercase;
-    color: #52525B;
+    color: var(--sens-text-secondary);
     margin-bottom: 8px;
 }
 
@@ -15975,18 +16422,19 @@ body.in-portal #coachHubView {
     justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
-    background: #121215;
-    color: #FFFFFF;
+    background: var(--sens-bg-surface) !important;
+    color: var(--sens-text-primary) !important;
     padding: 12px 16px;
     border-radius: 14px;
     margin-bottom: 16px;
-    border: 1px solid rgba(229, 203, 167, 0.25);
+    border: 1px solid var(--sens-border-hairline) !important;
+    box-shadow: var(--sens-shadow-sm);
 }
 
 .coach-kcal-sim-label {
     font-size: 12px;
     font-weight: 600;
-    color: #E4E4E7;
+    color: var(--sens-text-secondary);
 }
 
 .coach-kcal-sim-controls {
@@ -15995,16 +16443,16 @@ body.in-portal #coachHubView {
     gap: 6px;
     font-size: 12px;
     font-weight: 700;
-    color: #E5CBA7;
+    color: var(--sens-accent-gold-text);
 }
 
 .coach-kcal-sim-controls input {
     width: 54px;
     padding: 5px 8px;
     border-radius: 8px;
-    border: 1px solid rgba(229, 203, 167, 0.35);
-    background: rgba(255, 255, 255, 0.08);
-    color: #FFFFFF;
+    border: 1px solid var(--sens-border-subtle);
+    background: var(--sens-bg-surface-inset);
+    color: var(--sens-text-primary);
     font-weight: 800;
     text-align: center;
     font-variant-numeric: tabular-nums;
@@ -16017,8 +16465,8 @@ body.in-portal #coachHubView {
 }
 
 .coach-lib-item-card {
-    background: #141417 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
     border-radius: 18px !important;
     padding: 16px;
     display: flex;
@@ -16567,9 +17015,8 @@ body.in-portal #coachHubView {
 }
 
 .sens-mkt-adjust-btn.active small {
-    color: #FFFFFF !important;
+    color: #E5CBA7 !important;
     opacity: 0.88;
-}
 }
 
 /* Selector Modular de Capas Visibles SENS */
@@ -20289,7 +20736,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     position: fixed;
     inset: 0;
     z-index: 10005;
-    background: radial-gradient(circle at center, rgba(30, 24, 18, 0.94) 0%, rgba(8, 8, 9, 0.96) 80%);
+    background: rgba(18, 18, 20, 0.45);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
@@ -20300,14 +20747,14 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 }
 
 .sens-congrats-card {
-    background: #141418;
-    border: 1px solid rgba(229, 203, 167, 0.45);
+    background: #FFFFFF !important;
+    border: 1px solid rgba(229, 203, 167, 0.45) !important;
     border-radius: 26px;
     padding: 34px 26px;
-    max-width: 390px;
+    max-width: 400px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 0 60px rgba(229, 203, 167, 0.35), 0 20px 50px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 16px 48px -4px rgba(18, 18, 20, 0.12), 0 0 24px rgba(229, 203, 167, 0.25) !important;
     animation: sensCongratsPop 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
@@ -20379,7 +20826,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-congrats-title {
     font-size: 1.3rem;
     font-weight: 900;
-    color: #FFFFFF;
+    color: var(--sens-text-primary) !important;
     letter-spacing: 0.8px;
     margin: 0 0 6px 0;
 }
@@ -20387,16 +20834,16 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-congrats-subtitle {
     font-size: 13.5px;
     font-weight: 700;
-    color: #E5CBA7;
+    color: var(--sens-accent-bronze) !important;
     margin: 0 0 14px 0;
 }
 
 .sens-congrats-quote {
     font-size: 12px;
-    color: #A1A1AA;
+    color: var(--sens-text-secondary) !important;
     line-height: 1.45;
     font-style: italic;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--sens-border-hairline) !important;
     padding-top: 12px;
 }
 
@@ -20413,11 +20860,11 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 
 .sens-congrats-level-pill {
     display: inline-block;
-    padding: 3px 12px;
+    padding: 4px 12px;
     border-radius: 999px;
-    background: rgba(229, 203, 167, 0.15);
-    border: 1px solid rgba(229, 203, 167, 0.35);
-    color: #E5CBA7;
+    background: #EAF6EE !important;
+    border: 1px solid rgba(30, 123, 66, 0.25) !important;
+    color: #1E7B42 !important;
     font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
@@ -20426,8 +20873,8 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 }
 
 .sens-congrats-streak-counter-bump {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(229, 203, 167, 0.25);
+    background: var(--sens-bg-surface-subtle) !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
     border-radius: 14px;
     padding: 8px 16px;
     display: inline-flex;
@@ -20439,7 +20886,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-bump-number {
     font-size: 26px;
     font-weight: 900;
-    color: #E5CBA7;
+    color: var(--sens-text-primary) !important;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     animation: sensCountBump 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -20454,7 +20901,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-bump-label {
     font-size: 10.5px;
     font-weight: 800;
-    color: #FFFFFF;
+    color: var(--sens-accent-bronze) !important;
     letter-spacing: 0.6px;
     text-transform: uppercase;
 }
@@ -21579,8 +22026,8 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 }
 
 .sens-pillar-item {
-    background: #18181D;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--sens-bg-surface) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
     border-radius: 12px;
     padding: 9px 10px;
     display: flex;
@@ -21588,6 +22035,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     justify-content: space-between;
     min-height: 82px;
     cursor: pointer;
+    box-shadow: var(--sens-shadow-sm) !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     -webkit-tap-highlight-color: transparent;
     user-select: none;
@@ -21595,9 +22043,9 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 }
 
 .sens-pillar-item:hover {
-    border-color: rgba(229, 203, 167, 0.3);
+    border-color: var(--sens-accent-gold) !important;
     transform: translateY(-1px);
-    background: #1C1C22;
+    background: var(--sens-bg-surface-hover) !important;
 }
 
 .sens-pillar-item:active {
@@ -21608,11 +22056,12 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    border: 1.5px solid var(--sens-border-subtle);
     display: flex;
     align-items: center;
     justify-content: center;
     color: transparent;
+    background: var(--sens-bg-surface-subtle);
     transition: all 0.2s ease;
     margin-bottom: 4px;
 }
@@ -21620,7 +22069,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-pillar-chk.done {
     background: #10B981;
     border-color: #10B981;
-    color: #080809;
+    color: #FFFFFF;
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 
@@ -21634,14 +22083,16 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-pillar-heading {
     font-size: 11px;
     font-weight: 800;
-    color: #FFFFFF;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
     line-height: 1.2;
     margin-bottom: 0;
 }
 
 .sens-pillar-metric {
     font-size: 9.5px;
-    color: #8E8E93;
+    color: var(--sens-text-secondary) !important;
+    -webkit-text-fill-color: var(--sens-text-secondary) !important;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -21656,8 +22107,10 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     letter-spacing: 0.4px;
     padding: 2px 6px;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #8E8E93;
+    background: var(--sens-bg-surface-subtle) !important;
+    color: var(--sens-text-secondary) !important;
+    -webkit-text-fill-color: var(--sens-text-secondary) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
     transition: all 0.2s ease;
 }
 
@@ -21671,11 +22124,6 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     background: rgba(239, 68, 68, 0.15) !important;
     color: #F87171 !important;
     border: 1px solid rgba(239, 68, 68, 0.35) !important;
-}
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #71717A;
-    margin-top: 6px;
 }
 
 .sens-pillar-pill.done {
@@ -23233,12 +23681,630 @@ textarea,
     color: #E5CBA7;
 }
 
+/* ==============================================================================
+   3. SENS MODO LIGHT QUIET LUXURY — DEFINITIVE DESIGN SYSTEM ENFORCER
+   ============================================================================== */
 
+/* 3.1. Canvas y superficies globales */
+html,
+body,
+#root,
+#__next,
+.app-container,
+#app-container,
+main,
+.portal-body,
+.sens-portal-root {
+    background-color: var(--sens-bg-canvas) !important;
+    color: var(--sens-text-primary) !important;
+    font-family: var(--sens-font-sans) !important;
+    -webkit-font-smoothing: antialiased;
+}
 
+/* 3.2. Tarjetas y contenedores principales (ÚNICAMENTE contenedores raíz, CERO wildcards) */
+.card,
+.container-card,
+.sens-card,
+.sens-training-card,
+#dashTrainingVideoCard,
+.sens-streak-card,
+#sensDailyStreakCard,
+.sens-plan-status-strip,
+.sens-week-strip-wrap,
+.sens-macro-ring-card,
+.sens-nutri-plan-section,
+#sensMemberNutriPlanSection,
+.routine-day-card,
+.pricing-card,
+.train-plan-card,
+.coach-card,
+.wizard-card,
+.modal-content,
+.modal-dialog,
+.dialog-card,
+.sens-profile-tier-box,
+.sens-modal-tier-card,
+.sens-unlockables-module-card,
+.coach-directive-station-card {
+    background-color: var(--sens-bg-surface) !important;
+    color: var(--sens-text-primary) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    box-shadow: var(--sens-shadow-card) !important;
+}
 
+/* 3.3. ELIMINACIÓN DE CUADROS ANIDADOS: Reset total para sub-elementos internos de tarjetas */
+.sens-card-info-stack,
+.sens-card-domain-eyebrow,
+.sens-card-title-white,
+.sens-card-sub-white,
+.sens-training-card-content,
+.sens-card-top-info-row,
+.sens-card-badge-row,
+.sens-streak-top-row,
+.sens-streak-sub-row,
+.sens-streak-weekly-row,
+.sens-streak-count-col,
+.sens-streak-count-row,
+.sens-streak-badge-wrap,
+.sens-nutri-plan-header,
+.sens-nutri-plan-header *,
+.sens-week-strip-wrap *,
+.sens-routine-group-card *,
+.sens-bump-card *,
+.sens-congrats-card *,
+.sens-card-top-info-row *,
+.sens-card-info-stack *,
+.method-layout *,
+.train-plan-card .plan-price-wrap,
+.train-plan-card .plan-concept-tagline,
+.train-plan-card .plan-features-list,
+.train-plan-card .plan-features-list li {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
 
+/* 3.4. Tipografía Editorial & Jerarquía de Contraste */
+h1, h2, h3, h4, h5, h6, .heading, [class*="title"], [class*="heading"] {
+    color: var(--sens-text-primary) !important;
+    letter-spacing: -0.02em;
+}
 
+p, span, .text, [class*="subtitle"], [class*="desc"] {
+    color: var(--sens-text-secondary);
+}
 
+/* Títulos y bajadas clave integradas en cards */
+.sens-card-title-white {
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+    font-size: 1.55rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    margin: 3px 0 4px !important;
+}
+
+.sens-card-domain-eyebrow {
+    color: var(--sens-text-muted) !important;
+    -webkit-text-fill-color: var(--sens-text-muted) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+}
+
+.sens-card-sub-white {
+    color: var(--sens-text-secondary) !important;
+    -webkit-text-fill-color: var(--sens-text-secondary) !important;
+    font-size: 0.92rem !important;
+}
+
+/* Micro-etiquetas y kickers editoriales */
+.kicker, .badge-kicker, [class*="kicker"], [class*="category-tag"] {
+    font-size: 0.6875rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    color: var(--sens-text-muted) !important;
+}
+
+/* 3.5. Botones y Llamados a la Acción (CTAs) */
+.btn-primary,
+button[type="submit"],
+[class*="btn-primary"],
+[class*="button-primary"] {
+    background-color: var(--sens-accent-gold) !important;
+    color: var(--sens-accent-gold-text) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
+    font-weight: 700 !important;
+    border: none !important;
+    border-radius: var(--sens-radius-sm) !important;
+    letter-spacing: 0.04em !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover,
+button[type="submit"]:hover {
+    background-color: var(--sens-accent-gold-hover) !important;
+    transform: translateY(-1px);
+}
+
+.btn-secondary,
+.btn-outline,
+[class*="btn-outline"],
+[class*="btn-secondary"] {
+    background-color: transparent !important;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+    border: 1px solid var(--sens-border-subtle) !important;
+    border-radius: var(--sens-radius-sm) !important;
+    font-weight: 700 !important;
+}
+
+.btn-secondary:hover,
+.btn-outline:hover {
+    background-color: var(--sens-bg-surface-subtle) !important;
+    border-color: var(--sens-text-primary) !important;
+}
+
+/* Botón "Ver los 4 Planes SENS" en Hero (Modo Light Quiet Luxury) */
+.hero-btn-apple-dark,
+a.hero-btn-apple-dark,
+a.hero-btn-apple-dark:link,
+a.hero-btn-apple-dark:visited {
+    background: #FFFFFF !important;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+    border: 1.5px solid var(--sens-border-subtle) !important;
+    box-shadow: var(--sens-shadow-sm) !important;
+}
+
+.hero-btn-apple-dark:hover,
+a.hero-btn-apple-dark:hover {
+    background: var(--sens-bg-surface-subtle) !important;
+    border-color: var(--sens-text-primary) !important;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+}
+
+/* Flecha circular de avance en card de entrenamiento */
+.sens-btn-circle-arrow {
+    background: var(--sens-accent-gold) !important;
+    color: var(--sens-accent-gold-text) !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(229, 203, 167, 0.45) !important;
+}
+
+.sens-btn-circle-arrow svg {
+    stroke: var(--sens-accent-gold-text) !important;
+}
+
+/* 3.6. Pills, Chips, Tabs y Filtros */
+.tabs,
+.segmented-control,
+[class*="segmented"],
+[class*="pill-group"] {
+    background-color: var(--sens-bg-surface-subtle) !important;
+    border-radius: var(--sens-radius-full) !important;
+    padding: 4px !important;
+}
+
+.tab,
+.segment,
+[class*="tab-item"] {
+    color: var(--sens-text-secondary) !important;
+    border-radius: var(--sens-radius-full) !important;
+}
+
+.tab.active,
+.segment.active,
+[class*="tab-item"].active,
+[aria-selected="true"] {
+    background-color: var(--sens-bg-surface) !important;
+    color: var(--sens-text-primary) !important;
+    box-shadow: var(--sens-shadow-sm) !important;
+    font-weight: 700 !important;
+}
+
+.pill-champagne {
+    background: var(--sens-accent-gold-light) !important;
+    color: var(--sens-accent-gold-text) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
+    border: 1px solid rgba(229, 203, 167, 0.4) !important;
+}
+
+.badge-tag-optimo {
+    background: var(--sens-accent-tag-bg) !important;
+    color: var(--sens-accent-tag-text) !important;
+}
+
+/* Pills flotantes del Hero Landing */
+.sens-hero-compact-pills .hero-plan-pill.standard {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+    border: 1px solid var(--sens-border-subtle) !important;
+    box-shadow: var(--sens-shadow-sm) !important;
+}
+
+.sens-hero-compact-pills .hero-plan-pill.free {
+    background: var(--sens-accent-gold-light) !important;
+    color: var(--sens-accent-gold-text) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
+    border: 1px solid rgba(229, 203, 167, 0.45) !important;
+}
+
+/* Chips de los 4 Tipos de Entrenamiento (Muscular, Cardio, Movilidad, Yoga) */
+.sens-type-chip {
+    background: var(--sens-bg-surface-subtle) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    color: var(--sens-text-secondary) !important;
+    -webkit-text-fill-color: var(--sens-text-secondary) !important;
+}
+
+.sens-type-chip.active,
+.sens-type-chip.highlight {
+    background: var(--sens-accent-gold-light) !important;
+    border-color: rgba(229, 203, 167, 0.45) !important;
+    color: var(--sens-accent-gold-text) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
+}
+
+.sens-type-chip svg {
+    stroke: currentColor !important;
+}
+
+/* 3.7. Tarjeta Tira de Plan Actual en Dashboard (Image 1) */
+.sens-plan-status-strip {
+    background: #FFFFFF !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    box-shadow: var(--sens-shadow-card) !important;
+}
+
+.sens-plan-tier-badge {
+    background: var(--sens-accent-gold) !important;
+    color: var(--sens-accent-gold-text) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
+    font-weight: 800 !important;
+}
+
+.sens-plan-title-compact {
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+}
+
+.sens-plan-days-tag {
+    color: var(--sens-text-secondary) !important;
+    -webkit-text-fill-color: var(--sens-text-secondary) !important;
+}
+
+.btn-sens-plan-upgrade {
+    background: var(--sens-accent-gold) !important;
+    color: var(--sens-accent-gold-text) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
+    border: none !important;
+}
+
+.btn-sens-plan-share {
+    background: var(--sens-bg-surface-subtle) !important;
+    border: 1px solid var(--sens-border-subtle) !important;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+}
+
+/* 3.8. Tarjeta de Racha SENS (Image 1) */
+.sens-streak-card {
+    background: #FFFFFF !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    box-shadow: var(--sens-shadow-card) !important;
+}
+
+.sens-streak-hero-num {
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+}
+
+.sens-streak-hero-unit {
+    color: var(--sens-text-secondary) !important;
+    -webkit-text-fill-color: var(--sens-text-secondary) !important;
+}
+
+.sens-streak-level-tag {
+    color: var(--sens-accent-bronze) !important;
+    -webkit-text-fill-color: var(--sens-accent-bronze) !important;
+}
+
+.sens-streak-status-pill {
+    background: var(--sens-bg-surface-subtle) !important;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+}
+
+.sens-streak-sub {
+    color: var(--sens-text-secondary) !important;
+    -webkit-text-fill-color: var(--sens-text-secondary) !important;
+}
+
+.sens-streak-weekly-label {
+    color: var(--sens-text-muted) !important;
+    -webkit-text-fill-color: var(--sens-text-muted) !important;
+}
+
+/* 3.9. Módulo de Nutrición & Directiva de Nico (Image 5) */
+.sens-nutri-plan-section {
+    background: #FFFFFF !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    box-shadow: var(--sens-shadow-card) !important;
+}
+
+.sens-nutri-plan-header h3 {
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+}
+
+.sens-nutri-directive-card {
+    background: var(--sens-bg-surface-subtle) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+    border-radius: var(--sens-radius-md) !important;
+}
+
+.sens-nutri-directive-card strong {
+    color: var(--sens-accent-bronze) !important;
+    -webkit-text-fill-color: var(--sens-accent-bronze) !important;
+}
+
+.sens-smart-recommender-card {
+    background: var(--sens-bg-surface-subtle) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    color: var(--sens-text-primary) !important;
+    -webkit-text-fill-color: var(--sens-text-primary) !important;
+}
+
+/* 3.10. PROTECCIÓN DE CONTRASTE EN FOTOS Y VIDEOS OSCUROS */
+/* Texto sobre videos en loop */
+.sens-video-top-badges,
+.sens-video-top-badges *,
+.sens-video-dots-indicator span {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+.sens-modality-pill {
+    background: var(--sens-accent-gold) !important;
+    color: var(--sens-accent-gold-text) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
+}
+
+.sens-duration-pill {
+    background: rgba(18, 18, 20, 0.75) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Tarjeta Editorial de Nico (Image 3) - Contraste sobre gradiente de foto */
+.nico-editorial-card .ig-content,
+.nico-editorial-card .ig-content p,
+.nico-editorial-card .ig-content span,
+.nico-editorial-card .ig-content .ig-light,
+.nico-editorial-card .ig-content .ig-body {
+    color: rgba(255, 255, 255, 0.95) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.nico-editorial-card .ig-content .ig-bold {
+    color: var(--sens-accent-gold) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold) !important;
+}
+
+.nico-editorial-card .pill-dark {
+    background: rgba(18, 18, 20, 0.75) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Frente de Flip Cards en Pilares */
+.flip-card-front,
+.flip-card-front h3,
+.flip-card-front .step-number {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 3.11. Barras de Navegación, Topbars y Floating Mobile Dock */
+/* Topbar del portal (Image 1, 4, 5) */
+.portal-topbar {
+    background: rgba(250, 249, 246, 0.96) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--sens-border-hairline) !important;
+    color: var(--sens-text-primary) !important;
+}
+
+.portal-topbar .brand-logo-img-portal,
+.brand-logo-img,
+.brand-logo-img-footer,
+.brand-logo-img-modal,
+img[src*="logo-blanco"] {
+    filter: invert(1) brightness(0.12) !important;
+}
+
+.portal-nav-bar {
+    background: var(--sens-bg-surface) !important;
+    border-bottom: 1px solid var(--sens-border-hairline) !important;
+}
+
+.portal-nav-item {
+    color: var(--sens-text-secondary) !important;
+}
+
+.portal-nav-item.active,
+.portal-nav-item:hover {
+    color: var(--sens-text-primary) !important;
+    border-bottom-color: var(--sens-accent-gold) !important;
+}
+
+/* Mobile Floating Dock (Image 4 & 5) */
+body.in-portal #sensFloatingDock,
+.sens-floating-dock {
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid var(--sens-border-subtle) !important;
+    box-shadow: 0 10px 30px -4px rgba(18, 18, 20, 0.12) !important;
+}
+
+body.in-portal #sensFloatingDock .sens-dock-item,
+.sens-dock-item {
+    color: var(--sens-text-secondary) !important;
+    -webkit-text-fill-color: var(--sens-text-secondary) !important;
+}
+
+body.in-portal #sensFloatingDock .sens-dock-item svg,
+.sens-dock-item svg {
+    stroke: var(--sens-text-secondary) !important;
+}
+
+body.in-portal #sensFloatingDock .sens-dock-item.active,
+.sens-dock-item.active {
+    background: var(--sens-accent-gold-light) !important;
+    color: var(--sens-accent-gold-text) !important;
+    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
+}
+
+body.in-portal #sensFloatingDock .sens-dock-item.active svg,
+.sens-dock-item.active svg {
+    stroke: var(--sens-accent-gold-text) !important;
+}
+
+/* Navbar Principal */
+.navbar,
+header .navbar {
+    background: linear-gradient(to bottom, rgba(250, 249, 246, 0.95), rgba(250, 249, 246, 0.85)) !important;
+    border-bottom: 1px solid var(--sens-border-hairline) !important;
+}
+
+.navbar.scrolled {
+    background: rgba(250, 249, 246, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--sens-border-hairline) !important;
+}
+
+.navbar .nav-link,
+.navbar a {
+    color: var(--sens-text-primary) !important;
+}
+
+.mobile-quick-bar,
+.sticky-footer {
+    background: rgba(250, 249, 246, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-top: 1px solid var(--sens-border-hairline) !important;
+    box-shadow: 0 -4px 20px rgba(18, 18, 20, 0.06) !important;
+}
+
+/* 3.12. Rescate universal de fondos oscuros hardcodeados en contenedores (Excluyendo Hero y Video Cards) */
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #121214"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#121214"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #080809"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#080809"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #0E0E11"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#0E0E11"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #141417"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#141417"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #121216"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#121216"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #1A1A1D"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#1A1A1D"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #09090B"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#09090B"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #080809"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#080809"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #121214"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#121214"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #09090B"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#09090B"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #0E0E11"],
+:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#0E0E11"] {
+    background: var(--sens-bg-surface) !important;
+    background-color: var(--sens-bg-surface) !important;
+    color: var(--sens-text-primary) !important;
+    border: 1px solid var(--sens-border-hairline) !important;
+    box-shadow: var(--sens-shadow-card) !important;
+}
+
+/* =============================================================================
+   SENS QUIET VITALITY — DESKTOP EXPANSION (1024PX+) & FORMULARIO ANAMNESIS
+   ============================================================================= */
+@media (min-width: 1024px) {
+    /* Layout Maestro Desktop */
+    .portal-body,
+    .portal-view {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding-left: var(--sens-margin);
+        padding-right: var(--sens-margin);
+    }
+
+    /* Tira Semanal Desktop Expandida */
+    .sens-week-strip-wrap {
+        padding: 24px;
+        border-radius: 20px;
+    }
+
+    .sens-week-days-strip {
+        gap: 12px;
+    }
+
+    .sens-week-day-pill {
+        min-height: 105px;
+        padding: 14px 10px 12px;
+        border-radius: 18px;
+        justify-content: space-between;
+    }
+
+    .sens-day-hero-num,
+    .sens-week-day-num {
+        font-size: 18px;
+        margin: 4px 0 8px;
+    }
+
+    /* Modal de Ejecución de Ejercicio Desktop (Split 2 Columnas) */
+    #exerciseModal .sheet-content-scroll {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+        align-items: start;
+    }
+
+    /* Wizard Onboarding Desktop Expandido */
+    .wizard-container {
+        max-width: 820px;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px -8px rgba(18, 18, 20, 0.08);
+    }
+
+    .wizard-header {
+        padding: 32px 40px 20px;
+    }
+
+    .wizard-steps-carousel {
+        padding: 36px 40px 40px;
+    }
+
+    .selection-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 14px;
+    }
+}
 
 
 
