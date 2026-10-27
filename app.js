@@ -12071,11 +12071,11 @@ function renderCoachDynamicWeekStrip() {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
         } else if (isToday) {
-            statusBadge = `<span class="sens-day-badge today" title="Hoy">Hoy</span>`;
+            statusBadge = `<span class="sens-day-badge today" title="Hoy">•</span>`;
         } else if (hasExercises || modality === 'presencial' || modality === 'online' || modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge future-routine" title="Rutina programada">Rutina</span>`;
+            statusBadge = `<span class="sens-day-badge future-routine" title="Rutina programada">•</span>`;
         } else {
-            statusBadge = `<span class="sens-day-badge future-rest" title="Descanso">Descanso</span>`;
+            statusBadge = `<span class="sens-day-badge future-rest" title="Descanso">–</span>`;
         }
 
         const dateFormatted = formatDateDDMM(dayDate);
@@ -17522,11 +17522,11 @@ function renderDynamicWeekStrip() {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
         } else if (isToday) {
-            statusBadge = `<span class="sens-day-badge today" title="Hoy">Hoy</span>`;
+            statusBadge = `<span class="sens-day-badge today" title="Hoy">•</span>`;
         } else if (hasExercises || modality === 'presencial' || modality === 'online' || modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge future-routine" title="Rutina programada">Rutina</span>`;
+            statusBadge = `<span class="sens-day-badge future-routine" title="Rutina programada">•</span>`;
         } else {
-            statusBadge = `<span class="sens-day-badge future-rest" title="Descanso">Descanso</span>`;
+            statusBadge = `<span class="sens-day-badge future-rest" title="Descanso">–</span>`;
         }
 
         const heroNum = dayDate.getDate();
@@ -19354,9 +19354,42 @@ function updateSensStreakCard(targetDate = null) {
         ? SensGamification.getStreakLevel(streakDays)
         : { level: 1, title: 'Semilla del Hábito' };
 
-    if (streakNum) streakNum.textContent = streakDays;
+    if (streakNum) streakNum.textContent = `${streakDays} DÍAS`;
     if (streakLevelTag) streakLevelTag.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
     if (flameIcon) flameIcon.classList.toggle('active-glow', streakDays > 0);
+
+    // Actualizar Meta Semanal y 7 Dashes
+    const metaProgressText = document.getElementById('sensStreakMetaProgressText');
+    const weeklyProgress = (streakDays % 7 === 0 && streakDays > 0) ? 7 : (streakDays % 7);
+    if (metaProgressText) metaProgressText.textContent = `${weeklyProgress} de 7 días`;
+
+    for (let dashIdx = 1; dashIdx <= 7; dashIdx++) {
+        const dashEl = document.getElementById(`streakDash${dashIdx}`);
+        if (dashEl) {
+            dashEl.classList.toggle('filled', dashIdx <= weeklyProgress);
+        }
+    }
+
+    // Actualizar Barras de las 3 Píldoras de Métricas (Fuerza, Nutrición, Pasos)
+    const barWorkout = document.getElementById('pillarBarWorkout');
+    if (barWorkout) {
+        barWorkout.style.width = wDone ? '100%' : '0%';
+    }
+
+    const barNutrition = document.getElementById('pillarBarNutrition');
+    if (barNutrition) {
+        const nConsumed = dayRec.nutrition.consumed || 0;
+        const nTarget = dayRec.nutrition.target || 1950;
+        const nPct = Math.min(100, Math.round((nConsumed / Math.max(1, nTarget)) * 100));
+        barNutrition.style.width = `${nPct}%`;
+    }
+
+    const barActivity = document.getElementById('pillarBarActivity');
+    if (barActivity) {
+        const aSteps = dayRec.cardio.steps || 0;
+        const aPct = Math.min(100, Math.round((aSteps / 10000) * 100));
+        barActivity.style.width = `${aPct}%`;
+    }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -19376,23 +19409,23 @@ function updateSensStreakCard(targetDate = null) {
             streakStatusPill.textContent = 'Racha no alcanzada';
         } else {
             streakStatusPill.className = 'sens-streak-status-pill';
-            streakStatusPill.textContent = 'En progreso';
+            streakStatusPill.textContent = 'Hoy';
         }
     }
 
     if (streakSub) {
         if (dayRec.completedCount === 3) {
             streakSub.textContent = '¡Día 100% completado! Racha perfecta asegurada.';
-            streakSub.style.color = '#10B981';
+            streakSub.style.color = '#1E7B42';
         } else if (dayRec.completedCount >= 1) {
             streakSub.textContent = `${dayRec.completedCount} de 3 objetivos cumplidos • ¡Seguí sumando hábitos hoy!`;
-            streakSub.style.color = '#E5CBA7';
+            streakSub.style.color = '#705B3E';
         } else if (isPast) {
-            streakSub.textContent = 'Día finalizado sin cumplir objetivos. Tocá ✕ para ver el detalle.';
-            streakSub.style.color = '#F87171';
+            streakSub.textContent = 'Día finalizado sin cumplir objetivos. Tocá para ver el detalle.';
+            streakSub.style.color = '#ba1a1a';
         } else {
             streakSub.textContent = 'Completá tus objetivos de hoy para mantener la racha activa.';
-            streakSub.style.color = '#A1A1AA';
+            streakSub.style.color = '#575659';
         }
     }
 

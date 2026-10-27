@@ -222,34 +222,30 @@
          MÓDULO 2: PÁGINA PÚBLICA (LANDING PAGE SENS TRAIN)
          ========================================================================= -->
     <main id="publicLanding">
-        <!-- Hero Section (Apple-Grade Premium Presentation) -->
-        <section class="sens-train-hero" id="sensTrainHero">
-            <!-- Skeleton Shimmer Placeholder: Lujo silencioso mientras el video / poster inicializa -->
+        <!-- Hero Section (Light Quiet Luxury Cinematográfico) -->
+        <section class="sens-train-hero sens-hero-quiet-luxury" id="sensTrainHero">
+            <!-- Skeleton Shimmer Placeholder: Lujo silencioso mientras carga -->
             <div class="hero-skeleton-wrap" id="heroSkeleton" aria-hidden="true">
                 <div class="hero-skeleton-shimmer"></div>
-                <div class="hero-skeleton-content">
-                    <div class="hero-skel-pill"></div>
-                    <div class="hero-skel-title"></div>
-                    <div class="hero-skel-subtitle"></div>
-                    <div class="hero-skel-subtitle short"></div>
-                    <div class="hero-skel-actions">
-                        <div class="hero-skel-btn"></div>
-                        <div class="hero-skel-btn outline"></div>
-                    </div>
-                </div>
             </div>
 
-            <!-- Fallback Image: Visible instantáneamente mientras carga el video -->
-            <div class="hero-bg-fallback" id="heroBgFallback"></div>
-            <!-- Video Hero: Se reproduce nítido en loop -->
-            <video autoplay muted loop playsinline preload="auto" poster="img/hero-bg-opt.jpg" class="hero-video"
-                id="heroVideo">
-                <source src="vid/hero-bg-opt.mp4" type="video/mp4">
-            </video>
-            <!-- Overlay Brandbook: Gradiente responsivo (fade abajo en mobile, fade izquierda a derecha en desktop) -->
-            <div class="hero-overlay"></div>
+            <!-- Fondo de Imagen HD de Nico con Fallback & Scrim Degradado de Alto Contraste -->
+            <div class="sens-hero-media-wrap">
+                <img alt="Head Coach Nico guiando una sesión biomecánica" class="sens-hero-img-nico" 
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1DyYdGHkEF9x4S32RCLdFDVgMkb7RjvMIuzl6X2R3ItNYj-BBUvqOdm43sOd38uqWpsHJO_0-cW4JPmW_Sohfjz3TrCc4vSEWFMgtLN1xnqP5zrx-nXmSvWzb1tTdpamaFQKgoIV1nlyepCaA5GeLzPthWujKlTDyqUOouTNXfMl36wMVjtxzsaLLTjzRWNwRY7joOZvKkCO3XB1ztPO9yUMT1w6egDE1ThsaMQ"
+                    onerror="this.onerror=null;this.src='img/img-nico.png'">
+                <div class="sens-hero-scrim"></div>
+            </div>
 
-            <div class="hero-train-content">
+            <!-- Contenido Tipográfico y CTAs -->
+            <div class="sens-hero-content-stack">
+                <!-- Kicker Chip -->
+                <div class="sens-hero-kicker-chip">
+                    <span class="sens-hero-kicker-dot"></span>
+                    <span>Método Biomecánico SENS</span>
+                </div>
+
+                <!-- Título Principal -->
                 <div class="sens-hero-welcome-header play-entrance" id="sensHeroWelcomeHeader">
                     <div class="sens-hero-welcome-question">
                         Hey, ¿entrenamos juntos?
@@ -258,56 +254,50 @@
                         MAKES SENS.
                     </h1>
                 </div>
+
+                <!-- Bajada con Alto Contraste -->
                 <div class="sens-hero-followup play-entrance" id="sensHeroFollowup">
                     <p class="hero-description-train">
                         Fuerza progresiva, postura sin dolor y nutrición inteligente. Probalo gratis 7 días en la App o entrená 1 a 1 con Nico en CABA y Online.
                     </p>
-                    <div class="hero-cta-group">
-                        <button type="button" class="btn btn-primary"
+
+                    <!-- CTAs Primarios -->
+                    <div class="hero-cta-group sens-hero-cta-group-luxury">
+                        <button type="button" class="btn btn-primary sens-hero-btn-champagne"
                             onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()"
                             data-agent-action="start_free_7day_app_trial">
-                            Probar App 7 Días Gratis →
+                            <span>Probar App 7 Días Gratis</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
                         </button>
-                        <a href="#planes" class="btn hero-btn-apple-dark" data-agent-action="view_pricing_plans">
+                        <a href="#planes" class="btn sens-hero-btn-glass" data-agent-action="view_pricing_plans">
                             Ver los 4 Planes SENS
                         </a>
-                        <a href="#sumate" class="btn btn-outline hero-btn-secondary" data-agent-action="schedule_initial_assessment">
-                            Entrenar con Nico
+                        <a href="#sumate" class="sens-hero-link-person" data-agent-action="schedule_initial_assessment">
+                            Entrenar con Nico en persona
                         </a>
                     </div>
-                    <!-- Tira Horizontal Apple-Style de los 4 Escalones SENS (Carrusel Táctil) -->
-                    <div class="sens-hero-pills-container">
-                        <div class="sens-hero-pills-header">
-                            <span class="sens-hero-pills-title">Planes y Membresías</span>
-                            <div class="sens-hero-pills-nav">
-                                <button type="button" class="sens-hero-pills-arrow" onclick="scrollHeroPills(-1)"
-                                    aria-label="Anterior">‹</button>
-                                <span class="sens-hero-pills-counter" id="heroPillsCounter">1 de 4</span>
-                                <button type="button" class="sens-hero-pills-arrow" onclick="scrollHeroPills(1)"
-                                    aria-label="Siguiente">›</button>
-                            </div>
+
+                    <!-- Píldoras Horizontales de los 4 Planes -->
+                    <div class="sens-hero-pills-row-luxury">
+                        <div class="sens-hero-plan-pill-item" onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()">
+                            <span class="sens-pill-dot-green"></span>
+                            <span>1. Plan Free 7d</span>
                         </div>
-                        <div class="sens-hero-compact-pills" id="sensHeroCompactPills">
-                            <button type="button" class="hero-plan-pill free"
-                                onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()">
-                                1. Plan Free • 7 Días $0
-                            </button>
-                            <a href="#planes"
-                                onclick="setTimeout(()=>{const b=document.getElementById('btnModeApp');if(b)b.click();},100);"
-                                class="hero-plan-pill standard">
-                                2. App Premium • $24.9k / 3M $59.9k
-                            </a>
-                            <a href="#planes"
-                                onclick="setTimeout(()=>{const b=document.getElementById('btnModeOnline');if(b)b.click();},100);"
-                                class="hero-plan-pill standard">
-                                3. Online 1:1 • Con Nico
-                            </a>
-                            <a href="#planes"
-                                onclick="setTimeout(()=>{const b=document.getElementById('btnModePresencial');if(b)b.click();},100);"
-                                class="hero-plan-pill standard">
-                                4. Presencial CABA • 1:1
-                            </a>
-                        </div>
+                        <a href="#planes" onclick="setTimeout(()=>{const b=document.getElementById('btnModeApp');if(b)b.click();},100);" class="sens-hero-plan-pill-item">
+                            <span class="sens-pill-dot-gold"></span>
+                            <span>2. App Premium $24.9k</span>
+                        </a>
+                        <a href="#planes" onclick="setTimeout(()=>{const b=document.getElementById('btnModeOnline');if(b)b.click();},100);" class="sens-hero-plan-pill-item">
+                            <span class="sens-pill-dot-white"></span>
+                            <span>3. Online 1:1</span>
+                        </a>
+                        <a href="#planes" onclick="setTimeout(()=>{const b=document.getElementById('btnModePresencial');if(b)b.click();},100);" class="sens-hero-plan-pill-item">
+                            <span class="sens-pill-dot-gold"></span>
+                            <span>4. Presencial CABA</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1255,23 +1245,49 @@
     </div>
 
     <!-- =========================================================================
-         MÓDULO 3: MODAL DE AUTENTICACIÓN (SUPABASE AUTH)
+         MÓDULO 3: MODAL DE AUTENTICACIÓN (SUPABASE AUTH - LIGHT QUIET LUXURY)
          ========================================================================= -->
     <div class="modal-overlay" id="authModal">
-        <div class="modal-card">
-            <button class="modal-close-btn" id="closeAuthModalBtn" aria-label="Cerrar">&times;</button>
-            <img src="img/logo-blanco.png" alt="SENS TRAIN & WELLNESS" class="brand-logo-img-modal">
-            <div style="font-size: 0.95rem; color: #FFFFFF; font-weight: 300; letter-spacing: 1px; margin-top: 10px;">
-                ¿Entrenamos juntos?</div>
-            <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent-primary); letter-spacing: 2.5px;">MAKE
-                SENS.</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-top: 4px;">Acceso exclusivo
-                para alumnos y atletas de Nico</p>
+        <div class="modal-card sens-auth-modal-card">
+            <!-- Header Minimalista y Cerrar -->
+            <div class="sens-auth-modal-topbar">
+                <button type="button" class="sens-auth-close-btn" id="closeAuthModalBtn" aria-label="Cerrar modal">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="sens-auth-brand-kicker">SENS TRAIN &amp; WELLNESS</div>
+            </div>
 
-            <!-- Selector de Pestañas -->
-            <div class="auth-tabs">
-                <button class="auth-tab active" id="tabLoginBtn">Iniciar Sesión</button>
-                <button class="auth-tab" id="tabRegisterBtn">Registrarme</button>
+            <!-- Ambient Banner Sutil: Santuario Somático -->
+            <div class="sens-auth-ambient-banner">
+                <div class="sens-auth-ambient-bg"></div>
+                <div class="sens-auth-ambient-overlay">
+                    <div class="sens-auth-ambient-badge">
+                        <span class="sens-pulse-dot"></span>
+                        <span>Plataforma Activa • Longevidad &amp; Fuerza</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Encabezado Editorial -->
+            <div class="sens-auth-editorial">
+                <span class="sens-auth-kicker">PORTAL PRIVADO SENS</span>
+                <h2 class="sens-auth-title">
+                    Bienvenido a tu espacio.<br>
+                    <span class="sens-auth-italic">¿Entrenamos juntos?</span>
+                    <span class="sens-auth-gold-slogan">MAKES SENS.</span>
+                </h2>
+                <p class="sens-auth-subtitle">
+                    Accedé a tus rutinas personalizadas, videos biomecánicos y plan nutricional guiado por Nico.
+                </p>
+            </div>
+
+            <!-- Selector de Pestañas en Cápsula (Segmented Pill) -->
+            <div class="auth-tabs sens-auth-capsule-tabs">
+                <button type="button" class="auth-tab active" id="tabLoginBtn">Iniciar Sesión</button>
+                <button type="button" class="auth-tab" id="tabRegisterBtn">Registrarme</button>
             </div>
 
             <!-- Alerta de Feedback -->
@@ -1280,72 +1296,114 @@
             <!-- Vista 1: Login Form -->
             <form class="auth-pane active" id="loginForm">
                 <div class="input-group">
-                    <label class="input-label" for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" class="input-control" placeholder="tu@email.com" required
-                        autocomplete="username">
+                    <div class="sens-input-label-row">
+                        <label class="input-label" for="loginEmail">Email personal</label>
+                        <span class="sens-input-hint">Vinculado a tu ficha</span>
+                    </div>
+                    <div class="sens-input-icon-wrap">
+                        <svg class="sens-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </svg>
+                        <input type="email" id="loginEmail" class="input-control" placeholder="tu@email.com" required autocomplete="username">
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label class="input-label" for="loginPassword">Contraseña</label>
-                    <input type="password" id="loginPassword" class="input-control" placeholder="••••••••" required
-                        autocomplete="current-password">
+                    <div class="sens-input-label-row">
+                        <label class="input-label" for="loginPassword">Contraseña</label>
+                        <button type="button" id="btnForgotPass" class="btn-link-forgot">¿Olvidaste tu contraseña?</button>
+                    </div>
+                    <div class="sens-input-icon-wrap">
+                        <svg class="sens-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <input type="password" id="loginPassword" class="input-control" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end; margin-top: -6px; margin-bottom: 14px;">
-                    <button type="button" id="btnForgotPass" class="btn-link-forgot"
-                        style="background: none; border: none; color: var(--accent-primary); font-size: 11.5px; cursor: pointer; text-decoration: underline; padding: 0;">
-                        ¿Olvidaste tu contraseña?
-                    </button>
-                </div>
-                <button type="submit" class="btn btn-primary btn-full" id="submitLoginBtn">Ingresar a mi Portal</button>
-                <p style="margin-top: 16px; font-size: 11px; color: var(--text-muted); text-align: center;">
-                    ¿Primer día? Si ya coordinaste tu inicio con Nico, seleccioná <strong>Registrarme</strong>.
-                </p>
+                <button type="submit" class="btn btn-primary btn-full sens-auth-submit-btn" id="submitLoginBtn">
+                    <span>Ingresar a mi Portal</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
             </form>
 
             <!-- Vista 2: Register Form -->
             <form class="auth-pane" id="registerForm">
                 <div class="input-group">
-                    <label class="input-label" for="regFullName">Nombre y Apellido</label>
-                    <input type="text" id="regFullName" class="input-control" placeholder="Tu nombre" required>
+                    <div class="sens-input-label-row">
+                        <label class="input-label" for="regFullName">Nombre y Apellido</label>
+                    </div>
+                    <div class="sens-input-icon-wrap">
+                        <svg class="sens-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <input type="text" id="regFullName" class="input-control" placeholder="Tu nombre y apellido" required>
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label class="input-label" for="regEmail">Email</label>
-                    <input type="email" id="regEmail" class="input-control" placeholder="tu@email.com" required
-                        autocomplete="username">
+                    <div class="sens-input-label-row">
+                        <label class="input-label" for="regEmail">Email</label>
+                        <span class="sens-input-hint">Para asociar tu evaluación</span>
+                    </div>
+                    <div class="sens-input-icon-wrap">
+                        <svg class="sens-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </svg>
+                        <input type="email" id="regEmail" class="input-control" placeholder="tu@email.com" required autocomplete="username">
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label class="input-label" for="regPassword">Contraseña</label>
-                    <input type="password" id="regPassword" class="input-control" placeholder="Mínimo 6 caracteres"
-                        minlength="6" required autocomplete="new-password">
+                    <div class="sens-input-label-row">
+                        <label class="input-label" for="regPassword">Contraseña</label>
+                        <span class="sens-input-hint">Mínimo 6 caracteres</span>
+                    </div>
+                    <div class="sens-input-icon-wrap">
+                        <svg class="sens-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <input type="password" id="regPassword" class="input-control" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password">
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full" id="submitRegBtn">Crear Cuenta &amp;
-                    Comenzar</button>
-                <p
-                    style="margin-top: 14px; font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.4;">
-                    Si ya coordinaste tu inicio con Nico, creá tu cuenta con el mismo email para acceder a tu plan y
-                    ficha biomecánica.
-                </p>
+                <button type="submit" class="btn btn-primary btn-full sens-auth-submit-btn" id="submitRegBtn">
+                    <span>Crear Cuenta &amp; Comenzar</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
             </form>
 
             <!-- Vista 3: Forgot Password Form -->
             <form class="auth-pane" id="forgotPassForm">
-                <div style="margin-bottom: 16px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                <div class="sens-auth-info-desc">
                     Ingresá el email de tu cuenta y te enviaremos un enlace seguro para restablecer tu contraseña.
                 </div>
                 <div class="input-group">
-                    <label class="input-label" for="forgotEmail">Email Registrado</label>
-                    <input type="email" id="forgotEmail" class="input-control" placeholder="tu@email.com" required
-                        autocomplete="username">
+                    <div class="sens-input-label-row">
+                        <label class="input-label" for="forgotEmail">Email Registrado</label>
+                    </div>
+                    <div class="sens-input-icon-wrap">
+                        <svg class="sens-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </svg>
+                        <input type="email" id="forgotEmail" class="input-control" placeholder="tu@email.com" required autocomplete="username">
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full" id="submitForgotBtn">Enviar Enlace de
-                    Recuperación</button>
-                <div
-                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 11.5px;">
-                    <button type="button" id="btnBackToLoginFromForgot"
-                        style="background: none; border: none; color: var(--text-muted); font-size: 11.5px; cursor: pointer; padding: 0;">
+                <button type="submit" class="btn btn-primary btn-full sens-auth-submit-btn" id="submitForgotBtn">
+                    <span>Enviar Enlace de Recuperación</span>
+                </button>
+                <div class="sens-auth-footer-links">
+                    <button type="button" id="btnBackToLoginFromForgot" class="sens-auth-back-link">
                         ← Volver a Iniciar Sesión
                     </button>
-                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Olvid%C3%A9%20mi%20contrase%C3%B1a%20en%20SENS%20y%20necesito%20acceder."
-                        target="_blank" rel="noopener" style="color: var(--accent-primary); text-decoration: none;">
+                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Olvid%C3%A9%20mi%20contrase%C3%B1a%20en%20SENS%20y%20necesito%20acceder." target="_blank" rel="noopener" class="sens-auth-wa-link">
                         Ayuda por WhatsApp →
                     </a>
                 </div>
@@ -1353,27 +1411,57 @@
 
             <!-- Vista 4: Establecer Nueva Contraseña (Recovery Flow de Supabase) -->
             <form class="auth-pane" id="updatePasswordForm">
-                <div
-                    style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; letter-spacing: 0.5px; margin-bottom: 6px;">
+                <div class="sens-auth-title" style="font-size: 1.15rem; margin-bottom: 6px;">
                     Establecer Nueva Contraseña
                 </div>
-                <div style="margin-bottom: 16px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                <div class="sens-auth-info-desc">
                     Ingresá y confirmá tu nueva clave para acceder a tu cuenta y portal SENS.
                 </div>
                 <div class="input-group">
-                    <label class="input-label" for="newPasswordInput">Nueva Contraseña</label>
-                    <input type="password" id="newPasswordInput" class="input-control" placeholder="Mínimo 6 caracteres"
-                        minlength="6" required autocomplete="new-password">
+                    <div class="sens-input-label-row">
+                        <label class="input-label" for="newPasswordInput">Nueva Contraseña</label>
+                    </div>
+                    <input type="password" id="newPasswordInput" class="input-control" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password">
                 </div>
                 <div class="input-group">
-                    <label class="input-label" for="confirmPasswordInput">Confirmar Contraseña</label>
-                    <input type="password" id="confirmPasswordInput" class="input-control"
-                        placeholder="Repetí tu nueva clave" minlength="6" required autocomplete="new-password">
+                    <div class="sens-input-label-row">
+                        <label class="input-label" for="confirmPasswordInput">Confirmar Contraseña</label>
+                    </div>
+                    <input type="password" id="confirmPasswordInput" class="input-control" placeholder="Repetí tu nueva clave" minlength="6" required autocomplete="new-password">
                 </div>
-                <button type="submit" class="btn btn-primary btn-full" id="submitUpdatePassBtn">
+                <button type="submit" class="btn btn-primary btn-full sens-auth-submit-btn" id="submitUpdatePassBtn">
                     Guardar Contraseña &amp; Ingresar
                 </button>
             </form>
+
+            <!-- Bloque de Bienvenida: Nuevos Alumnos & Sincronización -->
+            <div class="sens-auth-new-user-card">
+                <div class="sens-auth-new-user-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <div class="sens-auth-new-user-text">
+                    <strong>¿Primera vez en SENS?</strong>
+                    <p>Si ya coordinaste tu evaluación con Nico, creá tu cuenta con el mismo email para vincular tu ficha biomecánica y métricas basales.</p>
+                    <a href="javascript:void(0)" onclick="const b=document.getElementById('tabRegisterBtn'); if(b) b.click();" class="sens-auth-new-user-link">
+                        Crear cuenta gratis (7 días de prueba) →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Footer con Asistencia Directa / WhatsApp Nico -->
+            <div class="sens-auth-bottom-help">
+                <p>¿Tenés problemas para ingresar?</p>
+                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Tengo%20problemas%20para%20ingresar%20a%20mi%20cuenta%20en%20SENS." target="_blank" rel="noopener" class="sens-auth-wa-button">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.52 3.48A11.93 11.93 0 0 0 12.06 0C5.46 0 .09 5.37.09 11.97c0 2.11.55 4.17 1.6 5.98L0 24l6.23-1.63a11.94 11.94 0 0 0 5.83 1.5h.01c6.6 0 11.97-5.37 11.97-11.97 0-3.2-1.25-6.21-3.52-8.42zM12.07 21.87h-.01a9.92 9.92 0 0 1-5.06-1.39l-.36-.21-3.76.99 1-3.66-.23-.37a9.92 9.92 0 0 1-1.52-5.26c0-5.48 4.46-9.94 9.95-9.94 2.65 0 5.15 1.03 7.03 2.91a9.88 9.88 0 0 1 2.91 7.03c0 5.48-4.46 9.94-9.95 9.94zm5.46-7.46c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.05 1.03-1.05 2.51s1.07 2.91 1.22 3.11c.15.2 2.1 3.21 5.09 4.5.71.31 1.27.49 1.7.63.72.23 1.37.2 1.88.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z"/>
+                    </svg>
+                    <span>Hablar con Nico por WhatsApp</span>
+                </a>
+                <span class="sens-auth-location-badge">SENS Methodology • Montevideo • Buenos Aires</span>
+            </div>
         </div>
     </div>
 
@@ -1385,15 +1473,12 @@
         <div class="portal-topbar">
             <div class="portal-brand" id="portalBrandLogoWrap"
                 style="cursor: pointer; display: flex; align-items: center; gap: 10px;" title="Volver a Web Pública">
-                <img src="img/logo-blanco.png" alt="SENS" class="brand-logo-img-portal">
+                <img src="img/logo-dark.svg" alt="SENS" class="brand-logo-img-portal">
                 <span class="pill pill-champagne" id="portalPlanBadge"
                     onclick="event.stopPropagation(); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();"
-                    title="Ver mi plan actual y cómo escalar"
-                    style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid rgba(229, 203, 167, 0.45);">
+                    title="Ver mi plan actual y cómo escalar">
                     <span id="portalPlanBadgeText">Plan Free (7d)</span>
-                    <span
-                        style="font-size: 9.5px; font-weight: 800; opacity: 0.9; border-left: 1px solid rgba(229, 203, 167, 0.35); padding-left: 6px;">Escalar
-                        ↑</span>
+                    <span style="font-size: 9.5px; font-weight: 800; opacity: 0.9; margin-left: 2px;">↑</span>
                 </span>
             </div>
             <div class="portal-user-badge" style="display: flex; align-items: center; gap: 10px;">
@@ -1422,11 +1507,12 @@
                 <button type="button" class="btn btn-outline btn-sm desktop-only-btn" id="btnTopbarBackHome"
                     style="font-size: 11px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">←
                     Inicio Web</button>
-                <div class="user-avatar-wrap" id="userAvatarWrap">
+                <div class="user-avatar-wrap" id="userAvatarWrap" style="position: relative;">
                     <button type="button" class="user-avatar-btn" id="userAvatarBtn" aria-label="Abrir Menú de Perfil"
                         title="Mi Cuenta SENS">
                         <span id="userAvatarInitials">--</span>
                     </button>
+                    <span class="user-avatar-status-dot" style="position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; background: #1E7B42; border: 2px solid #FFFFFF; pointer-events: none;"></span>
                     <!-- Dropdown flotante estilo Apple -->
                     <div class="user-avatar-dropdown" id="userAvatarDropdown" style="min-width: 285px;">
                         <div class="avatar-dropdown-header" style="padding-bottom: 10px;">
@@ -3223,202 +3309,127 @@
                 </div>
 
                 <!-- 0.5. Racha SENS & Gamificación Quiet Luxury (BIGG / Apple Health Benchmark) -->
-                <div class="sens-streak-card" id="sensDailyStreakCard">
+                <div class="sens-streak-card sens-quiet-luxury-card" id="sensDailyStreakCard">
                     <!-- Fila 1: Hero Badge + Contador de Racha + Nivel + Status Pill -->
                     <div class="sens-streak-top-row">
                         <div class="sens-streak-badge-wrap">
                             <div class="sens-streak-flame-icon active-glow" id="sensStreakFlameIcon">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"
-                                    stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 23c6.075 0 11-4.925 11-11 0-4.062-2.197-7.614-5.5-9.563-.357.514-.65 1.077-.866 1.673C15.405 7.42 16 9.638 16 12c0 2.21-1.79 4-4 4s-4-1.79-4-4c0-3.328 1.948-6.198 4.757-7.485C11.517 4.17 10.323 4 9 4 4.582 4 1 7.582 1 12c0 6.075 4.925 11 11 11z"/>
                                 </svg>
                             </div>
                             <div class="sens-streak-count-col">
                                 <div class="sens-streak-count-row">
-                                    <span class="sens-streak-hero-num" id="sensStreakHeroNum">0</span>
-                                    <span class="sens-streak-hero-unit">DÍAS EN RACHA</span>
+                                    <span class="sens-streak-hero-num" id="sensStreakHeroNum">0 DÍAS</span>
+                                    <span class="sens-streak-hero-unit">EN RACHA</span>
                                 </div>
-                                <div class="sens-streak-level-tag" id="sensStreakLevelTag">Nivel 1 • Inicio del Hábito
-                                </div>
+                                <div class="sens-streak-level-tag" id="sensStreakLevelTag">Nivel 1 • Inicio del Hábito Consciente</div>
                             </div>
                         </div>
-                        <span class="sens-streak-status-pill" id="sensStreakStatusPill">En progreso</span>
+                        <span class="sens-streak-status-pill" id="sensStreakStatusPill">Hoy</span>
                     </div>
 
-                    <!-- Fila 2: Subtítulo con ancho completo (Zero Overlap) -->
-                    <div class="sens-streak-sub-row">
-                        <div class="sens-streak-sub" id="sensStreakSubText">Completá tus objetivos de hoy para mantener
-                            la racha.</div>
-                    </div>
-
-                    <!-- Fila 3: Tira Semanal de 7 Días Independiente y Distribuida (Lun - Dom) -->
-                    <div class="sens-streak-weekly-row">
-                        <span class="sens-streak-weekly-label">Semana en Curso:</span>
-                        <div class="sens-streak-dots-wrap" id="sensStreakDotsWrap">
-                            <!-- Inyectado dinámicamente: 7 micro-anillos Lun-Dom con ✓ y ✕ -->
+                    <!-- Fila 2: Medidor y Barra de Progreso hacia la Meta de 7 Días -->
+                    <div class="sens-streak-meta-box">
+                        <div class="sens-streak-meta-header">
+                            <div class="sens-streak-meta-title">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="#B38E5D">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                </svg>
+                                <span>Meta Semanal de Racha</span>
+                            </div>
+                            <span class="sens-streak-meta-progress" id="sensStreakMetaProgressText">0 de 7 días</span>
+                        </div>
+                        <!-- 7 Segmentos de barra -->
+                        <div class="sens-streak-dashes-row" id="sensStreakDashesRow">
+                            <div class="sens-streak-dash" id="streakDash1"></div>
+                            <div class="sens-streak-dash" id="streakDash2"></div>
+                            <div class="sens-streak-dash" id="streakDash3"></div>
+                            <div class="sens-streak-dash" id="streakDash4"></div>
+                            <div class="sens-streak-dash" id="streakDash5"></div>
+                            <div class="sens-streak-dash" id="streakDash6"></div>
+                            <div class="sens-streak-dash" id="streakDash7"></div>
+                        </div>
+                        <!-- Recompensa desbloqueable -->
+                        <div class="sens-streak-reward-hint">
+                            <span class="sens-reward-trophy">🏆</span>
+                            <p><strong>Premio 7 días:</strong> +3 Días Gratis en Membresía o +500 kcal de Presupuesto Social.</p>
                         </div>
                     </div>
 
-                    <!-- Fila 4: Detalle Desplegable de Racha no alcanzada / Motivos (Item 2) -->
-                    <div class="sens-streak-missed-detail-box" id="sensStreakMissedDetailBox" style="display: none;">
-                        <div class="sens-streak-missed-header">
-                            <span class="sens-missed-title" id="sensStreakMissedDateTitle">Racha no alcanzada • Detalle
-                                del día</span>
-                            <button type="button" class="btn-clean sens-btn-close-missed"
-                                id="btnCloseStreakMissedDetail" aria-label="Cerrar detalle">✕</button>
-                        </div>
-                        <div class="sens-streak-missed-reasons" id="sensStreakMissedReasonsList">
-                            <!-- Inyectado dinámicamente: motivos exactos de por qué no se completó -->
-                        </div>
-                        <div class="sens-streak-missed-coaching-tip" id="sensStreakMissedCoachingTip">
-                            "La disciplina biológica se construye recuperando el ritmo hoy. Nico AI adaptó tus metas
-                            para consolidar tu racha."
-                        </div>
-                    </div>
-
-                    <!-- Los 3 Pilares Diarios SENS (Colapsables por Defecto) -->
-                    <div class="sens-streak-pillars-wrap is-collapsed" id="sensStreakPillarsWrap">
-                        <div class="sens-streak-pillars-header"
-                            onclick="window.toggleSensPillarsCollapse && window.toggleSensPillarsCollapse()"
-                            role="button" tabindex="0" aria-expanded="false"
-                            title="Tocar para ver u ocultar detalle de objetivos">
-                            <span class="sens-pillars-title">OBJETIVOS DIARIOS SENS</span>
-                            <div class="sens-pillars-header-right">
-                                <span class="sens-pillars-ratio" id="sensPillarsRatio">2 de 3 completados</span>
-                                <svg class="sens-pillars-toggle-icon" width="13" height="13" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
+                    <!-- Fila 3: 3 Píldoras Ovaladas de Métricas Diarias (Fuerza, Nutrición, Pasos) -->
+                    <div class="sens-streak-pills-trio">
+                        <div class="sens-metric-trio-card" onclick="window.scrollToWorkoutCard && window.scrollToWorkoutCard()">
+                            <div class="sens-metric-trio-head">
+                                <span>FUERZA</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/>
                                 </svg>
                             </div>
+                            <div class="sens-metric-trio-val" id="pillarMetricWorkout">0<span class="sens-val-unit">/1 ses</span></div>
+                            <div class="sens-metric-trio-bar-track">
+                                <div class="sens-metric-trio-bar-fill" id="pillarBarWorkout" style="width: 0%;"></div>
+                            </div>
                         </div>
-                        <div class="sens-pillars-grid" id="sensPillarsGrid">
-                            <!-- Pilar 1: Entrenamiento -->
-                            <div class="sens-pillar-item" id="pillarItemWorkout"
-                                onclick="window.scrollToWorkoutCard && window.scrollToWorkoutCard()"
-                                title="Ver entrenamiento de hoy">
-                                <div class="sens-pillar-chk" id="pillarChkWorkout">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12" />
-                                    </svg>
-                                </div>
-                                <div class="sens-pillar-content">
-                                    <div class="sens-pillar-heading-wrap"
-                                        style="display: flex; align-items: center; gap: 5px;">
-                                        <span class="sens-pillar-heading">Fuerza &amp; Rutina</span>
-                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
-                                            <button type="button" class="sens-tooltip-btn"
-                                                onclick="window.toggleSensTooltip(this, event);"
-                                                aria-label="Regla de racha entrenamiento"
-                                                title="Ver regla de racha">?</button>
-                                            <div class="sens-tooltip-popover sens-streak-rule-popover"
-                                                onclick="event.stopPropagation();">
-                                                <div class="sens-streak-popover-header">
-                                                    <span class="sens-streak-popover-badge">Regla SENS</span>
-                                                    <strong class="sens-streak-popover-title">Entrenamiento</strong>
-                                                    <button type="button" class="sens-popover-close-btn"
-                                                        onclick="window.closeAllTooltips(); event.stopPropagation();"
-                                                        aria-label="Cerrar regla">×</button>
-                                                </div>
-                                                <p class="sens-streak-popover-text">
-                                                    Solo se activa si completás el <strong>100% de los
-                                                        ejercicios</strong> prescriptos para hoy en tu rutina (o marcás
-                                                    descanso activo). En días anteriores incompletos muestra ✕.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="sens-pillar-metric" id="pillarMetricWorkout">Sesión Programada</div>
-                                </div>
-                                <span class="sens-pillar-pill" id="pillarPillWorkout">Completado</span>
+                        <div class="sens-metric-trio-card" onclick="window.scrollToNutritionCard && window.scrollToNutritionCard()">
+                            <div class="sens-metric-trio-head">
+                                <span>NUTRICIÓN</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                                </svg>
                             </div>
-
-                            <!-- Pilar 2: Nutrición -->
-                            <div class="sens-pillar-item" id="pillarItemNutrition"
-                                onclick="window.scrollToNutritionCard && window.scrollToNutritionCard()"
-                                title="Ver nutrición de hoy">
-                                <div class="sens-pillar-chk" id="pillarChkNutrition">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12" />
-                                    </svg>
-                                </div>
-                                <div class="sens-pillar-content">
-                                    <div class="sens-pillar-heading-wrap"
-                                        style="display: flex; align-items: center; gap: 5px;">
-                                        <span class="sens-pillar-heading">Plan Nutricional</span>
-                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
-                                            <button type="button" class="sens-tooltip-btn"
-                                                onclick="window.toggleSensTooltip(this, event);"
-                                                aria-label="Regla de racha nutrición"
-                                                title="Ver regla de racha">?</button>
-                                            <div class="sens-tooltip-popover sens-streak-rule-popover"
-                                                onclick="event.stopPropagation();">
-                                                <div class="sens-streak-popover-header">
-                                                    <span class="sens-streak-popover-badge">Regla SENS</span>
-                                                    <strong class="sens-streak-popover-title">Nutrición</strong>
-                                                    <button type="button" class="sens-popover-close-btn"
-                                                        onclick="window.closeAllTooltips(); event.stopPropagation();"
-                                                        aria-label="Cerrar regla">×</button>
-                                                </div>
-                                                <p class="sens-streak-popover-text">
-                                                    Mantiene la racha si tus calorías consumidas quedan entre
-                                                    <strong>-20% y +10%</strong> de tu meta prescripta. Si superás el
-                                                    <strong>+10%</strong>, perdés la racha diaria.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="sens-pillar-metric" id="pillarMetricNutrition">1.850 / 1.950 kcal</div>
-                                </div>
-                                <span class="sens-pillar-pill" id="pillarPillNutrition">En rango</span>
+                            <div class="sens-metric-trio-val" id="pillarMetricNutrition">1.450<span class="sens-val-unit">k</span></div>
+                            <div class="sens-metric-trio-bar-track">
+                                <div class="sens-metric-trio-bar-fill" id="pillarBarNutrition" style="width: 74%;"></div>
                             </div>
-
-                            <!-- Pilar 3: Pasos & Cardio -->
-                            <div class="sens-pillar-item" id="pillarItemActivity"
-                                onclick="window.scrollToBalanceCard && window.scrollToBalanceCard()"
-                                title="Cargar pasos y cardio">
-                                <div class="sens-pillar-chk" id="pillarChkActivity">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12" />
-                                    </svg>
-                                </div>
-                                <div class="sens-pillar-content">
-                                    <div class="sens-pillar-heading-wrap"
-                                        style="display: flex; align-items: center; gap: 5px;">
-                                        <span class="sens-pillar-heading">Pasos &amp; Cardio</span>
-                                        <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
-                                            <button type="button" class="sens-tooltip-btn"
-                                                onclick="window.toggleSensTooltip(this, event);"
-                                                aria-label="Regla de racha pasos y cardio"
-                                                title="Ver regla de racha">?</button>
-                                            <div class="sens-tooltip-popover sens-streak-rule-popover"
-                                                onclick="event.stopPropagation();">
-                                                <div class="sens-streak-popover-header">
-                                                    <span class="sens-streak-popover-badge">Regla SENS</span>
-                                                    <strong class="sens-streak-popover-title">Pasos &amp;
-                                                        Cardio</strong>
-                                                    <button type="button" class="sens-popover-close-btn"
-                                                        onclick="window.closeAllTooltips(); event.stopPropagation();"
-                                                        aria-label="Cerrar regla">×</button>
-                                                </div>
-                                                <p class="sens-streak-popover-text">
-                                                    Se acredita al guardar tu registro en Balance Energético: requiere
-                                                    mínimo <strong>10.000 pasos</strong> ó <strong>90m caminata</strong>
-                                                    ó <strong>30m cardio</strong>.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="sens-pillar-metric" id="pillarMetricActivity">0 pasos • 0m cardio</div>
-                                </div>
-                                <span class="sens-pillar-pill" id="pillarPillActivity">Pendiente</span>
+                        </div>
+                        <div class="sens-metric-trio-card" onclick="window.scrollToBalanceCard && window.scrollToBalanceCard()">
+                            <div class="sens-metric-trio-head">
+                                <span>PASOS</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <path d="M13 4v16M17 8l-4-4-4 4"/>
+                                </svg>
+                            </div>
+                            <div class="sens-metric-trio-val" id="pillarMetricActivity">6.4k<span class="sens-val-unit">/10k</span></div>
+                            <div class="sens-metric-trio-bar-track">
+                                <div class="sens-metric-trio-bar-fill" id="pillarBarActivity" style="width: 64%;"></div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Fila 4: Subtítulo con ancho completo (Zero Overlap) -->
+                    <div class="sens-streak-sub-row" style="margin-top: 8px;">
+                        <div class="sens-streak-sub" id="sensStreakSubText">Completá tus objetivos de hoy para mantener la racha activa.</div>
+                    </div>
+
+                    <!-- Fila 5: Tira Semanal de 7 Días Independiente (Preservada) -->
+                    <div class="sens-streak-weekly-row" style="display: none;">
+                        <div class="sens-streak-dots-wrap" id="sensStreakDotsWrap"></div>
+                    </div>
+
+                    <!-- Detalle Desplegable de Racha no alcanzada / Motivos (Preservado) -->
+                    <div class="sens-streak-missed-detail-box" id="sensStreakMissedDetailBox" style="display: none;">
+                        <div class="sens-streak-missed-header">
+                            <span class="sens-missed-title" id="sensStreakMissedDateTitle">Racha no alcanzada • Detalle del día</span>
+                            <button type="button" class="btn-clean sens-btn-close-missed" id="btnCloseStreakMissedDetail" aria-label="Cerrar detalle">✕</button>
+                        </div>
+                        <div class="sens-streak-missed-reasons" id="sensStreakMissedReasonsList"></div>
+                        <div class="sens-streak-missed-coaching-tip" id="sensStreakMissedCoachingTip">
+                            "La disciplina biológica se construye recuperando el ritmo hoy. Nico AI adaptó tus metas para consolidar tu racha."
+                        </div>
+                    </div>
+
+                    <!-- Los 3 Pilares Diarios SENS (Estructura interna preservada para soporte de listeners) -->
+                    <div class="sens-streak-pillars-wrap is-collapsed" id="sensStreakPillarsWrap" style="display: none !important;">
+                        <span class="sens-pillars-ratio" id="sensPillarsRatio">2 de 3 completados</span>
+                        <div id="pillarChkWorkout"></div>
+                        <span id="pillarPillWorkout"></span>
+                        <div id="pillarChkNutrition"></div>
+                        <span id="pillarPillNutrition"></span>
+                        <div id="pillarChkActivity"></div>
+                        <span id="pillarPillActivity"></span>
+                    </div>
+                </div>
 
                     <!-- Recompensas & Desbloqueos Compactos (Estructura preservada, oculta en front-end) -->
                     <div class="sens-streak-rewards-compact" id="dashUnlockablesModule" style="display: none !important;">

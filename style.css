@@ -24306,5 +24306,1032 @@ header .navbar {
     }
 }
 
+/* =============================================================================
+   SENS QUIET LUXURY DEFINITIVE ENGINE (STITCH SYSTEM PARITY - V4.0)
+   ============================================================================= */
+
+/* 1. MODAL DE ACCESO / LOGIN (#authModal) */
+#authModal.modal-overlay {
+    background: rgba(18, 18, 20, 0.65) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.sens-auth-modal-card {
+    max-width: 440px !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 20px 60px -10px rgba(18, 18, 20, 0.15) !important;
+    padding: 24px 20px !important;
+    color: #121214 !important;
+    position: relative !important;
+    text-align: left !important;
+}
+
+.sens-auth-modal-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.sens-auth-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #F4F3F1;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    color: #575659;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+}
+
+.sens-auth-close-btn:hover {
+    background: #EFECE6;
+    color: #121214;
+}
+
+.sens-auth-brand-kicker {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #705B3E;
+}
+
+.sens-auth-ambient-banner {
+    position: relative;
+    width: 100%;
+    height: 86px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.04);
+}
+
+.sens-auth-ambient-bg {
+    width: 100%;
+    height: 100%;
+    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDBHcuD0z0y-61xuaBsSrzdWEv68le0VFh84B0C4Nm4RKdSkDJuidsTqF20YNI_BDZRo9cl9d3xjIdAJXzNFLX84o7mKslDTqKvyUhL7XBje1UW0Nv8TK2n9Nu4HmwlC5FgUQLs-DhAVuCYTDEGvCykjhabgekdbHnX24lkE7MzdCXJ5qjH6DVfO3WCFmAwWDszUy2bhgHVK_yXjVvGHzYG9TDAjJmRk1HDvAfMhw');
+    background-size: cover;
+    background-position: center;
+}
+
+.sens-auth-ambient-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(250, 249, 246, 0.95) 0%, rgba(250, 249, 246, 0.6) 45%, transparent 100%);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+}
+
+.sens-auth-ambient-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #121214;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.04);
+}
+
+.sens-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1E7B42;
+    animation: sensPulse 2s infinite;
+}
+
+@keyframes sensPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+.sens-auth-editorial {
+    text-align: left;
+    margin-bottom: 16px;
+}
+
+.sens-auth-kicker {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #705B3E;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.sens-auth-title {
+    font-size: 1.35rem;
+    font-weight: 300;
+    line-height: 1.25;
+    color: #121214 !important;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+}
+
+.sens-auth-italic {
+    font-style: italic;
+    font-weight: 500;
+    color: #121214;
+}
+
+.sens-auth-gold-slogan {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #705B3E;
+    margin-left: 6px;
+}
+
+.sens-auth-subtitle {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #575659 !important;
+    margin: 0;
+}
+
+.sens-auth-capsule-tabs {
+    display: flex !important;
+    background: #EFEEEB !important;
+    border-radius: 9999px !important;
+    padding: 4px !important;
+    gap: 4px !important;
+    margin-bottom: 18px !important;
+}
+
+.sens-auth-capsule-tabs .auth-tab {
+    flex: 1 !important;
+    border-radius: 9999px !important;
+    padding: 9px 14px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    border: none !important;
+    background: transparent !important;
+    color: #575659 !important;
+    transition: all 0.25s !important;
+    cursor: pointer !important;
+    text-align: center !important;
+}
+
+.sens-auth-capsule-tabs .auth-tab.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.sens-input-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.sens-input-label-row .input-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #121214 !important;
+    margin: 0;
+}
+
+.sens-input-hint {
+    font-size: 11px;
+    color: #8E8D90;
+}
+
+.sens-input-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.sens-input-icon {
+    position: absolute;
+    left: 14px;
+    color: #8E8D90;
+    pointer-events: none;
+}
+
+.sens-auth-modal-card .input-control {
+    width: 100% !important;
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 12px !important;
+    color: #121214 !important;
+    font-size: 14px !important;
+    padding: 12px 14px 12px 42px !important;
+    transition: all 0.2s !important;
+    box-sizing: border-box !important;
+}
+
+.sens-auth-modal-card .input-control:focus {
+    background: #FFFFFF !important;
+    border-color: #121214 !important;
+    box-shadow: 0 0 0 2px rgba(18, 18, 20, 0.08) !important;
+    outline: none !important;
+}
+
+.sens-auth-modal-card .input-control::placeholder {
+    color: #8E8D90 !important;
+}
+
+.sens-auth-submit-btn {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    border-radius: 9999px !important;
+    padding: 13px 20px !important;
+    border: none !important;
+    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.35) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    transition: transform 0.15s, background 0.2s !important;
+}
+
+.sens-auth-submit-btn:hover {
+    background: #D8BD97 !important;
+}
+
+.sens-auth-submit-btn:active {
+    transform: scale(0.99) !important;
+}
+
+.sens-auth-new-user-card {
+    background: #EFEEEB;
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 18px;
+    text-align: left;
+}
+
+.sens-auth-new-user-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #FBDEB9;
+    color: #2A241C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-auth-new-user-text strong {
+    font-size: 13px;
+    font-weight: 600;
+    color: #121214;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.sens-auth-new-user-text p {
+    font-size: 11.5px;
+    line-height: 1.45;
+    color: #575659;
+    margin: 0 0 6px;
+}
+
+.sens-auth-new-user-link {
+    font-size: 12px;
+    font-weight: 700;
+    color: #705B3E;
+    text-decoration: none;
+}
+
+.sens-auth-new-user-link:hover {
+    text-decoration: underline;
+}
+
+.sens-auth-bottom-help {
+    margin-top: 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.sens-auth-bottom-help p {
+    font-size: 12px;
+    color: #575659;
+    margin: 0;
+}
+
+.sens-auth-wa-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: 9999px;
+    background: #EFEEEB;
+    color: #121214;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.sens-auth-wa-button:hover {
+    background: #E5E1E4;
+}
+
+.sens-auth-location-badge {
+    font-size: 10px;
+    color: #8E8D90;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+}
+
+.sens-auth-footer-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+}
+
+.sens-auth-back-link {
+    background: none;
+    border: none;
+    color: #575659;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.sens-auth-back-link:hover {
+    color: #121214;
+    text-decoration: underline;
+}
+
+.sens-auth-wa-link {
+    color: #705B3E;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.sens-auth-wa-link:hover {
+    text-decoration: underline;
+}
+
+
+/* 2. HERO QUIET LUXURY DE LA LANDING (PARIDAD STITCH) */
+.sens-hero-quiet-luxury {
+    border-radius: 28px !important;
+    margin: 10px 14px 28px !important;
+    min-height: 520px !important;
+    max-height: 600px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    padding: 22px 18px !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15) !important;
+    background: #121214 !important;
+    text-align: left !important;
+}
+
+.sens-hero-media-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.sens-hero-img-nico {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 18%;
+}
+
+.sens-hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(8, 8, 9, 0.15) 0%, rgba(8, 8, 9, 0.40) 35%, rgba(8, 8, 9, 0.88) 72%, rgba(8, 8, 9, 0.98) 100%);
+    pointer-events: none;
+}
+
+.sens-hero-content-stack {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    text-align: left;
+}
+
+.sens-hero-kicker-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #FFFFFF;
+}
+
+.sens-hero-kicker-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #E5CBA7;
+}
+
+.sens-hero-quiet-luxury .sens-hero-welcome-question {
+    font-size: 26px !important;
+    font-weight: 300 !important;
+    color: #FFFFFF !important;
+    line-height: 1.2 !important;
+    margin: 0 0 2px !important;
+    text-align: left !important;
+}
+
+.sens-hero-quiet-luxury .sens-hero-welcome-slogan {
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    color: #E5CBA7 !important;
+    letter-spacing: 0.04em !important;
+    margin: 0 0 8px !important;
+    text-align: left !important;
+}
+
+.sens-hero-quiet-luxury .hero-description-train {
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    max-width: 420px !important;
+    margin: 0 0 16px !important;
+    text-align: left !important;
+}
+
+.sens-hero-cta-group-luxury {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+}
+
+.sens-hero-btn-champagne {
+    width: 100% !important;
+    padding: 14px 24px !important;
+    border-radius: 9999px !important;
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    border: none !important;
+    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.35) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: transform 0.15s !important;
+}
+
+.sens-hero-btn-champagne:active {
+    transform: scale(0.99) !important;
+}
+
+.sens-hero-btn-glass {
+    width: 100% !important;
+    padding: 11px 20px !important;
+    border-radius: 9999px !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #FFFFFF !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    display: block !important;
+}
+
+.sens-hero-link-person {
+    text-align: center !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.82) !important;
+    text-decoration: underline !important;
+    text-underline-offset: 4px !important;
+    text-decoration-color: rgba(229, 203, 167, 0.6) !important;
+    display: block !important;
+    width: 100% !important;
+}
+
+.sens-hero-pills-row-luxury {
+    width: 100% !important;
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 4px !important;
+}
+
+.sens-hero-plan-pill-item {
+    white-space: nowrap !important;
+    padding: 6px 14px !important;
+    border-radius: 9999px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-decoration: none !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+}
+
+.sens-pill-dot-green {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #81D996;
+    flex-shrink: 0;
+}
+
+.sens-pill-dot-gold {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #E5CBA7;
+    flex-shrink: 0;
+}
+
+.sens-pill-dot-white {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+}
+
+
+/* 3. DASHBOARD ALUMNO: TOPBAR & CALENDARIO SEMANAL */
+body.in-portal .portal-topbar {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.08) !important;
+    height: 64px !important;
+    padding: 0 16px !important;
+}
+
+body.in-portal .portal-topbar .brand-logo-img-portal {
+    height: 30px !important;
+    width: auto !important;
+    filter: none !important;
+}
+
+body.in-portal #portalPlanBadge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 5px 12px !important;
+    border-radius: 9999px !important;
+    background: rgba(251, 222, 185, 0.45) !important;
+    border: 1px solid rgba(229, 203, 167, 0.6) !important;
+    color: #705B3E !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+}
+
+/* Strip Calendar de Días: Tarjetas Blancas con Sombra Suave */
+body.in-portal .sens-week-strip-wrap {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 6px !important;
+    padding: 4px 0 !important;
+}
+
+body.in-portal .sens-week-day-pill {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.03) !important;
+    padding: 10px 2px 8px !important;
+    min-height: 84px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    cursor: pointer !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+body.in-portal .sens-week-day-pill:hover {
+    background: #FAF9F6 !important;
+    transform: translateY(-1px) !important;
+}
+
+body.in-portal .sens-week-day-pill .sens-day-name {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: #575659 !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal .sens-week-day-pill .sens-day-hero-num {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    line-height: 1 !important;
+}
+
+/* Past Day Done: Check Verde */
+body.in-portal .sens-week-day-pill .sens-day-badge.done {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    background: #EAF6EE !important;
+    color: #1E7B42 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+}
+
+/* Past Day Missed: Cruz Gris Suave */
+body.in-portal .sens-week-day-pill .sens-day-badge.missed {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    background: #EFEEEB !important;
+    color: #8E8D90 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+}
+
+/* Rest: Guión */
+body.in-portal .sens-week-day-pill .sens-day-badge.rest {
+    color: #8E8D90 !important;
+    font-size: 12px !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Selected / Today: Cápsula Champagne Dorada */
+body.in-portal .sens-week-day-pill.active {
+    background: #E5CBA7 !important;
+    border: 1px solid rgba(112, 91, 62, 0.3) !important;
+    box-shadow: 0 8px 24px rgba(251, 222, 185, 0.45) !important;
+    transform: scale(1.04) !important;
+    z-index: 5 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-name {
+    color: #564428 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-hero-num {
+    color: #25201A !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.today {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #25201A !important;
+    border: none !important;
+    margin: 6px auto !important;
+}
+
+
+/* 4. DASHBOARD ALUMNO: RACHA SENS & METAS DIARIAS */
+.sens-quiet-luxury-card {
+    background: #FFFFFF !important;
+    border-radius: 20px !important;
+    padding: 18px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    margin-bottom: 18px !important;
+}
+
+.sens-streak-meta-box {
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(244, 243, 241, 0.7);
+    border: 1px solid rgba(251, 222, 185, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.sens-streak-meta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sens-streak-meta-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #121214;
+}
+
+.sens-streak-meta-progress {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #705B3E;
+}
+
+.sens-streak-dashes-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    height: 6px;
+    width: 100%;
+}
+
+.sens-streak-dash {
+    background: #E3E2E0;
+    border-radius: 9999px;
+    height: 100%;
+    transition: background 0.3s;
+}
+
+.sens-streak-dash.filled {
+    background: #705B3E !important;
+}
+
+.sens-streak-reward-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #575659;
+    line-height: 1.35;
+}
+
+.sens-streak-reward-hint p {
+    margin: 0;
+}
+
+.sens-streak-pills-trio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.sens-metric-trio-card {
+    background: rgba(244, 243, 241, 0.75);
+    border-radius: 16px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    border: 1px solid rgba(18, 18, 20, 0.04);
+    transition: transform 0.15s;
+}
+
+.sens-metric-trio-card:active {
+    transform: scale(0.97);
+}
+
+.sens-metric-trio-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #575659;
+    margin-bottom: 4px;
+}
+
+.sens-metric-trio-val {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #121214;
+    line-height: 1.1;
+}
+
+.sens-val-unit {
+    font-size: 11px;
+    font-weight: 400;
+    color: #8E8D90;
+    margin-left: 1px;
+}
+
+.sens-metric-trio-bar-track {
+    width: 100%;
+    height: 4px;
+    background: #E3E2E0;
+    border-radius: 9999px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.sens-metric-trio-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: #705B3E;
+    transition: width 0.4s;
+}
+
+
+/* 5. REST DAY CARD (CERO CAJA NEGRA EN LIGHT MODE) */
+body.in-portal .sens-training-card-rest {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px 20px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.04) !important;
+}
+
+body.in-portal .sens-rest-card-inner {
+    max-width: 480px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 10px !important;
+}
+
+body.in-portal .sens-rest-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 4px 12px !important;
+    border-radius: 9999px !important;
+    background: #EAF6EE !important;
+    color: #1E7B42 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+}
+
+body.in-portal .sens-rest-title {
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    margin: 2px 0 6px !important;
+    letter-spacing: -0.01em !important;
+}
+
+body.in-portal .sens-rest-desc {
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
+    color: #575659 !important;
+    margin: 0 0 16px !important;
+    max-width: 380px !important;
+}
+
+body.in-portal #btnRestSeeStretches {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    padding: 10px 18px !important;
+    font-size: 12px !important;
+}
+
+body.in-portal #btnRestBringWorkout {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    padding: 10px 18px !important;
+    font-size: 12px !important;
+}
+
+
+/* 6. FLOATING BOTTOM NAV DOCK (CÁPSULA FLOTANTE LIGHT QUIET LUXURY) */
+body.in-portal #sensFloatingDock {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    justify-content: center !important;
+    padding-bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
+    pointer-events: none !important;
+}
+
+body.in-portal .sens-floating-dock {
+    pointer-events: auto !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-radius: 9999px !important;
+    padding: 5px 6px !important;
+    box-shadow: 0 12px 36px -6px rgba(18, 18, 20, 0.12) !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    max-width: calc(100vw - 32px) !important;
+}
+
+body.in-portal .sens-dock-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 8px 14px !important;
+    border-radius: 9999px !important;
+    background: transparent !important;
+    border: none !important;
+    color: #575659 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+    min-width: 0 !important;
+}
+
+body.in-portal .sens-dock-item svg {
+    width: 17px !important;
+    height: 17px !important;
+    stroke: currentColor !important;
+    flex-shrink: 0 !important;
+}
+
+body.in-portal .sens-dock-item.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14) !important;
+}
+
+body.in-portal .sens-dock-item.active svg {
+    stroke: #FFFFFF !important;
+}
+
+body.in-portal .sens-dock-item:hover:not(.active) {
+    color: #121214 !important;
+    background: rgba(18, 18, 20, 0.04) !important;
+}
+
+
 
 
