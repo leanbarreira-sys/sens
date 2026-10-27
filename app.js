@@ -4917,6 +4917,20 @@ window.diagWizardGoStep = function(targetStep, toastMsg) {
     if (progressText) progressText.textContent = `${pct}%`;
     if (stepLabel) stepLabel.textContent = stepNames[targetStep] || `Paso ${targetStep}`;
 
+    // Sincronización del Stepper de 8 Hitos Desktop & Mobile
+    const desktopStepperNodes = document.querySelectorAll('.sens-step-milestone-node');
+    if (desktopStepperNodes && desktopStepperNodes.length > 0) {
+        desktopStepperNodes.forEach((node) => {
+            const nodeStep = parseInt(node.getAttribute('data-step-idx'), 10);
+            node.classList.remove('active', 'completed');
+            if (nodeStep < targetStep) {
+                node.classList.add('completed');
+            } else if (nodeStep === targetStep) {
+                node.classList.add('active');
+            }
+        });
+    }
+
     if (toastMsg) {
         showDiagnosisToast(toastMsg);
     }
@@ -8168,7 +8182,80 @@ function playChimeSequence() {
     SensGamification.playCelebrationFanfare();
 }
 
-window.showSensCelebrationToast = function(title, subtitle, quote) {
+window._selectedCelebrationReward = 'days';
+
+window.switchMilestone = function(type) {
+    const tabs = document.querySelectorAll('.sens-celebration-tabs-wrap .milestone-tab');
+    const panels = document.querySelectorAll('.sens-congrats-card .milestone-panel');
+    const ptsBadge = document.getElementById('sensCelebrationPtsText');
+    const kickerEl = document.getElementById('sensCongratsLevelPill');
+
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+
+    const activeTab = document.getElementById(`tab-${type}`);
+    const activePanel = document.getElementById(`panel-${type}`);
+    if (activeTab) activeTab.classList.add('active');
+    if (activePanel) activePanel.classList.add('active');
+
+    if (type === 'streak') {
+        if (ptsBadge) ptsBadge.textContent = '+350 PTS SENS';
+        if (kickerEl) kickerEl.textContent = 'Ritual Concluido • Hito Semanal';
+    } else if (type === 'workout') {
+        if (ptsBadge) ptsBadge.textContent = '+180 PTS SENS';
+        if (kickerEl) kickerEl.textContent = 'Ritual Concluido • Sesión de Fuerza';
+    } else if (type === 'nutrition') {
+        if (ptsBadge) ptsBadge.textContent = '+120 PTS SENS';
+        if (kickerEl) kickerEl.textContent = 'Ritual Concluido • Nutrición Consciente';
+    } else if (type === 'steps') {
+        if (ptsBadge) ptsBadge.textContent = '+150 PTS SENS';
+        if (kickerEl) kickerEl.textContent = 'Ritual Concluido • Actividad NEAT';
+    }
+};
+
+window.selectCelebrationReward = function(rewardType) {
+    window._selectedCelebrationReward = rewardType;
+    const cardA = document.getElementById('rewardOptA');
+    const cardB = document.getElementById('rewardOptB');
+    if (cardA && cardB) {
+        if (rewardType === 'days') {
+            cardA.classList.add('active');
+            cardB.classList.remove('active');
+        } else {
+            cardB.classList.add('active');
+            cardA.classList.remove('active');
+        }
+    }
+    if (typeof SensGamification !== 'undefined') {
+        SensGamification.playHapticFeedback();
+    }
+};
+
+window.claimCelebrationReward = function() {
+    const chosen = window._selectedCelebrationReward || 'days';
+    if (chosen === 'days') {
+        if (typeof showSensToast === 'function') {
+            showSensToast('¡Recompensa desbloqueada! Se extendieron +3 días Pro en tu membresía sin cargo.', 'champagne', 4500);
+        }
+    } else {
+        if (typeof showSensToast === 'function') {
+            showSensToast('¡Recompensa acreditada! +500 kcal añadidas a tu saldo social de fin de semana.', 'champagne', 4500);
+        }
+    }
+    window.closeSensCelebration();
+};
+
+window.closeSensCelebration = function() {
+    if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
+    const overlay = document.getElementById('sensCongratsOverlay');
+    if (overlay) overlay.style.display = 'none';
+};
+
+window.openCelebrationModal = function(type = 'streak') {
+    window.showSensCelebrationToast(null, null, null, type);
+};
+
+window.showSensCelebrationToast = function(title, subtitle, quote, milestoneType = null) {
     const overlay = document.getElementById('sensCongratsOverlay');
     const titleEl = document.getElementById('sensCongratsTitle');
     const subtitleEl = document.getElementById('sensCongratsSubtitle');
@@ -8178,36 +8265,67 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
     const continueBtn = document.getElementById('btnSensCongratsContinue');
 
     const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
-    const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 1;
+    const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 7;
     const levelInfo = SensGamification.getStreakLevel(streakDays);
 
-    if (titleEl) titleEl.textContent = title || '¡OBJETIVO CUMPLIDO!';
-    if (subtitleEl) subtitleEl.textContent = subtitle || 'Racha SENS Activa';
-    if (quoteEl) {
-        quoteEl.textContent = quote || '"Gran trabajo. Cada hábito ejecutado con intención consolida tu rendimiento y longevidad celular."';
-    }
+    if (titleEl && title) titleEl.textContent = title;
+    if (subtitleEl && subtitle) subtitleEl.textContent = subtitle;
+    if (quoteEl && quote) quoteEl.textContent = quote;
     if (levelPillEl) levelPillEl.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
     if (bumpNumEl) bumpNumEl.textContent = streakDays;
 
+    // Detectar hito objetivo
+    let targetMilestone = milestoneType;
+    if (!targetMilestone) {
+        const fullText = `${title || ''} ${subtitle || ''}`.toLowerCase();
+        if (fullText.includes('entreno') || fullText.includes('ejercicio') || fullText.includes('series')) {
+            targetMilestone = 'workout';
+        } else if (fullText.includes('nutri') || fullText.includes('calor') || fullText.includes('macro')) {
+            targetMilestone = 'nutrition';
+        } else if (fullText.includes('paso') || fullText.includes('aerób') || fullText.includes('neat')) {
+            targetMilestone = 'steps';
+        } else {
+            targetMilestone = 'streak';
+        }
+    }
+
+    // Poblar métricas dinámicas según telemetría viva
+    if (typeof modalExerciseState !== 'undefined' && modalExerciseState.setsData) {
+        const totalKg = modalExerciseState.setsData.reduce((acc, s) => acc + (parseFloat(s.weight) || 0) * (parseInt(s.reps) || 0), 0);
+        const celebTonnage = document.getElementById('celebWorkoutTonnage');
+        const celebSets = document.getElementById('celebWorkoutSets');
+        if (celebTonnage && totalKg > 0) celebTonnage.textContent = totalKg.toLocaleString('es-AR');
+        if (celebSets && modalExerciseState.setsData.length > 0) celebSets.textContent = modalExerciseState.setsData.length;
+    }
+
+    // Poblar nutrición si está disponible
+    if (typeof AppState !== 'undefined' && AppState.nutritionLog) {
+        const consumed = AppState.nutritionLog.consumedKcal || 1920;
+        const celebNutri = document.getElementById('celebNutriConsumed');
+        if (celebNutri) celebNutri.textContent = consumed.toLocaleString('es-AR');
+    }
+
+    window.switchMilestone(targetMilestone);
+
     SensGamification.playCelebrationFanfare();
     SensGamification.playHapticFeedback();
-    SensConfetti.burst(300);
+    SensConfetti.burst(320);
 
     if (overlay) {
         overlay.style.display = 'flex';
 
-        const dismiss = () => {
-            if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
-            overlay.style.display = 'none';
-        };
-
-        if (continueBtn) continueBtn.onclick = (e) => { e.stopPropagation(); dismiss(); };
-        overlay.onclick = dismiss;
+        if (continueBtn && !continueBtn._hasSensClick) {
+            continueBtn._hasSensClick = true;
+            continueBtn.onclick = (e) => {
+                e.stopPropagation();
+                window.claimCelebrationReward();
+            };
+        }
 
         if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
         window._sensCelebrationTimer = setTimeout(() => {
             overlay.style.display = 'none';
-        }, 5000);
+        }, 15000);
     } else {
         if (typeof showSensToast === 'function') {
             showSensToast(`${title}: ${subtitle}`, 'champagne', 4000);

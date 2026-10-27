@@ -2939,8 +2939,11 @@ button.btn-primary:focus {
 }
 
 .navbar.scrolled {
-    background: #080809 !important;
-    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(250, 249, 246, 0.94) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
 }
 
 /* ==========================================================================
@@ -14444,11 +14447,13 @@ body.in-portal .sens-workout-goal-hero .sens-workout-timer-pill,
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
-/* 3. Modal / Bottom Sheet Táctil de Ejecución de Ejercicio (#121214) */
+/* 3. Modal / Bottom Sheet Táctil de Ejecución de Ejercicio (Light Quiet Luxury Parity) */
 body.in-portal .sens-exercise-modal-sheet,
 .sens-exercise-modal-sheet {
-    background: #121214 !important;
-    color: #FFFFFF !important;
+    background: #FAF9F6 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 16px 40px -4px rgba(18, 18, 20, 0.08), 0 4px 12px rgba(18, 18, 20, 0.03) !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet h2,
@@ -14457,82 +14462,89 @@ body.in-portal .sens-exercise-modal-sheet h4,
 body.in-portal .sens-exercise-modal-title,
 .sens-exercise-modal-sheet .sens-exercise-modal-title,
 .sens-exercise-modal-title {
-    color: #FFFFFF !important;
-    font-weight: 800 !important;
+    color: #121214 !important;
+    font-weight: 700 !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet p,
 body.in-portal .sens-exercise-modal-sheet .sens-coach-notes-body,
 .sens-coach-notes-body {
-    color: rgba(255, 255, 255, 0.9) !important;
+    color: #575659 !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-exercise-modal-video-cue,
 .sens-exercise-modal-video-cue {
-    color: #FFFFFF !important;
+    color: #121214 !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-timer-card,
-.sens-timer-card {
-    background: #18181C !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+body.in-portal .sens-exercise-modal-sheet .sens-master-timer-card,
+.sens-timer-card,
+.sens-master-timer-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.03) !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-timer-label,
 .sens-timer-label {
-    color: rgba(255, 255, 255, 0.72) !important;
+    color: #575659 !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-timer-digits,
+body.in-portal .sens-exercise-modal-sheet #masterTimerDisplay,
 .sens-timer-digits {
-    color: #FFFFFF !important;
+    color: #121214 !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-timer-digits.text-champagne {
-    color: #E5CBA7 !important;
+    color: #705B3E !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-series-section-header h4,
 .sens-series-section-header h4 {
-    color: #FFFFFF !important;
+    color: #121214 !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-tactile-set-row,
 .sens-tactile-set-row {
-    background: #16161a;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #FFFFFF !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    box-shadow: 0 1px 3px rgba(18, 18, 20, 0.02) !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-tactile-set-row.completed,
 .sens-tactile-set-row.completed {
-    border-color: rgba(16, 185, 129, 0.4) !important;
-    background: rgba(16, 185, 129, 0.08) !important;
+    border-color: rgba(30, 123, 66, 0.35) !important;
+    background: #EAF6EE !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-set-label,
 .sens-set-label {
-    color: #FFFFFF !important;
+    color: #121214 !important;
 }
 
-/* 4. Empty State de Rutina (#121214) */
+/* 4. Empty State de Rutina (Light Quiet Luxury) */
 body.in-portal .sens-empty-state-card,
 .sens-empty-state-card {
-    background: #121214 !important;
-    color: #FFFFFF !important;
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
 }
 
 body.in-portal .sens-empty-state-card h3,
 body.in-portal .sens-empty-state-title,
 .sens-empty-state-title {
-    color: #FFFFFF !important;
-    font-weight: 800 !important;
+    color: #121214 !important;
+    font-weight: 700 !important;
 }
 
 body.in-portal .sens-empty-state-card p,
 body.in-portal .sens-empty-state-desc,
 .sens-empty-state-desc {
-    color: rgba(255, 255, 255, 0.8) !important;
+    color: #575659 !important;
 }
 
 /* 5. Coach Master Active Athlete Card: Modern Quiet Luxury Claro styled in #coachHubView section */
@@ -21002,14 +21014,15 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 
 /* 1. Hero Calórico Primario con Paridad y Claridad Total */
 .sens-nutri-hero-primary-card {
-    background: #121215;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 20px 22px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    position: relative;
-    overflow: hidden;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 20px 22px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    color: #121214 !important;
 }
 
 .sens-nutri-hero-header {
@@ -21021,8 +21034,8 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 
 .sens-nutri-hero-title {
     font-size: 1.35rem;
-    font-weight: 800;
-    color: #FFFFFF;
+    font-weight: 700;
+    color: #121214 !important;
     margin: 4px 0 0 0;
     letter-spacing: -0.2px;
 }
@@ -21044,17 +21057,17 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 
 .sens-nutri-hero-val {
     font-size: 2.5rem;
-    font-weight: 900;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
-    color: #FFFFFF;
+    color: #121214 !important;
     letter-spacing: -0.8px;
     line-height: 1;
 }
 
 .sens-nutri-hero-unit {
     font-size: 13.5px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-weight: 500;
+    color: #575659 !important;
 }
 
 .sens-nutri-hero-stat-target {
@@ -21066,23 +21079,23 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #71717A;
+    color: #705B3E !important;
     font-weight: 700;
 }
 
 .sens-nutri-target-val {
     display: block;
     font-size: 14.5px;
-    font-weight: 800;
-    color: #E5CBA7;
+    font-weight: 700;
+    color: #121214 !important;
     font-variant-numeric: tabular-nums;
 }
 
 .sens-nutri-remaining-val {
     display: block;
     font-size: 11.5px;
-    color: #A1A1AA;
-    font-weight: 600;
+    color: #575659 !important;
+    font-weight: 500;
     margin-top: 2px;
 }
 
@@ -21094,7 +21107,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-nutri-progress-track {
     position: relative;
     height: 10px;
-    background: rgba(255, 255, 255, 0.08);
+    background: #EFECE6 !important;
     border-radius: 999px;
     overflow: hidden;
 }
@@ -21102,7 +21115,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-nutri-progress-fill {
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%);
+    background: #121214 !important;
     transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
 }
 
@@ -21110,9 +21123,9 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     position: absolute;
     top: 0;
     bottom: 0;
-    background: repeating-linear-gradient(45deg, rgba(229, 203, 167, 0.12), rgba(229, 203, 167, 0.12) 4px, rgba(229, 203, 167, 0.25) 4px, rgba(229, 203, 167, 0.25) 8px);
-    border-left: 1px dashed rgba(229, 203, 167, 0.5);
-    border-right: 1px dashed rgba(229, 203, 167, 0.5);
+    background: repeating-linear-gradient(45deg, rgba(229, 203, 167, 0.25), rgba(229, 203, 167, 0.25) 4px, rgba(229, 203, 167, 0.45) 4px, rgba(229, 203, 167, 0.45) 8px) !important;
+    border-left: 1px dashed rgba(112, 91, 62, 0.5) !important;
+    border-right: 1px dashed rgba(112, 91, 62, 0.5) !important;
     pointer-events: none;
 }
 
@@ -21120,14 +21133,14 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     display: flex;
     justify-content: space-between;
     font-size: 11px;
-    color: #71717A;
+    color: #575659 !important;
     margin-top: 6px;
     font-variant-numeric: tabular-nums;
 }
 
 /* Acordeón Integrado de Desglose de Macronutrientes */
 .sens-nutri-macro-accordion-wrap {
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
     padding-top: 12px;
     margin-top: 12px;
 }
@@ -21137,21 +21150,20 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
     border-radius: 10px;
     padding: 8px 12px;
-    color: #E4E4E7;
+    color: #121214 !important;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .sens-btn-macro-drawer-toggle:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(229, 203, 167, 0.3);
-    color: #FFFFFF;
+    background: #EFECE6 !important;
+    color: #121214 !important;
 }
 
 .sens-macro-toggle-left {
@@ -21164,7 +21176,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-macro-toggle-summary {
     font-size: 11px;
     font-weight: 600;
-    color: #A1A1AA;
+    color: #575659 !important;
     font-variant-numeric: tabular-nums;
 }
 
@@ -21176,7 +21188,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-macro-ratio {
     display: block;
     font-size: 10.5px;
-    color: #71717A;
+    color: #8E8D90 !important;
     margin-top: 2px;
 }
 
@@ -21191,21 +21203,23 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     font-weight: 700;
     margin-top: 6px;
     font-variant-numeric: tabular-nums;
+    color: #121214 !important;
 }
 
 /* 2. Subsecciones Visuales de Comida: Container Encompassing Parent Card */
 .sens-meal-subsection-block {
     margin-bottom: 22px;
-    background: #111114;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 16px 16px 14px 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 16px 16px 14px 16px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03) !important;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    color: #121214 !important;
 }
 
 .sens-meal-subsection-block:hover {
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(18, 18, 20, 0.14) !important;
 }
 
 .sens-meal-subsection-header {
@@ -21215,7 +21229,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     padding: 0 0 12px 0;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
     border-radius: 0;
     margin-bottom: 12px;
 }
@@ -21237,15 +21251,15 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #E5CBA7;
-    box-shadow: 0 0 8px rgba(229, 203, 167, 0.4);
+    background: #705B3E !important;
+    box-shadow: none !important;
     flex-shrink: 0;
 }
 
 .sens-meal-title {
     font-size: 13px;
-    font-weight: 800;
-    color: #FFFFFF;
+    font-weight: 700;
+    color: #121214 !important;
     text-transform: uppercase;
     letter-spacing: 0.8px;
     margin: 0;
@@ -21254,33 +21268,32 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-meal-subtotal-meta {
     font-size: 11px;
     font-weight: 700;
-    color: #E5CBA7;
-    background: rgba(229, 203, 167, 0.08);
-    border: 1px solid rgba(229, 203, 167, 0.2);
+    color: #705B3E !important;
+    background: rgba(229, 203, 167, 0.4) !important;
+    border: 1px solid rgba(112, 91, 62, 0.3) !important;
     border-radius: 999px;
     padding: 2px 8px;
     font-variant-numeric: tabular-nums;
 }
 
 .btn-quick-add-to-meal {
-    padding: 5px 12px;
-    font-size: 11px;
+    padding: 6px 14px;
+    font-size: 11.5px;
     font-weight: 700;
     border-radius: 999px;
-    border: 1px solid rgba(229, 203, 167, 0.4);
-    background: rgba(229, 203, 167, 0.08);
-    color: #E5CBA7;
+    border: none !important;
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    box-shadow: 0 2px 8px rgba(229, 203, 167, 0.3) !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-quick-add-to-meal:hover {
-    background: rgba(229, 203, 167, 0.2);
-    border-color: #E5CBA7;
-    color: #FFFFFF;
+    background: #D8BD97 !important;
     transform: translateY(-1px);
 }
 
@@ -25330,6 +25343,920 @@ body.in-portal .sens-dock-item.active svg {
 body.in-portal .sens-dock-item:hover:not(.active) {
     color: #121214 !important;
     background: rgba(18, 18, 20, 0.04) !important;
+}
+
+/* =============================================================================
+   7. STEPPER DE ONBOARDING 8 PASOS (PARIDAD CLÍNICA DESKTOP & MOBILE)
+   ============================================================================= */
+.sens-onboarding-desktop-stepper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 16px 0 12px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .sens-onboarding-desktop-stepper {
+        grid-template-columns: repeat(8, 1fr);
+        gap: 6px;
+    }
+}
+
+.sens-step-milestone-node {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 6px;
+    border-radius: 12px;
+    background: #F4F3F1;
+    border: 1px solid rgba(18, 18, 20, 0.05);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: left;
+}
+
+.sens-step-milestone-node .step-num-check {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+    color: #8E8D90;
+    margin-bottom: 2px;
+}
+
+.sens-step-milestone-node .step-check-icon {
+    font-size: 11px;
+    color: #1E7B42;
+    display: none;
+}
+
+.sens-step-milestone-node.completed .step-check-icon {
+    display: inline-block;
+}
+
+.sens-step-milestone-node.completed {
+    background: #EAF6EE;
+    border-color: rgba(30, 123, 66, 0.25);
+}
+
+.sens-step-milestone-node.completed .step-num-check {
+    color: #1E7B42;
+}
+
+.sens-step-milestone-node.active {
+    background: #FBDEB9;
+    border-color: #D4B996;
+    box-shadow: 0 4px 12px rgba(222, 194, 159, 0.35);
+}
+
+.sens-step-milestone-node.active .step-num-check {
+    color: #271903;
+    font-weight: 800;
+}
+
+.sens-step-milestone-node .step-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: #121214;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-step-milestone-node .step-sub {
+    font-size: 9px;
+    font-weight: 600;
+    color: #575659;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =============================================================================
+   8. CEREMONIA DE HITOS Y CELEBRACIÓN SOMÁTICA (QUIET LUXURY 4-PANEL RITUAL)
+   ============================================================================= */
+.sens-congrats-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 10500 !important;
+    background: rgba(18, 18, 20, 0.65) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
+    overflow-y: auto !important;
+    animation: sensFadeInOverlay 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes sensFadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.sens-confetti-canvas {
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    z-index: 20 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.sens-congrats-card {
+    position: relative !important;
+    z-index: 30 !important;
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 20px 60px -10px rgba(18, 18, 20, 0.18), 0 4px 16px rgba(18, 18, 20, 0.04) !important;
+    width: 100% !important;
+    max-width: 540px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    padding: 20px 18px 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    animation: sensScaleUpCard 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+}
+
+@media (min-width: 1024px) {
+    .sens-congrats-card {
+        max-width: 680px !important;
+        padding: 28px 26px 30px !important;
+    }
+}
+
+@keyframes sensScaleUpCard {
+    from { transform: scale(0.92) translateY(12px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.sens-celebration-top-ribbon {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+}
+
+.sens-celebration-badge-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #F4F3F1;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #575659;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.sens-celebration-points-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #FBDEB9;
+    color: #766143;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.sens-celebration-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #F4F3F1;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    color: #575659;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.sens-celebration-close-btn:hover {
+    background: #EAE8E3;
+    color: #121214;
+}
+
+.sens-celebration-tabs-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 0 4px;
+    width: 100%;
+}
+
+.sens-celebration-tabs-wrap::-webkit-scrollbar {
+    display: none;
+}
+
+.milestone-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 13px;
+    border-radius: 9999px;
+    background: #F4F3F1;
+    color: #575659;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.milestone-tab:hover {
+    background: #ECEAE4;
+    color: #121214;
+}
+
+.milestone-tab.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    border-color: #121214 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+
+.milestone-panel {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    animation: sensFadeInPanel 0.22s ease-out;
+}
+
+.milestone-panel.active {
+    display: flex !important;
+}
+
+@keyframes sensFadeInPanel {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.sens-celebration-emblem-wrap {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    margin: 8px auto 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sens-radiant-halo {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: rgba(251, 222, 185, 0.45);
+    animation: sensPingRing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.sens-radiant-halo-blur {
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: rgba(251, 222, 185, 0.6);
+    filter: blur(4px);
+}
+
+.sens-radiant-core-badge {
+    position: relative;
+    z-index: 2;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 8px 24px rgba(222, 194, 159, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes sensPingRing {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    80%, 100% { transform: scale(1.35); opacity: 0; }
+}
+
+.sens-celebration-editorial-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.sens-celebration-kicker-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    background: rgba(251, 222, 185, 0.5);
+    color: #766143;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.sens-celebration-headline {
+    font-size: 1.45rem;
+    font-weight: 300;
+    color: #121214 !important;
+    letter-spacing: -0.025em;
+    margin: 2px 0 0;
+}
+
+.sens-celebration-subline {
+    font-size: 12px;
+    color: #575659;
+    margin: 0;
+    max-width: 360px;
+    line-height: 1.45;
+}
+
+/* 7-Day Recap Ribbon */
+.sens-7day-recap-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    border-radius: 16px;
+    padding: 12px 14px;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sens-7day-recap-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 600;
+    color: #77767B;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.sens-7day-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.sens-7day-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.sens-7day-col .d-label {
+    font-size: 10px;
+    color: #8E8D90;
+    font-weight: 600;
+}
+
+.sens-7day-col .d-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.sens-7day-col .d-circle.done {
+    background: #FBDEB9;
+    color: #766143;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.04);
+}
+
+.sens-7day-col .d-circle.active-gold {
+    background: #705B3E;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(112, 91, 62, 0.35);
+}
+
+/* Reward Selector */
+.sens-reward-choice-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sens-reward-choice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #77767B;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.sens-reward-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reward-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.08);
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.02);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.reward-card:hover {
+    border-color: #D4B996;
+    background: #FAF9F6;
+}
+
+.reward-card.active {
+    border-color: #705B3E !important;
+    background: rgba(251, 222, 185, 0.2) !important;
+    box-shadow: 0 4px 14px rgba(222, 194, 159, 0.35) !important;
+}
+
+.reward-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reward-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FBDEB9;
+    color: #766143;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.reward-text strong {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #121214;
+    display: block;
+}
+
+.reward-text span {
+    font-size: 11px;
+    color: #575659;
+    display: block;
+}
+
+.reward-check-indicator {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #C8C6CA;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+.reward-card.active .reward-check-indicator {
+    background: #705B3E;
+    border-color: #705B3E;
+    color: #FFFFFF;
+}
+
+/* Bento Metrics 2x2 */
+.sens-bento-metrics-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.bento-metric-cell {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    border-radius: 16px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.bento-cell-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #77767B;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.bento-cell-val strong {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #121214;
+}
+
+.bento-cell-val small {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #575659;
+}
+
+.bento-cell-sub {
+    font-size: 10.5px;
+    color: #1E7B42;
+    font-weight: 500;
+}
+
+/* Nico Somatic Reflection Card */
+.sens-celebration-nico-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 2px 12px rgba(18, 18, 20, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sens-nico-card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sens-nico-avatar-frame {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #F4F3F1;
+    flex-shrink: 0;
+    border: 1px solid rgba(18, 18, 20, 0.08);
+}
+
+.sens-nico-avatar-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sens-nico-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.sens-nico-info strong {
+    font-size: 12.5px;
+    color: #121214;
+}
+
+.sens-nico-info span {
+    font-size: 10.5px;
+    color: #705B3E;
+    font-weight: 500;
+}
+
+.sens-nico-quote-text {
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: #575659;
+    font-style: italic;
+    margin: 0;
+    padding: 8px 10px;
+    background: #F6F4EE;
+    border-radius: 10px;
+}
+
+/* Scenic Walk Banner */
+.sens-scenic-walk-banner {
+    position: relative;
+    width: 100%;
+    height: 105px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.06);
+}
+
+.sens-scenic-walk-banner .scenic-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sens-scenic-walk-banner .scenic-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 20%, rgba(18, 18, 20, 0.85) 100%);
+}
+
+.sens-scenic-walk-banner .scenic-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 10px 14px;
+    font-size: 11.5px;
+}
+
+.sens-scenic-walk-banner .scenic-pct {
+    color: #E5CBA7;
+    font-weight: 700;
+}
+
+/* Nutri Range Card */
+.sens-nutri-celeb-range-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sens-nutri-celeb-range-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.sens-nutri-celeb-range-top strong {
+    font-size: 13px;
+    color: #121214;
+    display: block;
+}
+
+.sens-nutri-celeb-range-top span {
+    font-size: 11px;
+    color: #575659;
+}
+
+.sens-range-bar-track {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    border-radius: 9999px;
+    background: #EFEEEB;
+    overflow: hidden;
+}
+
+.sens-range-bar-optimal-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: rgba(156, 246, 176, 0.45);
+}
+
+.sens-range-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: #1E7B42;
+    transition: width 0.6s ease-out;
+}
+
+.sens-range-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #8E8D90;
+}
+
+/* Trio Macros Bento */
+.sens-macros-trio-bento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.macro-bento-cell {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    border-radius: 14px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+}
+
+.macro-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #77767B;
+}
+
+.macro-val strong {
+    font-size: 1.15rem;
+    color: #121214;
+}
+
+.macro-val small {
+    font-size: 10.5px;
+    color: #8E8D90;
+}
+
+.macro-benefit {
+    font-size: 9.5px;
+    color: #705B3E;
+    font-weight: 600;
+    background: #F6F4EE;
+    padding: 2px 4px;
+    border-radius: 6px;
+}
+
+/* Saldo Social Card */
+.sens-social-budget-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(251, 222, 185, 0.35);
+    border: 1px solid rgba(222, 194, 159, 0.5);
+}
+
+.sens-social-icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #FBDEB9;
+    color: #766143;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-social-info strong {
+    font-size: 12px;
+    color: #121214;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.sens-social-info p {
+    font-size: 11px;
+    line-height: 1.45;
+    color: #575659;
+    margin: 0;
+}
+
+/* Pillars Progress Card in Celebration */
+.sens-pillars-progress-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sens-pillars-progress-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+}
+
+.sens-pillars-bar-track {
+    width: 100%;
+    height: 6px;
+    border-radius: 9999px;
+    background: #EFEEEB;
+    overflow: hidden;
+}
+
+.sens-pillars-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: #705B3E;
+    transition: width 0.5s ease-out;
+}
+
+.sens-pillars-chips-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pillar-status-chip {
+    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    background: #F4F3F1;
+    color: #575659;
+}
+
+.pillar-status-chip.done {
+    background: #EAF6EE;
+    color: #1E7B42;
+    font-weight: 600;
+}
+
+/* Actions Row */
+.sens-celebration-actions-row {
+    width: 100%;
+    margin-top: 4px;
+}
+
+.sens-btn-celebration-primary {
+    width: 100% !important;
+    padding: 14px 20px !important;
+    border-radius: 9999px !important;
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    border: none !important;
+    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.4) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: transform 0.15s, background 0.2s !important;
+}
+
+.sens-btn-celebration-primary:hover {
+    background: #D8BD97 !important;
+}
+
+.sens-btn-celebration-primary:active {
+    transform: scale(0.99) !important;
+}
+
+/* =============================================================================
+   9. MODAL EJERCICIO DESKTOP 2-COLUMN SPLIT PARITY (@media >= 1024px)
+   ============================================================================= */
+@media (min-width: 1024px) {
+    #sensExerciseModalBackdrop {
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(18, 18, 20, 0.6) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        padding: 30px !important;
+    }
+
+    #sensExerciseModalSheet {
+        max-width: 1140px !important;
+        width: 94% !important;
+        max-height: 88vh !important;
+        border-radius: 24px !important;
+        padding: 24px 28px !important;
+        box-shadow: 0 24px 64px -12px rgba(18, 18, 20, 0.2) !important;
+        animation: sensFadeInScale 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    @keyframes sensFadeInScale {
+        from { transform: scale(0.95); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
 }
 
 
