@@ -8619,30 +8619,26 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-family: var(--font-main);
 }
 
-/* Coreografía Narrativa: Pregunta -> Pausa Reflexiva -> Respuesta "MAKES SENS." */
+/* Coreografía Narrativa: Pregunta -> Pausa Reflexiva -> Respuesta "MAKES SENS." (Zero Blur para 60fps en iOS/Android) */
 @keyframes sensQuestionEntrance {
     0% {
-        opacity: 0;
-        transform: translate3d(0, 14px, 0);
-        filter: blur(3px);
+        opacity: 0.3;
+        transform: translate3d(0, 8px, 0);
     }
     100% {
         opacity: 1;
         transform: translate3d(0, 0, 0);
-        filter: blur(0);
     }
 }
 
 @keyframes sensSloganAnswerEntrance {
     0% {
-        opacity: 0;
-        transform: translate3d(0, 18px, 0) scale(0.97);
-        filter: blur(5px);
+        opacity: 0.3;
+        transform: translate3d(0, 10px, 0) scale(0.99);
     }
     100% {
         opacity: 1;
         transform: translate3d(0, 0, 0) scale(1);
-        filter: blur(0);
     }
 }
 
@@ -8718,49 +8714,52 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* =========================================================================
-   HERO PÚBLICO (HOME): COREOGRAFÍA NARRATIVA EN ORDEN A -> B -> C
+   HERO PÚBLICO (HOME): COREOGRAFÍA ULTRA-FLUIDA (GPU ACCELERATED & ZERO-JANK)
+   Zero Forced Reflow • Cero Blur sobre Video • 100% Visible por Defecto
    ========================================================================= */
 .sens-hero-welcome-header {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
+/* Estado Base: 100% visible permanentemente para prevenir texto invisible en iOS Low-Power Mode y redes lentas */
 .sens-hero-welcome-question,
 .sens-hero-welcome-slogan,
 .sens-hero-followup {
-    opacity: 0;
-    will-change: opacity, transform, filter;
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: opacity, transform;
 }
 
-/* Paso 1 (A): Pregunta / Saludo reflexivo (0.08s delay, 0.44s duration) */
+/* Paso 1 (A): Saludo 'Hey, ¿entrenamos juntos?' (GPU composited) */
 .sens-hero-welcome-header.play-entrance .sens-hero-welcome-question {
-    animation: sensQuestionEntrance 0.44s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+    animation: sensQuestionEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Paso 2 (B): Pausa de ~500ms tras asentarse la pregunta. Entra slogan 'MAKES SENS.' a 0.95s */
+/* Paso 2 (B): Slogan 'MAKES SENS.' */
 .sens-hero-welcome-header.play-entrance .sens-hero-welcome-slogan {
-    animation: sensSloganAnswerEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+    animation: sensSloganAnswerEntrance 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
 }
 
-/* Paso 3 (C): Entra la bajada y CTAs a 1.65s (inmediatamente después de que 'MAKES SENS.' se asienta) */
+/* Paso 3 (C): Bajada y CTAs */
 @keyframes sensFollowupEntrance {
     0% {
-        opacity: 0;
-        transform: translate3d(0, 14px, 0);
-        filter: blur(3px);
+        opacity: 0.3;
+        transform: translate3d(0, 8px, 0);
     }
     100% {
         opacity: 1;
         transform: translate3d(0, 0, 0);
-        filter: blur(0);
     }
 }
 
 .sens-hero-followup.play-entrance,
 .sens-hero-welcome-header.play-entrance ~ .sens-hero-followup {
-    animation: sensFollowupEntrance 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.65s both;
+    animation: sensFollowupEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
 }
 
 /* Estado Consolidado al terminar la coreografía completa (A -> B -> C) */

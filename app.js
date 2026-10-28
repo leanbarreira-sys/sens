@@ -1985,7 +1985,7 @@ function initHeroVideo() {
         isRevealed = true;
         heroSection.classList.add('hero-ready');
         if (typeof triggerHeroGreetingAnimation === 'function') {
-            try { triggerHeroGreetingAnimation(true); } catch (_) {}
+            try { triggerHeroGreetingAnimation(false); } catch (_) {}
         }
         if (skeleton) {
             skeleton.style.display = 'none';
@@ -17033,35 +17033,27 @@ function triggerHeroGreetingAnimation(force = false) {
         heroGreetingTimer = null;
     }
 
-    if (header) {
-        header.classList.remove('play-entrance', 'played');
+    // Zero forced reflows: los textos permanecen 100% legibles por hardware GPU
+    if (header && !header.classList.contains('play-entrance') && !header.classList.contains('played')) {
+        header.classList.add('play-entrance');
     }
-    if (followup) {
-        followup.classList.remove('play-entrance', 'played');
+    if (followup && !followup.classList.contains('play-entrance') && !followup.classList.contains('played')) {
+        followup.classList.add('play-entrance');
     }
-    if (header) void header.offsetWidth;
-    if (followup) void followup.offsetWidth;
-
-    if (header) header.classList.add('play-entrance');
-    if (followup) followup.classList.add('play-entrance');
 
     heroGreetingTimer = setTimeout(() => {
         if (header) header.classList.add('played');
         if (followup) followup.classList.add('played');
-    }, 2400);
+    }, 600);
 }
 
-// Fallback de seguridad para el hero público (A -> B -> C completo)
+// Fallback ultra-rápido para el Hero: consolidar visibilidad al 100% en frame inicial
 setTimeout(() => {
     const h = document.getElementById('sensHeroWelcomeHeader');
     const f = document.getElementById('sensHeroFollowup');
-    if (h && !h.classList.contains('played')) {
-        h.classList.add('played');
-    }
-    if (f && !f.classList.contains('played')) {
-        f.classList.add('played');
-    }
-}, 2800);
+    if (h) h.classList.add('played');
+    if (f) f.classList.add('played');
+}, 650);
 
 /**
  * Navega semanas en el calendario dinámico con física de animación GPU fluida (Swipe & Flechas)
