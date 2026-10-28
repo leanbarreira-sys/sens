@@ -22264,20 +22264,20 @@ body:has(.modal.show) #sensCoachFloatingDock {
    SENS PWA ENGINE & MARKETING POPUP (QUIET LUXURY OBSIDIAN & CHAMPAGNE)
    ============================================================================= */
 
-/* 1. Marketing Install Floating Popup / Toast */
+/* 1. Marketing Install Floating Popup / Toast - Quiet Light Luxury */
 .sens-pwa-marketing-popup {
     position: fixed;
     bottom: 24px;
     right: 20px;
     width: calc(100% - 40px);
     max-width: 420px;
-    background: rgba(18, 18, 22, 0.96);
-    border: 1px solid rgba(229, 203, 167, 0.35);
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
     border-radius: 20px;
     padding: 16px 18px 18px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 28px rgba(229, 203, 167, 0.15);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
+    box-shadow: 0 20px 48px rgba(18, 18, 20, 0.12), 0 4px 12px rgba(18, 18, 20, 0.04) !important;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     z-index: 99999;
     box-sizing: border-box;
     display: none;
@@ -22323,9 +22323,9 @@ body.in-portal .sens-pwa-marketing-popup {
     font-weight: 800;
     letter-spacing: 0.8px;
     text-transform: uppercase;
-    color: #E5CBA7;
-    background: rgba(229, 203, 167, 0.12);
-    border: 1px solid rgba(229, 203, 167, 0.3);
+    color: #705B3E !important;
+    background: #FAF6EF !important;
+    border: 1px solid #E5CBA7 !important;
     padding: 3px 8px;
     border-radius: 999px;
     display: inline-flex;
@@ -22336,7 +22336,7 @@ body.in-portal .sens-pwa-marketing-popup {
 .sens-pwa-popup-close {
     background: transparent;
     border: none;
-    color: #8E8E93;
+    color: #8E8E93 !important;
     font-size: 20px;
     cursor: pointer;
     padding: 0 4px;
@@ -22348,7 +22348,7 @@ body.in-portal .sens-pwa-marketing-popup {
 }
 
 .sens-pwa-popup-close:hover {
-    color: #FFFFFF;
+    color: #121214 !important;
 }
 
 .sens-pwa-popup-body {
@@ -22362,9 +22362,9 @@ body.in-portal .sens-pwa-marketing-popup {
     width: 46px;
     height: 46px;
     border-radius: 12px;
-    background: #080809;
-    border: 1px solid rgba(229, 203, 167, 0.4);
-    box-shadow: 0 0 14px rgba(229, 203, 167, 0.2);
+    background: #FAF6EF !important;
+    border: 1px solid rgba(229, 203, 167, 0.6) !important;
+    box-shadow: 0 2px 8px rgba(112, 91, 62, 0.08) !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22383,16 +22383,16 @@ body.in-portal .sens-pwa-marketing-popup {
 }
 
 .sens-pwa-popup-title {
-    font-size: 13.5px;
-    font-weight: 800;
-    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 700;
+    color: #121214 !important;
     margin: 0 0 3px 0;
     line-height: 1.25;
 }
 
 .sens-pwa-popup-desc {
     font-size: 11.5px;
-    color: #A1A1AA;
+    color: #575659 !important;
     line-height: 1.4;
     margin: 0;
 }
@@ -22403,13 +22403,13 @@ body.in-portal .sens-pwa-marketing-popup {
     flex-wrap: wrap;
     margin-bottom: 14px;
     padding: 6px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
 }
 
 .sens-pwa-perk-item {
     font-size: 10px;
-    color: #E4E4E7;
+    color: #4A494C !important;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -22417,7 +22417,7 @@ body.in-portal .sens-pwa-marketing-popup {
 }
 
 .sens-pwa-perk-item svg {
-    color: #E5CBA7;
+    color: #705B3E !important;
     flex-shrink: 0;
 }
 
@@ -22429,20 +22429,24 @@ body.in-portal .sens-pwa-marketing-popup {
 
 .btn-pwa-main-install {
     flex: 1;
-    background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%) !important;
-    color: #080809 !important;
+    background: #121214 !important;
+    color: #FAF6EF !important;
     font-size: 12.5px !important;
-    font-weight: 800 !important;
+    font-weight: 700 !important;
     padding: 10px 16px !important;
-    border-radius: 12px !important;
+    border-radius: 9999px !important;
     border: none !important;
     cursor: pointer !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 7px !important;
-    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.3) !important;
+    box-shadow: 0 4px 14px rgba(18, 18, 20, 0.15) !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-pwa-main-install:hover {
+    background: #2A2A2E !important;
 }
 
 .btn-pwa-main-install:active {
@@ -22450,20 +22454,20 @@ body.in-portal .sens-pwa-marketing-popup {
 }
 
 .btn-pwa-secondary-dismiss {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #A1A1AA;
-    font-size: 11.5px;
-    font-weight: 600;
-    padding: 10px 14px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.15s ease;
+    background: rgba(18, 18, 20, 0.04) !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #575659 !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    padding: 10px 14px !important;
+    border-radius: 9999px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
 }
 
 .btn-pwa-secondary-dismiss:hover {
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.2);
+    color: #121214 !important;
+    background: rgba(18, 18, 20, 0.08) !important;
 }
 
 /* Barra de progreso de cuenta regresiva */
@@ -22473,7 +22477,7 @@ body.in-portal .sens-pwa-marketing-popup {
     left: 0;
     height: 3px;
     width: 100%;
-    background: linear-gradient(90deg, #E5CBA7 0%, #C4A47C 100%);
+    background: linear-gradient(90deg, #E5CBA7 0%, #C4A47C 100%) !important;
     transform-origin: left center;
     transition: transform 0.1s linear;
 }
@@ -23348,8 +23352,37 @@ body:not(.in-portal) .navbar.scrolled {
     box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.06) !important;
 }
 
-body:not(.in-portal) #headerBrandLogo {
+body:not(.in-portal) #headerBrandLogo,
+body:not(.in-portal) .brand-logo-img {
+    height: 38px !important;
+    max-width: 180px !important;
+    width: auto !important;
+    object-fit: contain !important;
     filter: none !important;
+}
+
+body:not(.in-portal) .navbar.scrolled #headerBrandLogo,
+body:not(.in-portal) .navbar.scrolled .brand-logo-img {
+    height: 34px !important;
+    filter: none !important;
+}
+
+body:not(.in-portal) .brand-logo-img-footer {
+    height: 48px !important;
+    max-width: 200px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    filter: none !important;
+    margin: 0 auto 16px !important;
+}
+
+body:not(.in-portal) .brand-logo-img-modal {
+    height: 42px !important;
+    max-width: 180px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    filter: none !important;
+    margin: 0 auto 12px !important;
 }
 
 body:not(.in-portal) .nav-links .nav-link {
@@ -23450,8 +23483,8 @@ body:not(.in-portal) .sens-train-hero {
     position: relative !important;
     box-shadow: 0 12px 36px rgba(18, 18, 20, 0.12) !important;
     padding: 72px 5% 32px !important;
-    min-height: 480px !important;
-    max-height: 520px !important;
+    min-height: 580px !important;
+    max-height: 640px !important;
     height: auto !important;
 }
 
@@ -23537,7 +23570,8 @@ body:not(.in-portal) .sens-hero-welcome-question {
     margin-bottom: 2px !important;
 }
 
-body:not(.in-portal) .sens-hero-welcome-slogan {
+body:not(.in-portal) .sens-hero-welcome-slogan,
+body:not(.in-portal) #sensHeroWelcomeHeader h1 {
     font-size: clamp(2.2rem, 5vw, 3.4rem) !important;
     font-weight: 800 !important;
     color: #FFFFFF !important;
@@ -24125,8 +24159,13 @@ body:not(.in-portal) .pricing-main-btn .btn-badge {
 /* Sub-selector Presencial (1 a 1 vs Dúos / Tríos) */
 body:not(.in-portal) .presencial-sub-selector-container {
     width: 100% !important;
-    display: flex !important;
+    display: flex;
     justify-content: center !important;
+}
+
+body:not(.in-portal) .presencial-sub-selector-container[style*="display: none"],
+body:not(.in-portal) .presencial-sub-selector-container.is-hidden {
+    display: none !important;
 }
 
 body:not(.in-portal) .pricing-sub-nav {
@@ -24621,13 +24660,13 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
         gap: 56px !important;
         align-items: center !important;
         width: 100% !important;
-        min-height: 680px !important;
+        min-height: 740px !important;
     }
 
     body:not(.in-portal) .sens-hero-visual-card {
         position: relative !important;
         width: 100% !important;
-        height: 680px !important;
+        height: 740px !important;
         border-radius: 28px !important;
         overflow: hidden !important;
         box-shadow: 0 16px 48px rgba(18, 18, 20, 0.08) !important;
@@ -24799,7 +24838,8 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
         letter-spacing: normal !important;
     }
 
-    body:not(.in-portal) .sens-hero-welcome-slogan {
+    body:not(.in-portal) .sens-hero-welcome-slogan,
+    body:not(.in-portal) #sensHeroWelcomeHeader h1 {
         color: #121214 !important;
         font-size: 52px !important;
         font-weight: 300 !important;

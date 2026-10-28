@@ -5,11 +5,11 @@ console.log('=== PHASE 1 VERIFICATION TEST ===');
 const html = fs.readFileSync('index.html', 'utf8');
 const css = fs.readFileSync('style.css', 'utf8');
 
-// 1. Verify SVG Dark Logo in Header, Mobile Menu, Footer, and Auth Modal
-const logoDarkMatches = (html.match(/src="img\/logo-dark\.svg"/g) || []).length;
-console.log(`1. img/logo-dark.svg occurrences in index.html: ${logoDarkMatches} (Expected >= 4)`);
-if (logoDarkMatches < 4) {
-  console.error('ERROR: Missing logo-dark.svg replacements');
+// 1. Verify Black Logo in Header, Mobile Menu, Footer, and Auth Modal (logo-NEGRO.png on light surfaces)
+const logoNegroMatches = (html.match(/src="img\/logo-NEGRO\.png"/g) || []).length;
+console.log(`1. img/logo-NEGRO.png occurrences in index.html: ${logoNegroMatches} (Expected >= 4)`);
+if (logoNegroMatches < 4) {
+  console.error('ERROR: Missing logo-NEGRO.png replacements');
   process.exit(1);
 }
 

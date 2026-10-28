@@ -2389,7 +2389,10 @@ function initPricingTabs() {
         });
 
         if (currentMode === 'app') {
-            if (subSelector) subSelector.style.display = 'none';
+            if (subSelector) {
+                subSelector.style.setProperty('display', 'none', 'important');
+                subSelector.classList.add('is-hidden');
+            }
             const appTab = document.getElementById('tab-app');
             if (appTab) {
                 appTab.style.display = 'block';
@@ -2401,7 +2404,10 @@ function initPricingTabs() {
                 setTimeout(() => { setupCarouselSwipe('appCarousel', 'appDots'); }, 50);
             }
         } else if (currentMode === 'online') {
-            if (subSelector) subSelector.style.display = 'none';
+            if (subSelector) {
+                subSelector.style.setProperty('display', 'none', 'important');
+                subSelector.classList.add('is-hidden');
+            }
             const onlineTab = document.getElementById('tab-online');
             if (onlineTab) {
                 onlineTab.style.display = 'block';
@@ -2414,7 +2420,10 @@ function initPricingTabs() {
             }
         } else {
             // Modo Presencial
-            if (subSelector) subSelector.style.display = 'flex';
+            if (subSelector) {
+                subSelector.style.setProperty('display', 'flex', 'important');
+                subSelector.classList.remove('is-hidden');
+            }
             const targetId = 'tab-' + currentSub;
             const targetEl = document.getElementById(targetId);
             if (targetEl) {

@@ -3,7 +3,7 @@
    Cache-First for Static Assets | Network-First for Navigation | Offline Support
    ============================================================================= */
 
-const CACHE_NAME = 'sens-pwa-v3.8.0';
+const CACHE_NAME = 'sens-pwa-v3.9.0';
 
 const PRECACHE_ASSETS = [
     './',
@@ -13,6 +13,7 @@ const PRECACHE_ASSETS = [
     './nutrition_db.js',
     './exercises_db.js',
     './manifest.json',
+    './img/logo-NEGRO.png',
     './img/logo-blanco.png',
     './img/icons/icon-192.png',
     './img/icons/icon-512.png',
@@ -60,6 +61,11 @@ self.addEventListener('fetch', (event) => {
 
     // Bypass caching for Supabase / external APIs
     if (url.hostname.includes('supabase.co') || url.pathname.includes('/auth/v1/')) {
+        return;
+    }
+
+    // Bypass caching for videos and HTTP Range requests (prevents 206 Partial Content Cache API errors and video playback hangs)
+    if (request.headers.get('range') || url.pathname.endsWith('.mp4') || url.pathname.endsWith('.webm')) {
         return;
     }
 
