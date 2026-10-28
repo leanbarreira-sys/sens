@@ -1223,6 +1223,35 @@ document.addEventListener('DOMContentLoaded', () => {
 // NUEVO: CAPTACIÓN ABIERTA DE PROSPECTOS (SECCIÓN SUMATE & CTAs DE PLANES)
 // =============================================================================
 function initLeadCapture() {
+    // 0. Sincronización Dinámica de Selección de Modalidad (Presencial CABA vs Online 1:1)
+    function updateLeadModalityUI() {
+        const checkedRadio = document.querySelector('input[name="leadModality"]:checked');
+        const selectedVal = checkedRadio ? checkedRadio.value : 'Presencial';
+        const allPillLabels = document.querySelectorAll('.sens-lead-pill-label');
+        allPillLabels.forEach(label => {
+            const input = label.querySelector('input[name="leadModality"]');
+            const isMatch = input && input.value === selectedVal;
+            label.classList.toggle('active', isMatch);
+        });
+    }
+
+    const modalityGroup = document.getElementById('leadModalityGroup');
+    if (modalityGroup) {
+        modalityGroup.addEventListener('click', (e) => {
+            const label = e.target.closest('.sens-lead-pill-label');
+            if (label) {
+                const radio = label.querySelector('input[name="leadModality"]');
+                if (radio && !radio.checked) {
+                    radio.checked = true;
+                }
+                updateLeadModalityUI();
+            }
+        });
+        document.querySelectorAll('input[name="leadModality"]').forEach(radio => {
+            radio.addEventListener('change', updateLeadModalityUI);
+        });
+    }
+
     // 1. Botones de Planes ("Agendar Evaluación Inicial" o "Elegir Plan") - 1-Click Instant Navigation
     const planButtons = document.querySelectorAll('.plan-select-btn');
     
@@ -1234,18 +1263,16 @@ function initLeadCapture() {
         const planName = btn.getAttribute('data-plan') || '';
         const sumateSection = document.getElementById('sumate');
         if (sumateSection) {
-            // Preseleccionar radio button correspondiente
-            const radioPresencial = document.querySelector('input[name="leadModality"][value="Presencial 1 a 1 (CABA)"]');
-            const radioGrupo = document.querySelector('input[name="leadModality"][value="Presencial Grupal (Dúo o Trío)"]');
-            const radioOnline = document.querySelector('input[name="leadModality"][value="Online Asesorado"]');
+            // Preseleccionar radio button correspondiente (Presencial u Online 1:1)
+            const radioPresencial = document.querySelector('input[name="leadModality"][value="Presencial"]');
+            const radioOnline = document.querySelector('input[name="leadModality"][value="Online 1:1"]');
             
-            if (planName.includes('Grupo') || planName.includes('Dúo') || planName.includes('Trío')) {
-                if (radioGrupo) radioGrupo.checked = true;
-            } else if (planName.includes('Online')) {
+            if (planName.toLowerCase().includes('online')) {
                 if (radioOnline) radioOnline.checked = true;
             } else {
                 if (radioPresencial) radioPresencial.checked = true;
             }
+            updateLeadModalityUI();
 
             // Pre-cargar la opción elegida en el campo de objetivo para que Nico sepa exactamente qué plan tocó
             const goalInput = document.getElementById('leadGoal');
@@ -1307,14 +1334,14 @@ function initLeadCapture() {
         });
     });
 
-    // 2. Envío de Formulario Lead Intake
+    // 2. Envío de Formulario Lead Intake (Contacto por WhatsApp EXCLUSIVO para Presencial y Online 1:1)
     const btnSubmitLead = document.getElementById('btnSubmitLead');
     if (btnSubmitLead) {
         btnSubmitLead.addEventListener('click', async () => {
             const fullName = document.getElementById('leadFullName') ? document.getElementById('leadFullName').value.trim() : '';
             const phone = document.getElementById('leadPhone') ? document.getElementById('leadPhone').value.trim() : '';
             const selectedModalityRadio = document.querySelector('input[name="leadModality"]:checked');
-            const modality = selectedModalityRadio ? selectedModalityRadio.value : 'Presencial 1 a 1 (CABA)';
+            const modality = selectedModalityRadio ? selectedModalityRadio.value : 'Presencial';
             const goal = document.getElementById('leadGoal') ? document.getElementById('leadGoal').value : 'Fuerza y recomposición física';
 
             if (!fullName || !phone) {
@@ -1322,11 +1349,21 @@ function initLeadCapture() {
                 return;
             }
 
+            // Si por algún flujo residual la modalidad fuese de App, derivar a la cuenta autónoma sin WhatsApp
+            if (modality.toLowerCase().includes('app')) {
+                if (typeof window.openFreeAppTrialModal === 'function') {
+                    window.openFreeAppTrialModal();
+                } else {
+                    showSensToast('Para acceder a la App SENS, creá tu cuenta gratis sin necesidad de WhatsApp.', 'info');
+                }
+                return;
+            }
+
             // Guardar lead en Supabase si está disponible, o en localStorage
             const leadData = {
                 full_name: fullName,
                 phone: phone,
-                preferred_modality: modality.includes('Grupo') ? 'presencial_grupo' : (modality.includes('Online') ? 'online_premium' : 'presencial_caba'),
+                preferred_modality: modality.includes('Online') ? 'online_premium' : 'presencial_caba',
                 fitness_goal: goal,
                 created_at: new Date().toISOString()
             };
@@ -1340,7 +1377,7 @@ function initLeadCapture() {
             }
             localStorage.setItem('sens_last_lead', JSON.stringify(leadData));
 
-            // Mensaje preconfigurado para WhatsApp de Nico
+            // Mensaje preconfigurado para WhatsApp de Nico (Solo Presencial u Online 1:1)
             const waText = encodeURIComponent(`Hola Nico! Me gustaría agendar una Evaluación Inicial en SENS.\nMi nombre es: ${fullName}\nModalidad de interés: ${modality}\nMi objetivo: ${goal}`);
             const waUrl = `https://wa.me/5491136329846?text=${waText}`;
 
@@ -1354,7 +1391,7 @@ function initLeadCapture() {
                 details: 'El prospecto completó el formulario en la web y se le abrió el chat de WhatsApp.'
             }).catch(() => {});
 
-            // Abrir WhatsApp
+            // Abrir WhatsApp solo para modalidades presenciales u online 1:1
             window.open(waUrl, '_blank');
         });
     }
