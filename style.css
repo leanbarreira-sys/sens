@@ -10843,7 +10843,6 @@ body.in-portal .sens-coach-daily-note-card {
     align-items: center;
     gap: 2px;
 }
-}
 
 /* Grilla de Cards de Video (Estilo Pilares) */
 .sens-exercise-video-grid {
@@ -16647,7 +16646,6 @@ body.in-portal #coachHubView {
     color: #FFFFFF !important;
     opacity: 0.88;
 }
-}
 
 /* Selector Modular de Capas Visibles SENS */
 .sens-mkt-layers-bar {
@@ -21754,11 +21752,6 @@ body:has(.modal.show) #sensCoachFloatingDock {
     color: #F87171 !important;
     border: 1px solid rgba(239, 68, 68, 0.35) !important;
 }
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #71717A;
-    margin-top: 6px;
-}
 
 .sens-pillar-pill.done {
     background: rgba(16, 185, 129, 0.14);
@@ -23694,6 +23687,7 @@ body:not(.in-portal) #metodo div[style*="Antes de SENS"] {
 
 body:not(.in-portal) #metodo div[style*="Con SENS"] {
     background: #FAF6EF !important;
+}
 /* ==========================================================================
    SECCIONES 4 & 5: EL MÉTODO (CÓMO TRABAJAMOS) & HEAD COACH NICO S.
    Estilo 100% fiel al prototipo Quiet Light Luxury y capturas de usuario
@@ -24357,10 +24351,132 @@ body:not(.in-portal) #btnSubmitLead:hover {
     transform: translateY(-1px) !important;
 }
 
+body:not(.in-portal) .wellness-editorial-card,
 body:not(.in-portal) #wellness {
+    background: #F4F3F0 !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 24px !important;
+    border-radius: 28px !important;
+    padding: 28px 22px !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
+    margin-top: 24px !important;
+    color: #121214 !important;
     overflow: hidden !important;
+    position: relative !important;
+}
+
+body:not(.in-portal) .wellness-trilogy-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 100% !important;
+}
+
+body:not(.in-portal) .wellness-eyebrow {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.2em !important;
+    display: block !important;
+    margin-bottom: 6px !important;
+}
+
+body:not(.in-portal) .wellness-trilogy-title {
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    color: #121214 !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 0 8px 0 !important;
+}
+
+body:not(.in-portal) .wellness-trilogy-desc {
+    font-size: 13px !important;
+    color: #575659 !important;
+    font-weight: 400 !important;
+    line-height: 1.55 !important;
+    margin: 0 0 18px 0 !important;
+}
+
+body:not(.in-portal) .wellness-domains-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin-bottom: 20px !important;
+}
+
+body:not(.in-portal) .wellness-domain-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    text-decoration: none !important;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.03) !important;
+    transition: all 0.2s ease !important;
+}
+
+body:not(.in-portal) .wellness-domain-card:hover {
+    background: #FAF9F6 !important;
+    border-color: #E5CBA7 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.06) !important;
+}
+
+body:not(.in-portal) .wellness-domain-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+body:not(.in-portal) .wellness-domain-left .material-symbols-outlined {
+    color: #705B3E !important;
+    font-size: 20px !important;
+}
+
+body:not(.in-portal) .wellness-domain-name {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    display: block !important;
+}
+
+body:not(.in-portal) .wellness-domain-sub {
+    font-size: 11px !important;
+    color: #8E8B85 !important;
+    display: block !important;
+}
+
+body:not(.in-portal) .wellness-domain-arrow {
+    color: #8E8B85 !important;
+    font-size: 16px !important;
+    transition: transform 0.2s ease !important;
+}
+
+body:not(.in-portal) .wellness-domain-card:hover .wellness-domain-arrow {
+    transform: translateX(2px) !important;
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) .wellness-guarantee-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding-top: 8px !important;
+    color: #705B3E !important;
+    font-size: 11.5px !important;
+    line-height: 1.4 !important;
+}
+
+body:not(.in-portal) .wellness-guarantee-row .material-symbols-outlined {
+    font-size: 20px !important;
+    color: #705B3E !important;
+    flex-shrink: 0 !important;
+}
+
+body:not(.in-portal) .wellness-guarantee-row span:last-child {
+    color: #575659 !important;
 }
 
 /* 9. Footer Público */
