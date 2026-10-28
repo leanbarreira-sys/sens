@@ -62,10 +62,10 @@
 
     <!-- PWA Manifest & Native App Architecture (Apple iOS & Android Standalone) -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#080809">
+    <meta name="theme-color" content="#FAF9F6">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="SENS">
     <meta name="application-name" content="SENS">
     <link rel="apple-touch-icon" sizes="180x180" href="img/icons/apple-touch-icon.png">
@@ -73,16 +73,16 @@
     <link rel="icon" type="image/png" sizes="512x512" href="img/icons/icon-512.png">
     <link rel="icon" type="image/svg+xml" href="img/icons/icon.svg">
     <style>
-        html,
-        body {
-            background-color: #080809 !important;
-            color: #FFFFFF !important;
+        html:not(.in-portal-mode),
+        body:not(.in-portal) {
+            background-color: #FAF9F6 !important;
+            color: #121214 !important;
             margin: 0;
             padding: 0;
         }
 
         .sens-train-hero {
-            background-color: #080809;
+            background-color: #121214;
         }
 
         html.in-portal-mode,
@@ -109,14 +109,16 @@
         })();
     </script>
 
-    <!-- Google Fonts: Plus Jakarta Sans -->
+    <!-- Google Fonts: Plus Jakarta Sans & Material Symbols -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=13.2">
+    <link rel="stylesheet" href="style.css?v=13.3">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -380,127 +382,126 @@
             </div>
         </section>
 
-        <!-- Sección Método & Quién es Nico -->
-        <section class="section-sens" id="metodo"
-            style="background: rgba(18, 18, 20, 0.45); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
-            <div class="method-layout">
-                <div>
-                    <span class="section-eyebrow">El Método</span>
-                    <h2 class="section-main-title">CÓMO <span class="text-champagne">TRABAJAMOS</span></h2>
-                    <p class="section-lead">
-                        Un proceso guiado para que entrenes con confianza, mejores tu energía y disfrutes
-                        cada etapa adaptado a tu tiempo y espacio.
-                    </p>
+        <!-- =========================================================================
+             MÓDULO 3 & 4: EL MÉTODO (CÓMO TRABAJAMOS) & HEAD COACH NICO S.
+             ========================================================================= -->
+        <section class="section-sens sens-metodo-section" id="metodo">
+            <div class="sens-metodo-header">
+                <span class="sens-metodo-eyebrow">Proceso Sin Fricción</span>
+                <h2 class="sens-metodo-title">CÓMO <span class="text-champagne">TRABAJAMOS</span></h2>
+            </div>
 
-                    <div class="method-features-list">
-                        <div class="method-feature-item">
-                            <div class="method-feature-icon">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold"
-                                    style="margin-bottom: 4px; color: var(--text-primary); font-size: 1.02rem;">
-                                    Evaluación</h4>
-                                <p
-                                    style="font-size: 0.9rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
-                                    Conocemos tu historial, lesiones y objetivos personalizados.</p>
-                            </div>
-                        </div>
-
-                        <div class="method-feature-item">
-                            <div class="method-feature-icon">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold"
-                                    style="margin-bottom: 4px; color: var(--text-primary); font-size: 1.02rem;">
-                                    Progresión sin Intimidación</h4>
-                                <p
-                                    style="font-size: 0.9rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
-                                    Técnica cuidada, cero riesgos y un clima cercano sin exigencias extremas ni gritos.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="method-feature-item">
-                            <div class="method-feature-icon">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold"
-                                    style="margin-bottom: 4px; color: var(--text-primary); font-size: 1.02rem;">Hábitos
-                                    y Constancia Real</h4>
-                                <p
-                                    style="font-size: 0.9rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
-                                    Metas simples de movimiento, descanso y nutrición práctica para tu vida diaria.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Comparación Antes vs Después -->
-                    <div
-                        style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:24px;">
-                        <div
-                            style="background:#141416; border:none; border-radius:12px; padding:18px; box-shadow:0 4px 16px rgba(0,0,0,0.25);">
-                            <span
-                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Antes
-                                de SENS</span>
-                            <p style="font-size:0.86rem; color:var(--text-secondary); margin:0; line-height:1.45;">
-                                Rutinas genéricas, molestias articulares o frustración por falta de constancia.</p>
-                        </div>
-                        <div
-                            style="background:#18181C; border:none; border-radius:12px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.35);">
-                            <span
-                                style="font-size:10px; font-weight:800; color:var(--accent-primary); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Con
-                                SENS</span>
-                            <p style="font-size:0.86rem; color:var(--text-primary); margin:0; line-height:1.45;">Postura
-                                erguida, más energía diaria, cuerpo ágil y un hábito que disfrutas sostener.</p>
-                        </div>
+            <!-- 3 Pasos Cards -->
+            <div class="sens-steps-grid">
+                <div class="sens-step-card">
+                    <div class="sens-step-number">01</div>
+                    <div class="sens-step-content">
+                        <h3 class="sens-step-title">Evaluación Inicial de Movilidad</h3>
+                        <p class="sens-step-desc">Mapeamos asimetrías, rangos articulares y hábitos para armar un plan que se adapte a tu anatomía.</p>
                     </div>
                 </div>
 
-                <!-- Tarjeta Editorial de Nico (Brandbook Style: Foto Centrada y Rostro Despejado) -->
-                <div class="ig-post nico-editorial-card">
-                    <img src="img/img-nico.png" alt="Nico Entrenador Principal SENS" class="ig-img nico-portrait-img"
-                        loading="lazy">
-                    <div class="grad-bottom"></div>
-                    <div class="ig-content pos-bottom">
-                        <span class="ig-badge-tag" style="margin-bottom: 6px; font-size: 8.5px;">ENTRENADOR
-                            PRINCIPAL</span>
-                        <div class="ig-bold"
-                            style="font-size: 28px; color: var(--accent-primary); margin: 2px 0 4px; line-height: 1;">
-                            NICO</div>
-                        <div class="ig-light"
-                            style="font-size: 11px; margin-bottom: 8px; letter-spacing: 1.2px; line-height: 1.35; text-transform: uppercase;">
-                            Entrenador personal, instructor de yoga y masajista profesional</div>
-                        <p class="ig-body"
-                            style="font-size: 12px; line-height: 1.45; color: rgba(255,255,255,0.9); margin-top: 0; margin-bottom: 12px;">
-                            "Integro entrenamiento, movilidad y yoga para ofrecerte un espacio seguro, preciso y
-                            desafiante.
-                            Mi compromiso es que te sientas en control de tu cuerpo."
-                        </p>
-                        <div class="pill-container" style="margin-bottom: 14px; gap: 6px;">
-                            <span class="pill pill-dark" style="font-size: 10px; padding: 4px 10px;">Palermo y
-                                alrededores</span>
-                            <span class="pill pill-champagne" style="font-size: 10px; padding: 4px 10px;">Cupos
-                                Limitados</span>
-                        </div>
-                        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20conocer%20m%C3%A1s%20sobre%20el%20entrenamiento%20en%20SENS."
-                            target="_blank" rel="noopener" class="btn btn-primary btn-sm"
-                            style="width: 100%; text-align: center; padding: 10px 14px; font-size: 11px;">
-                            Escribir a Nico por WhatsApp →
-                        </a>
+                <div class="sens-step-card">
+                    <div class="sens-step-number">02</div>
+                    <div class="sens-step-content">
+                        <h3 class="sens-step-title">Progresión sin Intimidación</h3>
+                        <p class="sens-step-desc">Cargas seguras y ejercicios explicados paso a paso en video HD, con foco estricto en la técnica.</p>
                     </div>
                 </div>
+
+                <div class="sens-step-card">
+                    <div class="sens-step-number">03</div>
+                    <div class="sens-step-content">
+                        <h3 class="sens-step-title">Hábitos &amp; Constancia Real</h3>
+                        <p class="sens-step-desc">Acompañamiento continuo que premia la consistencia por encima del agotamiento sin sentido.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparativa: Antes vs Con SENS -->
+            <div class="sens-comparison-grid">
+                <!-- Antes de SENS -->
+                <div class="sens-comp-card sens-comp-before">
+                    <div class="sens-comp-header">
+                        <span class="material-symbols-outlined sens-comp-icon-before">close</span>
+                        <span class="sens-comp-title-before">Antes de SENS</span>
+                    </div>
+                    <ul class="sens-comp-list sens-comp-list-before">
+                        <li>
+                            <span class="sens-comp-dot-before"></span>
+                            <span>Rutinas genéricas de gimnasio sin progresión medible</span>
+                        </li>
+                        <li>
+                            <span class="sens-comp-dot-before"></span>
+                            <span>Dolor lumbar recurrente al hacer fuerza</span>
+                        </li>
+                        <li>
+                            <span class="sens-comp-dot-before"></span>
+                            <span>Abandono al mes por falta de claridad y motivación</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Con SENS -->
+                <div class="sens-comp-card sens-comp-after">
+                    <div class="sens-comp-header">
+                        <div class="sens-comp-title-group">
+                            <span class="material-symbols-outlined sens-comp-icon-after">check_circle</span>
+                            <span class="sens-comp-title-after">Con SENS</span>
+                        </div>
+                        <span class="sens-comp-badge-optimal">
+                            <span class="sens-comp-badge-dot"></span>Óptimo
+                        </span>
+                    </div>
+                    <ul class="sens-comp-list sens-comp-list-after">
+                        <li>
+                            <span class="sens-comp-dot-after"></span>
+                            <span>Sobrecarga progresiva milimétrica desde la App</span>
+                        </li>
+                        <li>
+                            <span class="sens-comp-dot-after"></span>
+                            <span>Cuerpo desinflamado, postura erguida y sin molestias</span>
+                        </li>
+                        <li>
+                            <span class="sens-comp-dot-after"></span>
+                            <span>Contacto directo con tu coach para dudas en WhatsApp</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Head Coach Nico S. -->
+        <section class="section-sens sens-coach-section" id="coach-section">
+            <div class="sens-coach-card">
+                <div class="sens-coach-header">
+                    <div class="sens-coach-avatar-wrap">
+                        <img src="img/img-nico.png" alt="Retrato de Head Coach Nico S." class="sens-coach-avatar-img" loading="lazy">
+                    </div>
+                    <div class="sens-coach-identity">
+                        <span class="sens-coach-eyebrow">Fundador &amp; Head Coach</span>
+                        <h3 class="sens-coach-name">Nico S.</h3>
+                        <p class="sens-coach-bio">Biomecánica • CABA &amp; Global</p>
+                    </div>
+                </div>
+
+                <!-- Credenciales Badges -->
+                <div class="sens-coach-badges">
+                    <span class="sens-coach-badge">Palermo &amp; Belgrano</span>
+                    <span class="sens-coach-badge">Yoga &amp; Movilidad Somática</span>
+                    <span class="sens-coach-badge">Alto Rendimiento</span>
+                </div>
+
+                <!-- Cita Textual -->
+                <blockquote class="sens-coach-quote">
+                    “Integro entrenamiento, movilidad y yoga para ofrecerte un espacio seguro, preciso y desafiante. No creo en castigar al cuerpo; creo en enseñarle a moverse con solvencia.”
+                </blockquote>
+
+                <!-- WhatsApp Directo -->
+                <a class="sens-coach-cta-btn" href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20conocer%20m%C3%A1s%20sobre%20el%20entrenamiento%20en%20SENS." target="_blank" rel="noopener noreferrer">
+                    <span class="material-symbols-outlined">chat</span>
+                    <span>Hablar directo con Nico por WhatsApp</span>
+                </a>
             </div>
         </section>
 
@@ -519,17 +520,14 @@
                 <div class="pricing-main-nav" role="tablist" aria-label="Modalidad Principal">
                     <button class="pricing-main-btn" data-mode="app" role="tab" aria-selected="false" id="btnModeApp">
                         <span class="btn-text">App SENS</span>
-                        <span class="btn-badge">Free 7d / Premium</span>
                     </button>
                     <button class="pricing-main-btn active" data-mode="presencial" role="tab" aria-selected="true"
                         id="btnModePresencial">
-                        <span class="btn-text">Presencial (CABA)</span>
-                        <span class="btn-badge">1 a 1 o Grupos</span>
+                        <span class="btn-text">Presencial</span>
                     </button>
                     <button class="pricing-main-btn" data-mode="online" role="tab" aria-selected="false"
                         id="btnModeOnline">
-                        <span class="btn-text">Online 1 a 1</span>
-                        <span class="btn-badge">Con Nico</span>
+                        <span class="btn-text">Online 1:1</span>
                     </button>
                 </div>
 
@@ -538,11 +536,11 @@
                     <div class="pricing-sub-nav" role="tablist" aria-label="Tipo de Presencial">
                         <button class="pricing-sub-btn active" data-sub="presencial-ind" role="tab" aria-selected="true"
                             id="btnSubInd">
-                            Personalizado 1 a 1
+                            1 a 1
                         </button>
                         <button class="pricing-sub-btn" data-sub="presencial-grupos" role="tab" aria-selected="false"
                             id="btnSubGrupos">
-                            Grupos por Persona (Dúos / Tríos)
+                            Dúos / Tríos
                         </button>
                     </div>
                 </div>
