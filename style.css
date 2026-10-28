@@ -23462,15 +23462,32 @@ body:not(.in-portal) .sens-train-hero {
     height: auto !important;
 }
 
-@media (min-width: 900px) {
-    body:not(.in-portal) .sens-train-hero {
-        max-width: 1200px !important;
-        margin: 104px auto 36px !important;
-        border-radius: 32px !important;
-        padding: 95px 6% 40px !important;
-        min-height: 520px !important;
-        max-height: 580px !important;
-    }
+/* Mobile Defaults (< 1024px) para elementos split */
+body:not(.in-portal) .sens-hero-split-grid {
+    display: contents !important;
+}
+
+body:not(.in-portal) .sens-hero-visual-card {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1 !important;
+}
+
+body:not(.in-portal) .sens-hero-desktop-badge,
+body:not(.in-portal) .sens-hero-biometric-capsule,
+body:not(.in-portal) .sens-hero-desktop-eyebrow,
+body:not(.in-portal) .sens-hero-desktop-routes {
+    display: none !important;
+}
+
+body:not(.in-portal) .sens-metodo-coach-desktop-wrapper {
+    display: block !important;
+}
+
+body:not(.in-portal) .sens-sumate-wellness-desktop-wrapper {
+    display: block !important;
 }
 
 /* Cero Skeleton Shimmer: Video & Poster visibles instantáneamente sin trabas */
@@ -24435,4 +24452,646 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn {
 body:not(.in-portal) .mobile-quick-bar #mobileQuickAccessBtn:active,
 body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
     transform: scale(0.98) !important;
+}
+
+/* ==========================================================================
+   FASE 1: DESKTOP QUIET LIGHT LUXURY EXPANSION (@media min-width: 1024px)
+   Paridad 1:1 con stitch_sens_quiet_luxury_design_system/pantallas DESKTOP/sens_landing_oficial_desktop/code.html
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+    /* 1. Ocultar Dock Móvil en Desktop */
+    body:not(.in-portal) .mobile-quick-bar {
+        display: none !important;
+    }
+
+    /* 2. Contenedor Global y Barra de Navegación */
+    body:not(.in-portal) .navbar {
+        padding: 0 48px !important;
+        height: 76px !important;
+    }
+
+    body:not(.in-portal) .navbar-container {
+        max-width: 1520px !important;
+        margin: 0 auto !important;
+        width: 100% !important;
+    }
+
+    body:not(.in-portal) .section-sens {
+        max-width: 1520px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-left: 48px !important;
+        padding-right: 48px !important;
+    }
+
+    /* 3. Hero Cinematográfico Split Grid */
+    body:not(.in-portal) .sens-train-hero {
+        background: transparent !important;
+        box-shadow: none !important;
+        max-width: 1520px !important;
+        margin: 0 auto !important;
+        padding: 110px 48px 48px !important;
+        min-height: calc(100vh - 76px) !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+        border-radius: 0 !important;
+    }
+
+    body:not(.in-portal) .sens-hero-split-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 56px !important;
+        align-items: center !important;
+        width: 100% !important;
+        min-height: 680px !important;
+    }
+
+    body:not(.in-portal) .sens-hero-visual-card {
+        position: relative !important;
+        width: 100% !important;
+        height: 680px !important;
+        border-radius: 28px !important;
+        overflow: hidden !important;
+        box-shadow: 0 16px 48px rgba(18, 18, 20, 0.08) !important;
+        background: #121214 !important;
+        z-index: 2 !important;
+    }
+
+    body:not(.in-portal) .sens-hero-visual-card #heroVideo,
+    body:not(.in-portal) .sens-hero-visual-card .hero-video {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center 20% !important;
+        filter: brightness(0.96) !important;
+    }
+
+    body:not(.in-portal) .sens-hero-visual-card .hero-overlay {
+        position: absolute !important;
+        inset: 0 !important;
+        background: linear-gradient(180deg, rgba(8, 8, 9, 0.2) 0%, rgba(8, 8, 9, 0.35) 40%, rgba(8, 8, 9, 0.82) 100%) !important;
+    }
+
+    /* Top Badge: Santuario SENS */
+    body:not(.in-portal) .sens-hero-desktop-badge {
+        position: absolute !important;
+        top: 24px !important;
+        left: 24px !important;
+        z-index: 15 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 8px 16px !important;
+        border-radius: 9999px !important;
+        background: rgba(250, 249, 246, 0.94) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        color: #121214 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.12em !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    body:not(.in-portal) .sens-hero-badge-dot {
+        width: 7px !important;
+        height: 7px !important;
+        border-radius: 50% !important;
+        background: #1E7B42 !important;
+        box-shadow: 0 0 6px rgba(30, 123, 66, 0.6) !important;
+        animation: sensDotPulse 2s infinite !important;
+    }
+
+    @keyframes sensDotPulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.15); }
+    }
+
+    /* Floating Biometric Capsule (Tactile Oura/Aman Aesthetic) */
+    body:not(.in-portal) .sens-hero-biometric-capsule {
+        position: absolute !important;
+        bottom: 24px !important;
+        left: 24px !important;
+        right: 24px !important;
+        z-index: 15 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 16px 22px !important;
+        border-radius: 20px !important;
+        background: rgba(250, 249, 246, 0.96) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    }
+
+    body:not(.in-portal) .sens-bio-metric-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+
+    body:not(.in-portal) .sens-bio-icon-wrap {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: #FAF6EF !important;
+        border: 1px solid #E5CBA7 !important;
+        color: #705B3E !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    body:not(.in-portal) .sens-bio-text {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    body:not(.in-portal) .sens-bio-label {
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        color: #705B3E !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.08em !important;
+    }
+
+    body:not(.in-portal) .sens-bio-value {
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        color: #121214 !important;
+        line-height: 1.2 !important;
+    }
+
+    body:not(.in-portal) .sens-bio-divider {
+        height: 34px !important;
+        width: 1px !important;
+        background: rgba(18, 18, 20, 0.1) !important;
+    }
+
+    body:not(.in-portal) .sens-bio-metric-right {
+        display: flex !important;
+        flex-direction: column !important;
+        text-align: right !important;
+    }
+
+    body:not(.in-portal) .sens-bio-subvalue {
+        font-size: 13.5px !important;
+        font-weight: 600 !important;
+        color: #121214 !important;
+    }
+
+    /* Columna Derecha Editorial */
+    body:not(.in-portal) .hero-train-content {
+        max-width: 620px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        text-align: left !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    body:not(.in-portal) .sens-hero-desktop-eyebrow {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 6px 14px !important;
+        border-radius: 9999px !important;
+        background: #EFECE6 !important;
+        color: #705B3E !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.12em !important;
+        margin-bottom: 16px !important;
+        align-self: flex-start !important;
+    }
+
+    body:not(.in-portal) .sens-hero-welcome-question {
+        color: #575659 !important;
+        font-size: 19px !important;
+        margin-bottom: 6px !important;
+        text-align: left !important;
+        font-weight: 400 !important;
+        letter-spacing: normal !important;
+    }
+
+    body:not(.in-portal) .sens-hero-welcome-slogan {
+        color: #121214 !important;
+        font-size: 52px !important;
+        font-weight: 300 !important;
+        letter-spacing: -0.02em !important;
+        margin-bottom: 16px !important;
+        line-height: 1.1 !important;
+        text-align: left !important;
+    }
+
+    body:not(.in-portal) .hero-description-train {
+        color: #575659 !important;
+        font-size: 16px !important;
+        line-height: 1.65 !important;
+        font-weight: 300 !important;
+        margin: 0 0 26px 0 !important;
+        text-align: left !important;
+        max-width: 580px !important;
+    }
+
+    body:not(.in-portal) .hero-cta-group {
+        justify-content: flex-start !important;
+        margin-bottom: 32px !important;
+        gap: 14px !important;
+    }
+
+    body:not(.in-portal) .hero-cta-group .btn-primary {
+        padding: 14px 28px !important;
+        font-size: 13.5px !important;
+        font-weight: 800 !important;
+    }
+
+    body:not(.in-portal) .hero-cta-group .hero-btn-apple-dark {
+        background: #F4F3F0 !important;
+        border: 1px solid rgba(18, 18, 20, 0.08) !important;
+        color: #121214 !important;
+        padding: 14px 24px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        transition: background 0.2s ease !important;
+    }
+
+    body:not(.in-portal) .hero-cta-group .hero-btn-apple-dark:hover {
+        background: #EFECE6 !important;
+    }
+
+    body:not(.in-portal) .hero-cta-group .hero-btn-secondary {
+        color: #705B3E !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+    }
+
+    /* Rutas Somáticas Micro-Selectors */
+    body:not(.in-portal) .sens-hero-desktop-routes {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    body:not(.in-portal) .sens-routes-title {
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.12em !important;
+        color: #8E8B85 !important;
+        margin-bottom: 10px !important;
+    }
+
+    body:not(.in-portal) .sens-routes-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    body:not(.in-portal) .sens-route-card {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(18, 18, 20, 0.08) !important;
+        border-radius: 14px !important;
+        padding: 12px 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        box-shadow: 0 1px 4px rgba(18, 18, 20, 0.04) !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        min-height: 82px !important;
+    }
+
+    body:not(.in-portal) .sens-route-card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(18, 18, 20, 0.08) !important;
+        border-color: #E5CBA7 !important;
+        background: #FAF6EF !important;
+    }
+
+    body:not(.in-portal) .sens-route-num {
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        color: #705B3E !important;
+        letter-spacing: 0.04em !important;
+    }
+
+    body:not(.in-portal) .sens-route-price {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        color: #121214 !important;
+        line-height: 1.1 !important;
+        margin: 3px 0 2px !important;
+    }
+
+    body:not(.in-portal) .sens-route-sub {
+        font-size: 10.5px !important;
+        color: #8E8B85 !important;
+        line-height: 1.25 !important;
+    }
+
+    /* 4. Pilares SENS: 4 Columnas Elegantes */
+    body:not(.in-portal) #pilares .section-head {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+        max-width: 1520px !important;
+        margin: 0 auto 36px !important;
+        text-align: left !important;
+    }
+
+    body:not(.in-portal) #pilares .section-head .section-main-title {
+        font-size: 36px !important;
+        font-weight: 300 !important;
+        margin: 4px 0 0 !important;
+    }
+
+    body:not(.in-portal) #pilares .section-head .section-lead {
+        max-width: 460px !important;
+        margin: 0 !important;
+        text-align: left !important;
+        font-size: 14.5px !important;
+    }
+
+    body:not(.in-portal) #pilares .pill-dark {
+        display: none !important;
+    }
+
+    body:not(.in-portal) #pilares .touch-carousel-wrap {
+        overflow: visible !important;
+        max-width: 1520px !important;
+        margin: 0 auto !important;
+    }
+
+    body:not(.in-portal) #pilares .pillars-carousel {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 24px !important;
+        overflow: visible !important;
+        transform: none !important;
+        width: 100% !important;
+    }
+
+    body:not(.in-portal) #pilares .carousel-slide {
+        width: 100% !important;
+        flex: none !important;
+        min-width: 0 !important;
+    }
+
+    body:not(.in-portal) #pilares .carousel-slide .ig-post {
+        height: 520px !important;
+        border-radius: 24px !important;
+        box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.05) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+
+    body:not(.in-portal) #pilares .carousel-slide .ig-post:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 12px 32px -4px rgba(18, 18, 20, 0.1) !important;
+    }
+
+    body:not(.in-portal) #pilares .carousel-dots {
+        display: none !important;
+    }
+
+    /* 5. El Método & Head Coach Nico Split Grid */
+    body:not(.in-portal) .sens-metodo-coach-desktop-wrapper {
+        display: grid !important;
+        grid-template-columns: 7fr 5fr !important;
+        gap: 48px !important;
+        max-width: 1520px !important;
+        margin: 0 auto 60px !important;
+        padding: 0 48px !important;
+        align-items: start !important;
+    }
+
+    body:not(.in-portal) .sens-metodo-section {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body:not(.in-portal) .sens-metodo-title {
+        font-size: 32px !important;
+        margin-bottom: 24px !important;
+    }
+
+    body:not(.in-portal) .sens-steps-grid {
+        gap: 16px !important;
+        margin-bottom: 28px !important;
+    }
+
+    body:not(.in-portal) .sens-step-card {
+        padding: 20px 24px !important;
+        border-radius: 20px !important;
+    }
+
+    body:not(.in-portal) .sens-step-number {
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 14px !important;
+    }
+
+    body:not(.in-portal) .sens-step-title {
+        font-size: 16px !important;
+    }
+
+    body:not(.in-portal) .sens-step-desc {
+        font-size: 13.5px !important;
+    }
+
+    body:not(.in-portal) .sens-comparison-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 16px !important;
+    }
+
+    body:not(.in-portal) .sens-comp-card {
+        padding: 20px !important;
+        border-radius: 20px !important;
+    }
+
+    body:not(.in-portal) .sens-coach-section {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: sticky !important;
+        top: 100px !important;
+    }
+
+    body:not(.in-portal) .sens-coach-card {
+        padding: 28px !important;
+        border-radius: 28px !important;
+        box-shadow: 0 8px 32px rgba(18, 18, 20, 0.06) !important;
+    }
+
+    body:not(.in-portal) .sens-coach-avatar-wrap {
+        width: 100% !important;
+        height: 260px !important;
+        border-radius: 20px !important;
+        position: relative !important;
+        margin-bottom: 16px !important;
+    }
+
+    body:not(.in-portal) .sens-coach-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        margin-bottom: 16px !important;
+    }
+
+    body:not(.in-portal) .sens-coach-name {
+        font-size: 24px !important;
+        font-weight: 600 !important;
+    }
+
+    body:not(.in-portal) .sens-coach-bio {
+        font-size: 13.5px !important;
+        color: #705B3E !important;
+        font-weight: 500 !important;
+    }
+
+    body:not(.in-portal) .sens-coach-quote {
+        font-size: 13px !important;
+        line-height: 1.6 !important;
+        padding: 18px !important;
+        margin-bottom: 20px !important;
+    }
+
+    body:not(.in-portal) .sens-coach-cta-btn {
+        padding: 14px 24px !important;
+        font-size: 13.5px !important;
+    }
+
+    /* 6. Planes & Precios Desktop Grid */
+    body:not(.in-portal) #planes .section-head .section-main-title {
+        font-size: 36px !important;
+    }
+
+    body:not(.in-portal) #planes .section-head .section-lead {
+        font-size: 15px !important;
+        max-width: 640px !important;
+    }
+
+    body:not(.in-portal) .pricing-selector-container {
+        max-width: 520px !important;
+        margin: 0 auto 32px !important;
+    }
+
+    body:not(.in-portal) .pricing-main-nav {
+        max-width: 480px !important;
+        padding: 5px !important;
+    }
+
+    body:not(.in-portal) .pricing-main-btn {
+        font-size: 13.5px !important;
+        padding: 9px 18px !important;
+    }
+
+    body:not(.in-portal) .pricing-sub-nav {
+        max-width: 320px !important;
+        padding: 4px !important;
+    }
+
+    body:not(.in-portal) .pricing-sub-btn {
+        font-size: 12px !important;
+        padding: 8px 14px !important;
+    }
+
+    body:not(.in-portal) #planes .touch-carousel-wrap {
+        overflow: visible !important;
+        max-width: 1400px !important;
+        margin: 0 auto !important;
+    }
+
+    body:not(.in-portal) #planes .pricing-carousel {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 24px !important;
+        overflow: visible !important;
+        transform: none !important;
+        width: 100% !important;
+    }
+
+    body:not(.in-portal) #tab-presencial-grupos .pricing-carousel,
+    body:not(.in-portal) #tab-online .pricing-carousel {
+        grid-template-columns: repeat(2, 1fr) !important;
+        max-width: 860px !important;
+        margin: 0 auto !important;
+    }
+
+    body:not(.in-portal) #planes .carousel-slide {
+        width: 100% !important;
+        flex: none !important;
+        min-width: 0 !important;
+        display: flex !important;
+    }
+
+    body:not(.in-portal) .train-plan-card {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        padding: 28px !important;
+        border-radius: 28px !important;
+    }
+
+    body:not(.in-portal) .train-plan-card .plan-features-list {
+        margin-bottom: 24px !important;
+    }
+
+    body:not(.in-portal) #planes .carousel-dots {
+        display: none !important;
+    }
+
+    /* 7. Cómo Sumarte & Trilogy Split Grid */
+    body:not(.in-portal) .sens-sumate-wellness-desktop-wrapper {
+        display: grid !important;
+        grid-template-columns: 7fr 5fr !important;
+        gap: 40px !important;
+        max-width: 1520px !important;
+        margin: 0 auto !important;
+        padding: 0 48px !important;
+        align-items: stretch !important;
+    }
+
+    body:not(.in-portal) #sumate .lead-intake-card {
+        max-width: 100% !important;
+        margin: 0 !important;
+        height: 100% !important;
+        padding: 36px !important;
+        border-radius: 28px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+    }
+
+    body:not(.in-portal) #wellness {
+        max-width: 100% !important;
+        margin: 0 !important;
+        height: 100% !important;
+        border-radius: 28px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+    }
+
+    /* 8. Footer Desktop */
+    body:not(.in-portal) footer {
+        max-width: 1520px !important;
+        margin: 40px auto 0 !important;
+        padding: 60px 48px !important;
+        border-radius: 28px 28px 0 0 !important;
+    }
 }

@@ -118,7 +118,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=13.6">
+    <link rel="stylesheet" href="style.css?v=13.7">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -226,41 +226,104 @@
     <main id="publicLanding">
         <!-- Hero Section (Apple-Grade Premium Presentation) -->
         <section class="sens-train-hero" id="sensTrainHero">
-            <!-- Fallback Image: Visible instantáneamente mientras carga el video -->
-            <div class="hero-bg-fallback" id="heroBgFallback"></div>
-            <!-- Video Hero: Se reproduce nítido en loop desde el primer instante -->
-            <video autoplay muted loop playsinline preload="auto" poster="img/hero-bg-opt.jpg" class="hero-video"
-                id="heroVideo">
-                <source src="vid/hero-bg-opt.mp4" type="video/mp4">
-            </video>
-            <!-- Overlay Brandbook: Gradiente responsivo para máxima legibilidad tipográfica -->
-            <div class="hero-overlay"></div>
+            <div class="sens-hero-split-grid">
+                <!-- Left Visual Column (Mobile Full-Bleed Card / Desktop Left Split) -->
+                <div class="sens-hero-visual-card">
+                    <!-- Fallback Image: Visible instantáneamente mientras carga el video -->
+                    <div class="hero-bg-fallback" id="heroBgFallback"></div>
+                    <!-- Video Hero: Se reproduce nítido en loop desde el primer instante -->
+                    <video autoplay muted loop playsinline preload="auto" poster="img/hero-bg-opt.jpg" class="hero-video"
+                        id="heroVideo">
+                        <source src="vid/hero-bg-opt.mp4" type="video/mp4">
+                    </video>
+                    <!-- Overlay Brandbook: Gradiente responsivo para máxima legibilidad tipográfica -->
+                    <div class="hero-overlay"></div>
 
-            <div class="hero-train-content">
-                <div class="sens-hero-welcome-header play-entrance" id="sensHeroWelcomeHeader">
-                    <div class="sens-hero-welcome-question">
-                        Hey, ¿entrenamos juntos?
+                    <!-- Desktop Location Badge -->
+                    <div class="sens-hero-desktop-badge">
+                        <span class="sens-hero-badge-dot"></span>
+                        <span>Santuario SENS • CABA &amp; Online Global</span>
                     </div>
-                    <h1 class="sens-hero-welcome-slogan">
-                        MAKES SENS.
-                    </h1>
+
+                    <!-- Desktop Floating Biometric Capsule (Tactile Somatic Aesthetic) -->
+                    <div class="sens-hero-biometric-capsule">
+                        <div class="sens-bio-metric-left">
+                            <div class="sens-bio-icon-wrap">
+                                <span class="material-symbols-outlined" style="font-size:22px;">vital_signs</span>
+                            </div>
+                            <div class="sens-bio-text">
+                                <span class="sens-bio-label">Readiness Score</span>
+                                <span class="sens-bio-value">94/100 • Óptimo</span>
+                            </div>
+                        </div>
+                        <div class="sens-bio-divider"></div>
+                        <div class="sens-bio-metric-right">
+                            <span class="sens-bio-label">Metodología 1:1</span>
+                            <span class="sens-bio-subvalue">Sin fatiga lesiva</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="sens-hero-followup play-entrance" id="sensHeroFollowup">
-                    <p class="hero-description-train">
-                        Fuerza progresiva, postura sin dolor y nutrición inteligente. Probalo gratis 7 días en la App o entrená 1 a 1 con Nico en CABA y Online.
-                    </p>
-                    <div class="hero-cta-group">
-                        <button type="button" class="btn btn-primary"
-                            onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()"
-                            data-agent-action="start_free_7day_app_trial">
-                            Probar App 7 Días Gratis →
-                        </button>
-                        <a href="#planes" class="btn hero-btn-apple-dark" data-agent-action="view_pricing_plans">
-                            Ver los 4 Planes SENS
-                        </a>
-                        <a href="#sumate" class="btn btn-outline hero-btn-secondary" data-agent-action="schedule_initial_assessment">
-                            Entrenar con Nico
-                        </a>
+
+                <!-- Right Editorial Column (Mobile Overlay at Bottom / Desktop Editorial Right) -->
+                <div class="hero-train-content">
+                    <!-- Desktop Eyebrow Capsule -->
+                    <div class="sens-hero-desktop-eyebrow">
+                        <span class="material-symbols-outlined" style="font-size:16px;">verified</span>
+                        <span>Makes Sens Experience</span>
+                    </div>
+
+                    <div class="sens-hero-welcome-header play-entrance" id="sensHeroWelcomeHeader">
+                        <div class="sens-hero-welcome-question">
+                            Hey, ¿entrenamos juntos?
+                        </div>
+                        <h1 class="sens-hero-welcome-slogan">
+                            MAKES SENS.
+                        </h1>
+                    </div>
+                    <div class="sens-hero-followup play-entrance" id="sensHeroFollowup">
+                        <p class="hero-description-train">
+                            Fuerza progresiva, postura sin dolor y nutrición inteligente. Probalo gratis 7 días en la App o entrená 1 a 1 con Nico en CABA y Online. Un estándar de movimiento diseñado para longevidad, no para el desgaste.
+                        </p>
+                        <div class="hero-cta-group">
+                            <button type="button" class="btn btn-primary"
+                                onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()"
+                                data-agent-action="start_free_7day_app_trial">
+                                Probar App 7 Días Gratis →
+                            </button>
+                            <a href="#planes" class="btn hero-btn-apple-dark" data-agent-action="view_pricing_plans">
+                                Ver los 4 Planes SENS
+                            </a>
+                            <a href="#sumate" class="btn btn-outline hero-btn-secondary" data-agent-action="schedule_initial_assessment">
+                                Entrenar con Nico
+                            </a>
+                        </div>
+
+                        <!-- Desktop Route Micro-Selectors -->
+                        <div class="sens-hero-desktop-routes">
+                            <span class="sens-routes-title">Rutas Somáticas Disponibles</span>
+                            <div class="sens-routes-grid">
+                                <div class="sens-route-card" onclick="window.switchPricingTab &amp;&amp; window.switchPricingTab('app')">
+                                    <span class="sens-route-num">1. FREE 7D</span>
+                                    <span class="sens-route-price">$0</span>
+                                    <span class="sens-route-sub">Acceso App Completo</span>
+                                </div>
+                                <div class="sens-route-card" onclick="window.switchPricingTab &amp;&amp; window.switchPricingTab('app')">
+                                    <span class="sens-route-num">2. APP PREMIUM</span>
+                                    <span class="sens-route-price">$24.9k<small style="font-size:11px; font-weight:400; color:#5A5752;">/m</small></span>
+                                    <span class="sens-route-sub">3 Meses $59.9k</span>
+                                </div>
+                                <div class="sens-route-card" onclick="window.switchPricingTab &amp;&amp; window.switchPricingTab('online')">
+                                    <span class="sens-route-num">3. ONLINE 1:1</span>
+                                    <span class="sens-route-price">$130k<small style="font-size:11px; font-weight:400; color:#5A5752;">/m</small></span>
+                                    <span class="sens-route-sub">Coaching Continuo</span>
+                                </div>
+                                <div class="sens-route-card" onclick="window.switchPricingTab &amp;&amp; window.switchPricingTab('presencial')">
+                                    <span class="sens-route-num">4. CABA 1:1</span>
+                                    <span class="sens-route-price">$200k+</span>
+                                    <span class="sens-route-sub">Presencial VIP</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -385,125 +448,127 @@
         <!-- =========================================================================
              MÓDULO 3 & 4: EL MÉTODO (CÓMO TRABAJAMOS) & HEAD COACH NICO S.
              ========================================================================= -->
-        <section class="section-sens sens-metodo-section" id="metodo">
-            <div class="sens-metodo-header">
-                <span class="sens-metodo-eyebrow">Proceso Sin Fricción</span>
-                <h2 class="sens-metodo-title">CÓMO <span class="text-champagne">TRABAJAMOS</span></h2>
-            </div>
-
-            <!-- 3 Pasos Cards -->
-            <div class="sens-steps-grid">
-                <div class="sens-step-card">
-                    <div class="sens-step-number">01</div>
-                    <div class="sens-step-content">
-                        <h3 class="sens-step-title">Evaluación Inicial de Movilidad</h3>
-                        <p class="sens-step-desc">Mapeamos asimetrías, rangos articulares y hábitos para armar un plan que se adapte a tu anatomía.</p>
-                    </div>
+        <div class="sens-metodo-coach-desktop-wrapper">
+            <section class="section-sens sens-metodo-section" id="metodo">
+                <div class="sens-metodo-header">
+                    <span class="sens-metodo-eyebrow">Proceso Sin Fricción</span>
+                    <h2 class="sens-metodo-title">CÓMO <span class="text-champagne">TRABAJAMOS</span></h2>
                 </div>
 
-                <div class="sens-step-card">
-                    <div class="sens-step-number">02</div>
-                    <div class="sens-step-content">
-                        <h3 class="sens-step-title">Progresión sin Intimidación</h3>
-                        <p class="sens-step-desc">Cargas seguras y ejercicios explicados paso a paso en video HD, con foco estricto en la técnica.</p>
-                    </div>
-                </div>
-
-                <div class="sens-step-card">
-                    <div class="sens-step-number">03</div>
-                    <div class="sens-step-content">
-                        <h3 class="sens-step-title">Hábitos &amp; Constancia Real</h3>
-                        <p class="sens-step-desc">Acompañamiento continuo que premia la consistencia por encima del agotamiento sin sentido.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Comparativa: Antes vs Con SENS -->
-            <div class="sens-comparison-grid">
-                <!-- Antes de SENS -->
-                <div class="sens-comp-card sens-comp-before">
-                    <div class="sens-comp-header">
-                        <span class="material-symbols-outlined sens-comp-icon-before">close</span>
-                        <span class="sens-comp-title-before">Antes de SENS</span>
-                    </div>
-                    <ul class="sens-comp-list sens-comp-list-before">
-                        <li>
-                            <span class="sens-comp-dot-before"></span>
-                            <span>Rutinas genéricas de gimnasio sin progresión medible</span>
-                        </li>
-                        <li>
-                            <span class="sens-comp-dot-before"></span>
-                            <span>Dolor lumbar recurrente al hacer fuerza</span>
-                        </li>
-                        <li>
-                            <span class="sens-comp-dot-before"></span>
-                            <span>Abandono al mes por falta de claridad y motivación</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Con SENS -->
-                <div class="sens-comp-card sens-comp-after">
-                    <div class="sens-comp-header">
-                        <div class="sens-comp-title-group">
-                            <span class="material-symbols-outlined sens-comp-icon-after">check_circle</span>
-                            <span class="sens-comp-title-after">Con SENS</span>
+                <!-- 3 Pasos Cards -->
+                <div class="sens-steps-grid">
+                    <div class="sens-step-card">
+                        <div class="sens-step-number">01</div>
+                        <div class="sens-step-content">
+                            <h3 class="sens-step-title">Evaluación Inicial de Movilidad</h3>
+                            <p class="sens-step-desc">Mapeamos asimetrías, rangos articulares y hábitos para armar un plan que se adapte a tu anatomía.</p>
                         </div>
-                        <span class="sens-comp-badge-optimal">
-                            <span class="sens-comp-badge-dot"></span>Óptimo
-                        </span>
                     </div>
-                    <ul class="sens-comp-list sens-comp-list-after">
-                        <li>
-                            <span class="sens-comp-dot-after"></span>
-                            <span>Sobrecarga progresiva milimétrica desde la App</span>
-                        </li>
-                        <li>
-                            <span class="sens-comp-dot-after"></span>
-                            <span>Cuerpo desinflamado, postura erguida y sin molestias</span>
-                        </li>
-                        <li>
-                            <span class="sens-comp-dot-after"></span>
-                            <span>Contacto directo con tu coach para dudas en WhatsApp</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
 
-        <!-- Sección Head Coach Nico S. -->
-        <section class="section-sens sens-coach-section" id="coach-section">
-            <div class="sens-coach-card">
-                <div class="sens-coach-header">
-                    <div class="sens-coach-avatar-wrap">
-                        <img src="img/img-nico.png" alt="Retrato de Head Coach Nico S." class="sens-coach-avatar-img" loading="lazy">
+                    <div class="sens-step-card">
+                        <div class="sens-step-number">02</div>
+                        <div class="sens-step-content">
+                            <h3 class="sens-step-title">Progresión sin Intimidación</h3>
+                            <p class="sens-step-desc">Cargas seguras y ejercicios explicados paso a paso en video HD, con foco estricto en la técnica.</p>
+                        </div>
                     </div>
-                    <div class="sens-coach-identity">
-                        <span class="sens-coach-eyebrow">Fundador &amp; Head Coach</span>
-                        <h3 class="sens-coach-name">Nico S.</h3>
-                        <p class="sens-coach-bio">Biomecánica • CABA &amp; Global</p>
+
+                    <div class="sens-step-card">
+                        <div class="sens-step-number">03</div>
+                        <div class="sens-step-content">
+                            <h3 class="sens-step-title">Hábitos &amp; Constancia Real</h3>
+                            <p class="sens-step-desc">Acompañamiento continuo que premia la consistencia por encima del agotamiento sin sentido.</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Credenciales Badges -->
-                <div class="sens-coach-badges">
-                    <span class="sens-coach-badge">Palermo &amp; Belgrano</span>
-                    <span class="sens-coach-badge">Yoga &amp; Movilidad Somática</span>
-                    <span class="sens-coach-badge">Alto Rendimiento</span>
+                <!-- Comparativa: Antes vs Con SENS -->
+                <div class="sens-comparison-grid">
+                    <!-- Antes de SENS -->
+                    <div class="sens-comp-card sens-comp-before">
+                        <div class="sens-comp-header">
+                            <span class="material-symbols-outlined sens-comp-icon-before">close</span>
+                            <span class="sens-comp-title-before">Antes de SENS</span>
+                        </div>
+                        <ul class="sens-comp-list sens-comp-list-before">
+                            <li>
+                                <span class="sens-comp-dot-before"></span>
+                                <span>Rutinas genéricas de gimnasio sin progresión medible</span>
+                            </li>
+                            <li>
+                                <span class="sens-comp-dot-before"></span>
+                                <span>Dolor lumbar recurrente al hacer fuerza</span>
+                            </li>
+                            <li>
+                                <span class="sens-comp-dot-before"></span>
+                                <span>Abandono al mes por falta de claridad y motivación</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Con SENS -->
+                    <div class="sens-comp-card sens-comp-after">
+                        <div class="sens-comp-header">
+                            <div class="sens-comp-title-group">
+                                <span class="material-symbols-outlined sens-comp-icon-after">check_circle</span>
+                                <span class="sens-comp-title-after">Con SENS</span>
+                            </div>
+                            <span class="sens-comp-badge-optimal">
+                                <span class="sens-comp-badge-dot"></span>Óptimo
+                            </span>
+                        </div>
+                        <ul class="sens-comp-list sens-comp-list-after">
+                            <li>
+                                <span class="sens-comp-dot-after"></span>
+                                <span>Sobrecarga progresiva milimétrica desde la App</span>
+                            </li>
+                            <li>
+                                <span class="sens-comp-dot-after"></span>
+                                <span>Cuerpo desinflamado, postura erguida y sin molestias</span>
+                            </li>
+                            <li>
+                                <span class="sens-comp-dot-after"></span>
+                                <span>Contacto directo con tu coach para dudas en WhatsApp</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+            </section>
 
-                <!-- Cita Textual -->
-                <blockquote class="sens-coach-quote">
-                    “Integro entrenamiento, movilidad y yoga para ofrecerte un espacio seguro, preciso y desafiante. No creo en castigar al cuerpo; creo en enseñarle a moverse con solvencia.”
-                </blockquote>
+            <!-- Sección Head Coach Nico S. -->
+            <section class="section-sens sens-coach-section" id="coach-section">
+                <div class="sens-coach-card">
+                    <div class="sens-coach-header">
+                        <div class="sens-coach-avatar-wrap">
+                            <img src="img/img-nico.png" alt="Retrato de Head Coach Nico S." class="sens-coach-avatar-img" loading="lazy">
+                        </div>
+                        <div class="sens-coach-identity">
+                            <span class="sens-coach-eyebrow">Fundador &amp; Head Coach</span>
+                            <h3 class="sens-coach-name">Nico S.</h3>
+                            <p class="sens-coach-bio">Biomecánica • CABA &amp; Global</p>
+                        </div>
+                    </div>
 
-                <!-- WhatsApp Directo -->
-                <a class="sens-coach-cta-btn" href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20conocer%20m%C3%A1s%20sobre%20el%20entrenamiento%20en%20SENS." target="_blank" rel="noopener noreferrer">
-                    <span class="material-symbols-outlined">chat</span>
-                    <span>Hablar directo con Nico por WhatsApp</span>
-                </a>
-            </div>
-        </section>
+                    <!-- Credenciales Badges -->
+                    <div class="sens-coach-badges">
+                        <span class="sens-coach-badge">Palermo &amp; Belgrano</span>
+                        <span class="sens-coach-badge">Yoga &amp; Movilidad Somática</span>
+                        <span class="sens-coach-badge">Alto Rendimiento</span>
+                    </div>
+
+                    <!-- Cita Textual -->
+                    <blockquote class="sens-coach-quote">
+                        “Integro entrenamiento, movilidad y yoga para ofrecerte un espacio seguro, preciso y desafiante. No creo en castigar al cuerpo; creo en enseñarle a moverse con solvencia.”
+                    </blockquote>
+
+                    <!-- WhatsApp Directo -->
+                    <a class="sens-coach-cta-btn" href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20conocer%20m%C3%A1s%20sobre%20el%20entrenamiento%20en%20SENS." target="_blank" rel="noopener noreferrer">
+                        <span class="material-symbols-outlined">chat</span>
+                        <span>Hablar directo con Nico por WhatsApp</span>
+                    </a>
+                </div>
+            </section>
+        </div>
 
         <!-- Precios & Modalidades (Con Diferencial Real por Frecuencia & Sin Costo Gym) -->
         <section class="section-sens" id="planes">
@@ -980,87 +1045,89 @@
              SECCIÓN 7: EVALUACIÓN INICIAL / CÓMO SUMARTE (QUIET LIGHT LUXURY)
              ===================================================================== -->
         <section class="section-sens" id="sumate">
-            <div class="lead-intake-card" style="max-width: 580px; margin: 0 auto; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 28px; padding: 28px 22px; box-shadow: 0 4px 24px -2px rgba(18, 18, 20, 0.05);">
-                <div style="margin-bottom: 20px; text-align: left;">
-                    <span style="font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #705B3E; display: block; margin-bottom: 4px;">Tu Primer Paso</span>
-                    <h2 style="font-size: 1.65rem; font-weight: 300; color: #121214; margin: 0 0 4px; line-height: 1.2;">Evaluación <span style="font-weight: 800; color: #705B3E;">Inicial</span></h2>
-                    <p style="font-size: 12.5px; color: #5A5752; margin: 0; line-height: 1.45;">
-                        Completá tus datos para que Nico revise tu perfil y te recomiende la mejor modalidad.
-                    </p>
+            <div class="sens-sumate-wellness-desktop-wrapper">
+                <div class="lead-intake-card" style="max-width: 580px; margin: 0 auto; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 28px; padding: 28px 22px; box-shadow: 0 4px 24px -2px rgba(18, 18, 20, 0.05);">
+                    <div style="margin-bottom: 20px; text-align: left;">
+                        <span style="font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #705B3E; display: block; margin-bottom: 4px;">Tu Primer Paso</span>
+                        <h2 style="font-size: 1.65rem; font-weight: 300; color: #121214; margin: 0 0 4px; line-height: 1.2;">Evaluación <span style="font-weight: 800; color: #705B3E;">Inicial</span></h2>
+                        <p style="font-size: 12.5px; color: #5A5752; margin: 0; line-height: 1.45;">
+                            Completá tus datos para que Nico revise tu perfil y te recomiende la mejor modalidad.
+                        </p>
+                    </div>
+
+                    <form id="publicLeadForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 14px;">
+                        <!-- Modalidad Selector (Presencial u Online 1:1) -->
+                        <div>
+                            <label class="input-label" style="display: block; font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 8px;">Modalidad deseada</label>
+                            <div class="selection-group" id="leadModalityGroup" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <label class="selection-item sens-lead-pill-label active" id="labelLeadPresencial" style="padding: 11px 8px; border-radius: 12px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; user-select: none;">
+                                    <input type="radio" name="leadModality" value="Presencial" checked class="sr-only" style="position: absolute; opacity: 0; pointer-events: none;">
+                                    <span class="selection-label" style="font-size: 12px;">Presencial (CABA)</span>
+                                </label>
+                                <label class="selection-item sens-lead-pill-label" id="labelLeadOnline" style="padding: 11px 8px; border-radius: 12px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; user-select: none;">
+                                    <input type="radio" name="leadModality" value="Online 1:1" class="sr-only" style="position: absolute; opacity: 0; pointer-events: none;">
+                                    <span class="selection-label" style="font-size: 12px;">Online 1:1</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div class="input-group" style="margin-bottom: 0;">
+                                <label class="input-label" for="leadFullName" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">Nombre y Apellido</label>
+                                <input type="text" id="leadFullName" class="input-control" placeholder="Ej. Sofía Rossi" required style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
+                            </div>
+                            <div class="input-group" style="margin-bottom: 0;">
+                                <label class="input-label" for="leadPhone" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">Número de WhatsApp</label>
+                                <input type="tel" id="leadPhone" class="input-control" placeholder="+54 9 11 0000-0000" required style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
+                            </div>
+                        </div>
+
+                        <div class="input-group" style="margin-bottom: 4px;">
+                            <label class="input-label" for="leadGoal" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">¿Cuál es tu principal meta hoy?</label>
+                            <select id="leadGoal" class="input-control" style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
+                                <option value="Ganar masa muscular y fuerza sin dolor">Ganar masa muscular y fuerza sin dolor</option>
+                                <option value="Corregir postura y descompresión de columna">Corregir postura y descompresión de columna</option>
+                                <option value="Pérdida de grasa & recomposición corporal">Pérdida de grasa &amp; recomposición corporal</option>
+                                <option value="Salud metabólica general y longevidad">Salud metabólica general y longevidad</option>
+                            </select>
+                        </div>
+
+                        <button type="button" id="btnSubmitLead" class="btn btn-primary btn-full"
+                            data-agent-action="submit_initial_assessment_lead"
+                            style="width: 100%; padding: 14px 20px; font-size: 13px; font-weight: 800; border-radius: 9999px; background: #E5CBA7; color: #2A241C; border: none; box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <span>Solicitar Evaluación Inicial con Nico</span>
+                            <span style="font-size: 16px;">→</span>
+                        </button>
+
+                        <p style="text-align: center; font-size: 10.5px; color: #5A5752; margin: 2px 0 0; line-height: 1.4;">
+                            Respondemos en menos de 2 horas en horario comercial. Sin compromisos.
+                        </p>
+                    </form>
                 </div>
 
-                <form id="publicLeadForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 14px;">
-                    <!-- Modalidad Selector (Presencial u Online 1:1) -->
-                    <div>
-                        <label class="input-label" style="display: block; font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 8px;">Modalidad deseada</label>
-                        <div class="selection-group" id="leadModalityGroup" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <label class="selection-item sens-lead-pill-label active" id="labelLeadPresencial" style="padding: 11px 8px; border-radius: 12px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; user-select: none;">
-                                <input type="radio" name="leadModality" value="Presencial" checked class="sr-only" style="position: absolute; opacity: 0; pointer-events: none;">
-                                <span class="selection-label" style="font-size: 12px;">Presencial (CABA)</span>
-                            </label>
-                            <label class="selection-item sens-lead-pill-label" id="labelLeadOnline" style="padding: 11px 8px; border-radius: 12px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; user-select: none;">
-                                <input type="radio" name="leadModality" value="Online 1:1" class="sr-only" style="position: absolute; opacity: 0; pointer-events: none;">
-                                <span class="selection-label" style="font-size: 12px;">Online 1:1</span>
-                            </label>
+                <!-- Banner SENS Wellness & Trilogy (Servicio Boutique Complementario a Domicilio) -->
+                <div class="wellness-editorial-card" id="wellness" style="max-width: 900px; margin: 60px auto 0;">
+                    <img src="img/balance.webp" alt="SENS Trilogy Wellness Experience" class="wellness-editorial-img"
+                        loading="lazy">
+                    <div class="wellness-editorial-overlay"></div>
+                    <div class="wellness-editorial-content">
+                        <span class="pill pill-champagne" style="margin-bottom: 14px; font-size: 10px;">SERVICIO
+                            COMPLEMENTARIO BOUTIQUE</span>
+                        <h3 class="wellness-editorial-title">
+                            Bienestar &amp; Recuperación <span class="text-champagne font-black">Trilogy</span>
+                        </h3>
+                        <p class="wellness-editorial-desc">
+                            Como complemento a tu práctica de entrenamiento o para días de recuperación profunda: llevamos
+                            el método <strong>Trilogy</strong> a la comodidad de tu hogar: <strong>MOVE</strong> (Yoga
+                            pasivo) + <strong>BODY</strong> (Masaje profundo) + <strong>MIND</strong> (Meditación).
+                        </p>
+                        <div class="hero-cta-group" style="justify-content: flex-start; gap: 14px;">
+                            <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20consultar%20por%20la%20experiencia%20Trilogy%20a%20domicilio."
+                                target="_blank" rel="noopener" class="btn btn-outline"
+                                style="background: rgba(8,8,9,0.7); backdrop-filter: blur(8px);">
+                                Consultar Trilogy a Domicilio por WhatsApp
+                            </a>
                         </div>
-                    </div>
-
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <div class="input-group" style="margin-bottom: 0;">
-                            <label class="input-label" for="leadFullName" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">Nombre y Apellido</label>
-                            <input type="text" id="leadFullName" class="input-control" placeholder="Ej. Sofía Rossi" required style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
-                        </div>
-                        <div class="input-group" style="margin-bottom: 0;">
-                            <label class="input-label" for="leadPhone" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">Número de WhatsApp</label>
-                            <input type="tel" id="leadPhone" class="input-control" placeholder="+54 9 11 0000-0000" required style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
-                        </div>
-                    </div>
-
-                    <div class="input-group" style="margin-bottom: 4px;">
-                        <label class="input-label" for="leadGoal" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">¿Cuál es tu principal meta hoy?</label>
-                        <select id="leadGoal" class="input-control" style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
-                            <option value="Ganar masa muscular y fuerza sin dolor">Ganar masa muscular y fuerza sin dolor</option>
-                            <option value="Corregir postura y descompresión de columna">Corregir postura y descompresión de columna</option>
-                            <option value="Pérdida de grasa & recomposición corporal">Pérdida de grasa &amp; recomposición corporal</option>
-                            <option value="Salud metabólica general y longevidad">Salud metabólica general y longevidad</option>
-                        </select>
-                    </div>
-
-                    <button type="button" id="btnSubmitLead" class="btn btn-primary btn-full"
-                        data-agent-action="submit_initial_assessment_lead"
-                        style="width: 100%; padding: 14px 20px; font-size: 13px; font-weight: 800; border-radius: 9999px; background: #E5CBA7; color: #2A241C; border: none; box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                        <span>Solicitar Evaluación Inicial con Nico</span>
-                        <span style="font-size: 16px;">→</span>
-                    </button>
-
-                    <p style="text-align: center; font-size: 10.5px; color: #5A5752; margin: 2px 0 0; line-height: 1.4;">
-                        Respondemos en menos de 2 horas en horario comercial. Sin compromisos.
-                    </p>
-                </form>
-            </div>
-
-            <!-- Banner SENS Wellness & Trilogy (Servicio Boutique Complementario a Domicilio) -->
-            <div class="wellness-editorial-card" id="wellness" style="max-width: 900px; margin: 60px auto 0;">
-                <img src="img/balance.webp" alt="SENS Trilogy Wellness Experience" class="wellness-editorial-img"
-                    loading="lazy">
-                <div class="wellness-editorial-overlay"></div>
-                <div class="wellness-editorial-content">
-                    <span class="pill pill-champagne" style="margin-bottom: 14px; font-size: 10px;">SERVICIO
-                        COMPLEMENTARIO BOUTIQUE</span>
-                    <h3 class="wellness-editorial-title">
-                        Bienestar &amp; Recuperación <span class="text-champagne font-black">Trilogy</span>
-                    </h3>
-                    <p class="wellness-editorial-desc">
-                        Como complemento a tu práctica de entrenamiento o para días de recuperación profunda: llevamos
-                        el método <strong>Trilogy</strong> a la comodidad de tu hogar: <strong>MOVE</strong> (Yoga
-                        pasivo) + <strong>BODY</strong> (Masaje profundo) + <strong>MIND</strong> (Meditación).
-                    </p>
-                    <div class="hero-cta-group" style="justify-content: flex-start; gap: 14px;">
-                        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20consultar%20por%20la%20experiencia%20Trilogy%20a%20domicilio."
-                            target="_blank" rel="noopener" class="btn btn-outline"
-                            style="background: rgba(8,8,9,0.7); backdrop-filter: blur(8px);">
-                            Consultar Trilogy a Domicilio por WhatsApp
-                        </a>
                     </div>
                 </div>
             </div>
@@ -9527,7 +9594,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=13.2"></script>
+    <script src="app.js?v=13.3"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

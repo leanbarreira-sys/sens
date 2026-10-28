@@ -2492,23 +2492,17 @@ function initPricingTabs() {
         });
     });
 
-    // Soporte para tabs legacy en caso de ser referenciados
-    const legacyTabBtns = document.querySelectorAll('.pricing-tabs-nav .tab-btn');
-    legacyTabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            legacyTabBtns.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(c => {
-                c.style.display = 'none';
-                c.classList.remove('active');
-            });
-            btn.classList.add('active');
-            const targetEl = document.getElementById(btn.getAttribute('data-target'));
-            if (targetEl) {
-                targetEl.style.display = 'block';
-                targetEl.classList.add('active');
-            }
-        });
-    });
+    // Exposición global para micro-selectors del Hero Desktop y accesos rápidos
+    window.switchPricingTab = function(mode, sub) {
+        const btn = document.querySelector(`.pricing-main-btn[data-mode="${mode}"]`);
+        if (btn) selectMode(btn);
+        if (sub) {
+            const sBtn = document.querySelector(`.pricing-sub-btn[data-sub="${sub}"]`);
+            if (sBtn) selectSub(sBtn);
+        }
+        const section = document.getElementById('planes');
+        if (section) section.scrollIntoView({ behavior: 'smooth' });
+    };
 }
 
 // =============================================================================
