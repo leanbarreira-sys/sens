@@ -72946,43 +72946,81 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * Resuelve un alimento por ID, código o nombre con tolerancia de búsqueda inteligente
+ * Resuelve un alimento por ID, código o nombre con tolerancia de búsqueda inteligente y normalización profunda
  */
 function getResolvedFood(foodOrId, athleteId = null) {
     if (!foodOrId) return null;
-    const searchId = typeof foodOrId === 'string' ? foodOrId : (foodOrId.id || foodOrId.codigo || '');
-    const searchCode = typeof foodOrId === 'object' ? (foodOrId.codigo || foodOrId.code || '') : '';
-    const searchName = typeof foodOrId === 'string' ? foodOrId : (foodOrId.name || foodOrId.nombre_alimento_o_plato || foodOrId.name_es || '');
+    const isObj = typeof foodOrId === 'object';
+    const searchId = isObj ? (foodOrId.id || '') : foodOrId;
+    const searchCode = isObj ? (foodOrId.codigo || foodOrId.code || '') : (typeof foodOrId === 'string' && foodOrId.startsWith('NUT-') ? foodOrId : '');
+    const searchName = isObj ? (foodOrId.nombre_alimento_o_plato || foodOrId.name || foodOrId.name_es || '') : foodOrId;
 
-    let baseFood = null;
-    if (searchId) {
-        baseFood = SENS_FOOD_LIBRARY.find(f => f.id === searchId || f.codigo === searchId);
+    const norm = (s) => (s || '')
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\([^)]*\)/g, ' ')
+        .replace(/[^a-z0-9 ]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    let match = null;
+    if (searchCode) {
+        const cUp = searchCode.toUpperCase();
+        match = SENS_FOOD_LIBRARY.find(f => f.codigo && f.codigo.toUpperCase() === cUp);
     }
-    if (!baseFood && searchCode) {
-        baseFood = SENS_FOOD_LIBRARY.find(f => f.codigo === searchCode);
+    if (!match && searchId) {
+        match = SENS_FOOD_LIBRARY.find(f => f.id === searchId || (f.codigo && f.codigo.toUpperCase() === searchId.toUpperCase()));
     }
-    if (!baseFood && searchName) {
-        const clean = searchName.toLowerCase().trim();
-        baseFood = SENS_FOOD_LIBRARY.find(f => 
-            (f.name && f.name.toLowerCase() === clean) ||
-            (f.nombre_alimento_o_plato && f.nombre_alimento_o_plato.toLowerCase() === clean) ||
-            (f.name_es && f.name_es.toLowerCase() === clean) ||
-            (f.name_en && f.name_en.toLowerCase() === clean)
-        );
-        if (!baseFood) {
-            // Intento con includes para títulos ligeramente modificados
-            baseFood = SENS_FOOD_LIBRARY.find(f => 
-                (f.name && (f.name.toLowerCase().includes(clean) || clean.includes(f.name.toLowerCase()))) ||
-                (f.nombre_alimento_o_plato && (f.nombre_alimento_o_plato.toLowerCase().includes(clean) || clean.includes(f.nombre_alimento_o_plato.toLowerCase())))
-            );
+    if (!match && searchName) {
+        const cleanTarget = norm(searchName);
+        if (cleanTarget) {
+            match = SENS_FOOD_LIBRARY.find(f => {
+                const libClean = norm(f.nombre_alimento_o_plato || f.name);
+                return libClean === cleanTarget;
+            });
+            if (!match) {
+                const targetTokens = cleanTarget.split(' ').filter(w => w.length >= 3);
+                if (targetTokens.length > 0) {
+                    match = SENS_FOOD_LIBRARY.find(f => {
+                        const libClean = norm(f.nombre_alimento_o_plato || f.name);
+                        return targetTokens.every(tok => libClean.includes(tok));
+                    });
+                }
+            }
         }
     }
-    if (!baseFood && typeof foodOrId === 'object') {
-        baseFood = foodOrId;
-    }
-    if (!baseFood) return null;
 
-    let resolved = Object.assign({}, baseFood);
+    let baseFood = match || (isObj ? foodOrId : { name: searchName });
+    let resolved = Object.assign({}, isObj ? foodOrId : {}, baseFood);
+
+    if (match) {
+        resolved.imagen_url = match.imagen_url;
+        resolved.image = match.imagen_url;
+        resolved.codigo = match.codigo;
+        resolved.id = match.id;
+        resolved.porcion_total_g_ml = match.porcion_total_g_ml;
+        resolved.calorias_kcal = match.calorias_kcal;
+        resolved.proteinas_g = match.proteinas_g;
+        resolved.carbohidratos_g = match.carbohidratos_g;
+        resolved.grasas_g = match.grasas_g;
+        resolved.fibra_g = match.fibra_g;
+        resolved.ingredientes_y_gramajes = match.ingredientes_y_gramajes;
+        resolved.paso_a_paso_preparacion = match.paso_a_paso_preparacion;
+        resolved.truco_del_chef = match.truco_del_chef;
+        resolved.tip_nutricionista_deportivo = match.tip_nutricionista_deportivo;
+        resolved.reemplazos_equivalentes = match.reemplazos_equivalentes;
+        resolved.costo_estimado_nivel = match.costo_estimado_nivel;
+        resolved.apto_vianda_fria = match.apto_vianda_fria;
+        resolved.tipo_item = match.tipo_item;
+        resolved.unidades_caseras_total = match.unidades_caseras_total;
+        resolved.peso_unidad_g = match.peso_unidad_g;
+    }
+
+    if (!resolved.image) {
+        resolved.image = resolved.imagen_url || resolved.image_url || resolved.imagen_path || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+    }
 
     // Overrides por alumno en Coach OS si existen
     try {

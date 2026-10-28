@@ -1,483 +1,85 @@
-/* ==============================================================================
-   1. SENS DESIGN TOKENS — MODO LIGHT QUIET LUXURY (MASTER TOKENS)
-   ============================================================================== */
+/* =========================================
+   1. DESIGN TOKENS & CORE VARIABLES (Onyx & Champagne - Brandbook v6.0)
+   ========================================= */
 :root {
-  /* --- PALETA BASE & SUPERFICIES (LIGHT QUIET LUXURY) --- */
-  --sens-bg-canvas: #FAF9F6;              /* Fondo general: alabastro/lino cálido */
-  --sens-bg-surface: #FFFFFF;             /* Tarjetas, modales, drawers: blanco puro */
-  --sens-bg-surface-subtle: #F3F1ED;      /* Fondos secundarios, pills inactivas, rows alternas */
-  --sens-bg-surface-inset: #ECEAE4;       /* Inputs, campos de texto, slots sombreados */
-  --sens-bg-surface-hover: #F8F6F2;
+    /* --- PALETA BASE & SUPERFICIES (MODO LIGHT QUIET LUXURY) --- */
+    --sens-bg-canvas: #FAF9F6;              /* Lienzo general: alabastro/lino cálido */
+    --sens-bg-surface: #FFFFFF;             /* Contenedores y cards: blanco puro */
+    --sens-bg-surface-subtle: #F3F1ED;      /* Fondos secundarios, pills y chips */
+    --sens-bg-surface-inset: #ECEAE4;       /* Inputs, slots y áreas de contraste suave */
 
-  /* --- TEXTO & CONTRASTE EDITORIAL --- */
-  --sens-text-primary: #121214;          /* Carbón profundo / tinta negra */
-  --sens-text-secondary: #575659;        /* Gris visón cálido para bajadas y descripciones */
-  --sens-text-muted: #8E8D90;            /* Micro-labels, disclaimers y placeholders */
-  --sens-text-inverse: #FFFFFF;          /* Solo sobre botones oscuros o fotos */
+    /* --- TEXTO & CONTRASTE EDITORIAL --- */
+    --sens-text-primary: #121214;          /* Carbón profundo / tinta negra */
+    --sens-text-secondary: #575659;        /* Gris visón cálido para bajadas y descripciones */
+    --sens-text-muted: #8E8D90;            /* Micro-labels, disclaimers y placeholders */
 
-  /* --- ACENTOS & IDENTIDAD SENS --- */
-  --sens-accent-gold: #E5CBA7;           /* Champagne / arena dorada para CTAs primarios */
-  --sens-accent-gold-hover: #D8BD97;     /* Hover de botones dorados */
-  --sens-accent-gold-light: #F7EFE4;     /* Chips destacados y badges suaves */
-  --sens-accent-gold-text: #2A241C;      /* Texto de alto contraste sobre botón champagne */
-  --sens-accent-bronze: #B38E5D;         /* Destacados tipográficos */
-  --sens-accent-green: #25D366;          /* WhatsApp */
-  --sens-accent-tag-bg: #EBF7EE;         /* Badge 'Óptimo' / éxito background */
-  --sens-accent-tag-text: #1B7A36;       /* Badge 'Óptimo' texto */
+    /* --- ACENTOS & IDENTIDAD SENS --- */
+    --sens-accent-gold: #E5CBA7;           /* Champagne / arena dorada para CTAs principales */
+    --sens-accent-gold-hover: #D8BD97;     /* Hover de botones dorados */
+    --sens-accent-gold-light: #F7EFE4;     /* Chips recomendados y acentos suaves */
+    --sens-accent-gold-text: #2A241C;      /* Texto de alto contraste sobre botón champagne */
+    --sens-accent-green: #25D366;          /* WhatsApp icon */
+    --sens-accent-tag-bg: #EBF7EE;         /* Badge 'Óptimo' background */
+    --sens-accent-tag-text: #1B7A36;       /* Badge 'Óptimo' texto */
 
-  /* --- BORDES CAPILARES (HAIRLINE BORDERS) --- */
-  --sens-border-hairline: rgba(18, 18, 20, 0.08); /* Bordes sutiles de cards */
-  --sens-border-subtle: rgba(18, 18, 20, 0.12);   /* Bordes de inputs y divisores */
-  --sens-border-focus: #121214;                   /* Estado focus */
+    /* --- BORDES & DELINEADO TÁCTIL (HAIRLINE BORDERS) --- */
+    --sens-border-hairline: rgba(18, 18, 20, 0.08); /* Bordes sutiles sin sombras toscas */
+    --sens-border-subtle: rgba(18, 18, 20, 0.12);
+    --sens-border-focus: #121214;
 
-  /* --- SOMBRAS ORGÁNICAS (QUIET LUXURY SHADOWS) --- */
-  --sens-shadow-sm: 0 1px 3px rgba(18, 18, 20, 0.03);
-  --sens-shadow-card: 0 4px 20px -2px rgba(18, 18, 20, 0.04), 0 2px 6px -1px rgba(18, 18, 20, 0.02);
-  --sens-shadow-floating: 0 10px 30px -4px rgba(18, 18, 20, 0.08);
+    /* --- SOMBRAS ORGÁNICAS (QUIET LUXURY SHADOWS) --- */
+    --sens-shadow-sm: 0 1px 3px rgba(18, 18, 20, 0.03);
+    --sens-shadow-card: 0 4px 20px -2px rgba(18, 18, 20, 0.04), 0 2px 6px -1px rgba(18, 18, 20, 0.02);
+    --sens-shadow-floating: 0 10px 30px -4px rgba(18, 18, 20, 0.08);
 
-  /* --- TIPOGRAFÍA --- */
-  --sens-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-main: var(--sens-font-sans);
-  --font-heading: var(--sens-font-sans);
-  --font-body: var(--sens-font-sans);
-  --font-display: var(--sens-font-sans);
+    /* --- RADIOS --- */
+    --sens-radius-sm: 8px;
+    --sens-radius-md: 14px;
+    --sens-radius-lg: 20px;
+    --sens-radius-full: 9999px;
 
-  /* --- RADIOS DE ESQUINA --- */
-  --sens-radius-sm: 8px;
-  --sens-radius-md: 14px;
-  --sens-radius-lg: 20px;
-  --sens-radius-full: 9999px;
+    /* Paleta Onyx & Champagne */
+    --bg-base: #080809;        /* Negro Onyx profundo (70%) */
+    --bg-surface: #121214;     /* Superficies, cards, modales (20%) */
+    --bg-elevated: #1A1A1D;    /* Elementos flotantes, inputs, dropdowns */
+    
+    /* Acento Champagne / Oro Blanco (2% - Impacto y marca) */
+    --accent-primary: #E5CBA7; 
+    --accent-hover: #F2DEBE;
+    --accent-glow: rgba(229, 203, 167, 0.18);
+    
+    /* Jerarquía de Texto */
+    --text-primary: #FFFFFF;   /* Titulares y máxima legibilidad */
+    --text-secondary: #D1D1D5; /* Descripciones y cuerpo */
+    --text-muted: #7A7A80;     /* Metadatos, placeholders */
+    
+    /* Bordes y Glassmorphism */
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(229, 203, 167, 0.4);
+    --glass-bg: rgba(18, 18, 20, 0.85);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    
+    /* Feedback */
+    --success: #4CAF50;
+    --danger: #F44336;
+    
+    /* Tipografía Oficial SENS (Plus Jakarta Sans - Swiss Neogrotesque, Lining Figures & Quiet Luxury) */
+    --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    
+    /* Transiciones & Sombras */
+    --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 4px 20px var(--accent-glow);
 
-  /* --- COMPATIBILIDAD CON TOKENS HISTÓRICOS (MAPEADOS A LIGHT LUXURY) --- */
-  --bg-base: var(--sens-bg-canvas);
-  --bg-surface: var(--sens-bg-surface);
-  --bg-elevated: var(--sens-bg-surface-subtle);
-  --bg-glass: rgba(255, 255, 255, 0.88);
-  --glass-bg: rgba(255, 255, 255, 0.88);
-
-  --accent-primary: var(--sens-accent-gold);
-  --accent-hover: var(--sens-accent-gold-hover);
-  --accent-glow: rgba(229, 203, 167, 0.25);
-  --accent: var(--sens-accent-gold);
-  --accent-gray: var(--sens-text-secondary);
-
-  --text-primary: var(--sens-text-primary);
-  --text-secondary: var(--sens-text-secondary);
-  --text-muted: var(--sens-text-muted);
-
-  --border-subtle: var(--sens-border-subtle);
-  --border-strong: var(--sens-border-focus);
-  --border-glass: var(--sens-border-hairline);
-
-  --shadow-card: var(--sens-shadow-card);
-  --shadow-glow: var(--sens-shadow-floating);
-
-  --bg-pure: var(--sens-bg-canvas);
-  --text-main: var(--sens-text-primary);
-  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  --success: #1B7A36;
-  --danger: #D32F2F;
+    /* Aliases de compatibilidad */
+    --bg-pure: var(--bg-base);
+    --text-main: var(--text-primary);
+    --accent: var(--accent-primary);
 }
-
-/* ==============================================================================
-   2. HOJA DE ESTILOS DE RESET & RESCATE GLOBAL (COMPATIBILIDAD INSTANTÁNEA)
-   ============================================================================== */
-
-/* 3.1. Fondo y cuerpo global */
-html, body, #root, #__next, .app-container, main {
-  background-color: var(--sens-bg-canvas) !important;
-  color: var(--sens-text-primary) !important;
-  font-family: var(--sens-font-sans) !important;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* 3.2. Mapeo específico de tarjetas y contenedores (Zero Wildcards para evitar cuadros anidados) */
-.card,
-.container-card,
-.sens-card,
-.sens-streak-card,
-.sens-plan-status-strip,
-.sens-week-strip-wrap,
-.sens-macro-ring-card,
-.sens-nutri-plan-section,
-.sens-nutri-directive-card,
-.sens-smart-recommender-card,
-.routine-day-card,
-.pricing-card,
-.train-plan-card,
-.coach-card,
-.wizard-card,
-.modal-content,
-.modal-dialog,
-.dialog-card,
-.sens-profile-tier-box,
-.sens-modal-tier-card,
-.sens-unlockables-module-card,
-.coach-directive-station-card,
-.sens-rings-card,
-.sens-habit-track-card,
-.sens-biometrics-summary-card,
-.sens-weekly-workouts-card,
-.sens-block-accordion,
-.sens-nutri-target-hero-card,
-.sens-meal-group-card,
-.sens-pillar-item,
-.sens-workout-summary-card,
-.sens-workout-attendance-box,
-.workout-attendance-pending,
-.presencial-attendance-card,
-.user-avatar-dropdown,
-.coach-tier-mini-card,
-.coach-goal-prescription-box,
-.coach-taxonomy-level-box,
-.coach-lib-item-card,
-.coach-kcal-sim-bar,
-.native-bottom-sheet {
-  background-color: var(--sens-bg-surface) !important;
-  color: var(--sens-text-primary) !important;
-  border: 1px solid var(--sens-border-hairline) !important;
-  box-shadow: var(--sens-shadow-card) !important;
-}
-
-/* Tarjetas con Fondo de Video / Media (Mantienen estética Onyx Oscura con Texto Blanco Nítido) */
-.sens-training-card,
-#dashTrainingVideoCard,
-.sens-training-video-card {
-  background-color: #080809 !important;
-  border: 1px solid var(--sens-border-subtle) !important;
-  box-shadow: var(--sens-shadow-card) !important;
-}
-
-/* Reset total para sub-elementos internos de cards: CERO cajas o bordes en textos, stacks, filas o títulos */
-.sens-card-info-stack,
-.sens-card-domain-eyebrow,
-.sens-card-title-white,
-.sens-card-sub-white,
-.sens-training-card-content,
-.sens-card-top-info-row,
-.sens-card-badge-row,
-.sens-streak-top-row,
-.sens-streak-sub-row,
-.sens-streak-weekly-row,
-.sens-streak-count-col,
-.sens-streak-count-row,
-.sens-streak-badge-wrap,
-.sens-nutri-plan-header,
-.sens-nutri-plan-header * {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* 3.3. Títulos y tipografía */
-h1, h2, h3, h4, h5, h6, .heading, [class*="title"], [class*="heading"] {
-  color: var(--sens-text-primary);
-  letter-spacing: -0.02em;
-}
-
-p, span, .text, [class*="subtitle"], [class*="desc"] {
-  color: var(--sens-text-secondary);
-}
-
-/* Micro-etiquetas y kickers */
-.kicker, .badge-kicker, [class*="kicker"], [class*="category-tag"] {
-  font-size: 0.6875rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.12em !important;
-  color: var(--sens-text-muted) !important;
-}
-
-/* 3.4. Botones Primarios (Champagne) */
-.btn-primary, button[type="submit"], [class*="btn-primary"], [class*="button-primary"] {
-  background-color: var(--sens-accent-gold) !important;
-  color: var(--sens-accent-gold-text) !important;
-  font-weight: 700 !important;
-  border: none !important;
-  border-radius: var(--sens-radius-sm) !important;
-  letter-spacing: 0.04em !important;
-  transition: all 0.2s ease !important;
-}
-
-.btn-primary:hover, button[type="submit"]:hover {
-  background-color: var(--sens-accent-gold-hover) !important;
-  transform: translateY(-1px);
-}
-
-/* Botones Secundarios / Outlines */
-.btn-secondary, .btn-outline, [class*="btn-outline"], [class*="btn-secondary"] {
-  background-color: transparent !important;
-  color: var(--sens-text-primary) !important;
-  border: 1px solid var(--sens-border-subtle) !important;
-  border-radius: var(--sens-radius-sm) !important;
-  font-weight: 700 !important;
-}
-
-.btn-secondary:hover, .btn-outline:hover {
-  background-color: var(--sens-bg-surface-subtle) !important;
-  border-color: var(--sens-text-primary) !important;
-}
-
-/* 3.5. Inputs, formularios y selects */
-input[type="text"], input[type="email"], input[type="password"], input[type="tel"],
-input[type="number"], select, textarea, .input-field, [class*="input"] {
-  background-color: var(--sens-bg-surface) !important;
-  color: var(--sens-text-primary) !important;
-  border: 1px solid var(--sens-border-subtle) !important;
-  border-radius: var(--sens-radius-sm) !important;
-  padding: 0.875rem 1rem !important;
-  font-family: inherit !important;
-  outline: none !important;
-}
-
-input::placeholder, textarea::placeholder {
-  color: var(--sens-text-muted) !important;
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: var(--sens-border-focus) !important;
-}
-
-/* 3.6. Pills, Chips, Tabs y Segmented Controls */
-.tabs, .segmented-control, [class*="segmented"], [class*="pill-group"] {
-  background-color: var(--sens-bg-surface-subtle) !important;
-  border-radius: var(--sens-radius-full) !important;
-  padding: 4px !important;
-}
-
-.tab, .segment, [class*="tab-item"] {
-  color: var(--sens-text-secondary) !important;
-  border-radius: var(--sens-radius-full) !important;
-}
-
-.tab.active, .segment.active, [class*="tab-item"].active {
-  background-color: var(--sens-bg-surface) !important;
-  color: var(--sens-text-primary) !important;
-  box-shadow: var(--sens-shadow-sm) !important;
-  font-weight: 700 !important;
-}
-
-/* 3.7. Tablas, Listas de Ejercicios y Logs de Entrenamiento */
-.table, .list-group, [class*="exercise-list"], [class*="workout-row"] {
-  background-color: var(--sens-bg-surface) !important;
-  border-color: var(--sens-border-hairline) !important;
-}
-
-tr, [class*="list-item"] {
-  border-bottom: 1px solid var(--sens-border-hairline) !important;
-  color: var(--sens-text-primary) !important;
-}
-
-tr:nth-child(even), [class*="list-item"]:nth-child(even) {
-  background-color: var(--sens-bg-surface-subtle) !important;
-}
-
-/* 3.8. Modales, Drawers y Overlays */
-.modal-overlay, .modal-backdrop, .dialog-backdrop {
-  background: rgba(18, 18, 20, 0.45) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-}
-
-.modal-content, .modal-dialog, .modal-card, [class*="modal-body"], [class*="modal-container"] {
-  background-color: var(--sens-bg-surface) !important;
-  color: var(--sens-text-primary) !important;
-  border: 1px solid var(--sens-border-hairline) !important;
-  box-shadow: var(--sens-shadow-floating) !important;
-}
-
-/* 3.9. Logo & Icon Inversion */
-.brand-logo-img,
-.brand-logo-img-footer,
-.brand-logo-img-modal,
-.brand-logo-img-portal,
-img[src*="logo-blanco"] {
-  filter: invert(1) brightness(0.12) !important;
-}
-
-/* 3.10. Navbar & Sticky Footers */
-.navbar {
-  background: linear-gradient(to bottom, rgba(250, 249, 246, 0.95), rgba(250, 249, 246, 0.85)) !important;
-  border-bottom: 1px solid var(--sens-border-hairline) !important;
-}
-
-.navbar.scrolled {
-  background: rgba(250, 249, 246, 0.95) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border-bottom: 1px solid var(--sens-border-hairline) !important;
-}
-
-.navbar .nav-link {
-  color: var(--sens-text-primary) !important;
-}
-
-.mobile-quick-bar {
-  background: rgba(250, 249, 246, 0.95) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  border-top: 1px solid var(--sens-border-hairline) !important;
-  box-shadow: 0 -4px 20px rgba(18, 18, 20, 0.06) !important;
-}
-
-.mobile-menu-overlay {
-  background: var(--sens-bg-canvas) !important;
-  color: var(--sens-text-primary) !important;
-}
-
-/* Background simple gradient replacement */
-.bg-gradient {
-  background: radial-gradient(circle at 50% 0%, rgba(243, 241, 237, 0.8) 0%, rgba(250, 249, 246, 1) 70%) !important;
-}
-
-/* Hero / Fotos de Entrenadores Overlay (Dark Onyx Gradient Cinematic - Restaura contraste con video) */
-.hero-overlay {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  background: linear-gradient(180deg, rgba(8, 8, 9, 0.45) 0%, rgba(8, 8, 9, 0.78) 55%, rgba(8, 8, 9, 0.98) 100%) !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-}
-
-.wellness-editorial-overlay {
-  background: linear-gradient(180deg, rgba(8, 8, 9, 0.35) 0%, rgba(8, 8, 9, 0.75) 60%, rgba(8, 8, 9, 0.95) 100%) !important;
-}
-
-/* Tipografía de Alto Contraste para Hero sobre Fondo Oscuro */
-.hero-train-content,
-.hero-content {
-  position: relative !important;
-  z-index: 10 !important;
-}
-
-.sens-hero-welcome-question {
-  color: #E5CBA7 !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
-}
-
-.sens-hero-welcome-slogan,
-.hero-title,
-.hero-title * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95) !important;
-}
-
-.hero-description-train,
-.hero-apple-eyebrow {
-  color: rgba(255, 255, 255, 0.92) !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85) !important;
-}
-
-.hero-plan-pill.standard {
-  background: rgba(18, 18, 20, 0.82) !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
-  color: #FFFFFF !important;
-  backdrop-filter: blur(8px) !important;
-}
-
-.hero-btn-apple-dark {
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
-  color: #FFFFFF !important;
-  backdrop-filter: blur(8px) !important;
-}
-
-/* Portal topbar */
-.portal-topbar {
-  background: var(--sens-bg-surface) !important;
-  border-bottom: 1px solid var(--sens-border-hairline) !important;
-}
-
-.portal-nav-bar {
-  background: var(--sens-bg-surface) !important;
-  border-bottom: 1px solid var(--sens-border-hairline) !important;
-}
-
-/* 3.11. Rescate de estilos inline oscuros (Dark-to-Light Salvage) */
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #121214"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#121214"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #080809"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#080809"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #0E0E11"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#0E0E11"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #141417"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#141417"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #121216"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#121216"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #1A1A1D"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#1A1A1D"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #080809"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#080809"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #121214"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#121214"] {
-  background: var(--sens-bg-surface) !important;
-  background-color: var(--sens-bg-surface) !important;
-  color: var(--sens-text-primary) !important;
-  border: 1px solid var(--sens-border-hairline) !important;
-  box-shadow: var(--sens-shadow-card) !important;
-}
-
-/* Reemplazo de texto inline blanco por color primario (Excluyendo Hero, Video Cards, Badges y Botones oscuros) */
-:not(.hero-overlay):not(.hero-train-content):not(.hero-train-content *):not(.hero-content):not(.hero-content *):not(.sens-training-card-content):not(.sens-training-card-content *):not(.sens-movement-video-wrap):not(.sens-movement-video-wrap *):not(.btn-primary):not(.btn-workout-attended):not(.pill-champagne):not(.pill-champagne *):not([class*="badge-"]):not(.sens-chip-champagne)[style*="color: #FFFFFF"],
-:not(.hero-overlay):not(.hero-train-content):not(.hero-train-content *):not(.hero-content):not(.hero-content *):not(.sens-training-card-content):not(.sens-training-card-content *):not(.sens-movement-video-wrap):not(.sens-movement-video-wrap *):not(.btn-primary):not(.btn-workout-attended):not(.pill-champagne):not(.pill-champagne *):not([class*="badge-"]):not(.sens-chip-champagne)[style*="color:#FFFFFF"],
-:not(.hero-overlay):not(.hero-train-content):not(.hero-train-content *):not(.hero-content):not(.hero-content *):not(.sens-training-card-content):not(.sens-training-card-content *):not(.sens-movement-video-wrap):not(.sens-movement-video-wrap *):not(.btn-primary):not(.btn-workout-attended):not(.pill-champagne):not(.pill-champagne *):not([class*="badge-"]):not(.sens-chip-champagne)[style*="color: #fff"],
-:not(.hero-overlay):not(.hero-train-content):not(.hero-train-content *):not(.hero-content):not(.hero-content *):not(.sens-training-card-content):not(.sens-training-card-content *):not(.sens-movement-video-wrap):not(.sens-movement-video-wrap *):not(.btn-primary):not(.btn-workout-attended):not(.pill-champagne):not(.pill-champagne *):not([class*="badge-"]):not(.sens-chip-champagne)[style*="color:#fff"] {
-  color: var(--sens-text-primary) !important;
-}
-
-/* Protección de Texto en Tarjetas con Video (Portal Workout Focus Video Card) */
-.sens-training-card-content .sens-card-domain-eyebrow {
-  color: #E5CBA7 !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95) !important;
-}
-
-.sens-training-card-content .sens-card-title-white,
-.sens-training-card-content #dashWorkoutFocusTitle {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95) !important;
-}
-
-.sens-training-card-content .sens-card-sub-white,
-.sens-training-card-content #dashWorkoutSubFocus {
-  color: rgba(255, 255, 255, 0.92) !important;
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9) !important;
-}
-
-.sens-training-card-content .btn-reschedule-home-chip,
-.sens-training-card-content [onclick*="openRescheduleModal"] {
-  color: #E5CBA7 !important;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
-}
-
-.sens-card-cta-gold {
-  color: #E5CBA7 !important;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
-}
-
-/* Preservar alto contraste en botones dorados o badges oscuros específicos */
-.btn-primary,
-.btn-primary *,
-[class*="btn-primary"] *,
-.pill-champagne,
-.pill-champagne *,
-.tag-champagne,
-[style*="background: #E5CBA7"],
-[style*="background:#E5CBA7"] {
-  color: var(--sens-accent-gold-text) !important;
-}
-
-.badge-tag-optimo {
-  background: var(--sens-accent-tag-bg) !important;
-  color: var(--sens-accent-tag-text) !important;
-}
-
 
 * {
     margin: 0;
@@ -2939,11 +2541,8 @@ button.btn-primary:focus {
 }
 
 .navbar.scrolled {
-    background: rgba(250, 249, 246, 0.94) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border-bottom: 1px solid rgba(18, 18, 20, 0.08) !important;
-    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
+    background: #080809 !important;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 /* ==========================================================================
@@ -4854,10 +4453,10 @@ video.ig-img {
     width: 100%;
     max-width: 680px;
     margin: 20px auto 40px;
-    background: var(--sens-bg-surface);
-    border: 1px solid var(--sens-border-hairline);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
     border-radius: 20px;
-    box-shadow: var(--sens-shadow-floating);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -4876,8 +4475,8 @@ video.ig-img {
 /* Encabezado del Wizard */
 .wizard-header {
     padding: 24px 30px 16px;
-    background: var(--sens-bg-surface);
-    border-bottom: 1px solid var(--sens-border-hairline);
+    background: rgba(18, 18, 20, 0.95);
+    border-bottom: 1px solid var(--border-subtle);
     position: relative;
 }
 
@@ -5151,8 +4750,8 @@ video.ig-img {
     display: flex;
     gap: 14px;
     align-items: flex-start;
-    background: var(--sens-bg-surface-subtle);
-    border-left: 3px solid var(--sens-accent-gold);
+    background: rgba(229, 203, 167, 0.04);
+    border-left: 3px solid var(--accent-primary);
     padding: 16px;
     border-radius: 0 12px 12px 0;
     margin-bottom: 24px;
@@ -5165,12 +4764,12 @@ video.ig-img {
 
 .legal-text {
     font-size: 13px;
-    color: var(--sens-text-secondary);
+    color: #B5B5BC;
     line-height: 1.5;
 }
 
 .legal-text strong {
-    color: var(--sens-text-primary);
+    color: var(--text-primary);
 }
 
 /* Touch Cards (Gamified Ergonomics - Mínimo 44x44px target) */
@@ -5186,19 +4785,18 @@ video.ig-img {
     gap: 16px;
     padding: 16px 20px;
     min-height: 56px;
-    background: var(--sens-bg-surface);
-    border: 1px solid var(--sens-border-hairline);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
     border-radius: 14px;
     cursor: pointer;
-    box-shadow: var(--sens-shadow-sm);
     transition: var(--transition);
     user-select: none;
     position: relative;
 }
 
 .touch-card:hover {
-    border-color: var(--sens-accent-gold);
-    background: var(--sens-bg-surface-hover);
+    border-color: rgba(229, 203, 167, 0.35);
+    background: rgba(26, 26, 29, 0.95);
     transform: translateY(-2px);
 }
 
@@ -6697,16 +6295,15 @@ input[type="range"]::-moz-range-track {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    background: #FFFFFF !important;
-    border: 1px solid var(--sens-border-subtle) !important;
-    box-shadow: var(--sens-shadow-floating) !important;
+    background: #141417 !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7);
     border-radius: 12px;
     padding: 16px 20px;
     display: none;
     align-items: center;
     gap: 18px;
     z-index: 2000;
-    color: var(--sens-text-primary) !important;
     animation: slideUpTimer 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -7736,11 +7333,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
     top: calc(100% + 10px);
     right: 0;
     width: 270px;
-    background: #FFFFFF !important;
-    border: 1px solid var(--sens-border-subtle) !important;
+    background: #141417 !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
     border-radius: 16px;
     padding: 12px;
-    box-shadow: var(--sens-shadow-floating) !important;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
     z-index: 10005 !important;
     display: none;
     overflow: visible !important;
@@ -7971,14 +7568,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%) translateY(120px);
-    background: #FFFFFF !important;
+    background: #141417 !important;
     border: 1px solid var(--accent-primary);
     border-radius: 40px;
     padding: 10px 24px;
     display: flex;
     align-items: center;
     gap: 16px;
-    box-shadow: var(--sens-shadow-floating) !important;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(229, 203, 167, 0.25);
     z-index: 1500;
     transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -8762,14 +8359,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
     width: 100%;
     max-width: 520px;
     max-height: 82vh;
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-subtle) !important;
-    border-bottom: none !important;
+    background: #121216;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: none;
     border-radius: 22px 22px 0 0;
     z-index: 10000;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--sens-shadow-floating) !important;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.85);
     transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.32s ease;
     overscroll-behavior: contain;
     visibility: hidden;
@@ -9001,8 +8598,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .sheet-footer {
     padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
-    border-top: 1px solid var(--sens-border-hairline) !important;
-    background: var(--sens-bg-surface) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: #121216;
 }
 
 
@@ -9230,23 +8827,20 @@ input[type="range"]::-webkit-slider-thumb:hover {
     align-items: center;
     justify-content: center;
     gap: 2px;
-    padding: 10px 4px 8px 4px;
-    border-radius: 16px;
-    background: #FFFFFF !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    box-shadow: var(--sens-shadow-sm) !important;
-    color: var(--sens-text-muted);
+    padding: 8px 2px 6px 2px;
+    border-radius: 14px;
+    background: transparent;
+    border: 1.5px solid transparent;
+    color: var(--text-muted);
     cursor: pointer;
     font-family: var(--font-main);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     min-width: 0;
-    text-align: center;
 }
 
 .sens-week-day-pill:hover {
-    background: var(--sens-bg-surface-hover) !important;
-    border-color: var(--sens-border-subtle) !important;
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.04);
+    color: #FFFFFF;
 }
 
 .sens-week-day-name,
@@ -9257,8 +8851,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     line-height: 1;
-    color: var(--sens-text-secondary);
-    margin-bottom: 2px;
 }
 
 .sens-day-hero-num,
@@ -9266,38 +8858,36 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .sens-day-num {
     font-family: var(--font-heading);
     font-variant-numeric: tabular-nums lining-nums;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 700;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
+    color: #FFFFFF;
     line-height: 1.15;
-    margin: 2px 0 4px 0;
+    margin: 3px 0 4px 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+
 .sens-week-day-pill.active {
-    background: #E5CBA7 !important;
-    border: 1px solid rgba(184, 147, 96, 0.45) !important;
-    box-shadow: 0 8px 20px rgba(251, 222, 185, 0.45) !important;
-    transform: scale(1.04) translateY(-1px) !important;
-    z-index: 2;
+    background: #09090B !important;
+    border: 1.5px solid #9E7D4B !important;
+    box-shadow: 0 8px 24px rgba(9, 9, 11, 0.28), 0 0 0 1px rgba(158, 125, 75, 0.35) !important;
+    transform: translateY(-2px) !important;
 }
 
 .sens-week-day-pill.active .sens-week-day-num,
 .sens-week-day-pill.active .sens-day-hero-num,
 .sens-week-day-pill.active .sens-day-num {
     background: transparent !important;
-    color: #2A241C !important;
-    -webkit-text-fill-color: #2A241C !important;
+    color: #FFFFFF !important;
     box-shadow: none !important;
     font-weight: 800 !important;
 }
 
 .sens-week-day-pill.active .sens-week-day-name,
 .sens-week-day-pill.active .sens-day-name {
-    color: #564428 !important;
+    color: #E5CBA7 !important;
     font-weight: 700 !important;
 }
 
@@ -10639,17 +10229,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 /* 2. Cuadro Resumen Compacto de Sesión & Registro de Asistencia (Ligero, Menos Pesado) */
 .sens-workout-summary-card {
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
+    background: #141417;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
     padding: 12px 14px;
     margin-bottom: 12px;
-    box-shadow: var(--sens-shadow-card) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 body.in-portal .sens-workout-summary-card {
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .sens-workout-summary-top {
@@ -10659,7 +10249,7 @@ body.in-portal .sens-workout-summary-card {
     flex-wrap: wrap;
     gap: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--sens-border-hairline);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .sens-workout-summary-info {
@@ -10673,14 +10263,14 @@ body.in-portal .sens-workout-summary-card {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    color: var(--sens-accent-gold-text);
+    color: #B89360;
 }
 
 .sens-workout-summary-title {
     font-family: var(--font-heading);
     font-size: 1rem;
     font-weight: 700;
-    color: var(--sens-text-primary) !important;
+    color: #FFFFFF;
     margin: 0;
     line-height: 1.25;
 }
@@ -11253,6 +10843,7 @@ body.in-portal .sens-coach-daily-note-card {
     display: flex;
     align-items: center;
     gap: 2px;
+}
 }
 
 /* Grilla de Cards de Video (Estilo Pilares) */
@@ -14171,122 +13762,85 @@ body.in-portal .sens-dock-item.active svg,
     font-weight: 700;
     line-height: 1;
     letter-spacing: 0.3px;
+    padding: 2.5px 6px;
+    border-radius: 4px;
+    max-width: 100%;
+    white-space: nowrap;
+    border: none !important;
+}
+
+.sens-day-badge.presencial {
+    background: rgba(158, 125, 75, 0.12) !important;
+    color: #9E7D4B !important;
+    border: none !important;
+}
+
+.sens-day-badge.online {
+    background: #F4F4F5 !important;
+    color: #18181B !important;
+    border: none !important;
+}
+
+.sens-day-badge.auto {
+    background: #F4F4F5 !important;
+    color: #71717A !important;
     border: none !important;
 }
 
 .sens-day-badge.done {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #EAF6EE !important;
-    color: #1E7B42 !important;
-    font-size: 11px;
+    background: #E4E4E7 !important;
+    color: #09090B !important;
+    border: none !important;
     font-weight: 800;
-    box-shadow: 0 1px 3px rgba(30, 123, 66, 0.15);
-}
-
-.sens-day-badge.missed {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #F3F1ED !important;
-    color: #575659 !important;
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10px;
+    min-width: 18px;
+    padding: 2.5px 5px;
 }
 
 .sens-day-badge.rest {
-    color: #8E8D90 !important;
-    font-size: 12px;
-    font-weight: 500;
+    color: #A1A1AA !important;
+    font-size: 11px;
+    font-weight: 600;
     background: transparent !important;
-}
-
-.sens-day-badge.today {
-    padding: 2.5px 6px;
-    border-radius: 9999px;
-    background: #FFFFFF !important;
-    color: #2A241C !important;
-    font-size: 8px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-}
-
-.sens-day-badge.future-routine {
-    padding: 2.5px 6px;
-    border-radius: 9999px;
-    background: #F7EFE4 !important;
-    color: #8C6A38 !important;
-    font-size: 8px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-}
-
-.sens-day-badge.future-rest {
-    padding: 2.5px 6px;
-    border-radius: 9999px;
-    background: #F3F1ED !important;
-    color: #8E8D90 !important;
-    font-size: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-}
-
-.sens-day-badge.presencial {
-    padding: 2px 6px;
-    border-radius: 9999px;
-    background: #F7EFE4 !important;
-    color: #8C6A38 !important;
-    font-size: 8px;
-    font-weight: 700;
-}
-
-.sens-day-badge.online {
-    padding: 2px 6px;
-    border-radius: 9999px;
-    background: #F3F1ED !important;
-    color: #575659 !important;
-    font-size: 8px;
-    font-weight: 600;
-}
-
-.sens-day-badge.auto {
-    padding: 2px 6px;
-    border-radius: 9999px;
-    background: #F3F1ED !important;
-    color: #575659 !important;
-    font-size: 8px;
-    font-weight: 600;
+    border: none !important;
+    padding: 0;
 }
 
 /* Active pill variations */
-body.in-portal .sens-week-day-pill.active .sens-day-badge.done {
-    background: #FFFFFF !important;
-    color: #1E7B42 !important;
+body.in-portal .sens-week-day-pill.active .sens-day-badge.presencial {
+    background: #E5CBA7 !important;
+    color: #09090B !important;
+    border: none !important;
+    font-weight: 800 !important;
 }
 
-body.in-portal .sens-week-day-pill.active .sens-day-badge.today {
-    background: #FFFFFF !important;
-    color: #2A241C !important;
+body.in-portal .sens-week-day-pill.active .sens-day-badge.online {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    font-weight: 700 !important;
 }
 
-body.in-portal .sens-week-day-pill.active .sens-day-badge.presencial,
-body.in-portal .sens-week-day-pill.active .sens-day-badge.online,
 body.in-portal .sens-week-day-pill.active .sens-day-badge.auto {
-    background: rgba(255, 255, 255, 0.4) !important;
-    color: #2A241C !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-badge.done {
+    background: #E5CBA7 !important;
+    color: #09090B !important;
+    border: none !important;
+    font-weight: 800 !important;
 }
 
 body.in-portal .sens-week-day-pill.active .sens-day-badge.rest,
 .sens-week-day-pill.active .sens-day-badge.rest {
-    color: #564428 !important;
+    color: #71717A !important;
     border: none !important;
     background: transparent !important;
     font-weight: 700 !important;
+    font-size: 13px !important;
 }
 
 /* Leyenda de Modalidades debajo del Calendario */
@@ -14447,13 +14001,11 @@ body.in-portal .sens-workout-goal-hero .sens-workout-timer-pill,
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
-/* 3. Modal / Bottom Sheet Táctil de Ejecución de Ejercicio (Light Quiet Luxury Parity) */
+/* 3. Modal / Bottom Sheet Táctil de Ejecución de Ejercicio (#121214) */
 body.in-portal .sens-exercise-modal-sheet,
 .sens-exercise-modal-sheet {
-    background: #FAF9F6 !important;
-    color: #121214 !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    box-shadow: 0 16px 40px -4px rgba(18, 18, 20, 0.08), 0 4px 12px rgba(18, 18, 20, 0.03) !important;
+    background: #121214 !important;
+    color: #FFFFFF !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet h2,
@@ -14462,89 +14014,82 @@ body.in-portal .sens-exercise-modal-sheet h4,
 body.in-portal .sens-exercise-modal-title,
 .sens-exercise-modal-sheet .sens-exercise-modal-title,
 .sens-exercise-modal-title {
-    color: #121214 !important;
-    font-weight: 700 !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet p,
 body.in-portal .sens-exercise-modal-sheet .sens-coach-notes-body,
 .sens-coach-notes-body {
-    color: #575659 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-exercise-modal-video-cue,
 .sens-exercise-modal-video-cue {
-    color: #121214 !important;
+    color: #FFFFFF !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-timer-card,
-body.in-portal .sens-exercise-modal-sheet .sens-master-timer-card,
-.sens-timer-card,
-.sens-master-timer-card {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.03) !important;
+.sens-timer-card {
+    background: #18181C !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-timer-label,
 .sens-timer-label {
-    color: #575659 !important;
+    color: rgba(255, 255, 255, 0.72) !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-timer-digits,
-body.in-portal .sens-exercise-modal-sheet #masterTimerDisplay,
 .sens-timer-digits {
-    color: #121214 !important;
+    color: #FFFFFF !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-timer-digits.text-champagne {
-    color: #705B3E !important;
+    color: #E5CBA7 !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-series-section-header h4,
 .sens-series-section-header h4 {
-    color: #121214 !important;
+    color: #FFFFFF !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-tactile-set-row,
 .sens-tactile-set-row {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    color: #121214 !important;
-    box-shadow: 0 1px 3px rgba(18, 18, 20, 0.02) !important;
+    background: #16161a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #FFFFFF !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-tactile-set-row.completed,
 .sens-tactile-set-row.completed {
-    border-color: rgba(30, 123, 66, 0.35) !important;
-    background: #EAF6EE !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    background: rgba(16, 185, 129, 0.08) !important;
 }
 
 body.in-portal .sens-exercise-modal-sheet .sens-set-label,
 .sens-set-label {
-    color: #121214 !important;
+    color: #FFFFFF !important;
 }
 
-/* 4. Empty State de Rutina (Light Quiet Luxury) */
+/* 4. Empty State de Rutina (#121214) */
 body.in-portal .sens-empty-state-card,
 .sens-empty-state-card {
-    background: #FFFFFF !important;
-    color: #121214 !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
+    background: #121214 !important;
+    color: #FFFFFF !important;
 }
 
 body.in-portal .sens-empty-state-card h3,
 body.in-portal .sens-empty-state-title,
 .sens-empty-state-title {
-    color: #121214 !important;
-    font-weight: 700 !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
 }
 
 body.in-portal .sens-empty-state-card p,
 body.in-portal .sens-empty-state-desc,
 .sens-empty-state-desc {
-    color: #575659 !important;
+    color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* 5. Coach Master Active Athlete Card: Modern Quiet Luxury Claro styled in #coachHubView section */
@@ -14848,30 +14393,29 @@ body.in-portal .tape-input-control,
     color: rgba(255, 255, 255, 0.65) !important;
 }
 
-/* 3. Filas Agrupadas de Comida & Tarjetas Nutricionales */
+/* 3. Filas Agrupadas de Comida & Tarjetas Nutricionales Oscuras */
 body.in-portal .sens-meal-group-card,
 .sens-meal-group-card {
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    color: var(--sens-text-primary) !important;
-    box-shadow: var(--sens-shadow-sm) !important;
+    background: #121216 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #FFFFFF !important;
 }
 
 body.in-portal .sens-meal-group-header,
 .sens-meal-group-header {
-    color: var(--sens-text-primary) !important;
+    color: #FFFFFF !important;
     font-weight: 800 !important;
 }
 
 body.in-portal .sens-meal-name,
 .sens-meal-name {
-    color: var(--sens-text-primary) !important;
+    color: #FFFFFF !important;
     font-weight: 700 !important;
 }
 
 body.in-portal .sens-meal-desc,
 .sens-meal-desc {
-    color: var(--sens-text-secondary) !important;
+    color: rgba(255, 255, 255, 0.72) !important;
 }
 
 body.in-portal .sens-nutri-date-nav,
@@ -16316,19 +15860,18 @@ body.in-portal #coachHubView {
 }
 
 .coach-tier-mini-card {
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 12px;
     padding: 12px;
     display: flex;
     flex-direction: column;
     gap: 3px;
-    box-shadow: var(--sens-shadow-sm);
 }
 
 .coach-tier-mini-card.highlight-saas {
-    border-color: rgba(229, 203, 167, 0.6) !important;
-    background: linear-gradient(145deg, #FFFFFF 0%, rgba(229, 203, 167, 0.12) 100%) !important;
+    border-color: rgba(229, 203, 167, 0.35) !important;
+    background: linear-gradient(145deg, #16161A 0%, rgba(229, 203, 167, 0.08) 100%) !important;
 }
 
 .tier-mini-tag {
@@ -16336,13 +15879,13 @@ body.in-portal #coachHubView {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: var(--sens-accent-gold-text) !important;
+    color: #E5CBA7 !important;
 }
 
 .coach-tier-mini-card strong {
     font-size: 12px;
     font-weight: 800;
-    color: var(--sens-text-primary) !important;
+    color: #FFFFFF !important;
 }
 
 .tier-mini-price {
@@ -16354,17 +15897,16 @@ body.in-portal #coachHubView {
 
 .coach-tier-mini-card small {
     font-size: 10px;
-    color: var(--sens-text-secondary) !important;
+    color: #71717A !important;
     line-height: 1.3;
 }
 
 /* 6. Clinical Copilot & Goal Prescription Box */
 .coach-goal-prescription-box {
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 16px;
     padding: 14px 16px;
-    box-shadow: var(--sens-shadow-sm);
 }
 
 .coach-ai-recommendation-banner {
@@ -16410,12 +15952,11 @@ body.in-portal #coachHubView {
 
 /* 7. Taxonomy Level Box */
 .coach-taxonomy-level-box {
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 14px;
     padding: 12px 14px;
     margin-bottom: 12px;
-    box-shadow: var(--sens-shadow-sm);
 }
 
 .coach-taxonomy-level-label {
@@ -16424,7 +15965,7 @@ body.in-portal #coachHubView {
     font-weight: 800;
     letter-spacing: 0.9px;
     text-transform: uppercase;
-    color: var(--sens-text-secondary);
+    color: #52525B;
     margin-bottom: 8px;
 }
 
@@ -16434,19 +15975,18 @@ body.in-portal #coachHubView {
     justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
-    background: var(--sens-bg-surface) !important;
-    color: var(--sens-text-primary) !important;
+    background: #121215;
+    color: #FFFFFF;
     padding: 12px 16px;
     border-radius: 14px;
     margin-bottom: 16px;
-    border: 1px solid var(--sens-border-hairline) !important;
-    box-shadow: var(--sens-shadow-sm);
+    border: 1px solid rgba(229, 203, 167, 0.25);
 }
 
 .coach-kcal-sim-label {
     font-size: 12px;
     font-weight: 600;
-    color: var(--sens-text-secondary);
+    color: #E4E4E7;
 }
 
 .coach-kcal-sim-controls {
@@ -16455,16 +15995,16 @@ body.in-portal #coachHubView {
     gap: 6px;
     font-size: 12px;
     font-weight: 700;
-    color: var(--sens-accent-gold-text);
+    color: #E5CBA7;
 }
 
 .coach-kcal-sim-controls input {
     width: 54px;
     padding: 5px 8px;
     border-radius: 8px;
-    border: 1px solid var(--sens-border-subtle);
-    background: var(--sens-bg-surface-inset);
-    color: var(--sens-text-primary);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
     font-weight: 800;
     text-align: center;
     font-variant-numeric: tabular-nums;
@@ -16477,8 +16017,8 @@ body.in-portal #coachHubView {
 }
 
 .coach-lib-item-card {
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
+    background: #141417 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 18px !important;
     padding: 16px;
     display: flex;
@@ -17027,8 +16567,9 @@ body.in-portal #coachHubView {
 }
 
 .sens-mkt-adjust-btn.active small {
-    color: #E5CBA7 !important;
+    color: #FFFFFF !important;
     opacity: 0.88;
+}
 }
 
 /* Selector Modular de Capas Visibles SENS */
@@ -20008,7 +19549,7 @@ body.in-portal,
     max-width: 560px;
     max-height: 88vh;
     overflow-y: auto;
-    padding: 24px 20px max(44px, calc(env(safe-area-inset-bottom, 0px) + 32px));
+    padding: 24px 20px max(54px, calc(env(safe-area-inset-bottom, 0px) + 40px));
     color: #FFFFFF;
     box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.7);
     animation: sensSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
@@ -20019,7 +19560,9 @@ body.in-portal,
 body.sens-modal-open #sensFloatingDock,
 body.sens-modal-open #sensCoachFloatingDock,
 body:has(.sens-modal-sheet-wrap.active) #sensFloatingDock,
-body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
+body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock,
+body:has(.modal.show) #sensFloatingDock,
+body:has(.modal.show) #sensCoachFloatingDock {
     display: none !important;
     opacity: 0 !important;
     pointer-events: none !important;
@@ -20029,7 +19572,8 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 #dashUnlockablesModule,
 #nutriUnlockablesModule,
 .sens-streak-rewards-compact,
-.sens-unlockables-module-card {
+.sens-unlockables-module-card,
+#memberNutriDirectiveCard {
     display: none !important;
 }
 
@@ -20748,7 +20292,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     position: fixed;
     inset: 0;
     z-index: 10005;
-    background: rgba(18, 18, 20, 0.45);
+    background: radial-gradient(circle at center, rgba(30, 24, 18, 0.94) 0%, rgba(8, 8, 9, 0.96) 80%);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
@@ -20759,14 +20303,14 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 }
 
 .sens-congrats-card {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(229, 203, 167, 0.45) !important;
+    background: #141418;
+    border: 1px solid rgba(229, 203, 167, 0.45);
     border-radius: 26px;
     padding: 34px 26px;
-    max-width: 400px;
+    max-width: 390px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 16px 48px -4px rgba(18, 18, 20, 0.12), 0 0 24px rgba(229, 203, 167, 0.25) !important;
+    box-shadow: 0 0 60px rgba(229, 203, 167, 0.35), 0 20px 50px rgba(0, 0, 0, 0.9);
     animation: sensCongratsPop 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
@@ -20838,7 +20382,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-congrats-title {
     font-size: 1.3rem;
     font-weight: 900;
-    color: var(--sens-text-primary) !important;
+    color: #FFFFFF;
     letter-spacing: 0.8px;
     margin: 0 0 6px 0;
 }
@@ -20846,16 +20390,16 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-congrats-subtitle {
     font-size: 13.5px;
     font-weight: 700;
-    color: var(--sens-accent-bronze) !important;
+    color: #E5CBA7;
     margin: 0 0 14px 0;
 }
 
 .sens-congrats-quote {
     font-size: 12px;
-    color: var(--sens-text-secondary) !important;
+    color: #A1A1AA;
     line-height: 1.45;
     font-style: italic;
-    border-top: 1px solid var(--sens-border-hairline) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding-top: 12px;
 }
 
@@ -20872,11 +20416,11 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 
 .sens-congrats-level-pill {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 3px 12px;
     border-radius: 999px;
-    background: #EAF6EE !important;
-    border: 1px solid rgba(30, 123, 66, 0.25) !important;
-    color: #1E7B42 !important;
+    background: rgba(229, 203, 167, 0.15);
+    border: 1px solid rgba(229, 203, 167, 0.35);
+    color: #E5CBA7;
     font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
@@ -20885,8 +20429,8 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 }
 
 .sens-congrats-streak-counter-bump {
-    background: var(--sens-bg-surface-subtle) !important;
-    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(229, 203, 167, 0.25);
     border-radius: 14px;
     padding: 8px 16px;
     display: inline-flex;
@@ -20898,7 +20442,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-bump-number {
     font-size: 26px;
     font-weight: 900;
-    color: var(--sens-text-primary) !important;
+    color: #E5CBA7;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     animation: sensCountBump 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -20913,7 +20457,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-bump-label {
     font-size: 10.5px;
     font-weight: 800;
-    color: var(--sens-accent-bronze) !important;
+    color: #FFFFFF;
     letter-spacing: 0.6px;
     text-transform: uppercase;
 }
@@ -21014,15 +20558,14 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 
 /* 1. Hero Calórico Primario con Paridad y Claridad Total */
 .sens-nutri-hero-primary-card {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 20px !important;
-    padding: 20px 22px !important;
-    margin-bottom: 20px !important;
-    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
-    position: relative !important;
-    overflow: hidden !important;
-    color: #121214 !important;
+    background: #121215;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
 }
 
 .sens-nutri-hero-header {
@@ -21034,8 +20577,8 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 
 .sens-nutri-hero-title {
     font-size: 1.35rem;
-    font-weight: 700;
-    color: #121214 !important;
+    font-weight: 800;
+    color: #FFFFFF;
     margin: 4px 0 0 0;
     letter-spacing: -0.2px;
 }
@@ -21057,17 +20600,17 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 
 .sens-nutri-hero-val {
     font-size: 2.5rem;
-    font-weight: 800;
+    font-weight: 900;
     font-variant-numeric: tabular-nums;
-    color: #121214 !important;
+    color: #FFFFFF;
     letter-spacing: -0.8px;
     line-height: 1;
 }
 
 .sens-nutri-hero-unit {
     font-size: 13.5px;
-    font-weight: 500;
-    color: #575659 !important;
+    font-weight: 600;
+    color: var(--text-muted);
 }
 
 .sens-nutri-hero-stat-target {
@@ -21079,23 +20622,23 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #705B3E !important;
+    color: #71717A;
     font-weight: 700;
 }
 
 .sens-nutri-target-val {
     display: block;
     font-size: 14.5px;
-    font-weight: 700;
-    color: #121214 !important;
+    font-weight: 800;
+    color: #E5CBA7;
     font-variant-numeric: tabular-nums;
 }
 
 .sens-nutri-remaining-val {
     display: block;
     font-size: 11.5px;
-    color: #575659 !important;
-    font-weight: 500;
+    color: #A1A1AA;
+    font-weight: 600;
     margin-top: 2px;
 }
 
@@ -21107,7 +20650,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-nutri-progress-track {
     position: relative;
     height: 10px;
-    background: #EFECE6 !important;
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 999px;
     overflow: hidden;
 }
@@ -21115,7 +20658,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-nutri-progress-fill {
     height: 100%;
     border-radius: 999px;
-    background: #121214 !important;
+    background: linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%);
     transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
 }
 
@@ -21123,9 +20666,9 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     position: absolute;
     top: 0;
     bottom: 0;
-    background: repeating-linear-gradient(45deg, rgba(229, 203, 167, 0.25), rgba(229, 203, 167, 0.25) 4px, rgba(229, 203, 167, 0.45) 4px, rgba(229, 203, 167, 0.45) 8px) !important;
-    border-left: 1px dashed rgba(112, 91, 62, 0.5) !important;
-    border-right: 1px dashed rgba(112, 91, 62, 0.5) !important;
+    background: repeating-linear-gradient(45deg, rgba(229, 203, 167, 0.12), rgba(229, 203, 167, 0.12) 4px, rgba(229, 203, 167, 0.25) 4px, rgba(229, 203, 167, 0.25) 8px);
+    border-left: 1px dashed rgba(229, 203, 167, 0.5);
+    border-right: 1px dashed rgba(229, 203, 167, 0.5);
     pointer-events: none;
 }
 
@@ -21133,14 +20676,14 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     display: flex;
     justify-content: space-between;
     font-size: 11px;
-    color: #575659 !important;
+    color: #71717A;
     margin-top: 6px;
     font-variant-numeric: tabular-nums;
 }
 
 /* Acordeón Integrado de Desglose de Macronutrientes */
 .sens-nutri-macro-accordion-wrap {
-    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
     padding-top: 12px;
     margin-top: 12px;
 }
@@ -21150,20 +20693,21 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #F4F3F1 !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 10px;
     padding: 8px 12px;
-    color: #121214 !important;
+    color: #E4E4E7;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .sens-btn-macro-drawer-toggle:hover {
-    background: #EFECE6 !important;
-    color: #121214 !important;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(229, 203, 167, 0.3);
+    color: #FFFFFF;
 }
 
 .sens-macro-toggle-left {
@@ -21176,7 +20720,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-macro-toggle-summary {
     font-size: 11px;
     font-weight: 600;
-    color: #575659 !important;
+    color: #A1A1AA;
     font-variant-numeric: tabular-nums;
 }
 
@@ -21188,7 +20732,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-macro-ratio {
     display: block;
     font-size: 10.5px;
-    color: #8E8D90 !important;
+    color: #71717A;
     margin-top: 2px;
 }
 
@@ -21203,23 +20747,21 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     font-weight: 700;
     margin-top: 6px;
     font-variant-numeric: tabular-nums;
-    color: #121214 !important;
 }
 
 /* 2. Subsecciones Visuales de Comida: Container Encompassing Parent Card */
 .sens-meal-subsection-block {
     margin-bottom: 22px;
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 20px !important;
-    padding: 16px 16px 14px 16px !important;
-    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03) !important;
+    background: #111114;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 16px 16px 14px 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    color: #121214 !important;
 }
 
 .sens-meal-subsection-block:hover {
-    border-color: rgba(18, 18, 20, 0.14) !important;
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 .sens-meal-subsection-header {
@@ -21229,7 +20771,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     padding: 0 0 12px 0;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 0;
     margin-bottom: 12px;
 }
@@ -21251,15 +20793,15 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #705B3E !important;
-    box-shadow: none !important;
+    background: #E5CBA7;
+    box-shadow: 0 0 8px rgba(229, 203, 167, 0.4);
     flex-shrink: 0;
 }
 
 .sens-meal-title {
     font-size: 13px;
-    font-weight: 700;
-    color: #121214 !important;
+    font-weight: 800;
+    color: #FFFFFF;
     text-transform: uppercase;
     letter-spacing: 0.8px;
     margin: 0;
@@ -21268,32 +20810,33 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-meal-subtotal-meta {
     font-size: 11px;
     font-weight: 700;
-    color: #705B3E !important;
-    background: rgba(229, 203, 167, 0.4) !important;
-    border: 1px solid rgba(112, 91, 62, 0.3) !important;
+    color: #E5CBA7;
+    background: rgba(229, 203, 167, 0.08);
+    border: 1px solid rgba(229, 203, 167, 0.2);
     border-radius: 999px;
     padding: 2px 8px;
     font-variant-numeric: tabular-nums;
 }
 
 .btn-quick-add-to-meal {
-    padding: 6px 14px;
-    font-size: 11.5px;
+    padding: 5px 12px;
+    font-size: 11px;
     font-weight: 700;
     border-radius: 999px;
-    border: none !important;
-    background: #E5CBA7 !important;
-    color: #2A241C !important;
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    background: rgba(229, 203, 167, 0.08);
+    color: #E5CBA7;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    box-shadow: 0 2px 8px rgba(229, 203, 167, 0.3) !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-quick-add-to-meal:hover {
-    background: #D8BD97 !important;
+    background: rgba(229, 203, 167, 0.2);
+    border-color: #E5CBA7;
+    color: #FFFFFF;
     transform: translateY(-1px);
 }
 
@@ -22039,8 +21582,8 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 }
 
 .sens-pillar-item {
-    background: var(--sens-bg-surface) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
+    background: #18181D;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 12px;
     padding: 9px 10px;
     display: flex;
@@ -22048,7 +21591,6 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     justify-content: space-between;
     min-height: 82px;
     cursor: pointer;
-    box-shadow: var(--sens-shadow-sm) !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     -webkit-tap-highlight-color: transparent;
     user-select: none;
@@ -22056,9 +21598,9 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 }
 
 .sens-pillar-item:hover {
-    border-color: var(--sens-accent-gold) !important;
+    border-color: rgba(229, 203, 167, 0.3);
     transform: translateY(-1px);
-    background: var(--sens-bg-surface-hover) !important;
+    background: #1C1C22;
 }
 
 .sens-pillar-item:active {
@@ -22069,12 +21611,11 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 1.5px solid var(--sens-border-subtle);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     color: transparent;
-    background: var(--sens-bg-surface-subtle);
     transition: all 0.2s ease;
     margin-bottom: 4px;
 }
@@ -22082,7 +21623,7 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-pillar-chk.done {
     background: #10B981;
     border-color: #10B981;
-    color: #FFFFFF;
+    color: #080809;
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 
@@ -22096,16 +21637,14 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
 .sens-pillar-heading {
     font-size: 11px;
     font-weight: 800;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
+    color: #FFFFFF;
     line-height: 1.2;
     margin-bottom: 0;
 }
 
 .sens-pillar-metric {
     font-size: 9.5px;
-    color: var(--sens-text-secondary) !important;
-    -webkit-text-fill-color: var(--sens-text-secondary) !important;
+    color: #8E8E93;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -22120,10 +21659,8 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     letter-spacing: 0.4px;
     padding: 2px 6px;
     border-radius: 6px;
-    background: var(--sens-bg-surface-subtle) !important;
-    color: var(--sens-text-secondary) !important;
-    -webkit-text-fill-color: var(--sens-text-secondary) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
+    background: rgba(255, 255, 255, 0.08);
+    color: #8E8E93;
     transition: all 0.2s ease;
 }
 
@@ -22137,6 +21674,11 @@ body:has(.sens-modal-sheet-wrap.active) #sensCoachFloatingDock {
     background: rgba(239, 68, 68, 0.15) !important;
     color: #F87171 !important;
     border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #71717A;
+    margin-top: 6px;
 }
 
 .sens-pillar-pill.done {
@@ -23694,2570 +23236,11 @@ textarea,
     color: #E5CBA7;
 }
 
-/* ==============================================================================
-   3. SENS MODO LIGHT QUIET LUXURY — DEFINITIVE DESIGN SYSTEM ENFORCER
-   ============================================================================== */
 
-/* 3.1. Canvas y superficies globales */
-html,
-body,
-#root,
-#__next,
-.app-container,
-#app-container,
-main,
-.portal-body,
-.sens-portal-root {
-    background-color: var(--sens-bg-canvas) !important;
-    color: var(--sens-text-primary) !important;
-    font-family: var(--sens-font-sans) !important;
-    -webkit-font-smoothing: antialiased;
-}
 
-/* 3.2. Tarjetas y contenedores principales (ÚNICAMENTE contenedores raíz, CERO wildcards) */
-.card,
-.container-card,
-.sens-card,
-.sens-training-card,
-#dashTrainingVideoCard,
-.sens-streak-card,
-#sensDailyStreakCard,
-.sens-plan-status-strip,
-.sens-week-strip-wrap,
-.sens-macro-ring-card,
-.sens-nutri-plan-section,
-#sensMemberNutriPlanSection,
-.routine-day-card,
-.pricing-card,
-.train-plan-card,
-.coach-card,
-.wizard-card,
-.modal-content,
-.modal-dialog,
-.dialog-card,
-.sens-profile-tier-box,
-.sens-modal-tier-card,
-.sens-unlockables-module-card,
-.coach-directive-station-card {
-    background-color: var(--sens-bg-surface) !important;
-    color: var(--sens-text-primary) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    box-shadow: var(--sens-shadow-card) !important;
-}
 
-/* 3.3. ELIMINACIÓN DE CUADROS ANIDADOS: Reset total para sub-elementos internos de tarjetas */
-.sens-card-info-stack,
-.sens-card-domain-eyebrow,
-.sens-card-title-white,
-.sens-card-sub-white,
-.sens-training-card-content,
-.sens-card-top-info-row,
-.sens-card-badge-row,
-.sens-streak-top-row,
-.sens-streak-sub-row,
-.sens-streak-weekly-row,
-.sens-streak-count-col,
-.sens-streak-count-row,
-.sens-streak-badge-wrap,
-.sens-nutri-plan-header,
-.sens-nutri-plan-header *,
-.sens-week-strip-wrap *,
-.sens-routine-group-card *,
-.sens-bump-card *,
-.sens-congrats-card *,
-.sens-card-top-info-row *,
-.sens-card-info-stack *,
-.method-layout *,
-.train-plan-card .plan-price-wrap,
-.train-plan-card .plan-concept-tagline,
-.train-plan-card .plan-features-list,
-.train-plan-card .plan-features-list li {
-    background: transparent !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
 
-/* 3.4. Tipografía Editorial & Jerarquía de Contraste */
-h1, h2, h3, h4, h5, h6, .heading, [class*="title"], [class*="heading"] {
-    color: var(--sens-text-primary) !important;
-    letter-spacing: -0.02em;
-}
 
-p, span, .text, [class*="subtitle"], [class*="desc"] {
-    color: var(--sens-text-secondary);
-}
-
-/* Títulos y bajadas clave integradas en cards */
-.sens-card-title-white {
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-    font-size: 1.55rem !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.02em !important;
-    margin: 3px 0 4px !important;
-}
-
-.sens-card-domain-eyebrow {
-    color: var(--sens-text-muted) !important;
-    -webkit-text-fill-color: var(--sens-text-muted) !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase !important;
-}
-
-.sens-card-sub-white {
-    color: var(--sens-text-secondary) !important;
-    -webkit-text-fill-color: var(--sens-text-secondary) !important;
-    font-size: 0.92rem !important;
-}
-
-/* Micro-etiquetas y kickers editoriales */
-.kicker, .badge-kicker, [class*="kicker"], [class*="category-tag"] {
-    font-size: 0.6875rem !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.12em !important;
-    color: var(--sens-text-muted) !important;
-}
-
-/* 3.5. Botones y Llamados a la Acción (CTAs) */
-.btn-primary,
-button[type="submit"],
-[class*="btn-primary"],
-[class*="button-primary"] {
-    background-color: var(--sens-accent-gold) !important;
-    color: var(--sens-accent-gold-text) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
-    font-weight: 700 !important;
-    border: none !important;
-    border-radius: var(--sens-radius-sm) !important;
-    letter-spacing: 0.04em !important;
-    transition: all 0.2s ease !important;
-}
-
-.btn-primary:hover,
-button[type="submit"]:hover {
-    background-color: var(--sens-accent-gold-hover) !important;
-    transform: translateY(-1px);
-}
-
-.btn-secondary,
-.btn-outline,
-[class*="btn-outline"],
-[class*="btn-secondary"] {
-    background-color: transparent !important;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-    border: 1px solid var(--sens-border-subtle) !important;
-    border-radius: var(--sens-radius-sm) !important;
-    font-weight: 700 !important;
-}
-
-.btn-secondary:hover,
-.btn-outline:hover {
-    background-color: var(--sens-bg-surface-subtle) !important;
-    border-color: var(--sens-text-primary) !important;
-}
-
-/* Botón "Ver los 4 Planes SENS" en Hero (Modo Light Quiet Luxury) */
-.hero-btn-apple-dark,
-a.hero-btn-apple-dark,
-a.hero-btn-apple-dark:link,
-a.hero-btn-apple-dark:visited {
-    background: #FFFFFF !important;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-    border: 1.5px solid var(--sens-border-subtle) !important;
-    box-shadow: var(--sens-shadow-sm) !important;
-}
-
-.hero-btn-apple-dark:hover,
-a.hero-btn-apple-dark:hover {
-    background: var(--sens-bg-surface-subtle) !important;
-    border-color: var(--sens-text-primary) !important;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-}
-
-/* Flecha circular de avance en card de entrenamiento */
-.sens-btn-circle-arrow {
-    background: var(--sens-accent-gold) !important;
-    color: var(--sens-accent-gold-text) !important;
-    border: none !important;
-    box-shadow: 0 4px 14px rgba(229, 203, 167, 0.45) !important;
-}
-
-.sens-btn-circle-arrow svg {
-    stroke: var(--sens-accent-gold-text) !important;
-}
-
-/* 3.6. Pills, Chips, Tabs y Filtros */
-.tabs,
-.segmented-control,
-[class*="segmented"],
-[class*="pill-group"] {
-    background-color: var(--sens-bg-surface-subtle) !important;
-    border-radius: var(--sens-radius-full) !important;
-    padding: 4px !important;
-}
-
-.tab,
-.segment,
-[class*="tab-item"] {
-    color: var(--sens-text-secondary) !important;
-    border-radius: var(--sens-radius-full) !important;
-}
-
-.tab.active,
-.segment.active,
-[class*="tab-item"].active,
-[aria-selected="true"] {
-    background-color: var(--sens-bg-surface) !important;
-    color: var(--sens-text-primary) !important;
-    box-shadow: var(--sens-shadow-sm) !important;
-    font-weight: 700 !important;
-}
-
-.pill-champagne {
-    background: var(--sens-accent-gold-light) !important;
-    color: var(--sens-accent-gold-text) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
-    border: 1px solid rgba(229, 203, 167, 0.4) !important;
-}
-
-.badge-tag-optimo {
-    background: var(--sens-accent-tag-bg) !important;
-    color: var(--sens-accent-tag-text) !important;
-}
-
-/* Pills flotantes del Hero Landing */
-.sens-hero-compact-pills .hero-plan-pill.standard {
-    background: rgba(255, 255, 255, 0.95) !important;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-    border: 1px solid var(--sens-border-subtle) !important;
-    box-shadow: var(--sens-shadow-sm) !important;
-}
-
-.sens-hero-compact-pills .hero-plan-pill.free {
-    background: var(--sens-accent-gold-light) !important;
-    color: var(--sens-accent-gold-text) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
-    border: 1px solid rgba(229, 203, 167, 0.45) !important;
-}
-
-/* Chips de los 4 Tipos de Entrenamiento (Muscular, Cardio, Movilidad, Yoga) */
-.sens-type-chip {
-    background: var(--sens-bg-surface-subtle) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    color: var(--sens-text-secondary) !important;
-    -webkit-text-fill-color: var(--sens-text-secondary) !important;
-}
-
-.sens-type-chip.active,
-.sens-type-chip.highlight {
-    background: var(--sens-accent-gold-light) !important;
-    border-color: rgba(229, 203, 167, 0.45) !important;
-    color: var(--sens-accent-gold-text) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
-}
-
-.sens-type-chip svg {
-    stroke: currentColor !important;
-}
-
-/* 3.7. Tarjeta Tira de Plan Actual en Dashboard (Image 1) */
-.sens-plan-status-strip {
-    background: #FFFFFF !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    box-shadow: var(--sens-shadow-card) !important;
-}
-
-.sens-plan-tier-badge {
-    background: var(--sens-accent-gold) !important;
-    color: var(--sens-accent-gold-text) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
-    font-weight: 800 !important;
-}
-
-.sens-plan-title-compact {
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-}
-
-.sens-plan-days-tag {
-    color: var(--sens-text-secondary) !important;
-    -webkit-text-fill-color: var(--sens-text-secondary) !important;
-}
-
-.btn-sens-plan-upgrade {
-    background: var(--sens-accent-gold) !important;
-    color: var(--sens-accent-gold-text) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
-    border: none !important;
-}
-
-.btn-sens-plan-share {
-    background: var(--sens-bg-surface-subtle) !important;
-    border: 1px solid var(--sens-border-subtle) !important;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-}
-
-/* 3.8. Tarjeta de Racha SENS (Image 1) */
-.sens-streak-card {
-    background: #FFFFFF !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    box-shadow: var(--sens-shadow-card) !important;
-}
-
-.sens-streak-hero-num {
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-}
-
-.sens-streak-hero-unit {
-    color: var(--sens-text-secondary) !important;
-    -webkit-text-fill-color: var(--sens-text-secondary) !important;
-}
-
-.sens-streak-level-tag {
-    color: var(--sens-accent-bronze) !important;
-    -webkit-text-fill-color: var(--sens-accent-bronze) !important;
-}
-
-.sens-streak-status-pill {
-    background: var(--sens-bg-surface-subtle) !important;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-}
-
-.sens-streak-sub {
-    color: var(--sens-text-secondary) !important;
-    -webkit-text-fill-color: var(--sens-text-secondary) !important;
-}
-
-.sens-streak-weekly-label {
-    color: var(--sens-text-muted) !important;
-    -webkit-text-fill-color: var(--sens-text-muted) !important;
-}
-
-/* 3.9. Módulo de Nutrición & Directiva de Nico (Image 5) */
-.sens-nutri-plan-section {
-    background: #FFFFFF !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    box-shadow: var(--sens-shadow-card) !important;
-}
-
-.sens-nutri-plan-header h3 {
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-}
-
-.sens-nutri-directive-card {
-    background: var(--sens-bg-surface-subtle) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-    border-radius: var(--sens-radius-md) !important;
-}
-
-.sens-nutri-directive-card strong {
-    color: var(--sens-accent-bronze) !important;
-    -webkit-text-fill-color: var(--sens-accent-bronze) !important;
-}
-
-.sens-smart-recommender-card {
-    background: var(--sens-bg-surface-subtle) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    color: var(--sens-text-primary) !important;
-    -webkit-text-fill-color: var(--sens-text-primary) !important;
-}
-
-/* 3.10. PROTECCIÓN DE CONTRASTE EN FOTOS Y VIDEOS OSCUROS */
-/* Texto sobre videos en loop */
-.sens-video-top-badges,
-.sens-video-top-badges *,
-.sens-video-dots-indicator span {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
-}
-
-.sens-modality-pill {
-    background: var(--sens-accent-gold) !important;
-    color: var(--sens-accent-gold-text) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
-}
-
-.sens-duration-pill {
-    background: rgba(18, 18, 20, 0.75) !important;
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-/* Tarjeta Editorial de Nico (Image 3) - Contraste sobre gradiente de foto */
-.nico-editorial-card .ig-content,
-.nico-editorial-card .ig-content p,
-.nico-editorial-card .ig-content span,
-.nico-editorial-card .ig-content .ig-light,
-.nico-editorial-card .ig-content .ig-body {
-    color: rgba(255, 255, 255, 0.95) !important;
-    -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
-}
-
-.nico-editorial-card .ig-content .ig-bold {
-    color: var(--sens-accent-gold) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold) !important;
-}
-
-.nico-editorial-card .pill-dark {
-    background: rgba(18, 18, 20, 0.75) !important;
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-/* Frente de Flip Cards en Pilares */
-.flip-card-front,
-.flip-card-front h3,
-.flip-card-front .step-number {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
-}
-
-/* 3.11. Barras de Navegación, Topbars y Floating Mobile Dock */
-/* Topbar del portal (Image 1, 4, 5) */
-.portal-topbar {
-    background: rgba(250, 249, 246, 0.96) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border-bottom: 1px solid var(--sens-border-hairline) !important;
-    color: var(--sens-text-primary) !important;
-}
-
-.portal-topbar .brand-logo-img-portal,
-.brand-logo-img,
-.brand-logo-img-footer,
-.brand-logo-img-modal,
-img[src*="logo-blanco"] {
-    filter: invert(1) brightness(0.12) !important;
-}
-
-.portal-nav-bar {
-    background: var(--sens-bg-surface) !important;
-    border-bottom: 1px solid var(--sens-border-hairline) !important;
-}
-
-.portal-nav-item {
-    color: var(--sens-text-secondary) !important;
-}
-
-.portal-nav-item.active,
-.portal-nav-item:hover {
-    color: var(--sens-text-primary) !important;
-    border-bottom-color: var(--sens-accent-gold) !important;
-}
-
-/* Mobile Floating Dock (Image 4 & 5) */
-body.in-portal #sensFloatingDock,
-.sens-floating-dock {
-    background: rgba(255, 255, 255, 0.94) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid var(--sens-border-subtle) !important;
-    box-shadow: 0 10px 30px -4px rgba(18, 18, 20, 0.12) !important;
-}
-
-body.in-portal #sensFloatingDock .sens-dock-item,
-.sens-dock-item {
-    color: var(--sens-text-secondary) !important;
-    -webkit-text-fill-color: var(--sens-text-secondary) !important;
-}
-
-body.in-portal #sensFloatingDock .sens-dock-item svg,
-.sens-dock-item svg {
-    stroke: var(--sens-text-secondary) !important;
-}
-
-body.in-portal #sensFloatingDock .sens-dock-item.active,
-.sens-dock-item.active {
-    background: var(--sens-accent-gold-light) !important;
-    color: var(--sens-accent-gold-text) !important;
-    -webkit-text-fill-color: var(--sens-accent-gold-text) !important;
-}
-
-body.in-portal #sensFloatingDock .sens-dock-item.active svg,
-.sens-dock-item.active svg {
-    stroke: var(--sens-accent-gold-text) !important;
-}
-
-/* Navbar Principal */
-.navbar,
-header .navbar {
-    background: linear-gradient(to bottom, rgba(250, 249, 246, 0.95), rgba(250, 249, 246, 0.85)) !important;
-    border-bottom: 1px solid var(--sens-border-hairline) !important;
-}
-
-.navbar.scrolled {
-    background: rgba(250, 249, 246, 0.95) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border-bottom: 1px solid var(--sens-border-hairline) !important;
-}
-
-.navbar .nav-link,
-.navbar a {
-    color: var(--sens-text-primary) !important;
-}
-
-.mobile-quick-bar,
-.sticky-footer {
-    background: rgba(250, 249, 246, 0.95) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border-top: 1px solid var(--sens-border-hairline) !important;
-    box-shadow: 0 -4px 20px rgba(18, 18, 20, 0.06) !important;
-}
-
-/* 3.12. Rescate universal de fondos oscuros hardcodeados en contenedores (Excluyendo Hero y Video Cards) */
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #121214"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#121214"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #080809"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#080809"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #0E0E11"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#0E0E11"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #141417"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#141417"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #121216"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#121216"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #1A1A1D"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#1A1A1D"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background: #09090B"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background:#09090B"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #080809"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#080809"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #121214"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#121214"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #09090B"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#09090B"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color: #0E0E11"],
-:not(.hero-train-content):not(.hero-content):not(.sens-training-card):not(#dashTrainingVideoCard):not(.sens-training-video-card)[style*="background-color:#0E0E11"] {
-    background: var(--sens-bg-surface) !important;
-    background-color: var(--sens-bg-surface) !important;
-    color: var(--sens-text-primary) !important;
-    border: 1px solid var(--sens-border-hairline) !important;
-    box-shadow: var(--sens-shadow-card) !important;
-}
-
-/* =============================================================================
-   SENS QUIET VITALITY — DESKTOP EXPANSION (1024PX+) & FORMULARIO ANAMNESIS
-   ============================================================================= */
-@media (min-width: 1024px) {
-    /* Layout Maestro Desktop */
-    .portal-body,
-    .portal-view {
-        max-width: 1440px;
-        margin: 0 auto;
-        padding-left: var(--sens-margin);
-        padding-right: var(--sens-margin);
-    }
-
-    /* Tira Semanal Desktop Expandida */
-    .sens-week-strip-wrap {
-        padding: 24px;
-        border-radius: 20px;
-    }
-
-    .sens-week-days-strip {
-        gap: 12px;
-    }
-
-    .sens-week-day-pill {
-        min-height: 105px;
-        padding: 14px 10px 12px;
-        border-radius: 18px;
-        justify-content: space-between;
-    }
-
-    .sens-day-hero-num,
-    .sens-week-day-num {
-        font-size: 18px;
-        margin: 4px 0 8px;
-    }
-
-    /* Modal de Ejecución de Ejercicio Desktop (Split 2 Columnas) */
-    #exerciseModal .sheet-content-scroll {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 28px;
-        align-items: start;
-    }
-
-    /* Wizard Onboarding Desktop Expandido */
-    .wizard-container {
-        max-width: 820px;
-        border-radius: 24px;
-        box-shadow: 0 20px 60px -8px rgba(18, 18, 20, 0.08);
-    }
-
-    .wizard-header {
-        padding: 32px 40px 20px;
-    }
-
-    .wizard-steps-carousel {
-        padding: 36px 40px 40px;
-    }
-
-    .selection-group {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 14px;
-    }
-}
-
-/* =============================================================================
-   SENS QUIET LUXURY DEFINITIVE ENGINE (STITCH SYSTEM PARITY - V4.0)
-   ============================================================================= */
-
-/* 1. MODAL DE ACCESO / LOGIN (#authModal) */
-#authModal.modal-overlay {
-    background: rgba(18, 18, 20, 0.65) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-}
-
-.sens-auth-modal-card {
-    max-width: 440px !important;
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 24px !important;
-    box-shadow: 0 20px 60px -10px rgba(18, 18, 20, 0.15) !important;
-    padding: 24px 20px !important;
-    color: #121214 !important;
-    position: relative !important;
-    text-align: left !important;
-}
-
-.sens-auth-modal-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-}
-
-.sens-auth-close-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #F4F3F1;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    color: #575659;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    padding: 0;
-}
-
-.sens-auth-close-btn:hover {
-    background: #EFECE6;
-    color: #121214;
-}
-
-.sens-auth-brand-kicker {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #705B3E;
-}
-
-.sens-auth-ambient-banner {
-    position: relative;
-    width: 100%;
-    height: 86px;
-    border-radius: 16px;
-    overflow: hidden;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.04);
-}
-
-.sens-auth-ambient-bg {
-    width: 100%;
-    height: 100%;
-    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDBHcuD0z0y-61xuaBsSrzdWEv68le0VFh84B0C4Nm4RKdSkDJuidsTqF20YNI_BDZRo9cl9d3xjIdAJXzNFLX84o7mKslDTqKvyUhL7XBje1UW0Nv8TK2n9Nu4HmwlC5FgUQLs-DhAVuCYTDEGvCykjhabgekdbHnX24lkE7MzdCXJ5qjH6DVfO3WCFmAwWDszUy2bhgHVK_yXjVvGHzYG9TDAjJmRk1HDvAfMhw');
-    background-size: cover;
-    background-position: center;
-}
-
-.sens-auth-ambient-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(250, 249, 246, 0.95) 0%, rgba(250, 249, 246, 0.6) 45%, transparent 100%);
-    display: flex;
-    align-items: center;
-    padding: 0 14px;
-}
-
-.sens-auth-ambient-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(8px);
-    padding: 5px 12px;
-    border-radius: 9999px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #121214;
-    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.04);
-}
-
-.sens-pulse-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #1E7B42;
-    animation: sensPulse 2s infinite;
-}
-
-@keyframes sensPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(1.3); }
-}
-
-.sens-auth-editorial {
-    text-align: left;
-    margin-bottom: 16px;
-}
-
-.sens-auth-kicker {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #705B3E;
-    display: block;
-    margin-bottom: 4px;
-}
-
-.sens-auth-title {
-    font-size: 1.35rem;
-    font-weight: 300;
-    line-height: 1.25;
-    color: #121214 !important;
-    letter-spacing: -0.02em;
-    margin: 0 0 6px;
-}
-
-.sens-auth-italic {
-    font-style: italic;
-    font-weight: 500;
-    color: #121214;
-}
-
-.sens-auth-gold-slogan {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #705B3E;
-    margin-left: 6px;
-}
-
-.sens-auth-subtitle {
-    font-size: 12.5px;
-    line-height: 1.5;
-    color: #575659 !important;
-    margin: 0;
-}
-
-.sens-auth-capsule-tabs {
-    display: flex !important;
-    background: #EFEEEB !important;
-    border-radius: 9999px !important;
-    padding: 4px !important;
-    gap: 4px !important;
-    margin-bottom: 18px !important;
-}
-
-.sens-auth-capsule-tabs .auth-tab {
-    flex: 1 !important;
-    border-radius: 9999px !important;
-    padding: 9px 14px !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    border: none !important;
-    background: transparent !important;
-    color: #575659 !important;
-    transition: all 0.25s !important;
-    cursor: pointer !important;
-    text-align: center !important;
-}
-
-.sens-auth-capsule-tabs .auth-tab.active {
-    background: #121214 !important;
-    color: #FFFFFF !important;
-    font-weight: 600 !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-}
-
-.sens-input-label-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
-
-.sens-input-label-row .input-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #121214 !important;
-    margin: 0;
-}
-
-.sens-input-hint {
-    font-size: 11px;
-    color: #8E8D90;
-}
-
-.sens-input-icon-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.sens-input-icon {
-    position: absolute;
-    left: 14px;
-    color: #8E8D90;
-    pointer-events: none;
-}
-
-.sens-auth-modal-card .input-control {
-    width: 100% !important;
-    background: #F4F3F1 !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 12px !important;
-    color: #121214 !important;
-    font-size: 14px !important;
-    padding: 12px 14px 12px 42px !important;
-    transition: all 0.2s !important;
-    box-sizing: border-box !important;
-}
-
-.sens-auth-modal-card .input-control:focus {
-    background: #FFFFFF !important;
-    border-color: #121214 !important;
-    box-shadow: 0 0 0 2px rgba(18, 18, 20, 0.08) !important;
-    outline: none !important;
-}
-
-.sens-auth-modal-card .input-control::placeholder {
-    color: #8E8D90 !important;
-}
-
-.sens-auth-submit-btn {
-    background: #E5CBA7 !important;
-    color: #2A241C !important;
-    font-weight: 700 !important;
-    font-size: 14px !important;
-    border-radius: 9999px !important;
-    padding: 13px 20px !important;
-    border: none !important;
-    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.35) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    margin-top: 10px !important;
-    cursor: pointer !important;
-    width: 100% !important;
-    transition: transform 0.15s, background 0.2s !important;
-}
-
-.sens-auth-submit-btn:hover {
-    background: #D8BD97 !important;
-}
-
-.sens-auth-submit-btn:active {
-    transform: scale(0.99) !important;
-}
-
-.sens-auth-new-user-card {
-    background: #EFEEEB;
-    border-radius: 16px;
-    padding: 14px;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    margin-top: 18px;
-    text-align: left;
-}
-
-.sens-auth-new-user-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #FBDEB9;
-    color: #2A241C;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.sens-auth-new-user-text strong {
-    font-size: 13px;
-    font-weight: 600;
-    color: #121214;
-    display: block;
-    margin-bottom: 2px;
-}
-
-.sens-auth-new-user-text p {
-    font-size: 11.5px;
-    line-height: 1.45;
-    color: #575659;
-    margin: 0 0 6px;
-}
-
-.sens-auth-new-user-link {
-    font-size: 12px;
-    font-weight: 700;
-    color: #705B3E;
-    text-decoration: none;
-}
-
-.sens-auth-new-user-link:hover {
-    text-decoration: underline;
-}
-
-.sens-auth-bottom-help {
-    margin-top: 18px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-}
-
-.sens-auth-bottom-help p {
-    font-size: 12px;
-    color: #575659;
-    margin: 0;
-}
-
-.sens-auth-wa-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 18px;
-    border-radius: 9999px;
-    background: #EFEEEB;
-    color: #121214;
-    font-size: 12.5px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.2s;
-}
-
-.sens-auth-wa-button:hover {
-    background: #E5E1E4;
-}
-
-.sens-auth-location-badge {
-    font-size: 10px;
-    color: #8E8D90;
-    letter-spacing: 0.04em;
-    margin-top: 4px;
-}
-
-.sens-auth-footer-links {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 14px;
-}
-
-.sens-auth-back-link {
-    background: none;
-    border: none;
-    color: #575659;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 0;
-}
-
-.sens-auth-back-link:hover {
-    color: #121214;
-    text-decoration: underline;
-}
-
-.sens-auth-wa-link {
-    color: #705B3E;
-    font-size: 12px;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.sens-auth-wa-link:hover {
-    text-decoration: underline;
-}
-
-
-/* 2. HERO QUIET LUXURY DE LA LANDING (PARIDAD STITCH) */
-.sens-hero-quiet-luxury {
-    border-radius: 28px !important;
-    margin: 10px 14px 28px !important;
-    min-height: 520px !important;
-    max-height: 600px !important;
-    overflow: hidden !important;
-    position: relative !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-end !important;
-    padding: 22px 18px !important;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15) !important;
-    background: #121214 !important;
-    text-align: left !important;
-}
-
-.sens-hero-media-wrap {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.sens-hero-img-nico {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 18%;
-}
-
-.sens-hero-scrim {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(8, 8, 9, 0.15) 0%, rgba(8, 8, 9, 0.40) 35%, rgba(8, 8, 9, 0.88) 72%, rgba(8, 8, 9, 0.98) 100%);
-    pointer-events: none;
-}
-
-.sens-hero-content-stack {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    text-align: left;
-}
-
-.sens-hero-kicker-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    margin-bottom: 10px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #FFFFFF;
-}
-
-.sens-hero-kicker-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #E5CBA7;
-}
-
-.sens-hero-quiet-luxury .sens-hero-welcome-question {
-    font-size: 26px !important;
-    font-weight: 300 !important;
-    color: #FFFFFF !important;
-    line-height: 1.2 !important;
-    margin: 0 0 2px !important;
-    text-align: left !important;
-}
-
-.sens-hero-quiet-luxury .sens-hero-welcome-slogan {
-    font-size: 32px !important;
-    font-weight: 800 !important;
-    color: #E5CBA7 !important;
-    letter-spacing: 0.04em !important;
-    margin: 0 0 8px !important;
-    text-align: left !important;
-}
-
-.sens-hero-quiet-luxury .hero-description-train {
-    font-size: 12.5px !important;
-    line-height: 1.55 !important;
-    color: rgba(255, 255, 255, 0.9) !important;
-    max-width: 420px !important;
-    margin: 0 0 16px !important;
-    text-align: left !important;
-}
-
-.sens-hero-cta-group-luxury {
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-    margin-bottom: 16px !important;
-}
-
-.sens-hero-btn-champagne {
-    width: 100% !important;
-    padding: 14px 24px !important;
-    border-radius: 9999px !important;
-    background: #E5CBA7 !important;
-    color: #2A241C !important;
-    font-size: 14px !important;
-    font-weight: 800 !important;
-    border: none !important;
-    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.35) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    cursor: pointer !important;
-    transition: transform 0.15s !important;
-}
-
-.sens-hero-btn-champagne:active {
-    transform: scale(0.99) !important;
-}
-
-.sens-hero-btn-glass {
-    width: 100% !important;
-    padding: 11px 20px !important;
-    border-radius: 9999px !important;
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    color: #FFFFFF !important;
-    font-size: 12.5px !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-    text-decoration: none !important;
-    display: block !important;
-}
-
-.sens-hero-link-person {
-    text-align: center !important;
-    font-size: 11.5px !important;
-    font-weight: 500 !important;
-    color: rgba(255, 255, 255, 0.82) !important;
-    text-decoration: underline !important;
-    text-underline-offset: 4px !important;
-    text-decoration-color: rgba(229, 203, 167, 0.6) !important;
-    display: block !important;
-    width: 100% !important;
-}
-
-.sens-hero-pills-row-luxury {
-    width: 100% !important;
-    display: flex !important;
-    gap: 8px !important;
-    overflow-x: auto !important;
-    scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding-bottom: 4px !important;
-}
-
-.sens-hero-plan-pill-item {
-    white-space: nowrap !important;
-    padding: 6px 14px !important;
-    border-radius: 9999px !important;
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    background: rgba(255, 255, 255, 0.12) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
-    text-decoration: none !important;
-    flex-shrink: 0 !important;
-    cursor: pointer !important;
-}
-
-.sens-pill-dot-green {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #81D996;
-    flex-shrink: 0;
-}
-
-.sens-pill-dot-gold {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #E5CBA7;
-    flex-shrink: 0;
-}
-
-.sens-pill-dot-white {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
-    flex-shrink: 0;
-}
-
-
-/* 3. DASHBOARD ALUMNO: TOPBAR & CALENDARIO SEMANAL */
-body.in-portal .portal-topbar {
-    background: rgba(255, 255, 255, 0.85) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border-bottom: 1px solid rgba(18, 18, 20, 0.08) !important;
-    height: 64px !important;
-    padding: 0 16px !important;
-}
-
-body.in-portal .portal-topbar .brand-logo-img-portal {
-    height: 30px !important;
-    width: auto !important;
-    filter: none !important;
-}
-
-body.in-portal #portalPlanBadge {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 5px !important;
-    padding: 5px 12px !important;
-    border-radius: 9999px !important;
-    background: rgba(251, 222, 185, 0.45) !important;
-    border: 1px solid rgba(229, 203, 167, 0.6) !important;
-    color: #705B3E !important;
-    font-weight: 700 !important;
-    font-size: 11px !important;
-}
-
-/* Strip Calendar de Días: Tarjetas Blancas con Sombra Suave */
-body.in-portal .sens-week-strip-wrap {
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
-    gap: 6px !important;
-    padding: 4px 0 !important;
-}
-
-body.in-portal .sens-week-day-pill {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.06) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.03) !important;
-    padding: 10px 2px 8px !important;
-    min-height: 84px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    cursor: pointer !important;
-    transition: transform 0.2s, box-shadow 0.2s !important;
-}
-
-body.in-portal .sens-week-day-pill:hover {
-    background: #FAF9F6 !important;
-    transform: translateY(-1px) !important;
-}
-
-body.in-portal .sens-week-day-pill .sens-day-name {
-    font-size: 10px !important;
-    font-weight: 600 !important;
-    color: #575659 !important;
-    text-transform: uppercase !important;
-}
-
-body.in-portal .sens-week-day-pill .sens-day-hero-num {
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    color: #121214 !important;
-    line-height: 1 !important;
-}
-
-/* Past Day Done: Check Verde */
-body.in-portal .sens-week-day-pill .sens-day-badge.done {
-    width: 20px !important;
-    height: 20px !important;
-    border-radius: 50% !important;
-    background: #EAF6EE !important;
-    color: #1E7B42 !important;
-    font-size: 11px !important;
-    font-weight: 800 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border: none !important;
-}
-
-/* Past Day Missed: Cruz Gris Suave */
-body.in-portal .sens-week-day-pill .sens-day-badge.missed {
-    width: 20px !important;
-    height: 20px !important;
-    border-radius: 50% !important;
-    background: #EFEEEB !important;
-    color: #8E8D90 !important;
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border: none !important;
-}
-
-/* Rest: Guión */
-body.in-portal .sens-week-day-pill .sens-day-badge.rest {
-    color: #8E8D90 !important;
-    font-size: 12px !important;
-    background: transparent !important;
-    border: none !important;
-}
-
-/* Selected / Today: Cápsula Champagne Dorada */
-body.in-portal .sens-week-day-pill.active {
-    background: #E5CBA7 !important;
-    border: 1px solid rgba(112, 91, 62, 0.3) !important;
-    box-shadow: 0 8px 24px rgba(251, 222, 185, 0.45) !important;
-    transform: scale(1.04) !important;
-    z-index: 5 !important;
-}
-
-body.in-portal .sens-week-day-pill.active .sens-day-name {
-    color: #564428 !important;
-    font-weight: 700 !important;
-}
-
-body.in-portal .sens-week-day-pill.active .sens-day-hero-num {
-    color: #25201A !important;
-    font-weight: 800 !important;
-}
-
-body.in-portal .sens-week-day-pill.active .sens-day-badge.today {
-    width: 8px !important;
-    height: 8px !important;
-    border-radius: 50% !important;
-    background: #25201A !important;
-    border: none !important;
-    margin: 6px auto !important;
-}
-
-
-/* 4. DASHBOARD ALUMNO: RACHA SENS & METAS DIARIAS */
-.sens-quiet-luxury-card {
-    background: #FFFFFF !important;
-    border-radius: 20px !important;
-    padding: 18px !important;
-    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
-    border: 1px solid rgba(18, 18, 20, 0.06) !important;
-    margin-bottom: 18px !important;
-}
-
-.sens-streak-meta-box {
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: rgba(244, 243, 241, 0.7);
-    border: 1px solid rgba(251, 222, 185, 0.5);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 12px 0;
-}
-
-.sens-streak-meta-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sens-streak-meta-title {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: #121214;
-}
-
-.sens-streak-meta-progress {
-    font-size: 11.5px;
-    font-weight: 800;
-    color: #705B3E;
-}
-
-.sens-streak-dashes-row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    height: 6px;
-    width: 100%;
-}
-
-.sens-streak-dash {
-    background: #E3E2E0;
-    border-radius: 9999px;
-    height: 100%;
-    transition: background 0.3s;
-}
-
-.sens-streak-dash.filled {
-    background: #705B3E !important;
-}
-
-.sens-streak-reward-hint {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: #575659;
-    line-height: 1.35;
-}
-
-.sens-streak-reward-hint p {
-    margin: 0;
-}
-
-.sens-streak-pills-trio {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 4px;
-}
-
-.sens-metric-trio-card {
-    background: rgba(244, 243, 241, 0.75);
-    border-radius: 16px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    cursor: pointer;
-    border: 1px solid rgba(18, 18, 20, 0.04);
-    transition: transform 0.15s;
-}
-
-.sens-metric-trio-card:active {
-    transform: scale(0.97);
-}
-
-.sens-metric-trio-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #575659;
-    margin-bottom: 4px;
-}
-
-.sens-metric-trio-val {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #121214;
-    line-height: 1.1;
-}
-
-.sens-val-unit {
-    font-size: 11px;
-    font-weight: 400;
-    color: #8E8D90;
-    margin-left: 1px;
-}
-
-.sens-metric-trio-bar-track {
-    width: 100%;
-    height: 4px;
-    background: #E3E2E0;
-    border-radius: 9999px;
-    margin-top: 8px;
-    overflow: hidden;
-}
-
-.sens-metric-trio-bar-fill {
-    height: 100%;
-    border-radius: 9999px;
-    background: #705B3E;
-    transition: width 0.4s;
-}
-
-
-/* 5. REST DAY CARD (CERO CAJA NEGRA EN LIGHT MODE) */
-body.in-portal .sens-training-card-rest {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 24px 20px !important;
-    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.04) !important;
-}
-
-body.in-portal .sens-rest-card-inner {
-    max-width: 480px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    gap: 10px !important;
-}
-
-body.in-portal .sens-rest-badge {
-    display: inline-flex !important;
-    align-items: center !important;
-    padding: 4px 12px !important;
-    border-radius: 9999px !important;
-    background: #EAF6EE !important;
-    color: #1E7B42 !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.06em !important;
-}
-
-body.in-portal .sens-rest-title {
-    font-size: 1.35rem !important;
-    font-weight: 700 !important;
-    color: #121214 !important;
-    margin: 2px 0 6px !important;
-    letter-spacing: -0.01em !important;
-}
-
-body.in-portal .sens-rest-desc {
-    font-size: 12.5px !important;
-    line-height: 1.55 !important;
-    color: #575659 !important;
-    margin: 0 0 16px !important;
-    max-width: 380px !important;
-}
-
-body.in-portal #btnRestSeeStretches {
-    background: #E5CBA7 !important;
-    color: #2A241C !important;
-    border: none !important;
-    font-weight: 700 !important;
-    border-radius: 9999px !important;
-    padding: 10px 18px !important;
-    font-size: 12px !important;
-}
-
-body.in-portal #btnRestBringWorkout {
-    background: #F4F3F1 !important;
-    color: #121214 !important;
-    border: 1px solid rgba(18, 18, 20, 0.12) !important;
-    font-weight: 600 !important;
-    border-radius: 9999px !important;
-    padding: 10px 18px !important;
-    font-size: 12px !important;
-}
-
-
-/* 6. FLOATING BOTTOM NAV DOCK (CÁPSULA FLOTANTE LIGHT QUIET LUXURY) */
-body.in-portal #sensFloatingDock {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 1000 !important;
-    display: flex !important;
-    justify-content: center !important;
-    padding-bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
-    pointer-events: none !important;
-}
-
-body.in-portal .sens-floating-dock {
-    pointer-events: auto !important;
-    background: rgba(255, 255, 255, 0.94) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border-radius: 9999px !important;
-    padding: 5px 6px !important;
-    box-shadow: 0 12px 36px -6px rgba(18, 18, 20, 0.12) !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    max-width: calc(100vw - 32px) !important;
-}
-
-body.in-portal .sens-dock-item {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 6px !important;
-    padding: 8px 14px !important;
-    border-radius: 9999px !important;
-    background: transparent !important;
-    border: none !important;
-    color: #575659 !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    cursor: pointer !important;
-    transition: all 0.2s !important;
-    min-width: 0 !important;
-}
-
-body.in-portal .sens-dock-item svg {
-    width: 17px !important;
-    height: 17px !important;
-    stroke: currentColor !important;
-    flex-shrink: 0 !important;
-}
-
-body.in-portal .sens-dock-item.active {
-    background: #121214 !important;
-    color: #FFFFFF !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14) !important;
-}
-
-body.in-portal .sens-dock-item.active svg {
-    stroke: #FFFFFF !important;
-}
-
-body.in-portal .sens-dock-item:hover:not(.active) {
-    color: #121214 !important;
-    background: rgba(18, 18, 20, 0.04) !important;
-}
-
-/* =============================================================================
-   7. STEPPER DE ONBOARDING 8 PASOS (PARIDAD CLÍNICA DESKTOP & MOBILE)
-   ============================================================================= */
-.sens-onboarding-desktop-stepper {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin: 16px 0 12px;
-    width: 100%;
-}
-
-@media (min-width: 768px) {
-    .sens-onboarding-desktop-stepper {
-        grid-template-columns: repeat(8, 1fr);
-        gap: 6px;
-    }
-}
-
-.sens-step-milestone-node {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 8px 6px;
-    border-radius: 12px;
-    background: #F4F3F1;
-    border: 1px solid rgba(18, 18, 20, 0.05);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    text-align: left;
-}
-
-.sens-step-milestone-node .step-num-check {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 10px;
-    font-weight: 700;
-    color: #8E8D90;
-    margin-bottom: 2px;
-}
-
-.sens-step-milestone-node .step-check-icon {
-    font-size: 11px;
-    color: #1E7B42;
-    display: none;
-}
-
-.sens-step-milestone-node.completed .step-check-icon {
-    display: inline-block;
-}
-
-.sens-step-milestone-node.completed {
-    background: #EAF6EE;
-    border-color: rgba(30, 123, 66, 0.25);
-}
-
-.sens-step-milestone-node.completed .step-num-check {
-    color: #1E7B42;
-}
-
-.sens-step-milestone-node.active {
-    background: #FBDEB9;
-    border-color: #D4B996;
-    box-shadow: 0 4px 12px rgba(222, 194, 159, 0.35);
-}
-
-.sens-step-milestone-node.active .step-num-check {
-    color: #271903;
-    font-weight: 800;
-}
-
-.sens-step-milestone-node .step-name {
-    font-size: 11px;
-    font-weight: 700;
-    color: #121214;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.sens-step-milestone-node .step-sub {
-    font-size: 9px;
-    font-weight: 600;
-    color: #575659;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* =============================================================================
-   8. CEREMONIA DE HITOS Y CELEBRACIÓN SOMÁTICA (QUIET LUXURY 4-PANEL RITUAL)
-   ============================================================================= */
-.sens-congrats-overlay {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 10500 !important;
-    background: rgba(18, 18, 20, 0.65) !important;
-    backdrop-filter: blur(14px) !important;
-    -webkit-backdrop-filter: blur(14px) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 16px !important;
-    overflow-y: auto !important;
-    animation: sensFadeInOverlay 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-@keyframes sensFadeInOverlay {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.sens-confetti-canvas {
-    position: absolute !important;
-    inset: 0 !important;
-    pointer-events: none !important;
-    z-index: 20 !important;
-    width: 100% !important;
-    height: 100% !important;
-}
-
-.sens-congrats-card {
-    position: relative !important;
-    z-index: 30 !important;
-    background: #FAF9F6 !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 24px !important;
-    box-shadow: 0 20px 60px -10px rgba(18, 18, 20, 0.18), 0 4px 16px rgba(18, 18, 20, 0.04) !important;
-    width: 100% !important;
-    max-width: 540px !important;
-    max-height: 90vh !important;
-    overflow-y: auto !important;
-    padding: 20px 18px 24px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 14px !important;
-    animation: sensScaleUpCard 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    text-align: left !important;
-    box-sizing: border-box !important;
-}
-
-@media (min-width: 1024px) {
-    .sens-congrats-card {
-        max-width: 680px !important;
-        padding: 28px 26px 30px !important;
-    }
-}
-
-@keyframes sensScaleUpCard {
-    from { transform: scale(0.92) translateY(12px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
-}
-
-.sens-celebration-top-ribbon {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    width: 100%;
-}
-
-.sens-celebration-badge-left {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #F4F3F1;
-    padding: 5px 12px;
-    border-radius: 9999px;
-    font-size: 10.5px;
-    font-weight: 600;
-    color: #575659;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.sens-celebration-points-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: #FBDEB9;
-    color: #766143;
-    padding: 5px 12px;
-    border-radius: 9999px;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.sens-celebration-close-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #F4F3F1;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    color: #575659;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 13px;
-    transition: all 0.2s;
-    flex-shrink: 0;
-}
-
-.sens-celebration-close-btn:hover {
-    background: #EAE8E3;
-    color: #121214;
-}
-
-.sens-celebration-tabs-wrap {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    padding: 2px 0 4px;
-    width: 100%;
-}
-
-.sens-celebration-tabs-wrap::-webkit-scrollbar {
-    display: none;
-}
-
-.milestone-tab {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 7px 13px;
-    border-radius: 9999px;
-    background: #F4F3F1;
-    color: #575659;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    font-size: 11.5px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s;
-    flex-shrink: 0;
-}
-
-.milestone-tab:hover {
-    background: #ECEAE4;
-    color: #121214;
-}
-
-.milestone-tab.active {
-    background: #121214 !important;
-    color: #FFFFFF !important;
-    border-color: #121214 !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
-}
-
-.milestone-panel {
-    display: none;
-    flex-direction: column;
-    gap: 14px;
-    width: 100%;
-    animation: sensFadeInPanel 0.22s ease-out;
-}
-
-.milestone-panel.active {
-    display: flex !important;
-}
-
-@keyframes sensFadeInPanel {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.sens-celebration-emblem-wrap {
-    position: relative;
-    width: 96px;
-    height: 96px;
-    margin: 8px auto 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sens-radiant-halo {
-    position: absolute;
-    inset: -6px;
-    border-radius: 50%;
-    background: rgba(251, 222, 185, 0.45);
-    animation: sensPingRing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-.sens-radiant-halo-blur {
-    position: absolute;
-    inset: -2px;
-    border-radius: 50%;
-    background: rgba(251, 222, 185, 0.6);
-    filter: blur(4px);
-}
-
-.sens-radiant-core-badge {
-    position: relative;
-    z-index: 2;
-    width: 76px;
-    height: 76px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    box-shadow: 0 8px 24px rgba(222, 194, 159, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-@keyframes sensPingRing {
-    0% { transform: scale(0.9); opacity: 0.8; }
-    80%, 100% { transform: scale(1.35); opacity: 0; }
-}
-
-.sens-celebration-editorial-header {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-.sens-celebration-kicker-pill {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 9999px;
-    background: rgba(251, 222, 185, 0.5);
-    color: #766143;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.sens-celebration-headline {
-    font-size: 1.45rem;
-    font-weight: 300;
-    color: #121214 !important;
-    letter-spacing: -0.025em;
-    margin: 2px 0 0;
-}
-
-.sens-celebration-subline {
-    font-size: 12px;
-    color: #575659;
-    margin: 0;
-    max-width: 360px;
-    line-height: 1.45;
-}
-
-/* 7-Day Recap Ribbon */
-.sens-7day-recap-card {
-    background: #FFFFFF;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    border-radius: 16px;
-    padding: 12px 14px;
-    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.03);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sens-7day-recap-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 11px;
-    font-weight: 600;
-    color: #77767B;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.sens-7day-badges-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-}
-
-.sens-7day-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-.sens-7day-col .d-label {
-    font-size: 10px;
-    color: #8E8D90;
-    font-weight: 600;
-}
-
-.sens-7day-col .d-circle {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.sens-7day-col .d-circle.done {
-    background: #FBDEB9;
-    color: #766143;
-    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.04);
-}
-
-.sens-7day-col .d-circle.active-gold {
-    background: #705B3E;
-    color: #FFFFFF;
-    box-shadow: 0 2px 8px rgba(112, 91, 62, 0.35);
-}
-
-/* Reward Selector */
-.sens-reward-choice-section {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sens-reward-choice-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    font-weight: 600;
-    color: #77767B;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.sens-reward-cards-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.reward-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: #FFFFFF;
-    border: 1px solid rgba(18, 18, 20, 0.08);
-    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.02);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.reward-card:hover {
-    border-color: #D4B996;
-    background: #FAF9F6;
-}
-
-.reward-card.active {
-    border-color: #705B3E !important;
-    background: rgba(251, 222, 185, 0.2) !important;
-    box-shadow: 0 4px 14px rgba(222, 194, 159, 0.35) !important;
-}
-
-.reward-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.reward-icon-box {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #FBDEB9;
-    color: #766143;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.reward-text strong {
-    font-size: 12.5px;
-    font-weight: 700;
-    color: #121214;
-    display: block;
-}
-
-.reward-text span {
-    font-size: 11px;
-    color: #575659;
-    display: block;
-}
-
-.reward-check-indicator {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 1.5px solid #C8C6CA;
-    color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    transition: all 0.2s;
-}
-
-.reward-card.active .reward-check-indicator {
-    background: #705B3E;
-    border-color: #705B3E;
-    color: #FFFFFF;
-}
-
-/* Bento Metrics 2x2 */
-.sens-bento-metrics-2x2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-}
-
-.bento-metric-cell {
-    background: #FFFFFF;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    border-radius: 16px;
-    padding: 12px 14px;
-    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.02);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 6px;
-}
-
-.bento-cell-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 10.5px;
-    font-weight: 600;
-    color: #77767B;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.bento-cell-val strong {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #121214;
-}
-
-.bento-cell-val small {
-    font-size: 11.5px;
-    font-weight: 500;
-    color: #575659;
-}
-
-.bento-cell-sub {
-    font-size: 10.5px;
-    color: #1E7B42;
-    font-weight: 500;
-}
-
-/* Nico Somatic Reflection Card */
-.sens-celebration-nico-card {
-    background: #FFFFFF;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    border-radius: 16px;
-    padding: 14px;
-    box-shadow: 0 2px 12px rgba(18, 18, 20, 0.02);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sens-nico-card-top {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.sens-nico-avatar-frame {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #F4F3F1;
-    flex-shrink: 0;
-    border: 1px solid rgba(18, 18, 20, 0.08);
-}
-
-.sens-nico-avatar-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.sens-nico-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.sens-nico-info strong {
-    font-size: 12.5px;
-    color: #121214;
-}
-
-.sens-nico-info span {
-    font-size: 10.5px;
-    color: #705B3E;
-    font-weight: 500;
-}
-
-.sens-nico-quote-text {
-    font-size: 11.5px;
-    line-height: 1.5;
-    color: #575659;
-    font-style: italic;
-    margin: 0;
-    padding: 8px 10px;
-    background: #F6F4EE;
-    border-radius: 10px;
-}
-
-/* Scenic Walk Banner */
-.sens-scenic-walk-banner {
-    position: relative;
-    width: 100%;
-    height: 105px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.06);
-}
-
-.sens-scenic-walk-banner .scenic-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.sens-scenic-walk-banner .scenic-scrim {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 20%, rgba(18, 18, 20, 0.85) 100%);
-}
-
-.sens-scenic-walk-banner .scenic-content {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 10px 14px;
-    font-size: 11.5px;
-}
-
-.sens-scenic-walk-banner .scenic-pct {
-    color: #E5CBA7;
-    font-weight: 700;
-}
-
-/* Nutri Range Card */
-.sens-nutri-celeb-range-card {
-    background: #FFFFFF;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    border-radius: 16px;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sens-nutri-celeb-range-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.sens-nutri-celeb-range-top strong {
-    font-size: 13px;
-    color: #121214;
-    display: block;
-}
-
-.sens-nutri-celeb-range-top span {
-    font-size: 11px;
-    color: #575659;
-}
-
-.sens-range-bar-track {
-    position: relative;
-    width: 100%;
-    height: 8px;
-    border-radius: 9999px;
-    background: #EFEEEB;
-    overflow: hidden;
-}
-
-.sens-range-bar-optimal-zone {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    background: rgba(156, 246, 176, 0.45);
-}
-
-.sens-range-bar-fill {
-    height: 100%;
-    border-radius: 9999px;
-    background: #1E7B42;
-    transition: width 0.6s ease-out;
-}
-
-.sens-range-bar-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: #8E8D90;
-}
-
-/* Trio Macros Bento */
-.sens-macros-trio-bento {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-}
-
-.macro-bento-cell {
-    background: #FFFFFF;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    border-radius: 14px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    text-align: center;
-}
-
-.macro-tag {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #77767B;
-}
-
-.macro-val strong {
-    font-size: 1.15rem;
-    color: #121214;
-}
-
-.macro-val small {
-    font-size: 10.5px;
-    color: #8E8D90;
-}
-
-.macro-benefit {
-    font-size: 9.5px;
-    color: #705B3E;
-    font-weight: 600;
-    background: #F6F4EE;
-    padding: 2px 4px;
-    border-radius: 6px;
-}
-
-/* Saldo Social Card */
-.sens-social-budget-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: rgba(251, 222, 185, 0.35);
-    border: 1px solid rgba(222, 194, 159, 0.5);
-}
-
-.sens-social-icon-box {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #FBDEB9;
-    color: #766143;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.sens-social-info strong {
-    font-size: 12px;
-    color: #121214;
-    display: block;
-    margin-bottom: 2px;
-}
-
-.sens-social-info p {
-    font-size: 11px;
-    line-height: 1.45;
-    color: #575659;
-    margin: 0;
-}
-
-/* Pillars Progress Card in Celebration */
-.sens-pillars-progress-card {
-    background: #FFFFFF;
-    border: 1px solid rgba(18, 18, 20, 0.06);
-    border-radius: 16px;
-    padding: 12px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sens-pillars-progress-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11.5px;
-}
-
-.sens-pillars-bar-track {
-    width: 100%;
-    height: 6px;
-    border-radius: 9999px;
-    background: #EFEEEB;
-    overflow: hidden;
-}
-
-.sens-pillars-bar-fill {
-    height: 100%;
-    border-radius: 9999px;
-    background: #705B3E;
-    transition: width 0.5s ease-out;
-}
-
-.sens-pillars-chips-row {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.pillar-status-chip {
-    font-size: 10.5px;
-    padding: 3px 8px;
-    border-radius: 9999px;
-    background: #F4F3F1;
-    color: #575659;
-}
-
-.pillar-status-chip.done {
-    background: #EAF6EE;
-    color: #1E7B42;
-    font-weight: 600;
-}
-
-/* Actions Row */
-.sens-celebration-actions-row {
-    width: 100%;
-    margin-top: 4px;
-}
-
-.sens-btn-celebration-primary {
-    width: 100% !important;
-    padding: 14px 20px !important;
-    border-radius: 9999px !important;
-    background: #E5CBA7 !important;
-    color: #2A241C !important;
-    font-size: 13.5px !important;
-    font-weight: 700 !important;
-    border: none !important;
-    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.4) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    cursor: pointer !important;
-    transition: transform 0.15s, background 0.2s !important;
-}
-
-.sens-btn-celebration-primary:hover {
-    background: #D8BD97 !important;
-}
-
-.sens-btn-celebration-primary:active {
-    transform: scale(0.99) !important;
-}
-
-/* =============================================================================
-   9. MODAL EJERCICIO DESKTOP 2-COLUMN SPLIT PARITY (@media >= 1024px)
-   ============================================================================= */
-@media (min-width: 1024px) {
-    #sensExerciseModalBackdrop {
-        align-items: center !important;
-        justify-content: center !important;
-        background: rgba(18, 18, 20, 0.6) !important;
-        backdrop-filter: blur(14px) !important;
-        -webkit-backdrop-filter: blur(14px) !important;
-        padding: 30px !important;
-    }
-
-    #sensExerciseModalSheet {
-        max-width: 1140px !important;
-        width: 94% !important;
-        max-height: 88vh !important;
-        border-radius: 24px !important;
-        padding: 24px 28px !important;
-        box-shadow: 0 24px 64px -12px rgba(18, 18, 20, 0.2) !important;
-        animation: sensFadeInScale 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-
-    @keyframes sensFadeInScale {
-        from { transform: scale(0.95); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
-    }
-}
 
 
 

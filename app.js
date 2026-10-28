@@ -699,6 +699,16 @@ window.getResolvedFood = function(foodOrId, athleteId) {
     }
 
     let baseFood = null;
+    const norm = (s) => (s || '')
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\([^)]*\)/g, ' ')
+        .replace(/[^a-z0-9 ]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
     // 1. Match por código exacto (NUT-001 ... NUT-500) — Máxima prioridad inmutable
     if (searchCode) {
         baseFood = catalog.find(f => f.codigo && f.codigo.toUpperCase() === searchCode);
@@ -707,18 +717,26 @@ window.getResolvedFood = function(foodOrId, athleteId) {
     if (!baseFood && searchId) {
         baseFood = catalog.find(f => f.id === searchId || (f.codigo && f.codigo.toUpperCase() === searchId.toUpperCase()));
     }
-    // 3. Match por nombre normalizado (sin acentos)
+    // 3. Match por nombre normalizado (sin acentos, sin paréntesis, y por tokens)
     if (!baseFood && searchName) {
-        const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
         const targetClean = norm(searchName);
-        baseFood = catalog.find(f => {
-            const n1 = norm(f.nombre_alimento_o_plato || f.name);
-            const n2 = norm(f.name_es);
-            const n3 = norm(f.name_en);
-            return (n1 && (n1 === targetClean || n1.startsWith(targetClean) || targetClean.startsWith(n1))) ||
-                   (n2 && (n2 === targetClean || n2.startsWith(targetClean) || targetClean.startsWith(n2))) ||
-                   (n3 && (n3 === targetClean));
-        });
+        if (targetClean) {
+            baseFood = catalog.find(f => {
+                const n1 = norm(f.nombre_alimento_o_plato || f.name);
+                const n2 = norm(f.name_es);
+                const n3 = norm(f.name_en);
+                return n1 === targetClean || n2 === targetClean || n3 === targetClean;
+            });
+            if (!baseFood) {
+                const targetTokens = targetClean.split(' ').filter(w => w.length >= 3);
+                if (targetTokens.length > 0) {
+                    baseFood = catalog.find(f => {
+                        const libClean = norm(f.nombre_alimento_o_plato || f.name);
+                        return targetTokens.every(tok => libClean.includes(tok));
+                    });
+                }
+            }
+        }
     }
 
     // 4. Si aún no se encuentra y se pasó un objeto, usar el objeto
@@ -727,7 +745,7 @@ window.getResolvedFood = function(foodOrId, athleteId) {
     }
     if (!baseFood) return null;
 
-    let resolved = Object.assign({}, baseFood);
+    let resolved = Object.assign({}, (typeof foodOrId === 'object' ? foodOrId : {}), baseFood);
     try {
         const globalOverrides = JSON.parse(localStorage.getItem('sens_global_food_overrides_v1') || '{}');
         if (globalOverrides[baseFood.id] || (baseFood.codigo && globalOverrides[baseFood.codigo])) {
@@ -742,14 +760,12 @@ window.getResolvedFood = function(foodOrId, athleteId) {
     } catch (e) {}
 
     // Normalizar imagen exacta al 100% de la base de datos de 500 WebP
-    if (!resolved.image) {
-        resolved.image = resolved.imagen_url || resolved.image_url || resolved.imagen_path || resolved.thumbnail || '';
+    if (baseFood.imagen_url) {
+        resolved.imagen_url = baseFood.imagen_url;
+        resolved.image = baseFood.imagen_url;
     }
-    if ((!resolved.image || resolved.image.includes('nut-001-pechuga-de-pollo-a-la-plancha.webp') && resolved.codigo && resolved.codigo !== 'NUT-001') && resolved.codigo) {
-        const catalogMatch = catalog.find(f => f.codigo && f.codigo.toUpperCase() === resolved.codigo.toUpperCase());
-        if (catalogMatch && catalogMatch.imagen_url) {
-            resolved.image = catalogMatch.imagen_url;
-        }
+    if (!resolved.image) {
+        resolved.image = resolved.imagen_url || resolved.image_url || resolved.imagen_path || resolved.thumbnail || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
     }
     resolved.imagen_url = resolved.image;
 
@@ -4917,20 +4933,6 @@ window.diagWizardGoStep = function(targetStep, toastMsg) {
     if (progressText) progressText.textContent = `${pct}%`;
     if (stepLabel) stepLabel.textContent = stepNames[targetStep] || `Paso ${targetStep}`;
 
-    // Sincronización del Stepper de 8 Hitos Desktop & Mobile
-    const desktopStepperNodes = document.querySelectorAll('.sens-step-milestone-node');
-    if (desktopStepperNodes && desktopStepperNodes.length > 0) {
-        desktopStepperNodes.forEach((node) => {
-            const nodeStep = parseInt(node.getAttribute('data-step-idx'), 10);
-            node.classList.remove('active', 'completed');
-            if (nodeStep < targetStep) {
-                node.classList.add('completed');
-            } else if (nodeStep === targetStep) {
-                node.classList.add('active');
-            }
-        });
-    }
-
     if (toastMsg) {
         showDiagnosisToast(toastMsg);
     }
@@ -8182,80 +8184,7 @@ function playChimeSequence() {
     SensGamification.playCelebrationFanfare();
 }
 
-window._selectedCelebrationReward = 'days';
-
-window.switchMilestone = function(type) {
-    const tabs = document.querySelectorAll('.sens-celebration-tabs-wrap .milestone-tab');
-    const panels = document.querySelectorAll('.sens-congrats-card .milestone-panel');
-    const ptsBadge = document.getElementById('sensCelebrationPtsText');
-    const kickerEl = document.getElementById('sensCongratsLevelPill');
-
-    tabs.forEach(t => t.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-
-    const activeTab = document.getElementById(`tab-${type}`);
-    const activePanel = document.getElementById(`panel-${type}`);
-    if (activeTab) activeTab.classList.add('active');
-    if (activePanel) activePanel.classList.add('active');
-
-    if (type === 'streak') {
-        if (ptsBadge) ptsBadge.textContent = '+350 PTS SENS';
-        if (kickerEl) kickerEl.textContent = 'Ritual Concluido • Hito Semanal';
-    } else if (type === 'workout') {
-        if (ptsBadge) ptsBadge.textContent = '+180 PTS SENS';
-        if (kickerEl) kickerEl.textContent = 'Ritual Concluido • Sesión de Fuerza';
-    } else if (type === 'nutrition') {
-        if (ptsBadge) ptsBadge.textContent = '+120 PTS SENS';
-        if (kickerEl) kickerEl.textContent = 'Ritual Concluido • Nutrición Consciente';
-    } else if (type === 'steps') {
-        if (ptsBadge) ptsBadge.textContent = '+150 PTS SENS';
-        if (kickerEl) kickerEl.textContent = 'Ritual Concluido • Actividad NEAT';
-    }
-};
-
-window.selectCelebrationReward = function(rewardType) {
-    window._selectedCelebrationReward = rewardType;
-    const cardA = document.getElementById('rewardOptA');
-    const cardB = document.getElementById('rewardOptB');
-    if (cardA && cardB) {
-        if (rewardType === 'days') {
-            cardA.classList.add('active');
-            cardB.classList.remove('active');
-        } else {
-            cardB.classList.add('active');
-            cardA.classList.remove('active');
-        }
-    }
-    if (typeof SensGamification !== 'undefined') {
-        SensGamification.playHapticFeedback();
-    }
-};
-
-window.claimCelebrationReward = function() {
-    const chosen = window._selectedCelebrationReward || 'days';
-    if (chosen === 'days') {
-        if (typeof showSensToast === 'function') {
-            showSensToast('¡Recompensa desbloqueada! Se extendieron +3 días Pro en tu membresía sin cargo.', 'champagne', 4500);
-        }
-    } else {
-        if (typeof showSensToast === 'function') {
-            showSensToast('¡Recompensa acreditada! +500 kcal añadidas a tu saldo social de fin de semana.', 'champagne', 4500);
-        }
-    }
-    window.closeSensCelebration();
-};
-
-window.closeSensCelebration = function() {
-    if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
-    const overlay = document.getElementById('sensCongratsOverlay');
-    if (overlay) overlay.style.display = 'none';
-};
-
-window.openCelebrationModal = function(type = 'streak') {
-    window.showSensCelebrationToast(null, null, null, type);
-};
-
-window.showSensCelebrationToast = function(title, subtitle, quote, milestoneType = null) {
+window.showSensCelebrationToast = function(title, subtitle, quote) {
     const overlay = document.getElementById('sensCongratsOverlay');
     const titleEl = document.getElementById('sensCongratsTitle');
     const subtitleEl = document.getElementById('sensCongratsSubtitle');
@@ -8265,67 +8194,36 @@ window.showSensCelebrationToast = function(title, subtitle, quote, milestoneType
     const continueBtn = document.getElementById('btnSensCongratsContinue');
 
     const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
-    const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 7;
+    const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 1;
     const levelInfo = SensGamification.getStreakLevel(streakDays);
 
-    if (titleEl && title) titleEl.textContent = title;
-    if (subtitleEl && subtitle) subtitleEl.textContent = subtitle;
-    if (quoteEl && quote) quoteEl.textContent = quote;
+    if (titleEl) titleEl.textContent = title || '¡OBJETIVO CUMPLIDO!';
+    if (subtitleEl) subtitleEl.textContent = subtitle || 'Racha SENS Activa';
+    if (quoteEl) {
+        quoteEl.textContent = quote || '"Gran trabajo. Cada hábito ejecutado con intención consolida tu rendimiento y longevidad celular."';
+    }
     if (levelPillEl) levelPillEl.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
     if (bumpNumEl) bumpNumEl.textContent = streakDays;
 
-    // Detectar hito objetivo
-    let targetMilestone = milestoneType;
-    if (!targetMilestone) {
-        const fullText = `${title || ''} ${subtitle || ''}`.toLowerCase();
-        if (fullText.includes('entreno') || fullText.includes('ejercicio') || fullText.includes('series')) {
-            targetMilestone = 'workout';
-        } else if (fullText.includes('nutri') || fullText.includes('calor') || fullText.includes('macro')) {
-            targetMilestone = 'nutrition';
-        } else if (fullText.includes('paso') || fullText.includes('aerób') || fullText.includes('neat')) {
-            targetMilestone = 'steps';
-        } else {
-            targetMilestone = 'streak';
-        }
-    }
-
-    // Poblar métricas dinámicas según telemetría viva
-    if (typeof modalExerciseState !== 'undefined' && modalExerciseState.setsData) {
-        const totalKg = modalExerciseState.setsData.reduce((acc, s) => acc + (parseFloat(s.weight) || 0) * (parseInt(s.reps) || 0), 0);
-        const celebTonnage = document.getElementById('celebWorkoutTonnage');
-        const celebSets = document.getElementById('celebWorkoutSets');
-        if (celebTonnage && totalKg > 0) celebTonnage.textContent = totalKg.toLocaleString('es-AR');
-        if (celebSets && modalExerciseState.setsData.length > 0) celebSets.textContent = modalExerciseState.setsData.length;
-    }
-
-    // Poblar nutrición si está disponible
-    if (typeof AppState !== 'undefined' && AppState.nutritionLog) {
-        const consumed = AppState.nutritionLog.consumedKcal || 1920;
-        const celebNutri = document.getElementById('celebNutriConsumed');
-        if (celebNutri) celebNutri.textContent = consumed.toLocaleString('es-AR');
-    }
-
-    window.switchMilestone(targetMilestone);
-
     SensGamification.playCelebrationFanfare();
     SensGamification.playHapticFeedback();
-    SensConfetti.burst(320);
+    SensConfetti.burst(300);
 
     if (overlay) {
         overlay.style.display = 'flex';
 
-        if (continueBtn && !continueBtn._hasSensClick) {
-            continueBtn._hasSensClick = true;
-            continueBtn.onclick = (e) => {
-                e.stopPropagation();
-                window.claimCelebrationReward();
-            };
-        }
+        const dismiss = () => {
+            if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
+            overlay.style.display = 'none';
+        };
+
+        if (continueBtn) continueBtn.onclick = (e) => { e.stopPropagation(); dismiss(); };
+        overlay.onclick = dismiss;
 
         if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
         window._sensCelebrationTimer = setTimeout(() => {
             overlay.style.display = 'none';
-        }, 15000);
+        }, 5000);
     } else {
         if (typeof showSensToast === 'function') {
             showSensToast(`${title}: ${subtitle}`, 'champagne', 4000);
@@ -12184,16 +12082,18 @@ function renderCoachDynamicWeekStrip() {
             statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
         } else if (isPast) {
             if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
-                statusBadge = `<span class="sens-day-badge missed" title="No registrado">✕</span>`;
+                statusBadge = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
             } else {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
-        } else if (isToday) {
-            statusBadge = `<span class="sens-day-badge today" title="Hoy">•</span>`;
-        } else if (hasExercises || modality === 'presencial' || modality === 'online' || modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge future-routine" title="Rutina programada">•</span>`;
+        } else if (modality === 'presencial') {
+            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
+        } else if (modality === 'online') {
+            statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
+        } else if (modality === 'autonomo') {
+            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
         } else {
-            statusBadge = `<span class="sens-day-badge future-rest" title="Descanso">–</span>`;
+            statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
 
         const dateFormatted = formatDateDDMM(dayDate);
@@ -14260,7 +14160,7 @@ function renderNutriDaysNav() {
         if (isLogged) {
             badgeHtml = `<span class="sens-day-badge done" title="Plan nutricional registrado">✓</span>`;
         } else if (isToday) {
-            badgeHtml = `<span class="sens-day-badge today" title="Hoy">Hoy</span>`;
+            badgeHtml = `<span class="sens-day-badge auto" title="Hoy">Hoy</span>`;
         } else {
             badgeHtml = `<span class="sens-day-badge rest" title="Pauta activa">–</span>`;
         }
@@ -15025,13 +14925,13 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo', isFromSearch =
             bHtml += `<span class="sens-food-badge-pill champagne">${resolved.tipo_item}</span>`;
         }
         if (resolved?.costo_estimado_nivel) {
-            bHtml += `<span class="sens-food-badge-pill">💰 ${resolved.costo_estimado_nivel}</span>`;
+            bHtml += `<span class="sens-food-badge-pill">Nivel ${resolved.costo_estimado_nivel}</span>`;
         }
         if (resolved?.apto_vianda_fria) {
-            bHtml += `<span class="sens-food-badge-pill">❄️ Apto Vianda</span>`;
+            bHtml += `<span class="sens-food-badge-pill">Apto Vianda</span>`;
         }
         if (resolved?.tiempo_preparacion_min) {
-            bHtml += `<span class="sens-food-badge-pill">⏱️ ${resolved.tiempo_preparacion_min} min</span>`;
+            bHtml += `<span class="sens-food-badge-pill">${resolved.tiempo_preparacion_min} min</span>`;
         }
         badgesRow.innerHTML = bHtml;
     }
@@ -15676,7 +15576,7 @@ function initUserCustomMealModal(athId) {
                                 <div style="font-size: 13px; font-weight: 700; color: #FFF; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.25;">${foodName}</div>
                                 <div style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums; margin-top: 2px;">
                                     ${f.porcion_total_g_ml || 100}g • <span style="color: #E5CBA7; font-weight: 700;">${cal} kcal</span> • <span style="color: #38BDF8;">${prot}g Prot</span>
-                                    ${f.apto_vianda_fria ? ' • <span style="color: #93C5FD;">❄️ Vianda</span>' : ''}
+                                    ${f.apto_vianda_fria ? ' • <span style="color: #93C5FD;">Vianda</span>' : ''}
                                 </div>
                             </div>
                         </div>
@@ -16239,21 +16139,21 @@ function initUserFoodSwapModal() {
 function mapToCanonicalAisle(rawGondola) {
     const g = (rawGondola || '').toLowerCase();
     if (g.includes('verduler') || g.includes('fruta') || g.includes('vegetal')) {
-        return '🥬 Verdulería y Frutas';
+        return 'Verdulería y Frutas';
     }
     if (g.includes('carnicer') || g.includes('pescader') || g.includes('granja') || g.includes('carne') || g.includes('pollo') || g.includes('pescado')) {
-        return '🥩 Carnicería y Pescadería';
+        return 'Carnicería y Pescadería';
     }
     if (g.includes('lácteo') || g.includes('lacteo') || g.includes('huevo') || g.includes('queso') || g.includes('fiambrer')) {
-        return '🥛 Lácteos y Huevos';
+        return 'Lácteos y Huevos';
     }
     if (g.includes('congelado')) {
-        return '❄️ Congelados y Especiales';
+        return 'Congelados y Especiales';
     }
     if (g.includes('suplemento') || g.includes('dietética') || g.includes('dietetica') || g.includes('semilla') || g.includes('frutos secos')) {
-        return '🥜 Dietética, Semillas y Suplementos';
+        return 'Dietética, Semillas y Suplementos';
     }
-    return '🌾 Almacén y Despensa';
+    return 'Almacén y Despensa';
 }
 
 function renderShoppingListForSelectedDays(athId) {
@@ -16321,12 +16221,12 @@ function renderShoppingListForSelectedDays(athId) {
     });
 
     const aisleOrder = [
-        '🥬 Verdulería y Frutas',
-        '🥩 Carnicería y Pescadería',
-        '🥛 Lácteos y Huevos',
-        '🌾 Almacén y Despensa',
-        '🥜 Dietética, Semillas y Suplementos',
-        '❄️ Congelados y Especiales'
+        'Verdulería y Frutas',
+        'Carnicería y Pescadería',
+        'Lácteos y Huevos',
+        'Almacén y Despensa',
+        'Dietética, Semillas y Suplementos',
+        'Congelados y Especiales'
     ];
 
     // Llamar a buildWeeklyShoppingList para consolidar
@@ -16529,14 +16429,14 @@ function initUserShoppingListModal() {
             const daysCount = (window._sensSelectedShoppingDays || []).length;
             const daysLabel = daysCount === 1 ? '1 día' : `${daysCount} días`;
 
-            let wpText = `🛒 *LISTA DE SUPERMERCADO SENS*\n_Pauta nutricional activa (${daysLabel})_\n\n`;
+            let wpText = `*LISTA DE COMPRAS SENS*\n_Pauta nutricional activa (${daysLabel})_\n\n`;
             const aisleOrder = [
-                '🥬 Verdulería y Frutas',
-                '🥩 Carnicería y Pescadería',
-                '🥛 Lácteos y Huevos',
-                '🌾 Almacén y Despensa',
-                '🥜 Dietética, Semillas y Suplementos',
-                '❄️ Congelados y Especiales'
+                'Verdulería y Frutas',
+                'Carnicería y Pescadería',
+                'Lácteos y Huevos',
+                'Almacén y Despensa',
+                'Dietética, Semillas y Suplementos',
+                'Congelados y Especiales'
             ];
 
             aisleOrder.forEach(aisle => {
@@ -17635,16 +17535,18 @@ function renderDynamicWeekStrip() {
             statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
         } else if (isPast) {
             if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
-                statusBadge = `<span class="sens-day-badge missed" title="No registrado">✕</span>`;
+                statusBadge = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
             } else {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
-        } else if (isToday) {
-            statusBadge = `<span class="sens-day-badge today" title="Hoy">•</span>`;
-        } else if (hasExercises || modality === 'presencial' || modality === 'online' || modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge future-routine" title="Rutina programada">•</span>`;
+        } else if (modality === 'presencial') {
+            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
+        } else if (modality === 'online') {
+            statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
+        } else if (modality === 'autonomo') {
+            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
         } else {
-            statusBadge = `<span class="sens-day-badge future-rest" title="Descanso">–</span>`;
+            statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
 
         const heroNum = dayDate.getDate();
@@ -17831,12 +17733,16 @@ function renderWorkoutDaysNav() {
             } else {
                 badgeHtml = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
-        } else if (isToday) {
-            badgeHtml = `<span class="sens-day-badge today" title="Hoy">Hoy</span>`;
-        } else if (hasExercises || modality === 'presencial' || modality === 'online' || modality === 'autonomo') {
-            badgeHtml = `<span class="sens-day-badge future-routine" title="Rutina programada">Rutina</span>`;
+        } else if (modality === 'presencial') {
+            badgeHtml = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
+        } else if (modality === 'online') {
+            badgeHtml = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
+        } else if (modality === 'autonomo') {
+            badgeHtml = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
+        } else if (hasExercises) {
+            badgeHtml = `<span class="sens-day-badge plan" style="background: rgba(229,203,167,0.15); color: #E5CBA7; font-weight: 700; font-size: 8.5px; border-radius: 4px; padding: 1px 4px;" title="Rutina planificada">Plan</span>`;
         } else {
-            badgeHtml = `<span class="sens-day-badge future-rest" title="Descanso">Descanso</span>`;
+            badgeHtml = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
 
         html += `
@@ -19472,42 +19378,9 @@ function updateSensStreakCard(targetDate = null) {
         ? SensGamification.getStreakLevel(streakDays)
         : { level: 1, title: 'Semilla del Hábito' };
 
-    if (streakNum) streakNum.textContent = `${streakDays} DÍAS`;
+    if (streakNum) streakNum.textContent = streakDays;
     if (streakLevelTag) streakLevelTag.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
     if (flameIcon) flameIcon.classList.toggle('active-glow', streakDays > 0);
-
-    // Actualizar Meta Semanal y 7 Dashes
-    const metaProgressText = document.getElementById('sensStreakMetaProgressText');
-    const weeklyProgress = (streakDays % 7 === 0 && streakDays > 0) ? 7 : (streakDays % 7);
-    if (metaProgressText) metaProgressText.textContent = `${weeklyProgress} de 7 días`;
-
-    for (let dashIdx = 1; dashIdx <= 7; dashIdx++) {
-        const dashEl = document.getElementById(`streakDash${dashIdx}`);
-        if (dashEl) {
-            dashEl.classList.toggle('filled', dashIdx <= weeklyProgress);
-        }
-    }
-
-    // Actualizar Barras de las 3 Píldoras de Métricas (Fuerza, Nutrición, Pasos)
-    const barWorkout = document.getElementById('pillarBarWorkout');
-    if (barWorkout) {
-        barWorkout.style.width = wDone ? '100%' : '0%';
-    }
-
-    const barNutrition = document.getElementById('pillarBarNutrition');
-    if (barNutrition) {
-        const nConsumed = dayRec.nutrition.consumed || 0;
-        const nTarget = dayRec.nutrition.target || 1950;
-        const nPct = Math.min(100, Math.round((nConsumed / Math.max(1, nTarget)) * 100));
-        barNutrition.style.width = `${nPct}%`;
-    }
-
-    const barActivity = document.getElementById('pillarBarActivity');
-    if (barActivity) {
-        const aSteps = dayRec.cardio.steps || 0;
-        const aPct = Math.min(100, Math.round((aSteps / 10000) * 100));
-        barActivity.style.width = `${aPct}%`;
-    }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -19527,23 +19400,23 @@ function updateSensStreakCard(targetDate = null) {
             streakStatusPill.textContent = 'Racha no alcanzada';
         } else {
             streakStatusPill.className = 'sens-streak-status-pill';
-            streakStatusPill.textContent = 'Hoy';
+            streakStatusPill.textContent = 'En progreso';
         }
     }
 
     if (streakSub) {
         if (dayRec.completedCount === 3) {
             streakSub.textContent = '¡Día 100% completado! Racha perfecta asegurada.';
-            streakSub.style.color = '#1E7B42';
+            streakSub.style.color = '#10B981';
         } else if (dayRec.completedCount >= 1) {
             streakSub.textContent = `${dayRec.completedCount} de 3 objetivos cumplidos • ¡Seguí sumando hábitos hoy!`;
-            streakSub.style.color = '#705B3E';
+            streakSub.style.color = '#E5CBA7';
         } else if (isPast) {
-            streakSub.textContent = 'Día finalizado sin cumplir objetivos. Tocá para ver el detalle.';
-            streakSub.style.color = '#ba1a1a';
+            streakSub.textContent = 'Día finalizado sin cumplir objetivos. Tocá ✕ para ver el detalle.';
+            streakSub.style.color = '#F87171';
         } else {
             streakSub.textContent = 'Completá tus objetivos de hoy para mantener la racha activa.';
-            streakSub.style.color = '#575659';
+            streakSub.style.color = '#A1A1AA';
         }
     }
 
