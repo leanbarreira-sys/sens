@@ -23442,25 +23442,145 @@ body:not(.in-portal) #mobileMenuClientAccessBtn {
     border-radius: 9999px !important;
 }
 
-/* 4. Hero Section (Contenedor Editorial Lujo Silencioso) */
+/* 4. Hero Section: Dimensiones Proporcionadas, Curvatura Visible & Fluidez Inmediata */
 body:not(.in-portal) .sens-train-hero {
-    margin: 10px 14px 28px !important;
+    margin: 80px 14px 20px !important;
     border-radius: 28px !important;
     overflow: hidden !important;
     background: #121214 !important;
     color: #FFFFFF !important;
     position: relative !important;
     box-shadow: 0 12px 36px rgba(18, 18, 20, 0.15) !important;
-    padding: 100px 5% 40px !important;
+    padding: 80px 5% 32px !important;
+    min-height: 480px !important;
+    max-height: 530px !important;
+    height: auto !important;
 }
 
 @media (min-width: 900px) {
     body:not(.in-portal) .sens-train-hero {
-        max-width: 1240px !important;
-        margin: 20px auto 44px !important;
+        max-width: 1200px !important;
+        margin: 90px auto 36px !important;
         border-radius: 32px !important;
-        padding: 120px 6% 55px !important;
+        padding: 95px 6% 40px !important;
+        min-height: 520px !important;
+        max-height: 580px !important;
     }
+}
+
+/* Cero Skeleton Shimmer: Video & Poster visibles instantáneamente sin trabas */
+body:not(.in-portal) .hero-skeleton-wrap {
+    display: none !important;
+}
+
+body:not(.in-portal) #heroVideo,
+body:not(.in-portal) .hero-video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center 20% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 1 !important;
+}
+
+body:not(.in-portal) .hero-bg-fallback {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-size: cover !important;
+    background-position: center 20% !important;
+    z-index: 0 !important;
+}
+
+body:not(.in-portal) .hero-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(180deg, rgba(8, 8, 9, 0.15) 0%, rgba(8, 8, 9, 0.40) 35%, rgba(8, 8, 9, 0.88) 72%, rgba(8, 8, 9, 0.98) 100%) !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+}
+
+body:not(.in-portal) .hero-train-content {
+    position: relative !important;
+    z-index: 10 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    margin-top: auto !important;
+    width: 100% !important;
+    max-width: 680px !important;
+}
+
+body:not(.in-portal) .sens-hero-welcome-question {
+    font-size: 14px !important;
+    color: #FFFFFF !important;
+    font-weight: 400 !important;
+    margin-bottom: 2px !important;
+}
+
+body:not(.in-portal) .sens-hero-welcome-slogan {
+    font-size: clamp(2.2rem, 5vw, 3.4rem) !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 8px !important;
+    line-height: 1.1 !important;
+}
+
+body:not(.in-portal) .hero-description-train {
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    max-width: 520px !important;
+    margin: 0 auto 16px !important;
+    line-height: 1.45 !important;
+}
+
+body:not(.in-portal) .hero-cta-group {
+    display: flex !important;
+    gap: 10px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+
+body:not(.in-portal) .hero-cta-group .btn-primary {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-weight: 800 !important;
+    border-radius: 9999px !important;
+    padding: 12px 24px !important;
+    border: none !important;
+    font-size: 13px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+}
+
+body:not(.in-portal) .hero-cta-group .hero-btn-apple-dark {
+    background: rgba(18, 18, 20, 0.85) !important;
+    border: 1px solid rgba(229, 203, 167, 0.5) !important;
+    color: #FFFFFF !important;
+    border-radius: 9999px !important;
+    padding: 12px 22px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+body:not(.in-portal) .hero-cta-group .hero-btn-secondary {
+    background: transparent !important;
+    border: none !important;
+    color: #E5CBA7 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-decoration: underline !important;
+    padding: 6px 12px !important;
+}
+
+/* Ocultar carrusel redundante de pills en el Hero */
+body:not(.in-portal) .sens-hero-pills-container {
+    display: none !important;
 }
 
 /* 5. Sección Pilares SENS */
@@ -23564,7 +23684,7 @@ body:not(.in-portal) #metodo .nico-editorial-card {
     overflow: hidden !important;
 }
 
-/* 7. Sección Planes & Precios (Quiet Light Luxury Surfaces) */
+/* 7. Sección Planes & Precios (Quiet Light Luxury Surfaces & Clean Tabs) */
 body:not(.in-portal) #planes {
     background: #FAF9F6 !important;
 }
@@ -23585,40 +23705,84 @@ body:not(.in-portal) #planes .section-lead {
     color: #575659 !important;
 }
 
-body:not(.in-portal) .pricing-main-nav,
-body:not(.in-portal) .pricing-sub-nav {
-    background: #EFECE6 !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 9999px !important;
-    padding: 4px !important;
+body:not(.in-portal) .pricing-selector-container {
+    margin: 0 auto 18px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
 }
 
-body:not(.in-portal) .pricing-main-btn,
-body:not(.in-portal) .pricing-sub-btn {
+body:not(.in-portal) .pricing-main-nav {
+    background: #EFECE6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 9999px !important;
+    padding: 4px !important;
+    max-width: 320px !important;
+    width: 100% !important;
+    display: flex !important;
+    box-shadow: inset 0 1px 3px rgba(18, 18, 20, 0.04) !important;
+}
+
+body:not(.in-portal) .pricing-main-btn {
     background: transparent !important;
-    color: #575659 !important;
+    color: #5A5752 !important;
     border: none !important;
     border-radius: 9999px !important;
     font-weight: 500 !important;
-    transition: all 0.25s ease !important;
+    font-size: 12px !important;
+    padding: 8px 14px !important;
+    flex: 1 !important;
+    transition: all 0.2s ease !important;
 }
 
-body:not(.in-portal) .pricing-main-btn.active,
-body:not(.in-portal) .pricing-sub-btn.active {
-    background: #121214 !important;
-    color: #FFFFFF !important;
+body:not(.in-portal) .pricing-main-btn.active {
+    background: #FFFFFF !important;
+    color: #121214 !important;
     font-weight: 700 !important;
-    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.12) !important;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.08) !important;
 }
 
-body:not(.in-portal) .pricing-main-btn.active .btn-badge {
-    background: rgba(229, 203, 167, 0.25) !important;
-    color: #E5CBA7 !important;
+body:not(.in-portal) .pricing-main-btn .btn-badge {
+    display: none !important;
 }
 
-body:not(.in-portal) .pricing-main-btn:not(.active) .btn-badge {
-    background: #E7E4DC !important;
-    color: #575659 !important;
+body:not(.in-portal) .pricing-sub-nav {
+    background: #FAF6EF !important;
+    border: 1px solid #E5CBA7 !important;
+    border-radius: 9999px !important;
+    padding: 3px !important;
+    max-width: 290px !important;
+    width: 100% !important;
+    display: flex !important;
+    margin: 8px auto 0 !important;
+}
+
+body:not(.in-portal) .pricing-sub-btn {
+    background: transparent !important;
+    color: #705B3E !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    font-weight: 500 !important;
+    font-size: 11px !important;
+    padding: 6px 12px !important;
+    flex: 1 !important;
+}
+
+body:not(.in-portal) .pricing-sub-btn.active {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-weight: 700 !important;
+}
+
+/* Ocultar notas de transparencia repetitivas/pesadas */
+body:not(.in-portal) .sens-presencial-facility-note {
+    display: none !important;
+}
+
+body:not(.in-portal) .sens-transparency-note {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
 }
 
 body:not(.in-portal) .train-plan-card {
@@ -23630,8 +23794,8 @@ body:not(.in-portal) .train-plan-card {
 }
 
 body:not(.in-portal) .train-plan-card.highlight {
-    background: #FAF6EF !important;
-    border: 1.5px solid #E5CBA7 !important;
+    background: #FFFFFF !important;
+    border: 2px solid #E5CBA7 !important;
     box-shadow: 0 8px 32px -4px rgba(112, 91, 62, 0.12) !important;
 }
 
@@ -23673,25 +23837,32 @@ body:not(.in-portal) .plan-feature-row svg.check {
     stroke: #1E7B42 !important;
 }
 
-body:not(.in-portal) .train-plan-card .btn-primary {
+body:not(.in-portal) .train-plan-card.highlight .btn,
+body:not(.in-portal) .train-plan-card.highlight .btn-primary {
     background: #E5CBA7 !important;
     color: #2A241C !important;
     border: none !important;
-    font-weight: 700 !important;
+    font-weight: 800 !important;
     border-radius: 9999px !important;
     box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
 }
 
-body:not(.in-portal) .train-plan-card .btn-primary:hover {
+body:not(.in-portal) .train-plan-card.highlight .btn:hover {
     background: #D8BD97 !important;
     transform: translateY(-1px) !important;
 }
 
-body:not(.in-portal) .train-plan-card .btn-outline {
+body:not(.in-portal) .train-plan-card:not(.highlight) .btn,
+body:not(.in-portal) .train-plan-card:not(.highlight) .btn-outline {
     background: #F4F3F0 !important;
-    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
     color: #121214 !important;
+    font-weight: 700 !important;
     border-radius: 9999px !important;
+}
+
+body:not(.in-portal) .train-plan-card:not(.highlight) .btn:hover {
+    background: #EFECE6 !important;
 }
 
 body:not(.in-portal) #planes .carousel-dots span {
@@ -23702,55 +23873,39 @@ body:not(.in-portal) #planes .carousel-dots span.active {
     background: #121214 !important;
 }
 
-/* 8. Sección Sumate / Lead Form */
+/* 8. Sección Sumate / Formulario Evaluación Inicial */
 body:not(.in-portal) #sumate {
     background: #F4F3F0 !important;
     border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
     border-bottom: 1px solid rgba(18, 18, 20, 0.08) !important;
-}
-
-body:not(.in-portal) #sumate .section-eyebrow {
-    color: #705B3E !important;
-}
-
-body:not(.in-portal) #sumate .section-main-title {
-    color: #121214 !important;
-}
-
-body:not(.in-portal) #sumate .section-main-title .text-champagne {
-    color: #705B3E !important;
-}
-
-body:not(.in-portal) #sumate .section-lead {
-    color: #575659 !important;
+    padding-top: 50px !important;
+    padding-bottom: 60px !important;
 }
 
 body:not(.in-portal) #sumate .lead-intake-card {
     background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 24px !important;
-    box-shadow: 0 6px 30px -4px rgba(18, 18, 20, 0.06) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 4px 24px -2px rgba(18, 18, 20, 0.05) !important;
 }
 
-body:not(.in-portal) #sumate .lead-intake-card div[style*="CAMINO 1"] {
-    background: #FAF6EF !important;
-    border: 1px solid #E5CBA7 !important;
-    border-radius: 16px !important;
-}
-
-body:not(.in-portal) #sumate .lead-intake-card div[style*="CAMINO 1"] span {
-    color: #705B3E !important;
-}
-
-body:not(.in-portal) #sumate .lead-intake-card div[style*="CAMINO 1"] strong {
-    color: #121214 !important;
-}
-
-body:not(.in-portal) #sumate .selection-item {
-    background: #F4F3F0 !important;
+body:not(.in-portal) .sens-lead-pill-label {
+    background: #FAF9F6 !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    color: #121214 !important;
     border-radius: 12px !important;
+    transition: all 0.2s ease !important;
+}
+
+body:not(.in-portal) .sens-lead-pill-label.active,
+body:not(.in-portal) .sens-lead-pill-label:has(input:checked) {
+    background: #E5CBA7 !important;
+    border-color: #E5CBA7 !important;
+}
+
+body:not(.in-portal) .sens-lead-pill-label.active span,
+body:not(.in-portal) .sens-lead-pill-label:has(input:checked) span {
+    color: #2A241C !important;
+    font-weight: 800 !important;
 }
 
 body:not(.in-portal) #sumate .input-label {
@@ -23758,8 +23913,8 @@ body:not(.in-portal) #sumate .input-label {
 }
 
 body:not(.in-portal) #sumate .input-control {
-    background: #F4F3F0 !important;
-    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
     color: #121214 !important;
     border-radius: 12px !important;
 }
@@ -23774,8 +23929,9 @@ body:not(.in-portal) #btnSubmitLead {
     background: #E5CBA7 !important;
     color: #2A241C !important;
     border: none !important;
-    font-weight: 700 !important;
+    font-weight: 800 !important;
     border-radius: 9999px !important;
+    min-height: 48px !important;
     box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
 }
 
@@ -23817,13 +23973,66 @@ body:not(.in-portal) footer a {
     color: #121214 !important;
 }
 
+/* 10. Sticky Dock Inferior Móvil (Cápsula Flotante Quiet Light Luxury) */
+body:not(.in-portal) .mobile-quick-bar {
+    position: fixed !important;
+    bottom: 12px !important;
+    left: 14px !important;
+    right: 14px !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    padding: 6px !important;
+    border-radius: 9999px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(18, 18, 20, 0.12) !important;
+    max-width: 440px !important;
+    margin: 0 auto !important;
+}
 
+body:not(.in-portal) .mobile-quick-bar .mobile-quick-main-cta {
+    flex: 1 !important;
+    padding: 11px 16px !important;
+    border-radius: 9999px !important;
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    border: none !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.08) !important;
+    transition: transform 0.2s ease !important;
+}
 
+body:not(.in-portal) .mobile-quick-bar .mobile-quick-main-cta:active {
+    transform: scale(0.98) !important;
+}
 
+body:not(.in-portal) .mobile-quick-bar #mobileQuickAccessBtn,
+body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn {
+    padding: 11px 20px !important;
+    border-radius: 9999px !important;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    border: none !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    transition: transform 0.2s ease !important;
+}
 
-
-
-
-
-
-
+body:not(.in-portal) .mobile-quick-bar #mobileQuickAccessBtn:active,
+body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
+    transform: scale(0.98) !important;
+}

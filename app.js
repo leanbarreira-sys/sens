@@ -1946,26 +1946,18 @@ function initHeroVideo() {
         isRevealed = true;
         heroSection.classList.add('hero-ready');
         if (typeof triggerHeroGreetingAnimation === 'function') {
-            triggerHeroGreetingAnimation(true);
+            try { triggerHeroGreetingAnimation(true); } catch (_) {}
         }
         if (skeleton) {
-            skeleton.classList.add('fade-out');
-            setTimeout(() => {
-                if (skeleton && skeleton.parentNode) skeleton.style.display = 'none';
-            }, 550);
+            skeleton.style.display = 'none';
         }
         try {
             sessionStorage.setItem('sens_hero_loaded', 'true');
         } catch (e) {}
     }
 
-    // Si ya cargó en esta sesión de navegación (ej. usuario recarga o vuelve a la home),
-    // revelar instantáneamente sin parpadeo de skeleton
-    try {
-        if (sessionStorage.getItem('sens_hero_loaded') === 'true') {
-            revealHeroContent();
-        }
-    } catch (e) {}
+    // Revelación inmediata en frame 0: Cero trabas, fluidez absoluta y video/poster visible de inmediato
+    revealHeroContent();
 
     if (video) {
         function handleVideoReady() {

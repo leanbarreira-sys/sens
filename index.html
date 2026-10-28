@@ -116,7 +116,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=13.1">
+    <link rel="stylesheet" href="style.css?v=13.2">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -224,29 +224,14 @@
     <main id="publicLanding">
         <!-- Hero Section (Apple-Grade Premium Presentation) -->
         <section class="sens-train-hero" id="sensTrainHero">
-            <!-- Skeleton Shimmer Placeholder: Lujo silencioso mientras el video / poster inicializa -->
-            <div class="hero-skeleton-wrap" id="heroSkeleton" aria-hidden="true">
-                <div class="hero-skeleton-shimmer"></div>
-                <div class="hero-skeleton-content">
-                    <div class="hero-skel-pill"></div>
-                    <div class="hero-skel-title"></div>
-                    <div class="hero-skel-subtitle"></div>
-                    <div class="hero-skel-subtitle short"></div>
-                    <div class="hero-skel-actions">
-                        <div class="hero-skel-btn"></div>
-                        <div class="hero-skel-btn outline"></div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Fallback Image: Visible instantáneamente mientras carga el video -->
             <div class="hero-bg-fallback" id="heroBgFallback"></div>
-            <!-- Video Hero: Se reproduce nítido en loop -->
+            <!-- Video Hero: Se reproduce nítido en loop desde el primer instante -->
             <video autoplay muted loop playsinline preload="auto" poster="img/hero-bg-opt.jpg" class="hero-video"
                 id="heroVideo">
                 <source src="vid/hero-bg-opt.mp4" type="video/mp4">
             </video>
-            <!-- Overlay Brandbook: Gradiente responsivo (fade abajo en mobile, fade izquierda a derecha en desktop) -->
+            <!-- Overlay Brandbook: Gradiente responsivo para máxima legibilidad tipográfica -->
             <div class="hero-overlay"></div>
 
             <div class="hero-train-content">
@@ -274,40 +259,6 @@
                         <a href="#sumate" class="btn btn-outline hero-btn-secondary" data-agent-action="schedule_initial_assessment">
                             Entrenar con Nico
                         </a>
-                    </div>
-                    <!-- Tira Horizontal Apple-Style de los 4 Escalones SENS (Carrusel Táctil) -->
-                    <div class="sens-hero-pills-container">
-                        <div class="sens-hero-pills-header">
-                            <span class="sens-hero-pills-title">Planes y Membresías</span>
-                            <div class="sens-hero-pills-nav">
-                                <button type="button" class="sens-hero-pills-arrow" onclick="scrollHeroPills(-1)"
-                                    aria-label="Anterior">‹</button>
-                                <span class="sens-hero-pills-counter" id="heroPillsCounter">1 de 4</span>
-                                <button type="button" class="sens-hero-pills-arrow" onclick="scrollHeroPills(1)"
-                                    aria-label="Siguiente">›</button>
-                            </div>
-                        </div>
-                        <div class="sens-hero-compact-pills" id="sensHeroCompactPills">
-                            <button type="button" class="hero-plan-pill free"
-                                onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()">
-                                1. Plan Free • 7 Días $0
-                            </button>
-                            <a href="#planes"
-                                onclick="setTimeout(()=>{const b=document.getElementById('btnModeApp');if(b)b.click();},100);"
-                                class="hero-plan-pill standard">
-                                2. App Premium • $24.9k / 3M $59.9k
-                            </a>
-                            <a href="#planes"
-                                onclick="setTimeout(()=>{const b=document.getElementById('btnModeOnline');if(b)b.click();},100);"
-                                class="hero-plan-pill standard">
-                                3. Online 1:1 • Con Nico
-                            </a>
-                            <a href="#planes"
-                                onclick="setTimeout(()=>{const b=document.getElementById('btnModePresencial');if(b)b.click();},100);"
-                                class="hero-plan-pill standard">
-                                4. Presencial CABA • 1:1
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -710,19 +661,6 @@
             <!-- VISTA 2A: PRESENCIAL INDIVIDUAL (ACTIVA POR DEFECTO)         -->
             <!-- ============================================================ -->
             <div class="pricing-tab-content active" id="tab-presencial-ind" style="display:block;">
-                <!-- Nota de Transparencia de Instalaciones Presencial -->
-                <div class="sens-presencial-facility-note">
-                    <span class="note-badge">TRANSPARENCIA TOTAL SENS</span>
-                    <div class="note-title">Sobre el Acceso a Gimnasio / Instalaciones</div>
-                    <p class="note-text">
-                        La cuota mensual cubre <strong>el 100% de la planificación profesional, corrección biomecánica y
-                            acompañamiento presencial 1 a 1 de Nico</strong>.
-                        El pase al gimnasio o club <strong>NO está incluido en el abono</strong>: la membresía corre por
-                        cuenta de cada alumno (podés entrenar en el gimnasio de tu edificio, en tu propio club o
-                        concurrir al centro sugerido por Nico según disponibilidad en CABA).
-                    </p>
-                </div>
-
                 <div class="touch-carousel-wrap">
                     <div class="touch-carousel pricing-carousel" id="pricingCarousel">
                         <!-- 1. 2x por Semana (OPCIÓN DESTACADA AL FRENTE - MÁS ELEGIDO) -->
@@ -850,19 +788,6 @@
             <!-- VISTA 2B: PRESENCIAL GRUPOS (DÚOS Y TRÍOS)                   -->
             <!-- ============================================================ -->
             <div class="pricing-tab-content" id="tab-presencial-grupos" style="display:none;">
-                <!-- Nota de Transparencia de Instalaciones Presencial -->
-                <div class="sens-presencial-facility-note">
-                    <span class="note-badge">TRANSPARENCIA TOTAL SENS</span>
-                    <div class="note-title">Sobre el Acceso a Gimnasio / Instalaciones</div>
-                    <p class="note-text">
-                        La cuota mensual cubre <strong>el 100% de la planificación profesional y entrenamiento guiado
-                            con Nico</strong>.
-                        El pase al gimnasio o club <strong>NO está incluido en el abono</strong>: corre por cuenta de
-                        cada integrante (pueden entrenar en el SUM/gym del edificio de alguno de los miembros o en el
-                        centro sugerido por Nico en CABA).
-                    </p>
-                </div>
-
                 <div class="touch-carousel-wrap">
                     <div class="touch-carousel pricing-carousel" id="groupsCarousel">
                         <!-- 1. Dúos (OPCIÓN DESTACADA AL FRENTE) -->
@@ -1044,132 +969,78 @@
                 </div>
             </div>
 
-            <!-- Nota de Transparencia Comercial (Conforme a Documento Maestro) -->
-            <div class="pricing-compact-note">
-                <strong>Transparencia comercial:</strong> En el entrenamiento presencial en CABA, el costo operativo del
-                gimnasio sede se encuentra absorbido dentro del arancel mensual publicado por SENS, garantizando total
-                previsibilidad y evitando cobros sorpresa.
-            </div>
-
-            <!-- Cierre de Confianza en Planes: ¿Entrenamos juntos? Makes SENS. -->
-            <div
-                style="text-align: center; margin-top: 36px; padding: 32px 24px; background: #121214; border: none; border-radius: 20px; box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5); max-width: 680px; margin-left: auto; margin-right: auto;">
-                <div style="font-size: 1.1rem; color: #FFFFFF; font-weight: 300; letter-spacing: 0.5px;">¿Entrenamos
-                    juntos?</div>
-                <div
-                    style="font-size: 1.6rem; font-weight: 800; letter-spacing: 3px; color: var(--accent-primary); margin: 4px 0 8px;">
-                    MAKES SENS.</div>
-                <p
-                    style="font-size: 12.5px; color: var(--text-muted); max-width: 480px; margin: 0 auto 18px; line-height: 1.45;">
-                    No cobramos a ciegas. Coordinamos una evaluación inicial para conocer tu punto de partida, articular
-                    y definir el plan ideal para vos.
+            <!-- Nota de Transparencia Comercial Oficial SENS -->
+            <div class="sens-transparency-note" style="margin-top: 24px; padding: 14px 18px; border-radius: 16px; background: #F4F3F0; border: 1px solid rgba(18, 18, 20, 0.08); display: flex; align-items: flex-start; gap: 10px; max-width: 620px; margin-left: auto; margin-right: auto;">
+                <span class="material-symbols-outlined" style="color: #705B3E; font-size: 18px; margin-top: 1px; flex-shrink: 0;">info</span>
+                <p style="font-size: 11.5px; color: #5A5752; line-height: 1.5; margin: 0; text-align: left;">
+                    <strong>Nota de transparencia:</strong> En planes presenciales el acceso al espacio o estudio se coordina para que no tengas costos sorpresa ni matrículas ocultas.
                 </p>
-                <a href="#sumate" class="btn btn-primary btn-sm" style="padding: 12px 26px;"
-                    data-agent-action="schedule_initial_assessment">
-                    Solicitar Evaluación Inicial →
-                </a>
             </div>
         </section>
 
         <!-- =====================================================================
-             NUEVA SECCIÓN: CÓMO SUMARTE A SENS (CAPTACIÓN ABIERTA / EVALUACIÓN INICIAL)
+             SECCIÓN 7: EVALUACIÓN INICIAL / CÓMO SUMARTE (QUIET LIGHT LUXURY)
              ===================================================================== -->
-        <section class="section-sens" id="sumate"
-            style="background: rgba(18, 18, 20, 0.45); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); padding-top: 70px; padding-bottom: 80px;">
-            <div class="section-head" style="margin-bottom: 30px;">
-                <span class="section-eyebrow">Punto de Partida</span>
-                <h2 class="section-main-title">CÓMO <span class="text-champagne">SUMARTE</span></h2>
-                <p class="section-lead">
-                    No cobramos a ciegas. Coordinamos una evaluación inicial para comprender tu punto de partida,
-                    historia previa y disponibilidad, y definir la frecuencia adecuada para vos.
-                </p>
-            </div>
-
-            <div class="lead-intake-card"
-                style="max-width: 680px; margin: 0 auto; background: #121214; border: none; border-radius: 20px; padding: 36px 30px; box-shadow: 0 16px 40px rgba(0,0,0,0.5);">
-                <div
-                    style="background: rgba(229, 203, 167, 0.08); border-radius: 14px; padding: 16px 18px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-                    <div>
-                        <span
-                            style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #E5CBA7; display: block; margin-bottom: 2px;">CAMINO
-                            1 • ACCESO INMEDIATO</span>
-                        <strong style="font-size: 13.5px; color: #FFFFFF;">¿Querés empezar hoy mismo en la App Autónoma
-                            (7 Días Gratis)?</strong>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-sm"
-                        onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()"
-                        data-agent-action="start_free_7day_app_trial"
-                        style="padding: 9px 14px; font-size: 11.5px; font-weight: 800;">
-                        Crear Cuenta Gratis →
-                    </button>
+        <section class="section-sens" id="sumate">
+            <div class="lead-intake-card" style="max-width: 580px; margin: 0 auto; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 28px; padding: 28px 22px; box-shadow: 0 4px 24px -2px rgba(18, 18, 20, 0.05);">
+                <div style="margin-bottom: 20px; text-align: left;">
+                    <span style="font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #705B3E; display: block; margin-bottom: 4px;">Tu Primer Paso</span>
+                    <h2 style="font-size: 1.65rem; font-weight: 300; color: #121214; margin: 0 0 4px; line-height: 1.2;">Evaluación <span style="font-weight: 800; color: #705B3E;">Inicial</span></h2>
+                    <p style="font-size: 12.5px; color: #5A5752; margin: 0; line-height: 1.45;">
+                        Completá tus datos para que Nico revise tu perfil y te recomiende la mejor modalidad.
+                    </p>
                 </div>
-                <form id="publicLeadForm" onsubmit="return false;">
-                    <div style="margin-bottom: 22px;">
-                        <label class="input-label"
-                            style="display: block; margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px;">1.
-                            Modalidad que te interesa:</label>
-                        <div class="selection-group" style="gap: 10px;">
-                            <label class="selection-item"
-                                style="padding: 12px 14px; background: #18181B; border-radius: 10px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
-                                <input type="radio" name="leadModality" value="Presencial 1 a 1 (CABA)" checked>
-                                <div class="custom-circle"></div>
-                                <span class="selection-label"><strong>Presencial 1 a 1</strong> — Palermo / Belgrano
-                                    (Recomendado)</span>
+
+                <form id="publicLeadForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 14px;">
+                    <!-- Modalidad Selector -->
+                    <div>
+                        <label class="input-label" style="display: block; font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 8px;">Modalidad deseada</label>
+                        <div class="selection-group" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                            <label class="selection-item sens-lead-pill-label" style="padding: 10px 6px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 12px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
+                                <input type="radio" name="leadModality" value="App 7 Días" class="sr-only" style="position: absolute; opacity: 0;">
+                                <span class="selection-label" style="font-size: 11.5px; font-weight: 700; color: #121214;">App 7 Días</span>
                             </label>
-                            <label class="selection-item"
-                                style="padding: 12px 14px; background: #18181B; border-radius: 10px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
-                                <input type="radio" name="leadModality" value="Presencial Grupal (Dúo o Trío)">
-                                <div class="custom-circle"></div>
-                                <span class="selection-label"><strong>Presencial Grupal</strong> — Dúo o Trío
-                                    reducido</span>
+                            <label class="selection-item sens-lead-pill-label active" style="padding: 10px 6px; background: #E5CBA7; border: 1px solid #E5CBA7; border-radius: 12px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
+                                <input type="radio" name="leadModality" value="Presencial" checked class="sr-only" style="position: absolute; opacity: 0;">
+                                <span class="selection-label" style="font-size: 11.5px; font-weight: 800; color: #2A241C;">Presencial</span>
                             </label>
-                            <label class="selection-item"
-                                style="padding: 12px 14px; background: #18181B; border-radius: 10px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
-                                <input type="radio" name="leadModality" value="Online Asesorado">
-                                <div class="custom-circle"></div>
-                                <span class="selection-label"><strong>Online Asesorado</strong> — A distancia con
-                                    videollamadas</span>
+                            <label class="selection-item sens-lead-pill-label" style="padding: 10px 6px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 12px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
+                                <input type="radio" name="leadModality" value="Online 1:1" class="sr-only" style="position: absolute; opacity: 0;">
+                                <span class="selection-label" style="font-size: 11.5px; font-weight: 700; color: #121214;">Online 1:1</span>
                             </label>
                         </div>
                     </div>
 
-                    <div class="grid-2" style="margin-bottom: 16px; gap: 16px;">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
                         <div class="input-group" style="margin-bottom: 0;">
-                            <label class="input-label" for="leadFullName">Tu Nombre y Apellido *</label>
-                            <input type="text" id="leadFullName" class="input-control" placeholder="Ej: Roberto Gomez"
-                                required>
+                            <label class="input-label" for="leadFullName" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">Nombre y Apellido</label>
+                            <input type="text" id="leadFullName" class="input-control" placeholder="Ej. Sofía Rossi" required style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
                         </div>
                         <div class="input-group" style="margin-bottom: 0;">
-                            <label class="input-label" for="leadPhone">Tu WhatsApp *</label>
-                            <input type="tel" id="leadPhone" class="input-control" placeholder="Ej: +54 9 11 1234 5678"
-                                required>
+                            <label class="input-label" for="leadPhone" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">Número de WhatsApp</label>
+                            <input type="tel" id="leadPhone" class="input-control" placeholder="+54 9 11 0000-0000" required style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
                         </div>
                     </div>
 
-                    <div class="input-group" style="margin-bottom: 24px;">
-                        <label class="input-label" for="leadGoal">¿Cuál es tu principal objetivo o situación
-                            actual?</label>
-                        <select id="leadGoal" class="input-control">
-                            <option value="Quiero ganar fuerza y mejorar composición corporal">Ganar fuerza y mejorar
-                                composición corporal</option>
-                            <option value="Paso muchas horas sentado / Dolores posturales">Paso muchas horas sentado /
-                                Aliviar dolores y rigidez</option>
-                            <option value="Quiero empezar o retomar después de mucho tiempo">Retomar el entrenamiento de
-                                manera segura y sin lesiones</option>
-                            <option value="Complemento para otro deporte (running, tenis, etc.)">Complemento de fuerza
-                                para otro deporte</option>
+                    <div class="input-group" style="margin-bottom: 4px;">
+                        <label class="input-label" for="leadGoal" style="font-size: 11.5px; font-weight: 700; color: #121214; margin-bottom: 4px; display: block;">¿Cuál es tu principal meta hoy?</label>
+                        <select id="leadGoal" class="input-control" style="width: 100%; padding: 12px 14px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); font-size: 13px; color: #121214; box-sizing: border-box;">
+                            <option value="Ganar masa muscular y fuerza sin dolor">Ganar masa muscular y fuerza sin dolor</option>
+                            <option value="Corregir postura y descompresión de columna">Corregir postura y descompresión de columna</option>
+                            <option value="Pérdida de grasa & recomposición corporal">Pérdida de grasa &amp; recomposición corporal</option>
+                            <option value="Salud metabólica general y longevidad">Salud metabólica general y longevidad</option>
                         </select>
                     </div>
 
                     <button type="button" id="btnSubmitLead" class="btn btn-primary btn-full"
                         data-agent-action="submit_initial_assessment_lead"
-                        style="padding: 16px 20px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);">
-                        Solicitar Evaluación Inicial con Nico →
+                        style="width: 100%; padding: 14px 20px; font-size: 13px; font-weight: 800; border-radius: 9999px; background: #E5CBA7; color: #2A241C; border: none; box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <span>Solicitar Evaluación Inicial con Nico</span>
+                        <span style="font-size: 16px;">→</span>
                     </button>
 
-                    <p
-                        style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 14px; margin-bottom: 0;">
-                        Sin compromiso comercial directo. Coordinamos tu punto de partida directamente por WhatsApp.
+                    <p style="text-align: center; font-size: 10.5px; color: #5A5752; margin: 2px 0 0; line-height: 1.4;">
+                        Respondemos en menos de 2 horas en horario comercial. Sin compromisos.
                     </p>
                 </form>
             </div>
@@ -1242,14 +1113,14 @@
         </footer>
     </main>
 
-    <!-- Barra Rápida Flotante en Móviles -->
+    <!-- Barra Rápida Flotante en Móviles (Sticky Dock Quiet Luxury) -->
     <div class="mobile-quick-bar">
-        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20agendar%20una%20Evaluaci%C3%B3n%20Inicial%20en%20SENS%20TRAIN."
-            target="_blank" rel="noopener" class="btn btn-primary mobile-quick-main-cta"
+        <a href="#sumate" class="mobile-quick-main-cta" id="mobileQuickAgendarBtn"
             data-agent-action="schedule_initial_assessment_whatsapp">
-            ¿Entrenamos juntos? Agendar →
+            <span>¿Entrenamos? Agendar</span>
+            <span style="font-size: 14px; margin-left: 2px;">→</span>
         </a>
-        <button class="btn btn-outline" id="mobileQuickAccessBtn" data-agent-action="open_client_portal_auth">
+        <button type="button" class="mobile-quick-secondary-btn" id="mobileQuickAccessBtn" data-agent-action="open_client_portal_auth">
             Acceso
         </button>
     </div>
@@ -9662,7 +9533,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=13.1"></script>
+    <script src="app.js?v=13.2"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
