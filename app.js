@@ -439,6 +439,14 @@ const AppState = {
 };
 window.AppState = AppState;
 
+// Estado del Coach OS inicializado tempranamente para evitar Temporal Dead Zone (TDZ)
+var coachWorkoutState = window.coachWorkoutState || {
+    activeAthleteId: null,
+    activeDay: 'day1',
+    activeWeekStart: null
+};
+window.coachWorkoutState = coachWorkoutState;
+
 // Restauración síncrona inmediata desde caché local para render instantáneo sin flashes
 try {
     const cachedUser = localStorage.getItem('sens_active_user');
@@ -2552,27 +2560,31 @@ function initAuthModal() {
     const btnForgotPass = document.getElementById('btnForgotPass');
     const btnBackToLogin = document.getElementById('btnBackToLoginFromForgot');
 
-    tabLogin.addEventListener('click', () => {
-        if (authTabs) authTabs.style.display = 'flex';
-        tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-        if (paneLogin) paneLogin.classList.add('active');
-        if (paneRegister) paneRegister.classList.remove('active');
-        if (paneForgot) paneForgot.classList.remove('active');
-        if (paneUpdatePass) paneUpdatePass.classList.remove('active');
-        clearAuthAlert();
-    });
+    if (tabLogin) {
+        tabLogin.addEventListener('click', () => {
+            if (authTabs) authTabs.style.display = 'flex';
+            tabLogin.classList.add('active');
+            if (tabRegister) tabRegister.classList.remove('active');
+            if (paneLogin) paneLogin.classList.add('active');
+            if (paneRegister) paneRegister.classList.remove('active');
+            if (paneForgot) paneForgot.classList.remove('active');
+            if (paneUpdatePass) paneUpdatePass.classList.remove('active');
+            clearAuthAlert();
+        });
+    }
 
-    tabRegister.addEventListener('click', () => {
-        if (authTabs) authTabs.style.display = 'flex';
-        tabRegister.classList.add('active');
-        tabLogin.classList.remove('active');
-        if (paneRegister) paneRegister.classList.add('active');
-        if (paneLogin) paneLogin.classList.remove('active');
-        if (paneForgot) paneForgot.classList.remove('active');
-        if (paneUpdatePass) paneUpdatePass.classList.remove('active');
-        clearAuthAlert();
-    });
+    if (tabRegister) {
+        tabRegister.addEventListener('click', () => {
+            if (authTabs) authTabs.style.display = 'flex';
+            tabRegister.classList.add('active');
+            if (tabLogin) tabLogin.classList.remove('active');
+            if (paneRegister) paneRegister.classList.add('active');
+            if (paneLogin) paneLogin.classList.remove('active');
+            if (paneForgot) paneForgot.classList.remove('active');
+            if (paneUpdatePass) paneUpdatePass.classList.remove('active');
+            clearAuthAlert();
+        });
+    }
 
     if (btnForgotPass && paneForgot) {
         btnForgotPass.addEventListener('click', () => {
@@ -6030,18 +6042,22 @@ function athleteHasAssignedRoutine(athId) {
 
 function getActiveAthleteId() {
     // 1. Si es un alumno regular, SIEMPRE retornar su ID propio de Supabase/perfil
-    if (!isCurrentUserAdmin()) {
-        if (AppState.user && AppState.user.id) return AppState.user.id;
-        if (AppState.profile && AppState.profile.id) return AppState.profile.id;
+    if (typeof isCurrentUserAdmin === 'function' && !isCurrentUserAdmin()) {
+        if (typeof AppState !== 'undefined' && AppState.user && AppState.user.id) return AppState.user.id;
+        if (typeof AppState !== 'undefined' && AppState.profile && AppState.profile.id) return AppState.profile.id;
     }
     // 2. Si es el coach en Coach OS o impersonando a un atleta:
-    if (coachWorkoutState && coachWorkoutState.activeAthleteId) {
-        return coachWorkoutState.activeAthleteId;
-    }
+    try {
+        if (typeof coachWorkoutState !== 'undefined' && coachWorkoutState && coachWorkoutState.activeAthleteId) {
+            return coachWorkoutState.activeAthleteId;
+        }
+    } catch (_) {}
     // 3. Fallbacks
-    if (AppState.user && AppState.user.id) return AppState.user.id;
-    if (AppState.profile && AppState.profile.id) return AppState.profile.id;
-    if (AppState.activeAthleteId) return AppState.activeAthleteId;
+    if (typeof AppState !== 'undefined') {
+        if (AppState.user && AppState.user.id) return AppState.user.id;
+        if (AppState.profile && AppState.profile.id) return AppState.profile.id;
+        if (AppState.activeAthleteId) return AppState.activeAthleteId;
+    }
     return 'mock_vip';
 }
 
@@ -11979,11 +11995,11 @@ function recalcCoachFoodItem(foodId, grams) {
 // -----------------------------------------------------------------------------
 // SUB-MÓDULO 3: PRESCRIPCIÓN DE RUTINAS Y EJERCICIOS (CALENDARIO REAL 14/10, 15/10...)
 // -----------------------------------------------------------------------------
-let coachWorkoutState = {
-    activeAthleteId: null,
-    activeDay: 'day1',
-    activeWeekStart: getMonday(new Date())
-};
+coachWorkoutState = Object.assign(coachWorkoutState || {}, {
+    activeAthleteId: coachWorkoutState?.activeAthleteId || null,
+    activeDay: coachWorkoutState?.activeDay || 'day1',
+    activeWeekStart: coachWorkoutState?.activeWeekStart || getMonday(new Date())
+});
 
 function showCoachSaveSuccessBanner({ title, body, errorNotice } = {}) {
     const modal = document.getElementById('coachSaveSuccessModal');
@@ -30971,9 +30987,9 @@ const SensPwaManager = {
     },
 
     isStandalone() {
-        return window.matchMedia('(display-mode: standalone)').matches ||
-               window.navigator.standalone === true ||
-               document.referrer.includes('android-app://');
+        return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+               window.navigator?.standalone === true ||
+               Boolean(document.referrer && typeof document.referrer === 'string' && document.referrer.includes('android-app://'));
     },
 
     isIos() {
@@ -31075,24 +31091,30 @@ const SensPwaManager = {
     },
 
     checkDashboardCardState() {
-        if (this.isStandalone() || localStorage.getItem('sens_pwa_installed') === 'true') {
-            return;
-        }
-        if (sessionStorage.getItem('sens_pwa_dash_card_dismissed') === 'true') {
-            return;
-        }
-        const dashCard = document.getElementById('sensPwaDashCard');
-        if (dashCard) {
-            dashCard.style.display = 'flex';
-        }
+        try {
+            if (this.isStandalone() || localStorage.getItem('sens_pwa_installed') === 'true') {
+                return;
+            }
+            if (typeof sessionStorage !== 'undefined' && sessionStorage && sessionStorage.getItem('sens_pwa_dash_card_dismissed') === 'true') {
+                return;
+            }
+            const dashCard = document.getElementById('sensPwaDashCard');
+            if (dashCard) {
+                dashCard.style.display = 'flex';
+            }
+        } catch (_) {}
     },
 
     dismissDashboardCard() {
-        const dashCard = document.getElementById('sensPwaDashCard');
-        if (dashCard) {
-            dashCard.style.display = 'none';
-        }
-        sessionStorage.setItem('sens_pwa_dash_card_dismissed', 'true');
+        try {
+            const dashCard = document.getElementById('sensPwaDashCard');
+            if (dashCard) {
+                dashCard.style.display = 'none';
+            }
+            if (typeof sessionStorage !== 'undefined' && sessionStorage) {
+                sessionStorage.setItem('sens_pwa_dash_card_dismissed', 'true');
+            }
+        } catch (_) {}
     },
 
     async triggerInstall() {
