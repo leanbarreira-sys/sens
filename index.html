@@ -92,14 +92,14 @@
         }
     </style>
 
-    <!-- SENS Anti-Flash Script: Restaura el modo portal de inmediato antes del primer render -->
+    <!-- SENS Anti-Flash Script: Restaura el modo portal de inmediato si el usuario navegaba dentro del portal -->
     <script>
         (function () {
             try {
                 var h = window.location.hash || '';
                 var s = window.location.search || '';
                 var isAuthFlow = h.indexOf('type=recovery') !== -1 || h.indexOf('type=invite') !== -1 || h.indexOf('error=') !== -1 || s.indexOf('error=') !== -1;
-                if (!isAuthFlow && (localStorage.getItem('sens_in_portal') === 'true' || localStorage.getItem('sens_active_user'))) {
+                if (!isAuthFlow && localStorage.getItem('sens_in_portal') === 'true') {
                     document.documentElement.classList.add('in-portal-mode');
                     document.addEventListener('DOMContentLoaded', function () {
                         if (document.body) document.body.classList.add('in-portal');
@@ -118,7 +118,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=13.4">
+    <link rel="stylesheet" href="style.css?v=13.5">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

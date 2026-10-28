@@ -1165,11 +1165,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sanitizeWorkoutTemplates();
     }
 
-    // 0. Si el usuario está en el portal, restaurar síncronamente antes de inicializar módulos de la landing
+    // 0. Si el usuario estaba navegando en el portal, restaurar síncronamente antes de inicializar la landing
     const isSavedPortal = (
-        document.documentElement.classList.contains('in-portal-mode') || 
-        localStorage.getItem('sens_in_portal') === 'true' || 
-        Boolean(localStorage.getItem('sens_active_user'))
+        localStorage.getItem('sens_in_portal') === 'true' &&
+        document.documentElement.classList.contains('in-portal-mode')
     );
     if (isSavedPortal) {
         document.body.classList.add('in-portal');
@@ -1181,7 +1180,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.warn('[SENS] Error restaurando portal:', e);
         }
     } else {
-        // En la landing pública, disparar animación del Hero
+        // En la landing pública, asegurar visibilidad, scroll fluido y animación del Hero
+        document.documentElement.classList.remove('in-portal-mode');
+        document.body.classList.remove('in-portal');
+        document.body.style.overflow = '';
         if (typeof triggerHeroGreetingAnimation === 'function') {
             triggerHeroGreetingAnimation();
         }
@@ -3441,21 +3443,20 @@ function initPortalNavigation() {
 function returnToPublicLanding() {
     try {
         localStorage.removeItem('sens_in_portal');
-        localStorage.removeItem('sens_active_user');
-        localStorage.removeItem('sens_active_profile');
-        localStorage.removeItem('sens_active_anamnesis');
-        localStorage.removeItem('sens_onboarding_draft');
         document.documentElement.classList.remove('in-portal-mode');
     } catch (_) {}
     document.body.classList.remove('in-portal');
+    document.body.style.overflow = '';
     const globalHeader = document.querySelector('header');
     const mobileQuickBar = document.querySelector('.mobile-quick-bar');
     if (globalHeader) globalHeader.style.display = '';
     if (mobileQuickBar) mobileQuickBar.style.display = '';
     const floatSocial = document.getElementById('homeFloatingSocial');
     if (floatSocial) floatSocial.style.display = 'flex';
-    document.getElementById('app-container').classList.remove('active');
-    document.getElementById('publicLanding').style.display = 'block';
+    const appContainer = document.getElementById('app-container');
+    if (appContainer) appContainer.classList.remove('active');
+    const pubLanding = document.getElementById('publicLanding');
+    if (pubLanding) pubLanding.style.display = 'block';
     // Pausar videos y timers del portal al volver a la landing y reanudar Hero video
     const portalEl = document.getElementById('app-container');
     if (portalEl) {
@@ -4199,15 +4200,15 @@ function openUserPortal(forceOnboarding = false) {
     if (adminAddBtn) adminAddBtn.style.display = isAdmin ? 'inline-block' : 'none';
 
     // -------------------------------------------------------------------------
-    // 1. REGLA SUPREMA: EVALUACIÓN INICIAL / ONBOARDING CLÍNICO OBLIGATORIO (MÓDULO 4)
+    // 1. EVALUACIÓN INICIAL / ONBOARDING CLÍNICO
     // -------------------------------------------------------------------------
-    // Los administradores (Nico Coach) nunca realizan la evaluación de alumno.
-    // Para todos los alumnos/atletas: Si no han completado el diagnóstico inicial (onboarding_completed: false)
-    // o se solicita forzarlo explícitamente (forceOnboarding: true), DEBEN completar la Evaluación Inicial de 8 pasos.
-    // Esto es de cumplimiento OBLIGATORIO antes de cualquier otra pantalla (incluyendo activación y dashboard),
-    // ya que el coach necesita las respuestas de salud, lesiones (PAR-Q) y hábitos para evaluar al atleta.
+    // Solo forzar wizard si se solicita explícitamente (forceOnboarding: true)
+    // o si el perfil ya cargó con ID válido confirmando onboarding_completed === false.
+    // Si el perfil aún está resolviéndose desde Supabase, entrar directo al Dashboard (dashView)
+    // para evitar congelar la interfaz o atrapar al usuario en una pantalla bloqueada al refrescar.
+    const isProfileReady = Boolean(profile && profile.id);
     const isOnboardingDone = Boolean(profile && profile.onboarding_completed);
-    const mustDoOnboarding = !isAdmin && (forceOnboarding || !isOnboardingDone);
+    const mustDoOnboarding = !isAdmin && (forceOnboarding || (isProfileReady && profile.onboarding_completed === false && !localStorage.getItem('sens_skip_onboarding_temp')));
 
     if (mustDoOnboarding) {
         const subNav = document.getElementById('portalSubNav');
@@ -4415,8 +4416,8 @@ function startDiagnosisWizard(isEditMode = false) {
         prefillDiagnosisForm();
         window.diagWizardGoStep(1);
     } else {
-        if (modeBadge) modeBadge.textContent = 'Evaluación Inicial Obligatoria';
-        if (exitBtn) exitBtn.style.display = 'none';
+        if (modeBadge) modeBadge.textContent = 'Evaluación Inicial';
+        if (exitBtn) exitBtn.style.display = 'inline-block';
 
         // Precargar nombre si está disponible en auth o profile
         const fullNameInput = document.getElementById('diagFullName');
@@ -4875,11 +4876,14 @@ function initDiagnosisWizard() {
         });
     }
 
-    // 11. Botón Salir al Dashboard si se está en Modo Edición
+    // 11. Botón Salir al Dashboard desde el Wizard
     const exitDashBtn = document.getElementById('wizardExitToDashBtn');
     if (exitDashBtn) {
         exitDashBtn.addEventListener('click', () => {
-            document.getElementById('portalSubNav').style.display = 'flex';
+            try { localStorage.setItem('sens_skip_onboarding_temp', 'true'); } catch (_) {}
+            const subNav = document.getElementById('portalSubNav');
+            if (subNav) subNav.style.display = 'flex';
+            document.body.style.overflow = '';
             renderDashboardData();
             switchPortalView('dashView');
             window.scrollTo(0, 0);
