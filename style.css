@@ -14326,71 +14326,149 @@ body.in-portal .tape-input-control,
     color: #E5CBA7 !important;
 }
 
-/* 2. Modal de Registro y Acceso (#authModal - Fondo Obsidiana #121214) */
-#authModal .modal-card,
-.modal-overlay .modal-card {
+/* 2. Modales Internos del Portal (Fondo Oscuro para Coach/Portal) */
+.modal-overlay:not(#authModal) .modal-card {
     background: #121214 !important;
     border: none !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85) !important;
     color: #FFFFFF !important;
 }
 
+/* Modal de Acceso / Autenticación SENS (Quiet Light Luxury v6.0) */
+#authModal {
+    background: rgba(18, 18, 20, 0.55) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+}
+
+#authModal .modal-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 20px 50px -10px rgba(18, 18, 20, 0.15), 0 4px 16px rgba(18, 18, 20, 0.04) !important;
+    color: #121214 !important;
+    border-radius: 24px !important;
+}
+
+#authModal .brand-logo-img-modal {
+    filter: none !important;
+}
+
+#authModal .modal-close-btn {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 20px !important;
+    transition: all 0.2s ease !important;
+}
+
+#authModal .modal-close-btn:hover {
+    background: #EFECE6 !important;
+    color: #000000 !important;
+}
+
 #authModal h2,
 #authModal h3,
-#authModal h4,
-#authModal .modal-card div:not(.auth-tab) {
-    color: #FFFFFF !important;
+#authModal h4 {
+    color: #121214 !important;
+}
+
+#authModal .modal-card div[style*="¿Entrenamos juntos?"] {
+    color: #575659 !important;
 }
 
 #authModal .modal-card div[style*="var(--accent-primary)"] {
-    color: #E5CBA7 !important;
+    color: #705B3E !important;
 }
 
 #authModal p {
-    color: rgba(255, 255, 255, 0.78) !important;
-}
-
-#authModal .input-label {
-    color: rgba(255, 255, 255, 0.75) !important;
-    font-weight: 600 !important;
-}
-
-#authModal .input-control {
-    background: #18181B !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    color: #FFFFFF !important;
-}
-
-#authModal .input-control:focus {
-    border-color: #E5CBA7 !important;
-    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.2) !important;
-}
-
-#authModal .input-control::placeholder {
-    color: rgba(255, 255, 255, 0.4) !important;
+    color: #8E8D90 !important;
 }
 
 #authModal .auth-tabs {
-    background: #18181B !important;
+    background: #EFECE6 !important;
+    border-radius: 9999px !important;
+    padding: 4px !important;
+    display: flex !important;
+    gap: 4px !important;
     border: none !important;
 }
 
 #authModal .auth-tab {
-    color: rgba(255, 255, 255, 0.65) !important;
+    background: transparent !important;
+    color: #575659 !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    padding: 8px 16px !important;
+    transition: all 0.25s ease !important;
 }
 
 #authModal .auth-tab.active {
-    background: #E5CBA7 !important;
-    color: #09090B !important;
-    font-weight: 800 !important;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.12) !important;
+}
+
+#authModal .input-label {
+    color: #121214 !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    letter-spacing: 0.3px !important;
+}
+
+#authModal .input-control {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
+    border-radius: 12px !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+}
+
+#authModal .input-control:focus {
+    background: #FFFFFF !important;
+    border-color: #705B3E !important;
+    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.35) !important;
+}
+
+#authModal .input-control::placeholder {
+    color: #8E8D90 !important;
 }
 
 #authModal .btn-link-forgot {
-    color: #E5CBA7 !important;
+    color: #705B3E !important;
+    font-weight: 600 !important;
+}
+
+#authModal .btn-primary {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
+    min-height: 48px !important;
+    letter-spacing: 0.5px !important;
+    transition: all 0.25s ease !important;
+}
+
+#authModal .btn-primary:hover {
+    background: #D8BD97 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 14px rgba(18, 18, 20, 0.12) !important;
 }
 
 #authModal #btnBackToLoginFromForgot {
-    color: rgba(255, 255, 255, 0.65) !important;
+    color: #705B3E !important;
 }
 
 /* 3. Filas Agrupadas de Comida & Tarjetas Nutricionales Oscuras */
@@ -21027,6 +21105,8 @@ body:has(.modal.show) #sensCoachFloatingDock {
     color: #E5CBA7;
 }
 
+
+
 .sens-kcal-range-inputs {
     display: flex;
     align-items: center;
@@ -23235,6 +23315,508 @@ textarea,
     border-color: #E5CBA7;
     color: #E5CBA7;
 }
+
+/* ==========================================================================
+   FASE 1: SENS QUIET LIGHT LUXURY - LANDING OFICIAL & MODAL DE ACCESO
+   Tokens Stitch Oficiales: Alabastro Cálido #FAF9F6, Superficie #FFFFFF,
+   Carbón #121214, Visón #575659, Champagne #E5CBA7, Oro Quemado #705B3E,
+   Verde Mineral #1E7B42, Hairline Delineado rgba(18, 18, 20, 0.08).
+   Encapsulado quirúrgicamente en body:not(.in-portal).
+   ========================================================================== */
+
+/* 1. Lienzo Base & Contenedor Público */
+body:not(.in-portal),
+body:not(.in-portal) #publicLanding {
+    background-color: #FAF9F6 !important;
+    color: #121214 !important;
+}
+
+/* 2. Barra de Navegación Global (Light Luxury Parity) */
+body:not(.in-portal) header {
+    background: transparent !important;
+}
+
+body:not(.in-portal) .navbar {
+    background: rgba(250, 249, 246, 0.94) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 1px 8px rgba(18, 18, 20, 0.03) !important;
+}
+
+body:not(.in-portal) .navbar.scrolled {
+    background: rgba(250, 249, 246, 0.98) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.1) !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.06) !important;
+}
+
+body:not(.in-portal) #headerBrandLogo {
+    filter: none !important;
+}
+
+body:not(.in-portal) .nav-links .nav-link {
+    color: #121214 !important;
+    font-weight: 500 !important;
+    font-size: 13.5px !important;
+    letter-spacing: 0.2px !important;
+    transition: color 0.25s ease !important;
+}
+
+body:not(.in-portal) .nav-links .nav-link:hover {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) .nav-links .nav-link[style*="var(--accent-primary)"] {
+    color: #705B3E !important;
+    font-weight: 600 !important;
+}
+
+body:not(.in-portal) .nav-actions-desktop .help-link {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    border-radius: 9999px !important;
+    padding: 6px 14px !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    transition: all 0.2s ease !important;
+}
+
+body:not(.in-portal) .nav-actions-desktop .help-link:hover {
+    background: #EFECE6 !important;
+    border-color: rgba(18, 18, 20, 0.14) !important;
+}
+
+body:not(.in-portal) .nav-actions-desktop .btn-pwa-trigger {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    border-radius: 9999px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+body:not(.in-portal) #navClientAccessBtn,
+body:not(.in-portal) #navClientAccessBtnMobile {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    padding: 8px 18px !important;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.08) !important;
+    transition: transform 0.2s ease, background 0.2s ease !important;
+}
+
+body:not(.in-portal) #navClientAccessBtn:hover,
+body:not(.in-portal) #navClientAccessBtnMobile:hover {
+    background: #D8BD97 !important;
+    transform: translateY(-1px) !important;
+}
+
+body:not(.in-portal) .menu-toggle span {
+    background: #121214 !important;
+}
+
+/* 3. Menú Móvil Desplegable */
+body:not(.in-portal) .mobile-menu-overlay {
+    background: rgba(250, 249, 246, 0.98) !important;
+    color: #121214 !important;
+}
+
+body:not(.in-portal) .mobile-menu-close {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
+}
+
+body:not(.in-portal) .mobile-menu-overlay .mobile-nav-link {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #mobileMenuClientAccessBtn {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+}
+
+/* 4. Hero Section (Contenedor Editorial Lujo Silencioso) */
+body:not(.in-portal) .sens-train-hero {
+    margin: 10px 14px 28px !important;
+    border-radius: 28px !important;
+    overflow: hidden !important;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    position: relative !important;
+    box-shadow: 0 12px 36px rgba(18, 18, 20, 0.15) !important;
+    padding: 100px 5% 40px !important;
+}
+
+@media (min-width: 900px) {
+    body:not(.in-portal) .sens-train-hero {
+        max-width: 1240px !important;
+        margin: 20px auto 44px !important;
+        border-radius: 32px !important;
+        padding: 120px 6% 55px !important;
+    }
+}
+
+/* 5. Sección Pilares SENS */
+body:not(.in-portal) #pilares {
+    background: #FAF9F6 !important;
+}
+
+body:not(.in-portal) #pilares .section-eyebrow {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #pilares .section-main-title {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #pilares .section-main-title .text-champagne {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #pilares .section-lead {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) #pilares .pill-dark {
+    background: #EFECE6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #pilares .carousel-slide .ig-post {
+    border-radius: 20px !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    box-shadow: 0 6px 24px -4px rgba(18, 18, 20, 0.08) !important;
+    overflow: hidden !important;
+}
+
+body:not(.in-portal) #pilares .carousel-dots span {
+    background: #E7E4DC !important;
+}
+
+body:not(.in-portal) #pilares .carousel-dots span.active {
+    background: #121214 !important;
+}
+
+/* 6. Sección Método & Quién es Nico */
+body:not(.in-portal) #metodo {
+    background: #F4F3F0 !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.08) !important;
+}
+
+body:not(.in-portal) #metodo .section-eyebrow {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #metodo .section-main-title {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #metodo .section-main-title .text-champagne {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #metodo .section-lead {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) #metodo .method-feature-item h4 {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #metodo .method-feature-item p {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) #metodo .method-feature-icon {
+    background: #EFECE6 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+}
+
+body:not(.in-portal) #metodo div[style*="Antes de SENS"] {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.04) !important;
+}
+
+body:not(.in-portal) #metodo div[style*="Con SENS"] {
+    background: #FAF6EF !important;
+    border: 1.5px solid #E5CBA7 !important;
+    color: #121214 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 16px rgba(112, 91, 62, 0.08) !important;
+}
+
+body:not(.in-portal) #metodo .nico-editorial-card {
+    border-radius: 20px !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    overflow: hidden !important;
+}
+
+/* 7. Sección Planes & Precios (Quiet Light Luxury Surfaces) */
+body:not(.in-portal) #planes {
+    background: #FAF9F6 !important;
+}
+
+body:not(.in-portal) #planes .section-eyebrow {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #planes .section-main-title {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #planes .section-main-title .text-champagne {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #planes .section-lead {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) .pricing-main-nav,
+body:not(.in-portal) .pricing-sub-nav {
+    background: #EFECE6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 9999px !important;
+    padding: 4px !important;
+}
+
+body:not(.in-portal) .pricing-main-btn,
+body:not(.in-portal) .pricing-sub-btn {
+    background: transparent !important;
+    color: #575659 !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    font-weight: 500 !important;
+    transition: all 0.25s ease !important;
+}
+
+body:not(.in-portal) .pricing-main-btn.active,
+body:not(.in-portal) .pricing-sub-btn.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.12) !important;
+}
+
+body:not(.in-portal) .pricing-main-btn.active .btn-badge {
+    background: rgba(229, 203, 167, 0.25) !important;
+    color: #E5CBA7 !important;
+}
+
+body:not(.in-portal) .pricing-main-btn:not(.active) .btn-badge {
+    background: #E7E4DC !important;
+    color: #575659 !important;
+}
+
+body:not(.in-portal) .train-plan-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
+    color: #121214 !important;
+}
+
+body:not(.in-portal) .train-plan-card.highlight {
+    background: #FAF6EF !important;
+    border: 1.5px solid #E5CBA7 !important;
+    box-shadow: 0 8px 32px -4px rgba(112, 91, 62, 0.12) !important;
+}
+
+body:not(.in-portal) .train-plan-badge {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+}
+
+body:not(.in-portal) .plan-purpose-tag {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+}
+
+body:not(.in-portal) .plan-title {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) .plan-concept-tagline {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) .plan-amount {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) .plan-period {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) .plan-features-list li,
+body:not(.in-portal) .plan-feature-row {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) .plan-feature-row svg.check {
+    color: #1E7B42 !important;
+    stroke: #1E7B42 !important;
+}
+
+body:not(.in-portal) .train-plan-card .btn-primary {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
+}
+
+body:not(.in-portal) .train-plan-card .btn-primary:hover {
+    background: #D8BD97 !important;
+    transform: translateY(-1px) !important;
+}
+
+body:not(.in-portal) .train-plan-card .btn-outline {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
+    border-radius: 9999px !important;
+}
+
+body:not(.in-portal) #planes .carousel-dots span {
+    background: #E7E4DC !important;
+}
+
+body:not(.in-portal) #planes .carousel-dots span.active {
+    background: #121214 !important;
+}
+
+/* 8. Sección Sumate / Lead Form */
+body:not(.in-portal) #sumate {
+    background: #F4F3F0 !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.08) !important;
+}
+
+body:not(.in-portal) #sumate .section-eyebrow {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #sumate .section-main-title {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #sumate .section-main-title .text-champagne {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #sumate .section-lead {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) #sumate .lead-intake-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 6px 30px -4px rgba(18, 18, 20, 0.06) !important;
+}
+
+body:not(.in-portal) #sumate .lead-intake-card div[style*="CAMINO 1"] {
+    background: #FAF6EF !important;
+    border: 1px solid #E5CBA7 !important;
+    border-radius: 16px !important;
+}
+
+body:not(.in-portal) #sumate .lead-intake-card div[style*="CAMINO 1"] span {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) #sumate .lead-intake-card div[style*="CAMINO 1"] strong {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #sumate .selection-item {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    border-radius: 12px !important;
+}
+
+body:not(.in-portal) #sumate .input-label {
+    color: #121214 !important;
+}
+
+body:not(.in-portal) #sumate .input-control {
+    background: #F4F3F0 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
+    border-radius: 12px !important;
+}
+
+body:not(.in-portal) #sumate .input-control:focus {
+    background: #FFFFFF !important;
+    border-color: #705B3E !important;
+    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.35) !important;
+}
+
+body:not(.in-portal) #btnSubmitLead {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
+}
+
+body:not(.in-portal) #btnSubmitLead:hover {
+    background: #D8BD97 !important;
+    transform: translateY(-1px) !important;
+}
+
+body:not(.in-portal) #wellness {
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+}
+
+/* 9. Footer Público */
+body:not(.in-portal) footer {
+    background: #EFECE6 !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+}
+
+body:not(.in-portal) .brand-logo-img-footer {
+    filter: none !important;
+}
+
+body:not(.in-portal) footer div[style*="¿Entrenamos juntos?"] {
+    color: #575659 !important;
+}
+
+body:not(.in-portal) footer div[style*="MAKES SENS."] {
+    color: #705B3E !important;
+}
+
+body:not(.in-portal) footer p {
+    color: #8E8D90 !important;
+}
+
+body:not(.in-portal) footer a {
+    color: #121214 !important;
+}
+
 
 
 
