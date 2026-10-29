@@ -1843,12 +1843,23 @@ function applyDatabaseAthlete(athlete) {
         role: 'user_normal'
     };
 
+function formatPlanShortBadge(planName) {
+    if (!planName) return 'Plan SENS';
+    const lower = String(planName).toLowerCase();
+    if (lower.includes('presencial')) return 'Presencial CABA';
+    if (lower.includes('online')) return 'Online 1:1';
+    if (lower.includes('app') || lower.includes('premium') || lower.includes('autónom')) return 'App Premium';
+    if (lower.includes('free') || lower.includes('prueba') || lower.includes('trial') || lower.includes('gratuit')) return 'Plan Free';
+    return planName.length > 18 ? (planName.slice(0, 16) + '…') : planName;
+}
+window.formatPlanShortBadge = formatPlanShortBadge;
+
     updateCoachSubBadgeAndButton(athlete.subscription_status);
 
     const planBadgeEl = document.getElementById('portalPlanBadge');
     const userEmailEl = document.getElementById('portalUserEmail');
     const roleContextBadge = document.getElementById('roleContextBadge');
-    if (planBadgeEl) planBadgeEl.textContent = athlete.active_plan_name || 'Plan SENS';
+    if (planBadgeEl) planBadgeEl.textContent = formatPlanShortBadge(athlete.active_plan_name);
     if (userEmailEl) userEmailEl.textContent = athlete.email || athlete.full_name;
     if (roleContextBadge) roleContextBadge.textContent = `${athlete.active_plan_name || 'Plan'} • Alumno Real`;
 
@@ -1910,7 +1921,7 @@ function applyUserProfile(userTypeKey) {
     const adminIndicatorBadge = document.getElementById('adminIndicatorBadge');
     const adminAddBtn = document.getElementById('btnAdminAddExercise');
 
-    if (planBadgeEl) planBadgeEl.textContent = mock.active_plan_name;
+    if (planBadgeEl) planBadgeEl.textContent = formatPlanShortBadge(mock.active_plan_name);
     if (userEmailEl) userEmailEl.textContent = mock.email;
     if (roleContextBadge) roleContextBadge.textContent = mock.plan_badge_text;
 
@@ -3988,7 +3999,7 @@ function checkUserAccessStatus(profile) {
     // Actualizar el badge superior del Topbar (#portalPlanBadgeText)
     const topbarPlanText = document.getElementById('portalPlanBadgeText');
     if (topbarPlanText) {
-        topbarPlanText.textContent = isAdmin ? 'Coach OS • Director' : planDetails.shortBadge;
+        topbarPlanText.textContent = isAdmin ? 'Coach OS' : formatPlanShortBadge(planDetails.shortBadge);
     }
 
     // 1. Renderizar Barra Ejecutiva de Plan Actual & Escalera SENS en el Inicio (#dashView)
@@ -4417,7 +4428,7 @@ function openUserPortal(forceOnboarding = false) {
         userEmailEl.textContent = realEmail || 'Sesión Iniciada';
     }
     if (planBadgeEl) {
-        planBadgeEl.textContent = profile.active_plan_name || (profile.user_type ? formatPlanName(profile.user_type) : 'Plan Personalizado');
+        planBadgeEl.textContent = formatPlanShortBadge(profile.active_plan_name || (profile.user_type ? formatPlanName(profile.user_type) : 'Plan SENS'));
     }
 
     const isAdmin = isCurrentUserAdmin();
@@ -4613,14 +4624,11 @@ function renderDashboardData() {
 
     let rawFullName = (profile.full_name || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || '').trim();
     if (!rawFullName || rawFullName.includes('@')) {
-        const emailPrefix = (AppState.user && AppState.user.email ? AppState.user.email.split('@')[0] : 'Lean').toLowerCase();
-        if (emailPrefix.includes('lean') || emailPrefix.includes('barreira')) {
-            rawFullName = 'Lean';
-        } else {
-            rawFullName = emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1);
-        }
+        const emailPrefix = (AppState.user && AppState.user.email ? AppState.user.email.split('@')[0] : 'Atleta').replace(/[._-]/g, ' ').trim();
+        rawFullName = emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1);
     }
-    const firstName = rawFullName.trim().split(' ')[0] || 'Lean';
+    const rawFirst = rawFullName.trim().split(/\s+/)[0] || 'Atleta';
+    const firstName = rawFirst.charAt(0).toUpperCase() + rawFirst.slice(1);
 
     if (greetingNameEl) {
         greetingNameEl.textContent = firstName;
@@ -7150,27 +7158,27 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
 
             html += `
                 <div class="sens-move-day-row" style="background: #FAF9F6; border: 1px solid #ECEBE8; border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
                         <div style="width: 38px; height: 38px; border-radius: 10px; background: ${hasWk ? 'rgba(229,203,167,0.3)' : '#ECEBE8'}; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
                             <span style="font-size: 8.5px; font-weight: 800; color: ${hasWk ? '#705B3E' : '#77767B'};">${dow}</span>
                             <span style="font-size: 13px; font-weight: 800; color: #121214;">${curD.getDate()}</span>
                         </div>
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 6px;">
-                                <strong style="font-size: 12.5px; color: #121214;">${isToday ? 'Hoy: ' : ''}${title}</strong>
-                                ${hasWk ? `<span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 6px; border-radius: 9999px;">Ocupado</span>` : `<span class="pill pill-dark" style="font-size: 8.5px; padding: 1px 6px; color: #1E7B42; background: rgba(30,123,66,0.1); border-color: rgba(30,123,66,0.25); border-radius: 9999px;">Libre</span>`}
+                        <div style="min-width: 0; flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                <strong style="font-size: 12px; color: #121214; line-height: 1.25; word-break: break-word;">${isToday ? 'Hoy: ' : ''}${title}</strong>
+                                ${hasWk ? `<span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 6px; border-radius: 9999px; flex-shrink: 0;">Ocupado</span>` : `<span class="pill pill-dark" style="font-size: 8.5px; padding: 1px 6px; color: #1E7B42; background: rgba(30,123,66,0.1); border-color: rgba(30,123,66,0.25); border-radius: 9999px; flex-shrink: 0;">Libre</span>`}
                             </div>
-                            <span style="font-size: 11px; color: #575659;">${hasWk ? `${curSession.exercises.length} ejercicios planificados` : 'Disponible para tu sesión'}</span>
+                            <span style="font-size: 11px; color: #575659; display: block; margin-top: 2px;">${hasWk ? `${curSession.exercises.length} ejercicios planificados` : 'Disponible para tu sesión'}</span>
                         </div>
                     </div>
-                    <div>
+                    <div style="flex-shrink: 0; margin-left: 6px;">
                         ${hasWk ? `
-                            <button type="button" class="btn btn-outline btn-xs btn-sens-move-swap" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 10.5px; padding: 5px 10px; color: #705B3E; border: 1px solid rgba(229,203,167,0.6); background: #FFFFFF; font-weight: 700; border-radius: 9999px; cursor: pointer;" title="Intercambia los entrenamientos de ambos días">
-                                ⇄ Intercambiar
+                            <button type="button" class="btn btn-outline btn-xs btn-sens-move-swap" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 10.5px; padding: 6px 12px; color: #705B3E; border: 1.5px solid rgba(229,203,167,0.8); background: #FFFFFF; font-weight: 700; border-radius: 9999px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; line-height: 1;" title="Intercambia los entrenamientos de ambos días">
+                                <span>⇄</span><span>Intercambiar</span>
                             </button>
                         ` : `
-                            <button type="button" class="btn btn-primary btn-xs btn-sens-move-select" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'replace')" style="font-size: 10.5px; padding: 6px 14px; background: #E5CBA7; color: #1A140A; font-weight: 800; border: none; border-radius: 9999px; cursor: pointer;">
-                                Mover aquí →
+                            <button type="button" class="btn btn-primary btn-xs btn-sens-move-select" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'replace')" style="font-size: 10.5px; padding: 6px 12px; background: #E5CBA7; color: #1A140A; font-weight: 800; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; line-height: 1;">
+                                <span>Mover aquí</span><span>→</span>
                             </button>
                         `}
                     </div>

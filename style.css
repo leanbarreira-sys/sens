@@ -27419,8 +27419,15 @@ body.in-portal .portal-topbar .brand-logo-img-portal {
     filter: brightness(0) !important;
 }
 
-/* Badge de Plan Free en Topbar (Pill Cápsula Champagne) */
+/* Badge de Plan en Topbar (Oculto en mobile para no saturar header, cápsula single-row en desktop) */
 body.in-portal #portalPlanBadge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    max-width: 180px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     background: rgba(251, 222, 185, 0.45) !important;
     color: #705B3E !important;
     border: 1px solid rgba(112, 91, 62, 0.25) !important;
@@ -27431,6 +27438,12 @@ body.in-portal #portalPlanBadge {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02) !important;
 }
 
+@media (max-width: 768px) {
+    body.in-portal #portalPlanBadge {
+        display: none !important;
+    }
+}
+
 body.in-portal #portalPlanBadge::before {
     content: '' !important;
     display: inline-block !important;
@@ -27438,7 +27451,8 @@ body.in-portal #portalPlanBadge::before {
     height: 6px !important;
     border-radius: 50% !important;
     background: #705B3E !important;
-    margin-right: 6px !important;
+    margin-right: 4px !important;
+    flex-shrink: 0 !important;
 }
 
 /* Ocultar las tarjetas gigantes de Plan y PWA en el inicio para no romper la estética */
@@ -27718,59 +27732,80 @@ body.in-portal .sens-workout-rest-pane p {
     font-size: 13px !important;
 }
 
-/* 5. Floating Dock Inferior (Exact Fidelity con Image 1) */
+/* 5. Floating Dock Inferior (Icono + Texto Vertical sin letras rotas ni truncamientos) */
 body.in-portal #sensFloatingDock {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
     border-radius: 9999px !important;
-    box-shadow: 0 12px 36px -6px rgba(18, 18, 20, 0.12) !important;
-    padding: 6px 8px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
+    box-shadow: 0 10px 32px -4px rgba(18, 18, 20, 0.12), 0 2px 6px rgba(18, 18, 20, 0.04) !important;
+    padding: 5px 8px !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px !important;
     position: fixed !important;
     bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 9990 !important;
-    width: auto !important;
-    max-width: 90vw !important;
+    width: calc(100% - 32px) !important;
+    max-width: 360px !important;
+    box-sizing: border-box !important;
 }
 
 body.in-portal .sens-dock-item {
     background: transparent !important;
-    color: #575659 !important;
+    color: #77767B !important;
     border: none !important;
     border-radius: 9999px !important;
-    padding: 8px 14px !important;
+    padding: 7px 4px !important;
     display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
-    gap: 6px !important;
-    font-size: 12px !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    font-size: 10.5px !important;
     font-weight: 600 !important;
     text-transform: none !important;
-    letter-spacing: 0 !important;
+    letter-spacing: -0.01em !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     cursor: pointer !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 body.in-portal .sens-dock-item.active {
     background: #121214 !important;
     color: #FFFFFF !important;
     font-weight: 700 !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
 }
 
 body.in-portal .sens-dock-item svg {
-    width: 17px !important;
-    height: 17px !important;
+    width: 18px !important;
+    height: 18px !important;
     stroke: currentColor !important;
+    stroke-width: 2 !important;
+    margin: 0 auto !important;
+    flex-shrink: 0 !important;
 }
 
 body.in-portal .sens-dock-item.active svg {
     stroke: #FFFFFF !important;
+}
+
+body.in-portal .sens-dock-item span {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+    color: inherit !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: 100% !important;
+    line-height: 1.1 !important;
 }
 
 
@@ -27813,6 +27848,10 @@ body.in-portal #portalPlanBadge {
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
+    white-space: nowrap !important;
+    max-width: 180px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     background: rgba(251, 222, 185, 0.55) !important;
     color: #564428 !important;
     border: 1px solid rgba(112, 91, 62, 0.3) !important;
@@ -27823,6 +27862,12 @@ body.in-portal #portalPlanBadge {
     cursor: pointer !important;
     transition: all 0.2s ease !important;
     line-height: 1 !important;
+}
+
+@media (max-width: 768px) {
+    body.in-portal #portalPlanBadge {
+        display: none !important;
+    }
 }
 
 body.in-portal #portalPlanBadge .plan-status-dot {
@@ -28139,25 +28184,81 @@ body.in-portal .sens-act-metric-sub {
     font-size: 11px !important;
 }
 
-body.in-portal .sens-act-stepper-btn {
+body.in-portal .sens-act-stepper-control {
     background: #F4F3F1 !important;
-    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 9999px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 3px !important;
+    height: 36px !important;
+    box-sizing: border-box !important;
+}
+
+body.in-portal .sens-act-stepper-btn {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
     color: #121214 !important;
-    border-radius: 10px !important;
-    font-weight: 800 !important;
-    font-size: 16px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.15s ease !important;
 }
 
 body.in-portal .sens-act-stepper-btn:hover {
-    background: #E3E2E0 !important;
+    background: #FAF9F6 !important;
+    border-color: rgba(18, 18, 20, 0.14) !important;
+}
+
+body.in-portal .sens-act-stepper-btn:active {
+    background: #E5CBA7 !important;
+    color: #1A140A !important;
+    transform: scale(0.93) !important;
+}
+
+body.in-portal .sens-act-input-wrap {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 4px !important;
 }
 
 body.in-portal .sens-act-input {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
     color: #121214 !important;
+    font-weight: 800 !important;
+    font-size: 14.5px !important;
+    font-variant-numeric: tabular-nums !important;
+    width: 60px !important;
+    text-align: center !important;
+    padding: 0 !important;
+}
+
+body.in-portal .sens-act-input:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+body.in-portal .sens-act-unit-tag {
+    color: #77767B !important;
+    font-size: 10px !important;
     font-weight: 700 !important;
-    font-size: 15px !important;
+    margin-left: 2px !important;
 }
 
 body.in-portal .sens-act-quick-chip,
@@ -28288,11 +28389,20 @@ body.in-portal .sens-plan-next-action {
     white-space: nowrap !important;
 }
 
-/* 3. Bienvenida: Subir posición, MAKES SENS y ¿Lean, entrenamos? */
+/* 3. Bienvenida: ¿Lean, entrenamos? arriba y MAKES SENS abajo */
 body.in-portal .sens-dash-welcome-header {
     margin-top: 2px !important;
     margin-bottom: 12px !important;
     padding: 0 !important;
+}
+
+body.in-portal .sens-dash-welcome-question {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 0 2px 0 !important;
+    line-height: 1.15 !important;
 }
 
 body.in-portal .sens-dash-welcome-slogan {
@@ -28302,16 +28412,7 @@ body.in-portal .sens-dash-welcome-slogan {
     color: #77767B !important;
     text-transform: uppercase !important;
     display: block !important;
-    margin-bottom: 3px !important;
-}
-
-body.in-portal .sens-dash-welcome-question {
-    font-size: 20px !important;
-    font-weight: 700 !important;
-    color: #121214 !important;
-    letter-spacing: -0.02em !important;
     margin: 0 !important;
-    line-height: 1.15 !important;
 }
 
 /* 4. Eliminación de Eyebrows / Pills Redundantes en Cards */
@@ -28535,43 +28636,112 @@ body.in-portal .sens-5cals-chip .chip-val {
 /* 7. Balance Energético: Inputs y Steppers Redondeados (Look & Feel Cápsula) */
 body.in-portal .sens-act-stepper-control {
     border-radius: 9999px !important;
-    background: #FFFFFF !important;
-    border: 1.5px solid #E5E4E0 !important;
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
     padding: 3px !important;
     height: 36px !important;
     box-sizing: border-box !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    box-shadow: none !important;
 }
 
 body.in-portal .sens-act-stepper-btn {
-    border-radius: 9999px !important;
+    border-radius: 50% !important;
     width: 28px !important;
     height: 28px !important;
-    background: #F4F3F1 !important;
+    background: #FFFFFF !important;
     color: #121214 !important;
-    font-size: 16px !important;
+    font-size: 15px !important;
     font-weight: 700 !important;
-    border: none !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
     transition: all 0.15s ease !important;
 }
 
 body.in-portal .sens-act-stepper-btn:active {
     background: #E5CBA7 !important;
     color: #1A140A !important;
-    transform: scale(0.92) !important;
+    transform: scale(0.93) !important;
+}
+
+body.in-portal .sens-act-input-wrap {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 4px !important;
 }
 
 body.in-portal .sens-act-input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
     color: #121214 !important;
-    font-size: 14px !important;
+    font-size: 14.5px !important;
     font-weight: 800 !important;
     font-variant-numeric: tabular-nums !important;
     width: 60px !important;
     text-align: center !important;
+    padding: 0 !important;
+}
+
+body.in-portal .sens-act-input:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Botones del Modal "Pasar a Otro Día" (Pill Intercambiar y Mover Aquí) */
+body.in-portal .btn-sens-move-swap {
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(229, 203, 167, 0.8) !important;
+    border-radius: 9999px !important;
+    padding: 6px 14px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+body.in-portal .btn-sens-move-swap:hover {
+    background: #FAF9F6 !important;
+    border-color: #705B3E !important;
+}
+
+body.in-portal .btn-sens-move-select {
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    color: #1A140A !important;
+    background: #E5CBA7 !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    padding: 6px 14px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
 }
 
 body.in-portal .sens-act-quick-chip {
