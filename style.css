@@ -26778,3 +26778,622 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
         height: 22px !important;
     }
 }
+
+
+/* =============================================================================
+   SENS QUIET VITALITY LIGHT LUXURY — PORTAL ALUMNO (INICIO & MI ENTRENAMIENTO)
+   ============================================================================= */
+
+/* 1. Fondo Alabaster Base y Contenedor Principal */
+body.in-portal #app-container,
+body.in-portal {
+    background-color: #FAF9F6 !important;
+    color: #121214 !important;
+}
+
+body.in-portal .portal-content {
+    background-color: #FAF9F6 !important;
+    max-width: 1280px !important;
+    margin: 0 auto !important;
+    padding: 16px 16px 120px !important;
+}
+
+@media (min-width: 1024px) {
+    body.in-portal .portal-content {
+        padding: 32px 32px 140px !important;
+    }
+}
+
+/* 2. Saludo Somático / Bienvenida (Inicio y Entrenamiento) */
+body.in-portal .sens-dash-welcome-header {
+    background: transparent !important;
+    border: none !important;
+    padding: 8px 0 16px !important;
+    margin-bottom: 8px !important;
+    text-align: left !important;
+}
+
+body.in-portal .sens-dash-welcome-slogan {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 4px !important;
+}
+
+body.in-portal .sens-dash-welcome-question {
+    font-size: 24px !important;
+    font-weight: 300 !important;
+    color: #121214 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.25 !important;
+}
+
+@media (min-width: 1024px) {
+    body.in-portal .sens-dash-welcome-question {
+        font-size: 32px !important;
+    }
+}
+
+body.in-portal .sens-dash-welcome-question span,
+body.in-portal .sens-dash-welcome-athlete {
+    font-weight: 600 !important;
+    color: #121214 !important;
+}
+
+/* 3. Strip Semanal del Calendario (Quiet Vitality) */
+body.in-portal .sens-calendar-sticky-wrapper,
+body.in-portal #workoutCalendarStickyWrapper {
+    background: rgba(250, 249, 246, 0.88) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    padding: 8px 0 !important;
+    margin-bottom: 20px !important;
+    border: none !important;
+    position: sticky !important;
+    top: 60px !important;
+    z-index: 40 !important;
+}
+
+body.in-portal .sens-week-header-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 10px !important;
+}
+
+body.in-portal .sens-week-strip-wrap {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    padding: 6px !important;
+    box-shadow: 0 2px 12px rgba(18, 18, 20, 0.03) !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 6px !important;
+}
+
+body.in-portal .sens-week-day-pill {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 14px !important;
+    padding: 8px 2px !important;
+    text-align: center !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+body.in-portal .sens-week-day-pill:hover {
+    background: #F4F3F1 !important;
+}
+
+body.in-portal .sens-week-day-pill.active,
+body.in-portal .sens-week-day-pill.is-today {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.15) !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-name,
+body.in-portal .sens-week-day-pill.is-today .sens-day-name {
+    color: #A1A1AA !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-hero-num,
+body.in-portal .sens-week-day-pill.is-today .sens-day-hero-num {
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-day-name {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: #77767B !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    display: block !important;
+}
+
+body.in-portal .sens-day-hero-num {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    display: block !important;
+    margin-top: 2px !important;
+}
+
+/* 4. Tarjeta de Racha Somática SENS */
+body.in-portal .sens-daily-streak-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    margin-bottom: 24px !important;
+}
+
+body.in-portal .sens-streak-flame-icon {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: rgba(229, 203, 167, 0.35) !important;
+    color: #705B3E !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 0 16px rgba(251, 222, 185, 0.6) !important;
+}
+
+body.in-portal .sens-streak-hero-num {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    letter-spacing: -0.01em !important;
+}
+
+body.in-portal .sens-streak-level-tag {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #705B3E !important;
+}
+
+body.in-portal .sens-streak-status-pill {
+    background: #F4F3F1 !important;
+    color: #575659 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    padding: 4px 10px !important;
+    border: none !important;
+}
+
+body.in-portal .sens-streak-dot {
+    background: #EFEEEB !important;
+    border: none !important;
+}
+
+body.in-portal .sens-streak-dot.active {
+    background: #1E7B42 !important;
+}
+
+/* Pilares de Hábitos Diarios */
+body.in-portal .sens-pillar-item {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 14px !important;
+    padding: 10px 12px !important;
+    transition: all 0.2s ease !important;
+}
+
+body.in-portal .sens-pillar-item:hover {
+    background: #FFFFFF !important;
+    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.04) !important;
+}
+
+body.in-portal .sens-pillar-heading {
+    color: #121214 !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-pillar-metric {
+    color: #705B3E !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+/* 5. Desktop Bento Grid en Inicio */
+@media (min-width: 1024px) {
+    body.in-portal #dashView .sens-dash-cards-grid,
+    body.in-portal #dashView .sens-dash-main-bento {
+        display: grid !important;
+        grid-template-columns: 7fr 5fr !important;
+        gap: 24px !important;
+        align-items: stretch !important;
+        margin-bottom: 24px !important;
+    }
+
+    body.in-portal #dashView .dash-training-col {
+        grid-column: 1 !important;
+        margin-bottom: 0 !important;
+    }
+
+    body.in-portal #dashView .dash-nutri-col {
+        grid-column: 2 !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+/* 6. Card de Entrenamiento Principal en Inicio */
+body.in-portal .sens-training-video-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 32px rgba(18, 18, 20, 0.06) !important;
+    margin-bottom: 24px !important;
+    position: relative !important;
+}
+
+body.in-portal .sens-training-card-active,
+body.in-portal .sens-workout-active-pane {
+    position: relative !important;
+    min-height: 320px !important;
+}
+
+body.in-portal .sens-training-video-card .sens-video-overlay-gradient {
+    background: linear-gradient(to top, rgba(18, 18, 20, 0.88) 0%, rgba(18, 18, 20, 0.45) 50%, rgba(18, 18, 20, 0.1) 75%, transparent 100%) !important;
+}
+
+body.in-portal .sens-card-domain-eyebrow,
+body.in-portal .sens-workout-modality-pill {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(8px) !important;
+    color: #121214 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    border-radius: 9999px !important;
+    padding: 4px 10px !important;
+    border: none !important;
+}
+
+body.in-portal .sens-card-title-white {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #FFFFFF !important;
+    letter-spacing: -0.01em !important;
+    margin-top: 4px !important;
+}
+
+body.in-portal .sens-card-sub-white {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 400 !important;
+}
+
+/* 7. Card de Nutrición Consciente en Inicio */
+body.in-portal .sens-nutri-summary-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    margin-bottom: 24px !important;
+}
+
+body.in-portal .sens-nutri-summary-card h3,
+body.in-portal .sens-nutri-summary-card .sens-card-title {
+    color: #121214 !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal .sens-nutri-target-badge {
+    color: #121214 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-5cals-chip {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 12px !important;
+    padding: 8px 10px !important;
+    color: #575659 !important;
+    font-size: 11px !important;
+}
+
+body.in-portal .sens-5cals-chip.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+}
+
+/* 8. Card de Ecuación Metabólica & Balance */
+body.in-portal .sens-metabolic-balance-card,
+body.in-portal .sens-objective-card,
+body.in-portal #dashObjectiveCard {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    margin-bottom: 24px !important;
+}
+
+body.in-portal .sens-balance-title {
+    color: #121214 !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal .sens-balance-net-box {
+    background: #F4F3F1 !important;
+    border: none !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    margin: 12px 0 !important;
+}
+
+body.in-portal .sens-balance-triptych .sens-triptych-val {
+    color: #121214 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-balance-status-text {
+    color: #575659 !important;
+    font-size: 12px !important;
+}
+
+/* 9. Mi Entrenamiento (#workoutView) */
+body.in-portal .sens-workout-summary-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.04) !important;
+    margin-bottom: 20px !important;
+}
+
+body.in-portal .sens-workout-summary-card h3,
+body.in-portal #heroWorkoutTitle {
+    color: #121214 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+}
+
+body.in-portal #workoutSummaryDayTag {
+    color: #705B3E !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal .sens-workout-metrics-subwell,
+body.in-portal .sens-workout-summary-metrics {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.05) !important;
+    border-radius: 16px !important;
+    padding: 12px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    margin: 12px 0 !important;
+}
+
+body.in-portal .sens-workout-metrics-subwell .metric-val,
+body.in-portal #metricValExercises,
+body.in-portal #metricValMinutes,
+body.in-portal #metricValKcal {
+    color: #121214 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-workout-metrics-subwell .metric-label {
+    color: #77767B !important;
+    font-size: 10px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+/* Card de Asistencia de Sesión */
+body.in-portal .btn-workout-attended {
+    background: #1E7B42 !important;
+    color: #FFFFFF !important;
+    border-radius: 9999px !important;
+    padding: 8px 18px !important;
+    font-weight: 700 !important;
+    border: none !important;
+    font-size: 12px !important;
+}
+
+body.in-portal .btn-workout-missed {
+    background: #FAF9F6 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 9999px !important;
+    padding: 8px 18px !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+}
+
+/* Directiva Biomecánica de Nico */
+body.in-portal #workoutCoachDailyNoteCard {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-left: 5px solid #E5CBA7 !important;
+    border-radius: 18px !important;
+    padding: 16px 18px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03) !important;
+    margin-bottom: 20px !important;
+}
+
+body.in-portal #workoutCoachDailyNoteCard .coach-directive-title {
+    color: #705B3E !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal #workoutCoachDailyNoteBody {
+    color: #121214 !important;
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+}
+
+/* Filtros de Grupo Muscular */
+body.in-portal .workout-muscle-filter-btn {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.04) !important;
+    color: #575659 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 7px 16px !important;
+    border-radius: 9999px !important;
+    transition: all 0.2s ease !important;
+}
+
+body.in-portal .workout-muscle-filter-btn.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    border-color: #121214 !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.12) !important;
+}
+
+/* 10. Tarjetas de Ejercicios del Día */
+body.in-portal .sens-ex-compact-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.04) !important;
+    transition: all 0.25s ease !important;
+    margin-bottom: 16px !important;
+}
+
+body.in-portal .sens-ex-compact-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 30px rgba(18, 18, 20, 0.08) !important;
+}
+
+body.in-portal .sens-ex-compact-card .sens-ex-compact-name {
+    color: #121214 !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+}
+
+body.in-portal .sens-ex-compact-card .sens-ex-compact-badge {
+    background: rgba(229, 203, 167, 0.25) !important;
+    color: #705B3E !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    padding: 3px 8px !important;
+}
+
+body.in-portal .sens-ex-compact-card .sens-ex-compact-series-info {
+    color: #575659 !important;
+    font-size: 12px !important;
+}
+
+/* Desktop Grid de Ejercicios en Entrenamiento */
+@media (min-width: 1024px) {
+    body.in-portal #exercisesContainer {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 20px !important;
+    }
+
+    body.in-portal .sens-workout-type-section,
+    body.in-portal .sens-workout-muscle-group-block {
+        grid-column: 1 / -1 !important;
+    }
+
+    body.in-portal .sens-workout-carousel {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 16px !important;
+        overflow-x: visible !important;
+    }
+}
+
+/* 11. Modal de Detalle y Ejecución de Ejercicio */
+body.in-portal .sens-exercise-modal-sheet {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 28px 28px 0 0 !important;
+    box-shadow: 0 -10px 40px rgba(18, 18, 20, 0.15) !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet h2,
+body.in-portal .sens-exercise-modal-sheet h3,
+body.in-portal .sens-exercise-modal-sheet h4,
+body.in-portal #modalExName {
+    color: #121214 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-exercise-sheet-drag-handle {
+    background: #E3E2E0 !important;
+}
+
+body.in-portal .sens-master-timer-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 18px !important;
+    text-align: center !important;
+    margin: 16px 0 !important;
+}
+
+body.in-portal #masterTimerDisplay {
+    color: #121214 !important;
+    font-size: 36px !important;
+    font-weight: 700 !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+body.in-portal .sens-tactile-set-row {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 12px !important;
+    color: #121214 !important;
+    margin-bottom: 8px !important;
+}
+
+body.in-portal .sens-tactile-set-row.completed {
+    background: #EAF6EE !important;
+    border-color: rgba(30, 123, 66, 0.3) !important;
+}
+
+body.in-portal .sens-set-label {
+    color: #121214 !important;
+    font-weight: 700 !important;
+}
+
+/* 12. Empty State de Rutina */
+body.in-portal .sens-empty-state-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-empty-state-card h3,
+body.in-portal .sens-empty-state-card h4,
+body.in-portal .sens-empty-state-title {
+    color: #121214 !important;
+}
+
+body.in-portal .sens-empty-state-card p,
+body.in-portal .sens-empty-state-desc {
+    color: #575659 !important;
+}

@@ -125,7 +125,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=14.6">
+    <link rel="stylesheet" href="style.css?v=14.7">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2840,13 +2840,16 @@
             <section class="portal-view" id="dashView">
                 <!-- 0. Saludo Personalizado de Bienvenida -->
                 <div class="sens-dash-welcome-header" id="sensDashWelcomeHeader">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
+                        <span id="dashCircadianDate" style="font-size: 11px; font-weight: 500; color: #77767B;"></span>
+                    </div>
                     <div class="sens-dash-welcome-question">
-                        <span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, ¿entrenamos
-                        juntos hoy?
+                        <span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, <span style="font-weight: 300; font-style: italic;">¿entrenamos</span> juntos hoy?
                     </div>
-                    <div class="sens-dash-welcome-slogan">
-                        MAKES SENS.
-                    </div>
+                    <p style="font-size: 12.5px; color: #575659; margin-top: 4px; font-weight: 400; margin-bottom: 0;">
+                        Tu ventana neuromuscular óptima está lista.
+                    </p>
                 </div>
 
                 <!-- 0.1. Pill Sutil de Prueba Gratuita (7 Días) & Viral Loop (Inyectada por checkUserAccessStatus) -->
@@ -3140,7 +3143,9 @@
                     </div>
                 </div>
 
-                <!-- 2. Card de Entrenamiento Dinámica con Video & Foco Muscular Automático -->
+                <!-- Contenedor Bento Grid 2 Columnas en Desktop (Quiet Vitality) -->
+                <div class="sens-dash-cards-grid">
+                    <!-- 2. Card de Entrenamiento Dinámica con Video & Foco Muscular Automático -->
                 <div class="sens-training-video-card" id="dashTrainingVideoCard">
                     <!-- Estado A: Con Entrenamiento Programado para el Día Seleccionado -->
                     <div class="sens-training-card-active" id="dashWorkoutActivePane">
@@ -3379,6 +3384,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
 
                 <!-- 4. Card de Balance Energético Diario: Ecuación Real + Gráfico Semanal (Quiet Luxury Obsidian) -->
@@ -3724,13 +3730,16 @@
             <section class="portal-view" id="workoutView">
                 <!-- 0. Saludo Personalizado de Bienvenida (Idéntico a Inicio) -->
                 <div class="sens-dash-welcome-header" id="workoutWelcomeHeader">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span class="sens-dash-welcome-slogan">SENS WORKOUT • FASE ACTIVA</span>
+                        <span id="workoutCircadianDate" style="font-size: 11px; font-weight: 500; color: #77767B;"></span>
+                    </div>
                     <div class="sens-dash-welcome-question">
-                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, ¿entrenamos
-                        juntos hoy?
+                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, <span style="font-weight: 300; font-style: italic;">¿entrenamos</span> juntos hoy?
                     </div>
-                    <div class="sens-dash-welcome-slogan">
-                        MAKES SENS.
-                    </div>
+                    <p style="font-size: 12.5px; color: #575659; margin-top: 4px; font-weight: 400; margin-bottom: 0;">
+                        Fase 2 • Hipertrofia Funcional &amp; Estabilidad
+                    </p>
                 </div>
 
                 <!-- 1. Cuadro Resumen Ligero de la Sesión y Registro de Asistencia -->

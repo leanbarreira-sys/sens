@@ -4316,6 +4316,13 @@ function renderDashboardData() {
     if (greetingNameEl) {
         greetingNameEl.textContent = firstName;
     }
+    const dashCircadianEl = document.getElementById('dashCircadianDate');
+    if (dashCircadianEl) {
+        const now = new Date();
+        const options = { weekday: 'long', day: 'numeric', month: 'long' };
+        let dateStr = now.toLocaleDateString('es-ES', options);
+        dashCircadianEl.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+    }
     if (userNameEl && profile.full_name) {
         userNameEl.textContent = profile.full_name;
     }
@@ -6972,6 +6979,12 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     const athleteName = (AppState.profile?.full_name || AppState.profile?.name || AppState.user?.email?.split('@')[0] || 'Atleta').trim().split(' ')[0] || 'Atleta';
     if (greetingAthleteName) {
         greetingAthleteName.textContent = athleteName;
+    }
+    const workoutCircadianEl = document.getElementById('workoutCircadianDate');
+    if (workoutCircadianEl) {
+        const options = { weekday: 'long', day: 'numeric', month: 'long' };
+        let dateStr = effectiveDate.toLocaleDateString('es-ES', options);
+        workoutCircadianEl.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
     }
 
     // Caso 1: Usuario nuevo sin rutina asignada por Nico
