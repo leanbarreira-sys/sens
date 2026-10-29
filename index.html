@@ -125,7 +125,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=14.5">
+    <link rel="stylesheet" href="style.css?v=14.6">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -974,18 +974,16 @@
     <div class="modal-overlay" id="authModal">
         <div class="modal-card">
             <button class="modal-close-btn" id="closeAuthModalBtn" aria-label="Cerrar">&times;</button>
-            <img src="img/logo-NEGRO.png" alt="SENS TRAIN & WELLNESS" class="brand-logo-img-modal">
-            <div style="font-size: 0.95rem; color: #FFFFFF; font-weight: 300; letter-spacing: 1px; margin-top: 10px;">
-                ¿Entrenamos juntos?</div>
-            <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent-primary); letter-spacing: 2.5px;">MAKE
-                SENS.</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 300; margin-top: 4px;">Acceso exclusivo
-                para alumnos y atletas de Nico</p>
+            <img src="img/logo-NEGRO.png" alt="SENS TRAIN & WELLNESS" class="brand-logo-img-modal" style="height: 22px; width: auto; margin: 0 auto 10px; display: block;">
+            
+            <div class="auth-eyebrow-tag">PORTAL PRIVADO SENS</div>
+            <h2 class="auth-modal-title">¿Entrenamos juntos? <strong>MAKE SENS.</strong></h2>
+            <p class="auth-modal-desc">Acceso exclusivo para alumnos y atletas de Nico</p>
 
-            <!-- Selector de Pestañas -->
+            <!-- Selector de Pestañas Estilo Cápsula (Quiet Vitality) -->
             <div class="auth-tabs">
-                <button class="auth-tab active" id="tabLoginBtn">Iniciar Sesión</button>
-                <button class="auth-tab" id="tabRegisterBtn">Registrarme</button>
+                <button type="button" class="auth-tab active" id="tabLoginBtn">Iniciar Sesión</button>
+                <button type="button" class="auth-tab" id="tabRegisterBtn">Registrarme</button>
             </div>
 
             <!-- Alerta de Feedback -->
@@ -994,23 +992,22 @@
             <!-- Vista 1: Login Form -->
             <form class="auth-pane active" id="loginForm">
                 <div class="input-group">
-                    <label class="input-label" for="loginEmail">Email</label>
+                    <label class="input-label" for="loginEmail">Email Personal</label>
                     <input type="email" id="loginEmail" class="input-control" placeholder="tu@email.com" required
                         autocomplete="username">
                 </div>
                 <div class="input-group">
-                    <label class="input-label" for="loginPassword">Contraseña</label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="input-label" for="loginPassword" style="margin-bottom: 0;">Contraseña</label>
+                        <button type="button" id="btnForgotPass" class="btn-link-forgot">
+                            ¿Olvidaste tu contraseña?
+                        </button>
+                    </div>
                     <input type="password" id="loginPassword" class="input-control" placeholder="••••••••" required
                         autocomplete="current-password">
                 </div>
-                <div style="display: flex; justify-content: flex-end; margin-top: -6px; margin-bottom: 14px;">
-                    <button type="button" id="btnForgotPass" class="btn-link-forgot"
-                        style="background: none; border: none; color: var(--accent-primary); font-size: 11.5px; cursor: pointer; text-decoration: underline; padding: 0;">
-                        ¿Olvidaste tu contraseña?
-                    </button>
-                </div>
                 <button type="submit" class="btn btn-primary btn-full" id="submitLoginBtn">Ingresar a mi Portal</button>
-                <p style="margin-top: 16px; font-size: 11px; color: var(--text-muted); text-align: center;">
+                <p class="auth-subnote">
                     ¿Primer día? Si ya coordinaste tu inicio con Nico, seleccioná <strong>Registrarme</strong>.
                 </p>
             </form>
@@ -1031,18 +1028,15 @@
                     <input type="password" id="regPassword" class="input-control" placeholder="Mínimo 6 caracteres"
                         minlength="6" required autocomplete="new-password">
                 </div>
-                <button type="submit" class="btn btn-primary btn-full" id="submitRegBtn">Crear Cuenta &amp;
-                    Comenzar</button>
-                <p
-                    style="margin-top: 14px; font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.4;">
-                    Si ya coordinaste tu inicio con Nico, creá tu cuenta con el mismo email para acceder a tu plan y
-                    ficha biomecánica.
+                <button type="submit" class="btn btn-primary btn-full" id="submitRegBtn">Crear Cuenta &amp; Comenzar</button>
+                <p class="auth-subnote">
+                    Si ya coordinaste tu inicio con Nico, creá tu cuenta con el mismo email para acceder a tu plan y ficha biomecánica.
                 </p>
             </form>
 
             <!-- Vista 3: Forgot Password Form -->
             <form class="auth-pane" id="forgotPassForm">
-                <div style="margin-bottom: 16px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                <div style="margin-bottom: 16px; font-size: 12.5px; color: #575659; line-height: 1.5; text-align: left;">
                     Ingresá el email de tu cuenta y te enviaremos un enlace seguro para restablecer tu contraseña.
                 </div>
                 <div class="input-group">
@@ -1050,16 +1044,14 @@
                     <input type="email" id="forgotEmail" class="input-control" placeholder="tu@email.com" required
                         autocomplete="username">
                 </div>
-                <button type="submit" class="btn btn-primary btn-full" id="submitForgotBtn">Enviar Enlace de
-                    Recuperación</button>
-                <div
-                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 11.5px;">
+                <button type="submit" class="btn btn-primary btn-full" id="submitForgotBtn">Enviar Enlace de Recuperación</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 11.5px;">
                     <button type="button" id="btnBackToLoginFromForgot"
-                        style="background: none; border: none; color: var(--text-muted); font-size: 11.5px; cursor: pointer; padding: 0;">
+                        style="background: none; border: none; color: #575659; font-size: 11.5px; cursor: pointer; padding: 0;">
                         ← Volver a Iniciar Sesión
                     </button>
                     <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Olvid%C3%A9%20mi%20contrase%C3%B1a%20en%20SENS%20y%20necesito%20acceder."
-                        target="_blank" rel="noopener" style="color: var(--accent-primary); text-decoration: none;">
+                        target="_blank" rel="noopener" style="color: #705B3E; text-decoration: none; font-weight: 600;">
                         Ayuda por WhatsApp →
                     </a>
                 </div>
@@ -1067,11 +1059,10 @@
 
             <!-- Vista 4: Establecer Nueva Contraseña (Recovery Flow de Supabase) -->
             <form class="auth-pane" id="updatePasswordForm">
-                <div
-                    style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; letter-spacing: 0.5px; margin-bottom: 6px;">
+                <div style="font-size: 1.05rem; font-weight: 700; color: #121214; letter-spacing: -0.01em; margin-bottom: 6px; text-align: left;">
                     Establecer Nueva Contraseña
                 </div>
-                <div style="margin-bottom: 16px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                <div style="margin-bottom: 16px; font-size: 12.5px; color: #575659; line-height: 1.5; text-align: left;">
                     Ingresá y confirmá tu nueva clave para acceder a tu cuenta y portal SENS.
                 </div>
                 <div class="input-group">

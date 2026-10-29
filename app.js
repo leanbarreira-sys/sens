@@ -3297,7 +3297,13 @@ async function checkExistingSession() {
             } else if (portalActive) {
                 // El portal ya se abrió síncronamente al inicio; sincronizamos con los datos del perfil
                 const isAdmin = isCurrentUserAdmin();
-                const isOnboardingDone = Boolean(AppState.profile && AppState.profile.onboarding_completed);
+                const uEmail = (AppState.user && AppState.user.email) ? AppState.user.email : '';
+                const isOnboardingDone = Boolean(
+                    (AppState.profile && AppState.profile.onboarding_completed) ||
+                    localStorage.getItem('sens_onboarding_completed_global') === 'true' ||
+                    localStorage.getItem('sens_skip_onboarding_temp') === 'true' ||
+                    (uEmail && localStorage.getItem(`sens_onboarding_completed_${uEmail}`) === 'true')
+                );
                 if (!isAdmin && !isOnboardingDone) {
                     startDiagnosisWizard(false);
                 } else {
@@ -4218,8 +4224,13 @@ function openUserPortal(forceOnboarding = false) {
     // Si el perfil aún está resolviéndose desde Supabase, entrar directo al Dashboard (dashView)
     // para evitar congelar la interfaz o atrapar al usuario en una pantalla bloqueada al refrescar.
     const isProfileReady = Boolean(profile && profile.id);
-    const isOnboardingDone = Boolean(profile && profile.onboarding_completed);
-    const mustDoOnboarding = !isAdmin && (forceOnboarding || (isProfileReady && profile.onboarding_completed === false && !localStorage.getItem('sens_skip_onboarding_temp')));
+    const isOnboardingDone = Boolean(
+        profile.onboarding_completed ||
+        localStorage.getItem('sens_onboarding_completed_global') === 'true' ||
+        localStorage.getItem('sens_skip_onboarding_temp') === 'true' ||
+        (realEmail && localStorage.getItem(`sens_onboarding_completed_${realEmail}`) === 'true')
+    );
+    const mustDoOnboarding = !isAdmin && (forceOnboarding || (isProfileReady && profile.onboarding_completed === false && !isOnboardingDone));
 
     if (mustDoOnboarding) {
         const subNav = document.getElementById('portalSubNav');
@@ -5341,8 +5352,29 @@ async function processDiagnosisSubmission() {
         details: `Edad: ${age || '-'} años | Peso: ${weight || '-'}kg | Altura: ${height || '-'}cm | Pasos diarios recomendados: ${calculatedStepTarget} | Frecuencia: ${weeklyFrequency}x/sem | Micro-hábitos y expediente listos para calibración.`
     }).catch(() => {});
 
-    // Avanzar a la pantalla de felicitaciones (Paso 9)
-    window.diagWizardGoStep(9, '¡Diagnóstico completado con éxito!');
+    // Finalizar formalmente el onboarding y transicionar directamente al Dashboard (Inicio)
+    try {
+        localStorage.setItem('sens_onboarding_completed_global', 'true');
+        localStorage.setItem('sens_skip_onboarding_temp', 'true');
+        if (AppState.user && AppState.user.email) {
+            localStorage.setItem(`sens_onboarding_completed_${AppState.user.email}`, 'true');
+        }
+    } catch (_) {}
+
+    const onboardingSec = document.getElementById('onboardingSection');
+    if (onboardingSec) {
+        onboardingSec.classList.remove('active');
+        onboardingSec.style.display = 'none';
+    }
+
+    const subNav = document.getElementById('portalSubNav');
+    if (subNav) subNav.style.display = 'flex';
+    
+    renderDashboardData();
+    renderWorkoutDay(AppState.currentDay || 'day1');
+    switchPortalView('dashView');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    showSensToast('¡Diagnóstico guardado con éxito! Bienvenido a tu espacio de entrenamiento.', 'success');
 }
 
 // Temporizador regresivo (deprecado en favor de compromiso estático de Nico en 24h)
