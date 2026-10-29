@@ -144,6 +144,279 @@ if (isSupabaseConfigured) {
     console.log('[SENS] Modo Demo Activo (LocalStorage). La aplicación funciona al 100% de manera autónoma.');
 }
 
+/**
+ * =============================================================================
+ * SENS CLOUD SYNC ENGINE — PERSISTENCIA ATÓMICA EN SUPABASE & ZERO DATA LOSS
+ * =============================================================================
+ * Sincroniza y restaura permanentemente en Supabase (public.daily_logs & profiles):
+ * - Ejercicios (completados, profesor, autónomos) y calorías quemadas.
+ * - Nutrición (alimentos consumidos, recetas personalizadas, macros y calorías).
+ * - Pasos y actividades de cardio por día.
+ * - Rachas históricas inmutables con motivos de cumplimiento o pérdida.
+ * - Comentarios e intercambios de feedback entre Nico y el atleta.
+ */
+const SensCloudSyncEngine = {
+    _syncDebounceTimers: {},
+
+    async syncDailyToSupabase(athId, dateKey, immediateData = {}) {
+        if (!supabaseClient) return null;
+        let targetId = athId;
+        if (!targetId || targetId === 'mock_vip') {
+            if (AppState.user && AppState.user.id) {
+                targetId = AppState.user.id;
+            } else {
+                return null;
+            }
+        }
+
+        const dateIso = (typeof getFormattedDateKey === 'function')
+            ? getFormattedDateKey(dateKey)
+            : (dateKey instanceof Date ? dateKey.toISOString().split('T')[0] : String(dateKey));
+
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateIso)) return null;
+
+        // Cancelar debounce previo para esta fecha si existe
+        if (this._syncDebounceTimers[dateIso]) {
+            clearTimeout(this._syncDebounceTimers[dateIso]);
+        }
+
+        return new Promise((resolve) => {
+            this._syncDebounceTimers[dateIso] = setTimeout(async () => {
+                try {
+                    // 1. Actividad (Pasos & Cardio)
+                    let actLog = (typeof getAthleteActivityLog === 'function')
+                        ? getAthleteActivityLog(targetId, dateIso)
+                        : null;
+                    if (!actLog) {
+                        try {
+                            const rawAct = localStorage.getItem(`sens_daily_activity_v2_${targetId}`);
+                            if (rawAct) {
+                                const parsedAct = JSON.parse(rawAct);
+                                actLog = parsedAct[dateIso] || null;
+                            }
+                        } catch (_) {}
+                    }
+                    const steps = immediateData.steps ?? (actLog?.steps || 0);
+                    const cardioMinutes = immediateData.cardioMinutes ?? (actLog?.cardioMinutes || 0);
+                    const cardioType = immediateData.cardioType ?? (actLog?.cardioType || 'caminata');
+                    const cardioRate = immediateData.cardioRate ?? (actLog?.cardioRate || 6.5);
+                    const cardioCalories = immediateData.cardioCalories ?? Math.round((steps * 0.04) + (cardioMinutes * cardioRate));
+
+                    // 2. Entrenamiento (Ejercicios prescriptos / autónomos / completados)
+                    let executions = {};
+                    try {
+                        executions = JSON.parse(localStorage.getItem(`sens_daily_workout_execution_${targetId}`) || '{}');
+                    } catch (_) {}
+                    const workoutExec = immediateData.workout || executions[dateIso] || null;
+
+                    // 3. Nutrición (Alimentos consumidos, recetas, calorías)
+                    let consumedFoods = {};
+                    try {
+                        consumedFoods = JSON.parse(localStorage.getItem(`sens_user_consumed_foods_${targetId}_${dateIso}`) || '{}');
+                    } catch (_) {}
+                    let customMeals = [];
+                    try {
+                        customMeals = JSON.parse(localStorage.getItem(`sens_user_logged_meals_${targetId}_${dateIso}`) || '[]');
+                    } catch (_) {}
+                    let userAdjusted = {};
+                    try {
+                        userAdjusted = JSON.parse(localStorage.getItem(`sens_user_adjusted_meals_${targetId}_${dateIso}`) || '{}');
+                    } catch (_) {}
+
+                    let caloriesConsumed = immediateData.caloriesConsumed;
+                    if (caloriesConsumed === undefined || caloriesConsumed === null) {
+                        const rawCals = localStorage.getItem(`sens_cals_${dateIso}`);
+                        if (rawCals !== null && !isNaN(parseInt(rawCals, 10))) {
+                            caloriesConsumed = parseInt(rawCals, 10);
+                        } else if (typeof getAthleteConsumedCalories === 'function') {
+                            caloriesConsumed = getAthleteConsumedCalories(targetId, dateIso);
+                        } else {
+                            caloriesConsumed = 0;
+                        }
+                    }
+
+                    // 4. Racha Diaria (SensDailyStreakManager)
+                    let streakRecords = {};
+                    try {
+                        streakRecords = JSON.parse(localStorage.getItem(`sens_streak_daily_records_v3_${targetId}`) || '{}');
+                    } catch (_) {}
+                    const streakRecord = immediateData.streak || streakRecords[dateIso] || null;
+
+                    // 5. Comentarios y notas de Nico para este día
+                    let coachComments = [];
+                    try {
+                        coachComments = JSON.parse(localStorage.getItem(`sens_coach_comments_${targetId}_${dateIso}`) || '[]');
+                    } catch (_) {}
+                    if (immediateData.coachComment) {
+                        coachComments.push(immediateData.coachComment);
+                        try {
+                            localStorage.setItem(`sens_coach_comments_${targetId}_${dateIso}`, JSON.stringify(coachComments));
+                        } catch (_) {}
+                    }
+
+                    const structuredNotes = {
+                        v: 3,
+                        syncTimestamp: new Date().toISOString(),
+                        cardio: {
+                            steps,
+                            cardioMinutes,
+                            cardioType,
+                            cardioRate,
+                            cardioCalories
+                        },
+                        workout: workoutExec,
+                        nutrition: {
+                            caloriesConsumed,
+                            consumedFoods,
+                            customMeals,
+                            userAdjusted
+                        },
+                        streak: streakRecord,
+                        coachComments: coachComments
+                    };
+
+                    const payload = {
+                        user_id: targetId,
+                        log_date: dateIso,
+                        steps_count: steps,
+                        steps: steps,
+                        calories_consumed: caloriesConsumed,
+                        habits_completed: streakRecord || {},
+                        notes: JSON.stringify(structuredNotes)
+                    };
+
+                    const { data, error } = await supabaseClient
+                        .from('daily_logs')
+                        .upsert(payload, { onConflict: 'user_id,log_date' })
+                        .select();
+
+                    if (error) {
+                        console.warn('[SensCloudSyncEngine] Error al sincronizar daily_log con Supabase:', error.message);
+                        resolve(null);
+                    } else {
+                        console.log(`[SensCloudSyncEngine] ✓ Sincronizado permanentemente en Supabase para ${dateIso}`);
+                        resolve(data);
+                    }
+                } catch (e) {
+                    console.warn('[SensCloudSyncEngine] Excepción en syncDailyToSupabase:', e);
+                    resolve(null);
+                }
+            }, 300);
+        });
+    },
+
+    async hydrateAthleteCloudHistory(athId) {
+        if (!supabaseClient) return false;
+        let targetId = athId;
+        if (!targetId || targetId === 'mock_vip') {
+            if (AppState.user && AppState.user.id) {
+                targetId = AppState.user.id;
+            } else {
+                return false;
+            }
+        }
+
+        try {
+            console.log('[SensCloudSyncEngine] Hidratando historial completo del atleta desde Supabase...', targetId);
+            const { data: logs, error } = await supabaseClient
+                .from('daily_logs')
+                .select('*')
+                .eq('user_id', targetId)
+                .order('log_date', { ascending: true });
+
+            if (error || !Array.isArray(logs) || logs.length === 0) {
+                console.log('[SensCloudSyncEngine] No se encontraron daily_logs previos en Supabase.');
+                return false;
+            }
+
+            let actStore = {};
+            try { actStore = JSON.parse(localStorage.getItem(`sens_daily_activity_v2_${targetId}`) || '{}'); } catch (_) {}
+
+            let workoutStore = {};
+            try { workoutStore = JSON.parse(localStorage.getItem(`sens_daily_workout_execution_${targetId}`) || '{}'); } catch (_) {}
+
+            let completedDates = [];
+            try { completedDates = JSON.parse(localStorage.getItem('sens_completed_workout_dates') || '[]'); } catch (_) {}
+
+            let streakStore = {};
+            try { streakStore = JSON.parse(localStorage.getItem(`sens_streak_daily_records_v3_${targetId}`) || '{}'); } catch (_) {}
+
+            logs.forEach(row => {
+                const dKey = row.log_date;
+                if (!dKey) return;
+
+                let parsed = null;
+                if (row.notes && typeof row.notes === 'string' && (row.notes.startsWith('{') || row.notes.startsWith('['))) {
+                    try { parsed = JSON.parse(row.notes); } catch (_) {}
+                }
+
+                // 1. Hidratar Pasos y Cardio
+                const steps = (parsed?.cardio?.steps !== undefined) ? Number(parsed.cardio.steps) : (Number(row.steps_count) || Number(row.steps) || 0);
+                const cardioMinutes = Number(parsed?.cardio?.cardioMinutes) || 0;
+                const cardioType = parsed?.cardio?.cardioType || 'caminata';
+                const cardioRate = Number(parsed?.cardio?.cardioRate) || 6.5;
+
+                actStore[dKey] = {
+                    steps,
+                    cardioMinutes,
+                    cardioType,
+                    cardioRate,
+                    isLogged: (steps > 0 || cardioMinutes > 0),
+                    savedAt: parsed?.syncTimestamp || new Date().toISOString()
+                };
+
+                // 2. Hidratar Entrenamiento
+                if (parsed?.workout) {
+                    workoutStore[dKey] = parsed.workout;
+                    if (parsed.workout.completed && !completedDates.includes(dKey)) {
+                        completedDates.push(dKey);
+                    }
+                }
+
+                // 3. Hidratar Nutrición
+                const cals = (parsed?.nutrition?.caloriesConsumed !== undefined)
+                    ? Number(parsed.nutrition.caloriesConsumed)
+                    : (Number(row.calories_consumed) || 0);
+                if (cals > 0) {
+                    try { localStorage.setItem(`sens_cals_${dKey}`, cals); } catch (_) {}
+                }
+                if (parsed?.nutrition?.consumedFoods) {
+                    try { localStorage.setItem(`sens_user_consumed_foods_${targetId}_${dKey}`, JSON.stringify(parsed.nutrition.consumedFoods)); } catch (_) {}
+                }
+                if (parsed?.nutrition?.customMeals) {
+                    try { localStorage.setItem(`sens_user_logged_meals_${targetId}_${dKey}`, JSON.stringify(parsed.nutrition.customMeals)); } catch (_) {}
+                }
+                if (parsed?.nutrition?.userAdjusted) {
+                    try { localStorage.setItem(`sens_user_adjusted_meals_${targetId}_${dKey}`, JSON.stringify(parsed.nutrition.userAdjusted)); } catch (_) {}
+                }
+
+                // 4. Hidratar Racha
+                const streakRec = parsed?.streak || row.habits_completed;
+                if (streakRec && typeof streakRec === 'object') {
+                    streakStore[dKey] = streakRec;
+                }
+
+                // 5. Hidratar Comentarios de Nico
+                if (parsed?.coachComments && Array.isArray(parsed.coachComments)) {
+                    try { localStorage.setItem(`sens_coach_comments_${targetId}_${dKey}`, JSON.stringify(parsed.coachComments)); } catch (_) {}
+                }
+            });
+
+            localStorage.setItem(`sens_daily_activity_v2_${targetId}`, JSON.stringify(actStore));
+            localStorage.setItem(`sens_daily_workout_execution_${targetId}`, JSON.stringify(workoutStore));
+            localStorage.setItem('sens_completed_workout_dates', JSON.stringify(completedDates));
+            localStorage.setItem(`sens_streak_daily_records_v3_${targetId}`, JSON.stringify(streakStore));
+
+            console.log(`[SensCloudSyncEngine] ¡Historial de ${logs.length} días restaurado exitosamente desde Supabase!`);
+            return true;
+        } catch (err) {
+            console.error('[SensCloudSyncEngine] Error durante hidratación de historial:', err);
+            return false;
+        }
+    }
+};
+window.SensCloudSyncEngine = SensCloudSyncEngine;
+
 // Helpers de fechas para navegación de calendario (pasado y futuro)
 function getMonday(d) {
     const date = new Date(d);
@@ -3147,6 +3420,11 @@ async function loadProfileFromSupabase(userId) {
             try {
                 localStorage.setItem('sens_active_anamnesis', JSON.stringify(anamData));
             } catch (_) {}
+        }
+
+        // Hidratar historial completo de daily_logs (ejercicios, nutrición, pasos, rachas)
+        if (typeof SensCloudSyncEngine !== 'undefined') {
+            await SensCloudSyncEngine.hydrateAthleteCloudHistory(userId);
         }
     } catch (e) {
         console.error('Error cargando perfil:', e);
@@ -6369,6 +6647,12 @@ function saveAthleteWorkoutExecution(athId, targetDate, executionUpdate) {
         }
         localStorage.setItem('sens_completed_workout_dates', JSON.stringify(stored));
     } catch (e) {}
+
+    if (typeof SensCloudSyncEngine !== 'undefined') {
+        SensCloudSyncEngine.syncDailyToSupabase(athId, dateIso, {
+            workout: merged
+        });
+    }
 
     return merged;
 }
@@ -14504,6 +14788,9 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
         if (typeof showSensToast === 'function') showSensToast('✓ Registrado como consumido hoy.', 'champagne', 2000);
     }
     localStorage.setItem(logKey, JSON.stringify(loggedFoods));
+    if (typeof SensCloudSyncEngine !== 'undefined') {
+        SensCloudSyncEngine.syncDailyToSupabase(athId, dateIso);
+    }
 
     renderMemberNutritionPlan(athId, sDate);
     renderNutriDaysNav();
@@ -15000,6 +15287,9 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             AppState.dailyNutrition.carbs = Math.round(totalConsumedCarbs);
             AppState.dailyNutrition.fats = Math.round(totalConsumedFats);
             localStorage.setItem('sens_daily_nutrition', JSON.stringify(AppState.dailyNutrition));
+        }
+        if (typeof SensCloudSyncEngine !== 'undefined') {
+            SensCloudSyncEngine.syncDailyToSupabase(athId, dateIso, { caloriesConsumed: totalConsumedKcal });
         }
     } catch (e) {}
 
@@ -18996,6 +19286,14 @@ function saveAthleteActivityLog(athId, dateKey, data) {
             savedAt: new Date().toISOString()
         };
         localStorage.setItem(`${SENS_ACTIVITY_STORAGE_PREFIX}_${athId}`, JSON.stringify(store));
+        if (typeof SensCloudSyncEngine !== 'undefined') {
+            SensCloudSyncEngine.syncDailyToSupabase(athId, dateKey, {
+                steps: Number(data.steps) || 0,
+                cardioMinutes: Number(data.cardioMinutes) || 0,
+                cardioType: data.cardioType || 'caminata',
+                cardioRate: Number(data.cardioRate) || 6.5
+            });
+        }
     } catch (e) {}
 }
 window.saveAthleteActivityLog = saveAthleteActivityLog;
@@ -19037,6 +19335,12 @@ const SensDailyStreakManager = {
     saveAllRecords(athId, records) {
         try {
             localStorage.setItem(this.getStorageKey(athId), JSON.stringify(records));
+            if (typeof SensCloudSyncEngine !== 'undefined') {
+                const todayIso = (typeof getFormattedDateKey === 'function') ? getFormattedDateKey(new Date()) : new Date().toISOString().split('T')[0];
+                if (records && records[todayIso]) {
+                    SensCloudSyncEngine.syncDailyToSupabase(athId, todayIso, { streak: records[todayIso] });
+                }
+            }
         } catch (e) {}
     },
 
@@ -22684,40 +22988,18 @@ window.initCoachMarketingStudio = function() {
         });
     }
 
-    // Helper Universal para Exportación de Canvas (Web Share en Mobile, Blob Download en Desktop)
+    // Exportación directa UHD (2160px) a archivos del dispositivo (CERO desvíos a WhatsApp)
     async function exportMarketingCanvasPiece(canvas, fileName) {
         return new Promise((resolve) => {
             try {
-                canvas.toBlob(async (blob) => {
+                canvas.toBlob((blob) => {
                     if (!blob) {
-                        showSensToast('Error al generar el archivo de imagen.', 'error');
+                        showSensToast('Error al generar la imagen UHD.', 'error');
                         resolve(false);
                         return;
                     }
 
-                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || ('ontouchstart' in window);
-                    const file = new File([blob], fileName, { type: 'image/png' });
-
-                    // Si es mobile y soporta Web Share con archivos, abrir Share Sheet nativo (Guardar en Fotos / Compartir a IG)
-                    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
-                        try {
-                            await navigator.share({
-                                files: [file],
-                                title: 'SENS Studio HD',
-                                text: 'Pieza editorial SENS generada en alta definición.'
-                            });
-                            showSensToast('¡Pieza compartida / guardada en Fotos con éxito!', 'champagne');
-                            resolve(true);
-                            return;
-                        } catch (shareErr) {
-                            if (shareErr.name === 'AbortError') {
-                                resolve(true);
-                                return;
-                            }
-                        }
-                    }
-
-                    // Descarga estándar mediante Object URL insertado en DOM
+                    // Descarga directa obligatoria a Archivos / Descargas del móvil y escritorio
                     const objectUrl = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.style.display = 'none';
@@ -22728,17 +23010,17 @@ window.initCoachMarketingStudio = function() {
                     setTimeout(() => {
                         if (link.parentNode) link.parentNode.removeChild(link);
                         URL.revokeObjectURL(objectUrl);
-                    }, 1000);
+                    }, 2000);
 
-                    showSensToast('Pieza descargada en alta definición (PNG 1080px).', 'champagne');
+                    showSensToast('✓ Pieza UHD (2160px) descargada directamente a tus archivos.', 'champagne', 3500);
                     resolve(true);
                 }, 'image/png', 1.0);
             } catch (err) {
-                console.error('Error al exportar canvas:', err);
+                console.error('Error al exportar canvas UHD:', err);
                 if (err.name === 'SecurityError' || String(err).includes('Tainted')) {
                     showSensToast('Restricción CORS del navegador. Usá una imagen o video cargado desde tu dispositivo.', 'error', 6000);
                 } else {
-                    showSensToast('Error al exportar la imagen: ' + (err.message || 'error desconocido'), 'error');
+                    showSensToast('Error al exportar la imagen UHD: ' + (err.message || 'error desconocido'), 'error');
                 }
                 resolve(false);
             }
@@ -22761,9 +23043,15 @@ window.initCoachMarketingStudio = function() {
             const suffix = mktStudioState.format === 'carousel_4_5'
                 ? `slide-${mktStudioState.slideIdx + 1}`
                 : `escena-${mktStudioState.sceneIdx + 1}`;
-            const fileName = `SENS-${mktStudioState.templateId}-${suffix}.png`;
+            const fileName = `SENS-${mktStudioState.templateId}-${suffix}-UHD.png`;
 
-            await exportMarketingCanvasPiece(canvas, fileName);
+            // Renderizado en Offscreen Canvas a Resolución UHD 4K (2160px de ancho)
+            const uhdCanvas = document.createElement('canvas');
+            uhdCanvas.width = canvas.width * 2;
+            uhdCanvas.height = canvas.height * 2;
+            renderMarketingCanvasFrame(uhdCanvas, 2);
+
+            await exportMarketingCanvasPiece(uhdCanvas, fileName);
 
             mktStudioState.showSafeZoneGuides = prevGuides;
             renderMarketingCanvasFrame();
@@ -22787,8 +23075,12 @@ window.initCoachMarketingStudio = function() {
                 renderMarketingCanvasFrame();
                 await new Promise(r => setTimeout(r, 260));
 
-                const fileName = `SENS-${mktStudioState.templateId}-${isCarousel ? 'Slide' : 'Escena'}-${i + 1}.png`;
-                await exportMarketingCanvasPiece(canvas, fileName);
+                const fileName = `SENS-${mktStudioState.templateId}-${isCarousel ? 'Slide' : 'Escena'}-${i + 1}-UHD.png`;
+                const uhdCanvas = document.createElement('canvas');
+                uhdCanvas.width = canvas.width * 2;
+                uhdCanvas.height = canvas.height * 2;
+                renderMarketingCanvasFrame(uhdCanvas, 2);
+                await exportMarketingCanvasPiece(uhdCanvas, fileName);
                 await new Promise(r => setTimeout(r, 200));
             }
             mktStudioState.showSafeZoneGuides = prevGuides;
@@ -22801,7 +23093,7 @@ window.initCoachMarketingStudio = function() {
         btnRecordVideo.addEventListener('click', async () => {
             const canvas = document.getElementById('sensMarketingCanvas');
             if (!canvas || typeof canvas.captureStream !== 'function' || typeof MediaRecorder === 'undefined') {
-                showSensToast('Tu navegador no soporta grabación directa de video. Podés descargar la portada en HD (PNG).', 'info');
+                showSensToast('Tu navegador no soporta grabación directa de video. Podés descargar la portada en UHD (PNG).', 'info');
                 return;
             }
 
@@ -22811,7 +23103,6 @@ window.initCoachMarketingStudio = function() {
             const progressLabel = document.getElementById('mktVideoRenderStatusLabel');
             const progressPercent = document.getElementById('mktVideoRenderPercent');
 
-            // MIME Type seguro para Safari iOS y Chrome Android
             let mimeType = '';
             const candidates = [
                 'video/mp4;codecs=avc1',
@@ -22842,11 +23133,17 @@ window.initCoachMarketingStudio = function() {
             if (progressBar) progressBar.style.display = 'block';
             btnRecordVideo.disabled = true;
             btnRecordVideo.style.opacity = '0.7';
-            btnRecordVideo.innerHTML = `<span>⏳</span><span>Grabando Video HD...</span>`;
+            btnRecordVideo.innerHTML = `<span>⏳</span><span>Grabando Video 60 FPS UHD...</span>`;
 
             try {
-                const stream = canvas.captureStream(30);
-                const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+                // Captura a 60 FPS reales y tasa de bits de 16 Mbps para nitidez y máxima fluidez en RRSS
+                const stream = canvas.captureStream(60);
+                const recorderOptions = {
+                    videoBitsPerSecond: 16000000 // 16 Mbps studio quality
+                };
+                if (mimeType) recorderOptions.mimeType = mimeType;
+
+                const recorder = new MediaRecorder(stream, recorderOptions);
                 const chunks = [];
                 recorder.ondataavailable = (ev) => { if (ev.data && ev.data.size > 0) chunks.push(ev.data); };
 
@@ -22857,6 +23154,15 @@ window.initCoachMarketingStudio = function() {
 
                 const startTime = Date.now();
                 const sceneStep = totalDuration / 3;
+                let isRecording = true;
+
+                // Loop continuo de render con requestAnimationFrame a 60 FPS sin saltos ni cortes
+                const renderFrameLoop = () => {
+                    if (!isRecording) return;
+                    renderMarketingCanvasFrame();
+                    requestAnimationFrame(renderFrameLoop);
+                };
+                requestAnimationFrame(renderFrameLoop);
 
                 const progressTimer = setInterval(() => {
                     const elapsed = (Date.now() - startTime) / 1000;
@@ -22864,7 +23170,7 @@ window.initCoachMarketingStudio = function() {
 
                     if (progressFill) progressFill.style.width = `${pct}%`;
                     if (progressPercent) progressPercent.textContent = `${pct}%`;
-                    if (progressLabel) progressLabel.textContent = `🎬 Grabando Reel HD... (${elapsed.toFixed(1)}s / ${totalDuration}s)`;
+                    if (progressLabel) progressLabel.textContent = `🎬 Renderizando Reel 60 FPS... (${elapsed.toFixed(1)}s / ${totalDuration}s)`;
 
                     if (mktStudioState.format === 'reel_video_9_16') {
                         if (elapsed < sceneStep && mktStudioState.sceneIdx !== 0) {
@@ -22881,48 +23187,30 @@ window.initCoachMarketingStudio = function() {
                 }, 100);
 
                 recorder.onstop = async () => {
+                    isRecording = false;
                     clearInterval(progressTimer);
                     if (progressFill) progressFill.style.width = '100%';
                     if (progressPercent) progressPercent.textContent = '100%';
-                    if (progressLabel) progressLabel.textContent = '✓ Guardando archivo...';
+                    if (progressLabel) progressLabel.textContent = '✓ Guardando en tus descargas...';
 
                     const finalMime = mimeType || 'video/mp4';
                     const blob = new Blob(chunks, { type: finalMime });
-                    const fileName = `SENS-Reel-${mktStudioState.templateId}.${ext}`;
-                    const file = new File([blob], fileName, { type: finalMime });
+                    const fileName = `SENS-Reel-60fps-${mktStudioState.templateId}.${ext}`;
 
-                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || ('ontouchstart' in window);
-                    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
-                        try {
-                            await navigator.share({
-                                files: [file],
-                                title: 'SENS Video Reel HD',
-                                text: 'Video Reel de alto impacto generado con SENS Studio.'
-                            });
-                            showSensToast('¡Video guardado en tu galería con éxito!', 'champagne');
-                        } catch (shareErr) {
-                            if (shareErr.name !== 'AbortError') {
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.style.display = 'none';
-                                a.href = url;
-                                a.download = fileName;
-                                document.body.appendChild(a);
-                                a.click();
-                                setTimeout(() => { if (a.parentNode) a.parentNode.removeChild(a); URL.revokeObjectURL(url); }, 1500);
-                            }
-                        }
-                    } else {
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = url;
-                        a.download = fileName;
-                        document.body.appendChild(a);
-                        a.click();
-                        setTimeout(() => { if (a.parentNode) a.parentNode.removeChild(a); URL.revokeObjectURL(url); }, 1500);
-                        showSensToast(`Video ${ext.toUpperCase()} descargado en alta definición.`, 'champagne');
-                    }
+                    // Descarga directa a archivos (CERO desvíos a WhatsApp)
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        if (a.parentNode) a.parentNode.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }, 2000);
+
+                    showSensToast(`✓ Video Reel 60 FPS (${ext.toUpperCase()}) descargado directamente a tus archivos.`, 'champagne', 4000);
 
                     setTimeout(() => {
                         if (progressBar) progressBar.style.display = 'none';
@@ -22947,7 +23235,7 @@ window.initCoachMarketingStudio = function() {
                 btnRecordVideo.innerHTML = `<span id="mktVideoExportIcon">🎬</span><span id="mktVideoExportText">Descargar Video Reel HD (MP4 / WebM)</span>`;
                 mktStudioState.showSafeZoneGuides = prevGuides;
                 renderMarketingCanvasFrame();
-                showSensToast('Error en la grabación. Podés descargar la portada en HD (PNG).', 'error');
+                showSensToast('Error en la grabación. Podés descargar la portada en UHD (PNG).', 'error');
             }
         });
     }
@@ -23260,32 +23548,37 @@ window.stopCoachMarketingStudio = function() {
     }
 };
 
-function renderMarketingCanvasFrame() {
+function renderMarketingCanvasFrame(targetCanvas = null, scaleFactor = 1) {
     try {
-        const canvas = document.getElementById('sensMarketingCanvas');
+        const canvas = targetCanvas || document.getElementById('sensMarketingCanvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
-        const W = canvas.width;
-        const H = canvas.height;
+        const W = Math.round(canvas.width / scaleFactor);
+        const H = Math.round(canvas.height / scaleFactor);
         const is45 = (H <= 1400); // 1350 vs 1920
         const is916 = !is45;
+
+        ctx.save();
+        if (scaleFactor !== 1) {
+            ctx.scale(scaleFactor, scaleFactor);
+        }
 
         const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
         const op = (mktStudioState.overlayOpacity || 80) / 100;
         const layers = mktStudioState.layers || { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true };
 
         // =========================================================================
-        // REGLAS MATEMÁTICAS INNEGOCIABLES DE SAFE ZONES (TIKTOK / INSTAGRAM REELS & FEED)
-        // Vertical 9:16: Top 220px (tabs/perfil), Bottom 340px (caption/audio), Right 140px (dock likes), Left 72px
-        // Feed 4:5: Top/Bottom 96px, Left/Right 72px
+        // REGLAS MATEMÁTICAS DE SAFE ZONES LIMPIAS (TIKTOK / INSTAGRAM REELS & FEED)
+        // Margen Superior Despejado: Top 280px en 9:16 y 130px en 4:5
+        // CERO interferencia con la interfaz nativa de redes sociales
         // =========================================================================
-        const topSafeY = is916 ? 220 : 96;
+        const topSafeY = is916 ? 280 : 130;
         const bottomSafeY = is916 ? 1580 : 1254; // H - 340 en 9:16, H - 96 en 4:5
         const leftSafeX = 72;
         const rightSafeX = is916 ? 940 : 1008; // W - 140 en 9:16, W - 72 en 4:5
         const safeWidth = rightSafeX - leftSafeX; // 868px en 9:16, 936px en 4:5
         const safeCenterX = leftSafeX + (safeWidth / 2);
-        const contentTopY = layers.branding ? (topSafeY + (is45 ? 60 : 72)) : (topSafeY + 16);
+        const contentTopY = topSafeY + 16;
 
         // 1. Fondo Base Obsidian
         ctx.fillStyle = '#080809';
@@ -23370,63 +23663,14 @@ function renderMarketingCanvasFrame() {
     const entranceProgress = Math.min(1.0, sceneProgress / 0.18); // primeros 0.58s
     const kineticSlam = 1.0 + (0.045 * Math.pow(1.0 - entranceProgress, 2));
 
-    // 4. Header Superior de Marca SENS + Live Audio Bars + Scene Progress Bar
+    // 4. Marca SENS Quiet Luxury (Despejado en el margen superior, marca sutil al pie)
     if (layers.branding) {
         ctx.save();
-        const brandX = leftSafeX;
-        const brandY = topSafeY + 4;
-        const barH = is45 ? 44 : 50;
-
-        ctx.fillStyle = 'rgba(12, 12, 15, 0.85)';
-        roundRectCanvas(ctx, brandX, brandY, 236, barH, 12);
-        ctx.fill();
-
-        ctx.font = `800 ${is45 ? 15 : 17}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = '#FFFFFF';
+        ctx.font = `800 ${is45 ? 13 : 15}px "Plus Jakarta Sans", sans-serif`;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
-        ctx.fillText('MAKES SENS', brandX + 20, brandY + (barH / 2));
-
-        // Animated Live Audio Equalizer Bars (High CTR / Sound cue)
-        const eqX = brandX + 172;
-        const eqCenterY = brandY + (barH / 2);
-        ctx.fillStyle = '#E5CBA7';
-        const barHeights = [
-            6 + 5 * Math.sin(nowSec * 8),
-            11 + 7 * Math.sin(nowSec * 12 + 1),
-            9 + 6 * Math.sin(nowSec * 6 + 2),
-            5 + 4 * Math.sin(nowSec * 9 + 0.5)
-        ];
-        barHeights.forEach((bh, bIdx) => {
-            ctx.fillRect(eqX + (bIdx * 6), eqCenterY - (bh / 2), 3, bh);
-        });
-
-        const topRightText = mktStudioState.format === 'carousel_4_5'
-            ? `${mktStudioState.slideIdx + 1} / 4`
-            : mktStudioState.format === 'reel_video_9_16'
-                ? (mktStudioState.sceneIdx === 0 ? 'HOOK 0-3s' : mktStudioState.sceneIdx === 1 ? 'MÉTODO SENS' : 'PLAN VIP')
-                : 'SENS TRAIN';
-
-        if (topRightText) {
-            ctx.font = `700 ${is45 ? 15 : 17}px "Plus Jakarta Sans", sans-serif`;
-            const trW = ctx.measureText(topRightText).width + 36;
-            const trX = rightSafeX - trW;
-            ctx.fillStyle = 'rgba(12, 12, 15, 0.85)';
-            roundRectCanvas(ctx, trX, brandY, trW, barH, 12);
-            ctx.fill();
-            ctx.fillStyle = '#FAF9F6';
-            ctx.fillText(topRightText, trX + 18, brandY + (barH / 2));
-        }
-
-        // High VTR Dynamic Story/Reel Scene Progress Bar along topSafeY
-        if (is916) {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-            roundRectCanvas(ctx, leftSafeX, topSafeY - 8, safeWidth, 3, 2);
-            ctx.fill();
-            ctx.fillStyle = '#E5CBA7';
-            roundRectCanvas(ctx, leftSafeX, topSafeY - 8, Math.max(12, safeWidth * sceneProgress), 3, 2);
-            ctx.fill();
-        }
-
+        ctx.fillText('MAKES SENS.', rightSafeX, bottomSafeY + (is45 ? 20 : 26));
         ctx.restore();
     }
 
@@ -24612,6 +24856,11 @@ function renderMarketingCanvasFrame() {
 
         ctx.restore();
     }
+    ctx.restore(); // Restaurar escala global scaleFactor
+
+    // Si es render offscreen UHD, no reflejar en los mini visores
+    if (targetCanvas) return;
+
     // Mirroring frame to the Mini-Visor en Vivo in Editor
     const miniCanvas = document.getElementById('mktMiniFramingCanvas');
     if (miniCanvas) {
