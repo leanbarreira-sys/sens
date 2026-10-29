@@ -27397,3 +27397,379 @@ body.in-portal .sens-empty-state-card p,
 body.in-portal .sens-empty-state-desc {
     color: #575659 !important;
 }
+
+
+
+/* =============================================================================
+   SENS QUIET VITALITY LIGHT LUXURY — MOBILE-FIRST PARITY (IMAGE 1 EXACT FIDELITY)
+   ============================================================================= */
+
+/* 1. Barra Superior / Topbar (Blanco Puro & Frosted Glass) */
+body.in-portal .portal-topbar,
+.portal-topbar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    color: #121214 !important;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.in-portal .portal-topbar .brand-logo-img-portal {
+    filter: brightness(0) !important;
+}
+
+/* Badge de Plan Free en Topbar (Pill Cápsula Champagne) */
+body.in-portal #portalPlanBadge {
+    background: rgba(251, 222, 185, 0.45) !important;
+    color: #705B3E !important;
+    border: 1px solid rgba(112, 91, 62, 0.25) !important;
+    border-radius: 9999px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 4px 12px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02) !important;
+}
+
+body.in-portal #portalPlanBadge::before {
+    content: '' !important;
+    display: inline-block !important;
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background: #705B3E !important;
+    margin-right: 6px !important;
+}
+
+/* Ocultar las tarjetas gigantes de Plan y PWA en el inicio para no romper la estética */
+body.in-portal #sensTrialStatusPillContainer,
+body.in-portal #sensPwaDashCard {
+    display: none !important;
+}
+
+/* 2. Strip Semanal del Calendario (7 Columnas Limpias en Blanco Puro) */
+body.in-portal .sens-week-strip-wrap,
+body.in-portal #portalWeekStrip {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 6px !important;
+    box-shadow: none !important;
+}
+
+body.in-portal .sens-week-day-pill,
+body.in-portal .coach-week-day-pill {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 18px !important;
+    padding: 10px 2px 8px !important;
+    text-align: center !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.03) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    cursor: pointer !important;
+    min-height: 72px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.in-portal .sens-week-day-pill .sens-day-name,
+body.in-portal .coach-week-day-pill .sens-day-name {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: #77767B !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    margin-bottom: 2px !important;
+}
+
+body.in-portal .sens-week-day-pill .sens-day-hero-num,
+body.in-portal .coach-week-day-pill .sens-day-hero-num {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    line-height: 1.1 !important;
+    margin-bottom: 4px !important;
+}
+
+/* Día Activo / Seleccionado (Champagne Cálido de Alto Impacto - Image 1) */
+body.in-portal .sens-week-day-pill.active,
+body.in-portal .sens-week-day-pill.is-today,
+body.in-portal .coach-week-day-pill.active,
+body.in-portal .coach-week-day-pill.is-today {
+    background: #E5CBA7 !important;
+    border: 1px solid rgba(112, 91, 62, 0.35) !important;
+    box-shadow: 0 8px 20px rgba(229, 203, 167, 0.45) !important;
+    transform: scale(1.05) !important;
+    z-index: 2 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-name,
+body.in-portal .sens-week-day-pill.is-today .sens-day-name,
+body.in-portal .coach-week-day-pill.active .sens-day-name,
+body.in-portal .coach-week-day-pill.is-today .sens-day-name {
+    color: #564428 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-hero-num,
+body.in-portal .sens-week-day-pill.is-today .sens-day-hero-num,
+body.in-portal .coach-week-day-pill.active .sens-day-hero-num,
+body.in-portal .coach-week-day-pill.is-today .sens-day-hero-num {
+    color: #271903 !important;
+    font-weight: 800 !important;
+}
+
+/* Badges e Indicadores de Estado de Día */
+body.in-portal .sens-day-badge.done {
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 50% !important;
+    background: #EAF6EE !important;
+    color: #1E7B42 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.in-portal .sens-day-badge.missed {
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 50% !important;
+    background: #F4F3F1 !important;
+    color: #A1A1AA !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.in-portal .sens-day-badge.rest {
+    font-size: 12px !important;
+    color: #A1A1AA !important;
+    font-weight: 500 !important;
+}
+
+/* 3. Tarjeta de Racha SENS (Blanco Puro en lugar de Negro - Image 1) */
+body.in-portal .sens-streak-card,
+body.in-portal #sensDailyStreakCard {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 24px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    color: #121214 !important;
+    margin-bottom: 24px !important;
+}
+
+body.in-portal .sens-streak-flame-icon {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: rgba(251, 222, 185, 0.45) !important;
+    color: #705B3E !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 0 16px rgba(251, 222, 185, 0.6) !important;
+    border: none !important;
+}
+
+body.in-portal .sens-streak-hero-num {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    letter-spacing: -0.01em !important;
+}
+
+body.in-portal .sens-streak-hero-unit {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #77767B !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal .sens-streak-level-tag {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #705B3E !important;
+    text-transform: none !important;
+}
+
+body.in-portal .sens-streak-status-pill {
+    background: #F4F3F1 !important;
+    color: #575659 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    padding: 4px 12px !important;
+    border: none !important;
+    text-transform: none !important;
+}
+
+/* Well de Meta Semanal y Progreso (Fila 3) */
+body.in-portal .sens-streak-weekly-row {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    border-radius: 16px !important;
+    padding: 12px 14px !important;
+    margin: 12px 0 !important;
+}
+
+body.in-portal .sens-streak-weekly-label {
+    color: #121214 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-streak-dot-ring {
+    background: #E3E2E0 !important;
+    border-color: #E3E2E0 !important;
+}
+
+body.in-portal .sens-streak-dot-ring.done {
+    background: #1E7B42 !important;
+    border-color: #1E7B42 !important;
+    box-shadow: none !important;
+}
+
+body.in-portal .sens-streak-dot-ring.today {
+    background: #E5CBA7 !important;
+    border-color: #705B3E !important;
+}
+
+/* Pilares de Hábitos (Fuerza, Nutrición, Pasos) */
+body.in-portal .sens-pillar-item {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 16px !important;
+    padding: 10px 12px !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-pillar-heading {
+    color: #121214 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal .sens-pillar-metric {
+    color: #705B3E !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+/* 4. Card de Entrenamiento Principal (Full-Bleed Editorial Hero) */
+body.in-portal .sens-training-video-card,
+body.in-portal #dashTrainingVideoCard {
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 32px rgba(18, 18, 20, 0.06) !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    background: #FFFFFF !important;
+    min-height: 340px !important;
+}
+
+/* Tag de Sesión del Día */
+body.in-portal .sens-card-domain-eyebrow,
+body.in-portal .sens-workout-modality-pill {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    color: #121214 !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    padding: 4px 12px !important;
+    border-radius: 9999px !important;
+    border: none !important;
+}
+
+/* Estado de Descanso en Inicio: Fondo Alabaster Elegante en lugar de Negro */
+body.in-portal .sens-workout-rest-pane,
+body.in-portal #dashWorkoutRestPane {
+    background: #FFFFFF !important;
+    border-radius: 24px !important;
+    padding: 24px 20px !important;
+    color: #121214 !important;
+    text-align: center !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+}
+
+body.in-portal .sens-workout-rest-pane h3 {
+    color: #121214 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-workout-rest-pane p {
+    color: #575659 !important;
+    font-size: 13px !important;
+}
+
+/* 5. Floating Dock Inferior (Exact Fidelity con Image 1) */
+body.in-portal #sensFloatingDock {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 12px 36px -6px rgba(18, 18, 20, 0.12) !important;
+    padding: 6px 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    position: fixed !important;
+    bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 9990 !important;
+    width: auto !important;
+    max-width: 90vw !important;
+}
+
+body.in-portal .sens-dock-item {
+    background: transparent !important;
+    color: #575659 !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    padding: 8px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: pointer !important;
+}
+
+body.in-portal .sens-dock-item.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.in-portal .sens-dock-item svg {
+    width: 17px !important;
+    height: 17px !important;
+    stroke: currentColor !important;
+}
+
+body.in-portal .sens-dock-item.active svg {
+    stroke: #FFFFFF !important;
+}
+

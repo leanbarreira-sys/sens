@@ -2,7 +2,7 @@ const fs = require('fs');
 const app = fs.readFileSync('app.js', 'utf8');
 const html = fs.readFileSync('index.html', 'utf8');
 
-const onbMatch = html.match(/<section class="portal-view" id="onboardingSection">([\s\S]*?)<\/section>/);
+const onbMatch = html.match(/<section[^>]*id=["']onboardingSection["'][^>]*>([\s\S]*?)<\/section>/);
 if (!onbMatch) {
     console.log('onboardingSection not found');
     process.exit(1);

@@ -3304,7 +3304,8 @@ async function checkExistingSession() {
                     localStorage.getItem('sens_skip_onboarding_temp') === 'true' ||
                     (uEmail && localStorage.getItem(`sens_onboarding_completed_${uEmail}`) === 'true')
                 );
-                if (!isAdmin && !isOnboardingDone) {
+                // En el portal ya activo, jamás forzar el wizard en segundo plano
+                if (!isAdmin && !isOnboardingDone && !localStorage.getItem('sens_in_portal')) {
                     startDiagnosisWizard(false);
                 } else {
                     const isPending = Boolean(!isAdmin && AppState.profile && AppState.profile.subscription_status === 'pending_activation');
@@ -4230,7 +4231,7 @@ function openUserPortal(forceOnboarding = false) {
         localStorage.getItem('sens_skip_onboarding_temp') === 'true' ||
         (realEmail && localStorage.getItem(`sens_onboarding_completed_${realEmail}`) === 'true')
     );
-    const mustDoOnboarding = !isAdmin && (forceOnboarding || (isProfileReady && profile.onboarding_completed === false && !isOnboardingDone));
+    const mustDoOnboarding = !isAdmin && (forceOnboarding === true || (isProfileReady && profile.onboarding_completed === false && !isOnboardingDone));
 
     if (mustDoOnboarding) {
         const subNav = document.getElementById('portalSubNav');
@@ -12225,12 +12226,12 @@ function renderCoachDynamicWeekStrip() {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
 
-        const dateFormatted = formatDateDDMM(dayDate);
+        const dayNum = dayDate.getDate();
 
         html += `
-            <button type="button" class="coach-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
+            <button type="button" class="sens-week-day-pill coach-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
                 <span class="sens-day-name">${dayNames[i]}</span>
-                <span class="sens-day-hero-num">${dateFormatted}</span>
+                <span class="sens-day-hero-num">${dayNum}</span>
                 <div class="sens-day-modality-indicator">${statusBadge}</div>
             </button>
         `;
