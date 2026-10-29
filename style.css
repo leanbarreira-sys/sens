@@ -14113,440 +14113,1560 @@ body.in-portal .sens-muscle-focus-sub {
    MÓDULO DE CONTRASTE & BRANDBOOK QUIET LUXURY EN COMPONENTES OSCUROS (ONBOARDING, AUTH & MODALS)
    ============================================================================= */
 
-/* 1. Onboarding, Anamnesis Digital & Evaluación Inicial (Fondo Obsidiana #121214) */
-body.in-portal .wizard-container,
-.wizard-container {
-    background: #121214 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8) !important;
-    color: #FFFFFF !important;
+/* ==========================================================================
+   QUIET VITALITY — ONBOARDING, ANAMNESIS & EVALUACIÓN INICIAL (8 PASOS)
+   Paridad 1:1 con stitch_sens_quiet_luxury_design_system/Formulario y bienvenida
+   Fondo Alabastro #FAF9F6, Superficies Blancas #FFFFFF, Carbón #121214, Champagne #E5CBA7
+   ========================================================================== */
+
+/* =============================================================================
+   QUIET VITALITY LIGHT LUXURY — WIZARD ONBOARDING & ANAMNESIS CLINICA (PASOS 0 A 8/9)
+   Tokens: #FAF9F6 Alabastro | #FFFFFF Blanco Puro | #121214 Carbón | #705B3E Bronce | #E5CBA7 Champagne | #1E7B42 Verde Clínico
+   ============================================================================= */
+
+#onboardingSection {
+    background: #FAF9F6 !important;
+    min-height: 100vh !important;
+    padding: 0 0 60px !important;
+    color: #121214 !important;
+
+    /* Local Variable Overrides for Light Quiet Luxury */
+    --text-primary: #121214 !important;
+    --text-secondary: #575659 !important;
+    --text-muted: #8E8D90 !important;
+    --border-subtle: rgba(18, 18, 20, 0.08) !important;
+    --border-strong: rgba(18, 18, 20, 0.15) !important;
+    --accent-primary: #705B3E !important;
+    --bg-surface: #FAF9F6 !important;
+    --bg-elevated: #FFFFFF !important;
+    --bg-base: #FAF9F6 !important;
 }
 
+body.in-portal .wizard-container,
+#onboardingSection .wizard-container,
+.wizard-container {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 4px 24px -2px rgba(18, 18, 20, 0.04), 0 1px 3px rgba(18, 18, 20, 0.02) !important;
+    color: #121214 !important;
+    max-width: 960px !important;
+    margin: 32px auto 48px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+@media (max-width: 768px) {
+    body.in-portal .wizard-container,
+    #onboardingSection .wizard-container,
+    .wizard-container {
+        margin: 12px 12px 32px !important;
+        border-radius: 20px !important;
+        box-shadow: 0 2px 12px rgba(18, 18, 20, 0.04) !important;
+    }
+}
+
+/* Header & Progress Bar */
 body.in-portal .wizard-header,
+#onboardingSection .wizard-header,
 .wizard-header {
-    background: rgba(18, 18, 20, 0.98) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #FFFFFF !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    padding: 24px 32px 16px !important;
+}
+
+@media (max-width: 768px) {
+    body.in-portal .wizard-header,
+    #onboardingSection .wizard-header,
+    .wizard-header {
+        padding: 16px 16px 14px !important;
+    }
+}
+
+body.in-portal .wizard-top-bar,
+#onboardingSection .wizard-top-bar,
+.wizard-top-bar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 14px !important;
 }
 
 body.in-portal .wizard-brand,
+#onboardingSection .wizard-brand,
 .wizard-brand {
-    color: rgba(255, 255, 255, 0.6) !important;
+    font-size: 13px !important;
+    font-weight: 300 !important;
+    letter-spacing: 2px !important;
+    color: #121214 !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal .wizard-brand strong,
+#onboardingSection .wizard-brand strong,
+.wizard-brand strong {
+    font-weight: 700 !important;
+    color: #705B3E !important;
+}
+
+body.in-portal .wizard-exit-btn,
+#onboardingSection .wizard-exit-btn,
+.wizard-exit-btn {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    padding: 6px 14px !important;
+    border-radius: 9999px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+body.in-portal .wizard-exit-btn:hover,
+#onboardingSection .wizard-exit-btn:hover,
+.wizard-exit-btn:hover {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    border-color: rgba(18, 18, 20, 0.15) !important;
+}
+
+body.in-portal .wizard-progress-wrap,
+#onboardingSection .wizard-progress-wrap,
+.wizard-progress-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+}
+
+body.in-portal .wizard-progress-track,
+#onboardingSection .wizard-progress-track,
+.wizard-progress-track {
+    flex: 1 !important;
+    height: 4px !important;
+    background: #EFECE6 !important;
+    border-radius: 9999px !important;
+    overflow: hidden !important;
+}
+
+body.in-portal .wizard-progress-fill,
+#onboardingSection .wizard-progress-fill,
+.wizard-progress-fill {
+    height: 100% !important;
+    background: #705B3E !important;
+    border-radius: 9999px !important;
+    transition: width 0.4s ease !important;
+}
+
+body.in-portal .wizard-progress-percent,
+#onboardingSection .wizard-progress-percent,
+.wizard-progress-percent {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+body.in-portal .wizard-step-badge-row,
+#onboardingSection .wizard-step-badge-row,
+.wizard-step-badge-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
 }
 
 body.in-portal .wizard-step-label,
+#onboardingSection .wizard-step-label,
 .wizard-step-label {
-    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
 }
 
 body.in-portal .wizard-mode-badge,
+#onboardingSection .wizard-mode-badge,
 .wizard-mode-badge {
-    background: rgba(229, 203, 167, 0.12) !important;
-    color: #E5CBA7 !important;
-    border: 1px solid rgba(229, 203, 167, 0.25) !important;
+    background: #FAF9F6 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 9999px !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    padding: 3px 10px !important;
+    letter-spacing: 0.05em !important;
+}
+
+body.in-portal .feedback-toast,
+#onboardingSection .feedback-toast,
+.feedback-toast {
+    position: absolute !important;
+    right: 24px !important;
+    bottom: -16px !important;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    padding: 6px 14px !important;
+    border-radius: 9999px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18) !important;
+    z-index: 10 !important;
+}
+
+/* Step Content Body & Typography */
+body.in-portal .step-content-body,
+#onboardingSection .step-content-body,
+.step-content-body {
+    padding: 32px 36px !important;
+}
+
+@media (max-width: 768px) {
+    body.in-portal .step-content-body,
+    #onboardingSection .step-content-body,
+    .step-content-body {
+        padding: 20px 16px !important;
+    }
 }
 
 body.in-portal .step-tag-pill,
+#onboardingSection .step-tag-pill,
 .step-tag-pill {
-    color: #E5CBA7 !important;
+    font-size: 10.5px !important;
     font-weight: 700 !important;
+    color: #705B3E !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    display: inline-block !important;
+    margin-bottom: 8px !important;
 }
 
 body.in-portal .step-title,
 body.in-portal .wizard-step-card h2,
+#onboardingSection .step-title,
+#onboardingSection .wizard-step-card h2,
 .step-title,
 .wizard-step-card h2 {
-    color: #FFFFFF !important;
+    font-size: 24px !important;
     font-weight: 300 !important;
+    color: #121214 !important;
+    margin: 0 0 8px !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.02em !important;
 }
 
 body.in-portal .step-title strong,
 body.in-portal .wizard-step-card h2 strong,
+#onboardingSection .step-title strong,
+#onboardingSection .wizard-step-card h2 strong,
 .step-title strong,
 .wizard-step-card h2 strong {
-    color: #E5CBA7 !important;
-    font-weight: 800 !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
 }
 
 body.in-portal .step-desc,
 body.in-portal .wizard-step-card p,
+#onboardingSection .step-desc,
+#onboardingSection .wizard-step-card p,
 .step-desc,
 .wizard-step-card p {
-    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 13.5px !important;
+    color: #575659 !important;
+    line-height: 1.55 !important;
+    margin: 0 0 24px !important;
 }
 
-/* Paso 0: Consentimiento & Ley de Datos */
-body.in-portal .legal-notice-box,
-.legal-notice-box {
-    background: rgba(255, 255, 255, 0.04) !important;
-    border-left: 3px solid #9E7D4B !important;
-    border-radius: 0 12px 12px 0 !important;
-}
-
-body.in-portal .legal-text,
-.legal-text {
-    color: rgba(255, 255, 255, 0.88) !important;
-}
-
-body.in-portal .legal-text strong,
-.legal-text strong {
-    color: #FFFFFF !important;
-    font-weight: 700 !important;
-}
-
+/* Touch Cards & Interactive Containers */
+#onboardingSection .touch-card-consent,
+#onboardingSection .touch-card,
 body.in-portal .touch-card-consent,
 body.in-portal .touch-card,
 .touch-card-consent,
 .touch-card {
-    background: #18181B !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: #FFFFFF !important;
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 16px 18px !important;
+    color: #121214 !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 1px 3px rgba(18, 18, 20, 0.02) !important;
 }
 
+#onboardingSection .touch-card:hover,
+body.in-portal .touch-card:hover,
+.touch-card:hover {
+    background: #FFFFFF !important;
+    border-color: #E5CBA7 !important;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.04) !important;
+}
+
+#onboardingSection .touch-card .card-content,
 body.in-portal .touch-card .card-content,
 .touch-card .card-content {
-    color: #FFFFFF !important;
+    color: #121214 !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    flex: 1 !important;
 }
 
-/* Inputs y Selectores dentro del Wizard */
-body.in-portal .wizard-container .input-control,
-.wizard-container .input-control {
-    background: #18181B !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    color: #FFFFFF !important;
+#onboardingSection .touch-card .card-content strong,
+body.in-portal .touch-card .card-content strong,
+.touch-card .card-content strong {
+    color: #121214 !important;
+    font-weight: 600 !important;
+    display: block !important;
+    margin-bottom: 2px !important;
 }
 
-body.in-portal .wizard-container .input-control:focus,
-.wizard-container .input-control:focus {
+#onboardingSection .touch-card .card-content .card-sub,
+body.in-portal .touch-card .card-content .card-sub,
+.touch-card .card-content .card-sub {
+    color: #575659 !important;
+    font-size: 12px !important;
+    display: block !important;
+}
+
+#onboardingSection .touch-card .custom-box,
+body.in-portal .touch-card .custom-box,
+.touch-card .custom-box {
+    width: 20px !important;
+    height: 20px !important;
+    border: 1px solid rgba(18, 18, 20, 0.2) !important;
+    border-radius: 6px !important;
+    background: #FFFFFF !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    margin-top: 1px !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .touch-card input:checked ~ .custom-box,
+body.in-portal .touch-card input:checked ~ .custom-box,
+.touch-card input:checked ~ .custom-box {
+    background: #705B3E !important;
+    border-color: #705B3E !important;
+}
+
+#onboardingSection .touch-card input:checked ~ .custom-box svg path,
+body.in-portal .touch-card input:checked ~ .custom-box svg path,
+.touch-card input:checked ~ .custom-box svg path {
+    stroke: #FFFFFF !important;
+}
+
+#onboardingSection .touch-card .custom-circle,
+body.in-portal .touch-card .custom-circle,
+.touch-card .custom-circle {
+    width: 18px !important;
+    height: 18px !important;
+    border: 1.5px solid rgba(18, 18, 20, 0.25) !important;
+    border-radius: 50% !important;
+    background: #FFFFFF !important;
+    flex-shrink: 0 !important;
+    margin-top: 2px !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .touch-card input:checked ~ .custom-circle,
+body.in-portal .touch-card input:checked ~ .custom-circle,
+.touch-card input:checked ~ .custom-circle {
+    border-color: #705B3E !important;
+    background: #705B3E !important;
+    box-shadow: inset 0 0 0 3px #FFFFFF !important;
+}
+
+/* Inputs y Formularios dentro del Wizard */
+#onboardingSection .input-row,
+.input-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+    margin-bottom: 18px !important;
+}
+
+#onboardingSection .input-row-three,
+.input-row-three {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
+    margin-bottom: 24px !important;
+}
+
+@media (max-width: 680px) {
+    #onboardingSection .input-row,
+    .input-row,
+    #onboardingSection .input-row-three,
+    .input-row-three {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+}
+
+#onboardingSection .input-group,
+.input-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+}
+
+#onboardingSection .input-label,
+.input-label {
+    color: #575659 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    margin-bottom: 4px !important;
+    display: block !important;
+}
+
+#onboardingSection .input-control,
+.wizard-container .input-control,
+.input-control {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 12px !important;
+    color: #121214 !important;
+    padding: 12px 14px !important;
+    font-size: 13.5px !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#onboardingSection .input-control:focus,
+.wizard-container .input-control:focus,
+.input-control:focus {
+    background: #FFFFFF !important;
     border-color: #E5CBA7 !important;
-    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.25) !important;
+    outline: none !important;
 }
 
-body.in-portal .wizard-container .input-control::placeholder,
-.wizard-container .input-control::placeholder {
-    color: rgba(255, 255, 255, 0.4) !important;
+#onboardingSection .input-control::placeholder,
+.wizard-container .input-control::placeholder,
+.input-control::placeholder {
+    color: #8E8D90 !important;
 }
 
-body.in-portal .wizard-container .input-label,
-.wizard-container .input-label {
-    color: rgba(255, 255, 255, 0.78) !important;
+/* Sexo Biológico Toggles */
+#onboardingSection .gender-toggle-group,
+.gender-toggle-group {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+}
+
+#onboardingSection .gender-btn-pill,
+.gender-btn-pill {
+    cursor: pointer !important;
+    display: block !important;
+}
+
+#onboardingSection .gender-btn-pill input,
+.gender-btn-pill input {
+    position: absolute !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+#onboardingSection .gender-btn-pill .gender-btn-content,
+.gender-btn-pill .gender-btn-content {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 9999px !important;
+    color: #575659 !important;
+    padding: 10px 18px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+#onboardingSection .gender-btn-pill input:checked + .gender-btn-content,
+.gender-btn-pill input:checked + .gender-btn-content {
+    background: #E5CBA7 !important;
+    border-color: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
+}
+
+/* Grid de Objetivos Prioritarios (Paso 1) */
+#onboardingSection .goal-selection-section,
+.goal-selection-section {
+    margin-top: 14px !important;
+}
+
+#onboardingSection .goal-options-grid,
+.goal-options-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+    gap: 12px !important;
+}
+
+#onboardingSection .goal-card-touch,
+.goal-card-touch {
+    margin-bottom: 0 !important;
+    padding: 16px 18px !important;
+    min-height: 76px !important;
+}
+
+/* PAR-Q Clínico (Paso 2) */
+#onboardingSection .health-switch-list,
+.health-switch-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-bottom: 24px !important;
+}
+
+#onboardingSection .health-switch-item,
+.health-switch-item {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .health-switch-item:hover,
+.health-switch-item:hover {
+    background: #FFFFFF !important;
+    border-color: rgba(18, 18, 20, 0.15) !important;
+    box-shadow: 0 2px 12px rgba(18, 18, 20, 0.03) !important;
+}
+
+#onboardingSection .health-switch-header,
+.health-switch-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+}
+
+#onboardingSection .health-switch-label,
+.health-switch-label {
+    font-size: 13.5px !important;
+    color: #121214 !important;
+    font-weight: 500 !important;
+    line-height: 1.45 !important;
+    cursor: pointer !important;
+    flex: 1 !important;
+}
+
+#onboardingSection .switch-control-wrap,
+.switch-control-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+#onboardingSection .switch-status-tag,
+.switch-status-tag {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #8E8D90 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    min-width: 26px !important;
+    text-align: right !important;
+}
+
+#onboardingSection .switch-status-tag.is-yes,
+.switch-status-tag.is-yes {
+    color: #1E7B42 !important;
+}
+
+#onboardingSection .toggle-slider,
+.toggle-slider {
+    background: #E4E3E0 !important;
+    border-radius: 9999px !important;
+    transition: 0.25s ease !important;
+}
+
+#onboardingSection .toggle-slider:before,
+.toggle-slider:before {
+    background: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.18) !important;
+}
+
+#onboardingSection .toggle-switch input:checked + .toggle-slider,
+.toggle-switch input:checked + .toggle-slider {
+    background: #705B3E !important;
+}
+
+#onboardingSection .health-switch-detail,
+.health-switch-detail {
+    margin-top: 14px !important;
+    padding-top: 12px !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
+}
+
+#onboardingSection .health-detail-input,
+.health-detail-input {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    color: #121214 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Topografía de Dolor & Lesiones (Paso 3) */
+#onboardingSection .injuries-list-container,
+.injuries-list-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-bottom: 24px !important;
+}
+
+#onboardingSection .pill-grid,
+.pill-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+    gap: 12px !important;
+}
+
+#onboardingSection .pill-card,
+.pill-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 14px 16px !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+#onboardingSection .pill-card:hover,
+.pill-card:hover {
+    background: #FFFFFF !important;
+    border-color: rgba(18, 18, 20, 0.15) !important;
+}
+
+#onboardingSection .injury-intensity-row,
+.injury-intensity-row {
+    margin-top: 12px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important;
+}
+
+#onboardingSection .intensity-label,
+.intensity-label {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+}
+
+#onboardingSection .intensity-pill-group,
+.intensity-pill-group {
+    display: flex !important;
+    gap: 6px !important;
+}
+
+#onboardingSection .intensity-btn,
+.intensity-btn {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    padding: 5px 12px !important;
+    border-radius: 9999px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .intensity-btn:hover,
+.intensity-btn:hover {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border-color: rgba(18, 18, 20, 0.2) !important;
+}
+
+#onboardingSection .intensity-btn.active,
+.intensity-btn.active {
+    background: #705B3E !important;
+    color: #FFFFFF !important;
+    border-color: #705B3E !important;
+    box-shadow: 0 2px 8px rgba(112, 91, 62, 0.25) !important;
+}
+
+#onboardingSection .surgery-section-block,
+.surgery-section-block {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    margin-top: 18px !important;
+}
+
+#onboardingSection .surgery-section-block textarea,
+.surgery-section-block textarea {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    border-radius: 12px !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    color: #121214 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-top: 10px !important;
+}
+
+/* Contexto Deportivo & Frecuencia (Paso 4) */
+#onboardingSection .freq-slider-container,
+.freq-slider-container {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 18px !important;
+    padding: 20px 22px !important;
+    margin: 20px 0 !important;
+}
+
+#onboardingSection .freq-slider-header,
+.freq-slider-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 14px !important;
+}
+
+#onboardingSection .freq-slider-badge,
+.freq-slider-badge {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(112, 91, 62, 0.2) !important;
+    color: #705B3E !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 4px 14px !important;
+    border-radius: 9999px !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+#onboardingSection .freq-slider-scale,
+.freq-slider-scale {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-top: 8px !important;
+    color: #8E8D90 !important;
+    font-size: 11px !important;
     font-weight: 600 !important;
 }
 
-body.in-portal .gender-btn-pill .gender-btn-content,
-.gender-btn-pill .gender-btn-content {
-    background: #18181B !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: rgba(255, 255, 255, 0.8) !important;
+/* Carga Alostática, Sueño & Recuperación (Paso 5) */
+#onboardingSection .metric-slider-card,
+.metric-slider-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 18px !important;
+    padding: 20px 22px !important;
+    margin-bottom: 16px !important;
 }
 
-body.in-portal .gender-btn-pill input:checked + .gender-btn-content,
-.gender-btn-pill input:checked + .gender-btn-content {
-    background: rgba(229, 203, 167, 0.18) !important;
+#onboardingSection .metric-slider-header,
+.metric-slider-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 12px !important;
+}
+
+#onboardingSection .metric-slider-badge,
+.metric-slider-badge {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(112, 91, 62, 0.2) !important;
+    color: #705B3E !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 4px 14px !important;
+    border-radius: 9999px !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+#onboardingSection .water-btn,
+.water-btn {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    color: #575659 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .water-btn:hover,
+.water-btn:hover {
+    background: #FFFFFF !important;
+    border-color: rgba(18, 18, 20, 0.15) !important;
+    color: #121214 !important;
+}
+
+#onboardingSection .water-btn.active,
+.water-btn.active {
+    background: #FFFFFF !important;
+    border-color: #705B3E !important;
+    color: #121214 !important;
+    box-shadow: 0 2px 8px rgba(112, 91, 62, 0.12) !important;
+}
+
+/* Range Sliders Global Styling in Wizard */
+#onboardingSection input[type=range],
+.wizard-container input[type=range] {
+    -webkit-appearance: none !important;
+    width: 100% !important;
+    height: 6px !important;
+    background: #EFECE6 !important;
+    border-radius: 9999px !important;
+    outline: none !important;
+    margin: 12px 0 !important;
+}
+
+#onboardingSection input[type=range]::-webkit-slider-thumb,
+.wizard-container input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 50% !important;
+    background: #705B3E !important;
+    border: 3px solid #FFFFFF !important;
+    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.2) !important;
+    cursor: pointer !important;
+    transition: transform 0.1s ease !important;
+}
+
+#onboardingSection input[type=range]::-webkit-slider-thumb:hover,
+.wizard-container input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.15) !important;
+}
+
+/* Barreras de Adherencia (Paso 6) */
+#onboardingSection #diagHurdleDetail,
+.wizard-container #diagHurdleDetail {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+    font-size: 13.5px !important;
+    color: #121214 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    min-height: 90px !important;
+}
+
+#onboardingSection #diagHurdleDetail:focus,
+.wizard-container #diagHurdleDetail:focus {
+    background: #FFFFFF !important;
     border-color: #E5CBA7 !important;
-    color: #E5CBA7 !important;
+    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.25) !important;
+    outline: none !important;
+}
+
+/* Pruebas de Movilidad (Paso 7) */
+#onboardingSection .mobility-test-card,
+.mobility-test-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 18px !important;
+    padding: 20px 22px !important;
+    margin-bottom: 18px !important;
+}
+
+#onboardingSection .mobility-test-badge,
+.mobility-test-badge {
+    color: #705B3E !important;
+    font-size: 10.5px !important;
     font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
 }
 
-/* Tarjetas de Selección en Pasos del Wizard */
-body.in-portal .goal-selection-section,
-body.in-portal .goal-card,
-body.in-portal .parq-question-card,
-body.in-portal .health-switch-item,
-body.in-portal .joint-zone-card,
-body.in-portal .frequency-btn,
-body.in-portal .freq-slider-container,
-body.in-portal .equip-option-card,
-body.in-portal .metric-slider-card,
-body.in-portal .habit-barrier-card,
-body.in-portal .habit-value-card,
-body.in-portal .mobility-test-card,
-body.in-portal .tape-measurements-section,
-body.in-portal .photo-eval-section,
-body.in-portal .biometric-assessment-card,
-body.in-portal .congrats-card,
-.goal-selection-section,
-.goal-card,
-.parq-question-card,
-.health-switch-item,
-.joint-zone-card,
-.frequency-btn,
-.freq-slider-container,
-.equip-option-card,
-.metric-slider-card,
-.habit-barrier-card,
-.habit-value-card,
-.mobility-test-card,
-.tape-measurements-section,
-.photo-eval-section,
-.biometric-assessment-card,
-.congrats-card {
-    background: #18181B !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: #FFFFFF !important;
+#onboardingSection .mobility-instruction,
+.mobility-instruction {
+    font-size: 13px !important;
+    color: #575659 !important;
+    line-height: 1.5 !important;
+    margin: 8px 0 14px !important;
 }
 
-body.in-portal .wizard-container h3,
-body.in-portal .wizard-container h4,
-body.in-portal .goal-title,
-body.in-portal .equip-title,
-body.in-portal .habit-title,
-body.in-portal .joint-zone-name,
-.goal-title,
-.equip-title,
-.habit-title,
-.joint-zone-name {
-    color: #FFFFFF !important;
-    font-weight: 700 !important;
+#onboardingSection #btnSkipMobility,
+.wizard-container #btnSkipMobility {
+    background: transparent !important;
+    border: 1px dashed rgba(18, 18, 20, 0.2) !important;
+    color: #575659 !important;
+    border-radius: 9999px !important;
+    padding: 8px 18px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
 }
 
-body.in-portal .goal-desc,
-.goal-desc {
-    color: rgba(255, 255, 255, 0.8) !important;
+#onboardingSection #btnSkipMobility:hover,
+.wizard-container #btnSkipMobility:hover {
+    background: #FAF9F6 !important;
+    color: #121214 !important;
+    border-color: rgba(18, 18, 20, 0.35) !important;
 }
 
-body.in-portal .photo-box,
-.photo-box {
-    background: #121214 !important;
-    border: 1px dashed rgba(255, 255, 255, 0.2) !important;
-    color: #FFFFFF !important;
-}
-
-body.in-portal .tape-input-card,
-.tape-input-card {
-    background: #121214 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-body.in-portal .tape-input-control,
-.tape-input-control {
-    background: #18181B !important;
-    border: 1px solid rgba(229, 203, 167, 0.4) !important;
-    color: #E5CBA7 !important;
-}
-
-/* 2. Modales Internos del Portal (Fondo Oscuro para Coach/Portal) */
-.modal-overlay:not(#authModal) .modal-card {
-    background: #121214 !important;
-    border: none !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85) !important;
-    color: #FFFFFF !important;
-}
-
-/* Modal de Acceso / Autenticación SENS (Quiet Light Luxury v6.0) */
-#authModal {
-    background: rgba(18, 18, 20, 0.55) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-}
-
-#authModal .modal-card {
+/* Registro Fotográfico & Medidas (Paso 8) */
+#onboardingSection .photo-eval-section,
+.photo-eval-section {
     background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    box-shadow: 0 20px 50px -10px rgba(18, 18, 20, 0.15), 0 4px 16px rgba(18, 18, 20, 0.04) !important;
+    border-radius: 20px !important;
+    padding: 22px !important;
+    margin-bottom: 22px !important;
+}
+
+#onboardingSection .photo-cards-grid,
+.photo-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
+    margin-top: 16px !important;
+}
+
+@media (max-width: 580px) {
+    #onboardingSection .photo-cards-grid,
+    .photo-cards-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+#onboardingSection .photo-box,
+.photo-box {
+    background: #FAF9F6 !important;
+    border: 1.5px dashed rgba(112, 91, 62, 0.25) !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .photo-box:hover,
+.photo-box:hover {
+    background: #FFFFFF !important;
+    border-color: #705B3E !important;
+}
+
+#onboardingSection .photo-upload-btn,
+.photo-upload-btn {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    border-radius: 9999px !important;
     color: #121214 !important;
-    border-radius: 24px !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    padding: 6px 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    margin-top: 10px !important;
+    transition: all 0.2s ease !important;
 }
 
-#authModal .brand-logo-img-modal {
-    filter: none !important;
+#onboardingSection .photo-upload-btn:hover,
+.photo-upload-btn:hover {
+    background: #F4F3F1 !important;
+    border-color: rgba(18, 18, 20, 0.2) !important;
 }
 
-#authModal .modal-close-btn {
-    background: #F4F3F0 !important;
+#onboardingSection .photo-peace-of-mind,
+.photo-peace-of-mind {
+    color: #8E8D90 !important;
+    font-size: 11.5px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-top: 12px !important;
+}
+
+/* Cinta Métrica (Paso 8) */
+#onboardingSection .tape-measurements-section,
+.tape-measurements-section {
+    background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 22px !important;
+    margin-bottom: 22px !important;
+}
+
+#onboardingSection .tape-grid,
+.tape-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+    gap: 12px !important;
+    margin-top: 16px !important;
+}
+
+#onboardingSection .tape-input-card,
+.tape-input-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 12px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .tape-input-card:hover,
+.tape-input-card:hover {
+    background: #FFFFFF !important;
+    border-color: rgba(18, 18, 20, 0.15) !important;
+}
+
+#onboardingSection .tape-card-label,
+.tape-card-label {
+    font-size: 13px !important;
+    font-weight: 600 !important;
     color: #121214 !important;
-    width: 36px !important;
-    height: 36px !important;
+}
+
+#onboardingSection .tape-card-guide,
+.tape-card-guide {
+    font-size: 11px !important;
+    color: #575659 !important;
+    display: block !important;
+}
+
+#onboardingSection .tape-input-control,
+.tape-input-control {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    border-radius: 8px !important;
+    padding: 8px 10px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #121214 !important;
+    width: 68px !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+
+#onboardingSection .tape-unit,
+.tape-unit {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+}
+
+/* Tooltips de Prompts IA */
+#onboardingSection .sens-tooltip-popover,
+.sens-tooltip-popover {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    box-shadow: 0 10px 30px -4px rgba(18, 18, 20, 0.12) !important;
+    color: #121214 !important;
+    z-index: 100 !important;
+}
+
+#onboardingSection .prompt-text-display,
+.prompt-text-display {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    font-size: 11px !important;
+    color: #575659 !important;
+    font-family: monospace !important;
+    line-height: 1.4 !important;
+}
+
+#onboardingSection .btn-copy-prompt,
+.btn-copy-prompt {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    padding: 6px 14px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .btn-copy-prompt:hover,
+.btn-copy-prompt:hover {
+    background: #dec29f !important;
+}
+
+/* Paso 9: Comparador Somático & Proyección 3D */
+#onboardingSection .congrats-icon-wrap,
+.congrats-icon-wrap {
+    width: 64px !important;
+    height: 64px !important;
+    background: #EAF6EE !important;
+    border: 1px solid rgba(30, 123, 66, 0.25) !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 20px !important;
-    transition: all 0.2s ease !important;
+    margin: 0 auto 18px !important;
 }
 
-#authModal .modal-close-btn:hover {
-    background: #EFECE6 !important;
-    color: #000000 !important;
+#onboardingSection .congrats-icon-wrap svg,
+.congrats-icon-wrap svg {
+    stroke: #1E7B42 !important;
+    width: 28px !important;
+    height: 28px !important;
 }
 
-#authModal h2,
-#authModal h3,
-#authModal h4 {
-    color: #121214 !important;
-}
-
-#authModal .modal-card div[style*="¿Entrenamos juntos?"] {
-    color: #575659 !important;
-}
-
-#authModal .modal-card div[style*="var(--accent-primary)"] {
-    color: #705B3E !important;
-}
-
-#authModal p {
-    color: #8E8D90 !important;
-}
-
-#authModal .auth-tabs {
-    background: #EFECE6 !important;
-    border-radius: 9999px !important;
-    padding: 4px !important;
-    display: flex !important;
-    gap: 4px !important;
-    border: none !important;
-}
-
-#authModal .auth-tab {
-    background: transparent !important;
-    color: #575659 !important;
-    border: none !important;
-    border-radius: 9999px !important;
-    font-weight: 500 !important;
-    font-size: 13px !important;
-    padding: 8px 16px !important;
-    transition: all 0.25s ease !important;
-}
-
-#authModal .auth-tab.active {
-    background: #121214 !important;
-    color: #FFFFFF !important;
-    font-weight: 600 !important;
-    border-radius: 9999px !important;
-    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.12) !important;
-}
-
-#authModal .input-label {
-    color: #121214 !important;
-    font-weight: 600 !important;
-    font-size: 12px !important;
-    letter-spacing: 0.3px !important;
-}
-
-#authModal .input-control {
-    background: #F4F3F0 !important;
-    border: 1px solid rgba(18, 18, 20, 0.1) !important;
-    color: #121214 !important;
-    border-radius: 12px !important;
-    font-size: 14px !important;
-    transition: all 0.2s ease !important;
-}
-
-#authModal .input-control:focus {
+#onboardingSection .biometric-assessment-card,
+.biometric-assessment-card {
     background: #FFFFFF !important;
-    border-color: #705B3E !important;
-    box-shadow: 0 0 0 3px rgba(229, 203, 167, 0.35) !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 24px 20px !important;
+    margin: 20px 0 !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
 }
 
-#authModal .input-control::placeholder {
-    color: #8E8D90 !important;
-}
-
-#authModal .btn-link-forgot {
+#onboardingSection .biometric-eval-badge,
+.biometric-eval-badge {
+    background: #FAF9F6 !important;
     color: #705B3E !important;
-    font-weight: 600 !important;
+    border: 1px solid rgba(112, 91, 62, 0.15) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    padding: 3px 12px !important;
+    border-radius: 9999px !important;
+    display: inline-block !important;
+    margin-bottom: 8px !important;
 }
 
-#authModal .btn-primary {
+#onboardingSection .biometric-eval-title,
+.biometric-eval-title {
+    font-size: 20px !important;
+    font-weight: 300 !important;
+    color: #121214 !important;
+    margin: 0 0 6px !important;
+}
+
+#onboardingSection .biometric-eval-title strong,
+.biometric-eval-title strong {
+    font-weight: 700 !important;
+    color: #705B3E !important;
+}
+
+#onboardingSection .biometric-eval-sub,
+.biometric-eval-sub {
+    font-size: 12.5px !important;
+    color: #575659 !important;
+    margin: 0 0 16px !important;
+}
+
+#onboardingSection .silhouettes-comparator-grid,
+.silhouettes-comparator-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 70px 1fr !important;
+    gap: 14px !important;
+    align-items: center !important;
+    margin-top: 18px !important;
+}
+
+@media (max-width: 680px) {
+    #onboardingSection .silhouettes-comparator-grid,
+    .silhouettes-comparator-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+}
+
+#onboardingSection .silhouette-column,
+.silhouette-column {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 18px !important;
+    padding: 18px 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    position: relative !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .silhouette-column.current-state-col,
+.silhouette-column.current-state-col {
+    border-color: rgba(18, 18, 20, 0.08) !important;
+}
+
+#onboardingSection .silhouette-column.target-state-col,
+.silhouette-column.target-state-col {
+    border-color: rgba(112, 91, 62, 0.25) !important;
+    background: linear-gradient(180deg, #FAF9F6 0%, #FBF8F3 100%) !important;
+}
+
+#onboardingSection .silhouette-tag,
+.silhouette-tag {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    padding: 4px 12px !important;
+    border-radius: 9999px !important;
+}
+
+#onboardingSection .silhouette-tag.target-tag,
+.silhouette-tag.target-tag {
+    background: #F7EFE4 !important;
+    border-color: rgba(112, 91, 62, 0.2) !important;
+    color: #705B3E !important;
+}
+
+#onboardingSection .athlete-name-display,
+.athlete-name-display {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #121214 !important;
+    margin-top: 8px !important;
+}
+
+#onboardingSection .athlete-metrics-tag,
+.athlete-metrics-tag {
+    font-size: 12px !important;
+    color: #575659 !important;
+    margin-top: 2px !important;
+}
+
+#onboardingSection .athlete-status-badge,
+.athlete-status-badge {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #705B3E !important;
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    padding: 3px 10px !important;
+    border-radius: 9999px !important;
+    margin-top: 6px !important;
+    display: inline-block !important;
+}
+
+#onboardingSection .athlete-goal-display,
+.athlete-goal-display {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    margin-top: 8px !important;
+}
+
+#onboardingSection .transition-arrow-wrap,
+.transition-arrow-wrap {
+    width: 44px !important;
+    height: 44px !important;
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 6px !important;
+}
+
+#onboardingSection .transition-arrow-wrap svg,
+.transition-arrow-wrap svg {
+    stroke: #705B3E !important;
+}
+
+#onboardingSection .transition-caption,
+.transition-caption {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    text-align: center !important;
+}
+
+/* Compromiso Personal de Nico */
+#onboardingSection .coach-feedback-card,
+.coach-feedback-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(112, 91, 62, 0.2) !important;
+    border-radius: 20px !important;
+    padding: 22px 24px !important;
+    text-align: left !important;
+    margin-top: 20px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+#onboardingSection .coach-feedback-card::before,
+.coach-feedback-card::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, #E5CBA7, #705B3E) !important;
+}
+
+#onboardingSection .coach-feedback-header,
+.coach-feedback-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    margin-bottom: 12px !important;
+}
+
+#onboardingSection .coach-avatar-badge,
+.coach-avatar-badge {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 50% !important;
+    background: #FAF9F6 !important;
+    border: 1.5px solid #705B3E !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+#onboardingSection .coach-avatar-badge svg,
+.coach-avatar-badge svg {
+    stroke: #705B3E !important;
+}
+
+#onboardingSection .coach-feedback-tag,
+.coach-feedback-tag {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+}
+
+#onboardingSection .coach-feedback-title,
+.coach-feedback-title {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #121214 !important;
+    margin: 2px 0 0 !important;
+}
+
+#onboardingSection .coach-feedback-desc,
+.coach-feedback-desc {
+    font-size: 13.5px !important;
+    color: #575659 !important;
+    line-height: 1.6 !important;
+    margin: 12px 0 !important;
+}
+
+#onboardingSection .coach-feedback-channel,
+.coach-feedback-channel {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #1E7B42 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+#onboardingSection .live-status-dot,
+.live-status-dot {
+    width: 7px !important;
+    height: 7px !important;
+    background: #1E7B42 !important;
+    border-radius: 50% !important;
+    display: inline-block !important;
+}
+
+/* Botones de Navegación Footer del Wizard */
+#onboardingSection .wizard-footer-actions,
+body.in-portal .wizard-footer-actions,
+.wizard-footer-actions {
+    padding: 20px 36px 28px !important;
+    background: #FFFFFF !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+}
+
+@media (max-width: 768px) {
+    #onboardingSection .wizard-footer-actions,
+    body.in-portal .wizard-footer-actions,
+    .wizard-footer-actions {
+        padding: 16px 16px 24px !important;
+    }
+}
+
+#onboardingSection .wizard-footer-actions .btn-primary,
+body.in-portal .wizard-footer-actions .btn-primary,
+.wizard-footer-actions .btn-primary {
     background: #E5CBA7 !important;
     color: #2A241C !important;
     border: none !important;
-    font-weight: 700 !important;
     border-radius: 9999px !important;
-    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
-    min-height: 48px !important;
-    letter-spacing: 0.5px !important;
-    transition: all 0.25s ease !important;
-}
-
-#authModal .btn-primary:hover {
-    background: #D8BD97 !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 4px 14px rgba(18, 18, 20, 0.12) !important;
-}
-
-#authModal #btnBackToLoginFromForgot {
-    color: #705B3E !important;
-}
-
-/* 3. Filas Agrupadas de Comida & Tarjetas Nutricionales Oscuras */
-body.in-portal .sens-meal-group-card,
-.sens-meal-group-card {
-    background: #121216 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    color: #FFFFFF !important;
-}
-
-body.in-portal .sens-meal-group-header,
-.sens-meal-group-header {
-    color: #FFFFFF !important;
-    font-weight: 800 !important;
-}
-
-body.in-portal .sens-meal-name,
-.sens-meal-name {
-    color: #FFFFFF !important;
+    padding: 13px 28px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
 }
 
-body.in-portal .sens-meal-desc,
-.sens-meal-desc {
-    color: rgba(255, 255, 255, 0.72) !important;
+#onboardingSection .wizard-footer-actions .btn-primary:hover:not(:disabled),
+body.in-portal .wizard-footer-actions .btn-primary:hover:not(:disabled),
+.wizard-footer-actions .btn-primary:hover:not(:disabled) {
+    background: #dec29f !important;
+    transform: translateY(-1px) !important;
 }
 
-body.in-portal .sens-nutri-date-nav,
-.sens-nutri-date-nav {
-    background: #09090B !important;
+#onboardingSection .wizard-footer-actions .btn-primary:disabled,
+body.in-portal .wizard-footer-actions .btn-primary:disabled,
+.wizard-footer-actions .btn-primary:disabled {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+}
+
+#onboardingSection .wizard-footer-actions .btn-secondary,
+body.in-portal .wizard-footer-actions .btn-secondary,
+.wizard-footer-actions .btn-secondary {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 9999px !important;
+    padding: 12px 24px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+#onboardingSection .wizard-footer-actions .btn-secondary:hover,
+body.in-portal .wizard-footer-actions .btn-secondary:hover,
+.wizard-footer-actions .btn-secondary:hover {
+    background: #EAE8E4 !important;
+}
+
+#onboardingSection #btnDiagEnterDashboard,
+.wizard-container #btnDiagEnterDashboard {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
     border: none !important;
-    border-radius: 20px !important;
-    padding: 6px 16px !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 9999px !important;
+    padding: 15px 36px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.1) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
 }
 
-body.in-portal .sens-nutri-date-nav #nutriDateText,
-.sens-nutri-date-nav #nutriDateText {
-    color: #FFFFFF !important;
+#onboardingSection #btnDiagEnterDashboard:hover,
+.wizard-container #btnDiagEnterDashboard:hover {
+    background: #dec29f !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(18, 18, 20, 0.15) !important;
+}
+
+/* =============================================================================
+   MODALES DE AUTENTICACION & PORTAL (MODO LIGHT QUIET LUXURY)
+   ============================================================================= */
+#authModal .modal-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 10px 40px -4px rgba(18, 18, 20, 0.12) !important;
+    color: #121214 !important;
+}
+
+#authModal .modal-card h2,
+#authModal .modal-card h3 {
+    color: #121214 !important;
+}
+
+#authModal .auth-tab-btn {
+    color: #575659 !important;
+    border-bottom: 2px solid transparent !important;
+}
+
+#authModal .auth-tab-btn.active {
+    color: #121214 !important;
+    border-bottom: 2px solid #705B3E !important;
     font-weight: 700 !important;
 }
 
 /* 4. Tarjeta de Ecuación Metabólica en Progreso */
 body.in-portal .metabolic-equation-card,
 .metabolic-equation-card {
-    background: #121214 !important;
-    border: none !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
-    color: #FFFFFF !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 20, 0.04) !important;
+    color: #121214 !important;
 }
 
 body.in-portal .metabolic-equation-card h3,
 .metabolic-equation-card h3 {
-    color: #FFFFFF !important;
+    color: #121214 !important;
     font-weight: 800 !important;
 }
 
 body.in-portal .metabolic-equation-card .eq-lbl,
 .metabolic-equation-card .eq-lbl {
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: #575659 !important;
 }
 
 body.in-portal .metabolic-equation-card .eq-operator,
 .metabolic-equation-card .eq-operator {
-    color: rgba(255, 255, 255, 0.6) !important;
+    color: #705B3E !important;
 }
 
 /* 5. Modales Adicionales: Video, Catálogo y Porciones */
 #videoModal .modal-card,
 #exerciseLibraryModal .modal-card,
 .sens-portion-modal-card {
-    background: #121214 !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: #FFFFFF !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
 }
 
 #videoModal h3,
 #exerciseLibraryModal h3,
 .sens-portion-modal-card h3 {
-    color: #FFFFFF !important;
+    color: #121214 !important;
     font-weight: 800 !important;
 }
 

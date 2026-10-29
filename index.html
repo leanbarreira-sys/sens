@@ -125,7 +125,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=14.2">
+    <link rel="stylesheet" href="style.css?v=14.3">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1310,27 +1310,77 @@
                         <!-- PASO 0: CONSENTIMIENTO INFORMADO (LEY 25.326 ARGENTINA) -->
                         <div class="wizard-step-card active" id="diagStep0">
                             <div class="step-content-body">
-                                <div class="step-tag-pill">Paso 0 • Confidencialidad &amp; Seguridad de Datos</div>
-                                <h2 class="step-title">Evaluación <strong>Inicial</strong></h2>
+                                <div class="step-tag-pill">Paso 0 de 8 • Confidencialidad &amp; Seguridad de Datos</div>
+                                <h2 class="step-title">Evaluación Inicial Somática en <strong>SENS</strong></h2>
                                 <p class="step-desc">
                                     Personalización de tu programación basada en tu biomecánica y hábitos, no en
                                     suposiciones. Nos tomará solo 2 minutos.
                                 </p>
 
+                                <!-- Viñeta Arquitectónica del Santuario SENS -->
+                                <div class="sens-onboarding-vignette"
+                                    style="position: relative; width: 100%; height: 160px; border-radius: 18px; overflow: hidden; margin-bottom: 22px; background: #EFECE6; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.04);">
+                                    <img src="img/img-nico.png" alt="Santuario SENS"
+                                        style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%; filter: brightness(0.92);">
+                                    <div
+                                        style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(18, 18, 20, 0.75) 0%, rgba(18, 18, 20, 0.1) 60%, transparent 100%); display: flex; align-items: flex-end; padding: 14px 18px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span class="material-symbols-outlined"
+                                                style="font-size: 16px; color: #E5CBA7;">verified_user</span>
+                                            <span style="color: #FFFFFF; font-size: 11.5px; font-weight: 500; letter-spacing: 0.3px;">
+                                                “La ausencia de fricción somática es la máxima expresión del rendimiento vital.”
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Cuadro Ley 25.326 con Micro Badges -->
                                 <div class="legal-notice-box">
                                     <div class="legal-icon">
-                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                                            stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                        </svg>
+                                        <span class="material-symbols-outlined"
+                                            style="font-size: 22px; color: #705B3E;">gavel</span>
                                     </div>
                                     <div class="legal-text">
-                                        <strong>Ley Nacional 25.326 de Protección de Datos Personales.</strong><br>
+                                        <div
+                                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; flex-wrap: wrap; gap: 6px;">
+                                            <strong>Ley Nacional 25.326 de Protección de Datos Personales</strong>
+                                            <span
+                                                style="font-size: 10px; font-weight: 700; color: #1E7B42; background: #EAF6EE; padding: 2px 8px; border-radius: 9999px;">Cifrado
+                                                E2E Activo</span>
+                                        </div>
                                         Para diseñar tu plan de fuerza y movilidad, analizaremos tu punto de partida
                                         físico y hábitos de vida. Tus datos están estrictamente encriptados, son
                                         confidenciales y solo serán analizados por Nico para calibrar tus sesiones
                                         personalizadas.
+                                        <div
+                                            style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px;">
+                                            <div
+                                                style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 6px 10px; font-size: 11px; color: #575659; display: flex; align-items: center; gap: 6px;">
+                                                <span class="material-symbols-outlined"
+                                                    style="font-size: 14px; color: #705B3E;">lock</span>
+                                                <span>Secreto biométrico activo</span>
+                                            </div>
+                                            <div
+                                                style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 6px 10px; font-size: 11px; color: #575659; display: flex; align-items: center; gap: 6px;">
+                                                <span class="material-symbols-outlined"
+                                                    style="font-size: 14px; color: #705B3E;">tune</span>
+                                                <span>1:1 Artesanal con Nico</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Presentación Head Coach Nico -->
+                                <div class="coach-mini-presentation-card"
+                                    style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 12px 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 14px;">
+                                    <div
+                                        style="position: relative; width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1.5px solid #E5CBA7;">
+                                        <img src="img/img-nico.png" alt="Nico Head Coach"
+                                            style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%;">
+                                    </div>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span style="font-size: 13px; font-weight: 600; color: #121214;">Nico • Head Coach SENS</span>
+                                        <span style="font-size: 11.5px; color: #575659;">Garantía de secreto profesional y diseño individualizado.</span>
                                     </div>
                                 </div>
 
@@ -1338,13 +1388,13 @@
                                     <input type="checkbox" id="diagConsentCheck">
                                     <div class="custom-box">
                                         <svg viewBox="0 0 12 10" fill="none">
-                                            <path d="M1.5 5L4.5 8L10.5 2" stroke="#080809" stroke-width="2"
+                                            <path d="M1.5 5L4.5 8L10.5 2" stroke="#FFFFFF" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                     </div>
                                     <div class="card-content">
                                         Entiendo y acepto el tratamiento confidencial de mis datos personales y
-                                        evaluación física.
+                                        evaluación física (Ley 25.326).
                                     </div>
                                 </label>
                             </div>
@@ -1352,7 +1402,7 @@
                             <div class="wizard-footer-actions">
                                 <div></div>
                                 <button type="button" class="btn btn-primary" id="btnStartDiag" disabled>
-                                    Empezar →
+                                    Comenzar Evaluación Somática →
                                 </button>
                             </div>
                         </div>
@@ -1486,6 +1536,20 @@
                                     Preguntas breves para conocer tu estado general antes de entrenar. Si no aplica,
                                     dejalas en NO.
                                 </p>
+
+                                <!-- Banner Editorial de Longevidad Segura (ACSM) -->
+                                <div class="legal-notice-box" style="margin-bottom: 20px;">
+                                    <div class="legal-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#705B3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                            <path d="m9 12 2 2 4-4"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="legal-text" style="flex: 1;">
+                                        <strong>Privacidad Estricta &amp; Directiva de Longevidad Segura</strong><br>
+                                        <span>Acreditación estándar Colegio Médico ACSM. Los umbrales hemodinámicos condicionan las cargas tisulares del programa personalizado.</span>
+                                    </div>
+                                </div>
 
                                 <div class="health-switch-list">
                                     <!-- Pregunta 1 -->
