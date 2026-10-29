@@ -24610,11 +24610,11 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
 }
 
 /* ==========================================================================
-   FASE 1: DESKTOP QUIET LIGHT LUXURY EXPANSION (@media min-width: 1024px)
+   FASE 1: DESKTOP QUIET LIGHT LUXURY EXPANSION (@media min-width: 900px)
    Paridad 1:1 con stitch_sens_quiet_luxury_design_system/pantallas DESKTOP/sens_landing_oficial_desktop/code.html
    ========================================================================== */
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
     /* 1. Ocultar Dock Móvil en Desktop */
     body:not(.in-portal) .mobile-quick-bar {
         display: none !important;
@@ -25074,6 +25074,8 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
     }
 
     body:not(.in-portal) .sens-metodo-section {
+        grid-column: 1 !important;
+        width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -25086,11 +25088,11 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
 
     body:not(.in-portal) .sens-steps-grid {
         gap: 16px !important;
-        margin-bottom: 28px !important;
+        margin-bottom: 0 !important;
     }
 
     body:not(.in-portal) .sens-step-card {
-        padding: 20px 24px !important;
+        padding: 22px 24px !important;
         border-radius: 20px !important;
     }
 
@@ -25120,6 +25122,8 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
     }
 
     body:not(.in-portal) .sens-coach-section {
+        grid-column: 2 !important;
+        width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -25128,17 +25132,17 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
     }
 
     body:not(.in-portal) .sens-coach-card {
-        padding: 28px !important;
+        padding: 24px !important;
         border-radius: 28px !important;
         box-shadow: 0 8px 32px rgba(18, 18, 20, 0.06) !important;
     }
 
     body:not(.in-portal) .sens-coach-avatar-wrap {
         width: 100% !important;
-        height: 300px !important;
+        height: 240px !important;
         border-radius: 20px !important;
         position: relative !important;
-        margin-bottom: 18px !important;
+        margin-bottom: 16px !important;
         overflow: hidden !important;
     }
 
@@ -25146,7 +25150,7 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-        object-position: center 25% !important;
+        object-position: center 20% !important;
         display: block !important;
     }
 
@@ -25274,6 +25278,8 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
     }
 
     body:not(.in-portal) #sumate .lead-intake-card {
+        grid-column: 1 !important;
+        width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
         height: 100% !important;
@@ -25285,6 +25291,8 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
     }
 
     body:not(.in-portal) #wellness {
+        grid-column: 2 !important;
+        width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
         height: 100% !important;
