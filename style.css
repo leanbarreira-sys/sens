@@ -7175,9 +7175,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
     filter: blur(0) !important;
 }
 
-/* En Desktop (>= 992px): Video a la izquierda y Contenido Matematicamente Centrado en el Bloque Negro */
+/* En Desktop (>= 992px): Legacy Dark Split Mode (Desactivado en Landing Quiet Light Luxury) */
 @media (min-width: 992px) {
-    .sens-train-hero {
+    body.legacy-dark-split .sens-train-hero {
         min-height: 100vh !important;
         display: grid !important;
         grid-template-columns: min(44vw, 680px) 1fr !important;
@@ -7187,8 +7187,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
         overflow: hidden !important;
     }
 
-    .hero-bg-fallback,
-    .hero-video {
+    body.legacy-dark-split .hero-bg-fallback,
+    body.legacy-dark-split .hero-video {
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
@@ -7201,7 +7201,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
         z-index: 1 !important;
     }
 
-    .hero-overlay {
+    body.legacy-dark-split .hero-overlay {
         position: absolute !important;
         inset: 0 !important;
         background: 
@@ -7213,7 +7213,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     }
 
     /* El contenedor vive en la Columna 2 (el espacio negro) y se centra exactamente en ella */
-    .hero-train-content {
+    body.legacy-dark-split .hero-train-content {
         grid-column: 2 !important;
         width: 100% !important;
         max-width: 640px !important;
@@ -7227,7 +7227,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
         padding: 0 40px !important;
     }
 
-    .hero-skeleton-wrap {
+    body.legacy-dark-split .hero-skeleton-wrap {
         padding: 100px 0 60px !important;
         display: grid !important;
         grid-template-columns: min(44vw, 680px) 1fr !important;
@@ -24652,15 +24652,17 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
         height: auto !important;
         overflow: visible !important;
         border-radius: 0 !important;
+        display: block !important;
+        grid-template-columns: none !important;
     }
 
     body:not(.in-portal) .sens-hero-split-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        gap: 56px !important;
+        gap: 64px !important;
         align-items: center !important;
         width: 100% !important;
-        min-height: 740px !important;
+        min-height: 720px !important;
     }
 
     body:not(.in-portal) .sens-hero-visual-card {
@@ -24860,29 +24862,63 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
     }
 
     body:not(.in-portal) .hero-cta-group {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
         justify-content: flex-start !important;
+        gap: 16px !important;
         margin-bottom: 32px !important;
-        gap: 14px !important;
     }
 
     body:not(.in-portal) .hero-cta-group .btn-primary {
+        background: #E5CBA7 !important;
+        color: #121214 !important;
+        -webkit-text-fill-color: #121214 !important;
+        border: 1px solid #DDBB90 !important;
+        border-radius: 9999px !important;
         padding: 14px 28px !important;
         font-size: 13.5px !important;
-        font-weight: 800 !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px !important;
+        box-shadow: 0 4px 16px rgba(201, 169, 110, 0.25) !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    body:not(.in-portal) .hero-cta-group .btn-primary:hover {
+        background: #D8B788 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 20px rgba(201, 169, 110, 0.35) !important;
     }
 
     body:not(.in-portal) .hero-cta-group .hero-btn-apple-dark {
         background: #F4F3F0 !important;
         border: 1px solid rgba(18, 18, 20, 0.08) !important;
         color: #121214 !important;
-        padding: 14px 24px !important;
-        font-size: 13px !important;
+        -webkit-text-fill-color: #121214 !important;
+        padding: 14px 28px !important;
+        font-size: 13.5px !important;
         font-weight: 700 !important;
-        transition: background 0.2s ease !important;
+        border-radius: 9999px !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     body:not(.in-portal) .hero-cta-group .hero-btn-apple-dark:hover {
-        background: #EFECE6 !important;
+        background: #EAE8E2 !important;
+        color: #121214 !important;
+        -webkit-text-fill-color: #121214 !important;
+        border-color: rgba(18, 18, 20, 0.16) !important;
+        box-shadow: 0 4px 12px rgba(18, 18, 20, 0.06) !important;
+        transform: translateY(-1px) !important;
     }
 
     body:not(.in-portal) .hero-cta-group .hero-btn-secondary {
@@ -24956,27 +24992,33 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
         line-height: 1.25 !important;
     }
 
-    /* 4. Pilares SENS: 4 Columnas Elegantes */
+    /* 4. Pilares SENS: 3 Columnas Elegantes */
     body:not(.in-portal) #pilares .section-head {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: flex-end !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 48px !important;
+        align-items: start !important;
         max-width: 1520px !important;
         margin: 0 auto 36px !important;
         text-align: left !important;
     }
 
     body:not(.in-portal) #pilares .section-head .section-main-title {
-        font-size: 36px !important;
+        font-size: 38px !important;
         font-weight: 300 !important;
-        margin: 4px 0 0 !important;
+        letter-spacing: -0.02em !important;
+        color: #121214 !important;
+        margin: 0 !important;
+        line-height: 1.15 !important;
     }
 
     body:not(.in-portal) #pilares .section-head .section-lead {
-        max-width: 460px !important;
+        max-width: 600px !important;
         margin: 0 !important;
         text-align: left !important;
         font-size: 14.5px !important;
+        line-height: 1.6 !important;
+        color: #575659 !important;
     }
 
     body:not(.in-portal) #pilares .pill-dark {
@@ -24991,8 +25033,8 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
 
     body:not(.in-portal) #pilares .pillars-carousel {
         display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 24px !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 28px !important;
         overflow: visible !important;
         transform: none !important;
         width: 100% !important;
@@ -25249,5 +25291,23 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
         margin: 40px auto 0 !important;
         padding: 60px 48px !important;
         border-radius: 28px 28px 0 0 !important;
+    }
+
+    /* 9. Floating Social Refinado en Desktop */
+    body:not(.in-portal) .floating-social {
+        bottom: 24px !important;
+        right: 24px !important;
+        gap: 10px !important;
+    }
+
+    body:not(.in-portal) .floating-social .social-btn {
+        width: 46px !important;
+        height: 46px !important;
+        box-shadow: 0 4px 16px rgba(18, 18, 20, 0.12) !important;
+    }
+
+    body:not(.in-portal) .floating-social .social-btn svg {
+        width: 22px !important;
+        height: 22px !important;
     }
 }
