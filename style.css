@@ -14124,11 +14124,32 @@ body.in-portal .sens-muscle-focus-sub {
    Tokens: #FAF9F6 Alabastro | #FFFFFF Blanco Puro | #121214 Carbón | #705B3E Bronce | #E5CBA7 Champagne | #1E7B42 Verde Clínico
    ============================================================================= */
 
+/* Contenedor y Centrado Absoluto del Wizard en Desktop, Tablet y Mobile */
+body.in-portal:has(#onboardingSection.active) .portal-body,
+body[data-active-view="onboardingSection"] .portal-body {
+    padding: 20px 16px 80px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+}
+
 #onboardingSection {
     background: #FAF9F6 !important;
     min-height: 100vh !important;
+    width: 100% !important;
+    max-width: 100% !important;
     padding: 0 0 60px !important;
+    margin: 0 auto !important;
     color: #121214 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
 
     /* Local Variable Overrides for Light Quiet Luxury */
     --text-primary: #121214 !important;
@@ -14150,19 +14171,23 @@ body.in-portal .wizard-container,
     border-radius: 28px !important;
     box-shadow: 0 4px 24px -2px rgba(18, 18, 20, 0.04), 0 1px 3px rgba(18, 18, 20, 0.02) !important;
     color: #121214 !important;
+    width: 100% !important;
     max-width: 960px !important;
-    margin: 32px auto 48px !important;
+    margin: 24px auto 48px !important;
     position: relative !important;
     overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
+    box-sizing: border-box !important;
 }
 
 @media (max-width: 768px) {
     body.in-portal .wizard-container,
     #onboardingSection .wizard-container,
     .wizard-container {
-        margin: 12px 12px 32px !important;
+        width: 100% !important;
+        max-width: 640px !important;
+        margin: 12px auto 32px !important;
         border-radius: 20px !important;
         box-shadow: 0 2px 12px rgba(18, 18, 20, 0.04) !important;
     }
@@ -14767,11 +14792,19 @@ body.in-portal .touch-card input:checked ~ .custom-circle,
     margin-top: 12px !important;
     padding-top: 10px !important;
     border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
-    display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
     gap: 10px !important;
     flex-wrap: wrap !important;
+}
+
+#onboardingSection .injury-intensity-row[style*="display: none"] {
+    display: none !important;
+}
+
+#onboardingSection .injury-intensity-row.is-open,
+#onboardingSection .injury-intensity-row[style*="display: flex"] {
+    display: flex !important;
 }
 
 #onboardingSection .intensity-label,
@@ -15601,6 +15634,78 @@ body.in-portal .wizard-footer-actions .btn-secondary:hover,
     background: #dec29f !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 6px 20px rgba(18, 18, 20, 0.15) !important;
+}
+
+/* =============================================================================
+   QUIET VITALITY — FLOATING DOCK MÓVIL DEL PORTAL (DASHBOARD)
+   Oculto en Onboarding, y look and feel Light Luxury cuando está en el Dashboard
+   ============================================================================= */
+body:has(#onboardingSection.active) #sensFloatingDock,
+body.in-portal:has(#onboardingSection.active) #sensFloatingDock,
+body[data-active-view="onboardingSection"] #sensFloatingDock,
+#onboardingSection.active ~ #sensFloatingDock,
+#onboardingSection ~ #sensFloatingDock,
+body:has(#onboardingSection.active) .sens-floating-dock {
+    display: none !important;
+}
+
+@media (max-width: 900px) {
+    body.in-portal #sensFloatingDock {
+        position: fixed !important;
+        bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+        left: 50% !important;
+        transform: translate3d(-50%, 0, 0) !important;
+        -webkit-transform: translate3d(-50%, 0, 0) !important;
+        width: calc(100% - 32px) !important;
+        max-width: 400px !important;
+        box-sizing: border-box !important;
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 4px !important;
+        padding: 6px 8px !important;
+        background: rgba(255, 255, 255, 0.94) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(18, 18, 20, 0.08) !important;
+        border-radius: 36px !important;
+        box-shadow: 0 10px 32px -4px rgba(18, 18, 20, 0.12), 0 2px 6px rgba(18, 18, 20, 0.04) !important;
+        z-index: 99999 !important;
+        overflow: hidden !important;
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+    }
+
+    body.in-portal #sensFloatingDock .sens-dock-item {
+        background: transparent !important;
+        border: none !important;
+        color: #575659 !important;
+        font-size: 10.5px !important;
+        font-weight: 500 !important;
+        padding: 8px 6px !important;
+        border-radius: 24px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 3px !important;
+        transition: all 0.2s ease !important;
+        cursor: pointer !important;
+    }
+
+    body.in-portal #sensFloatingDock .sens-dock-item svg {
+        stroke: #575659 !important;
+        transition: stroke 0.2s ease !important;
+    }
+
+    body.in-portal #sensFloatingDock .sens-dock-item.active {
+        background: #FAF9F6 !important;
+        color: #705B3E !important;
+        font-weight: 700 !important;
+        box-shadow: 0 1px 3px rgba(18, 18, 20, 0.04) !important;
+    }
+
+    body.in-portal #sensFloatingDock .sens-dock-item.active svg {
+        stroke: #705B3E !important;
+    }
 }
 
 /* =============================================================================

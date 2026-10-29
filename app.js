@@ -3912,6 +3912,14 @@ function switchPortalView(viewId) {
         const coachDock = document.getElementById('sensCoachFloatingDock');
         const isAdmin = isCurrentUserAdmin();
         document.body.setAttribute('data-active-view', viewId);
+
+        // En Onboarding, el floating dock debe estar 100% oculto
+        if (viewId === 'onboardingSection') {
+            if (athleteDock) athleteDock.style.display = 'none';
+            if (coachDock) coachDock.style.display = 'none';
+        } else if (!isAdmin && athleteDock && window.innerWidth <= 900) {
+            athleteDock.style.display = 'grid';
+        }
         document.body.classList.toggle('is-admin', isAdmin);
 
         // Cerrar cualquier bottom sheet o modal activo para que no quede flotando entre vistas
@@ -4500,15 +4508,32 @@ function initDiagnosisWizard() {
     const noInjuriesCheck = document.getElementById('diagNoInjuriesCheck');
 
     injuryCheckboxes.forEach(cb => {
+        const intensityRow = document.getElementById(`intensity_${cb.value}`);
+        if (intensityRow) {
+            if (cb.checked) {
+                intensityRow.classList.add('is-open');
+                intensityRow.style.setProperty('display', 'flex', 'important');
+            } else {
+                intensityRow.classList.remove('is-open');
+                intensityRow.style.setProperty('display', 'none', 'important');
+            }
+        }
+
         cb.addEventListener('change', () => {
             const injuryKey = cb.value;
-            const intensityRow = document.getElementById(`intensity_${injuryKey}`);
+            const row = document.getElementById(`intensity_${injuryKey}`);
             
             if (cb.checked) {
                 if (noInjuriesCheck) noInjuriesCheck.checked = false;
-                if (intensityRow) intensityRow.style.display = 'flex';
+                if (row) {
+                    row.classList.add('is-open');
+                    row.style.setProperty('display', 'flex', 'important');
+                }
             } else {
-                if (intensityRow) intensityRow.style.display = 'none';
+                if (row) {
+                    row.classList.remove('is-open');
+                    row.style.setProperty('display', 'none', 'important');
+                }
             }
             saveDiagnosisDraft();
         });
@@ -4519,8 +4544,11 @@ function initDiagnosisWizard() {
             if (noInjuriesCheck.checked) {
                 injuryCheckboxes.forEach(cb => {
                     cb.checked = false;
-                    const intensityRow = document.getElementById(`intensity_${cb.value}`);
-                    if (intensityRow) intensityRow.style.display = 'none';
+                    const row = document.getElementById(`intensity_${cb.value}`);
+                    if (row) {
+                        row.classList.remove('is-open');
+                        row.style.setProperty('display', 'none', 'important');
+                    }
                 });
             }
             saveDiagnosisDraft();
@@ -5376,86 +5404,77 @@ function renderBiometricSilhouettes(gender, weight, height, goal, fullName) {
     }
 
     function buildSilhouetteSvg(isTarget, wFactor, hFactor) {
-        const strokeColor = isTarget ? "#E5CBA7" : "rgba(229, 203, 167, 0.45)";
-        const fillColor = isTarget ? "rgba(229, 203, 167, 0.16)" : "rgba(255, 255, 255, 0.04)";
-        const glow = isTarget ? "filter: drop-shadow(0 0 12px rgba(229, 203, 167, 0.42));" : "";
+        if (!isTarget) {
+            // T0 Inicial: Biomecánica Basal con Compensación Articular y Marcador L5-S1 (Alta Definición)
+            return `
+                <div class="somato-render-card" style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 6px;">
+                    <svg viewBox="0 0 100 220" fill="none" stroke="#575659" stroke-linecap="round" stroke-linejoin="round" style="width: 100%; max-height: 220px; display: block; margin: 0 auto;">
+                        <!-- Cabeza con sutil compensación basal -->
+                        <circle cx="50" cy="22" r="14" stroke="#575659" stroke-width="1.6" fill="rgba(87, 86, 89, 0.05)"/>
+                        
+                        <!-- Cuello y Hombros con leve inclinación postural -->
+                        <path d="M44 36v8M56 36v8M30 48c4-4 12-4 20-4s16 0 20 4" stroke="#575659" stroke-width="1.8"/>
+                        
+                        <!-- Torso Basal con compensación lateral -->
+                        <path d="M30 48l-4 46c0 6 6 12 14 12h20c8 0 14-6 14-12l-4-46" stroke="#575659" stroke-width="1.8" fill="rgba(87, 86, 89, 0.04)"/>
+                        <path d="M34 70c6 2 26 2 32 0" stroke-dasharray="2 2" stroke-width="1" stroke="#8E8D90"/>
+                        
+                        <!-- Pelvis / Cadera con rotación basal -->
+                        <path d="M38 106l-4 12c-1 3 1 6 4 6h24c3 0 5-3 4-6l-4-12" stroke="#575659" stroke-width="1.8"/>
+                        
+                        <!-- Extremidades Inferiores -->
+                        <path d="M42 124l-3 48-1 40M58 124l3 48 1 40" stroke="#575659" stroke-width="2"/>
+                        
+                        <!-- Brazos -->
+                        <path d="M26 50l-8 42-2 30M74 50l8 42 2 30" stroke="#575659" stroke-width="1.5"/>
 
-        const malePath = `
-            M 45 34
-            C 40 35, 33 40, 24 46
-            C 18 50, 15 62, 17 80
-            L 14 115
-            C 13 125, 16 128, 19 125
-            L 23 96
-            C 25 82, 32 78, 33 90
-            L 34 105
-            C 33 115, 30 126, 28 144
-            C 27 156, 31 165, 31 175
-            L 34 194
-            L 42 194
-            L 42 178
-            C 42 165, 45 140, 48 122
-            L 52 122
-            C 55 140, 58 165, 58 178
-            L 58 194
-            L 66 194
-            L 69 175
-            C 69 165, 73 156, 72 144
-            C 70 126, 67 115, 66 105
-            L 67 90
-            C 68 78, 75 82, 77 96
-            L 81 125
-            C 84 128, 87 125, 86 115
-            L 83 80
-            C 85 62, 82 50, 76 46
-            C 67 40, 60 35, 55 34
-            Z
-        `;
+                        <!-- Marcador Clínico Pulsante de Alerta L5-S1 -->
+                        <g class="l5-s1-pulse">
+                            <circle cx="50" cy="98" fill="#BA1A1A" fill-opacity="0.25" r="7" stroke="#BA1A1A" stroke-width="1.2">
+                                <animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/>
+                                <animate attributeName="fill-opacity" values="0.3;0.08;0.3" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="50" cy="98" fill="#BA1A1A" r="2.5" stroke="none"/>
+                        </g>
+                    </svg>
+                    <span style="display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #BA1A1A; background: #FDE8E8; padding: 4px 12px; border-radius: 9999px; margin-top: 10px; border: 1px solid rgba(186, 26, 26, 0.2);">Compensación L5-S1 Activa</span>
+                </div>
+            `;
+        } else {
+            // T16 Semanas: Fase Óptima 3D, Simetría, Torso en V y Descompresión Sagital
+            return `
+                <div class="somato-render-card" style="position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 6px;">
+                    <div style="position: absolute; inset: 0; background: radial-gradient(circle, rgba(229, 203, 167, 0.22) 0%, transparent 72%); pointer-events: none; border-radius: 16px;"></div>
+                    <svg viewBox="0 0 100 220" fill="none" stroke="#705B3E" stroke-linecap="round" stroke-linejoin="round" style="width: 100%; max-height: 220px; display: block; margin: 0 auto; position: relative; z-index: 2;">
+                        <!-- Cabeza Perfectamente Alineada -->
+                        <circle cx="50" cy="22" r="13" stroke="#705B3E" stroke-width="1.6" fill="rgba(229, 203, 167, 0.12)"/>
+                        
+                        <!-- Hombros Alineados & Escápula Activa -->
+                        <path d="M45 35v7M55 35v7M28 46c5-3 14-3 22-3s17 0 22 3" stroke="#705B3E" stroke-width="2"/>
+                        
+                        <!-- Torso Atlético en V & Cintura Recompuesta -->
+                        <path d="M28 46l-2 44c0 5 8 10 16 10h16c8 0 16-5 16-10l-2-44" stroke="#705B3E" stroke-width="2" fill="rgba(229, 203, 167, 0.12)"/>
+                        <path d="M38 68c4 1 20 1 24 0" stroke-dasharray="3 2" stroke-width="1" stroke="#E5CBA7"/>
+                        
+                        <!-- Pelvis Equilibrada y Descomprimida -->
+                        <path d="M40 100h20l-2 16h-16z" stroke="#705B3E" stroke-width="1.4"/>
+                        
+                        <!-- Extremidades Fuertes y Alineadas -->
+                        <path d="M42 116l-2 52 1 44M58 116l2 52-1 44" stroke="#705B3E" stroke-width="2.2"/>
+                        
+                        <!-- Brazos Atléticos -->
+                        <path d="M26 48l-6 44-2 30M74 48l6 44 2 30" stroke="#705B3E" stroke-width="1.6"/>
 
-        const femalePath = `
-            M 46 34
-            C 42 36, 35 41, 28 47
-            C 22 52, 19 64, 20 80
-            L 18 115
-            C 17 124, 20 126, 22 123
-            L 25 96
-            C 27 80, 34 76, 35 88
-            C 35 98, 29 108, 28 122
-            C 27 136, 28 148, 29 160
-            C 30 170, 33 178, 34 194
-            L 41 194
-            L 42 178
-            C 42 165, 45 142, 48 123
-            L 52 123
-            C 55 142, 58 165, 58 178
-            L 59 194
-            L 66 194
-            C 67 178, 70 170, 71 160
-            C 72 148, 73 136, 72 122
-            C 71 108, 65 98, 65 88
-            C 66 76, 73 80, 75 96
-            L 78 123
-            C 80 126, 83 124, 82 115
-            L 80 80
-            C 81 64, 78 52, 72 47
-            C 65 41, 58 36, 54 34
-            Z
-        `;
-
-        const bodyPath = gender === 'female' ? femalePath : malePath;
-        const headRadiusX = gender === 'female' ? 8 : 9;
-        const headRadiusY = gender === 'female' ? 11 : 12;
-
-        return `
-        <svg viewBox="0 0 100 210" style="width: 100%; height: 210px; max-height: 230px; ${glow}" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(50, 105) scale(${wFactor.toFixed(3)}, ${hFactor.toFixed(3)}) translate(-50, -105)">
-                <ellipse cx="50" cy="20" rx="${headRadiusX}" ry="${headRadiusY}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="2"/>
-                <path d="${bodyPath.trim()}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="2" stroke-linejoin="round"/>
-            </g>
-        </svg>`;
+                        <!-- Indicador de Descompresión Sagital -->
+                        <circle cx="50" cy="94" fill="#E5CBA7" r="3.5" stroke="#705B3E" stroke-width="1.2"/>
+                    </svg>
+                    <span style="display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1E7B42; background: #EAF6EE; padding: 4px 12px; border-radius: 9999px; margin-top: 10px; border: 1px solid rgba(30, 123, 66, 0.2);">Simetría &amp; Descompresión Óptima</span>
+                </div>
+            `;
+        }
     }
 
-    if (currentContainer) currentContainer.innerHTML = buildSilhouetteSvg(false, widthFactor, heightFactor);
+    currentContainer.innerHTML = buildSilhouetteSvg(false, widthFactor, heightFactor);
     if (goalContainer) goalContainer.innerHTML = buildSilhouetteSvg(true, targetWidth, targetHeight);
 
     if (nameDisplay) nameDisplay.textContent = fullName || 'Atleta SENS';
