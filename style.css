@@ -14127,7 +14127,7 @@ body.in-portal .sens-muscle-focus-sub {
 /* Contenedor y Centrado Absoluto del Wizard en Desktop, Tablet y Mobile */
 body.in-portal:has(#onboardingSection.active) .portal-body,
 body[data-active-view="onboardingSection"] .portal-body {
-    padding: 20px 16px 80px !important;
+    padding: 16px 16px 24px !important;
     max-width: 100% !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -14137,12 +14137,19 @@ body[data-active-view="onboardingSection"] .portal-body {
     justify-content: flex-start !important;
 }
 
+/* Aislamiento estricto: mientras onboardingSection esté activo, NINGUNA otra vista puede mostrarse */
+body:has(#onboardingSection.active) .portal-view:not(#onboardingSection),
+body[data-active-view="onboardingSection"] .portal-view:not(#onboardingSection),
+#onboardingSection.active ~ .portal-view {
+    display: none !important;
+}
+
 #onboardingSection {
     background: #FAF9F6 !important;
-    min-height: 100vh !important;
+    min-height: auto !important;
     width: 100% !important;
     max-width: 100% !important;
-    padding: 0 0 60px !important;
+    padding: 0 0 12px !important;
     margin: 0 auto !important;
     color: #121214 !important;
     display: flex !important;
@@ -14173,7 +14180,7 @@ body.in-portal .wizard-container,
     color: #121214 !important;
     width: 100% !important;
     max-width: 960px !important;
-    margin: 24px auto 48px !important;
+    margin: 16px auto 20px !important;
     position: relative !important;
     overflow: hidden !important;
     display: flex !important;
@@ -14187,7 +14194,7 @@ body.in-portal .wizard-container,
     .wizard-container {
         width: 100% !important;
         max-width: 640px !important;
-        margin: 12px auto 32px !important;
+        margin: 10px auto 16px !important;
         border-radius: 20px !important;
         box-shadow: 0 2px 12px rgba(18, 18, 20, 0.04) !important;
     }
@@ -15548,7 +15555,7 @@ body.in-portal .touch-card input:checked ~ .custom-circle,
 #onboardingSection .wizard-footer-actions,
 body.in-portal .wizard-footer-actions,
 .wizard-footer-actions {
-    padding: 20px 36px 28px !important;
+    padding: 16px 28px 18px !important;
     background: #FFFFFF !important;
     border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
     display: flex !important;

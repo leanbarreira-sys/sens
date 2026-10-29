@@ -4450,6 +4450,8 @@ function startDiagnosisWizard(isEditMode = false) {
         }
     }
 
+    const onboardingSec = document.getElementById('onboardingSection');
+    if (onboardingSec) onboardingSec.style.display = '';
     switchPortalView('onboardingSection');
     window.scrollTo(0, 0);
 }
@@ -4891,7 +4893,16 @@ function initDiagnosisWizard() {
     // 10. Botón Entrar al Dashboard desde Congrats (Paso 9)
     const enterDashBtn = document.getElementById('btnDiagEnterDashboard');
     if (enterDashBtn) {
-        enterDashBtn.addEventListener('click', () => {
+        enterDashBtn.addEventListener('click', (e) => {
+            if (e) e.preventDefault();
+            const onboardingSec = document.getElementById('onboardingSection');
+            if (onboardingSec) {
+                onboardingSec.classList.remove('active');
+                onboardingSec.style.display = 'none';
+            }
+            try { localStorage.setItem('sens_skip_onboarding_temp', 'true'); } catch (_) {}
+            if (AppState.profile) AppState.profile.onboarding_completed = true;
+
             const isAdmin = isCurrentUserAdmin();
             const access = checkUserAccessStatus(AppState.profile);
             if (!isAdmin && !access.hasAccess) {
@@ -4902,8 +4913,10 @@ function initDiagnosisWizard() {
                 renderDashboardData();
                 renderWorkoutDay(AppState.currentDay || 'day1');
                 switchPortalView('dashView');
-                window.scrollTo(0, 0);
             }
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         });
     }
 
