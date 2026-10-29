@@ -28198,3 +28198,405 @@ body.in-portal .sens-btn-save-activity {
     display: none !important;
 }
 
+
+/* =============================================================================
+   SENS QUIET LUXURY — REFINAMIENTOS DE EXPERIENCIA DE USUARIO (UX & CONTRASTE v15.1)
+   ============================================================================= */
+
+/* 1. Header: Logo SENS fiel a Inicio */
+body.in-portal .brand-logo-img-portal {
+    height: 28px !important;
+    width: auto !important;
+    max-width: 140px !important;
+    object-fit: contain !important;
+    display: block !important;
+    filter: none !important;
+}
+
+/* 2. Píldora Ejecutiva de Acceso en 1 Sola Fila (Single-Row Capsule) */
+body.in-portal #sensTrialStatusPillContainer {
+    margin-bottom: 14px !important;
+}
+
+body.in-portal .sens-plan-single-row-pill {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(229, 203, 167, 0.5) !important;
+    border-radius: 9999px !important;
+    padding: 6px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+body.in-portal .sens-plan-single-row-pill:hover {
+    background: #FAF9F6 !important;
+    border-color: #705B3E !important;
+    box-shadow: 0 4px 16px rgba(229, 203, 167, 0.25) !important;
+}
+
+body.in-portal .sens-plan-pill-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+}
+
+body.in-portal .sens-plan-name {
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    letter-spacing: -0.01em !important;
+}
+
+body.in-portal .sens-plan-days-bubble {
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    color: #705B3E !important;
+    background: rgba(229, 203, 167, 0.35) !important;
+    padding: 2px 7px !important;
+    border-radius: 9999px !important;
+    font-variant-numeric: tabular-nums !important;
+    white-space: nowrap !important;
+}
+
+body.in-portal .sens-plan-pill-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+    color: #705B3E !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+}
+
+body.in-portal .sens-plan-next-action {
+    white-space: nowrap !important;
+}
+
+/* 3. Bienvenida: Subir posición, MAKES SENS y ¿Lean, entrenamos? */
+body.in-portal .sens-dash-welcome-header {
+    margin-top: 2px !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
+}
+
+body.in-portal .sens-dash-welcome-slogan {
+    font-size: 9.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.22em !important;
+    color: #77767B !important;
+    text-transform: uppercase !important;
+    display: block !important;
+    margin-bottom: 3px !important;
+}
+
+body.in-portal .sens-dash-welcome-question {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #121214 !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 !important;
+    line-height: 1.15 !important;
+}
+
+/* 4. Eliminación de Eyebrows / Pills Redundantes en Cards */
+body.in-portal #dashWorkoutDayDateLabel,
+body.in-portal #dashNutriDayDateLabel {
+    display: none !important;
+}
+
+/* Botón "Pasar a otro día" en Card de Entrenamiento */
+body.in-portal .btn-reschedule-home-chip.sens-tactile-pill {
+    border-radius: 9999px !important;
+    background: rgba(255, 255, 255, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    color: #FFFFFF !important;
+    padding: 3px 10px !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+body.in-portal .btn-reschedule-home-chip.sens-tactile-pill:hover {
+    background: #E5CBA7 !important;
+    border-color: #705B3E !important;
+    color: #1A140A !important;
+}
+
+/* 5. Modal de Reprogramación: Look & Feel Quiet Luxury */
+body.in-portal #modalMoveWorkoutSession.sens-luxury-modal-overlay {
+    background: rgba(18, 18, 20, 0.5) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .sens-move-workout-modal-card {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15) !important;
+    padding: 20px !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .sens-move-modal-header {
+    border-bottom: 1px solid #ECEBE8 !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .sens-move-modal-kicker {
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.12em !important;
+    color: #705B3E !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .sens-move-modal-title {
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+    color: #121214 !important;
+    letter-spacing: -0.02em !important;
+    margin: 3px 0 0 0 !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .sens-move-modal-sub {
+    font-size: 11.5px !important;
+    color: #575659 !important;
+    margin: 2px 0 0 0 !important;
+}
+
+body.in-portal #modalMoveWorkoutSession #btnCloseMoveWorkoutModal {
+    color: #121214 !important;
+    opacity: 0.55 !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+}
+
+body.in-portal #modalMoveWorkoutSession #btnCloseMoveWorkoutModal:hover {
+    opacity: 1 !important;
+}
+
+body.in-portal #modalMoveWorkoutSession #moveWorkoutSourceSummary {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(229, 203, 167, 0.6) !important;
+    border-radius: 14px !important;
+    padding: 11px 14px !important;
+    margin-bottom: 14px !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .sens-move-section-label {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #705B3E !important;
+    margin-bottom: 8px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .btn-quick-move-pill {
+    background: #FAF9F6 !important;
+    border: 1.5px solid rgba(229, 203, 167, 0.5) !important;
+    color: #121214 !important;
+    font-size: 11.5px !important;
+    padding: 7px 16px !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .btn-quick-move-pill:hover {
+    background: #E5CBA7 !important;
+    border-color: #705B3E !important;
+    color: #1A140A !important;
+    transform: translateY(-1px) !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .sens-move-day-row {
+    background: #FAF9F6 !important;
+    border: 1px solid #ECEBE8 !important;
+    border-radius: 12px !important;
+    transition: all 0.15s ease !important;
+}
+
+body.in-portal #modalMoveWorkoutSession .sens-move-day-row:hover {
+    border-color: rgba(229, 203, 167, 0.7) !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* 6. Chips de Nutrición: Micro-iconos, Abreviaturas Responsivas y Cero Cortes */
+body.in-portal .sens-nutri-5cals-row {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    margin: 6px 0 2px 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+body.in-portal .sens-5cals-chip {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 6px 2px !important;
+    border-radius: 9px !important;
+    background: rgba(18, 18, 22, 0.82) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    min-width: 0 !important;
+    gap: 2px !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s ease !important;
+}
+
+body.in-portal .sens-5cals-chip.highlight {
+    background: rgba(229, 203, 167, 0.32) !important;
+    border: 1px solid rgba(229, 203, 167, 0.7) !important;
+    box-shadow: 0 0 12px rgba(229, 203, 167, 0.3) !important;
+}
+
+body.in-portal .sens-5cals-chip .chip-icon {
+    width: 12px !important;
+    height: 12px !important;
+    opacity: 0.9 !important;
+    flex-shrink: 0 !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-5cals-chip.highlight .chip-icon {
+    color: #E5CBA7 !important;
+}
+
+body.in-portal .sens-5cals-chip .chip-name {
+    font-size: 8.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.03em !important;
+    text-transform: uppercase !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+}
+
+body.in-portal .sens-5cals-chip .chip-val {
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    font-variant-numeric: tabular-nums !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+}
+
+/* Control Responsivo de Texto en Chips de Nutrición */
+@media (max-width: 640px) {
+    body.in-portal .chip-name-short {
+        display: inline !important;
+    }
+    body.in-portal .chip-name-full {
+        display: none !important;
+    }
+}
+
+@media (min-width: 641px) {
+    body.in-portal .chip-name-short {
+        display: none !important;
+    }
+    body.in-portal .chip-name-full {
+        display: inline !important;
+    }
+}
+
+/* 7. Balance Energético: Inputs y Steppers Redondeados (Look & Feel Cápsula) */
+body.in-portal .sens-act-stepper-control {
+    border-radius: 9999px !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid #E5E4E0 !important;
+    padding: 3px !important;
+    height: 36px !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.in-portal .sens-act-stepper-btn {
+    border-radius: 9999px !important;
+    width: 28px !important;
+    height: 28px !important;
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+body.in-portal .sens-act-stepper-btn:active {
+    background: #E5CBA7 !important;
+    color: #1A140A !important;
+    transform: scale(0.92) !important;
+}
+
+body.in-portal .sens-act-input {
+    color: #121214 !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    font-variant-numeric: tabular-nums !important;
+    width: 60px !important;
+    text-align: center !important;
+}
+
+body.in-portal .sens-act-quick-chip {
+    border-radius: 9999px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #ECEBE8 !important;
+    color: #575659 !important;
+    padding: 4px 11px !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    font-variant-numeric: tabular-nums !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.15s ease !important;
+}
+
+body.in-portal .sens-act-quick-chip:hover {
+    background: #FAF9F6 !important;
+    border-color: rgba(229, 203, 167, 0.6) !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-act-quick-chip.active {
+    background: #E5CBA7 !important;
+    border-color: #705B3E !important;
+    color: #1A140A !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 8px rgba(229, 203, 167, 0.35) !important;
+}

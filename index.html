@@ -125,7 +125,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=15.0">
+    <link rel="stylesheet" href="style.css?v=15.1">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1089,16 +1089,8 @@
         <!-- Barra Superior del Portal -->
         <div class="portal-topbar">
             <div class="portal-brand" id="portalBrandLogoWrap"
-                style="cursor: pointer; display: flex; align-items: center; gap: 8px;" title="SENS Train & Wellness">
-                <svg class="brand-wave-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#121214" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 8c2.5-3 5.5-3 8 0s5.5 3 8 0 5.5-3 6 0"></path>
-                    <path d="M2 12c2.5-3 5.5-3 8 0s5.5 3 8 0 5.5-3 6 0"></path>
-                    <path d="M2 16c2.5-3 5.5-3 8 0s5.5 3 8 0 5.5-3 6 0"></path>
-                </svg>
-                <div style="display: flex; flex-direction: column; line-height: 1;">
-                    <span style="font-size: 15px; font-weight: 700; letter-spacing: 0.2em; color: #121214;">SENS</span>
-                    <span style="font-size: 8px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #77767B; margin-top: 1.5px;">TRAIN &amp; WELLNESS</span>
-                </div>
+                style="cursor: pointer; display: flex; align-items: center;" title="SENS Train & Wellness">
+                <img src="img/logo-NEGRO.png" alt="SENS TRAIN & WELLNESS" class="brand-logo-img brand-logo-img-portal" id="portalBrandLogoImg">
             </div>
             <div class="portal-user-badge" style="display: flex; align-items: center; gap: 10px;">
                 <!-- Toggle Rápido para Admin: Cambiar entre App Alumno y Coach OS -->
@@ -2858,16 +2850,11 @@
             <section class="portal-view" id="dashView">
                 <!-- 0. Saludo Personalizado de Bienvenida -->
                 <div class="sens-dash-welcome-header" id="sensDashWelcomeHeader">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
-                        <span id="dashCircadianDate" style="font-size: 11px; font-weight: 500; color: #77767B;"></span>
-                    </div>
-                    <div class="sens-dash-welcome-question">
-                        <span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, <span style="font-weight: 300; font-style: italic;">¿entrenamos</span> juntos hoy?
-                    </div>
-                    <p style="font-size: 12.5px; color: #575659; margin-top: 4px; font-weight: 400; margin-bottom: 0;">
-                        Tu ventana neuromuscular óptima está lista.
-                    </p>
+                    <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
+                    <h2 class="sens-dash-welcome-question">
+                        ¿<span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, entrenamos?
+                    </h2>
+                    <span id="dashCircadianDate" style="display: none !important;"></span>
                 </div>
 
                 <!-- 0.1. Pill Sutil de Prueba Gratuita (7 Días) & Viral Loop (Inyectada por checkUserAccessStatus) -->
@@ -3217,16 +3204,21 @@
                         <div class="sens-training-card-content">
                             <div class="sens-card-top-info-row">
                                 <div class="sens-card-info-stack">
-                                    <span class="sens-card-domain-eyebrow" id="dashWorkoutDayDateLabel">Entrenamiento de
-                                        Hoy</span>
+                                    <span class="sens-card-domain-eyebrow" id="dashWorkoutDayDateLabel" style="display: none !important;">Entrenamiento de Hoy</span>
                                     <h3 class="sens-card-title-white" id="dashWorkoutFocusTitle">Piernas</h3>
                                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                         <p class="sens-card-sub-white" id="dashWorkoutSubFocus" style="margin: 0;">5
                                             ejercicios | 15 series</p>
-                                        <button type="button" class="btn-reschedule-home-chip"
+                                        <button type="button" class="btn-reschedule-home-chip sens-tactile-pill" id="btnDashRescheduleWorkout"
                                             onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))"
-                                            style="font-size: 10px; color: #E5CBA7; background: rgba(0,0,0,0.45); border: 1px solid rgba(229,203,167,0.3); border-radius: 6px; padding: 2px 7px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; font-weight: 700;">
-                                            ⇄ Pasar a otro día
+                                            title="Reubicar sesión a otra fecha">
+                                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="17 1 21 5 17 9"></polyline>
+                                                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                                <polyline points="7 23 3 19 7 15"></polyline>
+                                                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                                            </svg>
+                                            <span>Pasar a otro día</span>
                                         </button>
                                     </div>
                                 </div>
@@ -3364,8 +3356,7 @@
                     <div class="sens-nutri-card-content">
                         <div class="sens-card-top-info-row">
                             <div class="sens-card-info-stack">
-                                <span class="sens-card-domain-eyebrow" id="dashNutriDayDateLabel">Nutrición de
-                                    Hoy</span>
+                                <span class="sens-card-domain-eyebrow" id="dashNutriDayDateLabel" style="display: none !important;">Nutrición de Hoy</span>
                                 <h3 class="sens-card-title-white" id="dashNutriCaloriesHero">1.950 kcal Totales</h3>
                                 <p class="sens-card-sub-white" id="dashNutriSubText">Déficit calórico estructurado para
                                     preservar masa muscular</p>
@@ -3381,24 +3372,29 @@
                         </div>
                         <div class="sens-nutri-5cals-row" id="dashNutri5calsRow">
                             <div class="sens-5cals-chip highlight" data-meal-key="desayuno" title="Ver Desayuno">
-                                <span class="chip-name">Desayuno</span>
-                                <strong class="chip-val" id="calMealDesayuno">390 kcal</strong>
+                                <svg class="chip-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M4.93 10.93l2.83-2.83M19.07 10.93l-2.83-2.83M2 18h20M7 18a5 5 0 0 1 10 0"/></svg>
+                                <span class="chip-name"><span class="chip-name-short">Des</span><span class="chip-name-full">Desayuno</span></span>
+                                <strong class="chip-val" id="calMealDesayuno">390 cal</strong>
                             </div>
                             <div class="sens-5cals-chip" data-meal-key="almuerzo" title="Ver Almuerzo">
-                                <span class="chip-name">Almuerzo</span>
-                                <strong class="chip-val" id="calMealAlmuerzo">683 kcal</strong>
+                                <svg class="chip-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                                <span class="chip-name"><span class="chip-name-short">Alm</span><span class="chip-name-full">Almuerzo</span></span>
+                                <strong class="chip-val" id="calMealAlmuerzo">683 cal</strong>
                             </div>
                             <div class="sens-5cals-chip" data-meal-key="merienda" title="Ver Merienda">
-                                <span class="chip-name">Merienda</span>
-                                <strong class="chip-val" id="calMealMerienda">293 kcal</strong>
+                                <svg class="chip-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+                                <span class="chip-name"><span class="chip-name-short">Mer</span><span class="chip-name-full">Merienda</span></span>
+                                <strong class="chip-val" id="calMealMerienda">293 cal</strong>
                             </div>
                             <div class="sens-5cals-chip" data-meal-key="cena" title="Ver Cena">
-                                <span class="chip-name">Cena</span>
-                                <strong class="chip-val" id="calMealCena">390 kcal</strong>
+                                <svg class="chip-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                                <span class="chip-name"><span class="chip-name-short">Cen</span><span class="chip-name-full">Cena</span></span>
+                                <strong class="chip-val" id="calMealCena">390 cal</strong>
                             </div>
                             <div class="sens-5cals-chip" data-meal-key="snack" title="Ver Snack">
-                                <span class="chip-name">Snack</span>
-                                <strong class="chip-val" id="calMealSnack">195 kcal</strong>
+                                <svg class="chip-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                <span class="chip-name"><span class="chip-name-short">Snk</span><span class="chip-name-full">Snack</span></span>
+                                <strong class="chip-val" id="calMealSnack">195 cal</strong>
                             </div>
                         </div>
                     </div>
@@ -7212,52 +7208,44 @@
     </div>
 
     <!-- Modal de Reprogramación / Pasar Entrenamiento de un Día a Otro -->
-    <div class="modal-overlay" id="modalMoveWorkoutSession" style="display: none; z-index: 10050;">
-        <div class="modal-card coach-batch-modal-card"
-            style="max-width: 520px; max-height: 90vh; display: flex; flex-direction: column; background: #121214; color: #FFFFFF; border-radius: 16px; border: 1px solid rgba(229, 203, 167, 0.35); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);">
-            <div
-                style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 14px;">
+    <div class="modal-overlay sens-luxury-modal-overlay" id="modalMoveWorkoutSession" style="display: none; z-index: 10050;">
+        <div class="modal-card sens-move-workout-modal-card"
+            style="max-width: 520px; max-height: 90vh; display: flex; flex-direction: column;">
+            <div class="sens-move-modal-header"
+                style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 12px; margin-bottom: 14px;">
                 <div>
-                    <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">FLEXIBILIDAD DE
-                        PLANIFICACIÓN</span>
-                    <h3 id="moveWorkoutModalTitle"
-                        style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 3px 0 0 0;">Pasar
-                        Entrenamiento a Otro Día</h3>
-                    <p id="moveWorkoutModalSubtitle" style="font-size: 11.5px; color: #A1A1AA; margin: 2px 0 0 0;">
+                    <span class="sens-move-modal-kicker">FLEXIBILIDAD DE PLANIFICACIÓN</span>
+                    <h3 id="moveWorkoutModalTitle" class="sens-move-modal-title">Pasar Entrenamiento a Otro Día</h3>
+                    <p id="moveWorkoutModalSubtitle" class="sens-move-modal-sub">
                         Mové la sesión a otra fecha para no perder el estímulo prescripto.
                     </p>
                 </div>
                 <button type="button" class="modal-close-btn" id="btnCloseMoveWorkoutModal"
                     onclick="closeMoveWorkoutModal()"
-                    style="position: static; font-size: 24px; color: #A1A1AA; cursor: pointer; background: transparent; border: none;">&times;</button>
+                    style="position: static; font-size: 24px; cursor: pointer; background: transparent; border: none;">&times;</button>
             </div>
 
             <!-- Resumen de la sesión a mover -->
-            <div id="moveWorkoutSourceSummary"
-                style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.2); border-radius: 10px; padding: 10px 12px; margin-bottom: 14px;">
+            <div id="moveWorkoutSourceSummary" class="sens-move-source-summary">
                 <!-- Inyectado dinámicamente -->
             </div>
 
-            <div
-                style="font-size: 10.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+            <div class="sens-move-section-label">
                 Atajos Rápidos:
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-                <button type="button" class="btn btn-outline btn-sm" id="btnQuickMoveTomorrow"
-                    style="font-size: 11px; padding: 6px 14px; border-color: rgba(229, 203, 167, 0.4); color: #E5CBA7; font-weight: 700; background: #18181B; border-radius: 8px;">
+                <button type="button" class="btn-quick-move-pill" id="btnQuickMoveTomorrow">
                     Pasar a Mañana →
                 </button>
-                <button type="button" class="btn btn-outline btn-sm" id="btnQuickMoveDayAfter"
-                    style="font-size: 11px; padding: 6px 14px; border-color: rgba(255, 255, 255, 0.2); color: #D4D4D8; font-weight: 700; background: #18181B; border-radius: 8px;">
+                <button type="button" class="btn-quick-move-pill" id="btnQuickMoveDayAfter">
                     Pasar a Pasado Mañana →
                 </button>
             </div>
 
-            <div
-                style="font-size: 10.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+            <div class="sens-move-section-label">
                 O elegí una fecha de la semana:
             </div>
-            <div id="moveWorkoutTargetDaysList"
+            <div id="moveWorkoutTargetDaysList" class="sens-move-target-list"
                 style="overflow-y: auto; max-height: 240px; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; margin-bottom: 10px;">
                 <!-- Inyectado dinámicamente con los días de la semana -->
             </div>

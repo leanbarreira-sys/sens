@@ -3718,43 +3718,65 @@ function checkUserAccessStatus(profile) {
     if (pillContainer) {
         if (!isAdmin) {
             pillContainer.style.display = 'block';
+
+            let currentPlanName = 'Plan Gratuito';
+            let daysBadgeHtml = '';
+            let upgradeActionLabel = 'Subir a App Autónoma';
+            let nextTierTarget = 'app_subscribed';
+
+            const userKey = planDetails.key || 'app_trial';
+            if (userKey === 'app_trial') {
+                currentPlanName = 'Plan Gratuito';
+                daysBadgeHtml = `<span class="sens-plan-days-bubble">${daysRemaining} ${daysRemaining === 1 ? 'día' : 'días'}</span>`;
+                upgradeActionLabel = 'Subir a App Autónoma';
+                nextTierTarget = 'app_subscribed';
+            } else if (userKey === 'app_subscribed') {
+                currentPlanName = 'Plan App Autónoma';
+                upgradeActionLabel = 'Subir a Online';
+                nextTierTarget = 'online_1on1';
+            } else if (userKey === 'online_1on1') {
+                currentPlanName = 'Seguimiento Online';
+                upgradeActionLabel = 'Subir a Presencial';
+                nextTierTarget = 'presencial_1on1';
+            } else if (userKey === 'presencial_1on1') {
+                currentPlanName = 'Seguimiento Presencial';
+                upgradeActionLabel = 'Plan VIP 1:1';
+                nextTierTarget = 'presencial_1on1';
+            }
+
             pillContainer.innerHTML = `
-                <div class="sens-plan-status-strip">
-                    <div class="sens-plan-status-left">
+                <div class="sens-plan-single-row-pill" id="sensPlanSingleRowPill" data-agent-action="open_plans_upgrade_modal" title="Tocar para ver opciones de escalado">
+                    <div class="sens-plan-pill-left">
                         <span class="status-dot status-dot-active"></span>
-                        <span class="sens-plan-tier-badge">${escapeHTML(planDetails.shortBadge.toUpperCase())}</span>
-                        <strong class="sens-plan-title-compact">${escapeHTML(planDetails.title)}</strong>
-                        <span class="sens-plan-days-tag">${planDetails.key.includes('trial') ? '• 7 días gratis' : ''}</span>
+                        <span class="sens-plan-name">${escapeHTML(currentPlanName)}</span>
+                        ${daysBadgeHtml}
                     </div>
-                    <div class="sens-plan-status-right">
-                        <button type="button" class="btn-sens-plan-upgrade" id="btnTrialPillOpenLadder" data-agent-action="open_plans_upgrade_modal">
-                            Escalar Plan ↑
-                        </button>
-                        <button type="button" class="btn-sens-plan-share" id="btnTrialPillShareRef" data-agent-action="share_referral_from_dashboard" title="Regalar pase de 14 días y sumar +7 días para vos">
-                            +7d Gratis
-                        </button>
+                    <div class="sens-plan-pill-right" id="btnTrialPillOpenLadder">
+                        <span class="sens-plan-next-action">${escapeHTML(upgradeActionLabel)}</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </div>
                 </div>
             `;
 
-            const btnLadder = document.getElementById('btnTrialPillOpenLadder');
-            if (btnLadder) {
-                btnLadder.onclick = () => {
-                    window.openSensPlansUpgradeModal();
-                };
-            }
-
-            const btnShare = document.getElementById('btnTrialPillShareRef');
-            if (btnShare) {
-                btnShare.onclick = () => {
-                    try { navigator.clipboard.writeText(referralUrl); } catch (_) {}
-                    const waMsg = encodeURIComponent(`Hola! Te regalo un Pase de Invitado para entrenar en MAKES SENS. con el método de Nico (fuerza, postura y cálculo nutricional). Registrate con mi link único y cuando completes tu 1er entrenamiento ambos sumamos +7 días gratis: ${referralUrl}`);
-                    window.open(`https://wa.me/?text=${waMsg}`, '_blank');
+            const pillEl = document.getElementById('sensPlanSingleRowPill');
+            if (pillEl) {
+                pillEl.onclick = () => {
+                    window.openSensPlansUpgradeModal(nextTierTarget);
                 };
             }
         } else {
-            pillContainer.style.display = 'none';
-            pillContainer.innerHTML = '';
+            pillContainer.style.display = 'block';
+            pillContainer.innerHTML = `
+                <div class="sens-plan-single-row-pill" id="sensPlanSingleRowPill" style="cursor: default;">
+                    <div class="sens-plan-pill-left">
+                        <span class="status-dot status-dot-active" style="background: #10B981;"></span>
+                        <span class="sens-plan-name">Coach OS • Director Deportivo</span>
+                    </div>
+                    <div class="sens-plan-pill-right">
+                        <span class="sens-plan-next-action">Modo Master</span>
+                    </div>
+                </div>
+            `;
         }
     }
 
@@ -6785,13 +6807,13 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
         const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         const dayName = dayNames[sDate.getDay()];
         summaryEl.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+            <div class="sens-move-source-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                 <div>
-                    <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase; font-weight: 700;">Sesión a Reprogramar</span>
-                    <h4 style="font-size: 13px; font-weight: 800; color: #FFFFFF; margin: 2px 0 0 0;">${sessionTitle}</h4>
-                    <span style="font-size: 11px; color: #E5CBA7;">${dayName} ${sParts[2]}/${sParts[1]} • ${exCount} ejercicios</span>
+                    <span class="sens-move-source-kicker" style="font-size: 10px; color: #705B3E; text-transform: uppercase; font-weight: 700;">Sesión a Reprogramar</span>
+                    <h4 class="sens-move-source-title" style="font-size: 14px; font-weight: 800; color: #121214; margin: 2px 0 0 0;">${sessionTitle}</h4>
+                    <span class="sens-move-source-meta" style="font-size: 11px; color: #575659;">${dayName} ${sParts[2]}/${sParts[1]} • ${exCount} ejercicios</span>
                 </div>
-                <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">REUBICAR</span>
+                <span class="sens-move-reubicar-tag" style="font-size: 9px; font-weight: 800; background: #E5CBA7; color: #1A140A; padding: 2px 8px; border-radius: 9999px;">REUBICAR</span>
             </div>
         `;
     }
@@ -6843,27 +6865,27 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
             const isToday = offset === 0;
 
             html += `
-                <div class="sens-move-day-row" style="background: #18181B; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <div class="sens-move-day-row" style="background: #FAF9F6; border: 1px solid #ECEBE8; border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 36px; height: 36px; border-radius: 8px; background: ${hasWk ? 'rgba(229,203,167,0.15)' : 'rgba(255,255,255,0.06)'}; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <span style="font-size: 8.5px; font-weight: 800; color: ${hasWk ? '#E5CBA7' : '#A1A1AA'};">${dow}</span>
-                            <span style="font-size: 12px; font-weight: 800; color: #FFFFFF;">${curD.getDate()}</span>
+                        <div style="width: 38px; height: 38px; border-radius: 10px; background: ${hasWk ? 'rgba(229,203,167,0.3)' : '#ECEBE8'}; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="font-size: 8.5px; font-weight: 800; color: ${hasWk ? '#705B3E' : '#77767B'};">${dow}</span>
+                            <span style="font-size: 13px; font-weight: 800; color: #121214;">${curD.getDate()}</span>
                         </div>
                         <div>
                             <div style="display: flex; align-items: center; gap: 6px;">
-                                <strong style="font-size: 12px; color: #FFFFFF;">${isToday ? 'Hoy: ' : ''}${title}</strong>
-                                ${hasWk ? `<span class="pill pill-champagne" style="font-size: 8px; padding: 1px 4px;">Ocupado</span>` : `<span class="pill pill-dark" style="font-size: 8px; padding: 1px 4px; color: #10B981; border-color: rgba(16,185,129,0.3);">Libre</span>`}
+                                <strong style="font-size: 12.5px; color: #121214;">${isToday ? 'Hoy: ' : ''}${title}</strong>
+                                ${hasWk ? `<span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 6px; border-radius: 9999px;">Ocupado</span>` : `<span class="pill pill-dark" style="font-size: 8.5px; padding: 1px 6px; color: #1E7B42; background: rgba(30,123,66,0.1); border-color: rgba(30,123,66,0.25); border-radius: 9999px;">Libre</span>`}
                             </div>
-                            <span style="font-size: 10.5px; color: #71717A;">${hasWk ? `${curSession.exercises.length} ejercicios planificados` : 'Disponible para tu sesión'}</span>
+                            <span style="font-size: 11px; color: #575659;">${hasWk ? `${curSession.exercises.length} ejercicios planificados` : 'Disponible para tu sesión'}</span>
                         </div>
                     </div>
                     <div>
                         ${hasWk ? `
-                            <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 10px; padding: 4px 8px; color: #E5CBA7; border-color: rgba(229,203,167,0.4); font-weight: 700; border-radius: 6px; cursor: pointer;" title="Intercambia los entrenamientos de ambos días">
+                            <button type="button" class="btn btn-outline btn-xs btn-sens-move-swap" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 10.5px; padding: 5px 10px; color: #705B3E; border: 1px solid rgba(229,203,167,0.6); background: #FFFFFF; font-weight: 700; border-radius: 9999px; cursor: pointer;" title="Intercambia los entrenamientos de ambos días">
                                 ⇄ Intercambiar
                             </button>
                         ` : `
-                            <button type="button" class="btn btn-primary btn-xs" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'replace')" style="font-size: 10px; padding: 5px 12px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; font-weight: 800; border: none; border-radius: 6px; cursor: pointer;">
+                            <button type="button" class="btn btn-primary btn-xs btn-sens-move-select" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'replace')" style="font-size: 10.5px; padding: 6px 14px; background: #E5CBA7; color: #1A140A; font-weight: 800; border: none; border-radius: 9999px; cursor: pointer;">
                                 Mover aquí →
                             </button>
                         `}
