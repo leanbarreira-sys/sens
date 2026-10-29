@@ -125,7 +125,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=14.8">
+    <link rel="stylesheet" href="style.css?v=15.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1089,17 +1089,16 @@
         <!-- Barra Superior del Portal -->
         <div class="portal-topbar">
             <div class="portal-brand" id="portalBrandLogoWrap"
-                style="cursor: pointer; display: flex; align-items: center; gap: 10px;" title="Volver a Web Pública">
-                <img src="img/logo-blanco.png" alt="SENS" class="brand-logo-img-portal">
-                <span class="pill pill-champagne" id="portalPlanBadge"
-                    onclick="event.stopPropagation(); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();"
-                    title="Ver mi plan actual y cómo escalar"
-                    style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid rgba(229, 203, 167, 0.45);">
-                    <span id="portalPlanBadgeText">Plan Free (7d)</span>
-                    <span
-                        style="font-size: 9.5px; font-weight: 800; opacity: 0.9; border-left: 1px solid rgba(229, 203, 167, 0.35); padding-left: 6px;">Escalar
-                        ↑</span>
-                </span>
+                style="cursor: pointer; display: flex; align-items: center; gap: 8px;" title="SENS Train & Wellness">
+                <svg class="brand-wave-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#121214" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 8c2.5-3 5.5-3 8 0s5.5 3 8 0 5.5-3 6 0"></path>
+                    <path d="M2 12c2.5-3 5.5-3 8 0s5.5 3 8 0 5.5-3 6 0"></path>
+                    <path d="M2 16c2.5-3 5.5-3 8 0s5.5 3 8 0 5.5-3 6 0"></path>
+                </svg>
+                <div style="display: flex; flex-direction: column; line-height: 1;">
+                    <span style="font-size: 15px; font-weight: 700; letter-spacing: 0.2em; color: #121214;">SENS</span>
+                    <span style="font-size: 8px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #77767B; margin-top: 1.5px;">TRAIN &amp; WELLNESS</span>
+                </div>
             </div>
             <div class="portal-user-badge" style="display: flex; align-items: center; gap: 10px;">
                 <!-- Toggle Rápido para Admin: Cambiar entre App Alumno y Coach OS -->
@@ -1127,10 +1126,29 @@
                 <button type="button" class="btn btn-outline btn-sm desktop-only-btn" id="btnTopbarBackHome"
                     style="font-size: 11px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">←
                     Inicio Web</button>
+                <!-- Botón de Descarga / Instalar App (PWA Luxury) -->
+                <button type="button" class="btn-topbar-install-pwa" id="btnTopbarInstallPwa" onclick="if(window.SensPwaManager && window.SensPwaManager.promptInstall){window.SensPwaManager.promptInstall();}else if(window.showSensToast){window.showSensToast('Para instalar: Menú del navegador → Agregar a pantalla principal', 'info');}" title="Instalar SENS en tu celular">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>App</span>
+                </button>
+
+                <!-- Píldora de Categoría / Subir de Plan (Plan Free 7d ↑) -->
+                <button type="button" class="pill pill-champagne" id="portalPlanBadge"
+                    onclick="event.stopPropagation(); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();"
+                    title="Ver mi membresía y cómo escalar">
+                    <span class="plan-status-dot"></span>
+                    <span id="portalPlanBadgeText">Plan Free (7d) ↑</span>
+                </button>
+
                 <div class="user-avatar-wrap" id="userAvatarWrap">
                     <button type="button" class="user-avatar-btn" id="userAvatarBtn" aria-label="Abrir Menú de Perfil"
                         title="Mi Cuenta SENS">
-                        <span id="userAvatarInitials">--</span>
+                        <span id="userAvatarInitials">LB</span>
+                        <span class="avatar-online-dot"></span>
                     </button>
                     <!-- Dropdown flotante estilo Apple -->
                     <div class="user-avatar-dropdown" id="userAvatarDropdown" style="min-width: 285px;">
@@ -3664,7 +3682,8 @@
                     </div>
                 </div>
 
-                <!-- 6. Sección Tienda Oficial MercadoLibre (Equipamiento & Suplementos) -->
+                <div style="display: none !important;">
+<!-- 6. Sección Tienda Oficial MercadoLibre (Equipamiento & Suplementos) -->
                 <div class="sens-store-banner-card" id="dashStoreCard">
                     <div class="sens-store-banner-left">
                         <div class="sens-store-banner-icon">
@@ -3687,6 +3706,8 @@
                     </button>
                 </div>
 
+                
+</div>
                 <!-- 7. Card de Upsell Nativo al Coaching 1 a 1 con Nico (Solo para usuarios en app_trial o app_subscribed) -->
                 <div class="sens-nico-1on1-upsell-card" id="dashNico1on1UpsellCard"
                     style="background: #141417; border: 1px solid rgba(229, 203, 167, 0.28); border-radius: 20px; padding: 22px 22px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">

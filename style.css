@@ -27773,3 +27773,428 @@ body.in-portal .sens-dock-item.active svg {
     stroke: #FFFFFF !important;
 }
 
+
+
+
+/* =============================================================================
+   SENS QUIET VITALITY — CONTRAST & HEADER UX FIXES (WCAG AAA ALIGNMENT)
+   ============================================================================= */
+
+/* 1. Header Luxury Actions: Descarga PWA & Subir Plan */
+body.in-portal .portal-topbar {
+    height: 60px !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+body.in-portal .btn-topbar-install-pwa {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    padding: 5px 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    line-height: 1 !important;
+}
+
+body.in-portal .btn-topbar-install-pwa:hover {
+    background: #E3E2E0 !important;
+}
+
+body.in-portal #portalPlanBadge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(251, 222, 185, 0.55) !important;
+    color: #564428 !important;
+    border: 1px solid rgba(112, 91, 62, 0.3) !important;
+    border-radius: 9999px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 5px 12px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    line-height: 1 !important;
+}
+
+body.in-portal #portalPlanBadge .plan-status-dot {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background: #705B3E !important;
+    display: inline-block !important;
+}
+
+body.in-portal .user-avatar-btn,
+body.in-portal #topbarAvatarTrigger {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    border: none !important;
+}
+
+body.in-portal .avatar-online-dot {
+    position: absolute !important;
+    bottom: -1px !important;
+    right: -1px !important;
+    width: 9px !important;
+    height: 9px !important;
+    border-radius: 50% !important;
+    background: #1E7B42 !important;
+    border: 2px solid #FFFFFF !important;
+}
+
+/* 2. Calendario Semanal: Cero Rotura al Zoom & Cero Overflow */
+body.in-portal .sens-week-strip-wrap,
+body.in-portal #portalWeekStrip {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+
+body.in-portal .sens-week-day-pill,
+body.in-portal .coach-week-day-pill {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 8px 1px 6px !important;
+    text-align: center !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.03) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    cursor: pointer !important;
+    min-height: 68px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    transform: none !important; /* Elimina scale para evitar rotura en zoom */
+}
+
+body.in-portal .sens-week-day-pill.active,
+body.in-portal .sens-week-day-pill.is-today,
+body.in-portal .coach-week-day-pill.active,
+body.in-portal .coach-week-day-pill.is-today {
+    background: #E5CBA7 !important;
+    border: 1.5px solid #705B3E !important;
+    box-shadow: 0 4px 14px rgba(229, 203, 167, 0.5) !important;
+    transform: none !important;
+    z-index: 1 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-name,
+body.in-portal .sens-week-day-pill.is-today .sens-day-name,
+body.in-portal .coach-week-day-pill.active .sens-day-name,
+body.in-portal .coach-week-day-pill.is-today .sens-day-name {
+    color: #4A3B28 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-hero-num,
+body.in-portal .sens-week-day-pill.is-today .sens-day-hero-num,
+body.in-portal .coach-week-day-pill.active .sens-day-hero-num,
+body.in-portal .coach-week-day-pill.is-today .sens-day-hero-num {
+    color: #1A140A !important;
+    font-weight: 900 !important;
+}
+
+/* 3. Corrección de Contraste en Card de Descanso / Sin Ejercicios */
+body.in-portal .sens-workout-rest-pane,
+body.in-portal #dashWorkoutRestPane {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    padding: 24px 20px !important;
+    color: #121214 !important;
+    text-align: center !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.04) !important;
+}
+
+body.in-portal .sens-workout-rest-pane h3,
+body.in-portal .sens-rest-title {
+    color: #121214 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    margin: 8px 0 6px !important;
+}
+
+body.in-portal .sens-workout-rest-pane p,
+body.in-portal .sens-rest-desc {
+    color: #575659 !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    margin: 0 0 16px !important;
+}
+
+body.in-portal .sens-rest-badge {
+    background: rgba(251, 222, 185, 0.5) !important;
+    color: #705B3E !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    padding: 4px 10px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+}
+
+body.in-portal #btnRestSeeStretches,
+body.in-portal #btnRestBringWorkout {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.15) !important;
+    color: #121214 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    padding: 10px 18px !important;
+    transition: all 0.2s ease !important;
+}
+
+body.in-portal #btnRestSeeStretches:hover,
+body.in-portal #btnRestBringWorkout:hover {
+    background: #E3E2E0 !important;
+}
+
+/* 4. Corrección de Contraste en Card de Nutrición */
+body.in-portal #dashNutriSummaryCard {
+    background: #09090B !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 32px rgba(18, 18, 20, 0.08) !important;
+    position: relative !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-card-title-white,
+body.in-portal #dashNutriCaloriesHero {
+    color: #FFFFFF !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7) !important;
+    margin: 4px 0 !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-card-sub-white,
+body.in-portal #dashNutriSubText {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 12.5px !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
+    margin: 0 !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-radius: 12px !important;
+    padding: 6px 8px !important;
+    text-align: center !important;
+    color: #121214 !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip .chip-name {
+    color: #575659 !important;
+    font-size: 9.5px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip .chip-val {
+    color: #705B3E !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight {
+    background: #E5CBA7 !important;
+    border-color: #E5CBA7 !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight .chip-name {
+    color: #564428 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight .chip-val {
+    color: #271903 !important;
+    font-weight: 900 !important;
+}
+
+/* 5. Corrección de Contraste en Card de Balance Energético */
+body.in-portal #dashBalanceNetBox {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 18px !important;
+    padding: 16px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin: 16px 0 !important;
+}
+
+body.in-portal #dashBalanceNetBox .sens-triptych-label {
+    color: #77767B !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+}
+
+body.in-portal #dashBalanceNetBox .sens-triptych-val {
+    color: #121214 !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+body.in-portal #dashBalanceNetBox .sens-triptych-val .unit {
+    color: #77767B !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal #dashBalanceNetBox .sens-triptych-sub {
+    color: #575659 !important;
+    font-size: 11px !important;
+}
+
+body.in-portal #dashBalanceNetBox .sens-triptych-divider {
+    color: #77767B !important;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+}
+
+body.in-portal #dashBalanceNetBox .sens-triptych-col.sens-triptych-net {
+    background: rgba(251, 222, 185, 0.45) !important;
+    border: 1px solid rgba(112, 91, 62, 0.25) !important;
+    border-radius: 14px !important;
+    padding: 8px 10px !important;
+}
+
+body.in-portal #dashBalanceNetBox .sens-triptych-val.sens-val-net {
+    color: #271903 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #dashBalanceNetBox .sens-triptych-badge {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+}
+
+/* Actividad Diaria: Pasos & Cardio */
+body.in-portal .sens-activity-logger-panel {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 20px !important;
+    padding: 16px !important;
+}
+
+body.in-portal .sens-act-header-title {
+    color: #705B3E !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+}
+
+body.in-portal .sens-act-module {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 12px !important;
+}
+
+body.in-portal .sens-act-metric-title {
+    color: #121214 !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-act-metric-sub {
+    color: #77767B !important;
+    font-size: 11px !important;
+}
+
+body.in-portal .sens-act-stepper-btn {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    color: #121214 !important;
+    border-radius: 10px !important;
+    font-weight: 800 !important;
+    font-size: 16px !important;
+}
+
+body.in-portal .sens-act-stepper-btn:hover {
+    background: #E3E2E0 !important;
+}
+
+body.in-portal .sens-act-input {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    color: #121214 !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+}
+
+body.in-portal .sens-act-quick-chip,
+body.in-portal .sens-cardio-type-btn {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    border-radius: 9999px !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+}
+
+body.in-portal .sens-act-quick-chip.active,
+body.in-portal .sens-cardio-type-btn.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    border-color: #121214 !important;
+}
+
+body.in-portal .sens-btn-save-activity {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    font-weight: 800 !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    padding: 13px !important;
+    font-size: 13px !important;
+    letter-spacing: 0.04em !important;
+    box-shadow: 0 4px 14px rgba(229, 203, 167, 0.4) !important;
+}
+
+/* 6. Eliminación Definitiva de Sección MercadoLibre / Tienda */
+#dashStoreCard,
+.sens-store-banner-card,
+#storeView,
+#navPortalStore,
+.coach-store-section {
+    display: none !important;
+}
+

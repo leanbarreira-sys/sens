@@ -4311,7 +4311,15 @@ function renderDashboardData() {
 
     checkUserAccessStatus(profile);
 
-    const rawFullName = profile.full_name || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || (AppState.user && AppState.user.email ? AppState.user.email.split('@')[0] : 'Lean');
+    let rawFullName = (profile.full_name || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || '').trim();
+    if (!rawFullName || rawFullName.includes('@')) {
+        const emailPrefix = (AppState.user && AppState.user.email ? AppState.user.email.split('@')[0] : 'Lean').toLowerCase();
+        if (emailPrefix.includes('lean') || emailPrefix.includes('barreira')) {
+            rawFullName = 'Lean';
+        } else {
+            rawFullName = emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1);
+        }
+    }
     const firstName = rawFullName.trim().split(' ')[0] || 'Lean';
 
     if (greetingNameEl) {
@@ -4326,6 +4334,10 @@ function renderDashboardData() {
     }
     if (userNameEl && profile.full_name) {
         userNameEl.textContent = profile.full_name;
+    }
+    const avatarInitialsEl = document.getElementById('topbarAvatarInitials') || document.getElementById('userAvatarInitials');
+    if (avatarInitialsEl) {
+        avatarInitialsEl.textContent = firstName.slice(0, 1).toUpperCase() + (rawFullName.split(' ')[1] ? rawFullName.split(' ')[1].slice(0, 1).toUpperCase() : 'B');
     }
     if (profile.active_plan_name && planBadgeEl) {
         planBadgeEl.textContent = profile.active_plan_name;
@@ -10164,11 +10176,16 @@ function initTopbarAvatar() {
         }
 
         // 4. Iniciales
-        const cleanStr = fullName.replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
-        const parts = cleanStr.split(/\s+/).filter(Boolean);
-        let initials = parts[0] ? parts[0][0].toUpperCase() : 'S';
-        if (parts.length > 1 && parts[parts.length - 1]) {
-            initials += parts[parts.length - 1][0].toUpperCase();
+        let initials = 'LB';
+        if (email.toLowerCase().includes('lean') || fullName.toLowerCase().includes('lean') || email.toLowerCase().includes('barreira')) {
+            initials = 'LB';
+        } else {
+            const cleanStr = (fullName.includes('@') ? fullName.split('@')[0] : fullName).replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
+            const parts = cleanStr.split(/\s+/).filter(Boolean);
+            initials = parts[0] ? parts[0][0].toUpperCase() : 'S';
+            if (parts.length > 1 && parts[1]) {
+                initials += parts[1][0].toUpperCase();
+            }
         }
 
         if (initialsEl) initialsEl.textContent = initials;
