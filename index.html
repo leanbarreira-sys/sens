@@ -125,7 +125,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=14.0">
+    <link rel="stylesheet" href="style.css?v=14.1">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -421,11 +421,10 @@
                         </div>
                     </div>
                 </div>
+            </section>
 
-
-
-                <!-- Sección Head Coach Nico S. -->
-                <section class="section-sens sens-coach-section" id="coach-section">
+            <!-- Sección Head Coach Nico S. -->
+            <section class="section-sens sens-coach-section" id="coach-section">
                     <div class="sens-coach-card">
                         <div class="sens-coach-header">
                             <div class="sens-coach-avatar-wrap">
@@ -494,11 +493,11 @@
                     <div class="pricing-sub-nav" role="tablist" aria-label="Tipo de Presencial">
                         <button class="pricing-sub-btn active" data-sub="presencial-ind" role="tab" aria-selected="true"
                             id="btnSubInd">
-                            1 a 1
+                            Individual
                         </button>
                         <button class="pricing-sub-btn" data-sub="presencial-grupos" role="tab" aria-selected="false"
                             id="btnSubGrupos">
-                            Dúos / Tríos
+                            Grupal
                         </button>
                     </div>
                 </div>
@@ -513,12 +512,10 @@
                         <!-- 1. Plan App Premium Trimestral (3 Meses - Ahorro 20%) -->
                         <div class="carousel-slide">
                             <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">20% OFF</span>
-                                <h3 class="plan-title">App Premium • 3 Meses</h3>
-
+                                <span class="train-plan-badge">100% OFF</span>
                                 <div class="plan-price-wrap">
-                                    <span class="plan-amount">$59.900</span>
-                                    <span class="plan-period">/ 3 meses</span>
+                                    <span class="plan-amount">GRATIS 7 DÍAS</span>
+                                    <span class="plan-period"> Luego $19.900/mese</span>
                                 </div>
                                 <ul class="plan-features-list">
                                     <li class="plan-feature-row"><svg class="check" width="12" height="12"
@@ -541,42 +538,16 @@
                         </div>
 
 
-                        <!-- 3. Plan App Premium Mensual -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <h3 class="plan-title">App Premium • Mensual</h3>
 
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$24.900</span>
-                                    <span class="plan-period">/ mes (USD $19)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Acceso ilimitado a +1300 Ejercicios en HD y Timer</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Nutrición + 500 alimentos</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Cálculo basal y seguimiento por objetivo</span></li>
-                                </ul>
-                                <button type="button" class="btn btn-outline btn-full"
-                                    onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()">Probá 7
-                                    días Gratis →</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-dots" id="appDots">
-                        <div class="carousel-dot active" data-index="0"></div>
-                        <div class="carousel-dot" data-index="1"></div>
-                        <div class="carousel-dot" data-index="2"></div>
                     </div>
                 </div>
+
+                <div class="carousel-dots" id="appDots">
+                    <div class="carousel-dot active" data-index="0"></div>
+                    <div class="carousel-dot" data-index="1"></div>
+                    <div class="carousel-dot" data-index="2"></div>
+                </div>
+            </div>
             </div>
 
             <!-- ============================================================ -->
@@ -716,7 +687,7 @@
                             <div class="train-plan-card highlight">
                                 <span class="train-plan-badge">DESDE $100.000 C/U</span>
 
-                                <h3 class="plan-title">GRUPO 2 PERSONAS</h3>
+                                <h3 class="plan-title">GRUPOS DE 2 Y 3</h3>
                                 <div class="plan-concept-tagline">Entrená con alguien cercano manteniendo la atención
                                     personalizada y corrección técnica de Nico.</div>
                                 <div class="plan-price-wrap">
@@ -752,52 +723,15 @@
                             </div>
                         </div>
 
-                        <!-- 2. Tríos -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <span class="train-plan-badge">DESDE $85.000 C/U</span>
-                                <h3 class="plan-title">GRUPO 3 PERSONAS</h3>
-                                <div class="plan-concept-tagline">Atención semi-personalizada con la misma técnica y
-                                    cuidado a un arancel accesible.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$85k - $170k</span>
-                                    <span class="plan-period">/ persona / mes</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>1x/sem ($85k) •
-                                            2x/sem ($130k) • 3x/sem ($170k) por persona</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Locación flexible: edificio, gym...</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP bonificada </span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento personalizado </span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial Grupo - Trío"
-                                    data-agent-action="select_plan_presencial_trio">Consultar</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="carousel-dots" id="groupsDots">
-                        <div class="carousel-dot active" data-index="0"></div>
-                        <div class="carousel-dot" data-index="1"></div>
                     </div>
                 </div>
+
+                <div class="carousel-dots" id="groupsDots">
+                    <div class="carousel-dot active" data-index="0"></div>
+                    <div class="carousel-dot" data-index="1"></div>
+                </div>
+            </div>
             </div>
 
             <!-- ============================================================ -->
@@ -809,10 +743,10 @@
                         <!-- 1. Online Premium -->
                         <div class="carousel-slide">
                             <div class="train-plan-card highlight">
-                                <span class="plan-purpose-tag">SEGUIMIENTO CERCANO</span>
+                                <span class="plan-purpose-tag">SEGUIMIENTO PERSONALIZADO</span>
                                 <h3 class="plan-title">Online Premium</h3>
                                 <div class="plan-concept-tagline">Acompañamiento cercano con videollamada inicial de 60
-                                    min y llamadas semanales de 30 min.</div>
+                                    min y llamadas semanales de 60 min.</div>
                                 <div class="plan-price-wrap">
                                     <span class="plan-amount">$90.000</span>
                                     <span class="plan-period">/ mes</span>
@@ -822,8 +756,7 @@
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Videollamada inicial
-                                            (45-60 min) + llamada semanal de 60 min</span></li>
+                                        </svg><span>Videollamadas</span></li>
 
                                     <li class="plan-feature-row"><svg class="check" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
@@ -842,53 +775,7 @@
                             </div>
                         </div>
 
-                        <!-- 2. Online Básico -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <span class="plan-purpose-tag">ESTRUCTURA &amp; PLANIFICACIÓN</span>
-                                <h3 class="plan-title">Online Básico</h3>
-                                <div class="plan-concept-tagline">Para personas autónomas que necesitan orden, método y
-                                    progresión real sin improvisar.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$40.000</span>
-                                    <span class="plan-period">/ mes</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Cuestionario de
-                                            inicio, objetivos e historia previa</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Plan de entrenamiento
-                                            estructurado con series, reps y descansos</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Lineamientos de
-                                            hábitos diarios y soporte por WhatsApp</span></li>
 
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP bonificada </span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento personalizado </span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Online Básico ($40.000)"
-                                    data-agent-action="select_plan_online_basic">Elegir Online Básico</a>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="carousel-dots" id="onlineDots">
