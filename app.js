@@ -4569,7 +4569,7 @@ function openUserPortal(forceOnboarding = false) {
     // -------------------------------------------------------------------------
     // 2. CONTROL DE MEMBRESÍA, TRIAL (7 DÍAS) & PAGOS (SOLO TRAS FINALIZAR EL ONBOARDING)
     // -------------------------------------------------------------------------
-    const accessState = checkUserAccessStatus(profile);
+    const accessState = checkUserAccessStatus(profile) || { hasAccess: true };
     const isLockedByAccess = Boolean(
         !isAdmin && 
         profile && 
