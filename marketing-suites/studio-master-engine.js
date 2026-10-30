@@ -6,63 +6,8 @@
 (function () {
   'use strict';
 
-  // Master Somatic HUD Template (T00 from C:\Users\Lean\SENS\template -  marketing\code.html)
-  const MASTER_T00_TEMPLATE = {
-    id: 'T00',
-    num: 0,
-    format: '9:16',
-    blockId: 'b1',
-    name: 'Somatic HUD (Master)',
-    thumbBg: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAGh6cFg8_4VWbe-nerHN2M8dgIt4JmjSj4golexr0EeSuXU1hj6z1oaRywJ_QK-Ytodd4XFr_eo2HuLhp1FyfGI987VAwg0wu4dKYKKY1shlHKN0dmj8eywWjy7Ns419bd_IfDfyUp84aVXetovFwTKd9a7nKPvviDtLhdQLEgtvNdq2hB37uO0IIRMBjnxgDRYQrsT9KRI8olyK_qINKXLIcG42LyAq4akUjBIQ',
-    html: `<div class="relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-[0_24px_48px_-12px_rgba(26,28,26,0.18)] bg-primary group select-none">
-      <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGh6cFg8_4VWbe-nerHN2M8dgIt4JmjSj4golexr0EeSuXU1hj6z1oaRywJ_QK-Ytodd4XFr_eo2HuLhp1FyfGI987VAwg0wu4dKYKKY1shlHKN0dmj8eywWjy7Ns419bd_IfDfyUp84aVXetovFwTKd9a7nKPvviDtLhdQLEgtvNdq2hB37uO0IIRMBjnxgDRYQrsT9KRI8olyK_qINKXLIcG42LyAq4akUjBIQ');"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/35 to-primary/30 pointer-events-none"></div>
-      <div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
-        <div class="h-[16.6%] bg-error/20 border-b border-error/40 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase tracking-widest">Zona Superior Segura (0-320px)</span></div>
-        <div class="h-[24.5%] bg-error/20 border-t border-error/40 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase tracking-widest">Zona Inferior UI Reels/TikTok</span></div>
-      </div>
-      <div class="relative z-10 h-full flex flex-col justify-between p-6">
-        <div class="flex justify-between items-start pt-2">
-          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface/15 backdrop-blur-md border border-surface/15">
-            <span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span>
-            <span class="font-label text-[10px] uppercase tracking-[0.16em] text-surface font-medium">SENS • SOMATIC LAB</span>
-          </div>
-          <div class="sens-hud-layer flex flex-col items-end text-right bg-primary/40 backdrop-blur-md px-2.5 py-1.5 rounded-lg border border-surface/10">
-            <span class="text-[9px] font-mono uppercase tracking-widest text-secondary-fixed">L5-S1 AXIS</span>
-            <span class="text-sm font-headline font-semibold text-surface">90° <span class="text-[10px] font-normal text-tertiary-fixed">Óptimo</span></span>
-          </div>
-        </div>
-        <div class="sens-hud-layer my-auto self-center flex items-center justify-center relative pointer-events-none">
-          <div class="w-32 h-32 rounded-full border border-secondary-fixed/30 flex items-center justify-center animate-somatic-pulse">
-            <div class="w-20 h-20 rounded-full border border-dashed border-secondary-fixed/60 flex items-center justify-center">
-              <div class="w-2.5 h-2.5 rounded-full bg-secondary-fixed shadow-[0_0_12px_#fbdeb9]"></div>
-            </div>
-          </div>
-          <div class="absolute -right-16 top-2 bg-primary/70 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-mono text-secondary-fixed border border-secondary-fixed/20">
-            TENSION: 0%
-          </div>
-        </div>
-        <div class="space-y-3 pb-8">
-          <div class="space-y-1.5">
-            <span class="inline-block text-[10px] font-mono uppercase tracking-[0.18em] text-secondary-fixed">Diagnóstico Ejecutivo</span>
-            <h2 class="font-headline text-2xl font-light text-surface leading-[1.18] tracking-[-0.02em]">
-              El dolor lumbar a las 6 PM no es por tu silla.
-            </h2>
-          </div>
-          <p class="font-body text-xs text-surface/80 leading-relaxed font-normal">
-            El 94% de mis alumnos ejecutivos corrigen la compresión L5-S1 desbloqueando la rotación interna de cadera en 4 minutos.
-          </p>
-          <div class="pt-2 flex items-center justify-between border-t border-surface/15">
-            <span class="font-label text-[10px] uppercase tracking-[0.14em] text-secondary-fixed font-semibold">2 CUPOS DISPONIBLES • LINK EN BIO</span>
-            <span class="material-symbols-outlined text-surface text-[16px]">arrow_Outward</span>
-          </div>
-        </div>
-      </div>
-    </div>`
-  };
-
   const rawDb = Array.isArray(window.SENS_TEMPLATES_DB_200) ? window.SENS_TEMPLATES_DB_200 : [];
-  const ALL_TEMPLATES = [MASTER_T00_TEMPLATE, ...rawDb];
+  const ALL_TEMPLATES = [...rawDb];
 
   const PILLARS_BY_FORMAT = {
     '9:16': [
@@ -107,10 +52,10 @@
   const state = {
     format: '9:16',
     blockId: 'b1',
-    activeTemplateId: 'T00',
+    activeTemplateId: 'T01',
     motionLoop: false,
     safeZonesVisible: false,
-    hudVisible: true,
+    hudVisible: false,
     activeMediaSlotIndex: 0,
     mediaSlots: [], // [{ el, type: 'bg'|'img', originalUrl, customDataUrl, customVideoUrl, panY: 50, zoom: 1, scrim: 0.80, naturalWidth, naturalHeight }]
     textBindings: {
@@ -596,24 +541,24 @@
       const val = parseFloat(btn.getAttribute('data-pan-btn'));
       const active = Math.abs(val - slot.panY) < 1;
       btn.className = active
-        ? 'px-1.5 py-0.5 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors'
-        : 'px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors';
+        ? 'px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0'
+        : 'px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0';
     });
 
     document.querySelectorAll('[data-zoom-btn]').forEach(btn => {
       const val = parseFloat(btn.getAttribute('data-zoom-btn'));
       const active = Math.abs(val - slot.zoom) < 0.01;
       btn.className = active
-        ? 'px-1.5 py-0.5 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors'
-        : 'px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors';
+        ? 'px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0'
+        : 'px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0';
     });
 
     document.querySelectorAll('[data-scrim-btn]').forEach(btn => {
       const val = parseFloat(btn.getAttribute('data-scrim-btn'));
       const active = Math.abs(val - slot.scrim) < 0.02;
       btn.className = active
-        ? 'px-1.5 py-0.5 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors'
-        : 'px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors';
+        ? 'px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0'
+        : 'px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0';
     });
   }
 
@@ -804,38 +749,13 @@
       : 'w-2 h-2 rounded-full bg-outline';
   }
 
-  // Biometric HUD Overlay Toggle
+  // Biometric HUD Overlay Toggle (Disabled / Removed per Coach UX directive)
   function applyHudState(rootEl) {
     if (!rootEl) rootEl = document.getElementById('video-canvas');
     if (!rootEl) return;
-
-    let hudLayers = Array.from(rootEl.querySelectorAll('.sens-hud-layer'));
-    if (hudLayers.length === 0 && state.hudVisible && state.activeTemplateId !== 'T00') {
-      // Inject non-intrusive floating HUD badge if user toggles HUD on in any other template
-      let injectedHud = rootEl.querySelector('.sens-injected-hud');
-      if (!injectedHud) {
-        injectedHud = document.createElement('div');
-        injectedHud.className = 'sens-injected-hud sens-hud-layer absolute top-4 right-4 z-20 pointer-events-none flex flex-col items-end text-right bg-primary/55 backdrop-blur-md px-2.5 py-1.5 rounded-lg border border-surface/15';
-        injectedHud.innerHTML = `
-          <span class="text-[9px] font-mono uppercase tracking-widest text-secondary-fixed">SENS TELEMETRY</span>
-          <span class="text-xs font-headline font-semibold text-surface">90° AXIS • <span class="text-tertiary-fixed">0% TENSIÓN</span></span>
-        `;
-        rootEl.appendChild(injectedHud);
-      }
-      hudLayers = [injectedHud];
-    }
-
-    rootEl.querySelectorAll('.sens-hud-layer').forEach(layer => {
-      layer.style.display = state.hudVisible ? '' : 'none';
+    rootEl.querySelectorAll('.sens-hud-layer, .sens-injected-hud').forEach(layer => {
+      layer.remove();
     });
-
-    els.hudToggleBtn.setAttribute('aria-checked', String(state.hudVisible));
-    els.hudToggleBtn.className = state.hudVisible
-      ? 'w-11 h-6 bg-primary rounded-full relative flex items-center p-0.5 cursor-pointer transition-colors'
-      : 'w-11 h-6 bg-outline-variant rounded-full relative flex items-center p-0.5 cursor-pointer transition-colors';
-    els.hudKnob.className = state.hudVisible
-      ? 'w-5 h-5 bg-surface rounded-full shadow-sm transform translate-x-5 transition-transform'
-      : 'w-5 h-5 bg-surface rounded-full shadow-sm transform translate-x-0 transition-transform';
   }
 
   function applyMotionLoopState(rootEl) {
@@ -853,13 +773,13 @@
       const fmt = btn.getAttribute('data-format-btn');
       if (fmt === 'loop') {
         btn.className = state.motionLoop
-          ? 'px-2.5 py-1 rounded-lg bg-secondary-fixed text-on-secondary-fixed text-[11px] font-semibold shadow-sm transition-all'
-          : 'px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all';
+          ? 'px-2.5 py-1 rounded-lg bg-secondary-fixed text-on-secondary-fixed text-[11px] font-semibold shadow-sm transition-all whitespace-nowrap shrink-0'
+          : 'px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all whitespace-nowrap shrink-0';
       } else {
         const active = fmt === state.format;
         btn.className = active
-          ? 'px-2.5 py-1 rounded-lg bg-primary text-on-primary text-[11px] font-medium shadow-sm transition-all'
-          : 'px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all';
+          ? 'px-2.5 py-1 rounded-lg bg-primary text-on-primary text-[11px] font-medium shadow-sm transition-all whitespace-nowrap shrink-0'
+          : 'px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all whitespace-nowrap shrink-0';
       }
     });
   }
@@ -1087,32 +1007,194 @@
     }
   }
 
-  // Export 60FPS Reel (Records animated canvas compositing live video/Ken Burns + template overlay)
+  function drawCoverRectOnCtx(ctx, sourceEl, srcW, srcH, dstX, dstY, dstW, dstH, panYPercent, zoomFactor) {
+    if (!sourceEl || !srcW || !srcH || !dstW || !dstH) return;
+    const targetRatio = dstW / dstH;
+    const srcRatio = srcW / srcH;
+
+    let cropW, cropH;
+    if (srcRatio > targetRatio) {
+      cropH = srcH;
+      cropW = srcH * targetRatio;
+    } else {
+      cropW = srcW;
+      cropH = srcW / targetRatio;
+    }
+
+    const z = Math.max(1, zoomFactor || 1);
+    const zoomedW = cropW / z;
+    const zoomedH = cropH / z;
+
+    const panFraction = (typeof panYPercent === 'number' ? panYPercent : 50) / 100;
+    const sx = (srcW - zoomedW) * 0.5;
+    const sy = (srcH - zoomedH) * panFraction;
+
+    ctx.drawImage(sourceEl, sx, sy, zoomedW, zoomedH, dstX, dstY, dstW, dstH);
+  }
+
+  async function renderForegroundOverlayForVideo(targetWidthPx, activeVideoEntries) {
+    const stageEl = document.getElementById('video-canvas');
+    if (!stageEl || typeof window.html2canvas !== 'function') {
+      throw new Error('Stage o html2canvas no disponible');
+    }
+
+    const targetW = targetWidthPx || 1080;
+    const targetH = state.format === '9:16' ? Math.round(targetW * (16 / 9)) : Math.round(targetW * (5 / 4));
+    const rect = stageEl.getBoundingClientRect();
+    const cssW = stageEl.offsetWidth || rect.width || 360;
+    const scale = targetW / cssW;
+
+    document.body.classList.add('sens-exporting');
+    const wasSafeZone = state.safeZonesVisible;
+    if (wasSafeZone) {
+      state.safeZonesVisible = false;
+      applySafeZoneState(stageEl);
+    }
+
+    const hadMotion = stageEl.classList.contains('sens-motion-loop-active');
+    if (hadMotion) stageEl.classList.remove('sens-motion-loop-active');
+
+    const cleanupCallbacks = [];
+
+    try {
+      const prevStageBg = stageEl.style.background;
+      const prevStageBgColor = stageEl.style.backgroundColor;
+      stageEl.style.setProperty('background', 'transparent', 'important');
+      stageEl.style.setProperty('background-color', 'transparent', 'important');
+      cleanupCallbacks.push(() => {
+        stageEl.style.background = prevStageBg;
+        stageEl.style.backgroundColor = prevStageBgColor;
+      });
+
+      for (const entry of activeVideoEntries) {
+        const slot = entry.slot;
+        const vid = entry.vid;
+        if (vid) {
+          const prevVidVis = vid.style.visibility;
+          vid.style.visibility = 'hidden';
+          cleanupCallbacks.push(() => { vid.style.visibility = prevVidVis; });
+        }
+        if (slot && slot.el) {
+          const prevBgImg = slot.el.style.backgroundImage;
+          const prevBgCol = slot.el.style.backgroundColor;
+          const prevOpacity = slot.el.style.opacity;
+          if (slot.type === 'img') {
+            slot.el.style.opacity = '0';
+          } else {
+            slot.el.style.setProperty('background-image', 'none', 'important');
+            slot.el.style.setProperty('background-color', 'transparent', 'important');
+          }
+          cleanupCallbacks.push(() => {
+            slot.el.style.backgroundImage = prevBgImg;
+            slot.el.style.backgroundColor = prevBgCol;
+            slot.el.style.opacity = prevOpacity;
+          });
+        }
+      }
+
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      const rawOverlay = await window.html2canvas(stageEl, {
+        scale: scale,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        logging: false
+      });
+
+      const finalOverlay = document.createElement('canvas');
+      finalOverlay.width = targetW;
+      finalOverlay.height = targetH;
+      const fCtx = finalOverlay.getContext('2d');
+      fCtx.imageSmoothingEnabled = true;
+      fCtx.imageSmoothingQuality = 'high';
+      fCtx.drawImage(rawOverlay, 0, 0, targetW, targetH);
+
+      return finalOverlay;
+    } finally {
+      cleanupCallbacks.forEach(fn => {
+        try { fn(); } catch (_) {}
+      });
+      if (hadMotion) stageEl.classList.add('sens-motion-loop-active');
+      if (wasSafeZone) {
+        state.safeZonesVisible = true;
+        applySafeZoneState(stageEl);
+      }
+      document.body.classList.remove('sens-exporting');
+    }
+  }
+
+  // Export 60FPS Reel (Records live <video> slots + transparent UI overlay at 60FPS, or animated Ken Burns if photo)
   async function handleExportReel60FPS() {
     const origText = els.exportReelLabel.textContent;
     els.exportReelBtn.disabled = true;
 
     try {
       els.exportReelLabel.textContent = 'Preparando capas HD...';
-      // Capture high-res frame at 1080p base for 60FPS smooth encoding
-      const baseFrame = await renderStageToHighResCanvas(1080);
-      const outW = baseFrame.width;
-      const outH = baseFrame.height;
+      const stageEl = document.getElementById('video-canvas');
+      const stageRect = stageEl ? stageEl.getBoundingClientRect() : { left: 0, top: 0, width: 360, height: 640 };
+      const stW = stageRect.width || 360;
+      const stH = stageRect.height || (state.format === '9:16' ? 640 : 450);
+
+      // Detect active <video class="sens-bg-video"> slots
+      const activeVideoEntries = [];
+      for (const slot of state.mediaSlots) {
+        if (!slot || !slot.el) continue;
+        let vid = slot.el.querySelector ? slot.el.querySelector('video.sens-bg-video') : null;
+        if (!vid && slot.type === 'img' && slot.el.parentElement) {
+          vid = slot.el.parentElement.querySelector('video.sens-bg-video');
+        }
+        if (vid && (slot.customVideoUrl || vid.src)) {
+          const targetBoxEl = (slot.type === 'img' && slot.el.parentElement) ? slot.el.parentElement : slot.el;
+          const bRect = targetBoxEl.getBoundingClientRect();
+          const relX = Math.max(0, (bRect.left - stageRect.left) / stW);
+          const relY = Math.max(0, (bRect.top - stageRect.top) / stH);
+          const relW = Math.min(1, (bRect.width || stW) / stW);
+          const relH = Math.min(1, (bRect.height || stH) / stH);
+          activeVideoEntries.push({ slot, vid, relX, relY, relW, relH });
+        }
+      }
+
+      const hasLiveVideo = activeVideoEntries.length > 0;
+      const outW = 1080;
+      const outH = state.format === '9:16' ? 1920 : 1350;
+
+      let fgOverlayCanvas = null;
+      let baseFrame = null;
+
+      if (hasLiveVideo) {
+        // Ensure all loaded videos are playing and ready
+        for (const entry of activeVideoEntries) {
+          entry.vid.muted = true;
+          entry.vid.loop = true;
+          entry.vid.playsInline = true;
+          try {
+            entry.vid.currentTime = 0;
+            await entry.vid.play();
+          } catch (_) {}
+        }
+        fgOverlayCanvas = await renderForegroundOverlayForVideo(outW, activeVideoEntries);
+      } else {
+        baseFrame = await renderStageToHighResCanvas(outW);
+      }
 
       const streamCanvas = document.createElement('canvas');
       streamCanvas.width = outW;
       streamCanvas.height = outH;
       const ctx = streamCanvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
 
       if (typeof streamCanvas.captureStream !== 'function' || typeof window.MediaRecorder === 'undefined') {
-        // Fallback to 4K PNG if browser lacks MediaRecorder
         await handleExport4K();
         return;
       }
 
       const stream = streamCanvas.captureStream(60);
       let mimeType = 'video/webm;codecs=vp9';
-      if (MediaRecorder.isTypeSupported('video/mp4')) {
+      if (MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')) {
+        mimeType = 'video/mp4;codecs=avc1';
+      } else if (MediaRecorder.isTypeSupported('video/mp4')) {
         mimeType = 'video/mp4';
       } else if (!MediaRecorder.isTypeSupported(mimeType)) {
         mimeType = 'video/webm';
@@ -1128,7 +1210,16 @@
         if (e.data && e.data.size > 0) chunks.push(e.data);
       };
 
-      const durationMs = 5000;
+      let durationMs = 5000;
+      if (hasLiveVideo) {
+        const primaryVid = activeVideoEntries[0].vid;
+        if (primaryVid && primaryVid.duration && isFinite(primaryVid.duration) && primaryVid.duration > 0) {
+          durationMs = Math.min(15000, Math.max(4000, Math.round(primaryVid.duration * 1000)));
+        } else {
+          durationMs = 6000;
+        }
+      }
+
       const startTime = performance.now();
 
       await new Promise((resolve) => {
@@ -1141,13 +1232,35 @@
           els.exportReelLabel.textContent = `Grabando 60FPS... ${Math.round(progress * 100)}%`;
 
           ctx.clearRect(0, 0, outW, outH);
-          // Subtle somatic breathing motion if Motion Loop is active
-          const scalePulse = state.motionLoop ? 1 + 0.03 * Math.sin(progress * Math.PI * 2) : 1;
-          ctx.save();
-          ctx.translate(outW / 2, outH / 2);
-          ctx.scale(scalePulse, scalePulse);
-          ctx.drawImage(baseFrame, -outW / 2, -outH / 2, outW, outH);
-          ctx.restore();
+
+          if (hasLiveVideo && fgOverlayCanvas) {
+            ctx.fillStyle = '#121214';
+            ctx.fillRect(0, 0, outW, outH);
+
+            for (const entry of activeVideoEntries) {
+              const v = entry.vid;
+              const s = entry.slot;
+              const vW = v.videoWidth || s.naturalWidth || 1080;
+              const vH = v.videoHeight || s.naturalHeight || 1920;
+              const dstX = Math.round(entry.relX * outW);
+              const dstY = Math.round(entry.relY * outH);
+              const dstW = Math.round(entry.relW * outW);
+              const dstH = Math.round(entry.relH * outH);
+              const extraZoom = state.motionLoop ? (1 + 0.03 * Math.sin(progress * Math.PI * 2)) : 1;
+              drawCoverRectOnCtx(ctx, v, vW, vH, dstX, dstY, dstW, dstH, s.panY, (s.zoom || 1) * extraZoom);
+            }
+
+            // Composite crisp template UI + scrim overlay on top of live video frame
+            ctx.drawImage(fgOverlayCanvas, 0, 0, outW, outH);
+          } else if (baseFrame) {
+            // Always apply subtle somatic motion on static photos when exporting Reel 60FPS
+            const scalePulse = 1 + 0.035 * Math.sin(progress * Math.PI * 2);
+            ctx.save();
+            ctx.translate(outW / 2, outH / 2);
+            ctx.scale(scalePulse, scalePulse);
+            ctx.drawImage(baseFrame, -outW / 2, -outH / 2, outW, outH);
+            ctx.restore();
+          }
 
           if (elapsed < durationMs) {
             requestAnimationFrame(drawTick);
@@ -1381,12 +1494,6 @@
       });
     }
 
-    // HUD Switch Toggle
-    els.hudToggleBtn.addEventListener('click', () => {
-      state.hudVisible = !state.hudVisible;
-      applyHudState();
-    });
-
     // Export Buttons
     els.export4kBtn.addEventListener('click', handleExport4K);
     els.exportReelBtn.addEventListener('click', handleExportReel60FPS);
@@ -1444,10 +1551,11 @@
     selectTemplate,
     handleMediaFileUpload,
     renderStageToHighResCanvas,
-    handleExport4K
+    handleExport4K,
+    handleExportReel60FPS
   };
 
   // Boot Studio
   initEvents();
-  selectTemplate('T00');
+  selectTemplate('T01');
 })();

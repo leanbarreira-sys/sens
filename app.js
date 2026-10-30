@@ -4272,6 +4272,9 @@ function switchPortalView(viewId) {
         }
         document.body.classList.toggle('is-admin', isAdmin);
 
+        const currentActiveView = document.querySelector('#app-container .portal-view.active');
+        const isSameView = Boolean(currentActiveView && currentActiveView.id === viewId);
+
         // Cerrar cualquier bottom sheet o modal activo para que no quede flotando entre vistas
         const athleteSheet = document.getElementById('athletePickerBottomSheet');
         const athleteSheetBackdrop = document.getElementById('athleteSheetBackdrop');
@@ -4282,7 +4285,7 @@ function switchPortalView(viewId) {
         if (actionsSheet) actionsSheet.classList.remove('active');
         if (actionsBackdrop) actionsBackdrop.classList.remove('active');
         const userDrop = document.getElementById('userAvatarDropdown');
-        if (userDrop) userDrop.classList.remove('active');
+        if (userDrop && !isSameView) userDrop.classList.remove('active');
         document.body.style.overflow = '';
 
         if (isExcluded) {
@@ -4459,7 +4462,10 @@ function openUserPortal(forceOnboarding = false) {
     if (userEmailEl) {
         userEmailEl.textContent = realEmail || 'Sesión Iniciada';
     }
-    if (planBadgeEl) {
+    const planBadgeTextEl = document.getElementById('portalPlanBadgeText');
+    if (planBadgeTextEl) {
+        planBadgeTextEl.textContent = formatPlanShortBadge(profile.active_plan_name || (profile.user_type ? formatPlanName(profile.user_type) : 'Plan SENS'));
+    } else if (planBadgeEl) {
         planBadgeEl.textContent = formatPlanShortBadge(profile.active_plan_name || (profile.user_type ? formatPlanName(profile.user_type) : 'Plan SENS'));
     }
 
@@ -4679,8 +4685,13 @@ function renderDashboardData() {
     if (avatarInitialsEl) {
         avatarInitialsEl.textContent = firstName.slice(0, 1).toUpperCase() + (rawFullName.split(' ')[1] ? rawFullName.split(' ')[1].slice(0, 1).toUpperCase() : 'B');
     }
-    if (profile.active_plan_name && planBadgeEl) {
-        planBadgeEl.textContent = profile.active_plan_name;
+    if (profile.active_plan_name) {
+        const planTextSpan = document.getElementById('portalPlanBadgeText');
+        if (planTextSpan) {
+            planTextSpan.textContent = formatPlanShortBadge(profile.active_plan_name);
+        } else if (planBadgeEl) {
+            planBadgeEl.textContent = formatPlanShortBadge(profile.active_plan_name);
+        }
     }
     if (weightKpi) {
         if (profile.current_weight) {
@@ -10416,7 +10427,9 @@ function initTopbarAvatar() {
 
     if (!avatarBtn || !dropdown) return;
 
-    if (!avatarBtn._hasAvatarClickBound) {
+    // El botón #userAvatarBtn ya invoca window.toggleUserAvatarDropdown(event) desde su atributo onclick
+    // Solo agregamos listener si no tiene atributo onclick para evitar doble disparo
+    if (!avatarBtn._hasAvatarClickBound && !avatarBtn.getAttribute('onclick')) {
         avatarBtn._hasAvatarClickBound = true;
         avatarBtn.addEventListener('click', (e) => {
             if (e) {
@@ -10432,18 +10445,6 @@ function initTopbarAvatar() {
             dropdown.classList.remove('active');
         }
     });
-
-    // Solo cerrar en scroll vertical genuino amplio (> 60px) para no romper taps táctiles en mobile
-    let lastDropdownScrollY = window.scrollY;
-    window.addEventListener('scroll', () => {
-        if (dropdown.classList.contains('active')) {
-            if (Math.abs(window.scrollY - lastDropdownScrollY) > 60) {
-                dropdown.classList.remove('active');
-            }
-        } else {
-            lastDropdownScrollY = window.scrollY;
-        }
-    }, { passive: true });
 
     const handleAvatarItemNav = (actionFn) => {
         dropdown.classList.remove('active');
@@ -10759,7 +10760,11 @@ function initCoachOS() {
 
     // Función unificada para cambiar de Sub-Tab en Coach Hub (sincroniza Subnav y Dock Inferior)
     window.switchCoachSubTab = function(targetPaneId) {
-        const resolvedPaneId = targetPaneId === 'paneDatabases' ? 'paneLibrary' : targetPaneId;
+        // Biblioteca y Evolución ocultas por el momento: redirigir a Alumnos si se invocan por error
+        let resolvedPaneId = targetPaneId;
+        if (targetPaneId === 'paneDatabases' || targetPaneId === 'paneLibrary' || targetPaneId === 'paneEvolution') {
+            resolvedPaneId = 'paneAthletes';
+        }
         document.querySelectorAll('#coachHubSubnav .coach-subnav-btn').forEach(b => {
             b.classList.toggle('active', b.getAttribute('data-subtab') === resolvedPaneId);
         });
@@ -26081,8 +26086,8 @@ const CoachWorkoutsMaster = {
             }
 
             const categories = [
-                { id: 'day_muscles', label: dayMuscles.length > 0 ? `Día: ${dayMuscles.join(' + ')}` : 'Músculos del Día' },
-                { id: 'catalog_all', label: 'Ver Todo el Catálogo' },
+                { id: 'day_muscles', label: 'Músculos del Día' },
+                { id: 'catalog_all', label: 'Todo el Catálogo' },
                 { id: 'piernas', label: 'Piernas' },
                 { id: 'pecho', label: 'Pecho' },
                 { id: 'espalda', label: 'Espalda' },
@@ -26284,7 +26289,7 @@ const CoachWorkoutsMaster = {
             }
 
             const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
-            const favPill = isFav ? `<span class="pill" style="font-size: 8px; font-weight: 800; background: #E5CBA7; color: #121214; padding: 2px 6px;">★ FAVORITO</span>` : '';
+            const favPill = isFav ? `<span class="pill" style="font-size: 8px; font-weight: 800; background: #FBDEB9; color: #705B3E; padding: 2px 6px; white-space: nowrap !important; flex-shrink: 0;">★ FAVORITO</span>` : '';
 
             html += `
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
@@ -26292,8 +26297,8 @@ const CoachWorkoutsMaster = {
                     <div class="wizard-feed-card-gradient"></div>
                     <div class="wizard-feed-top-pills">
                         ${favPill}
-                        <span class="pill pill-champagne" style="font-size: 8px; font-weight: 800; padding: 2px 6px;">${muscleTag}</span>
-                        <span class="pill" style="font-size: 8px; font-weight: 700; background: rgba(18, 18, 20, 0.85); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); padding: 2px 6px;">${ex.sets || 3}x${ex.reps || '10-12'}</span>
+                        <span class="pill pill-champagne" style="font-size: 8px; font-weight: 800; padding: 2px 6px; white-space: nowrap !important; flex-shrink: 0;">${muscleTag}</span>
+                        <span class="pill" style="font-size: 8px; font-weight: 700; background: rgba(18, 18, 20, 0.85); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); padding: 2px 6px; white-space: nowrap !important; flex-shrink: 0;">${ex.sets || 3}x${ex.reps || '10-12'}</span>
                     </div>
                     <div class="wizard-feed-content">
                         <h4 class="wizard-feed-title" title="${exName}" style="color: #FFFFFF !important; font-size: 11.5px !important; font-weight: 800 !important; line-height: 1.25 !important; margin: 0 0 3px 0 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85) !important;">${exName}</h4>

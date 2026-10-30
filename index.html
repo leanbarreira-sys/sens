@@ -138,7 +138,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=23.0">
+    <link rel="stylesheet" href="style.css?v=24.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -152,13 +152,18 @@
                 try { e.preventDefault(); e.stopPropagation(); } catch(_) {}
             }
             var now = Date.now();
-            if (now - lastAvatarToggleTime < 350) return;
+            if (now - lastAvatarToggleTime < 220) return;
             lastAvatarToggleTime = now;
 
             var d = document.getElementById('userAvatarDropdown');
             if (!d) return;
             if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
-            d.classList.toggle('active');
+            var willOpen = !d.classList.contains('active');
+            if (willOpen) {
+                d.classList.add('active');
+            } else {
+                d.classList.remove('active');
+            }
         };
 
         // Close dropdown when tapping anywhere outside
@@ -5215,7 +5220,7 @@
                     <button type="button" class="coach-subnav-btn" data-subtab="paneNutrition">
                         Nutrición &amp; Macros
                     </button>
-                    <button type="button" class="coach-subnav-btn" data-subtab="paneLibrary">
+                    <button type="button" class="coach-subnav-btn" data-subtab="paneLibrary" style="display: none !important;">
                         Biblioteca Maestra
                     </button>
                     <button type="button" class="coach-subnav-btn" data-subtab="paneMarketing">
@@ -6734,7 +6739,7 @@
                     <div class="coach-surface-card" style="padding: 0; overflow: hidden; border-radius: 20px; border: 1px solid rgba(18, 18, 20, 0.08); background: #FAF9F6;">
                         <!-- Suite Maestra Unificada (UX/UI code.html + 200 Templates Sagrados + Pipeline 4K UHD) -->
                         <div style="position: relative; width: 100%; background: #FAF9F6;">
-                            <iframe id="sensMarketingSuiteFrame" src="marketing-suites/studio-master.html?v=22.0" title="SENS Marketing Studio — Fábrica de Reels &amp; TikTok" style="width: 100%; height: 90vh; min-height: 820px; border: none; display: block; background: #FAF9F6; -webkit-overflow-scrolling: touch;"></iframe>
+                            <iframe id="sensMarketingSuiteFrame" src="marketing-suites/studio-master.html?v=24.0" title="SENS Marketing Studio — Fábrica de Reels &amp; TikTok" style="width: 100%; height: 90vh; min-height: 820px; border: none; display: block; background: #FAF9F6; -webkit-overflow-scrolling: touch;"></iframe>
                         </div>
 
                         <!-- Controles de soporte ocultos para API de exportación directa y tests -->
@@ -7897,7 +7902,7 @@
         </button>
     </div>
 
-    <!-- Floating Dock Inferior Móvil Exclusivo de SENS Coach OS (5 Estaciones Táctiles) -->
+    <!-- Floating Dock Inferior Móvil Exclusivo de SENS Coach OS (4 Estaciones Táctiles Activas) -->
     <div class="sens-floating-dock coach-mode-dock" id="sensCoachFloatingDock" style="display: none;">
         <button type="button" class="sens-dock-item coach-dock-btn active" data-coach-subtab="paneAthletes"
             onclick="if(typeof window.switchCoachSubTab==='function')window.switchCoachSubTab('paneAthletes');">
@@ -7917,6 +7922,7 @@
             <span>Entreno</span>
         </button>
         <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneEvolution"
+            style="display: none !important;"
             onclick="if(typeof window.switchCoachSubTab==='function')window.switchCoachSubTab('paneEvolution');">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
@@ -7931,6 +7937,7 @@
             <span>Nutrición</span>
         </button>
         <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneLibrary"
+            style="display: none !important;"
             onclick="if(typeof window.switchCoachSubTab==='function')window.switchCoachSubTab('paneLibrary');">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -9264,7 +9271,7 @@
     <script src="nutrition_db.js?v=11.0"></script>
 
     <!-- Motor de Planificación Nutricional de Precisión Coach OS -->
-    <script src="coach_nutrition_master.js?v=11.0"></script>
+    <script src="coach_nutrition_master.js?v=12.0"></script>
 
     <!-- Base de Datos Maestra de Ejercicios SENS (52 Ejercicios Oficiales) -->
     <script src="exercises_db.js?v=12.0"></script>
@@ -9312,7 +9319,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=1.0"></script>
-    <script src="app.js?v=23.0"></script>
+    <script src="app.js?v=24.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

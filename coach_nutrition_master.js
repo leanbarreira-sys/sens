@@ -882,8 +882,8 @@ const CoachNutritionMaster = {
                         <div style="font-size: 10px; color: #0284C7; font-weight: 700;">${macros.protein}g Prot</div>
                     </div>
 
-                    <button type="button" class="btn btn-outline btn-sm btn-coach-swap-food" data-meal="${mealKey}" data-index="${idx}" title="Intercambiar por un equivalente con similares calorías y proteínas" style="font-size: 10px; padding: 4px 8px; border-color: rgba(158,125,75,0.4); color: #9E7D4B; border-radius: 6px; font-weight: 700;">
-                        🔄 Swap
+                    <button type="button" class="btn btn-outline btn-sm btn-coach-swap-food" data-meal="${mealKey}" data-index="${idx}" title="Intercambiar por un equivalente con similares calorías y proteínas" style="font-size: 10px; padding: 4px 8px; border-color: rgba(112,91,62,0.35); color: #705B3E; border-radius: 6px; font-weight: 700;">
+                        Cambiar
                     </button>
 
                     <button type="button" class="btn btn-outline btn-sm btn-coach-inspect-food" data-food-id="${food.id || food.codigo}" data-meal="${mealKey}" title="Ver preparación, receta e imagen HD" style="font-size: 10px; padding: 4px 8px; border-color: #E4E4E7; color: #52525B; border-radius: 6px;">
@@ -1174,53 +1174,53 @@ const CoachNutritionMaster = {
         if (existing) existing.remove();
 
         const modalHtml = `
-            <div class="sens-modal-backdrop sens-modal-sheet-wrap" id="coachFoodPickerModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100000; align-items: center; justify-content: center; padding: 16px;">
-                <div class="sens-modal-content" style="background: #111115; border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 18px; width: 100%; max-width: 760px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.85);">
+            <div class="sens-modal-backdrop sens-modal-sheet-wrap" id="coachFoodPickerModal" style="display: none; position: fixed; inset: 0; background: rgba(18,18,20,0.45); backdrop-filter: blur(8px); z-index: 100000; align-items: center; justify-content: center; padding: 12px;">
+                <div class="sens-modal-content" style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 22px; width: 100%; max-width: 760px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 60px rgba(18,18,20,0.18);">
                     <!-- Header -->
-                    <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
+                    <div style="padding: 16px 20px; border-bottom: 1px solid rgba(18,18,20,0.08); display: flex; justify-content: space-between; align-items: center; background: #FFFFFF;">
                         <div>
                             <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;">BIBLIOTECA 500 ALIMENTOS SENS</span>
-                            <h3 style="margin: 4px 0 0 0; font-size: 1.2rem; color: #FFFFFF; font-weight: 800;" id="foodPickerModalTitle">Agregar Alimento</h3>
+                            <h3 style="margin: 4px 0 0 0; font-size: 1.15rem; color: #121214; font-weight: 800;" id="foodPickerModalTitle">Agregar Alimento</h3>
                         </div>
-                        <button type="button" class="modal-close-btn" onclick="CoachNutritionMaster.closeFoodPickerModal()" style="background: none; border: none; color: #FFF; font-size: 20px; cursor: pointer; padding: 4px;" aria-label="Cerrar modal">✕</button>
+                        <button type="button" class="modal-close-btn" onclick="CoachNutritionMaster.closeFoodPickerModal()" style="background: #F4F3F1; border: 1px solid rgba(18,18,20,0.08); color: #121214; width: 34px; height: 34px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;" aria-label="Cerrar modal">✕</button>
                     </div>
 
                     <!-- Buscador & Filtros Completos (Momento, Tipo, Calorías, Objetivo) -->
-                    <div style="padding: 14px 20px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 10px;">
+                    <div style="padding: 14px 20px; background: #FAF9F6; border-bottom: 1px solid rgba(18,18,20,0.08); display: flex; flex-direction: column; gap: 10px;">
                         <!-- Input de Búsqueda -->
-                        <input type="text" id="foodPickerSearchInput" class="input-control" placeholder="Buscar entre 500 alimentos por nombre, código (NUT-001), ingredientes, dieta..." style="margin-bottom: 0; font-size: 13px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #FFF; border-radius: 10px; padding: 10px 14px;">
+                        <input type="text" id="foodPickerSearchInput" class="input-control" placeholder="Buscar entre 500 alimentos por nombre, código (NUT-001), ingredientes..." style="margin-bottom: 0; font-size: 13px; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); color: #121214; border-radius: 12px; padding: 10px 14px;">
 
                         <!-- Filtro 1: Momento del Día -->
                         <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;" id="coachFoodMealFilterRow">
-                            <button type="button" class="pill pill-champagne food-filter-pill active" data-filter-group="meal" data-val="active">Apto para esta comida</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="all">Todos los momentos</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="desayuno_merienda">Desayuno / Merienda</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="almuerzo_cena">Almuerzo / Cena</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="snack">Snack</button>
+                            <button type="button" class="pill pill-champagne food-filter-pill active" data-filter-group="meal" data-val="active" style="white-space: nowrap; flex-shrink: 0;">Apto para esta comida</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="all" style="white-space: nowrap; flex-shrink: 0;">Todos los momentos</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="desayuno_merienda" style="white-space: nowrap; flex-shrink: 0;">Desayuno / Merienda</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="almuerzo_cena" style="white-space: nowrap; flex-shrink: 0;">Almuerzo / Cena</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="meal" data-val="snack" style="white-space: nowrap; flex-shrink: 0;">Snack</button>
                         </div>
 
                         <!-- Filtro 2: Tipo de Ítem & Calorías -->
                         <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;" id="coachFoodTypeAndKcalRow">
-                            <button type="button" class="pill pill-champagne food-filter-pill active" data-filter-group="type" data-val="all">Todos los tipos</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="Receta">Recetas</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="Alimento Base">Alimentos Base</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="vianda">❄️ Vianda Fría</button>
-                            <span style="border-left: 1px solid rgba(255,255,255,0.15); margin: 0 4px;"></span>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="under200">&lt; 200 kcal</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="200-400">200-400 kcal</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="400-600">400-600 kcal</button>
-                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="over600">&gt; 600 kcal</button>
+                            <button type="button" class="pill pill-champagne food-filter-pill active" data-filter-group="type" data-val="all" style="white-space: nowrap; flex-shrink: 0;">Todos los tipos</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="Receta" style="white-space: nowrap; flex-shrink: 0;">Recetas</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="Alimento Base" style="white-space: nowrap; flex-shrink: 0;">Alimentos Base</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="type" data-val="vianda" style="white-space: nowrap; flex-shrink: 0;">Vianda Fría</button>
+                            <span style="border-left: 1px solid rgba(18,18,20,0.12); margin: 0 4px;"></span>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="under200" style="white-space: nowrap; flex-shrink: 0;">&lt; 200 kcal</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="200-400" style="white-space: nowrap; flex-shrink: 0;">200-400 kcal</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="400-600" style="white-space: nowrap; flex-shrink: 0;">400-600 kcal</button>
+                            <button type="button" class="pill pill-dark food-filter-pill" data-filter-group="kcal" data-val="over600" style="white-space: nowrap; flex-shrink: 0;">&gt; 600 kcal</button>
                         </div>
                     </div>
 
                     <!-- Header de Resultados -->
-                    <div style="padding: 8px 20px; font-size: 11px; color: #71717A; display: flex; justify-content: space-between; background: rgba(0,0,0,0.2);">
+                    <div style="padding: 8px 20px; font-size: 11px; color: #575659; display: flex; justify-content: space-between; background: #F4F3F1;">
                         <span id="foodPickerCountBadge">Cargando catálogo...</span>
-                        <span>Clic en "Detalle" para ver foto HD y receta</span>
+                        <span>Tocá "Detalle" para ver foto HD y receta</span>
                     </div>
 
                     <!-- Grid de Resultados -->
-                    <div id="foodPickerResultsGrid" style="flex: 1; overflow-y: auto; padding: 14px 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px;">
+                    <div id="foodPickerResultsGrid" style="flex: 1; overflow-y: auto; padding: 14px 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 10px; background: #FAF9F6;">
                         <!-- Inyectado dinámicamente -->
                     </div>
                 </div>
@@ -1363,25 +1363,25 @@ const CoachNutritionMaster = {
             const foodName = f.nombre_alimento_o_plato || f.name || 'Alimento SENS';
 
             return `
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 14px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 2px 8px rgba(18,18,20,0.03);">
                     <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;">
-                        <img src="${imgSrc}" alt="${foodName}" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #18181B; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'" />
+                        <img src="${imgSrc}" alt="${foodName}" style="width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: #F4F3F1; flex-shrink: 0; border: 1px solid rgba(18,18,20,0.08);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'" />
                         <div style="min-width: 0; flex: 1;">
-                            <strong style="font-size: 12.5px; color: #FFFFFF; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25;">${foodName}</strong>
-                            <div style="font-size: 11px; color: #71717A; margin-top: 2px; font-variant-numeric: tabular-nums;">
-                                ${f.porcion_total_g_ml || 100}g • <span style="color: #E5CBA7; font-weight: 700;">${cal} kcal</span> • <span style="color: #38BDF8; font-weight: 700;">${prot}g P</span>
-                                ${f.apto_vianda_fria ? ' • <span style="color: #93C5FD;">❄️</span>' : ''}
+                            <strong style="font-size: 12.5px; color: #121214; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25;">${foodName}</strong>
+                            <div style="font-size: 11px; color: #575659; margin-top: 2px; font-variant-numeric: tabular-nums;">
+                                ${f.porcion_total_g_ml || 100}g • <span style="color: #705B3E; font-weight: 700;">${cal} kcal</span> • <span style="color: #0284C7; font-weight: 700;">${prot}g P</span>
+                                ${f.apto_vianda_fria ? ' • <span style="color: #0284C7; font-weight: 600;">Vianda</span>' : ''}
                             </div>
-                            <div style="font-size: 9.5px; color: #A1A1AA; margin-top: 1px;">
+                            <div style="font-size: 9.5px; color: #77767B; margin-top: 1px;">
                                 C: ${carbs}g • G: ${fats}g • ${f.codigo || ''}
                             </div>
                         </div>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 5px; flex-shrink: 0;">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="CoachNutritionMaster.addFoodToActiveMeal('${f.id}')" style="font-size: 11px; padding: 5px 12px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; border-radius: 6px; cursor: pointer;">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="CoachNutritionMaster.addFoodToActiveMeal('${f.id}')" style="font-size: 11px; padding: 6px 12px; font-weight: 800; background: #121214; color: #FFFFFF; border: none; border-radius: 999px; cursor: pointer; white-space: nowrap;">
                             + Añadir
                         </button>
-                        <button type="button" class="btn btn-outline btn-sm" onclick="CoachNutritionMaster.inspectFood('${f.id}')" style="font-size: 10px; padding: 3px 8px; border-color: rgba(255,255,255,0.2); color: #E4E4E7; border-radius: 6px; cursor: pointer;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="CoachNutritionMaster.inspectFood('${f.id}')" style="font-size: 10px; padding: 4px 10px; border-color: rgba(18,18,20,0.14); color: #121214; background: #FAF9F6; border-radius: 999px; cursor: pointer; white-space: nowrap;">
                             Detalle ↗
                         </button>
                     </div>
@@ -2641,44 +2641,44 @@ const CoachNutritionMaster = {
         if (existing) existing.remove();
 
         const modalHtml = `
-            <div class="sens-modal-backdrop active" id="${modalId}" style="display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
-                <div style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 16px; width: 100%; max-width: 480px; padding: 22px; color: #FFF; box-shadow: 0 20px 50px rgba(0,0,0,0.85);">
+            <div class="sens-modal-backdrop active" id="${modalId}" style="display: flex; position: fixed; inset: 0; background: rgba(18,18,20,0.45); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; width: 100%; max-width: 480px; padding: 22px; color: #121214; box-shadow: 0 24px 60px rgba(18,18,20,0.18);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <div>
                             <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">REPLICACIÓN EN 1 TAP</span>
-                            <h3 style="margin: 4px 0 0 0; font-size: 1.2rem; color: #FFFFFF;">Clonar Menú de ${spanish.dayName} ${spanish.dayNum}</h3>
+                            <h3 style="margin: 4px 0 0 0; font-size: 1.2rem; color: #121214; font-weight: 800;">Clonar Menú de ${spanish.dayName} ${spanish.dayNum}</h3>
                         </div>
-                        <button type="button" onclick="document.getElementById('${modalId}').remove()" style="background: none; border: none; font-size: 20px; color: #A1A1AA; cursor: pointer;">✕</button>
+                        <button type="button" onclick="document.getElementById('${modalId}').remove()" style="background: #F4F3F1; border: 1px solid rgba(18,18,20,0.08); width: 32px; height: 32px; border-radius: 50%; font-size: 16px; color: #121214; cursor: pointer;">✕</button>
                     </div>
 
-                    <p style="font-size: 12px; color: #A1A1AA; margin: 0 0 16px 0; line-height: 1.4;">
+                    <p style="font-size: 12px; color: #575659; margin: 0 0 16px 0; line-height: 1.4;">
                         Seleccioná a qué días querés copiar exactamente el menú, alimentos y macros configurados para este día:
                     </p>
 
                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="same_weekdays" style="text-align: left; padding: 10px 14px; border-color: rgba(229,203,167,0.3); color: #FFF; font-weight: 700; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="same_weekdays" style="text-align: left; padding: 12px 14px; background: #FFFFFF; border-color: rgba(18,18,20,0.1); color: #121214; font-weight: 700; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
                             <span>A todos los <strong>${spanish.dayName}s</strong> del mes</span>
-                            <span style="color: #9E7D4B;">→</span>
+                            <span style="color: #705B3E;">→</span>
                         </button>
 
-                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="weekdays" style="text-align: left; padding: 10px 14px; border-color: rgba(229,203,167,0.3); color: #FFF; font-weight: 700; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="weekdays" style="text-align: left; padding: 12px 14px; background: #FFFFFF; border-color: rgba(18,18,20,0.1); color: #121214; font-weight: 700; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
                             <span>A todos los días de semana (<strong>Lunes a Viernes</strong>)</span>
-                            <span style="color: #9E7D4B;">→</span>
+                            <span style="color: #705B3E;">→</span>
                         </button>
 
-                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="weekends" style="text-align: left; padding: 10px 14px; border-color: rgba(229,203,167,0.3); color: #FFF; font-weight: 700; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="weekends" style="text-align: left; padding: 12px 14px; background: #FFFFFF; border-color: rgba(18,18,20,0.1); color: #121214; font-weight: 700; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
                             <span>A todos los fines de semana (<strong>Sábados y Domingos</strong>)</span>
-                            <span style="color: #9E7D4B;">→</span>
+                            <span style="color: #705B3E;">→</span>
                         </button>
 
-                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="all_month" style="text-align: left; padding: 10px 14px; border-color: rgba(229,203,167,0.3); color: #FFF; font-weight: 700; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <button type="button" class="btn btn-outline btn-replicate-target" data-target="all_month" style="text-align: left; padding: 12px 14px; background: #FFFFFF; border-color: rgba(18,18,20,0.1); color: #121214; font-weight: 700; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
                             <span>A <strong>Todo el Mes Completo</strong> (30 días)</span>
-                            <span style="color: #9E7D4B;">→</span>
+                            <span style="color: #705B3E;">→</span>
                         </button>
                     </div>
 
                     <div style="margin-top: 16px; text-align: right;">
-                        <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('${modalId}').remove()" style="border-color: #52525B; color: #A1A1AA;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('${modalId}').remove()" style="border-color: rgba(18,18,20,0.15); color: #575659; background: #FFFFFF;">
                             Cancelar
                         </button>
                     </div>

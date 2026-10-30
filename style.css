@@ -30474,3 +30474,562 @@ body.in-portal #profileSettingsView .diag-tag.highlight {
     color: #705B3E !important;
 }
 
+/* =========================================================================
+   7. COACH OS & TOPBAR MASTER REFINEMENT — LIGHT QUIET LUXURY (MOBILE-FIRST)
+   ========================================================================= */
+
+/* 7.1 TOPBAR: AVATAR CIRCULAR PERFECTO & PILLS APP ALUMNO / COACH OS EN 1 SOLA FILA */
+body.in-portal .portal-topbar,
+.portal-topbar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    padding: 8px 12px !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+}
+
+body.in-portal .portal-brand,
+.portal-brand {
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+}
+
+body.in-portal .portal-topbar-actions,
+.portal-topbar-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+    min-width: 0 !important;
+}
+
+/* Segmented Control App Alumno / Coach OS — Estrictamente 1 fila en todo dispositivo */
+body.in-portal #topbarAdminToggle,
+#topbarAdminToggle,
+.topbar-mode-segmented {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 2px !important;
+    padding: 3px !important;
+    border-radius: 999px !important;
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+}
+
+body.in-portal #topbarAdminToggle .topbar-mode-btn,
+#btnModeAppGeneral,
+#btnModeCoachOS,
+.topbar-mode-btn {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    flex-shrink: 0 !important;
+    height: 28px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.01em !important;
+    color: #575659 !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.18s ease !important;
+}
+
+body.in-portal #topbarAdminToggle .topbar-mode-btn span,
+#btnModeAppGeneral span,
+#btnModeCoachOS span,
+.topbar-mode-btn span {
+    white-space: nowrap !important;
+    display: inline-block !important;
+    line-height: 1 !important;
+}
+
+body.in-portal #topbarAdminToggle .topbar-mode-btn svg,
+.topbar-mode-btn svg {
+    width: 11px !important;
+    height: 11px !important;
+    flex-shrink: 0 !important;
+}
+
+body.in-portal #topbarAdminToggle .topbar-mode-btn.active,
+#btnModeAppGeneral.active,
+#btnModeCoachOS.active,
+.topbar-mode-btn.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.14) !important;
+}
+
+/* Círculo de Usuario Superior Derecho (#userAvatarBtn) — Geometría Circular 1:1 Inquebrantable */
+body.in-portal #userAvatarWrap,
+#userAvatarWrap,
+.user-avatar-wrap {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+body.in-portal #userAvatarBtn,
+#userAvatarBtn,
+.user-avatar-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
+    aspect-ratio: 1 / 1 !important;
+    flex: 0 0 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border: 1.5px solid rgba(197, 168, 128, 0.5) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    position: relative !important;
+    pointer-events: auto !important;
+    z-index: 1005 !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.12) !important;
+}
+
+body.in-portal #userAvatarInitials,
+#userAvatarInitials {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    letter-spacing: 0.02em !important;
+    text-align: center !important;
+    color: #FAF9F6 !important;
+    transform: none !important;
+    pointer-events: none !important;
+}
+
+body.in-portal #userAvatarBtn .avatar-online-dot,
+#userAvatarBtn .avatar-online-dot {
+    position: absolute !important;
+    bottom: -1px !important;
+    right: -1px !important;
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    background: #1E7B42 !important;
+    border: 2px solid #FAF9F6 !important;
+    pointer-events: none !important;
+}
+
+/* Dropdown de Usuario — Fijo en Viewport para cero recortes en Mobile */
+body.in-portal #userAvatarDropdown,
+#userAvatarDropdown {
+    position: fixed !important;
+    top: 60px !important;
+    right: 12px !important;
+    left: auto !important;
+    width: 320px !important;
+    max-width: calc(100vw - 24px) !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 22px !important;
+    padding: 16px !important;
+    box-shadow: 0 24px 60px rgba(18, 18, 20, 0.18), 0 4px 16px rgba(18, 18, 20, 0.06) !important;
+    z-index: 999999 !important;
+    display: none !important;
+    color: #121214 !important;
+}
+
+body.in-portal #userAvatarDropdown.active,
+#userAvatarDropdown.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: none !important;
+}
+
+@media (max-width: 640px) {
+    /* En mobile cuando el Coach (admin) tiene el switch App Alumno | Coach OS visible,
+       ocultamos el botón secundario de descarga PWA para que las pills y el avatar tengan espacio holgado */
+    body.is-admin .btn-topbar-install-pwa,
+    body.in-coach-mode .btn-topbar-install-pwa {
+        display: none !important;
+    }
+
+    body.in-portal #topbarAdminToggle .topbar-mode-btn,
+    #btnModeAppGeneral,
+    #btnModeCoachOS {
+        padding: 0 9px !important;
+        font-size: 10.5px !important;
+        height: 27px !important;
+        gap: 3.5px !important;
+    }
+
+    body.in-portal .portal-topbar-logo {
+        height: 20px !important;
+        max-width: 112px !important;
+    }
+}
+
+@media (max-width: 370px) {
+    body.in-portal #topbarAdminToggle .topbar-mode-btn svg {
+        display: none !important;
+    }
+}
+
+/* 7.2 OCULTAR SECCIÓN BIBLIOTECA Y EVOLUCIÓN POR EL MOMENTO */
+#coachHubSubnav [data-subtab="paneLibrary"],
+#coachHubSubnav [data-subtab="paneEvolution"],
+#sensCoachFloatingDock [data-coach-subtab="paneLibrary"],
+#sensCoachFloatingDock [data-coach-subtab="paneEvolution"],
+#paneLibrary,
+#paneEvolution {
+    display: none !important;
+}
+
+/* Dock Inferior Móvil del Coach — 4 Estaciones en Light Quiet Luxury */
+body.in-portal #sensCoachFloatingDock,
+#sensCoachFloatingDock.coach-mode-dock {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 16px 40px rgba(18, 18, 20, 0.12), 0 2px 10px rgba(18, 18, 20, 0.04) !important;
+    border-radius: 999px !important;
+    padding: 6px !important;
+}
+
+body.in-portal #sensCoachFloatingDock .coach-dock-btn {
+    color: #575659 !important;
+    background: transparent !important;
+    border-radius: 999px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    padding: 6px 4px !important;
+}
+
+body.in-portal #sensCoachFloatingDock .coach-dock-btn.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.16) !important;
+}
+
+body.in-portal #sensCoachFloatingDock .coach-dock-btn.active svg {
+    stroke: #FBDEB9 !important;
+}
+
+/* 7.3 COACH OS (#coachHubView) — SUPERFICIES LIGHT QUIET LUXURY Y PILLS EN 1 FILA */
+body.in-portal #coachHubView {
+    background: #FAF9F6 !important;
+    color: #121214 !important;
+}
+
+body.in-portal #coachHubView .coach-hub-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 12px !important;
+}
+
+body.in-portal #coachHubView .coach-hub-title {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-size: 1.65rem !important;
+    font-weight: 600 !important;
+    color: #121214 !important;
+    letter-spacing: -0.02em !important;
+}
+
+body.in-portal #coachHubView .coach-hub-title .text-champagne {
+    color: #705B3E !important;
+}
+
+/* Subnav de Coach Hub */
+body.in-portal #coachHubSubnav {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 6px !important;
+    background: #F4F3F1 !important;
+    padding: 4px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    scrollbar-width: none !important;
+}
+
+body.in-portal #coachHubSubnav::-webkit-scrollbar {
+    display: none !important;
+}
+
+body.in-portal #coachHubSubnav .coach-subnav-btn {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    border-radius: 10px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    padding: 8px 14px !important;
+    color: #575659 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+body.in-portal #coachHubSubnav .coach-subnav-btn.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.12) !important;
+}
+
+/* Banner de Alumno Activo en Entreno y Nutrición */
+body.in-portal #coachMasterActiveAthleteCard {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 18px !important;
+    padding: 12px 14px !important;
+    box-shadow: 0 4px 18px rgba(18, 18, 20, 0.04) !important;
+    margin-bottom: 14px !important;
+}
+
+body.in-portal #coachMasterActiveAthleteCard .coach-active-athlete-avatar {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    font-weight: 800 !important;
+}
+
+/* Todas las pills de filtro del Coach en 1 sola línea sin corte */
+body.in-portal #coachHubView .pill,
+body.in-portal #coachHubView .coach-muscle-filter-chip,
+body.in-portal #coachHubView .coach-vision-tab-btn,
+body.in-portal #coachHubView .coach-step-tab,
+body.in-portal #coachHubView .wizard-day-tab {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+/* Pills superiores en las tarjetas de catálogo de ejercicios (★ FAVORITO | PIERNA | 3x10-12) */
+body.in-portal .wizard-feed-top-pills {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+    overflow: hidden !important;
+    max-width: 100% !important;
+}
+
+body.in-portal .wizard-feed-top-pills .pill {
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    flex-shrink: 0 !important;
+    line-height: 1.15 !important;
+    padding: 2px 6px !important;
+    font-size: 8px !important;
+}
+
+/* Chips de filtro muscular + ★ Favoritos en Paso 3 de Entrenamiento */
+body.in-portal #wizardCatalogMuscleFilterStrip {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    overflow-x: auto !important;
+    padding: 4px 2px 8px 2px !important;
+    scrollbar-width: none !important;
+}
+
+body.in-portal #wizardCatalogMuscleFilterStrip::-webkit-scrollbar {
+    display: none !important;
+}
+
+body.in-portal .coach-muscle-filter-chip {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #575659 !important;
+    border-radius: 999px !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+body.in-portal .coach-muscle-filter-chip.active {
+    background: #121214 !important;
+    border-color: #121214 !important;
+    color: #FAF9F6 !important;
+}
+
+body.in-portal .coach-muscle-filter-chip.fav-toggle-chip {
+    background: #FAF9F6 !important;
+    border-color: rgba(197, 168, 128, 0.65) !important;
+    color: #705B3E !important;
+}
+
+body.in-portal .coach-muscle-filter-chip.fav-toggle-chip.active {
+    background: #FBDEB9 !important;
+    border-color: #705B3E !important;
+    color: #121214 !important;
+    box-shadow: 0 2px 8px rgba(112, 91, 62, 0.18) !important;
+}
+
+/* Mesa de Trabajo (Paso 3 Entreno) — Diseño Card Responsivo en Mobile (Cero Scroll Horizontal Roto) */
+@media (max-width: 768px) {
+    body.in-portal .wizard-worktable-header {
+        display: none !important;
+    }
+
+    body.in-portal .wizard-worktable-row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        padding: 12px !important;
+        border-radius: 14px !important;
+        background: #FFFFFF !important;
+        border: 1px solid rgba(18, 18, 20, 0.08) !important;
+        margin-bottom: 8px !important;
+        box-shadow: 0 2px 8px rgba(18, 18, 20, 0.03) !important;
+    }
+
+    body.in-portal .wizard-worktable-ex-info {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        margin-bottom: 4px !important;
+        padding-bottom: 6px !important;
+        border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    }
+
+    body.in-portal .wizard-worktable-input {
+        flex: 1 1 68px !important;
+        min-width: 60px !important;
+        height: 34px !important;
+        font-size: 12px !important;
+        background: #FAF9F6 !important;
+        border: 1px solid rgba(18, 18, 20, 0.12) !important;
+        border-radius: 8px !important;
+        color: #121214 !important;
+        font-weight: 700 !important;
+    }
+}
+
+/* 7.4 BOTTOM SHEETS & MODALES DEL COACH — LIGHT QUIET LUXURY */
+body.in-portal #athletePickerBottomSheet,
+body.in-portal #coachAthleteActionsBottomSheet,
+body.in-portal #coachPlanPickerBottomSheet,
+#athletePickerBottomSheet,
+#coachAthleteActionsBottomSheet,
+#coachPlanPickerBottomSheet {
+    background: #FAF9F6 !important;
+    color: #121214 !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 -20px 60px rgba(18, 18, 20, 0.16) !important;
+}
+
+#athletePickerBottomSheet .sheet-title,
+#coachAthleteActionsBottomSheet .sheet-title,
+#coachPlanPickerBottomSheet .sheet-title,
+#sheetAthleteFullName {
+    color: #121214 !important;
+}
+
+#athletePickerBottomSheet .sheet-close-btn,
+#coachAthleteActionsBottomSheet .sheet-close-btn,
+#coachPlanPickerBottomSheet .sheet-close-btn {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+}
+
+#athletePickerBottomSheet .sheet-search-input {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
+}
+
+#athletePickerBottomSheet .sheet-filter-pill {
+    background: #F4F3F1 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    white-space: nowrap !important;
+}
+
+#athletePickerBottomSheet .sheet-filter-pill.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+}
+
+#coachAthleteActionsBottomSheet .coach-sheet-action-item,
+#coachPlanPickerBottomSheet .coach-plan-option-btn {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    border-radius: 14px !important;
+}
+
+#coachAthleteActionsBottomSheet .coach-sheet-action-text strong,
+#coachPlanPickerBottomSheet .coach-plan-option-btn strong {
+    color: #121214 !important;
+}
+
+#coachAthleteActionsBottomSheet .coach-sheet-action-text span,
+#coachPlanPickerBottomSheet .coach-plan-option-btn span {
+    color: #575659 !important;
+}
+
+/* Modal de Acciones en Lote (Calendario Mensual Coach) & Dossier Clínico en Light Quiet Luxury */
+body.in-portal #modalCoachMultiDayActions .coach-batch-modal-card,
+body.in-portal #coachAthleteDossierModal .modal-card {
+    background: #FAF9F6 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 24px 60px rgba(18, 18, 20, 0.18) !important;
+}
+
+body.in-portal #modalCoachMultiDayActions #multiDayModalTitle,
+body.in-portal #coachAthleteDossierModal h3,
+body.in-portal #coachAthleteDossierModal h4 {
+    color: #121214 !important;
+}
+
+

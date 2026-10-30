@@ -178,26 +178,26 @@
 
 <!-- TopAppBar -->
 <header class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b border-outline-variant/15 transition-all duration-300">
-  <div class="flex justify-between items-center w-full px-5 h-16 max-w-2xl mx-auto">
-    <div class="flex items-center gap-2.5">
-      <span class="font-headline text-lg font-semibold tracking-[0.2em] uppercase text-primary">SENS</span>
-      <span class="h-3.5 w-[1px] bg-outline-variant/40"></span>
-      <span class="font-label text-xs uppercase tracking-[0.12em] text-secondary font-medium" id="header-studio-subtitle">Fábrica de Reels &amp; TikTok</span>
+  <div class="flex justify-between items-center w-full px-4 sm:px-5 h-14 sm:h-16 max-w-2xl mx-auto gap-2">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="font-headline text-base sm:text-lg font-semibold tracking-[0.2em] uppercase text-primary shrink-0">SENS</span>
+      <span class="h-3.5 w-[1px] bg-outline-variant/40 shrink-0"></span>
+      <span class="font-label text-[10px] sm:text-xs uppercase tracking-[0.1em] text-secondary font-medium truncate" id="header-studio-subtitle">Studio Marketing</span>
     </div>
-    <div class="flex items-center gap-2">
-      <button id="btn-open-vault" type="button" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container-high transition-colors text-xs font-medium text-on-surface">
-        <span class="material-symbols-outlined text-[16px] text-secondary">auto_awesome_motion</span>
-        <span id="vault-btn-label">Catálogo 200</span>
+    <div class="flex items-center gap-1.5 shrink-0">
+      <button id="btn-open-vault" type="button" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container-high transition-colors text-[11px] font-medium text-on-surface whitespace-nowrap shrink-0">
+        <span class="material-symbols-outlined text-[15px] text-secondary shrink-0">auto_awesome_motion</span>
+        <span id="vault-btn-label" class="whitespace-nowrap">Catálogo 200</span>
       </button>
-      <button id="btn-reset-template" type="button" title="Restaurar template original" class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors">
-        <span class="material-symbols-outlined text-[18px]">restart_alt</span>
+      <button id="btn-reset-template" type="button" title="Restaurar template original" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors shrink-0">
+        <span class="material-symbols-outlined text-[17px]">restart_alt</span>
       </button>
     </div>
   </div>
 </header>
 
 <!-- Main Workspace Container -->
-<main class="flex-1 w-full max-w-2xl mx-auto px-5 pt-4 pb-28 space-y-6">
+<main class="flex-1 w-full max-w-2xl mx-auto px-4 sm:px-5 pt-4 pb-28 space-y-6">
 
   <!-- STEP 1: SELECTOR DE TEMPLATES (200 ARQUETIPOS: 100 9:16 + 100 4:5) -->
   <section id="section-step-1" class="space-y-3">
@@ -207,10 +207,10 @@
         <h2 class="font-headline text-lg font-medium text-on-surface tracking-tight">1. Elegir Template</h2>
       </div>
       <!-- Format Selector -->
-      <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl">
-        <button type="button" data-format-btn="9:16" class="px-2.5 py-1 rounded-lg bg-primary text-on-primary text-[11px] font-medium shadow-sm transition-all">9:16 Reel</button>
-        <button type="button" data-format-btn="4:5" class="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all">4:5 Carrusel</button>
-        <button type="button" data-format-btn="loop" id="btn-motion-loop" class="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all">Motion Loop</button>
+      <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl shrink-0">
+        <button type="button" data-format-btn="9:16" class="px-2.5 py-1 rounded-lg bg-primary text-on-primary text-[11px] font-medium shadow-sm transition-all whitespace-nowrap shrink-0">9:16 Reel</button>
+        <button type="button" data-format-btn="4:5" class="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all whitespace-nowrap shrink-0">4:5 Carrusel</button>
+        <button type="button" data-format-btn="loop" id="btn-motion-loop" class="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all whitespace-nowrap shrink-0">Motion Loop</button>
       </div>
     </div>
 
@@ -228,16 +228,14 @@
   <!-- LIVE VIEWPORT: THE SACRED TEMPLATE -->
   <section id="section-live-viewport" class="relative flex flex-col items-center">
     <!-- Canvas Top Utility Bar -->
-    <div class="w-full max-w-[360px] flex items-center justify-between mb-2.5 px-1">
-      <div class="flex items-center gap-2">
-        <button id="btn-toggle-safezones" type="button" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-container text-[11px] font-medium text-on-surface-variant hover:text-on-surface transition-colors">
-          <span id="safezone-dot" class="w-2 h-2 rounded-full bg-outline"></span>
-          <span id="safezone-label">Safe Zones Reels / TikTok</span>
-        </button>
-      </div>
-      <div class="flex items-center gap-2">
-        <span id="active-template-badge" class="text-[11px] font-semibold tracking-wider text-secondary bg-secondary-fixed/40 px-2 py-0.5 rounded">T00 • Somatic HUD</span>
-        <span class="text-[11px] font-mono text-outline">03.4s / 10.0s (Loop)</span>
+    <div class="w-full max-w-[360px] flex items-center justify-between gap-1.5 mb-2.5 px-1">
+      <button id="btn-toggle-safezones" type="button" class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-container text-[10px] sm:text-[11px] font-medium text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap shrink-0">
+        <span id="safezone-dot" class="w-2 h-2 rounded-full bg-outline shrink-0"></span>
+        <span id="safezone-label" class="whitespace-nowrap">Safe Zones</span>
+      </button>
+      <div class="flex items-center gap-1.5 min-w-0">
+        <span id="active-template-badge" class="text-[10px] sm:text-[11px] font-semibold tracking-wider text-secondary bg-secondary-fixed/40 px-2 py-0.5 rounded truncate max-w-[165px]">T01 • Biomecánica</span>
+        <span class="text-[10px] font-mono text-outline whitespace-nowrap shrink-0">60 FPS</span>
       </div>
     </div>
 
@@ -248,14 +246,14 @@
     </div>
 
     <!-- Quick Interactive Helper Pill -->
-    <div class="w-full max-w-[360px] mt-2 flex items-center justify-between text-[11px] text-on-surface-variant px-1">
-      <span class="flex items-center gap-1">
-        <span class="material-symbols-outlined text-[14px] text-secondary">touch_app</span>
-        Tocá cualquier texto del diseño para editar in-situ
+    <div class="w-full max-w-[360px] mt-2 flex items-center justify-between gap-2 text-[11px] text-on-surface-variant px-1">
+      <span class="flex items-center gap-1 truncate">
+        <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">touch_app</span>
+        <span class="truncate">Tocá cualquier texto para editar in-situ</span>
       </span>
-      <button type="button" id="btn-quick-upload-trigger" class="text-secondary font-semibold hover:underline flex items-center gap-1">
+      <button type="button" id="btn-quick-upload-trigger" class="text-secondary font-semibold hover:underline flex items-center gap-1 whitespace-nowrap shrink-0">
         <span class="material-symbols-outlined text-[14px]">perm_media</span>
-        Cambiar Fondo
+        <span>Cambiar Fondo</span>
       </button>
     </div>
   </section>
@@ -264,15 +262,15 @@
   <section id="section-step-2" class="bg-surface-container-low rounded-2xl p-4 space-y-3.5">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-[18px] text-secondary">videocam</span>
-        <h3 class="font-label text-xs font-semibold uppercase tracking-[0.12em] text-on-surface">2. Medios &amp; Cámara (Fondo)</h3>
+        <span class="material-symbols-outlined text-[18px] text-secondary shrink-0">videocam</span>
+        <h3 class="font-label text-xs font-semibold uppercase tracking-[0.12em] text-on-surface whitespace-nowrap">2. Medios &amp; Cámara</h3>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
         <!-- Multi-slot switcher (visible when template has 2+ image slots) -->
         <div id="media-slot-switcher" class="hidden items-center gap-1 bg-surface p-0.5 rounded-lg border border-outline-variant/20"></div>
-        <button id="btn-upload-media" type="button" class="text-[11px] font-semibold text-primary bg-secondary-fixed hover:bg-secondary-fixed-dim px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
-          <span class="material-symbols-outlined text-[14px]">upload_file</span>
-          <span id="upload-btn-text">+ Cargar Video o Foto (4K HDR)</span>
+        <button id="btn-upload-media" type="button" class="text-[11px] font-semibold text-primary bg-secondary-fixed hover:bg-secondary-fixed-dim px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm whitespace-nowrap shrink-0">
+          <span class="material-symbols-outlined text-[14px] shrink-0">upload_file</span>
+          <span id="upload-btn-text" class="whitespace-nowrap">+ Cargar Video o Foto (4K)</span>
         </button>
         <input id="media-file-input" type="file" accept="image/*,video/mp4,video/webm,video/quicktime,video/*" class="hidden" />
       </div>
@@ -281,55 +279,55 @@
     <!-- Media Status Indicator (shows loaded file resolution / video status) -->
     <div id="media-status-bar" class="hidden items-center justify-between px-3 py-1.5 rounded-lg bg-surface text-[11px] text-on-surface-variant border border-outline-variant/15">
       <span id="media-status-text" class="truncate font-medium text-on-surface">Archivo nativo cargado</span>
-      <button id="btn-clear-custom-media" type="button" class="text-error font-semibold hover:underline ml-2">Restaurar original</button>
+      <button id="btn-clear-custom-media" type="button" class="text-error font-semibold hover:underline ml-2 whitespace-nowrap shrink-0">Restaurar original</button>
     </div>
 
-    <div class="grid grid-cols-3 gap-2.5">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
       <!-- Encuadre Vertical -->
-      <div class="bg-surface p-2.5 rounded-xl flex flex-col justify-between">
-        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium">Encuadre Vertical</span>
-        <div class="flex items-center justify-between mt-2">
-          <button type="button" data-pan-btn="25" class="px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors">-25%</button>
-          <button type="button" data-pan-btn="50" class="px-1.5 py-0.5 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors">Centro</button>
-          <button type="button" data-pan-btn="75" class="px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors">+25%</button>
+      <div class="bg-surface px-3 py-2.5 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
+        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap">Encuadre Vertical</span>
+        <div class="flex items-center gap-1 sm:justify-between sm:mt-1.5 shrink-0">
+          <button type="button" data-pan-btn="25" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">-25%</button>
+          <button type="button" data-pan-btn="50" class="px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0">Centro</button>
+          <button type="button" data-pan-btn="75" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">+25%</button>
         </div>
       </div>
 
       <!-- Zoom Somático -->
-      <div class="bg-surface p-2.5 rounded-xl flex flex-col justify-between">
-        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium">Zoom Somático</span>
-        <div class="flex items-center justify-between mt-2">
-          <button type="button" data-zoom-btn="1" class="px-1.5 py-0.5 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors">100%</button>
-          <button type="button" data-zoom-btn="1.08" class="px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors">108% Foco</button>
-          <button type="button" data-zoom-btn="1.25" class="px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors">125%</button>
+      <div class="bg-surface px-3 py-2.5 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
+        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap">Zoom Somático</span>
+        <div class="flex items-center gap-1 sm:justify-between sm:mt-1.5 shrink-0">
+          <button type="button" data-zoom-btn="1" class="px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0">100%</button>
+          <button type="button" data-zoom-btn="1.08" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">108%</button>
+          <button type="button" data-zoom-btn="1.25" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">125%</button>
         </div>
       </div>
 
       <!-- Scrim Oscuro -->
-      <div class="bg-surface p-2.5 rounded-xl flex flex-col justify-between">
-        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium">Filtro Scrim Oscuro</span>
-        <div class="flex items-center justify-between mt-2">
-          <button type="button" data-scrim-btn="0.65" class="px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors">65%</button>
-          <button type="button" data-scrim-btn="0.80" class="px-1.5 py-0.5 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors">80%</button>
-          <button type="button" data-scrim-btn="0.92" class="px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors">92%</button>
+      <div class="bg-surface px-3 py-2.5 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
+        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap">Contraste Scrim</span>
+        <div class="flex items-center gap-1 sm:justify-between sm:mt-1.5 shrink-0">
+          <button type="button" data-scrim-btn="0.65" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">65%</button>
+          <button type="button" data-scrim-btn="0.80" class="px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0">80%</button>
+          <button type="button" data-scrim-btn="0.92" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">92%</button>
         </div>
       </div>
     </div>
   </section>
 
   <!-- STEP 3: TEXT INJECTION ENGINE (3 UNIVERSAL FIELDS + ALL TEMPLATE COMPONENTS) -->
-  <section id="section-step-3" class="bg-surface-container-low rounded-2xl p-5 space-y-4">
+  <section id="section-step-3" class="bg-surface-container-low rounded-2xl p-4 sm:p-5 space-y-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-[18px] text-secondary">edit_note</span>
-        <h3 class="font-label text-xs font-semibold uppercase tracking-[0.12em] text-on-surface">3. Inyección de Textos (3 Campos Universales)</h3>
+        <span class="material-symbols-outlined text-[18px] text-secondary shrink-0">edit_note</span>
+        <h3 class="font-label text-xs font-semibold uppercase tracking-[0.12em] text-on-surface">3. Inyección de Textos</h3>
       </div>
       <!-- Quick Formula Pills -->
-      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-        <button type="button" data-formula-id="lumbar" class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-semibold whitespace-nowrap transition-all">Mito Lumbar 94%</button>
-        <button type="button" data-formula-id="rodilla" class="px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap transition-all">Error 3cm Rodilla</button>
-        <button type="button" data-formula-id="social" class="px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap transition-all">Social +500</button>
-        <button type="button" data-formula-id="vip" class="px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap transition-all">2 Cupos VIP</button>
+      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full pb-0.5">
+        <button type="button" data-formula-id="lumbar" class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-semibold whitespace-nowrap shrink-0 transition-all">Mito Lumbar 94%</button>
+        <button type="button" data-formula-id="rodilla" class="px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap shrink-0 transition-all">Error 3cm Rodilla</button>
+        <button type="button" data-formula-id="social" class="px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap shrink-0 transition-all">Social +500</button>
+        <button type="button" data-formula-id="vip" class="px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap shrink-0 transition-all">2 Cupos VIP</button>
       </div>
     </div>
 
@@ -337,27 +335,27 @@
     <div class="space-y-3">
       <!-- Field 1: Hook Principal -->
       <div class="bg-surface p-3 rounded-xl border border-outline-variant/20 focus-within:border-secondary transition-colors">
-        <div class="flex justify-between items-center mb-1">
-          <label for="input-hook" class="text-[10px] font-semibold uppercase tracking-[0.12em] text-secondary">Campo 1: Titular Hook (máx 50 car.)</label>
-          <span id="counter-hook" class="text-[10px] font-mono text-tertiary-fixed-dim">44 / 50 • Óptimo</span>
+        <div class="flex justify-between items-center gap-2 mb-1">
+          <label for="input-hook" class="text-[10px] font-semibold uppercase tracking-[0.12em] text-secondary truncate">Campo 1: Titular Hook (máx 50 car.)</label>
+          <span id="counter-hook" class="text-[10px] font-mono text-tertiary-fixed-dim whitespace-nowrap shrink-0">44 / 50 • Óptimo</span>
         </div>
         <input id="input-hook" class="w-full bg-transparent border-none p-0 text-sm font-medium text-on-surface focus:ring-0" type="text" value="El dolor lumbar a las 6 PM no es por tu silla."/>
       </div>
 
       <!-- Field 2: Bajada Somática -->
       <div class="bg-surface p-3 rounded-xl border border-outline-variant/20 focus-within:border-secondary transition-colors">
-        <div class="flex justify-between items-center mb-1">
-          <label for="input-bajada" class="text-[10px] font-semibold uppercase tracking-[0.12em] text-on-surface-variant">Campo 2: Bajada Somática (máx 120 car.)</label>
-          <span id="counter-bajada" class="text-[10px] font-mono text-on-surface-variant">114 / 120</span>
+        <div class="flex justify-between items-center gap-2 mb-1">
+          <label for="input-bajada" class="text-[10px] font-semibold uppercase tracking-[0.12em] text-on-surface-variant truncate">Campo 2: Bajada Somática (máx 120 car.)</label>
+          <span id="counter-bajada" class="text-[10px] font-mono text-on-surface-variant whitespace-nowrap shrink-0">114 / 120</span>
         </div>
         <textarea id="input-bajada" class="w-full bg-transparent border-none p-0 text-xs text-on-surface-variant focus:ring-0 resize-none leading-relaxed" rows="2">El 94% de mis alumnos ejecutivos corrigen la compresión L5-S1 desbloqueando la rotación interna de cadera en 4 minutos.</textarea>
       </div>
 
       <!-- Field 3: CTA / Escasez -->
       <div class="bg-surface p-3 rounded-xl border border-outline-variant/20 focus-within:border-secondary transition-colors">
-        <div class="flex justify-between items-center mb-1">
-          <label for="input-cta" class="text-[10px] font-semibold uppercase tracking-[0.12em] text-on-surface-variant">Campo 3: CTA • Cupos Slot (máx 35 car.)</label>
-          <span id="counter-cta" class="text-[10px] font-mono text-secondary">Conversión Directa</span>
+        <div class="flex justify-between items-center gap-2 mb-1">
+          <label for="input-cta" class="text-[10px] font-semibold uppercase tracking-[0.12em] text-on-surface-variant truncate">Campo 3: CTA • Cupos Slot (máx 35 car.)</label>
+          <span id="counter-cta" class="text-[10px] font-mono text-secondary whitespace-nowrap shrink-0">Conversión Directa</span>
         </div>
         <input id="input-cta" class="w-full bg-transparent border-none p-0 text-xs font-semibold uppercase tracking-wider text-on-surface focus:ring-0" type="text" value="2 CUPOS DISPONIBLES • LINK EN BIO"/>
       </div>
@@ -371,39 +369,27 @@
       </button>
       <div id="extra-fields-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
     </div>
-
-    <!-- Biometric Telemetry Overlay Toggle -->
-    <div class="pt-1 flex items-center justify-between px-1">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary text-[18px]">radar</span>
-        <div>
-          <p class="text-xs font-medium text-on-surface">HUD Telemetría Biomecánica</p>
-          <p class="text-[10px] text-on-surface-variant">Superpone vectores de ángulo 90° y tensión 0%</p>
-        </div>
-      </div>
-      <button id="btn-toggle-hud" type="button" role="switch" aria-checked="true" class="w-11 h-6 bg-primary rounded-full relative flex items-center p-0.5 cursor-pointer transition-colors">
-        <span id="hud-switch-knob" class="w-5 h-5 bg-surface rounded-full shadow-sm transform translate-x-5 transition-transform"></span>
-      </button>
-    </div>
   </section>
 
   <!-- EXPORT DOCK & CAPTION (BOTTOM OF FLOW) -->
   <section id="section-export" class="pt-2 space-y-2.5">
-    <div class="flex gap-2.5">
-      <button id="btn-export-reel" type="button" class="flex-1 h-14 bg-primary text-on-primary rounded-xl font-label text-xs font-semibold uppercase tracking-[0.14em] flex items-center justify-center gap-2 shadow-[0_12px_24px_-6px_rgba(0,0,0,0.25)] hover:opacity-95 active:scale-[0.99] transition-all">
-        <span class="material-symbols-outlined text-[18px] text-secondary-fixed">movie_edit</span>
-        <span id="export-reel-label">Exportar Reel 60FPS (MP4)</span>
+    <div class="flex flex-col sm:flex-row gap-2.5">
+      <button id="btn-export-reel" type="button" class="w-full sm:flex-1 h-12 sm:h-14 px-4 bg-primary text-on-primary rounded-xl font-label text-xs font-semibold uppercase tracking-[0.12em] flex items-center justify-center gap-2 shadow-[0_12px_24px_-6px_rgba(0,0,0,0.25)] hover:opacity-95 active:scale-[0.99] transition-all whitespace-nowrap">
+        <span class="material-symbols-outlined text-[18px] text-secondary-fixed shrink-0">movie_edit</span>
+        <span id="export-reel-label" class="whitespace-nowrap">Exportar Reel 60FPS (MP4)</span>
       </button>
-      <button id="btn-export-4k" type="button" class="px-4 h-14 bg-secondary-fixed text-on-secondary-fixed rounded-xl font-label text-xs font-semibold uppercase tracking-[0.1em] flex items-center justify-center gap-1.5 hover:bg-secondary-fixed-dim active:scale-[0.99] transition-all shadow-sm">
-        <span class="material-symbols-outlined text-[18px]">hd</span>
-        <span id="export-4k-label">Portada 4K</span>
-      </button>
-      <button id="btn-copy-caption" type="button" class="px-4 h-14 bg-surface-container-high text-on-surface rounded-xl font-label text-xs font-semibold uppercase tracking-[0.1em] flex items-center justify-center gap-1.5 hover:bg-surface-container-highest transition-colors">
-        <span class="material-symbols-outlined text-[18px]">content_copy</span>
-        <span>Copiar Caption</span>
-      </button>
+      <div class="grid grid-cols-2 sm:flex gap-2.5">
+        <button id="btn-export-4k" type="button" class="px-4 h-12 sm:h-14 bg-secondary-fixed text-on-secondary-fixed rounded-xl font-label text-xs font-semibold uppercase tracking-[0.08em] flex items-center justify-center gap-1.5 hover:bg-secondary-fixed-dim active:scale-[0.99] transition-all shadow-sm whitespace-nowrap">
+          <span class="material-symbols-outlined text-[18px] shrink-0">hd</span>
+          <span id="export-4k-label" class="whitespace-nowrap">Portada 4K</span>
+        </button>
+        <button id="btn-copy-caption" type="button" class="px-4 h-12 sm:h-14 bg-surface-container-high text-on-surface rounded-xl font-label text-xs font-semibold uppercase tracking-[0.08em] flex items-center justify-center gap-1.5 hover:bg-surface-container-highest transition-colors whitespace-nowrap">
+          <span class="material-symbols-outlined text-[18px] shrink-0">content_copy</span>
+          <span class="whitespace-nowrap">Copiar Caption</span>
+        </button>
+      </div>
     </div>
-    <p id="export-spec-subtitle" class="text-[10px] text-center font-mono text-on-surface-variant">Renderizado UHD 2160 × 3840 px • Zero Layout Drift • Audio Original Sync</p>
+    <p id="export-spec-subtitle" class="text-[10px] text-center font-mono text-on-surface-variant">Renderizado UHD 2160 × 3840 px • Zero Layout Drift • Video 60FPS Real</p>
   </section>
 
 </main>
