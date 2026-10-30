@@ -2711,7 +2711,7 @@ a.hero-btn-apple-dark:active {
     margin-top: 32px;
     flex-wrap: wrap;
     font-size: 11.5px;
-    color: rgba(255, 255, 255, 0.85);
+    color: #121214 !important;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
@@ -22649,12 +22649,13 @@ body:has(.modal.show) #sensCoachFloatingDock {
    RACHA SENS & GAMIFICACIÓN QUIET LUXURY (BIGG / APPLE HEALTH BENCHMARK)
    ============================================================================= */
 .sens-streak-card {
-    background: linear-gradient(135deg, #141418 0%, #0D0D10 100%);
-    border: 1px solid rgba(229, 203, 167, 0.22);
-    border-radius: 20px;
-    padding: 16px 18px;
-    margin-bottom: 18px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 24px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    color: #121214 !important;
+    margin-bottom: 20px !important;
     box-sizing: border-box;
     width: 100%;
     position: relative;
@@ -22678,17 +22679,23 @@ body:has(.modal.show) #sensCoachFloatingDock {
 }
 
 .sens-streak-flame-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, rgba(229, 203, 167, 0.16) 0%, rgba(229, 203, 167, 0.05) 100%);
-    border: 1px solid rgba(229, 203, 167, 0.35);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: #FAF7F2 !important;
+    border: 1px solid rgba(197, 168, 128, 0.45) !important;
+    color: #705B3E !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     flex-shrink: 0;
-    box-shadow: 0 0 16px rgba(229, 203, 167, 0.2);
+    box-shadow: 0 0 16px rgba(251, 222, 185, 0.6) !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sens-streak-flame-icon svg {
+    stroke: #705B3E !important;
+    color: #705B3E !important;
 }
 
 .sens-streak-flame-icon.active-glow {
@@ -29020,4 +29027,111 @@ body.in-portal .portal-body,
         padding-top: 0 !important;
         margin-bottom: 10px !important;
     }
+}
+
+
+/* =============================================================================
+   SENS QUIET LUXURY: TOPBAR MARGIN MINIMIZATION & NICO UPSELL CTA STYLING
+   ============================================================================= */
+html.in-portal-mode .portal-body,
+body.in-portal .portal-body,
+.portal-body {
+    padding-top: 4px !important;
+}
+
+@media (max-width: 900px) {
+    html.in-portal-mode .portal-body,
+    body.in-portal .portal-body,
+    .portal-body {
+        padding-top: 2px !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        padding-bottom: 84px !important;
+    }
+
+    body.in-portal .sens-dash-welcome-header,
+    html.in-portal-mode .sens-dash-welcome-header,
+    .sens-dash-welcome-header {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        margin-bottom: 6px !important;
+    }
+
+    body.in-portal .sens-dash-welcome-question,
+    html.in-portal-mode .sens-dash-welcome-question,
+    .sens-dash-welcome-question {
+        font-size: 19px !important;
+        font-weight: 700 !important;
+        color: #121214 !important;
+        line-height: 1.15 !important;
+        margin: 0 0 2px 0 !important;
+    }
+
+    body.in-portal .sens-dash-welcome-slogan,
+    html.in-portal-mode .sens-dash-welcome-slogan,
+    .sens-dash-welcome-slogan {
+        font-size: 9.5px !important;
+        color: #77767B !important;
+        margin: 0 !important;
+    }
+}
+
+/* 2. Botón CTA Oficial de Coaching 1 a 1 (#dashNico1on1UpsellCard) */
+.sens-nico-upsell-cta-btn,
+a.sens-nico-upsell-cta-btn {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 9999px !important;
+    font-weight: 700 !important;
+    font-size: 12.5px !important;
+    letter-spacing: 0.01em !important;
+    padding: 12px 22px !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.16) !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.sens-nico-upsell-cta-btn *,
+a.sens-nico-upsell-cta-btn * {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+.sens-nico-upsell-cta-btn:hover,
+a.sens-nico-upsell-cta-btn:hover {
+    background: #27272A !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 22px rgba(18, 18, 20, 0.22) !important;
+}
+
+.sens-nico-upsell-cta-btn:active,
+a.sens-nico-upsell-cta-btn:active {
+    transform: scale(0.98) !important;
+}
+
+/* 3. Llama de Rachas: Siempre visible con contraste #705B3E */
+body.in-portal #sensStreakFlameIcon,
+html.in-portal-mode #sensStreakFlameIcon,
+.sens-streak-flame-icon {
+    background: #FAF7F2 !important;
+    border: 1px solid rgba(197, 168, 128, 0.45) !important;
+    color: #705B3E !important;
+    box-shadow: 0 0 16px rgba(251, 222, 185, 0.6) !important;
+}
+
+body.in-portal #sensStreakFlameIcon svg,
+html.in-portal-mode #sensStreakFlameIcon svg,
+.sens-streak-flame-icon svg {
+    stroke: #705B3E !important;
+    color: #705B3E !important;
 }

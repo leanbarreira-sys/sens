@@ -146,6 +146,19 @@
 </head>
 
 <body>
+    <script>
+        (function() {
+            try {
+                var inPortal = localStorage.getItem('sens_in_portal') === 'true' || localStorage.getItem('sens_current_user') !== null;
+                var h = window.location.hash || '';
+                var isAuth = h.indexOf('type=recovery') !== -1 || h.indexOf('type=invite') !== -1 || h.indexOf('error=') !== -1;
+                if (!isAuth && inPortal) {
+                    document.documentElement.classList.add('in-portal-mode');
+                    document.body.classList.add('in-portal');
+                }
+            } catch(e) {}
+        })();
+    </script>
     <!-- Background Gradient (Brandbook Onyx & Deep Atmosphere) -->
     <div class="bg-gradient"></div>
 
@@ -1359,7 +1372,7 @@
                                 <span class="pill pill-champagne" style="font-size: 8.5px; padding: 2px 7px; margin-left: auto;">Nativa</span>
                             </button>
 
-                            <button type="button" class="avatar-dropdown-item" id="dropdownGoProfile">
+                            <button type="button" class="avatar-dropdown-item" id="dropdownGoProfile" onclick="if(typeof window.switchPortalView==='function'){var d=document.getElementById('userAvatarDropdown');if(d)d.classList.remove('active');window.switchPortalView('profileSettingsView');}">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -1368,7 +1381,7 @@
                                 <span>Mi Perfil &amp; Ajustes</span>
                             </button>
 
-                            <button type="button" class="avatar-dropdown-item" id="dropdownGoDiagnosis">
+                            <button type="button" class="avatar-dropdown-item" id="dropdownGoDiagnosis" onclick="if(typeof window.startDiagnosisWizard==='function'){var d=document.getElementById('userAvatarDropdown');if(d)d.classList.remove('active');window.startDiagnosisWizard(true);}">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
@@ -3002,8 +3015,8 @@
                  ===================================================================== -->
             <section class="portal-view active" id="dashView">
                 <!-- 0. Saludo Personalizado de Bienvenida -->
-                <div class="sens-dash-welcome-header" id="sensDashWelcomeHeader">
-                    <h2 class="sens-dash-welcome-question">
+                <div class="sens-dash-welcome-header" id="sensDashWelcomeHeader" style="margin-top: 0 !important; padding-top: 0 !important; margin-bottom: 6px !important;">
+                    <h2 class="sens-dash-welcome-question" style="margin: 0 0 2px 0 !important; color: #121214 !important;">
                         ¿<span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, entrenamos?
                     </h2>
                     <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
@@ -3099,8 +3112,8 @@
                     <!-- Fila 1: Hero Badge + Contador de Racha + Nivel + Status Pill -->
                     <div class="sens-streak-top-row">
                         <div class="sens-streak-badge-wrap">
-                            <div class="sens-streak-flame-icon active-glow" id="sensStreakFlameIcon">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"
+                            <div class="sens-streak-flame-icon active-glow" id="sensStreakFlameIcon" style="background: #FAF7F2 !important; border: 1px solid rgba(197, 168, 128, 0.45) !important; color: #705B3E !important;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#705B3E"
                                     stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                                     <path
                                         d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
@@ -3168,7 +3181,7 @@
                         <div class="sens-pillars-grid" id="sensPillarsGrid">
                             <!-- Pilar 1: Entrenamiento -->
                             <div class="sens-pillar-item" id="pillarItemWorkout"
-                                onclick="window.scrollToWorkoutCard && window.scrollToWorkoutCard()"
+                                onclick="if(typeof window.switchPortalView==='function'){window.switchPortalView('workoutView');}else if(window.scrollToWorkoutCard){window.scrollToWorkoutCard();}"
                                 title="Ver entrenamiento de hoy">
                                 <div class="sens-pillar-chk" id="pillarChkWorkout">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -3209,7 +3222,7 @@
 
                             <!-- Pilar 2: Nutrición -->
                             <div class="sens-pillar-item" id="pillarItemNutrition"
-                                onclick="window.scrollToNutritionCard && window.scrollToNutritionCard()"
+                                onclick="if(typeof window.switchPortalView==='function'){window.switchPortalView('nutritionView');}else if(window.scrollToNutritionCard){window.scrollToNutritionCard();}"
                                 title="Ver nutrición de hoy">
                                 <div class="sens-pillar-chk" id="pillarChkNutrition">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -3882,10 +3895,10 @@
                         </div>
                     </div>
                     <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Estoy%20usando%20la%20App%20SENS%20y%20quiero%20consultar%20disponibilidad%20de%20cupos%20para%20entrenamiento%201%20a%201."
-                        target="_blank" rel="noopener" class="btn btn-primary btn-sm"
+                        target="_blank" rel="noopener" class="sens-nico-upsell-cta-btn"
                         data-agent-action="inquire_nico_1on1_upsell"
-                        style="background: #121214; color: #FFFFFF; border: none; border-radius: 999px; font-weight: 700; font-size: 12px; padding: 11px 20px; white-space: nowrap; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                        Consultar disponibilidad de cupos →
+                        style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: 1px solid rgba(255,255,255,0.15) !important; border-radius: 9999px !important; font-weight: 700 !important; font-size: 12.5px !important; padding: 12px 22px !important; white-space: nowrap !important; cursor: pointer !important; text-decoration: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; box-shadow: 0 4px 16px rgba(18, 18, 20, 0.16) !important;">
+                        <span style="color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700 !important;">Consultar disponibilidad de cupos →</span>
                     </a>
                 </div>
             </section>

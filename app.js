@@ -4214,7 +4214,8 @@ function switchPortalView(viewId) {
         !isAdmin &&
         profile &&
         !accessState.hasAccess &&
-        viewId !== 'activationPendingView'
+        viewId !== 'activationPendingView' &&
+        viewId !== 'profileSettingsView'
     );
 
     // Bloqueo estricto de seguridad: usuarios no administradores jamás pueden acceder a Coach OS
@@ -4389,7 +4390,7 @@ function switchPortalView(viewId) {
     }
 
     if (window.scrollY > 80) {
-        window.scrollTo({ top: 0, behavior: 'instant' });
+        window.scrollTo(0, 0);
     }
 }
 window.switchPortalView = switchPortalView;
@@ -5264,7 +5265,7 @@ function initDiagnosisWizard() {
                 renderWorkoutDay(AppState.currentDay || 'day1');
                 switchPortalView('dashView');
             }
-            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            window.scrollTo(0, 0);
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         });
@@ -5712,7 +5713,7 @@ async function processDiagnosisSubmission() {
     renderDashboardData();
     renderWorkoutDay(AppState.currentDay || 'day1');
     switchPortalView('dashView');
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    window.scrollTo(0, 0);
     showSensToast('¡Diagnóstico guardado con éxito! Bienvenido a tu espacio de entrenamiento.', 'success');
 }
 
@@ -10391,18 +10392,41 @@ function initTopbarAvatar() {
         }
     });
 
+    // Solo cerrar en scroll vertical genuino amplio (> 60px) para no romper taps táctiles en mobile
+    let lastDropdownScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
         if (dropdown.classList.contains('active')) {
-            dropdown.classList.remove('active');
+            if (Math.abs(window.scrollY - lastDropdownScrollY) > 60) {
+                dropdown.classList.remove('active');
+            }
+        } else {
+            lastDropdownScrollY = window.scrollY;
         }
     }, { passive: true });
 
+    const handleAvatarItemNav = (actionFn) => {
+        dropdown.classList.remove('active');
+        if (typeof actionFn === 'function') actionFn();
+    };
+
     const goProfile = document.getElementById('dropdownGoProfile');
     if (goProfile) {
-        goProfile.addEventListener('click', () => {
-            dropdown.classList.remove('active');
-            switchPortalView('profileSettingsView');
-        });
+        const onProfileClick = (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            handleAvatarItemNav(() => switchPortalView('profileSettingsView'));
+        };
+        goProfile.addEventListener('click', onProfileClick);
+        goProfile.addEventListener('touchend', onProfileClick, { passive: false });
+    }
+
+    const goDiag = document.getElementById('dropdownGoDiagnosis');
+    if (goDiag) {
+        const onDiagClick = (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            handleAvatarItemNav(() => startDiagnosisWizard(true));
+        };
+        goDiag.addEventListener('click', onDiagClick);
+        goDiag.addEventListener('touchend', onDiagClick, { passive: false });
     }
 
     const goCoachOS = document.getElementById('dropdownGoCoachOS');
@@ -10424,13 +10448,7 @@ function initTopbarAvatar() {
         });
     }
 
-    const goDiag = document.getElementById('dropdownGoDiagnosis');
-    if (goDiag) {
-        goDiag.addEventListener('click', () => {
-            dropdown.classList.remove('active');
-            startDiagnosisWizard(true);
-        });
-    }
+
 
     function syncAvatarData() {
         const isAdmin = isCurrentUserAdmin();
@@ -10615,7 +10633,7 @@ function initCoachOS() {
         btnTopbarCoachOS.addEventListener('click', () => {
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+            if (window.scrollY > 80) window.scrollTo(0, 0);
         });
     }
 
@@ -10630,7 +10648,7 @@ function initCoachOS() {
         btn.addEventListener('click', () => {
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+            if (window.scrollY > 80) window.scrollTo(0, 0);
         });
     });
 
@@ -10638,7 +10656,7 @@ function initCoachOS() {
     document.querySelectorAll('.btn-store-entry').forEach(btn => {
         btn.addEventListener('click', () => {
             switchPortalView('storeView');
-            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+            if (window.scrollY > 80) window.scrollTo(0, 0);
         });
     });
 
@@ -10647,7 +10665,7 @@ function initCoachOS() {
             closeAthleteSheet();
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+            if (window.scrollY > 80) window.scrollTo(0, 0);
         });
     }
 
@@ -10675,7 +10693,7 @@ function initCoachOS() {
         btnOpenHub.addEventListener('click', () => {
             switchPortalView('coachHubView');
             renderCoachAthletesHub();
-            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+            if (window.scrollY > 80) window.scrollTo(0, 0);
         });
     }
 
@@ -10694,7 +10712,7 @@ function initCoachOS() {
     if (viewStudentBtn) {
         viewStudentBtn.addEventListener('click', () => {
             switchPortalView('dashView');
-            if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+            if (window.scrollY > 80) window.scrollTo(0, 0);
         });
     }
 
@@ -10786,7 +10804,7 @@ function initCoachOS() {
                     syncCoachMasterCard(AppState.activeAthleteId);
                 }
                 if (window.scrollY > 80) {
-                    window.scrollTo({ top: 0, behavior: 'instant' });
+                    window.scrollTo(0, 0);
                 }
             }
         });
@@ -11858,7 +11876,7 @@ function inspectAthleteAsCoach(athId) {
     if (typeof window.updateDashboardWorkoutDirective === 'function') {
         window.updateDashboardWorkoutDirective();
     }
-    if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+    if (window.scrollY > 80) window.scrollTo(0, 0);
     showSensToast(`Inspeccionando vista de ${target.full_name}.`, 'champagne');
 }
 
@@ -11885,7 +11903,7 @@ function exitAthleteInspection() {
         syncCoachMasterCard(AppState.activeAthleteId);
     }
     renderCoachAthletesHub();
-    if (window.scrollY > 80) window.scrollTo({ top: 0, behavior: 'instant' });
+    if (window.scrollY > 80) window.scrollTo(0, 0);
     showSensToast('Regresaste al panel Coach OS.', 'champagne');
 }
 
@@ -17801,12 +17819,12 @@ function initWeekStripCalendar() {
     const startWorkoutBtn = document.getElementById('dashStartWorkoutBtn');
     const workoutActivePane = document.getElementById('dashWorkoutActivePane');
     const handleStartWorkout = (e) => {
-        if (e && e.target && (e.target.closest('#btnRestSeeStretches, #dashWorkoutNavArrows, .sens-video-arrow-btn, #dashWorkoutDotsIndicator, .sens-video-dot') || window._dashWorkoutWasSwipe)) return;
+        if (e && e.target && (e.target.closest('#btnRestSeeStretches, #btnDashRescheduleWorkout, #dashWorkoutNavArrows, .sens-video-arrow-btn, #dashWorkoutDotsIndicator, .sens-video-dot') || window._dashWorkoutWasSwipe)) return;
         const dayKey = getDayKeyFromDate(AppState.selectedDate || new Date());
         AppState.currentDay = dayKey;
         triggerCardSpringAndNavigate(trainingCard, () => {
             switchPortalView('workoutView');
-            renderWorkoutDay(dayKey);
+            if (typeof renderWorkoutDay === 'function') renderWorkoutDay(dayKey);
         });
     };
     if (startWorkoutBtn) {
@@ -21032,7 +21050,7 @@ function initFloatingDock() {
                 const targetTab = btn.getAttribute('data-dock-tab');
                 if (targetTab && typeof switchPortalView === 'function') {
                     switchPortalView(targetTab);
-                    window.scrollTo({ top: 0, behavior: 'instant' });
+                    window.scrollTo(0, 0);
                 }
             };
             btn.addEventListener('click', handleNav);
@@ -21076,7 +21094,7 @@ function initFloatingDock() {
                 const tab = athBtn.getAttribute('data-dock-tab');
                 if (tab && typeof switchPortalView === 'function') {
                     switchPortalView(tab);
-                    window.scrollTo({ top: 0, behavior: 'instant' });
+                    window.scrollTo(0, 0);
                 }
                 return;
             }
