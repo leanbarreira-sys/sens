@@ -28770,3 +28770,223 @@ body.in-portal .sens-act-quick-chip.active {
     font-weight: 800 !important;
     box-shadow: 0 2px 8px rgba(229, 203, 167, 0.35) !important;
 }
+
+
+/* =============================================================================
+   SENS QUIET LUXURY: USER AVATAR ACCESS DROPDOWN & PLANS SECTIONS
+   ============================================================================= */
+.sens-quiet-avatar-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 295px;
+    max-width: calc(100vw - 24px);
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 14px !important;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12), 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+    z-index: 10005 !important;
+    display: none;
+    overflow: visible !important;
+    animation: sensPopDown 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.sens-quiet-avatar-dropdown.active {
+    display: block !important;
+}
+
+.sens-avatar-card-head {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sens-avatar-user-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 2px 4px 4px;
+}
+
+.sens-avatar-initials-pill {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FAF7F2;
+    border: 1px solid rgba(197, 168, 128, 0.35);
+    color: #705B3E;
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sens-avatar-user-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.sens-avatar-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #121214 !important;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-avatar-email {
+    font-size: 11px;
+    color: #71717A !important;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-avatar-plan-box {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 14px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sens-avatar-plan-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.sens-avatar-plan-tag {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #705B3E;
+}
+
+.sens-avatar-plan-status {
+    font-size: 9.5px;
+    font-weight: 800;
+    color: #059669;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-avatar-plan-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #121214 !important;
+    line-height: 1.3;
+}
+
+.sens-avatar-plan-hint {
+    font-size: 10.5px;
+    color: #575659 !important;
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.sens-avatar-upgrade-btn {
+    width: 100%;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.18s ease, transform 0.15s ease;
+}
+
+.sens-avatar-upgrade-btn:hover {
+    background: #27272A !important;
+}
+
+.sens-avatar-upgrade-btn:active {
+    transform: scale(0.98);
+}
+
+.sens-avatar-divider {
+    height: 1px;
+    background: rgba(18, 18, 20, 0.06);
+    margin: 8px 0;
+}
+
+.sens-avatar-actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sens-avatar-actions-list .avatar-dropdown-item {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #121214 !important;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 9px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sens-avatar-actions-list .avatar-dropdown-item svg {
+    color: #575659;
+    flex-shrink: 0;
+}
+
+.sens-avatar-actions-list .avatar-dropdown-item:hover {
+    background: #FAF9F6 !important;
+    color: #121214 !important;
+}
+
+.sens-avatar-actions-list .avatar-dropdown-item:hover svg {
+    color: #121214;
+}
+
+.sens-avatar-logout-item {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #DC2626 !important;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 9px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.sens-avatar-logout-item svg {
+    color: #DC2626 !important;
+}
+
+.sens-avatar-logout-item:hover {
+    background: rgba(220, 38, 38, 0.08) !important;
+    color: #B91C1C !important;
+}

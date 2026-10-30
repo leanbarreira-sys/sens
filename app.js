@@ -4193,12 +4193,23 @@ function renderSoftPaywallState(profile, daysRemaining) {
             window.open(`https://wa.me/?text=${shareText}`, '_blank');
         };
     }
+
+    return {
+        hasAccess: Boolean(hasAccess),
+        isAdmin: Boolean(isAdmin),
+        hasActivePremium: Boolean(hasActivePremium),
+        isTrialActive: Boolean(isTrialActive),
+        daysRemaining: Number(daysRemaining) || 0,
+        planDetails: planDetails || {},
+        refCode: refCode || '',
+        referralUrl: referralUrl || ''
+    };
 }
 
 function switchPortalView(viewId) {
     const isAdmin = isCurrentUserAdmin();
     const profile = AppState.profile;
-    const accessState = checkUserAccessStatus(profile);
+    const accessState = checkUserAccessStatus(profile) || { hasAccess: true };
     const isLockedByAccess = Boolean(
         !isAdmin &&
         profile &&
@@ -10503,6 +10514,8 @@ function initTopbarAvatar() {
         }
 
         if (initialsEl) initialsEl.textContent = initials;
+        const dropdownInitialsEl = document.getElementById('dropdownAvatarInitials');
+        if (dropdownInitialsEl) dropdownInitialsEl.textContent = initials;
         if (nameEl) nameEl.textContent = fullName;
         if (emailEl) emailEl.textContent = email || 'Sesión no iniciada';
         if (planEl) planEl.textContent = plan;
