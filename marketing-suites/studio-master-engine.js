@@ -1006,6 +1006,10 @@
       // Wait 1 frame for proxy <img> layout
       await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
+      // Bake all semi-transparent overlays, gradients & backdrop-blur glass cards into explicit rgba() inline styles
+      // so html2canvas 1.4.1 renders 100% of semi-transparent layers without failing on CSS Color 4 syntax or missing backdrop-filter
+      bakeSemiTransparentOverlaysForExport(stageEl, cleanupCallbacks, { isTransparentOrVideo: false });
+
       const rawCanvas = await window.html2canvas(stageEl, {
         scale: scale,
         useCORS: true,
@@ -1093,6 +1097,220 @@
     ctx.drawImage(sourceEl, sx, sy, zoomedW, zoomedH, dstX, dstY, dstW, dstH);
   }
 
+  // Exact RGB lookup table matching studio-master.html tailwind.config colors
+  const SENS_TW_RGB_MAP = {
+    'primary-fixed': [229, 225, 228],
+    'surface': [250, 249, 246],
+    'on-secondary-container': [118, 97, 67],
+    'error': [186, 26, 26],
+    'tertiary-fixed-dim': [129, 217, 150],
+    'outline': [119, 118, 123],
+    'on-secondary-fixed': [39, 25, 3],
+    'on-secondary': [255, 255, 255],
+    'inverse-on-surface': [242, 241, 238],
+    'on-tertiary-fixed-variant': [0, 82, 39],
+    'surface-container-highest': [227, 226, 224],
+    'on-surface': [26, 28, 26],
+    'on-error-container': [147, 0, 10],
+    'surface-container-lowest': [255, 255, 255],
+    'on-surface-variant': [71, 70, 74],
+    'tertiary': [0, 0, 0],
+    'secondary-fixed': [251, 222, 185],
+    'primary-container': [27, 27, 29],
+    'outline-variant': [200, 198, 202],
+    'surface-container': [239, 238, 235],
+    'surface-dim': [219, 218, 215],
+    'on-primary-fixed-variant': [71, 70, 73],
+    'on-primary': [255, 255, 255],
+    'tertiary-fixed': [156, 246, 176],
+    'inverse-surface': [47, 49, 47],
+    'on-tertiary-container': [60, 148, 88],
+    'on-primary-fixed': [27, 27, 29],
+    'secondary-container': [251, 222, 185],
+    'on-primary-container': [133, 131, 134],
+    'on-background': [26, 28, 26],
+    'primary': [0, 0, 0],
+    'on-secondary-fixed-variant': [86, 68, 40],
+    'error-container': [255, 218, 214],
+    'surface-container-low': [244, 243, 241],
+    'secondary': [112, 91, 62],
+    'surface-bright': [250, 249, 246],
+    'on-tertiary-fixed': [0, 33, 12],
+    'surface-container-high': [233, 232, 229],
+    'inverse-primary': [200, 198, 200],
+    'surface-tint': [95, 94, 96],
+    'on-error': [255, 255, 255],
+    'tertiary-container': [0, 33, 12],
+    'background': [250, 249, 246],
+    'primary-fixed-dim': [200, 198, 200],
+    'surface-variant': [227, 226, 224],
+    'secondary-fixed-dim': [222, 194, 159],
+    'on-tertiary': [255, 255, 255],
+    'black': [0, 0, 0],
+    'white': [255, 255, 255]
+  };
+
+  function normalizeModernCssColorString(str) {
+    if (!str || typeof str !== 'string') return str;
+    return str.replace(/rgba?\(\s*(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s*(?:\/\s*([0-9.]+%?))?\s*\)/gi, (_, r, g, b, a) => {
+      const rr = Math.round(parseFloat(r));
+      const gg = Math.round(parseFloat(g));
+      const bb = Math.round(parseFloat(b));
+      if (a === undefined || a === null || a === '') {
+        return `rgb(${rr}, ${gg}, ${bb})`;
+      }
+      let alpha = a.endsWith('%') ? (parseFloat(a) / 100) : parseFloat(a);
+      if (isNaN(alpha)) alpha = 1;
+      return `rgba(${rr}, ${gg}, ${bb}, ${alpha})`;
+    });
+  }
+
+  function bakeSemiTransparentOverlaysForExport(stageEl, cleanupList) {
+    if (!stageEl) return;
+    const allNodes = [stageEl, ...Array.from(stageEl.querySelectorAll('*'))];
+
+    allNodes.forEach(el => {
+      if (!el || !el.style) return;
+      const tag = el.tagName;
+      if (tag === 'VIDEO' || tag === 'CANVAS' || tag === 'SCRIPT' || tag === 'STYLE') return;
+      if (el.classList && (el.classList.contains('safe-zone-overlay') || el.classList.contains('card-safe-mask') || el.classList.contains('safe-guide'))) return;
+
+      const cls = typeof el.className === 'string' ? el.className : '';
+      const tokens = cls.split(/\s+/).filter(Boolean);
+
+      const prevBgColor = el.style.getPropertyValue('background-color');
+      const prevBgColorPrio = el.style.getPropertyPriority('background-color');
+      const prevBgImage = el.style.getPropertyValue('background-image');
+      const prevBgImagePrio = el.style.getPropertyPriority('background-image');
+      const prevBorder = el.style.getPropertyValue('border');
+      const prevBorderPrio = el.style.getPropertyPriority('border');
+      let modified = false;
+
+      // 1. Bake Tailwind Gradients (bg-gradient-to-* + from-* + via-* + to-*) & radial-gradient into explicit comma-separated rgba()
+      if (cls.includes('bg-[radial-gradient')) {
+        el.style.setProperty('background-image', 'radial-gradient(circle at center, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.92) 100%)', 'important');
+        el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.55)', 'important');
+        modified = true;
+      } else if (cls.includes('bg-gradient-to-')) {
+        const dirMap = {
+          'bg-gradient-to-t': 'to top',
+          'bg-gradient-to-b': 'to bottom',
+          'bg-gradient-to-r': 'to right',
+          'bg-gradient-to-l': 'to left',
+          'bg-gradient-to-tr': 'to top right',
+          'bg-gradient-to-tl': 'to top left',
+          'bg-gradient-to-br': 'to bottom right',
+          'bg-gradient-to-bl': 'to bottom left'
+        };
+        let dir = 'to top';
+        let fromSpec = null;
+        let viaSpec = null;
+        let toSpec = null;
+
+        tokens.forEach(tk => {
+          if (dirMap[tk]) dir = dirMap[tk];
+          const m = tk.match(/^(from|via|to)-([a-z-]+)(?:\/(\d+))?$/);
+          if (m) {
+            const role = m[1];
+            const cName = m[2];
+            const alpha = m[3] !== undefined ? (parseInt(m[3], 10) / 100) : 1;
+            const spec = { cName, alpha };
+            if (role === 'from') fromSpec = spec;
+            else if (role === 'via') viaSpec = spec;
+            else if (role === 'to') toSpec = spec;
+          }
+        });
+
+        if (fromSpec) {
+          const fromRgb = SENS_TW_RGB_MAP[fromSpec.cName] || [0, 0, 0];
+          const fromStr = `rgba(${fromRgb[0]}, ${fromRgb[1]}, ${fromRgb[2]}, ${fromSpec.alpha})`;
+          const stops = [fromStr];
+          let lastRgb = fromRgb;
+
+          if (viaSpec) {
+            if (viaSpec.cName === 'transparent') {
+              stops.push(`rgba(${lastRgb[0]}, ${lastRgb[1]}, ${lastRgb[2]}, 0)`);
+            } else {
+              const vRgb = SENS_TW_RGB_MAP[viaSpec.cName] || lastRgb;
+              stops.push(`rgba(${vRgb[0]}, ${vRgb[1]}, ${vRgb[2]}, ${viaSpec.alpha})`);
+              lastRgb = vRgb;
+            }
+          }
+
+          if (!toSpec || toSpec.cName === 'transparent') {
+            stops.push(`rgba(${lastRgb[0]}, ${lastRgb[1]}, ${lastRgb[2]}, 0)`);
+          } else {
+            const tRgb = SENS_TW_RGB_MAP[toSpec.cName] || lastRgb;
+            stops.push(`rgba(${tRgb[0]}, ${tRgb[1]}, ${tRgb[2]}, ${toSpec.alpha})`);
+          }
+
+          el.style.setProperty('background-image', `linear-gradient(${dir}, ${stops.join(', ')})`, 'important');
+          modified = true;
+        }
+      }
+
+      // 2. Bake Tailwind semi-transparent solid backgrounds (bg-<color>/<alpha>) & compensate for html2canvas lacking backdrop-filter
+      const hasBackdropBlur = cls.includes('backdrop-blur');
+      tokens.forEach(tk => {
+        const m = tk.match(/^bg-([a-z-]+)\/(\d+)$/);
+        if (!m) return;
+        const cName = m[1];
+        const rgb = SENS_TW_RGB_MAP[cName];
+        if (!rgb) return;
+        const rawAlpha = parseInt(m[2], 10) / 100;
+        const [r, g, b] = rgb;
+        const luma = (r * 0.299) + (g * 0.587) + (b * 0.114);
+
+        if (hasBackdropBlur) {
+          if (rawAlpha <= 0.30 && luma > 180) {
+            // Low-alpha white frost card with light text (e.g. bg-surface-container-lowest/15 backdrop-blur-md in T17, T23, T26, T34, T36, T41, T44)
+            // Since html2canvas lacks backdrop-filter: blur(), use rich dark smoked glass so white text is 100% legible over bright video/photos
+            el.style.setProperty('background-color', 'rgba(18, 18, 20, 0.68)', 'important');
+            if (!el.style.border) {
+              el.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.18)', 'important');
+            }
+          } else if (luma > 180) {
+            // Light frosted glass card (e.g. bg-surface/70, bg-surface/85, bg-surface-container-lowest/90)
+            const boosted = Math.min(0.95, Number((rawAlpha + 0.08).toFixed(2)));
+            el.style.setProperty('background-color', `rgba(${r}, ${g}, ${b}, ${boosted})`, 'important');
+          } else {
+            // Dark frosted glass card (e.g. bg-primary/80, bg-primary/85)
+            const boosted = Math.min(0.93, Number((rawAlpha + 0.05).toFixed(2)));
+            el.style.setProperty('background-color', `rgba(${r}, ${g}, ${b}, ${boosted})`, 'important');
+          }
+        } else {
+          // Pure semi-transparent scrim or tint (e.g. bg-primary/40, bg-primary/55, bg-surface-bright/80)
+          el.style.setProperty('background-color', `rgba(${r}, ${g}, ${b}, ${rawAlpha})`, 'important');
+        }
+        modified = true;
+      });
+
+      // 3. Fallback: If computed style still has CSS Color 4 space-separated rgb(r g b / a), normalize it
+      if (!modified) {
+        const cs = window.getComputedStyle(el);
+        if (cs.backgroundColor && cs.backgroundColor.includes('/')) {
+          el.style.setProperty('background-color', normalizeModernCssColorString(cs.backgroundColor), 'important');
+          modified = true;
+        }
+        if (cs.backgroundImage && cs.backgroundImage !== 'none' && cs.backgroundImage.includes('/')) {
+          el.style.setProperty('background-image', normalizeModernCssColorString(cs.backgroundImage), 'important');
+          modified = true;
+        }
+      }
+
+      if (modified && Array.isArray(cleanupList)) {
+        cleanupList.push(() => {
+          if (prevBgColor) el.style.setProperty('background-color', prevBgColor, prevBgColorPrio);
+          else el.style.removeProperty('background-color');
+          if (prevBgImage) el.style.setProperty('background-image', prevBgImage, prevBgImagePrio);
+          else el.style.removeProperty('background-image');
+          if (prevBorder) el.style.setProperty('border', prevBorder, prevBorderPrio);
+          else el.style.removeProperty('border');
+        });
+      }
+    });
+  }
+
   async function renderVideoLayersForComposite(targetWidthPx, activeVideoEntries, opts) {
     const stageEl = document.getElementById('video-canvas');
     if (!stageEl || typeof window.html2canvas !== 'function') {
@@ -1119,10 +1337,23 @@
     const cleanupAttrs = [];
 
     try {
-      // Tag all media slots (whether video or photo) so we can strip them cleanly in the cloned DOM
+      // Bake all semi-transparent overlays, gradients & backdrop-blur glass cards into explicit rgba() inline styles
+      bakeSemiTransparentOverlaysForExport(stageEl, cleanupAttrs);
+
+      // Tag all media slots (whether video or photo) so we can strip their media cleanly while preserving child scrims
       const entriesToStrip = (activeVideoEntries && activeVideoEntries.length > 0)
         ? activeVideoEntries
         : state.mediaSlots.map(s => ({ slot: s, vid: s.videoEl || null, relX: 0, relY: 0, relW: 1, relH: 1, relRadius: 0 }));
+
+      const isInjectedBgOnly = entriesToStrip.length === 1 && entriesToStrip[0].slot && entriesToStrip[0].slot.type === 'injected-bg';
+
+      // When exporting a pure Transparent PNG on a typographic template (injected-bg), unhide its fallback gradient scrim
+      // so text remains legible if needed, or soften any 100% opaque paper gradient (e.g. F61 via-background)
+      if (isInjectedBgOnly && entriesToStrip[0].slot.scrimEl && entriesToStrip[0].slot.scrimEl.classList.contains('opacity-0')) {
+        const scEl = entriesToStrip[0].slot.scrimEl;
+        scEl.classList.remove('opacity-0');
+        cleanupAttrs.push(() => scEl.classList.add('opacity-0'));
+      }
 
       const ancestorSet = new Set();
       for (const entry of entriesToStrip) {
@@ -1156,6 +1387,10 @@
           if (posMask & Node.DOCUMENT_POSITION_FOLLOWING) {
             node.setAttribute('data-sens-fg-behind', '1');
             cleanupAttrs.push(() => node.removeAttribute('data-sens-fg-behind'));
+          } else if (posMask & Node.DOCUMENT_POSITION_PRECEDING) {
+            // Node is painted IN FRONT of the media slot -> drawn only once in Layer 2 (avoids doubled scrim opacity)
+            node.setAttribute('data-sens-fg-front', '1');
+            cleanupAttrs.push(() => node.removeAttribute('data-sens-fg-front'));
           }
         });
       }
@@ -1165,7 +1400,7 @@
       const ignoreVideoAndGuides = (el) => {
         if (!el) return false;
         if (el.tagName === 'VIDEO' || el.tagName === 'CANVAS') return true;
-        if (el.classList && (el.classList.contains('sens-bg-video') || el.classList.contains('safe-zone-overlay'))) return true;
+        if (el.classList && (el.classList.contains('sens-bg-video') || el.classList.contains('safe-zone-overlay') || el.classList.contains('card-safe-mask') || el.classList.contains('safe-guide'))) return true;
         return false;
       };
 
@@ -1190,7 +1425,14 @@
                 el.style.setProperty('background-image', 'none', 'important');
                 el.style.setProperty('background-color', 'transparent', 'important');
                 el.style.setProperty('background', 'transparent', 'important');
+                // Hide child overlays in Layer 0 so they are only drawn once in Layer 2 (above the video)
+                Array.from(el.children).forEach(ch => {
+                  ch.style.setProperty('display', 'none', 'important');
+                });
               }
+            });
+            clonedDoc.querySelectorAll('[data-sens-fg-front="1"]').forEach(front => {
+              front.style.setProperty('visibility', 'hidden', 'important');
             });
           }
         });
@@ -1204,7 +1446,7 @@
         bCtx.drawImage(rawBgBase, 0, 0, targetW, targetH);
       }
 
-      // LAYER 2 (fgOverlayCanvas): Capture ONLY scrims, glass cards, badges & text in front of the video slot
+      // LAYER 2 (fgOverlayCanvas): Capture ALL semi-transparent scrims, gradients, glass cards, badges & text in front of the video slot
       const rawOverlay = await window.html2canvas(stageEl, {
         scale: scale,
         useCORS: true,
@@ -1214,42 +1456,58 @@
         ignoreElements: ignoreVideoAndGuides,
         onclone: (clonedDoc) => {
           clonedDoc.querySelectorAll('video, canvas').forEach(v => v.remove());
-          clonedDoc.querySelectorAll('[data-sens-video-slot-el="1"]').forEach(el => {
-            el.style.setProperty('display', 'none', 'important');
-            el.style.setProperty('opacity', '0', 'important');
-            el.style.setProperty('background', 'transparent', 'important');
-            el.style.setProperty('background-color', 'transparent', 'important');
-            el.style.setProperty('background-image', 'none', 'important');
-            if (el.tagName === 'IMG') el.removeAttribute('src');
-          });
+          // Make the ancestor wrappers transparent so the video shines through,
+          // EXCEPT in pureTransparentPng mode if an inner card (like Polaroid T07 w-[88%]) holds dark text
           clonedDoc.querySelectorAll('[data-sens-fg-anc="1"]').forEach(anc => {
+            const ancCls = typeof anc.className === 'string' ? anc.className : '';
+            const isInnerCard = pureTransparentPng && anc.id !== 'video-canvas' && !ancCls.includes('aspect-[9/16]') && !ancCls.includes('aspect-[4/5]') && !ancCls.includes('inset-0') && (ancCls.includes('bg-surface') || ancCls.includes('bg-primary'));
+            if (isInnerCard && !anc.hasAttribute('data-sens-video-slot-el')) {
+              // Keep inner card background semi-transparent for Polaroid/card layouts in single-layer PNG export
+              return;
+            }
             anc.style.setProperty('background', 'transparent', 'important');
             anc.style.setProperty('background-color', 'transparent', 'important');
             anc.style.setProperty('background-image', 'none', 'important');
             anc.style.setProperty('box-shadow', 'none', 'important');
             anc.style.setProperty('border-color', 'transparent', 'important');
           });
+          // CRITICAL FIX FOR T21-T100 & F21-F100:
+          // Never set display:none or opacity:0 on a DIV [data-sens-video-slot-el="1"] because in 160 templates
+          // the semi-transparent gradient/scrim (<div class="absolute inset-0 bg-gradient-to-t ..."> or bg-primary/40)
+          // is a CHILD INSIDE slot.el! Only strip slot.el's own background-image & background-color!
+          clonedDoc.querySelectorAll('[data-sens-video-slot-el="1"]').forEach(el => {
+            if (el.tagName === 'IMG') {
+              el.style.setProperty('display', 'none', 'important');
+              el.style.setProperty('opacity', '0', 'important');
+              el.removeAttribute('src');
+            } else {
+              el.style.setProperty('background', 'transparent', 'important');
+              el.style.setProperty('background-color', 'transparent', 'important');
+              el.style.setProperty('background-image', 'none', 'important');
+              el.style.setProperty('box-shadow', 'none', 'important');
+              el.style.setProperty('opacity', '1', 'important');
+            }
+          });
           clonedDoc.querySelectorAll('[data-sens-fg-behind="1"]').forEach(behind => {
             behind.style.setProperty('display', 'none', 'important');
             behind.style.setProperty('visibility', 'hidden', 'important');
             behind.style.setProperty('opacity', '0', 'important');
           });
-          // If exporting pure Transparent PNG for IG Edits / CapCut, also soften or hide full-screen solid veils
-          // so the video underneath in IG Edits shines through with 100% clarity
           const clonedRoot = clonedDoc.getElementById('video-canvas');
           if (clonedRoot) {
             clonedRoot.style.setProperty('background', 'transparent', 'important');
             clonedRoot.style.setProperty('background-color', 'transparent', 'important');
             clonedRoot.style.setProperty('box-shadow', 'none', 'important');
-            Array.from(clonedRoot.children).forEach(ch => {
-              const cls = ch.className || '';
-              if (typeof cls === 'string' && cls.includes('inset-0') && ch.children.length === 0 && ch.textContent.trim() === '') {
-                if (!cls.includes('bg-gradient')) {
-                  // Solid full-bleed tint sheet (e.g. bg-surface-bright/70 or bg-primary/60) -> make subtle or transparent
-                  ch.style.setProperty('opacity', pureTransparentPng ? '0' : '0.22', 'important');
+            // Only if the template is a pure typographic card (injected-bg) with an opaque paper gradient (e.g. F61 via-background),
+            // soften that opaque paper layer slightly so the user's video is visible underneath while keeping dark text legible.
+            if (isInjectedBgOnly) {
+              Array.from(clonedRoot.querySelectorAll('.inset-0')).forEach(ch => {
+                const cls = typeof ch.className === 'string' ? ch.className : '';
+                if (cls.includes('via-background') || cls.includes('to-surface-container')) {
+                  ch.style.setProperty('opacity', '0.78', 'important');
                 }
-              }
-            });
+              });
+            }
           }
         }
       });
