@@ -30533,10 +30533,17 @@ body.in-portal .portal-topbar-actions,
     min-width: 0 !important;
 }
 
-/* Segmented Control App Alumno / Coach OS — Estrictamente 1 fila en todo dispositivo */
-body.in-portal #topbarAdminToggle,
-#topbarAdminToggle,
-.topbar-mode-segmented {
+/* El usuario regular (no admin) NUNCA debe ver el switch App Alumno / Coach OS */
+body:not(.is-admin) #topbarAdminToggle,
+body:not(.is-admin) .topbar-admin-toggle-pill,
+body:not(.is-admin) #dropdownGoCoachOS {
+    display: none !important;
+}
+
+/* Segmented Control App Alumno / Coach OS — Estrictamente 1 fila SOLO para el Coach (is-admin) */
+body.in-portal.is-admin #topbarAdminToggle,
+body.is-admin #topbarAdminToggle,
+body.is-admin .topbar-mode-segmented {
     display: inline-flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
