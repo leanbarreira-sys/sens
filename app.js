@@ -31407,8 +31407,14 @@ const SensPwaManager = {
                Boolean(document.referrer && typeof document.referrer === 'string' && document.referrer.includes('android-app://'));
     },
 
+    isAndroid() {
+        return /Android/i.test(navigator.userAgent);
+    },
+
     isIos() {
-        return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        return (/iPad|iPhone|iPod/.test(navigator.userAgent) || 
+               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && 
+               !window.MSStream;
     },
 
     checkStandaloneState() {
@@ -31532,30 +31538,59 @@ const SensPwaManager = {
         } catch (_) {}
     },
 
+    promptInstall() {
+        return this.triggerInstall();
+    },
+
     async triggerInstall() {
-        // En iOS Safari, abrir bottom sheet nativo con pasos visuales
+        // Si ya está en modo standalone
+        if (this.isStandalone()) {
+            if (typeof window.showSensToast === 'function') {
+                window.showSensToast('¡Ya estás usando la App SENS instalada!', 'champagne', 3000);
+            }
+            return;
+        }
+
+        // Si es iOS Safari -> abrir paso a paso visual de iOS
         if (this.isIos()) {
             this.openIosSheet();
             return;
         }
 
-        // En Android / Chromium si capturamos el evento
+        // Si es Android o navegador compatible: intentar descarga/instalación nativa con 1 toque
         const promptEvent = this.deferredPrompt || window.deferredPwaPrompt;
         if (promptEvent) {
-            promptEvent.prompt();
-            const choiceResult = await promptEvent.userChoice;
-            if (choiceResult && choiceResult.outcome === 'accepted') {
-                localStorage.setItem('sens_pwa_installed', 'true');
-                this.dismissMarketingPopup(false);
-                this.dismissDashboardCard();
+            try {
+                promptEvent.prompt();
+                const choiceResult = await promptEvent.userChoice;
+                if (choiceResult && choiceResult.outcome === 'accepted') {
+                    localStorage.setItem('sens_pwa_installed', 'true');
+                    this.dismissMarketingPopup(false);
+                    this.dismissDashboardCard();
+                    this.updateInstallButtonsState(true);
+                    if (typeof window.showSensToast === 'function') {
+                        window.showSensToast('¡Descargando e instalando App SENS en tu celular!', 'champagne', 4000);
+                    }
+                }
+            } catch (err) {
+                console.warn('[SENS PWA] Error al invocar prompt:', err);
+                if (this.isAndroid()) {
+                    this.openAndroidSheet();
+                } else {
+                    this.openIosSheet();
+                }
             }
             this.deferredPrompt = null;
             window.deferredPwaPrompt = null;
             return;
         }
 
-        // Fallback para otros navegadores o iOS
-        this.openIosSheet();
+        // Si el evento nativo no está disponible aún o fue descartado:
+        if (this.isAndroid()) {
+            this.openAndroidSheet();
+        } else {
+            this.openIosSheet();
+        }
     },
 
     openIosSheet() {
@@ -31576,6 +31611,48 @@ const SensPwaManager = {
                 overlay.style.display = 'none';
             }, 300);
         }
+    },
+
+    openAndroidSheet() {
+        const overlay = document.getElementById('sensAndroidSheetOverlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
+            requestAnimationFrame(() => {
+                overlay.classList.add('active');
+            });
+        }
+    },
+
+    closeAndroidSheet() {
+        const overlay = document.getElementById('sensAndroidSheetOverlay');
+        if (overlay) {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+    },
+
+    async retryPrompt() {
+        const promptEvent = this.deferredPrompt || window.deferredPwaPrompt;
+        if (promptEvent) {
+            this.closeAndroidSheet();
+            try {
+                promptEvent.prompt();
+                const choiceResult = await promptEvent.userChoice;
+                if (choiceResult && choiceResult.outcome === 'accepted') {
+                    localStorage.setItem('sens_pwa_installed', 'true');
+                    this.updateInstallButtonsState(true);
+                }
+            } catch (_) {}
+            this.deferredPrompt = null;
+            window.deferredPwaPrompt = null;
+        } else {
+            this.closeAndroidSheet();
+            if (typeof window.showSensToast === 'function') {
+                window.showSensToast('En el menú ⋮ de tu navegador seleccioná "Instalar aplicación"', 'champagne', 4500);
+            }
+        }
     }
 };
 
@@ -31584,6 +31661,7 @@ window.triggerPwaInstall = () => SensPwaManager.triggerInstall();
 window.dismissPwaMarketingPopup = (remember) => SensPwaManager.dismissMarketingPopup(remember);
 window.dismissPwaDashCard = () => SensPwaManager.dismissDashboardCard();
 window.closeIosInstallSheet = () => SensPwaManager.closeIosSheet();
+window.closeAndroidInstallSheet = () => SensPwaManager.closeAndroidSheet();
 
 /* =============================================================================
    MOTOR DE AUTO-PRESCRIPCIÓN INSTANTÁNEA (0 SEGUNDOS) & DESBLOQUEOS METABÓLICOS

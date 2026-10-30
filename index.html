@@ -6,6 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>MAKES SENS. | SENS Train &amp; Wellness con Nico</title>
     <!-- SEO Meta Tags & Generative Engine Optimization (GEO) -->
+        <script>
+        // Captura temprana e inmediata de beforeinstallprompt para Android / Chromium
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            window.deferredPwaPrompt = e;
+            if (window.SensPwaManager) {
+                window.SensPwaManager.deferredPrompt = e;
+                if (typeof window.SensPwaManager.updateInstallButtonsState === 'function') {
+                    window.SensPwaManager.updateInstallButtonsState(false);
+                }
+            }
+        });
+    </script>
     <meta name="description"
         content="Entrenar la fuerza y cuidar tu cuerpo finalmente tiene sentido común. Método personalizado de fuerza, postura y longevidad en CABA y Online. Makes SENS.">
     <link rel="canonical" href="https://makesens.com.ar/">
@@ -1270,7 +1283,7 @@
                     style="font-size: 11px; border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">←
                     Inicio Web</button>
                 <!-- Botón de Descarga / Instalar App (PWA Luxury) -->
-                <button type="button" class="btn-topbar-install-pwa" id="btnTopbarInstallPwa" onclick="if(window.SensPwaManager && window.SensPwaManager.promptInstall){window.SensPwaManager.promptInstall();}else if(window.showSensToast){window.showSensToast('Para instalar: Menú del navegador → Agregar a pantalla principal', 'info');}" title="Instalar SENS en tu celular">
+                <button type="button" class="btn-topbar-install-pwa" id="btnTopbarInstallPwa" onclick="triggerPwaInstall()" title="Instalar SENS en tu celular">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -9466,6 +9479,40 @@
                 </div>
             </div>
             <button type="button" class="sens-ios-sheet-btn" onclick="closeIosInstallSheet()">Entendido ✓</button>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         BOTTOM SHEET DE INSTRUCCIONES PARA INSTALAR EN ANDROID
+         ========================================================================= -->
+    <div class="sens-ios-sheet-overlay sens-android-sheet-overlay" id="sensAndroidSheetOverlay"
+        onclick="if(event.target===this)closeAndroidInstallSheet();">
+        <div class="sens-ios-sheet sens-android-sheet">
+            <div class="sens-ios-drag-handle"></div>
+            <h3 class="sens-ios-sheet-title">Instalar App SENS en Android</h3>
+            <p class="sens-ios-sheet-sub">Instalá la aplicación oficial en tu teléfono en 2 pasos directos desde tu navegador:</p>
+            <div class="sens-ios-steps-list">
+                <div class="sens-ios-step-item">
+                    <span class="sens-ios-step-num">1</span>
+                    <span class="sens-ios-step-text">Tocá el menú de opciones (icono de <strong>tres puntos verticales ⋮</strong>) en la esquina superior derecha de tu navegador Chrome o Samsung Internet.</span>
+                </div>
+                <div class="sens-ios-step-item">
+                    <span class="sens-ios-step-num">2</span>
+                    <span class="sens-ios-step-text">Seleccioná <strong>"Instalar aplicación"</strong> o <strong>"Agregar a la pantalla principal"</strong> (icono de descarga <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>).</span>
+                </div>
+                <div class="sens-ios-step-item">
+                    <span class="sens-ios-step-num">3</span>
+                    <span class="sens-ios-step-text">Confirmá <strong>"Instalar"</strong>. ¡Listo! La App SENS se descargará de inmediato y quedará instalada como app nativa en tu celular.</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" class="sens-ios-sheet-btn" id="btnAndroidRetryPrompt" style="flex: 1;" onclick="if(window.SensPwaManager && window.SensPwaManager.retryPrompt){window.SensPwaManager.retryPrompt();}else{closeAndroidInstallSheet();}">
+                    Descargar Ahora →
+                </button>
+                <button type="button" class="btn btn-outline" style="border-radius: 12px; border: 1px solid rgba(229,203,167,0.3); color: #E5CBA7; font-size: 12px; padding: 10px 16px; background: transparent; cursor: pointer;" onclick="closeAndroidInstallSheet()">
+                    Entendido ✓
+                </button>
+            </div>
         </div>
     </div>
 
