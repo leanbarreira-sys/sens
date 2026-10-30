@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"secondary-fixed-dim":"#dec29f","error":"#ba1a1a","outline-variant":"#c8c6ca","on-tertiary":"#ffffff","on-primary-fixed":"#1b1b1d","surface-container-high":"#e9e8e5","on-primary":"#ffffff","on-tertiary-fixed-variant":"#005227","surface-container-highest":"#e3e2e0","on-surface-variant":"#47464a","secondary-fixed":"#fbdeb9","inverse-primary":"#c8c6c8","surface-container":"#efeeeb","surface-bright":"#faf9f6","on-background":"#1a1c1a","on-error-container":"#93000a","inverse-on-surface":"#f2f1ee","tertiary":"#000000","on-secondary":"#ffffff","secondary-container":"#fbdeb9","surface-container-low":"#f4f3f1","on-secondary-container":"#766143","primary":"#000000","on-secondary-fixed-variant":"#564428","tertiary-fixed-dim":"#81d996","outline":"#77767b","surface-container-lowest":"#ffffff","secondary":"#705b3e","inverse-surface":"#2f312f","on-primary-fixed-variant":"#474649","tertiary-container":"#00210c","surface-dim":"#dbdad7","surface-tint":"#5f5e60","on-surface":"#1a1c1a","primary-fixed-dim":"#c8c6c8","primary-fixed":"#e5e1e4","on-tertiary-fixed":"#00210c","on-tertiary-container":"#3c9458","primary-container":"#1b1b1d","tertiary-fixed":"#9cf6b0","on-primary-container":"#858386","surface-variant":"#e3e2e0","surface":"#faf9f6","on-error":"#ffffff","background":"#faf9f6","error-container":"#ffdad6","on-secondary-fixed":"#271903"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin":"3rem","space-md":"1.25rem","margin-mobile":"1.25rem","space-sm":"0.75rem","space-xs":"0.375rem","space-xl":"3.5rem","gutter-mobile":"1rem","gutter":"1.5rem","space-lg":"2rem"},"fontFamily":{"label-md":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"]},"fontSize":{"label-md":["0.875rem",{"lineHeight":"1.3","letterSpacing":"0.01em","fontWeight":"500"}],"headline-md":["1.75rem",{"lineHeight":"1.3","letterSpacing":"-0.02em","fontWeight":"500"}],"headline-xl-mobile":["2.25rem",{"lineHeight":"1.2","letterSpacing":"-0.03em","fontWeight":"300"}],"headline-xl":["3.25rem",{"lineHeight":"1.15","letterSpacing":"-0.035em","fontWeight":"300"}],"headline-lg-mobile":["1.875rem",{"lineHeight":"1.25","letterSpacing":"-0.025em","fontWeight":"400"}],"body-md":["0.9375rem",{"lineHeight":"1.6","letterSpacing":"-0.005em","fontWeight":"400"}],"headline-sm":["1.25rem",{"lineHeight":"1.4","letterSpacing":"-0.015em","fontWeight":"500"}],"body-sm":["0.8125rem",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"label-sm":["0.6875rem",{"lineHeight":"1.2","letterSpacing":"0.06em","fontWeight":"600"}],"body-lg":["1.125rem",{"lineHeight":"1.65","letterSpacing":"-0.01em","fontWeight":"400"}],"headline-lg":["2.5rem",{"lineHeight":"1.2","letterSpacing":"-0.03em","fontWeight":"400"}]}}}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 w-full px-margin flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md"><div class="flex items-baseline gap-space-xs"><span class="font-headline-sm text-headline-sm tracking-tight text-primary font-semibold">SENS</span><span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Train &amp; Wellness</span><span class="text-outline-variant font-body-sm text-body-sm px-space-xs">|</span><span class="font-label-md text-label-md text-secondary tracking-normal">Suite 4:5 Templates</span></div></div><nav class="hidden xl:flex items-center gap-space-xs p-space-xs bg-surface-container-low rounded-full" data-active-classes="bg-primary text-on-primary font-label-md rounded-full"><a class="px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors rounded-full" data-path="bloque-i" href="#">Bloque I (F01-F20)</a><a class="px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors rounded-full" data-path="bloque-ii" href="#">Bloque II (F21-F40)</a><a class="px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors rounded-full" data-path="bloque-iii" href="#">Bloque III (F41-F60)</a><a class="px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors rounded-full" data-path="bloque-iv" href="#">Bloque IV (F61-F80)</a><a aria-current="page" class="px-space-md py-space-xs transition-colors bg-primary text-on-primary font-label-md rounded-full" data-path="bloque-v" href="#">Bloque V (F81-F100)</a></nav><div class="flex items-center gap-space-md"><label class="flex items-center gap-space-xs cursor-pointer select-none px-space-sm py-space-xs bg-surface-container-low rounded-full"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Safe Zone</span><div class="relative inline-flex items-center"><input checked="" class="sr-only peer" type="checkbox"/><div class="w-9 h-5 bg-surface-container-high rounded-full peer peer-checked:bg-secondary transition-colors"></div><div class="absolute left-0.5 top-0.5 bg-surface-container-lowest w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 shadow-[0_1px_3px_rgba(0,0,0,0.1)]"></div></div></label><button class="inline-flex items-center justify-center px-space-md py-space-xs rounded-full bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container hover:text-on-primary transition-all shadow-[0_2px_8px_rgba(0,0,0,0.06)]" type="button">Exportar Suite 4:5 (100 Assets)</button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-5rem)]"><div class="flex flex-col w-full">
+<!-- Top Command / Breadcrumb & Header Section -->
+<section class="w-full px-margin-mobile md:px-margin pt-space-lg pb-space-lg bg-surface">
+<div class="max-w-[1440px] mx-auto flex flex-col gap-space-md">
+<!-- Breadcrumb & Status -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm tracking-widest uppercase">
+<span>SUITE ARCHETYPES</span>
+<span class="text-outline-variant">/</span>
+<span class="text-secondary font-semibold">BLOQUE V • F81 - F100</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface">CONVERSIÓN DIRECTA</span>
+</div>
+<div class="inline-flex items-center gap-space-xs px-space-sm py-1 bg-surface-container-low rounded-full">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface uppercase tracking-wider">Ratio Nativo 4:5 (1080×1350px)</span>
+</div>
+</div>
+<!-- Main Headline & Subtitle -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="max-w-3xl space-y-space-xs">
+<h1 class="font-headline-lg text-headline-lg md:text-headline-xl text-primary font-light tracking-tight leading-none">
+            Conversión, Escasez &amp; Llamados a la Acción
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            20 piezas visuales con ratio nativo 4:5 vertical (1080 × 1350 px). Diseñadas para alta respuesta directa, cierre de cupos presenciales en Palermo/Belgrano, accesos VIP, membresías trimestrales y el manifiesto somático final <span class="text-secondary font-medium tracking-normal">MAKES SENS</span>.
+          </p>
+</div>
+<!-- Global Action CTAs -->
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container hover:bg-surface-container-high transition-colors rounded-full font-label-md text-label-md text-on-surface" id="toggle-safe-zone" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary">crop</span>
+<span>Guía 1:1 IG: <span class="text-secondary font-semibold" id="safe-status-label">ON</span></span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs bg-primary text-on-primary hover:bg-primary-container transition-all rounded-full font-label-md text-label-md shadow-md" type="button">
+<span class="material-symbols-outlined text-[18px]">folder_zip</span>
+<span>Descargar Bloque V (ZIP)</span>
+</button>
+</div>
+</div>
+<!-- Category Filter Pills Bar -->
+<div class="pt-space-xs flex flex-wrap items-center gap-space-xs">
+<button class="filter-pill px-space-md py-space-xs bg-primary text-on-primary rounded-full font-label-md text-label-md transition-all shadow-sm" data-filter="all" type="button">
+          Todos (20)
+        </button>
+<button class="filter-pill px-space-md py-space-xs bg-surface-container-low text-on-surface-variant hover:text-on-surface rounded-full font-label-md text-label-md transition-all" data-filter="escasez" type="button">
+          Cupos &amp; Escasez (5)
+        </button>
+<button class="filter-pill px-space-md py-space-xs bg-surface-container-low text-on-surface-variant hover:text-on-surface rounded-full font-label-md text-label-md transition-all" data-filter="pases" type="button">
+          Pases &amp; Membresías (5)
+        </button>
+<button class="filter-pill px-space-md py-space-xs bg-surface-container-low text-on-surface-variant hover:text-on-surface rounded-full font-label-md text-label-md transition-all" data-filter="diagnostico" type="button">
+          Diagnóstico &amp; Desafíos (5)
+        </button>
+<button class="filter-pill px-space-md py-space-xs bg-surface-container-low text-on-surface-variant hover:text-on-surface rounded-full font-label-md text-label-md transition-all" data-filter="manifiesto" type="button">
+          Manifiesto &amp; Cierre (5)
+        </button>
+</div>
+</div>
+</section>
+<!-- 4:5 Archetypes Gallery Grid (Without outer white wrap cards, direct full bleed) -->
+<section class="w-full px-margin-mobile md:px-margin py-space-lg bg-surface-container-low">
+<div class="max-w-[1440px] mx-auto">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+<!-- 01 • F81: Boarding Pass VIP Palermo -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="absolute inset-0 bg-gradient-to-b from-secondary-fixed/20 via-transparent to-surface-container-low/60 pointer-events-none"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">SENS PRIVATE PASS</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">flight_takeoff</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">ORIGEN</p>
+<p class="font-headline-sm text-headline-sm font-semibold tracking-tight">CABA</p>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary text-sm">east</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-widest">DIRECT</span>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">DESTINO</p>
+<p class="font-headline-sm text-headline-sm font-semibold tracking-tight text-secondary">PALERMO STUDIO</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">PASE DE ACCESO EVALUACIÓN INICIAL</span>
+<p class="font-headline-sm text-headline-sm tracking-tight text-primary font-medium">ROW 01 • SEAT 1A</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">Válido para una sesión diagnóstica privada individual con Nico.</p>
+</div>
+</div>
+<div class="relative z-10 flex items-center justify-between pt-2">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">SERIAL TOKEN</span>
+<span class="font-label-sm text-label-sm tracking-widest font-mono text-primary">SENS-VIP-9941</span>
+</div>
+<div class="flex gap-1 items-end h-7">
+<span class="w-1 h-7 bg-primary"></span>
+<span class="w-1 h-5 bg-primary"></span>
+<span class="w-0.5 h-7 bg-primary"></span>
+<span class="w-2 h-7 bg-primary"></span>
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1.5 h-7 bg-primary"></span>
+<span class="w-0.5 h-6 bg-primary"></span>
+<span class="w-1 h-7 bg-primary"></span>
+</div>
+</div>
+</div>
+<!-- 02 • F82: Cupos Limitados del Mes -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-primary-container text-on-primary flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="escasez">
+<div class="absolute inset-0 bg-radial from-secondary/15 via-transparent to-black/60 pointer-events-none"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary-fixed/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="px-space-sm py-0.5 bg-surface-container-highest/20 rounded-full font-label-sm text-label-sm tracking-wider uppercase text-secondary-fixed">PALERMO &amp; BELGRANO</span>
+<span class="flex h-2.5 w-2.5 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-error"></span>
+</span>
+</div>
+<div class="relative z-10 my-auto text-center flex flex-col items-center gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary-fixed-dim">DISPONIBILIDAD ESTRICTA</span>
+<p class="font-headline-xl text-[4.5rem] leading-none font-light tracking-tighter text-on-primary">2</p>
+<p class="font-headline-md text-headline-md tracking-tight font-medium text-secondary-fixed">CUPOS DISPONIBLES</p>
+<p class="font-body-sm text-body-sm text-outline-variant max-w-[220px] mx-auto pt-2">
+              Cupos presenciales 1 a 1 restantes para el mesociclo de Noviembre.
+            </p>
+</div>
+<div class="relative z-10 w-full text-center">
+<div class="w-full py-2.5 bg-secondary-fixed text-on-secondary-fixed rounded-full font-label-md text-label-md uppercase tracking-wider font-semibold">
+              RESERVAR ENTREVISTA
+            </div>
+</div>
+</div>
+<!-- 03 • F83: Pase 7 Días Gratis App -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="px-space-sm py-1 bg-surface-container-low rounded-full font-label-sm text-label-sm font-semibold tracking-wider text-secondary">0 COSTO • SIN TARJETA</span>
+<span class="material-symbols-outlined text-secondary">lock_open</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">SENS APP PROTOCOL</span>
+<h3 class="font-headline-md text-headline-md font-medium tracking-tight text-primary leading-tight">
+              Entrená 7 días gratis en la App SENS.
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Rutinas en video HD, timer de sobrecarga y pautas de nutrición en tu celular sin tarjeta de crédito.
+            </p>
+<div class="flex items-center gap-2 pt-2 text-secondary font-label-md text-label-md font-medium">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>iOS &amp; Android Nativo</span>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              DESCARGAR &amp; PROBAR
+            </div>
+</div>
+</div>
+<!-- 04 • F84: Invitación a Diagnóstico PAR-Q -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="diagnostico">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">CLINICAL PAR-Q</span>
+<span class="material-symbols-outlined text-secondary">medical_services</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3 text-center items-center">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-1">
+<span class="material-symbols-outlined text-[26px]">vital_signs</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight">
+              Evaluamos antes de cobrar.
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[240px]">
+              Anamnesis digital biomecánica en 2 minutos. Detectá desequilibrios articulares sin cargo.
+            </p>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-surface-container-high hover:bg-surface-container text-primary text-center rounded-full font-label-md text-label-md font-medium">
+              COMPLETAR TEST (2 MIN)
+            </div>
+</div>
+</div>
+<!-- 05 • F85: Certificado de Membresía SENS -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="absolute inset-3 rounded-xl bg-secondary/5 pointer-events-none"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm tracking-widest text-secondary font-semibold uppercase">CREDENTIAL Nº 0418</span>
+<span class="material-symbols-outlined text-secondary">workspace_premium</span>
+</div>
+<div class="relative z-10 my-auto text-center flex flex-col items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">PROGRAMA PRIVADO</span>
+<h3 class="font-headline-sm text-headline-sm font-semibold tracking-tight text-primary uppercase">
+              MEMBRESÍA ATLETA SOMÁTICO
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[220px]">
+              Certificación de acondicionamiento neuromotor &amp; vitalidad sostenible.
+            </p>
+<div class="pt-3">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-mono">DIR. TÉCNICA: N. SENS</span>
+</div>
+</div>
+<div class="relative z-10 text-center">
+<div class="w-full py-2 bg-primary text-on-primary rounded-full font-label-md text-label-md font-medium">
+              SOLICITAR ADMISIÓN
+            </div>
+</div>
+</div>
+<!-- 06 • F86: Código QR Somático -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="diagnostico">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm tracking-widest uppercase text-on-surface-variant">ACCESO DIRECTO</span>
+<span class="material-symbols-outlined text-secondary">qr_code_scanner</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col items-center text-center gap-3">
+<div class="p-3 bg-surface-container-low rounded-2xl shadow-sm">
+<svg class="w-32 h-32 text-primary" fill="currentColor" viewbox="0 0 100 100">
+<path d="M10 10h30v30h-30z M15 15v20h20v-20z M60 10h30v30h-30z M65 15v20h20v-20z M10 60h30v30h-30z M15 65v20h20v-20z M22 22h6v6h-6z M72 22h6v6h-6z M22 72h6v6h-6z M50 15h6v12h-6z M50 35h6v6h-6z M65 55h10v10h-10z M80 60h10v25h-10z M55 75h15v15h-15z M45 60h6v25h-6z"></path>
+</svg>
+</div>
+<p class="font-headline-sm text-headline-sm font-medium tracking-tight text-primary">Escaneo Somático</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[220px]">
+              Escaneá para iniciar tu anamnesis digital sin esperas ni fricción comercial.
+            </p>
+</div>
+<div class="relative z-10 text-center">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-semibold">RESPUESTA EN 60 SEGUNDOS</span>
+</div>
+</div>
+<!-- 07 • F87: Entrenamiento en Pareja (Dúo) -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="px-space-sm py-1 bg-secondary-fixed/30 rounded-full font-label-sm text-label-sm text-secondary font-semibold uppercase">PLAN DÚO PRIVADO</span>
+<span class="material-symbols-outlined text-secondary">group</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3">
+<h3 class="font-headline-md text-headline-md font-medium tracking-tight text-primary leading-tight">
+              ENTRENAR DE A DOS
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Misma corrección técnica 1 a 1 de Nico, valor de inversión dividido por persona.
+            </p>
+<div class="p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">INVERSIÓN DÚO</span>
+<p class="font-headline-sm text-headline-sm font-semibold text-secondary">$100k - $195k</p>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-medium">POR PERSONA</span>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              CONSULTAR DISPONIBILIDAD DÚO
+            </div>
+</div>
+</div>
+<!-- 08 • F88: Clínica de Sentadilla (Masterclass) -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="diagnostico">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">TICKET MASTERCLASS</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-medium">SÁBADO 10:00 AM</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">WORKSHOP PRESENCIAL</span>
+<h3 class="font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight">
+              CLÍNICA BIOMECÁNICA: SENTADILLA &amp; CADERA
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Alineación de fémur, dorsiflexión y salud lumbar. 6 plazas en sala técnica.
+            </p>
+<div class="flex items-center gap-2 pt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[18px]">location_on</span>
+<span>SENS Studio Palermo</span>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-secondary text-on-secondary text-center rounded-full font-label-md text-label-md font-medium">
+              RESERVAR TICKET (6 DISP.)
+            </div>
+</div>
+</div>
+<!-- 09 • F89: Membresía Trimestral (−20%) -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="px-space-sm py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full font-label-sm text-label-sm font-semibold tracking-widest uppercase">AHORRO 20%</span>
+<span class="material-symbols-outlined text-secondary">percent</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3 text-center items-center">
+<h3 class="font-headline-md text-headline-md font-light tracking-tight text-primary leading-snug">
+              UN HÁBITO REAL TOMA <span class="font-semibold text-secondary">90 DÍAS.</span>
+</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]">
+              Estructura trimestral de reprogramación postural y fuerza lineal.
+            </p>
+<div class="p-3 bg-surface-container-lowest rounded-xl w-full">
+<span class="font-headline-md text-headline-md font-semibold text-primary">$19.900</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/ mes</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant pt-1">$59.900 cobro único trimestral</p>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              ACTIVAR MEMBRESÍA TRIMESTRAL
+            </div>
+</div>
+</div>
+<!-- 10 • F90: Sesión de Diagnóstico 1 a 1 -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="diagnostico">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">VIDEOLLAMADA 1 A 1</span>
+<span class="material-symbols-outlined text-secondary">videocam</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Portrait of a professional athletic physical trainer in neutral tones studio lighting warm aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcCst1UtTZ_iKViOYPMruip3hgT5pyjWfC7Pfead-hjvh2gyYCxP08pEy-KJLEPiHZd_9PwcPujDtf9Mj0OauKbjU_LJvMSZKIjqxL_VR1tN7Y1pTbKB650frQQRnuq6LJsJRUdW4VgSdnMQaw9i4KF8Zw_M23xqh0oQ_enT2cg0ANgXpcYuokiJxAL9KVEdlegNih1IZxYfJGw7Y_bagNPzT2IrkwFi6Z7WrUzQ"/>
+</div>
+<h3 class="font-headline-md text-headline-md font-medium tracking-tight text-primary leading-tight">
+              30 MINUTOS CON NICO
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Hablemos de tus dolores articulares y definamos tu frecuencia ideal de carga.
+            </p>
+<div class="flex items-center gap-1.5 text-secondary font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span>Agenda abierta para esta semana</span>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              ELEGIR HORARIO CALENDAR
+            </div>
+</div>
+</div>
+<!-- 11 • F91: Convocatoria de Mesociclo -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="escasez">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">SEMANA 01</span>
+<span class="material-symbols-outlined text-secondary">event_available</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3 text-center items-center">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">INICIO MESOCICLO</span>
+<h3 class="font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight">
+              12 SEMANAS DE RECOMPOSICIÓN
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]">
+              Fuerza estructurada sin improvisación. Planificación individualizada progresiva.
+            </p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container rounded font-label-sm text-label-sm font-semibold">NOV</span>
+<span class="px-2 py-1 bg-surface-container rounded font-label-sm text-label-sm font-semibold">DIC</span>
+<span class="px-2 py-1 bg-surface-container rounded font-label-sm text-label-sm font-semibold">ENE</span>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              UNIRSE AL BLOQUE 12W
+            </div>
+</div>
+</div>
+<!-- 12 • F92: Invitación Referral (+7 Días) -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="px-space-sm py-1 bg-surface-container rounded-full font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">GIFT PASS</span>
+<span class="material-symbols-outlined text-secondary">card_giftcard</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3 text-center items-center">
+<h3 class="font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight">
+              REGALÁ 14 DÍAS A UN COLEGA
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]">
+              Ambos suman +7 días adicionales de acceso completo a la App SENS.
+            </p>
+<div class="p-3 bg-surface-container-low rounded-xl w-full text-center">
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant">TU CÓDIGO ÚNICO</span>
+<p class="font-headline-sm text-headline-sm font-mono tracking-widest text-primary pt-0.5">SENS-FRIEND-25</p>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-surface-container-high text-primary text-center rounded-full font-label-md text-label-md font-medium">
+              COMPARTIR LINK DIRECTO
+            </div>
+</div>
+</div>
+<!-- 13 • F93: Evaluación Postural sin Cargo -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="diagnostico">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">SCREENING POSTURAL</span>
+<span class="material-symbols-outlined text-secondary">accessibility_new</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3 items-center text-center">
+<div class="w-16 h-16 rounded-full bg-secondary-fixed/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[32px]">align_vertical_center</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-medium tracking-tight text-primary leading-tight">
+              ¿CÓMO ESTÁ TU COLUMNA HOY?
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]">
+              Test interactivo de 8 pasos con proyección somática 3D.
+            </p>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              INICIAR EVALUACIÓN (GRATIS)
+            </div>
+</div>
+</div>
+<!-- 14 • F94: Garantía de Cero Dolor -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="escasez">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">COMPROMISO TÉCNICO</span>
+<span class="material-symbols-outlined text-secondary">verified_user</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3 text-center items-center">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">shield</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight">
+              GARANTÍA DE CERO DOLOR
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]">
+              Si una serie te genera dolor articular, Nico reconfigura tu ejercicio en el momento sin forzar rangos lesivos.
+            </p>
+</div>
+<div class="relative z-10 text-center">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-semibold">CALIDAD MECÁNICA ASEGURADA</span>
+</div>
+</div>
+<!-- 15 • F95: Acceso al Catálogo de 500 Alimentos -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">GUÍA NUTRICIONAL</span>
+<span class="material-symbols-outlined text-secondary">restaurant</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3">
+<div class="w-full h-28 rounded-xl overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Artisanal clean Argentine meal flat lay olive oil beef steak fresh greens warm quiet luxury editorial food photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2_uzf31D8AeJ1JzwPOh1k-p25l2vcyJlDiecRgHSIw6_uPL-z9ujq3EEQBfmlVN_r_K-opMYetagsMKYU4u5b8m3b6Aqzdja_aUchYKeXPzFUvz3TJr_LQzhWu7CyAbd-g9WcnYIb0ORWxjHcCuXpK5qnrECsSPv3hKOo-ev4Tu-2zuobXMGSKfe-18zaP01VUsRGaoF2BIHF_GaGNC_Q2I-3WAwhuD0OcDn98g"/>
+</div>
+<h3 class="font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight">
+              500 COMIDAS REALES ARGENTINAS
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Sin pechuga seca con arroz. Comé con sentido común, saciedad y densidad nutricional.
+            </p>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              VER CATÁLOGO NUTRICIONAL
+            </div>
+</div>
+</div>
+<!-- 16 • F96: Desafío 21 Días de Hábito -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="diagnostico">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">NEURAL HABIT TRACK</span>
+<span class="material-symbols-outlined text-secondary">repeat</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3 text-center items-center">
+<h3 class="font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight">
+              21 DÍAS PARA DEJAR DE EMPEZAR DE CERO
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]">
+              Construí constancia neural sin agotarte ni saltar entrenamientos.
+            </p>
+<div class="grid grid-cols-7 gap-1.5 pt-2">
+<span class="w-4 h-4 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] text-on-secondary-fixed">✓</span>
+<span class="w-4 h-4 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] text-on-secondary-fixed">✓</span>
+<span class="w-4 h-4 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] text-on-secondary-fixed">✓</span>
+<span class="w-4 h-4 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] text-on-secondary-fixed">✓</span>
+<span class="w-4 h-4 rounded-full bg-surface-container"></span>
+<span class="w-4 h-4 rounded-full bg-surface-container"></span>
+<span class="w-4 h-4 rounded-full bg-surface-container"></span>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              SUMARME AL DESAFÍO 21D
+            </div>
+</div>
+</div>
+<!-- 17 • F97: Equipamiento Esencial MeLi -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">CURADURÍA HARDWARE</span>
+<span class="material-symbols-outlined text-secondary">shopping_bag</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">fitness_center</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight">
+              KIT ESENCIAL EN CASA
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Mancuernas hexagonales y bandas circulares seleccionadas en MercadoLibre por Nico para entrenar donde estés.
+            </p>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-surface-container-high text-primary text-center rounded-full font-label-md text-label-md font-medium">
+              VER KIT RECOMENDADO
+            </div>
+</div>
+</div>
+<!-- 18 • F98: Comparativa Gimnasio Tradicional vs SENS -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="escasez">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">CONTRASTE RADICAL</span>
+<span class="material-symbols-outlined text-secondary">compare_arrows</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-3">
+<div class="p-3 bg-surface-container-low rounded-xl">
+<span class="font-label-sm text-label-sm text-error uppercase font-medium">GIMNASIO TÍPICO</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Música ensordecedora, máquinas ocupadas, dolor articular y cero foco.</p>
+</div>
+<div class="p-3 bg-surface-container-highest rounded-xl">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">SISTEMA SENS</span>
+<p class="font-body-sm text-body-sm text-primary font-medium">Sala privada, corrección técnica 1 a 1, paz mental y progreso medido.</p>
+</div>
+</div>
+<div class="relative z-10">
+<div class="w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium">
+              ELEGIR ENTRENAR SIN RUIDO
+            </div>
+</div>
+</div>
+<!-- 19 • F99: Tarjeta de Invitado Especial -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="pases">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">PASS VIP SALA CABA</span>
+<span class="material-symbols-outlined text-secondary">badge</span>
+</div>
+<div class="relative z-10 my-auto text-center flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">star</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-semibold tracking-tight text-primary uppercase">
+              INVITADO DE HONOR
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[220px]">
+              Vení a compartir una sesión presencial con tu colega o pareja en Palermo.
+            </p>
+</div>
+<div class="relative z-10 text-center">
+<div class="w-full py-2 bg-primary text-on-primary rounded-full font-label-md text-label-md font-medium">
+              ACTIVAR PASE INVITADO
+            </div>
+</div>
+</div>
+<!-- 20 • F100: El Manifiesto Final: MAKES SENS -->
+<div class="template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl bg-primary text-on-primary flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300" data-category="manifiesto">
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary-fixed/5 pointer-events-none rounded-xl"></div>
+<div class="relative z-10 flex items-center justify-between">
+<span class="font-label-sm text-label-sm tracking-widest uppercase text-secondary-fixed-dim">SENS MANIFESTO</span>
+<span class="font-label-sm text-label-sm tracking-widest text-outline-variant font-mono">100 / 100</span>
+</div>
+<div class="relative z-10 my-auto flex flex-col gap-4 text-center items-center">
+<p class="font-headline-md text-headline-md md:text-headline-lg font-light tracking-tight text-on-primary leading-tight">
+              ENTRENAR SIN RUIDO. VIVIR SIN DOLOR.
+            </p>
+<p class="font-headline-xl text-headline-xl tracking-tighter text-secondary-fixed font-normal">
+              MAKES SENS.
+            </p>
+<div class="w-12 h-0.5 bg-secondary-fixed/40 my-1"></div>
+<p class="font-label-sm text-label-sm text-secondary-fixed-dim tracking-widest uppercase">
+              DR. NICO • SENS TRAIN &amp; WELLNESS
+            </p>
+</div>
+<div class="relative z-10">
+<div class="w-full py-3 bg-secondary-fixed text-on-secondary-fixed text-center rounded-full font-label-md text-label-md uppercase tracking-wider font-semibold">
+              UNIRSE AL MOVIMIENTO
+            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Architecture & Production Standards Block -->
+<section class="w-full px-margin-mobile md:px-margin py-space-xl bg-surface">
+<div class="max-w-[1440px] mx-auto flex flex-col gap-space-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">ESPECIFICACIONES DE PRODUCCIÓN</span>
+<h2 class="font-headline-md text-headline-md text-primary font-light tracking-tight pt-1">
+            Arquitectura de Conversión Bloque V
+          </h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">
+          Reglas técnicas para Instagram Feed 4:5 y recorte de cuadrícula central 1:1 sin pérdida de copys clave ni colapso de contraste.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="p-space-md bg-surface-container-low rounded-2xl flex flex-col gap-2">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[20px]">crop_square</span>
+<span class="font-label-md text-label-md font-semibold">Safe Zone 1:1 Estricta</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Todo el copy de respuesta directa y el CTA principal reside entre Y = 135px y Y = 1215px para sobrevivir intacto en el grid 1:1 de los perfiles.
+          </p>
+</div>
+<div class="p-space-md bg-surface-container-low rounded-2xl flex flex-col gap-2">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[20px]">hourglass_top</span>
+<span class="font-label-md text-label-md font-semibold">Escasez &amp; Realismo Somático</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Los llamados a la acción comunican cupos verificados en salas privadas de Belgrano/Palermo sin estridencias ni promociones agresivas.
+          </p>
+</div>
+<div class="p-space-md bg-surface-container-low rounded-2xl flex flex-col gap-2">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[20px]">auto_stories</span>
+<span class="font-label-md text-label-md font-semibold">Editorial Quiet Luxury</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Uso de tipografía Plus Jakarta Sans con acentos champagne #D4B996 y base en marfil #FAF9F6, logrando sofisticación sin estética de software genérico.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Inline Script for Filter & Safe-Zone Toggle -->
+<script>
+    (function() {
+      const toggleBtn = document.getElementById('toggle-safe-zone');
+      const safeStatusLabel = document.getElementById('safe-status-label');
+      const safeGuides = document.querySelectorAll('.safe-guide');
+      let safeZoneActive = true;
+
+      if (toggleBtn && safeStatusLabel) {
+        toggleBtn.addEventListener('click', () => {
+          safeZoneActive = !safeZoneActive;
+          safeStatusLabel.textContent = safeZoneActive ? 'ON' : 'OFF';
+          safeGuides.forEach(el => {
+            el.style.opacity = safeZoneActive ? '1' : '0';
+          });
+        });
+      }
+
+      const filterPills = document.querySelectorAll('.filter-pill');
+      const templates = document.querySelectorAll('.template-item');
+
+      filterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          const filter = pill.getAttribute('data-filter');
+          filterPills.forEach(p => {
+            p.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+            p.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          });
+          pill.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+          pill.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+
+          templates.forEach(t => {
+            const cat = t.getAttribute('data-category');
+            if (filter === 'all' || cat === filter) {
+              t.style.display = 'flex';
+            } else {
+              t.style.display = 'none';
+            }
+          });
+        });
+      });
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low py-space-lg"><div class="w-full px-margin flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex flex-col sm:flex-row items-center gap-space-xs sm:gap-space-md text-center sm:text-left"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">SENS</span><span class="font-body-sm text-body-sm text-on-surface-variant">© 2025 SENS Train &amp; Wellness. Quiet Vitality Standards.</span></div><div class="flex items-center gap-space-md"><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" data-path="documentacion" href="#">Documentación</a><span class="text-outline-variant text-body-sm font-body-sm">•</span><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" data-path="telemetria-estandar" href="#">Telemetría</a><span class="text-outline-variant text-body-sm font-body-sm">•</span><span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Ratio 4:5 Ultra-Fidelity</span></div></div></footer><script src="sens-marketing-suite-enhancer.js"></script>
+</body></html>

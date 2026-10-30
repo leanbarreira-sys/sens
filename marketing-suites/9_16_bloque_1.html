@@ -1,0 +1,909 @@
+<!DOCTYPE html><html lang="es" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005227","on-primary-fixed-variant":"#474649","on-tertiary":"#ffffff","tertiary":"#000000","outline":"#77767b","surface-variant":"#e3e2e0","primary-fixed-dim":"#c8c6c8","on-secondary-container":"#766143","on-error":"#ffffff","surface-dim":"#dbdad7","surface-tint":"#5f5e60","primary":"#000000","on-primary":"#ffffff","on-secondary-fixed":"#271903","on-tertiary-container":"#3c9458","on-primary-fixed":"#1b1b1d","inverse-surface":"#2f312f","surface-container-low":"#f4f3f1","secondary-fixed-dim":"#dec29f","secondary-container":"#fbdeb9","secondary":"#705b3e","surface-bright":"#faf9f6","surface":"#faf9f6","surface-container-highest":"#e3e2e0","outline-variant":"#c8c6ca","on-surface-variant":"#47464a","tertiary-container":"#00210c","tertiary-fixed":"#9cf6b0","surface-container-lowest":"#ffffff","error":"#ba1a1a","on-secondary-fixed-variant":"#564428","primary-fixed":"#e5e1e4","primary-container":"#1b1b1d","inverse-on-surface":"#f2f1ee","on-tertiary-fixed":"#00210c","on-secondary":"#ffffff","on-surface":"#1a1c1a","tertiary-fixed-dim":"#81d996","surface-container":"#efeeeb","secondary-fixed":"#fbdeb9","surface-container-high":"#e9e8e5","on-primary-container":"#858386","background":"#faf9f6","inverse-primary":"#c8c6c8","on-error-container":"#93000a","error-container":"#ffdad6","on-background":"#1a1c1a"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"gutter-mobile":"1rem","space-xl":"3.5rem","space-sm":"0.75rem","space-md":"1.25rem","margin":"3rem","gutter":"1.5rem","space-xs":"0.375rem","margin-mobile":"1.25rem","space-lg":"2rem"},fontFamily:{"body-sm":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"]},fontSize:{"body-sm":["0.8125rem",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"headline-xl-mobile":["2.25rem",{"lineHeight":"1.2","letterSpacing":"-0.03em","fontWeight":"300"}],"headline-xl":["3.25rem",{"lineHeight":"1.15","letterSpacing":"-0.035em","fontWeight":"300"}],"headline-md":["1.75rem",{"lineHeight":"1.3","letterSpacing":"-0.02em","fontWeight":"500"}],"headline-lg":["2.5rem",{"lineHeight":"1.2","letterSpacing":"-0.03em","fontWeight":"400"}],"headline-lg-mobile":["1.875rem",{"lineHeight":"1.25","letterSpacing":"-0.025em","fontWeight":"400"}],"body-lg":["1.125rem",{"lineHeight":"1.65","letterSpacing":"-0.01em","fontWeight":"400"}],"body-md":["0.9375rem",{"lineHeight":"1.6","letterSpacing":"-0.005em","fontWeight":"400"}],"headline-sm":["1.25rem",{"lineHeight":"1.4","letterSpacing":"-0.015em","fontWeight":"500"}],"label-md":["0.875rem",{"lineHeight":"1.3","letterSpacing":"0.01em","fontWeight":"500"}],"label-sm":["0.6875rem",{"lineHeight":"1.2","letterSpacing":"0.06em","fontWeight":"600"}]}}}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 w-full px-gutter flex items-center justify-between"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface">SENS</span><span class="h-3 w-[1px] bg-outline-variant"></span><span class="font-label-sm text-label-sm tracking-widest text-on-surface-variant uppercase">Suite 9:16</span></div><nav class="hidden md:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-medium rounded-full px-4 py-1.5"><a aria-current="page" class="transition-colors bg-primary-container text-on-primary font-medium rounded-full px-4 py-1.5" data-path="visor-maestro" href="#">Visor Maestro</a><a class="px-4 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="coleccion-templates" href="#">Templates</a><a class="px-4 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="bloques-editoriales" href="#">Bloques Sociales</a><a class="px-4 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="guia-de-estilo" href="#">Pautas Estéticas</a></nav></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-space-xs px-3 py-1.5 rounded-full bg-surface-container"><span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Canvas Activo 1080×1920</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Top Editorial Header & Operational Controls -->
+<section class="w-full px-gutter pt-8 pb-12 flex flex-col gap-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="flex flex-col max-w-2xl">
+<div class="flex items-center gap-space-xs mb-2">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container animate-pulse"></span>
+<span class="font-label-sm text-label-sm tracking-widest text-on-surface-variant uppercase">Bloque I • Templates 01 al 20</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Arquitectura Social 9:16</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Colección de activos verticales de precisión editorial concebidos para Instagram Stories, Reels y TikTok. 3 campos universales con 20 morfologías fisiológicas distintas y safe zones calibradas a 1080×1920px.</p>
+</div>
+<!-- Action Toolbar -->
+<div class="flex flex-wrap items-center gap-3">
+<!-- Safe Zone Toggle -->
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-surface-container-high hover:bg-surface-container-highest transition-colors font-label-md text-label-md text-on-surface" id="toggle-safe-zones-btn">
+<span class="material-symbols-outlined text-[18px] text-secondary">grid_view</span>
+<span class="" id="safe-zone-btn-text">Mostrar Safe Zones 9:16</span>
+</button>
+<!-- Category Filter Chips -->
+<div class="flex items-center bg-surface-container-low p-1 rounded-full">
+<button class="filter-chip active-filter px-4 py-1.5 rounded-full font-label-sm text-label-sm bg-primary text-on-primary transition-all" data-filter="all">Todos (20)</button>
+<button class="filter-chip px-4 py-1.5 rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-all" data-filter="editorial">Editoriales</button>
+<button class="filter-chip px-4 py-1.5 rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-all" data-filter="telemetry">Biometría</button>
+<button class="filter-chip px-4 py-1.5 rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-all" data-filter="cinematic">Cinemáticos</button>
+</div>
+</div>
+</div>
+<!-- Telemetry & Specs Pill Strip -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container-low shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">aspect_ratio</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Aspect Ratio</span>
+<span class="font-label-md text-label-md text-on-surface truncate">9:16 (1080 × 1920 px)</span>
+</div>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container-low shadow-sm">
+<span class="material-symbols-outlined text-on-tertiary-container text-[20px]">shield</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Zona Activa Y</span>
+<span class="font-label-md text-label-md text-on-surface truncate">340px • 1420px (Safe)</span>
+</div>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container-low shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">palette</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Paleta Primaria</span>
+<span class="font-label-md text-label-md text-on-surface truncate">Alabastro • Carbón • Champán</span>
+</div>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container-low shadow-sm">
+<span class="material-symbols-outlined text-on-tertiary-container text-[20px]">verified</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Campos Universales</span>
+<span class="font-label-md text-label-md text-on-surface truncate">Foto + Título + Bajada</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Master Focus Showcase (Lightbox / Hero Canvas) -->
+<section class="w-full px-gutter pb-16">
+<div class="rounded-xl bg-surface-container-low p-6 lg:p-10 shadow-sm flex flex-col lg:flex-row gap-10 items-center justify-between">
+<!-- Story Canvas Preview in Stage -->
+<div class="relative w-full max-w-[340px] sm:max-w-[380px] aspect-[9/16] rounded-xl overflow-hidden shadow-xl bg-primary flex-shrink-0 flex items-center justify-center group" id="master-stage-wrapper">
+<!-- Stage Background Image -->
+<div class="absolute inset-0 bg-cover bg-center transition-all duration-700" data-alt="Atmospheric editorial photograph of human biomechanics and stillness in high-end minimalist architecture with warm linen tones and dramatic daylight illumination." id="master-bg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDChzLr2PBb1169LGWH0P1g7BI55TzHWdRstgydf440YxeH-75Cpg1QKTMLpGUstBEv7PuivLS1uIOh8C9g6wmDGiW4we2RIS_kTE2fK90TzA8uWJJGqYwMg9SIG4m3dDU4y576cPzEuRhIOFdsBqNbQrJWnyPyXt2xk86JSJPoSX3V2Hsyf5zyvOldOH2Ihil2K90Wexghs4eDqh8abcPSAnb7yCIAIrvdLMs8AQ');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-primary/30 pointer-events-none"></div>
+<!-- Safe Zones Guide Overlay -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 z-40 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center backdrop-blur-[1px]">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-error bg-error/80 px-2 py-0.5 rounded-full">Safe Top 0-320px (Avatar / Hora)</span>
+</div>
+<div class="flex-1 flex justify-end">
+<div class="w-[9.2%] bg-secondary/25 flex items-center justify-center">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface [writing-mode:vertical-rl] py-2">Margen Derecho 100px</span>
+</div>
+</div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center backdrop-blur-[1px]">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-error bg-error/80 px-2 py-0.5 rounded-full">Safe Bottom 1450-1920px (Audio / CTA)</span>
+</div>
+</div>
+<!-- Dynamic Morphological Container -->
+<div class="relative z-20 w-[84%] max-h-[60%] flex flex-col justify-end transition-all duration-500" id="master-card-container">
+<div class="bg-surface/90 backdrop-blur-md rounded-xl p-5 shadow-xl flex flex-col gap-2.5" id="master-card-inner">
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-medium" id="master-title">La longevidad no es resistencia, es modulación nerviosa.</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3" id="master-subtitle">Aprender a desacelerar el tono vagal transforma la recuperación celular más que 90 minutos de esfuerzo continuo.</p>
+</div>
+</div>
+<!-- Stage Badge Overlay -->
+</div>
+<!-- Master Stage Telemetry & Metadata Details -->
+<div class="flex flex-col flex-1 w-full max-w-xl gap-6">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Laboratorio Morfológico</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1" id="detail-title">T01: Glassmorphism Card Inferior</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2" id="detail-desc">Caja de cristal esmerilado cálido anclada en el tercio inferior del active zone (Y=880px a Y=1360px). Ideal para declaraciones somáticas breves, contraste sutil y visualización de texturas fotográficas profundas.</p>
+</div>
+<!-- Structural Data Points -->
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 rounded-xl bg-surface-container">
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant block">Morfología de Caja</span>
+<span class="font-label-md text-label-md text-on-surface font-medium mt-0.5 block" id="detail-box">Warm Frosted Glass (Blur 16px)</span>
+</div>
+<div class="p-4 rounded-xl bg-surface-container">
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant block">Jerarquía Hook</span>
+<span class="font-label-md text-label-md text-on-surface font-medium mt-0.5 block" id="detail-hook">H1 Titular Conciso + Subtexto 220c</span>
+</div>
+<div class="p-4 rounded-xl bg-surface-container">
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant block">Eje Cromático</span>
+<span class="font-label-md text-label-md text-on-surface font-medium mt-0.5 block" id="detail-palette">Alabastro 90% / Carbón #121214</span>
+</div>
+<div class="p-4 rounded-xl bg-surface-container">
+<span class="font-label-sm text-label-sm uppercase text-on-surface-variant block">Safe Offset Inferido</span>
+<span class="font-label-md text-label-md text-on-tertiary-container font-medium mt-0.5 block" id="detail-safe">Cumple 100% (Libre Y=1450+)</span>
+</div>
+</div>
+<!-- Master Interactive Controls -->
+<div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+<button class="w-full sm:w-auto px-6 py-3 rounded-full bg-primary text-on-primary font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-2" id="master-copy-btn">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span class="">Copiar Textos (Título + Bajada)</span>
+</button>
+<button class="w-full sm:w-auto px-6 py-3 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-2" id="master-download-btn">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="">Descargar Asset 9:16 (1080×1920)</span>
+</button>
+</div>
+<!-- Toast Feedback Notification -->
+<div class="opacity-0 transition-opacity duration-300 flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-highest text-on-surface w-fit" id="toast-notify">
+<span class="material-symbols-outlined text-[16px] text-on-tertiary-container">check_circle</span>
+<span class="font-label-sm text-label-sm" id="toast-text">Textos copiados al portapapeles con éxito</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Complete 20-Template Gallery Grid -->
+<section class="w-full px-gutter pb-24">
+<div class="flex flex-col gap-2 mb-8">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface">Galería Maestra • 20 Templates</h2>
+<span class="font-label-md text-label-md text-on-surface-variant">20 de 20 Activos Listos</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cada espécimen implementa rigurosamente el triángulo: Fotografía Biomecánica • Titular Hook • Reencuadre Somático.</p>
+</div>
+<!-- 20 Template Responsive Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="template-grid">
+<!-- ==================== T01 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="1">
+<!-- 9:16 Story Viewport -->
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-end justify-center p-4 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="High contrast photograph of an athlete performing a slow spinal mobility sequence inside a calm brutalist concrete gym, early morning sun ray hitting the floor." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGh6cFg8_4VWbe-nerHN2M8dgIt4JmjSj4golexr0EeSuXU1hj6z1oaRywJ_QK-Ytodd4XFr_eo2HuLhp1FyfGI987VAwg0wu4dKYKKY1shlHKN0dmj8eywWjy7Ns419bd_IfDfyUp84aVXetovFwTKd9a7nKPvviDtLhdQLEgtvNdq2hB37uO0IIRMBjnxgDRYQrsT9KRI8olyK_qINKXLIcG42LyAq4akUjBIQ');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
+<!-- Safe Zone Guide -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+<!-- Morphological Container: Glassmorphism Card Inferior -->
+<div class="relative z-10 w-full bg-surface/85 backdrop-blur-md rounded-xl p-4 shadow-md flex flex-col gap-1.5 mb-16">
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-tight">La longevidad no es resistencia, es modulación nerviosa.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">Aprender a desacelerar el tono vagal transforma la recuperación celular más que 90 minutos de esfuerzo continuo.</p>
+</div>
+</div>
+<!-- Card Footer Actions -->
+
+</article>
+<!-- ==================== T02 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="2">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface-container-high group flex flex-col shadow-md">
+<!-- Split Asimétrico 60/40: Foto 60% arriba -->
+<div class="relative w-full h-[60%] overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Refined close-up of hands executing a kettlebell deadlift with impeccable lumbar alignment, soft studio daylight and warm textured shadows." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTJLhBL764gsE6Br_XHd5T-xoxhOiT03EFja0FMuozN-YnhPnk47l_qojYzP1DClK5uX-RoO3mG97JcDrQvq4LlZ_iYqv7tY2SFlcNxgtUff-o3YG_fRAOmHqKVMGTKl71JJvCNvBaTNaJ4XPJKtbLiC5HT6r6qkn2jVuLMx8u1ugs3oidRBRkoFNKdME7BHlHoXrCiKhTBKJZoz5lMCkV-wQG7A94_Ohih_Qecg');"></div>
+</div>
+<!-- Caja Alabastro 40% abajo -->
+<div class="w-full h-[40%] bg-surface-bright p-5 flex flex-col justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight mt-1">El rango articular activo define tu edad biológica.</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">No pierdes movilidad por envejecer; envejeces porque dejas de explorar los grados finales de cada articulación.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T03 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="3">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center p-5 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Serene practitioner sitting in seiza meditation pose on natural limestone floor, warm diffused dawn illumination reflecting organic calmness." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYCjkiIaHMA8zQQARUQEfxD9Q-etrnYmRRlO7sHQvgKkK_fB4V7EUkPaldU-pVEByKb9TIxtIATKlB6PeUpxnUjheb-mkxL-1GVAhmZWP_oXNBodw3iYqaya1hgS8Nfku757P9kffVumv_-MSnqhMBwjv-GiTmAZh4JIeJk8C1juDnT7zbiLLkUlf8Jn7333T05OG7U3ULs-IIJxoddOYzj3gag5jvBWlnes9gZA');"></div>
+<div class="absolute inset-0 bg-primary/25"></div>
+<!-- Morphological Container: Floating Pill Central -->
+<div class="relative z-10 w-full bg-surface-bright/95 shadow-xl rounded-full px-6 py-8 text-center flex flex-col items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">El pulso en reposo es el espejo del estrés no digerido.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[220px]">Cuando sincronizas inhalación y exhalación en cadencia 4-7-8, el sistema nervioso simpático cede terreno.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T04 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="telemetry" data-id="4">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-center p-4 gap-3 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Athlete preparing Olympic rings suspension workout in natural wood interior gym, precision lighting highlighting muscular definition without harsh flash." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASRbD3Nblodq5Ik_alie6jLXTzMS6xpD9TCCYnG8nnEvYJMrnNtgg_Go0X9rXhu8ET0aQ-VswEj618lyPcYt-ZVhShvDTugndGYrb5HihOuqXkvtVEeipaDskJ6jrMe91g_IXhNrwfOhpjulyUfC6pzCMOi3e0nX-CUYjysaXWk3eD6Dh8riDeF5GDxdTWgSFxvpvDPkKDPpmJXkuT1hz4QEctfQuJfaH_uzBpcQ');"></div>
+<div class="absolute inset-0 bg-primary/40"></div>
+<!-- Morphological Container: Bento Grid Doble Foco -->
+<div class="relative z-10 w-full bg-surface-bright rounded-xl p-4 shadow-lg flex flex-col gap-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Sobrecarga progresiva fascial: la clave oculta.</h3>
+</div>
+<div class="relative z-10 w-full bg-surface-container-low rounded-xl p-4 shadow-md flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant font-semibold">Bento Foco 02 • Bio-Mecánica</span>
+<p class="font-body-sm text-body-sm text-on-surface">El tejido conectivo tarda 3 veces más en adaptarse que la fibra muscular. Entrenar sin respeto al tendón es hipotecar tu futuro.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T05 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="5">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface group flex flex-col justify-center p-6 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Monochrome minimalist framing of barefoot feet grounding on textured sandstone stone, dramatic sharp sunlight and long shadows." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCj4fTBVTU578GnDY1B6MewM4wBC4MUkH0NIS_BmZN5eRXEyvtG2P4HJzd7NOiuSHBQF0XUKvop2-2PTrStI7gu-PXUa8VVr2W3ww4zFWJPF4h0NpPNw7bCAMgEJf7X3K9uI-UbzUppumCrobxS2rQ3gweVnicxD5w53_ab5kNOHmeHYtvTbylkzdyHbVsOuhKAqTXMBdGH5bH1m0A4Oya_PMR4T0Pbx50Z0cJWxg');"></div>
+<div class="absolute inset-0 bg-surface-bright/70 backdrop-blur-[2px]"></div>
+<!-- Morphological Container: Minimal Swiss Kicker -->
+<div class="relative z-10 flex flex-col text-left">
+<h3 class="font-headline-lg text-headline-lg text-on-surface font-light tracking-tighter leading-none mt-2">Dormir no es negociable.</h3>
+<div class="w-8 h-0.5 bg-primary my-4"></div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[200px] leading-relaxed">El lavado glinfático cerebral ocurre exclusivamente en fases de sueño profundo N3. Sin él, tu neuroplasticidad colapsa.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T06 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="cinematic" data-id="6">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-end p-5 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Cinematic low light cold immersion ice bath plunge with steam rising from water, serene silhouette of person with droplets glistening in champagne tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD19jt0KKB-LkuL56d0YWaS0KwU_0LaJtweVK1H9f_NETcxT1U4oi06kMMgwDYzbNpvg78cU6FubnHrJnx8Mcn1BmkFFnZPw2EJjtjtXojNo2a0_PpfuKWKZIkSHIsxKNuxrH8abDdaBkBf1D9W3FaNHeuEKrKbeZ_tK2WBkQsenU39HD3TJ9VafOTkZSnghBs5X_tvqaHN5PYPpdQdq9PNdHPAYcK3fVNV2q5fhA');"></div>
+<!-- Dark Onyx Cinemático -->
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/75 to-transparent"></div>
+<div class="relative z-10 flex flex-col gap-2 mb-16 pb-4">
+<h3 class="font-headline-sm text-headline-sm text-secondary-container tracking-tight">Hormesis térmica: la incomodidad cura.</h3>
+<p class="font-body-sm text-body-sm text-surface-container-high line-clamp-3">Exponerte al frío intencionado eleva la norepinefrina un 530% sin alterar el ritmo cardíaco de esfuerzo.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T07 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="7">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface-container group flex items-center justify-center p-4 shadow-md">
+<div class="absolute inset-0 bg-surface-dim"></div>
+<!-- Morphological Container: Polaroid Superpuesta Rotada 2deg -->
+<div class="relative z-10 w-[88%] bg-surface-bright rounded-lg shadow-xl p-3 transform rotate-2 transition-transform duration-300 group-hover:rotate-0">
+<div class="w-full aspect-[4/3] rounded overflow-hidden bg-surface-variant mb-3">
+<div class="w-full h-full bg-cover bg-center" data-alt="Tactile black and white picture of hands wrapping athletic tape around wrist joints in peaceful high end studio, warm linen highlights." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD3c6UALL08Om_knHjg56ayy7JNqFuGItXUK_IMaI-pxaQdbvgbY2m6rw_vJEmAKeL164yFEr0-6873mgSg249votfoou9VDzNQ08tUSlO3IApZOhjr_211FmBQv4g9-duoenYZUxZYthKdH3FZvWFa71tgRYI1DxSWOX7pfURLPdB274L_F6J93cNweebOBVdV3kgEj_dX77f7EJqFLkcfVxi60zupJCPpK8G0BQ');"></div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-1 leading-snug">Cada postura es un mapa de tus tensiones pasadas.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5">Liberar el psoas ilíaco desactiva la señal de alarma que tus suprarrenales envían al tálamo.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T08 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="telemetry" data-id="8">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-between p-5 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Technical posture assessment of human spine with subtle biometric grid overlays, clean clinical lighting in warm luxury laboratory." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCj-Ax6j9wqwDj7gX0s8EO-sEm9PFlk6wB4cNX-K8HIaKjABTrL5wxekhn_gkMhtT-Q8snY_V_mL6EyQj_2_JliMmf-pWfcSdnh8KZnpM4Bg37oLRmV9iBKjhIggE-dEa-l6qPzsD84OqUR8XmLKMdH8wbUDeDYdUUx_wPhO_agIajMLAhy6fpet3BCNNzxau4sDI-LLM-NPNJHiACQ4gGhUs4WlixPbDm5wJ3M6Q');"></div>
+<div class="absolute inset-0 bg-primary/60"></div>
+<!-- Morphological Container: HUD Biomecánico -->
+<div class="relative z-10 bg-surface/90 backdrop-blur-sm rounded-lg p-4 shadow-lg mb-16">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">La asimetría de cadera se compensa en la mandíbula.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 font-mono text-[11px]">CADENCIA MOTOR: 1.14 • Las cadenas miofasciales cruzadas transfieren cada milímetro de desvío pélvico al macizo craneal.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T09 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="9">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-center p-6 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Quiet thoughtful portrait of a wellness mentor looking through linen draped architectural window, soft amber dawn light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWkeoAUfA5gKkmgZtdpUEAIwjv-if2utGQz--AZuteU0MujDU0Ntdha2_jV-7tR4L2HG0AOQKUWvQlseeYz4uPGVq1Zcl33HZNDcaatEIX_trn7IdCSxzAn0qx6oomca5p3aNuh873XHw9nO9uJcEaqK6p5FGicILzAJB7mrayMRLWYvMlmzt1_uYqxAzt83Sab5skuXiL-up8wAd3OVsZfa3ZOZUPYYQwCdg8vA');"></div>
+<div class="absolute inset-0 bg-primary/50"></div>
+<!-- Morphological Container: Quote de Autor con Comillas Watermark -->
+<div class="relative z-10 flex flex-col text-on-primary">
+<span class="text-secondary/40 font-headline-xl text-[80px] leading-none select-none absolute -top-12 -left-4 font-serif">“</span>
+<h3 class="font-headline-md text-headline-md tracking-tight leading-tight mt-2 text-on-primary">“El movimiento consciente es la forma más pura de medicina preventiva.”</h3>
+<p class="font-body-sm text-body-sm text-primary-fixed mt-3 border-l-2 pl-3 border-secondary">— Nico G. • SENS Master Coach</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T10 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="10">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface group flex flex-col justify-end shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Athletic practitioner executing an isometric lunge under arched wooden architecture, soft morning light beam crossing the mat." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOG0DYb4kcy_YQ-4BLVupxV87tG89H7WjGjZzTiKuqWGRDFLrrrUDa3dFpywYSeg07x4HF8I87lnvItc2Q2g7JI2L0xLVKp7kOHZzqrwjiFKtzq4gXGGcwMqfI-05pwMa-Ip3KZ3GoYcaduLWnMX3aHFGQaP4t-t1BsHt5nnGqOwY1TLm6GFNlILVMlm8gEQl6wOWIEKwnrsnXbStbdak0Hvki8Kei2vlo9Omfjg');"></div>
+<!-- Morphological Container: Tarjeta con Solapa Superior -->
+<div class="relative z-10 w-full bg-surface-bright rounded-t-3xl p-5 shadow-2xl flex flex-col gap-2 mb-16">
+<div class="w-12 h-1 rounded-full bg-surface-variant mx-auto mb-1"></div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Fuerza isométrica: estabilidad que no fatiga el SNC.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">Sostener cargas sub-máximas recluta unidades motoras de alto umbral con mínima generación de micro-desgarros.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T11 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="11">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center p-4 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Refined portrait of a runner tying shoelaces in tranquil outdoor pine woods at sunrise with subtle morning mist and warm sunlight flares." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQENmOQVYoyLDdDvBNXxAJOTchZfgMxlWxxnZo-Q222AWqofdmdLga6dx8j9FKTU66HS6Rx_N2j1nOs6VRyLK23o_bMLF1Te8a_0CuijL0urRWo8CqWX6dT-jlXTjV5k81pRt9KKN44V1_yNFbqIw6muIGVGoIh8SfE4_q6XXSJFXlZyHrWUNy3fxhPZFPhTke6HOrlqm6aenB31H4tn8B_mFYlwM9KkYm-r26VQ');"></div>
+<div class="absolute inset-0 bg-primary/35"></div>
+<!-- Morphological Container: Doble Card Desfasada -->
+<div class="relative z-10 w-full flex flex-col items-center">
+<div class="w-[94%] bg-surface-bright rounded-xl p-4 shadow-xl z-10 flex flex-col gap-1.5 transform rotate-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">La pisada descalza recalibra tu cadena posterior.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Con 200,000 terminaciones nerviosas por pie, encerrarlos en suelas rígidas apaga la propiocepción glútea.</p>
+</div>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T12 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="cinematic" data-id="12">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Deep atmospheric photograph of human swimmer gliding under crystalline mineral water in dark limestone pool with subtle shafts of light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCW5cggGaQFgp3abUKnqiL4YrB4mYC7gq683Up4aAaiA7_4_d8A0l-NZdVa_AOpsL4JE9SscsxCZzJ51PRtBK5VB4tGUmQ7eslcoQMOQLZbYOIgB0OSEhnvS1LW08TfiRb6Uxr-WDvrCmmeUWoN8dFUEZ2kIO33SAeNxuG0unpubkrHq5LelSoc3Qv3VNrvS2522AVYw29A4HevfjULU-lcIHjYhn9GNhK6YAikIQ');"></div>
+<!-- Morphological Container: Franja Central Cinemática -->
+<div class="relative z-10 w-full bg-primary/80 backdrop-blur-md py-6 px-5 flex flex-col text-on-primary">
+<h3 class="font-headline-sm text-headline-sm text-surface-bright mt-1">El agua fría resetea la variabilidad cardíaca.</h3>
+<p class="font-body-sm text-body-sm text-primary-fixed mt-1.5">Un choque de 3 minutos genera una cascada dopaminérgica que dura hasta 4 horas sin choque adrenal posterior.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T13 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="telemetry" data-id="13">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-center p-4 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Morning macro photograph of an athletic ceramic mug of ceremonial matcha tea beside an elegant biometric wearable ring on warm travertine stone table." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQGkv41IqyrL-Zi8IbZkGsusRcZO3x-NWcQQBp_Yk4Kt5nsjiGjTtNrN5FcP6VAun4k6GKTz6c6rfSFYTViCWmkBfySwySNqN3rsCefzCw3EarNU7giSu3rMtNIQLlem4lEB3lY7GuOT5U1gXjUSsguOgGkJDgIXSHb1sdl3ouOQswMZeNqyF7FACIS3qM2IPVKY_DwqlWo8TGybhqRGNTzhzBRUpFjrr5_tESzA');"></div>
+<div class="absolute inset-0 bg-primary/30"></div>
+<!-- Morphological Container: Notificación Sistema Somático (iOS style) -->
+<div class="relative z-10 w-full bg-surface-bright/90 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-lg bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">notifications_active</span>
+</div>
+<span class="font-label-sm text-label-sm font-semibold tracking-tight text-on-surface">SENS Somatic Alert</span>
+</div>
+<span class="font-label-sm text-[11px] text-on-surface-variant">Ahora</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Carga simpática alta detectada • Pausa 5 min.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tu ritmo respiratorio subió a 18 rpm en reposo. Tres ciclos de exhalación doble prolongada devolverán tu eje vagal al balance.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T14 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="telemetry" data-id="14">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface group flex flex-col justify-center p-4 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Tactile textured paper background with clean architectural shadows of bamboo blinds, warm natural light and calm aesthetics." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4aYPhyohpic6XRKan3vbOZPz-P9nAxm3ONnZ2G4kT0F8uJRqrhFUn4PFKBE_qqHjQdPmV7r5vUzDV6nC9X5-83fl7Pri5BCl35PsvL3I4D7vJPaHSEnfrqaNmBRF8zp2o5AIJy5yr1Ib4hl6YXGFqmcnn2gtiNSydyxWv0OIja04W4fjNysztkNAq9ie8ZAzC5GG9NPyysf4eP7iGbfiSlO1dA4L_QRyQ4BB3dw');"></div>
+<!-- Morphological Container: Recibo Metabólico Fintech -->
+<div class="relative z-10 w-full bg-surface-bright rounded-xl p-4 shadow-xl flex flex-col font-mono text-on-surface">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-sans font-medium mt-2 leading-tight">Gasto basal y flexibilidad de combustible.</h3>
+<div class="flex flex-col gap-1 my-3 text-[12px] bg-surface-container-low p-2 rounded">
+<div class="flex justify-between"><span class="">Zona 2 Ox. Grasa:</span><span class="font-bold text-on-tertiary-container">78%</span></div>
+<div class="flex justify-between"><span class="">Lactato sanguíneo:</span><span class="font-bold">1.4 mmol/L</span></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-sans">Quemar grasa en bajas pulsaciones preserva glucógeno hepático para tus esfuerzos cognitivos vespertinos.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T15 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="15">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-end p-5 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Extreme macro detail of human back shoulder blade during a gentle thoracic rotation stretch, warm skin texture and soft ambient sidelight." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA0UZZAlJUQ9oj_wyuWHteBXmHFieodvgZftUdM4BKPdg9C9P1tJeWgfci6tvQvkjr6cfaEKgGbsxx7pUdgxs6gpUl_nrodwqh8WCtZ3FKhY7pRmONuAYVotmU_DJVlUEk4xwwyuBfFHMt5EoqSnQAZH4JEPCS69fwBS8grWIfjuyv7_qwRZNzUmkr9yydu0ajBZRsF_zey-veuqoirYfDZM82k_94O7ZTQY5QZog');"></div>
+<div class="absolute inset-0 bg-primary/65"></div>
+<!-- Morphological Container: Escáner Fascial con Línea Dorada -->
+<div class="relative z-10 flex flex-col mb-16">
+<h3 class="font-headline-sm text-headline-sm text-surface-bright mt-1">La fascia deshidratada se comporta como pegamento.</h3>
+<!-- Golden Laser Scanner Accent Line -->
+<div class="w-full h-0.5 bg-gradient-to-r from-secondary-container via-secondary to-transparent my-3 shadow-[0_0_8px_rgba(229,203,167,0.5)]"></div>
+<p class="font-body-sm text-body-sm text-primary-fixed">El masaje de compresión lenta restituye el flujo hialurónico intersticial entre los planos miofasciales profundos.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T16 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="16">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface-bright group flex items-center justify-between p-4 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Monochromatic portrait of barefoot athlete standing upright in perfect architectural alignment against clean warm textured stone wall." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBbb_hdCoi-Qi6StgUp_ae43io87TvRz1VIv94vTIgYXtBZHxOJwgwf-aocKZFMIsY7KgnAIN-j_bAjNtCm2Py7fVq8Y80RNKAY4TX8O7ZMX4XkKvi4HISHprT6yUdMwSkUM-jyqMPKPLURNN7T_x1m0kambtuh6A2SGftI0PMLspUQfQDRUqwLyFhu5RftqXZlGIJZLNKkNpUbcYoQJ2YUEJ2gcbp-qsCXgPnRYA');"></div>
+<div class="absolute inset-0 bg-surface-bright/80 backdrop-blur-sm"></div>
+<!-- Morphological Container: Macro Tipografía Vertical Margen Izquierdo -->
+<div class="relative z-10 flex h-full items-center">
+<span class="font-headline-lg text-headline-lg font-light tracking-tighter text-on-surface [writing-mode:vertical-rl] rotate-180 uppercase select-none opacity-40">LONGEVIDAD</span>
+<div class="flex flex-col ml-4 max-w-[200px]">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-1">Caminar 8,000 pasos es la línea base de la función mitocondrial.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">La contracción rítmica del sóleo bombea sangre venosa al corazón sin elevar la presión sistólica.</p>
+</div>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T17 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="17">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center p-4 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Reflective tranquil water surface with gentle ripples in natural stone basin reflecting sky and foliage in warm dusk tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDIjn7v085QlVSV61ZhMHDbtk0gYM3ZVKAfmJwRT5Tiimf6hsz8oqaAPEJzXpHYtJ4sShFz_Gh7Iot8eFXaAHdE4ezJ30PFbg9qY9SlyAMfvcyAzZ_gpvZ2-hBN3tZust59Lkl-3I7-uS9rdPbzYvsuAWovW658GKD4BSFpTYeoehPeCst7PsR1r_bRPJq3WJ1oY359jwk898uPkCAz2IoI1C4awVtBnbaxPOPY7w');"></div>
+<!-- Morphological Container: Tarjeta Espejada con Blur Suave -->
+<div class="relative z-10 w-[92%] bg-surface/70 backdrop-blur-xl rounded-2xl p-5 shadow-2xl flex flex-col text-on-surface">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-1 leading-snug">Tu digestión empieza 20 minutos antes del primer bocado.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">La fase cefálica gástrica requiere tono parasimpático. Comer en modo alerta bloquea el 60% del ácido clorhídrico.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T18 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="18">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center p-5 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Moody architectural interior of luxury Finnish sauna made of aged cedar timber, warm amber lighting and gentle rising steam." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCimMYnR7QDHZbB2G4aPqGhGb3So-8drSlcZNCho4X0tX_YAmM1xvepUSIrxrXcHaf2NMabrUbVX_eUG7cj2TptDIaGUbjOFXXylVyAjstWynYUCuHSBAOYl6pXx2EKNBKhP-E1WVeFbpCjq61gbnO11dFZktiuxgMoZ7RQPaiF4n8B03nQa8Pwt8vhxJ6rLraQPuSwycMUA7se_VTbl9zGuNssEeQW5UWpXLoHIw');"></div>
+<div class="absolute inset-0 bg-primary/55"></div>
+<!-- Morphological Container: Manifiesto Bloque Compacto con Marco Dorado -->
+<div class="relative z-10 w-full bg-surface-container-lowest/95 rounded-xl p-5 shadow-2xl flex flex-col gap-2 ring-1 ring-secondary/40">
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">El sudor elimina metales que el riñón no filtra.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">Sesiones semanales de sauna reducen el riesgo cardiovascular global en un 40% al imitar ejercicio moderado.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T19 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="telemetry" data-id="19">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface group flex flex-col justify-center p-4 shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Luxury biological identity badge concept on warm linen paper with embossed golden seals and medical typography precision." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBEUJu21xZPChJsqDo0Ky6OC2DbQuRcEwauS_s5TlNx2NSoL0ZPgAkzWPLy0f3fByPT8IJKIbgaLqGdRuzpnV0i30FRg39LywcOMJBqf8Os2qMXbMHFBkwjNuG1V_zeL3BF9UciosuuJw0DPJfbPLT_besfLp9Wu7PM84EGSnpHCE0DFDRhulV8X8soiD1XW0q93cfDxDJQX3jGXwIJ_5TUuRp9ZRfkPLBDNoGLww');"></div>
+<!-- Morphological Container: Pasaporte Biológico con Sello Nico -->
+<div class="relative z-10 w-full bg-surface-bright rounded-2xl p-4 shadow-xl flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center font-bold text-on-secondary-container font-headline-sm">
+                NG
+              </div>
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Validado por Coach Nico</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-1">VO2 Max es el mayor predictor de esperanza de vida.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Pasar del quintil más bajo al intermedio disminuye la mortalidad por todas las causas en un 50%.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+<!-- ==================== T20 ==================== -->
+<article class="template-card flex flex-col rounded-xl transition-all duration-300" data-category="editorial" data-id="20">
+<div class="relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-end shadow-md">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Sensory photograph of an individual standing in early morning sunlight in natural landscape, breathing deeply with expanded chest and relaxed shoulders." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBF7cCD8dknpilp9LMVKbc8nm0qQldbbRuYK8NGnnpJg9XGkwqcdMEkIP9GJn5l4eyzhOu8KrevMN14ifDw-dqds71EjFSg67A0_IUUnKQbrfWkQWBZZmVyreqZ75K6miHoncxhd_yMDSUgyIzcbk3W0Mb4BczYrz51wcSk1yu47BrhTaXC9510ZcB12Sb3h-wZ6emv-Fub2J6qkGa0WvhGeXJUjYdcUXazdkWvCA');"></div>
+<!-- Morphological Container: Split Diagonal 45deg con Fondo Alabastro -->
+<div class="relative z-10 w-full bg-surface-bright p-5 shadow-2xl [clip-path:polygon(0_15%,100%_0,100%_100%,0_100%)] flex flex-col pt-8 mb-16">
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight mt-1">La luz del sol matutina ancla tu ritmo circadiano.</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3 mt-1">Diez minutos de fotones naturales antes de mirar pantallas reprograman el reloj celular de cada órgano vital.</p>
+</div>
+<!-- Safe Zone -->
+<div class="safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between">
+<div class="h-[16.6%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Top Safe</span></div>
+<div class="h-[24.5%] bg-error/20 flex items-center justify-center"><span class="font-label-sm text-[10px] text-on-error uppercase">Bottom Safe</span></div>
+</div>
+</div>
+
+</article>
+</div>
+</section>
+<!-- Interactive JavaScript Handling Inspector, Copy Actions & Safe Zones -->
+<script>
+    (function() {
+      // 20 Templates Database
+      const templatesData = {
+        1: {
+          tag: "T01 • Glassmorphism Inferior",
+          title: "La longevidad no es resistencia, es modulación nerviosa.",
+          subtitle: "Aprender a desacelerar el tono vagal transforma la recuperación celular más que 90 minutos de esfuerzo continuo.",
+          desc: "Caja de cristal esmerilado cálido anclada en el tercio inferior del active zone (Y=880px a Y=1360px). Ideal para declaraciones somáticas breves, contraste sutil y visualización de texturas fotográficas profundas.",
+          box: "Warm Frosted Glass (Blur 16px)",
+          hook: "H1 Titular Conciso + Subtexto 220c",
+          palette: "Alabastro 90% / Carbón #121214",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        2: {
+          tag: "T02 • Split 60/40 Asimétrico",
+          title: "El rango articular activo define tu edad biológica.",
+          subtitle: "No pierdes movilidad por envejecer; envejeces porque dejas de explorar los grados finales de cada articulación.",
+          desc: "División geométrica nítida: 60% superior dedicado al poder de la fotografía biomecánica y 40% inferior como tarjeta sólida Alabastro para máxima legibilidad tipográfica.",
+          box: "Split Asimétrico 60/40 Plano",
+          hook: "Editorial de Alto Impacto",
+          palette: "Alabastro #FAF9F6 / Carbón",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        3: {
+          tag: "T03 • Floating Pill Central",
+          title: "El pulso en reposo es el espejo del estrés no digerido.",
+          subtitle: "Cuando sincronizas inhalación y exhalación en cadencia 4-7-8, el sistema nervioso simpático cede terreno.",
+          desc: "Cápsula flotante con curvatura continua 'full-pill' suspendida en el baricentro visual del canvas vertical. Aísla el mensaje y canaliza la atención sin interferencias periféricas.",
+          box: "Full Pill Floating Radius 9999px",
+          hook: "Sentencia Somática Flotante",
+          palette: "Alabastro Porcelana / Tinta Carbón",
+          safe: "Cumple 100% (Y=620px a Y=1280px)"
+        },
+        4: {
+          tag: "T04 • Bento Grid Doble Foco",
+          title: "Sobrecarga progresiva fascial: la clave oculta.",
+          subtitle: "El tejido conectivo tarda 3 veces más en adaptarse que la fibra muscular. Entrenar sin respeto al tendón es hipotecar tu futuro.",
+          desc: "Dos micro-tarjetas flotantes separadas de forma modular. La primera ancla el gancho cognitivo y la segunda desglosa el principio fisiológico con fondo tonal diferenciado.",
+          box: "Bento Modular Doble Card",
+          hook: "Gancho + Explicación Dual",
+          palette: "Alabastro + Porcelana Tintada",
+          safe: "Cumple 100% (Libre Top & Bottom)"
+        },
+        5: {
+          tag: "T05 • Minimal Swiss Kicker",
+          title: "Dormir no es negociable.",
+          subtitle: "El lavado glinfático cerebral ocurre exclusivamente en fases de sueño profundo N3. Sin él, tu neuroplasticidad colapsa.",
+          desc: "Tratamiento inspirado en el diseño suizo clásico: macro tipografía alineada a la izquierda, línea de acento minimalista y bajada de ancho controlado para lectura óptima.",
+          box: "Plano Abierto Minimal Suizo",
+          hook: "Macro Titular Rotundo",
+          palette: "Carbón Puro / Travertino Suave",
+          safe: "Cumple 100% (Margen Activo Libre)"
+        },
+        6: {
+          tag: "T06 • Dark Onyx Cinemático",
+          title: "Hormesis térmica: la incomodidad cura.",
+          subtitle: "Exponerte al frío intencionado eleva la norepinefrina un 530% sin alterar el ritmo cardíaco de esfuerzo.",
+          desc: "Fondo oscuro profundo con degradé carbón cinemático que resalta la fotografía en claroscuro. La tipografía utiliza el acento Champagne (#E5CBA7) para denotar exclusividad.",
+          box: "Degradé Carbón Cinemático Inmersivo",
+          hook: "Alto Contraste Oro Champagne",
+          palette: "Onyx #121214 + Champán #E5CBA7",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        7: {
+          tag: "T07 • Polaroid Superpuesta Rotada",
+          title: "Cada postura es un mapa de tus tensiones pasadas.",
+          subtitle: "Liberar el psoas ilíaco desactiva la señal de alarma que tus suprarrenales envían al tálamo.",
+          desc: "Metáfora física analógica: marco fotográfico con ligero ángulo de 2 grados, aportando tactilidad orgánica de revista coleccionable con micro-resumen editorial.",
+          box: "Marco Polaroid 2° Desfase",
+          hook: "Visual Táctil Editorial",
+          palette: "Blanco Puro + Papel Lino",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        8: {
+          tag: "T08 • HUD Biomecánico",
+          title: "La asimetría de cadera se compensa en la mandíbula.",
+          subtitle: "CADENCIA MOTOR: 1.14 • Las cadenas miofasciales cruzadas transfieren cada milímetro de desvío pélvico al macizo craneal.",
+          desc: "Estética de telemetría de laboratorio de alta gama: coordenadas angulares, indicadores de pulso y tipografía monoespaciada para comunicar rigor técnico biomecánico.",
+          box: "HUD Biométrico Clínico",
+          hook: "Telemetría Somática de Precisión",
+          palette: "Verde Esmeralda Salvia + Carbón",
+          safe: "Cumple 100% (Retícula Central)"
+        },
+        9: {
+          tag: "T09 • Quote de Autor Watermark",
+          title: "“El movimiento consciente es la forma más pura de medicina preventiva.”",
+          subtitle: "— Nico G. • SENS Master Coach. Protocolo de Longevidad Aplicada.",
+          desc: "Comillas monumentales en marca de agua translúcida de fondo con texto en primer plano y atribución rubricada, ideal para reflexiones fundacionales.",
+          box: "Caja Abierta Tipográfica con Sello",
+          hook: "Cita Autorizada de Autor",
+          palette: "Champagne Translúcido + Marfil",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        10: {
+          tag: "T10 • Tarjeta Solapa Inferior",
+          title: "Fuerza isométrica: estabilidad que no fatiga el SNC.",
+          subtitle: "Sostener cargas sub-máximas recluta unidades motoras de alto umbral con mínima generación de micro-desgarros.",
+          desc: "Tarjeta de solapa que emerge de forma limpia desde la base con bordes superiores curvados (32px), creando un marco seguro de lectura que abraza la imagen.",
+          box: "BottomSheet / Solapa Ergonómica",
+          hook: "Hook Inmersivo de Base",
+          palette: "Alabastro #FAF9F6 + Carbón",
+          safe: "Cumple 100% (Y=920px a Y=1420px)"
+        },
+        11: {
+          tag: "T11 • Doble Card Desfasada",
+          title: "La pisada descalza recalibra tu cadena posterior.",
+          subtitle: "Con 200,000 terminaciones nerviosas por pie, encerrarlos en suelas rígidas apaga la propiocepción glútea.",
+          desc: "Dos tarjetas superpuestas con ligero giro angular relativo. Genera tridimensionalidad y jerarquiza la secuencia lógica entre concepto preliminar y conclusión biológica.",
+          box: "Doble Card Angular Escalonada",
+          hook: "Secuencia Cognitiva Dinámica",
+          palette: "Tonal Alabastro / Carbón Mate",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        12: {
+          tag: "T12 • Franja Central Cinemática",
+          title: "El agua fría resetea la variabilidad cardíaca.",
+          subtitle: "Un choque de 3 minutos genera una cascada dopaminérgica que dura hasta 4 horas sin choque adrenal posterior.",
+          desc: "Banda horizontal translúcida a sangre completa que corta la imagen en su ecuador perfecto (Y=720px a Y=1200px), asegurando legibilidad sin tapar pies ni cabeza del sujeto.",
+          box: "Banda Horizontal Translúcida",
+          hook: "Corte Cinemático Panorámico",
+          palette: "Carbón 80% + Oro Champán",
+          safe: "Cumple 100% (Completamente Central)"
+        },
+        13: {
+          tag: "T13 • Notificación Sistema Somático",
+          title: "Carga simpática alta detectada • Pausa 5 min.",
+          subtitle: "Tu ritmo respiratorio subió a 18 rpm en reposo. Tres ciclos de exhalación doble prolongada devolverán tu eje vagal al balance.",
+          desc: "Reinterpretación de los banners de alerta fisiológica de sistemas operativos móviles de lujo: ícono de telemetría, timestamp 'Ahora' y directiva neuromuscular inmediata.",
+          box: "Floating Notification Card (Apple Inspired)",
+          hook: "Micro-Acción de Biofeedback",
+          palette: "Cristal Esmerilado Alabastro",
+          safe: "Cumple 100% (Active Upper-Mid Y)"
+        },
+        14: {
+          tag: "T14 • Recibo Metabólico Fintech",
+          title: "Gasto basal y flexibilidad de combustible.",
+          subtitle: "Quemar grasa en bajas pulsaciones preserva glucógeno hepático para tus esfuerzos cognitivos vespertinos.",
+          desc: "Diseño con estética de ticket o recibo de precisión financiera adaptado al metabolismo, con métricas desglosadas, números de serie y tipografía técnica.",
+          box: "Recibo Troquelado con Desglose",
+          hook: "Auditoría Fisiológica Cuantitativa",
+          palette: "Papel Caliza + Tinta Carbón",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        15: {
+          tag: "T15 • Escáner Fascial Línea Dorada",
+          title: "La fascia deshidratada se comporta como pegamento.",
+          subtitle: "El masaje de compresión lenta restituye el flujo hialurónico intersticial entre los planos miofasciales profundos.",
+          desc: "Línea de rayo horizontal en tono dorado champagne con gradiente y resplandor sutil que divide el titular audaz de la explicación científica como un escaneo activo.",
+          box: "Plano Abierto con Separador Láser",
+          hook: "Diagnóstico Fascial en Profundidad",
+          palette: "Acento Champán #E5CBA7 + Negro",
+          safe: "Cumple 100% (Libre Top & Bottom)"
+        },
+        16: {
+          tag: "T16 • Macro Tipografía Vertical",
+          title: "Caminar 8,000 pasos es la línea base de la función mitocondrial.",
+          subtitle: "La contracción rítmica del sóleo bombea sangre venosa al corazón sin elevar la presión sistólica.",
+          desc: "Columna vertebral tipográfica vertical en 90 grados que guía el scroll visual, acompañada de una caja de lectura lateral condensada con alta densidad de valor.",
+          box: "Spine Vertical 90° con Columna Lateral",
+          hook: "Eje Arquitectónico Vertical",
+          palette: "Monocromo Alabastro / Carbón",
+          safe: "Cumple 100% (Respeta Margen 100px)"
+        },
+        17: {
+          tag: "T17 • Tarjeta Espejada con Blur Suave",
+          title: "Tu digestión empieza 20 minutos antes del primer bocado.",
+          subtitle: "La fase cefálica gástrica requiere tono parasimpático. Comer en modo alerta bloquea el 60% del ácido clorhídrico.",
+          desc: "Superficie de refracción líquida con desenfoque de 24px que absorbe los tonos de la fotografía de fondo mientras entrega un contraste inmaculado para el texto.",
+          box: "Refractive Specular Blur Card",
+          hook: "Efecto Espejo Orgánico Calmante",
+          palette: "Lino Esmerilado + Grafito",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        18: {
+          tag: "T18 • Manifiesto Marco Dorado",
+          title: "El sudor elimina metales que el riñón no filtra.",
+          subtitle: "Sesiones semanales de sauna reducen el riesgo cardiovascular global en un 40% al imitar ejercicio moderado.",
+          desc: "Caja compacta sellada con un bisel perimetral en tono champagne que evoca los certificados y credenciales de alta alcurnia deportiva.",
+          box: "Caja Sellada con Filete Champagne 1px",
+          hook: "Manifiesto de Longevidad Máxima",
+          palette: "Champán Suave #E5CBA7 / Carbón",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        19: {
+          tag: "T19 • Pasaporte Biológico con Sello",
+          title: "VO2 Max es el mayor predictor de esperanza de vida.",
+          subtitle: "Pasar del quintil más bajo al intermedio disminuye la mortalidad por todas las causas en un 50%.",
+          desc: "Estructura de credencial de membresía y pase médico con avatar circular del coach Nico, validación institucional y data biológica de alta relevancia.",
+          box: "Passport Badge con Sello de Entrenador",
+          hook: "Certificación Biomédica Autorizada",
+          palette: "Dorado Bronce + Alabastro Puro",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        },
+        20: {
+          tag: "T20 • Split Diagonal 45° Alabastro",
+          title: "La luz del sol matutina ancla tu ritmo circadiano.",
+          subtitle: "Diez minutos de fotones naturales antes de mirar pantallas reprograman el reloj celular de cada órgano vital.",
+          desc: "Corte dinámico en ángulo diagonal oblicuo que genera tensión geométrica y dinamismo moderno sin perder la elegancia del blanco cálido.",
+          box: "Corte Diagonal Asimétrico Dinámico",
+          hook: "Hook Circadiano Matinal",
+          palette: "Alabastro #FAF9F6 / Carbón",
+          safe: "Cumple 100% (Libre Y=1450+)"
+        }
+      };
+
+      let activeTemplateId = 1;
+      let safeZonesVisible = false;
+
+      // DOM Elements
+      const toggleSafeBtn = document.getElementById('toggle-safe-zones-btn');
+      const safeZoneBtnText = document.getElementById('safe-zone-btn-text');
+      const safeOverlays = document.querySelectorAll('.safe-zone-overlay');
+      const toastNotify = document.getElementById('toast-notify');
+      const toastText = document.getElementById('toast-text');
+
+      // Master Stage Elements
+      const masterTag = document.getElementById('master-tag');
+      const masterTitle = document.getElementById('master-title');
+      const masterSubtitle = document.getElementById('master-subtitle');
+      const masterBadgeLabel = document.getElementById('master-badge-label');
+      const detailTitle = document.getElementById('detail-title');
+      const detailDesc = document.getElementById('detail-desc');
+      const detailBox = document.getElementById('detail-box');
+      const detailHook = document.getElementById('detail-hook');
+      const detailPalette = document.getElementById('detail-palette');
+      const detailSafe = document.getElementById('detail-safe');
+      const masterCopyBtn = document.getElementById('master-copy-btn');
+      const masterDownloadBtn = document.getElementById('master-download-btn');
+
+      // Show Toast Notification
+      function showToast(msg) {
+        toastText.textContent = msg;
+        toastNotify.classList.remove('opacity-0');
+        toastNotify.classList.add('opacity-100');
+        setTimeout(() => {
+          toastNotify.classList.remove('opacity-100');
+          toastNotify.classList.add('opacity-0');
+        }, 2600);
+      }
+
+      // Safe Zone Toggle Logic
+      toggleSafeBtn.addEventListener('click', () => {
+        safeZonesVisible = !safeZonesVisible;
+        safeOverlays.forEach(overlay => {
+          overlay.classList.toggle('opacity-0', !safeZonesVisible);
+          overlay.classList.toggle('opacity-100', safeZonesVisible);
+        });
+        if (safeZonesVisible) {
+          safeZoneBtnText.textContent = "Ocultar Safe Zones 9:16";
+          toggleSafeBtn.classList.add('bg-secondary-container', 'text-on-secondary-container');
+          toggleSafeBtn.classList.remove('bg-surface-container-high', 'text-on-surface');
+        } else {
+          safeZoneBtnText.textContent = "Mostrar Safe Zones 9:16";
+          toggleSafeBtn.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+          toggleSafeBtn.classList.add('bg-surface-container-high', 'text-on-surface');
+        }
+      });
+
+      // Update Inspector Stage
+      function inspectTemplate(id) {
+        activeTemplateId = id;
+        const data = templatesData[id];
+        if (!data) return;
+
+        masterTag.textContent = data.tag;
+        masterTitle.textContent = data.title;
+        masterSubtitle.textContent = data.subtitle;
+        masterBadgeLabel.textContent = `T${id < 10 ? '0' + id : id} Inspector`;
+        detailTitle.textContent = `${data.tag}`;
+        detailDesc.textContent = data.desc;
+        detailBox.textContent = data.box;
+        detailHook.textContent = data.hook;
+        detailPalette.textContent = data.palette;
+        detailSafe.textContent = data.safe;
+
+        // Smooth scroll to hero stage on inspect click
+        const heroStage = document.getElementById('master-stage-wrapper');
+        heroStage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      // Copy Text Function
+      function copyTemplateText(id) {
+        const data = templatesData[id];
+        if (!data) return;
+        const clipText = `[TÍTULO HOOK]: ${data.title}\n[BAJADA REENCUADRE]: ${data.subtitle}\n\n#SENS #SomaticIntelligence #Longevity #Biomechanics`;
+        navigator.clipboard.writeText(clipText).then(() => {
+          showToast(`T${id < 10 ? '0' + id : id}: Título y Bajada copiados`);
+        }).catch(() => {
+          showToast(`Copiado al portapapeles`);
+        });
+      }
+
+      // Download Simulation (1080x1920 SVG/PNG trigger)
+      function triggerDownload(id) {
+        const data = templatesData[id];
+        showToast(`Generando activo vertical 1080×1920 (PNG) para T${id < 10 ? '0' + id : id}...`);
+      }
+
+      // Master Stage Toolbar Listeners
+      masterCopyBtn.addEventListener('click', () => copyTemplateText(activeTemplateId));
+      masterDownloadBtn.addEventListener('click', () => triggerDownload(activeTemplateId));
+
+      // Grid Delegations
+      document.querySelectorAll('[data-inspect]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = parseInt(btn.getAttribute('data-inspect'), 10);
+          inspectTemplate(id);
+        });
+      });
+
+      document.querySelectorAll('[data-copy-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = parseInt(btn.getAttribute('data-copy-id'), 10);
+          copyTemplateText(id);
+        });
+      });
+
+      document.querySelectorAll('[data-download-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = parseInt(btn.getAttribute('data-download-id'), 10);
+          triggerDownload(id);
+        });
+      });
+
+      // Filter Chips Delegation
+      const filterChips = document.querySelectorAll('.filter-chip');
+      const templateCards = document.querySelectorAll('.template-card');
+
+      filterChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          filterChips.forEach(c => {
+            c.classList.remove('bg-primary', 'text-on-primary', 'active-filter');
+            c.classList.add('text-on-surface-variant');
+          });
+          chip.classList.add('bg-primary', 'text-on-primary', 'active-filter');
+          chip.classList.remove('text-on-surface-variant');
+
+          const category = chip.getAttribute('data-filter');
+          templateCards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+        });
+      });
+
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low py-space-lg"><div class="w-full px-gutter flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface">SENS</span><span class="font-body-sm text-body-sm text-on-surface-variant">Somatic Intelligence &amp; Holistic Longevity Media Suite</span></div><div class="flex items-center gap-space-lg font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase"><span class="">Proporción Vertical 9:16</span><span class="">Exportación Ultra-Fidelidad</span><span class="">© 2025 SENS Train &amp; Wellness</span></div></div></footer>
+
+
+
+
+<script src="sens-marketing-suite-enhancer.js"></script>
+</body></html>

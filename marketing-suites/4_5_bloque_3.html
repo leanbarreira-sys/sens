@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-primary-fixed": "#1b1b1d", "primary-container": "#1b1b1d", "primary-fixed": "#e5e1e4", "surface-container-lowest": "#ffffff", "on-tertiary-fixed-variant": "#005227", "surface-container-highest": "#e3e2e0", "on-secondary-container": "#766143", "surface-dim": "#dbdad7", "outline": "#77767b", "on-surface-variant": "#47464a", "on-secondary": "#ffffff", "on-tertiary": "#ffffff", "surface-bright": "#faf9f6", "primary-fixed-dim": "#c8c6c8", "on-primary-fixed-variant": "#474649", "secondary-container": "#fbdeb9", "on-secondary-fixed-variant": "#564428", "tertiary": "#000000", "error-container": "#ffdad6", "on-error-container": "#93000a", "secondary": "#705b3e", "primary": "#000000", "on-error": "#ffffff", "inverse-surface": "#2f312f", "surface-variant": "#e3e2e0", "on-background": "#1a1c1a", "surface-container-low": "#f4f3f1", "secondary-fixed-dim": "#dec29f", "on-tertiary-container": "#3c9458", "inverse-primary": "#c8c6c8", "inverse-on-surface": "#f2f1ee", "tertiary-fixed": "#9cf6b0", "tertiary-container": "#00210c", "surface-container": "#efeeeb", "surface-tint": "#5f5e60", "outline-variant": "#c8c6ca", "surface": "#faf9f6", "secondary-fixed": "#fbdeb9", "background": "#faf9f6", "error": "#ba1a1a", "on-primary": "#ffffff", "on-tertiary-fixed": "#00210c", "tertiary-fixed-dim": "#81d996", "on-surface": "#1a1c1a", "on-primary-container": "#858386", "on-secondary-fixed": "#271903", "surface-container-high": "#e9e8e5" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin": "3rem", "margin-mobile": "1.25rem", "gutter": "1.5rem", "space-lg": "2rem", "space-md": "1.25rem", "space-xl": "3.5rem", "space-xs": "0.375rem", "gutter-mobile": "1rem", "space-sm": "0.75rem" }, "fontFamily": { "label-md": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "headline-xl": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"] }, "fontSize": { "label-md": ["0.875rem", { "lineHeight": "1.3", "letterSpacing": "0.01em", "fontWeight": "500" }], "body-sm": ["0.8125rem", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }], "headline-xl": ["3.25rem", { "lineHeight": "1.15", "letterSpacing": "-0.035em", "fontWeight": "300" }], "headline-sm": ["1.25rem", { "lineHeight": "1.4", "letterSpacing": "-0.015em", "fontWeight": "500" }], "headline-lg-mobile": ["1.875rem", { "lineHeight": "1.25", "letterSpacing": "-0.025em", "fontWeight": "400" }], "body-lg": ["1.125rem", { "lineHeight": "1.65", "letterSpacing": "-0.01em", "fontWeight": "400" }], "body-md": ["0.9375rem", { "lineHeight": "1.6", "letterSpacing": "-0.005em", "fontWeight": "400" }], "label-sm": ["0.6875rem", { "lineHeight": "1.2", "letterSpacing": "0.06em", "fontWeight": "600" }], "headline-lg": ["2.5rem", { "lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "400" }], "headline-xl-mobile": ["2.25rem", { "lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "300" }], "headline-md": ["1.75rem", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500" }] } } } };</script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-secondary-container selection:text-on-secondary-fixed"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="h-20 w-full px-margin-mobile md:px-margin flex items-center justify-between"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" data-path="portal" href="#"><span class="w-2.5 h-2.5 rounded-full bg-primary group-hover:bg-secondary transition-colors"></span><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary">SENS</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pl-1">Train &amp; Wellness</span></a><div class="hidden xl:block w-px h-6 bg-surface-container-highest"></div><span class="hidden xl:inline-block font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Suite 4:5 Templates</span></div><nav class="hidden lg:flex items-center gap-space-xs bg-surface-container-low p-1.5 rounded-full" data-active-classes="bg-surface-container-high text-on-surface font-semibold rounded-full"><a class="px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="bloque-i-f01-f20" href="#">Bloque I (F01–F20)</a><a class="px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="bloque-ii-f21-f40" href="#">Bloque II (F21–F40)</a><a class="px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="bloque-iii-f41-f60" href="#">Bloque III (F41–F60)</a><a class="px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="bloque-iv-f61-f80" href="#">Bloque IV (F61–F80)</a><a class="px-space-md py-space-xs rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="bloque-v-f81-f100" href="#">Bloque V (F81–F100)</a></nav><div class="flex items-center gap-space-md"><a class="inline-flex items-center justify-center px-space-md py-space-xs rounded-full bg-secondary-container text-on-secondary-fixed hover:bg-secondary-fixed-dim transition-colors font-label-md text-label-md" data-path="generador" href="#">Volver al Generador</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.06)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-140px)]"><div class="flex flex-col w-full">
+<!-- Top Command Bar / Suite Title (Editorial Canvas) -->
+<section class="w-full px-margin-mobile md:px-margin pt-space-md pb-space-lg">
+<div class="flex flex-col xl:flex-row xl:items-end justify-between gap-space-lg">
+<div class="flex flex-col max-w-2xl">
+<div class="flex items-center gap-space-sm mb-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Editorial Instagram Architecture</span>
+<span class="text-outline-variant font-label-sm text-label-sm">/</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-medium">Bloque III • F41–F60</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg tracking-tight text-primary">Métricas, Datos &amp; Comparativas</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          20 piezas curadas en formato vertical estricto 4:5 (1080×1350 px). Desplegadas a sangre completa, con cota áurea de corte de perfil 1:1 y tipografía de precisión somática libre de ruidos perimetrales.
+        </p>
+</div>
+<!-- Action Cluster -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-all font-label-md text-label-md" id="toggle-safe-zone" type="button">
+<span class="material-symbols-outlined text-[18px]">crop_square</span>
+<span id="safe-zone-text">Ver Guía 1:1 Feed Cut</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container transition-all font-label-md text-label-md" onclick="copiarTodosTextos()" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span>Copiar Textos Matrix</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-primary text-on-primary hover:opacity-90 transition-all font-label-md text-label-md shadow-sm" onclick="descargarLoteCompleto()" type="button">
+<span class="material-symbols-outlined text-[18px]">download_for_offline</span>
+<span>Exportar Pack 20 Assets 4:5</span>
+</button>
+</div>
+</div>
+<!-- Filter & Filter Telemetry Bar -->
+<div class="mt-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md bg-surface-container-low p-2 rounded-xl">
+<div class="flex flex-wrap items-center gap-1.5" id="category-filters">
+<button class="filter-btn active px-space-md py-space-xs rounded-full bg-primary text-on-primary font-label-md text-label-md transition-all" data-filter="all">Todos (20)</button>
+<button class="filter-btn px-space-md py-space-xs rounded-full bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label-md text-label-md transition-all" data-filter="biomecanica">Biomecánica &amp; Ejes</button>
+<button class="filter-btn px-space-md py-space-xs rounded-full bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label-md text-label-md transition-all" data-filter="porcentajes">Porcentajes &amp; Deltas</button>
+<button class="filter-btn px-space-md py-space-xs rounded-full bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label-md text-label-md transition-all" data-filter="tiempos">Tiempos &amp; Cronos</button>
+<button class="filter-btn px-space-md py-space-xs rounded-full bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label-md text-label-md transition-all" data-filter="habitos">Metabolismo &amp; Hábitos</button>
+</div>
+<div class="flex items-center gap-space-sm px-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">search</span>
+<input class="bg-surface rounded-full px-space-md py-1.5 text-body-sm text-on-surface placeholder:text-outline focus:outline-none w-56 md:w-64" id="template-search" placeholder="Buscar métrica, variable o ID..." type="text"/>
+</div>
+</div>
+</section>
+<!-- Feed Visual Display Canvas: Pure 4:5 Bleed Grid (Zero headers above, zero white frames below) -->
+<section class="w-full px-margin-mobile md:px-margin pb-space-xl">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter" id="templates-grid">
+<!-- F41: Delta Somático (Antes vs SENS) -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="biomecanica" data-id="F41" onclick="openModal('F41')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Quiet luxury somatic studio with natural daylight, subtle timber beams and an athletic human spine silhouette performing neutral spine postural alignment in muted linen tones" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzPtMay9athui6HAHRlOQjQeDPfyWPpXE8nQYIz4i7FCuoQxKeEHXVGP7ZsCMkoNOOxmiXZzbePM6UnmUHl_04-XuFiQMyG86VJfAk_GWbMZ2At7wB4FQZq_RwvHh1bi4zxfuZoecEkn9tX9wJ2sBpF9OWXq7fPt0JP935t1y5dfpuMA2XmqvHvbStXdXjXyKCyiAnUVQC3c22CQvOuABoiomqhsyVdTgedXb0cg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/45 to-transparent"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<!-- Golden Ratio Centered Focus Block -->
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="bg-surface/10 backdrop-blur-md p-4 rounded-xl mb-4">
+<div class="grid grid-cols-2 gap-3 text-center">
+<div class="p-2 rounded-lg bg-primary/40">
+<span class="font-label-sm text-label-sm text-outline-variant uppercase">Convencional</span>
+<p class="font-headline-sm text-headline-sm text-surface mt-0.5">+14 mm</p>
+<span class="font-body-sm text-body-sm text-surface-dim">Compresión axial</span>
+</div>
+<div class="p-2 rounded-lg bg-secondary/30">
+<span class="font-label-sm text-label-sm text-secondary-fixed uppercase">Protocolo SENS</span>
+<p class="font-headline-sm text-headline-sm text-secondary-container mt-0.5">0.0 mm</p>
+<span class="font-body-sm text-body-sm text-secondary-fixed">Descompresión total</span>
+</div>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Delta Somático Lumbar</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Reorganización de la bisagra coxofemoral para neutralizar la tensión pasiva del tejido conjuntivo.</p>
+</div>
+</article>
+<!-- F42: Gráfica de Onda ECG -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="tiempos" data-id="F42" onclick="openModal('F42')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Monochromatic textural concrete architecture with soft warm ivory illumination and serene athletic recovery telemetry atmosphere" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-VM4LbTCy4-nEJMQctQM6AeNckB4t0NoAzB19iZsc7GBqquS63Stsb08xxpGoXQweTLPulw8bJNjDxXzEpAP3uXyoIgR4MANwe829bKUhzK54FBLTQ-ZLvnA6w0zrsdW9WR0DM8fCFvf3FFvd-Km7aqqlQ3VWd_8kYU14DBn2wmsSoSq75HsL73xUS6BUuWdRlAc0nkcQeI27U-RXmrWXQu57dtGjknwl1_Ckmg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<!-- ECG Pulse Wave Inline SVG -->
+<div class="w-full mb-5">
+<svg class="w-full h-16 text-secondary-container" fill="none" viewbox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 45 L90 45 L102 15 L114 68 L126 32 L138 52 L146 45 L320 45" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<circle class="fill-secondary-container animate-pulse" cx="114" cy="68" r="3.5"></circle>
+</svg>
+<div class="flex justify-between items-center px-1">
+<span class="font-label-sm text-label-sm text-secondary-container uppercase tracking-wider">VFC • 84 ms</span>
+<span class="font-label-sm text-label-sm text-surface-dim uppercase">Status Parasimpático</span>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Recuperación Neuromuscular</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Variabilidad cardíaca optimizada. Tu sistema autónomo autoriza volumen de intensidad máxima.</p>
+</div>
+</article>
+<!-- F43: Métrica Numérica Monumental -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="porcentajes" data-id="F43" onclick="openModal('F43')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="High-end private recovery suite with stone finish, minimalist dark marble basin, and diffuse zen light" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD699XNT9jWSZkHbefppGmoG-tqGyrMbyWGAE_GAi3DnxVtsanWzeqJKnvbB7c0ngiOfAmfB5PdwRdSaGyHX4Th7JeDpbmUeIHA3QW9W0Y5yUciMh6Lm3_SK2sF8CGNtkkua4Ow9ISYH_7mBFEt1mztuNabAmlLjsu_7UwUfM3nv8YIcooD-dVycfO3oVuUqmrDy6eadZRUUpde_FDQzBxPlKwVRUZL48L0hlA_yg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/60 to-primary/30"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline-xl text-[4.5rem] leading-none font-light tracking-tighter text-secondary-container">−42%</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Carga Axial en L5-S1</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1.5 line-clamp-2">Reducción medible al reconfigurar la trayectoria articular de bisagra de cadera en patrones de tracción.</p>
+</div>
+</article>
+<!-- F44: Tabla de Dos Filas -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="biomecanica" data-id="F44" onclick="openModal('F44')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Bespoke luxury gymnasium equipment forged from matte black steel and hand-stitched caramel Italian leather" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBAM8-oYUIp2LbitfCSRUakWg_Rw2E16nLQ4DXRvzcbaTe6D-at417p_SjFzm03jNjofLTc2j9EnRzbXFbzhqzHliCrxexymyTygnGrVCTr0Yr_WehkL8ZlPAQHGyf0yWaSmsV0psVxR8M8eKccGOqeQNtvKLJxnDkme8KhDoj7BJitYAtLTgIMXefVFFtyO85vbcohTdN4JT-l7U3WF8CZnNCCQvy-O1cgwJ01nw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="bg-surface/10 backdrop-blur-md rounded-xl p-3.5 mb-4 flex flex-col gap-2">
+<div class="flex justify-between items-center pb-2 bg-primary/20 px-3 py-1.5 rounded-lg">
+<span class="font-label-sm text-label-sm uppercase text-outline-variant">Microciclo 03</span>
+<span class="font-label-md text-label-md font-semibold text-on-primary">12.400 kg tonelaje</span>
+</div>
+<div class="flex justify-between items-center bg-secondary/30 px-3 py-1.5 rounded-lg">
+<span class="font-label-sm text-label-sm uppercase text-secondary-fixed">Microciclo 04 (SENS)</span>
+<span class="font-label-md text-label-md font-semibold text-secondary-container">14.850 kg tonelaje</span>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Sobrecarga Progresiva</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Incremento del 19.7% en estímulo miofibrilar con cero incremento de fatiga ligamentosa.</p>
+</div>
+</article>
+<!-- F45: Cronómetro Ejecutivo 42 min -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="tiempos" data-id="F45" onclick="openModal('F45')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Minimalist architectural hourglass and Swiss precision chronometer dial resting on tactile porous limestone table" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCEKC9pqcA6ECBnxX233QhMeA1X87w7dYqpvGxyGCTKCmLuxQElTSDv56UEil-FLT_wnlbN2aNpwV6Tk2HQ75ztRTU9qf0qIVCV1uNjQmB547SqjLyIsHm4PGOtzSnNd-gDEcmAQHGDnpKKAmAbP8JMK5dmYb5xrNtFrfh21Ae--K77XbJxFhcoYmljQ453jtkLsB24YCFojqhIr4m7foUvFgXDMq9jmKUrMCkVGA')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="inline-flex items-center gap-2 self-start bg-secondary-container text-on-secondary-fixed px-3 py-1 rounded-full mb-3">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Ventana Óptima</span>
+</div>
+<p class="font-headline-xl text-headline-xl font-light text-on-primary tracking-tight">42 MIN</p>
+<h2 class="font-headline-md text-headline-md text-secondary-container font-medium tracking-tight mt-1">Precisión Sin Fatiga</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1.5 line-clamp-2">El umbral exacto de producción hormonal antes del incremento exponencial de cortisol sistémico.</p>
+</div>
+</article>
+<!-- F46: Temporizador Concéntrico (75s) -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="tiempos" data-id="F46" onclick="openModal('F46')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Warm studio setting with smooth curved oak wood walls and gentle shadows cast by morning sunlight" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8YJzkHFOAdLCNmqDeehLFFEoeWOPBv8jZh28JFjU47ilMBIymfgGd6sQcdk9BcK6uwCe5INGCVL9Rhp0I4-Vabkm5WGwr0vEZTNaHUaKbcXeK0ufrnHQnFICVYBqPFsoiEPbsxrPPhxpsFHvo2RkLRzEMoayeekq77JuVF5mquEFU_Dmh9f9RxOIo8UmKrWgCyxJekMeusTSfy8dfnWubtt2YFL0tHdPQkX52wQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-transparent"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-center gap-4 mb-4">
+<div class="relative w-16 h-16 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 64 64">
+<circle class="text-surface/20" cx="32" cy="32" fill="none" r="28" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-secondary-container" cx="32" cy="32" fill="none" r="28" stroke="currentColor" stroke-dasharray="175" stroke-dashoffset="45" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<span class="absolute font-headline-sm text-headline-sm font-light text-on-primary">75s</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-secondary-container uppercase tracking-wider">Rest Interval</span>
+<p class="font-body-sm text-body-sm text-surface-container-high">Resíntesis de fosfocreatina completa (92%).</p>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Densidad Entre Series</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">El descanso exacto para preservar reclutamiento motor en unidades de alto umbral.</p>
+</div>
+</article>
+<!-- F47: Balanza Cortisol vs Fuerza -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="habitos" data-id="F47" onclick="openModal('F47')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Sculptural bronze scale resting in an understated architectural wellness pavilion with clean geometry" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDbFBeY7y3P5HQED5wEZgzq5997suaF18oQxqnatO7KlUzeFxMgY4Gpsec3FOsiI0bheQ1AAFk2NmLAoAGapzafo4aPGuVz9mhxKwKu5EILmB8EjnsuOjp2Zq2lFGpXrxP-ZlAp2cTxgkgE90K6_uSMQ68Cy7QadzFEWQbrylBYpW8KZ7SQ7lGPV4hbwOndkLaQb5_LJO-JMYYnq0Mz__baGwYlhOlWCrVtYKEhRg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="bg-surface/10 backdrop-blur-md rounded-xl p-3 mb-4">
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-error-container font-medium">Cortisol −31%</span>
+<span class="text-outline-variant">⇌</span>
+<span class="text-secondary-container font-medium">Torque Miofibrilar +18%</span>
+</div>
+<div class="w-full bg-surface/20 h-1.5 rounded-full mt-2 overflow-hidden flex">
+<div class="bg-error-container h-full w-[35%]"></div>
+<div class="bg-secondary-container h-full w-[65%]"></div>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Regulación Neuroendocrina</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Entrenar con menor fatiga central incrementa la capacidad neta de generación de fuerza máxima.</p>
+</div>
+</article>
+<!-- F48: Escala RIR 1 a 4 -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="biomecanica" data-id="F48" onclick="openModal('F48')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Serene training space with monolithic sandstone pillars and cast bronze kettlebells in perfect symmetrical alignment" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8kazuPn-XTGjiIc1fMs5vXhNv7A3AnJmjd2u51bkeGA0LY86Yzx7zsop7S3yk9ubFhZHMrkLI1dHXXQx0MfYIxDsS3Q-fXDi11oRfu4Mz0RKtEbejEzOEmoKOCLC0amO42clrrJwKPjWC8D_DTrTNPJYA3BIAztWERWnx5vo3Epgyz7bUlGuC05FozRy3Nuc8_qzL026q8BtWWoHavUgj9e2A13cnSDcC6341Jg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/10"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-center gap-2 mb-4">
+<div class="flex-1 py-1.5 text-center rounded-lg bg-surface/20 font-label-md text-surface-dim">RIR 4</div>
+<div class="flex-1 py-1.5 text-center rounded-lg bg-surface/20 font-label-md text-surface-dim">RIR 3</div>
+<div class="flex-1 py-2 text-center rounded-lg bg-secondary-container text-on-secondary-fixed font-headline-sm font-semibold shadow-sm">RIR 2</div>
+<div class="flex-1 py-1.5 text-center rounded-lg bg-surface/20 font-label-md text-surface-dim">RIR 1</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Proximidad al Fallo Consciente</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">RIR 2 asegura 98% del estímulo anabólico protegiendo cápsulas articulares y discos intervertebrales.</p>
+</div>
+</article>
+<!-- F49: Ventana Anabólica 7.5 hs -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="habitos" data-id="F49" onclick="openModal('F49')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="High-end restful sanctuary bedroom with linen sheets, indirect amber lighting and acoustic wool wall panels" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB0MfGO0vJHBNnjV1ms2FJKuwyk8fTOhD30yqHST35pw4rG4p9rxEboHPSmMDcam-pk23HbTSSQyEjPPsAh63EGSXWvE7tJmxKYWzjW2bwXmvtATHEmrwhzJPpebyRx25pHzwQh7-aA2ZHFXosMVo5p4MY4g4XeZ5-U9su7liMqGQ8A-74xYirx-PTmxAcBZGsRKDwLqe4hUanl77xU1DuOzT0kDjTONCHGrKo6Fg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline-xl text-headline-xl text-secondary-container font-light">7.5 hs</span>
+<span class="font-label-sm text-label-sm text-surface-container-high uppercase tracking-widest">Fase REM &amp; N3</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Ventana Anabólica Nocturna</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">El 80% de la hormona somatotropina se secreta en las primeras 4 horas de arquitectura de sueño profundo.</p>
+</div>
+</article>
+<!-- F50: Saldo Metabólico +500 kcal -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="habitos" data-id="F50" onclick="openModal('F50')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Refined sommelier table in luxury private lounge with single fine crystal glass of biodynamic pinot noir and organic sourdough" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGZWxzyBGBjDxhqE2oWTUML9IdEs06wFitym8n8K94lhfJpB9B0JENRWwksnTNHNKSpCvyvEht5rENww1Mwe03BhVidsVQNs_uIHxrW2Sxlo3TcuOOV8rO7t57_v-m_uGAb_eu5gi3VYH4AFgqIrQJn7g_xmHlzPfgRnnov4MqzleDGZqQl7hgK46RE7HiwIQtCQFwtBvH18eUrDaALNUVjgGFrRN3KuQcmuDtFw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="inline-flex items-center gap-2 bg-secondary-container/90 backdrop-blur-sm text-on-secondary-fixed px-3 py-1.5 rounded-full mb-3 self-start">
+<span class="material-symbols-outlined text-[16px]">local_bar</span>
+<span class="font-label-md text-label-md font-semibold">+500 kcal Buffer Social</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Cena con Vino sin Culpa</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Estructuración semanal que protege la sensibilidad a la insulina mientras disfrutas tu vida social.</p>
+</div>
+</article>
+<!-- F51: Comparador de Volumen Muscular -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="porcentajes" data-id="F51" onclick="openModal('F51')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Athletic anatomy biomechanics visual with clean slate background and refined titanium rod lines" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD84nPYZY1vhBZXI8vO1eTuPY7RaSXqrZebX0hTMHH7RXI4MRWakT69GzcnuTOMad3kW_N74CdT5vVtLVKiRLU9orkIRgSTL_AvkdKwG9okcIGR-PrYoitDFHbi9JZoUZp-UEZ2bVy9s4Co5iHoNBfAet3V7tq3pNKwVEy1UzbNreFfzzSadE0xS0UAgmE7018H0WqIyuy__v_7XUQ-v-E4Y82Je5ZbLsoerTXLjA')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/30"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="space-y-2 mb-4 bg-surface/10 backdrop-blur-md p-3 rounded-xl">
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-1 text-surface">
+<span>Estímulo Hipertrófico Efectivo</span>
+<span class="text-secondary-container">94%</span>
+</div>
+<div class="h-1.5 w-full bg-surface/20 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container w-[94%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-1 text-surface">
+<span>Desgaste Articular Sistémico</span>
+<span class="text-surface-dim">12%</span>
+</div>
+<div class="h-1.5 w-full bg-surface/20 rounded-full overflow-hidden">
+<div class="h-full bg-outline-variant w-[12%]"></div>
+</div>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Volumen de Máxima Rentabilidad</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Separando el daño metabólico del estímulo mecánico real.</p>
+</div>
+</article>
+<!-- F52: Score de Densidad 9.8/10 -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="biomecanica" data-id="F52" onclick="openModal('F52')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Monolithic travertine architecture with natural light rays illuminating an elegant athletic posture matrix" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBwyrmyPHbwVRUv1Gbf74TsPIGGjpvmlgWoCyVTyizRu6Tv6HX4qVfO0_FUhApayY41lQW6TyohwrYQzYgod4K3BbD4o--rWbMC9danpJSKJaNoP6wdBl3s15dBVQ6P0MCTExOM-hmcAWFYIlsIxF5OMRFcb34LjDHNGDegNxi3tEaZ925XuKJYF-7PqZUrHYOt-0g7t4G_e_CDh5Yl7zV3GwegMREOqEFjVZlC5w')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline-xl text-headline-xl text-secondary-container font-light">9.8</span>
+<span class="font-headline-sm text-headline-sm text-outline-variant">/ 10</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Score de Densidad Postural</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Vector propioceptivo calibrado con estabilidad torácica intacta en todas las repeticiones.</p>
+</div>
+</article>
+<!-- F53: Racha de 7 Días de Consistencia -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="habitos" data-id="F53" onclick="openModal('F53')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Artistic botanical installation with stone pebble pathways and soft indirect gallery lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDnOGTSW8tsct5KQx7HaCDR5geD_XTatB5USinCVCx9uKI6Uw79k4A6WEVDov2xG1TnivcKphZrtxJWlzJBe1pkfzV8MzDuGQHP7L8tpxS2LJJqfLDCbwzZXxXqBOnfezvmm3sBT8_MBJHIG7hcQoex8moNeb9zQv0nlhdKa0Ehwy5eOdfuu7x70uk8IihXj2U47-kgnzspxRhjimS9vkbY7-FjIT-29W_eIG8D3w')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/10"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex justify-between items-center gap-1.5 mb-4">
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm">L</span>
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm">M</span>
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm">M</span>
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm">J</span>
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm">V</span>
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm">S</span>
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm">D</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Racha de 7 Días</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Constancia biológica: pequeñas dosis diarias de descompresión superan a maratones caóticas.</p>
+</div>
+</article>
+<!-- F54: Semáforo Tisular -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="biomecanica" data-id="F54" onclick="openModal('F54')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Quiet wellness sanctuary with water reflection ripples across dark basalt stone walls" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDASOPCm0H0DTeVenUp6moUd4SqmEmmqWZdSmbY6bUcvIwXo1x0w6KZ0XbDmdGk64D0G-xXXDgvOxy46rjUlDvskAJZiyO1i7Qzkz6P4WAcKiYq-WBpcvpgHDQxDvunidkrnAxVp4Td4v-Ijzxl8txV-YYlFbBASDhcTTuAfPLTdpgPR0Cah3kNdMJmaSYlogv7FwDkFbEiRzyg2OxzhAk7zkcH_cKXzestexyD_w')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-center gap-3 mb-4 bg-surface/10 backdrop-blur-md p-2.5 rounded-xl">
+<span class="w-3.5 h-3.5 rounded-full bg-tertiary-fixed shadow-sm"></span>
+<span class="font-label-sm text-label-sm text-surface">Tendones: Óptimo</span>
+<span class="text-outline-variant">·</span>
+<span class="w-3.5 h-3.5 rounded-full bg-secondary-container shadow-sm"></span>
+<span class="font-label-sm text-label-sm text-surface">SNC: Moderado</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Semáforo de Estrés Tisular</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Lectura biomecánica antes de ingresar al rack: ajustar ángulo de carga en tiempo real.</p>
+</div>
+</article>
+<!-- F55: Métrica de Hidratación Fascial -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="habitos" data-id="F55" onclick="openModal('F55')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Gentle kinetic drop of mineral water creating concentric ripples in stone basin within zen minimalist spa" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8KKS-DlslzSq5aCqwykKLl2EHKcd1b_9uop5PR7bBqAIwDq3CO4jnksl9BD-F9S2HtQ70AUFeVXzrZCzTF1Bk32ggSjNJpsDpTzAOTxFMjHVNGTyK4_ypZJ6yoheo7GXIhmQ8yhKe2iqgpfHT5JHxgIzs530wFZkXFk-ucK_NfISzy9vI1m4ptERbGCZJKsjscIrR6eV08BhRqX_8QTnRFzs8c0K-4sj-yUraFg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/10"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline-xl text-headline-xl text-secondary-container font-light">68%</span>
+<span class="font-label-sm text-label-sm text-surface uppercase tracking-wider">Agua Libre Celular</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Elasticidad Fascial</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">La descompresión con rodillo suave repone los fluidos intercelulares en tendones rígidos.</p>
+</div>
+</article>
+<!-- F56: Tacómetro de Frecuencia (4-7-8) -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="tiempos" data-id="F56" onclick="openModal('F56')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Understated somatic meditation corner with linen meditation cushion on dark waxed oak floor, soft incense smoke curl" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB-VCmi50yoEdjV9qnP3xIA0bGiTJ96s-tKNAN-zB4-XEDigXlJmiXAGFRjoq4MduXbSWVQE0DJgVekpaxYS9dr3lQNxYc0RAgZMbiZZjG2NhWNDPqLdHHuWq7Kt2SWtLmOmdncViSOXLaoqQPQgYf5K1HdVmotPSVgnZpfqeCDHLJRi-3MppeMwrgausMba3blf7LBT7x868CGkRo-abfHvYrLZfrEA_CkmCHZ7Q')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-center gap-3 mb-3">
+<div class="px-3 py-1 rounded-full bg-surface/20 text-on-primary font-label-md">Inhala 4s</div>
+<div class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-fixed font-label-md font-semibold">Retén 7s</div>
+<div class="px-3 py-1 rounded-full bg-surface/20 text-on-primary font-label-md">Exhala 8s</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Reset Parasimpático</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">3 minutos post-sesión apagan la adrenalina y aceleran el arribo de nutrientes a los miocitos.</p>
+</div>
+</article>
+<!-- F57: Edad Biológica vs Cronológica -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="porcentajes" data-id="F57" onclick="openModal('F57')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Portrait of an energetic 45 year old executive in relaxed athletic posture inside high-end glass architectural home overlooking pine forest" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBPQahmmqf2uNMOpqlzan1fZJxPVQNhyZG2VkwWR-4Yx_vFPlrU4YuwbtUy32aN7WAobqvdJx6ep9EwsG70WLqO0mc3JViR0x-2oLuYldQdmslcEerRmhw_uPZr4EogorMx13mLgCnzXibpYDJ7TCkp0T9m1cSXE8fRvVXdV3IhKIgtsQNJ8GSgfyjnsTKc8GrorkYcPNVyEekp0mjhP6c8iZiT8hOn47vXwutDvQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-baseline gap-4 mb-3">
+<div>
+<span class="font-label-sm text-label-sm text-outline-variant uppercase">Calendario</span>
+<p class="font-headline-md text-headline-md text-surface-dim line-through">48 años</p>
+</div>
+<span class="text-secondary-container font-headline-md text-headline-md">→</span>
+<div>
+<span class="font-label-sm text-label-sm text-secondary-fixed uppercase">SENS Somático</span>
+<p class="font-headline-xl text-headline-xl text-secondary-container font-light leading-none">36</p>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Edad Biológica Funcional</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Movilidad torácica, potencia de tren inferior y densidad capilar periférica de 12 años menos.</p>
+</div>
+</article>
+<!-- F58: Bóveda de Glucógeno Celular -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="habitos" data-id="F58" onclick="openModal('F58')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Abstract scientific microcellular matrix illuminated in warm champagne and deep obsidian tones" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaFk7E7wiJ59tr3SuQ3bbh9tO1s8-takHP983GwyPdHc9HbWzKPk_fHRXDfrvT7Ay31WdshYL_U4KrAdumVqGFDxVAPFLqzlpZl4GXQ6Th_vucv1ujAS202gWIudK0b8RCrIKSXFahYRP9cmsRq8Ib7IYFYMVi72ovcbWpWCCJtG861_mba4JbXCa_4pl5uwYQTdwgsXV6LBRYJiRVQqma0t4l-L3tsAdrYS_J4Q')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="inline-flex items-center gap-2 bg-secondary/30 px-3 py-1.5 rounded-full mb-3 self-start">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">bolt</span>
+<span class="font-label-sm text-label-sm text-secondary-fixed uppercase font-semibold">GLUT-4 Traslocación Rápida</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Sensibilidad a la Insulina</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Cada gramo de carbohidrato consumido se canaliza directamente al músculo, no al adipocito.</p>
+</div>
+</article>
+<!-- F59: Diagrama de Fulcro Lumbar -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="biomecanica" data-id="F59" onclick="openModal('F59')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Technical blueprint sketch style of a human spine lumbar hinge rendered with minimalist gold and graphite lines" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBBilL4SFo2WkejIimLhOE2zbfZt5oLNM6teKWIt5WaWs5CVcF-H967fqoNuM1mHJon5xYw-PTEvopglziShUED2n-g8zHMc45C9OmR7ueQMM4CuoGJE5kU9SW-xxf4J0ab83R7ypId-r5TCWjjUqPQoiWCWnGbAwqc8NlYBylHqtJtaQuePxZAXQyIXc6QmNkQrIrPGAgY3V99zrIPoA34tjAE65QC0bSUL8JIsw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="bg-surface/10 backdrop-blur-md p-3 rounded-xl mb-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-surface">Brazo de Momento</span>
+<span class="font-label-md text-label-md font-semibold text-secondary-container">Neutralizado (0° torsión)</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Fulcro Lumbar L5-S1</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">La transferencia de palanca hacia los glúteos anula por completo la tensión en el disco.</p>
+</div>
+</article>
+<!-- F60: Matriz de Dispersión Calórica (NEAT) -->
+<article class="template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-cat="porcentajes" data-id="F60" onclick="openModal('F60')">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Scenic sunlit city park walkway lined with sculptural limestone benches and autumn foliage, quiet elegance" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBdNUL5YrgOkusnuZ8Ui4L-BnOUn4IaRN4SEZYQPfxMhqr6NJoKrgx842LSTvq3koadcj2SSIT7z9vFj7cpjTpZTToSsnIztJBkfnsP0iMYUooChMqnUSqOiqEsV4iCUTbv459W10wRzKnkqKH-WU29EXxYmv0MT5s-VhoqaUU6Ke87007lES003P7ERVPfQui9tJoPv338O8S_MKxDOKhA4ldRv0tZKpLGiW6vQg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20"></div>
+<div class="safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden"></div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline-xl text-headline-xl text-secondary-container font-light">10.000</span>
+<span class="font-label-sm text-label-sm text-surface uppercase tracking-wider">Pasos NEAT / Día</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight">Gasto Silencioso vs Cinta</h2>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2">Quema un 40% más de grasa acumulada que 30 minutos de cardio exhaustivo, sin generar hambre reactiva.</p>
+</div>
+</article>
+</div>
+</section>
+<!-- Interactive Modal / Visual Inspector Drawer -->
+<div class="fixed inset-0 z-50 bg-primary/70 backdrop-blur-md hidden flex items-center justify-center p-4" id="inspector-modal">
+<div class="relative bg-surface rounded-2xl max-w-4xl w-full max-h-[921px] overflow-y-auto shadow-2xl p-6 md:p-8 flex flex-col lg:flex-row gap-8">
+<!-- Close button -->
+<button class="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-container-high hover:bg-surface-container-highest flex items-center justify-center transition-colors" onclick="closeModal()">
+<span class="material-symbols-outlined text-[20px] text-on-surface">close</span>
+</button>
+<!-- Left: Full Bleed 4:5 Simulation with 1:1 Instagram Cut overlay toggle -->
+<div class="w-full lg:w-1/2 flex flex-col items-center">
+<div class="relative w-full max-w-[340px] aspect-[4/5] rounded-2xl overflow-hidden shadow-xl bg-primary" id="modal-preview-box">
+<div class="absolute inset-0 bg-cover bg-center" id="modal-preview-bg"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-transparent"></div>
+<div class="absolute inset-x-0 top-[10%] bottom-[10%] border-2 border-secondary-container/80 pointer-events-none hidden" id="modal-crop-overlay">
+<span class="absolute top-2 left-2 bg-secondary-container text-on-secondary-fixed font-label-sm text-[10px] px-2 py-0.5 rounded">Corte 1:1 Feed</span>
+</div>
+<div class="relative z-10 w-full h-full flex flex-col justify-end p-6">
+<div class="mb-3" id="modal-preview-metric"></div>
+<h3 class="font-headline-md text-headline-md text-on-primary font-medium tracking-tight" id="modal-preview-title"></h3>
+<p class="font-body-sm text-body-sm text-surface-container-high mt-1" id="modal-preview-desc"></p>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-3">Proporción 4:5 • 1080 × 1350 px</p>
+</div>
+<!-- Right: Content Editor & Copy Matrix -->
+<div class="w-full lg:w-1/2 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm font-semibold uppercase" id="modal-badge-id">F41</span>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm uppercase" id="modal-badge-cat">Biomecánica</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-4">Inspector Editorial de Asset</h2>
+<div class="space-y-4">
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Título de Impacto</label>
+<input class="w-full bg-surface-container-low rounded-xl px-4 py-2.5 text-body-md text-on-surface focus:outline-none" id="edit-title" oninput="syncPreview()" type="text"/>
+</div>
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Bajada Somática / Métrica</label>
+<textarea class="w-full bg-surface-container-low rounded-xl px-4 py-2.5 text-body-sm text-on-surface focus:outline-none resize-none" id="edit-desc" oninput="syncPreview()" rows="3"></textarea>
+</div>
+<div class="bg-surface-container-low p-3.5 rounded-xl">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Copy Sugerido para Instagram Caption:</span>
+<p class="font-body-sm text-body-sm text-on-surface mt-1 italic" id="modal-caption-text"></p>
+</div>
+</div>
+</div>
+<!-- Drawer Action Row -->
+<div class="flex items-center gap-3 mt-6 pt-4 border-t border-surface-container-highest">
+<button class="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-label-md text-label-md transition-colors" onclick="copiarCaptionIndividual()">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span>Copiar Caption</span>
+</button>
+<button class="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-full bg-primary text-on-primary hover:opacity-90 font-label-md text-label-md transition-opacity" onclick="simularDescargaAsset()">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Descargar 1080×1350</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Toast notification element -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-primary text-on-primary px-5 py-3 rounded-full font-label-md text-label-md shadow-xl flex items-center gap-2" id="toast">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">check_circle</span>
+<span id="toast-message">Operación completada</span>
+</div>
+</div>
+<script>
+  // Template Catalog Master Data
+  const templateRegistry = {
+    F41: {
+      id: "F41",
+      cat: "biomecanica",
+      catName: "Biomecánica",
+      title: "Delta Somático Lumbar",
+      desc: "Reorganización de la bisagra coxofemoral para neutralizar la tensión pasiva del tejido conjuntivo.",
+      metricHtml: `<div class="bg-surface/10 backdrop-blur-md p-3 rounded-xl mb-3"><div class="grid grid-cols-2 gap-2 text-center"><div><span class="text-[10px] text-outline-variant uppercase">Convencional</span><p class="text-surface font-semibold text-sm">+14 mm</p></div><div><span class="text-[10px] text-secondary-fixed uppercase">SENS</span><p class="text-secondary-container font-semibold text-sm">0.0 mm</p></div></div></div>`,
+      caption: "La descompresión axial no es un lujo, es la base de la longevidad biomecánica. Conocer el delta entre tu patrón convencional y tu bisagra ideal libera hasta 14 mm de presión intradiscal. #SENS #SomaticPrecision #L5S1"
+    },
+    F42: {
+      id: "F42",
+      cat: "tiempos",
+      catName: "Tiempos & Cronos",
+      title: "Recuperación Neuromuscular",
+      desc: "Variabilidad cardíaca optimizada. Tu sistema autónomo autoriza volumen de intensidad máxima.",
+      metricHtml: `<div class="bg-surface/10 backdrop-blur-md px-3 py-1.5 rounded-full inline-block mb-3 text-secondary-container font-label-sm">VFC • 84 ms (Parasimpático)</div>`,
+      caption: "Si tu VFC no supera la línea base matutina, forzar un récord personal solo inflama tus uniones miotendinosas. La biología manda sobre el ego. #SENS #HRV #BiometricPrecision"
+    },
+    F43: {
+      id: "F43",
+      cat: "porcentajes",
+      catName: "Porcentajes",
+      title: "Carga Axial en L5-S1",
+      desc: "Reducción medible al reconfigurar la trayectoria articular de bisagra de cadera en patrones de tracción.",
+      metricHtml: `<span class="text-3xl font-light text-secondary-container block mb-1">−42%</span>`,
+      caption: "Menos presión compresiva en el disco, más reclutamiento glúteo y femoral. Un micro-ajuste de 4 grados en la cadera cambia la longevidad de tu columna. #SENS #Biomecanica"
+    },
+    F44: {
+      id: "F44",
+      cat: "biomecanica",
+      catName: "Biomecánica",
+      title: "Sobrecarga Progresiva",
+      desc: "Incremento del 19.7% en estímulo miofibrilar con cero incremento de fatiga ligamentosa.",
+      metricHtml: `<div class="bg-surface/10 px-3 py-1.5 rounded-lg text-secondary-container font-label-sm mb-2">Tonelaje: 14.850 kg (+19.7%)</div>`,
+      caption: "El tonelaje estructurado no significa entrenar más pesado sin control, sino garantizar que cada kilo mueva fibras y no articule tensiones parásitas. #SENS #LongevityTraining"
+    },
+    F45: {
+      id: "F45",
+      cat: "tiempos",
+      catName: "Tiempos & Cronos",
+      title: "Precisión Sin Fatiga",
+      desc: "El umbral exacto de producción hormonal antes del incremento exponencial de cortisol sistémico.",
+      metricHtml: `<span class="text-3xl font-light text-secondary-container block mb-1">42 MIN</span>`,
+      caption: "Entrenar 90 minutos destruye tu sistema hormonal. 42 minutos ejecutados con cadencia y descanso estricto multiplican tus resultados sin agotamiento vespertino. #SENS #ExecutiveFitness"
+    },
+    F46: {
+      id: "F46",
+      cat: "tiempos",
+      catName: "Tiempos & Cronos",
+      title: "Densidad Entre Series",
+      desc: "El descanso exacto para preservar reclutamiento motor en unidades de alto umbral.",
+      metricHtml: `<span class="text-2xl font-light text-secondary-container block mb-1">75s Pausa</span>`,
+      caption: "75 segundos de pausa activa restauran el 92% de tu fosfocreatina. Sin pausas azarosas ni scrolls en el teléfono. #SENS #PrecisionHabits"
+    },
+    F47: {
+      id: "F47",
+      cat: "habitos",
+      catName: "Metabolismo & Hábitos",
+      title: "Regulación Neuroendocrina",
+      desc: "Entrenar con menor fatiga central incrementa la capacidad neta de generación de fuerza máxima.",
+      metricHtml: `<div class="bg-surface/10 px-3 py-1 rounded-full text-secondary-container text-xs mb-2">Cortisol −31% ⇌ Fuerza +18%</div>`,
+      caption: "El estrés crónico bloquea la síntesis de nuevas proteínas miofibrilares. Descomprime tu sistema nervioso para desbloquear hipertrofia densa. #SENS #Neuroendocrine"
+    },
+    F48: {
+      id: "F48",
+      cat: "biomecanica",
+      catName: "Biomecánica",
+      title: "Proximidad al Fallo Consciente",
+      desc: "RIR 2 asegura 98% del estímulo anabólico protegiendo cápsulas articulares y discos intervertebrales.",
+      metricHtml: `<span class="px-2.5 py-1 bg-secondary-container text-on-secondary-fixed rounded text-xs font-bold mb-2 inline-block">RIR 2 TARGET</span>`,
+      caption: "Llevar cada serie al fallo muscular absoluto solo compra daño articular y semanas de recuperación innecesarias. Quédate a dos repeticiones de la falla. #SENS #RIR2"
+    },
+    F49: {
+      id: "F49",
+      cat: "habitos",
+      catName: "Metabolismo & Hábitos",
+      title: "Ventana Anabólica Nocturna",
+      desc: "El 80% de la hormona somatotropina se secreta en las primeras 4 horas de arquitectura de sueño profundo.",
+      metricHtml: `<span class="text-3xl font-light text-secondary-container block mb-1">7.5 hs</span>`,
+      caption: "No hay batido post-entreno que reemplace 7 horas y media de sueño en ambiente templado y oscuro. Tu músculo se repara de noche. #SENS #DeepSleep"
+    },
+    F50: {
+      id: "F50",
+      cat: "habitos",
+      catName: "Metabolismo & Hábitos",
+      title: "Cena con Vino sin Culpa",
+      desc: "Estructuración semanal que protege la sensibilidad a la insulina mientras disfrutas tu vida social.",
+      metricHtml: `<span class="text-xs bg-secondary-container text-on-secondary-fixed px-3 py-1 rounded-full font-bold mb-2 inline-block">+500 kcal Buffer</span>`,
+      caption: "La sostenibilidad es el único método real de longevidad. Diseñamos tu gasto semanal para que puedas disfrutar de una buena cena de viernes sin retroceder un paso. #SENS #QuietLuxuryLiving"
+    },
+    F51: {
+      id: "F51",
+      cat: "porcentajes",
+      catName: "Porcentajes",
+      title: "Volumen de Máxima Rentabilidad",
+      desc: "Separando el daño metabólico del estímulo mecánico real.",
+      metricHtml: `<span class="text-secondary-container font-medium text-sm mb-1 block">Hipertrofia 94% | Desgaste 12%</span>`,
+      caption: "La relación estímulo-fatiga es el rey de la prescripción moderna. Máximo impacto con mínima inflamación articular. #SENS #HypertrophyArchitecture"
+    },
+    F52: {
+      id: "F52",
+      cat: "biomecanica",
+      catName: "Biomecánica",
+      title: "Score de Densidad Postural",
+      desc: "Vector propioceptivo calibrado con estabilidad torácica intacta en todas las repeticiones.",
+      metricHtml: `<span class="text-3xl font-light text-secondary-container block mb-1">9.8 / 10</span>`,
+      caption: "Si la repetición 8 no se ve idéntica a la repetición 1, la serie terminó. La disciplina formal protege la estructura de por vida. #SENS #FormFirst"
+    },
+    F53: {
+      id: "F53",
+      cat: "habitos",
+      catName: "Metabolismo & Hábitos",
+      title: "Racha de 7 Días",
+      desc: "Constancia biológica: pequeñas dosis diarias de descompresión superan a maratones caóticas.",
+      metricHtml: `<div class="flex gap-1 mb-2"><span class="w-4 h-4 rounded-full bg-secondary-container"></span><span class="w-4 h-4 rounded-full bg-secondary-container"></span><span class="w-4 h-4 rounded-full bg-secondary-container"></span><span class="w-4 h-4 rounded-full bg-secondary-container"></span><span class="w-4 h-4 rounded-full bg-secondary-container"></span><span class="w-4 h-4 rounded-full bg-secondary-container"></span><span class="w-4 h-4 rounded-full bg-secondary-container"></span></div>`,
+      caption: "Tu cuerpo premia la coherencia rítmica. 15 minutos de movilidad consciente cada día valen más que dos horas esporádicas el domingo. #SENS #DailyRituals"
+    },
+    F54: {
+      id: "F54",
+      cat: "biomecanica",
+      catName: "Biomecánica",
+      title: "Semáforo de Estrés Tisular",
+      desc: "Lectura biomecánica antes de ingresar al rack: ajustar ángulo de carga en tiempo real.",
+      metricHtml: `<div class="flex items-center gap-2 mb-2 text-xs text-surface"><span class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed"></span> Verde Tisular</div>`,
+      caption: "Escuchar el feedback de cápsulas y tendones antes de cargar la barra. La autorregulación es el secreto de los atletas que entrenan a los 60 años con vitalidad. #SENS #TissueCare"
+    },
+    F55: {
+      id: "F55",
+      cat: "habitos",
+      catName: "Metabolismo & Hábitos",
+      title: "Elasticidad Fascial",
+      desc: "La descompresión con rodillo suave repone los fluidos intercelulares en tendones rígidos.",
+      metricHtml: `<span class="text-3xl font-light text-secondary-container block mb-1">68% Agua Libre</span>`,
+      caption: "La fascia deshidratada se comporta como cuero seco; la fascia elástica absorbe impacto como un muelle hidráulico. Hidrata y descomprime. #SENS #FascialHealth"
+    },
+    F56: {
+      id: "F56",
+      cat: "tiempos",
+      catName: "Tiempos & Cronos",
+      title: "Reset Parasimpático",
+      desc: "3 minutos post-sesión apagan la adrenalina y aceleran el arribo de nutrientes a los miocitos.",
+      metricHtml: `<div class="text-secondary-container font-semibold text-xs mb-2">Cadencia 4-7-8 Breathwork</div>`,
+      caption: "No termines la última serie y salgas corriendo a contestar correos. Tómate tres minutos en el suelo para indicar a tus glándulas que el peligro ha pasado. #SENS #Downregulation"
+    },
+    F57: {
+      id: "F57",
+      cat: "porcentajes",
+      catName: "Porcentajes",
+      title: "Edad Biológica Funcional",
+      desc: "Movilidad torácica, potencia de tren inferior y densidad capilar periférica de 12 años menos.",
+      metricHtml: `<div class="text-secondary-container text-2xl font-light mb-1">36 Somática <span class="text-xs text-surface-dim line-through">48 Cronológica</span></div>`,
+      caption: "Tu edad no se mide por las velas del pastel, sino por la rigidez de tus arterias y la velocidad con la que tu cadera genera torque. #SENS #LongevityArchitecture"
+    },
+    F58: {
+      id: "F58",
+      cat: "habitos",
+      catName: "Metabolismo & Hábitos",
+      title: "Sensibilidad a la Insulina",
+      desc: "Cada gramo de carbohidrato consumido se canaliza directamente al músculo, no al adipocito.",
+      metricHtml: `<span class="text-xs bg-secondary/40 text-secondary-container px-2 py-0.5 rounded font-mono mb-2 inline-block">GLUT-4 ACTIVE</span>`,
+      caption: "El entrenamiento de fuerza de precisión convierte a tus músculos en esponjas ávidas de glucosa. Salud metabólica definitiva. #SENS #MetabolicHealth"
+    },
+    F59: {
+      id: "F59",
+      cat: "biomecanica",
+      catName: "Biomecánica",
+      title: "Fulcro Lumbar L5-S1",
+      desc: "La transferencia de palanca hacia los glúteos anula por completo la tensión en el disco.",
+      metricHtml: `<div class="text-xs text-secondary-container font-mono mb-1">Momento Flexor = 0 Nm</div>`,
+      caption: "Si sientes la espalda baja después del peso muerto, no estás entrenando la cadena posterior; estás comprometiendo ligamentos espinales. Ajusta el fulcro. #SENS #SpineSafety"
+    },
+    F60: {
+      id: "F60",
+      cat: "porcentajes",
+      catName: "Porcentajes",
+      title: "Gasto Silencioso vs Cinta",
+      desc: "Quema un 40% más de grasa acumulada que 30 minutos de cardio exhaustivo, sin generar hambre reactiva.",
+      metricHtml: `<span class="text-3xl font-light text-secondary-container block mb-1">10.000 Pasos</span>`,
+      caption: "El movimiento no estructurado (NEAT) es la herramienta más subestimada de recomposición corporal. Camina al sol, respira y recupera. #SENS #NEATMethod"
+    }
+  };
+
+  let currentActiveId = "F41";
+
+  // Modal handler
+  function openModal(id) {
+    currentActiveId = id;
+    const data = templateRegistry[id];
+    if (!data) return;
+
+    document.getElementById("modal-badge-id").innerText = data.id;
+    document.getElementById("modal-badge-cat").innerText = data.catName;
+    document.getElementById("edit-title").value = data.title;
+    document.getElementById("edit-desc").value = data.desc;
+    document.getElementById("modal-caption-text").innerText = data.caption;
+
+    // Preview
+    document.getElementById("modal-preview-title").innerText = data.title;
+    document.getElementById("modal-preview-desc").innerText = data.desc;
+    document.getElementById("modal-preview-metric").innerHTML = data.metricHtml;
+
+    // Sync image from card
+    const card = document.querySelector(`[data-id="${id}"] [style*="background-image"]`);
+    if (card) {
+      document.getElementById("modal-preview-bg").style.backgroundImage = card.style.backgroundImage;
+    }
+
+    document.getElementById("inspector-modal").classList.remove("hidden");
+  }
+
+  function closeModal() {
+    document.getElementById("inspector-modal").classList.add("hidden");
+  }
+
+  function syncPreview() {
+    const t = document.getElementById("edit-title").value;
+    const d = document.getElementById("edit-desc").value;
+    document.getElementById("modal-preview-title").innerText = t;
+    document.getElementById("modal-preview-desc").innerText = d;
+  }
+
+  // Toast utility
+  function showToast(msg) {
+    const toast = document.getElementById("toast");
+    const label = document.getElementById("toast-message");
+    label.innerText = msg;
+    toast.classList.remove("translate-y-20", "opacity-0");
+    setTimeout(() => {
+      toast.classList.add("translate-y-20", "opacity-0");
+    }, 3200);
+  }
+
+  function copiarCaptionIndividual() {
+    const data = templateRegistry[currentActiveId];
+    if (data) {
+      navigator.clipboard.writeText(data.caption);
+      showToast("Caption copiado al portapapeles");
+    }
+  }
+
+  function copiarTodosTextos() {
+    let full = "SENS TRAIN & WELLNESS — BLOQUE III (F41 AL F60)\\n\\n";
+    Object.values(templateRegistry).forEach(t => {
+      full += `[${t.id}] ${t.title}\\n${t.desc}\\nCAPTION: ${t.caption}\\n-------------------\\n`;
+    });
+    navigator.clipboard.writeText(full);
+    showToast("Matrix completa de 20 textos copiada");
+  }
+
+  function simularDescargaAsset() {
+    showToast(`Generando render 1080×1350 px para ${currentActiveId}...`);
+  }
+
+  function descargarLoteCompleto() {
+    showToast("Preparando archivo .ZIP con los 20 assets 4:5 a máxima resolución...");
+  }
+
+  // Safe zone toggle (Instagram 1:1 cut indicator)
+  const toggleBtn = document.getElementById("toggle-safe-zone");
+  let safeZoneActive = false;
+
+  toggleBtn.addEventListener("click", () => {
+    safeZoneActive = !safeZoneActive;
+    const guides = document.querySelectorAll(".safe-guide");
+    const modalGuide = document.getElementById("modal-crop-overlay");
+    const label = document.getElementById("safe-zone-text");
+
+    guides.forEach(g => {
+      if (safeZoneActive) {
+        g.classList.remove("hidden");
+        g.classList.add("border-y-2", "border-secondary-container/60", "bg-primary/10");
+      } else {
+        g.classList.add("hidden");
+        g.classList.remove("border-y-2", "border-secondary-container/60", "bg-primary/10");
+      }
+    });
+
+    if (modalGuide) {
+      if (safeZoneActive) modalGuide.classList.remove("hidden");
+      else modalGuide.classList.add("hidden");
+    }
+
+    label.innerText = safeZoneActive ? "Ocultar Guía 1:1 Feed Cut" : "Ver Guía 1:1 Feed Cut";
+    showToast(safeZoneActive ? "Guía de corte 1:1 activada" : "Guía de corte desactivada");
+  });
+
+  // Filter Bar Functionality
+  const filterBtns = document.querySelectorAll(".filter-btn");
+  const cards = document.querySelectorAll(".template-card");
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach(b => {
+        b.classList.remove("active", "bg-primary", "text-on-primary");
+        b.classList.add("bg-transparent", "text-on-surface-variant");
+      });
+      btn.classList.add("active", "bg-primary", "text-on-primary");
+      btn.classList.remove("bg-transparent", "text-on-surface-variant");
+
+      const filter = btn.getAttribute("data-filter");
+      cards.forEach(card => {
+        const cat = card.getAttribute("data-cat");
+        if (filter === "all" || cat === filter) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+
+  // Live Search
+  const searchInput = document.getElementById("template-search");
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      const id = card.getAttribute("data-id").toLowerCase();
+      if (text.includes(query) || id.includes(query)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+
+  // Close modal when clicking outer backdrop
+  document.getElementById("inspector-modal").addEventListener("click", (e) => {
+    if (e.target.id === "inspector-modal") closeModal();
+  });
+</script>
+</main><footer class="w-full bg-surface-container-low py-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="w-full px-margin-mobile md:px-margin"><div class="flex flex-col md:flex-row md:items-center md:justify-between gap-space-lg pb-space-lg"><div class="flex flex-col gap-space-xs"><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-headline-sm text-headline-sm text-primary uppercase tracking-wider">SENS</span><span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Train &amp; Wellness</span></div><p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">Somatic Precision &amp; Restorative Longevity Architecture. Suite curada de 100 templates en relación de aspecto 4:5.</p></div><div class="flex flex-wrap items-center gap-space-md"><span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Ritual Index</span><div class="flex items-center gap-space-sm font-label-md text-label-md text-on-surface-variant"><a class="hover:text-on-surface transition-colors" data-path="bloque-i-f01-f20" href="#">I</a><span class="text-outline-variant">·</span><a class="hover:text-on-surface transition-colors" data-path="bloque-ii-f21-f40" href="#">II</a><span class="text-outline-variant">·</span><a class="hover:text-on-surface transition-colors" data-path="bloque-iii-f41-f60" href="#">III</a><span class="text-outline-variant">·</span><a class="hover:text-on-surface transition-colors" data-path="bloque-iv-f61-f80" href="#">IV</a><span class="text-outline-variant">·</span><a class="hover:text-on-surface transition-colors" data-path="bloque-v-f81-f100" href="#">V</a></div></div></div><div class="pt-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm"><p class="font-body-sm text-body-sm text-on-surface-variant">© 2025 SENS Train &amp; Wellness. Quiet Vitality Standards.</p><div class="flex items-center gap-space-lg font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant"><a class="hover:text-on-surface transition-colors" data-path="portal" href="#">Portal Central</a><a class="hover:text-on-surface transition-colors" data-path="generador" href="#">Configurador Somático</a></div></div></div></footer><script src="sens-marketing-suite-enhancer.js"></script>
+</body></html>

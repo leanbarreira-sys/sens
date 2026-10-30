@@ -1,7 +1,7 @@
 /* =============================================================================
-   SENS QUIET VITALITY — SUITE MASTER DE 200 TEMPLATES EXACTOS (4:5 & 9:16)
+   SENS QUIET VITALITY — SUITE MASTER DE 200 TEMPLATES DE MARKETING (4:5 & 9:16)
    100 Templates en 4:5 (F01 a F100) | 100 Templates en 9:16 (T01 a T100)
-   Estructuras HTML auténticas, Límite Estricto de Caracteres y Soporte UHD 4K
+   Límites de Caracteres Estrictos y Soporte Completo de Video & Foto UHD
    ============================================================================= */
 
 if (typeof window === 'undefined') {
@@ -16,17 +16,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Equilibrio Bioquímico",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Glassmorphism Card Flotante",
+    "tag": "SENS • MÉTODO",
     "title": "Equilibrio Bioquímico",
     "bajada": "Sincronización circadiana mediante luz matutina.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB61kGwxKTjPg2mVZOoyO7IcD_NYAwp0OCBgt-DEM3Xe0JN0CyJU3Cat586tRPwOpaOxt1IgIqbc1BnloPIwWj-aoP9vt4bFjR1orMdEMJxQEUI-b-MyddWoNq1PCQr1ShUF561fGrC7tPuH75WdabiK5qcrx2n9A3K3QBpLN_ujHIfyA76eQAN_j4GGASSlD4Lf1PZ6C1xnPsNhUo3x1CCimtSnYECMCdKBBEMCA",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"A tranquil stone wellness sanctuary with diffuse natural light casting subtle reflections on warm beige plaster walls, calm organic spa interior, high-end quiet luxury style.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB61kGwxKTjPg2mVZOoyO7IcD_NYAwp0OCBgt-DEM3Xe0JN0CyJU3Cat586tRPwOpaOxt1IgIqbc1BnloPIwWj-aoP9vt4bFjR1orMdEMJxQEUI-b-MyddWoNq1PCQr1ShUF561fGrC7tPuH75WdabiK5qcrx2n9A3K3QBpLN_ujHIfyA76eQAN_j4GGASSlD4Lf1PZ6C1xnPsNhUo3x1CCimtSnYECMCdKBBEMCA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<!-- Inset Card inside 1:1 zone -->\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-space-md flex items-center justify-center\">\n<div class=\"w-full bg-surface/90 backdrop-blur-md p-space-md rounded-lg shadow-md space-y-1\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface leading-tight font-medium\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Equilibrio Bioquímico</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sincronización circadiana mediante luz matutina.</span></p>\n</div>\n</div>\n<!-- Safe zone indicator bar -->\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -36,17 +37,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Cinemática Articular",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Split Asimétrico 50/50",
+    "tag": "SENS • MÉTODO",
     "title": "Cinemática Articular",
-    "bajada": "Preservación del Cartílago y Tensión fascial en cadencia controlada.",
-    "tag": "SENS PROTOCOL",
+    "bajada": "Preservación del cartílago y tensión fascial en cadencia controlada.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCl9iQuHjTUtnVkZusQDpAKcchlNWmIlqWF1uPATztu2vyDGPUaJSt9U1TGDB_wNX5YvqEspjHMOg8cco1KCspaymnloGWpja0GNc2qswAu08lqIA0KPMKQuGQnPDz6__cG0XWEdTuO40GgL4zytkM7cLh7PSfc574Li5kFIFBoctVkjRJP_Gv2vOFzh_7qKX5x40dEd_n4Kg8rBu8adu8HuRdNzro9-ryoJCYo9A",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex flex-col\">\n<div class=\"h-1/2 w-full relative overflow-hidden\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Athletic silhouette stretching calmly against a neutral sand-toned architectural backdrop, warm diffuse ambient lighting, serene movement and posture.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCl9iQuHjTUtnVkZusQDpAKcchlNWmIlqWF1uPATztu2vyDGPUaJSt9U1TGDB_wNX5YvqEspjHMOg8cco1KCspaymnloGWpja0GNc2qswAu08lqIA0KPMKQuGQnPDz6__cG0XWEdTuO40GgL4zytkM7cLh7PSfc574Li5kFIFBoctVkjRJP_Gv2vOFzh_7qKX5x40dEd_n4Kg8rBu8adu8HuRdNzro9-ryoJCYo9A')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n<div class=\"h-1/2 w-full bg-surface p-space-md flex flex-col justify-center space-y-1\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface leading-tight font-medium\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cinemática Articular</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Preservación del Cartílago y Tensión fascial en cadencia controlada.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 68
     }
   },
   {
@@ -56,17 +58,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Crioterapia Vascular",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Bento Box Cuadrante",
+    "tag": "SENS • MÉTODO",
     "title": "Crioterapia Vascular",
-    "bajada": "Adaptación al Frío y Constricción mitocondrial.",
-    "tag": "SENS PROTOCOL",
+    "bajada": "Adaptación al frío y constricción mitocondrial.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBlB2ufdKT532HN16pyINa0H2iC7b4itkXhNMEFukIzeN7-vhqw33J9VpKxF2RkkanK7-7_Qd7NkYF_CLWVuLaI9Yls79GK95UATegfHJvampx9X2nCmTlBwti6B9tV1uZ6rZCgJuDI-wYqtgU5cqXWdvMgOiI4Vw1Y8vElBjKbzNEVTjhDx9z8pfvXXl4_5-UbKjrxYCwtLRKs9-pf9-HAURr9FUmC_G5Uk3Z1cg",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Minimalist cold plunge bath carved from natural grey slate stone with crystal clear still water, quiet meditative luxury ambiance.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBlB2ufdKT532HN16pyINa0H2iC7b4itkXhNMEFukIzeN7-vhqw33J9VpKxF2RkkanK7-7_Qd7NkYF_CLWVuLaI9Yls79GK95UATegfHJvampx9X2nCmTlBwti6B9tV1uZ6rZCgJuDI-wYqtgU5cqXWdvMgOiI4Vw1Y8vElBjKbzNEVTjhDx9z8pfvXXl4_5-UbKjrxYCwtLRKs9-pf9-HAURr9FUmC_G5Uk3Z1cg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-space-md flex items-end\">\n<div class=\"w-full bg-surface p-space-md rounded-xl shadow-lg space-y-1\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Crioterapia Vascular</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Adaptación al Frío y Constricción mitocondrial.</span></p>\n</div>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -76,17 +79,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Passepartout Blanco",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Editorial Monocle Feed",
+    "tag": "SENS • MÉTODO",
     "title": "Passepartout Blanco",
     "bajada": "Margen perimetral con encuadre sereno de galería.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDvxgQdC7yWHUEWS_jt2QxgZqt4NXHrqnHu_odDsSDVhXZERh_AG8mQMjeGDAf6UgiQGnLditNTjckZk7gVgrzVuGQIOj1F_5TPX72uiQxHHWfsVoBCDDrANOLGYlHlKiOZrDrJH5AIBenwqKbHI3qg3JqSVF0RyV6LcE48LOCardUcondnHnn14ZiyYgQUVEoPR4TvuJHYOQwnuGd_n94udlZGlu3tjm4eEYMD9w",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface p-space-md flex flex-col justify-between\">\n<div class=\"w-full h-3/5 overflow-hidden rounded-lg relative\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Close up architectural detail of an oak wood meditation bench with warm soft sunlight, tactile linen fabric nearby, understated luxury.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDvxgQdC7yWHUEWS_jt2QxgZqt4NXHrqnHu_odDsSDVhXZERh_AG8mQMjeGDAf6UgiQGnLditNTjckZk7gVgrzVuGQIOj1F_5TPX72uiQxHHWfsVoBCDDrANOLGYlHlKiOZrDrJH5AIBenwqKbHI3qg3JqSVF0RyV6LcE48LOCardUcondnHnn14ZiyYgQUVEoPR4TvuJHYOQwnuGd_n94udlZGlu3tjm4eEYMD9w')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n<div class=\"py-space-xs space-y-1\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Passepartout Blanco</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Margen perimetral con encuadre sereno de galería.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -96,17 +100,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "La disciplina de la quietud no es inacción.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Swiss Minimal Kicker",
+    "tag": "SENS • MÉTODO",
     "title": "La disciplina de la quietud no es inacción.",
     "bajada": "Es el calibrado consciente de las reservas metabólicas.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container-low flex flex-col justify-center p-space-lg\">\n<div class=\"space-y-space-sm my-auto\">\n\n<h4 class=\"font-headline-md text-headline-md text-on-surface font-light leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La disciplina de la quietud no es inacción.</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Es el calibrado consciente de las reservas metabólicas.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 43,
+      "bajada": 60
     }
   },
   {
@@ -116,17 +121,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Ritual Nocturno",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Dark Onyx Cinemático",
+    "tag": "F06 • Dark Onyx",
     "title": "Ritual Nocturno",
     "bajada": "Atenuación lumínica y descenso térmico corporal.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBN_Q1Wo9rKHv0O0_PECuE4bXJUXsBP0OlxKMejAfS-cWAuLsGnJdDgj6sffNfq5DCe45-1og5TI0cd-44kcp9ci2FbxpP3GpSz5yUclWRXGBbJQGxaarysnuL_NSIWS6CaJfQnsMCCJF2ssb3sZE8bQ-XpP-7w4Gg4HMmQuXOuIL6NpQ2Wl-SeyVJ44DHhhmiBXQcf6z3gaxhmTo2w0tcu0V8PPCbOfPgJPkDoGQ",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-primary flex flex-col justify-end p-space-lg\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-500\" data-alt=\"Dark dramatic onyx stone texture with soft amber rim lighting, architectural chiaroscuro depth, luxurious somatic atmosphere.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBN_Q1Wo9rKHv0O0_PECuE4bXJUXsBP0OlxKMejAfS-cWAuLsGnJdDgj6sffNfq5DCe45-1og5TI0cd-44kcp9ci2FbxpP3GpSz5yUclWRXGBbJQGxaarysnuL_NSIWS6CaJfQnsMCCJF2ssb3sZE8bQ-XpP-7w4Gg4HMmQuXOuIL6NpQ2Wl-SeyVJ44DHhhmiBXQcf6z3gaxhmTo2w0tcu0V8PPCbOfPgJPkDoGQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 space-y-1 my-auto\">\n<span class=\"font-label-sm text-label-sm text-secondary-container uppercase tracking-widest\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">F06 • Dark Onyx</span></span>\n<h4 class=\"font-headline-sm text-headline-sm text-on-primary font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Ritual Nocturno</span></h4>\n<p class=\"font-body-sm text-body-sm text-outline-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Atenuación lumínica y descenso térmico corporal.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -136,17 +142,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Registro Somático",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Polaroid Somática",
+    "tag": "SENS • MÉTODO",
     "title": "Registro Somático",
-    "bajada": "Notas sobre Percepción interoceptiva diaria.",
-    "tag": "SENS PROTOCOL",
+    "bajada": "Notas sobre percepción interoceptiva diaria.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDGoc1NQ8jibrtawWFQh2uDnAxf2q4UAO0DRvyonN6yCJQ71ojJ0AH0d1i4EuVBGKn-Kk0jKYOKHRK5CH1WtlqkvIv40e9b40b9vIFrtQKQ8Oo0Nj2Oc-71nLTpw0L61y_-VdREnnm4oGCWiRZCGpfIy_yF0URRKecXoa37XjUCqe-0iHCiqgArVWM5KqAN9uXm2GVT0Xh01UUn6mY4g69qWjUIfqWTrjK-exeRdQ",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container p-space-md flex flex-col justify-between\">\n<div class=\"w-full h-[70%] bg-surface-container-lowest rounded-lg p-space-xs shadow-md\">\n<div class=\"w-full h-full bg-cover bg-center rounded\" data-alt=\"Natural ceramic bowl with pure herbal tea beside an open linen journal on warm raw timber, morning stillness, peaceful quiet vitality.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDGoc1NQ8jibrtawWFQh2uDnAxf2q4UAO0DRvyonN6yCJQ71ojJ0AH0d1i4EuVBGKn-Kk0jKYOKHRK5CH1WtlqkvIv40e9b40b9vIFrtQKQ8Oo0Nj2Oc-71nLTpw0L61y_-VdREnnm4oGCWiRZCGpfIy_yF0URRKecXoa37XjUCqe-0iHCiqgArVWM5KqAN9uXm2GVT0Xh01UUn6mY4g69qWjUIfqWTrjK-exeRdQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n<div class=\"space-y-0.5 px-space-xs my-auto\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Registro Somático</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Notas sobre Percepción interoceptiva diaria.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -156,17 +163,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Plantilla F08",
-    "title": "Plantilla F08",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Foco en Cita Editorial",
+    "tag": "F08 • Dr. Elena Voss",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "La longevidad no es prolongar los años, sino densificar la vitalidad de cada minuto.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex flex-col justify-center p-space-lg\">\n<div class=\"relative z-10 space-y-space-xs\">\n<span class=\"font-headline-xl text-headline-xl text-secondary opacity-40 leading-none\">“</span>\n<p class=\"font-headline-sm text-headline-sm text-on-surface font-light leading-snug -mt-4\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La longevidad no es prolongar los años, sino densificar la vitalidad de cada minuto.</span></p>\n<span class=\"block font-label-sm text-label-sm text-secondary uppercase tracking-widest pt-2\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">F08 • Dr. Elena Voss</span></span>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 20,
+      "title": 43,
+      "bajada": 84
     }
   },
   {
@@ -176,17 +184,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Ventilación Pránica",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Split Horizontal 60/40",
+    "tag": "SENS • MÉTODO",
     "title": "Ventilación Pránica",
     "bajada": "Relación 1:2 en espiración para inducir tono vagal.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCbjl-LH53wMAFgeL7quiOAZGXd5MSHoihA-EGP-tnqV-gHxlp50pL6bmRl2_Q1_8MH5CJufv5L4ySUEY3dx246IiJjkRmnCXoAlllZptEcjUysCWZ4S3RZhVM61bBYlyDr1D7rM2gtnEGNrXFZrEpTf-g3-BtGTGD7FfyPZ85db5APlFDZOvHaW8JU3cDmtZDo7oLqjq06H22s_R0lglIWdUY4ul-NbAEO9_ZfuA",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface flex flex-col\">\n<div class=\"h-[60%] w-full relative\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Calm athletic individual practicing breathwork beside a glass facade overlooking tranquil pine forest misty morning.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCbjl-LH53wMAFgeL7quiOAZGXd5MSHoihA-EGP-tnqV-gHxlp50pL6bmRl2_Q1_8MH5CJufv5L4ySUEY3dx246IiJjkRmnCXoAlllZptEcjUysCWZ4S3RZhVM61bBYlyDr1D7rM2gtnEGNrXFZrEpTf-g3-BtGTGD7FfyPZ85db5APlFDZOvHaW8JU3cDmtZDo7oLqjq06H22s_R0lglIWdUY4ul-NbAEO9_ZfuA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n<div class=\"h-[40%] w-full bg-surface-container-low p-space-md flex flex-col justify-center space-y-1\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Ventilación Pránica</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Relación 1:2 en espiración para inducir tono vagal.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -196,17 +205,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Arquitectura Celular",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Recuadro Inset Flotante",
+    "tag": "SENS • MÉTODO",
     "title": "Arquitectura Celular",
     "bajada": "Autofagia y ayuno rítmico coordinado con el ciclo solar.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCG27fJ7ULDaeiBqOgSSfao_zdQJrrTEcVReCu_r9980Yv4gPHc7MOKuBmrppmFKpjNBijVQdPwJXQkGzoM56WrHsO3993tb-59kFc66PObOGhqo0Oq_UAPXkGDbOdwan-6W1zs_3_qy0Q8-jiA1qiG1Qyf6T-e19ufdsS8j_u01co5XKzVWk7IPsYPjo2hady8CiGnXmP-UbaIUnK0B1IxRTPsRYZOHP2d17eK8Q",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container p-space-md flex items-center justify-center\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Abstract smooth stone textures with gentle morning shadows and delicate botanical leaves, quiet luxury wellness setting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCG27fJ7ULDaeiBqOgSSfao_zdQJrrTEcVReCu_r9980Yv4gPHc7MOKuBmrppmFKpjNBijVQdPwJXQkGzoM56WrHsO3993tb-59kFc66PObOGhqo0Oq_UAPXkGDbOdwan-6W1zs_3_qy0Q8-jiA1qiG1Qyf6T-e19ufdsS8j_u01co5XKzVWk7IPsYPjo2hady8CiGnXmP-UbaIUnK0B1IxRTPsRYZOHP2d17eK8Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 w-full bg-surface/95 p-space-md rounded-2xl shadow-xl space-y-1\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Arquitectura Celular</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Autofagia y ayuno rítmico coordinado con el ciclo solar.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -216,17 +226,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Espacio Terapéutico",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Marco Dorado Pulido",
+    "tag": "SENS • MÉTODO",
     "title": "Espacio Terapéutico",
     "bajada": "Luz indirecta y diseño biofílico armónico.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCB7VyfjqWLuTJJn8IJDQbPK9gk9E6S5VZ_r6nS-3bkSAi6DqPpFa45Z0OUQqJTOezBqKBrXGd3orC4Se4LoM9tVcEzDDavIRNWTnDEeo748tD8o0DzxD8V7y9k6VE2tWpvRooA652vXlp-w1n7_YL_9_y88NaJ47J00eysiIICppA9d_zcsUkePr6WnQHNStFqTlmfqHpGIOoLcXVmsqwTHsnaapEgy1BhXPz_vg",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex items-center justify-center p-space-md\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Architectural wellness studio with curved limestone walls and minimalist wood louvers, elegant warm daylight.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCB7VyfjqWLuTJJn8IJDQbPK9gk9E6S5VZ_r6nS-3bkSAi6DqPpFa45Z0OUQqJTOezBqKBrXGd3orC4Se4LoM9tVcEzDDavIRNWTnDEeo748tD8o0DzxD8V7y9k6VE2tWpvRooA652vXlp-w1n7_YL_9_y88NaJ47J00eysiIICppA9d_zcsUkePr6WnQHNStFqTlmfqHpGIOoLcXVmsqwTHsnaapEgy1BhXPz_vg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-space-md\">\n<div class=\"absolute inset-space-sm shadow-[inset_0_0_0_1.5px_rgba(212,185,150,0.6)] rounded-lg pointer-events-none\"></div>\n<div class=\"bg-surface/90 backdrop-blur-sm p-space-sm rounded space-y-0.5\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Espacio Terapéutico</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Luz indirecta y diseño biofílico armónico.</span></p>\n</div>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -236,17 +247,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Termorregulación",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Franja Central Diáfana",
+    "tag": "SENS • MÉTODO",
     "title": "Termorregulación",
     "bajada": "Estabilidad homeostática a través de contrastes.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDNdk01dxhEaFasSZTpI0E-DXdOKHT3au82LfO84xVRpL4Ro882eUXgvrLWTzI4S-40oZuAPreGPlxcRJcknGXOFBSm3G_HZeRvlxeW9zLxIO7nKvGH995VozHHt78COMHu-S_5VO0occ0EIPFImk67ouzIoAUkNBj4CCW2LJVDeGr8hWVEjYBOeubk-bByKUXLk5rLnuGLhmZophWBw6zG-KzcVIzdlDlZdit9Yg",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex items-center\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Overhead shot of serene rippling thermal water in a minimalist limestone basin, gentle reflections, warm neutral tones.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNdk01dxhEaFasSZTpI0E-DXdOKHT3au82LfO84xVRpL4Ro882eUXgvrLWTzI4S-40oZuAPreGPlxcRJcknGXOFBSm3G_HZeRvlxeW9zLxIO7nKvGH995VozHHt78COMHu-S_5VO0occ0EIPFImk67ouzIoAUkNBj4CCW2LJVDeGr8hWVEjYBOeubk-bByKUXLk5rLnuGLhmZophWBw6zG-KzcVIzdlDlZdit9Yg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 w-full bg-surface/90 backdrop-blur-md py-space-md px-space-md space-y-0.5\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Termorregulación</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Estabilidad homeostática a través de contrastes.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -256,17 +268,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Tono Postural",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Tarjeta Desfasada en Espejo",
+    "tag": "SENS • MÉTODO",
     "title": "Tono Postural",
     "bajada": "Equilibrio dinámico en apoyos unilaterales.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB7tnAyAacHY2XTw1Rv_Nsbr_Fb6BeBmYROygmVvhHBcoKlj2jUMvD0_Z1QGAtEH5lR2oUxKchiEdhvbfY90n7q5LjSN4QjgqJI91vPz95TOFU6LBjlMoaH5Si4kQUXSDkD3OK49N6bKNQYkrEWHXJ_hHbHj4uIlpyZII3zbxkM3w7dmrgbKZGOCK0aE7jQ5Ia4BNJfj-aUgp_znuHFfpSJWYkbmmJfDQIuz-A2_g",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container p-space-md flex items-center justify-end\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Serene minimalist architectural staircase with shadow play, light sandstone finish, serene quiet ambiance.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB7tnAyAacHY2XTw1Rv_Nsbr_Fb6BeBmYROygmVvhHBcoKlj2jUMvD0_Z1QGAtEH5lR2oUxKchiEdhvbfY90n7q5LjSN4QjgqJI91vPz95TOFU6LBjlMoaH5Si4kQUXSDkD3OK49N6bKNQYkrEWHXJ_hHbHj4uIlpyZII3zbxkM3w7dmrgbKZGOCK0aE7jQ5Ia4BNJfj-aUgp_znuHFfpSJWYkbmmJfDQIuz-A2_g')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 w-4/5 -ml-8 bg-surface-container-lowest p-space-md rounded-xl shadow-lg space-y-1\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tono Postural</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Equilibrio dinámico en apoyos unilaterales.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -276,17 +289,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Menos Frecuencia, Mayor Densidad",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Manifiesto Compacto",
+    "tag": "SENS • MÉTODO",
     "title": "Menos Frecuencia, Mayor Densidad",
     "bajada": "El estímulo de calidad supera al volumen extenuante.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCIubh2mJDJcXsUP0txh8H1_KSXdQsf_VT5nFpimGFLJ2sUKxtDZdh-5jDXkAXOk4P-sfmUW0bhVp2kbyfIPj1MbDxn42AX46QqzWHe19rl34UcYjfOzGiCUGDcLFxM_VqsjLIRpD-bgauAY5kXjsh8gonvHU2t4DPrl4kU-onhNPxZMBd88ojvJVWHpGryGXlhpHN0mHGOBxBTBSxvrdsx37wHmqVYit63jvnPKQ",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex items-center justify-center p-space-md\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center opacity-30 group-hover:scale-105 transition-transform duration-500\" data-alt=\"Subtle zen rock garden with raked sand lines and solitary basalt stone, quiet luxury aesthetics.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCIubh2mJDJcXsUP0txh8H1_KSXdQsf_VT5nFpimGFLJ2sUKxtDZdh-5jDXkAXOk4P-sfmUW0bhVp2kbyfIPj1MbDxn42AX46QqzWHe19rl34UcYjfOzGiCUGDcLFxM_VqsjLIRpD-bgauAY5kXjsh8gonvHU2t4DPrl4kU-onhNPxZMBd88ojvJVWHpGryGXlhpHN0mHGOBxBTBSxvrdsx37wHmqVYit63jvnPKQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 bg-primary text-on-primary p-space-lg rounded-xl shadow-xl space-y-1 text-center max-w-[90%]\">\n\n<h4 class=\"font-headline-sm text-headline-sm font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Menos Frecuencia, Mayor Densidad</span></h4>\n<p class=\"font-body-sm text-body-sm text-outline-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El estímulo de calidad supera al volumen extenuante.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -296,17 +310,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Claridad Cognitiva",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Foco Radial Vignette",
+    "tag": "SENS • MÉTODO",
     "title": "Claridad Cognitiva",
     "bajada": "Entrenamiento de la atención plena en esfuerzo sostenido.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCIG9YcRN0sqUc7tFOz4vjz8K33wM7xYLoz3TltyGg6heDnPbqc0HEAyEOLpOQU8I0gZzTPbECrWRhm5y0ERRVchcmsOzp1HYlwQuV5b2rvxalO4-xVoYSI7fjunXenJpbmwriTK9agtDTrS8TygwNHshCHx2KOWvorqv2KilJUoSE41Li0E0UjbEprNSviSWyW-Nq9xo4xCQICb4MxO32ylS2ENdRtiP-u5VeBCA",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex flex-col justify-center items-center text-center p-space-lg\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Soft morning mist rolling over calm mountain peaks, pale golden hour sunlight, ethereal serene view.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCIG9YcRN0sqUc7tFOz4vjz8K33wM7xYLoz3TltyGg6heDnPbqc0HEAyEOLpOQU8I0gZzTPbECrWRhm5y0ERRVchcmsOzp1HYlwQuV5b2rvxalO4-xVoYSI7fjunXenJpbmwriTK9agtDTrS8TygwNHshCHx2KOWvorqv2KilJUoSE41Li0E0UjbEprNSviSWyW-Nq9xo4xCQICb4MxO32ylS2ENdRtiP-u5VeBCA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-radial from-surface/90 via-surface/60 to-surface/20\"></div>\n<div class=\"relative z-10 space-y-1 max-w-xs\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Claridad Cognitiva</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Entrenamiento de la atención plena en esfuerzo sostenido.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -316,17 +331,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "CALMA.VIGOR.CONTROL.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Macro Tipografía Titular",
+    "tag": "SENS • MÉTODO",
     "title": "CALMA.VIGOR.CONTROL.",
     "bajada": "La tríada somática indispensable para un cuerpo resiliente.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container-lowest flex flex-col justify-between p-space-lg\">\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n<div class=\"my-auto space-y-space-xs\">\n\n<h4 class=\"font-headline-lg text-headline-lg text-on-surface font-light leading-none tracking-tighter\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">CALMA. VIGOR. CONTROL.</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant pt-space-xs\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La tríada somática indispensable para un cuerpo resiliente.</span></p>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -336,17 +352,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Fuerza Isométrica",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Tarjeta con Solapa",
+    "tag": "SENS • MÉTODO",
     "title": "Fuerza Isométrica",
     "bajada": "Estabilidad escapular sin fricción articular repetitiva.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDY98UwcK9P3_u6UkssUfSPathdpnrYi0TtzxTYqDRBSPkX0O4Yq79DZ0Q8438opZivfFwtf9sN1BLO-h5PmGbks7cg82Vlk1o0E5DPdf59gWCS2pmKvTS_SNCW7jDlmDDaKm67q3k5-f9KZTW8d53fplGHUSfb-xjgTCbic2ggUWFi9awx1h98eOsP8M6SjHePXqQ5oSyA6oPMpW7MebKLvLw2IKgpgn4R9tFg8A",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex items-center justify-center p-space-md\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Minimalist wooden training rings suspended quietly in an airy studio with natural oak flooring and soft ambient lighting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDY98UwcK9P3_u6UkssUfSPathdpnrYi0TtzxTYqDRBSPkX0O4Yq79DZ0Q8438opZivfFwtf9sN1BLO-h5PmGbks7cg82Vlk1o0E5DPdf59gWCS2pmKvTS_SNCW7jDlmDDaKm67q3k5-f9KZTW8d53fplGHUSfb-xjgTCbic2ggUWFi9awx1h98eOsP8M6SjHePXqQ5oSyA6oPMpW7MebKLvLw2IKgpgn4R9tFg8A')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 w-full bg-surface rounded-xl shadow-xl overflow-hidden\">\n<div class=\"bg-secondary-container px-space-sm py-1\">\n\n</div>\n<div class=\"p-space-md space-y-1\">\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fuerza Isométrica</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Estabilidad escapular sin fricción articular repetitiva.</span></p>\n</div>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -356,17 +373,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Plantilla F18",
-    "title": "Plantilla F18",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Contraste Positivo / Negativo",
+    "tag": "Fuerza",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "Estímulo concéntrico máximo.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCkd-fsMo4ooiCwva0adtGPjxX4QSvpKFPq9N4ILiU70ragWXIinTcFuIiHzfeJHK9SdjnfE1vZW4MjcRuni89SrmG-Aa9XdvTRmrOliFGUI3jWbKsLt_uAg3Uuj41ADf7qmmvH6Yl3iRGFXAz0otsDWtCiGoo9eHVWNli48JhARCRJOmPIog3hMpGEc6rbY5KtTxA8UYcqruzy0BBFtz-IW4jOxRQ_4oD7-QmsYw",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex\">\n<div class=\"w-1/2 h-full relative overflow-hidden bg-primary p-space-sm flex flex-col justify-center\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center opacity-30\" data-alt=\"Monochrome textured dark stone with gentle light reflecting on a water basin edge, elegant serene mood.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCkd-fsMo4ooiCwva0adtGPjxX4QSvpKFPq9N4ILiU70ragWXIinTcFuIiHzfeJHK9SdjnfE1vZW4MjcRuni89SrmG-Aa9XdvTRmrOliFGUI3jWbKsLt_uAg3Uuj41ADf7qmmvH6Yl3iRGFXAz0otsDWtCiGoo9eHVWNli48JhARCRJOmPIog3hMpGEc6rbY5KtTxA8UYcqruzy0BBFtz-IW4jOxRQ_4oD7-QmsYw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 space-y-1\">\n<span class=\"font-label-sm text-label-sm text-secondary-container uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fuerza</span></span>\n<p class=\"font-body-sm text-body-sm text-on-primary\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Estímulo concéntrico máximo.</span></p>\n</div>\n</div>\n<div class=\"w-1/2 h-full bg-surface-container-lowest p-space-sm flex flex-col justify-center space-y-1\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase\">Reposo</span>\n<p class=\"font-body-sm text-body-sm text-on-surface\">Asimilación celular activa.</p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 18,
+      "title": 43,
+      "bajada": 60
     }
   },
   {
@@ -376,17 +394,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Hidroterapia Activa",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Split Diagonal Sutil",
+    "tag": "F19 • Split Diagonal",
     "title": "Hidroterapia Activa",
     "bajada": "Descompresión espinal en flotación asistida.",
-    "tag": "SENS PROTOCOL",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD9VoSOTdN9J6emxeGPw4ap9UvR-zYA0er8ZMh-Id7xrNZbWqUa3KtfZVqUHCvmYYJIzQ1rxt5cw8oLtiz7OivU_dlegzRIwoG9Wes4zETIDsdLi7tsWiXSZeeLK1RAM18VOjHg9PA69ckPCs6VE5gateHSPYMrqt6zACP5aH6S-MIp1Pj44P6XjbMOuWe-iRUoOb-oOQYl7xDF6png2CHhF9T7NZ7carfggX0F2g",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Tranquil warm indoor lap pool with architectural limestone pillars and peaceful surface ripples, high end luxury retreat.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD9VoSOTdN9J6emxeGPw4ap9UvR-zYA0er8ZMh-Id7xrNZbWqUa3KtfZVqUHCvmYYJIzQ1rxt5cw8oLtiz7OivU_dlegzRIwoG9Wes4zETIDsdLi7tsWiXSZeeLK1RAM18VOjHg9PA69ckPCs6VE5gateHSPYMrqt6zACP5aH6S-MIp1Pj44P6XjbMOuWe-iRUoOb-oOQYl7xDF6png2CHhF9T7NZ7carfggX0F2g')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-x-0 bottom-0 h-1/2 bg-surface/95 [clip-path:polygon(0_20%,100%_0,100%_100%,0_100%)] p-space-md flex flex-col justify-end space-y-1\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">F19 • Split Diagonal</span></span>\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Hidroterapia Activa</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Descompresión espinal en flotación asistida.</span></p>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 20,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -396,17 +415,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes",
-    "name": "Longevidad Plena",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Tarjeta Cápsula Central",
+    "tag": "Gobernanza Técnica &amp; Telemetría",
     "title": "Longevidad Plena",
-    "bajada": "Sincronización circadiana mediante luz matutina.",
-    "tag": "SENS PROTOCOL",
+    "bajada": "El algoritmo de Instagram recorta de manera centrada las imágenes 4:5 al presentarlas en el perfil del usuario.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDddII5NwO1LwySmkrHHGu-eZPGhftWAEJbEAVVqCGsGNQpt0EKIxlwjoG_eWPtCYKi0_-nCB1YJgkw22FR03ssAkpALCJjj112TnFXJCog-5ex3YzjN3tqkokucTD1DPoxSPbhr5gGGukigJ5a8tWOx7wXgIJtds9CVF2jo8LQaOlXhmZiDQH4fggQ2YJsiW4GSUDDF5jnHK_JnWe3ath1A4SV81wXtSXdLjX2Mg",
-    "htmlTemplate": "<div class=\"relative w-full aspect-[4/5] overflow-hidden bg-surface-container flex items-center justify-center p-space-md\">\n<div class=\"absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500\" data-alt=\"Ethereal sunbeam penetrating smooth linen curtain into a minimalist sanctuary room, warm ivory tones, pure calm.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDddII5NwO1LwySmkrHHGu-eZPGhftWAEJbEAVVqCGsGNQpt0EKIxlwjoG_eWPtCYKi0_-nCB1YJgkw22FR03ssAkpALCJjj112TnFXJCog-5ex3YzjN3tqkokucTD1DPoxSPbhr5gGGukigJ5a8tWOx7wXgIJtds9CVF2jo8LQaOlXhmZiDQH4fggQ2YJsiW4GSUDDF5jnHK_JnWe3ath1A4SV81wXtSXdLjX2Mg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"relative z-10 w-full bg-surface/90 backdrop-blur-md px-space-lg py-space-md rounded-full shadow-xl flex items-center justify-between gap-space-sm\">\n<div class=\"space-y-0.5 min-w-0\">\n\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface font-medium leading-none truncate\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Longevidad Plena</span></h4>\n</div>\n<span class=\"material-symbols-outlined text-secondary flex-shrink-0\">arrow_forward</span>\n</div>\n<div class=\"safe-zone-marker hidden absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none shadow-[inset_0_0_0_1px_rgba(212,185,150,0.5)]\"></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 120
+      "tag": 35,
+      "title": 35,
+      "bajada": 111
     }
   },
   {
@@ -416,17 +436,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "FUERZASIN RUIDO.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F21",
+    "tag": "SENS Standard",
     "title": "FUERZASIN RUIDO.",
     "bajada": "Biomecánica pura desarrollada con calma reflexiva y cadencia controlada.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCEo89qoXyFP2LexcocQxNLq9cxasKCLM4Qi1p66lof8RjChAkc6PdHR3GM5dkKq_aB_Q1VvPhmClce-fPbPpBf-nbAxt0Pwc74rQ_vR7sbQrDMby0z4XwI1IMuFc2Ibl14zkisaIIr3WP7bbwvZKR3pPZ46nSP4A3SltUk1nN4YBGxAm8nZoaK6Zxk9CRrNuZXPcqbrJPGP2U6JIIX4f23crnUq4f8-SCFWxkLQg",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-high overflow-hidden rounded-xl shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Athletic female back muscles executing a precise slow pullup in architectural studio with warm morning side lighting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCEo89qoXyFP2LexcocQxNLq9cxasKCLM4Qi1p66lof8RjChAkc6PdHR3GM5dkKq_aB_Q1VvPhmClce-fPbPpBf-nbAxt0Pwc74rQ_vR7sbQrDMby0z4XwI1IMuFc2Ibl14zkisaIIr3WP7bbwvZKR3pPZ46nSP4A3SltUk1nN4YBGxAm8nZoaK6Zxk9CRrNuZXPcqbrJPGP2U6JIIX4f23crnUq4f8-SCFWxkLQg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/30 to-primary/10\"></div>\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"flex flex-col gap-2\">\n<h4 class=\"font-headline-md text-headline-md text-surface font-light leading-tight uppercase\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">FUERZA SIN RUIDO.</span></h4>\n<p class=\"font-body-sm text-body-sm text-surface/85 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Biomecánica pura desarrollada con calma reflexiva y cadencia controlada.</span></p>\n</div>\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary-fixed\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SENS Standard</span></span>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 72
     }
   },
   {
@@ -436,17 +457,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Respiración Orgánica",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F22",
+    "tag": "SENS • MÉTODO",
     "title": "Respiración Orgánica",
     "bajada": "El vacío espacial amplifica la cadencia de la musculatura somática.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDJACJutVaUm1wN25ForDu1yWTMlFmBa-b3Gqkyltd47TkOjBxXdlFah2Twa9zSRjX_MIAfsnyyd7AtOepKb2haEQBa5vOft-z5QyMjUUMBTMhiqAAUshsTkGgZBCeg3fSMURwfVCRT1rUgFHypTfsLxqLgzcNyXeWAC0vX6_YyTmRywdBcPXQc5qPoLTg733O6o68b8ryclnKq0qu8YH5rfn8KYRWbouRfdwft9Q",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-[#F6F4EE] overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"w-full h-44 rounded bg-cover bg-center shadow-sm\" data-alt=\"Architectural detail of polished ivory travertine stone with gentle natural shadow gradients, minimalist aesthetic.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDJACJutVaUm1wN25ForDu1yWTMlFmBa-b3Gqkyltd47TkOjBxXdlFah2Twa9zSRjX_MIAfsnyyd7AtOepKb2haEQBa5vOft-z5QyMjUUMBTMhiqAAUshsTkGgZBCeg3fSMURwfVCRT1rUgFHypTfsLxqLgzcNyXeWAC0vX6_YyTmRywdBcPXQc5qPoLTg733O6o68b8ryclnKq0qu8YH5rfn8KYRWbouRfdwft9Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"flex flex-col gap-1.5 text-center px-2\">\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface tracking-tight uppercase font-light\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Respiración Orgánica</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El vacío espacial amplifica la cadencia de la musculatura somática.</span></p>\n</div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 67
     }
   },
   {
@@ -456,17 +478,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "La forma sigue a la atención.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F23",
+    "tag": "Prescripción SENS",
     "title": "La forma sigue a la atención.",
-    "bajada": "Anotaciones de gabinete sobre la Recuperación neuromotriz profunda.",
-    "tag": "EDITORIAL SENS",
+    "bajada": "Anotaciones de gabinete sobre la recuperación neuromotriz profunda.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAhOrKZHKHAyo-F2eLD1Mcwf-_c6lJBe516HX9NvKKFNP-rpLfDz9UTBDRQ3n3agGbmX9UrQJLK9UnWJky6gz8Xu5okXCFkKYLYEIDhyO0FXuNBKynmpsP_lo9GoV_gyW5NzpvQU9Z65q2XwdwN76CUegKnKuY30DDJy31j4uRI_jaa1YsPgqsHfyRocEUKB3NS1QiVjUaefcJ23uXDbfGMysxdsi9L6vbLNF_AUQ",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-high overflow-hidden rounded-xl shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Close up of hands wrapping athletic linen straps around wrists with soft directional studio light.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAhOrKZHKHAyo-F2eLD1Mcwf-_c6lJBe516HX9NvKKFNP-rpLfDz9UTBDRQ3n3agGbmX9UrQJLK9UnWJky6gz8Xu5okXCFkKYLYEIDhyO0FXuNBKynmpsP_lo9GoV_gyW5NzpvQU9Z65q2XwdwN76CUegKnKuY30DDJy31j4uRI_jaa1YsPgqsHfyRocEUKB3NS1QiVjUaefcJ23uXDbfGMysxdsi9L6vbLNF_AUQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/40 backdrop-blur-[2px]\"></div>\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10 text-surface\">\n\n<div class=\"flex flex-col gap-3\">\n<span class=\"font-headline-md text-headline-md italic font-light text-secondary-fixed\">Soma &amp; Silencio.</span>\n<h4 class=\"font-headline-sm text-headline-sm uppercase tracking-wide\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La forma sigue a la atención.</span></h4>\n<p class=\"font-body-sm text-body-sm text-surface/90 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Anotaciones de gabinete sobre la Recuperación neuromotriz profunda.</span></p>\n</div>\n<span class=\"font-label-sm text-label-sm uppercase tracking-wider text-surface/70\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Prescripción SENS</span></span>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 67
     }
   },
   {
@@ -476,17 +499,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "¿El descanso es pausa o síntesis adaptativa?",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F24",
+    "tag": "Interrogación Somática",
     "title": "¿El descanso es pausa o síntesis adaptativa?",
-    "bajada": "La Recuperación molecular ocurre cuando disminuye la estimulación superflua.",
-    "tag": "EDITORIAL SENS",
+    "bajada": "La recuperación molecular ocurre cuando disminuye la estimulación superflua.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC8e9bHacp2e-vGv3K2oLnyqZTHG5QHxGsjiR3C9RrF6NCN19cHxuPgh6ssP3uvmlVZv4oOMqtLfDOCukZfYHxAchQWzsRrcR5wi4LCzCaW61MqK8oMOyOcUFS3W3krnwcnlxxUNkRT0luH5DwNPQNb82aiU6yXq9vdtO1QUyBDeEDYtm7qMP7f6f6BYGyD7DTui3DwBI3vyv9igFcsotvac6i85Jkgu50ScLV5GQ",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"flex flex-col gap-4\">\n<h4 class=\"font-headline-md text-headline-md text-on-surface font-light leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">¿El descanso es pausa o síntesis adaptativa?</span></h4>\n<div class=\"w-full h-32 rounded-lg bg-cover bg-center shadow-sm\" data-alt=\"Overhead shot of calm indoor water hydrotherapy pool with gentle ripples in quiet studio.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8e9bHacp2e-vGv3K2oLnyqZTHG5QHxGsjiR3C9RrF6NCN19cHxuPgh6ssP3uvmlVZv4oOMqtLfDOCukZfYHxAchQWzsRrcR5wi4LCzCaW61MqK8oMOyOcUFS3W3krnwcnlxxUNkRT0luH5DwNPQNb82aiU6yXq9vdtO1QUyBDeEDYtm7qMP7f6f6BYGyD7DTui3DwBI3vyv9igFcsotvac6i85Jkgu50ScLV5GQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La Recuperación molecular ocurre cuando disminuye la estimulación superflua.</span></p>\n</div>\n<span class=\"font-mono text-[10px] text-on-surface-variant uppercase\">Interrogación Somática</span>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 22,
+      "title": 44,
+      "bajada": 76
     }
   },
   {
@@ -496,17 +520,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "NON MULTA,SED MULTUM.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F25",
+    "tag": "SENS • MÉTODO",
     "title": "NON MULTA,SED MULTUM.",
     "bajada": "No muchas cosas de forma superficial, sino pocas con máxima profundidad neuromuscular.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB6A-O7kUyU1e08dYe6A3OKLmBt7mz8p3DVfcDTVFPIRA5b4-FC3enhoxME1Jo6NaZ-0OhTbNudd9qP1pE2UQVQKTlvlsF-QF5wrjJLAG8q3lf9PSa2w7GJ0fjKHW2F07YZWHZTr8VYNnSVf5nUFHbR4xKl7FU8LyqKqikOjl0rkUzRKKN_m_tglqFeduGEA_CrPaH3Prfz3kQgPylH9FLtOasVoWkk21wT4AxoRg",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-[#F4F3F1] overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"flex flex-col gap-3 my-auto text-center\">\n\n<h4 class=\"font-headline-md text-headline-md font-light text-on-surface tracking-tight uppercase\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">NON MULTA, SED MULTUM.</span></h4>\n<div class=\"w-12 h-0.5 bg-secondary mx-auto\"></div>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-xs mx-auto\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">No muchas cosas de forma superficial, sino pocas con máxima profundidad neuromuscular.</span></p>\n</div>\n<div class=\"w-full h-20 rounded bg-cover bg-center\" data-alt=\"Sculptural stone monolith standing calmly in a sunlit minimal architectural courtyard.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6A-O7kUyU1e08dYe6A3OKLmBt7mz8p3DVfcDTVFPIRA5b4-FC3enhoxME1Jo6NaZ-0OhTbNudd9qP1pE2UQVQKTlvlsF-QF5wrjJLAG8q3lf9PSa2w7GJ0fjKHW2F07YZWHZTr8VYNnSVf5nUFHbR4xKl7FU8LyqKqikOjl0rkUzRKKN_m_tglqFeduGEA_CrPaH3Prfz3kQgPylH9FLtOasVoWkk21wT4AxoRg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 86
     }
   },
   {
@@ -516,17 +541,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "EL CUERPOCOMO ARTEFACTO.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F26",
+    "tag": "SENS • MÉTODO",
     "title": "EL CUERPOCOMO ARTEFACTO.",
     "bajada": "La postura erguida traduce el estado de serenidad de la mente subyacente.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD0nJy4gS0RrH_HEiX1gmt27Bja5oGbi7jFEbew-z1QDCWF1W65eKl25fjWa51rJvWCTIksxl4u7MkHM2tn6HKA6BCcp3ffph4I9xYa3y_I42TWN2uZrvnFOnn9s8W7wYvW0t2-rqSwa9PW3fDKl4YoXL-mHmTWW8q_-KnuE8Ah9lOPKyzGJcfNa8kZ_zCVvQlQrKNuSgNhMPWUpjkoyI-s4TOsEvYmSDl1QCs2Zg",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-high overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n<div class=\"w-full h-full flex flex-col bg-primary text-on-primary p-6 rounded-lg shadow-lg justify-between\">\n\n<div class=\"flex flex-col gap-2\">\n<h4 class=\"font-headline-md text-headline-md uppercase tracking-tight font-light\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">EL CUERPO COMO ARTEFACTO.</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-primary/80 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La postura erguida traduce el estado de serenidad de la mente subyacente.</span></p>\n</div>\n<div class=\"w-full h-24 rounded bg-cover bg-center\" data-alt=\"High contrast charcoal monochrome study of an athlete spine in perfect neutral alignment.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0nJy4gS0RrH_HEiX1gmt27Bja5oGbi7jFEbew-z1QDCWF1W65eKl25fjWa51rJvWCTIksxl4u7MkHM2tn6HKA6BCcp3ffph4I9xYa3y_I42TWN2uZrvnFOnn9s8W7wYvW0t2-rqSwa9PW3fDKl4YoXL-mHmTWW8q_-KnuE8Ah9lOPKyzGJcfNa8kZ_zCVvQlQrKNuSgNhMPWUpjkoyI-s4TOsEvYmSDl1QCs2Zg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 73
     }
   },
   {
@@ -536,17 +562,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Sobrecarga Progresiva",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F27",
+    "tag": "Síntesis 100% SENS",
     "title": "Sobrecarga Progresiva",
-    "bajada": "Sin estímulo cuantificable no hay Adaptación duradera en el tejido conectivo ni en el sistema nervioso simpático.",
-    "tag": "EDITORIAL SENS",
+    "bajada": "Sin estímulo cuantificable no hay adaptación duradera en el tejido conectivo ni en el sistema nervioso simpático.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBer9KSLNeev3vsp7iGVSOmCVQYjTLWco4dPu9ETOsR8Daku-7kwK7a9ENY-mMChB1eZUqmB1L8xhcEv_yXzMHnwpkfL_M8yhRZ9VMcNn9awYhgBNHljDKK0RNHCmoXV_7ne0Bx0rEUjDkXlxo-jZUM3Igj-VuRd8PCoRteJElb3ljOg_ejxjrNihoXg2H35sc8DIiIm4ebBtZzRINfxm_jEjmDopgO3pRa2bO1YQ",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"grid grid-cols-2 gap-4 my-auto\">\n<div class=\"flex flex-col gap-2\">\n\n<h4 class=\"font-headline-sm text-headline-sm uppercase font-light text-on-surface\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sobrecarga Progresiva</span></h4>\n<div class=\"w-full h-28 rounded bg-cover bg-center mt-2 shadow-sm\" data-alt=\"Kettlebell crafted in smooth black stone resting on a timber workout floor with soft morning light.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBer9KSLNeev3vsp7iGVSOmCVQYjTLWco4dPu9ETOsR8Daku-7kwK7a9ENY-mMChB1eZUqmB1L8xhcEv_yXzMHnwpkfL_M8yhRZ9VMcNn9awYhgBNHljDKK0RNHCmoXV_7ne0Bx0rEUjDkXlxo-jZUM3Igj-VuRd8PCoRteJElb3ljOg_ejxjrNihoXg2H35sc8DIiIm4ebBtZzRINfxm_jEjmDopgO3pRa2bO1YQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n<div class=\"flex flex-col justify-between\">\n\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sin estímulo cuantificable no hay Adaptación duradera en el tejido conectivo ni en el sistema nervioso simpático.</span></p>\n<span class=\"font-label-sm text-label-sm font-semibold text-on-surface uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Síntesis 100% SENS</span></span>\n</div>\n</div>\n\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 113
     }
   },
   {
@@ -556,17 +583,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "La Forma Invisible",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F28",
+    "tag": "SENS",
     "title": "La Forma Invisible",
     "bajada": "Letras de gran cuerpo actuando como portales visuales a la dinámica de movimiento.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDDsidIfhYMCsZ8OlEWHLjbG2G8rdne_9J73fzvS9aIx3DebUCLDDs_O2pQ4F4QvZPzBZO_9PxPyLvd_3T31-Gz3653b28WU_rZwDXf1_TOuV1z-OdZTzTRznrtmr5bFqxBNssu_766_hfTRYzSXHfRXWwrKUrHvC1eWLhEfhLjvIK2TbU-cjRO_Wchg2c4m9Fji0H-xFa_Y8lWNOXzaypPAhUIdbstusmBxJnhPw",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-high overflow-hidden rounded-xl shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Female gymnast mid air during an intentional fluid leap, cinematic warm lighting, calm aesthetic.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDDsidIfhYMCsZ8OlEWHLjbG2G8rdne_9J73fzvS9aIx3DebUCLDDs_O2pQ4F4QvZPzBZO_9PxPyLvd_3T31-Gz3653b28WU_rZwDXf1_TOuV1z-OdZTzTRznrtmr5bFqxBNssu_766_hfTRYzSXHfRXWwrKUrHvC1eWLhEfhLjvIK2TbU-cjRO_Wchg2c4m9Fji0H-xFa_Y8lWNOXzaypPAhUIdbstusmBxJnhPw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/75\"></div>\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10 text-surface\">\n\n<div class=\"flex flex-col gap-1 my-auto\">\n<span class=\"font-headline-xl text-headline-xl font-bold uppercase tracking-tighter opacity-90 text-surface mix-blend-overlay\">SENS</span>\n<h4 class=\"font-headline-sm text-headline-sm uppercase tracking-wide\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La Forma Invisible</span></h4>\n<p class=\"font-body-sm text-body-sm text-surface/80 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Letras de gran cuerpo actuando como portales visuales a la dinámica de movimiento.</span></p>\n</div>\n\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 82
     }
   },
   {
@@ -576,17 +604,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Eje Escapular",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F29",
+    "tag": "01 / Activación",
     "title": "Eje Escapular",
     "bajada": "Cadena posterior concéntrica.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB68X0fyA4854fATzNXQxEbQEdFpalD3w4PwV1_qWxkirZFmjPg0AbOeoI98zBYwbTo3cJLR8a46AtBmX_DGjfRMQoGKkb27Pg_FEdBjal0pElwVOXaCIvmR2n-z__sC65KJsfwN8L_sNPOp5U6knkLAk6yMeFPAkhPkuRQULUjZ-OxNKylzWLGGujedhNia5lY1TgJNxhD_WO2kF8peeAmIG3jYpGKr1ysrXIeoA",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"flex flex-col gap-2\">\n<div class=\"p-3 bg-surface rounded-lg shadow-sm\">\n<span class=\"font-label-sm text-label-sm uppercase text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">01 / Activación</span></span>\n<h4 class=\"font-headline-sm text-headline-sm uppercase text-on-surface\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Eje Escapular</span></h4>\n</div>\n<div class=\"p-3 bg-surface-container-high rounded-lg opacity-75\">\n<span class=\"font-label-sm text-label-sm uppercase text-on-surface-variant\">02 / Carga</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-1\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cadena posterior concéntrica.</span></p>\n</div>\n<div class=\"w-full h-24 rounded bg-cover bg-center shadow-sm\" data-alt=\"Refined anatomical details of athletic shoulder blade movement in soft natural lighting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB68X0fyA4854fATzNXQxEbQEdFpalD3w4PwV1_qWxkirZFmjPg0AbOeoI98zBYwbTo3cJLR8a46AtBmX_DGjfRMQoGKkb27Pg_FEdBjal0pElwVOXaCIvmR2n-z__sC65KJsfwN8L_sNPOp5U6knkLAk6yMeFPAkhPkuRQULUjZ-OxNKylzWLGGujedhNia5lY1TgJNxhD_WO2kF8peeAmIG3jYpGKr1ysrXIeoA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -596,17 +625,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Editorial F30",
-    "title": "Editorial F30",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F30",
+    "tag": "MOVERSE BIEN.",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "Tres líneas equidistantes sin ornamentos superfluos.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB2eWfPcL3Im28BCcyvZQ3e9tnoqq99Ap53LvKb709VBd8NWJWKHYvbXtM3qvhAwp0xg-EOuNQwjL0onxiE_-KFcJKqoNIxkMzis74EjawQA9eslVLBaw_RHCPlydIv9lzAKeNVJWEFNXA-5RG3FivO0r1tNMJ2qD3RW7bzqRsFWfvCEmBdQCn82MRYoaXmBDL68TA0pFaTN3db_vlhXwa5t2XRUNkwx2-VeIGTVQ",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-highest overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10 text-center\">\n\n<div class=\"flex flex-col gap-6 my-auto\">\n<span class=\"font-headline-sm text-headline-sm uppercase tracking-widest font-light text-on-surface\">MOVERSE BIEN.</span>\n<span class=\"font-headline-sm text-headline-sm uppercase tracking-widest font-light text-secondary\">VIVIR MEJOR.</span>\n<span class=\"font-headline-sm text-headline-sm uppercase tracking-widest font-light text-on-surface\">MAKES SENS.</span>\n</div>\n<div class=\"flex flex-col gap-1 items-center\">\n<div class=\"w-16 h-12 rounded bg-cover bg-center shadow-sm\" data-alt=\"Monochrome close up of athlete lacing luxury minimalist training sneakers in quiet studio corner.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB2eWfPcL3Im28BCcyvZQ3e9tnoqq99Ap53LvKb709VBd8NWJWKHYvbXtM3qvhAwp0xg-EOuNQwjL0onxiE_-KFcJKqoNIxkMzis74EjawQA9eslVLBaw_RHCPlydIv9lzAKeNVJWEFNXA-5RG3FivO0r1tNMJ2qD3RW7bzqRsFWfvCEmBdQCn82MRYoaXmBDL68TA0pFaTN3db_vlhXwa5t2XRUNkwx2-VeIGTVQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tres líneas equidistantes sin ornamentos superfluos.</span></p>\n</div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 43,
+      "bajada": 60
     }
   },
   {
@@ -616,17 +646,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "LA CALIDAD DE TU \n                  \n                    ATENCIÓN\n                    \n\n                  DETERMINA TU FUERZA.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F31",
+    "tag": "SENS • MÉTODO",
     "title": "LA CALIDAD DE TU \n                  \n                    ATENCIÓN\n                    \n\n                  DETERMINA TU FUERZA.",
-    "bajada": "El enfoque mental precede a cualquier Adaptación motriz duradera.",
-    "tag": "EDITORIAL SENS",
+    "bajada": "El enfoque mental precede a cualquier adaptación motriz duradera.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB_rq2KMBbUe1xTuRL9Uytipal6bfBNoLJEVqpmKU-0O9wTZzGGNLerzrR3W5muqLdRP8RL5mgkiCoC7dHwBiAOV-Vwfnk2D9tWh42wgElnbr69VYmx9-lbXAXEY-0tl3f1JOl4CP6D7BtGRg1VWvK_V_njXZ9Re5VvJ-VFTWrP2zlV0mQFog5DkbVBfQ3SP-ZsY3f7hhSaAnHFnZhm25WC2QmFXaLViOYL1sD4-Q",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"flex flex-col gap-3 my-auto\">\n<h4 class=\"font-headline-md text-headline-md text-on-surface uppercase font-light leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">LA CALIDAD DE TU ATENCIÓN DETERMINA TU FUERZA.</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El enfoque mental precede a cualquier Adaptación motriz duradera.</span></p>\n</div>\n<div class=\"w-full h-28 rounded-lg bg-cover bg-center shadow-sm\" data-alt=\"Zen inspired minimalist gym space with brass architectural accents, warm wood and quiet natural daylight.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_rq2KMBbUe1xTuRL9Uytipal6bfBNoLJEVqpmKU-0O9wTZzGGNLerzrR3W5muqLdRP8RL5mgkiCoC7dHwBiAOV-Vwfnk2D9tWh42wgElnbr69VYmx9-lbXAXEY-0tl3f1JOl4CP6D7BtGRg1VWvK_V_njXZ9Re5VvJ-VFTWrP2zlV0mQFog5DkbVBfQ3SP-ZsY3f7hhSaAnHFnZhm25WC2QmFXaLViOYL1sD4-Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 126,
+      "bajada": 65
     }
   },
   {
@@ -636,17 +667,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Menos estímulo. Mayor integración.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F32",
+    "tag": "Disrupción",
     "title": "Menos estímulo. Mayor integración.",
     "bajada": "El sistema nervioso responde favorablemente a la sustracción de estímulos ruidosos.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCOr7QvFj2pLfU4Z_khHkuq2VsZ7Y4BMhyRT5KRgpUYSP6gOD2Eeb5cQrxzWOcVTTcPp9xrzP6lBhhQgg8gGq3VlqshsmTGSlot4rEMlZg96Xp2jcyBDPHzs65cQ1Eb2NevPfijg1Cf5XrTnEk_NC9hilLkFhaejXbs7Gq72xl_MJWYthBlFcp-D_WNmYh7nQNEad26lzkDF5tHA53mgIDWD8MSDAiav1nAj9A9kg",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-high overflow-hidden rounded-xl shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Cinematic side profile of person practicing diaphragmatic breathwork on luxury natural fiber mat.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCOr7QvFj2pLfU4Z_khHkuq2VsZ7Y4BMhyRT5KRgpUYSP6gOD2Eeb5cQrxzWOcVTTcPp9xrzP6lBhhQgg8gGq3VlqshsmTGSlot4rEMlZg96Xp2jcyBDPHzs65cQ1Eb2NevPfijg1Cf5XrTnEk_NC9hilLkFhaejXbs7Gq72xl_MJWYthBlFcp-D_WNmYh7nQNEad26lzkDF5tHA53mgIDWD8MSDAiav1nAj9A9kg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/50 to-transparent\"></div>\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10 text-surface\">\n\n<div class=\"flex flex-col gap-2 max-w-[210px]\">\n<span class=\"font-label-sm text-label-sm uppercase text-secondary-fixed\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Disrupción</span></span>\n<h4 class=\"font-headline-sm text-headline-sm uppercase font-light leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Menos estímulo. Mayor integración.</span></h4>\n<p class=\"font-body-sm text-body-sm text-surface/85 line-clamp-3\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El sistema nervioso responde favorablemente a la sustracción de estímulos ruidosos.</span></p>\n</div>\n\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 83
     }
   },
   {
@@ -656,17 +688,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Protocolo de Carga Lenta",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F33",
+    "tag": "SENS • MÉTODO",
     "title": "Protocolo de Carga Lenta",
     "bajada": "Isometría en rango terminal aplicada a estabilizadores lumbopélvicos.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBouwfoL6ZrixeCa4wFu6DzMxazEQKTDzMrOgebyhjGkoea2tfFOfd_0hfkVlPn_94xz_SujIots0zQ6TO2m6sJGkYxIIbkVxcWr8y1pUa6ytJcKExyODSe-KPpMpGDLBlcufyYhYwLwNmddyBhN__FRuK650k9yqGF362lkvi-XA9F3d3orJ3kfq-rQUvNlWW6RFDujidWxdlk7peSxRRSbiEij1gcpzMtvhZKQw",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"bg-surface p-4 rounded-xl shadow-sm flex flex-col gap-3\">\n<div class=\"flex justify-between items-center pb-2 border-b border-surface-container-highest\">\n\n\n</div>\n<h4 class=\"font-headline-sm text-headline-sm uppercase text-on-surface\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Protocolo de Carga Lenta</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Isometría en rango terminal aplicada a estabilizadores lumbopélvicos.</span></p>\n</div>\n<div class=\"w-full h-24 rounded-lg bg-cover bg-center\" data-alt=\"Laboratory clean wellness studio corner with wooden reformer and warm afternoon shadows.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBouwfoL6ZrixeCa4wFu6DzMxazEQKTDzMrOgebyhjGkoea2tfFOfd_0hfkVlPn_94xz_SujIots0zQ6TO2m6sJGkYxIIbkVxcWr8y1pUa6ytJcKExyODSe-KPpMpGDLBlcufyYhYwLwNmddyBhN__FRuK650k9yqGF362lkvi-XA9F3d3orJ3kfq-rQUvNlWW6RFDujidWxdlk7peSxRRSbiEij1gcpzMtvhZKQw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 69
     }
   },
   {
@@ -676,17 +709,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Editorial F34",
-    "title": "Editorial F34",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F34",
+    "tag": "Nico",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "No entrenamos para fatigarnos en el espejo; entrenamos para sostener la vida con gracia sin esfuerzo.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAkzZ9Ag3kssEeCngSTUQW2dfGAs7cAjh0wkCxLkaCyAr7O5cM64Y0C7tCPD3ENOotByHFoEmO3pry8YbwVrNmHQHriH0sRiCJgTl8hr_aR_jIG6-JFQgH1v2rbKW7kTZb3RzPEuHUiWs-lMErkJrVoX_jP1EJ-iWhY4Men8T1g6gnMrYRI30_TWe87VPayrR9VPf4cp4iI7tC60IR2Y0J9Dg6nQbUdNfyDGoptMg",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-[#FAF9F6] overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10 text-on-surface\">\n\n<div class=\"flex flex-col gap-3 my-auto\">\n<span class=\"font-headline-lg text-headline-lg text-secondary-fixed font-serif leading-none\">“</span>\n<p class=\"font-headline-sm text-headline-sm font-light text-on-surface leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">No entrenamos para fatigarnos en el espejo; entrenamos para sostener la vida con gracia sin esfuerzo.</span></p>\n<div class=\"flex items-center gap-3 pt-2\">\n<div class=\"w-9 h-9 rounded-full bg-cover bg-center shrink-0\" data-alt=\"Refined black and white portrait of athletic coach Nico with serene focused gaze.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAkzZ9Ag3kssEeCngSTUQW2dfGAs7cAjh0wkCxLkaCyAr7O5cM64Y0C7tCPD3ENOotByHFoEmO3pry8YbwVrNmHQHriH0sRiCJgTl8hr_aR_jIG6-JFQgH1v2rbKW7kTZb3RzPEuHUiWs-lMErkJrVoX_jP1EJ-iWhY4Men8T1g6gnMrYRI30_TWe87VPayrR9VPf4cp4iI7tC60IR2Y0J9Dg6nQbUdNfyDGoptMg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"flex flex-col\">\n<span class=\"font-label-sm text-label-sm uppercase font-semibold text-on-surface\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Nico</span></span>\n<span class=\"font-mono text-[10px] text-on-surface-variant\">Founder &amp; Somatic Director</span>\n</div>\n</div>\n</div>\n<span class=\"font-mono text-[10px] text-on-surface-variant uppercase\">SENS Signature Note</span>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 43,
+      "bajada": 101
     }
   },
   {
@@ -696,17 +730,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "EL TRIÁNGULO DEL BIENESTAR",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F35",
+    "tag": "SENS • MÉTODO",
     "title": "EL TRIÁNGULO DEL BIENESTAR",
     "bajada": "Integración de estímulos metabólicos de baja fricción y máxima absorción celular.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA1VSwNfzUWlbrPn1g-cq7uj2G7mIaWQGu_9wJ-DFQ3OT1EKuiIA9qt0fFCG3O6u843ySbVQWOUHrXJXKbQcOCHC3_rz1Uc0buUv4YKXVnCksRnUMiHD7QVa4c8STsh0okPAW-wKafzxLJRtG_zFseN3Biir3Ol4fU6WtnrLdRjAsYIzvOwIaMhimtrIEfHO8021u1fgA_0oaW0YXJcV4uINac3d5lKnQq3SdTx7g",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-high overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10 text-center\">\n\n<div class=\"flex flex-col gap-3 my-auto items-center\">\n\n<h4 class=\"font-headline-md text-headline-md uppercase text-on-surface font-light\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">EL TRIÁNGULO DEL BIENESTAR</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-xs\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Integración de estímulos metabólicos de baja fricción y máxima absorción celular.</span></p>\n</div>\n<div class=\"w-full h-24 rounded-lg bg-cover bg-center shadow-sm\" data-alt=\"Minimalist wooden training tools neatly arranged on tatami mat inside sunlit wellness atelier.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA1VSwNfzUWlbrPn1g-cq7uj2G7mIaWQGu_9wJ-DFQ3OT1EKuiIA9qt0fFCG3O6u843ySbVQWOUHrXJXKbQcOCHC3_rz1Uc0buUv4YKXVnCksRnUMiHD7QVa4c8STsh0okPAW-wKafzxLJRtG_zFseN3Biir3Ol4fU6WtnrLdRjAsYIzvOwIaMhimtrIEfHO8021u1fgA_0oaW0YXJcV4uINac3d5lKnQq3SdTx7g')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 81
     }
   },
   {
@@ -716,17 +751,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Densidad Ósea &amp; Fuerza Somática",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F36",
+    "tag": "Caja Mineral",
     "title": "Densidad Ósea &amp; Fuerza Somática",
     "bajada": "El hueso responde a la carga axial. El sedentarismo disuelve la estructura.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCqOENrj-mh6gbt_-y4vZgTVxX4OxiIsGaSAQREVC6LQE9ebERSwG860Ap262o6ewJZaTCOYI_mEb0pMkHDCdYmG4lRckJFWaXIk8yb_z5qXstFAC_T0w7g691tjNly-5JlqbYo-8dci9gq6o6P23Ft1eJOLBDPhIaYjL0oTUsJsh-Agkr48gXy4-_6jIpdWapjRZtoIDOcavV2OIjlmwuQ5gMDr0x-3QUV3tuykQ",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"p-6 bg-surface-container-low rounded-2xl shadow-inner flex flex-col gap-3\">\n<span class=\"font-label-sm text-label-sm uppercase text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Caja Mineral</span></span>\n<h4 class=\"font-headline-sm text-headline-sm uppercase text-on-surface font-light\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Densidad Ósea &amp; Fuerza Somática</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El hueso responde a la carga axial. El sedentarismo disuelve la estructura.</span></p>\n<div class=\"w-full h-20 rounded bg-cover bg-center shadow-sm mt-1\" data-alt=\"Macro photo of raw limestone showing intricate natural mineral grain in serene museum lighting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqOENrj-mh6gbt_-y4vZgTVxX4OxiIsGaSAQREVC6LQE9ebERSwG860Ap262o6ewJZaTCOYI_mEb0pMkHDCdYmG4lRckJFWaXIk8yb_z5qXstFAC_T0w7g691tjNly-5JlqbYo-8dci9gq6o6P23Ft1eJOLBDPhIaYjL0oTUsJsh-Agkr48gXy4-_6jIpdWapjRZtoIDOcavV2OIjlmwuQ5gMDr0x-3QUV3tuykQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n<span class=\"font-mono text-[10px] text-on-surface-variant\">Efecto Táctil Mineral</span>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 75
     }
   },
   {
@@ -736,17 +772,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Equilibrio.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F37",
+    "tag": "SENS • MÉTODO",
     "title": "Equilibrio.",
     "bajada": "La simetría no es inmovilidad, sino la continua oscilación armónica alrededor del centro de gravedad.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBbido2N6jHv8_dXF_VwbtD_4cyx0GPYDfBdjzMS10IiYj15ZqaPC7zcJRisAhQ0_aXRim8HrnjYAU-YD1SgZCuX9QtLdME6zCmh16GYP4PLgsgz5Vos0yhQ3MN8jys-DX_ICYtVwQRJry8leSrq6nvgha_j6Y2wHfPCvB4JsZ-HCSJoKQTWYPN4G3bhgBJknpYxuQ4h4ooa3vAIBEvVuaf_oj91z8oc9GveG1HVA",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10 text-center\">\n\n<div class=\"flex flex-col gap-2 my-auto\">\n\n<h4 class=\"font-headline-lg text-headline-lg font-serif italic text-on-surface font-light\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Equilibrio.</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-xs mx-auto\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La simetría no es inmovilidad, sino la continua oscilación armónica alrededor del centro de gravedad.</span></p>\n</div>\n<div class=\"w-full h-24 rounded-lg bg-cover bg-center shadow-sm\" data-alt=\"Sculptural brass and bronze balance scales placed on polished concrete table in wellness sanctuary.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBbido2N6jHv8_dXF_VwbtD_4cyx0GPYDfBdjzMS10IiYj15ZqaPC7zcJRisAhQ0_aXRim8HrnjYAU-YD1SgZCuX9QtLdME6zCmh16GYP4PLgsgz5Vos0yhQ3MN8jys-DX_ICYtVwQRJry8leSrq6nvgha_j6Y2wHfPCvB4JsZ-HCSJoKQTWYPN4G3bhgBJknpYxuQ4h4ooa3vAIBEvVuaf_oj91z8oc9GveG1HVA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 101
     }
   },
   {
@@ -756,17 +793,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "EL RITMO ES TODO.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F38",
+    "tag": "SENS • MÉTODO",
     "title": "EL RITMO ES TODO.",
     "bajada": "Cuando el tempo se desacelera, la propiocepción alcanza su máxima agudeza diagnóstica.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBuURzqz2n6Z0jIhGH5-a4N0qiNN7W7T6WgmnICUdAt0nLC3u9Xeru2TM4_u5MNzLtJmEOUuTLs3Pq-3OEgrgmoUCWTSL0UkgQ0-M8XCEXjcRhLgGJHmP3_1r0dZ9RaBbp7DUctSJelmcG5epkJNgw3AwPTAMDPf8ied9tagHTMcow3A78Cg_fazzNBFCfSCAlI5PbxmsbPqnLSG2yl-0lZLQa8LZ7gKp3mXl6SCw",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-high overflow-hidden rounded-xl shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Athletic body silhouette floating in warm deep mineral water bath with soft reflection ripples.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBuURzqz2n6Z0jIhGH5-a4N0qiNN7W7T6WgmnICUdAt0nLC3u9Xeru2TM4_u5MNzLtJmEOUuTLs3Pq-3OEgrgmoUCWTSL0UkgQ0-M8XCEXjcRhLgGJHmP3_1r0dZ9RaBbp7DUctSJelmcG5epkJNgw3AwPTAMDPf8ied9tagHTMcow3A78Cg_fazzNBFCfSCAlI5PbxmsbPqnLSG2yl-0lZLQa8LZ7gKp3mXl6SCw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/70\"></div>\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10 text-center text-surface\">\n\n<div class=\"flex flex-col gap-3 my-auto max-w-xs mx-auto\">\n<h4 class=\"font-headline-md text-headline-md uppercase font-light tracking-wide\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">EL RITMO ES TODO.</span></h4>\n<div class=\"w-8 h-px bg-secondary-fixed mx-auto\"></div>\n<p class=\"font-body-sm text-body-sm text-surface/85\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cuando el tempo se desacelera, la propiocepción alcanza su máxima agudeza diagnóstica.</span></p>\n</div>\n\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 86
     }
   },
   {
@@ -776,17 +814,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Longevidad Activa",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F39",
+    "tag": "SENS • MÉTODO",
     "title": "Longevidad Activa",
     "bajada": "Construir reservas funcionales hoy para asegurar autonomía plena en las próximas décadas.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCBvDxqgNoINdU3zGk3oX3hrLymU8-aLGKn48D5tro-JtSkS_7YAA7IDLl9l70M385dHui-Xl0kfgcip45DvNo-qTSDRDoiSK22m5D7TRnI-tjD5s2d8XVeHYJS9Ei99iIFpNknzO9lbOPvpVsadxkwUOzaWoDWwOSwReU_Ys-5qKzurEBoVY_Kstk7tgLBqSotZFAYEStN2ToJa78QGW0Xx1AbI9DYDuIIhjgawA",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface-container-high overflow-hidden rounded-xl shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Sun dappled linen curtain gently blowing across smooth oak floorboards in a quiet luxury training salon.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBvDxqgNoINdU3zGk3oX3hrLymU8-aLGKn48D5tro-JtSkS_7YAA7IDLl9l70M385dHui-Xl0kfgcip45DvNo-qTSDRDoiSK22m5D7TRnI-tjD5s2d8XVeHYJS9Ei99iIFpNknzO9lbOPvpVsadxkwUOzaWoDWwOSwReU_Ys-5qKzurEBoVY_Kstk7tgLBqSotZFAYEStN2ToJa78QGW0Xx1AbI9DYDuIIhjgawA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-center z-10\">\n<div class=\"bg-surface p-6 rounded-2xl shadow-2xl flex flex-col gap-2\">\n\n<h4 class=\"font-headline-sm text-headline-sm uppercase text-on-surface font-light\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Longevidad Activa</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Construir reservas funcionales hoy para asegurar autonomía plena en las próximas décadas.</span></p>\n<div class=\"pt-2 flex justify-between items-center text-[10px] font-mono text-on-surface-variant\">\n\n\n</div>\n</div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 18,
+      "title": 35,
+      "bajada": 89
     }
   },
   {
@@ -796,17 +835,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b2",
-    "block": "Bloque II: Editorial & Tipografía",
-    "name": "Biomecánica de Precisión",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "F40",
+    "tag": "Ingeniería Visual &amp; Telemetría",
     "title": "Biomecánica de Precisión",
     "bajada": "Cada vector de fuerza protege la integridad de la cápsula articular sin comprometer la potencia.",
-    "tag": "EDITORIAL SENS",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAZAGRlWMNJ9qeMEL_fiWi7e64wo3XjjOoyuA_30EJcFOBV-TECWP2M7MDzEQvPQtm6BUXKGk-qOsx1qHzuyxdY5lYP4QFy7wWfS7lyXcOeYFxWW_9ziufaUPmTxEjW6gsTm6v_dOwbVd2ONjtpORvFWTp-FM5cAKb4yWYhIuoOAIZHCUN8PxCp6K0vJc5nfyp44_ClIwEz2n9wf_1GZUfXv5WR9NxtEIuh3FFTXg",
-    "htmlTemplate": "<article class=\"flex flex-col overflow-hidden group transition-shadow\">\n<div class=\"relative w-full aspect-[4/5] bg-surface overflow-hidden rounded-xl shadow-md\">\n<div class=\"grid-overlay-guideline absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none opacity-0 transition-opacity flex flex-col justify-between z-20\">\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n<div class=\"w-full h-px bg-secondary-fixed/70\"></div>\n</div>\n<div class=\"absolute inset-x-0 top-[10%] bottom-[10%] p-6 flex flex-col justify-between z-10\">\n\n<div class=\"w-full h-52 rounded-xl bg-cover bg-center shadow-sm\" data-alt=\"Striking athletic posture of calm balance on wooden floor in quiet luxury modern gym space.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZAGRlWMNJ9qeMEL_fiWi7e64wo3XjjOoyuA_30EJcFOBV-TECWP2M7MDzEQvPQtm6BUXKGk-qOsx1qHzuyxdY5lYP4QFy7wWfS7lyXcOeYFxWW_9ziufaUPmTxEjW6gsTm6v_dOwbVd2ONjtpORvFWTp-FM5cAKb4yWYhIuoOAIZHCUN8PxCp6K0vJc5nfyp44_ClIwEz2n9wf_1GZUfXv5WR9NxtEIuh3FFTXg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"flex flex-col gap-1 pt-2\">\n<h4 class=\"font-headline-sm text-headline-sm uppercase text-on-surface\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Biomecánica de Precisión</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cada vector de fuerza protege la integridad de la cápsula articular sin comprometer la potencia.</span></p>\n</div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 130
+      "tag": 34,
+      "title": 35,
+      "bajada": 96
     }
   },
   {
@@ -817,16 +857,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Delta Somático Lumbar",
+    "name": "Template F41",
+    "tag": "biomecanica",
     "title": "Delta Somático Lumbar",
-    "bajada": "+14 mm",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBzPtMay9athui6HAHRlOQjQeDPfyWPpXE8nQYIz4i7FCuoQxKeEHXVGP7ZsCMkoNOOxmiXZzbePM6UnmUHl_04-XuFiQMyG86VJfAk_GWbMZ2At7wB4FQZq_RwvHh1bi4zxfuZoecEkn9tX9wJ2sBpF9OWXq7fPt0JP935t1y5dfpuMA2XmqvHvbStXdXjXyKCyiAnUVQC3c22CQvOuABoiomqhsyVdTgedXb0cg",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"biomecanica\" data-id=\"F41\" onclick=\"openModal('F41')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet luxury somatic studio with natural daylight, subtle timber beams and an athletic human spine silhouette performing neutral spine postural alignment in muted linen tones\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzPtMay9athui6HAHRlOQjQeDPfyWPpXE8nQYIz4i7FCuoQxKeEHXVGP7ZsCMkoNOOxmiXZzbePM6UnmUHl_04-XuFiQMyG86VJfAk_GWbMZ2At7wB4FQZq_RwvHh1bi4zxfuZoecEkn9tX9wJ2sBpF9OWXq7fPt0JP935t1y5dfpuMA2XmqvHvbStXdXjXyKCyiAnUVQC3c22CQvOuABoiomqhsyVdTgedXb0cg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/45 to-transparent\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<!-- Golden Ratio Centered Focus Block -->\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"bg-surface/10 backdrop-blur-md p-4 rounded-xl mb-4\">\n<div class=\"grid grid-cols-2 gap-3 text-center\">\n<div class=\"p-2 rounded-lg bg-primary/40\">\n<span class=\"font-label-sm text-label-sm text-outline-variant uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Convencional</span></span>\n<p class=\"font-headline-sm text-headline-sm text-surface mt-0.5\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">+14 mm</span></p>\n<span class=\"font-body-sm text-body-sm text-surface-dim\">Compresión axial</span>\n</div>\n<div class=\"p-2 rounded-lg bg-secondary/30\">\n<span class=\"font-label-sm text-label-sm text-secondary-fixed uppercase\">Protocolo SENS</span>\n<p class=\"font-headline-sm text-headline-sm text-secondary-container mt-0.5\">0.0 mm</p>\n<span class=\"font-body-sm text-body-sm text-secondary-fixed\">Descompresión total</span>\n</div>\n</div>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Delta Somático Lumbar</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\">Reorganización de la bisagra coxofemoral para neutralizar la Tensión pasiva del tejido conjuntivo.</p>\n</div>",
+    "bajada": "Reorganización de la bisagra coxofemoral para neutralizar la tensión pasiva del tejido conjuntivo.",
+    "metricHtml": "<div class=\"bg-surface/10 backdrop-blur-md p-3 rounded-xl mb-3\"><div class=\"grid grid-cols-2 gap-2 text-center\"><div><span class=\"text-[10px] text-outline-variant uppercase\">Convencional</span><p class=\"text-surface font-semibold text-sm\">+14 mm</p></div><div><span class=\"text-[10px] text-secondary-fixed uppercase\">SENS</span><p class=\"text-secondary-container font-semibold text-sm\">0.0 mm</p></div></div></div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 98
     }
   },
   {
@@ -837,16 +878,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Recuperación Neuromuscular",
+    "name": "Template F42",
+    "tag": "tiempos",
     "title": "Recuperación Neuromuscular",
-    "bajada": "VFC • 84 ms\nStatus Parasimpático\n\n\nRecuperación Neuromuscular\nVariabilidad cardíaca optimizada. Tu sistema autónomo autoriza volumen de intensidad máxima.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC-VM4LbTCy4-nEJMQctQM6AeNckB4t0NoAzB19iZsc7GBqquS63Stsb08xxpGoXQweTLPulw8bJNjDxXzEpAP3uXyoIgR4MANwe829bKUhzK54FBLTQ-ZLvnA6w0zrsdW9WR0DM8fCFvf3FFvd-Km7aqqlQ3VWd_8kYU14DBn2wmsSoSq75HsL73xUS6BUuWdRlAc0nkcQeI27U-RXmrWXQu57dtGjknwl1_Ckmg",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"tiempos\" data-id=\"F42\" onclick=\"openModal('F42')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monochromatic textural concrete architecture with soft warm ivory illumination and serene athletic recovery telemetry atmosphere\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-VM4LbTCy4-nEJMQctQM6AeNckB4t0NoAzB19iZsc7GBqquS63Stsb08xxpGoXQweTLPulw8bJNjDxXzEpAP3uXyoIgR4MANwe829bKUhzK54FBLTQ-ZLvnA6w0zrsdW9WR0DM8fCFvf3FFvd-Km7aqqlQ3VWd_8kYU14DBn2wmsSoSq75HsL73xUS6BUuWdRlAc0nkcQeI27U-RXmrWXQu57dtGjknwl1_Ckmg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<!-- ECG Pulse Wave Inline SVG -->\n<div class=\"w-full mb-5\">\n<svg class=\"w-full h-16 text-secondary-container\" fill=\"none\" viewbox=\"0 0 320 80\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M0 45 L90 45 L102 15 L114 68 L126 32 L138 52 L146 45 L320 45\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2.5\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">VFC • 84 ms Status Parasimpático Recuperación Neuromuscular Variabilidad cardíaca optimizada. Tu sistema autónomo autoriza volumen de intensidad máxima.</span></p>\n</div>",
+    "bajada": "Variabilidad cardíaca optimizada. Tu sistema autónomo autoriza volumen de intensidad máxima.",
+    "metricHtml": "<div class=\"bg-surface/10 backdrop-blur-md px-3 py-1.5 rounded-full inline-block mb-3 text-secondary-container font-label-sm\">VFC • 84 ms (Parasimpático)</div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 92
     }
   },
   {
@@ -857,16 +899,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Carga Axial en L5-S1",
+    "name": "Template F43",
+    "tag": "porcentajes",
     "title": "Carga Axial en L5-S1",
     "bajada": "Reducción medible al reconfigurar la trayectoria articular de bisagra de cadera en patrones de tracción.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD699XNT9jWSZkHbefppGmoG-tqGyrMbyWGAE_GAi3DnxVtsanWzeqJKnvbB7c0ngiOfAmfB5PdwRdSaGyHX4Th7JeDpbmUeIHA3QW9W0Y5yUciMh6Lm3_SK2sF8CGNtkkua4Ow9ISYH_7mBFEt1mztuNabAmlLjsu_7UwUfM3nv8YIcooD-dVycfO3oVuUqmrDy6eadZRUUpde_FDQzBxPlKwVRUZL48L0hlA_yg",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"porcentajes\" data-id=\"F43\" onclick=\"openModal('F43')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"High-end private recovery suite with stone finish, minimalist dark marble basin, and diffuse zen light\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD699XNT9jWSZkHbefppGmoG-tqGyrMbyWGAE_GAi3DnxVtsanWzeqJKnvbB7c0ngiOfAmfB5PdwRdSaGyHX4Th7JeDpbmUeIHA3QW9W0Y5yUciMh6Lm3_SK2sF8CGNtkkua4Ow9ISYH_7mBFEt1mztuNabAmlLjsu_7UwUfM3nv8YIcooD-dVycfO3oVuUqmrDy6eadZRUUpde_FDQzBxPlKwVRUZL48L0hlA_yg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/60 to-primary/30\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-baseline gap-2 mb-2\">\n<span class=\"font-headline-xl text-[4.5rem] leading-none font-light tracking-tighter text-secondary-container\">−42%</span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Carga Axial en L5-S1</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1.5 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Reducción medible al reconfigurar la trayectoria articular de bisagra de cadera en patrones de tracción.</span></p>\n</div>",
+    "metricHtml": "<span class=\"text-3xl font-light text-secondary-container block mb-1\">−42%</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 104
     }
   },
   {
@@ -877,16 +920,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Sobrecarga Progresiva",
+    "name": "Template F44",
+    "tag": "biomecanica",
     "title": "Sobrecarga Progresiva",
     "bajada": "Incremento del 19.7% en estímulo miofibrilar con cero incremento de fatiga ligamentosa.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBAM8-oYUIp2LbitfCSRUakWg_Rw2E16nLQ4DXRvzcbaTe6D-at417p_SjFzm03jNjofLTc2j9EnRzbXFbzhqzHliCrxexymyTygnGrVCTr0Yr_WehkL8ZlPAQHGyf0yWaSmsV0psVxR8M8eKccGOqeQNtvKLJxnDkme8KhDoj7BJitYAtLTgIMXefVFFtyO85vbcohTdN4JT-l7U3WF8CZnNCCQvy-O1cgwJ01nw",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"biomecanica\" data-id=\"F44\" onclick=\"openModal('F44')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Bespoke luxury gymnasium equipment forged from matte black steel and hand-stitched caramel Italian leather\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBAM8-oYUIp2LbitfCSRUakWg_Rw2E16nLQ4DXRvzcbaTe6D-at417p_SjFzm03jNjofLTc2j9EnRzbXFbzhqzHliCrxexymyTygnGrVCTr0Yr_WehkL8ZlPAQHGyf0yWaSmsV0psVxR8M8eKccGOqeQNtvKLJxnDkme8KhDoj7BJitYAtLTgIMXefVFFtyO85vbcohTdN4JT-l7U3WF8CZnNCCQvy-O1cgwJ01nw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"bg-surface/10 backdrop-blur-md rounded-xl p-3.5 mb-4 flex flex-col gap-2\">\n<div class=\"flex justify-between items-center pb-2 bg-primary/20 px-3 py-1.5 rounded-lg\">\n<span class=\"font-label-sm text-label-sm uppercase text-outline-variant\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Microciclo 03</span></span>\n<span class=\"font-label-md text-label-md font-semibold text-on-primary\">12.400 kg tonelaje</span>\n</div>\n<div class=\"flex justify-between items-center bg-secondary/30 px-3 py-1.5 rounded-lg\">\n<span class=\"font-label-sm text-label-sm uppercase text-secondary-fixed\">Microciclo 04 (SENS)</span>\n<span class=\"font-label-md text-label-md font-semibold text-secondary-container\">14.850 kg tonelaje</span>\n</div>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sobrecarga Progresiva</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Incremento del 19.7% en estímulo miofibrilar con cero incremento de fatiga ligamentosa.</span></p>\n</div>",
+    "metricHtml": "<div class=\"bg-surface/10 px-3 py-1.5 rounded-lg text-secondary-container font-label-sm mb-2\">Tonelaje: 14.850 kg (+19.7%)</div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 87
     }
   },
   {
@@ -897,16 +941,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Precisión Sin Fatiga",
+    "name": "Template F45",
+    "tag": "tiempos",
     "title": "Precisión Sin Fatiga",
-    "bajada": "42 MIN",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCEKC9pqcA6ECBnxX233QhMeA1X87w7dYqpvGxyGCTKCmLuxQElTSDv56UEil-FLT_wnlbN2aNpwV6Tk2HQ75ztRTU9qf0qIVCV1uNjQmB547SqjLyIsHm4PGOtzSnNd-gDEcmAQHGDnpKKAmAbP8JMK5dmYb5xrNtFrfh21Ae--K77XbJxFhcoYmljQ453jtkLsB24YCFojqhIr4m7foUvFgXDMq9jmKUrMCkVGA",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"tiempos\" data-id=\"F45\" onclick=\"openModal('F45')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Minimalist architectural hourglass and Swiss precision chronometer dial resting on tactile porous limestone table\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCEKC9pqcA6ECBnxX233QhMeA1X87w7dYqpvGxyGCTKCmLuxQElTSDv56UEil-FLT_wnlbN2aNpwV6Tk2HQ75ztRTU9qf0qIVCV1uNjQmB547SqjLyIsHm4PGOtzSnNd-gDEcmAQHGDnpKKAmAbP8JMK5dmYb5xrNtFrfh21Ae--K77XbJxFhcoYmljQ453jtkLsB24YCFojqhIr4m7foUvFgXDMq9jmKUrMCkVGA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"inline-flex items-center gap-2 self-start bg-secondary-container text-on-secondary-fixed px-3 py-1 rounded-full mb-3\">\n<span class=\"material-symbols-outlined text-[16px]\">timer</span>\n<span class=\"font-label-sm text-label-sm uppercase tracking-wider font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Ventana Óptima</span></span>\n</div>\n<p class=\"font-headline-xl text-headline-xl font-light text-on-primary tracking-tight\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">42 MIN</span></p>\n<h2 class=\"font-headline-md text-headline-md text-secondary-container font-medium tracking-tight mt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Precisión Sin Fatiga</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1.5 line-clamp-2\">El umbral exacto de producción hormonal antes del incremento exponencial de cortisol sistémico.</p>\n</div>",
+    "bajada": "El umbral exacto de producción hormonal antes del incremento exponencial de cortisol sistémico.",
+    "metricHtml": "<span class=\"text-3xl font-light text-secondary-container block mb-1\">42 MIN</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 95
     }
   },
   {
@@ -917,16 +962,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Densidad Entre Series",
+    "name": "Template F46",
+    "tag": "tiempos",
     "title": "Densidad Entre Series",
-    "bajada": "Resíntesis de fosfocreatina completa (92%).",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD8YJzkHFOAdLCNmqDeehLFFEoeWOPBv8jZh28JFjU47ilMBIymfgGd6sQcdk9BcK6uwCe5INGCVL9Rhp0I4-Vabkm5WGwr0vEZTNaHUaKbcXeK0ufrnHQnFICVYBqPFsoiEPbsxrPPhxpsFHvo2RkLRzEMoayeekq77JuVF5mquEFU_Dmh9f9RxOIo8UmKrWgCyxJekMeusTSfy8dfnWubtt2YFL0tHdPQkX52wQ",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"tiempos\" data-id=\"F46\" onclick=\"openModal('F46')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Warm studio setting with smooth curved oak wood walls and gentle shadows cast by morning sunlight\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8YJzkHFOAdLCNmqDeehLFFEoeWOPBv8jZh28JFjU47ilMBIymfgGd6sQcdk9BcK6uwCe5INGCVL9Rhp0I4-Vabkm5WGwr0vEZTNaHUaKbcXeK0ufrnHQnFICVYBqPFsoiEPbsxrPPhxpsFHvo2RkLRzEMoayeekq77JuVF5mquEFU_Dmh9f9RxOIo8UmKrWgCyxJekMeusTSfy8dfnWubtt2YFL0tHdPQkX52wQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-transparent\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-center gap-4 mb-4\">\n<div class=\"relative w-16 h-16 flex items-center justify-center\">\n<svg class=\"w-full h-full transform -rotate-90\" viewbox=\"0 0 64 64\">\n<circle class=\"text-surface/20\" cx=\"32\" cy=\"32\" fill=\"none\" r=\"28\" stroke=\"currentColor\" stroke-width=\"4\"></circle>\n<circle class=\"text-secondary-container\" cx=\"32\" cy=\"32\" fill=\"none\" r=\"28\" stroke=\"currentColor\" stroke-dasharray=\"175\" stroke-dashoffset=\"45\" stroke-linecap=\"round\" stroke-width=\"4\"></circle>\n</svg>\n<span class=\"absolute font-headline-sm text-headline-sm font-light text-on-primary\">75s</span>\n</div>\n<div>\n<span class=\"font-label-sm text-label-sm text-secondary-container uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Rest Interval</span></span>\n<p class=\"font-body-sm text-body-sm text-surface-container-high\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Resíntesis de fosfocreatina completa (92%).</span></p>\n</div>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Densidad Entre Series</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\">El descanso exacto para preservar reclutamiento motor en unidades de alto umbral.</p>\n</div>",
+    "bajada": "El descanso exacto para preservar reclutamiento motor en unidades de alto umbral.",
+    "metricHtml": "<span class=\"text-2xl font-light text-secondary-container block mb-1\">75s Pausa</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 81
     }
   },
   {
@@ -937,16 +983,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Regulación Neuroendocrina",
+    "name": "Template F47",
+    "tag": "habitos",
     "title": "Regulación Neuroendocrina",
     "bajada": "Entrenar con menor fatiga central incrementa la capacidad neta de generación de fuerza máxima.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDbFBeY7y3P5HQED5wEZgzq5997suaF18oQxqnatO7KlUzeFxMgY4Gpsec3FOsiI0bheQ1AAFk2NmLAoAGapzafo4aPGuVz9mhxKwKu5EILmB8EjnsuOjp2Zq2lFGpXrxP-ZlAp2cTxgkgE90K6_uSMQ68Cy7QadzFEWQbrylBYpW8KZ7SQ7lGPV4hbwOndkLaQb5_LJO-JMYYnq0Mz__baGwYlhOlWCrVtYKEhRg",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"habitos\" data-id=\"F47\" onclick=\"openModal('F47')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Sculptural bronze scale resting in an understated architectural wellness pavilion with clean geometry\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDbFBeY7y3P5HQED5wEZgzq5997suaF18oQxqnatO7KlUzeFxMgY4Gpsec3FOsiI0bheQ1AAFk2NmLAoAGapzafo4aPGuVz9mhxKwKu5EILmB8EjnsuOjp2Zq2lFGpXrxP-ZlAp2cTxgkgE90K6_uSMQ68Cy7QadzFEWQbrylBYpW8KZ7SQ7lGPV4hbwOndkLaQb5_LJO-JMYYnq0Mz__baGwYlhOlWCrVtYKEhRg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"bg-surface/10 backdrop-blur-md rounded-xl p-3 mb-4\">\n<div class=\"flex items-center justify-between text-body-sm\">\n<span class=\"text-error-container font-medium\">Cortisol −31%</span>\n<span class=\"text-outline-variant\">⇌</span>\n<span class=\"text-secondary-container font-medium\">Torque Miofibrilar +18%</span>\n</div>\n<div class=\"w-full bg-surface/20 h-1.5 rounded-full mt-2 overflow-hidden flex\">\n<div class=\"bg-error-container h-full w-[35%]\"></div>\n<div class=\"bg-secondary-container h-full w-[65%]\"></div>\n</div>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Regulación Neuroendocrina</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Entrenar con menor fatiga central incrementa la capacidad neta de generación de fuerza máxima.</span></p>\n</div>",
+    "metricHtml": "<div class=\"bg-surface/10 px-3 py-1 rounded-full text-secondary-container text-xs mb-2\">Cortisol −31% ⇌ Fuerza +18%</div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 94
     }
   },
   {
@@ -957,16 +1004,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Proximidad al Fallo Consciente",
+    "name": "Template F48",
+    "tag": "biomecanica",
     "title": "Proximidad al Fallo Consciente",
     "bajada": "RIR 2 asegura 98% del estímulo anabólico protegiendo cápsulas articulares y discos intervertebrales.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC8kazuPn-XTGjiIc1fMs5vXhNv7A3AnJmjd2u51bkeGA0LY86Yzx7zsop7S3yk9ubFhZHMrkLI1dHXXQx0MfYIxDsS3Q-fXDi11oRfu4Mz0RKtEbejEzOEmoKOCLC0amO42clrrJwKPjWC8D_DTrTNPJYA3BIAztWERWnx5vo3Epgyz7bUlGuC05FozRy3Nuc8_qzL026q8BtWWoHavUgj9e2A13cnSDcC6341Jg",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"biomecanica\" data-id=\"F48\" onclick=\"openModal('F48')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Serene training space with monolithic sandstone pillars and cast bronze kettlebells in perfect symmetrical alignment\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8kazuPn-XTGjiIc1fMs5vXhNv7A3AnJmjd2u51bkeGA0LY86Yzx7zsop7S3yk9ubFhZHMrkLI1dHXXQx0MfYIxDsS3Q-fXDi11oRfu4Mz0RKtEbejEzOEmoKOCLC0amO42clrrJwKPjWC8D_DTrTNPJYA3BIAztWERWnx5vo3Epgyz7bUlGuC05FozRy3Nuc8_qzL026q8BtWWoHavUgj9e2A13cnSDcC6341Jg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/10\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-center gap-2 mb-4\">\n<div class=\"flex-1 py-1.5 text-center rounded-lg bg-surface/20 font-label-md text-surface-dim\">RIR 4</div>\n<div class=\"flex-1 py-1.5 text-center rounded-lg bg-surface/20 font-label-md text-surface-dim\">RIR 3</div>\n<div class=\"flex-1 py-2 text-center rounded-lg bg-secondary-container text-on-secondary-fixed font-headline-sm font-semibold shadow-sm\">RIR 2</div>\n<div class=\"flex-1 py-1.5 text-center rounded-lg bg-surface/20 font-label-md text-surface-dim\">RIR 1</div>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Proximidad al Fallo Consciente</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">RIR 2 asegura 98% del estímulo anabólico protegiendo cápsulas articulares y discos intervertebrales.</span></p>\n</div>",
+    "metricHtml": "<span class=\"px-2.5 py-1 bg-secondary-container text-on-secondary-fixed rounded text-xs font-bold mb-2 inline-block\">RIR 2 TARGET</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 100
     }
   },
   {
@@ -977,16 +1025,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Ventana Anabólica Nocturna",
+    "name": "Template F49",
+    "tag": "habitos",
     "title": "Ventana Anabólica Nocturna",
     "bajada": "El 80% de la hormona somatotropina se secreta en las primeras 4 horas de arquitectura de sueño profundo.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB0MfGO0vJHBNnjV1ms2FJKuwyk8fTOhD30yqHST35pw4rG4p9rxEboHPSmMDcam-pk23HbTSSQyEjPPsAh63EGSXWvE7tJmxKYWzjW2bwXmvtATHEmrwhzJPpebyRx25pHzwQh7-aA2ZHFXosMVo5p4MY4g4XeZ5-U9su7liMqGQ8A-74xYirx-PTmxAcBZGsRKDwLqe4hUanl77xU1DuOzT0kDjTONCHGrKo6Fg",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"habitos\" data-id=\"F49\" onclick=\"openModal('F49')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"High-end restful sanctuary bedroom with linen sheets, indirect amber lighting and acoustic wool wall panels\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB0MfGO0vJHBNnjV1ms2FJKuwyk8fTOhD30yqHST35pw4rG4p9rxEboHPSmMDcam-pk23HbTSSQyEjPPsAh63EGSXWvE7tJmxKYWzjW2bwXmvtATHEmrwhzJPpebyRx25pHzwQh7-aA2ZHFXosMVo5p4MY4g4XeZ5-U9su7liMqGQ8A-74xYirx-PTmxAcBZGsRKDwLqe4hUanl77xU1DuOzT0kDjTONCHGrKo6Fg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-baseline gap-2 mb-2\">\n<span class=\"font-headline-xl text-headline-xl text-secondary-container font-light\">7.5 hs</span>\n<span class=\"font-label-sm text-label-sm text-surface-container-high uppercase tracking-widest\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fase REM &amp; N3</span></span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Ventana Anabólica Nocturna</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El 80% de la hormona somatotropina se secreta en las primeras 4 horas de arquitectura de sueño profundo.</span></p>\n</div>",
+    "metricHtml": "<span class=\"text-3xl font-light text-secondary-container block mb-1\">7.5 hs</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 104
     }
   },
   {
@@ -997,16 +1046,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Cena con Vino sin Culpa",
+    "name": "Template F50",
+    "tag": "habitos",
     "title": "Cena con Vino sin Culpa",
     "bajada": "Estructuración semanal que protege la sensibilidad a la insulina mientras disfrutas tu vida social.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCGZWxzyBGBjDxhqE2oWTUML9IdEs06wFitym8n8K94lhfJpB9B0JENRWwksnTNHNKSpCvyvEht5rENww1Mwe03BhVidsVQNs_uIHxrW2Sxlo3TcuOOV8rO7t57_v-m_uGAb_eu5gi3VYH4AFgqIrQJn7g_xmHlzPfgRnnov4MqzleDGZqQl7hgK46RE7HiwIQtCQFwtBvH18eUrDaALNUVjgGFrRN3KuQcmuDtFw",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"habitos\" data-id=\"F50\" onclick=\"openModal('F50')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Refined sommelier table in luxury private lounge with single fine crystal glass of biodynamic pinot noir and organic sourdough\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGZWxzyBGBjDxhqE2oWTUML9IdEs06wFitym8n8K94lhfJpB9B0JENRWwksnTNHNKSpCvyvEht5rENww1Mwe03BhVidsVQNs_uIHxrW2Sxlo3TcuOOV8rO7t57_v-m_uGAb_eu5gi3VYH4AFgqIrQJn7g_xmHlzPfgRnnov4MqzleDGZqQl7hgK46RE7HiwIQtCQFwtBvH18eUrDaALNUVjgGFrRN3KuQcmuDtFw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"inline-flex items-center gap-2 bg-secondary-container/90 backdrop-blur-sm text-on-secondary-fixed px-3 py-1.5 rounded-full mb-3 self-start\">\n<span class=\"material-symbols-outlined text-[16px]\">local_bar</span>\n<span class=\"font-label-md text-label-md font-semibold\">+500 kcal Buffer Social</span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cena con Vino sin Culpa</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Estructuración semanal que protege la sensibilidad a la insulina mientras disfrutas tu vida social.</span></p>\n</div>",
+    "metricHtml": "<span class=\"text-xs bg-secondary-container text-on-secondary-fixed px-3 py-1 rounded-full font-bold mb-2 inline-block\">+500 kcal Buffer</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 99
     }
   },
   {
@@ -1017,16 +1067,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Volumen de Máxima Rentabilidad",
+    "name": "Template F51",
+    "tag": "porcentajes",
     "title": "Volumen de Máxima Rentabilidad",
     "bajada": "Separando el daño metabólico del estímulo mecánico real.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD84nPYZY1vhBZXI8vO1eTuPY7RaSXqrZebX0hTMHH7RXI4MRWakT69GzcnuTOMad3kW_N74CdT5vVtLVKiRLU9orkIRgSTL_AvkdKwG9okcIGR-PrYoitDFHbi9JZoUZp-UEZ2bVy9s4Co5iHoNBfAet3V7tq3pNKwVEy1UzbNreFfzzSadE0xS0UAgmE7018H0WqIyuy__v_7XUQ-v-E4Y82Je5ZbLsoerTXLjA",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"porcentajes\" data-id=\"F51\" onclick=\"openModal('F51')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Athletic anatomy biomechanics visual with clean slate background and refined titanium rod lines\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD84nPYZY1vhBZXI8vO1eTuPY7RaSXqrZebX0hTMHH7RXI4MRWakT69GzcnuTOMad3kW_N74CdT5vVtLVKiRLU9orkIRgSTL_AvkdKwG9okcIGR-PrYoitDFHbi9JZoUZp-UEZ2bVy9s4Co5iHoNBfAet3V7tq3pNKwVEy1UzbNreFfzzSadE0xS0UAgmE7018H0WqIyuy__v_7XUQ-v-E4Y82Je5ZbLsoerTXLjA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/30\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"space-y-2 mb-4 bg-surface/10 backdrop-blur-md p-3 rounded-xl\">\n<div>\n<div class=\"flex justify-between font-label-sm text-label-sm mb-1 text-surface\">\n<span>Estímulo Hipertrófico Efectivo</span>\n<span class=\"text-secondary-container\">94%</span>\n</div>\n<div class=\"h-1.5 w-full bg-surface/20 rounded-full overflow-hidden\">\n<div class=\"h-full bg-secondary-container w-[94%]\"></div>\n</div>\n</div>\n<div>\n<div class=\"flex justify-between font-label-sm text-label-sm mb-1 text-surface\">\n<span>Desgaste Articular Sistémico</span>\n<span class=\"text-surface-dim\">12%</span>\n</div>\n<div class=\"h-1.5 w-full bg-surface/20 rounded-full overflow-hidden\">\n<div class=\"h-full bg-outline-variant w-[12%]\"></div>\n</div>\n</div>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Volumen de Máxima Rentabilidad</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Separando el daño metabólico del estímulo mecánico real.</span></p>\n</div>",
+    "metricHtml": "<span class=\"text-secondary-container font-medium text-sm mb-1 block\">Hipertrofia 94% | Desgaste 12%</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -1037,16 +1088,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Score de Densidad Postural",
+    "name": "Template F52",
+    "tag": "biomecanica",
     "title": "Score de Densidad Postural",
     "bajada": "Vector propioceptivo calibrado con estabilidad torácica intacta en todas las repeticiones.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBwyrmyPHbwVRUv1Gbf74TsPIGGjpvmlgWoCyVTyizRu6Tv6HX4qVfO0_FUhApayY41lQW6TyohwrYQzYgod4K3BbD4o--rWbMC9danpJSKJaNoP6wdBl3s15dBVQ6P0MCTExOM-hmcAWFYIlsIxF5OMRFcb34LjDHNGDegNxi3tEaZ925XuKJYF-7PqZUrHYOt-0g7t4G_e_CDh5Yl7zV3GwegMREOqEFjVZlC5w",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"biomecanica\" data-id=\"F52\" onclick=\"openModal('F52')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monolithic travertine architecture with natural light rays illuminating an elegant athletic posture matrix\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBwyrmyPHbwVRUv1Gbf74TsPIGGjpvmlgWoCyVTyizRu6Tv6HX4qVfO0_FUhApayY41lQW6TyohwrYQzYgod4K3BbD4o--rWbMC9danpJSKJaNoP6wdBl3s15dBVQ6P0MCTExOM-hmcAWFYIlsIxF5OMRFcb34LjDHNGDegNxi3tEaZ925XuKJYF-7PqZUrHYOt-0g7t4G_e_CDh5Yl7zV3GwegMREOqEFjVZlC5w')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-baseline gap-2 mb-2\">\n<span class=\"font-headline-xl text-headline-xl text-secondary-container font-light\">9.8</span>\n<span class=\"font-headline-sm text-headline-sm text-outline-variant\">/ 10</span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Score de Densidad Postural</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Vector propioceptivo calibrado con estabilidad torácica intacta en todas las repeticiones.</span></p>\n</div>",
+    "metricHtml": "<span class=\"text-3xl font-light text-secondary-container block mb-1\">9.8 / 10</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 90
     }
   },
   {
@@ -1057,16 +1109,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Racha de 7 Días",
+    "name": "Template F53",
+    "tag": "habitos",
     "title": "Racha de 7 Días",
     "bajada": "Constancia biológica: pequeñas dosis diarias de descompresión superan a maratones caóticas.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDnOGTSW8tsct5KQx7HaCDR5geD_XTatB5USinCVCx9uKI6Uw79k4A6WEVDov2xG1TnivcKphZrtxJWlzJBe1pkfzV8MzDuGQHP7L8tpxS2LJJqfLDCbwzZXxXqBOnfezvmm3sBT8_MBJHIG7hcQoex8moNeb9zQv0nlhdKa0Ehwy5eOdfuu7x70uk8IihXj2U47-kgnzspxRhjimS9vkbY7-FjIT-29W_eIG8D3w",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"habitos\" data-id=\"F53\" onclick=\"openModal('F53')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Artistic botanical installation with stone pebble pathways and soft indirect gallery lighting\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDnOGTSW8tsct5KQx7HaCDR5geD_XTatB5USinCVCx9uKI6Uw79k4A6WEVDov2xG1TnivcKphZrtxJWlzJBe1pkfzV8MzDuGQHP7L8tpxS2LJJqfLDCbwzZXxXqBOnfezvmm3sBT8_MBJHIG7hcQoex8moNeb9zQv0nlhdKa0Ehwy5eOdfuu7x70uk8IihXj2U47-kgnzspxRhjimS9vkbY7-FjIT-29W_eIG8D3w')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/10\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex justify-between items-center gap-1.5 mb-4\">\n<span class=\"w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm\">L</span>\n<span class=\"w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm\">M</span>\n<span class=\"w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm\">M</span>\n<span class=\"w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm\">J</span>\n<span class=\"w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm\">V</span>\n<span class=\"w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm\">S</span>\n<span class=\"w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-sm font-bold shadow-sm\">D</span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Racha de 7 Días</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Constancia biológica: pequeñas dosis diarias de descompresión superan a maratones caóticas.</span></p>\n</div>",
+    "metricHtml": "<div class=\"flex gap-1 mb-2\"><span class=\"w-4 h-4 rounded-full bg-secondary-container\"></span><span class=\"w-4 h-4 rounded-full bg-secondary-container\"></span><span class=\"w-4 h-4 rounded-full bg-secondary-container\"></span><span class=\"w-4 h-4 rounded-full bg-secondary-container\"></span><span class=\"w-4 h-4 rounded-full bg-secondary-container\"></span><span class=\"w-4 h-4 rounded-full bg-secondary-container\"></span><span class=\"w-4 h-4 rounded-full bg-secondary-container\"></span></div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 91
     }
   },
   {
@@ -1077,16 +1130,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Semáforo de Estrés Tisular",
+    "name": "Template F54",
+    "tag": "biomecanica",
     "title": "Semáforo de Estrés Tisular",
     "bajada": "Lectura biomecánica antes de ingresar al rack: ajustar ángulo de carga en tiempo real.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDASOPCm0H0DTeVenUp6moUd4SqmEmmqWZdSmbY6bUcvIwXo1x0w6KZ0XbDmdGk64D0G-xXXDgvOxy46rjUlDvskAJZiyO1i7Qzkz6P4WAcKiYq-WBpcvpgHDQxDvunidkrnAxVp4Td4v-Ijzxl8txV-YYlFbBASDhcTTuAfPLTdpgPR0Cah3kNdMJmaSYlogv7FwDkFbEiRzyg2OxzhAk7zkcH_cKXzestexyD_w",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"biomecanica\" data-id=\"F54\" onclick=\"openModal('F54')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet wellness sanctuary with water reflection ripples across dark basalt stone walls\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDASOPCm0H0DTeVenUp6moUd4SqmEmmqWZdSmbY6bUcvIwXo1x0w6KZ0XbDmdGk64D0G-xXXDgvOxy46rjUlDvskAJZiyO1i7Qzkz6P4WAcKiYq-WBpcvpgHDQxDvunidkrnAxVp4Td4v-Ijzxl8txV-YYlFbBASDhcTTuAfPLTdpgPR0Cah3kNdMJmaSYlogv7FwDkFbEiRzyg2OxzhAk7zkcH_cKXzestexyD_w')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-center gap-3 mb-4 bg-surface/10 backdrop-blur-md p-2.5 rounded-xl\">\n<span class=\"w-3.5 h-3.5 rounded-full bg-tertiary-fixed shadow-sm\"></span>\n<span class=\"font-label-sm text-label-sm text-surface\">Tendones: Óptimo</span>\n<span class=\"text-outline-variant\">·</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-container shadow-sm\"></span>\n<span class=\"font-label-sm text-label-sm text-surface\">SNC: Moderado</span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Semáforo de Estrés Tisular</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Lectura biomecánica antes de ingresar al rack: ajustar ángulo de carga en tiempo real.</span></p>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-2 mb-2 text-xs text-surface\"><span class=\"w-2.5 h-2.5 rounded-full bg-tertiary-fixed\"></span> Verde Tisular</div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 86
     }
   },
   {
@@ -1097,16 +1151,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Elasticidad Fascial",
+    "name": "Template F55",
+    "tag": "habitos",
     "title": "Elasticidad Fascial",
     "bajada": "La descompresión con rodillo suave repone los fluidos intercelulares en tendones rígidos.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC8KKS-DlslzSq5aCqwykKLl2EHKcd1b_9uop5PR7bBqAIwDq3CO4jnksl9BD-F9S2HtQ70AUFeVXzrZCzTF1Bk32ggSjNJpsDpTzAOTxFMjHVNGTyK4_ypZJ6yoheo7GXIhmQ8yhKe2iqgpfHT5JHxgIzs530wFZkXFk-ucK_NfISzy9vI1m4ptERbGCZJKsjscIrR6eV08BhRqX_8QTnRFzs8c0K-4sj-yUraFg",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"habitos\" data-id=\"F55\" onclick=\"openModal('F55')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Gentle kinetic drop of mineral water creating concentric ripples in stone basin within zen minimalist spa\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8KKS-DlslzSq5aCqwykKLl2EHKcd1b_9uop5PR7bBqAIwDq3CO4jnksl9BD-F9S2HtQ70AUFeVXzrZCzTF1Bk32ggSjNJpsDpTzAOTxFMjHVNGTyK4_ypZJ6yoheo7GXIhmQ8yhKe2iqgpfHT5JHxgIzs530wFZkXFk-ucK_NfISzy9vI1m4ptERbGCZJKsjscIrR6eV08BhRqX_8QTnRFzs8c0K-4sj-yUraFg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/10\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-baseline gap-2 mb-2\">\n<span class=\"font-headline-xl text-headline-xl text-secondary-container font-light\">68%</span>\n<span class=\"font-label-sm text-label-sm text-surface uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Agua Libre Celular</span></span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Elasticidad Fascial</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La descompresión con rodillo suave repone los fluidos intercelulares en tendones rígidos.</span></p>\n</div>",
+    "metricHtml": "<span class=\"text-3xl font-light text-secondary-container block mb-1\">68% Agua Libre</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 89
     }
   },
   {
@@ -1117,16 +1172,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Reset Parasimpático",
+    "name": "Template F56",
+    "tag": "tiempos",
     "title": "Reset Parasimpático",
     "bajada": "3 minutos post-sesión apagan la adrenalina y aceleran el arribo de nutrientes a los miocitos.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB-VCmi50yoEdjV9qnP3xIA0bGiTJ96s-tKNAN-zB4-XEDigXlJmiXAGFRjoq4MduXbSWVQE0DJgVekpaxYS9dr3lQNxYc0RAgZMbiZZjG2NhWNDPqLdHHuWq7Kt2SWtLmOmdncViSOXLaoqQPQgYf5K1HdVmotPSVgnZpfqeCDHLJRi-3MppeMwrgausMba3blf7LBT7x868CGkRo-abfHvYrLZfrEA_CkmCHZ7Q",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"tiempos\" data-id=\"F56\" onclick=\"openModal('F56')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Understated somatic meditation corner with linen meditation cushion on dark waxed oak floor, soft incense smoke curl\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB-VCmi50yoEdjV9qnP3xIA0bGiTJ96s-tKNAN-zB4-XEDigXlJmiXAGFRjoq4MduXbSWVQE0DJgVekpaxYS9dr3lQNxYc0RAgZMbiZZjG2NhWNDPqLdHHuWq7Kt2SWtLmOmdncViSOXLaoqQPQgYf5K1HdVmotPSVgnZpfqeCDHLJRi-3MppeMwrgausMba3blf7LBT7x868CGkRo-abfHvYrLZfrEA_CkmCHZ7Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-center gap-3 mb-3\">\n<div class=\"px-3 py-1 rounded-full bg-surface/20 text-on-primary font-label-md\">Inhala 4s</div>\n<div class=\"px-3 py-1 rounded-full bg-secondary-container text-on-secondary-fixed font-label-md font-semibold\">Retén 7s</div>\n<div class=\"px-3 py-1 rounded-full bg-surface/20 text-on-primary font-label-md\">Exhala 8s</div>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Reset Parasimpático</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">3 minutos post-sesión apagan la adrenalina y aceleran el arribo de nutrientes a los miocitos.</span></p>\n</div>",
+    "metricHtml": "<div class=\"text-secondary-container font-semibold text-xs mb-2\">Cadencia 4-7-8 Breathwork</div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 93
     }
   },
   {
@@ -1137,16 +1193,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Edad Biológica Funcional",
+    "name": "Template F57",
+    "tag": "porcentajes",
     "title": "Edad Biológica Funcional",
-    "bajada": "48 años",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBPQahmmqf2uNMOpqlzan1fZJxPVQNhyZG2VkwWR-4Yx_vFPlrU4YuwbtUy32aN7WAobqvdJx6ep9EwsG70WLqO0mc3JViR0x-2oLuYldQdmslcEerRmhw_uPZr4EogorMx13mLgCnzXibpYDJ7TCkp0T9m1cSXE8fRvVXdV3IhKIgtsQNJ8GSgfyjnsTKc8GrorkYcPNVyEekp0mjhP6c8iZiT8hOn47vXwutDvQ",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"porcentajes\" data-id=\"F57\" onclick=\"openModal('F57')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Portrait of an energetic 45 year old executive in relaxed athletic posture inside high-end glass architectural home overlooking pine forest\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBPQahmmqf2uNMOpqlzan1fZJxPVQNhyZG2VkwWR-4Yx_vFPlrU4YuwbtUy32aN7WAobqvdJx6ep9EwsG70WLqO0mc3JViR0x-2oLuYldQdmslcEerRmhw_uPZr4EogorMx13mLgCnzXibpYDJ7TCkp0T9m1cSXE8fRvVXdV3IhKIgtsQNJ8GSgfyjnsTKc8GrorkYcPNVyEekp0mjhP6c8iZiT8hOn47vXwutDvQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-baseline gap-4 mb-3\">\n<div>\n<span class=\"font-label-sm text-label-sm text-outline-variant uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Calendario</span></span>\n<p class=\"font-headline-md text-headline-md text-surface-dim line-through\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">48 años</span></p>\n</div>\n<span class=\"text-secondary-container font-headline-md text-headline-md\">→</span>\n<div>\n<span class=\"font-label-sm text-label-sm text-secondary-fixed uppercase\">SENS Somático</span>\n<p class=\"font-headline-xl text-headline-xl text-secondary-container font-light leading-none\">36</p>\n</div>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Edad Biológica Funcional</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\">Movilidad torácica, potencia de tren inferior y densidad capilar periférica de 12 años menos.</p>\n</div>",
+    "bajada": "Movilidad torácica, potencia de tren inferior y densidad capilar periférica de 12 años menos.",
+    "metricHtml": "<div class=\"text-secondary-container text-2xl font-light mb-1\">36 Somática <span class=\"text-xs text-surface-dim line-through\">48 Cronológica</span></div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 93
     }
   },
   {
@@ -1157,16 +1214,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Sensibilidad a la Insulina",
+    "name": "Template F58",
+    "tag": "habitos",
     "title": "Sensibilidad a la Insulina",
     "bajada": "Cada gramo de carbohidrato consumido se canaliza directamente al músculo, no al adipocito.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCaFk7E7wiJ59tr3SuQ3bbh9tO1s8-takHP983GwyPdHc9HbWzKPk_fHRXDfrvT7Ay31WdshYL_U4KrAdumVqGFDxVAPFLqzlpZl4GXQ6Th_vucv1ujAS202gWIudK0b8RCrIKSXFahYRP9cmsRq8Ib7IYFYMVi72ovcbWpWCCJtG861_mba4JbXCa_4pl5uwYQTdwgsXV6LBRYJiRVQqma0t4l-L3tsAdrYS_J4Q",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"habitos\" data-id=\"F58\" onclick=\"openModal('F58')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Abstract scientific microcellular matrix illuminated in warm champagne and deep obsidian tones\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaFk7E7wiJ59tr3SuQ3bbh9tO1s8-takHP983GwyPdHc9HbWzKPk_fHRXDfrvT7Ay31WdshYL_U4KrAdumVqGFDxVAPFLqzlpZl4GXQ6Th_vucv1ujAS202gWIudK0b8RCrIKSXFahYRP9cmsRq8Ib7IYFYMVi72ovcbWpWCCJtG861_mba4JbXCa_4pl5uwYQTdwgsXV6LBRYJiRVQqma0t4l-L3tsAdrYS_J4Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"inline-flex items-center gap-2 bg-secondary/30 px-3 py-1.5 rounded-full mb-3 self-start\">\n<span class=\"material-symbols-outlined text-[16px] text-secondary-container\">bolt</span>\n<span class=\"font-label-sm text-label-sm text-secondary-fixed uppercase font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">GLUT-4 Traslocación Rápida</span></span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sensibilidad a la Insulina</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cada gramo de carbohidrato consumido se canaliza directamente al músculo, no al adipocito.</span></p>\n</div>",
+    "metricHtml": "<span class=\"text-xs bg-secondary/40 text-secondary-container px-2 py-0.5 rounded font-mono mb-2 inline-block\">GLUT-4 ACTIVE</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 90
     }
   },
   {
@@ -1177,16 +1235,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Fulcro Lumbar L5-S1",
+    "name": "Template F59",
+    "tag": "biomecanica",
     "title": "Fulcro Lumbar L5-S1",
-    "bajada": "La transferencia de palanca hacia los glúteos anula por completo la Tensión en el disco.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBBilL4SFo2WkejIimLhOE2zbfZt5oLNM6teKWIt5WaWs5CVcF-H967fqoNuM1mHJon5xYw-PTEvopglziShUED2n-g8zHMc45C9OmR7ueQMM4CuoGJE5kU9SW-xxf4J0ab83R7ypId-r5TCWjjUqPQoiWCWnGbAwqc8NlYBylHqtJtaQuePxZAXQyIXc6QmNkQrIrPGAgY3V99zrIPoA34tjAE65QC0bSUL8JIsw",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"biomecanica\" data-id=\"F59\" onclick=\"openModal('F59')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Technical blueprint sketch style of a human spine lumbar hinge rendered with minimalist gold and graphite lines\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBBilL4SFo2WkejIimLhOE2zbfZt5oLNM6teKWIt5WaWs5CVcF-H967fqoNuM1mHJon5xYw-PTEvopglziShUED2n-g8zHMc45C9OmR7ueQMM4CuoGJE5kU9SW-xxf4J0ab83R7ypId-r5TCWjjUqPQoiWCWnGbAwqc8NlYBylHqtJtaQuePxZAXQyIXc6QmNkQrIrPGAgY3V99zrIPoA34tjAE65QC0bSUL8JIsw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"bg-surface/10 backdrop-blur-md p-3 rounded-xl mb-3 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm text-surface\">Brazo de Momento</span>\n<span class=\"font-label-md text-label-md font-semibold text-secondary-container\">Neutralizado (0° torsión)</span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fulcro Lumbar L5-S1</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La transferencia de palanca hacia los glúteos anula por completo la Tensión en el disco.</span></p>\n</div>",
+    "bajada": "La transferencia de palanca hacia los glúteos anula por completo la tensión en el disco.",
+    "metricHtml": "<div class=\"text-xs text-secondary-container font-mono mb-1\">Momento Flexor = 0 Nm</div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 88
     }
   },
   {
@@ -1197,16 +1256,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Gasto Silencioso vs Cinta",
+    "name": "Template F60",
+    "tag": "porcentajes",
     "title": "Gasto Silencioso vs Cinta",
-    "bajada": "Quema un 40% Más de grasa acumulada que 30 minutos de cardio exhaustivo, sin generar hambre reactiva.",
-    "tag": "TELEMETRÍA SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBdNUL5YrgOkusnuZ8Ui4L-BnOUn4IaRN4SEZYQPfxMhqr6NJoKrgx842LSTvq3koadcj2SSIT7z9vFj7cpjTpZTToSsnIztJBkfnsP0iMYUooChMqnUSqOiqEsV4iCUTbv459W10wRzKnkqKH-WU29EXxYmv0MT5s-VhoqaUU6Ke87007lES003P7ERVPfQui9tJoPv338O8S_MKxDOKhA4ldRv0tZKpLGiW6vQg",
-    "htmlTemplate": "<article class=\"template-card group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md cursor-pointer select-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1\" data-cat=\"porcentajes\" data-id=\"F60\" onclick=\"openModal('F60')\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Scenic sunlit city park walkway lined with sculptural limestone benches and autumn foliage, quiet elegance\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBdNUL5YrgOkusnuZ8Ui4L-BnOUn4IaRN4SEZYQPfxMhqr6NJoKrgx842LSTvq3koadcj2SSIT7z9vFj7cpjTpZTToSsnIztJBkfnsP0iMYUooChMqnUSqOiqEsV4iCUTbv459W10wRzKnkqKH-WU29EXxYmv0MT5s-VhoqaUU6Ke87007lES003P7ERVPfQui9tJoPv338O8S_MKxDOKhA4ldRv0tZKpLGiW6vQg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden\"></div>\n<div class=\"relative z-10 w-full h-full flex flex-col justify-end p-6\">\n<div class=\"flex items-baseline gap-2 mb-2\">\n<span class=\"font-headline-xl text-headline-xl text-secondary-container font-light\">10.000</span>\n<span class=\"font-label-sm text-label-sm text-surface uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Pasos NEAT / Día</span></span>\n</div>\n<h2 class=\"font-headline-md text-headline-md text-on-primary font-medium tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Gasto Silencioso vs Cinta</span></h2>\n<p class=\"font-body-sm text-body-sm text-surface-container-high mt-1 line-clamp-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Quema un 40% Más de grasa acumulada que 30 minutos de cardio exhaustivo, sin generar hambre reactiva.</span></p>\n</div>",
+    "bajada": "Quema un 40% más de grasa acumulada que 30 minutos de cardio exhaustivo, sin generar hambre reactiva.",
+    "metricHtml": "<span class=\"text-3xl font-light text-secondary-container block mb-1\">10.000 Pasos</span>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 101
     }
   },
   {
@@ -1216,17 +1276,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F61",
-    "title": "Quote F61",
-    "bajada": "“La descompresión axial no es descanso: es el estímulo que tu Cartílago necesita para hidratarse.”",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-low flex flex-col justify-between p-6\" data-category=\"memos\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-surface-container/60 via-background to-surface-container-low pointer-events-none\"></div>\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 flex flex-col items-center text-center px-4 my-auto\">\n<div class=\"w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md mb-6 hover:scale-105 transition-transform cursor-pointer\">\n<span class=\"material-symbols-outlined text-[28px] translate-x-0.5\" style=\"font-variation-settings: 'FILL' 1;\">play_arrow</span>\n</div>\n<div class=\"w-full max-w-[210px] flex items-center justify-center gap-1 mb-5\">\n<span class=\"w-1 h-3 rounded-full bg-secondary-fixed-dim\"></span>\n<span class=\"w-1 h-5 rounded-full bg-secondary\"></span>\n<span class=\"w-1 h-8 rounded-full bg-primary\"></span>\n<span class=\"w-1 h-4 rounded-full bg-secondary\"></span>\n<span class=\"w-1 h-10 rounded-full bg-primary\"></span>\n<span class=\"w-1 h-6 rounded-full bg-secondary-fixed-dim\"></span>\n<span class=\"w-1 h-3 rounded-full bg-secondary\"></span>\n<span class=\"w-1 h-7 rounded-full bg-primary\"></span>\n<span class=\"w-1 h-4 rounded-full bg-secondary-fixed-dim\"></span>\n<span class=\"w-1 h-2 rounded-full bg-outline-variant\"></span>\n</div>\n<p class=\"font-headline-sm text-headline-sm text-on-surface leading-snug font-light max-w-[240px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“La descompresión axial no es descanso: es el estímulo que tu Cartílago necesita para hidratarse.”</span></p>\n<span class=\"font-label-sm text-label-sm text-secondary mt-3 uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Nota de Voz 01:24 • Nico SENS</span></span>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>AUDIO SOMÁTICO</span>\n<span class=\"material-symbols-outlined text-[16px]\">graphic_eq</span>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Audio Note Somático",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "“La descompresión axial no es descanso: es el estímulo que tu cartílago necesita para hidratarse.”",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 98
     }
   },
   {
@@ -1236,17 +1297,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F62",
-    "title": "Quote F62",
-    "bajada": "“Siento un pellizco en la cadera derecha cuando bajo Más de noventa grados.”",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-lowest flex flex-col justify-between p-6\" data-category=\"dialogos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 flex flex-col gap-4 px-2 my-auto\">\n<div class=\"self-start max-w-[85%] bg-surface-container-low rounded-2xl rounded-tl-sm p-4 text-left\">\n<span class=\"block font-label-sm text-label-sm text-secondary mb-1\">ALUMNO • 08:14</span>\n<p class=\"font-body-md text-body-md text-on-surface leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Siento un pellizco en la cadera derecha cuando bajo Más de noventa grados.”</span></p>\n</div>\n<div class=\"self-end max-w-[85%] bg-primary text-on-primary rounded-2xl rounded-tr-sm p-4 text-left shadow-sm\">\n<span class=\"block font-label-sm text-label-sm text-secondary-container mb-1\">COACH NICO • 08:15</span>\n<p class=\"font-body-md text-body-md text-on-primary leading-relaxed font-light\">\n              “No bajes por inercia. Abre 5 grados la punta del pie, ancla el arco plantar y frena antes del tope óseo. La profundidad sin espacio es roce articular.”\n            </p>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>AJUSTE EN SALA</span>\n<span class=\"material-symbols-outlined text-[16px]\">forum</span>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Transcripción Clínica Alumno-Coach",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "“Siento un pellizco en la cadera derecha cuando bajo más de noventa grados.”",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 76
     }
   },
   {
@@ -1256,17 +1318,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "¿Cómo sé si estoy fatigando el músculo o simplemente desgastando el tendón?",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Pregunta & Respuesta en Espejo",
+    "tag": "1:1 SAFE",
     "title": "¿Cómo sé si estoy fatigando el músculo o simplemente desgastando el tendón?",
-    "bajada": "El músculo avisa con calor uniforme y Tensión difusa. El tendón avisa con una punzada focal 12 horas después al enfriarse. Si duele al tocar el hueso, ya te pasaste de volumen.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-background flex flex-col justify-between p-6\" data-category=\"dialogos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 flex flex-col gap-3 my-auto\">\n<div class=\"bg-surface-container rounded-xl p-4 text-left\">\n<span class=\"font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">P / PREGUNTA</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface font-light\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">¿Cómo sé si estoy fatigando el músculo o simplemente desgastando el tendón?</span></h3>\n</div>\n<div class=\"bg-surface-container-high rounded-xl p-4 text-left\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-wider block mb-1\">R / RESPUESTA</span>\n<p class=\"font-body-md text-body-md text-on-surface leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El músculo avisa con calor uniforme y Tensión difusa. El tendón avisa con una punzada focal 12 horas después al enfriarse. Si duele al tocar el hueso, ya te pasaste de volumen.</span></p>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>CRITERIO CLÍNICO</span>\n<span class=\"material-symbols-outlined text-[16px]\">compare_arrows</span>\n</div>",
+    "bajada": "El músculo avisa con calor uniforme y tensión difusa. El tendón avisa con una punzada focal 12 horas después al enfriarse. Si duele al tocar el hueso, ya te pasaste de volumen.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
+      "tag": 18,
       "title": 75,
-      "bajada": 140
+      "bajada": 176
     }
   },
   {
@@ -1276,17 +1339,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Para el directivo que cree que 4 horas de sueño son una medalla de honor:",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Carta Abierta para Directores",
+    "tag": "1:1 SAFE",
     "title": "Para el directivo que cree que 4 horas de sueño son una medalla de honor:",
     "bajada": "Tu cerebro elimina proteínas beta-amiloides sólo en fase profunda. Cuando entrenas al día siguiente con cafeína y 140 pulsaciones, estás sobrecargando una corteza prefrontal en déficit. La disciplina inteligente también es saber cuándo apagar la pantalla.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-low flex flex-col justify-between p-7\" data-category=\"memos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 flex flex-col text-left my-auto space-y-3\">\n<div class=\"flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">MEMORANDUM • CONFIDENCIAL</span></span>\n<span class=\"font-label-sm text-label-sm text-outline\">REF. DIR-88</span>\n</div>\n<h2 class=\"font-headline-sm text-headline-sm text-on-surface font-light tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Para el directivo que cree que 4 horas de sueño son una medalla de honor:</span></h2>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu cerebro elimina proteínas beta-amiloides sólo en fase profunda. Cuando entrenas al día siguiente con cafeína y 140 pulsaciones, estás sobrecargando una corteza prefrontal en déficit. La disciplina inteligente también es saber cuándo apagar la pantalla.</span></p>\n<div class=\"pt-2 flex items-center gap-2\">\n<span class=\"w-6 h-px bg-secondary\"></span>\n<span class=\"font-label-sm text-label-sm text-secondary\">DIRECCIÓN MÉDICA SENS</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>LONGEVIDAD EJECUTIVA</span>\n<span class=\"material-symbols-outlined text-[16px]\">drafts</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 73,
+      "bajada": 255
     }
   },
   {
@@ -1296,17 +1360,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F65",
-    "title": "Quote F65",
-    "bajada": "“Llegué con dos hernias discales pensando que nunca Más podría levantar nada del suelo. Hoy no solo no tengo dolor: aprendí a respirar antes de cada esfuerzo.”",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-lowest flex flex-col justify-between p-6\" data-category=\"citas\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 flex flex-col items-center text-center px-4 my-auto\">\n<div class=\"inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-on-tertiary-fixed-variant font-label-sm text-label-sm mb-4\">\n<span class=\"material-symbols-outlined text-[14px] text-tertiary-fixed-dim\" style=\"font-variation-settings: 'FILL' 1;\">verified</span>\n<span>ALUMNO VERIFICADO • 9 MESES</span>\n</div>\n<p class=\"font-headline-sm text-headline-sm text-on-surface font-light leading-relaxed mb-4\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Llegué con dos hernias discales pensando que nunca Más podría levantar nada del suelo. Hoy no solo no tengo dolor: aprendí a respirar antes de cada esfuerzo.”</span></p>\n<div class=\"text-center\">\n<span class=\"block font-label-md text-label-md text-on-surface font-medium\">Martín G. • 44 años</span>\n<span class=\"block font-body-sm text-body-sm text-on-surface-variant\">Socio Protocolo Regenerativo</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>CASO CLÍNICO</span>\n<span class=\"material-symbols-outlined text-[16px]\">grade</span>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Testimonio Somático Verificado",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "“Llegué con dos hernias discales pensando que nunca más podría levantar nada del suelo. Hoy no solo no tengo dolor: aprendí a respirar antes de cada esfuerzo.”",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 159
     }
   },
   {
@@ -1316,17 +1381,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F66",
-    "title": "Quote F66",
-    "bajada": "No necesitas sudar para haber entrenado bien. La Adaptación neural no deja charcos en el piso.",
-    "tag": "TESTIMONIO SENS",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Post-It Somático Feed",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "No necesitas sudar para haber entrenado bien. La adaptación neural no deja charcos en el piso.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDSnS80ZRnPJKi89i6qqH-aoh8YYFS7FThf1R_hQ8gn8hYTQMDuo80qRZJxEOvaRVi8JiQA-wlTUqK6fd24BRvJZfP8gsB_caQRobAnNo05fHoUk0Zar3V6twA9MthD9Ntvv6BxHBEM79VGbuqyhNgp3LU8hE2cwTHN9ZrHykDf7942R4ZkftXpd9gWgN5Tk4qb4DS7acKNdEAUXgFZ9V3foNsKqi5ch11LNEp_yA",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl flex flex-col justify-between p-6\" data-category=\"memos\">\n<!-- Subtle background photo -->\n<div class=\"absolute inset-0 bg-cover bg-center brightness-[0.92]\" data-alt=\"Warm natural textured linen fabric close up with soft angled afternoon sunlight creating soothing shadows\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDSnS80ZRnPJKi89i6qqH-aoh8YYFS7FThf1R_hQ8gn8hYTQMDuo80qRZJxEOvaRVi8JiQA-wlTUqK6fd24BRvJZfP8gsB_caQRobAnNo05fHoUk0Zar3V6twA9MthD9Ntvv6BxHBEM79VGbuqyhNgp3LU8hE2cwTHN9ZrHykDf7942R4ZkftXpd9gWgN5Tk4qb4DS7acKNdEAUXgFZ9V3foNsKqi5ch11LNEp_yA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-background/50 backdrop-blur-[2px]\"></div>\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex justify-center\">\n<div class=\"w-full max-w-[280px] bg-secondary-container/90 text-on-secondary-container p-6 rounded-lg shadow-lg rotate-[-1.5deg] transition-transform duration-300 group-hover:rotate-0\">\n<div class=\"flex items-center justify-between mb-3 text-secondary\">\n<span class=\"material-symbols-outlined text-[18px]\">push_pin</span>\n<span class=\"font-label-sm text-label-sm uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Recordatorio</span></span>\n</div>\n<p class=\"font-headline-sm text-headline-sm leading-snug font-normal text-on-secondary-container\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">No necesitas sudar para haber entrenado bien. La Adaptación neural no deja charcos en el piso.</span></p>\n<div class=\"mt-4 pt-2 border-t border-secondary/20 flex justify-between font-label-sm text-label-sm text-secondary\">\n<span>SENS TRAIN</span>\n<span>10:45 AM</span>\n</div>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>APUNTE RÁPIDO</span>\n<span class=\"material-symbols-outlined text-[16px]\">sticky_note_2</span>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 94
     }
   },
   {
@@ -1336,17 +1402,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F67",
-    "title": "Quote F67",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Diálogo Interno vs Realidad",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "“Si no salgo destruido de la sesión, siento que perdí el tiempo.”",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-low flex flex-col justify-between p-6\" data-category=\"dialogos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 flex flex-col gap-3 my-auto\">\n<div class=\"p-4 rounded-xl bg-surface-container-highest\">\n<span class=\"font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">LO QUE PIENSAS EN SALA:</span></span>\n<p class=\"font-body-md text-body-md text-on-surface line-through opacity-70\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Si no salgo destruido de la sesión, siento que perdí el tiempo.”</span></p>\n</div>\n<div class=\"p-4 rounded-xl bg-primary text-on-primary shadow-sm\">\n<span class=\"font-label-sm text-label-sm text-secondary-container uppercase tracking-wider block mb-1\">LO QUE PASA EN TU TEJIDO:</span>\n<p class=\"font-body-md text-body-md text-on-primary font-light\">\n              La destrucción excesiva satura la síntesis proteica e inflama el sistema inmune. La Adaptación ocurre en la dosis mínima efectiva.\n            </p>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>PARADIGMA SOMÁTICO</span>\n<span class=\"material-symbols-outlined text-[16px]\">sync_alt</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 65
     }
   },
   {
@@ -1356,17 +1423,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Nunca cargues peso sobre una articulación que no tiene rango libre de movimiento.",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Regla Inviolable #01",
+    "tag": "1:1 SAFE",
     "title": "Nunca cargues peso sobre una articulación que no tiene rango libre de movimiento.",
-    "bajada": "Forzar una carga sobre una cápsula rígida no fortalece los tejidos: solo desgasta el Cartílago articular a largo plazo.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-primary text-on-primary flex flex-col justify-between p-7\" data-category=\"citas\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary-fixed bg-surface-container-highest px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 flex flex-col text-left my-auto space-y-4\">\n<div class=\"inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/20 w-fit\">\n<span class=\"w-1.5 h-1.5 rounded-full bg-secondary-fixed\"></span>\n<span class=\"font-label-sm text-label-sm text-secondary-fixed uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">REGLA INVIOLABLE #01</span></span>\n</div>\n<h2 class=\"font-headline-md text-headline-md font-light leading-snug tracking-tight text-on-primary\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Nunca cargues peso sobre una articulación que no tiene rango libre de movimiento.</span></h2>\n<p class=\"font-body-sm text-body-sm text-primary-fixed-dim leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Forzar una carga sobre una cápsula rígida no fortalece los tejidos: solo desgasta el Cartílago articular a largo plazo.</span></p>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-surface-tint font-label-sm text-label-sm\">\n<span>SENS FUNDAMENTALS</span>\n<span class=\"material-symbols-outlined text-[16px]\">verified_user</span>\n</div>",
+    "bajada": "Forzar una carga sobre una cápsula rígida no fortalece los tejidos: solo desgasta el cartílago articular a largo plazo.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 81,
+      "bajada": 119
     }
   },
   {
@@ -1376,17 +1444,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Hito Alcanzado: 21 Días",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Notificación de Logro 21 Días",
+    "tag": "1:1 SAFE",
     "title": "Hito Alcanzado: 21 Días",
     "bajada": "3 semanas continuas de movilidad de cadera y descompresión sin registrar episodios de dolor lumbar.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-low flex flex-col justify-between p-6\" data-category=\"alertas\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col items-center\">\n<div class=\"w-full bg-surface-container-lowest rounded-2xl p-5 shadow-md flex flex-col gap-3\">\n<div class=\"flex items-center justify-between\">\n<div class=\"flex items-center gap-2\">\n<div class=\"w-7 h-7 rounded-full bg-tertiary-fixed flex items-center justify-center\">\n<span class=\"material-symbols-outlined text-[16px] text-tertiary-container\">check_circle</span>\n</div>\n<span class=\"font-label-sm text-label-sm uppercase tracking-wider text-on-surface\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SENS CORE OS</span></span>\n</div>\n<span class=\"font-label-sm text-label-sm text-outline\">AHORA</span>\n</div>\n<div>\n<h4 class=\"font-headline-sm text-headline-sm text-on-surface\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Hito Alcanzado: 21 Días</span></h4>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1 leading-normal\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">3 semanas continuas de movilidad de cadera y descompresión sin registrar episodios de dolor lumbar.</span></p>\n</div>\n<div class=\"flex items-center justify-between pt-2 border-t border-surface-variant/40\">\n<span class=\"font-label-sm text-label-sm text-secondary\">ESTADO NEUROMUSCULAR</span>\n<span class=\"font-label-sm text-label-sm font-semibold text-tertiary-container\">CALIBRADO</span>\n</div>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>MONITOR DE PROGRESO</span>\n<span class=\"material-symbols-outlined text-[16px]\">notifications_active</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 99
     }
   },
   {
@@ -1396,17 +1465,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F70",
-    "title": "Quote F70",
-    "bajada": "“Paciente presenta sobrecarga del piramidal. Suspender empujes axiales de pie por 7 Días. Pasar a tracciones horizontales en banco con apoyo esternal.”",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container flex flex-col justify-between p-6\" data-category=\"memos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col text-left space-y-4\">\n<div class=\"flex items-center gap-2\">\n<span class=\"w-2.5 h-2.5 rounded-full bg-error animate-pulse\"></span>\n<span class=\"font-label-sm text-label-sm tracking-widest text-outline uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">DICTADO 00:14 • LAB BIOMECÁNICO</span></span>\n</div>\n<p class=\"font-headline-sm text-headline-sm text-on-surface font-light leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Paciente presenta sobrecarga del piramidal. Suspender empujes axiales de pie por 7 Días. Pasar a tracciones horizontales en banco con apoyo esternal.”</span></p>\n<div class=\"flex items-center gap-3 pt-2\">\n<span class=\"px-2.5 py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm\">DR. NICO SENS</span>\n<span class=\"font-body-sm text-body-sm text-outline\">REVISIÓN ACTIVA</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>DICTADO CLÍNICO</span>\n<span class=\"material-symbols-outlined text-[16px]\">mic</span>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Dictado Clínico 00:14",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "“Paciente presenta sobrecarga del piramidal. Suspender empujes axiales de pie por 7 días. Pasar a tracciones horizontales en banco con apoyo esternal.”",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 151
     }
   },
   {
@@ -1416,17 +1486,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Antes del primer café: 90 segundos colgado de una barra para descomprimir columna.",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Recordatorio de Descompresión",
+    "tag": "1:1 SAFE",
     "title": "Antes del primer café: 90 segundos colgado de una barra para descomprimir columna.",
     "bajada": "La gravedad nocturna cede; devuelve el espacio a tus discos antes de sentarte en el coche.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-background flex flex-col justify-between p-6\" data-category=\"alertas\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col items-center text-center px-2\">\n<span class=\"font-headline-xl text-headline-xl text-secondary font-extralight tracking-tight mb-1\">07:00</span>\n<span class=\"font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-4\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">PROTOCOLO MATUTINO</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface font-light max-w-[260px] leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Antes del primer café: 90 segundos colgado de una barra para descomprimir columna.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-3 max-w-[240px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La gravedad nocturna cede; devuelve el espacio a tus discos antes de sentarte en el coche.</span></p>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>ALERTA TEMPRANA</span>\n<span class=\"material-symbols-outlined text-[16px]\">alarm</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 82,
+      "bajada": 90
     }
   },
   {
@@ -1436,17 +1507,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Una suela con 3 cm de espuma desconecta el 80% de tus mecanorreceptores plantares.",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Consejo Biomecánico de Calzado",
+    "tag": "1:1 SAFE",
     "title": "Una suela con 3 cm de espuma desconecta el 80% de tus mecanorreceptores plantares.",
     "bajada": "Si tus pies no sienten el suelo, tu rodilla y tu cadera tienen que inventar la estabilidad. Camina descalzo sobre superficies reales al menos 20 minutos al día.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-lowest flex flex-col justify-between p-6\" data-category=\"citas\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col text-left space-y-3\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">BIOMECÁNICA DEL PIE</span></span>\n<h2 class=\"font-headline-sm text-headline-sm text-on-surface font-light leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Una suela con 3 cm de espuma desconecta el 80% de tus mecanorreceptores plantares.</span></h2>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Si tus pies no sienten el suelo, tu rodilla y tu cadera tienen que inventar la estabilidad. Camina descalzo sobre superficies reales al menos 20 minutos al día.</span></p>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>PROPIOCEPCIÓN</span>\n<span class=\"material-symbols-outlined text-[16px]\">accessibility_new</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 82,
+      "bajada": 160
     }
   },
   {
@@ -1456,17 +1528,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F73",
-    "title": "Quote F73",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Micro-Ensayo Francés",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "La prisa moderna es un error ortopédico. Nos movemos rápido porque tememos quedarnos quietos con nuestras sensaciones corporales.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-low flex flex-col justify-between p-7\" data-category=\"memos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col text-left space-y-2.5\">\n<span class=\"font-label-sm text-label-sm text-outline uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">ESSAI 03 • SOBRE EL RITMO</span></span>\n<p class=\"font-body-sm text-body-sm text-on-surface leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La prisa moderna es un error ortopédico. Nos movemos rápido porque tememos quedarnos quietos con nuestras sensaciones corporales.</span></p>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed\">\n            El entrenamiento somático exige la calma de un reloj de arena. Aprender a sostener 4 segundos en la fase excéntrica enseña Más sobre paciencia que cualquier conferencia de liderazgo.\n          </p>\n<p class=\"font-body-sm text-body-sm text-on-surface leading-relaxed italic\">\n            El cuerpo siempre sabe cuándo lo estás apurando.\n          </p>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>MICRO-ENSAYO</span>\n<span class=\"material-symbols-outlined text-[16px]\">menu_book</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 129
     }
   },
   {
@@ -1476,17 +1549,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "El músculo no crece cuando levantas la barra. Crece cuando estás en fase REM a 18°C.",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Reflexión de Fin de Jornada",
+    "tag": "1:1 SAFE",
     "title": "El músculo no crece cuando levantas la barra. Crece cuando estás en fase REM a 18°C.",
     "bajada": "Baja las luces de tu habitación. El estímulo de hoy ya terminó; ahora le toca a la biología hacer su trabajo.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-inverse-surface text-inverse-on-surface flex flex-col justify-between p-6\" data-category=\"alertas\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary-fixed bg-surface-container-highest px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col items-center text-center px-4\">\n<div class=\"w-10 h-10 rounded-full bg-surface-variant/20 flex items-center justify-center mb-4 text-secondary-fixed\">\n<span class=\"material-symbols-outlined text-[20px]\">nightlight</span>\n</div>\n<span class=\"font-label-sm text-label-sm text-secondary-fixed uppercase tracking-widest mb-2\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">FIN DE JORNADA • 22:30</span></span>\n<h3 class=\"font-headline-sm text-headline-sm font-light text-inverse-on-surface leading-snug mb-3\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El músculo no crece cuando levantas la barra. Crece cuando estás en fase REM a 18°C.</span></h3>\n<p class=\"font-body-sm text-body-sm text-outline-variant max-w-[240px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Baja las luces de tu habitación. El estímulo de hoy ya terminó; ahora le toca a la biología hacer su trabajo.</span></p>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-outline font-label-sm text-label-sm\">\n<span>CICLO CIRCADIANO</span>\n<span class=\"material-symbols-outlined text-[16px]\">bedtime</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 84,
+      "bajada": 109
     }
   },
   {
@@ -1496,17 +1570,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "10 minutos de caminata suave después de cenar reducen el pico de glucosa un 35%.",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Sobremesa & Longevidad",
+    "tag": "1:1 SAFE",
     "title": "10 minutos de caminata suave después de cenar reducen el pico de glucosa un 35%.",
     "bajada": "No necesitas suplementos costosos ni protocolos complejos. Las contracciones musculares del sóleo y el cuádriceps captan glucosa de forma no insulino-dependiente. La longevidad es así de elegante.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-low flex flex-col justify-between p-6\" data-category=\"citas\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col text-left space-y-3\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">HÁBITOS SENCILLOS</span></span>\n<h2 class=\"font-headline-sm text-headline-sm text-on-surface font-light leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">10 minutos de caminata suave después de cenar reducen el pico de glucosa un 35%.</span></h2>\n<p class=\"font-body-md text-body-md text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">No necesitas suplementos costosos ni protocolos complejos. Las contracciones musculares del sóleo y el cuádriceps captan glucosa de forma no insulino-dependiente. La longevidad es así de elegante.</span></p>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>SALUD METABÓLICA</span>\n<span class=\"material-symbols-outlined text-[16px]\">directions_walk</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 80,
+      "bajada": 196
     }
   },
   {
@@ -1516,17 +1591,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F76",
-    "title": "Quote F76",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Declaración de Principios",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "El entrenamiento no debería agotarte la vida, sino expandirla.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-lowest flex flex-col justify-between p-7\" data-category=\"citas\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col items-center text-center px-2\">\n<span class=\"text-secondary font-headline-md text-headline-md font-serif leading-none mb-3\">“</span>\n<p class=\"font-headline-md text-headline-md text-on-surface font-light tracking-tight leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El entrenamiento no debería agotarte la vida, sino expandirla.</span></p>\n<div class=\"w-12 h-px bg-secondary my-4\"></div>\n<span class=\"font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">MANIFIESTO SENS • 2025</span></span>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>PRINCIPIO GUÍA</span>\n<span class=\"material-symbols-outlined text-[16px]\">format_quote</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 62
     }
   },
   {
@@ -1536,17 +1612,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F77",
-    "title": "Quote F77",
-    "bajada": "“La Tensión que no sueltas en el tapiz se convierte en contractura en tu escritorio.”",
-    "tag": "TESTIMONIO SENS",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Cita con Vidrio Esmerilado",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "“La tensión que no sueltas en el tapiz se convierte en contractura en tu escritorio.”",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC-TQ1Qgq2doV4IQtMpPYOq24EXq4ixQLCQqoLSIfdpeJrZV1pDuMe0fp69a4-XJ9iqrKQ-YWQOqifYNVYR2uDDMgHGIBiSWpHkPq1Vp8W-J_ukNmZJbC3jA_lR-bOOovcryy6ylrZtfrL_hBxpigJDQh9yIoJzdNj3_S3kXNopWiuX_QlG6d6Fy33TjnO2lX8o72Vi5HRTu9UJKnbEq1XGnydFq-MYqmBgGgM86g",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl flex flex-col justify-between p-6\" data-category=\"citas\">\n<!-- Calming botanical luxury background -->\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Serene minimalist architectural wellness space with warm light cast on stone wall and olive branch\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-TQ1Qgq2doV4IQtMpPYOq24EXq4ixQLCQqoLSIfdpeJrZV1pDuMe0fp69a4-XJ9iqrKQ-YWQOqifYNVYR2uDDMgHGIBiSWpHkPq1Vp8W-J_ukNmZJbC3jA_lR-bOOovcryy6ylrZtfrL_hBxpigJDQh9yIoJzdNj3_S3kXNopWiuX_QlG6d6Fy33TjnO2lX8o72Vi5HRTu9UJKnbEq1XGnydFq-MYqmBgGgM86g')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex justify-center\">\n<div class=\"w-full max-w-[280px] bg-surface/85 backdrop-blur-xl p-5 rounded-2xl shadow-xl text-left\">\n<div class=\"flex items-center gap-2 mb-3\">\n<span class=\"w-2 h-2 rounded-full bg-secondary\"></span>\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SOMATIC DIALOGUE</span></span>\n</div>\n<p class=\"font-headline-sm text-headline-sm text-on-surface font-light leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“La Tensión que no sueltas en el tapiz se convierte en contractura en tu escritorio.”</span></p>\n<span class=\"block font-body-sm text-body-sm text-on-surface-variant mt-3\">SENS Body Work Lab</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm bg-surface/70 px-3 py-1 rounded-full backdrop-blur-sm\">\n<span>VIDRIO ESMERILADO</span>\n<span class=\"material-symbols-outlined text-[16px]\">blur_on</span>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 85
     }
   },
   {
@@ -1556,17 +1633,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F78",
-    "title": "Quote F78",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Anotación al Margen Feed",
+    "tag": "1:1 SAFE",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "El reclutamiento de fibras no depende de cuánto peso pongas, sino de la velocidad con que intentas moverlo.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-low flex flex-col justify-between p-6\" data-category=\"dialogos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col text-left space-y-4\">\n<div>\n<span class=\"font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">TEXTO PRINCIPAL</span></span>\n<p class=\"font-headline-sm text-headline-sm text-on-surface font-light leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El reclutamiento de fibras no depende de cuánto peso pongas, sino de la velocidad con que intentas moverlo.</span></p>\n</div>\n<div class=\"pl-3 border-l-2 border-secondary bg-surface-container p-3 rounded-r-xl\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest block mb-0.5\">NOTA AL MARGEN • FISIOLOGÍA</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant italic\">\n              Principio de Henneman: la intención concéntrica máxima activa unidades motoras rápidas aún con cargas moderadas del 60%.\n            </p>\n</div>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>GLOSA TÉCNICA</span>\n<span class=\"material-symbols-outlined text-[16px]\">edit_note</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 43,
+      "bajada": 107
     }
   },
   {
@@ -1576,17 +1654,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "¿Estás entrenando para tu ego de hoy o para tu columna de los 60 años?",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Pregunta de Espejo",
+    "tag": "1:1 SAFE",
     "title": "¿Estás entrenando para tu ego de hoy o para tu columna de los 60 años?",
     "bajada": "La respuesta dictate cuántas series haces hoy y cómo tratas a tus discos vertebrales.",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-background flex flex-col justify-between p-7\" data-category=\"dialogos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col items-center text-center px-3\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-3\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">CHECK-IN SOMÁTICO</span></span>\n<h2 class=\"font-headline-md text-headline-md font-light text-on-surface leading-tight tracking-tight mb-4\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">¿Estás entrenando para tu ego de hoy o para tu columna de los 60 años?</span></h2>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-[250px] leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La respuesta dictate cuántas series haces hoy y cómo tratas a tus discos vertebrales.</span></p>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>ESPEJO INTERNO</span>\n<span class=\"material-symbols-outlined text-[16px]\">visibility</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 70,
+      "bajada": 85
     }
   },
   {
@@ -1596,17 +1675,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "4:5",
     "aspectRatio": "4/5",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Quote F80",
-    "title": "Quote F80",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Conversación de Vestuario",
+    "tag": "1:1 SAFE",
+    "title": "Arquitectura de Composición Bloque IV",
     "bajada": "“¿Sabes cuándo me di cuenta de que este método servía? Cuando pude levantar a mi hijo del suelo sin pensar en mi zona lumbar.”",
-    "tag": "TESTIMONIO SENS",
-    "defaultBg": "img/pilar-4-adherencia.jpg",
-    "htmlTemplate": "<article class=\"group relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-surface-container-lowest flex flex-col justify-between p-6\" data-category=\"dialogos\">\n<div class=\"safe-zone-overlay absolute inset-x-0 top-[10%] bottom-[10%] pointer-events-none hidden z-20\">\n<div class=\"w-full h-full border border-dashed border-secondary/40 rounded-xl bg-secondary/5 flex items-start justify-end p-2\">\n<span class=\"font-label-sm text-label-sm text-secondary bg-surface/90 px-1.5 py-0.5 rounded\">1:1 SAFE</span>\n</div>\n</div>\n<div class=\"relative z-10 w-full h-6\"></div>\n<!-- 1:1 Safe Zone Centered Content -->\n<div class=\"relative z-10 my-auto flex flex-col text-left space-y-3\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">VESTUARIO • POST-SESIÓN</span></span>\n<div class=\"bg-surface-container-low p-4 rounded-xl\">\n<p class=\"font-headline-sm text-headline-sm text-on-surface font-light leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“¿Sabes cuándo me di cuenta de que este método servía? Cuando pude levantar a mi hijo del suelo sin pensar en mi zona lumbar.”</span></p>\n</div>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\">\n            La verdadera fuerza no se mide en kilogramos de disco, sino en la confianza con que vives tu vida diaria.\n          </p>\n</div>\n<div class=\"relative z-10 w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm\">\n<span>CONVERSACIÓN REAL</span>\n<span class=\"material-symbols-outlined text-[16px]\">meeting_room</span>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 140
+      "tag": 18,
+      "title": 37,
+      "bajada": 126
     }
   },
   {
@@ -1617,16 +1697,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "SENS PRIVATE PASS",
-    "title": "SENS PRIVATE PASS",
+    "name": "Boarding Pass VIP Palermo",
+    "tag": "SENS PRIVATE PASS",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "ORIGEN",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-secondary-fixed/20 via-transparent to-surface-container-low/60 pointer-events-none\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SENS PRIVATE PASS</span></span>\n<span class=\"material-symbols-outlined text-secondary text-[20px]\">flight_takeoff</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-4\">\n<div class=\"flex items-center justify-between\">\n<div>\n<p class=\"font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">ORIGEN</span></p>\n<p class=\"font-headline-sm text-headline-sm font-semibold tracking-tight\">CABA</p>\n</div>\n<div class=\"flex flex-col items-center\">\n<span class=\"material-symbols-outlined text-secondary text-sm\">east</span>\n<span class=\"font-label-sm text-label-sm text-on-surface-variant tracking-widest\">DIRECT</span>\n</div>\n<div class=\"text-right\">\n<p class=\"font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest\">DESTINO</p>\n<p class=\"font-headline-sm text-headline-sm font-semibold tracking-tight text-secondary\">PALERMO STUDIO</p>\n</div>\n</div>\n<div class=\"bg-surface-container-low rounded-xl p-4 flex flex-col gap-2\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold\">PASE DE ACCESO EVALUACIÓN INICIAL</span>\n<p class=\"font-headline-sm text-headline-sm tracking-tight text-primary font-medium\">ROW 01 • SEAT 1A</p>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-snug\">Válido para una sesión diagnóstica privada individual con Nico.</p>\n</div>\n</div>\n<div class=\"relative z-10 flex items-center justify-between pt-2\">\n<div class=\"flex flex-col\">\n<span class=\"font-label-sm text-label-sm text-on-surface-variant uppercase\">SERIAL TOKEN</span>\n<span class=\"font-label-sm text-label-sm tracking-widest font-mono text-primary\">SENS-VIP-9941</span>\n</div>\n<div class=\"flex gap-1 items-end h-7\">\n<span class=\"w-1 h-7 bg-primary\"></span>\n<span class=\"w-1 h-5 bg-primary\"></span>\n<span class=\"w-0.5 h-7 bg-primary\"></span>\n<span class=\"w-2 h-7 bg-primary\"></span>\n<span class=\"w-1 h-4 bg-primary\"></span>\n<span class=\"w-1.5 h-7 bg-primary\"></span>\n<span class=\"w-0.5 h-6 bg-primary\"></span>\n<span class=\"w-1 h-7 bg-primary\"></span>\n</div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 43,
+      "bajada": 60
     }
   },
   {
@@ -1637,16 +1718,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Conversión F82",
-    "title": "Conversión F82",
+    "name": "Cupos Limitados del Mes",
+    "tag": "PALERMO &amp; BELGRANO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "2",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-primary-container text-on-primary flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"escasez\">\n<div class=\"absolute inset-0 bg-radial from-secondary/15 via-transparent to-black/60 pointer-events-none\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary-fixed/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"px-space-sm py-0.5 bg-surface-container-highest/20 rounded-full font-label-sm text-label-sm tracking-wider uppercase text-secondary-fixed\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">PALERMO &amp; BELGRANO</span></span>\n<span class=\"flex h-2.5 w-2.5 relative\">\n<span class=\"animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75\"></span>\n<span class=\"relative inline-flex rounded-full h-2.5 w-2.5 bg-error\"></span>\n</span>\n</div>\n<div class=\"relative z-10 my-auto text-center flex flex-col items-center gap-2\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary-fixed-dim\">DISPONIBILIDAD ESTRICTA</span>\n<p class=\"font-headline-xl text-[4.5rem] leading-none font-light tracking-tighter text-on-primary\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">2</span></p>\n<p class=\"font-headline-md text-headline-md tracking-tight font-medium text-secondary-fixed\">CUPOS DISPONIBLES</p>\n<p class=\"font-body-sm text-body-sm text-outline-variant max-w-[220px] mx-auto pt-2\">\n              Cupos presenciales 1 a 1 restantes para el mesociclo de Noviembre.\n            </p>\n</div>\n<div class=\"relative z-10 w-full text-center\">\n<div class=\"w-full py-2.5 bg-secondary-fixed text-on-secondary-fixed rounded-full font-label-md text-label-md uppercase tracking-wider font-semibold\">\n              RESERVAR ENTREVISTA\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 22,
+      "title": 43,
+      "bajada": 60
     }
   },
   {
@@ -1657,16 +1739,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Entrená 7 Días gratis en la App SENS.",
-    "title": "Entrená 7 Días gratis en la App SENS.",
+    "name": "Pase 7 Días Gratis App",
+    "tag": "0 COSTO • SIN TARJETA",
+    "title": "Entrená 7 días gratis en la App SENS.",
     "bajada": "Rutinas en video HD, timer de sobrecarga y pautas de nutrición en tu celular sin tarjeta de crédito.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"px-space-sm py-1 bg-surface-container-low rounded-full font-label-sm text-label-sm font-semibold tracking-wider text-secondary\">0 COSTO • SIN TARJETA</span>\n<span class=\"material-symbols-outlined text-secondary\">lock_open</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SENS APP PROTOCOL</span></span>\n<h3 class=\"font-headline-md text-headline-md font-medium tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Entrená 7 Días gratis en la App SENS.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Rutinas en video HD, timer de sobrecarga y pautas de nutrición en tu celular sin tarjeta de crédito.</span></p>\n<div class=\"flex items-center gap-2 pt-2 text-secondary font-label-md text-label-md font-medium\">\n<span class=\"material-symbols-outlined text-[18px]\">verified</span>\n<span>iOS &amp; Android Nativo</span>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              DESCARGAR &amp; PROBAR\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 21,
+      "title": 37,
+      "bajada": 100
     }
   },
   {
@@ -1677,16 +1760,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Evaluamos antes de cobrar.",
+    "name": "Invitación a Diagnóstico PAR-Q",
+    "tag": "CLINICAL PAR-Q",
     "title": "Evaluamos antes de cobrar.",
     "bajada": "Anamnesis digital biomecánica en 2 minutos. Detectá desequilibrios articulares sin cargo.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"diagnostico\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">CLINICAL PAR-Q</span></span>\n<span class=\"material-symbols-outlined text-secondary\">medical_services</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3 text-center items-center\">\n<div class=\"w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-1\">\n<span class=\"material-symbols-outlined text-[26px]\">vital_signs</span>\n</div>\n<h3 class=\"font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Evaluamos antes de cobrar.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[240px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Anamnesis digital biomecánica en 2 minutos. Detectá desequilibrios articulares sin cargo.</span></p>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-surface-container-high hover:bg-surface-container text-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              COMPLETAR TEST (2 MIN)\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 89
     }
   },
   {
@@ -1697,16 +1781,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "MEMBRESÍA ATLETA SOMÁTICO",
+    "name": "Certificado de Membresía SENS",
+    "tag": "CREDENTIAL Nº 0418",
     "title": "MEMBRESÍA ATLETA SOMÁTICO",
     "bajada": "Certificación de acondicionamiento neuromotor &amp; vitalidad sostenible.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"absolute inset-3 rounded-xl bg-secondary/5 pointer-events-none\"></div>\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm tracking-widest text-secondary font-semibold uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">CREDENTIAL Nº 0418</span></span>\n<span class=\"material-symbols-outlined text-secondary\">workspace_premium</span>\n</div>\n<div class=\"relative z-10 my-auto text-center flex flex-col items-center gap-2\">\n<span class=\"font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest\">PROGRAMA PRIVADO</span>\n<h3 class=\"font-headline-sm text-headline-sm font-semibold tracking-tight text-primary uppercase\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">MEMBRESÍA ATLETA SOMÁTICO</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Certificación de acondicionamiento neuromotor &amp; vitalidad sostenible.</span></p>\n<div class=\"pt-3\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest font-mono\">DIR. TÉCNICA: N. SENS</span>\n</div>\n</div>\n<div class=\"relative z-10 text-center\">\n<div class=\"w-full py-2 bg-primary text-on-primary rounded-full font-label-md text-label-md font-medium\">\n              SOLICITAR ADMISIÓN\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 73
     }
   },
   {
@@ -1717,16 +1802,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "RESPUESTA EN 60 SEGUNDOS",
-    "title": "RESPUESTA EN 60 SEGUNDOS",
+    "name": "Código QR Somático",
+    "tag": "ACCESO DIRECTO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "Escaneo Somático",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"diagnostico\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm tracking-widest uppercase text-on-surface-variant\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">ACCESO DIRECTO</span></span>\n<span class=\"material-symbols-outlined text-secondary\">qr_code_scanner</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col items-center text-center gap-3\">\n<div class=\"p-3 bg-surface-container-low rounded-2xl shadow-sm\">\n<svg class=\"w-32 h-32 text-primary\" fill=\"currentColor\" viewbox=\"0 0 100 100\">\n<path d=\"M10 10h30v30h-30z M15 15v20h20v-20z M60 10h30v30h-30z M65 15v20h20v-20z M10 60h30v30h-30z M15 65v20h20v-20z M22 22h6v6h-6z M72 22h6v6h-6z M22 72h6v6h-6z M50 15h6v12h-6z M50 35h6v6h-6z M65 55h10v10h-10z M80 60h10v25h-10z M55 75h15v15h-15z M45 60h6v25h-6z\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Escaneo Somático</span></p>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-[220px]\">\n              Escaneá para iniciar tu anamnesis digital sin esperas ni fricción comercial.\n            </p>\n</div>\n<div class=\"relative z-10 text-center\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest font-semibold\">RESPUESTA EN 60 SEGUNDOS</span>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 43,
+      "bajada": 60
     }
   },
   {
@@ -1737,16 +1823,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "ENTRENAR DE A DOS",
+    "name": "Entrenamiento en Pareja (Dúo)",
+    "tag": "PLAN DÚO PRIVADO",
     "title": "ENTRENAR DE A DOS",
     "bajada": "Misma corrección técnica 1 a 1 de Nico, valor de inversión dividido por persona.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"px-space-sm py-1 bg-secondary-fixed/30 rounded-full font-label-sm text-label-sm text-secondary font-semibold uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">PLAN DÚO PRIVADO</span></span>\n<span class=\"material-symbols-outlined text-secondary\">group</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3\">\n<h3 class=\"font-headline-md text-headline-md font-medium tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">ENTRENAR DE A DOS</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Misma corrección técnica 1 a 1 de Nico, valor de inversión dividido por persona.</span></p>\n<div class=\"p-3 bg-surface-container-low rounded-xl flex items-center justify-between\">\n<div>\n<span class=\"font-label-sm text-label-sm text-on-surface-variant uppercase\">INVERSIÓN DÚO</span>\n<p class=\"font-headline-sm text-headline-sm font-semibold text-secondary\">$100k - $195k</p>\n</div>\n<span class=\"font-label-sm text-label-sm text-primary uppercase font-medium\">POR PERSONA</span>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              CONSULTAR DISPONIBILIDAD DÚO\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 80
     }
   },
   {
@@ -1757,16 +1844,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "CLÍNICA BIOMECÁNICA: SENTADILLA &amp; CADERA",
+    "name": "Clínica de Sentadilla (Masterclass)",
+    "tag": "TICKET MASTERCLASS",
     "title": "CLÍNICA BIOMECÁNICA: SENTADILLA &amp; CADERA",
     "bajada": "Alineación de fémur, dorsiflexión y salud lumbar. 6 plazas en sala técnica.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"diagnostico\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">TICKET MASTERCLASS</span></span>\n<span class=\"font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-medium\">SÁBADO 10:00 AM</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant\">WORKSHOP PRESENCIAL</span>\n<h3 class=\"font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">CLÍNICA BIOMECÁNICA: SENTADILLA &amp; CADERA</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Alineación de fémur, dorsiflexión y salud lumbar. 6 plazas en sala técnica.</span></p>\n<div class=\"flex items-center gap-2 pt-1 text-on-surface-variant font-body-sm text-body-sm\">\n<span class=\"material-symbols-outlined text-secondary text-[18px]\">location_on</span>\n<span>SENS Studio Palermo</span>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-secondary text-on-secondary text-center rounded-full font-label-md text-label-md font-medium\">\n              RESERVAR TICKET (6 DISP.)\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 44,
+      "bajada": 75
     }
   },
   {
@@ -1777,16 +1865,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "UN HÁBITO REAL TOMA 90 Días.",
-    "title": "UN HÁBITO REAL TOMA 90 Días.",
+    "name": "Membresía Trimestral (−20%)",
+    "tag": "AHORRO 20%",
+    "title": "UN HÁBITO REAL TOMA 90 DÍAS.",
     "bajada": "Estructura trimestral de reprogramación postural y fuerza lineal.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"px-space-sm py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full font-label-sm text-label-sm font-semibold tracking-widest uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">AHORRO 20%</span></span>\n<span class=\"material-symbols-outlined text-secondary\">percent</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3 text-center items-center\">\n<h3 class=\"font-headline-md text-headline-md font-light tracking-tight text-primary leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">UN HÁBITO REAL TOMA 90 Días.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Estructura trimestral de reprogramación postural y fuerza lineal.</span></p>\n<div class=\"p-3 bg-surface-container-lowest rounded-xl w-full\">\n<span class=\"font-headline-md text-headline-md font-semibold text-primary\">$19.900</span>\n<span class=\"font-body-sm text-body-sm text-on-surface-variant\">/ mes</span>\n<p class=\"font-label-sm text-label-sm text-on-surface-variant pt-1\">$59.900 cobro único trimestral</p>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              ACTIVAR MEMBRESÍA TRIMESTRAL\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 65
     }
   },
   {
@@ -1797,16 +1886,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "30 MINUTOS CON NICO",
+    "name": "Sesión de Diagnóstico 1 a 1",
+    "tag": "VIDEOLLAMADA 1 A 1",
     "title": "30 MINUTOS CON NICO",
     "bajada": "Hablemos de tus dolores articulares y definamos tu frecuencia ideal de carga.",
-    "tag": "PASES & CUPOS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDcCst1UtTZ_iKViOYPMruip3hgT5pyjWfC7Pfead-hjvh2gyYCxP08pEy-KJLEPiHZd_9PwcPujDtf9Mj0OauKbjU_LJvMSZKIjqxL_VR1tN7Y1pTbKB650frQQRnuq6LJsJRUdW4VgSdnMQaw9i4KF8Zw_M23xqh0oQ_enT2cg0ANgXpcYuokiJxAL9KVEdlegNih1IZxYfJGw7Y_bagNPzT2IrkwFi6Z7WrUzQ",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"diagnostico\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">VIDEOLLAMADA 1 A 1</span></span>\n<span class=\"material-symbols-outlined text-secondary\">videocam</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3\">\n<div class=\"w-12 h-12 rounded-full overflow-hidden bg-surface-container\">\n<img class=\"w-full h-full object-cover\" data-alt=\"Portrait of a professional athletic physical trainer in neutral tones studio lighting warm aesthetic\" src=\"https://lh3.googleusercontent.com/aida-public/AB6AXuDcCst1UtTZ_iKViOYPMruip3hgT5pyjWfC7Pfead-hjvh2gyYCxP08pEy-KJLEPiHZd_9PwcPujDtf9Mj0OauKbjU_LJvMSZKIjqxL_VR1tN7Y1pTbKB650frQQRnuq6LJsJRUdW4VgSdnMQaw9i4KF8Zw_M23xqh0oQ_enT2cg0ANgXpcYuokiJxAL9KVEdlegNih1IZxYfJGw7Y_bagNPzT2IrkwFi6Z7WrUzQ\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"/>\n</div>\n<h3 class=\"font-headline-md text-headline-md font-medium tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">30 MINUTOS CON NICO</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Hablemos de tus dolores articulares y definamos tu frecuencia ideal de carga.</span></p>\n<div class=\"flex items-center gap-1.5 text-secondary font-label-sm text-label-sm font-medium\">\n<span class=\"material-symbols-outlined text-[16px]\">calendar_today</span>\n<span>Agenda abierta para esta semana</span>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              ELEGIR HORARIO CALENDAR\n            </div>\n</div>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 77
     }
   },
   {
@@ -1817,16 +1907,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "12 SEMANAS DE RECOMPOSICIÓN",
+    "name": "Convocatoria de Mesociclo",
+    "tag": "SEMANA 01",
     "title": "12 SEMANAS DE RECOMPOSICIÓN",
     "bajada": "Fuerza estructurada sin improvisación. Planificación individualizada progresiva.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"escasez\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SEMANA 01</span></span>\n<span class=\"material-symbols-outlined text-secondary\">event_available</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3 text-center items-center\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant\">INICIO MESOCICLO</span>\n<h3 class=\"font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">12 SEMANAS DE RECOMPOSICIÓN</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fuerza estructurada sin improvisación. Planificación individualizada progresiva.</span></p>\n<div class=\"flex gap-2\">\n<span class=\"px-2 py-1 bg-surface-container rounded font-label-sm text-label-sm font-semibold\">NOV</span>\n<span class=\"px-2 py-1 bg-surface-container rounded font-label-sm text-label-sm font-semibold\">DIC</span>\n<span class=\"px-2 py-1 bg-surface-container rounded font-label-sm text-label-sm font-semibold\">ENE</span>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              UNIRSE AL BLOQUE 12W\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 80
     }
   },
   {
@@ -1837,16 +1928,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "REGALÁ 14 Días A UN COLEGA",
-    "title": "REGALÁ 14 Días A UN COLEGA",
-    "bajada": "Ambos suman +7 Días adicionales de acceso completo a la App SENS.",
-    "tag": "PASES & CUPOS",
+    "name": "Invitación Referral (+7 Días)",
+    "tag": "GIFT PASS",
+    "title": "REGALÁ 14 DÍAS A UN COLEGA",
+    "bajada": "Ambos suman +7 días adicionales de acceso completo a la App SENS.",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"px-space-sm py-1 bg-surface-container rounded-full font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">GIFT PASS</span></span>\n<span class=\"material-symbols-outlined text-secondary\">card_giftcard</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3 text-center items-center\">\n<h3 class=\"font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">REGALÁ 14 Días A UN COLEGA</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Ambos suman +7 Días adicionales de acceso completo a la App SENS.</span></p>\n<div class=\"p-3 bg-surface-container-low rounded-xl w-full text-center\">\n<span class=\"font-label-sm text-label-sm uppercase text-on-surface-variant\">TU CÓDIGO ÚNICO</span>\n<p class=\"font-headline-sm text-headline-sm font-mono tracking-widest text-primary pt-0.5\">SENS-FRIEND-25</p>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-surface-container-high text-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              COMPARTIR LINK DIRECTO\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 65
     }
   },
   {
@@ -1857,16 +1949,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "¿CÓMO ESTÁ TU COLUMNA HOY?",
+    "name": "Evaluación Postural sin Cargo",
+    "tag": "SCREENING POSTURAL",
     "title": "¿CÓMO ESTÁ TU COLUMNA HOY?",
     "bajada": "Test interactivo de 8 pasos con proyección somática 3D.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"diagnostico\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SCREENING POSTURAL</span></span>\n<span class=\"material-symbols-outlined text-secondary\">accessibility_new</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3 items-center text-center\">\n<div class=\"w-16 h-16 rounded-full bg-secondary-fixed/20 flex items-center justify-center text-secondary\">\n<span class=\"material-symbols-outlined text-[32px]\">align_vertical_center</span>\n</div>\n<h3 class=\"font-headline-md text-headline-md font-medium tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">¿CÓMO ESTÁ TU COLUMNA HOY?</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Test interactivo de 8 pasos con proyección somática 3D.</span></p>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              INICIAR EVALUACIÓN (GRATIS)\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -1877,15 +1970,16 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "GARANTÍA DE CERO DOLOR",
+    "name": "Garantía de Cero Dolor",
+    "tag": "COMPROMISO TÉCNICO",
     "title": "GARANTÍA DE CERO DOLOR",
     "bajada": "Si una serie te genera dolor articular, Nico reconfigura tu ejercicio en el momento sin forzar rangos lesivos.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"escasez\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">COMPROMISO TÉCNICO</span></span>\n<span class=\"material-symbols-outlined text-secondary\">verified_user</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3 text-center items-center\">\n<div class=\"w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary\">\n<span class=\"material-symbols-outlined text-[24px]\">shield</span>\n</div>\n<h3 class=\"font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">GARANTÍA DE CERO DOLOR</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Si una serie te genera dolor articular, Nico reconfigura tu ejercicio en el momento sin forzar rangos lesivos.</span></p>\n</div>\n<div class=\"relative z-10 text-center\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase tracking-widest font-semibold\">CALIDAD MECÁNICA ASEGURADA</span>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
+      "tag": 18,
+      "title": 35,
       "bajada": 110
     }
   },
@@ -1897,16 +1991,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "500 COMIDAS REALES ARGENTINAS",
+    "name": "Acceso al Catálogo de 500 Alimentos",
+    "tag": "GUÍA NUTRICIONAL",
     "title": "500 COMIDAS REALES ARGENTINAS",
     "bajada": "Sin pechuga seca con arroz. Comé con sentido común, saciedad y densidad nutricional.",
-    "tag": "PASES & CUPOS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD2_uzf31D8AeJ1JzwPOh1k-p25l2vcyJlDiecRgHSIw6_uPL-z9ujq3EEQBfmlVN_r_K-opMYetagsMKYU4u5b8m3b6Aqzdja_aUchYKeXPzFUvz3TJr_LQzhWu7CyAbd-g9WcnYIb0ORWxjHcCuXpK5qnrECsSPv3hKOo-ev4Tu-2zuobXMGSKfe-18zaP01VUsRGaoF2BIHF_GaGNC_Q2I-3WAwhuD0OcDn98g",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">GUÍA NUTRICIONAL</span></span>\n<span class=\"material-symbols-outlined text-secondary\">restaurant</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3\">\n<div class=\"w-full h-28 rounded-xl overflow-hidden\">\n<img class=\"w-full h-full object-cover\" data-alt=\"Artisanal clean Argentine meal flat lay olive oil beef steak fresh greens warm quiet luxury editorial food photography\" src=\"https://lh3.googleusercontent.com/aida-public/AB6AXuD2_uzf31D8AeJ1JzwPOh1k-p25l2vcyJlDiecRgHSIw6_uPL-z9ujq3EEQBfmlVN_r_K-opMYetagsMKYU4u5b8m3b6Aqzdja_aUchYKeXPzFUvz3TJr_LQzhWu7CyAbd-g9WcnYIb0ORWxjHcCuXpK5qnrECsSPv3hKOo-ev4Tu-2zuobXMGSKfe-18zaP01VUsRGaoF2BIHF_GaGNC_Q2I-3WAwhuD0OcDn98g\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"/>\n</div>\n<h3 class=\"font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">500 COMIDAS REALES ARGENTINAS</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sin pechuga seca con arroz. Comé con sentido común, saciedad y densidad nutricional.</span></p>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              VER CATÁLOGO NUTRICIONAL\n            </div>\n</div>\n</div>",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 84
     }
   },
   {
@@ -1917,16 +2012,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "21 Días PARA DEJAR DE EMPEZAR DE CERO",
-    "title": "21 Días PARA DEJAR DE EMPEZAR DE CERO",
+    "name": "Desafío 21 Días de Hábito",
+    "tag": "NEURAL HABIT TRACK",
+    "title": "21 DÍAS PARA DEJAR DE EMPEZAR DE CERO",
     "bajada": "Construí constancia neural sin agotarte ni saltar entrenamientos.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"diagnostico\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">NEURAL HABIT TRACK</span></span>\n<span class=\"material-symbols-outlined text-secondary\">repeat</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3 text-center items-center\">\n<h3 class=\"font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">21 Días PARA DEJAR DE EMPEZAR DE CERO</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Construí constancia neural sin agotarte ni saltar entrenamientos.</span></p>\n<div class=\"grid grid-cols-7 gap-1.5 pt-2\">\n<span class=\"w-4 h-4 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] text-on-secondary-fixed\">✓</span>\n<span class=\"w-4 h-4 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] text-on-secondary-fixed\">✓</span>\n<span class=\"w-4 h-4 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] text-on-secondary-fixed\">✓</span>\n<span class=\"w-4 h-4 rounded-full bg-secondary-fixed flex items-center justify-center text-[8px] text-on-secondary-fixed\">✓</span>\n<span class=\"w-4 h-4 rounded-full bg-surface-container\"></span>\n<span class=\"w-4 h-4 rounded-full bg-surface-container\"></span>\n<span class=\"w-4 h-4 rounded-full bg-surface-container\"></span>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              SUMARME AL DESAFÍO 21D\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 37,
+      "bajada": 65
     }
   },
   {
@@ -1937,16 +2033,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "KIT ESENCIAL EN CASA",
+    "name": "Equipamiento Esencial MeLi",
+    "tag": "CURADURÍA HARDWARE",
     "title": "KIT ESENCIAL EN CASA",
     "bajada": "Mancuernas hexagonales y bandas circulares seleccionadas en MercadoLibre por Nico para entrenar donde estés.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">CURADURÍA HARDWARE</span></span>\n<span class=\"material-symbols-outlined text-secondary\">shopping_bag</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3\">\n<div class=\"w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary\">\n<span class=\"material-symbols-outlined text-[24px]\">fitness_center</span>\n</div>\n<h3 class=\"font-headline-md text-headline-md font-semibold tracking-tight text-primary leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">KIT ESENCIAL EN CASA</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Mancuernas hexagonales y bandas circulares seleccionadas en MercadoLibre por Nico para entrenar donde estés.</span></p>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-surface-container-high text-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              VER KIT RECOMENDADO\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 108
     }
   },
   {
@@ -1957,16 +2054,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "CONTRASTE RADICAL",
-    "title": "CONTRASTE RADICAL",
+    "name": "Comparativa Gimnasio Tradicional vs SENS",
+    "tag": "CONTRASTE RADICAL",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
     "bajada": "Música ensordecedora, máquinas ocupadas, dolor articular y cero foco.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface-container-lowest text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"escasez\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">CONTRASTE RADICAL</span></span>\n<span class=\"material-symbols-outlined text-secondary\">compare_arrows</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-3\">\n<div class=\"p-3 bg-surface-container-low rounded-xl\">\n<span class=\"font-label-sm text-label-sm text-error uppercase font-medium\">GIMNASIO TÍPICO</span>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Música ensordecedora, máquinas ocupadas, dolor articular y cero foco.</span></p>\n</div>\n<div class=\"p-3 bg-surface-container-highest rounded-xl\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold\">SISTEMA SENS</span>\n<p class=\"font-body-sm text-body-sm text-primary font-medium\">Sala privada, corrección técnica 1 a 1, paz mental y progreso medido.</p>\n</div>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-2.5 bg-primary text-on-primary text-center rounded-full font-label-md text-label-md font-medium\">\n              ELEGIR ENTRENAR SIN RUIDO\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 43,
+      "bajada": 69
     }
   },
   {
@@ -1977,16 +2075,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "INVITADO DE HONOR",
+    "name": "Tarjeta de Invitado Especial",
+    "tag": "PASS VIP SALA CABA",
     "title": "INVITADO DE HONOR",
     "bajada": "Vení a compartir una sesión presencial con tu colega o pareja en Palermo.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-surface text-on-surface flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"pases\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">PASS VIP SALA CABA</span></span>\n<span class=\"material-symbols-outlined text-secondary\">badge</span>\n</div>\n<div class=\"relative z-10 my-auto text-center flex flex-col items-center gap-2\">\n<div class=\"w-10 h-10 rounded-full bg-secondary-fixed/30 flex items-center justify-center text-secondary\">\n<span class=\"material-symbols-outlined text-[20px]\">star</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm font-semibold tracking-tight text-primary uppercase\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">INVITADO DE HONOR</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Vení a compartir una sesión presencial con tu colega o pareja en Palermo.</span></p>\n</div>\n<div class=\"relative z-10 text-center\">\n<div class=\"w-full py-2 bg-primary text-on-primary rounded-full font-label-md text-label-md font-medium\">\n              ACTIVAR PASE INVITADO\n            </div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 73
     }
   },
   {
@@ -1997,16 +2096,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "4/5",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Conversión F100",
-    "title": "Conversión F100",
+    "name": "El Manifiesto Final: MAKES SENS",
+    "tag": "SENS MANIFESTO",
+    "title": "Arquitectura de Conversión Bloque V",
     "bajada": "ENTRENAR SIN RUIDO. VIVIR SIN DOLOR.",
-    "tag": "PASES & CUPOS",
+    "metricHtml": "",
     "defaultBg": "img/hero-bg-opt.jpg",
-    "htmlTemplate": "<div class=\"template-item group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl bg-primary text-on-primary flex flex-col justify-between p-6 select-none transition-transform hover:-translate-y-1 duration-300\" data-category=\"manifiesto\">\n<div class=\"safe-guide absolute inset-x-0 top-[10%] bottom-[10%] bg-secondary-fixed/5 pointer-events-none rounded-xl\"></div>\n<div class=\"relative z-10 flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm tracking-widest uppercase text-secondary-fixed-dim\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SENS MANIFESTO</span></span>\n<span class=\"font-label-sm text-label-sm tracking-widest text-outline-variant font-mono\">100 / 100</span>\n</div>\n<div class=\"relative z-10 my-auto flex flex-col gap-4 text-center items-center\">\n<p class=\"font-headline-md text-headline-md md:text-headline-lg font-light tracking-tight text-on-primary leading-tight\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">ENTRENAR SIN RUIDO. VIVIR SIN DOLOR.</span></p>\n<p class=\"font-headline-xl text-headline-xl tracking-tighter text-secondary-fixed font-normal\">\n              MAKES SENS.\n            </p>\n<div class=\"w-12 h-0.5 bg-secondary-fixed/40 my-1\"></div>\n<p class=\"font-label-sm text-label-sm text-secondary-fixed-dim tracking-widest uppercase\">\n              DR. NICO • SENS TRAIN &amp; WELLNESS\n            </p>\n</div>\n<div class=\"relative z-10\">\n<div class=\"w-full py-3 bg-secondary-fixed text-on-secondary-fixed text-center rounded-full font-label-md text-label-md uppercase tracking-wider font-semibold\">\n              UNIRSE AL MOVIMIENTO\n            </div>\n</div>\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 65,
-      "bajada": 110
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -2016,17 +2116,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "La longevidad no es resistencia, es Modulación nerviosa.",
-    "title": "La longevidad no es resistencia, es Modulación nerviosa.",
-    "bajada": "Aprender a desacelerar el tono vagal transforma la Recuperación celular Más que 90 minutos de esfuerzo continuo.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAGh6cFg8_4VWbe-nerHN2M8dgIt4JmjSj4golexr0EeSuXU1hj6z1oaRywJ_QK-Ytodd4XFr_eo2HuLhp1FyfGI987VAwg0wu4dKYKKY1shlHKN0dmj8eywWjy7Ns419bd_IfDfyUp84aVXetovFwTKd9a7nKPvviDtLhdQLEgtvNdq2hB37uO0IIRMBjnxgDRYQrsT9KRI8olyK_qINKXLIcG42LyAq4akUjBIQ",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"1\">\n<!-- 9:16 Story Viewport -->\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-end justify-center p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"High contrast photograph of an athlete performing a slow spinal mobility sequence inside a calm brutalist concrete gym, early morning sun ray hitting the floor.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGh6cFg8_4VWbe-nerHN2M8dgIt4JmjSj4golexr0EeSuXU1hj6z1oaRywJ_QK-Ytodd4XFr_eo2HuLhp1FyfGI987VAwg0wu4dKYKKY1shlHKN0dmj8eywWjy7Ns419bd_IfDfyUp84aVXetovFwTKd9a7nKPvviDtLhdQLEgtvNdq2hB37uO0IIRMBjnxgDRYQrsT9KRI8olyK_qINKXLIcG42LyAq4akUjBIQ');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent\"></div>\n<!-- Safe Zone Guide -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n<!-- Morphological Container: Glassmorphism Card Inferior -->\n<div class=\"relative z-10 w-full bg-surface/85 backdrop-blur-md rounded-xl p-4 shadow-md flex flex-col gap-1.5 mb-16\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface tracking-tight leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La longevidad no es resistencia, es Modulación nerviosa.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-3\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Aprender a desacelerar el tono vagal transforma la Recuperación celular Más que 90 minutos de esfuerzo continuo.</span></p>\n</div>\n</div>\n<!-- Card Footer Actions -->",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Glassmorphism Inferior",
+    "tag": "Glassmorphism Inferior",
+    "title": "La longevidad no es resistencia, es modulación nerviosa.",
+    "bajada": "Caja de cristal esmerilado cálido anclada en el tercio inferior del active zone (Y=880px a Y=1360px). Ideal para declaraciones somáticas breves, contraste sutil y visualización de texturas fotográficas profundas.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 22,
+      "title": 56,
+      "bajada": 212
     }
   },
   {
@@ -2036,17 +2137,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "El rango articular activo define tu edad biológica.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Split 60/40 Asimétrico",
+    "tag": "Split 60/40 Asimétrico",
     "title": "El rango articular activo define tu edad biológica.",
-    "bajada": "No pierdes movilidad por envejecer; envejeces porque dejas de explorar los grados finales de cada articulación.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCTJLhBL764gsE6Br_XHd5T-xoxhOiT03EFja0FMuozN-YnhPnk47l_qojYzP1DClK5uX-RoO3mG97JcDrQvq4LlZ_iYqv7tY2SFlcNxgtUff-o3YG_fRAOmHqKVMGTKl71JJvCNvBaTNaJ4XPJKtbLiC5HT6r6qkn2jVuLMx8u1ugs3oidRBRkoFNKdME7BHlHoXrCiKhTBKJZoz5lMCkV-wQG7A94_Ohih_Qecg",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"2\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface-container-high group flex flex-col shadow-md\">\n<!-- Split Asimétrico 60/40: Foto 60% arriba -->\n<div class=\"relative w-full h-[60%] overflow-hidden\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Refined close-up of hands executing a kettlebell deadlift with impeccable lumbar alignment, soft studio daylight and warm textured shadows.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTJLhBL764gsE6Br_XHd5T-xoxhOiT03EFja0FMuozN-YnhPnk47l_qojYzP1DClK5uX-RoO3mG97JcDrQvq4LlZ_iYqv7tY2SFlcNxgtUff-o3YG_fRAOmHqKVMGTKl71JJvCNvBaTNaJ4XPJKtbLiC5HT6r6qkn2jVuLMx8u1ugs3oidRBRkoFNKdME7BHlHoXrCiKhTBKJZoz5lMCkV-wQG7A94_Ohih_Qecg');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n<!-- Caja Alabastro 40% abajo -->\n<div class=\"w-full h-[40%] bg-surface-bright p-5 flex flex-col justify-between\">\n<div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface tracking-tight mt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El rango articular activo define tu edad biológica.</span></h3>\n</div>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-3\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">No pierdes movilidad por envejecer; envejeces porque dejas de explorar los grados finales de cada articulación.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "División geométrica nítida: 60% superior dedicado al poder de la fotografía biomecánica y 40% inferior como tarjeta sólida Alabastro para máxima legibilidad tipográfica.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 22,
+      "title": 51,
+      "bajada": 169
     }
   },
   {
@@ -2056,17 +2158,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "El pulso en reposo es el espejo del estrés no digerido.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Floating Pill Central",
+    "tag": "Floating Pill Central",
     "title": "El pulso en reposo es el espejo del estrés no digerido.",
-    "bajada": "Cuando sincronizas inhalación y exhalación en cadencia 4-7-8, el sistema nervioso simpático cede terreno.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBYCjkiIaHMA8zQQARUQEfxD9Q-etrnYmRRlO7sHQvgKkK_fB4V7EUkPaldU-pVEByKb9TIxtIATKlB6PeUpxnUjheb-mkxL-1GVAhmZWP_oXNBodw3iYqaya1hgS8Nfku757P9kffVumv_-MSnqhMBwjv-GiTmAZh4JIeJk8C1juDnT7zbiLLkUlf8Jn7333T05OG7U3ULs-IIJxoddOYzj3gag5jvBWlnes9gZA",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"3\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center p-5 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Serene practitioner sitting in seiza meditation pose on natural limestone floor, warm diffused dawn illumination reflecting organic calmness.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYCjkiIaHMA8zQQARUQEfxD9Q-etrnYmRRlO7sHQvgKkK_fB4V7EUkPaldU-pVEByKb9TIxtIATKlB6PeUpxnUjheb-mkxL-1GVAhmZWP_oXNBodw3iYqaya1hgS8Nfku757P9kffVumv_-MSnqhMBwjv-GiTmAZh4JIeJk8C1juDnT7zbiLLkUlf8Jn7333T05OG7U3ULs-IIJxoddOYzj3gag5jvBWlnes9gZA');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/25\"></div>\n<!-- Morphological Container: Floating Pill Central -->\n<div class=\"relative z-10 w-full bg-surface-bright/95 shadow-xl rounded-full px-6 py-8 text-center flex flex-col items-center gap-2\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El pulso en reposo es el espejo del estrés no digerido.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-[220px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cuando sincronizas inhalación y exhalación en cadencia 4-7-8, el sistema nervioso simpático cede terreno.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Cápsula flotante con curvatura continua 'full-pill' suspendida en el baricentro visual del canvas vertical. Aísla el mensaje y canaliza la atención sin interferencias periféricas.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 21,
+      "title": 55,
+      "bajada": 179
     }
   },
   {
@@ -2076,17 +2179,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Sobrecarga progresiva fascial: la clave oculta.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Bento Grid Doble Foco",
+    "tag": "Bento Grid Doble Foco",
     "title": "Sobrecarga progresiva fascial: la clave oculta.",
-    "bajada": "El tejido conectivo tarda 3 veces Más en adaptarse que la fibra muscular. Entrenar sin respeto al tendón es hipotecar tu futuro.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuASRbD3Nblodq5Ik_alie6jLXTzMS6xpD9TCCYnG8nnEvYJMrnNtgg_Go0X9rXhu8ET0aQ-VswEj618lyPcYt-ZVhShvDTugndGYrb5HihOuqXkvtVEeipaDskJ6jrMe91g_IXhNrwfOhpjulyUfC6pzCMOi3e0nX-CUYjysaXWk3eD6Dh8riDeF5GDxdTWgSFxvpvDPkKDPpmJXkuT1hz4QEctfQuJfaH_uzBpcQ",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"telemetry\" data-id=\"4\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-center p-4 gap-3 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Athlete preparing Olympic rings suspension workout in natural wood interior gym, precision lighting highlighting muscular definition without harsh flash.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASRbD3Nblodq5Ik_alie6jLXTzMS6xpD9TCCYnG8nnEvYJMrnNtgg_Go0X9rXhu8ET0aQ-VswEj618lyPcYt-ZVhShvDTugndGYrb5HihOuqXkvtVEeipaDskJ6jrMe91g_IXhNrwfOhpjulyUfC6pzCMOi3e0nX-CUYjysaXWk3eD6Dh8riDeF5GDxdTWgSFxvpvDPkKDPpmJXkuT1hz4QEctfQuJfaH_uzBpcQ');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n<!-- Morphological Container: Bento Grid Doble Foco -->\n<div class=\"relative z-10 w-full bg-surface-bright rounded-xl p-4 shadow-lg flex flex-col gap-1\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sobrecarga progresiva fascial: la clave oculta.</span></h3>\n</div>\n<div class=\"relative z-10 w-full bg-surface-container-low rounded-xl p-4 shadow-md flex flex-col gap-1\">\n<span class=\"font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Bento Foco 02 • Bio-Mecánica</span></span>\n<p class=\"font-body-sm text-body-sm text-on-surface\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El tejido conectivo tarda 3 veces Más en adaptarse que la fibra muscular. Entrenar sin respeto al tendón es hipotecar tu futuro.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Top Safe</span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Dos micro-tarjetas flotantes separadas de forma modular. La primera ancla el gancho cognitivo y la segunda desglosa el principio fisiológico con fondo tonal diferenciado.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 21,
+      "title": 47,
+      "bajada": 170
     }
   },
   {
@@ -2096,17 +2200,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Dormir no es negociable.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Minimal Swiss Kicker",
+    "tag": "Minimal Swiss Kicker",
     "title": "Dormir no es negociable.",
-    "bajada": "El lavado glinfático cerebral ocurre exclusivamente en fases de sueño profundo N3. Sin él, tu neuroplasticidad colapsa.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCj4fTBVTU578GnDY1B6MewM4wBC4MUkH0NIS_BmZN5eRXEyvtG2P4HJzd7NOiuSHBQF0XUKvop2-2PTrStI7gu-PXUa8VVr2W3ww4zFWJPF4h0NpPNw7bCAMgEJf7X3K9uI-UbzUppumCrobxS2rQ3gweVnicxD5w53_ab5kNOHmeHYtvTbylkzdyHbVsOuhKAqTXMBdGH5bH1m0A4Oya_PMR4T0Pbx50Z0cJWxg",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"5\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface group flex flex-col justify-center p-6 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Monochrome minimalist framing of barefoot feet grounding on textured sandstone stone, dramatic sharp sunlight and long shadows.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCj4fTBVTU578GnDY1B6MewM4wBC4MUkH0NIS_BmZN5eRXEyvtG2P4HJzd7NOiuSHBQF0XUKvop2-2PTrStI7gu-PXUa8VVr2W3ww4zFWJPF4h0NpPNw7bCAMgEJf7X3K9uI-UbzUppumCrobxS2rQ3gweVnicxD5w53_ab5kNOHmeHYtvTbylkzdyHbVsOuhKAqTXMBdGH5bH1m0A4Oya_PMR4T0Pbx50Z0cJWxg');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-surface-bright/70 backdrop-blur-[2px]\"></div>\n<!-- Morphological Container: Minimal Swiss Kicker -->\n<div class=\"relative z-10 flex flex-col text-left\">\n<h3 class=\"font-headline-lg text-headline-lg text-on-surface font-light tracking-tighter leading-none mt-2\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Dormir no es negociable.</span></h3>\n<div class=\"w-8 h-0.5 bg-primary my-4\"></div>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant max-w-[200px] leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El lavado glinfático cerebral ocurre exclusivamente en fases de sueño profundo N3. Sin él, tu neuroplasticidad colapsa.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Tratamiento inspirado en el diseño suizo clásico: macro tipografía alineada a la izquierda, línea de acento minimalista y bajada de ancho controlado para lectura óptima.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 20,
+      "title": 35,
+      "bajada": 169
     }
   },
   {
@@ -2116,17 +2221,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Hormesis térmica: la incomodidad cura.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Dark Onyx Cinemático",
+    "tag": "Dark Onyx Cinemático",
     "title": "Hormesis térmica: la incomodidad cura.",
-    "bajada": "Exponerte al Frío intencionado eleva la norepinefrina un 530% sin alterar el ritmo cardíaco de esfuerzo.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD19jt0KKB-LkuL56d0YWaS0KwU_0LaJtweVK1H9f_NETcxT1U4oi06kMMgwDYzbNpvg78cU6FubnHrJnx8Mcn1BmkFFnZPw2EJjtjtXojNo2a0_PpfuKWKZIkSHIsxKNuxrH8abDdaBkBf1D9W3FaNHeuEKrKbeZ_tK2WBkQsenU39HD3TJ9VafOTkZSnghBs5X_tvqaHN5PYPpdQdq9PNdHPAYcK3fVNV2q5fhA",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"cinematic\" data-id=\"6\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-end p-5 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Cinematic low light cold immersion ice bath plunge with steam rising from water, serene silhouette of person with droplets glistening in champagne tones.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD19jt0KKB-LkuL56d0YWaS0KwU_0LaJtweVK1H9f_NETcxT1U4oi06kMMgwDYzbNpvg78cU6FubnHrJnx8Mcn1BmkFFnZPw2EJjtjtXojNo2a0_PpfuKWKZIkSHIsxKNuxrH8abDdaBkBf1D9W3FaNHeuEKrKbeZ_tK2WBkQsenU39HD3TJ9VafOTkZSnghBs5X_tvqaHN5PYPpdQdq9PNdHPAYcK3fVNV2q5fhA');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<!-- Dark Onyx Cinemático -->\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary via-primary/75 to-transparent\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 mb-16 pb-4\">\n<h3 class=\"font-headline-sm text-headline-sm text-secondary-container tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Hormesis térmica: la incomodidad cura.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-container-high line-clamp-3\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Exponerte al Frío intencionado eleva la norepinefrina un 530% sin alterar el ritmo cardíaco de esfuerzo.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Fondo oscuro profundo con degradé carbón cinemático que resalta la fotografía en claroscuro. La tipografía utiliza el acento Champagne (#E5CBA7) para denotar exclusividad.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 20,
+      "title": 38,
+      "bajada": 171
     }
   },
   {
@@ -2136,17 +2242,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Cada postura es un mapa de tus tensiones pasadas.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Polaroid Superpuesta Rotada",
+    "tag": "Polaroid Superpuesta Rotada",
     "title": "Cada postura es un mapa de tus tensiones pasadas.",
-    "bajada": "Liberar el psoas ilíaco desactiva la señal de alarma que tus suprarrenales envían al tálamo.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD3c6UALL08Om_knHjg56ayy7JNqFuGItXUK_IMaI-pxaQdbvgbY2m6rw_vJEmAKeL164yFEr0-6873mgSg249votfoou9VDzNQ08tUSlO3IApZOhjr_211FmBQv4g9-duoenYZUxZYthKdH3FZvWFa71tgRYI1DxSWOX7pfURLPdB274L_F6J93cNweebOBVdV3kgEj_dX77f7EJqFLkcfVxi60zupJCPpK8G0BQ",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"7\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface-container group flex items-center justify-center p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-surface-dim\"></div>\n<!-- Morphological Container: Polaroid Superpuesta Rotada 2deg -->\n<div class=\"relative z-10 w-[88%] bg-surface-bright rounded-lg shadow-xl p-3 transform rotate-2 transition-transform duration-300 group-hover:rotate-0\">\n<div class=\"w-full aspect-[4/3] rounded overflow-hidden bg-surface-variant mb-3\">\n<div class=\"w-full h-full bg-cover bg-center\" data-alt=\"Tactile black and white picture of hands wrapping athletic tape around wrist joints in peaceful high end studio, warm linen highlights.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD3c6UALL08Om_knHjg56ayy7JNqFuGItXUK_IMaI-pxaQdbvgbY2m6rw_vJEmAKeL164yFEr0-6873mgSg249votfoou9VDzNQ08tUSlO3IApZOhjr_211FmBQv4g9-duoenYZUxZYthKdH3FZvWFa71tgRYI1DxSWOX7pfURLPdB274L_F6J93cNweebOBVdV3kgEj_dX77f7EJqFLkcfVxi60zupJCPpK8G0BQ');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface mt-1 leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cada postura es un mapa de tus tensiones pasadas.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1.5\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Liberar el psoas ilíaco desactiva la señal de alarma que tus suprarrenales envían al tálamo.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Metáfora física analógica: marco fotográfico con ligero ángulo de 2 grados, aportando tactilidad orgánica de revista coleccionable con micro-resumen editorial.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 27,
+      "title": 49,
+      "bajada": 159
     }
   },
   {
@@ -2156,17 +2263,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "La asimetría de cadera se compensa en la mandíbula.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "HUD Biomecánico",
+    "tag": "HUD Biomecánico",
     "title": "La asimetría de cadera se compensa en la mandíbula.",
-    "bajada": "CADENCIA MOTOR: 1.14 • Las cadenas miofasciales cruzadas transfieren cada milímetro de desvío pélvico al macizo craneal.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCj-Ax6j9wqwDj7gX0s8EO-sEm9PFlk6wB4cNX-K8HIaKjABTrL5wxekhn_gkMhtT-Q8snY_V_mL6EyQj_2_JliMmf-pWfcSdnh8KZnpM4Bg37oLRmV9iBKjhIggE-dEa-l6qPzsD84OqUR8XmLKMdH8wbUDeDYdUUx_wPhO_agIajMLAhy6fpet3BCNNzxau4sDI-LLM-NPNJHiACQ4gGhUs4WlixPbDm5wJ3M6Q",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"telemetry\" data-id=\"8\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-between p-5 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Technical posture assessment of human spine with subtle biometric grid overlays, clean clinical lighting in warm luxury laboratory.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCj-Ax6j9wqwDj7gX0s8EO-sEm9PFlk6wB4cNX-K8HIaKjABTrL5wxekhn_gkMhtT-Q8snY_V_mL6EyQj_2_JliMmf-pWfcSdnh8KZnpM4Bg37oLRmV9iBKjhIggE-dEa-l6qPzsD84OqUR8XmLKMdH8wbUDeDYdUUx_wPhO_agIajMLAhy6fpet3BCNNzxau4sDI-LLM-NPNJHiACQ4gGhUs4WlixPbDm5wJ3M6Q');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/60\"></div>\n<!-- Morphological Container: HUD Biomecánico -->\n<div class=\"relative z-10 bg-surface/90 backdrop-blur-sm rounded-lg p-4 shadow-lg mb-16\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La asimetría de cadera se compensa en la mandíbula.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-1 font-mono text-[11px]\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">CADENCIA MOTOR: 1.14 • Las cadenas miofasciales cruzadas transfieren cada milímetro de desvío pélvico al macizo craneal.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Estética de telemetría de laboratorio de alta gama: coordenadas angulares, indicadores de pulso y tipografía monoespaciada para comunicar rigor técnico biomecánico.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 18,
+      "title": 51,
+      "bajada": 164
     }
   },
   {
@@ -2176,17 +2284,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "“El movimiento consciente es la forma Más pura de medicina preventiva.”",
-    "title": "“El movimiento consciente es la forma Más pura de medicina preventiva.”",
-    "bajada": "— Nico G. • SENS Master Coach",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAWkeoAUfA5gKkmgZtdpUEAIwjv-if2utGQz--AZuteU0MujDU0Ntdha2_jV-7tR4L2HG0AOQKUWvQlseeYz4uPGVq1Zcl33HZNDcaatEIX_trn7IdCSxzAn0qx6oomca5p3aNuh873XHw9nO9uJcEaqK6p5FGicILzAJB7mrayMRLWYvMlmzt1_uYqxAzt83Sab5skuXiL-up8wAd3OVsZfa3ZOZUPYYQwCdg8vA",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"9\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-center p-6 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Quiet thoughtful portrait of a wellness mentor looking through linen draped architectural window, soft amber dawn light.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWkeoAUfA5gKkmgZtdpUEAIwjv-if2utGQz--AZuteU0MujDU0Ntdha2_jV-7tR4L2HG0AOQKUWvQlseeYz4uPGVq1Zcl33HZNDcaatEIX_trn7IdCSxzAn0qx6oomca5p3aNuh873XHw9nO9uJcEaqK6p5FGicILzAJB7mrayMRLWYvMlmzt1_uYqxAzt83Sab5skuXiL-up8wAd3OVsZfa3ZOZUPYYQwCdg8vA');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/50\"></div>\n<!-- Morphological Container: Quote de Autor con Comillas Watermark -->\n<div class=\"relative z-10 flex flex-col text-on-primary\">\n<span class=\"text-secondary/40 font-headline-xl text-[80px] leading-none select-none absolute -top-12 -left-4 font-serif\">“</span>\n<h3 class=\"font-headline-md text-headline-md tracking-tight leading-tight mt-2 text-on-primary\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“El movimiento consciente es la forma Más pura de medicina preventiva.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-primary-fixed mt-3 border-l-2 pl-3 border-secondary\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">— Nico G. • SENS Master Coach</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Quote de Autor Watermark",
+    "tag": "Quote de Autor Watermark",
+    "title": "“El movimiento consciente es la forma más pura de medicina preventiva.”",
+    "bajada": "Comillas monumentales en marca de agua translúcida de fondo con texto en primer plano y atribución rubricada, ideal para reflexiones fundacionales.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 24,
+      "title": 71,
+      "bajada": 147
     }
   },
   {
@@ -2196,17 +2305,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Fuerza isométrica: estabilidad que no fatiga el SNC.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Tarjeta Solapa Inferior",
+    "tag": "Tarjeta Solapa Inferior",
     "title": "Fuerza isométrica: estabilidad que no fatiga el SNC.",
-    "bajada": "Sostener cargas sub-máximas recluta unidades motoras de alto umbral con mínima generación de micro-desgarros.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDOG0DYb4kcy_YQ-4BLVupxV87tG89H7WjGjZzTiKuqWGRDFLrrrUDa3dFpywYSeg07x4HF8I87lnvItc2Q2g7JI2L0xLVKp7kOHZzqrwjiFKtzq4gXGGcwMqfI-05pwMa-Ip3KZ3GoYcaduLWnMX3aHFGQaP4t-t1BsHt5nnGqOwY1TLm6GFNlILVMlm8gEQl6wOWIEKwnrsnXbStbdak0Hvki8Kei2vlo9Omfjg",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"10\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface group flex flex-col justify-end shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Athletic practitioner executing an isometric lunge under arched wooden architecture, soft morning light beam crossing the mat.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOG0DYb4kcy_YQ-4BLVupxV87tG89H7WjGjZzTiKuqWGRDFLrrrUDa3dFpywYSeg07x4HF8I87lnvItc2Q2g7JI2L0xLVKp7kOHZzqrwjiFKtzq4gXGGcwMqfI-05pwMa-Ip3KZ3GoYcaduLWnMX3aHFGQaP4t-t1BsHt5nnGqOwY1TLm6GFNlILVMlm8gEQl6wOWIEKwnrsnXbStbdak0Hvki8Kei2vlo9Omfjg');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<!-- Morphological Container: Tarjeta con Solapa Superior -->\n<div class=\"relative z-10 w-full bg-surface-bright rounded-t-3xl p-5 shadow-2xl flex flex-col gap-2 mb-16\">\n<div class=\"w-12 h-1 rounded-full bg-surface-variant mx-auto mb-1\"></div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fuerza isométrica: estabilidad que no fatiga el SNC.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-3\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sostener cargas sub-máximas recluta unidades motoras de alto umbral con mínima generación de micro-desgarros.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Tarjeta de solapa que emerge de forma limpia desde la base con bordes superiores curvados (32px), creando un marco seguro de lectura que abraza la imagen.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 23,
+      "title": 52,
+      "bajada": 154
     }
   },
   {
@@ -2216,17 +2326,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "La pisada descalza recalibra tu cadena posterior.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Doble Card Desfasada",
+    "tag": "Doble Card Desfasada",
     "title": "La pisada descalza recalibra tu cadena posterior.",
-    "bajada": "Con 200,000 terminaciones nerviosas por pie, encerrarlos en suelas rígidas apaga la propiocepción glútea.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAQENmOQVYoyLDdDvBNXxAJOTchZfgMxlWxxnZo-Q222AWqofdmdLga6dx8j9FKTU66HS6Rx_N2j1nOs6VRyLK23o_bMLF1Te8a_0CuijL0urRWo8CqWX6dT-jlXTjV5k81pRt9KKN44V1_yNFbqIw6muIGVGoIh8SfE4_q6XXSJFXlZyHrWUNy3fxhPZFPhTke6HOrlqm6aenB31H4tn8B_mFYlwM9KkYm-r26VQ",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"11\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Refined portrait of a runner tying shoelaces in tranquil outdoor pine woods at sunrise with subtle morning mist and warm sunlight flares.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQENmOQVYoyLDdDvBNXxAJOTchZfgMxlWxxnZo-Q222AWqofdmdLga6dx8j9FKTU66HS6Rx_N2j1nOs6VRyLK23o_bMLF1Te8a_0CuijL0urRWo8CqWX6dT-jlXTjV5k81pRt9KKN44V1_yNFbqIw6muIGVGoIh8SfE4_q6XXSJFXlZyHrWUNy3fxhPZFPhTke6HOrlqm6aenB31H4tn8B_mFYlwM9KkYm-r26VQ');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/35\"></div>\n<!-- Morphological Container: Doble Card Desfasada -->\n<div class=\"relative z-10 w-full flex flex-col items-center\">\n<div class=\"w-[94%] bg-surface-bright rounded-xl p-4 shadow-xl z-10 flex flex-col gap-1.5 transform rotate-1\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La pisada descalza recalibra tu cadena posterior.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Con 200,000 terminaciones nerviosas por pie, encerrarlos en suelas rígidas apaga la propiocepción glútea.</span></p>\n</div>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Dos tarjetas superpuestas con ligero giro angular relativo. Genera tridimensionalidad y jerarquiza la secuencia lógica entre concepto preliminar y conclusión biológica.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 20,
+      "title": 49,
+      "bajada": 168
     }
   },
   {
@@ -2236,17 +2347,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "El agua fría resetea la variabilidad cardíaca.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Franja Central Cinemática",
+    "tag": "Franja Central Cinemática",
     "title": "El agua fría resetea la variabilidad cardíaca.",
-    "bajada": "Un choque de 3 minutos genera una cascada dopaminérgica que dura hasta 4 horas sin choque adrenal posterior.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCW5cggGaQFgp3abUKnqiL4YrB4mYC7gq683Up4aAaiA7_4_d8A0l-NZdVa_AOpsL4JE9SscsxCZzJ51PRtBK5VB4tGUmQ7eslcoQMOQLZbYOIgB0OSEhnvS1LW08TfiRb6Uxr-WDvrCmmeUWoN8dFUEZ2kIO33SAeNxuG0unpubkrHq5LelSoc3Qv3VNrvS2522AVYw29A4HevfjULU-lcIHjYhn9GNhK6YAikIQ",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"cinematic\" data-id=\"12\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Deep atmospheric photograph of human swimmer gliding under crystalline mineral water in dark limestone pool with subtle shafts of light.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCW5cggGaQFgp3abUKnqiL4YrB4mYC7gq683Up4aAaiA7_4_d8A0l-NZdVa_AOpsL4JE9SscsxCZzJ51PRtBK5VB4tGUmQ7eslcoQMOQLZbYOIgB0OSEhnvS1LW08TfiRb6Uxr-WDvrCmmeUWoN8dFUEZ2kIO33SAeNxuG0unpubkrHq5LelSoc3Qv3VNrvS2522AVYw29A4HevfjULU-lcIHjYhn9GNhK6YAikIQ');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<!-- Morphological Container: Franja Central Cinemática -->\n<div class=\"relative z-10 w-full bg-primary/80 backdrop-blur-md py-6 px-5 flex flex-col text-on-primary\">\n<h3 class=\"font-headline-sm text-headline-sm text-surface-bright mt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El agua fría resetea la variabilidad cardíaca.</span></h3>\n<p class=\"font-body-sm text-body-sm text-primary-fixed mt-1.5\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Un choque de 3 minutos genera una cascada dopaminérgica que dura hasta 4 horas sin choque adrenal posterior.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Banda horizontal translúcida a sangre completa que corta la imagen en su ecuador perfecto (Y=720px a Y=1200px), asegurando legibilidad sin tapar pies ni cabeza del sujeto.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "title": 46,
+      "bajada": 171
     }
   },
   {
@@ -2256,17 +2368,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Carga simpática alta detectada • Pausa 5 min.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Notificación Sistema Somático",
+    "tag": "Notificación Sistema Somático",
     "title": "Carga simpática alta detectada • Pausa 5 min.",
-    "bajada": "Tu ritmo respiratorio subió a 18 rpm en reposo. Tres ciclos de exhalación doble prolongada devolverán tu eje vagal al balance.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBQGkv41IqyrL-Zi8IbZkGsusRcZO3x-NWcQQBp_Yk4Kt5nsjiGjTtNrN5FcP6VAun4k6GKTz6c6rfSFYTViCWmkBfySwySNqN3rsCefzCw3EarNU7giSu3rMtNIQLlem4lEB3lY7GuOT5U1gXjUSsguOgGkJDgIXSHb1sdl3ouOQswMZeNqyF7FACIS3qM2IPVKY_DwqlWo8TGybhqRGNTzhzBRUpFjrr5_tESzA",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"telemetry\" data-id=\"13\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-center p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Morning macro photograph of an athletic ceramic mug of ceremonial matcha tea beside an elegant biometric wearable ring on warm travertine stone table.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQGkv41IqyrL-Zi8IbZkGsusRcZO3x-NWcQQBp_Yk4Kt5nsjiGjTtNrN5FcP6VAun4k6GKTz6c6rfSFYTViCWmkBfySwySNqN3rsCefzCw3EarNU7giSu3rMtNIQLlem4lEB3lY7GuOT5U1gXjUSsguOgGkJDgIXSHb1sdl3ouOQswMZeNqyF7FACIS3qM2IPVKY_DwqlWo8TGybhqRGNTzhzBRUpFjrr5_tESzA');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/30\"></div>\n<!-- Morphological Container: Notificación Sistema Somático (iOS style) -->\n<div class=\"relative z-10 w-full bg-surface-bright/90 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex flex-col gap-2\">\n<div class=\"flex items-center justify-between\">\n<div class=\"flex items-center gap-2\">\n<div class=\"w-6 h-6 rounded-lg bg-primary text-on-primary flex items-center justify-center\">\n<span class=\"material-symbols-outlined text-[14px]\">notifications_active</span>\n</div>\n<span class=\"font-label-sm text-label-sm font-semibold tracking-tight text-on-surface\">SENS Somatic Alert</span>\n</div>\n<span class=\"font-label-sm text-[11px] text-on-surface-variant\">Ahora</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Carga simpática alta detectada • Pausa 5 min.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu ritmo respiratorio subió a 18 rpm en reposo. Tres ciclos de exhalación doble prolongada devolverán tu eje vagal al balance.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Reinterpretación de los banners de alerta fisiológica de sistemas operativos móviles de lujo: ícono de telemetría, timestamp 'Ahora' y directiva neuromuscular inmediata.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 29,
+      "title": 45,
+      "bajada": 169
     }
   },
   {
@@ -2276,17 +2389,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Gasto basal y flexibilidad de combustible.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Recibo Metabólico Fintech",
+    "tag": "Recibo Metabólico Fintech",
     "title": "Gasto basal y flexibilidad de combustible.",
-    "bajada": "Quemar grasa en bajas pulsaciones preserva glucógeno hepático para tus esfuerzos cognitivos vespertinos.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA4aYPhyohpic6XRKan3vbOZPz-P9nAxm3ONnZ2G4kT0F8uJRqrhFUn4PFKBE_qqHjQdPmV7r5vUzDV6nC9X5-83fl7Pri5BCl35PsvL3I4D7vJPaHSEnfrqaNmBRF8zp2o5AIJy5yr1Ib4hl6YXGFqmcnn2gtiNSydyxWv0OIja04W4fjNysztkNAq9ie8ZAzC5GG9NPyysf4eP7iGbfiSlO1dA4L_QRyQ4BB3dw",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"telemetry\" data-id=\"14\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface group flex flex-col justify-center p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Tactile textured paper background with clean architectural shadows of bamboo blinds, warm natural light and calm aesthetics.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4aYPhyohpic6XRKan3vbOZPz-P9nAxm3ONnZ2G4kT0F8uJRqrhFUn4PFKBE_qqHjQdPmV7r5vUzDV6nC9X5-83fl7Pri5BCl35PsvL3I4D7vJPaHSEnfrqaNmBRF8zp2o5AIJy5yr1Ib4hl6YXGFqmcnn2gtiNSydyxWv0OIja04W4fjNysztkNAq9ie8ZAzC5GG9NPyysf4eP7iGbfiSlO1dA4L_QRyQ4BB3dw');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<!-- Morphological Container: Recibo Metabólico Fintech -->\n<div class=\"relative z-10 w-full bg-surface-bright rounded-xl p-4 shadow-xl flex flex-col font-mono text-on-surface\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface font-sans font-medium mt-2 leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Gasto basal y flexibilidad de combustible.</span></h3>\n<div class=\"flex flex-col gap-1 my-3 text-[12px] bg-surface-container-low p-2 rounded\">\n<div class=\"flex justify-between\"><span class=\"\">Zona 2 Ox. Grasa:</span><span class=\"font-bold text-on-tertiary-container\">78%</span></div>\n<div class=\"flex justify-between\"><span class=\"\">Lactato sanguíneo:</span><span class=\"font-bold\">1.4 mmol/L</span></div>\n</div>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant font-sans\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Quemar grasa en bajas pulsaciones preserva glucógeno hepático para tus esfuerzos cognitivos vespertinos.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Diseño con estética de ticket o recibo de precisión financiera adaptado al metabolismo, con métricas desglosadas, números de serie y tipografía técnica.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "title": 42,
+      "bajada": 152
     }
   },
   {
@@ -2296,17 +2410,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "La fascia deshidratada se comporta como pegamento.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Escáner Fascial Línea Dorada",
+    "tag": "Escáner Fascial Línea Dorada",
     "title": "La fascia deshidratada se comporta como pegamento.",
-    "bajada": "El masaje de compresión lenta restituye el flujo hialurónico intersticial entre los planos miofasciales profundos.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA0UZZAlJUQ9oj_wyuWHteBXmHFieodvgZftUdM4BKPdg9C9P1tJeWgfci6tvQvkjr6cfaEKgGbsxx7pUdgxs6gpUl_nrodwqh8WCtZ3FKhY7pRmONuAYVotmU_DJVlUEk4xwwyuBfFHMt5EoqSnQAZH4JEPCS69fwBS8grWIfjuyv7_qwRZNzUmkr9yydu0ajBZRsF_zey-veuqoirYfDZM82k_94O7ZTQY5QZog",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"15\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-end p-5 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Extreme macro detail of human back shoulder blade during a gentle thoracic rotation stretch, warm skin texture and soft ambient sidelight.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA0UZZAlJUQ9oj_wyuWHteBXmHFieodvgZftUdM4BKPdg9C9P1tJeWgfci6tvQvkjr6cfaEKgGbsxx7pUdgxs6gpUl_nrodwqh8WCtZ3FKhY7pRmONuAYVotmU_DJVlUEk4xwwyuBfFHMt5EoqSnQAZH4JEPCS69fwBS8grWIfjuyv7_qwRZNzUmkr9yydu0ajBZRsF_zey-veuqoirYfDZM82k_94O7ZTQY5QZog');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/65\"></div>\n<!-- Morphological Container: Escáner Fascial con Línea Dorada -->\n<div class=\"relative z-10 flex flex-col mb-16\">\n<h3 class=\"font-headline-sm text-headline-sm text-surface-bright mt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La fascia deshidratada se comporta como pegamento.</span></h3>\n<!-- Golden Laser Scanner Accent Line -->\n<div class=\"w-full h-0.5 bg-gradient-to-r from-secondary-container via-secondary to-transparent my-3 shadow-[0_0_8px_rgba(229,203,167,0.5)]\"></div>\n<p class=\"font-body-sm text-body-sm text-primary-fixed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El masaje de compresión lenta restituye el flujo hialurónico intersticial entre los planos miofasciales profundos.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Línea de rayo horizontal en tono dorado champagne con gradiente y resplandor sutil que divide el titular audaz de la explicación científica como un escaneo activo.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 28,
+      "title": 50,
+      "bajada": 163
     }
   },
   {
@@ -2316,17 +2431,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Caminar 8,000 pasos es la línea base de la función mitocondrial.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Macro Tipografía Vertical",
+    "tag": "Macro Tipografía Vertical",
     "title": "Caminar 8,000 pasos es la línea base de la función mitocondrial.",
-    "bajada": "La contracción rítmica del sóleo bombea sangre venosa al corazón sin elevar la presión sistólica.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBbb_hdCoi-Qi6StgUp_ae43io87TvRz1VIv94vTIgYXtBZHxOJwgwf-aocKZFMIsY7KgnAIN-j_bAjNtCm2Py7fVq8Y80RNKAY4TX8O7ZMX4XkKvi4HISHprT6yUdMwSkUM-jyqMPKPLURNN7T_x1m0kambtuh6A2SGftI0PMLspUQfQDRUqwLyFhu5RftqXZlGIJZLNKkNpUbcYoQJ2YUEJ2gcbp-qsCXgPnRYA",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"16\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface-bright group flex items-center justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Monochromatic portrait of barefoot athlete standing upright in perfect architectural alignment against clean warm textured stone wall.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBbb_hdCoi-Qi6StgUp_ae43io87TvRz1VIv94vTIgYXtBZHxOJwgwf-aocKZFMIsY7KgnAIN-j_bAjNtCm2Py7fVq8Y80RNKAY4TX8O7ZMX4XkKvi4HISHprT6yUdMwSkUM-jyqMPKPLURNN7T_x1m0kambtuh6A2SGftI0PMLspUQfQDRUqwLyFhu5RftqXZlGIJZLNKkNpUbcYoQJ2YUEJ2gcbp-qsCXgPnRYA');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-surface-bright/80 backdrop-blur-sm\"></div>\n<!-- Morphological Container: Macro Tipografía Vertical Margen Izquierdo -->\n<div class=\"relative z-10 flex h-full items-center\">\n<span class=\"font-headline-lg text-headline-lg font-light tracking-tighter text-on-surface [writing-mode:vertical-rl] rotate-180 uppercase select-none opacity-40\">LONGEVIDAD</span>\n<div class=\"flex flex-col ml-4 max-w-[200px]\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface mt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Caminar 8,000 pasos es la línea base de la función mitocondrial.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La contracción rítmica del sóleo bombea sangre venosa al corazón sin elevar la presión sistólica.</span></p>\n</div>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Columna vertebral tipográfica vertical en 90 grados que guía el scroll visual, acompañada de una caja de lectura lateral condensada con alta densidad de valor.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "title": 64,
+      "bajada": 159
     }
   },
   {
@@ -2336,17 +2452,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "Tu digestión empieza 20 minutos antes del primer bocado.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Tarjeta Espejada con Blur Suave",
+    "tag": "Tarjeta Espejada con Blur Suave",
     "title": "Tu digestión empieza 20 minutos antes del primer bocado.",
-    "bajada": "La fase cefálica gástrica requiere tono parasimpático. Comer en modo alerta bloquea el 60% del ácido clorhídrico.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDIjn7v085QlVSV61ZhMHDbtk0gYM3ZVKAfmJwRT5Tiimf6hsz8oqaAPEJzXpHYtJ4sShFz_Gh7Iot8eFXaAHdE4ezJ30PFbg9qY9SlyAMfvcyAzZ_gpvZ2-hBN3tZust59Lkl-3I7-uS9rdPbzYvsuAWovW658GKD4BSFpTYeoehPeCst7PsR1r_bRPJq3WJ1oY359jwk898uPkCAz2IoI1C4awVtBnbaxPOPY7w",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"17\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Reflective tranquil water surface with gentle ripples in natural stone basin reflecting sky and foliage in warm dusk tones.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDIjn7v085QlVSV61ZhMHDbtk0gYM3ZVKAfmJwRT5Tiimf6hsz8oqaAPEJzXpHYtJ4sShFz_Gh7Iot8eFXaAHdE4ezJ30PFbg9qY9SlyAMfvcyAzZ_gpvZ2-hBN3tZust59Lkl-3I7-uS9rdPbzYvsuAWovW658GKD4BSFpTYeoehPeCst7PsR1r_bRPJq3WJ1oY359jwk898uPkCAz2IoI1C4awVtBnbaxPOPY7w');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<!-- Morphological Container: Tarjeta Espejada con Blur Suave -->\n<div class=\"relative z-10 w-[92%] bg-surface/70 backdrop-blur-xl rounded-2xl p-5 shadow-2xl flex flex-col text-on-surface\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface mt-1 leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu digestión empieza 20 minutos antes del primer bocado.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant mt-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La fase cefálica gástrica requiere tono parasimpático. Comer en modo alerta bloquea el 60% del ácido clorhídrico.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Superficie de refracción líquida con desenfoque de 24px que absorbe los tonos de la fotografía de fondo mientras entrega un contraste inmaculado para el texto.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 31,
+      "title": 56,
+      "bajada": 159
     }
   },
   {
@@ -2356,17 +2473,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "El sudor elimina metales que el riñón no filtra.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Manifiesto Marco Dorado",
+    "tag": "Manifiesto Marco Dorado",
     "title": "El sudor elimina metales que el riñón no filtra.",
-    "bajada": "Sesiones semanales de sauna reducen el riesgo cardiovascular global en un 40% al imitar ejercicio moderado.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCimMYnR7QDHZbB2G4aPqGhGb3So-8drSlcZNCho4X0tX_YAmM1xvepUSIrxrXcHaf2NMabrUbVX_eUG7cj2TptDIaGUbjOFXXylVyAjstWynYUCuHSBAOYl6pXx2EKNBKhP-E1WVeFbpCjq61gbnO11dFZktiuxgMoZ7RQPaiF4n8B03nQa8Pwt8vhxJ6rLraQPuSwycMUA7se_VTbl9zGuNssEeQW5UWpXLoHIw",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"18\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex items-center justify-center p-5 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Moody architectural interior of luxury Finnish sauna made of aged cedar timber, warm amber lighting and gentle rising steam.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCimMYnR7QDHZbB2G4aPqGhGb3So-8drSlcZNCho4X0tX_YAmM1xvepUSIrxrXcHaf2NMabrUbVX_eUG7cj2TptDIaGUbjOFXXylVyAjstWynYUCuHSBAOYl6pXx2EKNBKhP-E1WVeFbpCjq61gbnO11dFZktiuxgMoZ7RQPaiF4n8B03nQa8Pwt8vhxJ6rLraQPuSwycMUA7se_VTbl9zGuNssEeQW5UWpXLoHIw');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<div class=\"absolute inset-0 bg-primary/55\"></div>\n<!-- Morphological Container: Manifiesto Bloque Compacto con Marco Dorado -->\n<div class=\"relative z-10 w-full bg-surface-container-lowest/95 rounded-xl p-5 shadow-2xl flex flex-col gap-2 ring-1 ring-secondary/40\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface tracking-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El sudor elimina metales que el riñón no filtra.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-3\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sesiones semanales de sauna reducen el riesgo cardiovascular global en un 40% al imitar ejercicio moderado.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Caja compacta sellada con un bisel perimetral en tono champagne que evoca los certificados y credenciales de alta alcurnia deportiva.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 23,
+      "title": 48,
+      "bajada": 133
     }
   },
   {
@@ -2376,17 +2494,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "VO2 Max es el mayor predictor de esperanza de vida.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Pasaporte Biológico con Sello",
+    "tag": "Pasaporte Biológico con Sello",
     "title": "VO2 Max es el mayor predictor de esperanza de vida.",
-    "bajada": "Pasar del quintil Más bajo al intermedio disminuye la mortalidad por todas las causas en un 50%.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBEUJu21xZPChJsqDo0Ky6OC2DbQuRcEwauS_s5TlNx2NSoL0ZPgAkzWPLy0f3fByPT8IJKIbgaLqGdRuzpnV0i30FRg39LywcOMJBqf8Os2qMXbMHFBkwjNuG1V_zeL3BF9UciosuuJw0DPJfbPLT_besfLp9Wu7PM84EGSnpHCE0DFDRhulV8X8soiD1XW0q93cfDxDJQX3jGXwIJ_5TUuRp9ZRfkPLBDNoGLww",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"telemetry\" data-id=\"19\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-surface group flex flex-col justify-center p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Luxury biological identity badge concept on warm linen paper with embossed golden seals and medical typography precision.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBEUJu21xZPChJsqDo0Ky6OC2DbQuRcEwauS_s5TlNx2NSoL0ZPgAkzWPLy0f3fByPT8IJKIbgaLqGdRuzpnV0i30FRg39LywcOMJBqf8Os2qMXbMHFBkwjNuG1V_zeL3BF9UciosuuJw0DPJfbPLT_besfLp9Wu7PM84EGSnpHCE0DFDRhulV8X8soiD1XW0q93cfDxDJQX3jGXwIJ_5TUuRp9ZRfkPLBDNoGLww');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<!-- Morphological Container: Pasaporte Biológico con Sello Nico -->\n<div class=\"relative z-10 w-full bg-surface-bright rounded-2xl p-4 shadow-xl flex flex-col gap-2\">\n<div class=\"flex items-center gap-3\">\n<div class=\"w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center font-bold text-on-secondary-container font-headline-sm\">\n                NG\n              </div>\n<div class=\"flex flex-col\">\n<span class=\"font-label-sm text-[11px] text-on-surface-variant\">Validado por Coach Nico</span>\n</div>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface mt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">VO2 Max es el mayor predictor de esperanza de vida.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Pasar del quintil Más bajo al intermedio disminuye la mortalidad por todas las causas en un 50%.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Estructura de credencial de membresía y pase médico con avatar circular del coach Nico, validación institucional y data biológica de alta relevancia.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 29,
+      "title": 51,
+      "bajada": 149
     }
   },
   {
@@ -2396,17 +2515,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b1",
-    "block": "Bloque I: Flotantes 9:16",
-    "name": "La luz del sol matutina ancla tu ritmo circadiano.",
+    "block": "Bloque I: Bloques Flotantes",
+    "name": "Split Diagonal 45° Alabastro",
+    "tag": "Split Diagonal 45° Alabastro",
     "title": "La luz del sol matutina ancla tu ritmo circadiano.",
-    "bajada": "Diez minutos de fotones naturales antes de mirar pantallas reprograman el reloj celular de cada órgano vital.",
-    "tag": "SENS STORY",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBF7cCD8dknpilp9LMVKbc8nm0qQldbbRuYK8NGnnpJg9XGkwqcdMEkIP9GJn5l4eyzhOu8KrevMN14ifDw-dqds71EjFSg67A0_IUUnKQbrfWkQWBZZmVyreqZ75K6miHoncxhd_yMDSUgyIzcbk3W0Mb4BczYrz51wcSk1yu47BrhTaXC9510ZcB12Sb3h-wZ6emv-Fub2J6qkGa0WvhGeXJUjYdcUXazdkWvCA",
-    "htmlTemplate": "<article class=\"template-card flex flex-col rounded-xl transition-all duration-300\" data-category=\"editorial\" data-id=\"20\">\n<div class=\"relative w-full aspect-[9/16] rounded-lg overflow-hidden bg-primary group flex flex-col justify-end shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105\" data-alt=\"Sensory photograph of an individual standing in early morning sunlight in natural landscape, breathing deeply with expanded chest and relaxed shoulders.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBF7cCD8dknpilp9LMVKbc8nm0qQldbbRuYK8NGnnpJg9XGkwqcdMEkIP9GJn5l4eyzhOu8KrevMN14ifDw-dqds71EjFSg67A0_IUUnKQbrfWkQWBZZmVyreqZ75K6miHoncxhd_yMDSUgyIzcbk3W0Mb4BczYrz51wcSk1yu47BrhTaXC9510ZcB12Sb3h-wZ6emv-Fub2J6qkGa0WvhGeXJUjYdcUXazdkWvCA');\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\"></div>\n<!-- Morphological Container: Split Diagonal 45deg con Fondo Alabastro -->\n<div class=\"relative z-10 w-full bg-surface-bright p-5 shadow-2xl [clip-path:polygon(0_15%,100%_0,100%_100%,0_100%)] flex flex-col pt-8 mb-16\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface tracking-tight mt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La luz del sol matutina ancla tu ritmo circadiano.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant line-clamp-3 mt-1\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Diez minutos de fotones naturales antes de mirar pantallas reprograman el reloj celular de cada órgano vital.</span></p>\n</div>\n<!-- Safe Zone -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 z-30 flex flex-col justify-between\">\n<div class=\"h-[16.6%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Top Safe</span></span></div>\n<div class=\"h-[24.5%] bg-error/20 flex items-center justify-center\"><span class=\"font-label-sm text-[10px] text-on-error uppercase\">Bottom Safe</span></div>\n</div>\n</div>",
+    "bajada": "Corte dinámico en ángulo diagonal oblicuo que genera tensión geométrica y dinamismo moderno sin perder la elegancia del blanco cálido.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 130
+      "tag": 28,
+      "title": 50,
+      "bajada": 134
     }
   },
   {
@@ -2416,17 +2536,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "El descanso no es pausa, es síntesis biológica.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Revista Monocle Edition",
+    "tag": "SENS • MÉTODO",
     "title": "El descanso no es pausa, es síntesis biológica.",
     "bajada": "Sin fase parasimpática no hay regeneración celular ni supercompensación miofibrilar.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA7WZbN2GiQ4XMdtuQoAqXjegkZDR0Hfdn-P4E4Mw5rN6MtNYLPX2oTERcWFhmFz0xGqdc7rDTbraciKzk2Ch2tEB6_LhJH6vDXYROi10VEHjdm0qRRXwAklj-INJsDPzZeIaFSMHNe5u1r8NPpso1uS-sV1GwA9a82cH8rtOCY1h-4CLPxFulXGz1g0sWVu75VEtsNH2CFF6Ol5rJleZTJu7waG2PyRzZkBOLgdQ",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Serif Editorial 42pt\" data-id=\"T21\" data-morphology=\"Full Bleed Asimétrico\" data-name=\"Revista Monocle Edition\" data-offset=\"Top 360px • Bot 480px\" data-palette=\"Carbón / Champagne\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Athlete resting mindfully on wooden bench in gentle warm natural light, quiet luxury minimalist gym aesthetic, soft shadows\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA7WZbN2GiQ4XMdtuQoAqXjegkZDR0Hfdn-P4E4Mw5rN6MtNYLPX2oTERcWFhmFz0xGqdc7rDTbraciKzk2Ch2tEB6_LhJH6vDXYROi10VEHjdm0qRRXwAklj-INJsDPzZeIaFSMHNe5u1r8NPpso1uS-sV1GwA9a82cH8rtOCY1h-4CLPxFulXGz1g0sWVu75VEtsNH2CFF6Ol5rJleZTJu7waG2PyRzZkBOLgdQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-transparent\"></div>\n</div>\n<!-- Safe Zone Guide -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<!-- Card Content -->\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"flex flex-col gap-1 my-auto\"><div class=\"w-6 h-px bg-secondary-fixed\"></div><h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-normal leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El descanso no es pausa, es síntesis biológica.</span></h4><p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed mt-1\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sin fase parasimpática no hay regeneración celular ni supercompensación miofibrilar.</span></p></div></div>\n</div>\n<!-- Card Action Controls -->\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 47,
+      "bajada": 84
     }
   },
   {
@@ -2436,17 +2557,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "FUERZA SIN RUIDO.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Bold Statement Colosal",
+    "tag": "SENS • MÉTODO",
     "title": "FUERZA SIN RUIDO.",
-    "bajada": "El rendimiento duradero prescinde del ego. Tres sesiones de Precisión semanal superan años de sobreentrenamiento desordenado.",
-    "tag": "EDITORIAL STORY",
+    "bajada": "El rendimiento duradero prescinde del ego. Tres sesiones de precisión semanal superan años de sobreentrenamiento desordenado.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBkD7-W4Wx8j033FDOZIAf6RKGZwid09354vyhlBSCGE9OBBtWcrFAwri0FADtv9amIgu2853umlbPH8qRKpUAr_BgFReH3ksfz7tggrUhwT3KOkApfs61JahZkwI6HYAjTHNEdKFRRj06kF6ux7yLdnqVIePiSPiXQQueOi9boCUz2QQ8A_gLFNfiqW3jYw391thqjOanie42UYE0VPhJZ2Dg-F9_AKnhgfEbbGA",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"monumental\" data-hook=\"Sans Heavy 64pt\" data-id=\"T22\" data-morphology=\"Centrado Monumental\" data-name=\"Bold Statement Colosal\" data-offset=\"Top 340px • Bot 460px\" data-palette=\"Onyx / Blanco Puro\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Muscular back traction training in architectural concrete gym with subtle daylight glow, cinematic minimalist photography\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkD7-W4Wx8j033FDOZIAf6RKGZwid09354vyhlBSCGE9OBBtWcrFAwri0FADtv9amIgu2853umlbPH8qRKpUAr_BgFReH3ksfz7tggrUhwT3KOkApfs61JahZkwI6HYAjTHNEdKFRRj06kF6ux7yLdnqVIePiSPiXQQueOi9boCUz2QQ8A_gLFNfiqW3jYw391thqjOanie42UYE0VPhJZ2Dg-F9_AKnhgfEbbGA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/90 to-primary\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-between p-space-sm text-on-primary\">\n<div class=\"flex flex-col gap-2 my-auto\">\n<h4 class=\"card-title font-headline-lg text-[28px] text-on-primary font-bold tracking-tight uppercase leading-none\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">FUERZA SIN RUIDO.</span></h4>\n<p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El rendimiento duradero prescinde del ego. Tres sesiones de Precisión semanal superan años de sobreentrenamiento desordenado.</span></p>\n</div>\n</div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 125
     }
   },
   {
@@ -2456,17 +2578,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Nutrición con sentido común.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Nota Manuscrita Digital",
+    "tag": "SENS • MÉTODO",
     "title": "Nutrición con sentido común.",
     "bajada": "“No renegamos del almuerzo familiar ni del vino de fin de semana. Aprendemos a modular la energía con inteligencia metabólica.”",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDMQN9aMbDsXM2ZKRm36PBd9MBukoPXiDE3Uz44pKazcOZNn90ZBzqr8TOeDBdd4GQ7fJE01-3aZze2ci17EqGsBIb7MeIQSo6nhPw0FRe6q-D-SOsPjY2PDGR23uKE9VdLFO1o7xELcUXLa7jTOSnC0uBOE7RunJzUyGUPfMUZoa-aFULEakSiOlROhiHigkhbx8_TNWYZnx_RmANuX-xeRNjhGcHGkWlhhU5h6w",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Sans + Italic Script\" data-id=\"T23\" data-morphology=\"Editorial Orgánico\" data-name=\"Nota Manuscrita Digital\" data-offset=\"Top 350px • Bot 470px\" data-palette=\"Lino / Café Cortado\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Artisanal high-protein breakfast and black coffee in pure natural morning light on light wood table, quiet luxury editorial wellness style\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDMQN9aMbDsXM2ZKRm36PBd9MBukoPXiDE3Uz44pKazcOZNn90ZBzqr8TOeDBdd4GQ7fJE01-3aZze2ci17EqGsBIb7MeIQSo6nhPw0FRe6q-D-SOsPjY2PDGR23uKE9VdLFO1o7xELcUXLa7jTOSnC0uBOE7RunJzUyGUPfMUZoa-aFULEakSiOlROhiHigkhbx8_TNWYZnx_RmANuX-xeRNjhGcHGkWlhhU5h6w')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/60 to-primary/20\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"flex flex-col gap-2 my-auto\"><h4 class=\"card-title font-headline-md text-[20px] text-on-primary font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Nutrición con sentido común.</span></h4><div class=\"p-space-xs rounded-xl bg-surface-container-lowest/15 backdrop-blur-md\"><p class=\"card-body font-body-sm text-[11px] text-secondary-fixed italic leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“No renegamos del almuerzo familiar ni del vino de fin de semana. Aprendemos a modular la energía con inteligencia metabólica.”</span></p></div></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 127
     }
   },
   {
@@ -2476,17 +2599,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Tu movilidad define tu década.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Tarjeta Flotante Minimalista",
+    "tag": "LONGEVIDAD ARTICULAR",
     "title": "Tu movilidad define tu década.",
     "bajada": "La edad cronológica es una convención. La edad biológica se mide en grados de dorsiflexión y salud de columna.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCBt1s-BPY5e-eARVL2mHIt_aHCiPWdTMD9bveqcKMRVVP4RplqwXoEvMomswhBYu-8j0LgHfvIbqTUncyVdyAnizhWrSU0_TWnwuAoECciUgY9ssB93RWnuLHV5hHvneQhi6ZqG0GSAifJE8jfPc0Aaf7hR2j-JczSKrXQTUP3_52bEzrKNumtX4xlZ2uBKuXmi0zpUiceK_VcAxzk_Off3mjhioiy4oLcU4CJuw",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"contraste\" data-hook=\"Centrado Suave\" data-id=\"T24\" data-morphology=\"Card 24px Radius\" data-name=\"Tarjeta Flotante Minimalista\" data-offset=\"Top 380px • Bot 490px\" data-palette=\"Blanco Alabastro / Carbón\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Thoracic spine mobility stretch performed by athletic figure in serene studio, warm beige tones, clean background\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBt1s-BPY5e-eARVL2mHIt_aHCiPWdTMD9bveqcKMRVVP4RplqwXoEvMomswhBYu-8j0LgHfvIbqTUncyVdyAnizhWrSU0_TWnwuAoECciUgY9ssB93RWnuLHV5hHvneQhi6ZqG0GSAifJE8jfPc0Aaf7hR2j-JczSKrXQTUP3_52bEzrKNumtX4xlZ2uBKuXmi0zpUiceK_VcAxzk_Off3mjhioiy4oLcU4CJuw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/25\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm\"><div class=\"p-space-md rounded-2xl bg-surface-container-lowest/95 backdrop-blur-md shadow-xl flex flex-col gap-1.5 my-auto\"><span class=\"font-label-sm text-[9px] text-secondary font-semibold uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">LONGEVIDAD ARTICULAR</span></span><h4 class=\"card-title font-headline-sm text-headline-sm text-primary font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu movilidad define tu década.</span></h4><p class=\"card-body font-body-sm text-[11px] text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La edad cronológica es una convención. La edad biológica se mide en grados de dorsiflexión y salud de columna.</span></p></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 20,
+      "title": 35,
+      "bajada": 110
     }
   },
   {
@@ -2496,17 +2620,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "El dolor no es medalla.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Contraste Positivo/Negativo (Split 50/50)",
+    "tag": "BIOMECÁNICA SENS",
     "title": "El dolor no es medalla.",
     "bajada": "Si tus articulaciones sufren al entrenar, no estás construyendo masa muscular: estás hipotecando tu motricidad futura.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCHABURa2glOmK4Rg62w2t41DjSCR4RWVI4c4uD1P0k-pYRrMfkXPqbozG0I1efVYMttB99_cNy7A5_MBlwqkZixf242Q5ZgI94f1qsBnYZVMLAOGRkT2vnd8Db_C9hOUGDQgUg2RYKegoEGbTm9g9kCUPq3h0BlC_smUaxM0Do5x3cjLBNMfUEp_o0IY9v7kyngr0QUZEm-EUwxjvVLuJtyhqNrdDs920G-AKhvQ",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"contraste\" data-hook=\"Doble Polaridad\" data-id=\"T25\" data-morphology=\"Bipartición 50/50\" data-name=\"Contraste Split 50/50\" data-offset=\"Top 340px • Bot 450px\" data-palette=\"Onyx Puro / Alabastro\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container flex flex-col\">\n<!-- Top Half (Dark) -->\n<div class=\"h-1/2 relative bg-cover bg-center\" data-alt=\"Athletic deep barbell squat with perfect form in moody luxury dark studio, sharp rim lighting\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCHABURa2glOmK4Rg62w2t41DjSCR4RWVI4c4uD1P0k-pYRrMfkXPqbozG0I1efVYMttB99_cNy7A5_MBlwqkZixf242Q5ZgI94f1qsBnYZVMLAOGRkT2vnd8Db_C9hOUGDQgUg2RYKegoEGbTm9g9kCUPq3h0BlC_smUaxM0Do5x3cjLBNMfUEp_o0IY9v7kyngr0QUZEm-EUwxjvVLuJtyhqNrdDs920G-AKhvQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/70\"></div>\n<div class=\"absolute inset-0 p-space-sm flex flex-col justify-end text-on-primary pb-4\"><h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-medium leading-snug pb-2\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El dolor no es medalla.</span></h4></div>\n</div>\n<!-- Bottom Half (Light) -->\n<div class=\"h-1/2 bg-surface-container-lowest p-space-sm flex flex-col justify-between\">\n<p class=\"card-body font-body-sm text-[11px] text-on-surface leading-relaxed pt-2\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Si tus articulaciones sufren al entrenar, no estás construyendo masa muscular: estás hipotecando tu motricidad futura.</span></p>\n<div class=\"flex items-center justify-between pb-4\">\n<span class=\"font-label-sm text-[9px] text-secondary font-semibold uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">BIOMECÁNICA SENS</span></span>\n<span class=\"material-symbols-outlined text-[16px] text-secondary\">arrow_forward</span>\n</div>\n</div>\n<!-- Safe Zone Guide -->\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 118
     }
   },
   {
@@ -2516,17 +2641,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Reporte de Densidad Postural.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Badge de Laboratorio Biomecánico",
+    "tag": "INFORME VERIFICADO",
     "title": "Reporte de Densidad Postural.",
     "bajada": "La compensación escapular detectada en T0 quedó neutralizada en la semana 12 mediante tracciones guiadas.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDo8YN-K-BW8En5RMCrIyY6WxyK-U9Qq2QkYsg5MWkF3va4rysFb5DP6sIaJWlnbBNd6DYHtCSDC_kY7kDsyT8sjdNQYW7l64r70cN5SWcIG2eG-eD8beXI3POt8FDN3f4f4iar6bThjkq1UPsw44haxa-ntCQq9WOolsxT-tK-vfhWVr27HxXwUgal833j4_IlvckP9O-9TEC7lAXF8QPG6Riaqh97ZkfOsvjtSg",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Mono Titular + Serial\" data-id=\"T26\" data-morphology=\"Certificado Clínico\" data-name=\"Badge Laboratorio Biomecánico\" data-offset=\"Top 360px • Bot 480px\" data-palette=\"Porcelana / Grafito\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Extreme close up of textured black kettlebell and chalk dust on dark floor, tactile precision gym aesthetic\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDo8YN-K-BW8En5RMCrIyY6WxyK-U9Qq2QkYsg5MWkF3va4rysFb5DP6sIaJWlnbBNd6DYHtCSDC_kY7kDsyT8sjdNQYW7l64r70cN5SWcIG2eG-eD8beXI3POt8FDN3f4f4iar6bThjkq1UPsw44haxa-ntCQq9WOolsxT-tK-vfhWVr27HxXwUgal833j4_IlvckP9O-9TEC7lAXF8QPG6Riaqh97ZkfOsvjtSg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/60 to-primary/30\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"p-space-sm rounded-xl bg-surface-container-lowest/15 backdrop-blur-md flex flex-col gap-1 pb-4 my-auto\"><div class=\"flex items-center gap-1\"><span class=\"w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim\"></span><span class=\"font-label-sm text-[9px] font-mono text-tertiary-fixed-dim\">INFORME VERIFICADO</span></div><h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Reporte de Densidad Postural.</span></h4><p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La compensación escapular detectada en T0 quedó neutralizada en la semana 12 mediante tracciones guiadas.</span></p></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 105
     }
   },
   {
@@ -2536,17 +2662,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "La consistencia vence al entusiasmo.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Título Subrayado Champagne",
+    "tag": "SENS • MÉTODO",
     "title": "La consistencia vence al entusiasmo.",
     "bajada": "Quien entrena 40 minutos con método cada 48 horas supera invariablemente a quien entrena dos horas al fallo y abandona.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC-fgZyWPNkHknz5qKfMPqBSpGE-xAPjTXocWpjju6OOMy8fPbBnpWUbZExqDdOCI-RkfMKU4JKIYB9EL-FrHmgTxBTRs69VFX6h1VOv-MNdEYdncUMAB55UrOudS7iTq4yqRI1v_z8Sb9e4RFjRO49wWQb-juIRZXjbUGgzIOtbvmcxbebfwcg_H2UD4Sigh2cYiC5VZ0-jTWiQupHCVSwRzc1dmSHgEwUKjLWiw",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Resalte Dorado\" data-id=\"T27\" data-morphology=\"Acento Caligráfico Oro\" data-name=\"Título Subrayado Champagne\" data-offset=\"Top 350px • Bot 470px\" data-palette=\"Monocromo + Champagne\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Serene black and white studio portrait of a mature focused athlete, clean editorial studio lighting, soft natural textures\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-fgZyWPNkHknz5qKfMPqBSpGE-xAPjTXocWpjju6OOMy8fPbBnpWUbZExqDdOCI-RkfMKU4JKIYB9EL-FrHmgTxBTRs69VFX6h1VOv-MNdEYdncUMAB55UrOudS7iTq4yqRI1v_z8Sb9e4RFjRO49wWQb-juIRZXjbUGgzIOtbvmcxbebfwcg_H2UD4Sigh2cYiC5VZ0-jTWiQupHCVSwRzc1dmSHgEwUKjLWiw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/40 to-transparent\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"flex flex-col gap-2 my-auto\"><div class=\"relative inline-block\"><h4 class=\"card-title font-headline-md text-[20px] text-on-primary font-normal leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La consistencia vence al entusiasmo.</span></h4><div class=\"w-24 h-1 bg-secondary-fixed rounded-full mt-1\"></div></div><p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed mt-1\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Quien entrena 40 minutos con método cada 48 horas supera invariablemente a quien entrena dos horas al fallo y abandona.</span></p></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 36,
+      "bajada": 119
     }
   },
   {
@@ -2556,17 +2683,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Modular el tono vagal.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Caja Inset Sombreada",
+    "tag": "SISTEMA NERVIOSO",
     "title": "Modular el tono vagal.",
-    "bajada": "Tres minutos de respiración nasal profunda post-serie aceleran la tasa de Recuperación del sistema nervioso central.",
-    "tag": "EDITORIAL STORY",
+    "bajada": "Tres minutos de respiración nasal profunda post-serie aceleran la tasa de recuperación del sistema nervioso central.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBusmhHCuzmrb3PbZdNV5or-3vpKtePYWls9Lety-UckmjAiBv4pImkXkw6Uj9oPJx1xCToO0gBuWPj43iqE4IXF6j6_so3IUu5bKDeGP1SesQbyIhmrcPcKPBIRlS1cvWjveIuKMwX64gnJz9mmPLb_duedJ8u8Wtg963eSPLM6-MHui3QXvDLwm-oKX48WXvsgCB-QeaTkF9Er-6w1-kpPkdTh7pjA1Eck5k85A",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"contraste\" data-hook=\"Efecto Relieve Suave\" data-id=\"T28\" data-morphology=\"Contenedor Hendido\" data-name=\"Caja Inset Sombreada\" data-offset=\"Top 360px • Bot 480px\" data-palette=\"Arena / Carbón Intenso\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Conscious post-workout breathing in warm cedar sauna or minimalist recovery space, warm ethereal light\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBusmhHCuzmrb3PbZdNV5or-3vpKtePYWls9Lety-UckmjAiBv4pImkXkw6Uj9oPJx1xCToO0gBuWPj43iqE4IXF6j6_so3IUu5bKDeGP1SesQbyIhmrcPcKPBIRlS1cvWjveIuKMwX64gnJz9mmPLb_duedJ8u8Wtg963eSPLM6-MHui3QXvDLwm-oKX48WXvsgCB-QeaTkF9Er-6w1-kpPkdTh7pjA1Eck5k85A')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-between p-space-sm\">\n<div class=\"p-space-md rounded-2xl bg-primary/85 backdrop-blur-md shadow-2xl flex flex-col gap-1 pb-4 my-auto\">\n<span class=\"font-label-sm text-[9px] text-secondary-fixed uppercase tracking-wider font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SISTEMA NERVIOSO</span></span>\n<h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Modular el tono vagal.</span></h4>\n<p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed mt-1\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tres minutos de respiración nasal profunda post-serie aceleran la tasa de Recuperación del sistema nervioso central.</span></p>\n</div>\n<div class=\"pb-4\"></div>\n</div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 116
     }
   },
   {
@@ -2576,17 +2704,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Paso a paso.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Doble Columna Editorial",
+    "tag": "SENS • MÉTODO",
     "title": "Paso a paso.",
     "bajada": "10.000 pasos diarios no son cardio: son la base no negociable de la salud mitocondrial y la sensibilidad insulínica.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBDxdIj_Li8aPsVBgURHPjJtTCOL1RnxUZq4qEpuSapwX64mjk-JMZ2iYbCZ3SH19VB4JHpXJa3lP5tSNgn1LbbXJ1DG8gcLJx0SRdZgBcAj6DhnV-oFE1URwRD9LlObwkz6BVQ8utisbCFB1A-dYzfepV2MsfoEVJitSBx7ENzqg2L8OmDByhu8gYRvXRyo8KgclQKr24W8RSknYlZRYlC1oCJ0igqGtWRWm8PEQ",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Contrapunto 40/60\" data-id=\"T29\" data-morphology=\"Bi-Columna Asimétrica\" data-name=\"Doble Columna Editorial\" data-offset=\"Top 350px • Bot 470px\" data-palette=\"Alabastro / Carbón\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Long distant silhouette runner at misty golden sunrise over quiet coastal road, peaceful quiet endurance mood\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBDxdIj_Li8aPsVBgURHPjJtTCOL1RnxUZq4qEpuSapwX64mjk-JMZ2iYbCZ3SH19VB4JHpXJa3lP5tSNgn1LbbXJ1DG8gcLJx0SRdZgBcAj6DhnV-oFE1URwRD9LlObwkz6BVQ8utisbCFB1A-dYzfepV2MsfoEVJitSBx7ENzqg2L8OmDByhu8gYRvXRyo8KgclQKr24W8RSknYlZRYlC1oCJ0igqGtWRWm8PEQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/60 to-transparent\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"grid grid-cols-5 gap-2 my-auto items-center\"><div class=\"col-span-2\"><h4 class=\"card-title font-headline-md text-[18px] text-on-primary font-semibold leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Paso a paso.</span></h4></div><div class=\"col-span-3\"><p class=\"card-body font-body-sm text-[10px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">10.000 pasos diarios no son cardio: son la base no negociable de la salud mitocondrial y la sensibilidad insulínica.</span></p></div></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 116
     }
   },
   {
@@ -2596,17 +2725,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "MAKES SENS.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Estilo Monolito",
+    "tag": "SENS • MÉTODO",
     "title": "MAKES SENS.",
     "bajada": "Fuerza sin inflamación. Hábitos sin aislamiento. Acompañamiento real 1 a 1.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC3fGuhS_QF0mrKwbeDlSsGFYIaOiEz55PqUK8DVClx708a31cfJWoSQb02-LQJn9oqHVlWE77Wg-fFIvzUmuzRqkUx34LAk1ai9z-Tc4UlpzjkxYFFg6jCtOHwUXdJAE9fd_wLZfw7mnMrX8tucWaHn_MTIzvwNrjPkvFMaILK-3TyhVs1Pr3cHPXwwarWxtRMYUOrEtPWjbITrpp85K4_dSmx5JxjmQgI6sq8vA",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"monumental\" data-hook=\"Marca Monumento\" data-id=\"T30\" data-morphology=\"Bloque Sólido Centrado\" data-name=\"Estilo Monolito\" data-offset=\"Top 340px • Bot 460px\" data-palette=\"Carbón #121214 / Oro\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Chalked hand gripping knurled steel Olympic barbell tightly, high-end macro athletic photography in dark studio\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3fGuhS_QF0mrKwbeDlSsGFYIaOiEz55PqUK8DVClx708a31cfJWoSQb02-LQJn9oqHVlWE77Wg-fFIvzUmuzRqkUx34LAk1ai9z-Tc4UlpzjkxYFFg6jCtOHwUXdJAE9fd_wLZfw7mnMrX8tucWaHn_MTIzvwNrjPkvFMaILK-3TyhVs1Pr3cHPXwwarWxtRMYUOrEtPWjbITrpp85K4_dSmx5JxjmQgI6sq8vA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/80\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-between p-space-sm text-on-primary\">\n<div class=\"p-space-md rounded-xl bg-primary-container shadow-2xl flex flex-col gap-2 my-auto text-center\">\n<h4 class=\"card-title font-headline-lg text-[26px] text-secondary-fixed font-bold tracking-widest uppercase\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">MAKES SENS.</span></h4>\n<p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fuerza sin inflamación. Hábitos sin aislamiento. Acompañamiento real 1 a 1.</span></p>\n</div>\n</div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 75
     }
   },
   {
@@ -2616,17 +2746,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "¿Ocho horas sentado y una hora de cinta?",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Foco en Pregunta & Dilema",
+    "tag": "SENS • MÉTODO",
     "title": "¿Ocho horas sentado y una hora de cinta?",
     "bajada": "El sedentarismo corporativo no se compensa con castigo cardiovascular. Se revierte con activación de glúteo y fuerza axial.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD8eyqEzpEgvAPDTAxSnKs0LMHPOEClCeOlWxUMunaMT9hSz6MY_8x72zHTzz__mD2oNhADWyB6vJrRcSmeJeqTv8zy9lxK0eDi3VwjDTBTX3BfHpZTY6XaNCmwdST2Q7Qr6lfNllAYZyur8Qf7o0l_DHhbLFVKOlH8gBIFTEd6dwpkpKvRwGimWGfm7tRuvT7xuY0NxXSh_fWtx1iB3Iv18z_aarOpwdjGs2hbrQ",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Hook Curiosidad\" data-id=\"T31\" data-morphology=\"Interrogante Reflexivo\" data-name=\"Foco en Pregunta &amp; Dilema\" data-offset=\"Top 360px • Bot 480px\" data-palette=\"Gris Pizarra / Café\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Modern architectural executive desk with laptop and porcelain coffee cup in warm sunlight, high-end quiet luxury workspace\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8eyqEzpEgvAPDTAxSnKs0LMHPOEClCeOlWxUMunaMT9hSz6MY_8x72zHTzz__mD2oNhADWyB6vJrRcSmeJeqTv8zy9lxK0eDi3VwjDTBTX3BfHpZTY6XaNCmwdST2Q7Qr6lfNllAYZyur8Qf7o0l_DHhbLFVKOlH8gBIFTEd6dwpkpKvRwGimWGfm7tRuvT7xuY0NxXSh_fWtx1iB3Iv18z_aarOpwdjGs2hbrQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-primary/20\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"flex flex-col gap-2 my-auto\"><h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-medium leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">¿Ocho horas sentado y una hora de cinta?</span></h4><p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El sedentarismo corporativo no se compensa con castigo cardiovascular. Se revierte con activación de glúteo y fuerza axial.</span></p></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 40,
+      "bajada": 123
     }
   },
   {
@@ -2636,17 +2767,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "AXIOMA I • Precisión ANTES QUE CARGA.",
-    "title": "AXIOMA I • Precisión ANTES QUE CARGA.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Estructura de Axioma (Regla Romana I)",
+    "tag": "SENS • MÉTODO",
+    "title": "AXIOMA I • PRECISIÓN ANTES QUE CARGA.",
     "bajada": "Añadir peso a un patrón de movimiento defectuoso solo acelera el deterioro del tejido conectivo.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuADOKGkqHqmv6p59Xtv_t-NWd1YZ3Y5XHyoZA3OjL6c_5S0J6kcJV8d3N14mn5lUpjq5Wh3NDJtWzQdtAvCJAy_uatJJtLU9koAr_GWWnE320ryc9lAGpmsSh4zExIBq5Q1fJHyi_hBzDzImAvIjc8yrmxlRpdoDT2G6oMxVX14wwjVAGoykfzzwXg6nDTZw5noposLwsyNEPVyxDROIrdBhLfvi71rrLlHHIgljw",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"monumental\" data-hook=\"Numeral Monumental\" data-id=\"T32\" data-morphology=\"Ley Canónica Romana\" data-name=\"Estructura de Axioma (Regla I)\" data-offset=\"Top 350px • Bot 470px\" data-palette=\"Carbón / Bronce Antiguo\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Precision deadlift setup at knee level in muted daylight gym, focusing on back tension and poise, clean architectural lines\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuADOKGkqHqmv6p59Xtv_t-NWd1YZ3Y5XHyoZA3OjL6c_5S0J6kcJV8d3N14mn5lUpjq5Wh3NDJtWzQdtAvCJAy_uatJJtLU9koAr_GWWnE320ryc9lAGpmsSh4zExIBq5Q1fJHyi_hBzDzImAvIjc8yrmxlRpdoDT2G6oMxVX14wwjVAGoykfzzwXg6nDTZw5noposLwsyNEPVyxDROIrdBhLfvi71rrLlHHIgljw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/70 to-primary/30\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"flex flex-col gap-1 my-auto\"><span class=\"font-headline-md text-headline-md text-secondary-fixed font-light\">I</span><div class=\"w-10 h-px bg-secondary-fixed/50 mb-1\"></div><h4 class=\"card-title font-headline-sm text-[16px] text-on-primary font-semibold tracking-wide uppercase leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">AXIOMA I • Precisión ANTES QUE CARGA.</span></h4><p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed mt-1\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Añadir peso a un patrón de movimiento defectuoso solo acelera el deterioro del tejido conectivo.</span></p></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 37,
+      "bajada": 96
     }
   },
   {
@@ -2656,17 +2788,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "La ventana anabólica es diaria.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Tarjeta con Borde Dorado Pulido",
+    "tag": "VENTANA BIOLÓGICA",
     "title": "La ventana anabólica es diaria.",
     "bajada": "Tu cuerpo no asimila nutrientes en 30 minutos post-entreno; responde al balance sostenido de las últimas 24 horas.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAGa9xrRuKvUjPJM5x1ztpLqohZJrydIeCvdwt2x_fKWWYqVmTkVwfLhSyOBTeOhI_BJu3lEkVIMbPj5HfZn4T8c33iZ5UlOxYIELkkbCUkFBnK59j7kFbBzWg3bKesuDfgIQRsmOe-SqFwDB-n2XXuypnUvH0b4QutuppAv-F2oGg0mhK6rPx0CacnVEgy67Scq8N_WQOEPcefdumYZRAhQrOv5djHG_PasFZYGg",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"contraste\" data-hook=\"Elegancia Suntuosa\" data-id=\"T33\" data-morphology=\"Ribete Capilar 1.5px\" data-name=\"Tarjeta Borde Dorado Pulido\" data-offset=\"Top 370px • Bot 480px\" data-palette=\"Carbón / Champagne Puro\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Culinary plate with fresh salmon avocado and seeds in natural Scandinavian kitchen light, luxury healthy lifestyle food presentation\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGa9xrRuKvUjPJM5x1ztpLqohZJrydIeCvdwt2x_fKWWYqVmTkVwfLhSyOBTeOhI_BJu3lEkVIMbPj5HfZn4T8c33iZ5UlOxYIELkkbCUkFBnK59j7kFbBzWg3bKesuDfgIQRsmOe-SqFwDB-n2XXuypnUvH0b4QutuppAv-F2oGg0mhK6rPx0CacnVEgy67Scq8N_WQOEPcefdumYZRAhQrOv5djHG_PasFZYGg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/30\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-between p-space-sm\">\n<div class=\"p-space-md rounded-2xl bg-primary/90 backdrop-blur-md shadow-2xl flex flex-col gap-1 my-auto shadow-[inset_0_0_0_1px_rgba(251,222,185,0.4)]\">\n<span class=\"font-label-sm text-[9px] text-secondary-fixed uppercase tracking-wider font-medium\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">VENTANA BIOLÓGICA</span></span>\n<h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La ventana anabólica es diaria.</span></h4>\n<p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed mt-1\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu cuerpo no asimila nutrientes en 30 minutos post-entreno; responde al balance sostenido de las últimas 24 horas.</span></p>\n</div>\n<div class=\"pb-4\"></div>\n</div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 114
     }
   },
   {
@@ -2676,17 +2809,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "SOBRECARGA PROGRESIVA.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Máscara Tipográfica / Titular Transparente",
+    "tag": "SENS • MÉTODO",
     "title": "SOBRECARGA PROGRESIVA.",
-    "bajada": "El único estímulo que el músculo no puede ignorar es el incremento medido de Tensión mecánica semana a semana.",
-    "tag": "EDITORIAL STORY",
+    "bajada": "El único estímulo que el músculo no puede ignorar es el incremento medido de tensión mecánica semana a semana.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC_a53uVRnGJf73i0rN2Rs_7g3GRoJFZYvwwfMhia93ThDS0R2m-5bGKQQ4tDKbClgnk1bgkQFyckEgkt2E0C8RcEgZU6r92h5rwI1Mj6mPFMWeWP9e0xhog8mxT4K_Ko0ZqkQOztzqWuh4qtKeFE9f7VNxlJ0jy3i5EV12jPuEWTFML8kZ6lNkKA66ao8Kk_XnHtZ-chPPhRtKjYWgU7hUX9--DMqHCjXl57GXoQ",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"monumental\" data-hook=\"Tipografía Contenedora\" data-id=\"T34\" data-morphology=\"Recorte de Alto Impacto\" data-name=\"Máscara Tipográfica Transparente\" data-offset=\"Top 340px • Bot 460px\" data-palette=\"Alabastro Puro / Carbón\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Heavy competition calibrated weight plates stacked on steel barbell, dark dramatic fitness photography\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC_a53uVRnGJf73i0rN2Rs_7g3GRoJFZYvwwfMhia93ThDS0R2m-5bGKQQ4tDKbClgnk1bgkQFyckEgkt2E0C8RcEgZU6r92h5rwI1Mj6mPFMWeWP9e0xhog8mxT4K_Ko0ZqkQOztzqWuh4qtKeFE9f7VNxlJ0jy3i5EV12jPuEWTFML8kZ6lNkKA66ao8Kk_XnHtZ-chPPhRtKjYWgU7hUX9--DMqHCjXl57GXoQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/85\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-between p-space-sm text-on-primary\">\n<div class=\"flex flex-col gap-2 my-auto\">\n<div class=\"px-space-sm py-1 bg-surface-container-lowest/20 backdrop-blur-md rounded-lg inline-block\">\n<h4 class=\"card-title font-headline-md text-[20px] text-on-primary font-bold tracking-tight uppercase leading-none\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">SOBRECARGA PROGRESIVA.</span></h4>\n</div>\n<p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El único estímulo que el músculo no puede ignorar es el incremento medido de Tensión mecánica semana a semana.</span></p>\n</div>\n</div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 110
     }
   },
   {
@@ -2696,17 +2830,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Ritmo circadiano y luz matutina.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Superposición Asimétrica",
+    "tag": "SENS • MÉTODO",
     "title": "Ritmo circadiano y luz matutina.",
     "bajada": "Exponer la retina a fotones naturales antes de mirar pantallas resetea el reloj neuroendocrino y optimiza la fuerza vespertina.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDxSxLnSpS01NNcFqjs-4YzkI3sg4sX3MPn_zs5BJDlzxctjr3LZAQ9FEbru3xX1tJKyNT60hCV2pXmBsZt2FvzhcUSy-dG7t6z2B2EHRU-7lnnWRyUdYGvjigRKRLv5sYHxTtDMBypCJEe8h-xAsoHg4Qdr2eLFbmEbkTYWXTBMftQmiok84ElHTLnIIKo4xxJ-_WLR8bPuzqJor98Ly2pzcgafPhUMggNawcRfQ",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Desplazamiento Dinámico\" data-id=\"T35\" data-morphology=\"Overlap Margen Izquierdo\" data-name=\"Superposición Asimétrica\" data-offset=\"Top 360px • Bot 470px\" data-palette=\"Lino / Verde Bosque\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Walking in lush green park during golden sunrise hour, soft lens flare through trees, serene morning routine\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDxSxLnSpS01NNcFqjs-4YzkI3sg4sX3MPn_zs5BJDlzxctjr3LZAQ9FEbru3xX1tJKyNT60hCV2pXmBsZt2FvzhcUSy-dG7t6z2B2EHRU-7lnnWRyUdYGvjigRKRLv5sYHxTtDMBypCJEe8h-xAsoHg4Qdr2eLFbmEbkTYWXTBMftQmiok84ElHTLnIIKo4xxJ-_WLR8bPuzqJor98Ly2pzcgafPhUMggNawcRfQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/40 to-transparent\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"flex flex-col gap-2 my-auto -ml-2 pl-3 bg-primary/80 backdrop-blur-sm rounded-r-2xl py-3\"><h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Ritmo circadiano y luz matutina.</span></h4><p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Exponer la retina a fotones naturales antes de mirar pantallas resetea el reloj neuroendocrino y optimiza la fuerza vespertina.</span></p></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 127
     }
   },
   {
@@ -2716,17 +2851,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Bitácora #48 • Palermo Sede.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Estilo Diario Clínico",
+    "tag": "SENS • MÉTODO",
     "title": "Bitácora #48 • Palermo Sede.",
     "bajada": "Leandro B. completa 14.850 kg de tonelaje total acumulado con dolor lumbar cero y RIR 2 constante.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCb6ZbjDWwOaGuIZ5QLMoC9q3s4UJfRSgit7qBHW_DK8HrTqX0MIxCbBv94QVWk-9AweH9hwVVIvlCdfVQIoI-Ee-s9UrRFFOVyrBBvDFXUDQxI5wzRPEEdhS26Jh7sHNTKTrvUa1tpa2SoDM2fudoyuArjJDWyaRvTpOrXtAoAv6jeELCFdFT8pYUuTmF3Xh3cwApuqd2MNqkRQGTNuLkQDHAr2ArVM12FGh3d7w",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Membrete Palermo CABA\" data-id=\"T36\" data-morphology=\"Bitácora Médica\" data-name=\"Estilo Diario Clínico\" data-offset=\"Top 350px • Bot 470px\" data-palette=\"Porcelana / Ónix\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Athlete performing precise lat pulldown exercise in architectural Buenos Aires gym studio, warm morning light\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCb6ZbjDWwOaGuIZ5QLMoC9q3s4UJfRSgit7qBHW_DK8HrTqX0MIxCbBv94QVWk-9AweH9hwVVIvlCdfVQIoI-Ee-s9UrRFFOVyrBBvDFXUDQxI5wzRPEEdhS26Jh7sHNTKTrvUa1tpa2SoDM2fudoyuArjJDWyaRvTpOrXtAoAv6jeELCFdFT8pYUuTmF3Xh3cwApuqd2MNqkRQGTNuLkQDHAr2ArVM12FGh3d7w')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/60 to-primary/20\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"p-space-sm rounded-xl bg-surface-container-lowest/15 backdrop-blur-md flex flex-col gap-1.5 pb-4 my-auto\"><span class=\"font-mono text-[9px] text-surface-dim\">LOG #0048 • FEB 2025</span><h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Bitácora #48 • Palermo Sede.</span></h4><p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Leandro B. completa 14.850 kg de tonelaje total acumulado con dolor lumbar cero y RIR 2 constante.</span></p></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 98
     }
   },
   {
@@ -2736,17 +2872,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Eficiencia mecánica.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Micro-Píldoras de Contexto",
+    "tag": "RIR 2",
     "title": "Eficiencia mecánica.",
     "bajada": "Menos series de relleno, máxima intención neuromuscular en cada repetición efectiva.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAe_JRtgbeSEaiw2fkp-j4NNf9PJeRWwihR91kIGs27kKqdoVre6Dg_BdPTpJoMJHQkS49EI0J4Og6jCv_HaHL8TCmPJXCUVeeWWTL6rAwBzYZAiFrNTokU7WpJG3L-HZW_UtS2ade2-mP5cegYTd6UHIgC8-uzzA8m0KCA3lFtf3U0hNrnBLIbxxGwiDmy73ORlRLCHe-XzWMpJEEpie2KRKtXIDSYjzDHSLK2CQ",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"contraste\" data-hook=\"Titular Conciso + Tags\" data-id=\"T37\" data-morphology=\"Chips Flotantes\" data-name=\"Micro-Píldoras de Contexto\" data-offset=\"Top 360px • Bot 480px\" data-palette=\"Carbón / Sage Suave\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Minimal running shoes and vintage mechanical stopwatch on concrete bench, muted architectural composition\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAe_JRtgbeSEaiw2fkp-j4NNf9PJeRWwihR91kIGs27kKqdoVre6Dg_BdPTpJoMJHQkS49EI0J4Og6jCv_HaHL8TCmPJXCUVeeWWTL6rAwBzYZAiFrNTokU7WpJG3L-HZW_UtS2ade2-mP5cegYTd6UHIgC8-uzzA8m0KCA3lFtf3U0hNrnBLIbxxGwiDmy73ORlRLCHe-XzWMpJEEpie2KRKtXIDSYjzDHSLK2CQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-transparent\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-center p-space-sm text-on-primary\"><div class=\"flex flex-col gap-2 my-auto\"><div class=\"flex items-center gap-1\"><span class=\"px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-[9px] font-semibold\">RIR 2</span><span class=\"px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-label-sm text-[9px]\">45 MIN</span></div><h4 class=\"card-title font-headline-sm text-headline-sm text-on-primary font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Eficiencia mecánica.</span></h4><p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Menos series de relleno, máxima intención neuromuscular en cada repetición efectiva.</span></p></div></div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 84
     }
   },
   {
@@ -2756,17 +2893,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "El cortisol inhibe la síntesis.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Gradiente Radial de Alto Enfoque (Vignette)",
+    "tag": "SENS • MÉTODO",
     "title": "El cortisol inhibe la síntesis.",
     "bajada": "Entrenar con fatiga crónica y estrés laboral no genera hipertrofia: profundiza la resistencia al estímulo.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBXpITfWQSXDkb8tHazKyf5B6vl-v9YrcTOF5h8T8VSf_sg_rD2yB3sQv_NzgFWbmBTLcF7gQ0Ozt-vl-fR8oP_sPFHC16a4V03gOQ12H7VZjKWQKNduTGZVure8eOOk8V07gl3YQKIJmhhA48wV-qtQv9PhQmx3bV4mBSCJbPLdlgm_TcP2oS9lznyKd0HlOYDbQKGeAVbJagxvyjXhoVAP0rIUQJrqVZm9f5W1Q",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"contraste\" data-hook=\"Viñeta Somática\" data-id=\"T38\" data-morphology=\"Enfoque Óptico Circular\" data-name=\"Gradiente Radial Vignette\" data-offset=\"Top 340px • Bot 460px\" data-palette=\"Onyx Profundo / Champagne\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Zen somatic studio interior with textured plaster wall, soft shadow play and warm ambient light, serene architectural wellness atmosphere\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBXpITfWQSXDkb8tHazKyf5B6vl-v9YrcTOF5h8T8VSf_sg_rD2yB3sQv_NzgFWbmBTLcF7gQ0Ozt-vl-fR8oP_sPFHC16a4V03gOQ12H7VZjKWQKNduTGZVure8eOOk8V07gl3YQKIJmhhA48wV-qtQv9PhQmx3bV4mBSCJbPLdlgm_TcP2oS9lznyKd0HlOYDbQKGeAVbJagxvyjXhoVAP0rIUQJrqVZm9f5W1Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.92)_100%)]\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-between p-space-sm text-on-primary\">\n<div class=\"flex flex-col gap-2 my-auto text-center px-2\">\n<h4 class=\"card-title font-headline-md text-[20px] text-on-primary font-normal leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El cortisol inhibe la síntesis.</span></h4>\n<p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Entrenar con fatiga crónica y estrés laboral no genera hipertrofia: profundiza la resistencia al estímulo.</span></p>\n</div>\n</div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 18,
+      "title": 35,
+      "bajada": 106
     }
   },
   {
@@ -2776,17 +2914,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "Diseño sin fricción.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Tarjeta de Apertura Desplegable",
+    "tag": "PRINCIPIO DE ADHERENCIA",
     "title": "Diseño sin fricción.",
-    "bajada": "La mejor rutina no es la Más sofisticada en papel, sino la que podés sostener con entusiasmo cada semana.",
-    "tag": "EDITORIAL STORY",
+    "bajada": "La mejor rutina no es la más sofisticada en papel, sino la que podés sostener con entusiasmo cada semana.",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA3u-0J28SLvNPl5azgCB1AHcxQ4YbJ2DjL97iDGflcU8iHld2Quc-QsMwCCUkHjUBb9kYC2-hyJA7_hHMQrxcebj9wr-64wHQORDXPaGTCRnr5iH1qKtynBfqlGf5vZ3qE8sOjUkaf1sjmqAcmX0xf8rCfqpJa0b0dMYmTXy4FVFq4qC2UZbM4YuBHJqSQw7LFtseu_bX_Cwzv65SCOJAzxEiVY3kxYSiYx09-5w",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"editorial\" data-hook=\"Pestaña de Cierre\" data-id=\"T39\" data-morphology=\"Estilo Desplegable\" data-name=\"Tarjeta Apertura Acordeón\" data-offset=\"Top 360px • Bot 480px\" data-palette=\"Alabastro / Nogal\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Handcrafted wooden dumbbell rack with precision steel weights in luxury private training facility, gentle daylight\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA3u-0J28SLvNPl5azgCB1AHcxQ4YbJ2DjL97iDGflcU8iHld2Quc-QsMwCCUkHjUBb9kYC2-hyJA7_hHMQrxcebj9wr-64wHQORDXPaGTCRnr5iH1qKtynBfqlGf5vZ3qE8sOjUkaf1sjmqAcmX0xf8rCfqpJa0b0dMYmTXy4FVFq4qC2UZbM4YuBHJqSQw7LFtseu_bX_Cwzv65SCOJAzxEiVY3kxYSiYx09-5w')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/35\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-between p-space-sm\">\n<div class=\"p-space-md rounded-2xl bg-surface-container-lowest/95 backdrop-blur-md shadow-xl flex flex-col gap-1 pb-4 my-auto\">\n<div class=\"flex items-center justify-between border-b pb-1 border-outline-variant/30\">\n<span class=\"font-label-sm text-[9px] text-secondary font-semibold uppercase\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">PRINCIPIO DE ADHERENCIA</span></span>\n<span class=\"material-symbols-outlined text-[14px] text-secondary\">expand_more</span>\n</div>\n<h4 class=\"card-title font-headline-sm text-headline-sm text-primary font-medium leading-snug mt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Diseño sin fricción.</span></h4>\n<p class=\"card-body font-body-sm text-[11px] text-on-surface-variant leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La mejor rutina no es la Más sofisticada en papel, sino la que podés sostener con entusiasmo cada semana.</span></p>\n</div>\n<div class=\"pb-4\"></div>\n</div>\n</div>\n\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 23,
+      "title": 35,
+      "bajada": 105
     }
   },
   {
@@ -2796,17 +2935,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b2",
-    "block": "Bloque II: Tipografía & Statements",
-    "name": "MOVERSE BIEN.\n                  VIVIR MEJOR.\nMAKES SENS.",
+    "block": "Bloque II: Editorial Tipografía",
+    "name": "Manifiesto de 3 Líneas Equi-espaciadas",
+    "tag": "Gobernanza de Formato",
     "title": "MOVERSE BIEN.\n                  VIVIR MEJOR.\nMAKES SENS.",
     "bajada": "Salud somática, biomecánica clínica y fuerza para la vida real.",
-    "tag": "EDITORIAL STORY",
+    "metricHtml": "",
     "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAcA3EoUFJrYv-MfpS2yioAt2OVr5QoMM23kiysSDOU9KP_rUqOSZVoRpXtIhoHn0U5FrzMk9hYhWqmnpn26r2fURJV_EiJgxOE1tqAEyCYIKwSEPATktPq4oP3lpHJ4X7de7WXkusvkbjXplygA0w6Wl4XZI_K3ljTousMrewiTAn9-J_PDIAFZX0OTF9FIT8C1XMDQ770tMOks-9_fk1JLnMkJbzE8_rCqVws1A",
-    "htmlTemplate": "<div class=\"template-card flex flex-col gap-space-xs group\" data-category=\"monumental\" data-hook=\"Ritmo Triádico\" data-id=\"T40\" data-morphology=\"Tres Renglones Estrictos\" data-name=\"Manifiesto de 3 Líneas\" data-offset=\"Top 340px • Bot 460px\" data-palette=\"Carbón Puro / Blanco\">\n<div class=\"relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 cursor-pointer bg-surface-container\">\n<div class=\"absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105\" data-alt=\"Zen overhead aerial view of minimalist yoga mat and barefoot athlete in pure morning sunlight on warm concrete, calming architectural wellness composition\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcA3EoUFJrYv-MfpS2yioAt2OVr5QoMM23kiysSDOU9KP_rUqOSZVoRpXtIhoHn0U5FrzMk9hYhWqmnpn26r2fURJV_EiJgxOE1tqAEyCYIKwSEPATktPq4oP3lpHJ4X7de7WXkusvkbjXplygA0w6Wl4XZI_K3ljTousMrewiTAn9-J_PDIAFZX0OTF9FIT8C1XMDQ770tMOks-9_fk1JLnMkJbzE8_rCqVws1A')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/70 to-primary/40\"></div>\n</div>\n<div class=\"safe-zone-overlay absolute inset-0 pointer-events-none z-30 transition-opacity duration-200 opacity-0\">\n<div class=\"absolute top-0 inset-x-0 h-[17%] bg-error/20 border-b border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">AVATAR UNSAFE</span></div>\n<div class=\"absolute bottom-0 inset-x-0 h-[24%] bg-error/20 border-t border-error/40 flex items-center justify-center\"><span class=\"text-[9px] text-error font-mono bg-surface/80 px-1\">ENGAGEMENT UNSAFE</span></div>\n</div>\n<div class=\"absolute inset-0 z-20 flex flex-col justify-between p-space-sm text-on-primary\">\n<div class=\"flex flex-col gap-2 my-auto\">\n<h4 class=\"card-title font-headline-md text-[20px] text-on-primary font-bold tracking-widest uppercase leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">MOVERSE BIEN. VIVIR MEJOR. MAKES SENS.</span></h4>\n<div class=\"w-8 h-px bg-secondary-fixed/50 my-1\"></div>\n<p class=\"card-body font-body-sm text-[11px] text-surface-container-high leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Salud somática, biomecánica clínica y fuerza para la vida real.</span></p>\n</div>\n</div>\n</div>\n\n</div>\n</div>",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "tag": 21,
+      "title": 56,
+      "bajada": 63
     }
   },
   {
@@ -2817,16 +2957,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Tu punto de partida no es tu destino.",
+    "name": "Delta Somático (Antes vs SENS)",
+    "tag": "SENS • PROTOCOLO",
     "title": "Tu punto de partida no es tu destino.",
-    "bajada": "Recomposición corporal con Precisión neuromuscular y dolor cero.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB0z85C-6NNn2xXWe-i9kcumvlaOyxosw2xMailOjwXGf6Zh4THwoZyZ4e4bPH_zktzbskKhhS2afhdpiiKzh-Np8vXXYpoQlgEO-8zdsfL04fkV0eyzpdektCdQ2k8e7RW0yy-rpnbbIwyoJXu4aluQldLybUZIMsJXM41Y8wKlewJsd0xlNrNpW59JvrTebBsWzDfWQk1kvCWxP2N9dUOBmje0RDnpHgKqlo8Kg",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(41)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Close up architectural portrait of an athletic silhouette in warm alabaster studio lighting with soft bronze undertones and quiet luxury wellness ambiance.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB0z85C-6NNn2xXWe-i9kcumvlaOyxosw2xMailOjwXGf6Zh4THwoZyZ4e4bPH_zktzbskKhhS2afhdpiiKzh-Np8vXXYpoQlgEO-8zdsfL04fkV0eyzpdektCdQ2k8e7RW0yy-rpnbbIwyoJXu4aluQldLybUZIMsJXM41Y8wKlewJsd0xlNrNpW59JvrTebBsWzDfWQk1kvCWxP2N9dUOBmje0RDnpHgKqlo8Kg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<!-- Top Safe 0-320px -->\n<div class=\"relative z-10 h-[17%]\"></div>\n<!-- Active 340-1420px -->\n<div class=\"relative z-10 flex flex-col gap-2.5 my-auto\">\n<!-- Visual Metric Element -->\n<div class=\"px-2.5 py-1.5 rounded-lg bg-surface-container-lowest/15 backdrop-blur-md flex items-center justify-between\">\n<span class=\"font-label-sm text-[9px] text-surface-variant font-medium\">Inicio</span>\n<span class=\"material-symbols-outlined text-[14px] text-secondary-fixed\">east</span>\n<span class=\"font-label-sm text-[9px] text-tertiary-fixed font-semibold\">SENS Δ +98%</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu punto de partida no es tu destino.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Recomposición corporal con Precisión neuromuscular y dolor cero.</span></p>\n</div>\n<!-- Bottom Safe 1450-1920px -->\n<div class=\"relative z-10 h-[22%]\"></div>\n<!-- Overlay Mask -->\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "bajada": "Recomposición corporal con precisión neuromuscular y dolor cero.",
+    "metricHtml": "<div class=\"w-full bg-surface-container-lowest/15 backdrop-blur-md rounded-2xl p-4 flex items-center justify-between shadow-sm\">\n                      <div class=\"flex flex-col\">\n                        <span class=\"font-label-sm text-[10px] text-surface-variant uppercase tracking-widest\">Punto Basal</span>\n                        <span class=\"font-headline-sm text-headline-sm font-light text-surface\">Carga Disfuncional</span>\n                      </div>\n                      <span class=\"material-symbols-outlined text-secondary-fixed text-[22px]\">trending_flat</span>\n                      <div class=\"flex flex-col text-right\">\n                        <span class=\"font-label-sm text-[10px] text-tertiary-fixed font-semibold uppercase tracking-widest\">SENS Protocol</span>\n                        <span class=\"font-headline-sm text-headline-sm font-medium text-tertiary-fixed\">Δ Simetría 98%</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 37,
+      "bajada": 64
     }
   },
   {
@@ -2837,16 +2978,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "La variabilidad cardíaca no miente.",
+    "name": "Gráfica de Onda ECG",
+    "tag": "SENS • PROTOCOLO",
     "title": "La variabilidad cardíaca no miente.",
-    "bajada": "La variabilidad cardíaca no miente.\n              \n\n                El descanso parasimpático es donde el músculo se sintetiza.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAIQZaG9Fzj6oFsa68wg29jOTMPyaeGLix1UTYOht5qk78XpTJvnw9Fb6h2Aaxn9bRSxeL7f6Pi59ihgOmxV-sdrb-TqnhY8FqvST3ARNLeBS0KloP_pAd8vJNw5Qcu81CdZiBfKg1ZmRQsD1giU7E6yvTopmnhXJgUUDGC8ocjwayww1oFTRQm58mGR5QluOIYD_gajFqCypCwc2VTvQixJHyJXVQLH_fej0uQ7Q",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(42)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monochrome serene medical-grade wellness therapy sanctuary with natural wood grain texture and indirect ambient warm museum lighting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAIQZaG9Fzj6oFsa68wg29jOTMPyaeGLix1UTYOht5qk78XpTJvnw9Fb6h2Aaxn9bRSxeL7f6Pi59ihgOmxV-sdrb-TqnhY8FqvST3ARNLeBS0KloP_pAd8vJNw5Qcu81CdZiBfKg1ZmRQsD1giU7E6yvTopmnhXJgUUDGC8ocjwayww1oFTRQm58mGR5QluOIYD_gajFqCypCwc2VTvQixJHyJXVQLH_fej0uQ7Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- ECG Pulse Wave -->\n<svg class=\"w-full h-8 text-secondary-fixed stroke-current fill-none\" viewBox=\"0 0 200 40\">\n<path d=\"M0,20 L60,20 L70,8 L76,32 L84,5 L90,35 L96,20 L200,20\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La variabilidad cardíaca no miente. El descanso parasimpático es donde el músculo se sintetiza.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "bajada": "El descanso parasimpático es donde el músculo se sintetiza.",
+    "metricHtml": "<svg class=\"w-full h-10 text-secondary-fixed stroke-current fill-none\" viewBox=\"0 0 240 40\">\n                      <path d=\"M0,20 L70,20 L80,5 L88,35 L98,2 L106,38 L114,20 L240,20\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -2857,16 +2999,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Menos inflamación, mayor longevidad.",
+    "name": "Indicador de Porcentaje Gigante",
+    "tag": "SENS • PROTOCOLO",
     "title": "Menos inflamación, mayor longevidad.",
     "bajada": "Reducir el cortisol matutino protege tu salud cardiovascular.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCKT7fVvtFrbPVCH2XsXPum3koK0vqAtb7px-sW3jrwp10KVw3a1S5hXemqHkSHyI-LoB_y9MRrWL2-5La62-TCol5IAZZv_sVaQDtGktEhMv6UdzrrYx5a0qYqH3Fuyem8zVuLMfF6PUVmNowu3zZncDyzq9tjgQETXID6oyBxlaLQIOzkST-7vRGmKmGidaGVdCLPlZoX20ZN-hex2cTW6zpwptC6QH_bjD6apQ",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(43)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet luxury tactile stone wellness retreat corner with steam and subtle morning sunlight on porous travertine surfaces.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCKT7fVvtFrbPVCH2XsXPum3koK0vqAtb7px-sW3jrwp10KVw3a1S5hXemqHkSHyI-LoB_y9MRrWL2-5La62-TCol5IAZZv_sVaQDtGktEhMv6UdzrrYx5a0qYqH3Fuyem8zVuLMfF6PUVmNowu3zZncDyzq9tjgQETXID6oyBxlaLQIOzkST-7vRGmKmGidaGVdCLPlZoX20ZN-hex2cTW6zpwptC6QH_bjD6apQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-1 my-auto\">\n<!-- Giant Percent Metric -->\n<span class=\"font-headline-xl text-[54px] text-secondary-fixed leading-none font-extralight tracking-tighter\">−42%</span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug pt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Menos inflamación, mayor longevidad.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Reducir el cortisol matutino protege tu salud cardiovascular.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full flex items-baseline gap-2\">\n                      <span class=\"font-headline-xl text-[68px] text-secondary-fixed leading-none font-extralight tracking-tighter\">−42%</span>\n                      <span class=\"font-label-sm text-[11px] text-surface-variant uppercase tracking-widest\">Marcador Sistémico</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 36,
+      "bajada": 61
     }
   },
   {
@@ -2877,16 +3020,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Sobrecarga progresiva medible.",
+    "name": "Tabla de Dos Filas",
+    "tag": "SENS • PROTOCOLO",
     "title": "Sobrecarga progresiva medible.",
     "bajada": "Cada repetición registrada construye densidad ósea real.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCOgmc0TA543CwnixMvCWL_ptbicC0sEp4HguGJNHd3Oo923A4HIlfTHiCWSSHayjHgpHm5HRmIgk5AhKERD3_Vbqtw8QZocngDpvpeqC9IWMlHELYezWfmshr3lZxn6yTmZ1iDm2RE2wllAz5xf1lGErzb1XBYfHQXlNbzfQj01-UWVwUkLneAUyOV5xufw8z76R9nM15DJ-4VgyL1De74j2Q1isD7TdkJDUMHvw",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(44)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Artisan engineered stainless steel barbell plate on dark matte rubber luxury training floor with soft linear amber lighting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCOgmc0TA543CwnixMvCWL_ptbicC0sEp4HguGJNHd3Oo923A4HIlfTHiCWSSHayjHgpHm5HRmIgk5AhKERD3_Vbqtw8QZocngDpvpeqC9IWMlHELYezWfmshr3lZxn6yTmZ1iDm2RE2wllAz5xf1lGErzb1XBYfHQXlNbzfQj01-UWVwUkLneAUyOV5xufw8z76R9nM15DJ-4VgyL1De74j2Q1isD7TdkJDUMHvw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2.5 my-auto\">\n<!-- Two row table -->\n<div class=\"flex flex-col gap-1 p-2 rounded-lg bg-surface-container-lowest/15 backdrop-blur-sm\">\n<div class=\"flex justify-between font-label-sm text-[9px] text-surface-variant\">\n<span class=\"\">Basal Sem 1</span><span class=\"\">72.5 kg</span>\n</div>\n<div class=\"flex justify-between font-label-sm text-[10px] text-tertiary-fixed font-semibold\">\n<span class=\"\">Progreso Sem 12</span><span class=\"\">105.0 kg (+44%)</span>\n</div>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sobrecarga progresiva medible.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cada repetición registrada construye densidad ósea real.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full flex flex-col gap-2 p-3 rounded-xl bg-surface-container-lowest/15 backdrop-blur-md\">\n                      <div class=\"flex justify-between items-center font-label-sm text-label-sm text-surface-variant\">\n                        <span>Línea de Base (Semana 1)</span>\n                        <span class=\"font-medium text-surface\">72.5 kg</span>\n                      </div>\n                      <div class=\"w-full h-px bg-surface-variant/20\"></div>\n                      <div class=\"flex justify-between items-center font-label-sm text-label-sm text-tertiary-fixed font-semibold\">\n                        <span>Pico Adaptativo (Semana 12)</span>\n                        <span>105.0 kg (+44.8%)</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -2897,16 +3041,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Masa muscular como póliza metabólica.",
+    "name": "Bóveda de Glucógeno Activo",
+    "tag": "SENS • PROTOCOLO",
     "title": "Masa muscular como póliza metabólica.",
     "bajada": "El tejido activo consume glucosa mientras dormís.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCl0_vsEK5ud1XwXyLo726ca87Q75l7R14uxA5ofV7UYSWs7csMpn8AUazkAvyXruPmG-YV9wPIM3hSi_9Xl1Z6AB1SGCU_FhNDaheaHFejyJhZmnBJTgENwcBX06HouR-uTA6OXK8ri6ok5pVjq7qKDFN5ADdLXxozD7hHh0i6LOCrloe-DrYEhzGwWv91IlrdUpZhZ-pgCY4JBJi48aLywQ1Ogg1DyLsDgTQ7XA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(45)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Minimalist architectural gym interior with smooth limestone floor, warm timber slats, and serene solitary athletic posture in repose.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCl0_vsEK5ud1XwXyLo726ca87Q75l7R14uxA5ofV7UYSWs7csMpn8AUazkAvyXruPmG-YV9wPIM3hSi_9Xl1Z6AB1SGCU_FhNDaheaHFejyJhZmnBJTgENwcBX06HouR-uTA6OXK8ri6ok5pVjq7qKDFN5ADdLXxozD7hHh0i6LOCrloe-DrYEhzGwWv91IlrdUpZhZ-pgCY4JBJi48aLywQ1Ogg1DyLsDgTQ7XA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Glycogen Vault Bar -->\n<div class=\"w-full flex flex-col gap-1\">\n<div class=\"flex justify-between font-label-sm text-[9px] text-surface\">\n<span class=\"uppercase tracking-widest\">Bóveda de Glucógeno</span>\n<span class=\"text-secondary-fixed\">88% Capacidad</span>\n</div>\n<div class=\"w-full h-1.5 rounded-full bg-surface-container-highest/20 overflow-hidden\">\n<div class=\"w-[88%] h-full rounded-full bg-secondary-fixed\"></div>\n</div>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Masa muscular como póliza metabólica.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El tejido activo consume glucosa mientras dormís.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full flex flex-col gap-2\">\n                      <div class=\"flex justify-between font-label-sm text-label-sm text-surface\">\n                        <span class=\"uppercase tracking-widest text-[11px]\">Bóveda de Glucógeno</span>\n                        <span class=\"text-secondary-fixed font-medium\">88% Capacidad Retenida</span>\n                      </div>\n                      <div class=\"w-full h-2 rounded-full bg-surface-container-highest/30 overflow-hidden\">\n                        <div class=\"w-[88%] h-full rounded-full bg-secondary-fixed\"></div>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 37,
+      "bajada": 60
     }
   },
   {
@@ -2917,16 +3062,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "42 minutos de Precisión.",
-    "title": "42 minutos de Precisión.",
+    "name": "Temporizador Concéntrico",
+    "tag": "SENS • PROTOCOLO",
+    "title": "42 minutos de precisión.",
     "bajada": "El tiempo justo para estimular sin fatiga residual.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAtJ6QmU5T4pGadGSJwnGBgrGM7YmsrGL9LW74NfGXRred5rFBv88KgD4Tifxa_Z46iMYjb4iJWxm_B_SDQBVc7419f7jpHTjNlSTSP2w2KcnNjt80ZZUSXhGh3LrhcsTaI6Ra7TIQhviLLJKMHljnbyEls8EfGZIztCI7vg00uu07TeTomC-jktxQnnUGMiBYJ4zKStOQYVK1HmiGAZ8IveBHP706Q26Al3nwCkg",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(46)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet atmospheric interior of a private biomechanics sanctuary with natural light washing over fine concrete and raw oak finishes.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAtJ6QmU5T4pGadGSJwnGBgrGM7YmsrGL9LW74NfGXRred5rFBv88KgD4Tifxa_Z46iMYjb4iJWxm_B_SDQBVc7419f7jpHTjNlSTSP2w2KcnNjt80ZZUSXhGh3LrhcsTaI6Ra7TIQhviLLJKMHljnbyEls8EfGZIztCI7vg00uu07TeTomC-jktxQnnUGMiBYJ4zKStOQYVK1HmiGAZ8IveBHP706Q26Al3nwCkg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Concentric Timer Dial -->\n<div class=\"w-12 h-12 rounded-full border-2 border-secondary-fixed/30 border-t-secondary-fixed flex items-center justify-center\">\n<span class=\"font-label-sm text-[11px] text-surface font-semibold\">42m</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">42 minutos de Precisión.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El tiempo justo para estimular sin fatiga residual.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-4\">\n                      <div class=\"w-14 h-14 rounded-full border-2 border-secondary-fixed/40 border-t-secondary-fixed flex items-center justify-center\">\n                        <span class=\"material-symbols-outlined text-secondary-fixed text-[22px]\">timer</span>\n                      </div>\n                      <div class=\"flex flex-col\">\n                        <span class=\"font-headline-sm text-headline-sm text-surface font-light\">42:00</span>\n                        <span class=\"font-label-sm text-[10px] text-surface-variant uppercase tracking-widest\">Ventana Eficiente</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -2937,16 +3083,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "El fallo muscular no es obligatorio.",
+    "name": "Medidor de Sobrecarga RIR",
+    "tag": "SENS • PROTOCOLO",
     "title": "El fallo muscular no es obligatorio.",
-    "bajada": "La Tensión mecánica óptima se logra con cadencia consciente.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA6-HqqzYg5up7WJ5b1-Zj3oD6Sa73plxNXWYv21dCNDthgiw6L_cAnWHEWPKHe_d6Yjm2X-tZBzxL6WDJREWaMMdO2JbzfMJRjTnc-bCY48WFZDHTsuclovdLZ9zv75aAZvI3VvrgoWm9hbbPu04TnpVugxp0BfQn_LsCcqCodDqwAkViUWX42KQp1KcttLSYuM0q6oeJTGanCanZRks22XIVxPfRGrLv_dwPXcA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(47)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Precision tactile textured wall in an exclusive somatic longevity studio, muted warm palette, soft sculptural shadow cast.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6-HqqzYg5up7WJ5b1-Zj3oD6Sa73plxNXWYv21dCNDthgiw6L_cAnWHEWPKHe_d6Yjm2X-tZBzxL6WDJREWaMMdO2JbzfMJRjTnc-bCY48WFZDHTsuclovdLZ9zv75aAZvI3VvrgoWm9hbbPu04TnpVugxp0BfQn_LsCcqCodDqwAkViUWX42KQp1KcttLSYuM0q6oeJTGanCanZRks22XIVxPfRGrLv_dwPXcA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- RIR Scale -->\n<div class=\"grid grid-cols-4 gap-1.5\">\n<div class=\"h-1 rounded bg-secondary-fixed/30\"></div>\n<div class=\"h-1 rounded bg-secondary-fixed/50\"></div>\n<div class=\"h-1.5 rounded bg-secondary-fixed\"></div>\n<div class=\"h-1 rounded bg-secondary-fixed/30\"></div>\n</div>\n<div class=\"flex justify-between font-label-sm text-[8px] text-surface-variant uppercase tracking-wider\">\n<span class=\"\">RIR 1</span><span class=\"text-secondary-fixed font-semibold\">RIR 2 (Óptimo)</span><span class=\"\">RIR 4</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El fallo muscular no es obligatorio.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La Tensión mecánica óptima se logra con cadencia consciente.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "bajada": "La tensión mecánica óptima se logra con cadencia consciente.",
+    "metricHtml": "<div class=\"w-full flex flex-col gap-2\">\n                      <div class=\"grid grid-cols-4 gap-2\">\n                        <div class=\"h-1.5 rounded-full bg-secondary-fixed/30\"></div>\n                        <div class=\"h-1.5 rounded-full bg-secondary-fixed/50\"></div>\n                        <div class=\"h-2 rounded-full bg-secondary-fixed shadow-sm\"></div>\n                        <div class=\"h-1.5 rounded-full bg-secondary-fixed/30\"></div>\n                      </div>\n                      <div class=\"flex justify-between font-label-sm text-[9px] text-surface-variant uppercase tracking-widest\">\n                        <span>RIR 1</span>\n                        <span class=\"text-secondary-fixed font-bold\">RIR 2 (Umbral de Oro)</span>\n                        <span>RIR 4</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 36,
+      "bajada": 60
     }
   },
   {
@@ -2957,16 +3104,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Entrenar para regenerar, no para romperte.",
+    "name": "Balanza de Cortisol vs Fuerza",
+    "tag": "SENS • PROTOCOLO",
     "title": "Entrenar para regenerar, no para romperte.",
     "bajada": "Modulá tu sistema nervioso antes de exigir la carga.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCmXoZO_JSW2V7_OMeZ9UPaNsQRr1VwpRqpd7Dj_GZT0-WASIhhQLzVD8GIGaiGMv9BWbp8jKcy6yOadQHe5fQeYZi4ZSG20bxI4Tikgs7NzKXfm9Y-ccVd1FAXp5m91O5e6r7pxnV1Lyf3lOeBJM3sfR6c2KlqGUiJA_wAGEnZC1MxY7h_Nk_du1oCncVM9v44mxtSHVwewTkZVAp90RyBLMbO2g3aXPIfJQvjeQ",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(48)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monolithic warm ivory stone bath and cold plunge pool in architectural luxury sanctuary, silence and recovery atmosphere.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCmXoZO_JSW2V7_OMeZ9UPaNsQRr1VwpRqpd7Dj_GZT0-WASIhhQLzVD8GIGaiGMv9BWbp8jKcy6yOadQHe5fQeYZi4ZSG20bxI4Tikgs7NzKXfm9Y-ccVd1FAXp5m91O5e6r7pxnV1Lyf3lOeBJM3sfR6c2KlqGUiJA_wAGEnZC1MxY7h_Nk_du1oCncVM9v44mxtSHVwewTkZVAp90RyBLMbO2g3aXPIfJQvjeQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Balance Scale -->\n<div class=\"flex items-center justify-between text-secondary-fixed font-label-sm text-[9px] px-2 py-1 rounded bg-surface-container-lowest/10\">\n<span class=\"opacity-60\">Cortisol ↓</span>\n<span class=\"font-semibold text-tertiary-fixed\">Fuerza Real ↑</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Entrenar para regenerar, no para romperte.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Modulá tu sistema nervioso antes de exigir la carga.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full p-3 rounded-xl bg-surface-container-lowest/15 backdrop-blur-md flex items-center justify-around text-surface\">\n                      <div class=\"flex flex-col items-center\">\n                        <span class=\"font-label-sm text-[9px] text-surface-variant uppercase tracking-widest\">Cortisol</span>\n                        <span class=\"font-headline-sm text-headline-sm text-surface-variant font-light\">Bajo</span>\n                      </div>\n                      <span class=\"material-symbols-outlined text-secondary-fixed text-[24px]\">balance</span>\n                      <div class=\"flex flex-col items-center\">\n                        <span class=\"font-label-sm text-[9px] text-tertiary-fixed font-semibold uppercase tracking-widest\">Fuerza Real</span>\n                        <span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">Elevada</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 42,
+      "bajada": 60
     }
   },
   {
@@ -2977,16 +3125,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "La ventana anabólica real es tu sueño.",
+    "name": "Indicador de Horas de Sueño",
+    "tag": "SENS • PROTOCOLO",
     "title": "La ventana anabólica real es tu sueño.",
     "bajada": "7.5 horas de fase profunda consolidan el estímulo de fuerza.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBzTYS0770IBOXp8K96LT5DxYyrfPskGuVa6j6aGcoRolmMh1gsEUGLg_W6TYBScKyBM4eOfi1U84SkxLQ__Md2QWYvhsDIAYC9GY9aTIHnyhHizBgTnUr6qSJBJte33E-9z6tSiOfo1ot-T0pYLGPOYj9Wv_aubajvRUSXEtJXQOZ5hIWsodvGr1s7iq6Ah7qVNeb5Le3LwZfGNjFWxARzSZFbMCLaWaVjgYzdKg",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(49)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Ultra peaceful luxury bedroom sanctuary in deep twilight, textured linen bedding, ambient whisper lighting and zero digital screens.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzTYS0770IBOXp8K96LT5DxYyrfPskGuVa6j6aGcoRolmMh1gsEUGLg_W6TYBScKyBM4eOfi1U84SkxLQ__Md2QWYvhsDIAYC9GY9aTIHnyhHizBgTnUr6qSJBJte33E-9z6tSiOfo1ot-T0pYLGPOYj9Wv_aubajvRUSXEtJXQOZ5hIWsodvGr1s7iq6Ah7qVNeb5Le3LwZfGNjFWxARzSZFbMCLaWaVjgYzdKg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Sleep Dial Metric -->\n<div class=\"flex items-baseline gap-2\">\n<span class=\"font-headline-lg-mobile text-headline-lg-mobile text-secondary-fixed font-light\">7.5 h</span>\n<span class=\"font-label-sm text-[10px] text-surface-variant uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fase Profunda NREM</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La ventana anabólica real es tu sueño.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">7.5 horas de fase profunda consolidan el estímulo de fuerza.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-3\">\n                      <span class=\"font-headline-lg text-[44px] text-secondary-fixed leading-none font-extralight\">7.5 h</span>\n                      <div class=\"flex flex-col\">\n                        <span class=\"font-label-sm text-[11px] text-surface font-medium uppercase tracking-wider\">Fase Delta Profunda</span>\n                        <span class=\"font-label-sm text-[9px] text-surface-variant\">Somatic Repair Protocol</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 38,
+      "bajada": 60
     }
   },
   {
@@ -2997,16 +3146,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Densidad postural en cada serie.",
+    "name": "Score de Densidad Somática",
+    "tag": "SENS • PROTOCOLO",
     "title": "Densidad postural en cada serie.",
     "bajada": "Alineación de columna y eje neutro garantizados.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA2qj2TUbzY-E1efyvlmBqm7W67WDtw6FiIKEmczoLN9deWAhIMg_77dBAq6pMXFKuGocuCvvOfjZzqnevp-NmtrfQl3MQDrB0fVqjOZ3lQHZgKLzMFOSeI4hKxHj2GJeVjvB-z3dNPdfDHco9dup92JiY_ap7gL0sY4QW45U_9KVGgnVVoXrvdv9r3yahmUsYgqKw8xXRm5cRSqP2NDfk9cyKHv-fLjONIPhfRIg",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(49)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Macro texture of human spine posture alignment in dramatic editorial side lighting against raw slate textured concrete.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2qj2TUbzY-E1efyvlmBqm7W67WDtw6FiIKEmczoLN9deWAhIMg_77dBAq6pMXFKuGocuCvvOfjZzqnevp-NmtrfQl3MQDrB0fVqjOZ3lQHZgKLzMFOSeI4hKxHj2GJeVjvB-z3dNPdfDHco9dup92JiY_ap7gL0sY4QW45U_9KVGgnVVoXrvdv9r3yahmUsYgqKw8xXRm5cRSqP2NDfk9cyKHv-fLjONIPhfRIg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Score Badge -->\n<span class=\"inline-flex w-fit px-3 py-1 rounded-full bg-secondary-fixed/20 text-secondary-fixed font-headline-sm text-headline-sm font-semibold\">\n                9.8 / 10\n              </span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Densidad postural en cada serie.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Alineación de columna y eje neutro garantizados.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-fixed/20 text-secondary-fixed\">\n                      <span class=\"material-symbols-outlined text-[20px]\">verified_user</span>\n                      <span class=\"font-headline-sm text-headline-sm font-semibold\">9.8 / 10 Posture Score</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3017,16 +3167,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Eficiencia ejecutiva.",
+    "name": "Cronómetro de Tensión Mecánica",
+    "tag": "SENS • PROTOCOLO",
     "title": "Eficiencia ejecutiva.",
     "bajada": "El método adaptado a la agenda de profesionales exigentes.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD72hVze9DdrFKQrzbnkK4A2minV8qjv-6YdhnXi4vBLbyAAjkKbk4CDDp-vg1Hq0v32qhJuaFlaTN4pXuGkkFj8DNuowc7S3U4nlALYUCpafoawwfiLuXymGxDZFO69H4EhMvRIW1BIfa3Q8gNlocLdhKI-LmooAKECNyIrcHFArSlQazOCs8SJJ7lKpOaR3p6V4iiu7xyQB2Ct2naDATNzJJAEp9p0v0VjCrj1Q",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(51)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Executive minimalist suite desk with mechanical bronze timer stopwatch, espresso porcelain cup, calm morning sunlight.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD72hVze9DdrFKQrzbnkK4A2minV8qjv-6YdhnXi4vBLbyAAjkKbk4CDDp-vg1Hq0v32qhJuaFlaTN4pXuGkkFj8DNuowc7S3U4nlALYUCpafoawwfiLuXymGxDZFO69H4EhMvRIW1BIfa3Q8gNlocLdhKI-LmooAKECNyIrcHFArSlQazOCs8SJJ7lKpOaR3p6V4iiu7xyQB2Ct2naDATNzJJAEp9p0v0VjCrj1Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<span class=\"font-headline-lg-mobile text-headline-lg-mobile text-surface font-light\">42 min</span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Eficiencia ejecutiva.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El método adaptado a la agenda de profesionales exigentes.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full flex items-baseline gap-2\">\n                      <span class=\"font-headline-lg text-[48px] text-surface font-light leading-none\">42</span>\n                      <span class=\"font-headline-sm text-headline-sm text-secondary-fixed font-medium\">minutos de sesión</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3037,16 +3188,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Tus lumbares no duelen por débiles.",
+    "name": "Radiografía Lumbar con Punto de Fulcro",
+    "tag": "SENS • PROTOCOLO",
     "title": "Tus lumbares no duelen por débiles.",
     "bajada": "La disociación pélvica descomprime el disco intervertebral.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCqtJEsBGil5xB82KKKjCkBNiUrlCt0KjMsiS5C_xMi2XE8VKG6m2aTjKZzhLZoiyq5DsfBe2bsck8VdL-gwvclP-VDaEMPOwoeofpESN9xcW-Kx-_31xee1n-thEnnmlmqDhdPZOlHDtpV4Izmy4zyAM86EfwusUhBdp7tvoEPt9gsR0M1-QIDmKOouE2CEU6NRGkpTu7lrRZYLXQ231wtXbBXkjrz-O2gRpBusw",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(52)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Abstract translucent architectural spine fulcrum model under museum studio spotlight with warm bronze tint.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqtJEsBGil5xB82KKKjCkBNiUrlCt0KjMsiS5C_xMi2XE8VKG6m2aTjKZzhLZoiyq5DsfBe2bsck8VdL-gwvclP-VDaEMPOwoeofpESN9xcW-Kx-_31xee1n-thEnnmlmqDhdPZOlHDtpV4Izmy4zyAM86EfwusUhBdp7tvoEPt9gsR0M1-QIDmKOouE2CEU6NRGkpTu7lrRZYLXQ231wtXbBXkjrz-O2gRpBusw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Micro L5-S1 badge -->\n<div class=\"flex items-center gap-1.5 px-2 py-1 rounded bg-secondary-fixed/15 w-fit\">\n<span class=\"w-1.5 h-1.5 rounded-full bg-secondary-fixed\"></span>\n<span class=\"font-label-sm text-[9px] text-secondary-fixed font-semibold uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fulcro L5-S1 Descomprimido</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tus lumbares no duelen por débiles.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La disociación pélvica descomprime el disco intervertebral.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-lowest/15 backdrop-blur-md\">\n                      <span class=\"w-2.5 h-2.5 rounded-full bg-tertiary-fixed\"></span>\n                      <span class=\"font-label-sm text-label-sm text-surface font-medium tracking-wide\">Descompresión L5-S1 Activa</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3057,16 +3209,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Gasto basal vs cardio reactivo.",
+    "name": "Matriz de Dispersión de Cargas",
+    "tag": "SENS • PROTOCOLO",
     "title": "Gasto basal vs cardio reactivo.",
     "bajada": "Construir masa magra eleva tu metabolismo las 24 horas.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDJpD0hVg-B5h4KavZjYGQpI8Fp4qzq3Fox6GNkBQvzoFSklj7VpnrrwTNZzdr0lpeGQx4_r4ZUwgze7rKzRDvmLalIC07EanemkufeYIf9atyAmNx9R_-aUXj_bvBmPXpfIhKUslybtTPPJT55BFaLCRfT97dOnZwu68Sp0MUcaZYBpgODntnLiihw9RcV8aiMoBhxX1SdP339rM8WcJCLhFEtG3L0xpqirDy3gA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(53)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Sculptural concrete athletic longevity facility with soft skylight illuminating minimalist architectural exercise columns.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDJpD0hVg-B5h4KavZjYGQpI8Fp4qzq3Fox6GNkBQvzoFSklj7VpnrrwTNZzdr0lpeGQx4_r4ZUwgze7rKzRDvmLalIC07EanemkufeYIf9atyAmNx9R_-aUXj_bvBmPXpfIhKUslybtTPPJT55BFaLCRfT97dOnZwu68Sp0MUcaZYBpgODntnLiihw9RcV8aiMoBhxX1SdP339rM8WcJCLhFEtG3L0xpqirDy3gA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Dispersion dots -->\n<div class=\"flex items-center gap-2\">\n<span class=\"w-2 h-2 rounded-full bg-secondary-fixed\"></span>\n<span class=\"h-px flex-1 bg-surface-variant/40\"></span>\n<span class=\"w-2.5 h-2.5 rounded-full bg-tertiary-fixed\"></span>\n<span class=\"h-px flex-1 bg-surface-variant/40\"></span>\n<span class=\"w-2 h-2 rounded-full bg-secondary-fixed\"></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Gasto basal vs cardio reactivo.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Construir masa magra eleva tu metabolismo las 24 horas.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-3 w-full\">\n                      <span class=\"w-3 h-3 rounded-full bg-secondary-fixed\"></span>\n                      <div class=\"h-0.5 flex-1 bg-surface-variant/30\"></div>\n                      <span class=\"w-4 h-4 rounded-full bg-tertiary-fixed\"></span>\n                      <div class=\"h-0.5 flex-1 bg-surface-variant/30\"></div>\n                      <span class=\"w-3 h-3 rounded-full bg-secondary-fixed\"></span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3077,16 +3230,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "El fin de la culpa de fin de semana.",
+    "name": "Tarjeta de Saldo Metabólico",
+    "tag": "SENS • PROTOCOLO",
     "title": "El fin de la culpa de fin de semana.",
     "bajada": "Metabolismo flexible con sentido común y vida social.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCPxFSF6gU9rvt81QmXUSGU4XRaG1-KR1ESulGZ1cnQqGXJu5RCYK-2mYqxdYcv0IGWNkuKnu6YlS4y1k87imZWR5G9rNprVensOg8AjKfl7E-ybBuDPfT_aIy_zv-W6PZwyzfnq7TA7xGcFNdokc7KPzLUIxdfhFBUycDzNyHwhMCgGTAHmiz37PZJTrGZxfRksyNqzqNTzhnTqX6ifcEq4iE11lFilk1fQnorGA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(54)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Artisanal glass carafes and healthy nutrient dense culinary arrangement on polished granite dining counter in soft warm ambient light.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCPxFSF6gU9rvt81QmXUSGU4XRaG1-KR1ESulGZ1cnQqGXJu5RCYK-2mYqxdYcv0IGWNkuKnu6YlS4y1k87imZWR5G9rNprVensOg8AjKfl7E-ybBuDPfT_aIy_zv-W6PZwyzfnq7TA7xGcFNdokc7KPzLUIxdfhFBUycDzNyHwhMCgGTAHmiz37PZJTrGZxfRksyNqzqNTzhnTqX6ifcEq4iE11lFilk1fQnorGA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Calorie Badge -->\n<span class=\"inline-flex w-fit px-3 py-1 rounded-full bg-secondary-fixed text-primary font-headline-sm text-headline-sm font-semibold\">\n                +500 kcal\n              </span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El fin de la culpa de fin de semana.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Metabolismo flexible con sentido común y vida social.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"inline-flex px-4 py-1.5 rounded-full bg-secondary-fixed text-primary font-headline-sm text-headline-sm font-semibold\">\n                      +500 kcal Margen Social\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 36,
+      "bajada": 60
     }
   },
   {
@@ -3097,16 +3251,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Cadencia respiratoria 4-7-8.",
+    "name": "Tacómetro de Frecuencia Cardíaca",
+    "tag": "SENS • PROTOCOLO",
     "title": "Cadencia respiratoria 4-7-8.",
     "bajada": "Desactivar la alarma simpática tras la última repetición.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBMIOi8V7CZ2kBqmkGguIIUmxTwx2PYOPGSGUY7y2ybKyc10DOxnPBIg1UVJYzLsdNY-PhW0wpUgLZfy9pEEZCbqgVyE_P043Ee9L8OKLi3ezH58pnF-rc_3Ss_qmW8_sRMX1x1BHlonC8PIBj7a7Ye1ol3Bdyh3sqnzg-qPNH7PSjsgsbe_dyYBR1EjiLRkKVboR1Roa6r-q_9JWAQAvLDVKmLB2rJV0Z0ecoTrw",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(55)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet tranquil breathing chamber with textured off white walls, zen architecture, soft shadow play and gentle meditative stillness.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBMIOi8V7CZ2kBqmkGguIIUmxTwx2PYOPGSGUY7y2ybKyc10DOxnPBIg1UVJYzLsdNY-PhW0wpUgLZfy9pEEZCbqgVyE_P043Ee9L8OKLi3ezH58pnF-rc_3Ss_qmW8_sRMX1x1BHlonC8PIBj7a7Ye1ol3Bdyh3sqnzg-qPNH7PSjsgsbe_dyYBR1EjiLRkKVboR1Roa6r-q_9JWAQAvLDVKmLB2rJV0Z0ecoTrw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Tachometer Cadence 4-7-8 -->\n<div class=\"font-label-sm text-label-sm text-secondary-fixed uppercase tracking-[0.25em] font-semibold\">\n                Ritmo: Inhala 4 · Sostén 7 · Exhala 8\n              </div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cadencia respiratoria 4-7-8.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Desactivar la alarma simpática tras la última repetición.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-2 font-label-sm text-[11px] text-secondary-fixed uppercase tracking-[0.2em]\">\n                      <span class=\"material-symbols-outlined text-[18px]\">air</span>\n                      <span>Cadencia: Inhala 4 · Pausa 7 · Exhala 8</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3117,16 +3272,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Fuerza asimilable, articulaciones blindadas.",
+    "name": "Comparador de Volumen Muscular",
+    "tag": "SENS • PROTOCOLO",
     "title": "Fuerza asimilable, articulaciones blindadas.",
     "bajada": "Medición objetiva sin desgaste articular.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB5W9Oj7Ox87I3DwHoUgMuuproYfV8i_iDhOfDytr3xNQ0gZib3W-6wpmXWT5k04RTHd0gUQUIwTGKIvdJs4b0_d8KmoIOE55oBSRG3LycHKDbH9SBVTzfyi7oG3fUxK5FVO1CPai7vFn10a7Ie4pL0vWBZiRcKkZ1mKJ4xXGI-k0CsD_QoycN4laCtUf-vUhC7ixcGGOkSuiipxOxzMsOaWLpP0BugPfjF7yETLA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(56)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"High precision stainless steel athletic equipment joint in quiet minimal aesthetic setting, dark charcoal tones.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5W9Oj7Ox87I3DwHoUgMuuproYfV8i_iDhOfDytr3xNQ0gZib3W-6wpmXWT5k04RTHd0gUQUIwTGKIvdJs4b0_d8KmoIOE55oBSRG3LycHKDbH9SBVTzfyi7oG3fUxK5FVO1CPai7vFn10a7Ie4pL0vWBZiRcKkZ1mKJ4xXGI-k0CsD_QoycN4laCtUf-vUhC7ixcGGOkSuiipxOxzMsOaWLpP0BugPfjF7yETLA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Tonelaje Comparador -->\n<div class=\"flex items-baseline justify-between font-label-sm text-[10px] text-surface\">\n<span class=\"text-surface-variant\">Tonelaje Asimilado:</span>\n<span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">14.850 kg</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fuerza asimilable, articulaciones blindadas.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Medición objetiva sin desgaste articular.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex justify-between items-baseline w-full\">\n                      <span class=\"font-label-sm text-label-sm text-surface-variant\">Tonelaje Asimilado:</span>\n                      <span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">14.850 kg Netos</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 44,
+      "bajada": 60
     }
   },
   {
@@ -3137,16 +3293,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "La consistencia supera al esfuerzo esporádico.",
+    "name": "Racha de Consistencia 7 Días",
+    "tag": "SENS • PROTOCOLO",
     "title": "La consistencia supera al esfuerzo esporádico.",
-    "bajada": "7 Días continuos en control de tu cuerpo.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCx0v8wKBi-TYEZ0-drGpYx7UowTW7pdvM1Sa7dOnbMKsNpM9_QROLVGmdiYVKASqGLbEwm_QEAjHClJfBRZZQ3U4JF2Rn7o2XX1jhRSBn39x-YC1j7XGxUpDh70p-jp845bVXlx8Zdy7odbVg90ITzstIQd5iWMo6T1dEz4U264r73M1tjGsM50ZduI05IEN-zyFv4p-3Jp-2X0rHtA6M9oFNSifV0nnQ4wSJYUA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(57)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monastic Japanese inspired wellness courtyard with gravel patterns, warm limestone slabs, calm morning atmosphere.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCx0v8wKBi-TYEZ0-drGpYx7UowTW7pdvM1Sa7dOnbMKsNpM9_QROLVGmdiYVKASqGLbEwm_QEAjHClJfBRZZQ3U4JF2Rn7o2XX1jhRSBn39x-YC1j7XGxUpDh70p-jp845bVXlx8Zdy7odbVg90ITzstIQd5iWMo6T1dEz4U264r73M1tjGsM50ZduI05IEN-zyFv4p-3Jp-2X0rHtA6M9oFNSifV0nnQ4wSJYUA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- 7 Days Streak Indicator -->\n<div class=\"flex justify-between items-center px-1\">\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La consistencia supera al esfuerzo esporádico.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">7 Días continuos en control de tu cuerpo.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "bajada": "7 días continuos en control de tu cuerpo.",
+    "metricHtml": "<div class=\"flex justify-between items-center w-full px-2\">\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 46,
+      "bajada": 60
     }
   },
   {
@@ -3157,16 +3314,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "El dolor no es una medalla.",
+    "name": "Semáforo de Inflamación",
+    "tag": "SENS • PROTOCOLO",
     "title": "El dolor no es una medalla.",
     "bajada": "Escuchar el feedback tisular antes de que se vuelva lesión.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCrZxmeeRvobRmWx5a9mxCiFzIzr4RBHtlBgp4Bmji8kOpmzPQ5bRJiPfwum2Ju6JUmgBXWpQzDL8vj-4awcxzl5Sn_sj7N0nY8gH75EGek7cA80__GPpz4wlFWkpkSz8RgVWa_bfX1EuJS_GjZrAIvb1hswRYkltziGEB18GYyuXO3sfLM1_-KnZ2fJSYCXgn1T3mFLHI4IHqY0W5PYeqd-ibt2RJWAviAeMocBQ",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(58)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Close up architectural detail of polished granite edge meeting soft linen curtain in a high end recovery space.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCrZxmeeRvobRmWx5a9mxCiFzIzr4RBHtlBgp4Bmji8kOpmzPQ5bRJiPfwum2Ju6JUmgBXWpQzDL8vj-4awcxzl5Sn_sj7N0nY8gH75EGek7cA80__GPpz4wlFWkpkSz8RgVWa_bfX1EuJS_GjZrAIvb1hswRYkltziGEB18GYyuXO3sfLM1_-KnZ2fJSYCXgn1T3mFLHI4IHqY0W5PYeqd-ibt2RJWAviAeMocBQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Semáforo tisular -->\n<div class=\"flex items-center gap-2\">\n<span class=\"w-2.5 h-2.5 rounded-full bg-tertiary-fixed\"></span>\n<span class=\"w-2.5 h-2.5 rounded-full bg-secondary-fixed/50\"></span>\n<span class=\"w-2.5 h-2.5 rounded-full bg-surface-variant/40\"></span>\n<span class=\"font-label-sm text-[9px] text-tertiary-fixed font-semibold ml-1\">Tisular: Calma Total</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El dolor no es una medalla.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Escuchar el feedback tisular antes de que se vuelva lesión.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-3\">\n                      <span class=\"w-3.5 h-3.5 rounded-full bg-tertiary-fixed\"></span>\n                      <span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed/40\"></span>\n                      <span class=\"w-3.5 h-3.5 rounded-full bg-surface-variant/30\"></span>\n                      <span class=\"font-label-sm text-label-sm text-tertiary-fixed font-semibold uppercase tracking-wider\">Estado Tisular Seguro</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3177,16 +3335,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "Tu fascia necesita agua y Tensión elástica.",
-    "title": "Tu fascia necesita agua y Tensión elástica.",
+    "name": "Métrica de Hidratación Fascial",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Tu fascia necesita agua y tensión elástica.",
     "bajada": "Movilidad articular con carga para deslizar sin fricción.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDqce-v3zHCmF2bBhfQv43_U6SJcSVTeyRKa-1h_rkPD7R_-FBVTTnYK_JUdtH8NYnXZ6Zg-W5LvaHNURdfyjpfM6tZg-WJLPpEAkMq2RuNPEuIrq0tdoiLJ-jk2R_lyen5wRjkFeHOFtMuSe2xWENW1xv52RaX4nJlio8qbeJDPtgRWBYBQ2ahhI9_ONYd1CMtFe9oM_68TiXbOqfgqrrLeZ8xeDGwdv4c5rxtQA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(59)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Pure crystal water droplet suspended over dark slate pool, macro quiet luxury biometric aesthetic.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqce-v3zHCmF2bBhfQv43_U6SJcSVTeyRKa-1h_rkPD7R_-FBVTTnYK_JUdtH8NYnXZ6Zg-W5LvaHNURdfyjpfM6tZg-WJLPpEAkMq2RuNPEuIrq0tdoiLJ-jk2R_lyen5wRjkFeHOFtMuSe2xWENW1xv52RaX4nJlio8qbeJDPtgRWBYBQ2ahhI9_ONYd1CMtFe9oM_68TiXbOqfgqrrLeZ8xeDGwdv4c5rxtQA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Fascia Osmolarity Indicator -->\n<div class=\"flex items-center gap-1.5 text-secondary-fixed\">\n<span class=\"material-symbols-outlined text-[16px]\">water_drop</span>\n<span class=\"font-label-sm text-[9px] uppercase tracking-wider font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Turgencia Fascial Óptima</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu fascia necesita agua y Tensión elástica.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Movilidad articular con carga para deslizar sin fricción.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-2 text-secondary-fixed font-label-sm text-label-sm\">\n                      <span class=\"material-symbols-outlined text-[20px]\">water_drop</span>\n                      <span class=\"uppercase tracking-widest font-semibold\">Turgencia y Osmolaridad Fascial</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 43,
+      "bajada": 60
     }
   },
   {
@@ -3197,16 +3356,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b3",
     "block": "Bloque III: Métricas & Datos",
-    "name": "La edad se mide en dorsiflexión y fuerza.",
+    "name": "Indicador de Edad Biológica",
+    "tag": "SENS • PROTOCOLO",
     "title": "La edad se mide en dorsiflexión y fuerza.",
     "bajada": "Makes SENS. Longevidad atlética con Nico.",
-    "tag": "TELEMETRÍA 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDrvCB-qZ8U5OJvqQ-nHI51vLinPn6Jkee7KU08CeC609q5PfcRZPOIedL6zuIFWOJ1qjgVdexkdOqb4kiJtLKQ2jidODrkqEkgMDXKx2XBph-TZKiiGViDOHh1B24FZVgNgXNkafIRdellDfu9up--jdKwZDvK7pESFjUsxDKZl7UTywWD-mWvJl6yP78f3T_gUVQ3Rh_mGL9qbRgGALwDHKZD5fnayVb9bVKtEw",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(60)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Distinguished athletic silhouette moving dynamically with perfect dorsiflexion against warm textured alabaster wall.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDrvCB-qZ8U5OJvqQ-nHI51vLinPn6Jkee7KU08CeC609q5PfcRZPOIedL6zuIFWOJ1qjgVdexkdOqb4kiJtLKQ2jidODrkqEkgMDXKx2XBph-TZKiiGViDOHh1B24FZVgNgXNkafIRdellDfu9up--jdKwZDvK7pESFjUsxDKZl7UTywWD-mWvJl6yP78f3T_gUVQ3Rh_mGL9qbRgGALwDHKZD5fnayVb9bVKtEw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Age Comparison Delta -->\n<div class=\"flex items-center gap-3\">\n<span class=\"font-headline-sm text-headline-sm text-surface-variant line-through font-light\">48 Años</span>\n<span class=\"material-symbols-outlined text-[16px] text-tertiary-fixed\">arrow_forward</span>\n<span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">36 Biológicos</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La edad se mide en dorsiflexión y fuerza.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Makes SENS. Longevidad atlética con Nico.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-4\">\n                      <span class=\"font-headline-sm text-headline-sm text-surface-variant line-through font-light\">48 Años</span>\n                      <span class=\"material-symbols-outlined text-[20px] text-tertiary-fixed\">arrow_forward</span>\n                      <span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">36 Biológicos</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 70,
-      "bajada": 120
+      "tag": 18,
+      "title": 41,
+      "bajada": 60
     }
   },
   {
@@ -3216,17 +3376,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“El dolor lumbar que sentís a las 5 PM no es fatiga muscular.”",
-    "title": "“El dolor lumbar que sentís a las 5 PM no es fatiga muscular.”",
-    "bajada": "Escuchá la corrección somática para resetear el psoas en 90°.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBSGSwG9p2a853IwP3ShSvGB6UWCHNAL9gZEGaZcd2JiPXdgErMe6W20fwYk6wksH8Ks_V3hgwY_hmS6azNrK0oShcbtGemiTjFYmw1td6Ra10KiDmoRpsqrCYZPwKigiDR9zKYS4kxb0w6Lz5zL8wBUdY_AUWdm358IbZfOh9WbwjB8k1qdj-zcFv6lwxzNLQ_t_EcIMYHaBN13rVhGImnY05-nu8SdAEK5b7pSg",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<!-- Specimen Preview Viewport (9:16 Safe) -->\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet luxury somatic studio with natural travertine stone, warm lighting, serene training environment, minimal, 8k resolution\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBSGSwG9p2a853IwP3ShSvGB6UWCHNAL9gZEGaZcd2JiPXdgErMe6W20fwYk6wksH8Ks_V3hgwY_hmS6azNrK0oShcbtGemiTjFYmw1td6Ra10KiDmoRpsqrCYZPwKigiDR9zKYS4kxb0w6Lz5zL8wBUdY_AUWdm358IbZfOh9WbwjB8k1qdj-zcFv6lwxzNLQ_t_EcIMYHaBN13rVhGImnY05-nu8SdAEK5b7pSg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<!-- Safe Active Center Content (340px to 1420px zone) -->\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/95 backdrop-blur-md p-3.5 rounded-xl shadow-lg flex flex-col gap-2\">\n<div class=\"flex items-center gap-2\">\n<span class=\"w-5 h-5 rounded-full bg-secondary text-surface-container-lowest flex items-center justify-center font-label-sm text-[10px]\">N</span>\n<span class=\"font-label-sm text-label-sm text-on-surface font-semibold text-[11px]\">Nico • Audio</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“El dolor lumbar que sentís a las 5 PM no es fatiga muscular.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Escuchá la corrección somática para resetear el psoas en 90°.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T61",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3236,17 +3397,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“Respirar por la boca durante el set eleva el cortisol basal un 35%.”",
-    "title": "“Respirar por la boca durante el set eleva el cortisol basal un 35%.”",
-    "bajada": "El sellado palatino mantiene la presión intra-abdominal sin colapsar el suelo pélvico.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCSChAFEK1WDlSyIERVxqTCJU6qypiEQ2FNCYJ2Qv4GmOMRGUu6HUkN5y9BQluyaGcyksWS8S7aOiMg-VKe-yx6WXj_tIUysbXzvzZlLkuZthNmPfA9o0pVUXjyzJhu1h8Pdbw_iWn3o-_8AqitMxbHtWEXkYBupbhSNdUBqxGGEOFcajq9sdm20OPg1qSF4s2oJuI3HeflIk3lSaWLNjtlQS5vupMZHohElM90_g",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"High-end private gym with cedar wood sauna reflections, soft warm amber glow, mist, cinematic film grain, serene luxury\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCSChAFEK1WDlSyIERVxqTCJU6qypiEQ2FNCYJ2Qv4GmOMRGUu6HUkN5y9BQluyaGcyksWS8S7aOiMg-VKe-yx6WXj_tIUysbXzvzZlLkuZthNmPfA9o0pVUXjyzJhu1h8Pdbw_iWn3o-_8AqitMxbHtWEXkYBupbhSNdUBqxGGEOFcajq9sdm20OPg1qSF4s2oJuI3HeflIk3lSaWLNjtlQS5vupMZHohElM90_g')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/50\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-primary-container/85 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2.5 text-on-primary\">\n<div class=\"flex items-center gap-2\">\n<span class=\"material-symbols-outlined text-secondary-fixed text-[18px]\">mic</span>\n<span class=\"font-label-sm text-label-sm text-secondary-fixed tracking-wider uppercase text-[10px]\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Nota de Voz Somática #44</span></span>\n</div>\n<div class=\"w-full flex items-center gap-1 py-1\">\n<span class=\"w-1.5 h-6 bg-secondary-fixed rounded-full\"></span>\n<span class=\"w-1.5 h-3 bg-on-primary-container rounded-full\"></span>\n<span class=\"w-1.5 h-8 bg-secondary-fixed rounded-full\"></span>\n<span class=\"w-1.5 h-4 bg-on-primary-container rounded-full\"></span>\n<span class=\"w-1.5 h-7 bg-secondary-fixed rounded-full\"></span>\n<span class=\"w-1.5 h-2 bg-on-primary-container rounded-full\"></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Respirar por la boca durante el set eleva el cortisol basal un 35%.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-primary-fixed text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El sellado palatino mantiene la presión intra-abdominal sin colapsar el suelo pélvico.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T62",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3256,17 +3418,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "¿Entreno fuerza si dormí 5 horas?",
-    "title": "¿Entreno fuerza si dormí 5 horas?",
-    "bajada": "No. Hoy hacés movilidad hidrostática y carga neural baja. Tu SNC no soporta picos axiales hoy.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBz5Qw7BPAkIVvIxZ7bUa2EQnzYLo06MeSJoE-dENfJFIzCP4DDJEzOMovoZydqOxuO4I6lBjdDUkSC1kteX1T2iFd5FJYfCEH3B5Cc_UqhpToGHs0UU0rmpcF_SPUHpEAb5xOmyfvtBpfg2VEm8_hlNgRawPKVXK3CiPql6Q8KwoEChCVqM8vYP-XKD5kMtWMg0DDn0DEYjPrGCcW41_gCKPoBLa1_ZZ-0ogqxkA",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monochrome architectural shot of an executive athletic club, minimalist concrete, floor to ceiling windows, zen calm\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBz5Qw7BPAkIVvIxZ7bUa2EQnzYLo06MeSJoE-dENfJFIzCP4DDJEzOMovoZydqOxuO4I6lBjdDUkSC1kteX1T2iFd5FJYfCEH3B5Cc_UqhpToGHs0UU0rmpcF_SPUHpEAb5xOmyfvtBpfg2VEm8_hlNgRawPKVXK3CiPql6Q8KwoEChCVqM8vYP-XKD5kMtWMg0DDn0DEYjPrGCcW41_gCKPoBLa1_ZZ-0ogqxkA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/45\"></div>\n</div>\n<div class=\"absolute top-[20%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center gap-2\">\n<div class=\"bg-surface-container-lowest/90 backdrop-blur-md p-3 rounded-xl shadow-md self-start max-w-[85%]\">\n<span class=\"font-label-sm text-[10px] text-on-surface-variant block uppercase font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Alumno:</span></span>\n<h3 class=\"font-headline-sm text-[13px] text-on-surface leading-tight\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">¿Entreno fuerza si dormí 5 horas?</span></h3>\n</div>\n<div class=\"bg-primary text-on-primary p-3 rounded-xl shadow-md self-end max-w-[90%]\">\n<span class=\"font-label-sm text-[10px] text-secondary-fixed block uppercase font-semibold\">Nico • Coach:</span>\n<p class=\"font-body-sm text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">No. Hoy hacés movilidad hidrostática y carga neural baja. Tu SNC no soporta picos axiales hoy.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T63",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3276,17 +3439,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“Sentí una puntada en el serrato al empujar.”",
-    "title": "“Sentí una puntada en el serrato al empujar.”",
-    "bajada": "Diagnóstico: Escápula alada por fatiga de romboides. Suspensión de press horizontal por 48 horas.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBLJP5God-buWHN9E-yLqBG71Tb8YCxS-5VJc3PNbtewarydLC4jpX5DggJXPWvaFIBrnNvSqiZNQJJPzekMTZire0qHoU0dRAtdPdOTQIdNcOGyQlnDK492R1cV9HFf7nL6_SWV44poomfCXrtWXEfUDV1-Lzrfw7flAdOyD7ENAW8gNSzBNDzzYBZLmAjf7CvESPOj7V_4CTrWBS9tNG3OZd77Sq_aR2TzkNBgA",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Close up of fine leather biometric notebook next to polished brass pen on linen desk, warm diffused daylight\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLJP5God-buWHN9E-yLqBG71Tb8YCxS-5VJc3PNbtewarydLC4jpX5DggJXPWvaFIBrnNvSqiZNQJJPzekMTZire0qHoU0dRAtdPdOTQIdNcOGyQlnDK492R1cV9HFf7nL6_SWV44poomfCXrtWXEfUDV1-Lzrfw7flAdOyD7ENAW8gNSzBNDzzYBZLmAjf7CvESPOj7V_4CTrWBS9tNG3OZd77Sq_aR2TzkNBgA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/45\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2 font-mono\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase text-[10px] tracking-widest font-sans font-bold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Registro Somático [09:15 AM]</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[13px] leading-tight font-sans font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Sentí una puntada en el serrato al empujar.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-relaxed font-sans\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Diagnóstico: Escápula alada por fatiga de romboides. Suspensión de press horizontal por 48 horas.</span></p>\n</div>\n</div>\n</div>\n</div>\n<div class=\"p-space-md pt-0 flex items-center gap-2\">\n\n\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T64",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3296,17 +3460,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“El descanso no es una recompensa; es un estímulo fisiológico obligatorio.”",
-    "title": "“El descanso no es una recompensa; es un estímulo fisiológico obligatorio.”",
-    "bajada": "Nota: Quien no programa su pausa somática terminará programando su lesión.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB7ADbpE5yCbTGMBr_SnMwJy_Uj-O_1ZcQJ_noH4hm314wVPu7RIEfyi0uyAy59bHfbADbb4xmzvA77rrZmk_9XUbGfINxclKIC-t7YqKuzztibsxXeZ5mY3wJgJK1unKgo17B9YSvF6dIjjNoAjCPQgjpx4RhBum25zGUFhT7OIzmA6CYx-Wd-9ffPTRJr-2mNM0GpkoLNTRaHIzfnM3UN90JsG3mATLbzhvWBvw",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Minimalist architectural interior with natural raw stone bench and water feature, gentle sunlight, peaceful spa atmosphere\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB7ADbpE5yCbTGMBr_SnMwJy_Uj-O_1ZcQJ_noH4hm314wVPu7RIEfyi0uyAy59bHfbADbb4xmzvA77rrZmk_9XUbGfINxclKIC-t7YqKuzztibsxXeZ5mY3wJgJK1unKgo17B9YSvF6dIjjNoAjCPQgjpx4RhBum25zGUFhT7OIzmA6CYx-Wd-9ffPTRJr-2mNM0GpkoLNTRaHIzfnM3UN90JsG3mATLbzhvWBvw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-xl shadow-lg flex gap-3\">\n<div class=\"w-1 bg-secondary rounded-full flex-shrink-0\"></div>\n<div class=\"flex flex-col gap-1.5\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“El descanso no es una recompensa; es un estímulo fisiológico obligatorio.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-secondary italic text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Nota: Quien no programa su pausa somática terminará programando su lesión.</span></p>\n</div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"p-space-md pt-0 flex items-center gap-2\">\n\n\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T65",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3316,17 +3481,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Para quienes manejan empresas de 8 cifras con un cuerpo de 70 años.",
-    "title": "Para quienes manejan empresas de 8 cifras con un cuerpo de 70 años.",
-    "bajada": "El colapso postural en reuniones de zoom destruye tu capacidad de toma de decisiones antes del mediodía.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAW9Xmyu2_QiSLhQddLYvvo_ZZaYVNjmms32SejD2s6CN8K61w0AjN7LanoZJzYX7P1p_uI2rVQBkhEmy89j2DtAx6oJYOTcrOPm5KT4Xt2NZ_KrIryViwuybzKB96GDHzjAJEVQxbjfX1ntnG3bCUK0QYvh_M4r3DMKuuwsv6GSnJUVKKE8OLiGbGSvS3PKNPvbhn2-Z9tdBPjLVBKW8B1DDrMa-unWSUhYw5Niw",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Executive boardroom desk with high end mechanical watch, warm leather desk mat, blurred skyline in morning light\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAW9Xmyu2_QiSLhQddLYvvo_ZZaYVNjmms32SejD2s6CN8K61w0AjN7LanoZJzYX7P1p_uI2rVQBkhEmy89j2DtAx6oJYOTcrOPm5KT4Xt2NZ_KrIryViwuybzKB96GDHzjAJEVQxbjfX1ntnG3bCUK0QYvh_M4r3DMKuuwsv6GSnJUVKKE8OLiGbGSvS3PKNPvbhn2-Z9tdBPjLVBKW8B1DDrMa-unWSUhYw5Niw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/50\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/95 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2\">\n<span class=\"font-label-sm text-label-sm text-on-surface-variant uppercase text-[10px] tracking-widest font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Memo Confidencial • Dirección</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Para quienes manejan empresas de 8 cifras con un cuerpo de 70 años.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El colapso postural en reuniones de zoom destruye tu capacidad de toma de decisiones antes del mediodía.</span></p>\n</div>\n</div>\n</div>\n</div>\n<div class=\"p-space-md pt-0 flex items-center gap-2\">\n\n\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T66",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3336,17 +3502,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“Dejé de operarme los meniscos tras 8 semanas de reeducación de cadera.”",
-    "title": "“Dejé de operarme los meniscos tras 8 semanas de reeducación de cadera.”",
-    "bajada": "El problema nunca estuvo en la rodilla; era un glúteo medio totalmente inhibido por el sedentarismo ejecutivo.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuApkVPBhWF1W8xfuWQ2pCOAconFNCwpiee_5cuQWkRVNal64kjZhsCsw1ey8MWHF-f9vzyDXfOUzT3hNHvzJZDTbzRBey9Lh6nvpyYjmyX0223RZPVTDzEotmRdPdaYhB25KiFHYAYbtMP8B4N92yKoZTNyMrtnPxnZ7s1hAnazuemccthiGkocXa17mhiuefBABxwZvsQKjFNyxPddZiX0yB9Q73zPVzRNrLzP2g",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Portrait of fit 45 year old man sitting in serene modern health club, quiet confidence, elegant neutral palette\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApkVPBhWF1W8xfuWQ2pCOAconFNCwpiee_5cuQWkRVNal64kjZhsCsw1ey8MWHF-f9vzyDXfOUzT3hNHvzJZDTbzRBey9Lh6nvpyYjmyX0223RZPVTDzEotmRdPdaYhB25KiFHYAYbtMP8B4N92yKoZTNyMrtnPxnZ7s1hAnazuemccthiGkocXa17mhiuefBABxwZvsQKjFNyxPddZiX0yB9Q73zPVzRNrLzP2g')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/45\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2\">\n<div class=\"flex items-center gap-2\">\n<span class=\"material-symbols-outlined text-secondary text-[20px]\">format_quote</span>\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold text-[10px]\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Martín G. • Fundador</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Dejé de operarme los meniscos tras 8 semanas de reeducación de cadera.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El problema nunca estuvo en la rodilla; era un glúteo medio totalmente inhibido por el sedentarismo ejecutivo.</span></p>\n</div>\n</div>\n</div>\n</div>\n<div class=\"p-space-md pt-0 flex items-center gap-2\">\n\n\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T67",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3356,17 +3523,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“El primer movimiento de tu día define la curva tensional de tus vértebras.”",
-    "title": "“El primer movimiento de tu día define la curva tensional de tus vértebras.”",
-    "bajada": "Tres minutos de descompresión antes del café cambian el flujo sanguíneo cerebral de toda la jornada.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCRje0882rvowF2Xw8vwL8LbGGA3AHu89OT6bEawkvPGBXou2uOhMwwl8v8U__RRxDSvvKSO2Vahlzm7mOb0rMJ5WMrkxFe7JUsx72QMJic8vKumCFe8hPDRAx083c-Zm7KqD8Pb2aFn-bPYbFw4SQGQ0IG7abuxIZOPMIyLfXJVyMXr32LB88SXt3ClLQr8WK3iNRBONcRdBIlIh279alfg7E0FHH1zyKMsfeCXg",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Early morning sunrise through large architectural glass window over quiet misty hills, clean serene wellness atmosphere\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCRje0882rvowF2Xw8vwL8LbGGA3AHu89OT6bEawkvPGBXou2uOhMwwl8v8U__RRxDSvvKSO2Vahlzm7mOb0rMJ5WMrkxFe7JUsx72QMJic8vKumCFe8hPDRAx083c-Zm7KqD8Pb2aFn-bPYbFw4SQGQ0IG7abuxIZOPMIyLfXJVyMXr32LB88SXt3ClLQr8WK3iNRBONcRdBIlIh279alfg7E0FHH1zyKMsfeCXg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/95 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2\">\n<div class=\"flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm text-on-surface-variant font-mono text-[10px]\">ALARMA SOMÁTICA • 07:00 AM</span>\n<span class=\"material-symbols-outlined text-secondary text-[16px]\">notifications_active</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“El primer movimiento de tu día define la curva tensional de tus vértebras.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tres minutos de descompresión antes del café cambian el flujo sanguíneo cerebral de toda la jornada.</span></p>\n</div>\n</div>\n</div>\n</div>\n<div class=\"p-space-md pt-0 flex items-center gap-2\">\n\n\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T68",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3376,17 +3544,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“No entrenamos para transpirar; entrenamos para vivir 100 años con autonomía articular.”",
-    "title": "“No entrenamos para transpirar; entrenamos para vivir 100 años con autonomía articular.”",
-    "bajada": "Cualquier protocolo que hipoteque tu Cartílago a los 70 no es entrenamiento: es vanidad.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuARfRLE7ogzfBDYu-4zcs0ua5uRMsso1bLIAKb0999Y_HOV1B9MSFIszx_dR-t0SAgd6PiO8SiC3XvBO6fKEiZpTEI0I48JykVU7gtBf_IkUhp80obseisow6hawgd9WQTI_Xg9n41kWNHbNaZiNqz106Zwy5zJgKFeXqOx4gUkz0b0f6Xy0c8a24I0seKJh6N-AeGIcmmDRxYCVca3PYCcAG9ve-MWG5XeS4Yb4g",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Minimalist dark marble wall with thin architectural gold line, quiet luxury interior detail, serene atmosphere\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuARfRLE7ogzfBDYu-4zcs0ua5uRMsso1bLIAKb0999Y_HOV1B9MSFIszx_dR-t0SAgd6PiO8SiC3XvBO6fKEiZpTEI0I48JykVU7gtBf_IkUhp80obseisow6hawgd9WQTI_Xg9n41kWNHbNaZiNqz106Zwy5zJgKFeXqOx4gUkz0b0f6Xy0c8a24I0seKJh6N-AeGIcmmDRxYCVca3PYCcAG9ve-MWG5XeS4Yb4g')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/50\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold text-[10px]\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Compromiso Biomecánico</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“No entrenamos para transpirar; entrenamos para vivir 100 años con autonomía articular.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cualquier protocolo que hipoteque tu Cartílago a los 70 no es entrenamiento: es vanidad.</span></p>\n<span class=\"font-label-sm text-label-sm text-secondary italic text-[10px] pt-1\">Firmado: SENS Methodology</span>\n</div>\n</div>\n</div>\n</div>\n<div class=\"p-space-md pt-0 flex items-center gap-2\">\n\n<button class=\"py-2 px-3 rounded-full bg-primary hover:opacity-90 font-label-sm text-label-sm text-on-primary flex items-center justify-center gap-1.5 transition-opacity\" type=\"button\">\n\n\n</button>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T69",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3396,17 +3565,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“Apoyar los talones completos al sentarte cambia la presión discal.”",
-    "title": "“Apoyar los talones completos al sentarte cambia la presión discal.”",
-    "bajada": "Dejá de trabajar con las puntas de los pies en el aire. La cadena posterior necesita anclaje real.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDogpBNdCEe6J86Bt9THaxcwjIHkNyvSPiPhLwQ_OQEIPBjJp9kjWhyqaVuUcXQZH7nmsxdC-QaghM2EiuXvMDvDnUdr9bNM3gDspQpFvdmC2GsHsGxacObPTF8JjBfKrgD6k5eo1dmdr9j1xUG021yAZd0U23LM7S01RZKrybmUO-o1mamdfM6QjZUn-puk14yS4vkRLbIsR3LyNUclGza8Xw1QYJbRONqmw61Fw",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Textured raw clay ceramic vessel in natural sunlight on wooden shelf, serene organic texture, warm linen shadows\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDogpBNdCEe6J86Bt9THaxcwjIHkNyvSPiPhLwQ_OQEIPBjJp9kjWhyqaVuUcXQZH7nmsxdC-QaghM2EiuXvMDvDnUdr9bNM3gDspQpFvdmC2GsHsGxacObPTF8JjBfKrgD6k5eo1dmdr9j1xUG021yAZd0U23LM7S01RZKrybmUO-o1mamdfM6QjZUn-puk14yS4vkRLbIsR3LyNUclGza8Xw1QYJbRONqmw61Fw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-secondary-container/95 p-4 rounded-xl shadow-xl flex flex-col gap-2 rotate-[-1deg]\">\n<span class=\"font-label-sm text-label-sm text-on-secondary-fixed uppercase font-semibold text-[10px]\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Recordatorio de Pared</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-secondary-fixed text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Apoyar los talones completos al sentarte cambia la presión discal.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-secondary-fixed-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Dejá de trabajar con las puntas de los pies en el aire. La cadena posterior necesita anclaje real.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T70",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3416,17 +3586,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Micro Story T71",
-    "title": "Micro Story T71",
-    "bajada": "“Tengo que entrenar hasta no poder moverme para que rinda.”",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuALFfZJQ4V584057liVfQCYlRhJ0XbtVoCj6lAvaXkEEqb0-I3wO1PqXkt_CReENZ2JeAICNXrcw4dwwjzgndLfOB--B7J6NXtBXZHZ5MNaCZkARG0jqS0ocqWO5ljFMMtQFwI-HVSrY92Wi0i3_qX9HAcwWryXDPAMn8mSJhTO_URViQLszW0FHyC4uqKPnPIku2oGMlWRigomoG5XE7mEVicOl-ETqTO76t_60Q",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Reflective dark glass pool in a luxury alpine wellness retreat, peaceful water ripples, moody evening light\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuALFfZJQ4V584057liVfQCYlRhJ0XbtVoCj6lAvaXkEEqb0-I3wO1PqXkt_CReENZ2JeAICNXrcw4dwwjzgndLfOB--B7J6NXtBXZHZ5MNaCZkARG0jqS0ocqWO5ljFMMtQFwI-HVSrY92Wi0i3_qX9HAcwWryXDPAMn8mSJhTO_URViQLszW0FHyC4uqKPnPIku2oGMlWRigomoG5XE7mEVicOl-ETqTO76t_60Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/45\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center gap-2\">\n<div class=\"bg-surface-container-high/90 p-3 rounded-xl\">\n<span class=\"font-label-sm text-[10px] text-error font-semibold uppercase block\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Lo que pensás:</span></span>\n<p class=\"font-body-sm text-[12px] text-on-surface font-medium\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Tengo que entrenar hasta no poder moverme para que rinda.”</span></p>\n</div>\n<div class=\"bg-surface-container-lowest/95 p-3 rounded-xl shadow-md\">\n<span class=\"font-label-sm text-[10px] text-on-tertiary-container font-semibold uppercase block\">Lo que pasa:</span>\n<p class=\"font-body-sm text-[11px] text-on-surface-variant\">Inundás el torrente de citoquinas inflamatorias y apagás la síntesis proteica por 72 horas.</p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T71",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3436,17 +3607,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“Nunca agregues peso sobre una articulación con rango restringido.”",
-    "title": "“Nunca agregues peso sobre una articulación con rango restringido.”",
-    "bajada": "Primero devolvemos la rotación interna del fémur; después cargamos la barra.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAcClv-o1YlSLeiHIU_7qmH0J9SuFdQoadzwYXMaiYNpiFKGIbtx-nK_oCr8w5iFwzLb4P-Hqnt1LXJN-PpMAN6IgJZnBxPQEcB-3-upHSpOAJO2HU7zUjJ4Gx0JzYdDjh56pC-KeiSo8cS6lgZtJVbGKi2nq-N7Ok_pTlW1qbenohGRAh9vLdAUEkYzsHu6jzuL_q9Ek9cPvhKmthEB1fgKVur_cZ8CqZzn_jJzg",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Architectural detail of polished oak handrail in private performance studio, warm dramatic side lighting\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcClv-o1YlSLeiHIU_7qmH0J9SuFdQoadzwYXMaiYNpiFKGIbtx-nK_oCr8w5iFwzLb4P-Hqnt1LXJN-PpMAN6IgJZnBxPQEcB-3-upHSpOAJO2HU7zUjJ4Gx0JzYdDjh56pC-KeiSo8cS6lgZtJVbGKi2nq-N7Ok_pTlW1qbenohGRAh9vLdAUEkYzsHu6jzuL_q9Ek9cPvhKmthEB1fgKVur_cZ8CqZzn_jJzg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/45\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-primary text-on-primary p-4 rounded-xl shadow-xl flex flex-col gap-2\">\n<div class=\"w-8 h-0.5 bg-secondary-fixed\"></div>\n<span class=\"font-label-sm text-label-sm text-secondary-fixed font-bold tracking-widest text-[10px]\">REGLA #01 SENS</span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Nunca agregues peso sobre una articulación con rango restringido.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-primary-fixed text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Primero devolvemos la rotación interna del fémur; después cargamos la barra.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T72",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3456,17 +3628,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "21 Días consecutivos sin dolor al levantarte.",
-    "title": "21 Días consecutivos sin dolor al levantarte.",
-    "bajada": "Tu HRV basal subió 14 ms. La descompresión antes de dormir ya es parte de tu arquitectura biológica.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDLnYo0DR9lBbVTi_ZavmJioOJsTVMlMUfGrbbbjdXiHhS-CfMslpkgjOO5c6GxFKiQsFselvAsSb7TKwbEb-WUIWOEPaMlJ2kytwTFcrXTy2p-mg3_2SmwFNmNxbKqmSW0ex9D_0t6sBYI3kJJ6FK9cG2SUnrrvQ-11Xo9_nV8KErSPwoIEQ9-9BYImR43zisx-docMKjbnMWsv86-nETQI-DYMEZPDSxVRe3-lg",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n<div class=\"flex items-center justify-between\">\n\n\n</div>\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Sleek biometric smart ring resting on frosted glass plate next to green botanical leaf, pristine luxury product look\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLnYo0DR9lBbVTi_ZavmJioOJsTVMlMUfGrbbbjdXiHhS-CfMslpkgjOO5c6GxFKiQsFselvAsSb7TKwbEb-WUIWOEPaMlJ2kytwTFcrXTy2p-mg3_2SmwFNmNxbKqmSW0ex9D_0t6sBYI3kJJ6FK9cG2SUnrrvQ-11Xo9_nV8KErSPwoIEQ9-9BYImR43zisx-docMKjbnMWsv86-nETQI-DYMEZPDSxVRe3-lg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/95 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2\">\n<div class=\"flex items-center gap-2 text-on-tertiary-container\">\n<span class=\"material-symbols-outlined text-[18px]\">verified</span>\n<span class=\"font-label-sm text-label-sm uppercase font-semibold text-[10px]\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Hábito Somático Consistente</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">21 Días consecutivos sin dolor al levantarte.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu HRV basal subió 14 ms. La descompresión antes de dormir ya es parte de tu arquitectura biológica.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T73",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3476,17 +3649,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“Las zapatillas con cámara de aire amortiguan tu reflejo neuromuscular.”",
-    "title": "“Las zapatillas con cámara de aire amortiguan tu reflejo neuromuscular.”",
-    "bajada": "Para sentadillas pesadas usá suela plana o descalzo. Tu cerebro necesita censar la densidad del suelo.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDqhxsr_lfqjo91mU3DwQ6lvLGu_VEQYUCHIqVbKS_w5b3Ci3-Qfqq5DaaSj0L0ndnH1cSquurw3GydcGPuMsYNYxi-mbmFkwOxVZKpO15Y17y3otLSGCf13Dvo0TeBIKYqAm3QQLvKeEcEOeiko6-FyWebkraBcC752Plma_J0ofix-KDt-4gnW2jmnUtIn0LUwOaNzAsfvYXSP4cFA6jZeDhOLG0_eEiSIuq-sg",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Minimalist luxury gym locker room with natural white oak lockers and soft recessed cove lighting, clean lines\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqhxsr_lfqjo91mU3DwQ6lvLGu_VEQYUCHIqVbKS_w5b3Ci3-Qfqq5DaaSj0L0ndnH1cSquurw3GydcGPuMsYNYxi-mbmFkwOxVZKpO15Y17y3otLSGCf13Dvo0TeBIKYqAm3QQLvKeEcEOeiko6-FyWebkraBcC752Plma_J0ofix-KDt-4gnW2jmnUtIn0LUwOaNzAsfvYXSP4cFA6jZeDhOLG0_eEiSIuq-sg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/45\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold text-[10px]\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Biomecánica del Calzado</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Las zapatillas con cámara de aire amortiguan tu reflejo neuromuscular.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Para sentadillas pesadas usá suela plana o descalzo. Tu cerebro necesita censar la densidad del suelo.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T74",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3496,17 +3670,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "I. El músculo obedece al nervio.",
-    "title": "I. El músculo obedece al nervio.",
-    "bajada": "II. El nervio responde al entorno respiratorio. Si tu exhalación es corta, tu tono muscular será defensivo y rígido.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBbyxVHT8izW4PXAm6bc3ftUJ-KqEPMKFQT1wo965y6XZ86gqjWYquBAj96GclVWb5K0Bq2rJWhZxyujV1Z3TtVdbzllFylI7QG-MRGOd0pUoRFGJQ2fkprtMNLavyQ5toLNi6JnDRHDBI9A62Rbs_LfSnL7eE-S947OsR-SvO2lf5zATtmpoSxuSwQfMrkd7xYAqtrCwRLMmXOIBzw7-64vJtB8W0iK_hbK4g65w",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Warm textured travertine stone wall with soft architectural shadows, quiet elegance, understated luxury background\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBbyxVHT8izW4PXAm6bc3ftUJ-KqEPMKFQT1wo965y6XZ86gqjWYquBAj96GclVWb5K0Bq2rJWhZxyujV1Z3TtVdbzllFylI7QG-MRGOd0pUoRFGJQ2fkprtMNLavyQ5toLNi6JnDRHDBI9A62Rbs_LfSnL7eE-S947OsR-SvO2lf5zATtmpoSxuSwQfMrkd7xYAqtrCwRLMmXOIBzw7-64vJtB8W0iK_hbK4g65w')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/95 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2 font-serif\">\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface font-sans text-[13px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">I. El músculo obedece al nervio.</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant font-sans text-[11px] leading-relaxed\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">II. El nervio responde al entorno respiratorio. Si tu exhalación es corta, tu tono muscular será defensivo y rígido.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T75",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3516,17 +3691,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“El tendón rotuliano tolera la carga isométrica; no el impacto desordenado.”",
-    "title": "“El tendón rotuliano tolera la carga isométrica; no el impacto desordenado.”",
-    "bajada": "Prescribimos 5 series de 45 segundos en prensa estática a 60 grados.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDNX0BejTTldbGAGWNRlMiJsaSv-5dwHvoTBFuSd-iNr1Yu9cim-_pNJPFSBxLmhTgX5L0eDSX8GTHlqbmFg6pCE_xByTzSUNeVq1E__pOCOyK_ljnak534-EW6eY3z2tvmfoRXEZpC-YWww6YsIwYeJUWSWsgK1G7nFqeSEULgmhnSK0M53CDw9UquKsUW1mhW55nww_cjOM3_IjgiuJyPGkcduqTGqHGhcIz28A",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"High tech biometric laboratory desk with clean stainless steel instruments, dark slate stone, precision optics, high contrast\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNX0BejTTldbGAGWNRlMiJsaSv-5dwHvoTBFuSd-iNr1Yu9cim-_pNJPFSBxLmhTgX5L0eDSX8GTHlqbmFg6pCE_xByTzSUNeVq1E__pOCOyK_ljnak534-EW6eY3z2tvmfoRXEZpC-YWww6YsIwYeJUWSWsgK1G7nFqeSEULgmhnSK0M53CDw9UquKsUW1mhW55nww_cjOM3_IjgiuJyPGkcduqTGqHGhcIz28A')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/45\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2\">\n<div class=\"flex items-center justify-between\">\n<span class=\"font-label-sm text-label-sm text-error font-mono text-[10px] flex items-center gap-1\">\n<span class=\"w-2 h-2 rounded-full bg-error animate-ping\"></span>\n                      REC • 00:14\n                    </span>\n\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“El tendón rotuliano tolera la carga isométrica; no el impacto desordenado.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Prescribimos 5 series de 45 segundos en prensa estática a 60 grados.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T76",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3536,17 +3712,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "Alineación escapular en plano escapular puro.",
-    "title": "Alineación escapular en plano escapular puro.",
-    "bajada": "Menos impacto acromioclavicular. Mayor longevidad en atletas masters.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAULQ8UMrDPtlt6xAgJ7PY83hvXZLzh-I3pq9UnAaCo58qpbuEkwCxQSRgzRM9Zh2QEpOxFnfOWIvRZsIGg70CDdMHzqlSPP8P4Alw_YBHtHiVuvJVUsx9sx6_3xlTkAOmDL_eWRxQVWycqo4tENb1v3aj2-IaI7gM9CmBSjPaIEOu26ZlIIDuWewmqHUNmQxV2FTDdfc5uczrZ5Ujk-e2F9IYdhIaG3ORsR2McVQ",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Athletic woman practicing controlled joint mobility on a light oak floor, soft natural morning window lighting, quiet focus\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAULQ8UMrDPtlt6xAgJ7PY83hvXZLzh-I3pq9UnAaCo58qpbuEkwCxQSRgzRM9Zh2QEpOxFnfOWIvRZsIGg70CDdMHzqlSPP8P4Alw_YBHtHiVuvJVUsx9sx6_3xlTkAOmDL_eWRxQVWycqo4tENb1v3aj2-IaI7gM9CmBSjPaIEOu26ZlIIDuWewmqHUNmQxV2FTDdfc5uczrZ5Ujk-e2F9IYdhIaG3ORsR2McVQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/30\"></div>\n</div>\n<div class=\"absolute top-[40%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-end\">\n<div class=\"bg-primary/80 backdrop-blur-md p-3.5 rounded-xl text-on-primary flex flex-col gap-1.5 shadow-lg\">\n<h3 class=\"font-headline-sm text-headline-sm text-surface text-[13px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Alineación escapular en plano escapular puro.</span></h3>\n<p class=\"font-body-sm text-body-sm text-primary-fixed text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Menos impacto acromioclavicular. Mayor longevidad en atletas masters.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T77",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3556,17 +3733,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“La rigidez muscular suele ser el intento del cuerpo de crear estabilidad donde falta fuerza.”",
-    "title": "“La rigidez muscular suele ser el intento del cuerpo de crear estabilidad donde falta fuerza.”",
-    "bajada": "Dejá de elongar lo que tu sistema nervioso está usando como sostén de emergencia.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC2XN4W4CoAVzw2J1zayZUyzvVXb7ufTyCuYkHGKdQStIRuMaajZa144-x77YKP7g08zU9CcNzaUkWIwQ1t9BCyPiB8z7VR0wWuH60kTzXCZ9ghWga0LJTd065h7_7yQYCa3Pu2bX8fV_I0gUzP64dd8Kg1ANVRrlFCucvLQxq1bp0DzXvBt18dKo393ZOMssJREPEWSKJ5nzB6iOf1vBaXtn4HfhiEOus_0dUQNg",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Moody dark slate spa bathroom with warm candle flame glow and cedar bath accents, intense luxury depth\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2XN4W4CoAVzw2J1zayZUyzvVXb7ufTyCuYkHGKdQStIRuMaajZa144-x77YKP7g08zU9CcNzaUkWIwQ1t9BCyPiB8z7VR0wWuH60kTzXCZ9ghWga0LJTd065h7_7yQYCa3Pu2bX8fV_I0gUzP64dd8Kg1ANVRrlFCucvLQxq1bp0DzXvBt18dKo393ZOMssJREPEWSKJ5nzB6iOf1vBaXtn4HfhiEOus_0dUQNg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface/70 backdrop-blur-2xl p-4 rounded-2xl shadow-xl flex flex-col gap-2\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold text-[10px]\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Axioma SENS</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“La rigidez muscular suele ser el intento del cuerpo de crear estabilidad donde falta fuerza.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Dejá de elongar lo que tu sistema nervioso está usando como sostén de emergencia.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T78",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3576,17 +3754,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“Bajar la temperatura de la habitación a 18°C aumenta el sueño profundo un 28%.”",
-    "title": "“Bajar la temperatura de la habitación a 18°C aumenta el sueño profundo un 28%.”",
-    "bajada": "La reparación miofibrilar no sucede en vigilia. Tu descanso de hoy es tu press de banca de mañana.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuC6lXh6nbYg1mUxUalbvNk3qKsLb13BtuqDog1WdQU0qWrEGXIZmqL83u_-9C3JsaKBasvA6aLu2mLVWaTPniyW7BCvKBTIbeJQSe58iaw9HUU5rWmbhdCTaTC4L-4iH6lVAXtB2MHtKDtsFqXU0g0iB9j_sEEAuTvYZeLhJh1la3Lo1zcvTueVrFYbuA84fpycnDIyHcCYbOfpCHE2Ae3098EBAdijh8YszLpTtw",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Deep night sky visible through luxury bedroom penthouse glass terrace, minimal low light aesthetic, tranquil quiet\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC6lXh6nbYg1mUxUalbvNk3qKsLb13BtuqDog1WdQU0qWrEGXIZmqL83u_-9C3JsaKBasvA6aLu2mLVWaTPniyW7BCvKBTIbeJQSe58iaw9HUU5rWmbhdCTaTC4L-4iH6lVAXtB2MHtKDtsFqXU0g0iB9j_sEEAuTvYZeLhJh1la3Lo1zcvTueVrFYbuA84fpycnDIyHcCYbOfpCHE2Ae3098EBAdijh8YszLpTtw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/75\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-primary-container/90 text-on-primary p-4 rounded-xl shadow-xl flex flex-col gap-2\">\n<div class=\"flex items-center gap-2 text-secondary-fixed\">\n<span class=\"material-symbols-outlined text-[18px]\">bedtime</span>\n<span class=\"font-label-sm text-label-sm uppercase font-semibold text-[10px]\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cierre Somático • 22:30 PM</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Bajar la temperatura de la habitación a 18°C aumenta el sueño profundo un 28%.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-primary-fixed text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La reparación miofibrilar no sucede en vigilia. Tu descanso de hoy es tu press de banca de mañana.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T79",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3596,17 +3775,18 @@ window.SENS_MARKETING_CATALOG = [
     "format": "9:16",
     "aspectRatio": "9/16",
     "blockId": "b4",
-    "block": "Bloque IV: Micro-Stories & Diálogos",
-    "name": "“Caminar 10 minutos post-cena reduce el pico glucémico un 30%.”",
-    "title": "“Caminar 10 minutos post-cena reduce el pico glucémico un 30%.”",
-    "bajada": "No precisás suplementos caros. Precisás la física elemental de la contracción muscular antes de dormir.",
-    "tag": "DIÁLOGOS SENS",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAT8XoukXmTUx3Tf3J1bVVA1BWq0pfjOZrL5iNPwyyjp7OGXx_7yUKcWMfp0BH8vns9mOLAKluK_thIJY5qHlLiOu3hGl5xOLZMmqmnE7__UvOgzGB5EwOyZhtchhCzCPKJsDnxXJbsJRYiO0cYSIB9fTQTviexW1G07kcIAKUhZBBsBHJQ1d693dQCJF5VTZMIETP2_fgYMncGwnAIf8azUhemsCun3kusNOww1g",
-    "htmlTemplate": "<article class=\"rounded-2xl overflow-hidden flex flex-col justify-between group\">\n<div class=\"flex flex-col\">\n\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container shadow-xl\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Minimalist private dining room table with single glass of mineral water and organic stone centerpiece, soft evening glow\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAT8XoukXmTUx3Tf3J1bVVA1BWq0pfjOZrL5iNPwyyjp7OGXx_7yUKcWMfp0BH8vns9mOLAKluK_thIJY5qHlLiOu3hGl5xOLZMmqmnE7__UvOgzGB5EwOyZhtchhCzCPKJsDnxXJbsJRYiO0cYSIB9fTQTviexW1G07kcIAKUhZBBsBHJQ1d693dQCJF5VTZMIETP2_fgYMncGwnAIf8azUhemsCun3kusNOww1g')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-primary/40\"></div>\n</div>\n<div class=\"absolute top-[22%] bottom-[25%] left-0 w-full px-4 flex flex-col justify-center\">\n<div class=\"bg-surface-container-lowest/95 backdrop-blur-md p-4 rounded-xl shadow-lg flex flex-col gap-2\">\n<span class=\"font-label-sm text-label-sm text-secondary uppercase font-semibold text-[10px] tracking-widest\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sobremesa &amp; Longevidad</span></span>\n<h3 class=\"font-headline-sm text-headline-sm text-on-surface text-[14px] leading-tight font-semibold\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">“Caminar 10 minutos post-cena reduce el pico glucémico un 30%.”</span></h3>\n<p class=\"font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-snug\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">No precisás suplementos caros. Precisás la física elemental de la contracción muscular antes de dormir.</span></p>\n</div>\n</div>\n</div>\n</div>",
+    "block": "Bloque IV: Micro Stories & Diálogos",
+    "name": "Template Editorial T80",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Entrenamiento neuromuscular con dolor cero.",
+    "bajada": "Fuerza tranquila y movilidad biomecánica para personas reales en CABA y Online.",
+    "metricHtml": "",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
       "tag": 25,
-      "title": 80,
-      "bajada": 140
+      "title": 65,
+      "bajada": 120
     }
   },
   {
@@ -3617,16 +3797,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Tu punto de partida no es tu destino.",
+    "name": "Delta Somático (Antes vs SENS)",
+    "tag": "SENS • PROTOCOLO",
     "title": "Tu punto de partida no es tu destino.",
-    "bajada": "Recomposición corporal con Precisión neuromuscular y dolor cero.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB0z85C-6NNn2xXWe-i9kcumvlaOyxosw2xMailOjwXGf6Zh4THwoZyZ4e4bPH_zktzbskKhhS2afhdpiiKzh-Np8vXXYpoQlgEO-8zdsfL04fkV0eyzpdektCdQ2k8e7RW0yy-rpnbbIwyoJXu4aluQldLybUZIMsJXM41Y8wKlewJsd0xlNrNpW59JvrTebBsWzDfWQk1kvCWxP2N9dUOBmje0RDnpHgKqlo8Kg",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(41)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Close up architectural portrait of an athletic silhouette in warm alabaster studio lighting with soft bronze undertones and quiet luxury wellness ambiance.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB0z85C-6NNn2xXWe-i9kcumvlaOyxosw2xMailOjwXGf6Zh4THwoZyZ4e4bPH_zktzbskKhhS2afhdpiiKzh-Np8vXXYpoQlgEO-8zdsfL04fkV0eyzpdektCdQ2k8e7RW0yy-rpnbbIwyoJXu4aluQldLybUZIMsJXM41Y8wKlewJsd0xlNrNpW59JvrTebBsWzDfWQk1kvCWxP2N9dUOBmje0RDnpHgKqlo8Kg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<!-- Top Safe 0-320px -->\n<div class=\"relative z-10 h-[17%]\"></div>\n<!-- Active 340-1420px -->\n<div class=\"relative z-10 flex flex-col gap-2.5 my-auto\">\n<!-- Visual Metric Element -->\n<div class=\"px-2.5 py-1.5 rounded-lg bg-surface-container-lowest/15 backdrop-blur-md flex items-center justify-between\">\n<span class=\"font-label-sm text-[9px] text-surface-variant font-medium\">Inicio</span>\n<span class=\"material-symbols-outlined text-[14px] text-secondary-fixed\">east</span>\n<span class=\"font-label-sm text-[9px] text-tertiary-fixed font-semibold\">SENS Δ +98%</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu punto de partida no es tu destino.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Recomposición corporal con Precisión neuromuscular y dolor cero.</span></p>\n</div>\n<!-- Bottom Safe 1450-1920px -->\n<div class=\"relative z-10 h-[22%]\"></div>\n<!-- Overlay Mask -->\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "bajada": "Recomposición corporal con precisión neuromuscular y dolor cero.",
+    "metricHtml": "<div class=\"w-full bg-surface-container-lowest/15 backdrop-blur-md rounded-2xl p-4 flex items-center justify-between shadow-sm\">\n                      <div class=\"flex flex-col\">\n                        <span class=\"font-label-sm text-[10px] text-surface-variant uppercase tracking-widest\">Punto Basal</span>\n                        <span class=\"font-headline-sm text-headline-sm font-light text-surface\">Carga Disfuncional</span>\n                      </div>\n                      <span class=\"material-symbols-outlined text-secondary-fixed text-[22px]\">trending_flat</span>\n                      <div class=\"flex flex-col text-right\">\n                        <span class=\"font-label-sm text-[10px] text-tertiary-fixed font-semibold uppercase tracking-widest\">SENS Protocol</span>\n                        <span class=\"font-headline-sm text-headline-sm font-medium text-tertiary-fixed\">Δ Simetría 98%</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 37,
+      "bajada": 64
     }
   },
   {
@@ -3637,16 +3818,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "La variabilidad cardíaca no miente.",
+    "name": "Gráfica de Onda ECG",
+    "tag": "SENS • PROTOCOLO",
     "title": "La variabilidad cardíaca no miente.",
-    "bajada": "La variabilidad cardíaca no miente.\n              \n\n                El descanso parasimpático es donde el músculo se sintetiza.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAIQZaG9Fzj6oFsa68wg29jOTMPyaeGLix1UTYOht5qk78XpTJvnw9Fb6h2Aaxn9bRSxeL7f6Pi59ihgOmxV-sdrb-TqnhY8FqvST3ARNLeBS0KloP_pAd8vJNw5Qcu81CdZiBfKg1ZmRQsD1giU7E6yvTopmnhXJgUUDGC8ocjwayww1oFTRQm58mGR5QluOIYD_gajFqCypCwc2VTvQixJHyJXVQLH_fej0uQ7Q",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(42)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monochrome serene medical-grade wellness therapy sanctuary with natural wood grain texture and indirect ambient warm museum lighting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAIQZaG9Fzj6oFsa68wg29jOTMPyaeGLix1UTYOht5qk78XpTJvnw9Fb6h2Aaxn9bRSxeL7f6Pi59ihgOmxV-sdrb-TqnhY8FqvST3ARNLeBS0KloP_pAd8vJNw5Qcu81CdZiBfKg1ZmRQsD1giU7E6yvTopmnhXJgUUDGC8ocjwayww1oFTRQm58mGR5QluOIYD_gajFqCypCwc2VTvQixJHyJXVQLH_fej0uQ7Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- ECG Pulse Wave -->\n<svg class=\"w-full h-8 text-secondary-fixed stroke-current fill-none\" viewBox=\"0 0 200 40\">\n<path d=\"M0,20 L60,20 L70,8 L76,32 L84,5 L90,35 L96,20 L200,20\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La variabilidad cardíaca no miente. El descanso parasimpático es donde el músculo se sintetiza.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "bajada": "El descanso parasimpático es donde el músculo se sintetiza.",
+    "metricHtml": "<svg class=\"w-full h-10 text-secondary-fixed stroke-current fill-none\" viewBox=\"0 0 240 40\">\n                      <path d=\"M0,20 L70,20 L80,5 L88,35 L98,2 L106,38 L114,20 L240,20\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3657,16 +3839,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Menos inflamación, mayor longevidad.",
+    "name": "Indicador de Porcentaje Gigante",
+    "tag": "SENS • PROTOCOLO",
     "title": "Menos inflamación, mayor longevidad.",
     "bajada": "Reducir el cortisol matutino protege tu salud cardiovascular.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCKT7fVvtFrbPVCH2XsXPum3koK0vqAtb7px-sW3jrwp10KVw3a1S5hXemqHkSHyI-LoB_y9MRrWL2-5La62-TCol5IAZZv_sVaQDtGktEhMv6UdzrrYx5a0qYqH3Fuyem8zVuLMfF6PUVmNowu3zZncDyzq9tjgQETXID6oyBxlaLQIOzkST-7vRGmKmGidaGVdCLPlZoX20ZN-hex2cTW6zpwptC6QH_bjD6apQ",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(43)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet luxury tactile stone wellness retreat corner with steam and subtle morning sunlight on porous travertine surfaces.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCKT7fVvtFrbPVCH2XsXPum3koK0vqAtb7px-sW3jrwp10KVw3a1S5hXemqHkSHyI-LoB_y9MRrWL2-5La62-TCol5IAZZv_sVaQDtGktEhMv6UdzrrYx5a0qYqH3Fuyem8zVuLMfF6PUVmNowu3zZncDyzq9tjgQETXID6oyBxlaLQIOzkST-7vRGmKmGidaGVdCLPlZoX20ZN-hex2cTW6zpwptC6QH_bjD6apQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-1 my-auto\">\n<!-- Giant Percent Metric -->\n<span class=\"font-headline-xl text-[54px] text-secondary-fixed leading-none font-extralight tracking-tighter\">−42%</span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug pt-1\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Menos inflamación, mayor longevidad.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Reducir el cortisol matutino protege tu salud cardiovascular.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full flex items-baseline gap-2\">\n                      <span class=\"font-headline-xl text-[68px] text-secondary-fixed leading-none font-extralight tracking-tighter\">−42%</span>\n                      <span class=\"font-label-sm text-[11px] text-surface-variant uppercase tracking-widest\">Marcador Sistémico</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 36,
+      "bajada": 61
     }
   },
   {
@@ -3677,16 +3860,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Sobrecarga progresiva medible.",
+    "name": "Tabla de Dos Filas",
+    "tag": "SENS • PROTOCOLO",
     "title": "Sobrecarga progresiva medible.",
     "bajada": "Cada repetición registrada construye densidad ósea real.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCOgmc0TA543CwnixMvCWL_ptbicC0sEp4HguGJNHd3Oo923A4HIlfTHiCWSSHayjHgpHm5HRmIgk5AhKERD3_Vbqtw8QZocngDpvpeqC9IWMlHELYezWfmshr3lZxn6yTmZ1iDm2RE2wllAz5xf1lGErzb1XBYfHQXlNbzfQj01-UWVwUkLneAUyOV5xufw8z76R9nM15DJ-4VgyL1De74j2Q1isD7TdkJDUMHvw",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(44)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Artisan engineered stainless steel barbell plate on dark matte rubber luxury training floor with soft linear amber lighting.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCOgmc0TA543CwnixMvCWL_ptbicC0sEp4HguGJNHd3Oo923A4HIlfTHiCWSSHayjHgpHm5HRmIgk5AhKERD3_Vbqtw8QZocngDpvpeqC9IWMlHELYezWfmshr3lZxn6yTmZ1iDm2RE2wllAz5xf1lGErzb1XBYfHQXlNbzfQj01-UWVwUkLneAUyOV5xufw8z76R9nM15DJ-4VgyL1De74j2Q1isD7TdkJDUMHvw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2.5 my-auto\">\n<!-- Two row table -->\n<div class=\"flex flex-col gap-1 p-2 rounded-lg bg-surface-container-lowest/15 backdrop-blur-sm\">\n<div class=\"flex justify-between font-label-sm text-[9px] text-surface-variant\">\n<span class=\"\">Basal Sem 1</span><span class=\"\">72.5 kg</span>\n</div>\n<div class=\"flex justify-between font-label-sm text-[10px] text-tertiary-fixed font-semibold\">\n<span class=\"\">Progreso Sem 12</span><span class=\"\">105.0 kg (+44%)</span>\n</div>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Sobrecarga progresiva medible.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cada repetición registrada construye densidad ósea real.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full flex flex-col gap-2 p-3 rounded-xl bg-surface-container-lowest/15 backdrop-blur-md\">\n                      <div class=\"flex justify-between items-center font-label-sm text-label-sm text-surface-variant\">\n                        <span>Línea de Base (Semana 1)</span>\n                        <span class=\"font-medium text-surface\">72.5 kg</span>\n                      </div>\n                      <div class=\"w-full h-px bg-surface-variant/20\"></div>\n                      <div class=\"flex justify-between items-center font-label-sm text-label-sm text-tertiary-fixed font-semibold\">\n                        <span>Pico Adaptativo (Semana 12)</span>\n                        <span>105.0 kg (+44.8%)</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3697,16 +3881,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Masa muscular como póliza metabólica.",
+    "name": "Bóveda de Glucógeno Activo",
+    "tag": "SENS • PROTOCOLO",
     "title": "Masa muscular como póliza metabólica.",
     "bajada": "El tejido activo consume glucosa mientras dormís.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCl0_vsEK5ud1XwXyLo726ca87Q75l7R14uxA5ofV7UYSWs7csMpn8AUazkAvyXruPmG-YV9wPIM3hSi_9Xl1Z6AB1SGCU_FhNDaheaHFejyJhZmnBJTgENwcBX06HouR-uTA6OXK8ri6ok5pVjq7qKDFN5ADdLXxozD7hHh0i6LOCrloe-DrYEhzGwWv91IlrdUpZhZ-pgCY4JBJi48aLywQ1Ogg1DyLsDgTQ7XA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(45)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Minimalist architectural gym interior with smooth limestone floor, warm timber slats, and serene solitary athletic posture in repose.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCl0_vsEK5ud1XwXyLo726ca87Q75l7R14uxA5ofV7UYSWs7csMpn8AUazkAvyXruPmG-YV9wPIM3hSi_9Xl1Z6AB1SGCU_FhNDaheaHFejyJhZmnBJTgENwcBX06HouR-uTA6OXK8ri6ok5pVjq7qKDFN5ADdLXxozD7hHh0i6LOCrloe-DrYEhzGwWv91IlrdUpZhZ-pgCY4JBJi48aLywQ1Ogg1DyLsDgTQ7XA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Glycogen Vault Bar -->\n<div class=\"w-full flex flex-col gap-1\">\n<div class=\"flex justify-between font-label-sm text-[9px] text-surface\">\n<span class=\"uppercase tracking-widest\">Bóveda de Glucógeno</span>\n<span class=\"text-secondary-fixed\">88% Capacidad</span>\n</div>\n<div class=\"w-full h-1.5 rounded-full bg-surface-container-highest/20 overflow-hidden\">\n<div class=\"w-[88%] h-full rounded-full bg-secondary-fixed\"></div>\n</div>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Masa muscular como póliza metabólica.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El tejido activo consume glucosa mientras dormís.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full flex flex-col gap-2\">\n                      <div class=\"flex justify-between font-label-sm text-label-sm text-surface\">\n                        <span class=\"uppercase tracking-widest text-[11px]\">Bóveda de Glucógeno</span>\n                        <span class=\"text-secondary-fixed font-medium\">88% Capacidad Retenida</span>\n                      </div>\n                      <div class=\"w-full h-2 rounded-full bg-surface-container-highest/30 overflow-hidden\">\n                        <div class=\"w-[88%] h-full rounded-full bg-secondary-fixed\"></div>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 37,
+      "bajada": 60
     }
   },
   {
@@ -3717,16 +3902,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "42 minutos de Precisión.",
-    "title": "42 minutos de Precisión.",
+    "name": "Temporizador Concéntrico",
+    "tag": "SENS • PROTOCOLO",
+    "title": "42 minutos de precisión.",
     "bajada": "El tiempo justo para estimular sin fatiga residual.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuAtJ6QmU5T4pGadGSJwnGBgrGM7YmsrGL9LW74NfGXRred5rFBv88KgD4Tifxa_Z46iMYjb4iJWxm_B_SDQBVc7419f7jpHTjNlSTSP2w2KcnNjt80ZZUSXhGh3LrhcsTaI6Ra7TIQhviLLJKMHljnbyEls8EfGZIztCI7vg00uu07TeTomC-jktxQnnUGMiBYJ4zKStOQYVK1HmiGAZ8IveBHP706Q26Al3nwCkg",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(46)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet atmospheric interior of a private biomechanics sanctuary with natural light washing over fine concrete and raw oak finishes.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAtJ6QmU5T4pGadGSJwnGBgrGM7YmsrGL9LW74NfGXRred5rFBv88KgD4Tifxa_Z46iMYjb4iJWxm_B_SDQBVc7419f7jpHTjNlSTSP2w2KcnNjt80ZZUSXhGh3LrhcsTaI6Ra7TIQhviLLJKMHljnbyEls8EfGZIztCI7vg00uu07TeTomC-jktxQnnUGMiBYJ4zKStOQYVK1HmiGAZ8IveBHP706Q26Al3nwCkg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Concentric Timer Dial -->\n<div class=\"w-12 h-12 rounded-full border-2 border-secondary-fixed/30 border-t-secondary-fixed flex items-center justify-center\">\n<span class=\"font-label-sm text-[11px] text-surface font-semibold\">42m</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">42 minutos de Precisión.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El tiempo justo para estimular sin fatiga residual.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-4\">\n                      <div class=\"w-14 h-14 rounded-full border-2 border-secondary-fixed/40 border-t-secondary-fixed flex items-center justify-center\">\n                        <span class=\"material-symbols-outlined text-secondary-fixed text-[22px]\">timer</span>\n                      </div>\n                      <div class=\"flex flex-col\">\n                        <span class=\"font-headline-sm text-headline-sm text-surface font-light\">42:00</span>\n                        <span class=\"font-label-sm text-[10px] text-surface-variant uppercase tracking-widest\">Ventana Eficiente</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3737,16 +3923,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "El fallo muscular no es obligatorio.",
+    "name": "Medidor de Sobrecarga RIR",
+    "tag": "SENS • PROTOCOLO",
     "title": "El fallo muscular no es obligatorio.",
-    "bajada": "La Tensión mecánica óptima se logra con cadencia consciente.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA6-HqqzYg5up7WJ5b1-Zj3oD6Sa73plxNXWYv21dCNDthgiw6L_cAnWHEWPKHe_d6Yjm2X-tZBzxL6WDJREWaMMdO2JbzfMJRjTnc-bCY48WFZDHTsuclovdLZ9zv75aAZvI3VvrgoWm9hbbPu04TnpVugxp0BfQn_LsCcqCodDqwAkViUWX42KQp1KcttLSYuM0q6oeJTGanCanZRks22XIVxPfRGrLv_dwPXcA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(47)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Precision tactile textured wall in an exclusive somatic longevity studio, muted warm palette, soft sculptural shadow cast.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6-HqqzYg5up7WJ5b1-Zj3oD6Sa73plxNXWYv21dCNDthgiw6L_cAnWHEWPKHe_d6Yjm2X-tZBzxL6WDJREWaMMdO2JbzfMJRjTnc-bCY48WFZDHTsuclovdLZ9zv75aAZvI3VvrgoWm9hbbPu04TnpVugxp0BfQn_LsCcqCodDqwAkViUWX42KQp1KcttLSYuM0q6oeJTGanCanZRks22XIVxPfRGrLv_dwPXcA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- RIR Scale -->\n<div class=\"grid grid-cols-4 gap-1.5\">\n<div class=\"h-1 rounded bg-secondary-fixed/30\"></div>\n<div class=\"h-1 rounded bg-secondary-fixed/50\"></div>\n<div class=\"h-1.5 rounded bg-secondary-fixed\"></div>\n<div class=\"h-1 rounded bg-secondary-fixed/30\"></div>\n</div>\n<div class=\"flex justify-between font-label-sm text-[8px] text-surface-variant uppercase tracking-wider\">\n<span class=\"\">RIR 1</span><span class=\"text-secondary-fixed font-semibold\">RIR 2 (Óptimo)</span><span class=\"\">RIR 4</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El fallo muscular no es obligatorio.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La Tensión mecánica óptima se logra con cadencia consciente.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "bajada": "La tensión mecánica óptima se logra con cadencia consciente.",
+    "metricHtml": "<div class=\"w-full flex flex-col gap-2\">\n                      <div class=\"grid grid-cols-4 gap-2\">\n                        <div class=\"h-1.5 rounded-full bg-secondary-fixed/30\"></div>\n                        <div class=\"h-1.5 rounded-full bg-secondary-fixed/50\"></div>\n                        <div class=\"h-2 rounded-full bg-secondary-fixed shadow-sm\"></div>\n                        <div class=\"h-1.5 rounded-full bg-secondary-fixed/30\"></div>\n                      </div>\n                      <div class=\"flex justify-between font-label-sm text-[9px] text-surface-variant uppercase tracking-widest\">\n                        <span>RIR 1</span>\n                        <span class=\"text-secondary-fixed font-bold\">RIR 2 (Umbral de Oro)</span>\n                        <span>RIR 4</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 36,
+      "bajada": 60
     }
   },
   {
@@ -3757,16 +3944,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Entrenar para regenerar, no para romperte.",
+    "name": "Balanza de Cortisol vs Fuerza",
+    "tag": "SENS • PROTOCOLO",
     "title": "Entrenar para regenerar, no para romperte.",
     "bajada": "Modulá tu sistema nervioso antes de exigir la carga.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCmXoZO_JSW2V7_OMeZ9UPaNsQRr1VwpRqpd7Dj_GZT0-WASIhhQLzVD8GIGaiGMv9BWbp8jKcy6yOadQHe5fQeYZi4ZSG20bxI4Tikgs7NzKXfm9Y-ccVd1FAXp5m91O5e6r7pxnV1Lyf3lOeBJM3sfR6c2KlqGUiJA_wAGEnZC1MxY7h_Nk_du1oCncVM9v44mxtSHVwewTkZVAp90RyBLMbO2g3aXPIfJQvjeQ",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(48)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monolithic warm ivory stone bath and cold plunge pool in architectural luxury sanctuary, silence and recovery atmosphere.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCmXoZO_JSW2V7_OMeZ9UPaNsQRr1VwpRqpd7Dj_GZT0-WASIhhQLzVD8GIGaiGMv9BWbp8jKcy6yOadQHe5fQeYZi4ZSG20bxI4Tikgs7NzKXfm9Y-ccVd1FAXp5m91O5e6r7pxnV1Lyf3lOeBJM3sfR6c2KlqGUiJA_wAGEnZC1MxY7h_Nk_du1oCncVM9v44mxtSHVwewTkZVAp90RyBLMbO2g3aXPIfJQvjeQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Balance Scale -->\n<div class=\"flex items-center justify-between text-secondary-fixed font-label-sm text-[9px] px-2 py-1 rounded bg-surface-container-lowest/10\">\n<span class=\"opacity-60\">Cortisol ↓</span>\n<span class=\"font-semibold text-tertiary-fixed\">Fuerza Real ↑</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Entrenar para regenerar, no para romperte.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Modulá tu sistema nervioso antes de exigir la carga.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full p-3 rounded-xl bg-surface-container-lowest/15 backdrop-blur-md flex items-center justify-around text-surface\">\n                      <div class=\"flex flex-col items-center\">\n                        <span class=\"font-label-sm text-[9px] text-surface-variant uppercase tracking-widest\">Cortisol</span>\n                        <span class=\"font-headline-sm text-headline-sm text-surface-variant font-light\">Bajo</span>\n                      </div>\n                      <span class=\"material-symbols-outlined text-secondary-fixed text-[24px]\">balance</span>\n                      <div class=\"flex flex-col items-center\">\n                        <span class=\"font-label-sm text-[9px] text-tertiary-fixed font-semibold uppercase tracking-widest\">Fuerza Real</span>\n                        <span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">Elevada</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 42,
+      "bajada": 60
     }
   },
   {
@@ -3777,16 +3965,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "La ventana anabólica real es tu sueño.",
+    "name": "Indicador de Horas de Sueño",
+    "tag": "SENS • PROTOCOLO",
     "title": "La ventana anabólica real es tu sueño.",
     "bajada": "7.5 horas de fase profunda consolidan el estímulo de fuerza.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBzTYS0770IBOXp8K96LT5DxYyrfPskGuVa6j6aGcoRolmMh1gsEUGLg_W6TYBScKyBM4eOfi1U84SkxLQ__Md2QWYvhsDIAYC9GY9aTIHnyhHizBgTnUr6qSJBJte33E-9z6tSiOfo1ot-T0pYLGPOYj9Wv_aubajvRUSXEtJXQOZ5hIWsodvGr1s7iq6Ah7qVNeb5Le3LwZfGNjFWxARzSZFbMCLaWaVjgYzdKg",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(49)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Ultra peaceful luxury bedroom sanctuary in deep twilight, textured linen bedding, ambient whisper lighting and zero digital screens.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzTYS0770IBOXp8K96LT5DxYyrfPskGuVa6j6aGcoRolmMh1gsEUGLg_W6TYBScKyBM4eOfi1U84SkxLQ__Md2QWYvhsDIAYC9GY9aTIHnyhHizBgTnUr6qSJBJte33E-9z6tSiOfo1ot-T0pYLGPOYj9Wv_aubajvRUSXEtJXQOZ5hIWsodvGr1s7iq6Ah7qVNeb5Le3LwZfGNjFWxARzSZFbMCLaWaVjgYzdKg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Sleep Dial Metric -->\n<div class=\"flex items-baseline gap-2\">\n<span class=\"font-headline-lg-mobile text-headline-lg-mobile text-secondary-fixed font-light\">7.5 h</span>\n<span class=\"font-label-sm text-[10px] text-surface-variant uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fase Profunda NREM</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La ventana anabólica real es tu sueño.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">7.5 horas de fase profunda consolidan el estímulo de fuerza.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-3\">\n                      <span class=\"font-headline-lg text-[44px] text-secondary-fixed leading-none font-extralight\">7.5 h</span>\n                      <div class=\"flex flex-col\">\n                        <span class=\"font-label-sm text-[11px] text-surface font-medium uppercase tracking-wider\">Fase Delta Profunda</span>\n                        <span class=\"font-label-sm text-[9px] text-surface-variant\">Somatic Repair Protocol</span>\n                      </div>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 38,
+      "bajada": 60
     }
   },
   {
@@ -3797,16 +3986,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Densidad postural en cada serie.",
+    "name": "Score de Densidad Somática",
+    "tag": "SENS • PROTOCOLO",
     "title": "Densidad postural en cada serie.",
     "bajada": "Alineación de columna y eje neutro garantizados.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuA2qj2TUbzY-E1efyvlmBqm7W67WDtw6FiIKEmczoLN9deWAhIMg_77dBAq6pMXFKuGocuCvvOfjZzqnevp-NmtrfQl3MQDrB0fVqjOZ3lQHZgKLzMFOSeI4hKxHj2GJeVjvB-z3dNPdfDHco9dup92JiY_ap7gL0sY4QW45U_9KVGgnVVoXrvdv9r3yahmUsYgqKw8xXRm5cRSqP2NDfk9cyKHv-fLjONIPhfRIg",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(49)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Macro texture of human spine posture alignment in dramatic editorial side lighting against raw slate textured concrete.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2qj2TUbzY-E1efyvlmBqm7W67WDtw6FiIKEmczoLN9deWAhIMg_77dBAq6pMXFKuGocuCvvOfjZzqnevp-NmtrfQl3MQDrB0fVqjOZ3lQHZgKLzMFOSeI4hKxHj2GJeVjvB-z3dNPdfDHco9dup92JiY_ap7gL0sY4QW45U_9KVGgnVVoXrvdv9r3yahmUsYgqKw8xXRm5cRSqP2NDfk9cyKHv-fLjONIPhfRIg')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Score Badge -->\n<span class=\"inline-flex w-fit px-3 py-1 rounded-full bg-secondary-fixed/20 text-secondary-fixed font-headline-sm text-headline-sm font-semibold\">\n                9.8 / 10\n              </span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Densidad postural en cada serie.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Alineación de columna y eje neutro garantizados.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-fixed/20 text-secondary-fixed\">\n                      <span class=\"material-symbols-outlined text-[20px]\">verified_user</span>\n                      <span class=\"font-headline-sm text-headline-sm font-semibold\">9.8 / 10 Posture Score</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3817,16 +4007,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Eficiencia ejecutiva.",
+    "name": "Cronómetro de Tensión Mecánica",
+    "tag": "SENS • PROTOCOLO",
     "title": "Eficiencia ejecutiva.",
     "bajada": "El método adaptado a la agenda de profesionales exigentes.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuD72hVze9DdrFKQrzbnkK4A2minV8qjv-6YdhnXi4vBLbyAAjkKbk4CDDp-vg1Hq0v32qhJuaFlaTN4pXuGkkFj8DNuowc7S3U4nlALYUCpafoawwfiLuXymGxDZFO69H4EhMvRIW1BIfa3Q8gNlocLdhKI-LmooAKECNyIrcHFArSlQazOCs8SJJ7lKpOaR3p6V4iiu7xyQB2Ct2naDATNzJJAEp9p0v0VjCrj1Q",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(51)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Executive minimalist suite desk with mechanical bronze timer stopwatch, espresso porcelain cup, calm morning sunlight.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD72hVze9DdrFKQrzbnkK4A2minV8qjv-6YdhnXi4vBLbyAAjkKbk4CDDp-vg1Hq0v32qhJuaFlaTN4pXuGkkFj8DNuowc7S3U4nlALYUCpafoawwfiLuXymGxDZFO69H4EhMvRIW1BIfa3Q8gNlocLdhKI-LmooAKECNyIrcHFArSlQazOCs8SJJ7lKpOaR3p6V4iiu7xyQB2Ct2naDATNzJJAEp9p0v0VjCrj1Q')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<span class=\"font-headline-lg-mobile text-headline-lg-mobile text-surface font-light\">42 min</span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Eficiencia ejecutiva.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El método adaptado a la agenda de profesionales exigentes.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"w-full flex items-baseline gap-2\">\n                      <span class=\"font-headline-lg text-[48px] text-surface font-light leading-none\">42</span>\n                      <span class=\"font-headline-sm text-headline-sm text-secondary-fixed font-medium\">minutos de sesión</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3837,16 +4028,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Tus lumbares no duelen por débiles.",
+    "name": "Radiografía Lumbar con Punto de Fulcro",
+    "tag": "SENS • PROTOCOLO",
     "title": "Tus lumbares no duelen por débiles.",
     "bajada": "La disociación pélvica descomprime el disco intervertebral.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCqtJEsBGil5xB82KKKjCkBNiUrlCt0KjMsiS5C_xMi2XE8VKG6m2aTjKZzhLZoiyq5DsfBe2bsck8VdL-gwvclP-VDaEMPOwoeofpESN9xcW-Kx-_31xee1n-thEnnmlmqDhdPZOlHDtpV4Izmy4zyAM86EfwusUhBdp7tvoEPt9gsR0M1-QIDmKOouE2CEU6NRGkpTu7lrRZYLXQ231wtXbBXkjrz-O2gRpBusw",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(52)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Abstract translucent architectural spine fulcrum model under museum studio spotlight with warm bronze tint.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqtJEsBGil5xB82KKKjCkBNiUrlCt0KjMsiS5C_xMi2XE8VKG6m2aTjKZzhLZoiyq5DsfBe2bsck8VdL-gwvclP-VDaEMPOwoeofpESN9xcW-Kx-_31xee1n-thEnnmlmqDhdPZOlHDtpV4Izmy4zyAM86EfwusUhBdp7tvoEPt9gsR0M1-QIDmKOouE2CEU6NRGkpTu7lrRZYLXQ231wtXbBXkjrz-O2gRpBusw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Micro L5-S1 badge -->\n<div class=\"flex items-center gap-1.5 px-2 py-1 rounded bg-secondary-fixed/15 w-fit\">\n<span class=\"w-1.5 h-1.5 rounded-full bg-secondary-fixed\"></span>\n<span class=\"font-label-sm text-[9px] text-secondary-fixed font-semibold uppercase tracking-wider\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fulcro L5-S1 Descomprimido</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tus lumbares no duelen por débiles.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La disociación pélvica descomprime el disco intervertebral.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-lowest/15 backdrop-blur-md\">\n                      <span class=\"w-2.5 h-2.5 rounded-full bg-tertiary-fixed\"></span>\n                      <span class=\"font-label-sm text-label-sm text-surface font-medium tracking-wide\">Descompresión L5-S1 Activa</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3857,16 +4049,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Gasto basal vs cardio reactivo.",
+    "name": "Matriz de Dispersión de Cargas",
+    "tag": "SENS • PROTOCOLO",
     "title": "Gasto basal vs cardio reactivo.",
     "bajada": "Construir masa magra eleva tu metabolismo las 24 horas.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDJpD0hVg-B5h4KavZjYGQpI8Fp4qzq3Fox6GNkBQvzoFSklj7VpnrrwTNZzdr0lpeGQx4_r4ZUwgze7rKzRDvmLalIC07EanemkufeYIf9atyAmNx9R_-aUXj_bvBmPXpfIhKUslybtTPPJT55BFaLCRfT97dOnZwu68Sp0MUcaZYBpgODntnLiihw9RcV8aiMoBhxX1SdP339rM8WcJCLhFEtG3L0xpqirDy3gA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(53)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Sculptural concrete athletic longevity facility with soft skylight illuminating minimalist architectural exercise columns.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDJpD0hVg-B5h4KavZjYGQpI8Fp4qzq3Fox6GNkBQvzoFSklj7VpnrrwTNZzdr0lpeGQx4_r4ZUwgze7rKzRDvmLalIC07EanemkufeYIf9atyAmNx9R_-aUXj_bvBmPXpfIhKUslybtTPPJT55BFaLCRfT97dOnZwu68Sp0MUcaZYBpgODntnLiihw9RcV8aiMoBhxX1SdP339rM8WcJCLhFEtG3L0xpqirDy3gA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Dispersion dots -->\n<div class=\"flex items-center gap-2\">\n<span class=\"w-2 h-2 rounded-full bg-secondary-fixed\"></span>\n<span class=\"h-px flex-1 bg-surface-variant/40\"></span>\n<span class=\"w-2.5 h-2.5 rounded-full bg-tertiary-fixed\"></span>\n<span class=\"h-px flex-1 bg-surface-variant/40\"></span>\n<span class=\"w-2 h-2 rounded-full bg-secondary-fixed\"></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Gasto basal vs cardio reactivo.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Construir masa magra eleva tu metabolismo las 24 horas.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-3 w-full\">\n                      <span class=\"w-3 h-3 rounded-full bg-secondary-fixed\"></span>\n                      <div class=\"h-0.5 flex-1 bg-surface-variant/30\"></div>\n                      <span class=\"w-4 h-4 rounded-full bg-tertiary-fixed\"></span>\n                      <div class=\"h-0.5 flex-1 bg-surface-variant/30\"></div>\n                      <span class=\"w-3 h-3 rounded-full bg-secondary-fixed\"></span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3877,16 +4070,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "El fin de la culpa de fin de semana.",
+    "name": "Tarjeta de Saldo Metabólico",
+    "tag": "SENS • PROTOCOLO",
     "title": "El fin de la culpa de fin de semana.",
     "bajada": "Metabolismo flexible con sentido común y vida social.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCPxFSF6gU9rvt81QmXUSGU4XRaG1-KR1ESulGZ1cnQqGXJu5RCYK-2mYqxdYcv0IGWNkuKnu6YlS4y1k87imZWR5G9rNprVensOg8AjKfl7E-ybBuDPfT_aIy_zv-W6PZwyzfnq7TA7xGcFNdokc7KPzLUIxdfhFBUycDzNyHwhMCgGTAHmiz37PZJTrGZxfRksyNqzqNTzhnTqX6ifcEq4iE11lFilk1fQnorGA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(54)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Artisanal glass carafes and healthy nutrient dense culinary arrangement on polished granite dining counter in soft warm ambient light.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCPxFSF6gU9rvt81QmXUSGU4XRaG1-KR1ESulGZ1cnQqGXJu5RCYK-2mYqxdYcv0IGWNkuKnu6YlS4y1k87imZWR5G9rNprVensOg8AjKfl7E-ybBuDPfT_aIy_zv-W6PZwyzfnq7TA7xGcFNdokc7KPzLUIxdfhFBUycDzNyHwhMCgGTAHmiz37PZJTrGZxfRksyNqzqNTzhnTqX6ifcEq4iE11lFilk1fQnorGA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Calorie Badge -->\n<span class=\"inline-flex w-fit px-3 py-1 rounded-full bg-secondary-fixed text-primary font-headline-sm text-headline-sm font-semibold\">\n                +500 kcal\n              </span>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El fin de la culpa de fin de semana.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Metabolismo flexible con sentido común y vida social.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"inline-flex px-4 py-1.5 rounded-full bg-secondary-fixed text-primary font-headline-sm text-headline-sm font-semibold\">\n                      +500 kcal Margen Social\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 36,
+      "bajada": 60
     }
   },
   {
@@ -3897,16 +4091,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Cadencia respiratoria 4-7-8.",
+    "name": "Tacómetro de Frecuencia Cardíaca",
+    "tag": "SENS • PROTOCOLO",
     "title": "Cadencia respiratoria 4-7-8.",
     "bajada": "Desactivar la alarma simpática tras la última repetición.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuBMIOi8V7CZ2kBqmkGguIIUmxTwx2PYOPGSGUY7y2ybKyc10DOxnPBIg1UVJYzLsdNY-PhW0wpUgLZfy9pEEZCbqgVyE_P043Ee9L8OKLi3ezH58pnF-rc_3Ss_qmW8_sRMX1x1BHlonC8PIBj7a7Ye1ol3Bdyh3sqnzg-qPNH7PSjsgsbe_dyYBR1EjiLRkKVboR1Roa6r-q_9JWAQAvLDVKmLB2rJV0Z0ecoTrw",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(55)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Quiet tranquil breathing chamber with textured off white walls, zen architecture, soft shadow play and gentle meditative stillness.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBMIOi8V7CZ2kBqmkGguIIUmxTwx2PYOPGSGUY7y2ybKyc10DOxnPBIg1UVJYzLsdNY-PhW0wpUgLZfy9pEEZCbqgVyE_P043Ee9L8OKLi3ezH58pnF-rc_3Ss_qmW8_sRMX1x1BHlonC8PIBj7a7Ye1ol3Bdyh3sqnzg-qPNH7PSjsgsbe_dyYBR1EjiLRkKVboR1Roa6r-q_9JWAQAvLDVKmLB2rJV0Z0ecoTrw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Tachometer Cadence 4-7-8 -->\n<div class=\"font-label-sm text-label-sm text-secondary-fixed uppercase tracking-[0.25em] font-semibold\">\n                Ritmo: Inhala 4 · Sostén 7 · Exhala 8\n              </div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Cadencia respiratoria 4-7-8.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Desactivar la alarma simpática tras la última repetición.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-2 font-label-sm text-[11px] text-secondary-fixed uppercase tracking-[0.2em]\">\n                      <span class=\"material-symbols-outlined text-[18px]\">air</span>\n                      <span>Cadencia: Inhala 4 · Pausa 7 · Exhala 8</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3917,16 +4112,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Fuerza asimilable, articulaciones blindadas.",
+    "name": "Comparador de Volumen Muscular",
+    "tag": "SENS • PROTOCOLO",
     "title": "Fuerza asimilable, articulaciones blindadas.",
     "bajada": "Medición objetiva sin desgaste articular.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuB5W9Oj7Ox87I3DwHoUgMuuproYfV8i_iDhOfDytr3xNQ0gZib3W-6wpmXWT5k04RTHd0gUQUIwTGKIvdJs4b0_d8KmoIOE55oBSRG3LycHKDbH9SBVTzfyi7oG3fUxK5FVO1CPai7vFn10a7Ie4pL0vWBZiRcKkZ1mKJ4xXGI-k0CsD_QoycN4laCtUf-vUhC7ixcGGOkSuiipxOxzMsOaWLpP0BugPfjF7yETLA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(56)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"High precision stainless steel athletic equipment joint in quiet minimal aesthetic setting, dark charcoal tones.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5W9Oj7Ox87I3DwHoUgMuuproYfV8i_iDhOfDytr3xNQ0gZib3W-6wpmXWT5k04RTHd0gUQUIwTGKIvdJs4b0_d8KmoIOE55oBSRG3LycHKDbH9SBVTzfyi7oG3fUxK5FVO1CPai7vFn10a7Ie4pL0vWBZiRcKkZ1mKJ4xXGI-k0CsD_QoycN4laCtUf-vUhC7ixcGGOkSuiipxOxzMsOaWLpP0BugPfjF7yETLA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Tonelaje Comparador -->\n<div class=\"flex items-baseline justify-between font-label-sm text-[10px] text-surface\">\n<span class=\"text-surface-variant\">Tonelaje Asimilado:</span>\n<span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">14.850 kg</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Fuerza asimilable, articulaciones blindadas.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Medición objetiva sin desgaste articular.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex justify-between items-baseline w-full\">\n                      <span class=\"font-label-sm text-label-sm text-surface-variant\">Tonelaje Asimilado:</span>\n                      <span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">14.850 kg Netos</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 44,
+      "bajada": 60
     }
   },
   {
@@ -3937,16 +4133,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "La consistencia supera al esfuerzo esporádico.",
+    "name": "Racha de Consistencia 7 Días",
+    "tag": "SENS • PROTOCOLO",
     "title": "La consistencia supera al esfuerzo esporádico.",
-    "bajada": "7 Días continuos en control de tu cuerpo.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCx0v8wKBi-TYEZ0-drGpYx7UowTW7pdvM1Sa7dOnbMKsNpM9_QROLVGmdiYVKASqGLbEwm_QEAjHClJfBRZZQ3U4JF2Rn7o2XX1jhRSBn39x-YC1j7XGxUpDh70p-jp845bVXlx8Zdy7odbVg90ITzstIQd5iWMo6T1dEz4U264r73M1tjGsM50ZduI05IEN-zyFv4p-3Jp-2X0rHtA6M9oFNSifV0nnQ4wSJYUA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(57)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Monastic Japanese inspired wellness courtyard with gravel patterns, warm limestone slabs, calm morning atmosphere.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCx0v8wKBi-TYEZ0-drGpYx7UowTW7pdvM1Sa7dOnbMKsNpM9_QROLVGmdiYVKASqGLbEwm_QEAjHClJfBRZZQ3U4JF2Rn7o2XX1jhRSBn39x-YC1j7XGxUpDh70p-jp845bVXlx8Zdy7odbVg90ITzstIQd5iWMo6T1dEz4U264r73M1tjGsM50ZduI05IEN-zyFv4p-3Jp-2X0rHtA6M9oFNSifV0nnQ4wSJYUA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- 7 Days Streak Indicator -->\n<div class=\"flex justify-between items-center px-1\">\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n<span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[8px] font-bold\">✓</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La consistencia supera al esfuerzo esporádico.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">7 Días continuos en control de tu cuerpo.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "bajada": "7 días continuos en control de tu cuerpo.",
+    "metricHtml": "<div class=\"flex justify-between items-center w-full px-2\">\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                      <span class=\"w-5 h-5 rounded-full bg-secondary-fixed flex items-center justify-center text-primary text-[10px] font-bold\">✓</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 46,
+      "bajada": 60
     }
   },
   {
@@ -3957,16 +4154,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "El dolor no es una medalla.",
+    "name": "Semáforo de Inflamación",
+    "tag": "SENS • PROTOCOLO",
     "title": "El dolor no es una medalla.",
     "bajada": "Escuchar el feedback tisular antes de que se vuelva lesión.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuCrZxmeeRvobRmWx5a9mxCiFzIzr4RBHtlBgp4Bmji8kOpmzPQ5bRJiPfwum2Ju6JUmgBXWpQzDL8vj-4awcxzl5Sn_sj7N0nY8gH75EGek7cA80__GPpz4wlFWkpkSz8RgVWa_bfX1EuJS_GjZrAIvb1hswRYkltziGEB18GYyuXO3sfLM1_-KnZ2fJSYCXgn1T3mFLHI4IHqY0W5PYeqd-ibt2RJWAviAeMocBQ",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(58)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Close up architectural detail of polished granite edge meeting soft linen curtain in a high end recovery space.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCrZxmeeRvobRmWx5a9mxCiFzIzr4RBHtlBgp4Bmji8kOpmzPQ5bRJiPfwum2Ju6JUmgBXWpQzDL8vj-4awcxzl5Sn_sj7N0nY8gH75EGek7cA80__GPpz4wlFWkpkSz8RgVWa_bfX1EuJS_GjZrAIvb1hswRYkltziGEB18GYyuXO3sfLM1_-KnZ2fJSYCXgn1T3mFLHI4IHqY0W5PYeqd-ibt2RJWAviAeMocBQ')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Semáforo tisular -->\n<div class=\"flex items-center gap-2\">\n<span class=\"w-2.5 h-2.5 rounded-full bg-tertiary-fixed\"></span>\n<span class=\"w-2.5 h-2.5 rounded-full bg-secondary-fixed/50\"></span>\n<span class=\"w-2.5 h-2.5 rounded-full bg-surface-variant/40\"></span>\n<span class=\"font-label-sm text-[9px] text-tertiary-fixed font-semibold ml-1\">Tisular: Calma Total</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">El dolor no es una medalla.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Escuchar el feedback tisular antes de que se vuelva lesión.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-3\">\n                      <span class=\"w-3.5 h-3.5 rounded-full bg-tertiary-fixed\"></span>\n                      <span class=\"w-3.5 h-3.5 rounded-full bg-secondary-fixed/40\"></span>\n                      <span class=\"w-3.5 h-3.5 rounded-full bg-surface-variant/30\"></span>\n                      <span class=\"font-label-sm text-label-sm text-tertiary-fixed font-semibold uppercase tracking-wider\">Estado Tisular Seguro</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 35,
+      "bajada": 60
     }
   },
   {
@@ -3977,16 +4175,17 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "Tu fascia necesita agua y Tensión elástica.",
-    "title": "Tu fascia necesita agua y Tensión elástica.",
+    "name": "Métrica de Hidratación Fascial",
+    "tag": "SENS • PROTOCOLO",
+    "title": "Tu fascia necesita agua y tensión elástica.",
     "bajada": "Movilidad articular con carga para deslizar sin fricción.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDqce-v3zHCmF2bBhfQv43_U6SJcSVTeyRKa-1h_rkPD7R_-FBVTTnYK_JUdtH8NYnXZ6Zg-W5LvaHNURdfyjpfM6tZg-WJLPpEAkMq2RuNPEuIrq0tdoiLJ-jk2R_lyen5wRjkFeHOFtMuSe2xWENW1xv52RaX4nJlio8qbeJDPtgRWBYBQ2ahhI9_ONYd1CMtFe9oM_68TiXbOqfgqrrLeZ8xeDGwdv4c5rxtQA",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(59)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Pure crystal water droplet suspended over dark slate pool, macro quiet luxury biometric aesthetic.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqce-v3zHCmF2bBhfQv43_U6SJcSVTeyRKa-1h_rkPD7R_-FBVTTnYK_JUdtH8NYnXZ6Zg-W5LvaHNURdfyjpfM6tZg-WJLPpEAkMq2RuNPEuIrq0tdoiLJ-jk2R_lyen5wRjkFeHOFtMuSe2xWENW1xv52RaX4nJlio8qbeJDPtgRWBYBQ2ahhI9_ONYd1CMtFe9oM_68TiXbOqfgqrrLeZ8xeDGwdv4c5rxtQA')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Fascia Osmolarity Indicator -->\n<div class=\"flex items-center gap-1.5 text-secondary-fixed\">\n<span class=\"material-symbols-outlined text-[16px]\">water_drop</span>\n<span class=\"font-label-sm text-[9px] uppercase tracking-wider font-semibold\"><span data-mkt-field=\"tag\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Turgencia Fascial Óptima</span></span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Tu fascia necesita agua y Tensión elástica.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Movilidad articular con carga para deslizar sin fricción.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-2 text-secondary-fixed font-label-sm text-label-sm\">\n                      <span class=\"material-symbols-outlined text-[20px]\">water_drop</span>\n                      <span class=\"uppercase tracking-widest font-semibold\">Turgencia y Osmolaridad Fascial</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 43,
+      "bajada": 60
     }
   },
   {
@@ -3997,20 +4196,21 @@ window.SENS_MARKETING_CATALOG = [
     "aspectRatio": "9/16",
     "blockId": "b5",
     "block": "Bloque V: Conversión & Escasez",
-    "name": "La edad se mide en dorsiflexión y fuerza.",
+    "name": "Indicador de Edad Biológica",
+    "tag": "SENS • PROTOCOLO",
     "title": "La edad se mide en dorsiflexión y fuerza.",
     "bajada": "Makes SENS. Longevidad atlética con Nico.",
-    "tag": "CONVERSIÓN 9:16",
-    "defaultBg": "https://lh3.googleusercontent.com/aida-public/AB6AXuDrvCB-qZ8U5OJvqQ-nHI51vLinPn6Jkee7KU08CeC609q5PfcRZPOIedL6zuIFWOJ1qjgVdexkdOqb4kiJtLKQ2jidODrkqEkgMDXKx2XBph-TZKiiGViDOHh1B24FZVgNgXNkafIRdellDfu9up--jdKwZDvK7pESFjUsxDKZl7UTywWD-mWvJl6yP78f3T_gUVQ3Rh_mGL9qbRgGALwDHKZD5fnayVb9bVKtEw",
-    "htmlTemplate": "<article class=\"group cursor-pointer rounded-2xl flex flex-col gap-3 transition-all duration-300\" onclick=\"selectTemplate(60)\">\n<div class=\"relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-primary-container flex flex-col justify-between p-4 shadow-md\">\n<div class=\"absolute inset-0 bg-cover bg-center\" data-alt=\"Distinguished athletic silhouette moving dynamically with perfect dorsiflexion against warm textured alabaster wall.\" style=\"background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDrvCB-qZ8U5OJvqQ-nHI51vLinPn6Jkee7KU08CeC609q5PfcRZPOIedL6zuIFWOJ1qjgVdexkdOqb4kiJtLKQ2jidODrkqEkgMDXKx2XBph-TZKiiGViDOHh1B24FZVgNgXNkafIRdellDfu9up--jdKwZDvK7pESFjUsxDKZl7UTywWD-mWvJl6yP78f3T_gUVQ3Rh_mGL9qbRgGALwDHKZD5fnayVb9bVKtEw')\" id=\"mktActiveBgSlot\" class=\"mkt-template-bg-slot\" data-mkt-media-slot=\"true\">\n<div class=\"absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/65 to-primary/90\"></div>\n</div>\n<div class=\"relative z-10 h-[17%]\"></div>\n<div class=\"relative z-10 flex flex-col gap-2 my-auto\">\n<!-- Age Comparison Delta -->\n<div class=\"flex items-center gap-3\">\n<span class=\"font-headline-sm text-headline-sm text-surface-variant line-through font-light\">48 Años</span>\n<span class=\"material-symbols-outlined text-[16px] text-tertiary-fixed\">arrow_forward</span>\n<span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">36 Biológicos</span>\n</div>\n<h3 class=\"font-headline-sm text-headline-sm text-surface font-medium leading-snug\"><span data-mkt-field=\"title\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">La edad se mide en dorsiflexión y fuerza.</span></h3>\n<p class=\"font-body-sm text-body-sm text-surface-variant/90 leading-relaxed font-light\"><span data-mkt-field=\"bajada\" contenteditable=\"true\" spellcheck=\"false\" class=\"mkt-live-editable-field\">Makes SENS. Longevidad atlética con Nico.</span></p>\n</div>\n<div class=\"relative z-10 h-[22%]\"></div>\n<div class=\"card-safe-mask absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 flex flex-col justify-between\">\n<div class=\"h-[17%] bg-error/20\"></div>\n<div class=\"h-[61%] border-y border-dashed border-tertiary-fixed-dim/40\"></div>\n<div class=\"h-[22%] bg-error/20\"></div>\n</div>\n</div>",
+    "metricHtml": "<div class=\"flex items-center gap-4\">\n                      <span class=\"font-headline-sm text-headline-sm text-surface-variant line-through font-light\">48 Años</span>\n                      <span class=\"material-symbols-outlined text-[20px] text-tertiary-fixed\">arrow_forward</span>\n                      <span class=\"font-headline-sm text-headline-sm text-tertiary-fixed font-semibold\">36 Biológicos</span>\n                    </div>",
+    "defaultBg": "img/hero-bg-opt.jpg",
+    "mediaType": "image",
     "charLimits": {
-      "tag": 25,
-      "title": 75,
-      "bajada": 120
+      "tag": 18,
+      "title": 41,
+      "bajada": 60
     }
   }
 ];
 
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== 'undefined') {
     module.exports = window.SENS_MARKETING_CATALOG;
 }
