@@ -22028,9 +22028,9 @@ window.stopCoachMarketingStudio = stopCoachMarketingStudio;
 function syncMarketingSuiteIframe() {
     const iframe = document.getElementById('sensMarketingSuiteFrame');
     if (!iframe) return;
-    const targetUrl = 'marketing-suites/studio-master.html?v=26.0';
+    const targetUrl = 'marketing-suites/studio-master.html?v=27.0';
     const currentSrc = iframe.getAttribute('src') || '';
-    if (!currentSrc.includes('studio-master.html?v=26.0')) {
+    if (!currentSrc.includes('studio-master.html?v=27.0')) {
         iframe.src = targetUrl;
     } else if (iframe.contentWindow) {
         const is916 = (MktStudioState.format === '9:16');

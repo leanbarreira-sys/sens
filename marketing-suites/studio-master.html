@@ -256,6 +256,24 @@
         <span>Cambiar Fondo</span>
       </button>
     </div>
+
+    <!-- BARRA DE DESCARGA DIRECTA BAJO EL PREVIEW (VISIBLE SIN SCROLLEAR) -->
+    <div class="w-full max-w-[360px] mt-3 grid grid-cols-1 gap-2">
+      <button id="btn-quick-export-overlay-png" type="button" class="w-full h-11 px-3.5 bg-secondary-fixed text-on-secondary-fixed border border-secondary/30 rounded-xl font-label text-[11px] font-bold uppercase tracking-[0.06em] flex items-center justify-center gap-2 shadow-sm hover:bg-secondary-fixed-dim active:scale-[0.99] transition-all whitespace-nowrap">
+        <span class="material-symbols-outlined text-[17px] shrink-0">layers</span>
+        <span>Descargar Capa PNG Transparente 4K (IG Edits)</span>
+      </button>
+      <div class="grid grid-cols-2 gap-2">
+        <button id="btn-quick-export-reel" type="button" class="w-full h-10 px-3 bg-primary text-on-primary rounded-xl font-label text-[10.5px] font-semibold uppercase tracking-[0.06em] flex items-center justify-center gap-1.5 shadow-sm hover:opacity-95 active:scale-[0.99] transition-all whitespace-nowrap">
+          <span class="material-symbols-outlined text-[15px] text-secondary-fixed shrink-0">movie_edit</span>
+          <span>Exportar Video HD</span>
+        </button>
+        <button id="btn-quick-export-4k" type="button" class="w-full h-10 px-3 bg-surface-container-high text-on-surface rounded-xl font-label text-[10.5px] font-semibold uppercase tracking-[0.06em] flex items-center justify-center gap-1.5 hover:bg-surface-container-highest active:scale-[0.99] transition-all whitespace-nowrap">
+          <span class="material-symbols-outlined text-[15px] shrink-0">hd</span>
+          <span>Portada 4K</span>
+        </button>
+      </div>
+    </div>
   </section>
 
   <!-- STEP 2: MEDIA & CAMERA CONTROLS -->
@@ -442,7 +460,7 @@
   </button>
 </nav>
 
-<script src="templates-db-200.js?v=26.0"></script>
-<script src="studio-master-engine.js?v=26.0"></script>
+<script src="templates-db-200.js?v=27.0"></script>
+<script src="studio-master-engine.js?v=27.0"></script>
 </body>
 </html>

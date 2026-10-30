@@ -3,7 +3,7 @@
    Cache-First for Static Assets | Network-First for Navigation | Offline Support
    ============================================================================= */
 
-const CACHE_NAME = 'sens-pwa-v8.0.0';
+const CACHE_NAME = 'sens-pwa-v9.0.0';
 
 const PRECACHE_ASSETS = [
     './',
@@ -88,7 +88,21 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Static Assets (CSS, JS, Fonts, Images): Stale-While-Revalidate
+    // Static Assets (CSS, JS, Fonts, Images): Network-First for JS/CSS/HTML so updates are always immediate
+    if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css') || url.pathname.endsWith('.html')) {
+        event.respondWith(
+            fetch(request)
+                .then((networkResponse) => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const copy = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+                    }
+                    return networkResponse;
+                })
+                .catch(() => caches.match(request))
+        );
+        return;
+    }
     event.respondWith(
         caches.match(request).then((cachedResponse) => {
             const fetchPromise = fetch(request)

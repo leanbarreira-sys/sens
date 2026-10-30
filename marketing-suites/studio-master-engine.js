@@ -1737,9 +1737,21 @@
       });
     }
 
-    // Export Buttons
+    // Export Buttons (Bottom & Quick Top Bar under Preview)
     if (els.exportOverlayPngBtn) {
       els.exportOverlayPngBtn.addEventListener('click', handleExportTransparentOverlayPNG);
+    }
+    const quickOverlayBtn = document.getElementById('btn-quick-export-overlay-png');
+    if (quickOverlayBtn) {
+      quickOverlayBtn.addEventListener('click', handleExportTransparentOverlayPNG);
+    }
+    const quickReelBtn = document.getElementById('btn-quick-export-reel');
+    if (quickReelBtn) {
+      quickReelBtn.addEventListener('click', handleExportReel60FPS);
+    }
+    const quick4kBtn = document.getElementById('btn-quick-export-4k');
+    if (quick4kBtn) {
+      quick4kBtn.addEventListener('click', handleExport4K);
     }
     els.export4kBtn.addEventListener('click', handleExport4K);
     els.exportReelBtn.addEventListener('click', handleExportReel60FPS);
