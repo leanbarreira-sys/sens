@@ -6887,8 +6887,9 @@
             <!-- Filtros por Grupo Muscular en Modal Rápido -->
             <div id="quickAddCategoryPills"
                 style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 8px;">
+                <button type="button" class="coach-muscle-filter-chip fav-toggle-chip" data-role="quickadd-fav-toggle" id="quickAddFavToggleBtn">★ Favoritos</button>
+                <div style="width: 1px; height: 18px; background: #E4E4E7; align-self: center; flex-shrink: 0;"></div>
                 <button type="button" class="coach-muscle-filter-chip active" data-cat="all">Todos</button>
-                <button type="button" class="coach-muscle-filter-chip" data-cat="favoritos" style="background: rgba(229, 203, 167, 0.2); color: #705B3E; font-weight: 800; border: 1px solid rgba(229, 203, 167, 0.5);">★ Favoritos</button>
                 <button type="button" class="coach-muscle-filter-chip" data-cat="piernas">Piernas</button>
                 <button type="button" class="coach-muscle-filter-chip" data-cat="espalda">Espalda</button>
                 <button type="button" class="coach-muscle-filter-chip" data-cat="pecho">Pecho</button>
@@ -7265,8 +7266,10 @@
 
                 <!-- Nivel 1 & 2 en el Modal Rápido -->
                 <div class="lib-group-filter-strip" id="libGroupPillStrip">
+                    <button type="button" class="lib-pill-btn fav-toggle-chip" data-role="lib-fav-toggle" id="libFavToggleBtn">★ Favoritos</button>
+                    <span
+                        style="display: inline-block; width: 1px; height: 16px; background: rgba(255,255,255,0.15); margin: 0 4px; vertical-align: middle;"></span>
                     <button type="button" class="lib-pill-btn active" data-group="all">Todos</button>
-                    <button type="button" class="lib-pill-btn" data-group="favoritos" style="background: rgba(229, 203, 167, 0.15); color: #E5CBA7; font-weight: 800; border: 1px solid rgba(229, 203, 167, 0.4);">★ Favoritos</button>
                     <button type="button" class="lib-pill-btn" data-group="muscular">Muscular</button>
                     <button type="button" class="lib-pill-btn" data-group="cardio">Cardio</button>
                     <button type="button" class="lib-pill-btn" data-group="yoga">Yoga</button>
@@ -9305,7 +9308,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=1.0"></script>
-    <script src="app.js?v=20.0"></script>
+    <script src="app.js?v=21.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

@@ -19438,6 +19438,36 @@ body.in-portal #coachHubView {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
 }
 
+.coach-muscle-filter-chip.fav-toggle-chip,
+.lib-pill-btn.fav-toggle-chip {
+    background: rgba(229, 203, 167, 0.12) !important;
+    color: #9E7D4B !important;
+    border: 1px dashed rgba(229, 203, 167, 0.7) !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.3px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.coach-muscle-filter-chip.fav-toggle-chip:hover,
+.lib-pill-btn.fav-toggle-chip:hover {
+    background: rgba(229, 203, 167, 0.22) !important;
+    border-color: #E5CBA7 !important;
+    color: #121214 !important;
+}
+
+.coach-muscle-filter-chip.fav-toggle-chip.active,
+.lib-pill-btn.fav-toggle-chip.active {
+    background: #E5CBA7 !important;
+    color: #121214 !important;
+    border: 1px solid #E5CBA7 !important;
+    box-shadow: 0 2px 10px rgba(229, 203, 167, 0.5) !important;
+    font-weight: 800 !important;
+}
+
 /* 9. Barra Masiva de Series / Reps / Descanso & Inputs de Alta Legibilidad */
 .wizard-global-batch-bar {
     background: #F8F9FA;

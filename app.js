@@ -1945,6 +1945,7 @@ function applyUserProfile(userTypeKey) {
 // =============================================================================
 let activeLibraryGroup = 'all';
 let activeLibraryLegsSub = 'all';
+let activeLibraryOnlyFavs = false;
 
 function initExerciseCatalogModal() {
     const modal = document.getElementById('exerciseLibraryModal');
@@ -1975,9 +1976,19 @@ function initExerciseCatalogModal() {
     }
 
     if (pillStrip) {
-        pillStrip.querySelectorAll('.lib-pill-btn').forEach(btn => {
+        const favToggle = pillStrip.querySelector('[data-role="lib-fav-toggle"]');
+        if (favToggle) {
+            favToggle.addEventListener('click', () => {
+                activeLibraryOnlyFavs = !activeLibraryOnlyFavs;
+                favToggle.classList.toggle('active', activeLibraryOnlyFavs);
+                favToggle.innerHTML = `★ ${activeLibraryOnlyFavs ? 'Solo Favoritos' : 'Favoritos'}`;
+                renderExerciseLibraryList();
+            });
+        }
+
+        pillStrip.querySelectorAll('.lib-pill-btn[data-group]').forEach(btn => {
             btn.addEventListener('click', () => {
-                pillStrip.querySelectorAll('.lib-pill-btn').forEach(b => b.classList.remove('active'));
+                pillStrip.querySelectorAll('.lib-pill-btn[data-group]').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 activeLibraryGroup = btn.getAttribute('data-group') || 'all';
                 if (legsSubStrip) {
@@ -2021,6 +2032,12 @@ function renderExerciseLibraryList() {
         const ex = (typeof window.getResolvedExercise === 'function')
             ? window.getResolvedExercise(rawEx, currentAthId)
             : rawEx;
+        
+        const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+        if (activeLibraryOnlyFavs && !isFav) {
+            return false;
+        }
+
         const tax = (typeof getExerciseTaxonomy === 'function')
             ? getExerciseTaxonomy(ex)
             : { type: 'muscular', muscleGroup: 'piernas', subMuscle: null };
@@ -2028,8 +2045,6 @@ function renderExerciseLibraryList() {
         let matchGroup = false;
         if (selectedGroup === 'all') {
             matchGroup = true;
-        } else if (selectedGroup === 'favoritos') {
-            matchGroup = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
         } else if (['muscular', 'cardio', 'movilidad', 'yoga'].includes(selectedGroup)) {
             matchGroup = (tax.type === selectedGroup);
         } else if (['piernas', 'biceps', 'triceps', 'pecho', 'espalda', 'abdominales', 'hombros', 'zona_lumbar', 'antebrazos'].includes(selectedGroup)) {
@@ -2044,6 +2059,7 @@ function renderExerciseLibraryList() {
 
         const matchQuery = !query ||
             (ex.name && ex.name.toLowerCase().includes(query)) ||
+            (ex.name_es && ex.name_es.toLowerCase().includes(query)) ||
             (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(query)) ||
             (ex.execution && ex.execution.toLowerCase().includes(query)) ||
             (ex.recommendations && ex.recommendations.toLowerCase().includes(query)) ||
@@ -2051,6 +2067,14 @@ function renderExerciseLibraryList() {
             (ex.cue && ex.cue.toLowerCase().includes(query));
 
         return matchGroup && matchQuery;
+    });
+
+    // Orden: favoritos siempre primero
+    filtered.sort((a, b) => {
+        const aFav = (a.is_favorite || a.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(a.id))) ? 1 : 0;
+        const bFav = (b.is_favorite || b.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(b.id))) ? 1 : 0;
+        if (bFav !== aFav) return bFav - aFav;
+        return (a.name || '').localeCompare(b.name || '');
     });
 
     if (filtered.length === 0) {
@@ -24069,6 +24093,7 @@ const CoachQuickAddManager = {
     targetAthleteId: null,
     onSuccessCallback: null,
     activeCat: 'all',
+    onlyFavs: false,
     searchQuery: '',
 
     init() {
@@ -24095,6 +24120,17 @@ const CoachQuickAddManager = {
 
         if (categoryPillsWrap && !categoryPillsWrap._hasListener) {
             categoryPillsWrap._hasListener = true;
+
+            const favToggleBtn = categoryPillsWrap.querySelector('[data-role="quickadd-fav-toggle"]');
+            if (favToggleBtn) {
+                favToggleBtn.addEventListener('click', () => {
+                    this.onlyFavs = !this.onlyFavs;
+                    favToggleBtn.classList.toggle('active', this.onlyFavs);
+                    favToggleBtn.innerHTML = `★ ${this.onlyFavs ? 'Solo Favoritos' : 'Favoritos'}`;
+                    this.renderList();
+                });
+            }
+
             categoryPillsWrap.querySelectorAll('button[data-cat]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     categoryPillsWrap.querySelectorAll('button[data-cat]').forEach(b => b.classList.remove('active'));
@@ -24111,6 +24147,7 @@ const CoachQuickAddManager = {
         this.targetAthleteId = athId;
         this.onSuccessCallback = onAdded;
         this.activeCat = 'all';
+        this.onlyFavs = false;
         this.searchQuery = '';
 
         const titleEl = document.getElementById('quickAddDayTitle');
@@ -24123,6 +24160,11 @@ const CoachQuickAddManager = {
 
         const catWrap = document.getElementById('quickAddCategoryPills');
         if (catWrap) {
+            const favToggleBtn = catWrap.querySelector('[data-role="quickadd-fav-toggle"]');
+            if (favToggleBtn) {
+                favToggleBtn.classList.remove('active');
+                favToggleBtn.innerHTML = '★ Favoritos';
+            }
             catWrap.querySelectorAll('button[data-cat]').forEach(b => {
                 b.classList.toggle('active', b.getAttribute('data-cat') === 'all');
             });
@@ -24147,15 +24189,30 @@ const CoachQuickAddManager = {
             ? SENS_EXERCISE_LIBRARY
             : (typeof EXERCISE_CATALOG !== 'undefined' ? EXERCISE_CATALOG : []);
 
-        const cat = this.activeCat;
+        const cat = this.activeCat || 'all';
         const q = this.searchQuery;
+        const onlyFavs = Boolean(this.onlyFavs);
 
         const filtered = sourceLib.filter(ex => {
-            const nameMatch = !q || ex.name.toLowerCase().includes(q) || (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(q));
+            const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+            if (onlyFavs && !isFav) return false;
+
+            const nameMatch = !q || 
+                (ex.name && ex.name.toLowerCase().includes(q)) || 
+                (ex.name_es && ex.name_es.toLowerCase().includes(q)) || 
+                (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(q));
             if (!nameMatch) return false;
+
             if (cat === 'all') return true;
-            if (cat === 'favoritos') return Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
             return getBiomechanicalCategory(ex) === cat;
+        });
+
+        // ORDEN: FAVORITOS SIEMPRE PRIMERO
+        filtered.sort((a, b) => {
+            const aFav = (a.is_favorite || a.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(a.id))) ? 1 : 0;
+            const bFav = (b.is_favorite || b.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(b.id))) ? 1 : 0;
+            if (bFav !== aFav) return bFav - aFav;
+            return (a.name || '').localeCompare(b.name || '');
         });
 
         if (filtered.length === 0) {
@@ -26006,10 +26063,12 @@ const CoachWorkoutsMaster = {
             if (!this.step3MuscleSubFilter) {
                 this.step3MuscleSubFilter = 'day_muscles';
             }
+            if (this.step3OnlyFavorites === undefined) {
+                this.step3OnlyFavorites = false;
+            }
 
             const categories = [
                 { id: 'day_muscles', label: dayMuscles.length > 0 ? `Día: ${dayMuscles.join(' + ')}` : 'Músculos del Día' },
-                { id: 'favoritos', label: '★ Favoritos Coach' },
                 { id: 'catalog_all', label: 'Ver Todo el Catálogo' },
                 { id: 'piernas', label: 'Piernas' },
                 { id: 'pecho', label: 'Pecho' },
@@ -26019,7 +26078,15 @@ const CoachWorkoutsMaster = {
                 { id: 'core', label: 'Core & Movilidad' }
             ];
 
-            let stripHtml = '';
+            const isFavActive = Boolean(this.step3OnlyFavorites);
+            let stripHtml = `
+                <button type="button" class="coach-muscle-filter-chip fav-toggle-chip ${isFavActive ? 'active' : ''}" 
+                        id="wizardFavToggleChip" data-is-fav-toggle="true"
+                        title="Tocar para filtrar solo favoritos del grupo seleccionado">
+                    ★ ${isFavActive ? 'Solo Favoritos' : 'Favoritos'}
+                </button>
+                <div style="width: 1px; height: 20px; background: #E4E4E7; margin: 0 2px; align-self: center; flex-shrink: 0;"></div>
+            `;
             categories.forEach(cat => {
                 const isSubActive = (this.step3MuscleSubFilter === cat.id);
                 stripHtml += `<button type="button" class="coach-muscle-filter-chip ${isSubActive ? 'active' : ''}" data-muscle-sub="${cat.id}">${cat.label}</button>`;
@@ -26027,11 +26094,22 @@ const CoachWorkoutsMaster = {
             filterStrip.innerHTML = stripHtml;
             filterStrip.style.display = 'flex';
 
+            const favToggleChip = filterStrip.querySelector('[data-is-fav-toggle="true"]');
+            if (favToggleChip) {
+                favToggleChip.addEventListener('click', () => {
+                    this.step3OnlyFavorites = !this.step3OnlyFavorites;
+                    this._catalogRenderLimit = 50;
+                    favToggleChip.classList.toggle('active', this.step3OnlyFavorites);
+                    favToggleChip.innerHTML = `★ ${this.step3OnlyFavorites ? 'Solo Favoritos' : 'Favoritos'}`;
+                    this.renderStep3Catalog(activeDay);
+                });
+            }
+
             filterStrip.querySelectorAll('[data-muscle-sub]').forEach(chip => {
                 chip.addEventListener('click', () => {
                     this.step3MuscleSubFilter = chip.getAttribute('data-muscle-sub');
                     this._catalogRenderLimit = 50;
-                    filterStrip.querySelectorAll('.coach-muscle-filter-chip').forEach(c => c.classList.remove('active'));
+                    filterStrip.querySelectorAll('[data-muscle-sub]').forEach(c => c.classList.remove('active'));
                     chip.classList.add('active');
                     try { chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch (_) {}
                     this.renderStep3Catalog(activeDay);
@@ -26068,26 +26146,41 @@ const CoachWorkoutsMaster = {
         const rawQuery = (this.searchFilter || '').trim();
         const normQuery = rawQuery.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const subFilter = this.step3MuscleSubFilter || 'day_muscles';
+        const onlyFavs = Boolean(this.step3OnlyFavorites);
 
         const filtered = sourceLib.filter(ex => {
+            const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+
+            // 1. Si filtro de favoritos está activo, OBLIGATORIAMENTE debe ser favorito
+            if (onlyFavs && !isFav) {
+                return false;
+            }
+
             const nameNorm = (ex.name || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const nameEsNorm = (ex.name_es || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             const muscleNorm = (ex.primary_muscle || ex.muscle_group || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             const catNorm = (ex.category || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             const patternNorm = (ex.pattern || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-            // 1. Si hay texto en el buscador, búsqueda global en todo el catálogo sin trabas de día
+            // 2. Si hay texto en el buscador, filtrar por coincidencia de texto
             if (normQuery.length > 0) {
-                return nameNorm.includes(normQuery) || 
-                       muscleNorm.includes(normQuery) || 
-                       catNorm.includes(normQuery) || 
-                       patternNorm.includes(normQuery);
+                const textMatch = nameNorm.includes(normQuery) || 
+                                  nameEsNorm.includes(normQuery) || 
+                                  muscleNorm.includes(normQuery) || 
+                                  catNorm.includes(normQuery) || 
+                                  patternNorm.includes(normQuery);
+                if (!textMatch) return false;
+                if (subFilter !== 'catalog_all' && subFilter !== 'day_muscles') {
+                    const exBioCat = (typeof getBiomechanicalCategory === 'function') 
+                        ? getBiomechanicalCategory(ex) 
+                        : (ex.category || 'core').toLowerCase();
+                    if (exBioCat !== subFilter) return false;
+                }
+                return true;
             }
 
-            // 2. Si no hay texto, aplicar el chip activo
+            // 3. Sub-filtro de grupo muscular
             if (subFilter === 'catalog_all') return true;
-            if (subFilter === 'favoritos') {
-                return Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
-            }
 
             const exBioCat = (typeof getBiomechanicalCategory === 'function') 
                 ? getBiomechanicalCategory(ex) 
@@ -26115,6 +26208,18 @@ const CoachWorkoutsMaster = {
                 if (dmL.includes('core') && exBioCat === 'core') return true;
             }
             return false;
+        });
+
+        // 4. ORDEN: SIEMPRE FAVORITOS PRIMERO
+        filtered.sort((a, b) => {
+            const aFav = (a.is_favorite || a.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(a.id))) ? 1 : 0;
+            const bFav = (b.is_favorite || b.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(b.id))) ? 1 : 0;
+            if (bFav !== aFav) {
+                return bFav - aFav; // 1 antes que 0: favoritos siempre primero
+            }
+            const aName = (a.name_es || a.name || '').toLowerCase();
+            const bName = (b.name_es || b.name || '').toLowerCase();
+            return aName.localeCompare(bName);
         });
 
         const activeDraft = this.wizardDraft[activeDay.dateStr] || { exercises: [] };
