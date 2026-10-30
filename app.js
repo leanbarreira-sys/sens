@@ -2028,6 +2028,8 @@ function renderExerciseLibraryList() {
         let matchGroup = false;
         if (selectedGroup === 'all') {
             matchGroup = true;
+        } else if (selectedGroup === 'favoritos') {
+            matchGroup = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
         } else if (['muscular', 'cardio', 'movilidad', 'yoga'].includes(selectedGroup)) {
             matchGroup = (tax.type === selectedGroup);
         } else if (['piernas', 'biceps', 'triceps', 'pecho', 'espalda', 'abdominales', 'hombros', 'zona_lumbar', 'antebrazos'].includes(selectedGroup)) {
@@ -2081,12 +2083,15 @@ function renderExerciseLibraryList() {
         const repsVal = escapeHTML(ex.default_reps || ex.reps || '10-12');
         const safeExName = escapeHTML(ex.name);
         const safeExId = escapeHTML(ex.id);
+        const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+        const favBadge = isFav ? `<span class="pill pill-champagne" style="font-size: 9px; font-weight: 800; padding: 2px 7px; background: #E5CBA7; color: #121214;">★ FAVORITO</span>` : '';
 
         html += `
             <div class="sens-lib-card-item" data-lib-ex-id="${safeExId}" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s ease; cursor: pointer;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 240px;">
                         <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
+                            ${favBadge}
                             <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800; padding: 2px 7px;">${escapeHTML(tax.typeLabel.toUpperCase())}</span>
                             ${tax.muscleLabel ? `<span class="pill pill-dark" style="font-size: 9px; color: var(--accent-primary); border: none;">${escapeHTML(tax.muscleLabel)}</span>` : ''}
                             ${tax.subMuscleLabel ? `<span class="pill pill-dark" style="font-size: 9px; color: #10B981; border: none;">${escapeHTML(tax.subMuscleLabel)}</span>` : ''}
@@ -12991,11 +12996,15 @@ function renderCoachAssignedExercises() {
             : { kcalPerSet: 7, totalKcal: 21 };
         totalDayKcal += kcalData.totalKcal;
 
+        const isFav = Boolean(resolvedEx.is_favorite || resolvedEx.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(resolvedEx.id)));
+        const favTag = isFav ? `<span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 5px; font-weight: 800; background: #E5CBA7; color: #121214;">★ FAV</span>` : '';
+
         html += `
             <div class="coach-ex-card" data-ex-id="${ex.id}">
                 <div style="flex: 1; min-width: 220px;">
                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">#${idx + 1}</span>
+                        ${favTag}
                         <strong style="font-size: 14px; color: #FFFFFF;">${resolvedEx.name || ex.name}</strong>
                         <span class="pill pill-dark" style="font-size: 9.5px; padding: 2px 6px; border: 1px solid rgba(229,203,167,0.3); color: var(--accent-champagne);">~${kcalData.totalKcal} kcal (${kcalData.kcalPerSet} kcal/serie)</span>
                         ${resolvedEx._hasAthleteOverride ? `<span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 5px;">Personalizado Alumno</span>` : ''}
@@ -24145,6 +24154,7 @@ const CoachQuickAddManager = {
             const nameMatch = !q || ex.name.toLowerCase().includes(q) || (ex.primary_muscle && ex.primary_muscle.toLowerCase().includes(q));
             if (!nameMatch) return false;
             if (cat === 'all') return true;
+            if (cat === 'favoritos') return Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
             return getBiomechanicalCategory(ex) === cat;
         });
 
@@ -24157,6 +24167,8 @@ const CoachQuickAddManager = {
         filtered.forEach(ex => {
             const thumb = CoachWorkoutsMaster.getThumbnail(ex);
             const bioCat = getBiomechanicalCategory(ex).toUpperCase();
+            const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+            const favPill = isFav ? `<span class="pill" style="font-size: 8.5px; padding: 1px 6px; font-weight: 800; background: rgba(229, 203, 167, 0.35); color: #705B3E; margin-left: 4px;">★ FAVORITO</span>` : '';
 
             html += `
                 <div class="sens-coach-quick-card-row" data-quick-card="${ex.id}" style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; transition: all 0.18s ease;">
@@ -24166,6 +24178,7 @@ const CoachQuickAddManager = {
                         </div>
                         <div>
                             <span class="pill" style="font-size: 8.5px; padding: 1px 5px; font-weight: 800; background: #F4F4F5; color: #71717A;">${bioCat}</span>
+                            ${favPill}
                             <strong style="font-size: 12px; color: #121214; display: block; line-height: 1.2; margin-top: 2px;">${ex.name}</strong>
                         </div>
                     </div>
@@ -25996,6 +26009,7 @@ const CoachWorkoutsMaster = {
 
             const categories = [
                 { id: 'day_muscles', label: dayMuscles.length > 0 ? `Día: ${dayMuscles.join(' + ')}` : 'Músculos del Día' },
+                { id: 'favoritos', label: '★ Favoritos Coach' },
                 { id: 'catalog_all', label: 'Ver Todo el Catálogo' },
                 { id: 'piernas', label: 'Piernas' },
                 { id: 'pecho', label: 'Pecho' },
@@ -26071,6 +26085,9 @@ const CoachWorkoutsMaster = {
 
             // 2. Si no hay texto, aplicar el chip activo
             if (subFilter === 'catalog_all') return true;
+            if (subFilter === 'favoritos') {
+                return Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+            }
 
             const exBioCat = (typeof getBiomechanicalCategory === 'function') 
                 ? getBiomechanicalCategory(ex) 
@@ -26148,11 +26165,15 @@ const CoachWorkoutsMaster = {
                 mediaHtml = `<div class="wizard-feed-video-placeholder"></div>`;
             }
 
+            const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+            const favPill = isFav ? `<span class="pill" style="font-size: 8px; font-weight: 800; background: #E5CBA7; color: #121214; padding: 2px 6px;">★ FAVORITO</span>` : '';
+
             html += `
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
                     ${mediaHtml}
                     <div class="wizard-feed-card-gradient"></div>
                     <div class="wizard-feed-top-pills">
+                        ${favPill}
                         <span class="pill pill-champagne" style="font-size: 8px; font-weight: 800; padding: 2px 6px;">${muscleTag}</span>
                         <span class="pill" style="font-size: 8px; font-weight: 700; background: rgba(18, 18, 20, 0.85); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); padding: 2px 6px;">${ex.sets || 3}x${ex.reps || '10-12'}</span>
                     </div>
