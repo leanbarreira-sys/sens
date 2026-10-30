@@ -13567,25 +13567,27 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         display: none !important;
     }
 
-    /* Dock de Coach OS: Exclusivo para cuando el admin está en Coach OS (6 Estaciones en 1 Fila Sin Wrap) */
+    /* Dock de Coach OS: Exclusivo para cuando el admin está en Coach OS (4 Estaciones en Light Quiet Luxury idéntico al del alumno) */
     body.in-portal.is-admin.in-coach-mode #sensCoachFloatingDock,
     body.in-portal.is-admin[data-active-view="coachHubView"] #sensCoachFloatingDock {
         position: fixed !important;
-        bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
+        bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
         left: 50% !important;
         transform: translate3d(-50%, 0, 0) !important;
         -webkit-transform: translate3d(-50%, 0, 0) !important;
-        width: calc(100% - 16px) !important;
-        max-width: 440px !important;
+        width: calc(100% - 32px) !important;
+        max-width: 360px !important;
         box-sizing: border-box !important;
         display: grid !important;
-        grid-template-columns: repeat(6, 1fr) !important;
-        gap: 1px !important;
-        padding: 5px 2px !important;
-        background: #09090B !important;
-        border: 1px solid rgba(229, 203, 167, 0.25) !important;
-        border-radius: 36px !important;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65) !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 4px !important;
+        padding: 5px 8px !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+        backdrop-filter: blur(24px) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        border: 1px solid rgba(18, 18, 20, 0.08) !important;
+        border-radius: 9999px !important;
+        box-shadow: 0 10px 32px -4px rgba(18, 18, 20, 0.12), 0 2px 6px rgba(18, 18, 20, 0.04) !important;
         z-index: 99999 !important;
         overflow: hidden !important;
         pointer-events: auto !important;
@@ -13599,20 +13601,38 @@ html:not(.in-portal-mode) body:not(.in-portal) .sens-floating-dock {
         touch-action: manipulation !important;
         -webkit-tap-highlight-color: transparent !important;
         user-select: none !important;
-        padding: 6px 1px !important;
-        gap: 2px !important;
+        padding: 7px 4px !important;
+        gap: 3px !important;
         min-width: 0 !important;
+        border-radius: 9999px !important;
+        color: #77767B !important;
+        background: transparent !important;
+    }
+
+    #sensCoachFloatingDock .sens-dock-item.active {
+        background: #121214 !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
     }
 
     #sensCoachFloatingDock .sens-dock-item svg {
-        width: 17px !important;
-        height: 17px !important;
+        width: 18px !important;
+        height: 18px !important;
+        stroke: currentColor !important;
+        stroke-width: 2 !important;
+    }
+
+    #sensCoachFloatingDock .sens-dock-item.active svg {
+        stroke: #FFFFFF !important;
     }
 
     #sensCoachFloatingDock .sens-dock-item span {
-        font-size: 8px !important;
-        letter-spacing: 0.1px !important;
+        font-size: 10px !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em !important;
         max-width: 100% !important;
+        line-height: 1.1 !important;
     }
 
     /* Bajo ninguna circunstancia un usuario no admin o una vista regular muestra el dock de coach */
@@ -30726,37 +30746,68 @@ body.in-portal #userAvatarDropdown.active,
     display: none !important;
 }
 
-/* Dock Inferior Móvil del Coach — 4 Estaciones en Light Quiet Luxury */
+/* Dock Inferior Móvil del Coach — 4 Estaciones en Light Quiet Luxury (Paridad 100% con el del Usuario) */
+body.in-portal.is-admin.in-coach-mode #sensCoachFloatingDock,
+body.in-portal.is-admin[data-active-view="coachHubView"] #sensCoachFloatingDock,
 body.in-portal #sensCoachFloatingDock,
 #sensCoachFloatingDock.coach-mode-dock {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    background: rgba(255, 255, 255, 0.94) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
+    width: calc(100% - 32px) !important;
+    max-width: 360px !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    box-shadow: 0 16px 40px rgba(18, 18, 20, 0.12), 0 2px 10px rgba(18, 18, 20, 0.04) !important;
-    border-radius: 999px !important;
-    padding: 6px !important;
+    box-shadow: 0 10px 32px -4px rgba(18, 18, 20, 0.12), 0 2px 6px rgba(18, 18, 20, 0.04) !important;
+    border-radius: 9999px !important;
+    padding: 5px 8px !important;
 }
 
+body.in-portal #sensCoachFloatingDock .sens-dock-item,
 body.in-portal #sensCoachFloatingDock .coach-dock-btn {
-    color: #575659 !important;
+    color: #77767B !important;
     background: transparent !important;
-    border-radius: 999px !important;
-    font-size: 10px !important;
-    font-weight: 700 !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
     white-space: nowrap !important;
-    padding: 6px 4px !important;
+    padding: 7px 4px !important;
+    gap: 3px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
+body.in-portal #sensCoachFloatingDock .sens-dock-item svg,
+body.in-portal #sensCoachFloatingDock .coach-dock-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke: currentColor !important;
+    stroke-width: 2 !important;
+}
+
+body.in-portal #sensCoachFloatingDock .sens-dock-item span,
+body.in-portal #sensCoachFloatingDock .coach-dock-btn span {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.1 !important;
+}
+
+body.in-portal #sensCoachFloatingDock .sens-dock-item.active,
 body.in-portal #sensCoachFloatingDock .coach-dock-btn.active {
     background: #121214 !important;
-    color: #FAF9F6 !important;
-    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.16) !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
 }
 
+body.in-portal #sensCoachFloatingDock .sens-dock-item.active svg,
 body.in-portal #sensCoachFloatingDock .coach-dock-btn.active svg {
-    stroke: #FBDEB9 !important;
+    stroke: #FFFFFF !important;
 }
 
 /* 7.3 COACH OS (#coachHubView) — SUPERFICIES LIGHT QUIET LUXURY Y PILLS EN 1 FILA */

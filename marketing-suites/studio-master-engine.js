@@ -321,6 +321,7 @@
     renderMediaSlotSwitcher();
     updateMediaCalibratorButtonsUI();
     updateMediaStatusBar();
+    syncExportButtonsForMediaKind();
   }
 
   function renderMediaSlotSwitcher() {
@@ -350,6 +351,25 @@
     });
   }
 
+  function hasActiveVideoSlot() {
+    return state.mediaSlots.some(s => {
+      if (!s || !s.el) return false;
+      if (s.isVideo || s.customVideoUrl) return true;
+      const vid = s.videoEl || (s.el.querySelector && s.el.querySelector('video.sens-bg-video')) || (s.el.parentElement && s.el.parentElement.querySelector('video.sens-bg-video'));
+      return Boolean(vid && vid.src);
+    });
+  }
+
+  function syncExportButtonsForMediaKind() {
+    const isVid = hasActiveVideoSlot();
+    if (els.export4kLabel) {
+      els.export4kLabel.textContent = isVid ? 'Video 4K UHD' : 'Portada 4K';
+    }
+    if (els.exportReelLabel) {
+      els.exportReelLabel.textContent = isVid ? 'Exportar Reel 60FPS (MP4)' : 'Exportar Reel 60FPS (MP4)';
+    }
+  }
+
   // Inject Photo or Video into the Active Media Slot WITHOUT altering position classes
   function handleMediaFileUpload(file) {
     if (!file || state.mediaSlots.length === 0) return;
@@ -365,6 +385,7 @@
       const videoUrl = URL.createObjectURL(file);
       slot.customVideoUrl = videoUrl;
       slot.customDataUrl = null;
+      slot.isVideo = true;
       slot.fileName = file.name;
 
       // Ensure injected-bg becomes visible if used
@@ -377,6 +398,10 @@
         // Replace img src poster or overlay video inside parent
         const parent = slot.el.parentElement;
         if (parent) {
+          const parentPos = window.getComputedStyle(parent).position;
+          if (parentPos === 'static') {
+            parent.style.position = 'relative';
+          }
           let existingVid = parent.querySelector('video.sens-bg-video');
           if (!existingVid) {
             existingVid = document.createElement('video');
@@ -388,12 +413,25 @@
           existingVid.loop = true;
           existingVid.playsInline = true;
           existingVid.autoplay = true;
-          existingVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;';
+          existingVid.style.cssText = `position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center ${slot.panY}%;z-index:1;pointer-events:none;`;
           slot.el.style.opacity = '0';
+          slot.videoEl = existingVid;
+          existingVid.onloadedmetadata = () => {
+            slot.naturalWidth = existingVid.videoWidth || 1080;
+            slot.naturalHeight = existingVid.videoHeight || 1920;
+            updateMediaStatusBar();
+            syncExportButtonsForMediaKind();
+          };
           existingVid.play().catch(() => {});
         }
       } else {
-        // CRITICAL FIX: Keep slot.el's position: absolute intact! Never set position: relative on an absolute background div!
+        // Keep slot.el's position intact unless static (e.g., nested card div in Polaroid T07)
+        const slotPos = window.getComputedStyle(slot.el).position;
+        if (slotPos === 'static') {
+          slot.el.style.position = 'relative';
+        }
+        // Clear static background-image so only the live video is shown
+        slot.el.style.backgroundImage = 'none';
         let existingVid = slot.el.querySelector('video.sens-bg-video');
         if (!existingVid) {
           existingVid = document.createElement('video');
@@ -406,6 +444,7 @@
         existingVid.playsInline = true;
         existingVid.autoplay = true;
         existingVid.style.cssText = `position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center ${slot.panY}%;z-index:0;pointer-events:none;`;
+        slot.videoEl = existingVid;
         // Ensure any child gradient scrim inside slot.el sits above the video
         Array.from(slot.el.children).forEach(child => {
           if (child !== existingVid) {
@@ -416,12 +455,14 @@
           slot.naturalWidth = existingVid.videoWidth || 1080;
           slot.naturalHeight = existingVid.videoHeight || 1920;
           updateMediaStatusBar();
+          syncExportButtonsForMediaKind();
         };
         existingVid.play().catch(() => {});
       }
       applySlotTransformAndScrim(slot);
       updateMediaStatusBar();
-      showToast(`Video cargado en Fondo ${state.activeMediaSlotIndex + 1}`);
+      syncExportButtonsForMediaKind();
+      showToast(`Video cargado en Fondo ${state.activeMediaSlotIndex + 1} (Exportación en Video activa)`);
     } else {
       // High-Res Photo Upload (Preserve 100% Native Resolution)
       const reader = new FileReader();
@@ -430,6 +471,8 @@
         const probeImg = new Image();
         probeImg.onload = () => {
           slot.customDataUrl = dataUrl;
+          slot.isVideo = false;
+          slot.videoEl = null;
           if (slot.customVideoUrl) {
             URL.revokeObjectURL(slot.customVideoUrl);
             slot.customVideoUrl = null;
@@ -458,6 +501,7 @@
 
           applySlotTransformAndScrim(slot);
           updateMediaStatusBar();
+          syncExportButtonsForMediaKind();
           showToast(`Foto UHD (${probeImg.naturalWidth}×${probeImg.naturalHeight}px) aplicada`);
         };
         probeImg.src = dataUrl;
@@ -475,11 +519,15 @@
     }
     slot.customDataUrl = null;
     slot.customVideoUrl = null;
+    slot.isVideo = false;
+    slot.videoEl = null;
     slot.fileName = null;
     slot.panY = 50;
     slot.zoom = 1;
     slot.scrim = 0.80;
 
+    const oldVid = slot.el.parentElement ? slot.el.parentElement.querySelector('video.sens-bg-video') : null;
+    if (oldVid) oldVid.remove();
     const innerVid = slot.el.querySelector ? slot.el.querySelector('video.sens-bg-video') : null;
     if (innerVid) innerVid.remove();
 
@@ -497,6 +545,7 @@
     applySlotTransformAndScrim(slot);
     updateMediaCalibratorButtonsUI();
     updateMediaStatusBar();
+    syncExportButtonsForMediaKind();
     showToast('Fondo original restaurado');
   }
 
@@ -984,6 +1033,13 @@
   }
 
   async function handleExport4K() {
+    // CRITICAL RULE: If the user uploaded a VIDEO into any template (even an image/feed template),
+    // the output MUST respect the video input and export a high-resolution video!
+    if (hasActiveVideoSlot()) {
+      await handleExportReel60FPS({ from4kBtn: true });
+      return;
+    }
+
     const origText = els.export4kLabel.textContent;
     els.export4kBtn.disabled = true;
     els.export4kLabel.textContent = 'Render 4K...';
@@ -1032,7 +1088,7 @@
     ctx.drawImage(sourceEl, sx, sy, zoomedW, zoomedH, dstX, dstY, dstW, dstH);
   }
 
-  async function renderForegroundOverlayForVideo(targetWidthPx, activeVideoEntries) {
+  async function renderVideoLayersForComposite(targetWidthPx, activeVideoEntries) {
     const stageEl = document.getElementById('video-canvas');
     if (!stageEl || typeof window.html2canvas !== 'function') {
       throw new Error('Stage o html2canvas no disponible');
@@ -1054,65 +1110,121 @@
     const hadMotion = stageEl.classList.contains('sens-motion-loop-active');
     if (hadMotion) stageEl.classList.remove('sens-motion-loop-active');
 
-    const cleanupCallbacks = [];
+    const cleanupAttrs = [];
 
     try {
-      const prevStageBg = stageEl.style.background;
-      const prevStageBgColor = stageEl.style.backgroundColor;
-      stageEl.style.setProperty('background', 'transparent', 'important');
-      stageEl.style.setProperty('background-color', 'transparent', 'important');
-      cleanupCallbacks.push(() => {
-        stageEl.style.background = prevStageBg;
-        stageEl.style.backgroundColor = prevStageBgColor;
-      });
-
+      // Tag active video slots and their ancestors/preceding nodes so we only strip them inside html2canvas's cloned DOM!
+      // This keeps the live <video> in the real DOM 100% visible and playing at 60FPS without browser throttling!
+      const ancestorSet = new Set();
       for (const entry of activeVideoEntries) {
         const slot = entry.slot;
-        const vid = entry.vid;
-        if (vid) {
-          const prevVidVis = vid.style.visibility;
-          vid.style.visibility = 'hidden';
-          cleanupCallbacks.push(() => { vid.style.visibility = prevVidVis; });
-        }
         if (slot && slot.el) {
-          const prevBgImg = slot.el.style.backgroundImage;
-          const prevBgCol = slot.el.style.backgroundColor;
-          const prevOpacity = slot.el.style.opacity;
-          if (slot.type === 'img') {
-            slot.el.style.opacity = '0';
-          } else {
-            slot.el.style.setProperty('background-image', 'none', 'important');
-            slot.el.style.setProperty('background-color', 'transparent', 'important');
+          slot.el.setAttribute('data-sens-video-slot-el', '1');
+          cleanupAttrs.push(() => slot.el.removeAttribute('data-sens-video-slot-el'));
+        }
+        const refNode = (slot && slot.el) ? slot.el : entry.vid;
+        let curr = refNode;
+        while (curr && curr !== stageEl.parentElement) {
+          ancestorSet.add(curr);
+          if (curr.setAttribute) {
+            curr.setAttribute('data-sens-fg-anc', '1');
+            const cRef = curr;
+            cleanupAttrs.push(() => cRef.removeAttribute('data-sens-fg-anc'));
           }
-          cleanupCallbacks.push(() => {
-            slot.el.style.backgroundImage = prevBgImg;
-            slot.el.style.backgroundColor = prevBgCol;
-            slot.el.style.opacity = prevOpacity;
-          });
+          curr = curr.parentElement;
         }
       }
 
-      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const primaryRefNode = (activeVideoEntries[0].slot && activeVideoEntries[0].slot.el)
+        ? activeVideoEntries[0].slot.el
+        : activeVideoEntries[0].vid;
 
+      if (primaryRefNode) {
+        const allNodes = stageEl.querySelectorAll('*');
+        allNodes.forEach(node => {
+          if (ancestorSet.has(node) || node === primaryRefNode) return;
+          if (primaryRefNode.contains && primaryRefNode.contains(node)) return;
+          const posMask = node.compareDocumentPosition(primaryRefNode);
+          if (posMask & Node.DOCUMENT_POSITION_FOLLOWING) {
+            node.setAttribute('data-sens-fg-behind', '1');
+            cleanupAttrs.push(() => node.removeAttribute('data-sens-fg-behind'));
+          }
+        });
+      }
+
+      // LAYER 0 (bgBaseCanvas): Capture template background & cards behind the video slot
+      const rawBgBase = await window.html2canvas(stageEl, {
+        scale: scale,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        logging: false,
+        onclone: (clonedDoc) => {
+          clonedDoc.querySelectorAll('video').forEach(v => v.remove());
+          clonedDoc.querySelectorAll('[data-sens-video-slot-el="1"]').forEach(el => {
+            if (el.tagName === 'IMG') {
+              el.style.setProperty('opacity', '0', 'important');
+              el.removeAttribute('src');
+            } else {
+              el.style.setProperty('background-image', 'none', 'important');
+              el.style.setProperty('background-color', 'transparent', 'important');
+            }
+          });
+        }
+      });
+
+      const bgBaseCanvas = document.createElement('canvas');
+      bgBaseCanvas.width = targetW;
+      bgBaseCanvas.height = targetH;
+      const bCtx = bgBaseCanvas.getContext('2d');
+      bCtx.imageSmoothingEnabled = true;
+      bCtx.imageSmoothingQuality = 'high';
+      bCtx.drawImage(rawBgBase, 0, 0, targetW, targetH);
+
+      // LAYER 2 (fgOverlayCanvas): Capture ONLY scrims, glass cards, badges & text in front of the video slot
       const rawOverlay = await window.html2canvas(stageEl, {
         scale: scale,
         useCORS: true,
         allowTaint: true,
         backgroundColor: null,
-        logging: false
+        logging: false,
+        onclone: (clonedDoc) => {
+          clonedDoc.querySelectorAll('video').forEach(v => v.remove());
+          clonedDoc.querySelectorAll('[data-sens-video-slot-el="1"]').forEach(el => {
+            if (el.tagName === 'IMG') {
+              el.style.setProperty('opacity', '0', 'important');
+              el.removeAttribute('src');
+            } else {
+              el.style.setProperty('background', 'transparent', 'important');
+              el.style.setProperty('background-color', 'transparent', 'important');
+              el.style.setProperty('background-image', 'none', 'important');
+            }
+          });
+          clonedDoc.querySelectorAll('[data-sens-fg-anc="1"]').forEach(anc => {
+            anc.style.setProperty('background', 'transparent', 'important');
+            anc.style.setProperty('background-color', 'transparent', 'important');
+            anc.style.setProperty('background-image', 'none', 'important');
+            anc.style.setProperty('box-shadow', 'none', 'important');
+            anc.style.setProperty('border-color', 'transparent', 'important');
+          });
+          clonedDoc.querySelectorAll('[data-sens-fg-behind="1"]').forEach(behind => {
+            behind.style.setProperty('visibility', 'hidden', 'important');
+            behind.style.setProperty('opacity', '0', 'important');
+          });
+        }
       });
 
-      const finalOverlay = document.createElement('canvas');
-      finalOverlay.width = targetW;
-      finalOverlay.height = targetH;
-      const fCtx = finalOverlay.getContext('2d');
+      const fgOverlayCanvas = document.createElement('canvas');
+      fgOverlayCanvas.width = targetW;
+      fgOverlayCanvas.height = targetH;
+      const fCtx = fgOverlayCanvas.getContext('2d');
       fCtx.imageSmoothingEnabled = true;
       fCtx.imageSmoothingQuality = 'high';
       fCtx.drawImage(rawOverlay, 0, 0, targetW, targetH);
 
-      return finalOverlay;
+      return { bgBaseCanvas, fgOverlayCanvas };
     } finally {
-      cleanupCallbacks.forEach(fn => {
+      cleanupAttrs.forEach(fn => {
         try { fn(); } catch (_) {}
       });
       if (hadMotion) stageEl.classList.add('sens-motion-loop-active');
@@ -1124,13 +1236,21 @@
     }
   }
 
-  // Export 60FPS Reel (Records live <video> slots + transparent UI overlay at 60FPS, or animated Ken Burns if photo)
-  async function handleExportReel60FPS() {
-    const origText = els.exportReelLabel.textContent;
+  // Export 60FPS Reel / Video UHD (Records live <video> slots + transparent UI overlay at 60FPS, or animated Ken Burns if photo)
+  async function handleExportReel60FPS(opts) {
+    const from4kBtn = Boolean(opts && opts.from4kBtn);
+    const origReelText = els.exportReelLabel.textContent;
+    const orig4kText = els.export4kLabel.textContent;
     els.exportReelBtn.disabled = true;
+    els.export4kBtn.disabled = true;
 
     try {
-      els.exportReelLabel.textContent = 'Preparando capas HD...';
+      if (from4kBtn) {
+        els.export4kLabel.textContent = 'Preparando Video...';
+      } else {
+        els.exportReelLabel.textContent = 'Preparando capas HD...';
+      }
+
       const stageEl = document.getElementById('video-canvas');
       const stageRect = stageEl ? stageEl.getBoundingClientRect() : { left: 0, top: 0, width: 360, height: 640 };
       const stW = stageRect.width || 360;
@@ -1140,18 +1260,21 @@
       const activeVideoEntries = [];
       for (const slot of state.mediaSlots) {
         if (!slot || !slot.el) continue;
-        let vid = slot.el.querySelector ? slot.el.querySelector('video.sens-bg-video') : null;
-        if (!vid && slot.type === 'img' && slot.el.parentElement) {
+        let vid = slot.videoEl || (slot.el.querySelector ? slot.el.querySelector('video.sens-bg-video') : null);
+        if (!vid && slot.el.parentElement) {
           vid = slot.el.parentElement.querySelector('video.sens-bg-video');
         }
-        if (vid && (slot.customVideoUrl || vid.src)) {
+        if (vid && (slot.isVideo || slot.customVideoUrl || vid.src)) {
           const targetBoxEl = (slot.type === 'img' && slot.el.parentElement) ? slot.el.parentElement : slot.el;
           const bRect = targetBoxEl.getBoundingClientRect();
           const relX = Math.max(0, (bRect.left - stageRect.left) / stW);
           const relY = Math.max(0, (bRect.top - stageRect.top) / stH);
           const relW = Math.min(1, (bRect.width || stW) / stW);
           const relH = Math.min(1, (bRect.height || stH) / stH);
-          activeVideoEntries.push({ slot, vid, relX, relY, relW, relH });
+          const compStyle = window.getComputedStyle(targetBoxEl);
+          const cssRadius = parseFloat(compStyle.borderRadius) || 0;
+          const relRadius = cssRadius / stW;
+          activeVideoEntries.push({ slot, vid, relX, relY, relW, relH, relRadius });
         }
       }
 
@@ -1159,6 +1282,7 @@
       const outW = 1080;
       const outH = state.format === '9:16' ? 1920 : 1350;
 
+      let bgBaseCanvas = null;
       let fgOverlayCanvas = null;
       let baseFrame = null;
 
@@ -1173,7 +1297,19 @@
             await entry.vid.play();
           } catch (_) {}
         }
-        fgOverlayCanvas = await renderForegroundOverlayForVideo(outW, activeVideoEntries);
+        const layers = await renderVideoLayersForComposite(outW, activeVideoEntries);
+        bgBaseCanvas = layers.bgBaseCanvas;
+        fgOverlayCanvas = layers.fgOverlayCanvas;
+
+        // Re-verify all loaded videos are actively playing from t=0 right before recording starts
+        for (const entry of activeVideoEntries) {
+          try {
+            entry.vid.currentTime = 0;
+            if (entry.vid.paused) {
+              await entry.vid.play();
+            }
+          } catch (_) {}
+        }
       } else {
         baseFrame = await renderStageToHighResCanvas(outW);
       }
@@ -1184,11 +1320,6 @@
       const ctx = streamCanvas.getContext('2d');
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
-
-      if (typeof streamCanvas.captureStream !== 'function' || typeof window.MediaRecorder === 'undefined') {
-        await handleExport4K();
-        return;
-      }
 
       const stream = streamCanvas.captureStream(60);
       let mimeType = 'video/webm;codecs=vp9';
@@ -1202,7 +1333,7 @@
 
       const recorder = new MediaRecorder(stream, {
         mimeType,
-        videoBitsPerSecond: 24000000 // 24 Mbps UHD-grade bitrate
+        videoBitsPerSecond: 32000000 // 32 Mbps Cinema UHD bitrate
       });
 
       const chunks = [];
@@ -1229,16 +1360,30 @@
         function drawTick(now) {
           const elapsed = now - startTime;
           const progress = Math.min(1, elapsed / durationMs);
-          els.exportReelLabel.textContent = `Grabando 60FPS... ${Math.round(progress * 100)}%`;
+          const pctLabel = `${Math.round(progress * 100)}%`;
+          if (from4kBtn) {
+            els.export4kLabel.textContent = `Video ${pctLabel}`;
+          } else {
+            els.exportReelLabel.textContent = `Grabando 60FPS... ${pctLabel}`;
+          }
 
           ctx.clearRect(0, 0, outW, outH);
 
           if (hasLiveVideo && fgOverlayCanvas) {
-            ctx.fillStyle = '#121214';
-            ctx.fillRect(0, 0, outW, outH);
+            // 1. Draw template background / card container layer (Layer 0)
+            if (bgBaseCanvas) {
+              ctx.drawImage(bgBaseCanvas, 0, 0, outW, outH);
+            } else {
+              ctx.fillStyle = '#121214';
+              ctx.fillRect(0, 0, outW, outH);
+            }
 
+            // 2. Draw live moving <video> frame into exact slot rectangle (Layer 1)
             for (const entry of activeVideoEntries) {
               const v = entry.vid;
+              if (v.paused && !v.ended) {
+                v.play().catch(() => {});
+              }
               const s = entry.slot;
               const vW = v.videoWidth || s.naturalWidth || 1080;
               const vH = v.videoHeight || s.naturalHeight || 1920;
@@ -1246,14 +1391,22 @@
               const dstY = Math.round(entry.relY * outH);
               const dstW = Math.round(entry.relW * outW);
               const dstH = Math.round(entry.relH * outH);
+              const radPx = Math.round((entry.relRadius || 0) * outW);
               const extraZoom = state.motionLoop ? (1 + 0.03 * Math.sin(progress * Math.PI * 2)) : 1;
+
+              ctx.save();
+              if (radPx > 1 && typeof ctx.roundRect === 'function') {
+                ctx.beginPath();
+                ctx.roundRect(dstX, dstY, dstW, dstH, radPx);
+                ctx.clip();
+              }
               drawCoverRectOnCtx(ctx, v, vW, vH, dstX, dstY, dstW, dstH, s.panY, (s.zoom || 1) * extraZoom);
+              ctx.restore();
             }
 
-            // Composite crisp template UI + scrim overlay on top of live video frame
+            // 3. Draw foreground scrim gradients, glass cards, badges & crisp typography (Layer 2)
             ctx.drawImage(fgOverlayCanvas, 0, 0, outW, outH);
           } else if (baseFrame) {
-            // Always apply subtle somatic motion on static photos when exporting Reel 60FPS
             const scalePulse = 1 + 0.035 * Math.sin(progress * Math.PI * 2);
             ctx.save();
             ctx.translate(outW / 2, outH / 2);
@@ -1276,18 +1429,20 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `SENS-REEL-60FPS-${state.activeTemplateId}.${ext}`;
+      a.download = `SENS-VIDEO-60FPS-${state.activeTemplateId}-${outW}x${outH}.${ext}`;
       document.body.appendChild(a);
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 10000);
-      showToast(`Reel 60FPS exportado (${outW}×${outH}px)`);
+      showToast(`Video 60FPS exportado (${outW}×${outH}px)`);
     } catch (err) {
       console.error('Reel Export Error:', err);
-      showToast('Error al exportar Reel');
+      showToast('Error al exportar Video');
     } finally {
       els.exportReelBtn.disabled = false;
-      els.exportReelLabel.textContent = origText;
+      els.export4kBtn.disabled = false;
+      els.exportReelLabel.textContent = origReelText;
+      syncExportButtonsForMediaKind();
     }
   }
 

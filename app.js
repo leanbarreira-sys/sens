@@ -22028,9 +22028,9 @@ window.stopCoachMarketingStudio = stopCoachMarketingStudio;
 function syncMarketingSuiteIframe() {
     const iframe = document.getElementById('sensMarketingSuiteFrame');
     if (!iframe) return;
-    const targetUrl = 'marketing-suites/studio-master.html?v=22.0';
+    const targetUrl = 'marketing-suites/studio-master.html?v=25.0';
     const currentSrc = iframe.getAttribute('src') || '';
-    if (!currentSrc.includes('studio-master.html')) {
+    if (!currentSrc.includes('studio-master.html?v=25.0')) {
         iframe.src = targetUrl;
     } else if (iframe.contentWindow) {
         const is916 = (MktStudioState.format === '9:16');
@@ -22543,6 +22543,10 @@ function bindMktUhdExportButtons() {
 }
 
 function exportMarketingPieceUHD() {
+    if (MktStudioState.mediaType === 'video') {
+        recordMarketingVideoUHD();
+        return;
+    }
     const tpl = getActiveMktTemplate();
     const is916 = (tpl.format === '9:16');
     const topSafeY = is916 ? 280 : 130;
