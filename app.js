@@ -4206,17 +4206,16 @@ function renderSoftPaywallState(profile, daysRemaining) {
     };
 }
 
+let lastPortalNavTime = 0;
 window.switchPortalView = function switchPortalView(viewId) {
+    const now = Date.now();
+    if (now - lastPortalNavTime < 200 && AppState._activeViewId === viewId) return;
+    lastPortalNavTime = now;
+    AppState._activeViewId = viewId;
+
     const isAdmin = isCurrentUserAdmin();
     const profile = AppState.profile;
     const accessState = checkUserAccessStatus(profile) || { hasAccess: true };
-    const isLockedByAccess = Boolean(
-        !isAdmin &&
-        profile &&
-        !accessState.hasAccess &&
-        viewId !== 'activationPendingView' &&
-        viewId !== 'profileSettingsView'
-    );
 
     // Bloqueo estricto de seguridad: usuarios no administradores jamás pueden acceder a Coach OS
     if (viewId === 'coachHubView' && !isAdmin) {
@@ -4225,16 +4224,7 @@ window.switchPortalView = function switchPortalView(viewId) {
         viewId = 'dashView';
     }
 
-    // Bloqueo Soft-Paywall cuando los 7 días de prueba expiraron o está pendiente de activación
-    // EXCEPCIÓN VITAL: La Evaluación Inicial obligatoria ('onboardingSection') NUNCA se bloquea por estado de pago
-    if (isLockedByAccess && viewId !== 'onboardingSection') {
-        viewId = 'activationPendingView';
-        const subNav = document.getElementById('portalSubNav');
-        if (subNav) subNav.style.display = 'none';
-        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
-            dock.style.display = 'none';
-        });
-    } else {
+    {
         const subNav = document.getElementById('portalSubNav');
         const isExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView');
         if (subNav) subNav.style.display = isExcluded ? 'none' : 'flex';
@@ -10391,15 +10381,14 @@ function initTopbarAvatar() {
 
     if (!avatarBtn || !dropdown) return;
 
-    const onAvatarTrigger = (e) => {
+    // Solo click listener - el debounce de 350ms en window.toggleUserAvatarDropdown previene dobles ejecuciones
+    avatarBtn.addEventListener('click', (e) => {
         if (e) {
             e.preventDefault();
             e.stopPropagation();
         }
         window.toggleUserAvatarDropdown(e);
-    };
-    avatarBtn.addEventListener('click', onAvatarTrigger);
-    avatarBtn.addEventListener('touchend', onAvatarTrigger, { passive: false });
+    });
 
     document.addEventListener('click', (e) => {
         if (!dropdown.contains(e.target) && (!avatarBtn || !avatarBtn.contains(e.target))) {
@@ -21063,15 +21052,12 @@ function initFloatingDock() {
                     e.stopPropagation();
                 }
                 const targetTab = btn.getAttribute('data-dock-tab');
-                if (targetTab && typeof switchPortalView === 'function') {
-                    switchPortalView(targetTab);
+                if (targetTab && typeof window.switchPortalView === 'function') {
+                    window.switchPortalView(targetTab);
                     window.scrollTo(0, 0);
                 }
             };
             btn.addEventListener('click', handleNav);
-            btn.addEventListener('touchend', (e) => {
-                handleNav(e);
-            }, { passive: false });
         });
     }
 
@@ -21127,7 +21113,6 @@ function initFloatingDock() {
         };
 
         document.addEventListener('click', onDockClick);
-        document.addEventListener('touchend', onDockClick, { passive: false });
     }
 }
 

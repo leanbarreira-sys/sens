@@ -27761,7 +27761,7 @@ body.in-portal #sensFloatingDock {
     bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    z-index: 9990 !important;
+    z-index: 100001 !important; pointer-events: auto !important;
     width: calc(100% - 32px) !important;
     max-width: 360px !important;
     box-sizing: border-box !important;
@@ -29134,4 +29134,55 @@ html.in-portal-mode #sensStreakFlameIcon svg,
 .sens-streak-flame-icon svg {
     stroke: #705B3E !important;
     color: #705B3E !important;
+}
+
+/* Elevación garantizada de Topbar y Menú de Usuario */
+body.in-portal .portal-topbar,
+.portal-topbar {
+    z-index: 100000 !important;
+}
+
+body.in-portal .user-avatar-wrap,
+.user-avatar-wrap {
+    position: relative !important;
+    z-index: 100004 !important;
+}
+
+body.in-portal #userAvatarDropdown,
+#userAvatarDropdown,
+.sens-quiet-avatar-dropdown {
+    z-index: 100005 !important;
+    pointer-events: auto !important;
+}
+
+body.in-portal #userAvatarDropdown.active,
+#userAvatarDropdown.active,
+.sens-quiet-avatar-dropdown.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Elevación garantizada del Dock Inferior sobre cualquier elemento */
+body.in-portal #sensFloatingDock,
+html.in-portal-mode #sensFloatingDock,
+#sensFloatingDock {
+    z-index: 100001 !important;
+    pointer-events: auto !important;
+}
+
+body.in-portal .sens-dock-item,
+html.in-portal-mode .sens-dock-item,
+.sens-dock-item {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+body.in-portal .sens-dock-item *,
+html.in-portal-mode .sens-dock-item *,
+.sens-dock-item * {
+    pointer-events: none !important;
 }
