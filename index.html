@@ -138,11 +138,65 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=19.0">
+    <link rel="stylesheet" href="style.css?v=20.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- Tailwind CSS (Scoped for Quiet Vitality Marketing Studio Templates without Preflight Reset) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: { preflight: false },
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#faf9f6",
+                        "surface-dim": "#dbdad7",
+                        "surface-bright": "#faf9f6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f4f3f1",
+                        "surface-container": "#efeeeb",
+                        "surface-container-high": "#e9e8e5",
+                        "surface-container-highest": "#e3e2e0",
+                        "on-surface": "#1a1c1a",
+                        "on-surface-variant": "#47464a",
+                        "inverse-surface": "#2f312f",
+                        "inverse-on-surface": "#f2f1ee",
+                        "outline": "#77767b",
+                        "outline-variant": "#c8c6ca",
+                        "surface-tint": "#5f5e60",
+                        "primary": "#000000",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#1b1b1d",
+                        "on-primary-container": "#858386",
+                        "secondary": "#705b3e",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#fbdeb9",
+                        "on-secondary-container": "#766143",
+                        "secondary-fixed": "#fbdeb9",
+                        "secondary-fixed-dim": "#dec29f",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "background": "#faf9f6",
+                        "on-background": "#1a1c1a"
+                    },
+                    spacing: {
+                        "space-xs": "0.375rem",
+                        "space-sm": "0.75rem",
+                        "space-md": "1.25rem",
+                        "space-lg": "2rem",
+                        "space-xl": "3.5rem",
+                        "gutter": "1.5rem"
+                    }
+                }
+            }
+        };
+    </script>
 
     <!-- SENS Instant Dropdown & Portal Navigation Bootstrap (Debounced) -->
     <script>
@@ -6674,41 +6728,46 @@
                      ========================================================================= -->
                 <div class="coach-subpane" id="paneMarketing">
                     <div class="coach-surface-card" style="padding: 16px;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                        <!-- Header Principal Quiet Luxury -->
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
                             <div>
                                 <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; padding: 2px 8px; letter-spacing: 0.08em;">
                                     SENS QUIET VITALITY • 200 TEMPLATES STUDIO
                                 </span>
-                                <h3 style="font-size: 1.25rem; font-weight: 800; margin-top: 4px; color: #121214; letter-spacing: -0.02em;">
+                                <h3 style="font-size: 1.28rem; font-weight: 800; margin-top: 4px; color: #121214; letter-spacing: -0.02em;">
                                     Catálogo de 200 Templates de Marketing
                                 </h3>
-                                <p style="font-size: 11.5px; color: #575659; margin-top: 2px; max-width: 650px;">
-                                    100 plantillas en 9:16 y 100 en 4:5. Hacé clic directo sobre el texto para editarlo (WYSIWYG) con límite estricto de caracteres, cambiá fotos por videos y descargá en UHD 4K sin pixelado.
+                                <p style="font-size: 12px; color: #575659; margin-top: 2px; max-width: 680px; line-height: 1.5;">
+                                    100 plantillas en 9:16 y 100 en 4:5 con sus composiciones originales exactas. Hacé clic directo en el texto o cambiá la foto por video desde el paso 1 y descargá en UHD 4K sin compresión.
                                 </p>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 6px;">
-                                <span class="sens-uhd-badge">UHD 4K NATIVO</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="sens-uhd-badge" style="background: rgba(112, 91, 62, 0.12); color: #705B3E; font-weight: 800; font-size: 10px; padding: 4px 10px; border-radius: 9999px;">
+                                    UHD 4K NATIVO
+                                </span>
                             </div>
                         </div>
 
-                        <!-- Mobile Switcher (Diseñar / Previsualizar en pantalla chica) -->
+                        <!-- Mobile Switcher (Sin Emojis • Quiet Luxury) -->
                         <div class="sens-mkt-mobile-switcher" id="mktMobileSwitcher">
                             <button type="button" class="sens-mkt-switch-btn active" data-tab="editor" id="mktSwitchTabEditor">
-                                <span>✏️ 1. Editar &amp; Elegir</span>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                <span>1. Elegir &amp; Editar</span>
                             </button>
                             <button type="button" class="sens-mkt-switch-btn" data-tab="preview" id="mktSwitchTabPreview">
-                                <span>👁️ 2. Canvas &amp; Descargar</span>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px;"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
+                                <span>2. Lienzo UHD</span>
                             </button>
                         </div>
 
                         <div class="sens-mkt-studio-layout mobile-view-editor" id="mktStudioMainLayout">
-                            <!-- COLUMNA IZQUIERDA: CONTROLES & CATÁLOGO (350px - 440px) -->
+                            <!-- COLUMNA IZQUIERDA: CONTROLES & CATÁLOGO VISUAL (PASO 1 A 5) -->
                             <div class="sens-mkt-controls-col">
                                 <!-- Paso 1: Selector de Formato (9:16 vs 4:5) -->
                                 <div class="sens-mkt-control-block">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                         <span class="sens-mkt-step-badge">1 • FORMATO DE PUBLICACIÓN</span>
-                                        <span id="mktFormatBadgeText" style="font-size: 10px; font-weight: 700; color: #705B3E;">9:16 (1080×1920)</span>
+                                        <span id="mktFormatBadgeText" style="font-size: 10.5px; font-weight: 700; color: #705B3E;">9:16 (1080×1920)</span>
                                     </div>
                                     <div class="sens-mkt-format-grid" id="mktFormatSelectorGrid">
                                         <button type="button" class="sens-mkt-format-btn active" data-format="9:16" id="btnFmt916">
@@ -6722,49 +6781,51 @@
                                     </div>
                                 </div>
 
-                                <!-- Paso 2: Selector de Bloque Temático (5 Bloques x 20 Templates) -->
+                                <!-- Paso 2: Selector de Bloques Temáticos & Galería Visual Inmediata -->
                                 <div class="sens-mkt-control-block">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                        <span class="sens-mkt-step-badge">2 • BLOQUES TEMÁTICOS (20 POR BLOQUE)</span>
+                                        <span class="sens-mkt-step-badge">2 • CATÁLOGO VISUAL DE TEMPLATES</span>
                                         <span id="mktBlockCountBadge" style="font-size: 10px; font-weight: 700; color: #575659;">20 plantillas</span>
                                     </div>
+                                    
+                                    <!-- Selector de 5 Bloques -->
                                     <div class="sens-mkt-block-ribbon" id="mktBlockRibbon">
                                         <button type="button" class="sens-mkt-block-tab active" data-block="b1">
                                             <span>Bloque I</span>
-                                            <small>Bloques Flotantes</small>
+                                            <small>Flotantes</small>
                                         </button>
                                         <button type="button" class="sens-mkt-block-tab" data-block="b2">
                                             <span>Bloque II</span>
-                                            <small>Tipografía Pura</small>
+                                            <small>Tipografía</small>
                                         </button>
                                         <button type="button" class="sens-mkt-block-tab" data-block="b3">
                                             <span>Bloque III</span>
-                                            <small>Métricas &amp; Datos</small>
+                                            <small>Métricas</small>
                                         </button>
                                         <button type="button" class="sens-mkt-block-tab" data-block="b4">
                                             <span>Bloque IV</span>
-                                            <small>Micro Stories</small>
+                                            <small>Stories</small>
                                         </button>
                                         <button type="button" class="sens-mkt-block-tab" data-block="b5">
                                             <span>Bloque V</span>
-                                            <small>Conversión &amp; Cupos</small>
+                                            <small>Conversión</small>
                                         </button>
                                     </div>
 
-                                    <!-- Grid de 20 Templates del Bloque Activo -->
-                                    <div class="sens-mkt-templates-grid" id="mktTemplateSelectorGrid" style="max-height: 290px; overflow-y: auto; margin-top: 10px;">
-                                        <!-- Inyectado dinámicamente con los 20 templates del bloque -->
+                                    <!-- Galería Visual con Miniaturas Reales de las 20 Plantillas del Bloque -->
+                                    <div class="sens-mkt-templates-grid" id="mktTemplateSelectorGrid" style="margin-top: 10px;">
+                                        <!-- Inyectado dinámicamente con miniaturas reales en app.js -->
                                     </div>
                                 </div>
 
-                                <!-- Paso 3: Componentes Editables (Modo Híbrido con Límite Estricto de Caracteres) -->
+                                <!-- Paso 3: Componentes Editables (Límites Estrictos de Caracteres) -->
                                 <div class="sens-mkt-control-block">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                         <span class="sens-mkt-step-badge">3 • COMPONENTES EDITABLES</span>
                                         <span class="sens-mkt-lock-badge">Límite Estricto Activo</span>
                                     </div>
-                                    <p style="font-size: 10.5px; color: #71717A; margin-bottom: 10px;">
-                                        Podés escribir acá o hacer clic directo sobre el texto del lienzo. Los caracteres se bloquean al límite exacto de marketing para no romper las filas.
+                                    <p style="font-size: 11px; color: #71717A; margin-bottom: 10px; line-height: 1.4;">
+                                        Podés escribir en los campos de abajo o hacer clic directo sobre el texto del lienzo. Los caracteres se bloquean al límite exacto para mantener el equilibrio visual.
                                     </p>
 
                                     <!-- Campo 1: Tag / Kicker / Eyebrow -->
@@ -6780,9 +6841,9 @@
                                     <div class="sens-mkt-field-group">
                                         <div class="sens-mkt-field-header">
                                             <label for="mktInputHeadline">Titular Principal (Headline):</label>
-                                            <span class="sens-mkt-char-badge" id="mktTitleCharBadge">0 / 60</span>
+                                            <span class="sens-mkt-char-badge" id="mktTitleCharBadge">0 / 65</span>
                                         </div>
-                                        <textarea id="mktInputHeadline" class="sens-mkt-textarea" rows="2" placeholder="Titular de alto impacto..." maxlength="60"></textarea>
+                                        <textarea id="mktInputHeadline" class="sens-mkt-textarea" rows="2" placeholder="Titular de alto impacto..." maxlength="65"></textarea>
                                     </div>
 
                                     <!-- Campo 3: Bajada / Subtítulo / Cuerpo -->
@@ -6792,6 +6853,12 @@
                                             <span class="sens-mkt-char-badge" id="mktBajadaCharBadge">0 / 120</span>
                                         </div>
                                         <textarea id="mktInputSubtitle" class="sens-mkt-textarea" rows="3" placeholder="Texto explicativo con sentido común..." maxlength="120"></textarea>
+                                    </div>
+
+                                    <div style="margin-top: 8px; display: flex; justify-content: flex-end;">
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktCopyTexts" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; border-color: rgba(18, 18, 20, 0.15); color: #121214;">
+                                            Copiar Textos
+                                        </button>
                                     </div>
                                 </div>
 
@@ -6806,19 +6873,23 @@
                                     </div>
 
                                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
-                                        <label for="mktMediaFileInput" class="btn btn-primary btn-sm" style="cursor: pointer; font-weight: 800; flex: 1; text-align: center; background: #E5CBA7; color: #121214; border: none; padding: 9px 12px; border-radius: 10px; font-size: 11.5px; box-shadow: 0 2px 8px rgba(229, 203, 167, 0.3);">
-                                            📁 Subir Foto o Video
+                                        <label for="mktMediaFileInput" class="btn btn-primary btn-sm" style="cursor: pointer; font-weight: 800; flex: 1; text-align: center; background: #E5CBA7; color: #121214; border: none; padding: 9px 12px; border-radius: 10px; font-size: 11.5px; box-shadow: 0 2px 8px rgba(229, 203, 167, 0.3); display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                            <span>Subir Foto o Video</span>
                                         </label>
                                         <input type="file" id="mktMediaFileInput" accept="video/mp4,video/webm,video/quicktime,video/*,image/jpeg,image/png,image/webp,image/*" style="display: none;">
-                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktSensVideos" style="font-size: 11px; padding: 8px 11px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214;">
-                                            🎥 Videos SENS
+                                        
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktSensVideos" style="font-size: 11px; padding: 8px 11px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214; display: flex; align-items: center; gap: 5px;">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                                            <span>Videos SENS</span>
                                         </button>
-                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktSensPhotos" style="font-size: 11px; padding: 8px 11px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214;">
-                                            🖼️ Fotos Quiet Luxury
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktSensPhotos" style="font-size: 11px; padding: 8px 11px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214; display: flex; align-items: center; gap: 5px;">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                            <span>Fotos Quiet Luxury</span>
                                         </button>
                                     </div>
 
-                                    <!-- Selector modal rápido de videos de ejercicios de Nico -->
+                                    <!-- Selector rápido de videos de ejercicios de Nico -->
                                     <div id="mktSensVideoPickerBar" style="display: none; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.1); border-radius: 10px; padding: 8px; margin-bottom: 8px;">
                                         <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #705B3E; display: block; margin-bottom: 6px;">
                                             Elegir Ejercicio de Nico:
@@ -6838,10 +6909,10 @@
                                     <!-- Controles de Video si hay video activo -->
                                     <div id="mktVideoPlaybackControls" style="display: none; align-items: center; gap: 8px; margin-top: 8px; background: #F4F3F1; padding: 6px 10px; border-radius: 8px;">
                                         <button type="button" class="btn btn-outline btn-sm" id="btnMktToggleVideoPlay" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #FFF;">
-                                            ⏸️ Pausar
+                                            Pausar
                                         </button>
                                         <button type="button" class="btn btn-outline btn-sm" id="btnMktToggleVideoMute" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #FFF;">
-                                            🔇 Mute
+                                            Silenciar
                                         </button>
                                         <span style="font-size: 9.5px; color: #71717A;">Video en loop continuo</span>
                                     </div>
@@ -6851,7 +6922,7 @@
                                 <div class="sens-mkt-control-block" style="display: flex; justify-content: space-between; align-items: center;">
                                     <div>
                                         <span class="sens-mkt-step-badge" style="margin-bottom: 0;">5 • SAFE ZONES INSTAGRAM / TIKTOK</span>
-                                        <p style="font-size: 10px; color: #71717A; margin: 2px 0 0 0;">Muestra guías para no tapar avatar, comentarios ni botones.</p>
+                                        <p style="font-size: 10.5px; color: #71717A; margin: 2px 0 0 0;">Muestra guías para no tapar avatar, comentarios ni botones.</p>
                                     </div>
                                     <label class="sens-switch-ui">
                                         <input type="checkbox" id="mktSafeZoneToggle">
@@ -6860,7 +6931,7 @@
                                 </div>
                             </div>
 
-                            <!-- COLUMNA DERECHA: LIENZO WYSIWYG & EXPORTACIÓN UHD -->
+                            <!-- COLUMNA DERECHA: LIENZO EXACTO WYSIWYG & EXPORTACIÓN UHD -->
                             <div class="sens-mkt-preview-col">
                                 <div class="sens-mkt-stage-topbar">
                                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -6876,8 +6947,9 @@
 
                                 <!-- Contenedor del Lienzo Interactivo WYSIWYG -->
                                 <div class="sens-mkt-canvas-stage is-916" id="mktCanvasStageWrap">
-                                    <!-- Artboard Interactivo DOM (WYSIWYG con exactitud 1:1) -->
+                                    <!-- Artboard Interactivo DOM (Inyectado con el HTML auténtico de cada plantilla) -->
                                     <div class="sens-mkt-artboard" id="mktInteractiveArtboard">
+                                        <!-- Estructura auténtica del template inyectada acá por app.js -->
                                         <!-- Capa de Fondo (Foto o Video) -->
                                         <div class="mkt-artboard-media-box" id="mktArtboardMediaBox">
                                             <img id="mktArtboardImg" class="mkt-artboard-media-asset" alt="SENS Template Background" src="img/hero-bg-opt.jpg">
@@ -6894,49 +6966,13 @@
                                             <div class="mkt-safe-bottom"><small>ZONA RESERVADA BOTONES / INPUTS</small></div>
                                         </div>
 
-                                        <!-- Contenido Tipográfico y Componentes Somáticos -->
-                                        <div class="mkt-artboard-content" id="mktArtboardContent">
-                                            <!-- Marca de Agua SENS -->
-                                            <div class="mkt-brand-header">
-                                                <svg width="22" height="14" viewBox="0 0 24 16" fill="none">
-                                                    <path d="M2 14C5 14 7 10 10 10C13 10 15 14 18 14C21 14 22 12 22 12" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
-                                                    <path d="M2 8C5 8 7 4 10 4C13 4 15 8 18 8C21 8 22 6 22 6" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
-                                                    <path d="M2 2C5 2 7 1 10 1C13 1 15 2 18 2C21 2 22 1 22 1" stroke="#E5CBA7" stroke-width="2.2" stroke-linecap="round"/>
-                                                </svg>
-                                                <span class="mkt-brand-title">SENS <small>TRAIN &amp; WELLNESS</small></span>
-                                            </div>
-
-                                            <!-- Inset Card Flotante -->
+                                        <!-- Contenedor Tipográfico Base -->
+                                        <div class="mkt-artboard-content" id="mktArtboardContent" style="display: none;">
                                             <div class="mkt-glass-card" id="mktGlassCard">
-                                                <!-- Tag Kicker Editable -->
-                                                <div class="mkt-editable-field-wrap">
-                                                    <span class="mkt-tag-kicker" id="mktLiveTag" contenteditable="true" spellcheck="false" data-mkt-field="tag">
-                                                        SENS • PROTOCOLO
-                                                    </span>
-                                                </div>
-
-                                                <!-- Headline Editable -->
-                                                <div class="mkt-editable-field-wrap">
-                                                    <h2 class="mkt-headline" id="mktLiveTitle" contenteditable="true" spellcheck="false" data-mkt-field="title">
-                                                        Tu punto de partida no es tu destino.
-                                                    </h2>
-                                                </div>
-
-                                                <!-- Bajada / Subtítulo Editable -->
-                                                <div class="mkt-editable-field-wrap">
-                                                    <p class="mkt-bajada" id="mktLiveBajada" contenteditable="true" spellcheck="false" data-mkt-field="bajada">
-                                                        Recomposición corporal con precisión neuromuscular y dolor cero en CABA y Online.
-                                                    </p>
-                                                </div>
-
-                                                <!-- Contenedor de Métrica / Componente Específico (ECG, Cronómetro, etc.) -->
-                                                <div class="mkt-metric-container" id="mktLiveMetricWrap"></div>
-                                            </div>
-
-                                            <!-- Footer / CTA Strip -->
-                                            <div class="mkt-artboard-footer">
-                                                <span class="mkt-cta-pill">makesens.com.ar</span>
-                                                <span class="mkt-handle">@sens.train.ba</span>
+                                                <span id="mktLiveTag">SENS • PROTOCOLO</span>
+                                                <h2 id="mktLiveTitle">Tu punto de partida no es tu destino.</h2>
+                                                <p id="mktLiveBajada">Recomposición corporal con dolor cero.</p>
+                                                <div id="mktLiveMetricWrap"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -6949,24 +6985,25 @@
                                 <div class="sens-mkt-export-actions-wrap" id="mktExportActionsWrap" style="margin-top: 14px; display: flex; flex-direction: column; gap: 8px;">
                                     <!-- Botón Principal: Imagen UHD 300 DPI -->
                                     <button type="button" class="btn btn-primary btn-full sens-mkt-btn-record-video" id="btnMktExportPngUHD" style="font-weight: 800; padding: 13px; font-size: 13px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #121214; border: none; border-radius: 12px; box-shadow: 0 4px 16px rgba(229, 203, 167, 0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                        <svg width="18" height="18" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                         <span>Descargar Imagen UHD (PNG 300 DPI • 2160×3840)</span>
                                     </button>
 
                                     <!-- Botón Secundario: Grabar Video UHD (Si el fondo es video) -->
                                     <button type="button" class="btn btn-outline btn-full" id="btnMktRecordVideoUHD" style="font-weight: 700; padding: 11px; font-size: 12px; background: #FFFFFF; color: #121214; border: 1px solid rgba(18, 18, 20, 0.15); border-radius: 12px; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 8px;">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" ry="2" ry="2"/></svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
                                         <span>Grabar Clip de Video UHD (MP4 / WebM 60fps)</span>
                                     </button>
 
                                     <!-- Botón Terciario: Capturar Fotograma UHD -->
                                     <button type="button" class="btn btn-outline btn-full" id="btnMktCaptureFrameUHD" style="font-weight: 700; padding: 9px; font-size: 11.5px; background: transparent; color: #575659; border: 1px dashed rgba(18, 18, 20, 0.18); border-radius: 10px; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 6px;">
-                                        <span>📸 Capturar Fotograma Actual en UHD</span>
+                                        <span>Capturar Fotograma Actual en UHD</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </section>
         </div>
@@ -9483,8 +9520,8 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="marketing_templates_catalog.js?v=1.0"></script>
-    <script src="app.js?v=17.0"></script>
+    <script src="marketing_templates_catalog.js?v=2.0"></script>
+    <script src="app.js?v=18.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

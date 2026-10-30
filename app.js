@@ -21948,7 +21948,7 @@ function getActiveMktTemplate() {
 }
 
 function initCoachMarketingStudio() {
-    console.log('[SENS Marketing Studio] Inicializando suite de 200 templates Quiet Vitality...');
+    console.log('[SENS Marketing Studio] Inicializando suite de 200 templates exactos Quiet Vitality...');
     const catalog = getMktCatalog();
     if (!catalog || catalog.length === 0) {
         console.warn('[SENS Marketing Studio] window.SENS_MARKETING_CATALOG no encontrado. Reintentando carga...');
@@ -21963,8 +21963,12 @@ function initCoachMarketingStudio() {
     bindMktSafeZoneToggle();
     bindMktUhdExportButtons();
     bindMktMobileSwitcher();
+    bindMktCopyButton();
 
-    // Cargar template inicial
+    // Renderizar grid de templates visual
+    renderMktTemplatesGrid();
+
+    // Cargar template inicial auténtico
     loadMktTemplate(getActiveMktTemplate().code);
 }
 window.initCoachMarketingStudio = initCoachMarketingStudio;
@@ -22005,7 +22009,7 @@ function bindMktFormatButtons() {
             stage.classList.toggle('is-45', !is916);
         }
 
-        // Renderizar grid de templates del formato actual
+        // Renderizar catálogo visual del formato seleccionado
         renderMktTemplatesGrid();
 
         // Cargar el primer template disponible en este formato y bloque
@@ -22046,7 +22050,7 @@ function bindMktBlockTabs() {
     });
 }
 
-// 3. RENDERIZADO DEL GRID DE 20 TEMPLATES
+// 3. RENDERIZAR GALERÍA VISUAL DE TEMPLATES (MINIATURAS CON IMAGEN REAL)
 function renderMktTemplatesGrid() {
     const grid = document.getElementById('mktTemplateSelectorGrid');
     if (!grid) return;
@@ -22061,31 +22065,40 @@ function renderMktTemplatesGrid() {
 
     grid.innerHTML = items.map(t => {
         const isActive = (t.code === MktStudioState.templateId);
+        const is916 = (t.format === '9:16');
+        const bgUrl = t.defaultBg || 'img/hero-bg-opt.jpg';
+
         return `
-            <div class="sens-mkt-template-card-item \${isActive ? 'active' : ''}" data-tpl-code="\${t.code}">
-                <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
-                    <span class="sens-mkt-tpl-code-pill">\${t.code}</span>
-                    <div class="sens-mkt-tpl-info">
-                        <span class="sens-mkt-tpl-name">\${t.name}</span>
-                        <span class="sens-mkt-tpl-cat">\${t.tag || 'SENS PROTOCOL'}</span>
-                    </div>
+            <div class="sens-mkt-visual-card ${isActive ? 'active' : ''}" data-tpl-code="${t.code}">
+                <div class="sens-mkt-card-thumb ${is916 ? 'is-916' : ''}" style="background-image: url('${bgUrl}');">
+                    <div class="sens-mkt-thumb-scrim"></div>
+                    <span class="sens-mkt-thumb-badge">${t.code}</span>
+                    <span class="sens-mkt-aspect-pill">${t.format}</span>
                 </div>
-                <span style="font-size: 11px; color: \${isActive ? '#705B3E' : '#A1A1AA'}; font-weight: 800;">
-                    \${isActive ? '✓' : '→'}
-                </span>
+                <div class="sens-mkt-card-meta">
+                    <strong class="sens-mkt-card-title" title="${t.name}">${t.name}</strong>
+                    <span class="sens-mkt-card-tag">${t.tag || 'SENS'}</span>
+                </div>
             </div>
         `;
     }).join('');
 
-    grid.querySelectorAll('.sens-mkt-template-card-item').forEach(card => {
+    grid.querySelectorAll('.sens-mkt-visual-card').forEach(card => {
         card.onclick = () => {
             const code = card.getAttribute('data-tpl-code');
-            if (code) loadMktTemplate(code);
+            if (code) {
+                loadMktTemplate(code);
+                // Scroll suave hacia el lienzo en pantallas móviles
+                if (window.innerWidth <= 960) {
+                    const stage = document.getElementById('mktCanvasStageWrap');
+                    if (stage) stage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
         };
     });
 }
 
-// 4. CARGAR TEMPLATE ACTIVO & ENFORZAR LÍMITES DE CARACTERES
+// 4. CARGAR TEMPLATE AUTÉNTICO & ENFORZAR LÍMITES DE CARACTERES
 function loadMktTemplate(code) {
     const catalog = getMktCatalog();
     const tpl = catalog.find(t => t.code === code);
@@ -22095,24 +22108,23 @@ function loadMktTemplate(code) {
     MktStudioState.format = tpl.format;
     MktStudioState.blockId = tpl.blockId;
 
-    // Resaltar en el grid
+    // Resaltar en la galería visual
     const grid = document.getElementById('mktTemplateSelectorGrid');
     if (grid) {
-        grid.querySelectorAll('.sens-mkt-template-card-item').forEach(c => {
+        grid.querySelectorAll('.sens-mkt-visual-card').forEach(c => {
             const isMatch = (c.getAttribute('data-tpl-code') === tpl.code);
             c.classList.toggle('active', isMatch);
         });
     }
 
-    // Actualizar campos
-    MktStudioState.fields.tag = tpl.tag || 'SENS • PROTOCOLO';
-    MktStudioState.fields.title = tpl.title || 'Entrenamiento con dolor cero.';
-    MktStudioState.fields.bajada = tpl.bajada || 'Fuerza tranquila y longevidad en CABA y Online.';
+    // Actualizar campos de texto
+    MktStudioState.fields.tag = tpl.tag || 'SENS PROTOCOL';
+    MktStudioState.fields.title = tpl.title || 'Equilibrio Bioquímico';
+    MktStudioState.fields.bajada = tpl.bajada || 'Sincronización circadiana mediante luz matutina.';
 
-    // Límites estrictos según requerimiento de marketing
-    const limits = tpl.charLimits || { tag: 25, title: 60, bajada: 120 };
+    const limits = tpl.charLimits || { tag: 25, title: 65, bajada: 120 };
 
-    // 1. Sincronizar inputs del panel lateral
+    // Sincronizar inputs del panel
     const inputTag = document.getElementById('mktInputEyebrow');
     const inputTitle = document.getElementById('mktInputHeadline');
     const inputBajada = document.getElementById('mktInputSubtitle');
@@ -22130,31 +22142,167 @@ function loadMktTemplate(code) {
         inputBajada.value = MktStudioState.fields.bajada;
     }
 
-    // 2. Sincronizar elementos en el Artboard WYSIWYG
-    const liveTag = document.getElementById('mktLiveTag');
-    const liveTitle = document.getElementById('mktLiveTitle');
-    const liveBajada = document.getElementById('mktLiveBajada');
-    const liveMetric = document.getElementById('mktLiveMetricWrap');
-
-    if (liveTag) liveTag.innerText = MktStudioState.fields.tag;
-    if (liveTitle) liveTitle.innerText = MktStudioState.fields.title;
-    if (liveBajada) liveBajada.innerText = MktStudioState.fields.bajada;
-
-    if (liveMetric) {
-        liveMetric.innerHTML = tpl.metricHtml || '';
-        liveMetric.style.display = tpl.metricHtml ? 'block' : 'none';
-    }
-
-    // 3. Actualizar badges de conteo y advertencia
+    // Actualizar badges de conteo y advertencia
     updateCharBadge('mktTagCharBadge', MktStudioState.fields.tag, limits.tag);
     updateCharBadge('mktTitleCharBadge', MktStudioState.fields.title, limits.title);
     updateCharBadge('mktBajadaCharBadge', MktStudioState.fields.bajada, limits.bajada);
 
-    // 4. Actualizar multimedia de fondo por defecto
-    if (!MktStudioState.customMediaActive) {
-        MktStudioState.mediaUrl = tpl.defaultBg || 'img/hero-bg-opt.jpg';
-        updateMktMediaDisplay();
+    // Inyectar el HTML auténtico del template en el Artboard
+    const artboard = document.getElementById('mktInteractiveArtboard');
+    if (artboard && tpl.htmlTemplate) {
+        artboard.innerHTML = tpl.htmlTemplate;
+
+        // Inyectar botón flotante para cambiar foto/video directo desde el lienzo
+        const floatBtn = document.createElement('button');
+        floatBtn.type = 'button';
+        floatBtn.className = 'mkt-floating-media-btn';
+        floatBtn.id = 'btnMktFloatingMedia';
+        floatBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Cambiar Foto / Video</span>
+        `;
+        floatBtn.onclick = () => {
+            const fileInput = document.getElementById('mktMediaFileInput');
+            if (fileInput) fileInput.click();
+        };
+        artboard.appendChild(floatBtn);
+
+        // Inyectar Guía Safe Zone
+        const safeGuide = document.createElement('div');
+        safeGuide.className = 'mkt-safe-zone-guide';
+        safeGuide.id = 'mktSafeZoneOverlay';
+        safeGuide.style.display = MktStudioState.showSafeZones ? 'flex' : 'none';
+        safeGuide.innerHTML = `
+            <div class="mkt-safe-top"><small>ZONA RESERVADA HEADER</small></div>
+            <div class="mkt-safe-center"><span>ÁREA DE CONTENIDO SEGURO</span></div>
+            <div class="mkt-safe-bottom"><small>ZONA RESERVADA BOTONES</small></div>
+        `;
+        artboard.appendChild(safeGuide);
+
+        // Configurar multimedia inicial
+        if (!MktStudioState.customMediaActive) {
+            MktStudioState.mediaUrl = tpl.defaultBg || 'img/hero-bg-opt.jpg';
+        }
+        applyMediaToArtboard();
+
+        // Conectar eventos WYSIWYG en vivo dentro del template
+        attachWysiwygToTemplate(limits);
     }
+}
+
+// Aplica la foto o el video actual al slot de multimedia del template activo
+function applyMediaToArtboard() {
+    const artboard = document.getElementById('mktInteractiveArtboard');
+    if (!artboard) return;
+
+    const isVideo = (MktStudioState.mediaType === 'video');
+    const mediaUrl = MktStudioState.mediaUrl || 'img/hero-bg-opt.jpg';
+
+    // Buscar el contenedor de fondo o imagen
+    const mediaSlots = artboard.querySelectorAll('[data-mkt-media-slot="true"], .mkt-template-bg-slot, [style*="background-image"]');
+    
+    if (isVideo) {
+        // En modo video: si no existe el tag video lo creamos en el slot
+        mediaSlots.forEach(slot => {
+            let existingVid = slot.querySelector('video.mkt-artboard-media-asset');
+            if (!existingVid) {
+                existingVid = document.createElement('video');
+                existingVid.className = 'mkt-artboard-media-asset absolute inset-0 w-full h-full object-cover';
+                existingVid.autoplay = true;
+                existingVid.loop = true;
+                existingVid.muted = true;
+                existingVid.playsInline = true;
+                existingVid.setAttribute('webkit-playsinline', 'true');
+                slot.style.position = 'relative';
+                slot.appendChild(existingVid);
+            }
+            if (existingVid.src !== mediaUrl) {
+                existingVid.src = mediaUrl;
+            }
+            existingVid.play().catch(() => {});
+        });
+
+        // Controles de video
+        const videoControls = document.getElementById('mktVideoPlaybackControls');
+        const btnRecordUHD = document.getElementById('btnMktRecordVideoUHD');
+        const btnCaptureFrame = document.getElementById('btnMktCaptureFrameUHD');
+        if (videoControls) videoControls.style.display = 'flex';
+        if (btnRecordUHD) btnRecordUHD.style.display = 'flex';
+        if (btnCaptureFrame) btnCaptureFrame.style.display = 'flex';
+    } else {
+        // En modo foto: actualizar background-image o src y remover video activo
+        mediaSlots.forEach(slot => {
+            const existingVid = slot.querySelector('video.mkt-artboard-media-asset');
+            if (existingVid) {
+                existingVid.pause();
+                existingVid.remove();
+            }
+            if (slot.tagName.toLowerCase() === 'img') {
+                slot.src = mediaUrl;
+            } else {
+                slot.style.backgroundImage = `url('${mediaUrl}')`;
+            }
+        });
+
+        const videoControls = document.getElementById('mktVideoPlaybackControls');
+        const btnRecordUHD = document.getElementById('btnMktRecordVideoUHD');
+        const btnCaptureFrame = document.getElementById('btnMktCaptureFrameUHD');
+        if (videoControls) videoControls.style.display = 'none';
+        if (btnRecordUHD) btnRecordUHD.style.display = 'none';
+        if (btnCaptureFrame) btnCaptureFrame.style.display = 'none';
+    }
+}
+
+// Conectar listeners de edición directa (WYSIWYG) dentro del template
+function attachWysiwygToTemplate(limits) {
+    const artboard = document.getElementById('mktInteractiveArtboard');
+    if (!artboard) return;
+
+    const liveTitles = artboard.querySelectorAll('[data-mkt-field="title"]');
+    const liveBajadas = artboard.querySelectorAll('[data-mkt-field="bajada"]');
+    const liveTags = artboard.querySelectorAll('[data-mkt-field="tag"]');
+
+    const inputTitle = document.getElementById('mktInputHeadline');
+    const inputBajada = document.getElementById('mktInputSubtitle');
+    const inputTag = document.getElementById('mktInputEyebrow');
+
+    const setupField = (elements, fieldName, limit, inputEl, badgeId) => {
+        elements.forEach(el => {
+            el.setAttribute('contenteditable', 'true');
+            el.setAttribute('spellcheck', 'false');
+            el.classList.add('mkt-live-editable-field');
+
+            el.addEventListener('keydown', (e) => {
+                const currentLen = (el.innerText || '').length;
+                const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Escape'];
+                if (currentLen >= limit && !allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    const badge = document.getElementById(badgeId);
+                    if (badge) {
+                        badge.classList.add('is-limit-warning');
+                        setTimeout(() => badge.classList.remove('is-limit-warning'), 350);
+                    }
+                }
+            });
+
+            el.addEventListener('input', () => {
+                let val = el.innerText || '';
+                if (val.length > limit) {
+                    val = val.slice(0, limit);
+                    el.innerText = val;
+                }
+                MktStudioState.fields[fieldName] = val;
+                if (inputEl && inputEl.value !== val) {
+                    inputEl.value = val;
+                }
+                updateCharBadge(badgeId, val, limit);
+            });
+        });
+    };
+
+    setupField(liveTitles, 'title', limits.title || 65, inputTitle, 'mktTitleCharBadge');
+    setupField(liveBajadas, 'bajada', limits.bajada || 120, inputBajada, 'mktBajadaCharBadge');
+    setupField(liveTags, 'tag', limits.tag || 25, inputTag, 'mktTagCharBadge');
 }
 
 function updateCharBadge(badgeId, text, limit) {
@@ -22165,85 +22313,40 @@ function updateCharBadge(badgeId, text, limit) {
     badge.classList.toggle('is-limit-warning', len >= limit);
 }
 
-// 5. EDICIÓN HÍBRIDA (WYSIWYG + INPUTS) CON BLOQUEO ESTRICTO
+// 5. EDICIÓN DESDE EL PANEL DE CONTROLES
 function bindMktEditorInputs() {
     const inputTag = document.getElementById('mktInputEyebrow');
     const inputTitle = document.getElementById('mktInputHeadline');
     const inputBajada = document.getElementById('mktInputSubtitle');
 
-    const liveTag = document.getElementById('mktLiveTag');
-    const liveTitle = document.getElementById('mktLiveTitle');
-    const liveBajada = document.getElementById('mktLiveBajada');
-
-    const syncField = (field, text, liveEl, inputEl, badgeId) => {
+    const syncFromInput = (field, text, badgeId) => {
         const tpl = getActiveMktTemplate();
-        const limit = (tpl.charLimits && tpl.charLimits[field]) || 60;
+        const limit = (tpl.charLimits && tpl.charLimits[field]) || 65;
         let safeText = String(text || '');
         if (safeText.length > limit) {
             safeText = safeText.slice(0, limit);
         }
         MktStudioState.fields[field] = safeText;
 
-        if (liveEl && liveEl.innerText !== safeText) {
-            liveEl.innerText = safeText;
-        }
-        if (inputEl && inputEl.value !== safeText) {
-            inputEl.value = safeText;
+        const artboard = document.getElementById('mktInteractiveArtboard');
+        if (artboard) {
+            const liveEls = artboard.querySelectorAll(`[data-mkt-field="${field}"]`);
+            liveEls.forEach(el => {
+                if (el.innerText !== safeText) el.innerText = safeText;
+            });
         }
         updateCharBadge(badgeId, safeText, limit);
     };
 
-    // Listeners en Inputs del Panel
     if (inputTag) {
-        inputTag.addEventListener('input', (e) => syncField('tag', e.target.value, liveTag, inputTag, 'mktTagCharBadge'));
+        inputTag.addEventListener('input', (e) => syncFromInput('tag', e.target.value, 'mktTagCharBadge'));
     }
     if (inputTitle) {
-        inputTitle.addEventListener('input', (e) => syncField('title', e.target.value, liveTitle, inputTitle, 'mktTitleCharBadge'));
+        inputTitle.addEventListener('input', (e) => syncFromInput('title', e.target.value, 'mktTitleCharBadge'));
     }
     if (inputBajada) {
-        inputBajada.addEventListener('input', (e) => syncField('bajada', e.target.value, liveBajada, inputBajada, 'mktBajadaCharBadge'));
+        inputBajada.addEventListener('input', (e) => syncFromInput('bajada', e.target.value, 'mktBajadaCharBadge'));
     }
-
-    // Listeners WYSIWYG en Vivo en el Artboard (con guardia estricta en keydown y paste)
-    const attachWysiwygGuard = (field, liveEl, inputEl, badgeId) => {
-        if (!liveEl) return;
-
-        liveEl.addEventListener('keydown', (e) => {
-            const tpl = getActiveMktTemplate();
-            const limit = (tpl.charLimits && tpl.charLimits[field]) || 60;
-            const currentLen = (liveEl.innerText || '').length;
-
-            const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Escape'];
-            if (currentLen >= limit && !allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
-                e.preventDefault();
-                // Visual feedback de límite alcanzado
-                const badge = document.getElementById(badgeId);
-                if (badge) {
-                    badge.classList.add('is-limit-warning');
-                    setTimeout(() => badge.classList.remove('is-limit-warning'), 400);
-                }
-            }
-        });
-
-        liveEl.addEventListener('input', () => {
-            syncField(field, liveEl.innerText, null, inputEl, badgeId);
-        });
-
-        liveEl.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
-            const tpl = getActiveMktTemplate();
-            const limit = (tpl.charLimits && tpl.charLimits[field]) || 60;
-            const currentLen = (liveEl.innerText || '').length;
-            const available = Math.max(0, limit - currentLen);
-            const textToInsert = pasteData.slice(0, available);
-            document.execCommand('insertText', false, textToInsert);
-        });
-    };
-
-    attachWysiwygGuard('tag', liveTag, inputTag, 'mktTagCharBadge');
-    attachWysiwygGuard('title', liveTitle, inputTitle, 'mktTitleCharBadge');
-    attachWysiwygGuard('bajada', liveBajada, inputBajada, 'mktBajadaCharBadge');
 }
 
 // 6. MULTIMEDIA: FOTO & VIDEO INTERCAMBIABLES
@@ -22258,13 +22361,13 @@ function bindMktMediaControls() {
     const btnTogglePlay = document.getElementById('btnMktToggleVideoPlay');
     const btnToggleMute = document.getElementById('btnMktToggleVideoMute');
 
-    // Cambiar entre tipo Foto y Video
+    // Cambiar tipo Foto vs Video
     if (btnSelectImg) {
         btnSelectImg.onclick = () => {
             MktStudioState.mediaType = 'image';
             btnSelectImg.classList.add('active');
             if (btnSelectVid) btnSelectVid.classList.remove('active');
-            updateMktMediaDisplay();
+            applyMediaToArtboard();
         };
     }
     if (btnSelectVid) {
@@ -22272,7 +22375,7 @@ function bindMktMediaControls() {
             MktStudioState.mediaType = 'video';
             btnSelectVid.classList.add('active');
             if (btnSelectImg) btnSelectImg.classList.remove('active');
-            updateMktMediaDisplay();
+            applyMediaToArtboard();
         };
     }
 
@@ -22299,32 +22402,32 @@ function bindMktMediaControls() {
                 pillText.textContent = `${isVideo ? 'Video' : 'Foto'} cargado: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
             }
 
-            updateMktMediaDisplay();
+            applyMediaToArtboard();
         });
     }
 
-    // Videos oficiales SENS de Nico
+    // Videos oficiales SENS
     if (btnSensVideos) {
         btnSensVideos.onclick = () => {
-            MktStudioState.mediaType = 'video';
-            if (btnSelectImg && btnSelectVid) {
-                btnSelectImg.classList.remove('active');
-                btnSelectVid.classList.add('active');
-            }
             if (videoSelectBar) {
-                videoSelectBar.style.display = (videoSelectBar.style.display === 'none') ? 'block' : 'none';
+                const isHidden = (videoSelectBar.style.display === 'none');
+                videoSelectBar.style.display = isHidden ? 'block' : 'none';
+                if (isHidden) populateSensVideosDropdown();
             }
-            // Poblar dropdown con videos si está disponible
-            populateSensVideosDropdown();
         };
     }
 
     if (videoSelect) {
         videoSelect.onchange = (e) => {
             if (e.target.value) {
+                MktStudioState.mediaType = 'video';
                 MktStudioState.mediaUrl = e.target.value;
                 MktStudioState.customMediaActive = true;
-                updateMktMediaDisplay();
+                if (btnSelectImg && btnSelectVid) {
+                    btnSelectImg.classList.remove('active');
+                    btnSelectVid.classList.add('active');
+                }
+                applyMediaToArtboard();
             }
         };
     }
@@ -22348,27 +22451,30 @@ function bindMktMediaControls() {
             photoIdx = (photoIdx + 1) % luxuryPhotos.length;
             MktStudioState.mediaUrl = luxuryPhotos[photoIdx];
             MktStudioState.customMediaActive = true;
-            updateMktMediaDisplay();
+            applyMediaToArtboard();
         };
     }
 
     // Controles de Play/Pause y Mute
-    const video = document.getElementById('mktArtboardVideo');
-    if (btnTogglePlay && video) {
+    if (btnTogglePlay) {
         btnTogglePlay.onclick = () => {
+            const video = document.querySelector('#mktInteractiveArtboard video');
+            if (!video) return;
             if (video.paused) {
                 video.play();
-                btnTogglePlay.textContent = '⏸️ Pausar';
+                btnTogglePlay.textContent = 'Pausar';
             } else {
                 video.pause();
-                btnTogglePlay.textContent = '▶️ Reproducir';
+                btnTogglePlay.textContent = 'Reproducir';
             }
         };
     }
-    if (btnToggleMute && video) {
+    if (btnToggleMute) {
         btnToggleMute.onclick = () => {
+            const video = document.querySelector('#mktInteractiveArtboard video');
+            if (!video) return;
             video.muted = !video.muted;
-            btnToggleMute.textContent = video.muted ? '🔇 Mute' : '🔊 Con Audio';
+            btnToggleMute.textContent = video.muted ? 'Silenciar' : 'Con Audio';
         };
     }
 }
@@ -22382,7 +22488,6 @@ function populateSensVideosDropdown() {
         { label: 'Nico • Biomecánica & Fuerza Principal (Fondo Oficial)', url: 'https://makesens.com.ar/img/hero-bg-opt.mp4' }
     ];
 
-    // Buscar videos en exercises_db si existe
     if (typeof SENS_EXERCISES_DATABASE !== 'undefined' && Array.isArray(SENS_EXERCISES_DATABASE)) {
         SENS_EXERCISES_DATABASE.slice(0, 15).forEach(ex => {
             if (ex.video_url) {
@@ -22397,55 +22502,33 @@ function populateSensVideosDropdown() {
     select.innerHTML = defaultVideos.map(v => `<option value="${v.url}">${v.label}</option>`).join('');
 }
 
-function updateMktMediaDisplay() {
-    const img = document.getElementById('mktArtboardImg');
-    const video = document.getElementById('mktArtboardVideo');
-    const videoControls = document.getElementById('mktVideoPlaybackControls');
-    const btnRecordUHD = document.getElementById('btnMktRecordVideoUHD');
-    const btnCaptureFrame = document.getElementById('btnMktCaptureFrameUHD');
-
-    const isVideo = (MktStudioState.mediaType === 'video');
-
-    if (isVideo) {
-        if (img) img.style.display = 'none';
-        if (video) {
-            video.style.display = 'block';
-            if (video.src !== MktStudioState.mediaUrl) {
-                video.src = MktStudioState.mediaUrl;
-            }
-            video.play().catch(() => {});
-        }
-        if (videoControls) videoControls.style.display = 'flex';
-        if (btnRecordUHD) btnRecordUHD.style.display = 'flex';
-        if (btnCaptureFrame) btnCaptureFrame.style.display = 'flex';
-    } else {
-        if (video) {
-            video.pause();
-            video.style.display = 'none';
-        }
-        if (img) {
-            img.style.display = 'block';
-            img.src = MktStudioState.mediaUrl;
-        }
-        if (videoControls) videoControls.style.display = 'none';
-        if (btnRecordUHD) btnRecordUHD.style.display = 'none';
-        if (btnCaptureFrame) btnCaptureFrame.style.display = 'none';
-    }
-}
-
 // 7. GUÍA SAFE ZONE INSTAGRAM / TIKTOK
 function bindMktSafeZoneToggle() {
     const toggle = document.getElementById('mktSafeZoneToggle');
-    const overlay = document.getElementById('mktSafeZoneOverlay');
-    if (!toggle || !overlay) return;
+    if (!toggle) return;
 
     toggle.addEventListener('change', (e) => {
         MktStudioState.showSafeZones = e.target.checked;
-        overlay.style.display = e.target.checked ? 'flex' : 'none';
+        const overlay = document.getElementById('mktSafeZoneOverlay');
+        if (overlay) overlay.style.display = e.target.checked ? 'flex' : 'none';
     });
 }
 
-// 8. DESCARGA EN ULTRA HIGH DEFINITION (UHD 4K • 300 DPI)
+// 8. COPIAR TEXTOS
+function bindMktCopyButton() {
+    const btn = document.getElementById('btnMktCopyTexts');
+    if (!btn) return;
+    btn.onclick = () => {
+        const payload = `${MktStudioState.fields.tag}\n${MktStudioState.fields.title}\n\n${MktStudioState.fields.bajada}`;
+        navigator.clipboard.writeText(payload).then(() => {
+            if (typeof showSensToast === 'function') {
+                showSensToast('Textos copiados al portapapeles', 'champagne', 2000);
+            }
+        });
+    };
+}
+
+// 9. DESCARGA EN ULTRA HIGH DEFINITION (UHD 4K • 300 DPI)
 function bindMktUhdExportButtons() {
     const btnExportPng = document.getElementById('btnMktExportPngUHD');
     const btnRecordVid = document.getElementById('btnMktRecordVideoUHD');
@@ -22469,6 +22552,51 @@ function exportMarketingPieceUHD() {
     const width = 2160;
     const height = is916 ? 3840 : 2700;
 
+    if (typeof showSensToast === 'function') {
+        showSensToast('Generando pieza en Ultra High Definition (UHD 4K)...', 'champagne', 2500);
+    }
+
+    const artboard = document.getElementById('mktInteractiveArtboard');
+    const floatBtn = document.getElementById('btnMktFloatingMedia');
+    const safeOverlay = document.getElementById('mktSafeZoneOverlay');
+
+    if (floatBtn) floatBtn.style.display = 'none';
+    if (safeOverlay) safeOverlay.style.display = 'none';
+
+    // Si HTML2Canvas está disponible, renderizar el DOM auténtico exacto
+    if (typeof html2canvas === 'function' && artboard) {
+        const scaleFactor = 2160 / artboard.offsetWidth;
+        html2canvas(artboard, {
+            scale: Math.max(2, Math.min(scaleFactor, 4)),
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: null
+        }).then(renderedCanvas => {
+            if (floatBtn) floatBtn.style.display = 'inline-flex';
+            if (safeOverlay && MktStudioState.showSafeZones) safeOverlay.style.display = 'flex';
+
+            const a = document.createElement('a');
+            a.download = `SENS_${tpl.code}_UHD_${is916 ? '9x16' : '4x5'}.png`;
+            a.href = renderedCanvas.toDataURL('image/png', 1.0);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            if (typeof showSensToast === 'function') {
+                showSensToast('✓ Imagen descargada en UHD 4K (2160px sin compresión)', 'champagne', 3000);
+            }
+        }).catch(err => {
+            if (floatBtn) floatBtn.style.display = 'inline-flex';
+            if (safeOverlay && MktStudioState.showSafeZones) safeOverlay.style.display = 'flex';
+            console.warn('Fallback a render 2D canvas:', err);
+            exportMarketingCanvasPiece2D(width, height, is916, topSafeY, tpl);
+        });
+    } else {
+        exportMarketingCanvasPiece2D(width, height, is916, topSafeY, tpl);
+    }
+}
+
+function exportMarketingCanvasPiece2D(width, height, is916, topSafeY, tpl) {
     const canvas = document.getElementById('sensMarketingCanvas') || document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -22477,17 +22605,12 @@ function exportMarketingPieceUHD() {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // Toast de generación
-    if (typeof showSensToast === 'function') {
-        showSensToast('Generando pieza en Ultra High Definition (UHD 4K)...', 'champagne', 2000);
-    }
-
     const drawContent = () => {
         // 1. Gradiente Cinemático Base
         const grad = ctx.createLinearGradient(0, 0, 0, height);
         grad.addColorStop(0, 'rgba(9, 9, 11, 0.40)');
         grad.addColorStop(0.35, 'rgba(9, 9, 11, 0.20)');
-        grad.addColorStop(1, 'rgba(9, 9, 11, 0.82)');
+        grad.addColorStop(1, 'rgba(9, 9, 11, 0.85)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
 
@@ -22497,17 +22620,17 @@ function exportMarketingPieceUHD() {
         const cardY = is916 ? (height * 0.52) : (height * 0.44);
         const cardH = is916 ? (height * 0.36) : (height * 0.46);
 
-        ctx.fillStyle = 'rgba(18, 18, 20, 0.85)';
+        ctx.fillStyle = 'rgba(18, 18, 20, 0.88)';
         roundRectCanvas(ctx, cardMargin, cardY, cardW, cardH, 36);
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(229, 203, 167, 0.35)';
+        ctx.strokeStyle = 'rgba(229, 203, 167, 0.4)';
         ctx.lineWidth = 3;
         roundRectCanvas(ctx, cardMargin, cardY, cardW, cardH, 36);
         ctx.stroke();
 
         // 3. Tipografía de Precisión UHD (Plus Jakarta Sans)
-        const padX = cardMargin + 48;
+        const padX = cardMargin + 50;
         let textY = cardY + 70;
 
         // Tag / Kicker
@@ -22515,23 +22638,23 @@ function exportMarketingPieceUHD() {
         ctx.fillStyle = '#E5CBA7';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
-        ctx.fillText((MktStudioState.fields.tag || 'SENS • PROTOCOLO').toUpperCase(), padX, textY);
+        ctx.fillText((MktStudioState.fields.tag || 'SENS PROTOCOL').toUpperCase(), padX, textY);
         textY += 60;
 
         // Headline
         ctx.font = '700 56px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#FFFFFF';
-        const titleLines = wrapCanvasText(ctx, MktStudioState.fields.title || 'Entrenamiento con dolor cero.', cardW - 96);
+        const titleLines = wrapCanvasText(ctx, MktStudioState.fields.title || 'Entrenamiento con dolor cero.', cardW - 100);
         titleLines.forEach(line => {
             ctx.fillText(line, padX, textY);
             textY += 72;
         });
-        textY += 12;
+        textY += 14;
 
         // Bajada
         ctx.font = '400 32px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#E0DFE2';
-        const bajadaLines = wrapCanvasText(ctx, MktStudioState.fields.bajada || 'Fuerza tranquila y longevidad en CABA y Online.', cardW - 96);
+        const bajadaLines = wrapCanvasText(ctx, MktStudioState.fields.bajada || 'Fuerza tranquila y longevidad en CABA y Online.', cardW - 100);
         bajadaLines.forEach(line => {
             ctx.fillText(line, padX, textY);
             textY += 46;
@@ -22556,48 +22679,33 @@ function exportMarketingPieceUHD() {
             }
         } catch (err) {
             console.error('Error al descargar PNG UHD:', err);
-            if (typeof showSensToast === 'function') {
-                showSensToast('Error al exportar. Si la imagen es externa puede estar bloqueada por CORS.', 'warning', 3500);
-            }
         }
     };
 
-    // Dibujar fondo
     const isVideo = (MktStudioState.mediaType === 'video');
-    if (isVideo) {
-        const video = document.getElementById('mktArtboardVideo');
-        if (video && video.readyState >= 2) {
-            ctx.drawImage(video, 0, 0, width, height);
-            drawContent();
-        } else {
-            ctx.fillStyle = '#09090B';
-            ctx.fillRect(0, 0, width, height);
-            drawContent();
-        }
+    const video = document.querySelector('#mktInteractiveArtboard video');
+    if (isVideo && video && video.readyState >= 2) {
+        ctx.drawImage(video, 0, 0, width, height);
+        drawContent();
     } else {
-        const img = document.getElementById('mktArtboardImg');
-        if (img && img.complete && img.naturalWidth > 0) {
-            try {
-                ctx.drawImage(img, 0, 0, width, height);
-            } catch (_) {
-                ctx.fillStyle = '#09090B';
-                ctx.fillRect(0, 0, width, height);
-            }
+        const bgImg = new Image();
+        bgImg.crossOrigin = 'anonymous';
+        bgImg.onload = () => {
+            ctx.drawImage(bgImg, 0, 0, width, height);
             drawContent();
-        } else {
+        };
+        bgImg.onerror = () => {
             ctx.fillStyle = '#09090B';
             ctx.fillRect(0, 0, width, height);
             drawContent();
-        }
+        };
+        bgImg.src = MktStudioState.mediaUrl || tpl.defaultBg || 'img/hero-bg-opt.jpg';
     }
 }
 
-function captureMarketingFrameUHD() {
-    exportMarketingPieceUHD();
-}
-
+// 10. GRABACIÓN DE VIDEO UHD (WebM 60 FPS • 16 Mbps)
 function recordMarketingVideoUHD() {
-    const video = document.getElementById('mktArtboardVideo');
+    const video = document.querySelector('#mktInteractiveArtboard video');
     if (!video) return;
 
     const tpl = getActiveMktTemplate();
@@ -22664,7 +22772,6 @@ function recordMarketingVideoUHD() {
             return;
         }
 
-        // Dibujar frame de video
         if (video.readyState >= 2) {
             ctx.drawImage(video, 0, 0, width, height);
         } else {
@@ -22685,11 +22792,11 @@ function recordMarketingVideoUHD() {
         const cardY = is916 ? (height * 0.54) : (height * 0.46);
         const cardH = is916 ? (height * 0.34) : (height * 0.44);
 
-        ctx.fillStyle = 'rgba(18, 18, 20, 0.85)';
+        ctx.fillStyle = 'rgba(18, 18, 20, 0.88)';
         roundRectCanvas(ctx, cardMargin, cardY, cardW, cardH, 20);
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(229, 203, 167, 0.3)';
+        ctx.strokeStyle = 'rgba(229, 203, 167, 0.35)';
         ctx.lineWidth = 2;
         roundRectCanvas(ctx, cardMargin, cardY, cardW, cardH, 20);
         ctx.stroke();
@@ -22702,7 +22809,7 @@ function recordMarketingVideoUHD() {
         ctx.fillStyle = '#E5CBA7';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
-        ctx.fillText((MktStudioState.fields.tag || 'SENS • PROTOCOLO').toUpperCase(), padX, textY);
+        ctx.fillText((MktStudioState.fields.tag || 'SENS PROTOCOL').toUpperCase(), padX, textY);
         textY += 32;
 
         ctx.font = '700 28px "Plus Jakarta Sans", sans-serif';
@@ -22726,6 +22833,10 @@ function recordMarketingVideoUHD() {
     };
 
     renderFrameLoop();
+}
+
+function captureMarketingFrameUHD() {
+    exportMarketingPieceUHD();
 }
 
 function bindMktMobileSwitcher() {
