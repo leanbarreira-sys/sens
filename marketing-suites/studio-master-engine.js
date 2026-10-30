@@ -1009,6 +1009,7 @@
       // Bake all semi-transparent overlays, gradients & backdrop-blur glass cards into explicit rgba() inline styles
       // so html2canvas 1.4.1 renders 100% of semi-transparent layers without failing on CSS Color 4 syntax or missing backdrop-filter
       bakeSemiTransparentOverlaysForExport(stageEl, cleanupCallbacks, { isTransparentOrVideo: false });
+      squareOffFullBleedCornersForExport(stageEl, cleanupCallbacks);
 
       const rawCanvas = await window.html2canvas(stageEl, {
         scale: scale,
@@ -1162,6 +1163,36 @@
       let alpha = a.endsWith('%') ? (parseFloat(a) / 100) : parseFloat(a);
       if (isNaN(alpha)) alpha = 1;
       return `rgba(${rr}, ${gg}, ${bb}, ${alpha})`;
+    });
+  }
+
+  // Export-only: square off rounded corners of the template's outer frame and any full-bleed layer
+  // (background photo/video slot, inset-0 scrims). Inner cards, pills, badges & polaroids keep their radius.
+  function isFullBleedExportLayer(el, stageRect) {
+    if (!el || !stageRect || !stageRect.width || !stageRect.height) return false;
+    const r = el.getBoundingClientRect();
+    return r.width >= stageRect.width * 0.95 && r.height >= stageRect.height * 0.95;
+  }
+
+  function squareOffFullBleedCornersForExport(stageEl, cleanupList) {
+    if (!stageEl) return;
+    const stageRect = stageEl.getBoundingClientRect();
+    const nodes = [stageEl, ...Array.from(stageEl.querySelectorAll('*'))];
+    nodes.forEach(el => {
+      if (!el || !el.style) return;
+      if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE') return;
+      if (!isFullBleedExportLayer(el, stageRect)) return;
+      const cs = window.getComputedStyle(el);
+      if (!(parseFloat(cs.borderTopLeftRadius) || parseFloat(cs.borderTopRightRadius) || parseFloat(cs.borderBottomLeftRadius) || parseFloat(cs.borderBottomRightRadius))) return;
+      const prev = el.style.getPropertyValue('border-radius');
+      const prevPrio = el.style.getPropertyPriority('border-radius');
+      el.style.setProperty('border-radius', '0', 'important');
+      if (Array.isArray(cleanupList)) {
+        cleanupList.push(() => {
+          if (prev) el.style.setProperty('border-radius', prev, prevPrio);
+          else el.style.removeProperty('border-radius');
+        });
+      }
     });
   }
 
@@ -1339,6 +1370,7 @@
     try {
       // Bake all semi-transparent overlays, gradients & backdrop-blur glass cards into explicit rgba() inline styles
       bakeSemiTransparentOverlaysForExport(stageEl, cleanupAttrs);
+      squareOffFullBleedCornersForExport(stageEl, cleanupAttrs);
 
       // Tag all media slots (whether video or photo) so we can strip their media cleanly while preserving child scrims
       const entriesToStrip = (activeVideoEntries && activeVideoEntries.length > 0)
@@ -1557,7 +1589,7 @@
         const relH = Math.min(1, (bRect.height || stH) / stH);
         const compStyle = targetBoxEl ? window.getComputedStyle(targetBoxEl) : { borderRadius: '0px' };
         const cssRadius = parseFloat(compStyle.borderRadius) || 0;
-        const relRadius = cssRadius / stW;
+        const relRadius = (relW >= 0.95 && relH >= 0.95) ? 0 : cssRadius / stW;
         return { slot, vid: slot.videoEl || null, relX, relY, relW, relH, relRadius };
       });
 
@@ -1619,7 +1651,7 @@
           const relH = Math.min(1, (bRect.height || stH) / stH);
           const compStyle = window.getComputedStyle(targetBoxEl);
           const cssRadius = parseFloat(compStyle.borderRadius) || 0;
-          const relRadius = cssRadius / stW;
+          const relRadius = (relW >= 0.95 && relH >= 0.95) ? 0 : cssRadius / stW;
           activeVideoEntries.push({ slot, vid, relX, relY, relW, relH, relRadius });
         }
       }
