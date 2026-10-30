@@ -4206,7 +4206,7 @@ function renderSoftPaywallState(profile, daysRemaining) {
     };
 }
 
-function switchPortalView(viewId) {
+window.switchPortalView = function switchPortalView(viewId) {
     const isAdmin = isCurrentUserAdmin();
     const profile = AppState.profile;
     const accessState = checkUserAccessStatus(profile) || { hasAccess: true };
@@ -10373,6 +10373,17 @@ function initWorkoutStopwatch() {
 function initTopbarAvatar() {
     const avatarBtn = document.getElementById('userAvatarBtn');
     const dropdown = document.getElementById('userAvatarDropdown');
+
+    window.toggleUserAvatarDropdown = function(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        const drop = document.getElementById('userAvatarDropdown');
+        if (!drop) return;
+        if (typeof syncAvatarData === 'function') syncAvatarData();
+        drop.classList.toggle('active');
+    };
     const initialsEl = document.getElementById('userAvatarInitials');
     const nameEl = document.getElementById('dropdownUserName');
     const emailEl = document.getElementById('dropdownUserEmail');
@@ -10380,14 +10391,18 @@ function initTopbarAvatar() {
 
     if (!avatarBtn || !dropdown) return;
 
-    avatarBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        syncAvatarData();
-        dropdown.classList.toggle('active');
-    });
+    const onAvatarTrigger = (e) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        window.toggleUserAvatarDropdown(e);
+    };
+    avatarBtn.addEventListener('click', onAvatarTrigger);
+    avatarBtn.addEventListener('touchend', onAvatarTrigger, { passive: false });
 
     document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target) && e.target !== avatarBtn) {
+        if (!dropdown.contains(e.target) && (!avatarBtn || !avatarBtn.contains(e.target))) {
             dropdown.classList.remove('active');
         }
     });
@@ -31385,7 +31400,7 @@ const SensPwaManager = {
     registerServiceWorker() {
         if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                navigator.serviceWorker.register('./sw.js', { scope: './' }).then(reg => { try { reg.update(); } catch(_) {} return reg; })
                     .then((reg) => {
                         console.log('[SENS PWA] Service Worker activo y listo.');
                     })
