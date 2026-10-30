@@ -22016,13 +22016,19 @@ window.stopCoachMarketingStudio = stopCoachMarketingStudio;
 function syncMarketingSuiteIframe() {
     const iframe = document.getElementById('sensMarketingSuiteFrame');
     if (!iframe) return;
-    const is916 = (MktStudioState.format === '9:16');
-    const prefix = is916 ? '9_16' : '4_5';
-    const blockNum = (MktStudioState.blockId || 'b1').replace('b', '');
-    const targetUrl = `marketing-suites/${prefix}_bloque_${blockNum}.html`;
-    const currentSrc = iframe.getAttribute('src');
-    if (currentSrc !== targetUrl) {
+    const targetUrl = 'marketing-suites/studio-master.html?v=22.0';
+    const currentSrc = iframe.getAttribute('src') || '';
+    if (!currentSrc.includes('studio-master.html')) {
         iframe.src = targetUrl;
+    } else if (iframe.contentWindow) {
+        const is916 = (MktStudioState.format === '9:16');
+        const prefix = is916 ? 'T' : 'F';
+        const bNum = parseInt((MktStudioState.blockId || 'b1').replace('b', ''), 10) || 1;
+        const startNum = (bNum - 1) * 20 + 1;
+        const tplId = `${prefix}${String(startNum).padStart(2, '0')}`;
+        try {
+            iframe.contentWindow.postMessage({ type: 'SENS_SELECT_TEMPLATE', id: tplId }, '*');
+        } catch (_) {}
     }
 }
 
