@@ -3969,15 +3969,26 @@ window.closeSensPlansUpgradeModal = function() {
 // =============================================================================
 // GUARDIA DE ESTADO DE SUSCRIPCIÓN / TRIAL 7 DÍAS & VIRAL LOOP (checkUserAccessStatus)
 // =============================================================================
+function formatPlanShortBadge(planName) {
+    if (!planName) return 'Plan Free';
+    const lower = String(planName).toLowerCase();
+    if (lower.includes('presencial')) return 'Presencial CABA';
+    if (lower.includes('online')) return 'Online 1:1';
+    if (lower.includes('app') || lower.includes('premium') || lower.includes('autónom')) return 'App Premium';
+    if (lower.includes('free') || lower.includes('prueba') || lower.includes('trial') || lower.includes('gratuit')) return 'Plan Free';
+    return planName.length > 18 ? (planName.slice(0, 16) + '…') : planName;
+}
+window.formatPlanShortBadge = formatPlanShortBadge;
+
 function checkUserAccessStatus(profile) {
     const p = profile || AppState.profile || {};
     const isAdmin = isCurrentUserAdmin();
     const status = p.subscription_status || 'trial';
     const planTier = p.plan_tier || 'app_trial';
-    const planDetails = getSensUserPlanDetails(p);
-    const daysRemaining = planDetails.daysRemaining;
-    const refCode = planDetails.referralCode;
-    const referralUrl = planDetails.referralUrl;
+    const planDetails = (typeof getSensUserPlanDetails === 'function') ? getSensUserPlanDetails(p) : { daysRemaining: 7, shortBadge: 'Plan Free', title: 'Plan Free' };
+    const daysRemaining = Number(planDetails.daysRemaining) || 0;
+    const refCode = planDetails.referralCode || '';
+    const referralUrl = planDetails.referralUrl || '';
 
     let hasActivePremium = false;
     if (
@@ -3999,7 +4010,8 @@ function checkUserAccessStatus(profile) {
     // Actualizar el badge superior del Topbar (#portalPlanBadgeText)
     const topbarPlanText = document.getElementById('portalPlanBadgeText');
     if (topbarPlanText) {
-        topbarPlanText.textContent = isAdmin ? 'Coach OS' : formatPlanShortBadge(planDetails.shortBadge);
+        const badgeSource = (planDetails && (planDetails.shortBadge || planDetails.title)) || 'Plan Free';
+        topbarPlanText.textContent = isAdmin ? 'Coach OS' : formatPlanShortBadge(badgeSource);
     }
 
     // 1. Renderizar Barra Ejecutiva de Plan Actual & Escalera SENS en el Inicio (#dashView)
@@ -4193,21 +4205,10 @@ function renderSoftPaywallState(profile, daysRemaining) {
             window.open(`https://wa.me/?text=${shareText}`, '_blank');
         };
     }
-
-    return {
-        hasAccess: Boolean(hasAccess),
-        isAdmin: Boolean(isAdmin),
-        hasActivePremium: Boolean(hasActivePremium),
-        isTrialActive: Boolean(isTrialActive),
-        daysRemaining: Number(daysRemaining) || 0,
-        planDetails: planDetails || {},
-        refCode: refCode || '',
-        referralUrl: referralUrl || ''
-    };
 }
 
 let lastPortalNavTime = 0;
-window.switchPortalView = function switchPortalView(viewId) {
+function switchPortalView(viewId) {
     const now = Date.now();
     if (now - lastPortalNavTime < 200 && AppState._activeViewId === viewId) return;
     lastPortalNavTime = now;
