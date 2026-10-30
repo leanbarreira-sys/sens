@@ -107,8 +107,8 @@
 
         html.in-portal-mode,
         html.in-portal-mode body {
-            background-color: #F8F9FA !important;
-            color: #09090B !important;
+            background-color: #FAF9F6 !important;
+            color: #121214 !important;
         }
     </style>
 
@@ -138,7 +138,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=21.0">
+    <link rel="stylesheet" href="style.css?v=23.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -242,14 +242,14 @@
 
     <!-- Menú Móvil Desplegable -->
     <div class="mobile-menu-overlay" id="mobileMenu"
-        style="display:none; position:fixed; inset:0; background:rgba(8,8,9,0.98); z-index:100000; padding:35px 25px 40px; flex-direction:column; gap:20px; text-align:center; backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); overflow-y:auto; -webkit-overflow-scrolling:touch;">
+        style="display:none; position:fixed; inset:0; background:rgba(250,249,246,0.98); z-index:100000; padding:35px 25px 40px; flex-direction:column; gap:20px; text-align:center; backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); overflow-y:auto; -webkit-overflow-scrolling:touch; color:#121214;">
         <!-- Botón de Cruz para Cerrar Menú Móvil -->
         <button class="mobile-menu-close" id="mobileMenuCloseBtn" aria-label="Cerrar Menú"
-            style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:#FFFFFF; font-size:22px; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:100010; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.3);">
+            style="position:absolute; top:20px; right:20px; background:#F4F3F1; border:1px solid rgba(18,18,20,0.08); color:#121214; font-size:22px; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:100010; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.06);">
             &times;
         </button>
-        <img src="img/logo-NEGRO.png" alt="SENS Logo"
-            style="height:44px; width:auto; max-width:180px; margin:20px auto 10px; display:block;">
+        <img src="img/logo-NEGRO.png" alt="SENS TRAIN & WELLNESS" class="brand-logo-img"
+            style="height:40px; width:auto; max-width:180px; margin:20px auto 10px; display:block; filter:none !important;">
         <a href="#pilares" class="nav-link mobile-nav-link"
             style="font-size:1.15rem; min-height:44px; display:flex; align-items:center; justify-content:center;">Pilares
             SENS</a>
@@ -1344,34 +1344,56 @@
                 </button>
 
                 <div class="user-avatar-wrap" id="userAvatarWrap">
-                    <button type="button" class="user-avatar-btn" id="userAvatarBtn" onclick="window.toggleUserAvatarDropdown && window.toggleUserAvatarDropdown(event);" aria-label="Abrir Menú de Perfil"
-                        title="Mi Cuenta SENS" onclick="window.toggleUserAvatarDropdown && window.toggleUserAvatarDropdown(event);">
+                    <button type="button" class="user-avatar-btn" id="userAvatarBtn"
+                        onclick="window.toggleUserAvatarDropdown && window.toggleUserAvatarDropdown(event);"
+                        aria-label="Abrir Menú de Perfil" title="Mi Cuenta SENS">
                         <span id="userAvatarInitials">LB</span>
                         <span class="avatar-online-dot"></span>
                     </button>
-                    <!-- Dropdown flotante estilo Apple Quiet Luxury -->
-                    <div class="user-avatar-dropdown sens-quiet-avatar-dropdown" id="userAvatarDropdown" style="background: #FFFFFF !important; border: 1px solid rgba(18, 18, 20, 0.08) !important; color: #121214 !important; box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12), 0 2px 10px rgba(0, 0, 0, 0.04) !important;">
+                    <!-- Dropdown flotante estilo Apple Quiet Luxury (sens_men_de_acceso_perfil_light_quiet_luxury) -->
+                    <div class="user-avatar-dropdown sens-quiet-avatar-dropdown" id="userAvatarDropdown"
+                        style="background: #FFFFFF !important; border: 1px solid rgba(18, 18, 20, 0.08) !important; color: #121214 !important; box-shadow: 0 24px 60px -12px rgba(18, 18, 20, 0.14), 0 4px 16px rgba(18, 18, 20, 0.04) !important;">
                         <div class="sens-avatar-card-head">
-                            <div class="sens-avatar-user-badge">
-                                <span class="sens-avatar-initials-pill" id="dropdownAvatarInitials">LB</span>
-                                <div class="sens-avatar-user-meta">
-                                    <strong class="sens-avatar-name" id="dropdownUserName">Mi Perfil SENS</strong>
-                                    <span class="sens-avatar-email" id="dropdownUserEmail">Cargando perfil...</span>
+                            <div class="sens-avatar-user-badge" style="justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 11px; min-width: 0; flex: 1;">
+                                    <div style="position: relative; flex-shrink: 0;">
+                                        <span class="sens-avatar-initials-pill" id="dropdownAvatarInitials"
+                                            style="width: 42px; height: 42px; background: #121214; color: #FFFFFF; border: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 10px rgba(18,18,20,0.12);">LB</span>
+                                        <span style="position: absolute; bottom: -1px; right: -1px; width: 11px; height: 11px; border-radius: 50%; background: #1E7B42; border: 2px solid #FFFFFF;"></span>
+                                    </div>
+                                    <div class="sens-avatar-user-meta">
+                                        <div style="display: flex; align-items: center; gap: 5px;">
+                                            <strong class="sens-avatar-name" id="dropdownUserName" style="font-size: 14.5px; font-weight: 700; color: #121214 !important;">Leandro Barreira</strong>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#705B3E" stroke="#FFFFFF" stroke-width="2" style="flex-shrink: 0;">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <polyline points="9 12 11 14 15 10"></polyline>
+                                            </svg>
+                                        </div>
+                                        <span class="sens-avatar-email" id="dropdownUserEmail">Cargando perfil...</span>
+                                    </div>
                                 </div>
+                                <button type="button" aria-label="Cerrar menú"
+                                    onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active');"
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.06); color: #575659; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; font-weight: 700; flex-shrink: 0;">✕</button>
                             </div>
 
-                            <div id="dropdownPlanSummaryBox" class="sens-avatar-plan-box">
+                            <div id="dropdownPlanSummaryBox" class="sens-avatar-plan-box"
+                                style="background: #F4F3F1 !important; border: 1px solid rgba(18, 18, 20, 0.05) !important; border-radius: 16px; padding: 14px;">
                                 <div class="sens-avatar-plan-top">
-                                    <span class="sens-avatar-plan-tag">TU PLAN ACTUAL</span>
-                                    <span id="dropdownPlanStatusDot" class="sens-avatar-plan-status">Activo</span>
+                                    <span class="sens-avatar-plan-tag" style="color: #705B3E;">TU PLAN ACTUAL</span>
+                                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #9CF6B0; color: #00210C; padding: 2px 8px; border-radius: 999px; font-size: 9.5px; font-weight: 800;">
+                                        <span style="width: 5px; height: 5px; border-radius: 50%; background: #00210C;"></span>
+                                        <span id="dropdownPlanStatusDot" class="sens-avatar-plan-status" style="color: #00210C !important;">Activo</span>
+                                    </span>
                                 </div>
-                                <div id="dropdownUserPlan" class="sens-avatar-plan-title">Plan Free (Prueba 7 Días)</div>
-                                <div id="dropdownPlanNextStepHint" class="sens-avatar-plan-hint">
-                                    Escalá a App Premium (Mensual o 3 Meses), Online 1:1 o Presencial CABA.
+                                <div id="dropdownUserPlan" class="sens-avatar-plan-title" style="font-size: 14px; font-weight: 800; color: #121214 !important; margin-top: 2px;">Plan Free (Prueba 7 Días)</div>
+                                <div id="dropdownPlanNextStepHint" class="sens-avatar-plan-hint" style="font-size: 11px; color: #575659 !important; line-height: 1.4; margin: 2px 0 8px 0;">
+                                    Escalá a App Premium ($24.900/mes o $59.900 Trimestral), Online 1:1 o Presencial CABA.
                                 </div>
                                 <button type="button" id="dropdownOpenUpgradeBtn"
-                                    onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal()"
-                                    class="sens-avatar-upgrade-btn">
+                                    onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active'); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();"
+                                    class="sens-avatar-upgrade-btn"
+                                    style="background: #FBDEB9 !important; color: #271903 !important; border: 1px solid rgba(112, 91, 62, 0.25) !important; font-weight: 800; padding: 10px 14px; border-radius: 999px; box-shadow: 0 2px 8px rgba(112, 91, 62, 0.12);">
                                     <span>Escalar mi Plan / Ver Ventajas →</span>
                                 </button>
                             </div>
@@ -1381,73 +1403,107 @@
 
                         <div class="sens-avatar-actions-list">
                             <button type="button" class="avatar-dropdown-item coach-only-item" id="dropdownGoCoachOS"
-                                style="display: none; color: #705B3E; font-weight: 700;">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M12 20h9" />
-                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                                </svg>
-                                <span>Panel Maestro Coach OS</span>
+                                onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active'); if(typeof window.switchPortalView==='function'){window.switchPortalView('coachHubView'); if(typeof renderCoachAthletesHub==='function') renderCoachAthletesHub(); window.scrollTo(0,0);}"
+                                style="display: none; background: rgba(251, 222, 185, 0.28); border: 1px solid rgba(112, 91, 62, 0.15); border-radius: 12px; padding: 9px 10px; margin-bottom: 4px;">
+                                <span style="width: 32px; height: 32px; border-radius: 50%; background: #121214; color: #FBDEB9; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                    </svg>
+                                </span>
+                                <span style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
+                                    <strong style="font-size: 12.5px; font-weight: 800; color: #121214; line-height: 1.2;">Panel Maestro Coach OS</strong>
+                                    <small style="font-size: 10.5px; color: #705B3E; font-weight: 600;">Gestión de Alumnos &amp; Planes</small>
+                                </span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#705B3E" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                             </button>
 
                             <button type="button" class="avatar-dropdown-item btn-pwa-trigger" id="dropdownInstallApp"
-                                onclick="triggerPwaInstall()">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                    <polyline points="7 10 12 15 17 10" />
-                                    <line x1="12" y1="15" x2="12" y2="3" />
-                                </svg>
-                                <span>Instalar App SENS</span>
-                                <span class="pill pill-champagne" style="font-size: 8.5px; padding: 2px 7px; margin-left: auto;">Nativa</span>
+                                onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active'); if(typeof triggerPwaInstall==='function') triggerPwaInstall();">
+                                <span style="width: 32px; height: 32px; border-radius: 50%; background: #F4F3F1; color: #121214; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="7 10 12 15 17 10" />
+                                        <line x1="12" y1="15" x2="12" y2="3" />
+                                    </svg>
+                                </span>
+                                <span style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
+                                    <strong style="font-size: 12.5px; font-weight: 700; color: #121214; line-height: 1.2;">Instalar App SENS</strong>
+                                    <small style="font-size: 10.5px; color: #575659; font-weight: 500;">Acceso directo en tu pantalla</small>
+                                </span>
+                                <span class="pill pill-champagne" style="font-size: 8.5px; padding: 2px 7px; margin-left: auto;">PWA</span>
                             </button>
 
-                            <button type="button" class="avatar-dropdown-item" id="dropdownGoProfile" onclick="if(typeof window.switchPortalView==='function'){var d=document.getElementById('userAvatarDropdown');if(d)d.classList.remove('active');window.switchPortalView('profileSettingsView');}">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                                <span>Mi Perfil &amp; Ajustes</span>
+                            <button type="button" class="avatar-dropdown-item" id="dropdownGoProfile"
+                                onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active'); if(typeof window.switchPortalView==='function'){window.switchPortalView('profileSettingsView'); window.scrollTo(0,0);}">
+                                <span style="width: 32px; height: 32px; border-radius: 50%; background: #F4F3F1; color: #121214; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                </span>
+                                <span style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
+                                    <strong style="font-size: 12.5px; font-weight: 700; color: #121214; line-height: 1.2;">Mi Perfil &amp; Planes</strong>
+                                    <small style="font-size: 10.5px; color: #575659; font-weight: 500;">Membresía, precios y ajustes</small>
+                                </span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C8B8E" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                             </button>
 
-                            <button type="button" class="avatar-dropdown-item" id="dropdownGoDiagnosis" onclick="if(typeof window.startDiagnosisWizard==='function'){var d=document.getElementById('userAvatarDropdown');if(d)d.classList.remove('active');window.startDiagnosisWizard(true);}">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                                    <rect x="8" y="2" width="8" height="4" rx="1" />
-                                </svg>
-                                <span>Mi Diagnóstico Físico</span>
+                            <button type="button" class="avatar-dropdown-item" id="dropdownGoDiagnosis"
+                                onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active'); if(typeof window.startDiagnosisWizard==='function'){window.startDiagnosisWizard(true);}">
+                                <span style="width: 32px; height: 32px; border-radius: 50%; background: #F4F3F1; color: #121214; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                                        <rect x="8" y="2" width="8" height="4" rx="1" />
+                                    </svg>
+                                </span>
+                                <span style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
+                                    <strong style="font-size: 12.5px; font-weight: 700; color: #121214; line-height: 1.2;">Mi Diagnóstico Físico</strong>
+                                    <small style="font-size: 10.5px; color: #575659; font-weight: 500;">Ficha biomecánica y objetivos</small>
+                                </span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C8B8E" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                             </button>
 
-                            <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Tengo%20una%20consulta%20sobre%20mi%20entrenamiento%20en%20SENS." 
-                               target="_blank" rel="noopener" class="avatar-dropdown-item" id="dropdownContactNico">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-                                </svg>
-                                <span>Hablar con Nico por WhatsApp</span>
+                            <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Tengo%20una%20consulta%20sobre%20mi%20entrenamiento%20en%20SENS."
+                                target="_blank" rel="noopener" class="avatar-dropdown-item" id="dropdownContactNico"
+                                onclick="document.getElementById('userAvatarDropdown')?.classList.remove('active');">
+                                <span style="width: 32px; height: 32px; border-radius: 50%; background: #EAF6EE; color: #1E7B42; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1E7B42" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                                    </svg>
+                                </span>
+                                <span style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
+                                    <strong style="font-size: 12.5px; font-weight: 700; color: #121214; line-height: 1.2;">Hablar con Nico por WhatsApp</strong>
+                                    <small style="font-size: 10.5px; color: #1E7B42; font-weight: 600;">Soporte directo 1 a 1</small>
+                                </span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C8B8E" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                             </a>
 
                             <button type="button" class="avatar-dropdown-item" id="dropdownGoStore" style="display: none !important;">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                                </svg>
                                 <span>Equipamiento MeLi</span>
                             </button>
                         </div>
 
                         <div class="sens-avatar-divider"></div>
 
-                        <button type="button" class="avatar-dropdown-item sens-avatar-logout-item text-danger" id="logoutBtn">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                <polyline points="16 17 21 12 16 7" />
-                                <line x1="21" y1="12" x2="9" y2="12" />
-                            </svg>
-                            <span>Cerrar Sesión</span>
+                        <button type="button" class="avatar-dropdown-item sens-avatar-logout-item text-danger" id="logoutBtn"
+                            onclick="document.getElementById('userAvatarDropdown')?.classList.remove('active');">
+                            <span style="width: 32px; height: 32px; border-radius: 50%; background: #FFF5F5; color: #DC2626; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                    <polyline points="16 17 21 12 16 7" />
+                                    <line x1="21" y1="12" x2="9" y2="12" />
+                                </svg>
+                            </span>
+                            <span style="font-weight: 700; color: #DC2626;">Cerrar Sesión</span>
                         </button>
+
+                        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(18,18,20,0.05); display: flex; align-items: center; justify-content: space-between; font-size: 9.5px; color: #8C8B8E;">
+                            <span style="letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;">SENS OS • QUIET LUXURY</span>
+                            <span style="display: inline-flex; align-items: center; gap: 4px; color: #1E7B42; font-weight: 700;">
+                                <span style="width: 5px; height: 5px; border-radius: 50%; background: #1E7B42;"></span>
+                                Sincronizado
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -4248,7 +4304,7 @@
                             </div>
                         </div>
                         <div class="sens-accordion-body" id="coachPreviewNotesBody"
-                            style="display: block; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px;">
+                            style="display: block; border-top: 1px solid rgba(18, 18, 20, 0.06); padding-top: 12px;">
                             <!-- Inyectado dinámicamente -->
                         </div>
                     </div>
@@ -4257,7 +4313,7 @@
                     <div class="sens-modal-sticky-save-bar">
                         <div style="display: flex; gap: 10px; width: 100%;">
                             <button type="button" class="btn btn-outline" id="btnCoachPreviewClose"
-                                style="flex: 1; padding: 13px; font-weight: 700; border-color: rgba(255,255,255,0.2); color: #E4E4E7; border-radius: 14px; background: rgba(255,255,255,0.04);">
+                                style="flex: 1; padding: 13px; font-weight: 700; border-color: rgba(18,18,20,0.14); color: #121214; border-radius: 14px; background: #F4F3F1;">
                                 Cerrar
                             </button>
                             <button type="button" class="btn sens-sticky-save-btn" id="btnCoachPreviewAdd"
@@ -4455,45 +4511,46 @@
                     <div class="sens-nutri-plan-header">
                         <div>
                             <span class="sens-card-domain-eyebrow"
-                                style="color: #E5CBA7; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Directiva
+                                style="color: #705B3E; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">Directiva
                                 de Nico • Pauta Activa</span>
-                            <h3 style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 4px 0 0 0;">
-                                Recomendación Nutricional & Plan</h3>
+                            <h3 style="font-size: 1.25rem; font-weight: 800; color: #121214; margin: 4px 0 0 0; letter-spacing: -0.01em;">
+                                Recomendación Nutricional &amp; Plan</h3>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             <button type="button" class="btn btn-outline btn-sm" id="btnOpenShoppingListModal"
-                                style="border-color: rgba(229,203,167,0.35); color: #E5CBA7; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(229,203,167,0.06);">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                style="border-color: rgba(112, 91, 62, 0.25); color: #121214; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; box-shadow: 0 2px 8px rgba(18,18,20,0.04);">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#705B3E"
                                     stroke-width="2.5">
                                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                     <line x1="3" y1="6" x2="21" y2="6"></line>
                                     <path d="M16 10a4 4 0 0 1-8 0"></path>
                                 </svg>
-                                <span>Lista de Compras</span>
+                                <span>Lista del Súper SENS</span>
                             </button>
                             <span class="pill pill-champagne" id="memberNutriPlanGoalPill"
-                                style="font-size: 10px; padding: 3px 8px;">Déficit Calórico</span>
+                                style="font-size: 10px; padding: 4px 10px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 700;">Déficit Calórico</span>
                         </div>
                     </div>
 
                     <div class="sens-nutri-directive-card" id="memberNutriDirectiveCard"
-                        style="display: none !important;">
-                        <strong>Directiva del Coach:</strong> <span id="memberNutriDirectiveText">Priorizá 35-40g de
+                        style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-left: 4px solid #E5CBA7; border-radius: 18px; padding: 14px 16px; margin-bottom: 16px; color: #121214; font-size: 12.5px; line-height: 1.5; box-shadow: 0 4px 16px rgba(18,18,20,0.03);">
+                        <strong style="color: #705B3E; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.08em; display: block; margin-bottom: 4px;">Directiva de Nico:</strong>
+                        <span id="memberNutriDirectiveText" style="color: #121214;">Priorizá 35-40g de
                             proteína en cada una de las comidas principales y mantené hidratación constante antes y
                             después de entrenar.</span>
                     </div>
 
                     <!-- EXPERIENCIA 2: Recomendador Automático Inteligente "Clavar mis Macros" -->
-                    <div class="sens-smart-recommender-card" id="sensSmartMacroRecommender" style="display: none;">
+                    <div class="sens-smart-recommender-card" id="sensSmartMacroRecommender" style="display: none; background: #FFFFFF; border: 1px solid rgba(197, 168, 128, 0.35); border-radius: 18px; padding: 14px 16px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(18,18,20,0.03);">
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <strong
-                                    style="font-size: 12px; color: #E5CBA7; text-transform: uppercase; letter-spacing: 0.5px;">Recomendación
+                                    style="font-size: 11px; color: #705B3E; text-transform: uppercase; letter-spacing: 0.08em;">Recomendación
                                     Inteligente • Macros Restantes</strong>
                             </div>
                             <span id="recommenderRemainingMeta"
-                                style="font-size: 11px; font-weight: 700; color: #CBD5E1; font-variant-numeric: tabular-nums;">-</span>
+                                style="font-size: 11px; font-weight: 700; color: #575659; font-variant-numeric: tabular-nums;">-</span>
                         </div>
                         <div id="smartRecommenderSuggestions"
                             style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
@@ -4802,166 +4859,239 @@
                  MÓDULO: MI PERFIL, AJUSTES DE CUENTA & FICHA BIOMECÁNICA
                  ===================================================================== -->
             <section class="portal-view" id="profileSettingsView">
-                <div class="view-header" style="margin-bottom: 20px;">
-                    <span class="pill pill-champagne" style="font-size: 10px;">AJUSTES DE CUENTA &amp; MEMBRESÍA</span>
-                    <h2 class="view-title" style="margin-top: 6px;">Perfil, Plan Actual y <strong>Escala SENS</strong>
-                    </h2>
-                    <p class="view-subtitle">Gestioná tu membresía actual, conocé las ventajas de cada escalón y
-                        actualizá tu ficha biomecánica.</p>
+                <div class="view-header" style="margin-bottom: 18px;">
+                    <span class="pill pill-champagne" style="font-size: 10px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 700;">MI PERFIL &amp; MEMBRESÍA</span>
+                    <h2 class="view-title" style="margin-top: 6px; color: #121214;">Perfil, Plan Actual y <strong style="color: #705B3E;">Planes SENS</strong></h2>
+                    <p class="view-subtitle" style="color: #575659;">Gestioná tu membresía activa, compará los planes oficiales y actualizá tu ficha biomecánica.</p>
                 </div>
 
-                <!-- Tarjeta Destacada Full-Width: Tu Plan Actual & Cómo Escalar en SENS (4 Escalones) -->
+                <!-- Tarjeta Destacada Full-Width: Tu Plan Actual & Escalera de Planes SENS (Light Quiet Luxury Alineado a Inicio/Landing) -->
                 <div id="profilePlanLadderHeroCard"
-                    style="background: #121214; border: 1px solid rgba(229, 203, 167, 0.38); border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 14px 36px rgba(0,0,0,0.45);">
+                    style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 24px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(18, 18, 20, 0.04);">
                     <div
-                        style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 18px;">
+                        style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid rgba(18, 18, 20, 0.06); margin-bottom: 18px;">
                         <div>
                             <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                                 <span
-                                    style="font-size: 10px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; color: #E5CBA7;">TU
+                                    style="font-size: 10px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; color: #705B3E;">TU
                                     PLAN ACTUAL EN SENS</span>
                                 <span id="profileLadderCurrentStatusPill"
-                                    style="font-size: 10px; font-weight: 800; color: #080809; background: #E5CBA7; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums;">ACTIVO</span>
+                                    style="font-size: 10px; font-weight: 800; color: #00210C; background: #9CF6B0; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums;">ACTIVO</span>
                             </div>
                             <h3 id="profileLadderCurrentTitle"
-                                style="font-size: 1.35rem; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0;">Plan
+                                style="font-size: 1.35rem; font-weight: 800; color: #121214; margin: 0 0 4px 0; letter-spacing: -0.01em;">Plan
                                 Free (Prueba 7 Días)</h3>
                             <p id="profileLadderCurrentDesc"
-                                style="font-size: 12.5px; color: #A1A1AA; margin: 0; line-height: 1.45;">
+                                style="font-size: 12.5px; color: #575659; margin: 0; line-height: 1.45;">
                                 Rutina base autónoma de 3 días + Cálculo nutricional Mifflin-St Jeor + Sistema de Rachas
-                                y Recompensas.
+                                y Hábitos.
                             </p>
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <button type="button" class="btn btn-primary btn-sm"
                                 onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal()"
-                                style="font-weight: 800; padding: 10px 16px;">
+                                style="background: #121214 !important; color: #FFFFFF !important; border: none !important; border-radius: 999px; font-weight: 800; padding: 10px 18px; font-size: 12px;">
                                 Comparar Planes y Escalar →
                             </button>
                             <button type="button" class="btn btn-outline btn-sm" id="btnProfileShareGuestPass"
-                                style="border-color: rgba(229, 203, 167, 0.45); color: #E5CBA7; font-weight: 800; padding: 10px 14px;">
+                                style="background: #FBDEB9 !important; border: 1px solid rgba(112, 91, 62, 0.25) !important; color: #271903 !important; border-radius: 999px; font-weight: 800; padding: 10px 16px; font-size: 12px;">
                                 Invitar Amigo (+7 días gratis)
                             </button>
                         </div>
                     </div>
 
                     <div
-                        style="margin-bottom: 10px; font-size: 11px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; color: #D4D4D8;">
-                        ESCALERA DE PLANES SENS • TOCÁ CUALQUIER NIVEL PARA VER VENTAJAS O ESCALAR:
+                        style="margin-bottom: 12px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #705B3E;">
+                        PLANES Y PRECIOS OFICIALES SENS • ALINEADOS A LA WEB DE INICIO:
                     </div>
 
                     <div id="profileFourTiersGrid"
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 12px;">
-                        <!-- Nivel 1: Plan Free -->
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 14px;">
+                        <!-- Nivel 1: Plan Free 7 Días ($0) -->
                         <div class="sens-profile-tier-box" data-tier-box="app_trial"
-                            style="background: #18181B; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;">
+                            style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
                             <div>
                                 <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #A1A1AA; letter-spacing: 0.8px;">1.
+                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">1.
                                         PLAN FREE</span>
                                     <span class="tier-box-badge"
-                                        style="font-size: 9.5px; font-weight: 800; color: #10B981;">7 Días $0</span>
+                                        style="font-size: 9.5px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 8px; border-radius: 999px;">100% OFF • 7 DÍAS</span>
                                 </div>
                                 <strong
-                                    style="font-size: 13px; color: #FFFFFF; display: block; margin-bottom: 4px;">Prueba
-                                    Autónoma 7 Días</strong>
-                                <p style="font-size: 11px; color: #A1A1AA; margin: 0; line-height: 1.4;">Rutina 3 días
-                                    HD + macros Mifflin-St Jeor + +3 días extra al completar 3 sesiones.</p>
+                                    style="font-size: 14px; color: #121214; display: block; margin-bottom: 2px;">Prueba
+                                    Autónoma</strong>
+                                <div style="font-size: 1.2rem; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; margin-bottom: 6px;">
+                                    $0 <span style="font-size: 11px; font-weight: 500; color: #575659;">/ 7 días gratis</span>
+                                </div>
+                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Rutina base de 3 días en video HD y timer + cálculo basal y macros Mifflin-St Jeor + sistema de rachas diarias.</p>
                             </div>
-                            <span style="font-size: 10.5px; color: #E5CBA7; font-weight: 700;">Punto de partida incluido
-                                ✓</span>
+                            <span style="font-size: 11px; color: #705B3E; font-weight: 800;">+7 días gratis por amigo invitado ✓</span>
                         </div>
 
-                        <!-- Nivel 2: Plan App Premium -->
+                        <!-- Nivel 2: App SENS Premium ($24.900 Mensual / $59.900 Trimestral -20% OFF) -->
                         <div class="sens-profile-tier-box" data-tier-box="app_subscribed"
                             onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('app_subscribed')"
-                            style="cursor: pointer; background: #18181B; border: 1px solid rgba(229,203,167,0.35); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;">
+                            style="cursor: pointer; background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; box-shadow: 0 8px 24px rgba(197, 168, 128, 0.12);">
                             <div>
                                 <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #E5CBA7; letter-spacing: 0.8px;">2.
-                                        PLAN PREMIUM</span>
-
+                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">2.
+                                        APP SENS PREMIUM</span>
+                                    <span class="tier-box-badge"
+                                        style="font-size: 9px; font-weight: 800; color: #271903; background: #FBDEB9; padding: 2px 8px; border-radius: 999px;">MÁS ELEGIDO • -20%</span>
                                 </div>
-                                <strong style="font-size: 13px; color: #FFFFFF; display: block; margin-bottom: 2px;">App
-                                    Autónoma Full</strong>
-                                <div
-                                    style="font-size: 11px; color: #10B981; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 4px;">
-                                    $19.900/mes </div>
-                                <p style="font-size: 11px; color: #A1A1AA; margin: 0; line-height: 1.4;">Acceso
-                                    ilimitado a rutinas, timer de hardware, nutrición y desbloqueos semanales.</p>
+                                <strong style="font-size: 14px; color: #121214; display: block; margin-bottom: 6px;">App
+                                    Autónoma Ilimitada</strong>
+                                <div style="background: #F4F3F1; border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; font-size: 11px; font-variant-numeric: tabular-nums;">
+                                    <div style="display: flex; justify-content: space-between; color: #121214; margin-bottom: 3px;">
+                                        <span>• Pack 90 Días (3 Meses):</span>
+                                        <strong>$59.900 <span style="color:#059669;">(USD $45)</span></strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; color: #575659;">
+                                        <span>• Membresía Mensual:</span>
+                                        <strong>$24.900 / mes <span style="color:#77767B;">(USD $19)</span></strong>
+                                    </div>
+                                </div>
+                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Acceso ilimitado a +1300 Ejercicios HD, Nutrición de precisión + 500 alimentos y 12 semanas de progresión.</p>
                             </div>
-
+                            <span style="font-size: 11.5px; color: #121214; font-weight: 800; background: #FBDEB9; padding: 7px 12px; border-radius: 999px; text-align: center;">Activar App Premium →</span>
                         </div>
 
-                        <!-- Nivel 3: Seguimiento Online -->
+                        <!-- Nivel 3: Seguimiento Online 1:1 ($40.000 Básico / $90.000 Premium) -->
                         <div class="sens-profile-tier-box" data-tier-box="online_1on1"
                             onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('online_1on1')"
-                            style="cursor: pointer; background: #18181B; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;">
+                            style="cursor: pointer; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
                             <div>
                                 <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #E5CBA7; letter-spacing: 0.8px;">3.
-                                        SEGUIMIENTO ONLINE</span>
+                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">3.
+                                        ONLINE 1:1 CON NICO</span>
                                     <span class="tier-box-badge"
-                                        style="font-size: 9.5px; font-weight: 800; color: #E5CBA7;">1 a 1 con
-                                        Nico</span>
+                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; background: rgba(251,222,185,0.45); padding: 2px 8px; border-radius: 999px;">A Distancia</span>
                                 </div>
                                 <strong
-                                    style="font-size: 13px; color: #FFFFFF; display: block; margin-bottom: 2px;">Online
+                                    style="font-size: 14px; color: #121214; display: block; margin-bottom: 6px;">Online
                                     Básico o Premium</strong>
-                                <div
-                                    style="font-size: 11px; color: #E5CBA7; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 4px;">
-                                    Básico $40.000 • Premium $90.000/mes</div>
-                                <p style="font-size: 11px; color: #A1A1AA; margin: 0; line-height: 1.4;">Planificación a
-                                    medida por Nico, ajustes por WhatsApp y videollamadas 1 a 1.</p>
+                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; font-size: 11px; font-variant-numeric: tabular-nums;">
+                                    <div style="display: flex; justify-content: space-between; color: #121214; margin-bottom: 3px;">
+                                        <span>• Online Básico:</span>
+                                        <strong>$40.000 / mes</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; color: #705B3E;">
+                                        <span>• Online Premium (VIP):</span>
+                                        <strong>$90.000 / mes</strong>
+                                    </div>
+                                </div>
+                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Rutina a medida por Nico, soporte por WhatsApp, corrección técnica por video, videollamadas y App bonificada 100%.</p>
                             </div>
-                            <span style="font-size: 11px; color: #E5CBA7; font-weight: 800;">Escalar a Online 1 a 1
-                                →</span>
+                            <span style="font-size: 11px; color: #705B3E; font-weight: 800;">Postularme a Online 1:1 →</span>
                         </div>
 
-                        <!-- Nivel 4: Seguimiento Presencial CABA -->
+                        <!-- Nivel 4: Seguimiento Presencial CABA (Individual 1x $130k, 2x $200k, 3x $260k | Grupal Dúo $100k-$195k, Trío $85k-$170k) -->
                         <div class="sens-profile-tier-box" data-tier-box="presencial_1on1"
                             onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('presencial_1on1')"
-                            style="cursor: pointer; background: #18181B; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;">
+                            style="cursor: pointer; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
                             <div>
                                 <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #E5CBA7; letter-spacing: 0.8px;">4.
+                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">4.
                                         PRESENCIAL CABA</span>
                                     <span class="tier-box-badge"
-                                        style="font-size: 9.5px; font-weight: 800; color: #E5CBA7;">Gym Incluido</span>
+                                        style="font-size: 9.5px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 8px; border-radius: 999px;">Gym Incluido</span>
                                 </div>
-                                <strong style="font-size: 13px; color: #FFFFFF; display: block; margin-bottom: 2px;">1 a
-                                    1 o grupal</strong>
-                                <div
-                                    style="font-size: 11px; color: #E5CBA7; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 4px;">
-                                    Grupal $100k-$195k • 1 a 1 $130k-$260k</div>
-                                <p style="font-size: 11px; color: #A1A1AA; margin: 0; line-height: 1.4;">Entrená en vivo
-                                    con Nico en Palermo/Belgrano (1x, 2x o 3x/sem).</p>
+                                <strong style="font-size: 14px; color: #121214; display: block; margin-bottom: 6px;">Individual 1:1 o Grupal (Dúo/Trío)</strong>
+                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; font-size: 10.5px; font-variant-numeric: tabular-nums; line-height: 1.45;">
+                                    <div style="color: #121214; margin-bottom: 2px;"><strong>• 1 a 1:</strong> 1x $130k | 2x $200k | 3x $260k</div>
+                                    <div style="color: #705B3E;"><strong>• Dúo:</strong> $100k-$195k • <strong>Trío:</strong> $85k-$170k</div>
+                                </div>
+                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Entrená en vivo con Nico en CABA (1x, 2x o 3x/sem) con cuota de gimnasio y App SENS bonificadas.</p>
                             </div>
-                            <span style="font-size: 11px; color: #E5CBA7; font-weight: 800;">Ver Variantes Presenciales
-                                →</span>
+                            <span style="font-size: 11px; color: #705B3E; font-weight: 800;">Agendar Evaluación Presencial →</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="profile-settings-grid"
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
-                    <!-- Tarjeta 0: App Oficial SENS (PWA) -->
-                    <div class="card-panel" style="padding: 26px; border: 1px solid rgba(229, 203, 167, 0.35);">
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <!-- Tarjeta 1: Mi Cuenta & Membresía -->
+                    <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
+                        <div
+                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                            <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0;">Datos de Cuenta</h3>
+                            <span class="pill pill-champagne" id="settingsSubBadge">Activa</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
+                                <label
+                                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Nombre
+                                    Completo</label>
+                                <div id="settingsProfileName"
+                                    style="font-size: 15px; color: #121214; font-weight: 700;">—</div>
+                            </div>
+                            <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
+                                <label
+                                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Email
+                                    de Acceso</label>
+                                <div id="settingsProfileEmail"
+                                    style="font-size: 14px; color: #121214; font-weight: 600;">—</div>
+                            </div>
+                            <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
+                                <label
+                                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Plan
+                                    Contratado</label>
+                                <div id="settingsProfilePlan"
+                                    style="font-size: 14px; color: #705B3E; font-weight: 800;">—</div>
+                            </div>
+                            <div
+                                style="margin-top: 6px; padding-top: 14px; border-top: 1px solid rgba(18,18,20,0.06); display: flex; flex-direction: column; gap: 8px;">
+                                <button type="button" class="btn btn-primary btn-full btn-sm"
+                                    onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal()"
+                                    style="font-weight: 800; border-radius: 999px;">
+                                    Escalar mi Plan / Ver Beneficios →
+                                </button>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS."
+                                    target="_blank" rel="noopener" class="btn btn-outline btn-full btn-sm"
+                                    style="display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px;">
+                                    Contactar a Nico por WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 2: Ficha Biomecánica & Diagnóstico -->
+                    <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
+                        <div
+                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                            <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0;">Ficha Biomecánica</h3>
+                            <span class="pill pill-champagne"
+                                style="font-size: 10px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 700;">Auditada por Nico</span>
+                        </div>
+                        <p style="font-size: 12.5px; color: #575659; line-height: 1.5; margin-bottom: 16px;">
+                            Tus respuestas de la evaluación inicial calibran tus rutinas, volumen semanal, calorías y cargas asignadas por Nico.
+                        </p>
+                        <div id="settingsDiagTags"
+                            style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                            <span class="diag-tag">Cargando ficha...</span>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-full" id="btnSettingsEditDiag"
+                            style="border-color: rgba(112, 91, 62, 0.35); color: #705B3E; font-weight: 700; border-radius: 999px;">
+                            Re-evaluar / Editar Diagnóstico
+                        </button>
+                    </div>
+
+                    <!-- Tarjeta 0: App Oficial SENS (PWA) & Preferencias -->
+                    <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
                         <div
                             style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
                             <h3
-                                style="font-size: 1.15rem; color: #09090B; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"
-                                    style="color: var(--accent-primary);">
+                                style="font-size: 1.15rem; color: #121214; font-weight: 700; display: flex; align-items: center; gap: 8px; margin: 0;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#705B3E"
+                                    stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
                                     <line x1="12" y1="18" x2="12.01" y2="18" />
                                 </svg>
@@ -4969,13 +5099,13 @@
                             </h3>
                             <span class="pill pill-champagne" id="settingsPwaStatusBadge">PWA Nativa</span>
                         </div>
-                        <p style="font-size: 12.5px; color: #71717A; line-height: 1.45; margin-bottom: 16px;">
-                            Tené acceso instantáneo a tus videos de entrenamiento y registro metabólico directamente
-                            desde la pantalla de inicio de tu celular o tablet.
+                        <p style="font-size: 12.5px; color: #575659; line-height: 1.45; margin-bottom: 16px;">
+                            Tené acceso instantáneo a tus videos de entrenamiento en bucle y registro metabólico directamente
+                            desde la pantalla de inicio de tu iPhone o Android.
                         </p>
                         <button type="button" class="btn btn-primary btn-full btn-sm btn-pwa-trigger"
                             onclick="triggerPwaInstall()"
-                            style="display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800;">
+                            style="display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; border-radius: 999px;">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2.5">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -4986,58 +5116,13 @@
                         </button>
                     </div>
 
-                    <!-- Tarjeta 1: Mi Cuenta & Membresía -->
-                    <div class="card-panel" style="padding: 26px;">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
-                            <h3 style="font-size: 1.15rem; color: #09090B; font-weight: 700;">Datos de Cuenta</h3>
-                            <span class="pill pill-champagne" id="settingsSubBadge">Activa</span>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 14px;">
-                            <div>
-                                <label
-                                    style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #71717A; display: block; margin-bottom: 4px;">Nombre
-                                    Completo</label>
-                                <div id="settingsProfileName"
-                                    style="font-size: 15px; color: #09090B; font-weight: 600;">—</div>
-                            </div>
-                            <div>
-                                <label
-                                    style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #71717A; display: block; margin-bottom: 4px;">Email
-                                    de Acceso</label>
-                                <div id="settingsProfileEmail"
-                                    style="font-size: 15px; color: #09090B; font-weight: 500;">—</div>
-                            </div>
-                            <div>
-                                <label
-                                    style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #71717A; display: block; margin-bottom: 4px;">Plan
-                                    Contratado</label>
-                                <div id="settingsProfilePlan"
-                                    style="font-size: 14px; color: #9E7D4B; font-weight: 700;">—</div>
-                            </div>
-                            <div
-                                style="margin-top: 10px; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 8px;">
-                                <button type="button" class="btn btn-primary btn-full btn-sm"
-                                    onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal()"
-                                    style="font-weight: 800;">
-                                    Escalar mi Plan / Ver Beneficios →
-                                </button>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS."
-                                    target="_blank" rel="noopener" class="btn btn-outline btn-full btn-sm"
-                                    style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                    Contactar a Nico por WhatsApp
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tarjeta 2: Seguridad & Contraseña -->
-                    <div class="card-panel" style="padding: 26px;">
-                        <h3 style="font-size: 1.15rem; color: #09090B; font-weight: 700; margin-bottom: 18px;">Seguridad
+                    <!-- Tarjeta 3: Seguridad, Contraseña & Sesión -->
+                    <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
+                        <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0 0 16px 0;">Seguridad
                             &amp; Acceso</h3>
-                        <form id="formUpdatePassword" style="display: flex; flex-direction: column; gap: 14px;">
+                        <form id="formUpdatePassword" style="display: flex; flex-direction: column; gap: 12px;">
                             <div class="input-group">
-                                <label class="input-label" for="settingsNewPassword" style="color: #71717A;">Nueva
+                                <label class="input-label" for="settingsNewPassword" style="color: #575659;">Nueva
                                     Contraseña</label>
                                 <input type="password" id="settingsNewPassword" class="input-control"
                                     placeholder="Mínimo 6 caracteres" minlength="6" required
@@ -5045,73 +5130,46 @@
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="settingsConfirmPassword"
-                                    style="color: #71717A;">Confirmar Contraseña</label>
+                                    style="color: #575659;">Confirmar Contraseña</label>
                                 <input type="password" id="settingsConfirmPassword" class="input-control"
                                     placeholder="Repetí tu nueva contraseña" minlength="6" required
                                     autocomplete="new-password">
                             </div>
                             <button type="submit" class="btn btn-primary btn-full" id="btnSubmitNewPassword"
-                                style="margin-top: 6px;">
+                                style="margin-top: 4px; border-radius: 999px;">
                                 Guardar Nueva Contraseña
                             </button>
                         </form>
+                        <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(18,18,20,0.06);">
+                            <button type="button" class="btn btn-outline btn-full btn-sm"
+                                onclick="document.getElementById('logoutBtn')?.click()"
+                                style="border-color: rgba(220, 38, 38, 0.25); color: #DC2626; font-weight: 700; border-radius: 999px;">
+                                Cerrar Sesión en este Dispositivo
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Tarjeta 3: Ficha Biomecánica & Diagnóstico -->
-                    <div class="card-panel" style="padding: 26px;">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
-                            <h3 style="font-size: 1.15rem; color: #09090B; font-weight: 700;">Ficha Biomecánica</h3>
-                            <span class="pill pill-dark"
-                                style="font-size: 10px; background: #09090B; color: #FFFFFF;">Auditada por Nico</span>
-                        </div>
-                        <p style="font-size: 12.5px; color: #71717A; line-height: 1.5; margin-bottom: 16px;">
-                            Tus respuestas de la evaluación inicial calibran tus rutinas y cargas asignadas por Nico.
-                        </p>
-                        <div id="settingsDiagTags"
-                            style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
-                            <span class="diag-tag">Cargando ficha...</span>
-                        </div>
-                        <button type="button" class="btn btn-outline btn-full" id="btnSettingsEditDiag"
-                            style="border-color: rgba(158, 125, 75, 0.4); color: #9E7D4B; font-weight: 700;">
-                            Re-evaluar / Editar Diagnóstico
-                        </button>
-                    </div>
-
-                    <!-- Tarjeta 4: Equipamiento & Suplementación Oficial -->
-                    <div class="card-panel" style="padding: 26px;">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
-                            <h3 style="font-size: 1.15rem; color: #09090B; font-weight: 700;">Equipamiento &amp;
-                                Suplementos</h3>
-                            <span class="pill pill-champagne" style="font-size: 10px;">MercadoLibre</span>
-                        </div>
-                        <p
-                            style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
-                            Accedé al catálogo de kits de fuerza, bandas y suplementos grado clínico recomendados por
-                            Nico para tu plan.
-                        </p>
-                        <button type="button" class="btn btn-outline btn-full btn-store-entry" id="btnSettingsOpenStore"
-                            style="border-color: rgba(229, 203, 167, 0.4); color: var(--accent-primary);">
+                    <!-- Tarjeta 4: Equipamiento (Oculta en UI, preservada para integridad de IDs) -->
+                    <div class="card-panel" style="display: none !important;">
+                        <button type="button" class="btn btn-outline btn-full btn-store-entry" id="btnSettingsOpenStore">
                             Ver Catálogo en Tienda →
                         </button>
                     </div>
 
                     <!-- Tarjeta 5: SENS Coach OS (Solo visible para Admin / Nico) -->
                     <div class="card-panel coach-only-card" id="settingsCoachCard"
-                        style="padding: 26px; display: none; border-color: rgba(229, 203, 167, 0.3); background: linear-gradient(135deg, rgba(229,203,167,0.04), rgba(18,18,22,0.8));">
+                        style="padding: 24px; display: none; border: 1.5px solid #C5A880; background: #FAF7F2; border-radius: 20px;">
                         <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
-                            <h3 style="font-size: 1.15rem; color: #FFFFFF; font-weight: 700;">SENS Coach OS</h3>
+                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                            <h3 style="font-size: 1.15rem; color: #121214; font-weight: 800; margin: 0;">SENS Coach OS</h3>
                             <span class="pill pill-champagne" style="font-size: 10px;">Panel Master</span>
                         </div>
                         <p
-                            style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
-                            Acceso directo al Centro de Mando: gestión de alumnos, biblioteca biomecánica y auditoría de
-                            métricas.
+                            style="font-size: 12.5px; color: #575659; line-height: 1.5; margin-bottom: 16px;">
+                            Acceso directo al Centro de Mando: gestión de alumnos, biblioteca biomecánica, favoritos y estudio de marketing UHD.
                         </p>
                         <button type="button" class="btn btn-primary btn-full btn-coach-hub-entry"
-                            id="btnSettingsOpenCoach">
+                            id="btnSettingsOpenCoach" style="border-radius: 999px;">
                             Abrir SENS Coach OS →
                         </button>
                     </div>
@@ -7255,38 +7313,38 @@
     </div>
 
     <!-- =========================================================================
-         MODAL DE PORCIÓN & REGLA GRADUADA (ESTILO SAMSUNG HEALTH)
+         MODAL DE PORCIÓN & REGLA GRADUADA (ESTILO SAMSUNG HEALTH QUIET LUXURY)
          ========================================================================= -->
     <div class="modal-overlay" id="portionSizeModal">
-        <div class="sens-portion-modal-card">
-            <button class="modal-close-btn" id="closePortionModalBtn">&times;</button>
-            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 8px;">NUTRICIÓN DE PRECISIÓN</span>
-            <h3 style="font-size: 1.3rem; font-weight: 800; color: #FFFFFF; margin-top: 6px;"
+        <div class="sens-portion-modal-card" style="background: #FAF9F6; color: #121214; border: 1px solid rgba(18,18,20,0.08); box-shadow: 0 24px 64px rgba(18,18,20,0.18);">
+            <button class="modal-close-btn" id="closePortionModalBtn" style="color: #121214; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.08);">&times;</button>
+            <span class="pill pill-champagne" style="font-size: 9.5px; padding: 3px 9px; background: rgba(251,222,185,0.55); color: #705B3E; font-weight: 700;">NUTRICIÓN DE PRECISIÓN</span>
+            <h3 style="font-size: 1.3rem; font-weight: 800; color: #121214; margin-top: 6px;"
                 id="portionModalFoodTitle">
                 Definir tamaño porción
             </h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 16px;" id="portionModalFoodSub">
+            <p style="font-size: 12px; color: #575659; margin: 2px 0 16px;" id="portionModalFoodSub">
                 Elija unidad y defina la cantidad exacta.
             </p>
 
             <!-- Card de Control con Ruler Slider -->
             <div
-                style="background: #141418; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px; margin-bottom: 16px;">
+                style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(18,18,20,0.04);">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <strong style="font-size: 16px; color: #FFFFFF;" id="rulerFoodName">Pechuga de Pollo</strong>
-                        <div style="font-size: 13px; color: var(--accent-primary); font-weight: 800; margin-top: 2px;"
+                        <strong style="font-size: 16px; color: #121214;" id="rulerFoodName">Pechuga de Pollo</strong>
+                        <div style="font-size: 13px; color: #705B3E; font-weight: 800; margin-top: 2px;"
                             id="rulerDynamicKcal">178 kcal</div>
                     </div>
-                    <span style="font-size: 18px; color: var(--accent-primary);">★</span>
+                    <span style="font-size: 18px; color: #705B3E;">★</span>
                 </div>
 
                 <!-- Ruler Slider Táctil -->
                 <div class="sens-ruler-container">
-                    <div class="sens-ruler-bubble" id="rulerBubbleVal">100 g</div>
+                    <div class="sens-ruler-bubble" id="rulerBubbleVal" style="color: #121214; font-weight: 800;">100 g</div>
                     <input type="range" min="20" max="400" step="5" value="100" class="sens-ruler-slider-input"
                         id="portionRulerInput">
-                    <div class="sens-ruler-notches">
+                    <div class="sens-ruler-notches" style="color: #77767B;">
                         <span>50g</span>
                         <span>100g</span>
                         <span>150g</span>
@@ -7299,7 +7357,7 @@
                 <!-- Dropdown de Unidad en Píldora -->
                 <div style="text-align: center; margin-top: 10px;">
                     <div
-                        style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 700; color: #FFFFFF;">
+                        style="display: inline-flex; align-items: center; gap: 6px; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.08); border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 700; color: #121214;">
                         <span id="rulerUnitLabel">gramos (g)</span>
                         <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
                             <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -7310,50 +7368,50 @@
             </div>
 
             <!-- Ficha Clínica de Macronutrientes (FDA Style) -->
-            <div class="sens-fda-nutrition-panel">
+            <div class="sens-fda-nutrition-panel" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); color: #121214;">
                 <div class="sens-fda-header">
                     <div
-                        style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800;">
+                        style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #705B3E; font-weight: 800;">
                         Macronutrientes</div>
                     <!-- Barra segmentada -->
-                    <div class="sens-macro-segmented-bar" style="margin-top: 8px;">
+                    <div class="sens-macro-segmented-bar" style="margin-top: 8px; background: #F4F3F1;">
                         <div class="sens-macro-seg carb" id="fdaSegCarb" style="width: 35%;"></div>
                         <div class="sens-macro-seg fat" id="fdaSegFat" style="width: 20%;"></div>
                         <div class="sens-macro-seg prot" id="fdaSegProt" style="width: 45%;"></div>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700;">
-                        <span style="color: #38BDF8;" id="fdaPctCarb">Carb. 35%</span>
-                        <span style="color: #F59E0B;" id="fdaPctFat">Grasa 20%</span>
-                        <span style="color: var(--accent-primary);" id="fdaPctProt">Proteína 45%</span>
+                        <span style="color: #0284C7;" id="fdaPctCarb">Carb. 35%</span>
+                        <span style="color: #D97706;" id="fdaPctFat">Grasa 20%</span>
+                        <span style="color: #705B3E;" id="fdaPctProt">Proteína 45%</span>
                     </div>
                 </div>
 
-                <div class="sens-fda-cal-row">
-                    <span class="sens-fda-cal-title">Calorías</span>
-                    <span class="sens-fda-cal-val" id="fdaValKcal">178</span>
+                <div class="sens-fda-cal-row" style="color: #121214;">
+                    <span class="sens-fda-cal-title" style="color: #121214;">Calorías</span>
+                    <span class="sens-fda-cal-val" id="fdaValKcal" style="color: #121214;">178</span>
                 </div>
 
-                <div class="sens-fda-row">
+                <div class="sens-fda-row" style="color: #121214;">
                     <strong>Grasa total <span id="fdaValFatGrams">4.3g</span></strong>
                     <span id="fdaValFatPct">6%</span>
                 </div>
-                <div class="sens-fda-row sub">
+                <div class="sens-fda-row sub" style="color: #575659;">
                     <span>Grasa saturada 0.6g</span>
                     <span>3%</span>
                 </div>
-                <div class="sens-fda-row">
+                <div class="sens-fda-row" style="color: #575659;">
                     <span>Colesterol 0mg</span>
                     <span>0%</span>
                 </div>
-                <div class="sens-fda-row">
+                <div class="sens-fda-row" style="color: #575659;">
                     <span>Sodio 252mg</span>
                     <span>11%</span>
                 </div>
-                <div class="sens-fda-row">
+                <div class="sens-fda-row" style="color: #121214;">
                     <strong>Carbohidratos <span id="fdaValCarbGrams">16g</span></strong>
                     <span id="fdaValCarbPct">6%</span>
                 </div>
-                <div class="sens-fda-row">
+                <div class="sens-fda-row" style="color: #121214;">
                     <strong>Proteínas <span id="fdaValProtGrams">22.5g</span></strong>
                     <span id="fdaValProtPct">45%</span>
                 </div>
@@ -7361,8 +7419,8 @@
 
             <!-- Botones Flotantes en Píldora: Cancelar / Guardar -->
             <div class="sens-floating-pill-actions">
-                <button type="button" class="sens-pill-btn-action" id="btnCancelPortionModal">Cancelar</button>
-                <button type="button" class="sens-pill-btn-action save" id="btnSavePortionModal">Guardar</button>
+                <button type="button" class="sens-pill-btn-action" id="btnCancelPortionModal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.1);">Cancelar</button>
+                <button type="button" class="sens-pill-btn-action save" id="btnSavePortionModal" style="background: #121214; color: #FFFFFF;">Guardar</button>
             </div>
         </div>
     </div>
@@ -7371,12 +7429,12 @@
          MODAL DETALLE DE ALIMENTO & AJUSTE DE GRAMOS (MASTER 500 ALIMENTOS SENS)
          ========================================================================= -->
     <div class="sens-modal-sheet-wrap" id="userFoodDetailModal">
-        <div class="sens-modal-sheet-box">
+        <div class="sens-modal-sheet-box" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08); box-shadow: 0 -12px 48px rgba(18,18,20,0.16);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <span class="pill pill-champagne" id="ufdCategoryPill"
-                    style="font-size: 10px; padding: 2px 8px;">Proteína Magra</span>
+                    style="font-size: 10px; padding: 3px 10px; background: rgba(251,222,185,0.55); color: #705B3E; font-weight: 700;">Proteína Magra</span>
                 <button type="button" class="sens-modal-close-btn" id="btnCloseUserFoodDetailModal"
-                    aria-label="Cerrar modal">
+                    aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                         stroke-linecap="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -7386,7 +7444,7 @@
             </div>
 
             <!-- Imagen HD del Alimento con Badges Flotantes -->
-            <div class="sens-sheet-header-img" style="position: relative;">
+            <div class="sens-sheet-header-img" style="position: relative; border-radius: 18px; overflow: hidden;">
                 <img id="ufdFoodImg" src="Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp" alt="Alimento">
                 <div class="sens-sheet-header-img-gradient"></div>
                 <div style="position: absolute; top: 12px; left: 14px; right: 14px; display: flex; gap: 6px; flex-wrap: wrap;"
@@ -7395,9 +7453,9 @@
                 </div>
                 <div style="position: absolute; bottom: 12px; left: 14px; right: 14px;">
                     <span id="ufdMealPill"
-                        style="display: inline-block; font-size: 10px; font-weight: 800; text-transform: uppercase; color: #E5CBA7; margin-bottom: 4px;">Almuerzo</span>
+                        style="display: inline-block; font-size: 10px; font-weight: 800; text-transform: uppercase; color: #FBDEB9; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.6);">Almuerzo</span>
                     <h3 id="ufdFoodTitle"
-                        style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 0; line-height: 1.25;">
+                        style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 0; line-height: 1.25; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">
                         Pechuga de Pollo a la Plancha</h3>
                 </div>
             </div>
@@ -7405,7 +7463,7 @@
             <!-- Fila de Ajuste de Gramaje con Stepper Táctil & Toggle de Unidades (Item 5) -->
             <div style="margin-bottom: 16px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <label style="font-size: 12px; font-weight: 700; color: #E4E4E7; margin: 0;">
+                    <label style="font-size: 12px; font-weight: 700; color: #121214; margin: 0;">
                         Ajustar Porción:
                     </label>
                     <div class="sens-unit-toggle-pill-wrap" id="ufdUnitToggleWrap" style="display: none;">
@@ -7416,117 +7474,117 @@
                 </div>
 
                 <!-- Stepper en Modo Gramos -->
-                <div class="sens-gram-stepper-row" id="ufdGramsStepperRow">
-                    <button type="button" class="sens-stepper-btn" id="btnUfdMinus50" title="-50g">-50</button>
-                    <button type="button" class="sens-stepper-btn" id="btnUfdMinus10" title="-10g">-10</button>
+                <div class="sens-gram-stepper-row" id="ufdGramsStepperRow" style="background: #F4F3F1; border: 1px solid rgba(18,18,20,0.06); border-radius: 14px; padding: 8px 10px;">
+                    <button type="button" class="sens-stepper-btn" id="btnUfdMinus50" title="-50g" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">-50</button>
+                    <button type="button" class="sens-stepper-btn" id="btnUfdMinus10" title="-10g" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">-10</button>
                     <div style="display: flex; align-items: baseline; gap: 4px;">
                         <input type="number" id="ufdGramInput" class="sens-stepper-input" value="150" min="10"
-                            max="1000" step="5">
-                        <span style="font-size: 13px; font-weight: 700; color: #A1A1AA;" id="ufdUnitSuffix">g</span>
+                            max="1000" step="5" style="color: #121214; font-weight: 800;">
+                        <span style="font-size: 13px; font-weight: 700; color: #575659;" id="ufdUnitSuffix">g</span>
                     </div>
-                    <button type="button" class="sens-stepper-btn" id="btnUfdPlus10" title="+10g">+10</button>
-                    <button type="button" class="sens-stepper-btn" id="btnUfdPlus50" title="+50g">+50</button>
+                    <button type="button" class="sens-stepper-btn" id="btnUfdPlus10" title="+10g" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">+10</button>
+                    <button type="button" class="sens-stepper-btn" id="btnUfdPlus50" title="+50g" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">+50</button>
                 </div>
 
                 <!-- Stepper en Modo Unidades (Oculto inicialmente) -->
-                <div class="sens-gram-stepper-row" id="ufdUnitsStepperRow" style="display: none;">
+                <div class="sens-gram-stepper-row" id="ufdUnitsStepperRow" style="display: none; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.06); border-radius: 14px; padding: 8px 10px;">
                     <button type="button" class="sens-stepper-btn" id="btnUfdMinusUnit" title="-1 unidad"
-                        style="padding: 8px 16px;">-1</button>
+                        style="padding: 8px 16px; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">-1</button>
                     <div style="display: flex; align-items: baseline; gap: 4px;">
                         <input type="number" id="ufdUnitInput" class="sens-stepper-input" value="2" min="0.5" max="20"
-                            step="0.5" style="width: 60px;">
-                        <span style="font-size: 13px; font-weight: 700; color: #E5CBA7;" id="ufdUnitNameLabel">u</span>
+                            step="0.5" style="width: 60px; color: #121214; font-weight: 800;">
+                        <span style="font-size: 13px; font-weight: 700; color: #705B3E;" id="ufdUnitNameLabel">u</span>
                     </div>
                     <button type="button" class="sens-stepper-btn" id="btnUfdPlusUnit" title="+1 unidad"
-                        style="padding: 8px 16px;">+1</button>
+                        style="padding: 8px 16px; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">+1</button>
                 </div>
 
                 <!-- Recálculo Dinámico de Macros en Vivo -->
                 <div
-                    style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; gap: 8px; margin-top: 10px;">
-                    <div>
-                        <span style="display: block; font-size: 10px; font-weight: 700; color: #94A3B8;">CALORÍAS</span>
-                        <strong id="ufdCalcKcal" style="font-size: 16px; color: #FFFFFF; font-weight: 800;">248</strong>
+                    style="background: #F4F3F1; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 12px; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; gap: 8px; margin-top: 10px;">
+                    <div style="background: #FFFFFF; border-radius: 10px; padding: 8px 4px; border: 1px solid rgba(18,18,20,0.04);">
+                        <span style="display: block; font-size: 9.5px; font-weight: 700; color: #575659;">CALORÍAS</span>
+                        <strong id="ufdCalcKcal" style="font-size: 16px; color: #121214; font-weight: 800; font-variant-numeric: tabular-nums;">248</strong>
                     </div>
-                    <div>
-                        <span style="display: block; font-size: 10px; font-weight: 700; color: #E5CBA7;">PROTEÍNA</span>
+                    <div style="background: #FFFFFF; border-radius: 10px; padding: 8px 4px; border: 1px solid rgba(197,168,128,0.35);">
+                        <span style="display: block; font-size: 9.5px; font-weight: 700; color: #705B3E;">PROTEÍNA</span>
                         <strong id="ufdCalcProt"
-                            style="font-size: 16px; color: #E5CBA7; font-weight: 800;">46.5g</strong>
+                            style="font-size: 16px; color: #705B3E; font-weight: 800; font-variant-numeric: tabular-nums;">46.5g</strong>
                     </div>
-                    <div>
-                        <span style="display: block; font-size: 10px; font-weight: 700; color: #38BDF8;">CARBOS</span>
-                        <strong id="ufdCalcCarbs" style="font-size: 16px; color: #38BDF8; font-weight: 800;">0g</strong>
+                    <div style="background: #FFFFFF; border-radius: 10px; padding: 8px 4px; border: 1px solid rgba(18,18,20,0.04);">
+                        <span style="display: block; font-size: 9.5px; font-weight: 700; color: #0284C7;">CARBOS</span>
+                        <strong id="ufdCalcCarbs" style="font-size: 16px; color: #0284C7; font-weight: 800; font-variant-numeric: tabular-nums;">0g</strong>
                     </div>
-                    <div>
-                        <span style="display: block; font-size: 10px; font-weight: 700; color: #F59E0B;">GRASAS</span>
+                    <div style="background: #FFFFFF; border-radius: 10px; padding: 8px 4px; border: 1px solid rgba(18,18,20,0.04);">
+                        <span style="display: block; font-size: 9.5px; font-weight: 700; color: #D97706;">GRASAS</span>
                         <strong id="ufdCalcFats"
-                            style="font-size: 16px; color: #F59E0B; font-weight: 800;">5.4g</strong>
+                            style="font-size: 16px; color: #D97706; font-weight: 800; font-variant-numeric: tabular-nums;">5.4g</strong>
                     </div>
                 </div>
             </div>
 
             <!-- Ingredientes y Preparación con Despliegue "Ver Más" (Item 3) -->
             <div id="ufdIngredientsWrap"
-                style="margin-bottom: 14px; font-size: 12.5px; color: #CBD5E1; line-height: 1.5; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 10px 12px;">
-                <strong style="color: #FFFFFF; display: block; margin-bottom: 6px; font-size: 12px;">Ingredientes
+                style="margin-bottom: 14px; font-size: 12.5px; color: #575659; line-height: 1.5; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 12px 14px;">
+                <strong style="color: #121214; display: block; margin-bottom: 6px; font-size: 12px;">Ingredientes
                     Principales:</strong>
-                <div id="ufdIngredientsText" style="display: flex; flex-direction: column; gap: 4px;">-</div>
+                <div id="ufdIngredientsText" style="display: flex; flex-direction: column; gap: 4px; color: #121214;">-</div>
             </div>
 
             <div id="ufdStepsWrap"
-                style="margin-bottom: 14px; font-size: 12px; color: #94A3B8; line-height: 1.5; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 10px 12px;">
+                style="margin-bottom: 14px; font-size: 12px; color: #575659; line-height: 1.5; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 12px 14px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <strong style="color: #FFFFFF; font-size: 12.5px;">Pasos de Preparación:</strong>
-                    <button type="button" class="sens-btn-disclosure" id="btnToggleUfdSteps">
+                    <strong style="color: #121214; font-size: 12.5px;">Pasos de Preparación:</strong>
+                    <button type="button" class="sens-btn-disclosure" id="btnToggleUfdSteps" style="color: #705B3E; font-weight: 700;">
                         <span id="ufdStepsToggleText">Ver más</span>
                         <span id="ufdStepsArrow">▾</span>
                     </button>
                 </div>
-                <div id="ufdStepsPreview" style="color: #CBD5E1; font-size: 12px; line-height: 1.5;">-</div>
+                <div id="ufdStepsPreview" style="color: #575659; font-size: 12px; line-height: 1.5;">-</div>
                 <div id="ufdStepsFull"
-                    style="display: none; color: #CBD5E1; font-size: 12px; line-height: 1.6; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;">
+                    style="display: none; color: #575659; font-size: 12px; line-height: 1.6; margin-top: 8px; border-top: 1px solid rgba(18,18,20,0.06); padding-top: 8px;">
                 </div>
             </div>
 
             <!-- TRUCO DEL CHEF (NUEVO SENS V2) -->
-            <div class="sens-chef-trick-card" id="ufdChefTrickWrap" style="margin-bottom: 14px; display: none;">
+            <div class="sens-chef-trick-card" id="ufdChefTrickWrap" style="margin-bottom: 14px; display: none; background: #FAF7F2; border: 1px solid rgba(197, 168, 128, 0.35); border-radius: 14px; padding: 12px 14px;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
                     <strong
-                        style="color: #E5CBA7; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;">Truco
+                        style="color: #705B3E; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;">Truco
                         del Chef SENS</strong>
                 </div>
-                <p id="ufdChefTrickText" style="margin: 0; font-size: 12px; color: #F4F4F5; line-height: 1.5;">-</p>
+                <p id="ufdChefTrickText" style="margin: 0; font-size: 12px; color: #121214; line-height: 1.5;">-</p>
             </div>
 
             <!-- Tip del Coach / Nutricionista Deportivo -->
-            <div class="sens-nutri-directive-card" id="ufdTipWrap" style="margin-bottom: 14px;">
+            <div class="sens-nutri-directive-card" id="ufdTipWrap" style="margin-bottom: 14px; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.06); border-left: 4px solid #705B3E; border-radius: 14px; padding: 12px 14px;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
                     <strong
-                        style="color: #38BDF8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;">Tip
+                        style="color: #705B3E; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;">Tip
                         Nutricionista Deportivo</strong>
                 </div>
-                <p id="ufdCoachTipText" style="margin: 0; font-size: 12px; color: #E4E4E7; line-height: 1.5;">-</p>
+                <p id="ufdCoachTipText" style="margin: 0; font-size: 12px; color: #121214; line-height: 1.5;">-</p>
             </div>
 
             <!-- Reemplazos Equivalentes & Micronutrientes -->
             <div id="ufdEquivalentsWrap"
-                style="margin-bottom: 14px; font-size: 11.5px; color: #94A3B8; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 10px 12px; display: none;">
-                <strong style="color: #FFFFFF; font-size: 11.5px; display: block; margin-bottom: 4px;">Reemplazos
+                style="margin-bottom: 14px; font-size: 11.5px; color: #575659; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 10px 12px; display: none;">
+                <strong style="color: #121214; font-size: 11.5px; display: block; margin-bottom: 4px;">Reemplazos
                     Equivalentes:</strong>
-                <span id="ufdEquivalentsText" style="color: #CBD5E1; line-height: 1.4;">-</span>
+                <span id="ufdEquivalentsText" style="color: #575659; line-height: 1.4;">-</span>
             </div>
 
             <div id="ufdAllergensWrap"
-                style="display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: #94A3B8; margin-bottom: 18px;">
+                style="display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: #575659; margin-bottom: 18px;">
                 <span>Alérgenos / Sensibilidades:</span>
-                <span id="ufdAllergensText" style="font-weight: 700; color: #E4E4E7;">Ninguno declarado</span>
+                <span id="ufdAllergensText" style="font-weight: 700; color: #121214;">Ninguno declarado</span>
             </div>
 
             <!-- Botones de Acción: Intercambiar Equivalente + Guardar Ajuste -->
             <div
                 style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 24px));">
                 <button type="button" class="btn btn-outline" id="btnOpenUfdSwapModal"
-                    style="padding: 13px 10px; font-weight: 700; font-size: 12.5px; border-color: rgba(229,203,167,0.4); color: #E5CBA7; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    style="padding: 13px 10px; font-weight: 700; font-size: 12.5px; border-color: rgba(112,91,62,0.35); color: #705B3E; background: #FAF9F6; border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 6px;">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="17 1 21 5 17 9"></polyline>
                         <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
@@ -7536,7 +7594,7 @@
                     <span>Intercambiar</span>
                 </button>
                 <button type="button" class="btn btn-primary" id="btnConfirmUfdPortion"
-                    style="padding: 13px 14px; font-weight: 800; font-size: 12.5px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; border-radius: 12px;">
+                    style="padding: 13px 14px; font-weight: 800; font-size: 12.5px; background: #121214 !important; color: #FFFFFF !important; border: none; border-radius: 999px;">
                     Guardar Porción
                 </button>
             </div>
@@ -7547,17 +7605,17 @@
          EXPERIENCIA 1: MODAL DE INTERCAMBIO POR EQUIVALENTE (SWAP INTELIGENTE)
          ========================================================================= -->
     <div class="sens-modal-sheet-wrap" id="userFoodSwapModal">
-        <div class="sens-modal-sheet-box" style="max-height: 85vh; overflow-y: auto;">
+        <div class="sens-modal-sheet-box" style="max-height: 85vh; overflow-y: auto; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div>
                     <span
-                        style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #E5CBA7; letter-spacing: 0.5px;">REEMPLAZO
+                        style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #705B3E; letter-spacing: 0.5px;">REEMPLAZO
                         EQUIVALENTE</span>
-                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 2px 0 0 0;">Intercambiar
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #121214; margin: 2px 0 0 0;">Intercambiar
                         Plato</h3>
                 </div>
                 <button type="button" class="sens-modal-close-btn" id="btnCloseUserFoodSwapModal"
-                    aria-label="Cerrar modal">
+                    aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                         stroke-linecap="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -7565,9 +7623,9 @@
                     </svg>
                 </button>
             </div>
-            <p style="font-size: 12px; color: #A1A1AA; margin-bottom: 12px;">
+            <p style="font-size: 12px; color: #575659; margin-bottom: 12px;">
                 Opciones con similar perfil calórico y proteico para <strong id="swapCurrentFoodName"
-                    style="color: #FFF;">-</strong>:
+                    style="color: #121214;">-</strong>:
             </p>
             <div id="userFoodSwapList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
                 <!-- Opciones inyectadas dinámicamente -->
@@ -7579,17 +7637,17 @@
          EXPERIENCIA 4: MODAL DE LISTA DE SUPERMERCADO INTELIGENTE POR GÓNDOLA
          ========================================================================= -->
     <div class="sens-modal-sheet-wrap" id="userShoppingListModal">
-        <div class="sens-modal-sheet-box" style="max-height: 88vh; overflow-y: auto;">
+        <div class="sens-modal-sheet-box" style="max-height: 88vh; overflow-y: auto; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div>
                     <span
-                        style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #E5CBA7; letter-spacing: 0.5px;">PLAN
+                        style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #705B3E; letter-spacing: 0.5px;">PLAN
                         NUTRICIONAL ACTIVO</span>
-                    <h3 style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 2px 0 0 0;">Lista de
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: #121214; margin: 2px 0 0 0;">Lista de
                         Compras</h3>
                 </div>
                 <button type="button" class="sens-modal-close-btn" id="btnCloseUserShoppingListModal"
-                    aria-label="Cerrar modal">
+                    aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                         stroke-linecap="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -7600,9 +7658,9 @@
 
             <!-- Selector de Días para la Compra -->
             <div
-                style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px;">
+                style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 14px; padding: 12px; margin-bottom: 14px;">
                 <label
-                    style="display: block; font-size: 11px; font-weight: 700; color: #CBD5E1; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    style="display: block; font-size: 11px; font-weight: 700; color: #705B3E; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
                     Días a incluir en la compra:
                 </label>
                 <!-- Presets Rápidos -->
@@ -7625,10 +7683,10 @@
 
             <div
                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 8px; flex-wrap: wrap;">
-                <span id="shoppingListMetaCount" style="font-size: 11.5px; color: #A1A1AA;">Calculando
+                <span id="shoppingListMetaCount" style="font-size: 11.5px; color: #575659; font-weight: 600;">Calculando
                     ingredientes...</span>
                 <button type="button" class="btn btn-outline btn-sm" id="btnCopyShoppingListWhatsApp"
-                    style="border-color: #25D366; color: #25D366; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(37,211,102,0.08); cursor: pointer;">
+                    style="border-color: #1E7B42; color: #1E7B42; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; background: #EAF6EE; cursor: pointer;">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -7647,12 +7705,12 @@
          MODAL DE CARGA DE COMIDA PERSONALIZADA (BÚSQUEDA 500 ALIMENTOS O CALORÍAS)
          ========================================================================= -->
     <div class="sens-modal-sheet-wrap" id="userCustomMealModal">
-        <div class="sens-modal-sheet-box">
+        <div class="sens-modal-sheet-box" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <h3 style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 0;">Registrar Comida
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #121214; margin: 0;">Registrar Comida
                     Personalizada</h3>
                 <button type="button" class="sens-modal-close-btn" id="btnCloseUserCustomMealModal"
-                    aria-label="Cerrar modal">
+                    aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                         stroke-linecap="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -7664,7 +7722,7 @@
             <!-- Selector de Momento de Ingesta -->
             <div style="margin-bottom: 14px;">
                 <label
-                    style="display: block; font-size: 12px; font-weight: 700; color: #A1A1AA; margin-bottom: 6px;">Momento
+                    style="display: block; font-size: 12px; font-weight: 700; color: #575659; margin-bottom: 6px;">Momento
                     de la comida:</label>
                 <div class="sens-nutri-filter-scroll" id="customMealSlotRow" style="margin-bottom: 0;">
                     <button type="button" class="sens-nutri-tab-pill active" data-slot="desayuno">Desayuno</button>
@@ -7676,13 +7734,13 @@
             </div>
 
             <!-- Pestañas de Modo: Búsqueda vs Manual -->
-            <div style="display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 16px;">
+            <div style="display: flex; border-bottom: 1px solid rgba(18,18,20,0.08); margin-bottom: 16px;">
                 <button type="button" class="btn-clean" id="tabCustomSearchMode"
-                    style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #E5CBA7; background: transparent !important; border: none !important; border-bottom: 2px solid #E5CBA7 !important; text-align: center; cursor: pointer;">
+                    style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #121214; background: transparent !important; border: none !important; border-bottom: 2px solid #121214 !important; text-align: center; cursor: pointer;">
                     Buscar en Biblioteca (500 Alimentos)
                 </button>
                 <button type="button" class="btn-clean" id="tabCustomManualMode"
-                    style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #71717A; background: transparent !important; border: none !important; border-bottom: 2px solid transparent !important; text-align: center; cursor: pointer;">
+                    style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #77767B; background: transparent !important; border: none !important; border-bottom: 2px solid transparent !important; text-align: center; cursor: pointer;">
                     Carga Rápida de Calorías
                 </button>
             </div>
@@ -7700,7 +7758,7 @@
 
                 <input type="text" id="customFoodSearchInput" class="input-control"
                     placeholder="Buscar alimento o receta (ej: Pollo, Omelette, Bowl, Avena)..."
-                    style="font-size: 13px; margin-bottom: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 10px 14px;">
+                    style="font-size: 13px; margin-bottom: 10px; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.1); color: #121214; width: 100%; border-radius: 12px; padding: 10px 14px;">
 
                 <!-- Chips de Rango Calórico (Item 8) -->
                 <div class="sens-kcal-filter-row" id="customKcalFilterRow">
@@ -7713,23 +7771,23 @@
 
                 <!-- Entradas Exactas de Mín / Máx kcal -->
                 <div class="sens-kcal-range-inputs">
-                    <span style="font-size: 11px; color: #71717A;">Rango exacto:</span>
+                    <span style="font-size: 11px; color: #575659;">Rango exacto:</span>
                     <input type="number" id="customKcalMinInput" class="sens-kcal-range-input" placeholder="Mín kcal"
                         min="0" max="2500" step="50">
-                    <span style="color: #71717A; font-size: 11px;">–</span>
+                    <span style="color: #575659; font-size: 11px;">–</span>
                     <input type="number" id="customKcalMaxInput" class="sens-kcal-range-input" placeholder="Máx kcal"
                         min="0" max="2500" step="50">
                     <button type="button" class="btn btn-outline btn-sm" id="btnResetKcalFilter"
-                        style="padding: 4px 8px; font-size: 10.5px; border-color: rgba(255,255,255,0.15); color: #A1A1AA; cursor: pointer;">Limpiar</button>
+                        style="padding: 4px 8px; font-size: 10.5px; border-color: rgba(18,18,20,0.15); color: #575659; cursor: pointer;">Limpiar</button>
                 </div>
 
                 <!-- Bandeja de Ingredientes Seleccionados (Item 6: Brand Remove UX) -->
                 <div id="customSelectedIngredientsTray"
-                    style="display: none; background: rgba(229, 203, 167, 0.06); border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+                    style="display: none; background: #FAF7F2; border: 1px solid rgba(197, 168, 128, 0.35); border-radius: 12px; padding: 12px; margin-bottom: 12px;">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span style="font-size: 11.5px; font-weight: 700; color: #E5CBA7;">Comida compuesta:</span>
-                        <strong id="customTrayTotalKcal" style="font-size: 13px; color: #FFFFFF;">0 kcal</strong>
+                        <span style="font-size: 11.5px; font-weight: 700; color: #705B3E;">Comida compuesta:</span>
+                        <strong id="customTrayTotalKcal" style="font-size: 13px; color: #121214;">0 kcal</strong>
                     </div>
                     <div id="customTrayItemsList" style="display: flex; flex-direction: column; gap: 6px;"></div>
                 </div>
@@ -7744,17 +7802,17 @@
             <div id="paneCustomManual" style="display: none;">
                 <div style="margin-bottom: 12px;">
                     <label
-                        style="display: block; font-size: 12px; font-weight: 700; color: #E4E4E7; margin-bottom: 6px;">Nombre
+                        style="display: block; font-size: 12px; font-weight: 700; color: #121214; margin-bottom: 6px;">Nombre
                         del plato:</label>
                     <input type="text" id="manualMealNameInput" class="input-control"
                         placeholder="Ej: Cena con amigos, Plato libre..."
-                        style="font-size: 13px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #FFF; width: 100%; border-radius: 10px; padding: 10px 14px;">
+                        style="font-size: 13px; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.1); color: #121214; width: 100%; border-radius: 10px; padding: 10px 14px;">
                 </div>
 
                 <!-- Presets Rápidos de Calorías para Carga Instantánea -->
                 <div style="margin-bottom: 14px;">
                     <label
-                        style="display: block; font-size: 11.5px; font-weight: 700; color: #A1A1AA; margin-bottom: 6px;">Presets
+                        style="display: block; font-size: 11.5px; font-weight: 700; color: #575659; margin-bottom: 6px;">Presets
                         Rápidos:</label>
                     <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="manualKcalPresetsWrap">
                         <button type="button" class="sens-kcal-chip" data-kcal="250">250 kcal</button>
@@ -7769,34 +7827,34 @@
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px;">
                     <div>
                         <label
-                            style="display: block; font-size: 10px; font-weight: 800; color: #FFFFFF; margin-bottom: 4px; text-transform: uppercase;">Calorías</label>
+                            style="display: block; font-size: 10px; font-weight: 800; color: #121214; margin-bottom: 4px; text-transform: uppercase;">Calorías</label>
                         <input type="number" id="manualMealKcalInput" class="input-control" placeholder="550" min="0"
-                            style="font-size: 15px; font-weight: 800; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #FFF; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
+                            style="font-size: 15px; font-weight: 800; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.12); color: #121214; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
                     </div>
                     <div>
                         <label
-                            style="display: block; font-size: 10px; font-weight: 800; color: #E5CBA7; margin-bottom: 4px; text-transform: uppercase;">Proteína</label>
+                            style="display: block; font-size: 10px; font-weight: 800; color: #705B3E; margin-bottom: 4px; text-transform: uppercase;">Proteína</label>
                         <input type="number" id="manualMealProtInput" class="input-control" placeholder="35g" min="0"
-                            style="font-size: 13.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid rgba(229,203,167,0.3); color: #E5CBA7; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
+                            style="font-size: 13.5px; font-weight: 700; background: #FAF7F2; border: 1px solid rgba(197,168,128,0.4); color: #705B3E; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
                     </div>
                     <div>
                         <label
-                            style="display: block; font-size: 10px; font-weight: 800; color: #38BDF8; margin-bottom: 4px; text-transform: uppercase;">Carbos</label>
+                            style="display: block; font-size: 10px; font-weight: 800; color: #0284C7; margin-bottom: 4px; text-transform: uppercase;">Carbos</label>
                         <input type="number" id="manualMealCarbsInput" class="input-control" placeholder="50g" min="0"
-                            style="font-size: 13.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid rgba(56,189,248,0.3); color: #38BDF8; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
+                            style="font-size: 13.5px; font-weight: 700; background: #F4F3F1; border: 1px solid rgba(2,132,199,0.25); color: #0284C7; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
                     </div>
                     <div>
                         <label
-                            style="display: block; font-size: 10px; font-weight: 800; color: #F59E0B; margin-bottom: 4px; text-transform: uppercase;">Grasas</label>
+                            style="display: block; font-size: 10px; font-weight: 800; color: #D97706; margin-bottom: 4px; text-transform: uppercase;">Grasas</label>
                         <input type="number" id="manualMealFatsInput" class="input-control" placeholder="15g" min="0"
-                            style="font-size: 13.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid rgba(245,158,11,0.3); color: #F59E0B; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
+                            style="font-size: 13.5px; font-weight: 700; background: #F4F3F1; border: 1px solid rgba(217,119,6,0.25); color: #D97706; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
                     </div>
                 </div>
             </div>
 
             <!-- Botón Guardar Comida en el Día -->
             <button type="button" class="btn btn-primary" id="btnSaveCustomMealToDay"
-                style="width: 100%; padding: 14px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none; border-radius: 12px; cursor: pointer; margin-top: 10px; margin-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 24px));">
+                style="width: 100%; padding: 14px; font-weight: 800; background: #121214 !important; color: #FFFFFF !important; border: none; border-radius: 999px; cursor: pointer; margin-top: 10px; margin-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 24px));">
                 Guardar Comida en el Día
             </button>
         </div>
@@ -8388,49 +8446,49 @@
         </a>
     </div>
 
-    <!-- Modal Rápido de Carga de Peso & Pasos (Quiet Luxury) -->
+    <!-- Modal Rápido de Carga de Peso & Pasos (Light Quiet Luxury) -->
     <div id="quickBiometricsModal" class="modal-overlay"
-        style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+        style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(18, 18, 20, 0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
         <div
-            style="background: #141418; border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 20px; max-width: 360px; width: 90%; padding: 24px; color: #FFFFFF; box-shadow: 0 20px 50px rgba(0,0,0,0.7);">
+            style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 24px; max-width: 360px; width: 90%; padding: 24px; color: #121214; box-shadow: 0 24px 60px rgba(18, 18, 20, 0.16);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-                <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #FFFFFF;">Registrar Peso &amp;
+                <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #121214;">Registrar Peso &amp;
                     Métricas</h4>
                 <button type="button" id="btnCloseQuickBioModal"
-                    style="background: none; border: none; color: #A1A1AA; font-size: 20px; cursor: pointer; padding: 4px;">✕</button>
+                    style="background: #F4F3F1; border: none; color: #575659; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
             </div>
             <form id="quickBioForm">
                 <div style="margin-bottom: 14px;">
                     <label
-                        style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Peso
+                        style="display: block; font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;">Peso
                         de Hoy (kg)</label>
                     <input type="number" step="0.1" id="quickInputWeight" class="input-control" placeholder="Ej: 75.8"
                         required
-                        style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
+                        style="width: 100%; background: #FAF9F6 !important; border: 1px solid rgba(18, 18, 20, 0.1) !important; color: #121214 !important; font-weight: 700; border-radius: 12px; padding: 10px 14px; font-size: 14px;">
                 </div>
                 <div style="margin-bottom: 14px;">
                     <label
-                        style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Masa
-                        Muscular (kg) <span style="color: #71717A; font-weight: 400;">(Opcional)</span></label>
+                        style="display: block; font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;">Masa
+                        Muscular (kg) <span style="color: #8A898C; font-weight: 500; text-transform: none;">(Opcional)</span></label>
                     <input type="number" step="0.1" id="quickInputMuscle" class="input-control" placeholder="Ej: 35.2"
-                        style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
+                        style="width: 100%; background: #FAF9F6 !important; border: 1px solid rgba(18, 18, 20, 0.1) !important; color: #121214 !important; font-weight: 700; border-radius: 12px; padding: 10px 14px; font-size: 14px;">
                 </div>
                 <div style="margin-bottom: 14px;">
                     <label
-                        style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Grasa
-                        Corporal (%) <span style="color: #71717A; font-weight: 400;">(Opcional)</span></label>
+                        style="display: block; font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;">Grasa
+                        Corporal (%) <span style="color: #8A898C; font-weight: 500; text-transform: none;">(Opcional)</span></label>
                     <input type="number" step="0.1" id="quickInputFat" class="input-control" placeholder="Ej: 13.8"
-                        style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
+                        style="width: 100%; background: #FAF9F6 !important; border: 1px solid rgba(18, 18, 20, 0.1) !important; color: #121214 !important; font-weight: 700; border-radius: 12px; padding: 10px 14px; font-size: 14px;">
                 </div>
                 <div style="margin-bottom: 20px;">
                     <label
-                        style="display: block; font-size: 11.5px; font-weight: 700; color: #E5CBA7; margin-bottom: 6px;">Pasos
+                        style="display: block; font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;">Pasos
                         Caminados Hoy</label>
                     <input type="number" id="quickInputSteps" class="input-control" placeholder="Ej: 8500"
-                        style="width: 100%; background: #1C1C22 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #FFFFFF !important; border-radius: 10px; padding: 10px 14px; font-size: 14px;">
+                        style="width: 100%; background: #FAF9F6 !important; border: 1px solid rgba(18, 18, 20, 0.1) !important; color: #121214 !important; font-weight: 700; border-radius: 12px; padding: 10px 14px; font-size: 14px;">
                 </div>
                 <button type="submit" class="btn btn-primary"
-                    style="width: 100%; border-radius: 12px; padding: 12px; font-weight: 800; font-size: 13px;">Guardar
+                    style="width: 100%; border-radius: 999px; padding: 13px; font-weight: 800; font-size: 13px; background: #121214; color: #FAF9F6; border: none;">Guardar
                     Registro</button>
             </form>
         </div>
@@ -9216,34 +9274,34 @@
          ========================================================================= -->
     <div class="sens-reward-deepdive-sheet" id="rewardDeepDiveBottomSheet"
         onclick="if(event.target===this) window.closeSensRewardDeepDiveSheet && window.closeSensRewardDeepDiveSheet();">
-        <div class="sens-reward-sheet-card">
-            <div class="sens-reward-sheet-handle"></div>
+        <div class="sens-reward-sheet-card" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); color: #121214;">
+            <div class="sens-reward-sheet-handle" style="background: rgba(18, 18, 20, 0.14);"></div>
             <div
                 style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div id="rewardSheetIconWrap"
-                        style="width: 38px; height: 38px; border-radius: 12px; background: rgba(229, 203, 167, 0.16); display: flex; align-items: center; justify-content: center; color: #E5CBA7; font-weight: 800;">
+                        style="width: 38px; height: 38px; border-radius: 12px; background: rgba(251, 222, 185, 0.45); display: flex; align-items: center; justify-content: center; color: #705B3E; font-weight: 800;">
                         ★
                     </div>
                     <div>
                         <span id="rewardSheetEyebrow"
-                            style="font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #E5CBA7; display: block;">RECOMPENSA
+                            style="font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #705B3E; display: block;">RECOMPENSA
                             SENS</span>
                         <h3 id="rewardSheetTitle"
-                            style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin: 0; line-height: 1.25;">
+                            style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0; line-height: 1.25;">
                             Permiso Social Fin de Semana</h3>
                     </div>
                 </div>
                 <button type="button"
                     onclick="window.closeSensRewardDeepDiveSheet && window.closeSensRewardDeepDiveSheet()"
                     aria-label="Cerrar"
-                    style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #FFFFFF; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer; flex-shrink: 0;">✕</button>
+                    style="background: #F4F3F1; border: 1px solid rgba(18, 18, 20, 0.08); color: #121214; width: 32px; height: 32px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer; flex-shrink: 0;">✕</button>
             </div>
             <div id="rewardSheetStatusTag"
-                style="display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; margin-bottom: 12px; background: rgba(16, 185, 129, 0.15); color: #34D399;">
+                style="display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; margin-bottom: 12px; background: rgba(16, 185, 129, 0.14); color: #059669;">
                 DESBLOQUEADO
             </div>
-            <p id="rewardSheetDesc" style="font-size: 12.5px; color: #D4D4D8; line-height: 1.45; margin-bottom: 16px;">
+            <p id="rewardSheetDesc" style="font-size: 12.5px; color: #575659; line-height: 1.45; margin-bottom: 16px;">
                 Explicación de la recompensa.
             </p>
             <div id="rewardSheetActionContainer">
@@ -9254,7 +9312,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=1.0"></script>
-    <script src="app.js?v=22.0"></script>
+    <script src="app.js?v=23.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

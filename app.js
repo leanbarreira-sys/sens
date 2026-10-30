@@ -3902,7 +3902,7 @@ window.openSensPlansUpgradeModal = function(focusTier = null) {
         badge.textContent = `Tu Plan Actual: ${info.shortBadge}`;
     }
 
-    // Resaltar el card del plan actual o el enfocado
+    // Resaltar el card del plan actual o el enfocado (Light Quiet Luxury)
     modal.querySelectorAll('.sens-modal-tier-card').forEach(card => {
         const t = card.getAttribute('data-modal-tier');
         const isCurrent = (t === info.key);
@@ -3911,11 +3911,11 @@ window.openSensPlansUpgradeModal = function(focusTier = null) {
             card.style.borderColor = '#10B981';
             card.style.boxShadow = '0 0 0 1px rgba(16, 185, 129, 0.35)';
         } else if (isFocused || t === 'app_subscribed') {
-            card.style.borderColor = 'rgba(229, 203, 167, 0.55)';
-            card.style.boxShadow = '0 10px 26px rgba(0,0,0,0.45)';
+            card.style.borderColor = '#C5A880';
+            card.style.boxShadow = '0 8px 24px rgba(197, 168, 128, 0.14)';
         } else {
-            card.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-            card.style.boxShadow = 'none';
+            card.style.borderColor = 'rgba(18, 18, 20, 0.08)';
+            card.style.boxShadow = '0 2px 10px rgba(18, 18, 20, 0.02)';
         }
     });
 
@@ -7464,10 +7464,10 @@ function renderWorkoutDay(dayKey, targetDate = null) {
             attendanceBox.innerHTML = `
                 <div class="workout-attendance-completed">
                     <div class="attendance-done-info">
-                        <span class="status-dot status-dot-active" style="background: #10B981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);"></span>
-                        <span style="font-size: 11.5px; font-weight: 700; color: #FFFFFF;">Sesión registrada (${execution.durationMinutes || estMinutes} min)</span>
+                        <span class="status-dot status-dot-active" style="background: #10B981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);"></span>
+                        <span style="font-size: 11.5px; font-weight: 700; color: #121214;">Sesión registrada (${execution.durationMinutes || estMinutes} min)</span>
                     </div>
-                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer; text-decoration: underline;">
+                    <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 10.5px; color: #705B3E; background: none; border: none; cursor: pointer; text-decoration: underline; font-weight: 700;">
                         Cambiar
                     </button>
                 </div>
@@ -7476,17 +7476,17 @@ function renderWorkoutDay(dayKey, targetDate = null) {
             attendanceBox.innerHTML = `
                 <div class="workout-attendance-missed" style="display: flex; flex-direction: column; gap: 8px;">
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
-                        <span style="font-size: 11.5px; color: #A1A1AA;">✕ Descanso registrado</span>
-                        <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 10.5px; color: #B89360; background: none; border: none; cursor: pointer;">
+                        <span style="font-size: 11.5px; color: #575659; font-weight: 600;">✕ Descanso registrado</span>
+                        <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 10.5px; color: #705B3E; background: none; border: none; cursor: pointer; font-weight: 700;">
                             Cambiar a completado →
                         </button>
                     </div>
                     ${allDayExercises.length > 0 ? `
-                    <div style="background: rgba(229, 203, 167, 0.08); border: 1px solid rgba(229, 203, 167, 0.25); border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
-                        <span style="font-size: 11px; color: #E5CBA7; font-weight: 600;">¿Querés reprogramar este entrenamiento?</span>
+                    <div style="background: rgba(251, 222, 185, 0.25); border: 1px solid rgba(197, 168, 128, 0.38); border-radius: 10px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                        <span style="font-size: 11px; color: #705B3E; font-weight: 700;">¿Querés reprogramar este entrenamiento?</span>
                         <div style="display: flex; gap: 6px;">
-                            <button type="button" class="btn btn-outline btn-xs btn-move-tomorrow" onclick="moveWorkoutToTomorrow('${dateIso}')" style="font-size: 10px; padding: 4px 8px; color: #E5CBA7; border-color: rgba(229,203,167,0.4); font-weight: 700; border-radius: 6px; background: #18181B;">Pasar a Mañana →</button>
-                            <button type="button" class="btn btn-primary btn-xs btn-move-custom" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 10px; padding: 4px 8px; background: #E5CBA7; color: #09090B; font-weight: 800; border: none; border-radius: 6px;">Elegir Fecha</button>
+                            <button type="button" class="btn btn-outline btn-xs btn-move-tomorrow" onclick="moveWorkoutToTomorrow('${dateIso}')" style="font-size: 10px; padding: 5px 9px; color: #705B3E; border-color: rgba(197,168,128,0.45); font-weight: 700; border-radius: 8px; background: #FFFFFF;">Pasar a Mañana →</button>
+                            <button type="button" class="btn btn-primary btn-xs btn-move-custom" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 10px; padding: 5px 9px; background: #121214; color: #FAF9F6; font-weight: 800; border: none; border-radius: 8px;">Elegir Fecha</button>
                         </div>
                     </div>` : ''}
                 </div>
@@ -7495,9 +7495,9 @@ function renderWorkoutDay(dayKey, targetDate = null) {
             attendanceBox.innerHTML = `
                 <div class="workout-attendance-pending" id="workoutAttendancePendingPane">
                     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
-                        <span class="attendance-prompt" style="font-size: 12px; font-weight: 800; color: #FFFFFF;">¿Entrenaste hoy?</span>
+                        <span class="attendance-prompt" style="font-size: 12px; font-weight: 800; color: #121214;">¿Entrenaste hoy?</span>
                         ${allDayExercises.length > 0 ? `
-                        <button type="button" class="btn-link-subtle" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 11px; color: #E5CBA7; background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 700;">
+                        <button type="button" class="btn-link-subtle" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 11px; color: #705B3E; background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 700;">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
                             Pasar a otro día
                         </button>
@@ -7514,7 +7514,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                     </div>
                 </div>
                 <div class="workout-attendance-timing" id="workoutAttendanceTimingPane" style="display: none;">
-                    <div style="font-size: 10.5px; color: #FFFFFF; font-weight: 700;">¿Cuánto tiempo estuviste?</div>
+                    <div style="font-size: 10.5px; color: #121214; font-weight: 700;">¿Cuánto tiempo estuviste?</div>
                     <div class="workout-time-chips">
                         <button type="button" class="workout-time-chip ${estMinutes <= 35 ? 'selected' : ''}" data-min="30" onclick="selectWorkoutDurationChip(30)">30m</button>
                         <button type="button" class="workout-time-chip ${estMinutes > 35 && estMinutes <= 50 ? 'selected' : ''}" data-min="45" onclick="selectWorkoutDurationChip(45)">45m</button>
@@ -7563,21 +7563,21 @@ function renderWorkoutDay(dayKey, targetDate = null) {
 
         if (yHasExercises && (yWasMissed || yWasNotCompleted)) {
             missedRecoveryHtml = `
-                <div class="sens-missed-recovery-banner" style="background: linear-gradient(135deg, rgba(229, 203, 167, 0.12), rgba(18, 18, 20, 0.95)); border: 1px solid rgba(229, 203, 167, 0.35); border-radius: 14px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                <div class="sens-missed-recovery-banner" style="background: linear-gradient(135deg, #FFFFFF 0%, #FAF7F2 100%); border: 1px solid rgba(197, 168, 128, 0.4); border-radius: 16px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: 0 4px 16px rgba(18, 18, 20, 0.04);">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(229, 203, 167, 0.15); display: flex; align-items: center; justify-content: center; color: #E5CBA7; flex-shrink: 0;">
+                        <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(251, 222, 185, 0.38); display: flex; align-items: center; justify-content: center; color: #705B3E; flex-shrink: 0;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
                         </div>
                         <div>
-                            <div style="font-size: 12px; font-weight: 800; color: #FFFFFF;">¿No pudiste entrenar ayer?</div>
-                            <div style="font-size: 11px; color: #A1A1AA;">Tenías asignado <strong style="color: #E5CBA7;">${yDayData.title || 'Entrenamiento'}</strong> (${yDayData.exercises.length} ejercicios). Podés traerlo a hoy o reprogramarlo.</div>
+                            <div style="font-size: 12px; font-weight: 800; color: #121214;">¿No pudiste entrenar ayer?</div>
+                            <div style="font-size: 11px; color: #575659;">Tenías asignado <strong style="color: #705B3E;">${yDayData.title || 'Entrenamiento'}</strong> (${yDayData.exercises.length} ejercicios). Podés traerlo a hoy o reprogramarlo.</div>
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="font-size: 11px; padding: 6px 12px; border-color: rgba(229,203,167,0.5); color: #E5CBA7; font-weight: 700; border-radius: 8px; background: rgba(0,0,0,0.4); cursor: pointer;">
+                        <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="font-size: 11px; padding: 6px 12px; border-color: rgba(197, 168, 128, 0.5); color: #705B3E; font-weight: 700; border-radius: 8px; background: #FFFFFF; cursor: pointer;">
                             Traer sesión de ayer a hoy →
                         </button>
-                        <button type="button" class="btn btn-primary btn-xs" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="font-size: 11px; padding: 6px 12px; background: #E5CBA7; color: #09090B; font-weight: 800; border: none; border-radius: 8px; cursor: pointer;">
+                        <button type="button" class="btn btn-primary btn-xs" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="font-size: 11px; padding: 6px 12px; background: #121214; color: #FAF9F6; font-weight: 800; border: none; border-radius: 8px; cursor: pointer;">
                             Reprogramar ayer
                         </button>
                     </div>
@@ -7589,16 +7589,16 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     // 5. Estado Vacío si no hay ejercicios para el filtro
     if (exercisesToShow.length === 0) {
         container.innerHTML = missedRecoveryHtml + `
-            <div style="background:#121214; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:32px 20px; text-align:center; margin-bottom:24px;">
-                <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(229, 203, 167, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; color: #E5CBA7;">
+            <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 32px 20px; text-align: center; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(251, 222, 185, 0.35); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; color: #705B3E;">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
-                <h4 style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">Día de Descanso &amp; Recuperación</h4>
-                <p style="color:var(--text-muted); font-size: 12px; margin-bottom: 14px; max-width: 380px; margin-left: auto; margin-right: auto;">
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Día de Descanso &amp; Recuperación</h4>
+                <p style="color: #575659; font-size: 12px; margin-bottom: 14px; max-width: 380px; margin-left: auto; margin-right: auto; line-height: 1.5;">
                     No tenés ejercicios asignados para esta fecha. Si querés entrenar hoy, podés pasar un entrenamiento de otro día de tu semana.
                 </p>
                 <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-                    <button type="button" class="btn btn-outline btn-sm" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 11.5px; border-color: rgba(229, 203, 167, 0.4); color: #E5CBA7; font-weight: 700; border-radius: 8px;">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 11.5px; border-color: rgba(197, 168, 128, 0.5); color: #705B3E; background: #FAF9F6; font-weight: 700; border-radius: 10px;">
                         ⇄ Traer entrenamiento a esta fecha
                     </button>
                     ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()">+ Asignar ejercicios desde el catálogo (Nico)</button>` : ''}
@@ -7907,7 +7907,7 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
         `;
     } else if (localizedSummary) {
         stepsCardsHtml = `
-            <div style="font-size: 12px; color: #E4E4E7; line-height: 1.5; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px;">
+            <div style="font-size: 12px; color: #121214; line-height: 1.5; margin-bottom: 12px; background: #F4F3F1; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(18, 18, 20, 0.06);">
                 ${localizedSummary}
             </div>
         `;
@@ -7915,8 +7915,8 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
 
     if (modalNotes) {
         modalNotes.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
-                <span style="font-size: 11px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; letter-spacing: 0.5px;">Idioma / Language:</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(18, 18, 20, 0.08); padding-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.5px;">Idioma / Language:</span>
                 <div style="display: flex; gap: 6px;">
                     <button type="button" class="pill ${currentLang === 'es' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 3px 9px; cursor: pointer;">ES</button>
                     <button type="button" class="pill ${currentLang === 'en' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 3px 9px; cursor: pointer;">EN</button>
@@ -7925,7 +7925,7 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
             </div>
 
             <div style="margin-bottom: 14px;">
-                <div style="font-size: 11.5px; font-weight: 800; color: #E5CBA7; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px;">
+                <div style="font-size: 11.5px; font-weight: 800; color: #705B3E; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                     Técnica en 3 Pasos Clave
                 </div>
@@ -7939,19 +7939,19 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
                         <svg id="iconDeepBiomechanics" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
                     <div id="modalExDeepBiomechanics" class="sens-deep-biomechanics-body" style="display: none;">
-                        <div style="font-size: 11.5px; line-height: 1.6; color: #D4D4D8; white-space: pre-line;">${localizedDetailed}</div>
+                        <div style="font-size: 11.5px; line-height: 1.6; color: #575659; white-space: pre-line;">${localizedDetailed}</div>
                     </div>
                 </div>
             ` : ''}
 
-            <div style="margin-bottom: 10px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; padding: 10px;">
-                <strong style="color: #F87171; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Cómo NO hacerlo (Errores a evitar):</strong>
-                <span style="font-size: 11.5px; color: #E4E4E7; line-height: 1.45;">${commonMistakes}</span>
+            <div style="margin-bottom: 10px; background: rgba(186, 26, 26, 0.06); border: 1px solid rgba(186, 26, 26, 0.18); border-radius: 10px; padding: 10px 12px;">
+                <strong style="color: #BA1A1A; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Cómo NO hacerlo (Errores a evitar):</strong>
+                <span style="font-size: 11.5px; color: #121214; line-height: 1.45;">${commonMistakes}</span>
             </div>
 
-            <div style="background: rgba(229, 203, 167, 0.07); border: 1px solid rgba(229, 203, 167, 0.22); border-radius: 8px; padding: 10px;">
-                <strong style="color: #E5CBA7; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Recomendación de Nico:</strong>
-                <span style="font-size: 11.5px; color: #E4E4E7; line-height: 1.45;">${nicoRecs}</span>
+            <div style="background: rgba(251, 222, 185, 0.28); border: 1px solid rgba(197, 168, 128, 0.38); border-radius: 10px; padding: 10px 12px;">
+                <strong style="color: #705B3E; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Recomendación de Nico:</strong>
+                <span style="font-size: 11.5px; color: #121214; line-height: 1.45;">${nicoRecs}</span>
             </div>
         `;
     }
@@ -10067,27 +10067,27 @@ function renderProfileSettingsData() {
         };
     }
 
-    // Marcar visualmente cuál de los 4 niveles de la escalera está activo
+    // Marcar visualmente cuál de los 4 niveles de la escalera está activo (Light Quiet Luxury)
     document.querySelectorAll('.sens-profile-tier-box').forEach(box => {
         const boxTier = box.getAttribute('data-tier-box');
         if (boxTier === planDetails.key) {
             box.style.borderColor = '#10B981';
             box.style.boxShadow = '0 0 0 1px rgba(16, 185, 129, 0.35)';
         } else if (boxTier === 'app_subscribed') {
-            box.style.borderColor = 'rgba(229, 203, 167, 0.38)';
-            box.style.boxShadow = 'none';
+            box.style.borderColor = '#C5A880';
+            box.style.boxShadow = '0 8px 24px rgba(197, 168, 128, 0.12)';
         } else {
-            box.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-            box.style.boxShadow = 'none';
+            box.style.borderColor = 'rgba(18, 18, 20, 0.08)';
+            box.style.boxShadow = '0 2px 10px rgba(18, 18, 20, 0.02)';
         }
     });
 
     if (subBadge) {
         const isAct = (profile.subscription_status === 'active' || isAdmin || planDetails.daysRemaining > 0);
         subBadge.textContent = isAdmin ? 'Coach OS' : planDetails.statusLabel;
-        subBadge.style.background = isAct ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
-        subBadge.style.color = isAct ? '#10B981' : '#F59E0B';
-        subBadge.style.borderColor = isAct ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)';
+        subBadge.style.background = isAct ? 'rgba(16, 185, 129, 0.14)' : 'rgba(245, 158, 11, 0.14)';
+        subBadge.style.color = isAct ? '#059669' : '#D97706';
+        subBadge.style.borderColor = isAct ? 'rgba(16, 185, 129, 0.32)' : 'rgba(245, 158, 11, 0.32)';
     }
 
     if (diagTagsContainer) {
@@ -10399,6 +10399,11 @@ function initTopbarAvatar() {
             e.preventDefault();
             e.stopPropagation();
         }
+        const nowTs = Date.now();
+        if (window._lastAvatarToggleTs && (nowTs - window._lastAvatarToggleTs) < 320) {
+            return;
+        }
+        window._lastAvatarToggleTs = nowTs;
         const drop = document.getElementById('userAvatarDropdown');
         if (!drop) return;
         if (typeof syncAvatarData === 'function') syncAvatarData();
@@ -10411,14 +10416,16 @@ function initTopbarAvatar() {
 
     if (!avatarBtn || !dropdown) return;
 
-    // Solo click listener - el debounce de 350ms en window.toggleUserAvatarDropdown previene dobles ejecuciones
-    avatarBtn.addEventListener('click', (e) => {
-        if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        window.toggleUserAvatarDropdown(e);
-    });
+    if (!avatarBtn._hasAvatarClickBound) {
+        avatarBtn._hasAvatarClickBound = true;
+        avatarBtn.addEventListener('click', (e) => {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            window.toggleUserAvatarDropdown(e);
+        });
+    }
 
     document.addEventListener('click', (e) => {
         if (!dropdown.contains(e.target) && (!avatarBtn || !avatarBtn.contains(e.target))) {
@@ -14802,7 +14809,7 @@ function formatIngredientsHtml(ings) {
         return `
             <div class="sens-ingredient-item-row">
                 <span class="sens-ingredient-bullet">•</span>
-                <span style="color: #CBD5E1;">${clean}</span>
+                <span style="color: #121214;">${clean}</span>
             </div>
         `;
     }).join('');
@@ -14929,9 +14936,9 @@ function openCustomMealModalForSlot(slot) {
     const paneSearch = document.getElementById('paneCustomSearch');
     const paneManual = document.getElementById('paneCustomManual');
     if (tabSearch && tabManual && paneSearch && paneManual) {
-        tabSearch.style.color = '#E5CBA7';
-        tabSearch.style.borderBottomColor = '#E5CBA7';
-        tabManual.style.color = '#71717A';
+        tabSearch.style.color = '#121214';
+        tabSearch.style.borderBottomColor = '#705B3E';
+        tabManual.style.color = '#8A898C';
         tabManual.style.borderBottomColor = 'transparent';
         paneSearch.style.display = 'block';
         paneManual.style.display = 'none';
@@ -15192,7 +15199,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     </button>
                 </div>
                 <div class="sens-meal-foods-grid">
-                    ${cardsHtml || `<div style="padding: 14px; font-size: 12px; color: #71717A; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.06); text-align: center;">No hay alimentos en ${mealLabels[mKey]}. Tocá <strong>+ Agregar</strong> para sumar desde la biblioteca o registrar calorías.</div>`}
+                    ${cardsHtml || `<div style="padding: 16px; font-size: 12px; color: #575659; background: #FAF9F6; border-radius: 12px; border: 1px dashed rgba(18, 18, 20, 0.12); text-align: center;">No hay alimentos en ${mealLabels[mKey]}. Tocá <strong style="color: #705B3E;">+ Agregar</strong> para sumar desde la biblioteca o registrar calorías.</div>`}
                 </div>
             </div>
         `;
@@ -15288,16 +15295,16 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         const diff = targetKcal - totalConsumedKcal;
         if (totalConsumedKcal === 0) {
             remainingEl.textContent = `Restan ${targetKcal.toLocaleString('es-AR')} kcal para tu objetivo`;
-            remainingEl.style.color = '#A1A1AA';
+            remainingEl.style.color = '#575659';
         } else if (diff > 0) {
             remainingEl.textContent = `Restan ${diff.toLocaleString('es-AR')} kcal para tu objetivo`;
-            remainingEl.style.color = '#A1A1AA';
+            remainingEl.style.color = '#575659';
         } else if (diff === 0) {
             remainingEl.textContent = 'Meta calórica alcanzada exacta';
-            remainingEl.style.color = '#10B981';
+            remainingEl.style.color = '#059669';
         } else {
             remainingEl.textContent = `+${Math.abs(diff).toLocaleString('es-AR')} kcal sobre objetivo`;
-            remainingEl.style.color = '#F59E0B';
+            remainingEl.style.color = '#D97706';
         }
     }
     if (optimalRangeEl) {
@@ -15908,20 +15915,20 @@ function initUserCustomMealModal(athId) {
     // Pestañas de Modo
     if (tabSearch && tabManual) {
         tabSearch.addEventListener('click', () => {
-            tabSearch.style.color = '#E5CBA7';
-            tabSearch.style.borderBottomColor = '#E5CBA7';
+            tabSearch.style.color = '#121214';
+            tabSearch.style.borderBottomColor = '#705B3E';
             tabSearch.style.background = 'transparent';
-            tabManual.style.color = '#71717A';
+            tabManual.style.color = '#8A898C';
             tabManual.style.borderBottomColor = 'transparent';
             tabManual.style.background = 'transparent';
             if (paneSearch) paneSearch.style.display = 'block';
             if (paneManual) paneManual.style.display = 'none';
         });
         tabManual.addEventListener('click', () => {
-            tabManual.style.color = '#E5CBA7';
-            tabManual.style.borderBottomColor = '#E5CBA7';
+            tabManual.style.color = '#121214';
+            tabManual.style.borderBottomColor = '#705B3E';
             tabManual.style.background = 'transparent';
-            tabSearch.style.color = '#71717A';
+            tabSearch.style.color = '#8A898C';
             tabSearch.style.borderBottomColor = 'transparent';
             tabSearch.style.background = 'transparent';
             if (paneManual) paneManual.style.display = 'block';
@@ -15971,11 +15978,11 @@ function initUserCustomMealModal(athId) {
             sumKcal += macros.calories;
 
             return `
-                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 6px 10px;">
-                    <span style="font-size: 12px; color: #FFF; font-weight: 600;">${item.food.name}</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 10px; padding: 6px 10px;">
+                    <span style="font-size: 12px; color: #121214; font-weight: 700;">${item.food.name}</span>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" class="input-tray-grams" data-tray-idx="${idx}" value="${item.grams}" min="10" max="800" style="width: 55px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15); color: #E5CBA7; font-size: 12px; padding: 2px 4px; border-radius: 4px; text-align: center;">
-                        <span style="font-size: 11px; color: #E5CBA7; font-weight: 700;">${macros.calories} kcal</span>
+                        <input type="number" class="input-tray-grams" data-tray-idx="${idx}" value="${item.grams}" min="10" max="800" style="width: 55px; background: #F4F3F1; border: 1px solid rgba(18, 18, 20, 0.12); color: #121214; font-weight: 700; font-size: 12px; padding: 2px 4px; border-radius: 6px; text-align: center;">
+                        <span style="font-size: 11px; color: #705B3E; font-weight: 800;">${macros.calories} kcal</span>
                         <button type="button" class="sens-btn-remove-luxury btn-remove-tray-item" data-tray-idx="${idx}" title="Eliminar de la bandeja">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
@@ -16087,8 +16094,8 @@ function initUserCustomMealModal(athId) {
 
         if (matches.length === 0) {
             searchResults.innerHTML = `
-                <div style="text-align: center; padding: 24px 14px; color: #A1A1AA; font-size: 12px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed rgba(255,255,255,0.08);">
-                    No se encontraron alimentos para "<strong>${escapeSensHtml(query)}</strong>" en el momento ${currentSlot} y filtros seleccionados.<br>Probá cambiar el filtro o usar la carga rápida de calorías.
+                <div style="text-align: center; padding: 24px 14px; color: #575659; font-size: 12px; background: #FAF9F6; border-radius: 12px; border: 1px dashed rgba(18, 18, 20, 0.12);">
+                    No se encontraron alimentos para "<strong style="color: #121214;">${escapeSensHtml(query)}</strong>" en el momento ${currentSlot} y filtros seleccionados.<br>Probá cambiar el filtro o usar la carga rápida de calorías.
                 </div>
             `;
             return;
@@ -16104,23 +16111,23 @@ function initUserCustomMealModal(athId) {
             const foodName = f.nombre_alimento_o_plato || f.name || 'Alimento SENS';
 
             return `
-                <div class="sens-search-result-card" style="flex-shrink: 0 !important; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; margin-bottom: 6px;">
+                <div class="sens-search-result-card" style="flex-shrink: 0 !important; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 14px; overflow: hidden; margin-bottom: 6px; box-shadow: 0 2px 8px rgba(18, 18, 20, 0.02);">
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; gap: 8px;">
                         <div class="sens-search-card-click-trigger" data-food-id="${fid}" style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; cursor: pointer;" title="Toca para ver foto grande y desglose completo">
-                            <img src="${img}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #18181B; border: 1px solid rgba(255,255,255,0.1);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                            <img src="${img}" style="width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #F4F3F1; border: 1px solid rgba(18, 18, 20, 0.08);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                             <div style="min-width: 0; flex: 1;">
-                                <div style="font-size: 13px; font-weight: 700; color: #FFF; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.25;">${foodName}</div>
-                                <div style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums; margin-top: 2px;">
-                                    ${f.porcion_total_g_ml || 100}g • <span style="color: #E5CBA7; font-weight: 700;">${cal} kcal</span> • <span style="color: #38BDF8;">${prot}g Prot</span>
-                                    ${f.apto_vianda_fria ? ' • <span style="color: #93C5FD;">Vianda</span>' : ''}
+                                <div style="font-size: 13px; font-weight: 700; color: #121214; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.25;">${foodName}</div>
+                                <div style="font-size: 11px; color: #575659; font-variant-numeric: tabular-nums; margin-top: 2px;">
+                                    ${f.porcion_total_g_ml || 100}g • <span style="color: #705B3E; font-weight: 800;">${cal} kcal</span> • <span style="color: #0284C7; font-weight: 700;">${prot}g Prot</span>
+                                    ${f.apto_vianda_fria ? ' • <span style="color: #0369A1; font-weight: 600;">Vianda</span>' : ''}
                                 </div>
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
-                            <button type="button" class="btn btn-outline btn-sm btn-inspect-food-item" data-food-id="${fid}" style="padding: 4px 8px; font-size: 11px; border-color: rgba(229,203,167,0.35); color: #E5CBA7;" title="Ver foto y desglose completo">
+                            <button type="button" class="btn btn-outline btn-sm btn-inspect-food-item" data-food-id="${fid}" style="padding: 5px 9px; font-size: 11px; border-color: rgba(197, 168, 128, 0.45); color: #705B3E; background: #FAF9F6; font-weight: 700; border-radius: 8px;" title="Ver foto y desglose completo">
                                 <span>Detalle ↗</span>
                             </button>
-                            <button type="button" class="btn btn-outline btn-sm btn-add-food-to-tray" data-food-id="${fid}" style="padding: 4px 10px; font-size: 11px; border-color: rgba(255,255,255,0.2); color: #FFFFFF;" title="Añadir a comida compuesta">
+                            <button type="button" class="btn btn-outline btn-sm btn-add-food-to-tray" data-food-id="${fid}" style="padding: 5px 10px; font-size: 11px; border-color: #121214; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px;" title="Añadir a comida compuesta">
                                 + Agregar
                             </button>
                         </div>
@@ -16489,10 +16496,10 @@ function renderSmartMacroRecommender(allDayFoods, athId, targetKcal, consumedKca
         return `
             <div class="sens-recom-dish-chip" data-dish-code="${dish.codigo || fid}" title="Tocar para ver o sumar">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <img src="${img}" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                    <img src="${img}" style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(18, 18, 20, 0.08);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                     <div style="min-width: 0; flex: 1;">
-                        <span style="font-size: 11.5px; font-weight: 700; color: #FFFFFF; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${name}</span>
-                        <span style="font-size: 10px; color: #E5CBA7; font-weight: 700;">${cal} kcal • ${p}g P</span>
+                        <span style="font-size: 11.5px; font-weight: 700; color: #121214; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${name}</span>
+                        <span style="font-size: 10px; color: #705B3E; font-weight: 800;">${cal} kcal • ${p}g P</span>
                     </div>
                 </div>
             </div>
@@ -16556,7 +16563,7 @@ function openFoodSwapModal(foodItem, mealSlot, onSwapCallback = null) {
     alternatives = alternatives.slice(0, 8);
 
     if (alternatives.length === 0) {
-        listEl.innerHTML = `<div style="padding: 16px; color: #A1A1AA; font-size: 12px; text-align: center;">No hay equivalentes directos en el rango calórico para este momento.</div>`;
+        listEl.innerHTML = `<div style="padding: 16px; color: #575659; font-size: 12px; text-align: center;">No hay equivalentes directos en el rango calórico para este momento.</div>`;
     } else {
         listEl.innerHTML = alternatives.map(alt => {
             const cal = Number(alt.calorias_kcal || alt.calories || 0);
@@ -16567,14 +16574,14 @@ function openFoodSwapModal(foodItem, mealSlot, onSwapCallback = null) {
 
             return `
                 <div class="sens-swap-item-card">
-                    <img src="${img}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: #18181B;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                    <img src="${img}" style="width: 46px; height: 46px; border-radius: 10px; object-fit: cover; background: #F4F3F1; border: 1px solid rgba(18, 18, 20, 0.08);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                     <div style="flex: 1; min-width: 0;">
-                        <strong style="font-size: 13px; color: #FFF; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25;">${name}</strong>
-                        <div style="font-size: 11px; color: #71717A; margin-top: 2px;">
-                            ${alt.porcion_total_g_ml || 100}g • <span style="color: #E5CBA7; font-weight: 700;">${cal} kcal</span> • <span style="color: #38BDF8;">${prot}g P</span>
+                        <strong style="font-size: 13px; color: #121214; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25;">${name}</strong>
+                        <div style="font-size: 11px; color: #575659; margin-top: 2px;">
+                            ${alt.porcion_total_g_ml || 100}g • <span style="color: #705B3E; font-weight: 800;">${cal} kcal</span> • <span style="color: #0284C7; font-weight: 700;">${prot}g P</span>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline btn-sm btn-confirm-swap" data-swap-code="${altCode}" style="border-color: rgba(229,203,167,0.4); color: #E5CBA7; font-size: 11.5px; padding: 6px 12px; border-radius: 8px; font-weight: 700; white-space: nowrap;">
+                    <button type="button" class="btn btn-outline btn-sm btn-confirm-swap" data-swap-code="${altCode}" style="border-color: rgba(197, 168, 128, 0.5); color: #705B3E; background: #FAF9F6; font-size: 11.5px; padding: 6px 12px; border-radius: 10px; font-weight: 800; white-space: nowrap;">
                         Elegir plato
                     </button>
                 </div>
@@ -16796,19 +16803,19 @@ function renderShoppingListForSelectedDays(athId) {
         if (items.length > 0) {
             totalItemsCount += items.length;
             html += `
-                <div class="sens-shopping-aisle-block" style="margin-bottom: 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; overflow: hidden;">
-                    <div class="sens-shopping-aisle-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.05);">
-                        <strong style="font-size: 13px; color: #E5CBA7; font-weight: 700;">${aisle}</strong>
-                        <span style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums;">${items.length} ${items.length === 1 ? 'ítem' : 'ítems'}</span>
+                <div class="sens-shopping-aisle-block" style="margin-bottom: 14px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 14px; overflow: hidden;">
+                    <div class="sens-shopping-aisle-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #F4F3F1; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
+                        <strong style="font-size: 13px; color: #705B3E; font-weight: 800;">${aisle}</strong>
+                        <span style="font-size: 11px; color: #575659; font-weight: 600; font-variant-numeric: tabular-nums;">${items.length} ${items.length === 1 ? 'ítem' : 'ítems'}</span>
                     </div>
-                    <div style="display: flex; flex-direction: column;">
+                    <div style="display: flex; flex-direction: column; background: #FFFFFF;">
                         ${items.map(it => {
                             const unitText = it.unidad === 'u' ? 'unidades' : it.unidad;
                             return `
-                                <label class="sens-shopping-item-row" style="cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.03); user-select: none;">
-                                    <input type="checkbox" class="sens-shopping-checkbox" style="accent-color: #E5CBA7; width: 17px; height: 17px; cursor: pointer;">
-                                    <span style="flex: 1; font-size: 13px; color: #E4E4E7;">${escapeSensHtml(it.ingrediente)}</span>
-                                    <strong style="color: #FFF; font-size: 12.5px; font-variant-numeric: tabular-nums;">${it.cantidadTotal} ${unitText}</strong>
+                                <label class="sens-shopping-item-row" style="cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid rgba(18, 18, 20, 0.05); user-select: none;">
+                                    <input type="checkbox" class="sens-shopping-checkbox" style="accent-color: #705B3E; width: 18px; height: 18px; cursor: pointer;">
+                                    <span style="flex: 1; font-size: 13px; color: #121214; font-weight: 500;">${escapeSensHtml(it.ingrediente)}</span>
+                                    <strong style="color: #705B3E; font-size: 12.5px; font-weight: 800; font-variant-numeric: tabular-nums;">${it.cantidadTotal} ${unitText}</strong>
                                 </label>
                             `;
                         }).join('')}
@@ -16819,7 +16826,7 @@ function renderShoppingListForSelectedDays(athId) {
     });
 
     if (totalItemsCount === 0) {
-        container.innerHTML = `<div style="padding: 24px; color: #A1A1AA; font-size: 12.5px; text-align: center; background: rgba(255,255,255,0.02); border-radius: 12px;">No hay ingredientes calculables para los días seleccionados.</div>`;
+        container.innerHTML = `<div style="padding: 24px; color: #575659; font-size: 12.5px; text-align: center; background: #FAF9F6; border-radius: 12px;">No hay ingredientes calculables para los días seleccionados.</div>`;
     } else {
         container.innerHTML = html;
         if (metaCount) {

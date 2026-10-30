@@ -27458,8 +27458,13 @@ body.in-portal .portal-topbar,
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03) !important;
 }
 
-body.in-portal .portal-topbar .brand-logo-img-portal {
-    filter: brightness(0) !important;
+body.in-portal .portal-topbar .brand-logo-img-portal,
+body.in-portal #portalBrandLogoImg {
+    filter: none !important;
+    height: 34px !important;
+    width: auto !important;
+    max-width: 165px !important;
+    object-fit: contain !important;
 }
 
 /* Badge de Plan en Topbar (Oculto en mobile para no saturar header, cápsula single-row en desktop) */
@@ -29629,3 +29634,843 @@ html.in-portal-mode .sens-dock-item *,
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+/* =============================================================================
+   SENS QUIET VITALITY — MEMBER PORTAL UNIFIED LIGHT QUIET LUXURY SYSTEM (v23.0)
+   Covers: Logo Parity, Avatar Dropdown, Entrenar + Exercise Detail, Nutrición +
+   Food Detail Modals, and Perfil & Planes
+   ============================================================================= */
+
+/* 1. CONSISTENCIA TOTAL DEL LOGO (LANDING + PORTAL TOPBAR + MOBILE MENU + AUTH) */
+#headerBrandLogo,
+#portalBrandLogoImg,
+.brand-logo-img,
+.brand-logo-img-portal,
+body.in-portal .portal-topbar .brand-logo-img-portal,
+body.in-portal .brand-logo-img-portal,
+#mobileMenu .brand-logo-img {
+    filter: none !important;
+    -webkit-filter: none !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+body.in-portal .portal-topbar #portalBrandLogoImg,
+body.in-portal .portal-topbar .brand-logo-img-portal {
+    height: 34px !important;
+    max-width: 170px !important;
+    width: auto !important;
+}
+
+@media (max-width: 480px) {
+    body.in-portal .portal-topbar #portalBrandLogoImg,
+    body.in-portal .portal-topbar .brand-logo-img-portal {
+        height: 30px !important;
+        max-width: 148px !important;
+    }
+}
+
+/* 2. BOTÓN CIRCULAR DE USUARIO (#userAvatarBtn) & MENÚ DESPLEGABLE (#userAvatarDropdown) */
+body.in-portal #userAvatarBtn,
+#userAvatarBtn {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border: 1.5px solid rgba(197, 168, 128, 0.45) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    position: relative !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.12) !important;
+    transition: transform 0.15s ease, box-shadow 0.2s ease !important;
+}
+
+body.in-portal #userAvatarBtn:hover,
+#userAvatarBtn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 14px rgba(18, 18, 20, 0.18) !important;
+}
+
+body.in-portal #userAvatarBtn:active,
+#userAvatarBtn:active {
+    transform: scale(0.95) !important;
+}
+
+body.in-portal #userAvatarDropdown,
+#userAvatarDropdown {
+    position: absolute !important;
+    top: calc(100% + 10px) !important;
+    right: 0 !important;
+    width: 325px !important;
+    max-width: calc(100vw - 24px) !important;
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    padding: 16px !important;
+    box-shadow: 0 24px 60px rgba(18, 18, 20, 0.16), 0 4px 16px rgba(18, 18, 20, 0.06) !important;
+    z-index: 100010 !important;
+    display: none !important;
+    color: #121214 !important;
+}
+
+body.in-portal #userAvatarDropdown.active,
+#userAvatarDropdown.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+#userAvatarDropdown .avatar-dropdown-item:hover {
+    background: #F4F3F1 !important;
+}
+
+#userAvatarDropdown .sens-avatar-logout-item:hover {
+    background: rgba(186, 26, 26, 0.08) !important;
+}
+
+/* 3. SECCIÓN ENTRENAR (#workoutView) — LIGHT QUIET LUXURY */
+body.in-portal #workoutView .workout-filter-chip {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    padding: 7px 14px !important;
+    border-radius: 9999px !important;
+    transition: all 0.18s ease !important;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.02) !important;
+}
+
+body.in-portal #workoutView .workout-filter-chip:hover {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+}
+
+body.in-portal #workoutView .workout-filter-chip.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border-color: #121214 !important;
+    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.15) !important;
+}
+
+body.in-portal #workoutView #workoutAttendanceBox {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 16px !important;
+    padding: 12px 14px !important;
+    color: #121214 !important;
+}
+
+body.in-portal #workoutView .workout-time-chip {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #575659 !important;
+    border-radius: 999px !important;
+    padding: 5px 11px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #workoutView .workout-time-chip.selected {
+    background: #FBDEB9 !important;
+    border-color: #C5A880 !important;
+    color: #271903 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-workout-type-section {
+    background: transparent !important;
+    margin-bottom: 22px !important;
+}
+
+body.in-portal .sens-workout-type-header {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 16px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 12px !important;
+    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.02) !important;
+}
+
+body.in-portal .sens-workout-type-title {
+    color: #121214 !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    letter-spacing: 0.08em !important;
+}
+
+body.in-portal .sens-workout-type-icon {
+    background: rgba(251, 222, 185, 0.45) !important;
+    color: #705B3E !important;
+    border-radius: 10px !important;
+}
+
+body.in-portal .sens-workout-type-count {
+    background: #F4F3F1 !important;
+    color: #575659 !important;
+    font-weight: 700 !important;
+    border-radius: 999px !important;
+    padding: 3px 10px !important;
+    font-size: 10.5px !important;
+}
+
+body.in-portal .sens-muscle-header {
+    padding: 4px 4px 8px 4px !important;
+}
+
+body.in-portal .sens-muscle-title {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+    font-size: 11.5px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+}
+
+body.in-portal .sens-muscle-badge-dot {
+    background: #C5A880 !important;
+}
+
+body.in-portal .sens-muscle-swipe-hint {
+    color: #8A898C !important;
+    font-size: 10.5px !important;
+}
+
+/* Exercise Cards in #workoutView */
+body.in-portal .sens-ex-compact-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.07) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.04) !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-ex-compact-card.is-done {
+    border-color: rgba(16, 185, 129, 0.45) !important;
+    background: #FAFDFB !important;
+}
+
+body.in-portal .sens-ex-compact-thumb-wrap {
+    background: #F4F3F1 !important;
+}
+
+body.in-portal .sens-ex-compact-body {
+    background: #FFFFFF !important;
+    padding: 12px 14px !important;
+}
+
+body.in-portal .sens-ex-compact-title {
+    color: #121214 !important;
+    font-weight: 800 !important;
+    font-size: 14px !important;
+}
+
+body.in-portal .sens-ex-compact-sub {
+    color: #705B3E !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+}
+
+body.in-portal .sens-ex-compact-footer {
+    border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
+    padding-top: 8px !important;
+    margin-top: 8px !important;
+}
+
+body.in-portal .sens-ex-compact-meta-pill {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    padding: 3px 8px !important;
+    font-size: 11px !important;
+}
+
+body.in-portal .sens-ex-compact-kcal {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+    font-size: 11px !important;
+}
+
+/* 4. MODAL DE DETALLE Y EJECUCIÓN DE EJERCICIO (#sensExerciseModalSheet) — LIGHT QUIET LUXURY */
+body.in-portal #sensExerciseModalBackdrop {
+    background: rgba(18, 18, 20, 0.55) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+body.in-portal #sensExerciseModalSheet {
+    background: #FAF9F6 !important;
+    color: #121214 !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 -16px 48px rgba(18, 18, 20, 0.18) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-modal-close-circle {
+    background: rgba(255, 255, 255, 0.92) !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.12) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-modal-content-scroll {
+    background: #FAF9F6 !important;
+    color: #121214 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #modalExTitle {
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-chip-pill {
+    background: #F4F3F1 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-chip-pill.type {
+    background: rgba(251, 222, 185, 0.45) !important;
+    color: #705B3E !important;
+    border-color: rgba(197, 168, 128, 0.4) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-chip-pill.muscle {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-chip-pill.kcal {
+    background: #ECFDF5 !important;
+    color: #059669 !important;
+    border-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+/* Master Timer Card in Exercise Modal */
+body.in-portal #sensExerciseModalSheet .sens-master-timer-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.04) !important;
+    padding: 16px !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-timer-mode-badge {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-timer-pill-btn {
+    background: #F4F3F1 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-timer-pill-btn.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border-color: #121214 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #masterTimerValue {
+    color: #121214 !important;
+    font-weight: 800 !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+body.in-portal #sensExerciseModalSheet #masterTimerSubLabel {
+    color: #575659 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-timer-main-action {
+    background: #FBDEB9 !important;
+    color: #271903 !important;
+    font-weight: 800 !important;
+    border: 1px solid rgba(197, 168, 128, 0.5) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-timer-reset-action {
+    background: #F4F3F1 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-rest-chip {
+    background: #FAF9F6 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-rest-chip.active {
+    background: #FBDEB9 !important;
+    color: #271903 !important;
+    border-color: #705B3E !important;
+    font-weight: 800 !important;
+}
+
+/* Sets & Tactile Steppers in Exercise Modal */
+body.in-portal #sensExerciseModalSheet .sens-sets-section-header span:first-child {
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #modalSetsCompletedSummary {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-tactile-set-row {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 10px 12px !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.02) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-tactile-set-row.is-done {
+    background: #F2FBF6 !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-set-num-circle {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    font-weight: 800 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-capsule {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 12px !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-btn {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-input {
+    background: transparent !important;
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-sublabel {
+    color: #77767B !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-check-set-btn {
+    background: #F4F3F1 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-check-set-btn.is-done {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border-color: #10B981 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-add-extra-set {
+    background: #FFFFFF !important;
+    border: 1px dashed rgba(112, 91, 62, 0.4) !important;
+    color: #705B3E !important;
+    font-weight: 700 !important;
+    border-radius: 14px !important;
+}
+
+/* Biomechanics & Coach Notes Accordion in Exercise Modal */
+body.in-portal #sensExerciseModalSheet .sens-accordion-notes-box {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-accordion-header {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-accordion-body {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-summary-step-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 12px !important;
+    padding: 10px 12px !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-step-num-pill {
+    background: #FBDEB9 !important;
+    color: #271903 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-step-label {
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-step-text {
+    color: #575659 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-deep-biomechanics {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #705B3E !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-deep-biomechanics-body {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    color: #575659 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-modal-sticky-save-bar {
+    background: rgba(250, 249, 246, 0.96) !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-save-exercise {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border-radius: 9999px !important;
+    font-weight: 800 !important;
+    border: none !important;
+    box-shadow: 0 8px 24px rgba(18, 18, 20, 0.18) !important;
+}
+
+body.in-portal #sensExitConfirmModal .sens-exit-confirm-card {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 24px 60px rgba(18, 18, 20, 0.2) !important;
+}
+
+body.in-portal #sensExitConfirmModal .sens-exit-confirm-card h4 {
+    color: #121214 !important;
+}
+
+body.in-portal #sensExitConfirmModal .sens-exit-confirm-card p {
+    color: #575659 !important;
+}
+
+/* 5. SECCIÓN NUTRICIÓN (#nutritionView) & DETALLES DE CARDS — LIGHT QUIET LUXURY */
+body.in-portal #nutritionView .sens-nutri-hero-primary-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.04) !important;
+    color: #121214 !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-hero-eyebrow {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-goal-pill {
+    background: rgba(251, 222, 185, 0.45) !important;
+    color: #705B3E !important;
+    border: 1px solid rgba(197, 168, 128, 0.4) !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #nutritionView #nutriConsumedNum {
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-kcal-divider,
+body.in-portal #nutritionView #nutriTargetKcal {
+    color: #575659 !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-slider-track {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.05) !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-macro-accordion-toggle {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 14px !important;
+    color: #121214 !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-macro-accordion-toggle span {
+    color: #121214 !important;
+}
+
+body.in-portal #nutritionView #nutriMacroQuickSummary {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #nutritionView .sens-macro-pill-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 14px !important;
+    padding: 10px 12px !important;
+}
+
+body.in-portal #nutritionView .sens-macro-pill-label {
+    color: #575659 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #nutritionView .sens-macro-pill-val {
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #nutritionView .sens-macro-pill-pct {
+    color: #77767B !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-tab-pill,
+.sens-nutri-tab-pill {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    padding: 6px 14px !important;
+    font-size: 11.5px !important;
+    transition: all 0.15s ease !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-tab-pill.active,
+.sens-nutri-tab-pill.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border-color: #121214 !important;
+}
+
+body.in-portal #nutritionView .sens-btn-custom-meal {
+    background: #FBDEB9 !important;
+    color: #271903 !important;
+    border: 1px solid rgba(197, 168, 128, 0.5) !important;
+    border-radius: 9999px !important;
+    font-weight: 800 !important;
+    padding: 7px 14px !important;
+    font-size: 11.5px !important;
+}
+
+/* Meal Subsections & Food Cards in #nutritionView */
+body.in-portal .sens-meal-subsection-block {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.07) !important;
+    border-radius: 22px !important;
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03) !important;
+}
+
+body.in-portal .sens-meal-subsection-header {
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 12px !important;
+}
+
+body.in-portal .sens-meal-title {
+    color: #121214 !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
+}
+
+body.in-portal .sens-meal-subtotal-meta {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+    font-size: 11.5px !important;
+}
+
+body.in-portal .btn-quick-add-to-meal {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
+    border-radius: 9999px !important;
+    font-weight: 700 !important;
+    padding: 5px 12px !important;
+    font-size: 11px !important;
+}
+
+body.in-portal .btn-quick-add-to-meal:hover {
+    background: #FBDEB9 !important;
+    border-color: #C5A880 !important;
+}
+
+body.in-portal .sens-nutri-food-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 16px !important;
+    padding: 10px 12px !important;
+    transition: all 0.18s ease !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-nutri-food-card:hover {
+    background: #FFFFFF !important;
+    border-color: rgba(197, 168, 128, 0.5) !important;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.05) !important;
+}
+
+body.in-portal .sens-nutri-food-card.is-logged {
+    background: #F2FBF6 !important;
+    border-color: rgba(16, 185, 129, 0.38) !important;
+}
+
+body.in-portal .sens-nutri-food-meal-tag {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+    font-size: 9.5px !important;
+}
+
+body.in-portal .sens-nutri-food-title {
+    color: #121214 !important;
+    font-weight: 800 !important;
+    font-size: 13.5px !important;
+}
+
+body.in-portal .sens-nutri-food-meta {
+    color: #575659 !important;
+    font-size: 11.5px !important;
+}
+
+body.in-portal .sens-nutri-kcal-badge {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    font-weight: 800 !important;
+    border-radius: 999px !important;
+    padding: 4px 10px !important;
+    font-size: 11.5px !important;
+}
+
+body.in-portal .sens-btn-quick-log {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(18, 18, 20, 0.14) !important;
+    color: #575659 !important;
+}
+
+body.in-portal .sens-btn-quick-log.is-logged {
+    background: #10B981 !important;
+    border-color: #10B981 !important;
+    color: #FFFFFF !important;
+}
+
+/* Nutrition Modals Details (#userFoodDetailModal, #userFoodSwapModal, #userShoppingListModal, #userCustomMealModal) */
+body.in-portal .sens-recom-dish-chip {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 8px 10px !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-swap-item-card {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 10px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+body.in-portal .sens-step-item-row {
+    color: #121214 !important;
+}
+
+body.in-portal .sens-step-badge {
+    background: #FBDEB9 !important;
+    color: #271903 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-day-pill-toggle,
+body.in-portal .sens-kcal-chip {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    font-weight: 700 !important;
+    border-radius: 999px !important;
+}
+
+body.in-portal .sens-day-pill-toggle.active,
+body.in-portal .sens-kcal-chip.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border-color: #121214 !important;
+}
+
+/* 6. SECCIÓN PERFIL & PLANES (#profileSettingsView) — LIGHT QUIET LUXURY */
+body.in-portal #profileSettingsView .card-panel {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.07) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    color: #121214 !important;
+}
+
+body.in-portal #profileSettingsView h2,
+body.in-portal #profileSettingsView h3,
+body.in-portal #profileSettingsView h4 {
+    color: #121214 !important;
+}
+
+body.in-portal #profileSettingsView .input-label {
+    color: #575659 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #profileSettingsView .input-control {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal #profileSettingsView .diag-tag {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #121214 !important;
+    font-weight: 700 !important;
+    border-radius: 999px !important;
+    padding: 5px 12px !important;
+    font-size: 11.5px !important;
+}
+
+body.in-portal #profileSettingsView .diag-tag.highlight {
+    background: rgba(251, 222, 185, 0.45) !important;
+    border-color: rgba(197, 168, 128, 0.45) !important;
+    color: #705B3E !important;
+}
+
