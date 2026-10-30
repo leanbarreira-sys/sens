@@ -138,7 +138,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=18.0">
+    <link rel="stylesheet" href="style.css?v=19.0">
 
     <!-- CDN Libraries: Chart.js & Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6666,621 +6666,302 @@
                 <!-- =================================================================
                      ESTACIÓN 5: GROWTH MARKETING STUDIO SENS (MOBILE-FIRST VIRAL ENGINE)
                      ================================================================= -->
+                                <!-- =========================================================================
+                     SUBPANEL 4: MARKETING & VIRAL GROWTH STUDIO (200 TEMPLATES QUIET VITALITY)
+                     100 Templates en 9:16 (Stories/Reels) y 100 en 4:5 (Feed/Carrusel)
+                     Edición Híbrida (WYSIWYG en vivo + Panel) con Límite Estricto de Caracteres
+                     Foto y Video Intercambiables • Descarga en Ultra High Definition (UHD 4K)
+                     ========================================================================= -->
                 <div class="coach-subpane" id="paneMarketing">
                     <div class="coach-surface-card" style="padding: 16px;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
                             <div>
-                                <span class="pill pill-champagne"
-                                    style="font-size: 9.5px; font-weight: 800; padding: 2px 7px;">GROWTH STUDIO • VIRAL
-                                    MAKER</span>
-                                <h3 style="font-size: 1.15rem; font-weight: 800; margin-top: 4px; color: #121214;">
-                                    Creador de Contenido Viral SENS
+                                <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; padding: 2px 8px; letter-spacing: 0.08em;">
+                                    SENS QUIET VITALITY • 200 TEMPLATES STUDIO
+                                </span>
+                                <h3 style="font-size: 1.25rem; font-weight: 800; margin-top: 4px; color: #121214; letter-spacing: -0.02em;">
+                                    Catálogo de 200 Templates de Marketing
                                 </h3>
-                                <p style="font-size: 11px; color: var(--text-secondary); margin-top: 1px;">
-                                    Elegí un estilo viral, cargá tu foto/video y generá ganchos de alto CTR listos para
-                                    redes.
+                                <p style="font-size: 11.5px; color: #575659; margin-top: 2px; max-width: 650px;">
+                                    100 plantillas en 9:16 y 100 en 4:5. Hacé clic directo sobre el texto para editarlo (WYSIWYG) con límite estricto de caracteres, cambiá fotos por videos y descargá en UHD 4K sin pixelado.
                                 </p>
                             </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span class="sens-uhd-badge">UHD 4K NATIVO</span>
+                            </div>
                         </div>
 
-                        <!-- Mobile Segmented Switcher (Solo visible en dispositivos móviles / tablets) -->
+                        <!-- Mobile Switcher (Diseñar / Previsualizar en pantalla chica) -->
                         <div class="sens-mkt-mobile-switcher" id="mktMobileSwitcher">
-                            <button type="button" class="sens-mkt-switch-btn active" data-tab="editor"
-                                id="mktSwitchTabEditor">
-                                <span>✏️ 1. Diseñar &amp; Editar</span>
+                            <button type="button" class="sens-mkt-switch-btn active" data-tab="editor" id="mktSwitchTabEditor">
+                                <span>✏️ 1. Editar &amp; Elegir</span>
                             </button>
-                            <button type="button" class="sens-mkt-switch-btn" data-tab="preview"
-                                id="mktSwitchTabPreview">
-                                <span>👁️ 2. Ver Preview &amp; Descargar</span>
+                            <button type="button" class="sens-mkt-switch-btn" data-tab="preview" id="mktSwitchTabPreview">
+                                <span>👁️ 2. Canvas &amp; Descargar</span>
                             </button>
                         </div>
 
-                        <div class="sens-mkt-studio-layout mobile-view-editor">
-                            <!-- COLUMNA IZQUIERDA / CONTROLES SIMPLIFICADOS (3 PASOS DIRECTOS) -->
+                        <div class="sens-mkt-studio-layout mobile-view-editor" id="mktStudioMainLayout">
+                            <!-- COLUMNA IZQUIERDA: CONTROLES & CATÁLOGO (350px - 440px) -->
                             <div class="sens-mkt-controls-col">
-                                <!-- Paso 1: Formato y Estilo Viral -->
+                                <!-- Paso 1: Selector de Formato (9:16 vs 4:5) -->
                                 <div class="sens-mkt-control-block">
-                                    <span class="sens-mkt-step-badge">1 • FORMATO DE PUBLICACIÓN</span>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <span class="sens-mkt-step-badge">1 • FORMATO DE PUBLICACIÓN</span>
+                                        <span id="mktFormatBadgeText" style="font-size: 10px; font-weight: 700; color: #705B3E;">9:16 (1080×1920)</span>
+                                    </div>
                                     <div class="sens-mkt-format-grid" id="mktFormatSelectorGrid">
-                                        <button type="button" class="sens-mkt-format-btn active"
-                                            data-format="reel_video_9_16">
-                                            <strong>Reel 9:16</strong>
-                                            <span>TikTok / Reels</span>
+                                        <button type="button" class="sens-mkt-format-btn active" data-format="9:16" id="btnFmt916">
+                                            <strong>9:16 Vertical</strong>
+                                            <span>Stories / Reels / TikTok (100 Templates)</span>
                                         </button>
-                                        <button type="button" class="sens-mkt-format-btn" data-format="carousel_4_5">
-                                            <strong>Carrusel 4:5</strong>
-                                            <span>Swipe Feed</span>
+                                        <button type="button" class="sens-mkt-format-btn" data-format="4:5" id="btnFmt45">
+                                            <strong>4:5 Retrato</strong>
+                                            <span>Feed IG / Carrusel (100 Templates)</span>
                                         </button>
-                                        <button type="button" class="sens-mkt-format-btn" data-format="post_4_5">
-                                            <strong>Post 4:5</strong>
-                                            <span>Feed IG</span>
-                                        </button>
-                                        <button type="button" class="sens-mkt-format-btn" data-format="story_9_16">
-                                            <strong>Story 9:16</strong>
-                                            <span>Cupos VIP</span>
-                                        </button>
-                                    </div>
-
-                                    <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin: 12px 0 6px 0;">
-                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">ESTILO / ARQUETIPO
-                                            (20 TEMPLATES BRANDBOOK)</span>
-                                        <span
-                                            style="font-size: 9.5px; color: #9E7D4B; font-weight: 700; background: #F7EFE4; padding: 2px 6px; border-radius: 4px;">Overlay
-                                            Automático</span>
-                                    </div>
-                                    <div class="sens-mkt-templates-grid" id="mktTemplateSelectorGrid">
-                                        <!-- Inyectado dinámicamente con los 20 estilos visuales -->
                                     </div>
                                 </div>
 
-                                <!-- Paso 2: Tu Foto o Video de Fondo -->
+                                <!-- Paso 2: Selector de Bloque Temático (5 Bloques x 20 Templates) -->
                                 <div class="sens-mkt-control-block">
-                                    <span class="sens-mkt-step-badge">2 • FOTO O VIDEO DE FONDO</span>
-                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-                                        <label for="mktMediaFileInput" class="btn btn-primary btn-sm"
-                                            style="cursor: pointer; font-weight: 800; flex: 1; text-align: center; background: #E5CBA7; color: #2A241C; border: none; padding: 8px 12px; border-radius: 10px; font-size: 11.5px;">
-                                            📹 Subir Foto o Video del Celular
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <span class="sens-mkt-step-badge">2 • BLOQUES TEMÁTICOS (20 POR BLOQUE)</span>
+                                        <span id="mktBlockCountBadge" style="font-size: 10px; font-weight: 700; color: #575659;">20 plantillas</span>
+                                    </div>
+                                    <div class="sens-mkt-block-ribbon" id="mktBlockRibbon">
+                                        <button type="button" class="sens-mkt-block-tab active" data-block="b1">
+                                            <span>Bloque I</span>
+                                            <small>Bloques Flotantes</small>
+                                        </button>
+                                        <button type="button" class="sens-mkt-block-tab" data-block="b2">
+                                            <span>Bloque II</span>
+                                            <small>Tipografía Pura</small>
+                                        </button>
+                                        <button type="button" class="sens-mkt-block-tab" data-block="b3">
+                                            <span>Bloque III</span>
+                                            <small>Métricas &amp; Datos</small>
+                                        </button>
+                                        <button type="button" class="sens-mkt-block-tab" data-block="b4">
+                                            <span>Bloque IV</span>
+                                            <small>Micro Stories</small>
+                                        </button>
+                                        <button type="button" class="sens-mkt-block-tab" data-block="b5">
+                                            <span>Bloque V</span>
+                                            <small>Conversión &amp; Cupos</small>
+                                        </button>
+                                    </div>
+
+                                    <!-- Grid de 20 Templates del Bloque Activo -->
+                                    <div class="sens-mkt-templates-grid" id="mktTemplateSelectorGrid" style="max-height: 290px; overflow-y: auto; margin-top: 10px;">
+                                        <!-- Inyectado dinámicamente con los 20 templates del bloque -->
+                                    </div>
+                                </div>
+
+                                <!-- Paso 3: Componentes Editables (Modo Híbrido con Límite Estricto de Caracteres) -->
+                                <div class="sens-mkt-control-block">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <span class="sens-mkt-step-badge">3 • COMPONENTES EDITABLES</span>
+                                        <span class="sens-mkt-lock-badge">Límite Estricto Activo</span>
+                                    </div>
+                                    <p style="font-size: 10.5px; color: #71717A; margin-bottom: 10px;">
+                                        Podés escribir acá o hacer clic directo sobre el texto del lienzo. Los caracteres se bloquean al límite exacto de marketing para no romper las filas.
+                                    </p>
+
+                                    <!-- Campo 1: Tag / Kicker / Eyebrow -->
+                                    <div class="sens-mkt-field-group">
+                                        <div class="sens-mkt-field-header">
+                                            <label for="mktInputEyebrow">Tag Superior / Kicker:</label>
+                                            <span class="sens-mkt-char-badge" id="mktTagCharBadge">0 / 25</span>
+                                        </div>
+                                        <input type="text" id="mktInputEyebrow" class="sens-mkt-input" placeholder="Ej: BIOMECÁNICA SENS" maxlength="25">
+                                    </div>
+
+                                    <!-- Campo 2: Titular Principal (Headline) -->
+                                    <div class="sens-mkt-field-group">
+                                        <div class="sens-mkt-field-header">
+                                            <label for="mktInputHeadline">Titular Principal (Headline):</label>
+                                            <span class="sens-mkt-char-badge" id="mktTitleCharBadge">0 / 60</span>
+                                        </div>
+                                        <textarea id="mktInputHeadline" class="sens-mkt-textarea" rows="2" placeholder="Titular de alto impacto..." maxlength="60"></textarea>
+                                    </div>
+
+                                    <!-- Campo 3: Bajada / Subtítulo / Cuerpo -->
+                                    <div class="sens-mkt-field-group">
+                                        <div class="sens-mkt-field-header">
+                                            <label for="mktInputSubtitle">Bajada / Texto de Apoyo:</label>
+                                            <span class="sens-mkt-char-badge" id="mktBajadaCharBadge">0 / 120</span>
+                                        </div>
+                                        <textarea id="mktInputSubtitle" class="sens-mkt-textarea" rows="3" placeholder="Texto explicativo con sentido común..." maxlength="120"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Paso 4: Foto o Video de Fondo Intercambiables -->
+                                <div class="sens-mkt-control-block">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <span class="sens-mkt-step-badge">4 • FOTO O VIDEO DE FONDO</span>
+                                        <div class="sens-mkt-media-toggle-pill" id="mktMediaTypeToggle">
+                                            <button type="button" class="sens-mkt-media-btn active" data-media="image" id="btnMediaSelectImage">Foto</button>
+                                            <button type="button" class="sens-mkt-media-btn" data-media="video" id="btnMediaSelectVideo">Video</button>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                                        <label for="mktMediaFileInput" class="btn btn-primary btn-sm" style="cursor: pointer; font-weight: 800; flex: 1; text-align: center; background: #E5CBA7; color: #121214; border: none; padding: 9px 12px; border-radius: 10px; font-size: 11.5px; box-shadow: 0 2px 8px rgba(229, 203, 167, 0.3);">
+                                            📁 Subir Foto o Video
                                         </label>
-                                        <input type="file" id="mktMediaFileInput"
-                                            accept="video/*,video/mp4,video/quicktime,video/webm,image/*"
-                                            style="display: none;">
-                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktUseDefaultMedia"
-                                            style="font-size: 10.5px; padding: 8px 11px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214;">
-                                            Fondo SENS Oficial
+                                        <input type="file" id="mktMediaFileInput" accept="video/mp4,video/webm,video/quicktime,video/*,image/jpeg,image/png,image/webp,image/*" style="display: none;">
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktSensVideos" style="font-size: 11px; padding: 8px 11px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214;">
+                                            🎥 Videos SENS
                                         </button>
-                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktToggleVideoPlay"
-                                            style="font-size: 10.5px; padding: 8px 10px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214; display: none;">
-                                            ⏸️ Pausar Video
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktSensPhotos" style="font-size: 11px; padding: 8px 11px; border-radius: 10px; border-color: rgba(18, 18, 20, 0.15); color: #121214;">
+                                            🖼️ Fotos Quiet Luxury
                                         </button>
                                     </div>
-                                    <div id="mktMediaFileStatusPill" style="margin-top: 6px; display: none;">
-                                        <span
-                                            style="font-size: 10px; font-weight: 700; color: #1B7A36; background: #EBF7EE; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+
+                                    <!-- Selector modal rápido de videos de ejercicios de Nico -->
+                                    <div id="mktSensVideoPickerBar" style="display: none; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.1); border-radius: 10px; padding: 8px; margin-bottom: 8px;">
+                                        <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #705B3E; display: block; margin-bottom: 6px;">
+                                            Elegir Ejercicio de Nico:
+                                        </span>
+                                        <select id="mktSensVideoSelect" style="width: 100%; padding: 6px; font-size: 11px; border-radius: 6px; border: 1px solid #D4B996; background: #FAF9F6; font-family: inherit;">
+                                            <option value="https://makesens.com.ar/img/hero-bg-opt.mp4">Clip SENS • Fondo Principal de Movilidad</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="mktMediaFileStatusPill" style="display: none; margin-top: 4px;">
+                                        <span style="font-size: 10px; font-weight: 700; color: #1B7A36; background: #EBF7EE; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
                                             <span>✓</span>
-                                            <span id="mktMediaFileStatusText">Foto/Video cargado</span>
+                                            <span id="mktMediaFileStatusText">Multimedia cargada con éxito</span>
                                         </span>
                                     </div>
 
-                                    <!-- CALIBRACIÓN VISUAL INTUITIVA (Sin Sliders Confusos + Mini-Visor en Vivo) -->
-                                    <div class="sens-mkt-photo-adjustments-card" id="mktPhotoAdjustmentsBlock"
-                                        style="margin-top: 12px; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 12px; padding: 12px;">
-                                        <div
-                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                            <span
-                                                style="font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #9E7D4B;">
-                                                CALIBRAR ENCUADRE DE LA IMAGEN
-                                            </span>
-                                            <span style="font-size: 9px; color: #71717A; font-weight: 600;">Ajuste en 1
-                                                Tap</span>
-                                        </div>
-
-                                        <!-- 1. Posición / Encuadre Vertical -->
-                                        <div style="margin-bottom: 10px;">
-                                            <div
-                                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                                <label
-                                                    style="font-size: 11px; font-weight: 700; color: #121214; margin: 0;">
-                                                    1. Posición de la Foto / Video:
-                                                </label>
-                                                <span id="mktPanYFeedbackLabel"
-                                                    style="font-size: 10px; color: #9E7D4B; font-weight: 800;">Centrado</span>
-                                            </div>
-                                            <div class="sens-mkt-adjust-btn-group" id="mktPanYButtonGroup">
-                                                <button type="button" class="sens-mkt-adjust-btn" data-val="-25">
-                                                    <span>Subir Foto</span>
-                                                    <small>Muestra torso/cabeza</small>
-                                                </button>
-                                                <button type="button" class="sens-mkt-adjust-btn active" data-val="0">
-                                                    <span>Centrado</span>
-                                                    <small>Posición estándar</small>
-                                                </button>
-                                                <button type="button" class="sens-mkt-adjust-btn" data-val="25">
-                                                    <span>Bajar Foto</span>
-                                                    <small>Muestra piernas/suelo</small>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- 2. Zoom / Escala -->
-                                        <div style="margin-bottom: 10px;">
-                                            <div
-                                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                                <label
-                                                    style="font-size: 11px; font-weight: 700; color: #121214; margin: 0;">
-                                                    2. Zoom de Cámara:
-                                                </label>
-                                                <span id="mktZoomFeedbackLabel"
-                                                    style="font-size: 10px; color: #9E7D4B; font-weight: 800;">108%
-                                                    (Foco SENS)</span>
-                                            </div>
-                                            <div class="sens-mkt-adjust-btn-group" id="mktZoomButtonGroup">
-                                                <button type="button" class="sens-mkt-adjust-btn" data-val="100">
-                                                    <span>100%</span>
-                                                    <small>Completo</small>
-                                                </button>
-                                                <button type="button" class="sens-mkt-adjust-btn active" data-val="108">
-                                                    <span>108%</span>
-                                                    <small>Foco SENS</small>
-                                                </button>
-                                                <button type="button" class="sens-mkt-adjust-btn" data-val="125">
-                                                    <span>125%</span>
-                                                    <small>Primer Plano</small>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- 3. Contraste / Oscuridad de Fondo -->
-                                        <div style="margin-bottom: 10px;">
-                                            <div
-                                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                                <label
-                                                    style="font-size: 11px; font-weight: 700; color: #121214; margin: 0;">
-                                                    3. Oscuridad de Fondo (Legibilidad):
-                                                </label>
-                                                <span id="mktOpacityFeedbackLabel"
-                                                    style="font-size: 10px; color: #9E7D4B; font-weight: 800;">80%
-                                                    (Equilibrado)</span>
-                                            </div>
-                                            <div class="sens-mkt-adjust-btn-group" id="mktOpacityButtonGroup">
-                                                <button type="button" class="sens-mkt-adjust-btn" data-val="65">
-                                                    <span>65% Suave</span>
-                                                    <small>Más foto</small>
-                                                </button>
-                                                <button type="button" class="sens-mkt-adjust-btn active" data-val="80">
-                                                    <span>80% Óptimo</span>
-                                                    <small>Equilibrado</small>
-                                                </button>
-                                                <button type="button" class="sens-mkt-adjust-btn" data-val="92">
-                                                    <span>92% Fuerte</span>
-                                                    <small>Máximo contraste</small>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Acceso Directo y Estado del Visor en Vivo -->
-                                        <div
-                                            style="margin-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.08); padding-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
-                                            <div style="display: flex; align-items: center; gap: 6px;">
-                                                <span
-                                                    style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);"></span>
-                                                <span
-                                                    style="font-size: 11px; font-weight: 700; color: #121214;">Encuadre
-                                                    sincronizado en tiempo real</span>
-                                            </div>
-                                            <button type="button" class="btn btn-outline btn-sm"
-                                                id="btnMktScrollToVisor"
-                                                style="font-size: 10.5px; padding: 4px 10px; border-color: #E5CBA7; color: #121214; font-weight: 800; background: #FAF9F6; border-radius: 8px; cursor: pointer;">
-                                                👁️ Ver en Visor en Vivo ↓
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Paso 3: Mensaje & Gancho Viral -->
-                                <div class="sens-mkt-control-block">
-                                    <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">3 • MENSAJE &amp;
-                                            GANCHO VIRAL</span>
-                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktNextHookIdea"
-                                            style="font-size: 10.5px; padding: 3px 9px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 800;">
-                                            ⚡ Sugerir Hook Viral ↻
+                                    <!-- Controles de Video si hay video activo -->
+                                    <div id="mktVideoPlaybackControls" style="display: none; align-items: center; gap: 8px; margin-top: 8px; background: #F4F3F1; padding: 6px 10px; border-radius: 8px;">
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktToggleVideoPlay" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #FFF;">
+                                            ⏸️ Pausar
                                         </button>
-                                    </div>
-
-                                    <!-- Selector de Escena por Segundos (Para Videos Multi-Escena) -->
-                                    <div id="mktVideoScenesTimelineBar" class="sens-mkt-timeline-bar"
-                                        style="margin-bottom: 8px;">
-                                        <div
-                                            style="font-size: 9.5px; font-weight: 800; color: #9E7D4B; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
-                                            <span>LÍNEA DE TIEMPO DEL VIDEO:</span>
-                                            <label
-                                                style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-weight: 700;">
-                                                <input type="checkbox" id="mktAutoCycleScenesCheck"
-                                                    style="accent-color: #9E7D4B;">
-                                                <span>Rotar en vivo</span>
-                                            </label>
-                                        </div>
-                                        <div class="sens-mkt-scene-tabs">
-                                            <button type="button" class="sens-mkt-scene-btn active" data-scene="0">
-                                                <strong>0s–3s • HOOK</strong>
-                                                <span>Frena el dedo</span>
-                                            </button>
-                                            <button type="button" class="sens-mkt-scene-btn" data-scene="1">
-                                                <strong>3s–7s • VALOR</strong>
-                                                <span>Método / Rationale</span>
-                                            </button>
-                                            <button type="button" class="sens-mkt-scene-btn" data-scene="2">
-                                                <strong>7s+ • CTA</strong>
-                                                <span>Conversión</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Selector de Slide (Para Carrusel 4:5 de 4 Diapositivas) -->
-                                    <div id="mktCarouselSlidesBar" class="sens-mkt-timeline-bar"
-                                        style="display: none; margin-bottom: 8px;">
-                                        <div
-                                            style="font-size: 9.5px; font-weight: 800; color: #9E7D4B; margin-bottom: 5px;">
-                                            DIAPOSITIVAS DEL CARRUSEL 4:5:
-                                        </div>
-                                        <div class="sens-mkt-scene-tabs">
-                                            <button type="button" class="sens-mkt-slide-btn active" data-slide="0">
-                                                <strong>Slide 1/4</strong>
-                                                <span>Portada</span>
-                                            </button>
-                                            <button type="button" class="sens-mkt-slide-btn" data-slide="1">
-                                                <strong>Slide 2/4</strong>
-                                                <span>El Error</span>
-                                            </button>
-                                            <button type="button" class="sens-mkt-slide-btn" data-slide="2">
-                                                <strong>Slide 3/4</strong>
-                                                <span>Solución</span>
-                                            </button>
-                                            <button type="button" class="sens-mkt-slide-btn" data-slide="3">
-                                                <strong>Slide 4/4</strong>
-                                                <span>Cierre</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Campos de Texto Directos -->
-                                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <div class="sens-mkt-input-wrap" id="mktWrapHeadline">
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 2px;">
-                                                <label class="input-label" style="margin:0; font-weight:700;">Titular
-                                                    Principal / Hook</label>
-                                                <span id="mktCharCountHeadline"
-                                                    style="color: var(--text-muted); font-variant-numeric: tabular-nums;">0/52</span>
-                                            </div>
-                                            <input type="text" id="mktInputHeadline" class="input-control"
-                                                maxlength="52" value="ENTRENÁS DURO. PARECÉS EL MISMO."
-                                                style="margin-bottom: 0; font-weight: 800; font-size: 13px;">
-                                        </div>
-
-                                        <div class="sens-mkt-input-wrap" id="mktWrapSubtitle">
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 2px;">
-                                                <label class="input-label" style="margin:0; font-weight:700;">Bajada
-                                                    Explicativa</label>
-                                                <span id="mktCharCountSub"
-                                                    style="color: var(--text-muted); font-variant-numeric: tabular-nums;">0/110</span>
-                                            </div>
-                                            <textarea id="mktInputSubtitle" class="input-control" maxlength="110"
-                                                rows="2"
-                                                style="margin-bottom: 0; font-size: 12px;">El 92% fatiga el músculo equivocado por un error de 3cm en la cadera.</textarea>
-                                        </div>
-                                    </div>
-
-                                    <!-- Opciones Avanzadas (Sin Accordion <details> para evitar bloqueos táctiles en mobile) -->
-                                    <div class="sens-mkt-advanced-wrap"
-                                        style="margin-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.08); padding-top: 10px;">
-                                        <button type="button" class="btn btn-outline btn-full btn-sm"
-                                            id="btnToggleMktAdvanced"
-                                            style="font-size: 11px; font-weight: 700; color: #575659; border-color: rgba(18, 18, 20, 0.12); padding: 7px 10px; border-radius: 9px; display: flex; align-items: center; justify-content: space-between; background: #FAF9F6; margin-bottom: 10px; cursor: pointer;">
-                                            <span>⚙️ Opciones Avanzadas (Kicker Eyebrow, Chips y Caption)</span>
-                                            <span id="mktAdvancedToggleArrow">▲ Ocultar</span>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnMktToggleVideoMute" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #FFF;">
+                                            🔇 Mute
                                         </button>
-                                        <div id="mktAdvancedContent"
-                                            style="display: flex; flex-direction: column; gap: 10px;">
-                                            <div class="sens-mkt-input-wrap" id="mktWrapEyebrow">
-                                                <div
-                                                    style="display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 2px;">
-                                                    <label class="input-label" style="margin:0;">Etiqueta Kicker
-                                                        (Eyebrow)</label>
-                                                    <span id="mktCharCountBadge"
-                                                        style="color: var(--text-muted);">0/26</span>
-                                                </div>
-                                                <input type="text" id="mktInputEyebrow" class="input-control"
-                                                    maxlength="26" value="VERDAD BIOLÓGICA • SENS"
-                                                    style="margin-bottom: 0; font-size: 12px;">
-                                            </div>
-
-                                            <!-- Inputs de respaldo para compatibilidad de estado -->
-                                            <input type="hidden" id="mktMediaZoomSlider" value="108">
-                                            <input type="hidden" id="mktMediaPanYSlider" value="0">
-                                            <input type="hidden" id="mktOverlayOpacitySlider" value="80">
-                                            <span id="mktZoomValLabel" style="display: none;">108%</span>
-
-                                            <div id="mktLockedOverlayNotice"
-                                                style="font-size: 10.5px; font-weight: 600; color: #121214; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); padding: 6px 10px; border-radius: 8px; display: flex; align-items: center; gap: 6px;">
-                                                <span>🔒</span>
-                                                <span id="mktLockedOverlayDescription">Filtro Focal Completo (Optimizado
-                                                    para Titular Centrado)</span>
-                                            </div>
-
-                                            <div class="sens-mkt-input-wrap" id="mktWrapChips">
-                                                <div
-                                                    style="font-size: 10.5px; font-weight: 700; color: #575659; margin-bottom: 3px;">
-                                                    Pills / Chips Opcionales
-                                                </div>
-                                                <div
-                                                    style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
-                                                    <div>
-                                                        <input type="text" id="mktInputChip1" class="input-control"
-                                                            maxlength="20" placeholder="Chip 1"
-                                                            style="margin-bottom:0; font-size:11px;">
-                                                        <span id="mktCharCountC1" style="display:none;"></span>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" id="mktInputChip2" class="input-control"
-                                                            maxlength="20" placeholder="Chip 2"
-                                                            style="margin-bottom:0; font-size:11px;">
-                                                        <span id="mktCharCountC2" style="display:none;"></span>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" id="mktInputChip3" class="input-control"
-                                                            maxlength="22" placeholder="Chip 3"
-                                                            style="margin-bottom:0; font-size:11px;">
-                                                        <span id="mktCharCountC3" style="display:none;"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Capas Ocultas para Compatibilidad de Estado JS -->
-                                            <div id="mktLayersToggleBar" style="display: none;">
-                                                <button type="button" class="sens-layer-toggle active"
-                                                    data-layer="branding"><span
-                                                        class="sens-layer-check">✓</span></button>
-                                                <button type="button" class="sens-layer-toggle active"
-                                                    data-layer="eyebrow"><span
-                                                        class="sens-layer-check">✓</span></button>
-                                                <button type="button" class="sens-layer-toggle active"
-                                                    data-layer="headline"><span
-                                                        class="sens-layer-check">✓</span></button>
-                                                <button type="button" class="sens-layer-toggle active"
-                                                    data-layer="subtitle"><span
-                                                        class="sens-layer-check">✓</span></button>
-                                                <button type="button" class="sens-layer-toggle active"
-                                                    data-layer="chips"><span class="sens-layer-check">✓</span></button>
-                                            </div>
-
-                                            <!-- Autocompletar desde Biblioteca (Opcional) -->
-                                            <div
-                                                style="border-top: 1px solid rgba(18, 18, 20, 0.06); padding-top: 8px;">
-                                                <div
-                                                    style="font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">
-                                                    AUTOCOMPLETAR DATOS DE BIBLIOTECA SENS:
-                                                </div>
-                                                <div style="display: flex; gap: 6px;">
-                                                    <button type="button" class="btn btn-outline btn-sm"
-                                                        id="btnMktAutofillExercise"
-                                                        style="flex:1; font-size:10.5px; padding:4px 8px;">
-                                                        Cargar Ejercicio
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline btn-sm"
-                                                        id="btnMktAutofillFood"
-                                                        style="flex:1; font-size:10.5px; padding:4px 8px;">
-                                                        Cargar Alimento
-                                                    </button>
-                                                </div>
-                                                <div id="mktAutofillPickerDrawer"
-                                                    style="display: none; margin-top: 8px;">
-                                                    <input type="text" id="mktAutofillSearchInput" class="input-control"
-                                                        placeholder="Buscar..."
-                                                        style="margin-bottom: 6px; font-size: 11px;">
-                                                    <div id="mktAutofillItemsList"
-                                                        style="max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px;">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Caption para Copiar y Pegar (Editable) -->
-                                            <div
-                                                style="border-top: 1px solid rgba(18, 18, 20, 0.06); padding-top: 8px;">
-                                                <div
-                                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                                    <span
-                                                        style="font-size: 10px; font-weight: 700; color: var(--text-muted);">CAPTION
-                                                        IG / TIKTOK (EDITABLE):</span>
-                                                    <button type="button" class="btn btn-outline btn-sm"
-                                                        id="btnMktCopyCaption"
-                                                        style="font-size: 9.5px; padding: 2px 7px; font-weight: 800;">
-                                                        Copiar Texto
-                                                    </button>
-                                                </div>
-                                                <textarea id="mktCaptionOutput" class="input-control" rows="3"
-                                                    placeholder="Escribí o ajustá el caption de tu pieza..."
-                                                    style="font-size: 11px; margin-bottom: 0;"></textarea>
-                                            </div>
-                                        </div>
+                                        <span style="font-size: 9.5px; color: #71717A;">Video en loop continuo</span>
                                     </div>
                                 </div>
 
-                                <!-- BLOQUE PROTAGONISTA: VISOR EN VIVO ANTES DE DESCARGAR -->
-                                <div class="sens-mkt-control-block sens-mkt-live-visor-block" id="mktLiveVisorBlock">
-                                    <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                                        <div>
-                                            <div style="display: flex; align-items: center; gap: 6px;">
-                                                <span
-                                                    style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #22c55e;"></span>
-                                                <span
-                                                    style="font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #E5CBA7;">VISOR
-                                                    EN VIVO (TIEMPO REAL)</span>
-                                            </div>
-                                            <strong
-                                                style="font-size: 13.5px; color: #FFFFFF; display: block; margin-top: 2px;"
-                                                id="mktLiveVisorTplTitle">1. Hook Bold Statement</strong>
-                                            <span style="font-size: 10px; color: rgba(255,255,255,0.6);"
-                                                id="mktLiveVisorFormatBadge">9:16 Reel / Story (1080×1920)</span>
-                                        </div>
-
-                                        <!-- Selector de Tamaño del Visor -->
-                                        <div class="sens-mkt-visor-size-toggle" id="mktVisorSizeToggle"
-                                            style="display: flex; gap: 4px; background: rgba(255,255,255,0.08); padding: 3px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.12);">
-                                            <button type="button" class="btn btn-sm sens-mkt-size-btn active"
-                                                data-size="normal"
-                                                style="font-size: 10.5px; padding: 4px 9px; border: none; border-radius: 6px; font-weight: 700; background: #E5CBA7; color: #121214; cursor: pointer; transition: all 0.2s;">
-                                                Normal
-                                            </button>
-                                            <button type="button" class="btn btn-sm sens-mkt-size-btn" data-size="large"
-                                                style="font-size: 10.5px; padding: 4px 9px; border: none; border-radius: 6px; font-weight: 700; background: transparent; color: #FAF9F6; cursor: pointer; transition: all 0.2s;">
-                                                Grande 🔍
-                                            </button>
-                                            <button type="button" class="btn btn-sm sens-mkt-size-btn"
-                                                id="btnMktOpenLightbox"
-                                                style="font-size: 10.5px; padding: 4px 9px; border: none; border-radius: 6px; font-weight: 700; background: transparent; color: #E5CBA7; cursor: pointer; transition: all 0.2s;">
-                                                ⛶ Pantalla Completa
-                                            </button>
-                                        </div>
+                                <!-- Paso 5: Guía de Safe Zone Instagram -->
+                                <div class="sens-mkt-control-block" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span class="sens-mkt-step-badge" style="margin-bottom: 0;">5 • SAFE ZONES INSTAGRAM / TIKTOK</span>
+                                        <p style="font-size: 10px; color: #71717A; margin: 2px 0 0 0;">Muestra guías para no tapar avatar, comentarios ni botones.</p>
                                     </div>
-
-                                    <!-- Stage del Canvas Interactivo -->
-                                    <div class="sens-mkt-visor-stage-wrap"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 0;">
-                                        <div class="sens-mkt-visor-canvas-box size-normal is-916" id="mktVisorCanvasBox"
-                                            title="Toca para ampliar en pantalla completa">
-                                            <canvas id="mktMiniFramingCanvas" width="540" height="960"></canvas>
-                                            <div class="sens-mkt-visor-badge-tap"
-                                                style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.78); color: #E5CBA7; font-size: 9.5px; font-weight: 800; padding: 3px 8px; border-radius: 6px; pointer-events: none; backdrop-filter: blur(4px); border: 1px solid rgba(229, 203, 167, 0.3);">
-                                                🔍 Tocar para ampliar
-                                            </div>
-                                        </div>
-                                        <span
-                                            style="font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 8px; text-align: center;">
-                                            Cualquier cambio de texto, encuadre o template se refleja en vivo en este
-                                            visor.
-                                        </span>
-                                    </div>
+                                    <label class="sens-switch-ui">
+                                        <input type="checkbox" id="mktSafeZoneToggle">
+                                        <span class="sens-switch-slider"></span>
+                                    </label>
                                 </div>
-
-                                <!-- Botón Mobile para saltar directo a Vista Previa -->
-                                <button type="button" class="btn btn-primary btn-full sens-mkt-btn-go-preview"
-                                    id="btnMktGoToPreview"
-                                    style="margin-top: 12px; font-weight: 800; padding: 13px; font-size: 13px; background: #E5CBA7; color: #2A241C; border: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(229, 203, 167, 0.28);">
-                                    👁️ Ver Vista Previa y Descargar HD →
-                                </button>
                             </div>
 
-                            <!-- COLUMNA DERECHA / PREVIEW EN VIVO 1080p Y EXPORTACIÓN -->
+                            <!-- COLUMNA DERECHA: LIENZO WYSIWYG & EXPORTACIÓN UHD -->
                             <div class="sens-mkt-preview-col">
-                                <div class="sens-mkt-preview-sticky">
-                                    <!-- Botón Mobile para volver a editar -->
-                                    <button type="button" class="btn btn-outline btn-full btn-sm sens-mkt-back-to-edit"
-                                        id="btnMktGoToEdit"
-                                        style="margin-bottom: 12px; font-weight: 700; font-size: 12px; border-color: rgba(18, 18, 20, 0.15); color: #121214; border-radius: 10px; background: #FAF9F6; padding: 9px 12px;">
-                                        ← Volver a Modificar Textos o Estilo
-                                    </button>
-
-                                    <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-                                        <span
-                                            style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);"
-                                            id="mktPreviewResolutionLabel">
-                                            VISTA PREVIA EN VIVO • 1080×1920 (9:16)
+                                <div class="sens-mkt-stage-topbar">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span class="sens-mkt-status-dot"></span>
+                                        <span id="mktPreviewResolutionLabel" style="font-size: 10.5px; font-weight: 800; color: #121214; letter-spacing: 0.05em;">
+                                            VISTA PREVIA WYSIWYG • 9:16 (1080×1920)
                                         </span>
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <label
-                                                style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 10px; font-weight: 700; color: #9E7D4B; background: #F7EFE4; padding: 2px 7px; border-radius: 6px; user-select: none;"
-                                                title="Mostrar márgenes seguros de TikTok e Instagram (340px bottom, 220px top, 140px right)">
-                                                <input type="checkbox" id="mktToggleSafeZoneGuides"
-                                                    style="accent-color: #9E7D4B;">
-                                                <span>Safe Zones UI</span>
-                                            </label>
-                                            <span class="pill pill-champagne" id="mktActiveSceneIndicator"
-                                                style="font-size: 9.5px; padding: 2px 8px;">
-                                                Escena 1: 0s–3s (Hook)
-                                            </span>
+                                    </div>
+                                    <span style="font-size: 9.5px; color: #705B3E; font-weight: 700; background: #F7EFE4; padding: 2px 8px; border-radius: 6px;">
+                                        Edición Directa Habilitada
+                                    </span>
+                                </div>
+
+                                <!-- Contenedor del Lienzo Interactivo WYSIWYG -->
+                                <div class="sens-mkt-canvas-stage is-916" id="mktCanvasStageWrap">
+                                    <!-- Artboard Interactivo DOM (WYSIWYG con exactitud 1:1) -->
+                                    <div class="sens-mkt-artboard" id="mktInteractiveArtboard">
+                                        <!-- Capa de Fondo (Foto o Video) -->
+                                        <div class="mkt-artboard-media-box" id="mktArtboardMediaBox">
+                                            <img id="mktArtboardImg" class="mkt-artboard-media-asset" alt="SENS Template Background" src="img/hero-bg-opt.jpg">
+                                            <video id="mktArtboardVideo" class="mkt-artboard-media-asset" autoplay loop muted playsinline webkit-playsinline style="display: none;"></video>
                                         </div>
-                                    </div>
 
-                                    <!-- Contenedor del Canvas de Alta Resolución (1080x1350 o 1080x1920) -->
-                                    <div class="sens-mkt-canvas-stage is-916" id="mktCanvasStageWrap">
-                                        <canvas id="sensMarketingCanvas" width="1080" height="1920"></canvas>
-                                        <!-- Elementos multimedia ocultos que alimentan el canvas en RAM (Sin display:none para mantener activo el decodificador de video) -->
-                                        <video id="mktHiddenSourceVideo" muted loop playsinline webkit-playsinline
-                                            preload="auto"
-                                            style="position: fixed; top: -9999px; left: -9999px; width: 4px; height: 4px; opacity: 0; pointer-events: none; z-index: -100;"></video>
-                                    </div>
+                                        <!-- Gradientes Cinemáticos Somáticos -->
+                                        <div class="mkt-artboard-overlay-gradient" id="mktArtboardGradient"></div>
 
-                                    <!-- Botones de Exportación en Alta Definición -->
-                                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;"
-                                        id="mktExportActionsWrap">
-                                        <!-- Botón Principal de Video HD (Con animación y soporte MP4/WebM nativo) -->
-                                        <button type="button" class="btn btn-primary btn-full sens-mkt-btn-record-video"
-                                            id="btnMktRecordVideoWebm"
-                                            style="font-weight: 800; padding: 13px; font-size: 13px; background: #E5CBA7; color: #121214; border: none; border-radius: 12px; box-shadow: 0 4px 16px rgba(229, 203, 167, 0.35); display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                                            <span id="mktVideoExportIcon">🎬</span>
-                                            <span id="mktVideoExportText">Descargar Video Reel HD (MP4 / WebM)</span>
-                                        </button>
+                                        <!-- Guía Safe Zone (Activable/Desactivable) -->
+                                        <div class="mkt-safe-zone-guide" id="mktSafeZoneOverlay" style="display: none;">
+                                            <div class="mkt-safe-top"><small>ZONA RESERVADA HEADER (STORIES / REELS)</small></div>
+                                            <div class="mkt-safe-center"><span>ÁREA DE CONTENIDO SEGURO</span></div>
+                                            <div class="mkt-safe-bottom"><small>ZONA RESERVADA BOTONES / INPUTS</small></div>
+                                        </div>
 
-                                        <!-- Botón Secundario de Imagen HD (PNG) -->
-                                        <button type="button" class="btn btn-outline btn-full" id="btnMktExportPng"
-                                            style="font-weight: 700; padding: 10px; font-size: 12px; border-color: rgba(18, 18, 20, 0.18); color: #121214; background: #FFFFFF; border-radius: 10px;">
-                                            📸 Descargar Portada / Foto en HD (PNG)
-                                        </button>
-
-                                        <!-- Botón Secuencia Completa (Todas las diapositivas o escenas) -->
-                                        <button type="button" class="btn btn-outline btn-full" id="btnMktExportAllPack"
-                                            style="font-weight: 700; padding: 9px; font-size: 11.5px; border-color: #9E7D4B; color: #9E7D4B; background: transparent; border-radius: 10px;">
-                                            📦 Descargar Secuencia Completa (Todas las Escenas / Slides)
-                                        </button>
-
-                                        <!-- Barra de Progreso de Renderizado de Video (Visible solo durante grabación) -->
-                                        <div id="mktVideoRenderProgressBar"
-                                            style="display: none; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.1); border-radius: 10px; padding: 8px 12px; margin-top: 4px;">
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #121214; margin-bottom: 4px;">
-                                                <span id="mktVideoRenderStatusLabel">🎬 Renderizando video HD...</span>
-                                                <span id="mktVideoRenderPercent">0%</span>
+                                        <!-- Contenido Tipográfico y Componentes Somáticos -->
+                                        <div class="mkt-artboard-content" id="mktArtboardContent">
+                                            <!-- Marca de Agua SENS -->
+                                            <div class="mkt-brand-header">
+                                                <svg width="22" height="14" viewBox="0 0 24 16" fill="none">
+                                                    <path d="M2 14C5 14 7 10 10 10C13 10 15 14 18 14C21 14 22 12 22 12" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+                                                    <path d="M2 8C5 8 7 4 10 4C13 4 15 8 18 8C21 8 22 6 22 6" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+                                                    <path d="M2 2C5 2 7 1 10 1C13 1 15 2 18 2C21 2 22 1 22 1" stroke="#E5CBA7" stroke-width="2.2" stroke-linecap="round"/>
+                                                </svg>
+                                                <span class="mkt-brand-title">SENS <small>TRAIN &amp; WELLNESS</small></span>
                                             </div>
-                                            <div
-                                                style="width: 100%; height: 6px; background: rgba(18, 18, 20, 0.08); border-radius: 3px; overflow: hidden;">
-                                                <div id="mktVideoRenderProgressFill"
-                                                    style="width: 0%; height: 100%; background: #E5CBA7; transition: width 0.15s ease;">
+
+                                            <!-- Inset Card Flotante -->
+                                            <div class="mkt-glass-card" id="mktGlassCard">
+                                                <!-- Tag Kicker Editable -->
+                                                <div class="mkt-editable-field-wrap">
+                                                    <span class="mkt-tag-kicker" id="mktLiveTag" contenteditable="true" spellcheck="false" data-mkt-field="tag">
+                                                        SENS • PROTOCOLO
+                                                    </span>
                                                 </div>
+
+                                                <!-- Headline Editable -->
+                                                <div class="mkt-editable-field-wrap">
+                                                    <h2 class="mkt-headline" id="mktLiveTitle" contenteditable="true" spellcheck="false" data-mkt-field="title">
+                                                        Tu punto de partida no es tu destino.
+                                                    </h2>
+                                                </div>
+
+                                                <!-- Bajada / Subtítulo Editable -->
+                                                <div class="mkt-editable-field-wrap">
+                                                    <p class="mkt-bajada" id="mktLiveBajada" contenteditable="true" spellcheck="false" data-mkt-field="bajada">
+                                                        Recomposición corporal con precisión neuromuscular y dolor cero en CABA y Online.
+                                                    </p>
+                                                </div>
+
+                                                <!-- Contenedor de Métrica / Componente Específico (ECG, Cronómetro, etc.) -->
+                                                <div class="mkt-metric-container" id="mktLiveMetricWrap"></div>
+                                            </div>
+
+                                            <!-- Footer / CTA Strip -->
+                                            <div class="mkt-artboard-footer">
+                                                <span class="mkt-cta-pill">makesens.com.ar</span>
+                                                <span class="mkt-handle">@sens.train.ba</span>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Modal Lightbox de Inspección HD en Vivo -->
-                        <div class="sens-mkt-lightbox-modal" id="mktCanvasLightboxModal">
-                            <div
-                                style="position: relative; max-width: 94vw; max-height: 94vh; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                                <button type="button" id="btnMktCloseLightbox"
-                                    style="position: absolute; top: -38px; right: 0; background: transparent; border: none; color: #FFFFFF; font-size: 28px; cursor: pointer; padding: 4px 8px; line-height: 1;"
-                                    title="Cerrar">✕</button>
-                                <div
-                                    style="font-size: 11px; font-weight: 800; color: #E5CBA7; letter-spacing: 0.1em; text-transform: uppercase;">
-                                    INSPECCIÓN EN PANTALLA COMPLETA
+                                    <!-- Canvas Oculto para Renderizado UHD Offscreen -->
+                                    <canvas id="sensMarketingCanvas" width="2160" height="3840" style="display: none;"></canvas>
                                 </div>
-                                <canvas id="mktLightboxCanvas" width="540" height="960"
-                                    style="max-height: 74vh; max-width: 86vw; aspect-ratio: 9/16; border-radius: 14px; border: 1.5px solid #E5CBA7; box-shadow: 0 16px 48px rgba(0,0,0,0.9); display: block; background: #080809;"></canvas>
-                                <div style="display: flex; gap: 8px; width: 100%; max-width: 380px;">
-                                    <button type="button" class="btn btn-outline" id="btnMktLightboxStay"
-                                        style="flex: 1; border-color: rgba(255,255,255,0.25); color: #FFFFFF; font-weight: 700; font-size: 11.5px; padding: 10px; border-radius: 10px;">
-                                        ← Seguir Editando
+
+                                <!-- Botones de Exportación Ultra High Definition (UHD 4K) -->
+                                <div class="sens-mkt-export-actions-wrap" id="mktExportActionsWrap" style="margin-top: 14px; display: flex; flex-direction: column; gap: 8px;">
+                                    <!-- Botón Principal: Imagen UHD 300 DPI -->
+                                    <button type="button" class="btn btn-primary btn-full sens-mkt-btn-record-video" id="btnMktExportPngUHD" style="font-weight: 800; padding: 13px; font-size: 13px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #121214; border: none; border-radius: 12px; box-shadow: 0 4px 16px rgba(229, 203, 167, 0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        <svg width="18" height="18" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                        <span>Descargar Imagen UHD (PNG 300 DPI • 2160×3840)</span>
                                     </button>
-                                    <button type="button" class="btn btn-primary" id="btnMktLightboxConfirm"
-                                        style="flex: 1.5; background: #E5CBA7; color: #121214; font-weight: 800; font-size: 11.5px; padding: 10px; border-radius: 10px; border: none; box-shadow: 0 4px 14px rgba(229, 203, 167, 0.3);">
-                                        👁️ Ir a Descargar HD →
+
+                                    <!-- Botón Secundario: Grabar Video UHD (Si el fondo es video) -->
+                                    <button type="button" class="btn btn-outline btn-full" id="btnMktRecordVideoUHD" style="font-weight: 700; padding: 11px; font-size: 12px; background: #FFFFFF; color: #121214; border: 1px solid rgba(18, 18, 20, 0.15); border-radius: 12px; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 8px;">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" ry="2" ry="2"/></svg>
+                                        <span>Grabar Clip de Video UHD (MP4 / WebM 60fps)</span>
+                                    </button>
+
+                                    <!-- Botón Terciario: Capturar Fotograma UHD -->
+                                    <button type="button" class="btn btn-outline btn-full" id="btnMktCaptureFrameUHD" style="font-weight: 700; padding: 9px; font-size: 11.5px; background: transparent; color: #575659; border: 1px dashed rgba(18, 18, 20, 0.18); border-radius: 10px; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 6px;">
+                                        <span>📸 Capturar Fotograma Actual en UHD</span>
                                     </button>
                                 </div>
                             </div>
@@ -9802,7 +9483,8 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script src="app.js?v=16.0"></script>
+    <script src="marketing_templates_catalog.js?v=1.0"></script>
+    <script src="app.js?v=17.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

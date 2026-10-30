@@ -21893,3100 +21893,860 @@ function saveCoachDbItemEditorChanges() {
 // Diseñado bajo dirección creativa de lujo: Tipografías masivas, composición espacial diversa,
 // overlays adaptables y 100% de legibilidad en cualquier foto o video.
 // =============================================================================
-const SENS_MARKETING_TEMPLATES = [
-    {
-        id: 'tpl_hook_bold_statement',
-        name: '1. Hook Bold Statement (Centro 94px)',
-        badge: 'HOOK DISRUPTIVO',
-        desc: 'Titular monumental centrado de alto impacto stop-scroll. Frena el dedo en 0.2s.',
-        spatialArchetype: 'hero_center_big',
-        overlayMode: 'full_wash',
-        overlayTitle: 'Filtro Focal Completo (Optimizado para Titular Centrado 94px)',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'VERDAD BIOLÓGICA • SENS', headline: 'ENTRENÁS DURO. PARECÉS EL MISMO.', sub: 'El 92% fatiga el músculo equivocado por un error de 3cm en la cadera.', c1: 'Cadencia 3-1-1-0', c2: 'Fuerza Real', c3: '' },
-            { eyebrow: 'EL SECRETO TÉCNICO', headline: 'MENOS SERIES BASURA. MÁS TENSIÓN REAL.', sub: 'Controlá la bajada 3 segundos y frená abajo. El músculo crece bajo tensión, no con inercia.', c1: 'Cero Lesiones', c2: 'RIR 2 Clínico', c3: '' },
-            { eyebrow: 'MAKES SENS • CABA & APP', headline: '¿QUERÉS DEJAR DE ADIVINAR EN EL GYM?', sub: 'Evaluación articular presencial 1:1 en Buenos Aires o programación guiada en la App.', c1: 'Cupos Limitados', c2: 'Escribime SENS →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'STOP-SCROLL • 1/4', headline: 'ENTRENÁS DURO. PARECÉS EL MISMO.', sub: 'Por qué pasar 2 horas en el gimnasio no te está dando la estructura que buscás.', c1: 'Biomecánica', c2: 'Fuerza Real', c3: '' },
-            { eyebrow: 'EL ERROR • 2/4', headline: 'LEVANTAR KILOS CON INERCIA Y REBOTE', sub: 'Cuando rebotás en el fondo, el tendón absorbe el impacto y el músculo no trabaja.', c1: 'Evitá Rebotes', c2: 'Cuidá Rodillas', c3: '' },
-            { eyebrow: 'MÉTODO SENS • 3/4', headline: 'CADENCIA 3-1-1-0 + PAUSA ISOMÉTRICA', sub: '3 segundos al bajar, 1 segundo abajo y subida explosiva exhalando.', c1: '+Tensión Real', c2: '~42 kcal / 4 sets', c3: '' },
-            { eyebrow: 'TU PLAN • 4/4', headline: '¿ENTRENAMOS JUNTOS? MAKES SENS.', sub: 'Sumate hoy a los entrenamientos 1:1 en CABA o desde la App SENS.', c1: 'Cupos Activos', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'El 92% de las personas en el gimnasio entrena duro pero parece exactamente igual mes tras mes...\n\n¿Por qué? Porque confunden sudar y mover kilos con generar tensión mecánica real en las fibras correctas.\n\nEn SENS eliminamos las series basura, calibramos la cadencia (3-1-1-0) y medimos cada repetición para que tu tiempo rinda de verdad.\n\nComentá "SENS" o escribime por mensaje directo para coordinar tu evaluación inicial (Presencial CABA o App SENS).'
-    },
-    {
-        id: 'tpl_lower_third_pro',
-        name: '2. Lower-Third Biomecánico (Video Focus)',
-        badge: 'ANÁLISIS MOTOR',
-        desc: '70% de pantalla libre para video de ejecución motora. Titular protegido al pie.',
-        spatialArchetype: 'lower_third_clean',
-        overlayMode: 'lower_third',
-        overlayTitle: 'Gradiente Inferior Limpio (Video 70% Despejado)',
-        defaultLayers: { branding: false, eyebrow: true, headline: true, subtitle: false, chips: true },
-        scenes: [
-            { eyebrow: 'ANÁLISIS MOTOR', headline: 'DEJÁ DE TIRAR CON LOS BRAZOS', sub: '', c1: 'Depresión Escapular', c2: 'Dorsal Ancho', c3: '' },
-            { eyebrow: 'EJECUCIÓN PERFECTA', headline: 'CLAVÁ LOS HOMBROS HACIA ABAJO', sub: '', c1: 'Cero Balanceo', c2: 'Tensión Máxima', c3: '' },
-            { eyebrow: 'METODOLOGÍA SENS', headline: 'CONSTRUÍ UN CUERPO QUE RINDE', sub: '', c1: 'App SENS', c2: 'Escribime TÉCNICA →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'TRACCIÓN • 1/4', headline: 'POR QUÉ TU ESPALDA SIGUE PLANA', sub: 'El error en dominadas y remos que el 90% comete sin darse cuenta.', c1: 'Dorsal Ancho', c2: 'Biomecánica', c3: '' },
-            { eyebrow: 'EL VICIO • 2/4', headline: 'FLEXIONAR CODOS SIN CLAVAR ESCÁPULAS', sub: 'Fatiga tus antebrazos y bíceps pero deja dormido el dorsal ancho.', c1: 'Evitá Compensar', c2: 'Control Motor', c3: '' },
-            { eyebrow: 'CORRECCIÓN • 3/4', headline: 'DEPRESIÓN ESCAPULAR + PECHO ARRIBA', sub: 'Iniciá cada repetición bajando los hombros hacia los bolsillos.', c1: 'Técnica SENS', c2: 'RIR 2 Clínico', c3: '' },
-            { eyebrow: 'FEEDBACK • 4/4', headline: 'SUBÍ TU VIDEO A LA APP SENS', sub: 'Corrección biomecánica directa por Nico Maralle en tu celular.', c1: 'App SENS', c2: 'Escribime TÉCNICA →', c3: '' }
-        ],
-        caption: 'Si hacés dominadas o jalones y solo sentís los antebrazos y el cuello, estás tirando con los músculos equivocados...\n\nLa espalda solo se activa cuando aprendés a deprimir y fijar las escápulas antes de que los brazos doblen.\n\nGuardá este video para tu próxima sesión de tracción y probá este ajuste.\n\nEscribime "TÉCNICA" por DM si querés que analice tu ejecución.'
-    },
-    {
-        id: 'tpl_magazine_split',
-        name: '3. Portada Revista Split (Top & Bottom)',
-        badge: 'PORTADA REVISTA',
-        desc: 'Titular editorial arriba y rationale al pie. Centro 100% libre para ver al atleta.',
-        spatialArchetype: 'magazine_split',
-        overlayMode: 'magazine_split',
-        overlayTitle: 'Doble Viñeta Top/Bottom (Portada Revista Split)',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'PORTADA EDITORIAL • 2026', headline: 'EL 89% ENTRENA COMO EN 1995', sub: 'Volumen excesivo, máquinas obsoletas y cero control de tempo. La ciencia del movimiento cambió.', c1: 'Quiet Luxury', c2: 'Ciencia SENS', c3: '' },
-            { eyebrow: 'PARADIGMA SENS', headline: 'CALIDAD NEUROMUSCULAR > VOLUMEN CIEGO', sub: '3 series intensas al fallo técnico superan a 2 horas de series vacías con el celular en la mano.', c1: 'Sobrecarga Medida', c2: 'Alta Eficiencia', c3: '' },
-            { eyebrow: 'PROGRAMA EXCLUSIVO', headline: 'EVALUÁ TU ESTRUCTURA FÍSICA', sub: 'Diagnóstico lumbopélvico presencial en CABA o seguimiento online con Nico.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'PORTADA SENS • 1/4', headline: 'EL 89% DE LOS PLANES ESTÁ OBSOLETO', sub: 'Por qué las rutinas de culturismo tradicional no funcionan para profesionales ocupados.', c1: 'Entrenamiento', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'EL MITO • 2/4', headline: 'MÁS SERIES NO ES MÁS MÚSCULO', sub: 'El exceso de volumen genera fatiga sistémica sin añadir estímulo de crecimiento.', c1: 'Fatiga vs Estímulo', c2: 'SNC Seguro', c3: '' },
-            { eyebrow: 'EL MÉTODO • 3/4', headline: 'SERIES EFECTIVAS EN RIR 1-2', sub: 'Llegar cerca del límite con técnica intachable produce 3x más resultados en la mitad del tiempo.', c1: 'Precisión', c2: 'Longevidad', c3: '' },
-            { eyebrow: 'ACCESO • 4/4', headline: 'PLANES A MEDIDA EN LA APP SENS', sub: 'Accedé a la plataforma con rutinas personalizadas por $19.900 al mes.', c1: 'App SENS', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'El mito de que necesitás pasar 2 horas todos los días en el gimnasio fue creado en los años 90 por culturistas farmacológicos...\n\nPara quien trabaja, tiene familia y busca un físico atlético, funcional y con articulaciones sanas, la respuesta es simple: calidad neuromuscular extrema, cadencia controlada y sobrecarga progresiva medida.\n\nEscribime "SENS" por DM para diseñar tu programación personalizada.'
-    },
-    {
-        id: 'tpl_glass_card',
-        name: '4. Tarjeta Glassmorphic (Placa Titanio)',
-        badge: 'TARJETA GLASS',
-        desc: 'Placa oscura translúcida con borde de titanio. Contraste absoluto sobre fondos con luz.',
-        spatialArchetype: 'glass_card',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Placa Frosted Obsidian + Contraste Suave',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'DIAGNÓSTICO ERGONÓMICO', headline: 'SI PASÁS +7 HORAS SENTADO, TU POSTURA ESTÁ MURIENDO', sub: 'Amnesia glútea, acortamiento de psoas y fatiga cervical. El chasis humano no fue hecho para una silla.', c1: 'Salud Lumbar', c2: 'Movilidad 90/90', c3: '' },
-            { eyebrow: 'PROTOCOLO DE RESCATE', headline: 'RESET POSTURAL EN 8 MINUTOS', sub: 'Descompresión torácica, activación de core anti-rotación y extensión de cadera antes de tocar peso.', c1: 'Core Activo', c2: 'Cero Dolor', c3: '' },
-            { eyebrow: 'SESIONES SENS', headline: 'RECUPERÁ TU AGILIDAD DE ATLETA', sub: 'Programas pensados para fundadores, programadores y ejecutivos de alta exigencia.', c1: 'Presencial / Online', c2: 'Escribime POSTURA →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'POSTURA & SALUD • 1/4', headline: 'SI TRABAJÁS SENTADO, LEÉ ESTO', sub: 'Por qué elongar 5 minutos no revierte 8 horas de compresión discal diaria.', c1: 'Ergonomía', c2: 'Salud Lumbar', c3: '' },
-            { eyebrow: 'CAUSA RAÍZ • 2/4', headline: 'AMNESIA GLÚTEA Y RIGIDEZ DE PSOAS', sub: 'Cuando la cadera no extiende, tu zona lumbar compensa arqueándose en cada paso.', c1: 'Biomecánica', c2: 'Causa Real', c3: '' },
-            { eyebrow: 'SOLUCIÓN • 3/4', headline: 'BIRD-DOG + BISAGRA DE CADERA PURA', sub: 'Reactivá tu faja abdominal profunda y aprendé a moverte desde la articulación coxofemoral.', c1: 'Fuerza Segura', c2: 'Longevidad', c3: '' },
-            { eyebrow: 'EVALUACIÓN • 4/4', headline: 'DIAGNÓSTICO 360° DE MOVIMIENTO', sub: 'Coordiná tu sesión presencial en CABA o plan online personalizado.', c1: 'Nico Maralle', c2: 'Escribime POSTURA →', c3: '' }
-        ],
-        caption: 'El sedentarismo de escritorio no solo arruina tu postura: desconecta tus glúteos y transfiere todo el estrés a tu columna lumbar y tu cuello...\n\nIr a levantar peso al gimnasio con una cadera bloqueada es receta para una hernia discal.\n\nEn SENS aplicamos protocolos de movilidad articular y activación neuromuscular previa para que entrenes pesado sin una pizca de dolor.\n\nEscribime "POSTURA" por DM para evaluar tu caso.'
-    },
-    {
-        id: 'tpl_stat_monumental',
-        name: '5. Spotlight Cifra Única (172px Display)',
-        badge: 'MÉTRICA 172PX',
-        desc: 'Dato o tempo numérico masivo (ej: 0.00% o 3-1-1-0). Autoridad científica irrefutable.',
-        spatialArchetype: 'stat_monumental',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Viñeta Profunda para Cifra Monumental 172px',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'MITO FISIOLÓGICO DERRIBADO', headline: 'DE GRASA QUEMADA SUDANDO EN LA CINTA', sub: 'El sudor es solo pérdida de agua por termorregulación. La grasa se oxida construyendo masa muscular y EPOC.', c1: '0.00%', c2: '~11 kcal / serie', c3: '+EPOC 24hs' },
-            { eyebrow: 'GASTO REAL MEDIDO', headline: 'SERIES PESADAS = MÁS METABOLISMO POR 36HS', sub: 'El estímulo de fuerza crea microtensiones que demandan energía continua durante la recuperación.', c1: '3-1-1-0', c2: 'Fuerza Base', c3: 'Metabolismo Basal' },
-            { eyebrow: 'TECNOLOGÍA SENS', headline: 'MÉTODOS CIENTÍFICOS EN TU CELULAR', sub: 'Registro de kcal por serie, control de descanso y nutrición de precisión en la App.', c1: '$19.900', c2: 'Makes Sens', c3: 'Probala Hoy →' }
-        ],
-        slides: [
-            { eyebrow: 'METABOLISMO • 1/4', headline: 'SUDAR NO ES QUEMAR GRASA (ES PERDER AGUA)', sub: 'Desmitificando el cardio eterno frente a la hipertrofia inteligente.', c1: '0.00%', c2: 'Ciencia SENS', c3: '' },
-            { eyebrow: 'EL CÁLCULO • 2/4', headline: 'ENTRE 8 Y 12 KCAL POR SERIE EFECTIVA', sub: 'En ejercicios compuestos de piernas y espalda con cargas progresivas y tempo controlado.', c1: '~11 KCAL', c2: 'Alta Demanda', c3: '' },
-            { eyebrow: 'EL SECRETO • 3/4', headline: 'TU MÚSCULO OXIDA CALORÍAS DURMIENDO', sub: 'Cada kilo de masa muscular magra eleva tu tasa metabólica basal las 24 horas del día.', c1: 'Metabolismo', c2: 'Sostenible', c3: '' },
-            { eyebrow: 'EN TU CELU • 4/4', headline: 'RUTINAS CON KCAL Y MACROS EN LA APP', sub: 'Activá tu suscripción mensual por $19.900 y entrená sabiendo qué hacer.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: '¿Sabías que una serie de sentadillas o peso muerto con cadencia 3-1-1-0 gasta entre 8 y 12 kcal mecánicas, pero eleva tu metabolismo basal durante las 36 horas siguientes?\n\nEn SENS no te mandamos a correr 45 minutos aburrido en una cinta. Diseñamos estímulos de fuerza que convierten tu cuerpo en un motor metabólico eficiente.\n\nSumate desde el link de la bio o escribime "SENS".'
-    },
-    {
-        id: 'tpl_quote_editorial',
-        name: '6. Cita Editorial Viral (Comillas SENS)',
-        badge: 'CITA EDITORIAL',
-        desc: 'Comillas monumentales champagne y tipografía pura. Filosofía de alto impacto.',
-        spatialArchetype: 'quote_editorial',
-        overlayMode: 'full_wash',
-        overlayTitle: 'Lienzo Oscuro Minimalista para Cita Editorial',
-        defaultLayers: { branding: true, eyebrow: false, headline: true, subtitle: true, chips: false },
-        scenes: [
-            { eyebrow: '', headline: 'NO TE FALTA MOTIVACIÓN. TE FALTA UN SISTEMA QUE RESPETE TU TIEMPO.', sub: '— NICO MARALLE • MAKES SENS', c1: '', c2: '', c3: '' },
-            { eyebrow: '', headline: 'UN PLAN MEDIOCRE CUMPLIDO 1 AÑO SUPERA AL PLAN PERFECTO ABANDONADO EN 2 SEMANAS.', sub: '— LA ADHERENCIA ES LA ÚNICA MÉTRICA REAL', c1: '', c2: '', c3: '' },
-            { eyebrow: '', headline: 'NO ENTRENES PARA SOBREVIVIR EN EL GIMNASIO. ENTRENÁ PARA DOMINAR EN TU VIDA.', sub: '— HEY, ¿ENTRENAMOS JUNTOS? MAKES SENS.', c1: '', c2: '', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'MENTALIDAD • 1/4', headline: 'LA DISCIPLINA ES UNA CONSECUENCIA DEL DISEÑO', sub: 'Cuando el plan encaja en tu rutina diaria, ser constante deja de ser un esfuerzo titánico.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'LA TRAMPA • 2/4', headline: 'EL "TODO O NADA" QUE TE HACE ABANDONAR SIEMPRE', sub: 'Creer que faltar un día arruina la semana es el veneno mental que te mantiene reiniciando.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'EL SISTEMA • 3/4', headline: 'MÍNIMO INNEGOCIABLE: 3 SESIONES + PROTEÍNA', sub: 'Menos variables, ejecutadas con maestría y sin excusas.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'COMENZÁ HOY • 4/4', headline: 'DISEÑEMOS UN PLAN QUE ENCAJE EN TU VIDA', sub: 'Presencial CABA, Online 1:1 o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'No buscamos que vivas adentro de un gimnasio ni que peses cada hoja de lechuga.\n\nBuscamos que el entrenamiento y la nutrición te den más energía, postura impecable y fuerza mental para rendir en tus proyectos, tu empresa y tu familia.\n\nHey, ¿entrenamos juntos? Makes Sens.'
-    },
-    {
-        id: 'tpl_story_cupos_vip',
-        name: '7. Conversión Directa / Cupos Story',
-        badge: 'STORY VIP',
-        desc: 'Zona central despejada para stickers nativos y llamado directo a mensaje privado.',
-        spatialArchetype: 'story_callout',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Callout Inferior + Espacio Libre para Stickers IG',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'AGENDA PRIVADA • CABA & ONLINE', headline: 'SOLO 3 LUGARES PARA SEGUIMIENTO 1:1', sub: 'No es masivo. Planificación biomecánica y nutricional personalizada para quienes buscan resultados definitivos.', c1: 'Solo 3 Lugares', c2: '', c3: 'Escribime PLAN →' },
-            { eyebrow: 'PROCESO DE ADMISIÓN', headline: 'DIAGNÓSTICO 360° + AJUSTES CADA 7 DÍAS', sub: 'Monitoreo diario de fatiga, corrección en video y periodización adaptada a tu agenda.', c1: 'Fuerza & Estructura', c2: '', c3: '100% a Medida' },
-            { eyebrow: 'POSTULATE HOY', headline: 'ESCRIBIME "PLAN" POR MENSAJE DIRECTO', sub: 'Evaluamos tu historial articular y diseñamos tu plan de acción inmediato.', c1: 'Nico Maralle', c2: '', c3: 'Mensaje Directo →' }
-        ],
-        slides: [
-            { eyebrow: 'CUPOS DEL MES • 1/4', headline: '3 NUEVOS LUGARES PARA SEGUIMIENTO 1:1', sub: 'Para profesionales que buscan acompañamiento directo paso a paso.', c1: 'Solo 3 Lugares', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'PASO 1 • 2/4', headline: 'EVALUACIÓN DE POSTURA, FUERZA Y HÁBITOS', sub: 'Detectamos qué te frenó hasta hoy y diseñamos una hoja de ruta clínica realista.', c1: 'Ficha 360°', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'PASO 2 • 3/4', headline: 'EJECUCIÓN GUIADA Y AJUSTES SEMANALES', sub: 'Monitoreamos tus cargas, tu nutrición y tu recuperación semana a semana en la App.', c1: 'Cero Improvisar', c2: '', c3: 'Deslizá →' },
-            { eyebrow: 'RESERVÁ TU LUGAR • 4/4', headline: 'ENVIAME "PLAN" POR DM O WHATSAPP', sub: 'Los cupos presenciales en CABA se asignan por estricto orden de consulta.', c1: 'Nico Maralle', c2: '', c3: 'Escribime PLAN →' }
-        ],
-        caption: 'Abrimos 3 lugares este mes para seguimiento personalizado 1 a 1 (Presencial CABA o Programa Online Premium).\n\nSi querés dejar de adivinar en el gimnasio y seguir un plan biomecánico y nutricional diseñado específicamente para tu cuerpo y tu agenda, escribime "PLAN" por DM o WhatsApp.'
-    },
-    {
-        id: 'tpl_carrusel_swipe_guide',
-        name: '8. Carrusel Secuencia Swipe (4:5 Feed)',
-        badge: 'CARRUSEL SWIPE',
-        desc: 'Secuencia pedagógica de 4 pasos para feed. Retención y guardados máximos.',
-        spatialArchetype: 'editorial_bottom',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Gradiente Progresivo Inferior para Swipe Feed',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: false },
-        scenes: [
-            { eyebrow: 'REGLA INQUEBRANTABLE', headline: 'EL DOLOR AL ENTRENAR NO ES PROGRESO', sub: 'Es aviso de lesión. La verdadera fuerza se construye con articulaciones sanas y control motor.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'EL GRAN ERROR', headline: 'FORZAR RANGOS QUE TU CADERA NO TIENE', sub: 'Bajar más de lo que tu morfología permite solo redondea tu columna y descarga el glúteo.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'MÉTODO SENS', headline: 'CADENCIA CONTROLADA + RANGO ACTIVO', sub: 'El estímulo hipertrófico máximo ocurre en estiramiento con carga, no al rebotar.', c1: '', c2: '', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'VERDAD INCÓMODA • 1/4', headline: 'EL DOLOR AL ENTRENAR NO ES PROGRESO', sub: 'La diferencia entre terminar destruido y construir adaptación neuromuscular real.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'EL ERROR • 2/4', headline: 'FORZAR PROFUNDIDAD A COSTA DE TU LUMBAR', sub: 'Cuando la pelvis retrovierte (butt-wink), tus discos intervertebrales sufren una cizalla peligrosa.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'LA SOLUCIÓN • 3/4', headline: 'ENCONTRÁ TU RANGO ACTIVO INDIVIDUAL', sub: 'Pausá exactamente antes de que la pelvis bascule. Ese es tu rango de máxima tensión y cero dolor.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'PROGRAMÁ BIEN • 4/4', headline: 'ENTRENÁ CON UN SISTEMA QUE HACE SENTIDO', sub: 'Presencial CABA, Online o Suscripción App $19.900/mes.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'El dogma del "no pain no gain" lesionó a más personas de las que ayudó.\n\nEl dolor agudo en una articulación no es debilidad abandonando el cuerpo: es tu sistema nervioso avisándote que estás destruyendo tejido conectivo.\n\nEn SENS entrenamos con inteligencia biomecánica para que levantes más peso, progreses año tras año y tus rodillas y espalda sigan impecables a los 60 años.\n\nComentá "SENS" o escribime por DM.'
-    },
-    {
-        id: 'tpl_como_no_vs_si',
-        name: '9. Cómo NO vs. Cómo SÍ (Split Box)',
-        badge: 'COMPARATIVA TÉCNICA',
-        desc: 'Bloque doble: error biomecánico con ✕ en alerta y solución ✓ en Champagne Gold.',
-        spatialArchetype: 'split_comparative',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Doble Tarjeta Técnica (✕ Alerta vs ✓ Champagne)',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'CORRECCIÓN BIOMECÁNICA', headline: 'REBOTAR EN LA SENTADILLA', sub: 'Pausar 1s en el fondo con cadencia 3-1-1-0 recluta 2.4x más fibras y salva tus meniscos.', c1: '✕ CÓMO NO: Con inercia', c2: '✓ MÉTODO SENS: Pausa 1s', c3: 'RIR 2 Seguro' },
-            { eyebrow: 'TRAYECTORIA DE BARRA', headline: 'ABRIR CODOS A 90° EN BANCO', sub: 'Cerrá a 45° con retracción escapular activa para aislar el pectoral y proteger el manguito rotador.', c1: '✕ CÓMO NO: Codos en T', c2: '✓ MÉTODO SENS: Codos 45°', c3: 'Cero Dolor' },
-            { eyebrow: 'SOBRECARGA MEDIDA', headline: 'SUBIR PESO SIN CONTROL DE FORMA', sub: 'Registrá cada kilo y repetición en la App SENS. La sobrecarga progresiva es técnica, no ego.', c1: '✕ CÓMO NO: Ego Lifting', c2: '✓ MÉTODO SENS: Sobrecarga', c3: 'Escribime SENS →' }
-        ],
-        slides: [
-            { eyebrow: 'ANÁLISIS CLÍNICO • 1/4', headline: 'CÓMO NO VS CÓMO SÍ EN PRESS BANCA', sub: 'El error en la trayectoria que te provoca pinzamiento subacromial de hombro.', c1: '✕ Codos 90°', c2: '✓ Codos 45°', c3: '' },
-            { eyebrow: 'EL ERROR • 2/4', headline: '✕ ABRIR LOS CODOS EN T INESTABLE', sub: 'Aumenta el torque lesivo sobre el labrum y disminuye la activación del pectoral mayor.', c1: 'Estrés Articular', c2: 'Riesgo Alto', c3: '' },
-            { eyebrow: 'LA CORRECCIÓN • 3/4', headline: '✓ RETRACCIÓN ESCAPULAR + CODOS A 45°', sub: 'Clavá los omóplatos en el banco y descendé con una trayectoria en diagonal limpia.', c1: '+Estabilidad', c2: '+Reclutamiento', c3: '' },
-            { eyebrow: 'ENTRENÁ BIEN • 4/4', headline: 'MÉTODO SENS PRESENCIAL Y EN APP', sub: 'Corrección de técnica personalizada y plan a tu medida con Nico.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'La diferencia entre romperte el hombro o construir un torso fuerte está en 45 grados de ángulo de codo...\n\nEn SENS desarmamos cada movimiento básico para que entrenes con biomecánica de precisión, no con hábitos prestados de internet.\n\nComentá "TÉCNICA" o escribime para evaluar tu caso.'
-    },
-    {
-        id: 'tpl_presencial_caba_vip',
-        name: '10. Turnos Presenciales CABA (Quiet Luxury)',
-        badge: 'CONVOCATORIA VIP',
-        desc: 'Convocatoria exclusiva para entrenamiento 1:1 en Palermo/Belgrano. Sobriedad editorial.',
-        spatialArchetype: 'hero_center_big',
-        overlayMode: 'full_wash',
-        overlayTitle: 'Filtro Focal de Alta Gama para Convocatoria VIP',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'EXCLUSIVO BUENOS AIRES • 2026', headline: 'PRECIO ALTO. CUPO CERRADO. SOLO 4 HOMBRES.', sub: 'Entrenamiento 1:1 de precisión biomecánica en estudio privado (Palermo / Belgrano).', c1: 'Solo 4 Lugares', c2: 'Escribime CABA →', c3: '' },
-            { eyebrow: 'ESTÁNDAR DE ÉLITE', headline: 'CERO MÁQUINAS VACÍAS. CERO IMPROVISACIÓN.', sub: 'Testeo de rangos articulares, corrección electromotora y nutrición medida al gramo.', c1: 'Diagnóstico 360°', c2: 'Nico Maralle', c3: '' },
-            { eyebrow: 'POSTULACIÓN DIRECTA', headline: 'ESCRIBIME "CABA" POR MENSAJE PRIVADO', sub: 'Las admisiones se evalúan por orden de contacto y compatibilidad de horarios.', c1: 'Makes Sens', c2: 'Mensaje Directo →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'CABA 2026 • 1/4', headline: 'APERTURA DE CUPOS PRESENCIALES 1:1', sub: 'Entrenamiento personal de alta gama en Buenos Aires con Nico Maralle.', c1: 'Solo 4 Cupos', c2: 'Presencial CABA', c3: '' },
-            { eyebrow: 'DIAGNÓSTICO • 2/4', headline: 'EVALUACIÓN BIOMECÁNICA COMPUTARIZADA', sub: 'Testeo de movilidad de cadera, tobillo, columna y patrones de fuerza fundamentales.', c1: 'Ficha Clínica', c2: 'Cero Lesiones', c3: '' },
-            { eyebrow: 'PROGRAMACIÓN • 3/4', headline: 'SEGUIMIENTO DIARIO EN LA APP SENS', sub: 'Cada sesión presencial se complementa con tu dashboard de progreso en la App.', c1: 'Dashboard SENS', c2: '100% Personalizado', c3: '' },
-            { eyebrow: 'ACCESO • 4/4', headline: 'ESCRIBIME "CABA" POR MENSAJE DIRECTO', sub: 'Cupos estrictamente limitados por disponibilidad horaria. Hace sentido.', c1: 'Nico Maralle', c2: 'Escribime CABA →', c3: '' }
-        ],
-        caption: 'Abrimos la agenda para nuevas admisiones presenciales 1 a 1 en Buenos Aires (estudio privado en Palermo / Belgrano).\n\nCada proceso inicia con una evaluación biomecánica exhaustiva para calibrar rangos articulares y diseñar una periodización científica adaptada a tus objetivos y horarios.\n\nEscribime "CABA" por mensaje directo para coordinar tu entrevista inicial.'
-    },
-    {
-        id: 'tpl_kinetic_brutalism',
-        name: '11. Nike Brutalism Kinetic (96px Shock)',
-        badge: 'NIKE BRUTALISM',
-        desc: 'Tipografía ultra pesada escalonada con sombras duras. Máxima agresividad visual y CTR.',
-        spatialArchetype: 'kinetic_brutalism',
-        overlayMode: 'full_wash',
-        overlayTitle: 'Filtro Dinámico Brutalista para Impacto Inmediato',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'ESTÁNDAR NO NEGOCIABLE', headline: 'O ENTRENÁS CON SENTIDO O SOS TURISTA DEL GYM', sub: 'El progreso muscular no negocia con tu pereza ni con tus repeticiones a medias.', c1: '0% Excusas', c2: 'Fuerza Real', c3: '' },
-            { eyebrow: 'LA VERDAD MECÁNICA', headline: 'CADA SERIE QUE NO QUEMA ES TIEMPO PERDIDO', sub: 'Si no estás a 2 repeticiones del fallo técnico real, tu cuerpo no tiene motivo biológico para cambiar.', c1: 'RIR 1-2', c2: 'Sobrecarga', c3: '' },
-            { eyebrow: 'MAKES SENS', headline: 'SUBÍ TU NIVEL HOY. NO ESPERES EL LUNES.', sub: 'Entrenamiento guiado por Nico Maralle en Buenos Aires o en la App SENS.', c1: 'Comenzar →', c2: 'Makes Sens', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'BRUTALISMO • 1/4', headline: 'DEJÁ DE PASEAR POR EL GIMNASIO', sub: 'Entrenar no es mirar el celular entre descansos de 6 minutos.', c1: 'Foco Total', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'ESTÍMULO • 2/4', headline: 'EL MÚSCULO REQUIERE TENSIÓN MECÁNICA', sub: 'Llevar cada repetición con cadencia precisa es la única forma de estimular síntesis proteica.', c1: '3-1-1-0', c2: 'Ciencia SENS', c3: '' },
-            { eyebrow: 'SISTEMA • 3/4', headline: 'MÉTODOS PROBADOS EN 500+ ATLETAS', sub: 'Rutinas medidas al detalle con registro de sobrecarga progresiva en la App.', c1: 'App SENS', c2: 'RIR 2 Clínico', c3: '' },
-            { eyebrow: 'UNIRTE • 4/4', headline: 'DESCARGÁ LA APP SENS O CONSULTÁ 1:1', sub: 'Subí tu estándar hoy mismo. Link en bio o mensaje privado.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'O entrenás con sentido biomecánico o sos un turista del gimnasio que gasta 2 horas al día para seguir igual...\n\nEn SENS no hay lugar para repeticiones a medias ni para series con el celular en la mano. Medimos cada serie, calibramos el tempo y te exigimos lo que tu cuerpo es capaz de dar.\n\nComentá "SENS" o escribime por mensaje directo para sumarte hoy.'
-    },
-    {
-        id: 'tpl_polaroid_luxury',
-        name: '12. Polaroid Titanio & Firma Nico',
-        badge: 'POLAROID LUXURY',
-        desc: 'Marco fotográfico análogo de ultra lujo con paspartú titanio y firma editorial.',
-        spatialArchetype: 'polaroid_luxury',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Paspartú Titanio Editorial con Sello de Autor',
-        defaultLayers: { branding: false, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'CÓDIGO POSTURAL', headline: 'EL CUERPO HABLA ANTES DE QUE DIGAS UNA PALABRA', sub: 'Hombros atrás, caja torácica erguida y mirada al frente. El estándar físico que impone respeto.', c1: 'Postura', c2: 'Estructura', c3: '' },
-            { eyebrow: 'BIOMECÁNICA SENS', headline: 'UNA BUENA POSTURA CURA EL 80% DE TUS DOLORES', sub: 'Descompresión lumbar, activación de serrato anterior y glúteo medio en cada paso.', c1: 'Cero Dolor', c2: 'Columna Sana', c3: '' },
-            { eyebrow: 'DIAGNÓSTICO', headline: 'EVALUÁ TU ALINEACIÓN CON NICO', sub: 'Sesiones presenciales en CABA o corrección por video en la App SENS.', c1: 'Turnos Activos', c2: 'Link en Bio →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'ESTÉTICA • 1/4', headline: 'EL LENGUAJE SILENCIOSO DE TU POSTURA', sub: 'Por qué un cuerpo encorvado transmite debilidad antes de que hables.', c1: 'Presencia', c2: 'Estructura', c3: '' },
-            { eyebrow: 'CADENA POSTERIOR • 2/4', headline: 'LOS MÚSCULOS QUE SOSTIENEN TU REPUTACIÓN', sub: 'Dorsales, romboides y erectores espinales trabajados con tensión real.', c1: 'Cadena Posterior', c2: 'SNC Seguro', c3: '' },
-            { eyebrow: 'MÉTODO • 3/4', headline: '3 MOVIMIENTOS CLAVE DE APERTURA TORÁCICA', sub: 'Band pull-aparts, face-pulls y extensiones con bisagra de cadera pura.', c1: 'Movilidad', c2: 'Control Motor', c3: '' },
-            { eyebrow: 'SENS APP • 4/4', headline: 'PLANES DE POSTURA Y FUERZA EN LA APP', sub: 'Accedé por $19.900 al mes o postulate para seguimiento 1:1 en CABA.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'Tu cuerpo habla antes de que pronuncies una sola palabra...\n\nUna postura encorvada, con hombros caídos y cabeza adelantada, no solo sabotea tu presencia ejecutiva: destruye tus discos vertebrales y pinza tus hombros.\n\nEn SENS construimos físicos atléticos desde la estructura ósea hacia afuera.\n\nEscribime "POSTURA" por DM para diseñar tu plan personalizado.'
-    },
-    {
-        id: 'tpl_cinematic_letterbox',
-        name: '13. Cine 2.39:1 Letterbox (Subtítulos Oro)',
-        badge: 'LETTERBOX CINE',
-        desc: 'Barras negras panorámicas arriba y abajo con subtítulo centrado en champagne. Estética documental.',
-        spatialArchetype: 'cinematic_letterbox',
-        overlayMode: 'lower_third',
-        overlayTitle: 'Franjas Cinemascope 2.39:1 con Subtitulado Oro',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: false },
-        scenes: [
-            { eyebrow: 'DOCUMENTAL SENS', headline: 'EL DÍA QUE DECIDÍS DEJAR DE SER DÉBIL', sub: 'Todo cambio físico duradero empieza cuando decidís subir tus mínimos innegociables.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'PROCESO BIOLÓGICO', headline: 'LA INCOMODIDAD ES LA SEÑAL DE ADAPTACIÓN', sub: 'Tus tendones y tu sistema nervioso se reconfiguran únicamente bajo tensión mecánica.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'TU HISTORIA', headline: 'ESCRIBÍ TU MEJOR VERSIÓN FÍSICA', sub: 'Seguimiento biomecánico integral con Nico Maralle.', c1: '', c2: '', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'ESCENA 01 • 1/4', headline: 'EL PUNTO DE INFLEXIÓN FÍSICO', sub: 'Cansarte de mirarte al espejo y ver el mismo cuerpo año tras año.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'ESCENA 02 • 2/4', headline: 'LA TRAMPA DE LA COMODIDAD MODERNA', sub: 'Sillón, delivery y horas frente a la pantalla. El antídoto es el esfuerzo medido.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'ESCENA 03 • 3/4', headline: 'EL MÉTODO: RIGOR Y CONSTANCIA SENS', sub: '3 días de fuerza semanal, proteína alta y descanso inviolable.', c1: '', c2: '', c3: '' },
-            { eyebrow: 'ESCENA 04 • 4/4', headline: 'COMENZÁ TU PROCESO CON NICO', sub: 'Presencial en Buenos Aires o en la App SENS.', c1: '', c2: '', c3: '' }
-        ],
-        caption: 'El cambio físico no empieza el día que comprás la membresía del gimnasio. Empieza el día que decidís que tu estándar actual es inaceptable.\n\nEn SENS te damos la metodología, la biomecánica y el acompañamiento para que esa decisión se convierta en una estructura física real y duradera.\n\nEscribime "SENS" por DM o postulate desde el link de la bio.'
-    },
-    {
-        id: 'tpl_biomechanical_hud',
-        name: '14. HUD Telemetría & Retícula F1',
-        badge: 'BIOMECÁNICA HUD',
-        desc: 'Retícula de calibración biomecánica con coordenadas, ángulos articulares y vector de fuerza.',
-        spatialArchetype: 'biomechanical_hud',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Visor Articular Telemetría F1 con Mira Centrada',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'TELEMETRÍA MOTOR', headline: 'ÁNGULO TIBIAL 45°: MÁXIMA TENSIÓN', sub: 'Alineá rodilla con segundo metatarso y bloqueá la cadera. Cero meniscos en riesgo.', c1: 'Ángulo 45°', c2: 'Fuerza Segura', c3: '' },
-            { eyebrow: 'CINEMÁTICA', headline: 'CADENCIA 3-1-1-0 EN SENTADILLA', sub: '3 segundos concéntricos controlados multiplican el reclutamiento de vasto medial.', c1: 'Cadencia 3s', c2: 'Control', c3: '' },
-            { eyebrow: 'CALIBRACIÓN', headline: 'SUBÍ TU VIDEO PARA ANÁLISIS ARTICULAR', sub: 'Corrección motora directa por Nico en tu celular.', c1: 'Feedback HD', c2: 'App SENS →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'TELEMETRÍA • 1/4', headline: 'CALIBRACIÓN BIOMECÁNICA DEL MOVIMIENTO', sub: 'El análisis milimétrico de la trayectoria que previene cirugías de menisco.', c1: 'Biomecánica', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'ERROR VECTOR • 2/4', headline: 'COLAPSO EN VALGO DINÁMICO DE RODILLA', sub: 'Cuando la rodilla cae hacia adentro, el ligamento cruzado absorbe 3x más carga destructiva.', c1: 'Peligro Articular', c2: 'Valgo Rodilla', c3: '' },
-            { eyebrow: 'AJUSTE SENS • 3/4', headline: 'ROTACIÓN EXTERNA DE FÉMUR + GLÚTEO MEDIO', sub: 'Atornillá los pies al suelo y abrí las rodillas activamente durante todo el descenso.', c1: 'Estabilidad', c2: 'RIR 2 Clínico', c3: '' },
-            { eyebrow: 'EVALUATE • 4/4', headline: 'ANALIZÁ TU TÉCNICA CON NICO MARALLE', sub: 'Presencial CABA o corrección por video en la App SENS.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'Una sentadilla bien hecha es la mejor medicina para tus rodillas; una sentadilla con colapso en valgo es la antesala de una rotura de meniscos...\n\nEn SENS calibramos tus ángulos de palanca, la movilidad de tu tobillo y la activación glútea para que levantes pesado con total seguridad articular.\n\nComentá "TÉCNICA" para coordinar tu evaluación biomecánica.'
-    },
-    {
-        id: 'tpl_interrogation_shock',
-        name: '15. Interrogación Directa (Signo ? Shock)',
-        badge: 'SHOCK MENTAL',
-        desc: 'Pregunta filosa que expone una contradicción mental con marca de agua monumental de interrogación.',
-        spatialArchetype: 'interrogation_shock',
-        overlayMode: 'full_wash',
-        overlayTitle: 'Lienzo de Contraste Fuerte con Marca de Agua de Interrogación',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'CONTRADICCIÓN HABITUAL', headline: '¿CUÁNTOS MESES MÁS VAS A SEGUIR DICIENDO "EL LUNES"? ARRANCO', sub: 'El tiempo no se detiene a esperar que tengas ganas. La disciplina empieza sin motivación.', c1: 'Pará el Reloj', c2: 'Decidí Hoy', c3: '' },
-            { eyebrow: 'EL COSTO REAL', headline: 'CADA MES QUE POSTERGÁS TE CUESTA EL DOBLE RECUPERAR', sub: 'Perder masa muscular ralentiza tu metabolismo y deteriora tu postura año a año.', c1: 'Metabolismo', c2: 'No Esperes', c3: '' },
-            { eyebrow: 'SOLUCIÓN SENS', headline: 'EMPEZÁ HOY CON UN PLAN QUE HACE SENTIDO', sub: 'Presencial en Buenos Aires o personalizado en la App SENS.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'PREGUNTA INCÓMODA • 1/4', headline: '¿CUÁNDO FUE LA ÚLTIMA VEZ QUE TE SENTISTE ÁGIL?', sub: 'La sensación de pesadez y falta de energía no es vejez: es falta de entrenamiento neuromuscular.', c1: 'Reflexión', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'LA EXCUSA • 2/4', headline: '"NO TENGO TIEMPO PORQUE TRABAJO MUCHO"', sub: 'Nadie te pide 3 horas diarias. 45 minutos intensos y enfocados 3 veces por semana son suficientes.', c1: 'Gestión de Tiempo', c2: 'Alta Eficiencia', c3: '' },
-            { eyebrow: 'EL CAMBIO • 3/4', headline: 'UN SISTEMA QUE SE ADAPTA A TU AGENDA', sub: 'Rutinas flexibles que podés hacer en tu gimnasio, en casa o de viaje.', c1: 'Flexibilidad', c2: 'Sostenible', c3: '' },
-            { eyebrow: 'DECISIÓN • 4/4', headline: 'HACE SENTIDO COMENZAR HOY MISMO', sub: 'Descargá la App SENS o escribime para cupos 1:1.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: '¿Cuántos meses más vas a seguir diciendo "el próximo lunes arranco"?\n\nEl tiempo no se congela mientras buscás el momento perfecto. Tu metabolismo sigue desacelerando y tus articulaciones siguen perdiendo rango móvil.\n\nEl mejor momento para empezar fue hace 5 años; el segundo mejor momento es hoy.\n\nEscribime "SENS" por DM o entrá al link de la bio.'
-    },
-    {
-        id: 'tpl_equation_formula',
-        name: '16. Fórmula Exacta Recomposición [A + B = C]',
-        badge: 'FÓRMULA EXACTA',
-        desc: 'Estructura matemática de bloques aditivos que desmitifica la complejidad del cambio físico.',
-        spatialArchetype: 'equation_formula',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Esquema Matemático con Operadores Aditivos Champagne',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'MATEMÁTICA BIOLÓGICA', headline: 'CADENCIA 3s + RIR 2 + SUEÑO 8H = FÍSICO ATLETA', sub: 'Dejá de buscar el suplemento mágico. Estas tres variables garantizan el 95% de los resultados.', c1: '3-1-1-0', c2: 'RIR 2', c3: '8h Sueño' },
-            { eyebrow: 'NUTRICIÓN MEDIDA', headline: 'PROTEÍNA 1.8G + DÉFICIT 300KCAL = DEFINICIÓN PURA', sub: 'Protegé tu masa muscular mientras oxidás tejido adiposo sin pasar hambre.', c1: '1.8g / kg', c2: '-300 kcal', c3: 'Grasa Cero' },
-            { eyebrow: 'MÉTODO MAKES SENS', headline: 'APLICÁ LA FÓRMULA EXACTA EN TU DÍA A DÍA', sub: 'Calculá tus macros y registrá tus series en la App SENS.', c1: 'Calculadora', c2: 'App SENS →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'LA FÓRMULA • 1/4', headline: 'LA ECUACIÓN DEL CAMBIO FÍSICO REAL', sub: 'Por qué no necesitás rutinas complejas de 18 ejercicios distintos.', c1: 'Fórmula SENS', c2: 'Simplicidad', c3: '' },
-            { eyebrow: 'VARIABLE 1 • 2/4', headline: 'TENSIÓN MECÁNICA: CADENCIA 3-1-1-0', sub: 'Bajar lento y frenar el rebote recluta las fibras tipo II responsables de la hipertrofia.', c1: 'Cadencia 3s', c2: 'Tensión Pura', c3: '' },
-            { eyebrow: 'VARIABLE 2 • 3/4', headline: 'NUTRICIÓN: PROTEÍNA MEDIDA AL GRAMO', sub: 'Garantizar el umbral de leucina en cada comida para sintetizar músculo nuevo.', c1: 'Proteína Limpia', c2: 'Metabolismo', c3: '' },
-            { eyebrow: 'RESULTADO • 4/4', headline: 'APLICÁ LA FÓRMULA EN LA APP SENS', sub: 'Todo calculado y guiado en tu bolsillo por $19.900 al mes.', c1: 'Makes Sens', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'La recomposición corporal no es magia ni suerte genética: es una fórmula matemática y biológica exacta.\n\nTensión mecánica (cadencia 3-1-1-0) + Proximidad al fallo (RIR 1-2) + Proteína adecuada (1.8g/kg) = Físico atlético garantizado.\n\nEn la App SENS tenés todo el sistema calculado para tu peso y objetivos.\n\nDescargala desde el link de la bio o escribime "SENS".'
-    },
-    {
-        id: 'tpl_scarcity_countdown',
-        name: '17. Urgencia 24hs / Reloj Cuenta Regresiva',
-        badge: 'URGENCIA 24HS',
-        desc: 'Pill de cronómetro de alta tensión para cierres de mes y aperturas limitadas de cupos VIP.',
-        spatialArchetype: 'scarcity_countdown',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Borde de Alta Tensión y Reloj Regresivo 23:59:59',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'CIERRE DE AGENDA', headline: 'AGENDA CERRADA EN 24 HORAS: SOLO 2 CUPOS', sub: 'Para garantizar el estándar de atención 1:1, cerramos admisiones hasta el próximo mes.', c1: '⏳ 23:59:59', c2: 'Solo 2', c3: 'DM "PLAN"' },
-            { eyebrow: 'QUIÉN CLASIFICA', headline: 'BUSCAMOS ATLETAS Y PROFESIONALES COMPROMETIDOS', sub: 'Cero improvisación. Planificación clínica semanal adaptada a tu rutina real.', c1: 'Compromiso', c2: '100% Medido', c3: '' },
-            { eyebrow: 'RESERVÁ TU LUGAR', headline: 'ENVIAME "PLAN" ANTES DE LAS 00:00', sub: 'Se asignan en estricto orden de mensaje directo.', c1: 'Nico Maralle', c2: 'Escribime YA →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'ÚLTIMA LLAMADA • 1/4', headline: 'CIERRE DEFINITIVO DE ADMISIONES DEL MES', sub: 'Solo 2 plazas disponibles para seguimiento 1 a 1.', c1: 'Solo 2 Cupos', c2: '24 Horas', c3: '' },
-            { eyebrow: 'EL COMPROMISO • 2/4', headline: 'ACOMPAÑAMIENTO DIARIO PASO A PASO', sub: 'Nico Maralle revisa cada uno de tus entrenamientos y comidas en tiempo real.', c1: 'Cero Bots', c2: 'Humano 1:1', c3: '' },
-            { eyebrow: 'LOS RESULTADOS • 3/4', headline: 'CAMBIO VISIBLE EN LAS PRIMERAS 4 SEMANAS', sub: 'Sin dietas líquidas ni pasar hambre. Fuerza pura y salud metabólica.', c1: 'Adherencia', c2: 'Garantizado', c3: '' },
-            { eyebrow: 'ACTUÁ HOY • 4/4', headline: 'ESCRIBIME "PLAN" ANTES DE QUE SE AGOTEN', sub: 'Coordinamos tu entrevista de admisión por WhatsApp.', c1: 'Nico Maralle', c2: 'Escribime PLAN →', c3: '' }
-        ],
-        caption: 'En menos de 24 horas cerramos oficialmente las admisiones para el programa de entrenamiento personal 1:1 de este mes.\n\nSolo quedan 2 cupos disponibles para mantener la calidad y el seguimiento exhaustivo que caracteriza a Makes Sens.\n\nSi querés asegurar tu lugar, enviame la palabra "PLAN" por mensaje directo ahora mismo.'
-    },
-    {
-        id: 'tpl_podcast_soundwave',
-        name: '18. Podcast Soundwave / Píldora de Voz Oro',
-        badge: 'AUDIO RECORD',
-        desc: 'Onda sonora animada en champagne con tarjeta de transcripción de sabiduría técnica.',
-        spatialArchetype: 'podcast_soundwave',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Visualizador de Frecuencia Sonora reactivo en Champagne',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'AUDIO CLAVE • NICO', headline: 'SI NO PODÉS FRENAR LA BAJADA, EL PESO TE CONTROLA A VOS', sub: 'La fase excéntrica es donde se construye el 70% de la masa muscular. No la regales cayendo.', c1: '🎙️ Play Audio', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'CONTROL NEURONAL', headline: 'EL MÚSCULO NO SABE KILOS, SOLO SIENTE TENSIÓN', sub: 'Mover 100kg rebotando crea menos estímulo que 70kg con 3 segundos de descenso controlado.', c1: 'Tensión Real', c2: 'Cero Ego', c3: '' },
-            { eyebrow: 'SENS PODCAST', headline: 'ESCUCHÁ MÁS CLAVES TÉCNICAS EN LA APP', sub: 'Audios y masterclasses semanales con Nico Maralle.', c1: 'App SENS', c2: 'Link en Bio →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'PÍLDORA DE VOZ • 1/4', headline: 'EL SECRETO QUE NADIE TE CUENTA DEL TEMPO', sub: 'Por qué bajar rápido es el error número 1 de quienes no crecen en el gimnasio.', c1: 'Audio Master', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'FISIOLOGÍA • 2/4', headline: 'MICRORROTURAS EN ELONGACIÓN CONTROLADA', sub: 'El daño mecánico constructivo ocurre al frenar la carga, no al empujarla con inercia.', c1: 'Fase Excéntrica', c2: 'Ciencia SENS', c3: '' },
-            { eyebrow: 'PRUEBA ESTO • 3/4', headline: '3 SEGUNDOS DE BAJADA EN TU PRÓXIMO EJERCICIO', sub: 'Vas a tener que bajar un 20% el peso, pero vas a sentir el músculo como nunca antes.', c1: 'Prueba Práctica', c2: 'RIR 2', c3: '' },
-            { eyebrow: 'MÁS AUDIOS • 4/4', headline: 'BIBLIOTECA COMPLETA DE AUDIO EN LA APP', sub: 'Explicaciones paso a paso de cada movimiento por Nico Maralle.', c1: 'App SENS', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'Si no podés frenar la bajada del peso durante 3 segundos, no estás levantando el peso: el peso te está tirando a vos...\n\nLa fase excéntrica lenta no solo construye 70% más masa muscular por serie: fortalece tus tendones y previene desgarros.\n\nGuardá este video y probalo en tu próximo entrenamiento.'
-    },
-    {
-        id: 'tpl_minimal_monochrome',
-        name: '19. Monocromo Suizo (Quiet Luxury Puro)',
-        badge: 'SUIZO LUXURY',
-        desc: 'Línea de 1px champagne, espacio negativo masivo y tipografía sans-serif de precisión helvética.',
-        spatialArchetype: 'minimal_monochrome',
-        overlayMode: 'full_wash',
-        overlayTitle: 'Lienzo Suizo Minimalista con Línea Capilar Champagne',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'ESTÁNDAR EDITORIAL', headline: 'PRECISIÓN NEUROMUSCULAR SOBRE VOLUMEN CIEGO', sub: 'El verdadero lujo físico es entrenar 45 minutos y tener un cuerpo que responde con potencia.', c1: 'Quiet Luxury', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'LONGEVIDAD', headline: 'CONSTRUIR FUERZA HOY PARA VIVIR SIN DOLOR A LOS 70', sub: 'La masa muscular es el seguro de vida biológico más importante que podés construir.', c1: 'Longevidad', c2: 'Salud Real', c3: '' },
-            { eyebrow: 'SENS METHOD', headline: 'DISEÑEMOS TU PROGRAMA PERSONALIZADO', sub: 'Presencial CABA o Suscripción App $19.900/mes.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'FILOSOFÍA • 1/4', headline: 'LA BELLEZA DEL ESFUERZO PRECISO', sub: 'Cero gritos, cero payasadas. Solo biomecánica intachable y consistencia diaria.', c1: 'Quiet Luxury', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'ARQUITECTURA • 2/4', headline: 'DISEÑO DE UN CUERPO QUE DURA DÉCADAS', sub: 'Entrenar pensando en la postura, la densidad ósea y la agilidad de los próximos 30 años.', c1: 'Anti-Aging', c2: 'Fuerza Vital', c3: '' },
-            { eyebrow: 'ADHERENCIA • 3/4', headline: 'UN PLAN QUE CONVIVE CON TU VIDA', sub: 'La sostenibilidad en el tiempo es lo que separa a los profesionales de los novatos.', c1: 'Hábitos SENS', c2: 'Longevidad', c3: '' },
-            { eyebrow: 'ACCESO • 4/4', headline: 'EXPERIMENTÁ EL ESTÁNDAR MAKES SENS', sub: 'Sumate a la App o consultá por plazas presenciales con Nico.', c1: 'Nico Maralle', c2: 'Link en Bio →', c3: '' }
-        ],
-        caption: 'En un mundo de gimnasios ruidosos y modas pasajeras de redes sociales, en SENS elegimos el camino del rigor silencioso y la precisión biomecánica.\n\nEntrenar 45 minutos con intensidad calculada para tener un cuerpo estético, fuerte y preparado para rendir en tu vida real.\n\nHace sentido. Escribime "SENS" por DM.'
-    },
-    {
-        id: 'tpl_checklist_protocol',
-        name: '20. Checklist Protocolo 3 Innegociables',
-        badge: 'CHECKLIST PROTOCOLO',
-        desc: 'Lista de 3 reglas tácticas verificadas con status dots dorados para guardar en feed.',
-        spatialArchetype: 'checklist_protocol',
-        overlayMode: 'cinematic',
-        overlayTitle: 'Protocolo de 3 Filas de Chequeo Clínico SENS',
-        defaultLayers: { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true },
-        scenes: [
-            { eyebrow: 'PROTOCOLO BIOLÓGICO', headline: '3 INNEGOCIABLES PARA OXIDAR GRASA DE VERDAD', sub: '1. 140g Proteína limpia • 2. 4 Series Pesadas RIR 2 • 3. 8.000 Pasos diarios.', c1: '140g Prot', c2: 'RIR 2', c3: '8k Pasos' },
-            { eyebrow: 'EL ERROR COMÚN', headline: 'HACER CARDIO INTERMINABLE SIN TOCAR UNA PESA', sub: 'El cardio quema calorías en el momento; la masa muscular quema calorías las 24 horas del día.', c1: 'Fuerza Primero', c2: 'Metabolismo', c3: '' },
-            { eyebrow: 'SEGUIMIENTO SENS', headline: 'MONITOREÁ TUS HÁBITOS EN LA APP', sub: 'Rings de actividad y registro de comidas en Makes Sens.', c1: 'App SENS', c2: 'Comenzar →', c3: '' }
-        ],
-        slides: [
-            { eyebrow: 'CHECKLIST • 1/4', headline: 'LOS 3 HÁBITOS QUE TRANSFORMAN TU CUERPO', sub: 'Olvidate de los suplementos milagrosos. Enfocate únicamente en cumplir estos tres.', c1: 'Protocolo', c2: 'Makes Sens', c3: '' },
-            { eyebrow: 'HÁBITO 1 • 2/4', headline: '1.4G A 1.8G DE PROTEÍNA POR KILO', sub: 'Mantiene saciedad, frena antojos nocturnos y construye músculo metabólicamente activo.', c1: 'Proteína', c2: 'Saciedad', c3: '' },
-            { eyebrow: 'HÁBITO 2 • 3/4', headline: 'ENTRENAMIENTO DE FUERZA CON SOBRECARGA', sub: '3 a 4 sesiones semanales levantando con cadencia 3-1-1-0 y proximidad al fallo.', c1: 'Fuerza Pura', c2: 'RIR 1-2', c3: '' },
-            { eyebrow: 'HÁBITO 3 • 4/4', headline: '8.000 PASOS DIARIOS DE MOVILIDAD NEAT', sub: 'El gasto calórico silencioso que mantiene tu sensibilidad a la insulina alta.', c1: 'NEAT Alto', c2: 'App SENS →', c3: '' }
-        ],
-        caption: 'Dejá de complicarte con dietas extremas y rutinas de 2 horas. El cambio físico definitivo se resume en tres hábitos innegociables cumplidos con rigor durante 6 meses:\n\n1. 140g de proteína limpia diaria\n2. 4 sesiones de fuerza pesada con cadencia 3-1-1-0\n3. 8.000 pasos de movimiento diario\n\nEn la App SENS monitoreamos tus tres hábitos día a día para que no tengas que adivinar.\n\nGuardá este post y escribime "SENS" por DM.'
-    }
-];
+/* =============================================================================
+   SENS QUIET VITALITY — GROWTH STUDIO DE MARKETING (200 TEMPLATES 4K UHD)
+   100 Templates en 9:16 (Stories/Reels) y 100 en 4:5 (Feed/Carrusel)
+   Modo Híbrido: Edición Directa WYSIWYG + Panel con Límite Estricto de Caracteres
+   Soporte Universal de Foto & Video • Exportación en Ultra High Definition (UHD)
+   ============================================================================= */
 
-
-function getMarketingTemplateThumbSvg(t) {
-    const arch = t.spatialArchetype || 'hero_center_big';
-    let innerSvg = '';
-    switch(arch) {
-        case 'hero_center_big':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0C0C0F"/>' +
-                       '<rect x="8" y="7" width="26" height="5" rx="2.5" fill="#E5CBA7" opacity="0.8"/>' +
-                       '<rect x="18" y="24" width="64" height="6" rx="2" fill="#FFFFFF"/>' +
-                       '<rect x="25" y="33" width="50" height="6" rx="2" fill="#E5CBA7"/>' +
-                       '<rect x="30" y="44" width="40" height="3" rx="1.5" fill="#A1A1AA"/>' +
-                       '<rect x="34" y="52" width="32" height="4" rx="2" fill="rgba(229,203,167,0.3)"/>';
-            break;
-        case 'lower_third_clean':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#141418"/>' +
-                       '<circle cx="50" cy="22" r="10" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>' +
-                       '<path d="M0 34 L100 34 L100 68 L0 68 Z" fill="url(#gradLowerThumb)"/>' +
-                       '<rect x="10" y="44" width="18" height="3" rx="1.5" fill="#E5CBA7"/>' +
-                       '<rect x="10" y="50" width="56" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="58" width="40" height="4" rx="1.5" fill="rgba(229,203,167,0.4)"/>';
-            break;
-        case 'magazine_split':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
-                       '<rect x="8" y="8" width="22" height="3" rx="1" fill="#E5CBA7"/>' +
-                       '<rect x="8" y="14" width="58" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="8" y="21" width="46" height="5" rx="1.5" fill="#E5CBA7"/>' +
-                       '<rect x="8" y="52" width="70" height="3" rx="1" fill="#A1A1AA"/>' +
-                       '<rect x="8" y="57" width="50" height="3" rx="1" fill="#71717A"/>';
-            break;
-        case 'glass_card':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0C0C0F"/>' +
-                       '<rect x="8" y="20" width="84" height="40" rx="4" fill="rgba(24,24,28,0.92)" stroke="rgba(255,255,255,0.2)" stroke-width="0.8"/>' +
-                       '<rect x="14" y="26" width="20" height="3" rx="1" fill="#E5CBA7"/>' +
-                       '<rect x="14" y="32" width="60" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="14" y="38" width="48" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="14" y="46" width="40" height="3" rx="1" fill="#A1A1AA"/>';
-            break;
-        case 'stat_monumental':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
-                       '<text x="12" y="38" font-family="sans-serif" font-weight="900" font-size="24" fill="#E5CBA7">0.0%</text>' +
-                       '<rect x="12" y="44" width="58" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="12" y="51" width="42" height="3" rx="1" fill="#A1A1AA"/>' +
-                       '<rect x="12" y="57" width="30" height="3" rx="1" fill="rgba(229,203,167,0.4)"/>';
-            break;
-        case 'quote_editorial':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
-                       '<text x="50" y="24" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="24" fill="rgba(229,203,167,0.5)">“</text>' +
-                       '<rect x="18" y="28" width="64" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="24" y="35" width="52" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="32" y="45" width="36" height="3" rx="1" fill="#E5CBA7"/>';
-            break;
-        case 'story_callout':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0D0D11"/>' +
-                       '<rect x="10" y="8" width="36" height="6" rx="3" fill="#E5CBA7"/>' +
-                       '<rect x="10" y="18" width="70" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="25" width="54" height="5" rx="1.5" fill="#E5CBA7"/>' +
-                       '<rect x="25" y="48" width="50" height="12" rx="3" fill="none" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2,2" stroke-width="0.8"/>';
-            break;
-        case 'editorial_bottom':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
-                       '<text x="78" y="14" font-family="sans-serif" font-weight="700" font-size="7" fill="#E5CBA7">01/04</text>' +
-                       '<rect x="10" y="38" width="22" height="3" rx="1" fill="#E5CBA7"/>' +
-                       '<rect x="10" y="44" width="68" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="52" width="52" height="4" rx="1" fill="#A1A1AA"/>';
-            break;
-        case 'split_comparative':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#09090C"/>' +
-                       '<rect x="8" y="8" width="84" height="23" rx="3" fill="rgba(24,18,20,0.9)" stroke="rgba(235,87,87,0.6)" stroke-width="0.8"/>' +
-                       '<text x="14" y="18" font-family="sans-serif" font-weight="900" font-size="6" fill="#FF8A8A">✕ CÓMO NO</text>' +
-                       '<rect x="14" y="21" width="50" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="8" y="36" width="84" height="24" rx="3" fill="rgba(18,22,20,0.9)" stroke="rgba(229,203,167,0.8)" stroke-width="0.8"/>' +
-                       '<text x="14" y="46" font-family="sans-serif" font-weight="900" font-size="6" fill="#E5CBA7">✓ CÓMO SÍ</text>' +
-                       '<rect x="14" y="49" width="56" height="4" rx="1" fill="#FFFFFF"/>';
-            break;
-        case 'kinetic_brutalism':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#050507"/>' +
-                       '<rect x="8" y="12" width="76" height="9" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="16" y="25" width="76" height="9" rx="1" fill="#E5CBA7"/>' +
-                       '<rect x="10" y="38" width="68" height="9" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="8" y="52" width="36" height="4" rx="1" fill="#A1A1AA"/>';
-            break;
-        case 'polaroid_luxury':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
-                       '<rect x="12" y="6" width="76" height="56" rx="2" fill="#FAF9F6"/>' +
-                       '<rect x="16" y="10" width="68" height="36" rx="1" fill="#141418"/>' +
-                       '<rect x="20" y="50" width="46" height="4" rx="1" fill="#121214"/>' +
-                       '<rect x="20" y="56" width="28" height="2" rx="0.5" fill="#9E7D4B"/>';
-            break;
-        case 'cinematic_letterbox':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#1A1A22"/>' +
-                       '<rect x="0" y="0" width="100" height="14" fill="#000000"/>' +
-                       '<rect x="0" y="54" width="100" height="14" fill="#000000"/>' +
-                       '<circle cx="50" cy="34" r="8" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>' +
-                       '<rect x="25" y="59" width="50" height="4" rx="1" fill="#E5CBA7"/>';
-            break;
-        case 'biomechanical_hud':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#08080B"/>' +
-                       '<path d="M12 16 L12 10 L18 10 M82 10 L88 10 L88 16 M12 52 L12 58 L18 58 M82 58 L88 58 L88 52" stroke="#E5CBA7" stroke-width="1.2" fill="none"/>' +
-                       '<circle cx="50" cy="32" r="7" fill="none" stroke="rgba(229,203,167,0.4)" stroke-width="1" stroke-dasharray="2,2"/>' +
-                       '<rect x="18" y="44" width="52" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<rect x="18" y="50" width="38" height="3" rx="1" fill="#E5CBA7"/>';
-            break;
-        case 'interrogation_shock':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#08080A"/>' +
-                       '<text x="64" y="54" font-family="sans-serif" font-weight="900" font-size="52" fill="rgba(229,203,167,0.18)">?</text>' +
-                       '<rect x="10" y="16" width="60" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="24" width="50" height="5" rx="1.5" fill="#E5CBA7"/>' +
-                       '<rect x="10" y="32" width="44" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="46" width="34" height="3" rx="1" fill="#A1A1AA"/>';
-            break;
-        case 'equation_formula':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
-                       '<rect x="8" y="18" width="22" height="12" rx="2" fill="rgba(255,255,255,0.08)"/>' +
-                       '<text x="34" y="28" font-family="sans-serif" font-weight="900" font-size="10" fill="#E5CBA7">+</text>' +
-                       '<rect x="42" y="18" width="22" height="12" rx="2" fill="rgba(255,255,255,0.08)"/>' +
-                       '<text x="68" y="28" font-family="sans-serif" font-weight="900" font-size="10" fill="#E5CBA7">=</text>' +
-                       '<rect x="76" y="18" width="18" height="12" rx="2" fill="rgba(229,203,167,0.25)"/>' +
-                       '<rect x="10" y="42" width="68" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="50" width="48" height="3" rx="1" fill="#A1A1AA"/>';
-            break;
-        case 'scarcity_countdown':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0E"/>' +
-                       '<rect x="22" y="8" width="56" height="8" rx="4" fill="#14141A" stroke="#E5CBA7" stroke-width="0.8"/>' +
-                       '<text x="50" y="14" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="5" fill="#E5CBA7">23 : 59 : 59</text>' +
-                       '<rect x="10" y="24" width="76" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="32" width="60" height="5" rx="1.5" fill="#E5CBA7"/>' +
-                       '<rect x="10" y="46" width="46" height="3" rx="1" fill="#A1A1AA"/>';
-            break;
-        case 'podcast_soundwave':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0C0C10"/>' +
-                       '<g fill="#E5CBA7">' +
-                       '<rect x="32" y="18" width="3" height="8" rx="1.5"/>' +
-                       '<rect x="38" y="14" width="3" height="16" rx="1.5"/>' +
-                       '<rect x="44" y="10" width="3" height="24" rx="1.5"/>' +
-                       '<rect x="50" y="12" width="3" height="20" rx="1.5"/>' +
-                       '<rect x="56" y="15" width="3" height="14" rx="1.5"/>' +
-                       '<rect x="62" y="19" width="3" height="6" rx="1.5"/>' +
-                       '</g>' +
-                       '<rect x="12" y="42" width="76" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="20" y="50" width="60" height="3" rx="1" fill="#A1A1AA"/>';
-            break;
-        case 'minimal_monochrome':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#080809"/>' +
-                       '<rect x="10" y="16" width="28" height="2" fill="#E5CBA7"/>' +
-                       '<line x1="10" y1="24" x2="90" y2="24" stroke="rgba(229,203,167,0.3)" stroke-width="0.8"/>' +
-                       '<rect x="10" y="32" width="70" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="40" width="56" height="5" rx="1.5" fill="#FFFFFF"/>' +
-                       '<rect x="10" y="52" width="40" height="2.5" fill="#71717A"/>';
-            break;
-        case 'checklist_protocol':
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
-                       '<rect x="10" y="10" width="54" height="4" rx="1" fill="#E5CBA7"/>' +
-                       '<circle cx="14" cy="24" r="2.5" fill="#E5CBA7"/>' +
-                       '<rect x="22" y="22" width="58" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<circle cx="14" cy="36" r="2.5" fill="#E5CBA7"/>' +
-                       '<rect x="22" y="34" width="64" height="4" rx="1" fill="#FFFFFF"/>' +
-                       '<circle cx="14" cy="48" r="2.5" fill="#E5CBA7"/>' +
-                       '<rect x="22" y="46" width="50" height="4" rx="1" fill="#FFFFFF"/>';
-            break;
-        default:
-            innerSvg = '<rect x="0" y="0" width="100" height="68" fill="#0A0A0D"/>' +
-                       '<rect x="15" y="24" width="70" height="6" rx="2" fill="#FFFFFF"/>' +
-                       '<rect x="25" y="34" width="50" height="5" rx="2" fill="#E5CBA7"/>';
-            break;
-    }
-
-    return '<svg viewBox="0 0 100 68" width="100%" height="68" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block; border-radius:6px;"><defs><linearGradient id="gradLowerThumb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#080809" stop-opacity="0"/><stop offset="100%" stop-color="#080809" stop-opacity="1"/></linearGradient></defs>' + innerSvg + '</svg>';
-}
-
-
-let mktStudioState = {
-    format: 'reel_video_9_16', // 'reel_video_9_16', 'carousel_4_5', 'post_4_5', 'story_9_16'
-    templateId: 'tpl_hook_bold_statement',
-    sceneIdx: 0,
-    slideIdx: 0,
-    autoCycleScenes: false,
-    showSafeZoneGuides: false,
-    zoom: 105,
-    panY: 0,
-    overlayOpacity: 80,
-    overlayMode: 'full_wash', // 'cinematic' | 'full_wash' | 'lower_third'
-    mediaType: 'video', // 'video' | 'image'
-    customImageObj: null,
-    objectUrlCache: null,
-    rafId: null,
-    cycleTimer: null,
-    layers: {
-        branding: true,
-        eyebrow: true,
-        headline: true,
-        subtitle: true,
-        chips: true
+const MktStudioState = {
+    format: '9:16', // '9:16' o '4:5'
+    blockId: 'b1',   // 'b1' a 'b5'
+    templateId: 'T01',
+    mediaType: 'image', // 'image' o 'video'
+    mediaUrl: 'img/hero-bg-opt.jpg',
+    showSafeZones: false,
+    isVideoPlaying: true,
+    isVideoMuted: true,
+    fields: {
+        tag: 'SENS • PROTOCOLO',
+        title: 'Tu punto de partida no es tu destino.',
+        bajada: 'Recomposición corporal con precisión neuromuscular y dolor cero en CABA y Online.'
     }
 };
 
-window.initCoachMarketingStudio = function() {
-    // Switcher Mobile: 1. Diseñar & Editar vs 2. Ver Preview & Descargar
-    function setMktMobileView(tab) {
-        const switcher = document.getElementById('mktMobileSwitcher');
-        const layout = document.querySelector('.sens-mkt-studio-layout');
-        if (switcher) {
-            switcher.querySelectorAll('.sens-mkt-switch-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-tab') === tab);
-            });
-        }
-        if (layout) {
-            layout.classList.toggle('mobile-view-editor', tab === 'editor');
-            layout.classList.toggle('mobile-view-preview', tab === 'preview');
-        }
-        if (tab === 'preview') {
-            const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
-            if (hiddenVideo && typeof mktStudioState !== 'undefined' && mktStudioState.mediaType === 'video') {
-                hiddenVideo.play().catch(() => {});
-            }
-            if (typeof renderMarketingCanvasFrame === 'function') {
-                renderMarketingCanvasFrame();
-            }
-        }
-    }
-    window.setMktMobileView = setMktMobileView;
+window.MktStudioState = MktStudioState;
 
-    const switchBtns = document.querySelectorAll('#mktMobileSwitcher .sens-mkt-switch-btn');
-    switchBtns.forEach(btn => {
+function getMktCatalog() {
+    if (typeof window !== 'undefined' && Array.isArray(window.SENS_MARKETING_CATALOG) && window.SENS_MARKETING_CATALOG.length > 0) {
+        return window.SENS_MARKETING_CATALOG;
+    }
+    return [];
+}
+
+function getActiveMktTemplate() {
+    const catalog = getMktCatalog();
+    let tpl = catalog.find(t => t.code === MktStudioState.templateId);
+    if (!tpl) {
+        tpl = catalog.find(t => t.format === MktStudioState.format && t.blockId === MktStudioState.blockId);
+    }
+    if (!tpl) {
+        tpl = catalog[0] || {
+            code: 'T01',
+            name: 'Template Inicial',
+            format: '9:16',
+            blockId: 'b1',
+            tag: 'SENS • PROTOCOLO',
+            title: 'Tu punto de partida no es tu destino.',
+            bajada: 'Recomposición corporal con precisión neuromuscular y dolor cero.',
+            charLimits: { tag: 25, title: 60, bajada: 120 },
+            defaultBg: 'img/hero-bg-opt.jpg'
+        };
+    }
+    return tpl;
+}
+
+function initCoachMarketingStudio() {
+    console.log('[SENS Marketing Studio] Inicializando suite de 200 templates Quiet Vitality...');
+    const catalog = getMktCatalog();
+    if (!catalog || catalog.length === 0) {
+        console.warn('[SENS Marketing Studio] window.SENS_MARKETING_CATALOG no encontrado. Reintentando carga...');
+        setTimeout(initCoachMarketingStudio, 200);
+        return;
+    }
+
+    bindMktFormatButtons();
+    bindMktBlockTabs();
+    bindMktEditorInputs();
+    bindMktMediaControls();
+    bindMktSafeZoneToggle();
+    bindMktUhdExportButtons();
+    bindMktMobileSwitcher();
+
+    // Cargar template inicial
+    loadMktTemplate(getActiveMktTemplate().code);
+}
+window.initCoachMarketingStudio = initCoachMarketingStudio;
+
+function stopCoachMarketingStudio() {
+    const video = document.getElementById('mktArtboardVideo');
+    if (video) {
+        try { video.pause(); } catch (_) {}
+    }
+}
+window.stopCoachMarketingStudio = stopCoachMarketingStudio;
+
+// 1. SELECTOR DE FORMATO (9:16 vs 4:5)
+function bindMktFormatButtons() {
+    const btn916 = document.getElementById('btnFmt916');
+    const btn45 = document.getElementById('btnFmt45');
+    const badgeText = document.getElementById('mktFormatBadgeText');
+    const stage = document.getElementById('mktCanvasStageWrap');
+    const resLabel = document.getElementById('mktPreviewResolutionLabel');
+
+    const updateFormat = (fmt) => {
+        MktStudioState.format = fmt;
+        const is916 = (fmt === '9:16');
+
+        if (btn916) btn916.classList.toggle('active', is916);
+        if (btn45) btn45.classList.toggle('active', !is916);
+
+        if (badgeText) {
+            badgeText.textContent = is916 ? '9:16 (1080×1920)' : '4:5 (1080×1350)';
+        }
+        if (resLabel) {
+            resLabel.textContent = is916
+                ? 'VISTA PREVIA WYSIWYG • 9:16 (1080×1920)'
+                : 'VISTA PREVIA WYSIWYG • 4:5 (1080×1350)';
+        }
+        if (stage) {
+            stage.classList.toggle('is-916', is916);
+            stage.classList.toggle('is-45', !is916);
+        }
+
+        // Renderizar grid de templates del formato actual
+        renderMktTemplatesGrid();
+
+        // Cargar el primer template disponible en este formato y bloque
+        const catalog = getMktCatalog();
+        const first = catalog.find(t => t.format === fmt && t.blockId === MktStudioState.blockId) || catalog.find(t => t.format === fmt);
+        if (first) {
+            loadMktTemplate(first.code);
+        }
+    };
+
+    if (btn916) btn916.onclick = () => updateFormat('9:16');
+    if (btn45) btn45.onclick = () => updateFormat('4:5');
+}
+
+// 2. SELECTOR DE BLOQUES TEMÁTICOS (Bloques I al V)
+function bindMktBlockTabs() {
+    const ribbon = document.getElementById('mktBlockRibbon');
+    if (!ribbon) return;
+
+    ribbon.querySelectorAll('.sens-mkt-block-tab').forEach(btn => {
         btn.onclick = () => {
-            const tab = btn.getAttribute('data-tab') || 'editor';
-            setMktMobileView(tab);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const blockId = btn.getAttribute('data-block');
+            if (!blockId) return;
+
+            ribbon.querySelectorAll('.sens-mkt-block-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            MktStudioState.blockId = blockId;
+            renderMktTemplatesGrid();
+
+            // Cargar el primer template de este bloque
+            const catalog = getMktCatalog();
+            const first = catalog.find(t => t.format === MktStudioState.format && t.blockId === blockId);
+            if (first) {
+                loadMktTemplate(first.code);
+            }
         };
     });
+}
 
-    const btnGoPreview = document.getElementById('btnMktGoToPreview');
-    if (btnGoPreview) {
-        btnGoPreview.onclick = () => {
-            setMktMobileView('preview');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
+// 3. RENDERIZADO DEL GRID DE 20 TEMPLATES
+function renderMktTemplatesGrid() {
+    const grid = document.getElementById('mktTemplateSelectorGrid');
+    if (!grid) return;
+
+    const catalog = getMktCatalog();
+    const items = catalog.filter(t => t.format === MktStudioState.format && t.blockId === MktStudioState.blockId);
+
+    const blockBadge = document.getElementById('mktBlockCountBadge');
+    if (blockBadge) {
+        blockBadge.textContent = `${items.length} plantillas disponibles`;
     }
 
-    const btnGoEdit = document.getElementById('btnMktGoToEdit');
-    if (btnGoEdit) {
-        btnGoEdit.onclick = () => {
-            setMktMobileView('editor');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-    }
-
-    const tplGrid = document.getElementById('mktTemplateSelectorGrid');
-    // Calibración Táctil de Encuadre, Zoom y Contraste (Sin Sliders Confusos)
-    const panBtns = document.querySelectorAll('#mktPanYButtonGroup .sens-mkt-adjust-btn');
-    const panLabel = document.getElementById('mktPanYFeedbackLabel');
-    if (panBtns.length > 0) {
-        panBtns.forEach(btn => {
-            btn.onclick = () => {
-                panBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const val = parseInt(btn.getAttribute('data-val'), 10) || 0;
-                mktStudioState.panY = val;
-                if (panLabel) {
-                    panLabel.textContent = val < 0 ? 'Subido (Torso)' : (val > 0 ? 'Bajado (Piernas)' : 'Centrado');
-                }
-                const panSlider = document.getElementById('mktMediaPanYSlider');
-                if (panSlider) panSlider.value = val;
-                renderMarketingCanvasFrame();
-            };
-        });
-    }
-
-    const zoomBtns = document.querySelectorAll('#mktZoomButtonGroup .sens-mkt-adjust-btn');
-    const zoomFeedbackEl = document.getElementById('mktZoomFeedbackLabel');
-    if (zoomBtns.length > 0) {
-        zoomBtns.forEach(btn => {
-            btn.onclick = () => {
-                zoomBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const val = parseInt(btn.getAttribute('data-val'), 10) || 108;
-                mktStudioState.zoom = val;
-                if (zoomFeedbackEl) {
-                    zoomFeedbackEl.textContent = val + '% ' + (val === 100 ? '(Completo)' : (val === 108 ? '(Foco SENS)' : '(Primer Plano)'));
-                }
-                const zoomSlider = document.getElementById('mktMediaZoomSlider');
-                if (zoomSlider) zoomSlider.value = val;
-                renderMarketingCanvasFrame();
-            };
-        });
-    }
-
-    const opBtns = document.querySelectorAll('#mktOpacityButtonGroup .sens-mkt-adjust-btn');
-    const opFeedbackEl = document.getElementById('mktOpacityFeedbackLabel');
-    if (opBtns.length > 0) {
-        opBtns.forEach(btn => {
-            btn.onclick = () => {
-                opBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const val = parseInt(btn.getAttribute('data-val'), 10) || 80;
-                mktStudioState.overlayOpacity = val;
-                if (opFeedbackEl) {
-                    opFeedbackEl.textContent = val + '% ' + (val === 65 ? '(Suave)' : (val === 80 ? '(Equilibrado)' : '(Máximo Contraste)'));
-                }
-                const opSlider = document.getElementById('mktOverlayOpacitySlider');
-                if (opSlider) opSlider.value = val;
-                renderMarketingCanvasFrame();
-            };
-        });
-    }
-
-    const formatBtns = document.querySelectorAll('#mktFormatSelectorGrid .sens-mkt-format-btn');
-    const sceneBtns = document.querySelectorAll('#mktVideoScenesTimelineBar .sens-mkt-scene-btn');
-    const slideBtns = document.querySelectorAll('#mktCarouselSlidesBar .sens-mkt-slide-btn');
-    const autoCycleCheck = document.getElementById('mktAutoCycleScenesCheck');
-    const layersBar = document.getElementById('mktLayersToggleBar');
-
-    const inpEyebrow = document.getElementById('mktInputEyebrow');
-    const inpHeadline = document.getElementById('mktInputHeadline');
-    const inpSub = document.getElementById('mktInputSubtitle');
-    const inpC1 = document.getElementById('mktInputChip1');
-    const inpC2 = document.getElementById('mktInputChip2');
-    const inpC3 = document.getElementById('mktInputChip3');
-
-    // Toggles Modulares de Capas SENS
-    if (layersBar) {
-        layersBar.querySelectorAll('.sens-layer-toggle').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const layerKey = btn.getAttribute('data-layer');
-                if (!layerKey) return;
-                mktStudioState.layers[layerKey] = !mktStudioState.layers[layerKey];
-                syncMarketingLayersUI();
-                renderMarketingCanvasFrame();
-            });
-        });
-    }
-
-    if (tplGrid) {
-        let html = '';
-        SENS_MARKETING_TEMPLATES.forEach((t, idx) => {
-            html += `
-                <button type="button" class="sens-mkt-tpl-card ${idx === 0 ? 'active' : ''}" data-tpl-id="${t.id}">
-                    <div class="sens-mkt-tpl-thumb">
-                        ${getMarketingTemplateThumbSvg(t)}
+    grid.innerHTML = items.map(t => {
+        const isActive = (t.code === MktStudioState.templateId);
+        return `
+            <div class="sens-mkt-template-card-item \${isActive ? 'active' : ''}" data-tpl-code="\${t.code}">
+                <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                    <span class="sens-mkt-tpl-code-pill">\${t.code}</span>
+                    <div class="sens-mkt-tpl-info">
+                        <span class="sens-mkt-tpl-name">\${t.name}</span>
+                        <span class="sens-mkt-tpl-cat">\${t.tag || 'SENS PROTOCOL'}</span>
                     </div>
-                    <span class="sens-mkt-tpl-cat">${t.badge}</span>
-                    <strong class="sens-mkt-tpl-name">${t.name}</strong>
-                    <span class="sens-mkt-tpl-desc">${t.desc || ''}</span>
-                </button>
-            `;
-        });
-        tplGrid.innerHTML = html;
+                </div>
+                <span style="font-size: 11px; color: \${isActive ? '#705B3E' : '#A1A1AA'}; font-weight: 800;">
+                    \${isActive ? '✓' : '→'}
+                </span>
+            </div>
+        `;
+    }).join('');
 
-        tplGrid.querySelectorAll('.sens-mkt-tpl-card').forEach(btn => {
-            btn.addEventListener('click', () => {
-                tplGrid.querySelectorAll('.sens-mkt-tpl-card').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                mktStudioState.templateId = btn.getAttribute('data-tpl-id');
-                mktStudioState.sceneIdx = 0;
-                mktStudioState.slideIdx = 0;
-                applyMarketingTemplateToInputs();
-            });
-        });
-    }
-
-    formatBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            formatBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            mktStudioState.format = btn.getAttribute('data-format') || 'reel_video_9_16';
-            updateMarketingFormatLayout();
-            applyMarketingTemplateToInputs();
-        });
-    });
-
-    sceneBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            sceneBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            mktStudioState.sceneIdx = parseInt(btn.getAttribute('data-scene'), 10) || 0;
-            loadActiveSceneOrSlideIntoInputs();
-        });
-    });
-
-    slideBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            slideBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            mktStudioState.slideIdx = parseInt(btn.getAttribute('data-slide'), 10) || 0;
-            loadActiveSceneOrSlideIntoInputs();
-        });
-    });
-
-    if (autoCycleCheck) {
-        autoCycleCheck.addEventListener('change', () => {
-            mktStudioState.autoCycleScenes = autoCycleCheck.checked;
-        });
-    }
-
-    // Inputs en tiempo real con guardado en la escena/slide activa y contadores de caracteres con guardrails
-    const syncInputsToActiveFrame = () => {
-        const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
-        const frame = mktStudioState.format === 'carousel_4_5'
-            ? tpl.slides[mktStudioState.slideIdx]
-            : tpl.scenes[mktStudioState.sceneIdx];
-
-        if (frame) {
-            frame.eyebrow = (inpEyebrow?.value || '').slice(0, 26);
-            frame.headline = (inpHeadline?.value || '').slice(0, 52);
-            frame.sub = (inpSub?.value || '').slice(0, 110);
-            frame.c1 = (inpC1?.value || '').slice(0, 20);
-            frame.c2 = (inpC2?.value || '').slice(0, 20);
-            frame.c3 = (inpC3?.value || '').slice(0, 22);
-        }
-
-        const updateCounter = (el, val, max) => {
-            if (!el) return;
-            const len = (val || '').length;
-            el.textContent = `${len}/${max}`;
-            el.classList.toggle('is-warning', len >= Math.floor(max * 0.85) && len < max);
-            el.classList.toggle('is-max', len >= max);
+    grid.querySelectorAll('.sens-mkt-template-card-item').forEach(card => {
+        card.onclick = () => {
+            const code = card.getAttribute('data-tpl-code');
+            if (code) loadMktTemplate(code);
         };
-
-        updateCounter(document.getElementById('mktCharCountBadge'), inpEyebrow?.value, 26);
-        updateCounter(document.getElementById('mktCharCountHeadline'), inpHeadline?.value, 52);
-        updateCounter(document.getElementById('mktCharCountSub'), inpSub?.value, 110);
-        updateCounter(document.getElementById('mktCharCountC1'), inpC1?.value, 20);
-        updateCounter(document.getElementById('mktCharCountC2'), inpC2?.value, 20);
-        updateCounter(document.getElementById('mktCharCountC3'), inpC3?.value, 22);
-
-        renderMarketingCanvasFrame();
-    };
-
-    [inpEyebrow, inpHeadline, inpSub, inpC1, inpC2, inpC3].forEach(inp => {
-        if (inp) inp.addEventListener('input', syncInputsToActiveFrame);
     });
+}
 
-    // Botón Sugerir Otro Hook Viral
-    const nextHookBtn = document.getElementById('btnMktNextHookIdea');
-    if (nextHookBtn) {
-        nextHookBtn.addEventListener('click', () => {
-            const currentIdx = SENS_MARKETING_TEMPLATES.findIndex(t => t.id === mktStudioState.templateId);
-            const nextIdx = (currentIdx + 1) % SENS_MARKETING_TEMPLATES.length;
-            const nextTpl = SENS_MARKETING_TEMPLATES[nextIdx];
-            mktStudioState.templateId = nextTpl.id;
-            document.querySelectorAll('#mktTemplateSelectorGrid .sens-mkt-tpl-card').forEach(b => {
-                b.classList.toggle('active', b.getAttribute('data-tpl-id') === nextTpl.id);
-            });
-            applyMarketingTemplateToInputs();
-            showSensToast(`Template cargado: ${nextTpl.name}`, 'champagne');
+// 4. CARGAR TEMPLATE ACTIVO & ENFORZAR LÍMITES DE CARACTERES
+function loadMktTemplate(code) {
+    const catalog = getMktCatalog();
+    const tpl = catalog.find(t => t.code === code);
+    if (!tpl) return;
+
+    MktStudioState.templateId = tpl.code;
+    MktStudioState.format = tpl.format;
+    MktStudioState.blockId = tpl.blockId;
+
+    // Resaltar en el grid
+    const grid = document.getElementById('mktTemplateSelectorGrid');
+    if (grid) {
+        grid.querySelectorAll('.sens-mkt-template-card-item').forEach(c => {
+            const isMatch = (c.getAttribute('data-tpl-code') === tpl.code);
+            c.classList.toggle('active', isMatch);
         });
     }
 
-    // Autocompletar 1-Tap desde Biblioteca de Ejercicios o Alimentos
-    const btnAutoEx = document.getElementById('btnMktAutofillExercise');
-    const btnAutoFood = document.getElementById('btnMktAutofillFood');
-    const autoDrawer = document.getElementById('mktAutofillPickerDrawer');
-    const autoSearch = document.getElementById('mktAutofillSearchInput');
-    const autoList = document.getElementById('mktAutofillItemsList');
-    let autoMode = 'exercise';
+    // Actualizar campos
+    MktStudioState.fields.tag = tpl.tag || 'SENS • PROTOCOLO';
+    MktStudioState.fields.title = tpl.title || 'Entrenamiento con dolor cero.';
+    MktStudioState.fields.bajada = tpl.bajada || 'Fuerza tranquila y longevidad en CABA y Online.';
 
-    const renderAutofillDrawerList = (q = '') => {
-        if (!autoList) return;
-        let html = '';
-        if (autoMode === 'exercise') {
-            const lib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
-            lib.filter(x => !q || x.name.toLowerCase().includes(q)).slice(0, 15).forEach(ex => {
-                html += `<button type="button" class="btn btn-outline btn-sm mkt-autofill-pick-item" data-id="${ex.id}" style="text-align:left; justify-content:space-between; display:flex;"><span>${ex.name}</span><span style="color:#9E7D4B;">~${ex.kcal_per_set || 8} kcal/serie</span></button>`;
-            });
-        } else {
-            FOOD_CATALOG.filter(f => !q || f.name.toLowerCase().includes(q)).slice(0, 15).forEach(f => {
-                html += `<button type="button" class="btn btn-outline btn-sm mkt-autofill-pick-item" data-id="${f.id}" style="text-align:left; justify-content:space-between; display:flex;"><span>${f.name}</span><span style="color:#9E7D4B;">${f.calPer100} kcal • ${f.protPer100}g P</span></button>`;
-            });
+    // Límites estrictos según requerimiento de marketing
+    const limits = tpl.charLimits || { tag: 25, title: 60, bajada: 120 };
+
+    // 1. Sincronizar inputs del panel lateral
+    const inputTag = document.getElementById('mktInputEyebrow');
+    const inputTitle = document.getElementById('mktInputHeadline');
+    const inputBajada = document.getElementById('mktInputSubtitle');
+
+    if (inputTag) {
+        inputTag.maxLength = limits.tag;
+        inputTag.value = MktStudioState.fields.tag;
+    }
+    if (inputTitle) {
+        inputTitle.maxLength = limits.title;
+        inputTitle.value = MktStudioState.fields.title;
+    }
+    if (inputBajada) {
+        inputBajada.maxLength = limits.bajada;
+        inputBajada.value = MktStudioState.fields.bajada;
+    }
+
+    // 2. Sincronizar elementos en el Artboard WYSIWYG
+    const liveTag = document.getElementById('mktLiveTag');
+    const liveTitle = document.getElementById('mktLiveTitle');
+    const liveBajada = document.getElementById('mktLiveBajada');
+    const liveMetric = document.getElementById('mktLiveMetricWrap');
+
+    if (liveTag) liveTag.innerText = MktStudioState.fields.tag;
+    if (liveTitle) liveTitle.innerText = MktStudioState.fields.title;
+    if (liveBajada) liveBajada.innerText = MktStudioState.fields.bajada;
+
+    if (liveMetric) {
+        liveMetric.innerHTML = tpl.metricHtml || '';
+        liveMetric.style.display = tpl.metricHtml ? 'block' : 'none';
+    }
+
+    // 3. Actualizar badges de conteo y advertencia
+    updateCharBadge('mktTagCharBadge', MktStudioState.fields.tag, limits.tag);
+    updateCharBadge('mktTitleCharBadge', MktStudioState.fields.title, limits.title);
+    updateCharBadge('mktBajadaCharBadge', MktStudioState.fields.bajada, limits.bajada);
+
+    // 4. Actualizar multimedia de fondo por defecto
+    if (!MktStudioState.customMediaActive) {
+        MktStudioState.mediaUrl = tpl.defaultBg || 'img/hero-bg-opt.jpg';
+        updateMktMediaDisplay();
+    }
+}
+
+function updateCharBadge(badgeId, text, limit) {
+    const badge = document.getElementById(badgeId);
+    if (!badge) return;
+    const len = (text || '').length;
+    badge.textContent = `${len} / ${limit} car.`;
+    badge.classList.toggle('is-limit-warning', len >= limit);
+}
+
+// 5. EDICIÓN HÍBRIDA (WYSIWYG + INPUTS) CON BLOQUEO ESTRICTO
+function bindMktEditorInputs() {
+    const inputTag = document.getElementById('mktInputEyebrow');
+    const inputTitle = document.getElementById('mktInputHeadline');
+    const inputBajada = document.getElementById('mktInputSubtitle');
+
+    const liveTag = document.getElementById('mktLiveTag');
+    const liveTitle = document.getElementById('mktLiveTitle');
+    const liveBajada = document.getElementById('mktLiveBajada');
+
+    const syncField = (field, text, liveEl, inputEl, badgeId) => {
+        const tpl = getActiveMktTemplate();
+        const limit = (tpl.charLimits && tpl.charLimits[field]) || 60;
+        let safeText = String(text || '');
+        if (safeText.length > limit) {
+            safeText = safeText.slice(0, limit);
         }
-        autoList.innerHTML = html;
+        MktStudioState.fields[field] = safeText;
 
-        autoList.querySelectorAll('.mkt-autofill-pick-item').forEach(b => {
-            b.addEventListener('click', () => {
-                const id = b.getAttribute('data-id');
-                if (autoMode === 'exercise') {
-                    const lib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
-                    const ex = lib.find(x => x.id === id);
-                    if (ex) {
-                        const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
-                        tpl.scenes[0] = { eyebrow: `TÉCNICA • ${(ex.primary_muscle || 'FUERZA').toUpperCase().slice(0, 14)}`, headline: `CÓMO HACER ${ex.name.toUpperCase()}`.slice(0, 52), sub: (ex.common_mistakes || ex.execution || '').slice(0, 110), c1: `Foco: ${(ex.primary_muscle || 'Músculo').slice(0, 12)}`, c2: `~${ex.kcal_per_set || 8} kcal / serie`, c3: 'Mirá la técnica →' };
-                        tpl.scenes[1] = { eyebrow: 'EJECUCIÓN CORRECTA', headline: 'CLAVES BIOMECÁNICAS SENS', sub: (ex.execution || ex.recommendations || '').slice(0, 110), c1: `${ex.sets || 4} Series × ${ex.reps || '10'}`, c2: `Descanso ${ex.rest || 90}s`, c3: 'Control RIR 2' };
-                        loadActiveSceneOrSlideIntoInputs();
-                        showSensToast(`Datos de "${ex.name}" cargados en las escenas.`, 'champagne');
-                    }
-                } else {
-                    const f = FOOD_CATALOG.find(x => x.id === id);
-                    if (f) {
-                        const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
-                        tpl.scenes[0] = { eyebrow: 'NUTRICIÓN INTELIGENTE', headline: f.name.toUpperCase().slice(0, 52), sub: (f.coachNote || 'Alimento clave del catálogo nutricional SENS.').slice(0, 110), c1: `${f.calPer100} kcal / 100g`, c2: `${f.protPer100}g Proteína`, c3: `${f.carbsPer100}g C • ${f.fatsPer100}g G` };
-                        loadActiveSceneOrSlideIntoInputs();
-                        showSensToast(`Datos nutricionales de "${f.name}" cargados.`, 'champagne');
-                    }
+        if (liveEl && liveEl.innerText !== safeText) {
+            liveEl.innerText = safeText;
+        }
+        if (inputEl && inputEl.value !== safeText) {
+            inputEl.value = safeText;
+        }
+        updateCharBadge(badgeId, safeText, limit);
+    };
+
+    // Listeners en Inputs del Panel
+    if (inputTag) {
+        inputTag.addEventListener('input', (e) => syncField('tag', e.target.value, liveTag, inputTag, 'mktTagCharBadge'));
+    }
+    if (inputTitle) {
+        inputTitle.addEventListener('input', (e) => syncField('title', e.target.value, liveTitle, inputTitle, 'mktTitleCharBadge'));
+    }
+    if (inputBajada) {
+        inputBajada.addEventListener('input', (e) => syncField('bajada', e.target.value, liveBajada, inputBajada, 'mktBajadaCharBadge'));
+    }
+
+    // Listeners WYSIWYG en Vivo en el Artboard (con guardia estricta en keydown y paste)
+    const attachWysiwygGuard = (field, liveEl, inputEl, badgeId) => {
+        if (!liveEl) return;
+
+        liveEl.addEventListener('keydown', (e) => {
+            const tpl = getActiveMktTemplate();
+            const limit = (tpl.charLimits && tpl.charLimits[field]) || 60;
+            const currentLen = (liveEl.innerText || '').length;
+
+            const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Escape'];
+            if (currentLen >= limit && !allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+                e.preventDefault();
+                // Visual feedback de límite alcanzado
+                const badge = document.getElementById(badgeId);
+                if (badge) {
+                    badge.classList.add('is-limit-warning');
+                    setTimeout(() => badge.classList.remove('is-limit-warning'), 400);
                 }
-                if (autoDrawer) autoDrawer.style.display = 'none';
-            });
+            }
+        });
+
+        liveEl.addEventListener('input', () => {
+            syncField(field, liveEl.innerText, null, inputEl, badgeId);
+        });
+
+        liveEl.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+            const tpl = getActiveMktTemplate();
+            const limit = (tpl.charLimits && tpl.charLimits[field]) || 60;
+            const currentLen = (liveEl.innerText || '').length;
+            const available = Math.max(0, limit - currentLen);
+            const textToInsert = pasteData.slice(0, available);
+            document.execCommand('insertText', false, textToInsert);
         });
     };
 
-    if (btnAutoEx) {
-        btnAutoEx.addEventListener('click', () => {
-            autoMode = 'exercise';
-            if (autoDrawer) autoDrawer.style.display = 'block';
-            renderAutofillDrawerList('');
-        });
-    }
-    if (btnAutoFood) {
-        btnAutoFood.addEventListener('click', () => {
-            autoMode = 'food';
-            if (autoDrawer) autoDrawer.style.display = 'block';
-            renderAutofillDrawerList('');
-        });
-    }
-    if (autoSearch) {
-        autoSearch.addEventListener('input', () => renderAutofillDrawerList(autoSearch.value.trim().toLowerCase()));
-    }
+    attachWysiwygGuard('tag', liveTag, inputTag, 'mktTagCharBadge');
+    attachWysiwygGuard('title', liveTitle, inputTitle, 'mktTitleCharBadge');
+    attachWysiwygGuard('bajada', liveBajada, inputBajada, 'mktBajadaCharBadge');
+}
 
-    // Carga Efímera en RAM de Foto o Video (0 Bytes en Supabase)
+// 6. MULTIMEDIA: FOTO & VIDEO INTERCAMBIABLES
+function bindMktMediaControls() {
+    const btnSelectImg = document.getElementById('btnMediaSelectImage');
+    const btnSelectVid = document.getElementById('btnMediaSelectVideo');
     const fileInput = document.getElementById('mktMediaFileInput');
-    const defaultMediaBtn = document.getElementById('btnMktUseDefaultMedia');
-    const btnToggleVideoPlay = document.getElementById('btnMktToggleVideoPlay');
-    const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
+    const btnSensVideos = document.getElementById('btnMktSensVideos');
+    const btnSensPhotos = document.getElementById('btnMktSensPhotos');
+    const videoSelectBar = document.getElementById('mktSensVideoPickerBar');
+    const videoSelect = document.getElementById('mktSensVideoSelect');
+    const btnTogglePlay = document.getElementById('btnMktToggleVideoPlay');
+    const btnToggleMute = document.getElementById('btnMktToggleVideoMute');
 
-    if (hiddenVideo) {
-        hiddenVideo.muted = true;
-        hiddenVideo.loop = true;
-        hiddenVideo.playsInline = true;
-        if (!hiddenVideo.getAttribute('src')) {
-            hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
-            hiddenVideo.load();
-        }
+    // Cambiar entre tipo Foto y Video
+    if (btnSelectImg) {
+        btnSelectImg.onclick = () => {
+            MktStudioState.mediaType = 'image';
+            btnSelectImg.classList.add('active');
+            if (btnSelectVid) btnSelectVid.classList.remove('active');
+            updateMktMediaDisplay();
+        };
+    }
+    if (btnSelectVid) {
+        btnSelectVid.onclick = () => {
+            MktStudioState.mediaType = 'video';
+            btnSelectVid.classList.add('active');
+            if (btnSelectImg) btnSelectImg.classList.remove('active');
+            updateMktMediaDisplay();
+        };
     }
 
+    // Subida de archivo local (Foto o Video)
     if (fileInput) {
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
-            if (mktStudioState.objectUrlCache) {
-                URL.revokeObjectURL(mktStudioState.objectUrlCache);
-            }
-            const url = URL.createObjectURL(file);
-            mktStudioState.objectUrlCache = url;
 
-            const isVideo = (file.type && file.type.startsWith('video/')) || /\.(mp4|mov|webm|m4v|avi|ogv|3gp)$/i.test(file.name);
-            const statusPill = document.getElementById('mktMediaFileStatusPill');
-            const statusText = document.getElementById('mktMediaFileStatusText');
-            if (statusPill && statusText) {
-                statusPill.style.display = 'block';
-                const cleanName = file.name.length > 25 ? (file.name.slice(0, 22) + '...') : file.name;
-                statusText.textContent = `✓ ${isVideo ? '🎬 Video' : '🖼️ Foto'}: ${cleanName} cargado`;
+            const isVideo = file.type.startsWith('video');
+            MktStudioState.mediaType = isVideo ? 'video' : 'image';
+            MktStudioState.customMediaActive = true;
+            MktStudioState.mediaUrl = URL.createObjectURL(file);
+
+            if (btnSelectImg && btnSelectVid) {
+                btnSelectImg.classList.toggle('active', !isVideo);
+                btnSelectVid.classList.toggle('active', isVideo);
             }
 
-            if (isVideo) {
-                mktStudioState.mediaType = 'video';
-                mktStudioState.customImageObj = null;
-                if (btnToggleVideoPlay) {
-                    btnToggleVideoPlay.style.display = 'inline-flex';
-                    btnToggleVideoPlay.textContent = '⏸️ Pausar Video';
-                }
-                if (hiddenVideo) {
-                    hiddenVideo.src = url;
-                    hiddenVideo.muted = true;
-                    hiddenVideo.loop = true;
-                    hiddenVideo.playsInline = true;
-                    hiddenVideo.load();
-                    hiddenVideo.play().catch(() => {});
-                    hiddenVideo.onloadeddata = () => {
-                        renderMarketingCanvasFrame();
-                        if (!mktStudioState.rafId) {
-                            window.renderCoachMarketingStudio();
-                        }
-                    };
-                }
-                showSensToast('🎬 ¡Video cargado con éxito! Se reproduce en vivo en el visor.', 'champagne');
+            const pill = document.getElementById('mktMediaFileStatusPill');
+            const pillText = document.getElementById('mktMediaFileStatusText');
+            if (pill && pillText) {
+                pill.style.display = 'block';
+                pillText.textContent = `${isVideo ? 'Video' : 'Foto'} cargado: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+            }
+
+            updateMktMediaDisplay();
+        });
+    }
+
+    // Videos oficiales SENS de Nico
+    if (btnSensVideos) {
+        btnSensVideos.onclick = () => {
+            MktStudioState.mediaType = 'video';
+            if (btnSelectImg && btnSelectVid) {
+                btnSelectImg.classList.remove('active');
+                btnSelectVid.classList.add('active');
+            }
+            if (videoSelectBar) {
+                videoSelectBar.style.display = (videoSelectBar.style.display === 'none') ? 'block' : 'none';
+            }
+            // Poblar dropdown con videos si está disponible
+            populateSensVideosDropdown();
+        };
+    }
+
+    if (videoSelect) {
+        videoSelect.onchange = (e) => {
+            if (e.target.value) {
+                MktStudioState.mediaUrl = e.target.value;
+                MktStudioState.customMediaActive = true;
+                updateMktMediaDisplay();
+            }
+        };
+    }
+
+    // Fotos oficiales Quiet Luxury
+    if (btnSensPhotos) {
+        const luxuryPhotos = [
+            'img/hero-bg-opt.jpg',
+            'img/pilar-3-movilidad.jpg',
+            'img/pilar-4-adherencia.jpg',
+            'https://lh3.googleusercontent.com/aida-public/AB6AXuB61kGwxKTjPg2mVZOoyO7IcD_NYAwp0OCBgt-DEM3Xe0JN0CyJU3Cat586tRPwOpaOxt1IgIqbc1BnloPIwWj-aoP9vt4bFjR1orMdEMJxQEUI-b-MyddWoNq1PCQr1ShUF561fGrC7tPuH75WdabiK5qcrx2n9A3K3QBpLN_ujHIfyA76eQAN_j4GGASSlD4Lf1PZ6C1xnPsNhUo3x1CCimtSnYECMCdKBBEMCA',
+            'https://lh3.googleusercontent.com/aida-public/AB6AXuCEo89qoXyFP2LexcocQxNLq9cxasKCLM4Qi1p66lof8RjChAkc6PdHR3GM5dkKq_aB_Q1VvPhmClce-fPbPpBf-nbAxt0Pwc74rQ_vR7sbQrDMby0z4XwI1IMuFc2Ibl14zkisaIIr3WP7bbwvZKR'
+        ];
+        let photoIdx = 0;
+        btnSensPhotos.onclick = () => {
+            MktStudioState.mediaType = 'image';
+            if (btnSelectImg && btnSelectVid) {
+                btnSelectImg.classList.add('active');
+                btnSelectVid.classList.remove('active');
+            }
+            photoIdx = (photoIdx + 1) % luxuryPhotos.length;
+            MktStudioState.mediaUrl = luxuryPhotos[photoIdx];
+            MktStudioState.customMediaActive = true;
+            updateMktMediaDisplay();
+        };
+    }
+
+    // Controles de Play/Pause y Mute
+    const video = document.getElementById('mktArtboardVideo');
+    if (btnTogglePlay && video) {
+        btnTogglePlay.onclick = () => {
+            if (video.paused) {
+                video.play();
+                btnTogglePlay.textContent = '⏸️ Pausar';
             } else {
-                mktStudioState.mediaType = 'image';
-                if (btnToggleVideoPlay) btnToggleVideoPlay.style.display = 'none';
-                if (hiddenVideo && !hiddenVideo.paused) {
-                    try { hiddenVideo.pause(); } catch (_) {}
-                }
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = () => {
-                    mktStudioState.customImageObj = img;
-                    renderMarketingCanvasFrame();
-                };
-                img.src = url;
-                showSensToast('🖼️ Imagen cargada y centrada automáticamente.', 'champagne');
+                video.pause();
+                btnTogglePlay.textContent = '▶️ Reproducir';
             }
-            updateMarketingFormatLayout();
-        });
+        };
     }
+    if (btnToggleMute && video) {
+        btnToggleMute.onclick = () => {
+            video.muted = !video.muted;
+            btnToggleMute.textContent = video.muted ? '🔇 Mute' : '🔊 Con Audio';
+        };
+    }
+}
 
-    if (btnToggleVideoPlay && hiddenVideo) {
-        btnToggleVideoPlay.addEventListener('click', () => {
-            if (hiddenVideo.paused) {
-                hiddenVideo.play().catch(() => {});
-                btnToggleVideoPlay.textContent = '⏸️ Pausar Video';
-            } else {
-                hiddenVideo.pause();
-                btnToggleVideoPlay.textContent = '▶️ Reproducir Video';
-            }
-        });
-    }
+function populateSensVideosDropdown() {
+    const select = document.getElementById('mktSensVideoSelect');
+    if (!select || select._populated) return;
+    select._populated = true;
 
-    if (defaultMediaBtn) {
-        defaultMediaBtn.addEventListener('click', () => {
-            mktStudioState.mediaType = 'video';
-            mktStudioState.customImageObj = null;
-            const statusPill = document.getElementById('mktMediaFileStatusPill');
-            if (statusPill) statusPill.style.display = 'none';
-            if (btnToggleVideoPlay) {
-                btnToggleVideoPlay.style.display = 'inline-flex';
-                btnToggleVideoPlay.textContent = '⏸️ Pausar Video';
-            }
-            if (hiddenVideo) {
-                hiddenVideo.src = 'vid/pilar-2-vitalidad.mp4';
-                hiddenVideo.muted = true;
-                hiddenVideo.loop = true;
-                hiddenVideo.playsInline = true;
-                hiddenVideo.load();
-                hiddenVideo.play().catch(() => {});
-            }
-            updateMarketingFormatLayout();
-            showSensToast('Fondo oficial SENS restaurado.', 'info');
-        });
-    }
+    const defaultVideos = [
+        { label: 'Nico • Biomecánica & Fuerza Principal (Fondo Oficial)', url: 'https://makesens.com.ar/img/hero-bg-opt.mp4' }
+    ];
 
-    // Sliders de Zoom, Encuadre y Opacidad
-    const zoomSlider = document.getElementById('mktMediaZoomSlider');
-    const panYSlider = document.getElementById('mktMediaPanYSlider');
-    const opacitySlider = document.getElementById('mktOverlayOpacitySlider');
-    const zoomLabel = document.getElementById('mktZoomValLabel');
-
-    if (zoomSlider) {
-        zoomSlider.addEventListener('input', () => {
-            mktStudioState.zoom = parseInt(zoomSlider.value, 10) || 105;
-            if (zoomLabel) zoomLabel.textContent = `${mktStudioState.zoom}%`;
-            renderMarketingCanvasFrame();
-        });
-    }
-    if (panYSlider) {
-        panYSlider.addEventListener('input', () => {
-            mktStudioState.panY = parseInt(panYSlider.value, 10) || 0;
-            renderMarketingCanvasFrame();
-        });
-    }
-    if (opacitySlider) {
-        opacitySlider.addEventListener('input', () => {
-            mktStudioState.overlayOpacity = parseInt(opacitySlider.value, 10) || 80;
-            renderMarketingCanvasFrame();
-        });
-    }
-
-    // Copiar & Editar Caption IG / TikTok
-    const copyCapBtn = document.getElementById('btnMktCopyCaption');
-    const capEl = document.getElementById('mktCaptionOutput');
-    if (capEl) {
-        capEl.addEventListener('input', () => {
-            const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId);
-            if (tpl) tpl.caption = capEl.value;
-        });
-    }
-    if (copyCapBtn) {
-        copyCapBtn.addEventListener('click', () => {
-            if (capEl && navigator.clipboard) {
-                navigator.clipboard.writeText(capEl.value);
-                showSensToast('Caption copiado al portapapeles listo para Instagram / TikTok.', 'champagne');
+    // Buscar videos en exercises_db si existe
+    if (typeof SENS_EXERCISES_DATABASE !== 'undefined' && Array.isArray(SENS_EXERCISES_DATABASE)) {
+        SENS_EXERCISES_DATABASE.slice(0, 15).forEach(ex => {
+            if (ex.video_url) {
+                defaultVideos.push({
+                    label: `Ejercicio: ${ex.name_es || ex.name || 'Entrenamiento'}`,
+                    url: ex.video_url
+                });
             }
         });
     }
 
-    // Toggle de Opciones Avanzadas (Sin Accordion <details> para evitar bloqueos)
-    const btnToggleAdv = document.getElementById('btnToggleMktAdvanced');
-    const advContent = document.getElementById('mktAdvancedContent');
-    const advArrow = document.getElementById('mktAdvancedToggleArrow');
-    if (btnToggleAdv && advContent) {
-        btnToggleAdv.addEventListener('click', () => {
-            const isHidden = advContent.style.display === 'none';
-            advContent.style.display = isHidden ? 'flex' : 'none';
-            if (advArrow) advArrow.textContent = isHidden ? '▲ Ocultar' : '▼ Mostrar';
-        });
-    }
+    select.innerHTML = defaultVideos.map(v => `<option value="${v.url}">${v.label}</option>`).join('');
+}
 
-    // Toggle de Guías de Safe Zones (TikTok / Instagram) en tiempo real
-    const safeGuidesCheck = document.getElementById('mktToggleSafeZoneGuides');
-    if (safeGuidesCheck) {
-        safeGuidesCheck.checked = !!mktStudioState.showSafeZoneGuides;
-        safeGuidesCheck.addEventListener('change', () => {
-            mktStudioState.showSafeZoneGuides = safeGuidesCheck.checked;
-            renderMarketingCanvasFrame();
-        });
-    }
+function updateMktMediaDisplay() {
+    const img = document.getElementById('mktArtboardImg');
+    const video = document.getElementById('mktArtboardVideo');
+    const videoControls = document.getElementById('mktVideoPlaybackControls');
+    const btnRecordUHD = document.getElementById('btnMktRecordVideoUHD');
+    const btnCaptureFrame = document.getElementById('btnMktCaptureFrameUHD');
 
-    // Exportación directa UHD (2160px) a archivos del dispositivo (CERO desvíos a WhatsApp)
-    async function exportMarketingCanvasPiece(canvas, fileName) {
-        return new Promise((resolve) => {
-            try {
-                canvas.toBlob((blob) => {
-                    if (!blob) {
-                        showSensToast('Error al generar la imagen UHD.', 'error');
-                        resolve(false);
-                        return;
-                    }
+    const isVideo = (MktStudioState.mediaType === 'video');
 
-                    // Descarga directa obligatoria a Archivos / Descargas del móvil y escritorio
-                    const objectUrl = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.style.display = 'none';
-                    link.href = objectUrl;
-                    link.download = fileName;
-                    document.body.appendChild(link);
-                    link.click();
-                    setTimeout(() => {
-                        if (link.parentNode) link.parentNode.removeChild(link);
-                        URL.revokeObjectURL(objectUrl);
-                    }, 2000);
-
-                    showSensToast('✓ Pieza UHD (2160px) descargada directamente a tus archivos.', 'champagne', 3500);
-                    resolve(true);
-                }, 'image/png', 1.0);
-            } catch (err) {
-                console.error('Error al exportar canvas UHD:', err);
-                if (err.name === 'SecurityError' || String(err).includes('Tainted')) {
-                    showSensToast('Restricción CORS del navegador. Usá una imagen o video cargado desde tu dispositivo.', 'error', 6000);
-                } else {
-                    showSensToast('Error al exportar la imagen UHD: ' + (err.message || 'error desconocido'), 'error');
-                }
-                resolve(false);
+    if (isVideo) {
+        if (img) img.style.display = 'none';
+        if (video) {
+            video.style.display = 'block';
+            if (video.src !== MktStudioState.mediaUrl) {
+                video.src = MktStudioState.mediaUrl;
             }
-        });
+            video.play().catch(() => {});
+        }
+        if (videoControls) videoControls.style.display = 'flex';
+        if (btnRecordUHD) btnRecordUHD.style.display = 'flex';
+        if (btnCaptureFrame) btnCaptureFrame.style.display = 'flex';
+    } else {
+        if (video) {
+            video.pause();
+            video.style.display = 'none';
+        }
+        if (img) {
+            img.style.display = 'block';
+            img.src = MktStudioState.mediaUrl;
+        }
+        if (videoControls) videoControls.style.display = 'none';
+        if (btnRecordUHD) btnRecordUHD.style.display = 'none';
+        if (btnCaptureFrame) btnCaptureFrame.style.display = 'none';
     }
+}
 
-    // Exportar PNG actual, Secuencia Completa o Video Animado WebM
-    const btnExportPng = document.getElementById('btnMktExportPng');
-    const btnExportPack = document.getElementById('btnMktExportAllPack');
-    const btnRecordVideo = document.getElementById('btnMktRecordVideoWebm');
+// 7. GUÍA SAFE ZONE INSTAGRAM / TIKTOK
+function bindMktSafeZoneToggle() {
+    const toggle = document.getElementById('mktSafeZoneToggle');
+    const overlay = document.getElementById('mktSafeZoneOverlay');
+    if (!toggle || !overlay) return;
+
+    toggle.addEventListener('change', (e) => {
+        MktStudioState.showSafeZones = e.target.checked;
+        overlay.style.display = e.target.checked ? 'flex' : 'none';
+    });
+}
+
+// 8. DESCARGA EN ULTRA HIGH DEFINITION (UHD 4K • 300 DPI)
+function bindMktUhdExportButtons() {
+    const btnExportPng = document.getElementById('btnMktExportPngUHD');
+    const btnRecordVid = document.getElementById('btnMktRecordVideoUHD');
+    const btnCaptureFrame = document.getElementById('btnMktCaptureFrameUHD');
 
     if (btnExportPng) {
-        btnExportPng.addEventListener('click', async () => {
-            const canvas = document.getElementById('sensMarketingCanvas');
-            if (!canvas) return;
-            const prevGuides = mktStudioState.showSafeZoneGuides;
-            mktStudioState.showSafeZoneGuides = false;
-            renderMarketingCanvasFrame();
-
-            const suffix = mktStudioState.format === 'carousel_4_5'
-                ? `slide-${mktStudioState.slideIdx + 1}`
-                : `escena-${mktStudioState.sceneIdx + 1}`;
-            const fileName = `SENS-${mktStudioState.templateId}-${suffix}-UHD.png`;
-
-            // Renderizado en Offscreen Canvas a Resolución UHD 4K (2160px de ancho)
-            const uhdCanvas = document.createElement('canvas');
-            uhdCanvas.width = canvas.width * 2;
-            uhdCanvas.height = canvas.height * 2;
-            renderMarketingCanvasFrame(uhdCanvas, 2);
-
-            await exportMarketingCanvasPiece(uhdCanvas, fileName);
-
-            mktStudioState.showSafeZoneGuides = prevGuides;
-            renderMarketingCanvasFrame();
-        });
+        btnExportPng.onclick = () => exportMarketingPieceUHD();
     }
-
-    if (btnExportPack) {
-        btnExportPack.addEventListener('click', async () => {
-            const canvas = document.getElementById('sensMarketingCanvas');
-            if (!canvas) return;
-            const prevGuides = mktStudioState.showSafeZoneGuides;
-            mktStudioState.showSafeZoneGuides = false;
-            const isCarousel = mktStudioState.format === 'carousel_4_5';
-            const totalFrames = isCarousel ? 4 : 3;
-            showSensToast(`Generando las ${totalFrames} piezas de la secuencia en HD...`, 'champagne');
-
-            for (let i = 0; i < totalFrames; i++) {
-                if (isCarousel) mktStudioState.slideIdx = i;
-                else mktStudioState.sceneIdx = i;
-                loadActiveSceneOrSlideIntoInputs();
-                renderMarketingCanvasFrame();
-                await new Promise(r => setTimeout(r, 260));
-
-                const fileName = `SENS-${mktStudioState.templateId}-${isCarousel ? 'Slide' : 'Escena'}-${i + 1}-UHD.png`;
-                const uhdCanvas = document.createElement('canvas');
-                uhdCanvas.width = canvas.width * 2;
-                uhdCanvas.height = canvas.height * 2;
-                renderMarketingCanvasFrame(uhdCanvas, 2);
-                await exportMarketingCanvasPiece(uhdCanvas, fileName);
-                await new Promise(r => setTimeout(r, 200));
-            }
-            mktStudioState.showSafeZoneGuides = prevGuides;
-            renderMarketingCanvasFrame();
-            showSensToast(`Secuencia completa de ${totalFrames} piezas procesada.`, 'champagne');
-        });
+    if (btnRecordVid) {
+        btnRecordVid.onclick = () => recordMarketingVideoUHD();
     }
-
-    if (btnRecordVideo) {
-        btnRecordVideo.addEventListener('click', async () => {
-            const canvas = document.getElementById('sensMarketingCanvas');
-            if (!canvas || typeof canvas.captureStream !== 'function' || typeof MediaRecorder === 'undefined') {
-                showSensToast('Tu navegador no soporta grabación directa de video. Podés descargar la portada en UHD (PNG).', 'info');
-                return;
-            }
-
-            const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
-            const progressBar = document.getElementById('mktVideoRenderProgressBar');
-            const progressFill = document.getElementById('mktVideoRenderProgressFill');
-            const progressLabel = document.getElementById('mktVideoRenderStatusLabel');
-            const progressPercent = document.getElementById('mktVideoRenderPercent');
-
-            let mimeType = '';
-            const candidates = [
-                'video/mp4;codecs=avc1',
-                'video/mp4',
-                'video/webm;codecs=vp9,opus',
-                'video/webm;codecs=vp8,opus',
-                'video/webm'
-            ];
-            for (const c of candidates) {
-                if (MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(c)) {
-                    mimeType = c;
-                    break;
-                }
-            }
-
-            const isMp4 = mimeType.includes('mp4');
-            const ext = isMp4 ? 'mp4' : 'webm';
-
-            let totalDuration = 9;
-            if (mktStudioState.mediaType === 'video' && hiddenVideo && hiddenVideo.duration && !isNaN(hiddenVideo.duration) && isFinite(hiddenVideo.duration)) {
-                totalDuration = Math.max(4, Math.min(15, Math.round(hiddenVideo.duration)));
-            }
-
-            const prevGuides = mktStudioState.showSafeZoneGuides;
-            mktStudioState.showSafeZoneGuides = false;
-            renderMarketingCanvasFrame();
-
-            if (progressBar) progressBar.style.display = 'block';
-            btnRecordVideo.disabled = true;
-            btnRecordVideo.style.opacity = '0.7';
-            btnRecordVideo.innerHTML = `<span>⏳</span><span>Grabando Video 60 FPS UHD...</span>`;
-
-            try {
-                // Captura a 60 FPS reales y tasa de bits de 16 Mbps para nitidez y máxima fluidez en RRSS
-                const stream = canvas.captureStream(60);
-                const recorderOptions = {
-                    videoBitsPerSecond: 16000000 // 16 Mbps studio quality
-                };
-                if (mimeType) recorderOptions.mimeType = mimeType;
-
-                const recorder = new MediaRecorder(stream, recorderOptions);
-                const chunks = [];
-                recorder.ondataavailable = (ev) => { if (ev.data && ev.data.size > 0) chunks.push(ev.data); };
-
-                if (hiddenVideo) {
-                    hiddenVideo.currentTime = 0;
-                    hiddenVideo.play().catch(() => {});
-                }
-
-                const startTime = Date.now();
-                const sceneStep = totalDuration / 3;
-                let isRecording = true;
-
-                // Loop continuo de render con requestAnimationFrame a 60 FPS sin saltos ni cortes
-                const renderFrameLoop = () => {
-                    if (!isRecording) return;
-                    renderMarketingCanvasFrame();
-                    requestAnimationFrame(renderFrameLoop);
-                };
-                requestAnimationFrame(renderFrameLoop);
-
-                const progressTimer = setInterval(() => {
-                    const elapsed = (Date.now() - startTime) / 1000;
-                    const pct = Math.min(99, Math.round((elapsed / totalDuration) * 100));
-
-                    if (progressFill) progressFill.style.width = `${pct}%`;
-                    if (progressPercent) progressPercent.textContent = `${pct}%`;
-                    if (progressLabel) progressLabel.textContent = `🎬 Renderizando Reel 60 FPS... (${elapsed.toFixed(1)}s / ${totalDuration}s)`;
-
-                    if (mktStudioState.format === 'reel_video_9_16') {
-                        if (elapsed < sceneStep && mktStudioState.sceneIdx !== 0) {
-                            mktStudioState.sceneIdx = 0;
-                            loadActiveSceneOrSlideIntoInputs();
-                        } else if (elapsed >= sceneStep && elapsed < sceneStep * 2 && mktStudioState.sceneIdx !== 1) {
-                            mktStudioState.sceneIdx = 1;
-                            loadActiveSceneOrSlideIntoInputs();
-                        } else if (elapsed >= sceneStep * 2 && mktStudioState.sceneIdx !== 2) {
-                            mktStudioState.sceneIdx = 2;
-                            loadActiveSceneOrSlideIntoInputs();
-                        }
-                    }
-                }, 100);
-
-                recorder.onstop = async () => {
-                    isRecording = false;
-                    clearInterval(progressTimer);
-                    if (progressFill) progressFill.style.width = '100%';
-                    if (progressPercent) progressPercent.textContent = '100%';
-                    if (progressLabel) progressLabel.textContent = '✓ Guardando en tus descargas...';
-
-                    const finalMime = mimeType || 'video/mp4';
-                    const blob = new Blob(chunks, { type: finalMime });
-                    const fileName = `SENS-Reel-60fps-${mktStudioState.templateId}.${ext}`;
-
-                    // Descarga directa a archivos (CERO desvíos a WhatsApp)
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = fileName;
-                    document.body.appendChild(a);
-                    a.click();
-                    setTimeout(() => {
-                        if (a.parentNode) a.parentNode.removeChild(a);
-                        URL.revokeObjectURL(url);
-                    }, 2000);
-
-                    showSensToast(`✓ Video Reel 60 FPS (${ext.toUpperCase()}) descargado directamente a tus archivos.`, 'champagne', 4000);
-
-                    setTimeout(() => {
-                        if (progressBar) progressBar.style.display = 'none';
-                        btnRecordVideo.disabled = false;
-                        btnRecordVideo.style.opacity = '1';
-                        btnRecordVideo.innerHTML = `<span id="mktVideoExportIcon">🎬</span><span id="mktVideoExportText">Descargar Video Reel HD (MP4 / WebM)</span>`;
-                        mktStudioState.showSafeZoneGuides = prevGuides;
-                        renderMarketingCanvasFrame();
-                    }, 800);
-                };
-
-                recorder.start();
-                setTimeout(() => {
-                    if (recorder.state === 'recording') recorder.stop();
-                }, totalDuration * 1000);
-
-            } catch (recErr) {
-                console.error('Error recording video:', recErr);
-                if (progressBar) progressBar.style.display = 'none';
-                btnRecordVideo.disabled = false;
-                btnRecordVideo.style.opacity = '1';
-                btnRecordVideo.innerHTML = `<span id="mktVideoExportIcon">🎬</span><span id="mktVideoExportText">Descargar Video Reel HD (MP4 / WebM)</span>`;
-                mktStudioState.showSafeZoneGuides = prevGuides;
-                renderMarketingCanvasFrame();
-                showSensToast('Error en la grabación. Podés descargar la portada en UHD (PNG).', 'error');
-            }
-        });
-    }
-
-    // Scroll Suave al Visor en Vivo desde Paso 2
-    const btnScrollVisor = document.getElementById('btnMktScrollToVisor');
-    if (btnScrollVisor) {
-        btnScrollVisor.addEventListener('click', () => {
-            const visorEl = document.getElementById('mktLiveVisorBlock');
-            if (visorEl) {
-                visorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        });
-    }
-
-    // Selector de Tamaño del Visor en Vivo (Normal vs Grande)
-    const sizeBtns = document.querySelectorAll('#mktVisorSizeToggle .sens-mkt-size-btn[data-size]');
-    const visorBox = document.getElementById('mktVisorCanvasBox');
-    sizeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            sizeBtns.forEach(b => {
-                b.classList.remove('active');
-                b.style.background = 'transparent';
-                b.style.color = '#FAF9F6';
-            });
-            btn.classList.add('active');
-            btn.style.background = '#E5CBA7';
-            btn.style.color = '#121214';
-            const sz = btn.getAttribute('data-size');
-            if (visorBox) {
-                visorBox.classList.toggle('size-normal', sz === 'normal');
-                visorBox.classList.toggle('size-large', sz === 'large');
-            }
-        });
-    });
-
-    // Lightbox Modal en Pantalla Completa
-    const lightboxModal = document.getElementById('mktCanvasLightboxModal');
-    const openLightbox = () => {
-        if (!lightboxModal) return;
-        lightboxModal.style.display = 'flex';
-        requestAnimationFrame(() => {
-            lightboxModal.classList.add('is-open');
-            renderMarketingCanvasFrame();
-        });
-    };
-    const closeLightbox = () => {
-        if (!lightboxModal) return;
-        lightboxModal.classList.remove('is-open');
-        setTimeout(() => {
-            lightboxModal.style.display = 'none';
-        }, 220);
-    };
-
-    if (visorBox) visorBox.addEventListener('click', openLightbox);
-    const btnOpenLb = document.getElementById('btnMktOpenLightbox');
-    if (btnOpenLb) btnOpenLb.addEventListener('click', openLightbox);
-
-    const btnCloseLb = document.getElementById('btnMktCloseLightbox');
-    if (btnCloseLb) btnCloseLb.addEventListener('click', closeLightbox);
-
-    const btnStayLb = document.getElementById('btnMktLightboxStay');
-    if (btnStayLb) btnStayLb.addEventListener('click', closeLightbox);
-
-    const btnConfirmLb = document.getElementById('btnMktLightboxConfirm');
-    if (btnConfirmLb) {
-        btnConfirmLb.addEventListener('click', () => {
-            closeLightbox();
-            setMktMobileView('preview');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-
-    updateMarketingFormatLayout();
-    applyMarketingTemplateToInputs();
-};
-
-function updateMarketingFormatLayout() {
-    const canvas = document.getElementById('sensMarketingCanvas');
-    const stage = document.getElementById('mktCanvasStageWrap');
-    const resLabel = document.getElementById('mktPreviewResolutionLabel');
-    const scenesBar = document.getElementById('mktVideoScenesTimelineBar');
-    const slidesBar = document.getElementById('mktCarouselSlidesBar');
-    const visorBox = document.getElementById('mktVisorCanvasBox');
-    const visorFmtBadge = document.getElementById('mktLiveVisorFormatBadge');
-    const f = mktStudioState.format;
-
-    const is916 = (f === 'reel_video_9_16' || f === 'story_9_16');
-    if (canvas) {
-        canvas.width = 1080;
-        canvas.height = is916 ? 1920 : 1350;
-    }
-    if (stage) {
-        stage.classList.toggle('is-916', is916);
-        stage.classList.toggle('is-45', !is916);
-    }
-    if (visorBox) {
-        visorBox.classList.toggle('is-916', is916);
-        visorBox.classList.toggle('is-45', !is916);
-    }
-    if (visorFmtBadge) {
-        visorFmtBadge.textContent = is916
-            ? '9:16 Reel / Story (1080×1920)'
-            : '4:5 Feed (1080×1350)';
-    }
-    if (resLabel) {
-        resLabel.textContent = is916
-            ? 'VISTA PREVIA EN VIVO • 1080×1920 (9:16)'
-            : 'VISTA PREVIA EN VIVO • 1080×1350 (4:5)';
-    }
-    if (scenesBar) scenesBar.style.display = (f === 'reel_video_9_16') ? 'block' : 'none';
-    if (slidesBar) slidesBar.style.display = (f === 'carousel_4_5') ? 'block' : 'none';
-
-    const isVideo = (f === 'reel_video_9_16') || (mktStudioState.mediaType === 'video');
-    const btnRecord = document.getElementById('btnMktRecordVideoWebm');
-    const btnExportPng = document.getElementById('btnMktExportPng');
-    const btnExportPack = document.getElementById('btnMktExportAllPack');
-    if (btnRecord && btnExportPng) {
-        if (isVideo) {
-            btnRecord.style.background = '#E5CBA7';
-            btnRecord.style.color = '#121214';
-            btnRecord.style.boxShadow = '0 4px 16px rgba(229, 203, 167, 0.35)';
-            btnExportPng.style.background = '#FFFFFF';
-            btnExportPng.style.color = '#121214';
-            btnExportPng.style.boxShadow = 'none';
-        } else {
-            btnRecord.style.background = '#FFFFFF';
-            btnRecord.style.color = '#121214';
-            btnRecord.style.boxShadow = 'none';
-            btnExportPng.style.background = '#E5CBA7';
-            btnExportPng.style.color = '#121214';
-            btnExportPng.style.boxShadow = '0 4px 16px rgba(229, 203, 167, 0.35)';
-        }
-    }
-    if (btnExportPack) {
-        btnExportPack.style.display = (f === 'carousel_4_5' || f === 'reel_video_9_16') ? 'block' : 'none';
-    }
-
-    renderMarketingCanvasFrame();
-}
-
-function syncMarketingLayersUI() {
-    const bar = document.getElementById('mktLayersToggleBar');
-    if (bar && mktStudioState.layers) {
-        bar.querySelectorAll('.sens-layer-toggle').forEach(btn => {
-            const layerKey = btn.getAttribute('data-layer');
-            const isActive = !!mktStudioState.layers[layerKey];
-            btn.classList.toggle('active', isActive);
-            const check = btn.querySelector('.sens-layer-check');
-            if (check) check.textContent = isActive ? '✓' : '—';
-        });
-    }
-
-    const wrapEyebrow = document.getElementById('mktWrapEyebrow');
-    const wrapHeadline = document.getElementById('mktWrapHeadline');
-    const wrapSub = document.getElementById('mktWrapSubtitle');
-    const wrapChips = document.getElementById('mktWrapChips');
-
-    if (mktStudioState.layers) {
-        if (wrapEyebrow) wrapEyebrow.classList.toggle('is-layer-hidden', !mktStudioState.layers.eyebrow);
-        if (wrapHeadline) wrapHeadline.classList.toggle('is-layer-hidden', !mktStudioState.layers.headline);
-        if (wrapSub) wrapSub.classList.toggle('is-layer-hidden', !mktStudioState.layers.subtitle);
-        if (wrapChips) wrapChips.classList.toggle('is-layer-hidden', !mktStudioState.layers.chips);
+    if (btnCaptureFrame) {
+        btnCaptureFrame.onclick = () => captureMarketingFrameUHD();
     }
 }
 
-function applyMarketingTemplateToInputs() {
-    const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
-    const capOutput = document.getElementById('mktCaptionOutput');
-    if (capOutput) capOutput.value = tpl.caption || '';
-    if (tpl.defaultLayers) {
-        mktStudioState.layers = { ...tpl.defaultLayers };
-        syncMarketingLayersUI();
-    }
-    if (tpl.overlayMode) {
-        mktStudioState.overlayMode = tpl.overlayMode;
-    }
-    const overlayNotice = document.getElementById('mktLockedOverlayDescription');
-    if (overlayNotice) {
-        overlayNotice.textContent = tpl.overlayTitle || 'Overlay Arquitectónico SENS Calibrado';
-    }
-    const tplTitle = document.getElementById('mktLiveVisorTplTitle');
-    if (tplTitle && tpl) {
-        tplTitle.textContent = `${tpl.id}. ${tpl.name}`;
-    }
-    loadActiveSceneOrSlideIntoInputs();
-}
+function exportMarketingPieceUHD() {
+    const tpl = getActiveMktTemplate();
+    const is916 = (tpl.format === '9:16');
+    const topSafeY = is916 ? 280 : 130;
+    const width = 2160;
+    const height = is916 ? 3840 : 2700;
 
-function loadActiveSceneOrSlideIntoInputs() {
-    const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
-    const isCarousel = mktStudioState.format === 'carousel_4_5';
-    const frame = isCarousel
-        ? (tpl.slides[mktStudioState.slideIdx] || tpl.slides[0])
-        : (tpl.scenes[mktStudioState.sceneIdx] || tpl.scenes[0]);
+    const canvas = document.getElementById('sensMarketingCanvas') || document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d', { alpha: false });
 
-    const inpEyebrow = document.getElementById('mktInputEyebrow');
-    const inpHeadline = document.getElementById('mktInputHeadline');
-    const inpSub = document.getElementById('mktInputSubtitle');
-    const inpC1 = document.getElementById('mktInputChip1');
-    const inpC2 = document.getElementById('mktInputChip2');
-    const inpC3 = document.getElementById('mktInputChip3');
-    const indicator = document.getElementById('mktActiveSceneIndicator');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
 
-    if (inpEyebrow) inpEyebrow.value = frame.eyebrow || '';
-    if (inpHeadline) inpHeadline.value = frame.headline || '';
-    if (inpSub) inpSub.value = frame.sub || '';
-    if (inpC1) inpC1.value = frame.c1 || '';
-    if (inpC2) inpC2.value = frame.c2 || '';
-    if (inpC3) inpC3.value = frame.c3 || '';
-
-    const updateCounter = (el, val, max) => {
-        if (!el) return;
-        const len = (val || '').length;
-        el.textContent = `${len}/${max}`;
-        el.classList.toggle('is-warning', len >= Math.floor(max * 0.85) && len < max);
-        el.classList.toggle('is-max', len >= max);
-    };
-
-    updateCounter(document.getElementById('mktCharCountBadge'), inpEyebrow?.value, 26);
-    updateCounter(document.getElementById('mktCharCountHeadline'), inpHeadline?.value, 52);
-    updateCounter(document.getElementById('mktCharCountSub'), inpSub?.value, 110);
-    updateCounter(document.getElementById('mktCharCountC1'), inpC1?.value, 20);
-    updateCounter(document.getElementById('mktCharCountC2'), inpC2?.value, 20);
-    updateCounter(document.getElementById('mktCharCountC3'), inpC3?.value, 22);
-
-    if (indicator) {
-        if (isCarousel) {
-            indicator.textContent = `Slide ${mktStudioState.slideIdx + 1}/4`;
-        } else if (mktStudioState.format === 'reel_video_9_16') {
-            const labels = ['Escena 1: 0s–3s (Hook)', 'Escena 2: 3s–7s (Valor)', 'Escena 3: 7s+ (CTA)'];
-            indicator.textContent = labels[mktStudioState.sceneIdx] || labels[0];
-        } else {
-            indicator.textContent = 'Pieza Lista en HD';
-        }
+    // Toast de generación
+    if (typeof showSensToast === 'function') {
+        showSensToast('Generando pieza en Ultra High Definition (UHD 4K)...', 'champagne', 2000);
     }
 
-    document.querySelectorAll('#mktVideoScenesTimelineBar .sens-mkt-scene-btn').forEach((b, idx) => {
-        b.classList.toggle('active', idx === mktStudioState.sceneIdx);
-    });
-    document.querySelectorAll('#mktCarouselSlidesBar .sens-mkt-slide-btn').forEach((b, idx) => {
-        b.classList.toggle('active', idx === mktStudioState.slideIdx);
-    });
+    const drawContent = () => {
+        // 1. Gradiente Cinemático Base
+        const grad = ctx.createLinearGradient(0, 0, 0, height);
+        grad.addColorStop(0, 'rgba(9, 9, 11, 0.40)');
+        grad.addColorStop(0.35, 'rgba(9, 9, 11, 0.20)');
+        grad.addColorStop(1, 'rgba(9, 9, 11, 0.82)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
 
-    renderMarketingCanvasFrame();
-}
+        // 2. Tarjeta Inset de Cristal Esmerilado (Glassmorphism 4K)
+        const cardMargin = width * 0.08;
+        const cardW = width - (cardMargin * 2);
+        const cardY = is916 ? (height * 0.52) : (height * 0.44);
+        const cardH = is916 ? (height * 0.36) : (height * 0.46);
 
-window.renderCoachMarketingStudio = function() {
-    if (window.innerWidth <= 960) {
-        const layout = document.querySelector('.sens-mkt-studio-layout');
-        if (layout && !layout.classList.contains('mobile-view-editor') && !layout.classList.contains('mobile-view-preview')) {
-            if (typeof window.setMktMobileView === 'function') {
-                window.setMktMobileView('editor');
-            }
-        }
-    }
-
-    const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
-    if (hiddenVideo && mktStudioState.mediaType === 'video') {
-        hiddenVideo.play().catch(() => {});
-    }
-
-    if (mktStudioState.cycleTimer) clearInterval(mktStudioState.cycleTimer);
-    mktStudioState.cycleTimer = setInterval(() => {
-        const pane = document.getElementById('paneMarketing');
-        if (!pane || !pane.classList.contains('active')) return;
-        const layout = document.querySelector('.sens-mkt-studio-layout');
-        if (layout && layout.classList.contains('mobile-view-editor')) return; // Nunca alterar inputs mientras el coach edita
-        if (mktStudioState.format === 'reel_video_9_16' && mktStudioState.autoCycleScenes) {
-            const activeEl = document.activeElement;
-            const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
-            if (!isTyping) {
-                mktStudioState.sceneIdx = (mktStudioState.sceneIdx + 1) % 3;
-                loadActiveSceneOrSlideIntoInputs();
-            }
-        }
-    }, 3400);
-
-    const loopCanvas = () => {
-        const pane = document.getElementById('paneMarketing');
-        if (pane && pane.classList.contains('active')) {
-            renderMarketingCanvasFrame();
-            mktStudioState.rafId = requestAnimationFrame(loopCanvas);
-        } else {
-            mktStudioState.rafId = null;
-        }
-    };
-    if (!mktStudioState.rafId) {
-        const pane = document.getElementById('paneMarketing');
-        if (pane && pane.classList.contains('active')) {
-            mktStudioState.rafId = requestAnimationFrame(loopCanvas);
-        }
-    }
-    renderMarketingCanvasFrame();
-};
-
-window.stopCoachMarketingStudio = function() {
-    if (typeof mktStudioState !== 'undefined') {
-        if (mktStudioState.rafId) {
-            cancelAnimationFrame(mktStudioState.rafId);
-            mktStudioState.rafId = null;
-        }
-        if (mktStudioState.cycleTimer) {
-            clearInterval(mktStudioState.cycleTimer);
-            mktStudioState.cycleTimer = null;
-        }
-        const hiddenVideo = document.getElementById('mktHiddenSourceVideo');
-        if (hiddenVideo && !hiddenVideo.paused) {
-            try { hiddenVideo.pause(); } catch (_) {}
-        }
-    }
-};
-
-function renderMarketingCanvasFrame(targetCanvas = null, scaleFactor = 1) {
-    try {
-        const canvas = targetCanvas || document.getElementById('sensMarketingCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const W = Math.round(canvas.width / scaleFactor);
-        const H = Math.round(canvas.height / scaleFactor);
-        const is45 = (H <= 1400); // 1350 vs 1920
-        const is916 = !is45;
-
-        ctx.save();
-        if (scaleFactor !== 1) {
-            ctx.scale(scaleFactor, scaleFactor);
-        }
-
-        const tpl = SENS_MARKETING_TEMPLATES.find(t => t.id === mktStudioState.templateId) || SENS_MARKETING_TEMPLATES[0];
-        const op = (mktStudioState.overlayOpacity || 80) / 100;
-        const layers = mktStudioState.layers || { branding: true, eyebrow: true, headline: true, subtitle: true, chips: true };
-
-        // =========================================================================
-        // REGLAS MATEMÁTICAS DE SAFE ZONES LIMPIAS (TIKTOK / INSTAGRAM REELS & FEED)
-        // Margen Superior Despejado: Top 280px en 9:16 y 130px en 4:5
-        // CERO interferencia con la interfaz nativa de redes sociales
-        // =========================================================================
-        const topSafeY = is916 ? 280 : 130;
-        const bottomSafeY = is916 ? 1580 : 1254; // H - 340 en 9:16, H - 96 en 4:5
-        const leftSafeX = 72;
-        const rightSafeX = is916 ? 940 : 1008; // W - 140 en 9:16, W - 72 en 4:5
-        const safeWidth = rightSafeX - leftSafeX; // 868px en 9:16, 936px en 4:5
-        const safeCenterX = leftSafeX + (safeWidth / 2);
-        const contentTopY = topSafeY + 16;
-
-        // 1. Fondo Base Obsidian
-        ctx.fillStyle = '#080809';
-        ctx.fillRect(0, 0, W, H);
-
-        // 2. Dibujar Video o Imagen con Zoom y Encuadre
-        const sourceMedia = mktStudioState.mediaType === 'image' && mktStudioState.customImageObj
-            ? mktStudioState.customImageObj
-            : document.getElementById('mktHiddenSourceVideo');
-
-        if (sourceMedia) {
-            const mW = sourceMedia.videoWidth || sourceMedia.naturalWidth || 1080;
-            const mH = sourceMedia.videoHeight || sourceMedia.naturalHeight || 1920;
-            if (mW > 0 && mH > 0) {
-                const scale = Math.max(W / mW, H / mH) * (mktStudioState.zoom / 100);
-                const drawW = mW * scale;
-                const drawH = mH * scale;
-                const dx = (W - drawW) / 2;
-                const dy = ((H - drawH) / 2) + (mktStudioState.panY * 8);
-                try {
-                    ctx.drawImage(sourceMedia, dx, dy, drawW, drawH);
-                } catch (_) {}
-            }
-        }
-
-        // 3. Sistema de Overlays Arquitectónicos (Estrictamente gobernado por el Template)
-        const overlayMode = tpl.overlayMode || 'cinematic';
-        const spatialArchetype = tpl.spatialArchetype || 'editorial_bottom';
-
-        if (overlayMode === 'full_wash') {
-            // Tinte cinematográfico de alto contraste en toda la imagen para máxima legibilidad de tipografías 82px
-            ctx.fillStyle = `rgba(8, 8, 9, ${Math.min(0.92, op * 0.82).toFixed(2)})`;
-            ctx.fillRect(0, 0, W, H);
-            const radGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.75);
-            radGrad.addColorStop(0, `rgba(8, 8, 9, ${(op * 0.45).toFixed(2)})`);
-            radGrad.addColorStop(1, 'rgba(8, 8, 9, 0)');
-            ctx.fillStyle = radGrad;
-            ctx.fillRect(0, 0, W, H);
-        } else if (overlayMode === 'lower_third') {
-            const grad = ctx.createLinearGradient(0, 0, 0, H);
-            grad.addColorStop(0, 'rgba(8, 8, 9, 0)');
-            grad.addColorStop(0.50, 'rgba(8, 8, 9, 0)');
-            grad.addColorStop(0.70, `rgba(8, 8, 9, ${(op * 0.72).toFixed(2)})`);
-            grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, W, H);
-        } else if (overlayMode === 'magazine_split' || spatialArchetype === 'magazine_split') {
-            // Gradiente dual: Oscuro arriba para titular 72px, claro al centro para sujeto/atleta, oscuro abajo para rationale
-            const grad = ctx.createLinearGradient(0, 0, 0, H);
-            grad.addColorStop(0, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.05).toFixed(2)})`);
-            grad.addColorStop(0.28, `rgba(8, 8, 9, ${(op * 0.65).toFixed(2)})`);
-            grad.addColorStop(0.48, `rgba(8, 8, 9, ${(op * 0.12).toFixed(2)})`);
-            grad.addColorStop(0.68, `rgba(8, 8, 9, ${(op * 0.55).toFixed(2)})`);
-            grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, W, H);
-        } else {
-            // Cinematic gradient clásico adaptable
-            const grad = ctx.createLinearGradient(0, 0, 0, H);
-            if (is45) {
-                grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.45 : 0.20)).toFixed(2)})`);
-                grad.addColorStop(0.35, `rgba(8, 8, 9, ${(op * 0.20).toFixed(2)})`);
-                grad.addColorStop(0.60, `rgba(8, 8, 9, ${(op * 0.85).toFixed(2)})`);
-                grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
-            } else {
-                grad.addColorStop(0, `rgba(8, 8, 9, ${(op * (layers.branding ? 0.52 : 0.22)).toFixed(2)})`);
-                grad.addColorStop(0.40, `rgba(8, 8, 9, ${(op * 0.24).toFixed(2)})`);
-                grad.addColorStop(0.68, `rgba(8, 8, 9, ${(op * 0.88).toFixed(2)})`);
-                grad.addColorStop(1, `rgba(8, 8, 9, ${Math.min(0.98, op * 1.15).toFixed(2)})`);
-            }
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, W, H);
-        }
-
-    // =========================================================================
-    // MOTOR CINÉTICO DE ANIMACIÓN VIRAL (ALTO CTR & ALTO VTR)
-    // Dynamic Scene Progress, Kinetic Entrance Slam & Live Audio Indicator
-    // =========================================================================
-    const nowSec = performance.now() / 1000;
-    const sceneCycleDuration = 3.2;
-    const sceneProgress = (nowSec % sceneCycleDuration) / sceneCycleDuration;
-    const entranceProgress = Math.min(1.0, sceneProgress / 0.18); // primeros 0.58s
-    const kineticSlam = 1.0 + (0.045 * Math.pow(1.0 - entranceProgress, 2));
-
-    // 4. Marca SENS Quiet Luxury (Despejado en el margen superior, marca sutil al pie)
-    if (layers.branding) {
-        ctx.save();
-        ctx.font = `800 ${is45 ? 13 : 15}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-        ctx.textAlign = 'right';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('MAKES SENS.', rightSafeX, bottomSafeY + (is45 ? 20 : 26));
-        ctx.restore();
-    }
-
-    // Datos de entrada de texto
-    const rawEyebrow = (document.getElementById('mktInputEyebrow')?.value || '').trim();
-    const rawHeadline = (document.getElementById('mktInputHeadline')?.value || '').trim();
-    const rawSub = (document.getElementById('mktInputSubtitle')?.value || '').trim();
-    const c1 = (document.getElementById('mktInputChip1')?.value || '').trim();
-    const c2 = (document.getElementById('mktInputChip2')?.value || '').trim();
-    const c3 = (document.getElementById('mktInputChip3')?.value || '').trim();
-
-    // Reducción estricta de ruido visual: máximo 2 tags o bullets sobrios
-    const chips = (layers.chips ? [c1, c2, c3].filter(Boolean).slice(0, 2) : []);
-    const hasChips = chips.length > 0;
-    const hasSub = layers.subtitle && rawSub.length > 0;
-    const hasHead = layers.headline && rawHeadline.length > 0;
-    const hasEye = layers.eyebrow && rawEyebrow.length > 0;
-
-    // =========================================================================
-    // 5. RENDERIZADO POR ARQUETIPO ESPACIAL (10 CDUs Y BRANDBOOK SENS)
-    // Letras Más Grandes en Márgenes Correctos & Contraste Editorial Superior
-    // =========================================================================
-
-    ctx.save();
-
-    if (spatialArchetype === 'hero_center_big') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 1 & 10: TITULAR MONUMENTAL CENTRADO (HERO CENTER DISPLAY 94px)
-        // ---------------------------------------------------------------------
-        ctx.textAlign = 'center';
-        const headFontSize = is45 ? 74 : 94; // Monumental 94px!
-        const headLineHeight = is45 ? 82 : 104;
-        const subFontSize = is45 ? 26 : 32;
-        const subLineHeight = is45 ? 38 : 46;
-
-        ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 30).slice(0, 3) : [];
-        ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const subLines = hasSub ? wrapCanvasText(ctx, rawSub, safeWidth - 50).slice(0, 3) : [];
-
-        const hHead = headLines.length * headLineHeight;
-        const hSub = subLines.length * subLineHeight;
-        const hChips = hasChips ? (is45 ? 46 : 52) + 24 : 0;
-        const hEye = hasEye ? (is45 ? 36 : 44) : 0;
-        const totalH = hHead + (hSub ? hSub + 28 : 0) + (hEye ? hEye + 16 : 0) + hChips;
-
-        let curY = Math.max(contentTopY + 20, Math.min(bottomSafeY - totalH, Math.round((contentTopY + bottomSafeY - totalH) / 2)));
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textBaseline = 'top';
-            ctx.fillText(`• ${rawEyebrow.toUpperCase()} •`, safeCenterX, curY);
-            curY += is45 ? 36 : 44;
-        }
-
-        if (hasHead) {
-            ctx.save();
-            ctx.translate(safeCenterX, curY + (hHead / 2));
-            ctx.scale(kineticSlam, kineticSlam);
-            ctx.translate(-safeCenterX, -(curY + (hHead / 2)));
-
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 24;
-            ctx.shadowOffsetY = 6;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textBaseline = 'top';
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, safeCenterX, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += hHead + 28;
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.94)';
-            ctx.textBaseline = 'top';
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, safeCenterX, curY + (i * subLineHeight));
-            });
-            curY += hSub + 24;
-        }
-
-        if (hasChips) {
-            drawCenteredChipsRow(ctx, chips, safeCenterX, curY, is45);
-        }
-
-    } else if (spatialArchetype === 'magazine_split') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 3: PORTADA DE REVISTA SPLIT (TITULAR TOP 84px + RATIONALE BOTTOM)
-        // ---------------------------------------------------------------------
-        let topY = contentTopY;
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, topY);
-            topY += is45 ? 34 : 42;
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 68 : 84;
-            const headLineHeight = is45 ? 76 : 94;
-            ctx.save();
-            ctx.translate(leftSafeX, topY);
-            ctx.scale(kineticSlam, kineticSlam);
-            ctx.translate(-leftSafeX, -topY);
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 20;
-            ctx.shadowOffsetY = 5;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textBaseline = 'top';
-            ctx.textAlign = 'left';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, leftSafeX, topY + (i * headLineHeight));
-            });
-            ctx.restore();
-        }
-
-        const chipHeight = is45 ? 46 : 52;
-        let curY = bottomSafeY;
-
-        if (hasChips) {
-            curY = bottomSafeY - chipHeight;
-            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
-            curY -= (is45 ? 24 : 32);
-        }
-
-        if (hasSub) {
-            const subFontSize = is45 ? 26 : 31;
-            const subLineHeight = is45 ? 38 : 45;
-            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textAlign = 'left';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, is45 ? 2 : 3);
-            const subStartY = curY - (subLines.length * subLineHeight);
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, subStartY + (i * subLineHeight));
-            });
-        }
-
-    } else if (spatialArchetype === 'glass_card') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 4: TARJETA FLOTANTE GLASSMORPHIC (PLACA DE LUJO 68px)
-        // ---------------------------------------------------------------------
-        const cardW = safeWidth;
-        const padX = is45 ? 36 : 46;
-        const padY = is45 ? 32 : 40;
-        const innerW = cardW - (padX * 2);
-
-        const headFontSize = is45 ? 54 : 68;
-        const headLineHeight = is45 ? 62 : 78;
-        const subFontSize = is45 ? 25 : 31;
-        const subLineHeight = is45 ? 36 : 44;
-
-        ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), innerW).slice(0, 3) : [];
-        ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const subLines = hasSub ? wrapCanvasText(ctx, rawSub, innerW).slice(0, 3) : [];
-
-        const hEye = hasEye ? (is45 ? 30 : 36) : 0;
-        const hHead = headLines.length * headLineHeight;
-        const hSub = subLines.length * subLineHeight;
-        const hChips = hasChips ? (is45 ? 44 : 50) + 20 : 0;
-        const cardH = (padY * 2) + hEye + hHead + (hSub ? hSub + 20 : 0) + hChips;
-
-        const cardX = leftSafeX;
-        const cardY = bottomSafeY - cardH;
-
-        ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.70)';
-        ctx.shadowBlur = 35;
-        ctx.shadowOffsetY = 12;
-        ctx.fillStyle = 'rgba(13, 13, 17, 0.92)';
-        roundRectCanvas(ctx, cardX, cardY, cardW, cardH, 22);
+        ctx.fillStyle = 'rgba(18, 18, 20, 0.85)';
+        roundRectCanvas(ctx, cardMargin, cardY, cardW, cardH, 36);
         ctx.fill();
-        ctx.restore();
-
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
-        ctx.lineWidth = 1.5;
-        roundRectCanvas(ctx, cardX, cardY, cardW, cardH, 22);
-        ctx.stroke();
-
-        let inY = cardY + padY;
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(rawEyebrow.toUpperCase(), cardX + padX, inY);
-            inY += is45 ? 30 : 36;
-        }
-
-        if (hasHead) {
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textBaseline = 'top';
-            ctx.textAlign = 'left';
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, cardX + padX, inY + (i * headLineHeight));
-            });
-            inY += hHead + 20;
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            ctx.textAlign = 'left';
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, cardX + padX, inY + (i * subLineHeight));
-            });
-            inY += hSub + 20;
-        }
-
-        if (hasChips) {
-            drawLeftChipsRow(ctx, chips, cardX + padX, inY, is45, cardX + cardW - padX);
-        }
-
-    } else if (spatialArchetype === 'stat_monumental') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 5: SPOTLIGHT MÉTRICA ÚNICA (172px MONUMENTAL DISPLAY)
-        // ---------------------------------------------------------------------
-        let curY = bottomSafeY;
-        const chipHeight = is45 ? 46 : 52;
-
-        if (hasChips) {
-            curY = bottomSafeY - chipHeight;
-            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
-            curY -= (is45 ? 24 : 32);
-        }
-
-        if (hasSub) {
-            const subFontSize = is45 ? 26 : 31;
-            const subLineHeight = is45 ? 38 : 45;
-            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textAlign = 'left';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 2);
-            const subStartY = curY - (subLines.length * subLineHeight);
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, subStartY + (i * subLineHeight));
-            });
-            curY = subStartY - (is45 ? 20 : 28);
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 54 : 66;
-            const headLineHeight = is45 ? 62 : 76;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textAlign = 'left';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 2);
-            const headStartY = curY - (headLines.length * headLineHeight);
-            ctx.textBaseline = 'top';
-            headLines.forEach((line, i) => {
-                ctx.fillStyle = '#FFFFFF';
-                ctx.fillText(line, leftSafeX, headStartY + (i * headLineHeight));
-            });
-            curY = headStartY - (is45 ? 16 : 24);
-        }
-
-        const statNumber = c1 || rawEyebrow || '0.00%';
-        const statFontSize = is45 ? 130 : 172;
-        ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-        ctx.shadowBlur = 28;
-        ctx.shadowOffsetY = 8;
-        ctx.font = `900 ${statFontSize}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = '#E5CBA7';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'bottom';
-        ctx.fillText(statNumber.toUpperCase(), leftSafeX, curY);
-        ctx.restore();
-
-        if (hasEye && rawEyebrow !== statNumber) {
-            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.90)';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY - (is45 ? 130 : 175));
-        }
-
-    } else if (spatialArchetype === 'quote_editorial') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 6: CITA EDITORIAL VIRAL (COMILLAS SENS 70px)
-        // ---------------------------------------------------------------------
-        ctx.textAlign = 'center';
-        const quoteFontSize = is45 ? 52 : 68;
-        const quoteLineHeight = is45 ? 62 : 80;
-        const authorFontSize = is45 ? 22 : 26;
-
-        ctx.font = `800 ${quoteFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const quoteLines = wrapCanvasText(ctx, `"${rawHeadline}"`, safeWidth - 30).slice(0, 4);
-        const hQuote = quoteLines.length * quoteLineHeight;
-        const markH = is45 ? 90 : 120;
-        const totalH = markH + hQuote + (hasSub ? 60 : 0);
-
-        let curY = Math.max(contentTopY + 20, Math.min(bottomSafeY - totalH, Math.round((contentTopY + bottomSafeY - totalH) / 2)));
-
-        ctx.font = `900 ${is45 ? 120 : 160}px "Plus Jakarta Sans", Georgia, serif`;
-        ctx.fillStyle = 'rgba(229, 203, 167, 0.50)';
-        ctx.textBaseline = 'top';
-        ctx.fillText('“', safeCenterX, curY);
-        curY += is45 ? 85 : 110;
-
-        ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-        ctx.shadowBlur = 24;
-        ctx.shadowOffsetY = 6;
-        ctx.font = `800 ${quoteFontSize}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = '#FFFFFF';
-        ctx.textBaseline = 'top';
-        quoteLines.forEach((line, i) => {
-            ctx.fillText(line, safeCenterX, curY + (i * quoteLineHeight));
-        });
-        ctx.restore();
-        curY += hQuote + (is45 ? 28 : 36);
-
-        if (hasSub) {
-            ctx.font = `700 ${authorFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.fillText(rawSub.toUpperCase(), safeCenterX, curY);
-        }
-
-    } else if (spatialArchetype === 'story_callout') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 7: CONVERSIÓN DIRECTA / CUPOS STORY (9:16 - 74px)
-        // ---------------------------------------------------------------------
-        let curY = contentTopY + 20;
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
-            const badgeW = ctx.measureText(rawEyebrow).width + 36;
-            ctx.fillStyle = '#E5CBA7';
-            roundRectCanvas(ctx, leftSafeX, curY, badgeW, 44, 10);
-            ctx.fill();
-            ctx.fillStyle = '#121214';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX + 18, curY + 22);
-            curY += 64;
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 58 : 74;
-            const headLineHeight = is45 ? 66 : 84;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 22;
-            ctx.shadowOffsetY = 5;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textBaseline = 'top';
-            ctx.textAlign = 'left';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += (headLines.length * headLineHeight) + 26;
-        }
-
-        if (hasSub) {
-            const subFontSize = is45 ? 26 : 31;
-            const subLineHeight = is45 ? 38 : 45;
-            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            ctx.textAlign = 'left';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * subLineHeight));
-            });
-            curY += (subLines.length * subLineHeight) + 28;
-        }
-
-        if (hasChips) {
-            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
-        }
-
-    } else if (spatialArchetype === 'lower_third_clean') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 2: LOWER-THIRD BIOMECÁNICO (VIDEO FOCUS 80px)
-        // ---------------------------------------------------------------------
-        const chipHeight = is45 ? 46 : 52;
-        let curY = bottomSafeY;
-
-        if (hasChips) {
-            curY = bottomSafeY - chipHeight;
-            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
-            curY -= (is45 ? 24 : 30);
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 64 : 80;
-            const headLineHeight = is45 ? 72 : 90;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 24;
-            ctx.shadowOffsetY = 6;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textAlign = 'left';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 2);
-            const headStartY = curY - (headLines.length * headLineHeight);
-            ctx.textBaseline = 'top';
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, leftSafeX, headStartY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY = headStartY - (is45 ? 18 : 24);
-        }
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'bottom';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
-        }
-
-    } else if (spatialArchetype === 'split_comparative') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 9: CÓMO NO VS CÓMO SÍ (SPLIT COMPARATIVO BIOMECÁNICO)
-        // ---------------------------------------------------------------------
-        let curY = contentTopY;
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
-            curY += is45 ? 36 : 46;
-        }
-
-        // Card 1: CÓMO NO (Error común en alerta sobria)
-        const errTag = c1 || '✕ CÓMO NO:';
-        const errHeadline = rawHeadline || 'Error técnico habitual';
-        const cardPad = is45 ? 24 : 32;
-
-        ctx.font = `900 ${is45 ? 36 : 48}px "Plus Jakarta Sans", sans-serif`;
-        const errLines = wrapCanvasText(ctx, errHeadline.toUpperCase(), safeWidth - (cardPad * 2)).slice(0, 2);
-        const errCardH = (cardPad * 2) + 32 + (errLines.length * (is45 ? 44 : 56));
-
-        ctx.fillStyle = 'rgba(18, 16, 18, 0.92)';
-        roundRectCanvas(ctx, leftSafeX, curY, safeWidth, errCardH, 16);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(235, 87, 87, 0.50)';
-        ctx.lineWidth = 1.5;
-        roundRectCanvas(ctx, leftSafeX, curY, safeWidth, errCardH, 16);
-        ctx.stroke();
-
-        ctx.font = `800 ${is45 ? 17 : 21}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = '#FF8A8A';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'top';
-        ctx.fillText(errTag.toUpperCase(), leftSafeX + cardPad, curY + cardPad);
-
-        ctx.font = `900 ${is45 ? 34 : 46}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = '#FAF9F6';
-        errLines.forEach((line, i) => {
-            ctx.fillText(line, leftSafeX + cardPad, curY + cardPad + 36 + (i * (is45 ? 44 : 56)));
-        });
-
-        curY += errCardH + (is45 ? 18 : 24);
-
-        // Card 2: CÓMO SÍ (Solución con acento Champagne Gold)
-        const solTag = c2 || '✓ MÉTODO SENS:';
-        const solText = rawSub || 'Corrección técnica con sentido';
-
-        ctx.font = `600 ${is45 ? 25 : 32}px "Plus Jakarta Sans", sans-serif`;
-        const solLines = wrapCanvasText(ctx, solText, safeWidth - (cardPad * 2)).slice(0, 3);
-        const hasC3 = Boolean(c3);
-        const solCardH = (cardPad * 2) + 36 + (solLines.length * (is45 ? 38 : 46)) + (hasC3 ? (is45 ? 54 : 62) : 0);
-
-        ctx.fillStyle = 'rgba(16, 17, 22, 0.95)';
-        roundRectCanvas(ctx, leftSafeX, curY, safeWidth, solCardH, 16);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(229, 203, 167, 0.70)';
-        ctx.lineWidth = 2;
-        roundRectCanvas(ctx, leftSafeX, curY, safeWidth, solCardH, 16);
-        ctx.stroke();
-
-        ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = '#E5CBA7';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'top';
-        ctx.fillText(solTag.toUpperCase(), leftSafeX + cardPad, curY + cardPad);
-
-        ctx.font = `600 ${is45 ? 25 : 31}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = '#FAF9F6';
-        solLines.forEach((line, i) => {
-            ctx.fillText(line, leftSafeX + cardPad, curY + cardPad + 38 + (i * (is45 ? 38 : 46)));
-        });
-
-        if (hasC3) {
-            const chipY = curY + cardPad + 44 + (solLines.length * (is45 ? 38 : 46));
-            ctx.font = `800 ${is45 ? 16 : 19}px "Plus Jakarta Sans", sans-serif`;
-            const chipW = ctx.measureText(c3).width + 36;
-            ctx.fillStyle = '#E5CBA7';
-            roundRectCanvas(ctx, leftSafeX + cardPad, chipY, chipW, is45 ? 40 : 46, 8);
-            ctx.fill();
-            ctx.fillStyle = '#121214';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(c3, leftSafeX + cardPad + 18, chipY + (is45 ? 20 : 23));
-        }
-
-    } else if (spatialArchetype === 'kinetic_brutalism') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 11: NIKE BRUTALISM KINETIC (96px SHOCK)
-        // ---------------------------------------------------------------------
-        ctx.textAlign = 'left';
-        const headFontSize = is45 ? 76 : 96;
-        const headLineHeight = is45 ? 84 : 106;
-        const subFontSize = is45 ? 26 : 31;
-        const subLineHeight = is45 ? 38 : 45;
-
-        ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-        const headLines = hasHead ? wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3) : [];
-        const hHead = headLines.length * headLineHeight;
-
-        let curY = contentTopY + 20;
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textBaseline = 'top';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
-            curY += is45 ? 36 : 46;
-        }
-
-        if (hasHead) {
-            ctx.save();
-            ctx.translate(leftSafeX, curY);
-            ctx.scale(kineticSlam, kineticSlam);
-            ctx.translate(-leftSafeX, -curY);
-
-            ctx.shadowColor = '#000000';
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetX = 6;
-            ctx.shadowOffsetY = 6;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textBaseline = 'top';
-
-            headLines.forEach((line, i) => {
-                const staggerX = leftSafeX + (i * (is45 ? 20 : 32));
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, staggerX, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += hHead + (is45 ? 28 : 36);
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * subLineHeight));
-            });
-            curY += (subLines.length * subLineHeight) + 24;
-        }
-
-        if (hasChips) {
-            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
-        }
-
-    } else if (spatialArchetype === 'polaroid_luxury') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 12: POLAROID TITANIO & FIRMA NICO
-        // ---------------------------------------------------------------------
-        const frameX = leftSafeX - 12;
-        const frameY = contentTopY;
-        const frameW = safeWidth + 24;
-        const frameH = bottomSafeY - contentTopY;
-
-        ctx.strokeStyle = 'rgba(229, 203, 167, 0.65)';
-        ctx.lineWidth = 2.5;
-        roundRectCanvas(ctx, frameX, frameY, frameW, frameH, 18);
-        ctx.stroke();
-
-        let curY = bottomSafeY - (is45 ? 180 : 220);
-
-        if (hasHead) {
-            const headFontSize = is45 ? 52 : 68;
-            const headLineHeight = is45 ? 60 : 78;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0,0,0,0.95)';
-            ctx.shadowBlur = 20;
-            ctx.shadowOffsetY = 6;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#FFFFFF';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 20).slice(0, 2);
-            headLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += (headLines.length * headLineHeight) + 16;
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${is45 ? 24 : 29}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textBaseline = 'top';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth - 20).slice(0, 2);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * (is45 ? 34 : 40)));
-            });
-            curY += (subLines.length * (is45 ? 34 : 40)) + 14;
-        }
-
-        ctx.font = `800 ${is45 ? 16 : 19}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = 'rgba(244, 244, 246, 0.70)';
-        ctx.fillText('— NICO MARALLE // MAKES SENS', leftSafeX, curY);
-
-    } else if (spatialArchetype === 'cinematic_letterbox') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 13: CINE 2.39:1 LETTERBOX (SUBTÍTULOS ORO)
-        // ---------------------------------------------------------------------
-        const barH = is45 ? 120 : 160;
-        ctx.fillStyle = '#080809';
-        ctx.fillRect(0, 0, W, barH);
-        ctx.fillRect(0, H - barH, W, barH);
 
         ctx.strokeStyle = 'rgba(229, 203, 167, 0.35)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(0, barH);
-        ctx.lineTo(W, barH);
-        ctx.moveTo(0, H - barH);
-        ctx.lineTo(W, H - barH);
+        ctx.lineWidth = 3;
+        roundRectCanvas(ctx, cardMargin, cardY, cardW, cardH, 36);
         ctx.stroke();
 
-        ctx.textAlign = 'center';
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 17 : 20}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(rawEyebrow.toUpperCase(), W / 2, barH / 2);
-        }
+        // 3. Tipografía de Precisión UHD (Plus Jakarta Sans)
+        const padX = cardMargin + 48;
+        let textY = cardY + 70;
 
-        if (hasHead) {
-            const headFontSize = is45 ? 54 : 70;
-            const headLineHeight = is45 ? 64 : 82;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.98)';
-            ctx.shadowBlur = 24;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textBaseline = 'middle';
-            const headLines = wrapCanvasText(ctx, `“${rawHeadline.toUpperCase()}”`, safeWidth).slice(0, 2);
-            const startHeadY = (H - barH) + (barH / 2) - ((headLines.length - 1) * (headLineHeight / 2));
-            headLines.forEach((line, i) => {
-                ctx.fillText(line, W / 2, startHeadY + (i * headLineHeight));
-            });
-            ctx.restore();
-        }
-
-    } else if (spatialArchetype === 'biomechanical_hud') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 14: HUD TELEMETRÍA & RETÍCULA F1
-        // ---------------------------------------------------------------------
-        const retLen = is45 ? 26 : 36;
-        ctx.strokeStyle = '#E5CBA7';
-        ctx.lineWidth = 2.5;
-
-        ctx.beginPath();
-        ctx.moveTo(leftSafeX, contentTopY + retLen);
-        ctx.lineTo(leftSafeX, contentTopY);
-        ctx.lineTo(leftSafeX + retLen, contentTopY);
-
-        ctx.moveTo(rightSafeX - retLen, contentTopY);
-        ctx.lineTo(rightSafeX, contentTopY);
-        ctx.lineTo(rightSafeX, contentTopY + retLen);
-
-        ctx.moveTo(leftSafeX, bottomSafeY - retLen);
-        ctx.lineTo(leftSafeX, bottomSafeY);
-        ctx.lineTo(leftSafeX + retLen, bottomSafeY);
-
-        ctx.moveTo(rightSafeX - retLen, bottomSafeY);
-        ctx.lineTo(rightSafeX, bottomSafeY);
-        ctx.lineTo(rightSafeX, bottomSafeY - retLen);
-        ctx.stroke();
-
-        const crossY = contentTopY + (is45 ? 120 : 160);
-        ctx.beginPath();
-        ctx.arc(safeCenterX, crossY, is45 ? 18 : 24, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(229, 203, 167, 0.40)';
-        ctx.stroke();
-
-        let curY = bottomSafeY - (is45 ? 200 : 250);
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(`// TELEMETRÍA • ${rawEyebrow.toUpperCase()}`, leftSafeX + 10, curY);
-            curY += is45 ? 32 : 40;
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 58 : 74;
-            const headLineHeight = is45 ? 66 : 84;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 24;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textBaseline = 'top';
-            ctx.textAlign = 'left';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 20).slice(0, 2);
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, leftSafeX + 10, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += (headLines.length * headLineHeight) + 18;
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${is45 ? 24 : 29}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth - 20).slice(0, 2);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX + 10, curY + (i * (is45 ? 34 : 42)));
-            });
-        }
-
-    } else if (spatialArchetype === 'interrogation_shock') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 15: INTERROGACIÓN DIRECTA (SIGNO ? SHOCK)
-        // ---------------------------------------------------------------------
-        ctx.save();
-        ctx.font = `900 ${is45 ? 320 : 440}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = 'rgba(229, 203, 167, 0.08)';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('?', safeCenterX, (contentTopY + bottomSafeY) / 2);
-        ctx.restore();
-
-        ctx.textAlign = 'center';
-        let curY = contentTopY + (is45 ? 60 : 100);
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 19 : 23}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textBaseline = 'top';
-            ctx.fillText(`• ${rawEyebrow.toUpperCase()} •`, safeCenterX, curY);
-            curY += is45 ? 40 : 52;
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 66 : 86;
-            const headLineHeight = is45 ? 74 : 96;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0,0,0,0.95)';
-            ctx.shadowBlur = 26;
-            ctx.shadowOffsetY = 6;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textBaseline = 'top';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 30).slice(0, 3);
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, safeCenterX, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += (headLines.length * headLineHeight) + (is45 ? 24 : 32);
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${is45 ? 26 : 31}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.94)';
-            ctx.textBaseline = 'top';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth - 40).slice(0, 3);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, safeCenterX, curY + (i * (is45 ? 38 : 46)));
-            });
-        }
-
-    } else if (spatialArchetype === 'equation_formula') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 16: FÓRMULA EXACTA RECOMPOSICIÓN [A + B = C]
-        // ---------------------------------------------------------------------
-        let curY = contentTopY + 30;
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
-            curY += is45 ? 36 : 46;
-        }
-
-        const headFontSize = is45 ? 60 : 76;
-        const headLineHeight = is45 ? 70 : 88;
-        ctx.save();
-        ctx.shadowColor = 'rgba(0,0,0,0.95)';
-        ctx.shadowBlur = 24;
-        ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
+        // Tag / Kicker
+        ctx.font = '800 24px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#E5CBA7';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
-        const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
-        headLines.forEach((line, i) => {
-            ctx.fillStyle = line.includes('=') ? '#E5CBA7' : '#FFFFFF';
-            ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
+        ctx.fillText((MktStudioState.fields.tag || 'SENS • PROTOCOLO').toUpperCase(), padX, textY);
+        textY += 60;
+
+        // Headline
+        ctx.font = '700 56px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#FFFFFF';
+        const titleLines = wrapCanvasText(ctx, MktStudioState.fields.title || 'Entrenamiento con dolor cero.', cardW - 96);
+        titleLines.forEach(line => {
+            ctx.fillText(line, padX, textY);
+            textY += 72;
         });
-        ctx.restore();
-        curY += (headLines.length * headLineHeight) + 26;
+        textY += 12;
 
-        if (hasSub) {
-            ctx.font = `500 ${is45 ? 26 : 31}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * (is45 ? 38 : 45)));
-            });
-            curY += (subLines.length * (is45 ? 38 : 45)) + 24;
-        }
-
-        if (hasChips) {
-            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
-        }
-
-    } else if (spatialArchetype === 'scarcity_countdown') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 17: URGENCIA 24HS / RELOJ CUENTA REGRESIVA
-        // ---------------------------------------------------------------------
-        let curY = contentTopY + 20;
-
-        const pillW = is45 ? 240 : 280;
-        const pillH = is45 ? 44 : 52;
-        ctx.fillStyle = '#14141B';
-        roundRectCanvas(ctx, leftSafeX, curY, pillW, pillH, 12);
-        ctx.fill();
-        ctx.strokeStyle = '#E5CBA7';
-        ctx.lineWidth = 1.5;
-        roundRectCanvas(ctx, leftSafeX, curY, pillW, pillH, 12);
-        ctx.stroke();
-
-        ctx.font = `800 ${is45 ? 17 : 20}px "Plus Jakarta Sans", sans-serif`;
-        ctx.fillStyle = '#E5CBA7';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('⏳ 23 : 59 : 59 • URGENTE', leftSafeX + (pillW / 2), curY + (pillH / 2));
-        curY += pillH + (is45 ? 28 : 36);
-
-        if (hasHead) {
-            const headFontSize = is45 ? 62 : 78;
-            const headLineHeight = is45 ? 70 : 88;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0,0,0,0.95)';
-            ctx.shadowBlur = 24;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += (headLines.length * headLineHeight) + 24;
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${is45 ? 26 : 31}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            ctx.textAlign = 'left';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * (is45 ? 38 : 45)));
-            });
-        }
-
-    } else if (spatialArchetype === 'podcast_soundwave') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 18: PODCAST SOUNDWAVE / PÍLDORA DE VOZ ORO
-        // ---------------------------------------------------------------------
-        let curY = contentTopY + 30;
-
-        const waveCount = 12;
-        const waveSpacing = 14;
-        const totalWaveW = waveCount * waveSpacing;
-        const startWaveX = safeCenterX - (totalWaveW / 2);
-        const waveCenterY = curY + 24;
-
-        ctx.fillStyle = '#E5CBA7';
-        for (let wI = 0; wI < waveCount; wI++) {
-            const h = 10 + Math.abs(Math.sin(nowSec * 5 + wI * 0.7)) * (is45 ? 28 : 42);
-            roundRectCanvas(ctx, startWaveX + (wI * waveSpacing), waveCenterY - (h / 2), 5, h, 2.5);
-            ctx.fill();
-        }
-        curY += (is45 ? 65 : 85);
-
-        ctx.textAlign = 'center';
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textBaseline = 'top';
-            ctx.fillText(`🎙️ ${rawEyebrow.toUpperCase()}`, safeCenterX, curY);
-            curY += is45 ? 34 : 44;
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 58 : 74;
-            const headLineHeight = is45 ? 68 : 86;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0,0,0,0.95)';
-            ctx.shadowBlur = 24;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#FFFFFF';
-            ctx.textBaseline = 'top';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth - 20).slice(0, 3);
-            headLines.forEach((line, i) => {
-                ctx.fillText(line, safeCenterX, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += (headLines.length * headLineHeight) + 24;
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${is45 ? 25 : 30}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textBaseline = 'top';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth - 30).slice(0, 3);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, safeCenterX, curY + (i * (is45 ? 36 : 44)));
-            });
-        }
-
-    } else if (spatialArchetype === 'minimal_monochrome') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 19: MONOCROMO SUIZO (QUIET LUXURY PURO)
-        // ---------------------------------------------------------------------
-        let curY = contentTopY + 20;
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
-            curY += is45 ? 32 : 40;
-        }
-
-        ctx.strokeStyle = 'rgba(229, 203, 167, 0.45)';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(leftSafeX, curY);
-        ctx.lineTo(rightSafeX, curY);
-        ctx.stroke();
-        curY += is45 ? 30 : 40;
-
-        if (hasHead) {
-            const headFontSize = is45 ? 64 : 80;
-            const headLineHeight = is45 ? 72 : 90;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#FFFFFF';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 3);
-            headLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
-            });
-            curY += (headLines.length * headLineHeight) + 26;
-        }
-
-        if (hasSub) {
-            ctx.font = `500 ${is45 ? 26 : 31}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.88)';
-            ctx.textBaseline = 'top';
-            ctx.textAlign = 'left';
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, 3);
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * (is45 ? 38 : 45)));
-            });
-        }
-
-    } else if (spatialArchetype === 'checklist_protocol') {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 20: CHECKLIST PROTOCOLO 3 INNEGOCIABLES
-        // ---------------------------------------------------------------------
-        let curY = contentTopY + 20;
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 18 : 22}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
-            curY += is45 ? 34 : 44;
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 58 : 74;
-            const headLineHeight = is45 ? 66 : 84;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0,0,0,0.95)';
-            ctx.shadowBlur = 24;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#FFFFFF';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, 2);
-            headLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, curY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY += (headLines.length * headLineHeight) + 26;
-        }
-
-        const checkItems = [
-            c1 || '1. 140g Proteína Diaria',
-            c2 || '2. 4 Series Pesadas RIR 2',
-            c3 || '3. 8.000 Pasos de Movilidad'
-        ];
-
-        checkItems.forEach(item => {
-            const rowH = is45 ? 48 : 56;
-            ctx.fillStyle = 'rgba(16, 17, 22, 0.92)';
-            roundRectCanvas(ctx, leftSafeX, curY, safeWidth, rowH, 12);
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(229, 203, 167, 0.40)';
-            ctx.lineWidth = 1.2;
-            roundRectCanvas(ctx, leftSafeX, curY, safeWidth, rowH, 12);
-            ctx.stroke();
-
-            ctx.fillStyle = '#E5CBA7';
-            ctx.beginPath();
-            ctx.arc(leftSafeX + (is45 ? 22 : 26), curY + (rowH / 2), is45 ? 6 : 7, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.font = `700 ${is45 ? 20 : 24}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#FFFFFF';
-            ctx.textBaseline = 'middle';
-            ctx.textAlign = 'left';
-            ctx.fillText(item, leftSafeX + (is45 ? 42 : 50), curY + (rowH / 2));
-
-            curY += rowH + 10;
+        // Bajada
+        ctx.font = '400 32px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#E0DFE2';
+        const bajadaLines = wrapCanvasText(ctx, MktStudioState.fields.bajada || 'Fuerza tranquila y longevidad en CABA y Online.', cardW - 96);
+        bajadaLines.forEach(line => {
+            ctx.fillText(line, padX, textY);
+            textY += 46;
         });
-    } else {
-        // ---------------------------------------------------------------------
-        // ARQUETIPO 8: EDITORIAL BOTTOM CLASSIC / CARRUSEL SWIPE (78px DISPLAY)
-        // ---------------------------------------------------------------------
-        const chipHeight = is45 ? 46 : 52;
-        let curY = bottomSafeY;
 
-        if (hasChips) {
-            curY = bottomSafeY - chipHeight;
-            drawLeftChipsRow(ctx, chips, leftSafeX, curY, is45, rightSafeX);
-            curY -= (is45 ? 24 : 32);
-        }
+        // 4. Marca SENS Superior
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText('SENS TRAIN & WELLNESS', cardMargin, is916 ? 160 : 100);
 
-        if (hasSub) {
-            const subFontSize = is45 ? 26 : 32;
-            const subLineHeight = is45 ? 38 : 46;
-            ctx.font = `500 ${subFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textAlign = 'left';
-            const maxSubLines = is45 ? 2 : 3;
-            const subLines = wrapCanvasText(ctx, rawSub, safeWidth).slice(0, maxSubLines);
-            const subStartY = curY - (subLines.length * subLineHeight);
-            ctx.fillStyle = 'rgba(244, 244, 246, 0.92)';
-            ctx.textBaseline = 'top';
-            subLines.forEach((line, i) => {
-                ctx.fillText(line, leftSafeX, subStartY + (i * subLineHeight));
-            });
-            curY = subStartY - (is45 ? 22 : 30);
-        }
-
-        if (hasHead) {
-            const headFontSize = is45 ? 62 : 78;
-            const headLineHeight = is45 ? 70 : 88;
-            ctx.save();
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 22;
-            ctx.shadowOffsetY = 6;
-            ctx.font = `900 ${headFontSize}px "Plus Jakarta Sans", sans-serif`;
-            ctx.textAlign = 'left';
-            const maxHeadLines = is45 ? 2 : 3;
-            const headLines = wrapCanvasText(ctx, rawHeadline.toUpperCase(), safeWidth).slice(0, maxHeadLines);
-            const headStartY = curY - (headLines.length * headLineHeight);
-            ctx.textBaseline = 'top';
-            headLines.forEach((line, i) => {
-                const isAccent = (i === headLines.length - 1 && headLines.length > 1);
-                ctx.fillStyle = isAccent ? '#E5CBA7' : '#FFFFFF';
-                ctx.fillText(line, leftSafeX, headStartY + (i * headLineHeight));
-            });
-            ctx.restore();
-            curY = headStartY - (is45 ? 20 : 26);
-        }
-
-        if (hasEye) {
-            ctx.font = `800 ${is45 ? 20 : 23}px "Plus Jakarta Sans", sans-serif`;
-            ctx.fillStyle = '#E5CBA7';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'bottom';
-            ctx.fillText(rawEyebrow.toUpperCase(), leftSafeX, curY);
-        }
-    }
-
-    ctx.restore();
-
-    // =========================================================================
-    // 6. GUÍAS VISUALES DE SAFE ZONES EN TIEMPO REAL (INTERACTIVAS)
-    // Permite a Nico verificar con 100% de certeza que ningún texto sea tapado
-    // =========================================================================
-    if (mktStudioState.showSafeZoneGuides) {
-        ctx.save();
-        const topInset = topSafeY;
-        const bottomInset = H - bottomSafeY;
-        const rightInset = W - rightSafeX;
-        const leftInset = leftSafeX;
-
-        const safeW = safeWidth;
-        const safeH = bottomSafeY - topSafeY;
-
-        // Zona Prohibida Superior (Tabs / Barra de Estado / Perfil IG)
-        ctx.fillStyle = 'rgba(235, 87, 87, 0.16)';
-        ctx.fillRect(0, 0, W, topInset);
-        ctx.strokeStyle = 'rgba(235, 87, 87, 0.70)';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([8, 6]);
-        ctx.strokeRect(0, 0, W, topInset);
-
-        // Zona Prohibida Inferior (Comentarios, Caption, Audio)
-        ctx.fillStyle = 'rgba(235, 87, 87, 0.16)';
-        ctx.fillRect(0, bottomSafeY, W, bottomInset);
-        ctx.strokeRect(0, bottomSafeY, W, bottomInset);
-
-        // Zona Prohibida Derecha (Botonera TikTok / Reels Likes, Share, Audio)
-        if (is916) {
-            ctx.fillStyle = 'rgba(235, 87, 87, 0.16)';
-            ctx.fillRect(rightSafeX, topInset, rightInset, safeH);
-            ctx.strokeRect(rightSafeX, topInset, rightInset, safeH);
-        }
-
-        // Rectángulo de Safe Zone Activa
-        ctx.strokeStyle = '#E5CBA7';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([10, 6]);
-        ctx.strokeRect(leftInset, topInset, safeW, safeH);
-
-        // Indicadores Tipográficos
-        ctx.font = '700 17px "Plus Jakarta Sans", sans-serif';
-        ctx.fillStyle = '#FF9D9D';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(is916 ? '⛔ ZONA TAPADA: Stories / Tabs TikTok (Top 220px)' : '⛔ Margen Superior (96px)', W / 2, topInset / 2);
-        ctx.fillText(is916 ? '⛔ ZONA TAPADA: Caption, Comentarios y Audio (Bottom 340px)' : '⛔ Margen Inferior (96px)', W / 2, bottomSafeY + (bottomInset / 2));
-
-        if (is916) {
-            ctx.save();
-            ctx.translate(rightSafeX + (rightInset / 2), topInset + (safeH / 2));
-            ctx.rotate(Math.PI / 2);
-            ctx.fillText('⛔ Like / Comentarios / Share (140px)', 0, 0);
-            ctx.restore();
-        }
-
-        ctx.fillStyle = '#E5CBA7';
-        ctx.font = '800 16px "Plus Jakarta Sans", sans-serif';
-        ctx.textAlign = 'left';
-        ctx.fillText(`✓ SAFE ZONE ACTIVA (${safeW} × ${safeH} px)`, leftInset + 14, topInset + 26);
-
-        ctx.restore();
-    }
-    ctx.restore(); // Restaurar escala global scaleFactor
-
-    // Si es render offscreen UHD, no reflejar en los mini visores
-    if (targetCanvas) return;
-
-    // Mirroring frame to the Mini-Visor en Vivo in Editor
-    const miniCanvas = document.getElementById('mktMiniFramingCanvas');
-    if (miniCanvas) {
-        const targetW = 540;
-        const targetH = is45 ? 675 : 960;
-        if (miniCanvas.width !== targetW || miniCanvas.height !== targetH) {
-            miniCanvas.width = targetW;
-            miniCanvas.height = targetH;
-        }
-        const mCtx = miniCanvas.getContext('2d');
-        mCtx.clearRect(0, 0, targetW, targetH);
+        // 5. Descargar PNG UHD
         try {
-            mCtx.drawImage(canvas, 0, 0, targetW, targetH);
-        } catch (_) {}
-    }
-
-    // Mirroring frame to the Lightbox Modal if active
-    const lbModal = document.getElementById('mktCanvasLightboxModal');
-    if (lbModal && (lbModal.style.display !== 'none' || lbModal.classList.contains('is-open'))) {
-        const lbCanvas = document.getElementById('mktLightboxCanvas');
-        if (lbCanvas) {
-            const targetW = 540;
-            const targetH = is45 ? 675 : 960;
-            if (lbCanvas.width !== targetW || lbCanvas.height !== targetH) {
-                lbCanvas.width = targetW;
-                lbCanvas.height = targetH;
-                lbCanvas.style.aspectRatio = is45 ? '4/5' : '9/16';
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
+            const a = document.createElement('a');
+            a.download = `SENS_${tpl.code}_UHD_${is916 ? '9x16' : '4x5'}.png`;
+            a.href = dataUrl;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            if (typeof showSensToast === 'function') {
+                showSensToast('✓ Imagen descargada en UHD 4K (2160px sin compresión)', 'champagne', 3000);
             }
-            const lbCtx = lbCanvas.getContext('2d');
-            lbCtx.clearRect(0, 0, targetW, targetH);
+        } catch (err) {
+            console.error('Error al descargar PNG UHD:', err);
+            if (typeof showSensToast === 'function') {
+                showSensToast('Error al exportar. Si la imagen es externa puede estar bloqueada por CORS.', 'warning', 3500);
+            }
+        }
+    };
+
+    // Dibujar fondo
+    const isVideo = (MktStudioState.mediaType === 'video');
+    if (isVideo) {
+        const video = document.getElementById('mktArtboardVideo');
+        if (video && video.readyState >= 2) {
+            ctx.drawImage(video, 0, 0, width, height);
+            drawContent();
+        } else {
+            ctx.fillStyle = '#09090B';
+            ctx.fillRect(0, 0, width, height);
+            drawContent();
+        }
+    } else {
+        const img = document.getElementById('mktArtboardImg');
+        if (img && img.complete && img.naturalWidth > 0) {
             try {
-                lbCtx.drawImage(canvas, 0, 0, targetW, targetH);
-            } catch (_) {}
+                ctx.drawImage(img, 0, 0, width, height);
+            } catch (_) {
+                ctx.fillStyle = '#09090B';
+                ctx.fillRect(0, 0, width, height);
+            }
+            drawContent();
+        } else {
+            ctx.fillStyle = '#09090B';
+            ctx.fillRect(0, 0, width, height);
+            drawContent();
         }
     }
-    } catch (renderErr) {
-        console.error('Error renderMarketingCanvasFrame:', renderErr);
+}
+
+function captureMarketingFrameUHD() {
+    exportMarketingPieceUHD();
+}
+
+function recordMarketingVideoUHD() {
+    const video = document.getElementById('mktArtboardVideo');
+    if (!video) return;
+
+    const tpl = getActiveMktTemplate();
+    const is916 = (tpl.format === '9:16');
+    const width = 1080;
+    const height = is916 ? 1920 : 1350;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d', { alpha: false });
+
+    if (typeof canvas.captureStream !== 'function' || typeof MediaRecorder === 'undefined') {
+        if (typeof showSensToast === 'function') {
+            showSensToast('Tu navegador no soporta grabación en tiempo real. Exportando fotograma UHD...', 'warning', 3000);
+        }
+        exportMarketingPieceUHD();
+        return;
     }
-}
 
-function drawLeftChipsRow(ctx, chips, startX, y, is45, maxRightX) {
-    const chipHeight = is45 ? 46 : 52;
-    let chipX = startX;
-    ctx.font = `700 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
-    ctx.textAlign = 'left';
-    chips.forEach((ch, idx) => {
-        const isHighlight = (idx === chips.length - 1 && chips.length > 1) || (chips.length === 1 && ch.includes('→'));
-        const padX = is45 ? 18 : 22;
-        const w = ctx.measureText(ch).width + (padX * 2);
+    if (typeof showSensToast === 'function') {
+        showSensToast('Grabando clip de video UHD (6 segundos a 60 fps)...', 'champagne', 6000);
+    }
 
-        if (maxRightX && (chipX + w > maxRightX)) return; // Evita desbordar la safe zone derecha
+    const stream = canvas.captureStream(60);
+    let recorder;
+    try {
+        recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 16000000 });
+    } catch (_) {
+        try {
+            recorder = new MediaRecorder(stream, { mimeType: 'video/webm', videoBitsPerSecond: 12000000 });
+        } catch (e) {
+            recorder = new MediaRecorder(stream);
+        }
+    }
 
-        ctx.fillStyle = isHighlight ? '#E5CBA7' : 'rgba(20, 20, 24, 0.82)';
-        roundRectCanvas(ctx, chipX, y, w, chipHeight, 10);
+    const chunks = [];
+    recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) chunks.push(e.data);
+    };
+
+    recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.download = `SENS_${tpl.code}_UHD_Video.webm`;
+        a.href = url;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        if (typeof showSensToast === 'function') {
+            showSensToast('✓ Video UHD grabado y descargado exitosamente.', 'champagne', 3000);
+        }
+    };
+
+    recorder.start();
+
+    const startTime = Date.now();
+    const durationMs = 6000;
+
+    const renderFrameLoop = () => {
+        if (Date.now() - startTime >= durationMs) {
+            recorder.stop();
+            return;
+        }
+
+        // Dibujar frame de video
+        if (video.readyState >= 2) {
+            ctx.drawImage(video, 0, 0, width, height);
+        } else {
+            ctx.fillStyle = '#09090B';
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        // Overlay
+        const grad = ctx.createLinearGradient(0, 0, 0, height);
+        grad.addColorStop(0, 'rgba(9, 9, 11, 0.35)');
+        grad.addColorStop(1, 'rgba(9, 9, 11, 0.80)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+
+        // Tarjeta
+        const cardMargin = width * 0.08;
+        const cardW = width - (cardMargin * 2);
+        const cardY = is916 ? (height * 0.54) : (height * 0.46);
+        const cardH = is916 ? (height * 0.34) : (height * 0.44);
+
+        ctx.fillStyle = 'rgba(18, 18, 20, 0.85)';
+        roundRectCanvas(ctx, cardMargin, cardY, cardW, cardH, 20);
         ctx.fill();
 
-        ctx.fillStyle = isHighlight ? '#121214' : '#FAF9F6';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(ch, chipX + padX, y + (chipHeight / 2));
-        chipX += w + 12;
-    });
-}
+        ctx.strokeStyle = 'rgba(229, 203, 167, 0.3)';
+        ctx.lineWidth = 2;
+        roundRectCanvas(ctx, cardMargin, cardY, cardW, cardH, 20);
+        ctx.stroke();
 
-function drawCenteredChipsRow(ctx, chips, centerX, y, is45) {
-    const chipHeight = is45 ? 46 : 52;
-    ctx.font = `700 ${is45 ? 18 : 21}px "Plus Jakarta Sans", sans-serif`;
-    const padX = is45 ? 18 : 22;
+        // Tipografía
+        const padX = cardMargin + 24;
+        let textY = cardY + 36;
 
-    const widths = chips.map(ch => ctx.measureText(ch).width + (padX * 2));
-    const totalW = widths.reduce((a, b) => a + b, 0) + ((chips.length - 1) * 12);
-    let chipX = centerX - (totalW / 2);
-
-    chips.forEach((ch, idx) => {
-        const isHighlight = (idx === chips.length - 1 && chips.length > 1) || (chips.length === 1 && ch.includes('→'));
-        const w = widths[idx];
-
-        ctx.fillStyle = isHighlight ? '#E5CBA7' : 'rgba(20, 20, 24, 0.82)';
-        roundRectCanvas(ctx, chipX, y, w, chipHeight, 10);
-        ctx.fill();
-
-        ctx.fillStyle = isHighlight ? '#121214' : '#FAF9F6';
-        ctx.textBaseline = 'middle';
+        ctx.font = '800 13px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#E5CBA7';
         ctx.textAlign = 'left';
-        ctx.fillText(ch, chipX + padX, y + (chipHeight / 2));
-        chipX += w + 12;
-    });
+        ctx.textBaseline = 'top';
+        ctx.fillText((MktStudioState.fields.tag || 'SENS • PROTOCOLO').toUpperCase(), padX, textY);
+        textY += 32;
+
+        ctx.font = '700 28px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#FFFFFF';
+        const titleLines = wrapCanvasText(ctx, MktStudioState.fields.title || 'Entrenamiento con dolor cero.', cardW - 48);
+        titleLines.forEach(line => {
+            ctx.fillText(line, padX, textY);
+            textY += 36;
+        });
+        textY += 6;
+
+        ctx.font = '400 16px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#E0DFE2';
+        const bajadaLines = wrapCanvasText(ctx, MktStudioState.fields.bajada || 'Fuerza tranquila y longevidad en CABA y Online.', cardW - 48);
+        bajadaLines.forEach(line => {
+            ctx.fillText(line, padX, textY);
+            textY += 24;
+        });
+
+        requestAnimationFrame(renderFrameLoop);
+    };
+
+    renderFrameLoop();
+}
+
+function bindMktMobileSwitcher() {
+    const tabEdit = document.getElementById('mktSwitchTabEditor');
+    const tabPrev = document.getElementById('mktSwitchTabPreview');
+    const layout = document.getElementById('mktStudioMainLayout');
+
+    if (tabEdit && tabPrev && layout) {
+        tabEdit.onclick = () => {
+            tabEdit.classList.add('active');
+            tabPrev.classList.remove('active');
+            layout.classList.add('mobile-view-editor');
+            layout.classList.remove('mobile-view-preview');
+        };
+        tabPrev.onclick = () => {
+            tabPrev.classList.add('active');
+            tabEdit.classList.remove('active');
+            layout.classList.add('mobile-view-preview');
+            layout.classList.remove('mobile-view-editor');
+        };
+    }
 }
 
 function roundRectCanvas(ctx, x, y, w, h, r) {
@@ -25015,6 +22775,7 @@ function wrapCanvasText(ctx, text, maxWidth) {
     if (current) lines.push(current);
     return lines.slice(0, 4);
 }
+
 
 // =============================================================================
 // SENS CLARITY TRAINER: MOTOR DE PERIODIZACIÓN Y PLANIFICACIÓN MASIVA

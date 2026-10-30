@@ -29186,3 +29186,416 @@ html.in-portal-mode .sens-dock-item *,
 .sens-dock-item * {
     pointer-events: none !important;
 }
+
+
+/* =============================================================================
+   SENS QUIET VITALITY — 200 MARKETING TEMPLATES STUDIO (UHD & WYSIWYG)
+   ============================================================================= */
+
+.sens-uhd-badge {
+    background: #121214;
+    color: #E5CBA7;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.08em;
+    border: 1px solid rgba(229, 203, 167, 0.4);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.sens-mkt-block-ribbon {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    background: #F4F3F1;
+    padding: 3px;
+    border-radius: 10px;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+}
+
+.sens-mkt-block-tab {
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 3px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.sens-mkt-block-tab span {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #575659;
+}
+
+.sens-mkt-block-tab small {
+    font-size: 8px;
+    color: #8C8B8E;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.sens-mkt-block-tab.active {
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.08);
+}
+
+.sens-mkt-block-tab.active span {
+    color: #121214;
+    font-weight: 800;
+}
+
+.sens-mkt-block-tab.active small {
+    color: #705B3E;
+    font-weight: 600;
+}
+
+.sens-mkt-char-badge {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #575659;
+    background: #F4F3F1;
+    padding: 1px 6px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.sens-mkt-char-badge.is-limit-warning {
+    color: #BA1A1A !important;
+    background: #FFDAD6 !important;
+    font-weight: 800 !important;
+}
+
+.sens-mkt-lock-badge {
+    font-size: 9px;
+    font-weight: 700;
+    color: #1B7A36;
+    background: #EBF7EE;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.sens-mkt-media-toggle-pill {
+    display: inline-flex;
+    background: #F4F3F1;
+    padding: 2px;
+    border-radius: 8px;
+    border: 1px solid rgba(18, 18, 20, 0.08);
+}
+
+.sens-mkt-media-btn {
+    border: none;
+    background: transparent;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #575659;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.sens-mkt-media-btn.active {
+    background: #FFFFFF;
+    color: #121214;
+    box-shadow: 0 1px 3px rgba(18, 18, 20, 0.06);
+}
+
+/* Template Cards Grid */
+.sens-mkt-template-card-item {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.08);
+    border-radius: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.sens-mkt-template-card-item:hover {
+    border-color: #E5CBA7;
+    background: #FAF9F6;
+    transform: translateY(-1px);
+}
+
+.sens-mkt-template-card-item.active {
+    border-color: #705B3E !important;
+    background: #FAF9F6 !important;
+    box-shadow: 0 2px 8px rgba(112, 91, 62, 0.12) !important;
+}
+
+.sens-mkt-tpl-code-pill {
+    background: #121214;
+    color: #E5CBA7;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 3px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+}
+
+.sens-mkt-tpl-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.sens-mkt-tpl-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: #121214;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.sens-mkt-tpl-cat {
+    font-size: 9px;
+    color: #8C8B8E;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* Artboard WYSIWYG Stage */
+.sens-mkt-canvas-stage {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px -8px rgba(18, 18, 20, 0.22);
+    border: 1px solid rgba(18, 18, 20, 0.1);
+    background: #09090B;
+}
+
+.sens-mkt-canvas-stage.is-916 {
+    aspect-ratio: 9 / 16;
+}
+
+.sens-mkt-canvas-stage.is-45 {
+    aspect-ratio: 4 / 5;
+}
+
+.sens-mkt-artboard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    user-select: none;
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+}
+
+.mkt-artboard-media-box {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.mkt-artboard-media-asset {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.mkt-artboard-overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(9, 9, 11, 0.35) 0%, rgba(9, 9, 11, 0.15) 35%, rgba(9, 9, 11, 0.75) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.mkt-safe-zone-guide {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.mkt-safe-top,
+.mkt-safe-bottom {
+    background: rgba(229, 203, 167, 0.2);
+    border-bottom: 1px dashed rgba(229, 203, 167, 0.6);
+    padding: 8px 12px;
+    text-align: center;
+}
+
+.mkt-safe-bottom {
+    border-bottom: none;
+    border-top: 1px dashed rgba(229, 203, 167, 0.6);
+}
+
+.mkt-safe-top small,
+.mkt-safe-bottom small {
+    color: #FFFFFF;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.mkt-safe-center {
+    padding: 12px;
+    text-align: center;
+}
+
+.mkt-safe-center span {
+    font-size: 9px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.1em;
+}
+
+.mkt-artboard-content {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    padding: 22px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.mkt-brand-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(9, 9, 11, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    align-self: flex-start;
+}
+
+.mkt-brand-title {
+    font-size: 10px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.06em;
+}
+
+.mkt-brand-title small {
+    font-size: 7.5px;
+    color: #E5CBA7;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    margin-left: 4px;
+}
+
+.mkt-glass-card {
+    background: rgba(18, 18, 20, 0.78);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(229, 203, 167, 0.25);
+    border-radius: 16px;
+    padding: 16px 14px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mkt-editable-field-wrap {
+    position: relative;
+}
+
+.mkt-tag-kicker {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #E5CBA7;
+    outline: none;
+    display: inline-block;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+}
+
+.mkt-tag-kicker:focus,
+.mkt-headline:focus,
+.mkt-bajada:focus {
+    background: rgba(229, 203, 167, 0.18) !important;
+    outline: 1px dashed #E5CBA7 !important;
+}
+
+.mkt-headline {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    margin: 0;
+    outline: none;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+}
+
+.mkt-bajada {
+    font-size: 11px;
+    font-weight: 400;
+    color: #E0DFE2;
+    line-height: 1.45;
+    margin: 0;
+    outline: none;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+}
+
+.mkt-metric-container {
+    margin-top: 6px;
+}
+
+.mkt-artboard-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mkt-cta-pill {
+    font-size: 9px;
+    font-weight: 700;
+    color: #121214;
+    background: #E5CBA7;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+}
+
+.mkt-handle {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.02em;
+}
+
+@media (max-width: 900px) {
+    .sens-mkt-block-ribbon {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
