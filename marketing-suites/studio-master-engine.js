@@ -94,6 +94,8 @@
     extraList: document.getElementById('extra-fields-list'),
     hudToggleBtn: document.getElementById('btn-toggle-hud'),
     hudKnob: document.getElementById('hud-switch-knob'),
+    exportOverlayPngBtn: document.getElementById('btn-export-overlay-png'),
+    exportOverlayPngLabel: document.getElementById('export-overlay-png-label'),
     exportReelBtn: document.getElementById('btn-export-reel'),
     exportReelLabel: document.getElementById('export-reel-label'),
     export4kBtn: document.getElementById('btn-export-4k'),
@@ -363,10 +365,13 @@
   function syncExportButtonsForMediaKind() {
     const isVid = hasActiveVideoSlot();
     if (els.export4kLabel) {
-      els.export4kLabel.textContent = isVid ? 'Video 4K UHD' : 'Portada 4K';
+      els.export4kLabel.textContent = isVid ? 'Video 4K UHD' : 'Portada 4K (Con Fondo)';
     }
     if (els.exportReelLabel) {
-      els.exportReelLabel.textContent = isVid ? 'Exportar Reel 60FPS (MP4)' : 'Exportar Reel 60FPS (MP4)';
+      els.exportReelLabel.textContent = 'Exportar Video HD con Template';
+    }
+    if (els.exportOverlayPngLabel) {
+      els.exportOverlayPngLabel.textContent = 'Capa PNG Transparente 4K (IG Edits)';
     }
   }
 
@@ -1088,12 +1093,13 @@
     ctx.drawImage(sourceEl, sx, sy, zoomedW, zoomedH, dstX, dstY, dstW, dstH);
   }
 
-  async function renderVideoLayersForComposite(targetWidthPx, activeVideoEntries) {
+  async function renderVideoLayersForComposite(targetWidthPx, activeVideoEntries, opts) {
     const stageEl = document.getElementById('video-canvas');
     if (!stageEl || typeof window.html2canvas !== 'function') {
       throw new Error('Stage o html2canvas no disponible');
     }
 
+    const pureTransparentPng = Boolean(opts && opts.pureTransparentPng);
     const targetW = targetWidthPx || 1080;
     const targetH = state.format === '9:16' ? Math.round(targetW * (16 / 9)) : Math.round(targetW * (5 / 4));
     const rect = stageEl.getBoundingClientRect();
@@ -1113,10 +1119,13 @@
     const cleanupAttrs = [];
 
     try {
-      // Tag active video slots and their ancestors/preceding nodes so we only strip them inside html2canvas's cloned DOM!
-      // This keeps the live <video> in the real DOM 100% visible and playing at 60FPS without browser throttling!
+      // Tag all media slots (whether video or photo) so we can strip them cleanly in the cloned DOM
+      const entriesToStrip = (activeVideoEntries && activeVideoEntries.length > 0)
+        ? activeVideoEntries
+        : state.mediaSlots.map(s => ({ slot: s, vid: s.videoEl || null, relX: 0, relY: 0, relW: 1, relH: 1, relRadius: 0 }));
+
       const ancestorSet = new Set();
-      for (const entry of activeVideoEntries) {
+      for (const entry of entriesToStrip) {
         const slot = entry.slot;
         if (slot && slot.el) {
           slot.el.setAttribute('data-sens-video-slot-el', '1');
@@ -1135,9 +1144,8 @@
         }
       }
 
-      const primaryRefNode = (activeVideoEntries[0].slot && activeVideoEntries[0].slot.el)
-        ? activeVideoEntries[0].slot.el
-        : activeVideoEntries[0].vid;
+      const primaryEntry = entriesToStrip[0];
+      const primaryRefNode = primaryEntry && ((primaryEntry.slot && primaryEntry.slot.el) ? primaryEntry.slot.el : primaryEntry.vid);
 
       if (primaryRefNode) {
         const allNodes = stageEl.querySelectorAll('*');
@@ -1152,34 +1160,49 @@
         });
       }
 
-      // LAYER 0 (bgBaseCanvas): Capture template background & cards behind the video slot
-      const rawBgBase = await window.html2canvas(stageEl, {
-        scale: scale,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null,
-        logging: false,
-        onclone: (clonedDoc) => {
-          clonedDoc.querySelectorAll('video').forEach(v => v.remove());
-          clonedDoc.querySelectorAll('[data-sens-video-slot-el="1"]').forEach(el => {
-            if (el.tagName === 'IMG') {
-              el.style.setProperty('opacity', '0', 'important');
-              el.removeAttribute('src');
-            } else {
-              el.style.setProperty('background-image', 'none', 'important');
-              el.style.setProperty('background-color', 'transparent', 'important');
-            }
-          });
-        }
-      });
+      // CRITICAL FIX: ignoreElements runs inside html2canvas DocumentCloner BEFORE createVideoClone!
+      // This prevents html2canvas from ever turning <video> into a low-res pixelated <canvas> snapshot!
+      const ignoreVideoAndGuides = (el) => {
+        if (!el) return false;
+        if (el.tagName === 'VIDEO' || el.tagName === 'CANVAS') return true;
+        if (el.classList && (el.classList.contains('sens-bg-video') || el.classList.contains('safe-zone-overlay'))) return true;
+        return false;
+      };
 
-      const bgBaseCanvas = document.createElement('canvas');
-      bgBaseCanvas.width = targetW;
-      bgBaseCanvas.height = targetH;
-      const bCtx = bgBaseCanvas.getContext('2d');
-      bCtx.imageSmoothingEnabled = true;
-      bCtx.imageSmoothingQuality = 'high';
-      bCtx.drawImage(rawBgBase, 0, 0, targetW, targetH);
+      let bgBaseCanvas = null;
+      if (!pureTransparentPng) {
+        // LAYER 0 (bgBaseCanvas): Capture template background & cards behind the video slot
+        const rawBgBase = await window.html2canvas(stageEl, {
+          scale: scale,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: null,
+          logging: false,
+          ignoreElements: ignoreVideoAndGuides,
+          onclone: (clonedDoc) => {
+            clonedDoc.querySelectorAll('video, canvas').forEach(v => v.remove());
+            clonedDoc.querySelectorAll('[data-sens-video-slot-el="1"]').forEach(el => {
+              if (el.tagName === 'IMG') {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('opacity', '0', 'important');
+                el.removeAttribute('src');
+              } else {
+                el.style.setProperty('background-image', 'none', 'important');
+                el.style.setProperty('background-color', 'transparent', 'important');
+                el.style.setProperty('background', 'transparent', 'important');
+              }
+            });
+          }
+        });
+
+        bgBaseCanvas = document.createElement('canvas');
+        bgBaseCanvas.width = targetW;
+        bgBaseCanvas.height = targetH;
+        const bCtx = bgBaseCanvas.getContext('2d');
+        bCtx.imageSmoothingEnabled = true;
+        bCtx.imageSmoothingQuality = 'high';
+        bCtx.drawImage(rawBgBase, 0, 0, targetW, targetH);
+      }
 
       // LAYER 2 (fgOverlayCanvas): Capture ONLY scrims, glass cards, badges & text in front of the video slot
       const rawOverlay = await window.html2canvas(stageEl, {
@@ -1188,17 +1211,16 @@
         allowTaint: true,
         backgroundColor: null,
         logging: false,
+        ignoreElements: ignoreVideoAndGuides,
         onclone: (clonedDoc) => {
-          clonedDoc.querySelectorAll('video').forEach(v => v.remove());
+          clonedDoc.querySelectorAll('video, canvas').forEach(v => v.remove());
           clonedDoc.querySelectorAll('[data-sens-video-slot-el="1"]').forEach(el => {
-            if (el.tagName === 'IMG') {
-              el.style.setProperty('opacity', '0', 'important');
-              el.removeAttribute('src');
-            } else {
-              el.style.setProperty('background', 'transparent', 'important');
-              el.style.setProperty('background-color', 'transparent', 'important');
-              el.style.setProperty('background-image', 'none', 'important');
-            }
+            el.style.setProperty('display', 'none', 'important');
+            el.style.setProperty('opacity', '0', 'important');
+            el.style.setProperty('background', 'transparent', 'important');
+            el.style.setProperty('background-color', 'transparent', 'important');
+            el.style.setProperty('background-image', 'none', 'important');
+            if (el.tagName === 'IMG') el.removeAttribute('src');
           });
           clonedDoc.querySelectorAll('[data-sens-fg-anc="1"]').forEach(anc => {
             anc.style.setProperty('background', 'transparent', 'important');
@@ -1208,9 +1230,27 @@
             anc.style.setProperty('border-color', 'transparent', 'important');
           });
           clonedDoc.querySelectorAll('[data-sens-fg-behind="1"]').forEach(behind => {
+            behind.style.setProperty('display', 'none', 'important');
             behind.style.setProperty('visibility', 'hidden', 'important');
             behind.style.setProperty('opacity', '0', 'important');
           });
+          // If exporting pure Transparent PNG for IG Edits / CapCut, also soften or hide full-screen solid veils
+          // so the video underneath in IG Edits shines through with 100% clarity
+          const clonedRoot = clonedDoc.getElementById('video-canvas');
+          if (clonedRoot) {
+            clonedRoot.style.setProperty('background', 'transparent', 'important');
+            clonedRoot.style.setProperty('background-color', 'transparent', 'important');
+            clonedRoot.style.setProperty('box-shadow', 'none', 'important');
+            Array.from(clonedRoot.children).forEach(ch => {
+              const cls = ch.className || '';
+              if (typeof cls === 'string' && cls.includes('inset-0') && ch.children.length === 0 && ch.textContent.trim() === '') {
+                if (!cls.includes('bg-gradient')) {
+                  // Solid full-bleed tint sheet (e.g. bg-surface-bright/70 or bg-primary/60) -> make subtle or transparent
+                  ch.style.setProperty('opacity', pureTransparentPng ? '0' : '0.22', 'important');
+                }
+              }
+            });
+          }
         }
       });
 
@@ -1233,6 +1273,54 @@
         applySafeZoneState(stageEl);
       }
       document.body.classList.remove('sens-exporting');
+    }
+  }
+
+  // Export 4K UHD Transparent PNG Layer (for Instagram Edits / Reels / CapCut / TikTok)
+  async function handleExportTransparentOverlayPNG() {
+    const btn = els.exportOverlayPngBtn;
+    const label = els.exportOverlayPngLabel;
+    const origText = label ? label.textContent : 'Capa PNG Transparente 4K (IG Edits)';
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = 'Generando PNG Transparente 4K...';
+
+    try {
+      const stageEl = document.getElementById('video-canvas');
+      const stageRect = stageEl ? stageEl.getBoundingClientRect() : { left: 0, top: 0, width: 360, height: 640 };
+      const stW = stageRect.width || 360;
+      const stH = stageRect.height || (state.format === '9:16' ? 640 : 450);
+
+      const slotEntries = state.mediaSlots.map(slot => {
+        const targetBoxEl = (slot.type === 'img' && slot.el && slot.el.parentElement) ? slot.el.parentElement : slot.el;
+        const bRect = targetBoxEl ? targetBoxEl.getBoundingClientRect() : stageRect;
+        const relX = Math.max(0, (bRect.left - stageRect.left) / stW);
+        const relY = Math.max(0, (bRect.top - stageRect.top) / stH);
+        const relW = Math.min(1, (bRect.width || stW) / stW);
+        const relH = Math.min(1, (bRect.height || stH) / stH);
+        const compStyle = targetBoxEl ? window.getComputedStyle(targetBoxEl) : { borderRadius: '0px' };
+        const cssRadius = parseFloat(compStyle.borderRadius) || 0;
+        const relRadius = cssRadius / stW;
+        return { slot, vid: slot.videoEl || null, relX, relY, relW, relH, relRadius };
+      });
+
+      const outW = 2160;
+      const outH = state.format === '9:16' ? 3840 : 2700;
+      const { fgOverlayCanvas } = await renderVideoLayersForComposite(outW, slotEntries, { pureTransparentPng: true });
+
+      const dataUrl = fgOverlayCanvas.toDataURL('image/png', 1.0);
+      const link = document.createElement('a');
+      link.download = `SENS-CAPA-TRANSPARENTE-4K-${state.activeTemplateId}-${outW}x${outH}.png`;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showToast(`Capa PNG Transparente 4K descargada (${outW}×${outH}px) • Lista para IG Edits`);
+    } catch (err) {
+      console.error('Transparent PNG Overlay Error:', err);
+      showToast('Error al exportar Capa PNG Transparente');
+    } finally {
+      if (btn) btn.disabled = false;
+      if (label) label.textContent = origText;
     }
   }
 
@@ -1345,9 +1433,9 @@
       if (hasLiveVideo) {
         const primaryVid = activeVideoEntries[0].vid;
         if (primaryVid && primaryVid.duration && isFinite(primaryVid.duration) && primaryVid.duration > 0) {
-          durationMs = Math.min(15000, Math.max(4000, Math.round(primaryVid.duration * 1000)));
+          durationMs = Math.min(90000, Math.max(3000, Math.round(primaryVid.duration * 1000)));
         } else {
-          durationMs = 6000;
+          durationMs = 8000;
         }
       }
 
@@ -1650,6 +1738,9 @@
     }
 
     // Export Buttons
+    if (els.exportOverlayPngBtn) {
+      els.exportOverlayPngBtn.addEventListener('click', handleExportTransparentOverlayPNG);
+    }
     els.export4kBtn.addEventListener('click', handleExport4K);
     els.exportReelBtn.addEventListener('click', handleExportReel60FPS);
     els.copyCaptionBtn.addEventListener('click', handleCopyCaption);
@@ -1706,6 +1797,7 @@
     selectTemplate,
     handleMediaFileUpload,
     renderStageToHighResCanvas,
+    handleExportTransparentOverlayPNG,
     handleExport4K,
     handleExportReel60FPS
   };

@@ -3,7 +3,7 @@
    Cache-First for Static Assets | Network-First for Navigation | Offline Support
    ============================================================================= */
 
-const CACHE_NAME = 'sens-pwa-v7.0.1';
+const CACHE_NAME = 'sens-pwa-v8.0.0';
 
 const PRECACHE_ASSETS = [
     './',
@@ -65,8 +65,8 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Bypass caching for videos and HTTP Range requests (prevents 206 Partial Content Cache API errors and video playback hangs)
-    if (request.headers.get('range') || url.pathname.endsWith('.mp4') || url.pathname.endsWith('.webm')) {
+    // Bypass caching for videos, Marketing Studio iframe suite, and HTTP Range requests
+    if (request.headers.get('range') || url.pathname.endsWith('.mp4') || url.pathname.endsWith('.webm') || url.pathname.includes('/marketing-suites/')) {
         return;
     }
 

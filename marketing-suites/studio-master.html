@@ -373,23 +373,27 @@
 
   <!-- EXPORT DOCK & CAPTION (BOTTOM OF FLOW) -->
   <section id="section-export" class="pt-2 space-y-2.5">
-    <div class="flex flex-col sm:flex-row gap-2.5">
-      <button id="btn-export-reel" type="button" class="w-full sm:flex-1 h-12 sm:h-14 px-4 bg-primary text-on-primary rounded-xl font-label text-xs font-semibold uppercase tracking-[0.12em] flex items-center justify-center gap-2 shadow-[0_12px_24px_-6px_rgba(0,0,0,0.25)] hover:opacity-95 active:scale-[0.99] transition-all whitespace-nowrap">
-        <span class="material-symbols-outlined text-[18px] text-secondary-fixed shrink-0">movie_edit</span>
-        <span id="export-reel-label" class="whitespace-nowrap">Exportar Reel 60FPS (MP4)</span>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+      <button id="btn-export-overlay-png" type="button" class="w-full h-12 sm:h-14 px-4 bg-secondary-fixed text-on-secondary-fixed border border-secondary/25 rounded-xl font-label text-xs font-bold uppercase tracking-[0.08em] flex items-center justify-center gap-2 shadow-[0_10px_22px_-6px_rgba(112,91,62,0.28)] hover:bg-secondary-fixed-dim active:scale-[0.99] transition-all whitespace-nowrap">
+        <span class="material-symbols-outlined text-[18px] shrink-0">layers</span>
+        <span id="export-overlay-png-label" class="whitespace-nowrap">Capa PNG Transparente 4K (IG Edits)</span>
       </button>
-      <div class="grid grid-cols-2 sm:flex gap-2.5">
-        <button id="btn-export-4k" type="button" class="px-4 h-12 sm:h-14 bg-secondary-fixed text-on-secondary-fixed rounded-xl font-label text-xs font-semibold uppercase tracking-[0.08em] flex items-center justify-center gap-1.5 hover:bg-secondary-fixed-dim active:scale-[0.99] transition-all shadow-sm whitespace-nowrap">
-          <span class="material-symbols-outlined text-[18px] shrink-0">hd</span>
-          <span id="export-4k-label" class="whitespace-nowrap">Portada 4K</span>
-        </button>
-        <button id="btn-copy-caption" type="button" class="px-4 h-12 sm:h-14 bg-surface-container-high text-on-surface rounded-xl font-label text-xs font-semibold uppercase tracking-[0.08em] flex items-center justify-center gap-1.5 hover:bg-surface-container-highest transition-colors whitespace-nowrap">
-          <span class="material-symbols-outlined text-[18px] shrink-0">content_copy</span>
-          <span class="whitespace-nowrap">Copiar Caption</span>
-        </button>
-      </div>
+      <button id="btn-export-reel" type="button" class="w-full h-12 sm:h-14 px-4 bg-primary text-on-primary rounded-xl font-label text-xs font-semibold uppercase tracking-[0.10em] flex items-center justify-center gap-2 shadow-[0_12px_24px_-6px_rgba(0,0,0,0.25)] hover:opacity-95 active:scale-[0.99] transition-all whitespace-nowrap">
+        <span class="material-symbols-outlined text-[18px] text-secondary-fixed shrink-0">movie_edit</span>
+        <span id="export-reel-label" class="whitespace-nowrap">Exportar Video HD con Template</span>
+      </button>
     </div>
-    <p id="export-spec-subtitle" class="text-[10px] text-center font-mono text-on-surface-variant">Renderizado UHD 2160 × 3840 px • Zero Layout Drift • Video 60FPS Real</p>
+    <div class="grid grid-cols-2 gap-2.5">
+      <button id="btn-export-4k" type="button" class="px-4 h-11 bg-surface-container-high text-on-surface rounded-xl font-label text-[11px] font-semibold uppercase tracking-[0.08em] flex items-center justify-center gap-1.5 hover:bg-surface-container-highest active:scale-[0.99] transition-all shadow-sm whitespace-nowrap">
+        <span class="material-symbols-outlined text-[16px] shrink-0">hd</span>
+        <span id="export-4k-label" class="whitespace-nowrap">Portada 4K (Con Fondo)</span>
+      </button>
+      <button id="btn-copy-caption" type="button" class="px-4 h-11 bg-surface-container-high text-on-surface rounded-xl font-label text-[11px] font-semibold uppercase tracking-[0.08em] flex items-center justify-center gap-1.5 hover:bg-surface-container-highest transition-colors whitespace-nowrap">
+        <span class="material-symbols-outlined text-[16px] shrink-0">content_copy</span>
+        <span class="whitespace-nowrap">Copiar Caption</span>
+      </button>
+    </div>
+    <p id="export-spec-subtitle" class="text-[10px] text-center font-mono text-on-surface-variant">Capa PNG Transparente 4K (2160×3840px) lista para IG Edits / CapCut • O Video directo en 60FPS</p>
   </section>
 
 </main>
@@ -438,7 +442,7 @@
   </button>
 </nav>
 
-<script src="templates-db-200.js?v=25.0"></script>
-<script src="studio-master-engine.js?v=25.0"></script>
+<script src="templates-db-200.js?v=26.0"></script>
+<script src="studio-master-engine.js?v=26.0"></script>
 </body>
 </html>
