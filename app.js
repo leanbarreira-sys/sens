@@ -10818,6 +10818,9 @@ function initCoachOS() {
             if (typeof window.renderCoachMarketingStudio === 'function') {
                 window.renderCoachMarketingStudio();
             }
+            if (typeof window.syncMarketingSuiteIframe === 'function') {
+                window.syncMarketingSuiteIframe();
+            }
         } else {
             if (typeof window.stopCoachMarketingStudio === 'function') {
                 window.stopCoachMarketingStudio();
@@ -22028,9 +22031,9 @@ window.stopCoachMarketingStudio = stopCoachMarketingStudio;
 function syncMarketingSuiteIframe() {
     const iframe = document.getElementById('sensMarketingSuiteFrame');
     if (!iframe) return;
-    const targetUrl = 'marketing-suites/studio-master.html?v=28.2';
+    const targetUrl = 'marketing-suites/studio-master.html?v=29.1';
     const currentSrc = iframe.getAttribute('src') || '';
-    if (!currentSrc.includes('studio-master.html?v=28.2')) {
+    if (!currentSrc.includes('studio-master.html?v=29.1')) {
         iframe.src = targetUrl;
     } else if (iframe.contentWindow) {
         const is916 = (MktStudioState.format === '9:16');
@@ -22040,9 +22043,23 @@ function syncMarketingSuiteIframe() {
         const tplId = `${prefix}${String(startNum).padStart(2, '0')}`;
         try {
             iframe.contentWindow.postMessage({ type: 'SENS_SELECT_TEMPLATE', id: tplId }, '*');
+            iframe.contentWindow.postMessage({ type: 'SENS_REQUEST_HEIGHT' }, '*');
         } catch (_) {}
     }
 }
+window.syncMarketingSuiteIframe = syncMarketingSuiteIframe;
+
+// Dynamic height synchronization for Marketing Studio single seamless scroll (eliminates internal iframe scrollbar)
+window.addEventListener('message', function (e) {
+    if (e && e.data && e.data.type === 'SENS_MKT_HEIGHT' && typeof e.data.height === 'number') {
+        const frame = document.getElementById('sensMarketingSuiteFrame');
+        if (frame) {
+            const h = Math.max(e.data.height + 24, 600);
+            frame.style.height = h + 'px';
+            frame.style.minHeight = h + 'px';
+        }
+    }
+});
 
 function bindMktFullScreenButton() {
     const btnFull = document.getElementById('btnOpenSuiteFullScreen');

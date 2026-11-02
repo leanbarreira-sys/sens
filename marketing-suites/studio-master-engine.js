@@ -242,6 +242,16 @@
     applySafeZoneState(rootEl);
     applyHudState(rootEl);
     applyMotionLoopState(rootEl);
+
+    // Notify parent frame to adjust height for single seamless scroll
+    if (window.self !== window.top) {
+      setTimeout(() => {
+        try {
+          const h = Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0);
+          window.parent.postMessage({ type: 'SENS_MKT_HEIGHT', height: h }, '*');
+        } catch (_) {}
+      }, 60);
+    }
   }
 
   // Discover Media Slots (background-image divs or img tags) without altering positioning
@@ -367,13 +377,13 @@
   function syncExportButtonsForMediaKind() {
     const isVid = hasActiveVideoSlot();
     if (els.export4kLabel) {
-      els.export4kLabel.textContent = isVid ? 'Video 4K UHD' : 'Portada 4K (Con Fondo)';
+      els.export4kLabel.textContent = isVid ? 'Video 4K UHD' : 'Portada 4K';
     }
     if (els.exportReelLabel) {
-      els.exportReelLabel.textContent = 'Exportar Video HD con Template';
+      els.exportReelLabel.textContent = 'Exportar Video HD';
     }
     if (els.exportOverlayPngLabel) {
-      els.exportOverlayPngLabel.textContent = 'Capa PNG Transparente 4K (IG Edits)';
+      els.exportOverlayPngLabel.textContent = 'Capa PNG Transparente 4K';
     }
   }
 
@@ -2224,6 +2234,34 @@
       });
     });
 
+    // Report height to parent Coach OS window to enable a single smooth page scroll
+    function reportHeightToParent() {
+      if (window.self === window.top) return;
+      try {
+        if (!document.body.classList.contains('is-embedded')) {
+          document.body.classList.add('is-embedded');
+        }
+        const h = Math.max(
+          document.body.scrollHeight || 0,
+          document.documentElement.scrollHeight || 0,
+          document.body.offsetHeight || 0,
+          document.documentElement.offsetHeight || 0
+        );
+        if (h > 100) {
+          window.parent.postMessage({ type: 'SENS_MKT_HEIGHT', height: h }, '*');
+        }
+      } catch (_) {}
+    }
+
+    window.addEventListener('resize', reportHeightToParent, { passive: true });
+    window.addEventListener('load', reportHeightToParent, { passive: true });
+    if (typeof ResizeObserver !== 'undefined') {
+      try {
+        const ro = new ResizeObserver(() => reportHeightToParent());
+        ro.observe(document.body);
+      } catch (_) {}
+    }
+
     // Listen to postMessage from parent SENS portal if needed
     window.addEventListener('message', (e) => {
       if (!e.data || typeof e.data !== 'object') return;
@@ -2231,6 +2269,8 @@
         selectTemplate(e.data.id);
       } else if (e.data.type === 'SENS_EXPORT_4K') {
         handleExport4K();
+      } else if (e.data.type === 'SENS_REQUEST_HEIGHT') {
+        reportHeightToParent();
       }
     });
   }

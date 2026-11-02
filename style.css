@@ -17755,17 +17755,28 @@ body.in-portal #coachHubView {
     }
 }
 
-/* 6. Growth Marketing Studio (Light Quiet Luxury • 1080x1350 / 1080x1920) */
+/* 6. Growth Marketing Studio (Light Quiet Luxury • Single Seamless Scroll) */
 #paneMarketing {
     background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 #paneMarketing .coach-surface-card {
-    background: var(--sens-bg-surface, #FFFFFF) !important;
-    border: 1px solid var(--sens-border-hairline, rgba(18, 18, 20, 0.08)) !important;
-    border-radius: 20px !important;
-    box-shadow: var(--sens-shadow-card, 0 4px 20px -2px rgba(18, 18, 20, 0.04)) !important;
-    padding: 20px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#sensMarketingSuiteFrame {
+    width: 100% !important;
+    border: none !important;
+    display: block !important;
+    background: transparent !important;
+    overflow: hidden !important;
 }
 
 .sens-mkt-studio-layout {
@@ -17789,14 +17800,15 @@ body.in-portal #coachHubView {
 
 @media (max-width: 960px) {
     #paneMarketing {
-        padding-bottom: max(130px, calc(90px + env(safe-area-inset-bottom, 24px))) !important;
-        -webkit-overflow-scrolling: touch !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        padding-bottom: max(120px, calc(80px + env(safe-area-inset-bottom, 24px))) !important;
     }
     #sensMarketingSuiteFrame {
-        height: 100% !important;
-        min-height: calc(100vh - 120px) !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-y !important;
+        width: 100% !important;
+        border: none !important;
+        overflow: hidden !important;
+        background: transparent !important;
     }
     .sens-mkt-controls-col {
         padding-bottom: 110px !important;
