@@ -132,11 +132,11 @@
     els.pillarBar.innerHTML = pillars.map(p => {
       const active = p.id === state.blockId;
       const cls = active
-        ? 'px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[11px] font-semibold whitespace-nowrap transition-all shadow-sm'
-        : 'px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface text-[11px] font-medium whitespace-nowrap transition-all';
+        ? 'px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[11px] font-semibold whitespace-nowrap shrink-0 transition-all shadow-sm'
+        : 'px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface text-[11px] font-medium whitespace-nowrap shrink-0 transition-all';
       return `<button type="button" data-pillar-id="${p.id}" class="${cls}">${p.label}</button>`;
     }).join('') + `
-      <button type="button" id="btn-inline-vault" class="px-3 py-1 rounded-full bg-surface-container-high text-primary text-[11px] font-semibold whitespace-nowrap transition-all flex items-center gap-1">
+      <button type="button" id="btn-inline-vault" class="px-3 py-1 rounded-full bg-surface-container-high text-primary text-[11px] font-semibold whitespace-nowrap shrink-0 transition-all flex items-center gap-1">
         <span class="material-symbols-outlined text-[14px]">grid_view</span>
         <span>Ver Grilla</span>
       </button>
@@ -229,6 +229,8 @@
 
     // Update utility bar labels
     els.activeBadge.textContent = `${tpl.id} • ${tpl.name}`;
+    const floatingNameEl = document.getElementById('floating-bar-template-name');
+    if (floatingNameEl) floatingNameEl.textContent = `${tpl.id} • ${tpl.name}`;
     els.safezoneLabel.textContent = state.format === '9:16' ? 'Safe Zones Reels / TikTok' : 'Safe Zone 1:1 Feed';
     els.exportSubtitle.textContent = state.format === '9:16'
       ? 'Renderizado UHD 2160 × 3840 px • Zero Layout Drift • Audio Original Sync'
@@ -1978,8 +1980,8 @@
 
         document.querySelectorAll('[data-formula-id]').forEach(b => {
           b.className = b === btn
-            ? 'px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-semibold whitespace-nowrap transition-all'
-            : 'px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap transition-all';
+            ? 'px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-semibold whitespace-nowrap shrink-0 transition-all'
+            : 'px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap shrink-0 transition-all';
         });
 
         if (state.textBindings.hookEl) {
@@ -2046,6 +2048,43 @@
     els.export4kBtn.addEventListener('click', handleExport4K);
     els.exportReelBtn.addEventListener('click', handleExportReel60FPS);
     els.copyCaptionBtn.addEventListener('click', handleCopyCaption);
+
+    // Sticky Floating Utility Bar for iOS Mobile Scroll (Keeps template info & Quick Export visible)
+    const floatingBar = document.getElementById('sens-sticky-floating-bar');
+    const floatingPngBtn = document.getElementById('btn-floating-export-png');
+    const floatingScrollTopBtn = document.getElementById('btn-floating-scroll-top');
+    const previewSection = document.getElementById('section-live-viewport');
+
+    if (floatingBar && previewSection) {
+      if (floatingPngBtn) {
+        floatingPngBtn.addEventListener('click', handleExportTransparentOverlayPNG);
+      }
+      if (floatingScrollTopBtn) {
+        floatingScrollTopBtn.addEventListener('click', () => {
+          previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+
+      let tickTicking = false;
+      const updateFloatingBarVisibility = () => {
+        const rect = previewSection.getBoundingClientRect();
+        // When the bottom of the preview card has scrolled above the upper third of screen, show floating dock
+        const isPreviewPast = rect.bottom < 180;
+        if (isPreviewPast) {
+          floatingBar.classList.remove('sens-dock-hidden');
+        } else {
+          floatingBar.classList.add('sens-dock-hidden');
+        }
+        tickTicking = false;
+      };
+
+      window.addEventListener('scroll', () => {
+        if (!tickTicking) {
+          window.requestAnimationFrame(updateFloatingBarVisibility);
+          tickTicking = true;
+        }
+      }, { passive: true });
+    }
 
     // Vault Modal
     els.openVaultBtn.addEventListener('click', openVaultModal);

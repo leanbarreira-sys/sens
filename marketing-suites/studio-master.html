@@ -117,6 +117,10 @@
   }
 </script>
 <style>
+  html, body {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #faf9f6;
@@ -172,6 +176,41 @@
   .sens-exporting .sens-editor-only {
     display: none !important;
   }
+
+  /* Single-row pill ribbon standards for iPhone 15 & mobile screens */
+  .sens-pill-row-scroll {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    padding-bottom: 2px;
+  }
+  .sens-pill-row-scroll::-webkit-scrollbar {
+    display: none !important;
+  }
+  .sens-pill-row-scroll > * {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* iOS safe-area bottom cushion to prevent content from hiding under mobile docks */
+  .pb-mobile-cushion {
+    padding-bottom: max(140px, calc(110px + env(safe-area-inset-bottom, 24px))) !important;
+  }
+
+  /* Sticky floating mini-dock anchored on scroll with iPhone 15 Safe-Area Bottom clearance */
+  #sens-sticky-floating-bar {
+    bottom: max(12px, calc(10px + env(safe-area-inset-bottom, 0px))) !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    box-shadow: 0 12px 36px -4px rgba(18, 18, 20, 0.18), 0 2px 8px rgba(18, 18, 20, 0.06);
+  }
+  #sens-sticky-floating-bar.sens-dock-hidden {
+    transform: translate3d(-50%, 150%, 0) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 </style>
 </head>
 <body class="bg-surface text-on-surface min-h-screen flex flex-col justify-between selection:bg-secondary-fixed selection:text-on-secondary-fixed">
@@ -197,25 +236,26 @@
 </header>
 
 <!-- Main Workspace Container -->
-<main class="flex-1 w-full max-w-2xl mx-auto px-4 sm:px-5 pt-4 pb-28 space-y-6">
+<main class="flex-1 w-full max-w-2xl mx-auto px-3.5 sm:px-5 pt-3 pb-mobile-cushion space-y-5">
 
   <!-- STEP 1: SELECTOR DE TEMPLATES (200 ARQUETIPOS: 100 9:16 + 100 4:5) -->
-  <section id="section-step-1" class="space-y-3">
-    <div class="flex items-center justify-between gap-2 flex-wrap">
-      <div>
-        <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary block">Paso 1 • Estructura Visual</span>
-        <h2 class="font-headline text-lg font-medium text-on-surface tracking-tight">1. Elegir Template</h2>
+  <section id="section-step-1" class="space-y-2.5">
+    <!-- Header de Paso 1 + Selector de Formato en 1 sola fila con overflow controlado -->
+    <div class="flex items-center justify-between gap-2 overflow-x-auto sens-pill-row-scroll pb-0.5">
+      <div class="shrink-0 min-w-0 pr-1">
+        <span class="text-[9.5px] font-semibold uppercase tracking-[0.14em] text-secondary block leading-tight">Paso 1</span>
+        <h2 class="font-headline text-base sm:text-lg font-medium text-on-surface tracking-tight leading-tight">Template</h2>
       </div>
-      <!-- Format Selector -->
+      <!-- Format Selector: Estricto 1 row con shrink-0 -->
       <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl shrink-0">
-        <button type="button" data-format-btn="9:16" class="px-2.5 py-1 rounded-lg bg-primary text-on-primary text-[11px] font-medium shadow-sm transition-all whitespace-nowrap shrink-0">9:16 Reel</button>
-        <button type="button" data-format-btn="4:5" class="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all whitespace-nowrap shrink-0">4:5 Carrusel</button>
-        <button type="button" data-format-btn="loop" id="btn-motion-loop" class="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[11px] font-medium transition-all whitespace-nowrap shrink-0">Motion Loop</button>
+        <button type="button" data-format-btn="9:16" class="px-2.5 py-1 rounded-lg bg-primary text-on-primary text-[10.5px] font-medium shadow-sm transition-all whitespace-nowrap shrink-0">9:16 Reel</button>
+        <button type="button" data-format-btn="4:5" class="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[10.5px] font-medium transition-all whitespace-nowrap shrink-0">4:5 Carrusel</button>
+        <button type="button" data-format-btn="loop" id="btn-motion-loop" class="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface text-[10.5px] font-medium transition-all whitespace-nowrap shrink-0">Motion Loop</button>
       </div>
     </div>
 
-    <!-- 5 Thematic Pillars Filter -->
-    <div id="pillar-chips-bar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+    <!-- 5 Thematic Pillars Filter: Estricto 1 sola fila táctil scrollable sin wrap -->
+    <div id="pillar-chips-bar" class="sens-pill-row-scroll gap-1.5 pb-1">
       <!-- Dynamically populated by studio-master-engine.js -->
     </div>
 
@@ -277,18 +317,19 @@
   </section>
 
   <!-- STEP 2: MEDIA & CAMERA CONTROLS -->
-  <section id="section-step-2" class="bg-surface-container-low rounded-2xl p-4 space-y-3.5">
-    <div class="flex items-center justify-between flex-wrap gap-2">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-[18px] text-secondary shrink-0">videocam</span>
+  <section id="section-step-2" class="bg-surface-container-low rounded-2xl p-3.5 sm:p-4 space-y-3">
+    <!-- Header 1 fila estricta en mobile -->
+    <div class="flex items-center justify-between gap-2 overflow-x-auto sens-pill-row-scroll pb-0.5">
+      <div class="flex items-center gap-1.5 shrink-0">
+        <span class="material-symbols-outlined text-[17px] text-secondary shrink-0">videocam</span>
         <h3 class="font-label text-xs font-semibold uppercase tracking-[0.12em] text-on-surface whitespace-nowrap">2. Medios &amp; Cámara</h3>
       </div>
-      <div class="flex items-center gap-2 flex-wrap">
+      <div class="flex items-center gap-1.5 shrink-0">
         <!-- Multi-slot switcher (visible when template has 2+ image slots) -->
-        <div id="media-slot-switcher" class="hidden items-center gap-1 bg-surface p-0.5 rounded-lg border border-outline-variant/20"></div>
-        <button id="btn-upload-media" type="button" class="text-[11px] font-semibold text-primary bg-secondary-fixed hover:bg-secondary-fixed-dim px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm whitespace-nowrap shrink-0">
+        <div id="media-slot-switcher" class="hidden items-center gap-1 bg-surface p-0.5 rounded-lg border border-outline-variant/20 shrink-0"></div>
+        <button id="btn-upload-media" type="button" class="text-[10.5px] font-semibold text-primary bg-secondary-fixed hover:bg-secondary-fixed-dim px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap shrink-0">
           <span class="material-symbols-outlined text-[14px] shrink-0">upload_file</span>
-          <span id="upload-btn-text" class="whitespace-nowrap">+ Cargar Video o Foto (4K)</span>
+          <span id="upload-btn-text" class="whitespace-nowrap">+ Cargar Video/Foto</span>
         </button>
         <input id="media-file-input" type="file" accept="image/*,video/mp4,video/webm,video/quicktime,video/*" class="hidden" />
       </div>
@@ -302,8 +343,8 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
       <!-- Encuadre Vertical -->
-      <div class="bg-surface px-3 py-2.5 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
-        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap">Encuadre Vertical</span>
+      <div class="bg-surface px-3 py-2 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
+        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap shrink-0">Encuadre</span>
         <div class="flex items-center gap-1 sm:justify-between sm:mt-1.5 shrink-0">
           <button type="button" data-pan-btn="25" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">-25%</button>
           <button type="button" data-pan-btn="50" class="px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0">Centro</button>
@@ -312,8 +353,8 @@
       </div>
 
       <!-- Zoom Somático -->
-      <div class="bg-surface px-3 py-2.5 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
-        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap">Zoom Somático</span>
+      <div class="bg-surface px-3 py-2 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
+        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap shrink-0">Zoom</span>
         <div class="flex items-center gap-1 sm:justify-between sm:mt-1.5 shrink-0">
           <button type="button" data-zoom-btn="1" class="px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0">100%</button>
           <button type="button" data-zoom-btn="1.08" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">108%</button>
@@ -322,8 +363,8 @@
       </div>
 
       <!-- Scrim Oscuro -->
-      <div class="bg-surface px-3 py-2.5 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
-        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap">Contraste Scrim</span>
+      <div class="bg-surface px-3 py-2 rounded-xl flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2">
+        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-medium whitespace-nowrap shrink-0">Contraste</span>
         <div class="flex items-center gap-1 sm:justify-between sm:mt-1.5 shrink-0">
           <button type="button" data-scrim-btn="0.65" class="px-2 py-1 rounded bg-surface-container text-[10px] font-mono text-on-surface hover:bg-surface-container-high transition-colors whitespace-nowrap shrink-0">65%</button>
           <button type="button" data-scrim-btn="0.80" class="px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-mono transition-colors whitespace-nowrap shrink-0">80%</button>
@@ -334,14 +375,14 @@
   </section>
 
   <!-- STEP 3: TEXT INJECTION ENGINE (3 UNIVERSAL FIELDS + ALL TEMPLATE COMPONENTS) -->
-  <section id="section-step-3" class="bg-surface-container-low rounded-2xl p-4 sm:p-5 space-y-4">
-    <div class="flex items-center justify-between flex-wrap gap-2">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-[18px] text-secondary shrink-0">edit_note</span>
-        <h3 class="font-label text-xs font-semibold uppercase tracking-[0.12em] text-on-surface">3. Inyección de Textos</h3>
+  <section id="section-step-3" class="bg-surface-container-low rounded-2xl p-3.5 sm:p-5 space-y-3.5">
+    <div class="flex items-center justify-between gap-2 overflow-x-auto sens-pill-row-scroll pb-0.5">
+      <div class="flex items-center gap-1.5 shrink-0">
+        <span class="material-symbols-outlined text-[17px] text-secondary shrink-0">edit_note</span>
+        <h3 class="font-label text-xs font-semibold uppercase tracking-[0.12em] text-on-surface whitespace-nowrap">3. Textos</h3>
       </div>
-      <!-- Quick Formula Pills -->
-      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full pb-0.5">
+      <!-- Quick Formula Pills: Estricto 1 row horizontal scrollable -->
+      <div class="sens-pill-row-scroll gap-1 shrink-0">
         <button type="button" data-formula-id="lumbar" class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-semibold whitespace-nowrap shrink-0 transition-all">Mito Lumbar 94%</button>
         <button type="button" data-formula-id="rodilla" class="px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap shrink-0 transition-all">Error 3cm Rodilla</button>
         <button type="button" data-formula-id="social" class="px-2.5 py-1 rounded-full bg-surface text-on-surface-variant hover:text-on-surface text-[10px] font-medium whitespace-nowrap shrink-0 transition-all">Social +500</button>
@@ -416,6 +457,28 @@
 
 </main>
 
+<!-- STICKY FLOATING UTILITY BAR FOR IOS MOBILE SCROLL (PERSISTENT VISIBILITY) -->
+<aside id="sens-sticky-floating-bar" class="sens-dock-hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-24px)] max-w-[360px] bg-surface/95 backdrop-blur-xl border border-secondary/25 rounded-2xl px-3 py-2 flex items-center justify-between gap-2 shadow-2xl pointer-events-auto">
+  <div class="flex items-center gap-2 min-w-0">
+    <div class="w-8 h-8 rounded-lg bg-secondary-fixed/40 flex items-center justify-center shrink-0">
+      <span class="material-symbols-outlined text-[17px] text-secondary">movie_edit</span>
+    </div>
+    <div class="min-w-0">
+      <p id="floating-bar-template-name" class="text-[10.5px] font-bold text-on-surface leading-tight truncate">T01 • Biomecánica</p>
+      <p class="text-[9px] font-mono text-secondary uppercase tracking-wider leading-none mt-0.5">Listo para exportar</p>
+    </div>
+  </div>
+  <div class="flex items-center gap-1.5 shrink-0">
+    <button id="btn-floating-export-png" type="button" class="h-8 px-2.5 bg-secondary-fixed text-on-secondary-fixed border border-secondary/30 rounded-lg font-label text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 hover:bg-secondary-fixed-dim active:scale-[0.98] transition-all whitespace-nowrap shadow-sm">
+      <span class="material-symbols-outlined text-[14px]">layers</span>
+      <span>Capa PNG</span>
+    </button>
+    <button id="btn-floating-scroll-top" type="button" class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest flex items-center justify-center active:scale-[0.98] transition-all shrink-0" title="Volver al Preview">
+      <span class="material-symbols-outlined text-[16px]">vertical_align_top</span>
+    </button>
+  </div>
+</aside>
+
 <!-- FULL 200-TEMPLATE VAULT DRAWER MODAL -->
 <div id="vault-modal" class="fixed inset-0 z-50 hidden bg-primary/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
   <div class="bg-surface w-full max-w-4xl max-h-[88vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-outline-variant/20">
@@ -460,7 +523,7 @@
   </button>
 </nav>
 
-<script src="templates-db-200.js?v=28.1"></script>
-<script src="studio-master-engine.js?v=28.1"></script>
+<script src="templates-db-200.js?v=28.2"></script>
+<script src="studio-master-engine.js?v=28.2"></script>
 </body>
 </html>
