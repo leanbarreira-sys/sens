@@ -686,8 +686,9 @@
       extraEls: extraItems.map(x => x.el)
     };
 
-    // Sync initial values into Step 3 inputs
+    // Sync initial values into Step 3 inputs & enable multi-line breaks (pre-line)
     if (state.textBindings.hookEl) {
+      state.textBindings.hookEl.style.whiteSpace = 'pre-line';
       els.inputHook.value = cleanText(state.textBindings.hookEl);
       els.inputHook.disabled = false;
     } else {
@@ -696,6 +697,7 @@
     }
 
     if (state.textBindings.bajadaEl) {
+      state.textBindings.bajadaEl.style.whiteSpace = 'pre-line';
       els.inputBajada.value = cleanText(state.textBindings.bajadaEl);
       els.inputBajada.disabled = false;
     } else {
@@ -969,19 +971,31 @@
             if (slot.type === 'img') {
               const prevSrc = slot.el.src;
               const prevTransform = slot.el.style.transform;
+              const prevObjPos = slot.el.style.objectPosition;
               slot.el.src = bakedDataUrl;
               slot.el.style.transform = 'none';
+              slot.el.style.objectPosition = '50% 50%'; // Prevents double-panning
               cleanupCallbacks.push(() => {
                 slot.el.src = prevSrc;
                 slot.el.style.transform = prevTransform;
+                if (prevObjPos) slot.el.style.objectPosition = prevObjPos;
+                else slot.el.style.removeProperty('object-position');
               });
             } else {
               const prevBg = slot.el.style.backgroundImage;
               const prevTransform = slot.el.style.transform;
+              const prevPos = slot.el.style.position;
+              const prevOverflow = slot.el.style.overflow;
+              const computedPos = window.getComputedStyle(slot.el).position;
+              if (computedPos === 'static') {
+                slot.el.style.position = 'relative';
+              }
+              slot.el.style.overflow = 'hidden';
+
               const proxyImg = document.createElement('img');
               proxyImg.className = 'sens-4k-bake-proxy';
               proxyImg.src = bakedDataUrl;
-              proxyImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none;';
+              proxyImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none;object-fit:cover;';
               slot.el.style.backgroundImage = 'none';
               slot.el.style.transform = 'none';
               if (activeVid) activeVid.style.display = 'none';
@@ -996,6 +1010,10 @@
                 proxyImg.remove();
                 slot.el.style.backgroundImage = prevBg;
                 slot.el.style.transform = prevTransform;
+                if (prevPos) slot.el.style.position = prevPos;
+                else slot.el.style.removeProperty('position');
+                if (prevOverflow) slot.el.style.overflow = prevOverflow;
+                else slot.el.style.removeProperty('overflow');
                 if (activeVid) activeVid.style.display = '';
               });
             }
@@ -1044,6 +1062,78 @@
     }
   }
 
+  function ensureExportModalEl() {
+    let modal = document.getElementById('sens-studio-export-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'sens-studio-export-modal';
+      modal.className = 'fixed inset-0 bg-black/75 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none';
+      modal.innerHTML = `
+        <div class="w-full max-w-[340px] bg-surface rounded-3xl p-6 shadow-2xl border border-outline-variant/30 text-center flex flex-col items-center gap-3.5 transform transition-all duration-300 scale-95" id="sens-export-modal-card">
+          <div class="relative w-14 h-14 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full border-2 border-secondary-fixed/20 border-t-secondary animate-spin"></div>
+            <span class="material-symbols-outlined text-secondary text-2xl">auto_videocam</span>
+          </div>
+          <div class="w-full">
+            <h4 id="sens-export-modal-title" class="font-headline-sm text-sm font-semibold text-on-surface">Exportando Media</h4>
+            <p id="sens-export-modal-step" class="text-xs text-on-surface-variant font-medium mt-1">Preparando capas y tipografía...</p>
+          </div>
+          <div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden mt-1">
+            <div id="sens-export-modal-bar" class="bg-secondary h-full transition-all duration-150" style="width: 10%;"></div>
+          </div>
+          <span id="sens-export-modal-pct" class="text-[11px] font-mono text-secondary font-bold">10%</span>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    return modal;
+  }
+
+  function showExportProgressModal(title, step, pct = 10) {
+    const modal = ensureExportModalEl();
+    const t = modal.querySelector('#sens-export-modal-title');
+    const s = modal.querySelector('#sens-export-modal-step');
+    const b = modal.querySelector('#sens-export-modal-bar');
+    const p = modal.querySelector('#sens-export-modal-pct');
+    const card = modal.querySelector('#sens-export-modal-card');
+    if (t) t.textContent = title || 'Exportando Video UHD';
+    if (s) s.textContent = step || 'Procesando capas y tipografía...';
+    if (b) b.style.width = `${Math.min(100, Math.max(5, pct))}%`;
+    if (p) p.textContent = `${Math.round(pct)}%`;
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    modal.classList.add('opacity-100');
+    if (card) {
+      card.classList.remove('scale-95');
+      card.classList.add('scale-100');
+    }
+  }
+
+  function updateExportProgress(step, pct) {
+    const modal = document.getElementById('sens-studio-export-modal');
+    if (!modal) return;
+    const s = modal.querySelector('#sens-export-modal-step');
+    const b = modal.querySelector('#sens-export-modal-bar');
+    const p = modal.querySelector('#sens-export-modal-pct');
+    if (step && s) s.textContent = step;
+    if (typeof pct === 'number') {
+      const clamped = Math.min(100, Math.max(0, pct));
+      if (b) b.style.width = `${clamped}%`;
+      if (p) p.textContent = `${Math.round(clamped)}%`;
+    }
+  }
+
+  function hideExportProgressModal() {
+    const modal = document.getElementById('sens-studio-export-modal');
+    if (!modal) return;
+    const card = modal.querySelector('#sens-export-modal-card');
+    if (card) {
+      card.classList.remove('scale-100');
+      card.classList.add('scale-95');
+    }
+    modal.classList.remove('opacity-100');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+  }
+
   async function handleExport4K() {
     // CRITICAL RULE: If the user uploaded a VIDEO into any template (even an image/feed template),
     // the output MUST respect the video input and export a high-resolution video!
@@ -1055,9 +1145,11 @@
     const origText = els.export4kLabel.textContent;
     els.export4kBtn.disabled = true;
     els.export4kLabel.textContent = 'Render 4K...';
+    showExportProgressModal('Exportando Portada 4K', 'Renderizando composición...', 30);
 
     try {
       const canvas4K = await renderStageToHighResCanvas(2160);
+      updateExportProgress('Generando imagen UHD sin pérdidas...', 85);
       const dataUrl = canvas4K.toDataURL('image/png', 1.0);
       const link = document.createElement('a');
       link.download = `SENS-4K-UHD-${state.activeTemplateId}-${canvas4K.width}x${canvas4K.height}.png`;
@@ -1072,6 +1164,7 @@
     } finally {
       els.export4kBtn.disabled = false;
       els.export4kLabel.textContent = origText;
+      hideExportProgressModal();
     }
   }
 
@@ -1295,20 +1388,17 @@
         const luma = (r * 0.299) + (g * 0.587) + (b * 0.114);
 
         if (hasBackdropBlur) {
-          if (rawAlpha <= 0.30 && luma > 180) {
-            // Low-alpha white frost card with light text (e.g. bg-surface-container-lowest/15 backdrop-blur-md in T17, T23, T26, T34, T36, T41, T44)
-            // Since html2canvas lacks backdrop-filter: blur(), use rich dark smoked glass so white text is 100% legible over bright video/photos
-            el.style.setProperty('background-color', 'rgba(18, 18, 20, 0.68)', 'important');
-            if (!el.style.border) {
-              el.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.18)', 'important');
-            }
-          } else if (luma > 180) {
-            // Light frosted glass card (e.g. bg-surface/70, bg-surface/85, bg-surface-container-lowest/90)
-            const boosted = Math.min(0.95, Number((rawAlpha + 0.08).toFixed(2)));
+          if (luma > 180) {
+            // Light frosted glass card (e.g. bg-surface/70, bg-surface/85, bg-surface-container-lowest/15)
+            // Keep background light and clean so dark text contrast is 100% preserved
+            const boosted = Math.min(0.96, Math.max(0.65, Number((rawAlpha + 0.12).toFixed(2))));
             el.style.setProperty('background-color', `rgba(${r}, ${g}, ${b}, ${boosted})`, 'important');
+            if (!el.style.border) {
+              el.style.setProperty('border', '1px solid rgba(18, 18, 20, 0.08)', 'important');
+            }
           } else {
             // Dark frosted glass card (e.g. bg-primary/80, bg-primary/85)
-            const boosted = Math.min(0.93, Number((rawAlpha + 0.05).toFixed(2)));
+            const boosted = Math.min(0.94, Math.max(0.65, Number((rawAlpha + 0.08).toFixed(2))));
             el.style.setProperty('background-color', `rgba(${r}, ${g}, ${b}, ${boosted})`, 'important');
           }
         } else {
@@ -1438,9 +1528,11 @@
         return false;
       };
 
+      const isFullBleed = entriesToStrip.length === 1 && entriesToStrip[0].relW >= 0.95 && entriesToStrip[0].relH >= 0.95;
       let bgBaseCanvas = null;
-      if (!pureTransparentPng) {
-        // LAYER 0 (bgBaseCanvas): Capture template background & cards behind the video slot
+      if (!pureTransparentPng && !isFullBleed) {
+        // LAYER 0 (bgBaseCanvas): Only capture template background & cards when the video slot is not full-bleed
+        // For full-bleed videos, skipping Layer 0 cuts rendering time & RAM by 50% on mobile iOS devices!
         const rawBgBase = await window.html2canvas(stageEl, {
           scale: scale,
           useCORS: true,
@@ -1491,12 +1583,12 @@
         onclone: (clonedDoc) => {
           clonedDoc.querySelectorAll('video, canvas').forEach(v => v.remove());
           // Make the ancestor wrappers transparent so the video shines through,
-          // EXCEPT in pureTransparentPng mode if an inner card (like Polaroid T07 w-[88%]) holds dark text
+          // EXCEPT if an inner card (like Polaroid T07 w-[88%], split cards T02/F02) holds text
           clonedDoc.querySelectorAll('[data-sens-fg-anc="1"]').forEach(anc => {
             const ancCls = typeof anc.className === 'string' ? anc.className : '';
-            const isInnerCard = pureTransparentPng && anc.id !== 'video-canvas' && !ancCls.includes('aspect-[9/16]') && !ancCls.includes('aspect-[4/5]') && !ancCls.includes('inset-0') && (ancCls.includes('bg-surface') || ancCls.includes('bg-primary'));
+            const isInnerCard = anc.id !== 'video-canvas' && !ancCls.includes('aspect-[9/16]') && !ancCls.includes('aspect-[4/5]') && !ancCls.includes('inset-0') && (ancCls.includes('bg-surface') || ancCls.includes('bg-primary'));
             if (isInnerCard && !anc.hasAttribute('data-sens-video-slot-el')) {
-              // Keep inner card background semi-transparent for Polaroid/card layouts in single-layer PNG export
+              // Keep inner card background intact for Polaroid and card layouts
               return;
             }
             anc.style.setProperty('background', 'transparent', 'important');
@@ -1574,7 +1666,8 @@
     const label = els.exportOverlayPngLabel;
     const origText = label ? label.textContent : 'Capa PNG Transparente 4K (IG Edits)';
     if (btn) btn.disabled = true;
-    if (label) label.textContent = 'Generando PNG Transparente 4K...';
+    if (label) label.textContent = 'Generando PNG Transparente...';
+    showExportProgressModal('Capa PNG Transparente', 'Renderizando capas de diseño...', 25);
 
     try {
       const stageEl = document.getElementById('video-canvas');
@@ -1595,24 +1688,29 @@
         return { slot, vid: slot.videoEl || null, relX, relY, relW, relH, relRadius };
       });
 
-      const outW = 2160;
-      const outH = state.format === '9:16' ? 3840 : 2700;
+      // Responsive target width: On mobile devices, 1080px (native IG Reel FHD) renders instantly without WebKit memory pressure
+      const isMobile = window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const outW = isMobile ? 1080 : 2160;
+      const outH = state.format === '9:16' ? (isMobile ? 1920 : 3840) : (isMobile ? 1350 : 2700);
+      updateExportProgress('Codificando PNG transparente...', 65);
       const { fgOverlayCanvas } = await renderVideoLayersForComposite(outW, slotEntries, { pureTransparentPng: true });
 
+      updateExportProgress('Generando archivo final...', 90);
       const dataUrl = fgOverlayCanvas.toDataURL('image/png', 1.0);
       const link = document.createElement('a');
-      link.download = `SENS-CAPA-TRANSPARENTE-4K-${state.activeTemplateId}-${outW}x${outH}.png`;
+      link.download = `SENS-CAPA-TRANSPARENTE-${state.activeTemplateId}-${outW}x${outH}.png`;
       link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
       link.remove();
-      showToast(`Capa PNG Transparente 4K descargada (${outW}×${outH}px) • Lista para IG Edits`);
+      showToast(`Capa PNG Transparente descargada (${outW}×${outH}px) • Lista para IG Edits`);
     } catch (err) {
       console.error('Transparent PNG Overlay Error:', err);
       showToast('Error al exportar Capa PNG Transparente');
     } finally {
       if (btn) btn.disabled = false;
       if (label) label.textContent = origText;
+      hideExportProgressModal();
     }
   }
 
@@ -1623,6 +1721,7 @@
     const orig4kText = els.export4kLabel.textContent;
     els.exportReelBtn.disabled = true;
     els.export4kBtn.disabled = true;
+    showExportProgressModal(from4kBtn ? 'Exportando Video UHD' : 'Exportando Video 60FPS', 'Preparando capas HD...', 15);
 
     try {
       if (from4kBtn) {
@@ -1677,6 +1776,7 @@
             await entry.vid.play();
           } catch (_) {}
         }
+        updateExportProgress('Componiendo capas de alta fidelidad...', 22);
         const layers = await renderVideoLayersForComposite(outW, activeVideoEntries);
         bgBaseCanvas = layers.bgBaseCanvas;
         fgOverlayCanvas = layers.fgOverlayCanvas;
@@ -1691,6 +1791,7 @@
           } catch (_) {}
         }
       } else {
+        updateExportProgress('Renderizando fotograma base UHD...', 22);
         baseFrame = await renderStageToHighResCanvas(outW);
       }
 
@@ -1746,6 +1847,7 @@
           } else {
             els.exportReelLabel.textContent = `Grabando 60FPS... ${pctLabel}`;
           }
+          updateExportProgress(`Grabando video 60 FPS (${pctLabel})...`, 25 + progress * 70);
 
           ctx.clearRect(0, 0, outW, outH);
 
@@ -1798,6 +1900,7 @@
           if (elapsed < durationMs) {
             requestAnimationFrame(drawTick);
           } else {
+            updateExportProgress('Empaquetando video UHD...', 98);
             recorder.stop();
           }
         }
@@ -1823,6 +1926,7 @@
       els.export4kBtn.disabled = false;
       els.exportReelLabel.textContent = origReelText;
       syncExportButtonsForMediaKind();
+      hideExportProgressModal();
     }
   }
 

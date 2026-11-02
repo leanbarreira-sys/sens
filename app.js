@@ -7580,16 +7580,16 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
                         </div>
                         <div>
-                            <div style="font-size: 12px; font-weight: 800; color: #121214;">¿No pudiste entrenar ayer?</div>
-                            <div style="font-size: 11px; color: #575659;">Tenías asignado <strong style="color: #705B3E;">${yDayData.title || 'Entrenamiento'}</strong> (${yDayData.exercises.length} ejercicios). Podés traerlo a hoy o reprogramarlo.</div>
+                            <div style="font-size: 13px; font-weight: 800; color: #121214;">¿No pudiste entrenar ayer?</div>
+                            <div style="font-size: 11.5px; color: #575659; margin-top: 2px;">Tenías asignado <strong style="color: #121214;">${yDayData.title || 'Entrenamiento'}</strong> (${yDayData.exercises.length} ejercicios). Podés traerlo a hoy o reprogramarlo.</div>
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="font-size: 11px; padding: 6px 12px; border-color: rgba(197, 168, 128, 0.5); color: #705B3E; font-weight: 700; border-radius: 8px; background: #FFFFFF; cursor: pointer;">
-                            Traer sesión de ayer a hoy →
+                        <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="font-size: 12px; padding: 7px 14px; border: 1px solid #121214; color: #121214; font-weight: 700; border-radius: 8px; background: #FFFFFF; cursor: pointer;">
+                            Traer sesión a hoy
                         </button>
-                        <button type="button" class="btn btn-primary btn-xs" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="font-size: 11px; padding: 6px 12px; background: #121214; color: #FAF9F6; font-weight: 800; border: none; border-radius: 8px; cursor: pointer;">
-                            Reprogramar ayer
+                        <button type="button" class="btn btn-primary btn-xs" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="font-size: 12px; padding: 7px 14px; background: #121214; color: #FAF9F6; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">
+                            Pasar para mañana
                         </button>
                     </div>
                 </div>

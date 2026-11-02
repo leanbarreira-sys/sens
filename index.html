@@ -138,7 +138,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=28.2">
+    <link rel="stylesheet" href="style.css?v=29.0">
     <script>
         (function () {
             try {
@@ -3570,20 +3570,19 @@
                                     <span class="streak-pill-text">Descanso Activo ✓</span>
                                 </span>
                             </div>
-                            <h3 class="sens-rest-title">¿Hoy Descansamos? MAKES SENS.</h3>
-                            <p class="sens-rest-desc">
-                                Día de descanso celular y adaptación del sistema nervioso. Hidratate bien, caminá suave
-                                y recargá energía para tu próximo estímulo de fuerza con Nico.
+                            <h3 class="sens-rest-title" style="color: #121214; font-size: 17px; font-weight: 800; margin: 4px 0 6px 0;">¿No pudiste entrenar hoy?</h3>
+                            <p class="sens-rest-desc" style="color: #575659; font-size: 13px; line-height: 1.4; margin-bottom: 12px;">
+                                Día de descanso celular o recuperación. Podés reprogramar tu sesión o realizar estiramientos guiados con Nico.
                             </p>
                             <div class="sens-rest-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches"
-                                    style="font-size: 11.5px; border-color: rgba(229, 203, 167, 0.4); color: #E5CBA7;">
-                                    Ver estiramientos de movilidad →
+                                    style="font-size: 12px; border: 1px solid #121214; color: #121214; background: #FFFFFF; font-weight: 700; border-radius: 8px; padding: 7px 14px; cursor: pointer;">
+                                    Ver estiramientos
                                 </button>
-                                <button type="button" class="btn btn-outline btn-sm" id="btnRestBringWorkout"
+                                <button type="button" class="btn btn-primary btn-sm" id="btnRestBringWorkout"
                                     onclick="openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))"
-                                    style="font-size: 11.5px; border-color: rgba(255, 255, 255, 0.25); color: #FFFFFF; font-weight: 700;">
-                                    ⇄ Traer entrenamiento a hoy
+                                    style="font-size: 12px; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px; padding: 7px 14px; border: none; cursor: pointer;">
+                                    Reprogramar sesión
                                 </button>
                             </div>
                         </div>
@@ -4021,22 +4020,22 @@
                  MÓDULO 6: GESTOR DE RUTINAS Y ENTRENAMIENTO (VIDEO-FIRST / ALTO IMPACTO)
                  ===================================================================== -->
             <section class="portal-view" id="workoutView">
-                <!-- 0. Saludo Personalizado de Bienvenida (Idéntico a Inicio) -->
-                <div class="sens-dash-welcome-header" id="workoutWelcomeHeader">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <!-- 0. Saludo Personalizado de Bienvenida -->
+                <div class="sens-dash-welcome-header" id="workoutWelcomeHeader" style="margin-bottom: 12px;">
+                    <div style="display: none !important;">
                         <span class="sens-dash-welcome-slogan">SENS WORKOUT • FASE ACTIVA</span>
                         <span id="workoutCircadianDate" style="font-size: 11px; font-weight: 500; color: #77767B;"></span>
                     </div>
-                    <div class="sens-dash-welcome-question">
-                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, <span style="font-weight: 300; font-style: italic;">¿entrenamos</span> juntos hoy?
+                    <div class="sens-dash-welcome-question" style="margin-bottom: 0;">
+                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, ¿entrenamos hoy?
                     </div>
-                    <p style="font-size: 12.5px; color: #575659; margin-top: 4px; font-weight: 400; margin-bottom: 0;">
+                    <p style="display: none !important;">
                         Fase 2 • Hipertrofia Funcional &amp; Estabilidad
                     </p>
                 </div>
 
-                <!-- 1. Cuadro Resumen Ligero de la Sesión y Registro de Asistencia -->
-                <div class="sens-workout-summary-card" id="workoutSummaryCard">
+                <!-- 1. Cuadro Resumen Ligero de la Sesión y Registro de Asistencia (Ocultado a pedido del usuario) -->
+                <div class="sens-workout-summary-card" id="workoutSummaryCard" style="display: none !important;">
                     <div class="sens-workout-summary-top">
                         <div class="sens-workout-summary-info">
                             <span class="sens-workout-day-tag" id="workoutSummaryDayTag">Sesión del Día</span>
@@ -9338,7 +9337,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=1.0"></script>
-    <script src="app.js?v=28.2"></script>
+    <script src="app.js?v=29.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
