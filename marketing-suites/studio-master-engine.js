@@ -63,7 +63,9 @@
       bajadaEl: null,
       ctaEl: null,
       extraEls: []
-    }
+    },
+    hiddenElements: new Set(),
+    selectedElement: null
   };
 
   // DOM Elements
@@ -88,6 +90,19 @@
     inputCta: document.getElementById('input-cta'),
     counterHook: document.getElementById('counter-hook'),
     counterBajada: document.getElementById('counter-bajada'),
+    fieldWrapHook: document.getElementById('field-wrap-hook'),
+    fieldWrapBajada: document.getElementById('field-wrap-bajada'),
+    fieldWrapCta: document.getElementById('field-wrap-cta'),
+    btnVisHook: document.getElementById('btn-toggle-vis-hook'),
+    btnVisBajada: document.getElementById('btn-toggle-vis-bajada'),
+    btnVisCta: document.getElementById('btn-toggle-vis-cta'),
+    helperDefaultMsg: document.getElementById('helper-default-msg'),
+    helperSelectionActions: document.getElementById('helper-selection-actions'),
+    helperSelectedLabel: document.getElementById('helper-selected-label'),
+    btnQuickHideSelected: document.getElementById('btn-quick-hide-selected'),
+    btnQuickHideText: document.getElementById('btn-quick-hide-text'),
+    btnRestoreAllHidden: document.getElementById('btn-restore-all-hidden'),
+    restoreHiddenBadgeText: document.getElementById('restore-hidden-badge-text'),
     extraWrapper: document.getElementById('extra-components-wrapper'),
     extraToggleBtn: document.getElementById('btn-toggle-extra-fields'),
     extraLabel: document.getElementById('extra-fields-label'),
@@ -208,6 +223,9 @@
     if (!tpl) return;
 
     state.activeTemplateId = tpl.id;
+    // Reset hidden and selected elements on template switch
+    state.hiddenElements.clear();
+    state.selectedElement = null;
     if (tpl.format !== state.format) {
       state.format = tpl.format;
       updateFormatButtonsUI();
@@ -628,6 +646,224 @@
     });
   }
 
+
+  // =========================================================================
+  // ELEMENT VISIBILITY & IN-CANVAS SELECTION ENGINE
+  // Allows coaches to tap any component/pill in the template or in Step 3
+  // to hide it completely from both preview and 4K UHD / HD video outputs.
+  // =========================================================================
+
+  function getTargetHideElement(el) {
+    if (!el) return null;
+    const stage = document.getElementById('video-canvas');
+    if (el === stage || (el.id && el.id === 'video-canvas')) return null;
+
+    // Check if the element is inside a dedicated chip / pill wrapper
+    // (e.g. <div class="px-3 py-1 rounded-full bg-secondary-fixed ..."><span>Tag</span></div>)
+    const parent = el.parentElement;
+    if (parent && parent !== stage && parent.id !== 'video-canvas') {
+      const parentClass = (parent.className || '').toString();
+      const isBadgeOrPill = /(rounded-full|rounded-xl|rounded-lg|badge|pill|chip)/i.test(parentClass);
+      const hasBgOrBorder = /(bg-|border)/i.test(parentClass);
+      const childCount = parent.children ? parent.children.length : 0;
+      if (isBadgeOrPill && (hasBgOrBorder || childCount <= 2)) {
+        return parent;
+      }
+    }
+    return el;
+  }
+
+  function selectCanvasElement(target) {
+    if (!target) return;
+    const stage = document.getElementById('video-canvas');
+    if (target === stage || (target.id && target.id === 'video-canvas')) return;
+    if (target.classList && (target.classList.contains('safe-zone-overlay') || target.closest('.safe-zone-overlay'))) return;
+
+    if (state.selectedElement && state.selectedElement !== target) {
+      state.selectedElement.classList.remove('sens-canvas-selected');
+    }
+
+    state.selectedElement = target;
+    target.classList.add('sens-canvas-selected');
+    updateVisibilityUI();
+  }
+
+  function clearCanvasSelection() {
+    if (state.selectedElement) {
+      state.selectedElement.classList.remove('sens-canvas-selected');
+      state.selectedElement = null;
+    }
+    updateVisibilityUI();
+  }
+
+  function toggleElementVisibility(el) {
+    if (!el) return;
+    const hideTarget = getTargetHideElement(el);
+    if (!hideTarget) return;
+
+    const isCurrentlyHidden = state.hiddenElements.has(el) ||
+      state.hiddenElements.has(hideTarget) ||
+      hideTarget.classList.contains('sens-element-hidden') ||
+      hideTarget.getAttribute('data-sens-hidden') === 'true';
+
+    if (isCurrentlyHidden) {
+      // Unhide
+      hideTarget.classList.remove('sens-element-hidden');
+      hideTarget.removeAttribute('data-sens-hidden');
+      hideTarget.style.display = '';
+      state.hiddenElements.delete(el);
+      state.hiddenElements.delete(hideTarget);
+      showToast('Elemento visible');
+    } else {
+      // Hide
+      hideTarget.classList.add('sens-element-hidden');
+      hideTarget.setAttribute('data-sens-hidden', 'true');
+      state.hiddenElements.add(el);
+      state.hiddenElements.add(hideTarget);
+      showToast('Elemento oculto en exportación');
+    }
+
+    updateVisibilityUI();
+    reportHeightToParent();
+  }
+
+  function restoreAllHiddenElements() {
+    const stage = document.getElementById('video-canvas');
+    if (stage) {
+      const hiddenNodes = stage.querySelectorAll('.sens-element-hidden, [data-sens-hidden]');
+      hiddenNodes.forEach(node => {
+        node.classList.remove('sens-element-hidden');
+        node.removeAttribute('data-sens-hidden');
+        node.style.display = '';
+      });
+    }
+    state.hiddenElements.clear();
+    updateVisibilityUI();
+    reportHeightToParent();
+    showToast('Todos los elementos restaurados');
+  }
+
+  function updateVisibilityUI() {
+    // 1. Hook visibility
+    if (els.fieldWrapHook && els.btnVisHook) {
+      const isHookHidden = state.textBindings.hookEl && (
+        state.hiddenElements.has(state.textBindings.hookEl) ||
+        state.textBindings.hookEl.classList.contains('sens-element-hidden') ||
+        state.textBindings.hookEl.closest('.sens-element-hidden')
+      );
+      els.fieldWrapHook.classList.toggle('sens-field-muted', !!isHookHidden);
+      if (els.inputHook) els.inputHook.disabled = !!isHookHidden;
+      const icon = els.btnVisHook.querySelector('.material-symbols-outlined');
+      const label = els.btnVisHook.querySelector('.vis-label');
+      if (icon) icon.textContent = isHookHidden ? 'visibility_off' : 'visibility';
+      if (label) label.textContent = isHookHidden ? 'Oculto' : 'Visible';
+      els.btnVisHook.className = isHookHidden
+        ? 'text-error hover:text-error/80 px-1.5 py-0.5 rounded bg-error/10 transition-colors flex items-center gap-1 text-[10px] font-semibold'
+        : 'text-on-surface-variant hover:text-on-surface px-1.5 py-0.5 rounded hover:bg-surface-container transition-colors flex items-center gap-1 text-[10px] font-medium';
+    }
+
+    // 2. Bajada visibility
+    if (els.fieldWrapBajada && els.btnVisBajada) {
+      const isBajadaHidden = state.textBindings.bajadaEl && (
+        state.hiddenElements.has(state.textBindings.bajadaEl) ||
+        state.textBindings.bajadaEl.classList.contains('sens-element-hidden') ||
+        state.textBindings.bajadaEl.closest('.sens-element-hidden')
+      );
+      els.fieldWrapBajada.classList.toggle('sens-field-muted', !!isBajadaHidden);
+      if (els.inputBajada) els.inputBajada.disabled = !!isBajadaHidden;
+      const icon = els.btnVisBajada.querySelector('.material-symbols-outlined');
+      const label = els.btnVisBajada.querySelector('.vis-label');
+      if (icon) icon.textContent = isBajadaHidden ? 'visibility_off' : 'visibility';
+      if (label) label.textContent = isBajadaHidden ? 'Oculto' : 'Visible';
+      els.btnVisBajada.className = isBajadaHidden
+        ? 'text-error hover:text-error/80 px-1.5 py-0.5 rounded bg-error/10 transition-colors flex items-center gap-1 text-[10px] font-semibold'
+        : 'text-on-surface-variant hover:text-on-surface px-1.5 py-0.5 rounded hover:bg-surface-container transition-colors flex items-center gap-1 text-[10px] font-medium';
+    }
+
+    // 3. CTA visibility
+    if (els.fieldWrapCta && els.btnVisCta) {
+      const isCtaHidden = state.textBindings.ctaEl && (
+        state.hiddenElements.has(state.textBindings.ctaEl) ||
+        state.textBindings.ctaEl.classList.contains('sens-element-hidden') ||
+        state.textBindings.ctaEl.closest('.sens-element-hidden')
+      );
+      els.fieldWrapCta.classList.toggle('sens-field-muted', !!isCtaHidden);
+      if (els.inputCta) els.inputCta.disabled = !!isCtaHidden;
+      const icon = els.btnVisCta.querySelector('.material-symbols-outlined');
+      const label = els.btnVisCta.querySelector('.vis-label');
+      if (icon) icon.textContent = isCtaHidden ? 'visibility_off' : 'visibility';
+      if (label) label.textContent = isCtaHidden ? 'Oculto' : 'Visible';
+      els.btnVisCta.className = isCtaHidden
+        ? 'text-error hover:text-error/80 px-1.5 py-0.5 rounded bg-error/10 transition-colors flex items-center gap-1 text-[10px] font-semibold'
+        : 'text-on-surface-variant hover:text-on-surface px-1.5 py-0.5 rounded hover:bg-surface-container transition-colors flex items-center gap-1 text-[10px] font-medium';
+    }
+
+    // 4. Extra components visibility
+    (state.textBindings.extraEls || []).forEach((el, idx) => {
+      const wrap = document.getElementById(`field-wrap-extra-${idx}`);
+      const btn = wrap ? wrap.querySelector('[data-vis-target]') : null;
+      const inp = wrap ? wrap.querySelector('[data-extra-input]') : null;
+      if (wrap && btn) {
+        const isHidden = state.hiddenElements.has(el) ||
+          el.classList.contains('sens-element-hidden') ||
+          el.closest('.sens-element-hidden');
+        wrap.classList.toggle('sens-field-muted', !!isHidden);
+        if (inp) inp.disabled = !!isHidden;
+        const icon = btn.querySelector('.material-symbols-outlined');
+        const label = btn.querySelector('.vis-label');
+        if (icon) icon.textContent = isHidden ? 'visibility_off' : 'visibility';
+        if (label) label.textContent = isHidden ? 'Oculto' : 'Visible';
+        btn.className = isHidden
+          ? 'text-error hover:text-error/80 px-1.5 py-0.5 rounded bg-error/10 transition-colors flex items-center gap-1 text-[9.5px] font-semibold'
+          : 'text-on-surface-variant hover:text-on-surface px-1.5 py-0.5 rounded hover:bg-surface-container transition-colors flex items-center gap-1 text-[9.5px] font-medium';
+      }
+    });
+
+    // 5. Quick interactive helper row under canvas
+    const stage = document.getElementById('video-canvas');
+    const totalHidden = stage ? stage.querySelectorAll('.sens-element-hidden').length : state.hiddenElements.size;
+
+    if (els.btnRestoreAllHidden && els.restoreHiddenBadgeText) {
+      if (totalHidden > 0) {
+        els.btnRestoreAllHidden.classList.remove('hidden');
+        els.btnRestoreAllHidden.classList.add('flex');
+        els.restoreHiddenBadgeText.textContent = `${totalHidden} oculto${totalHidden > 1 ? 's' : ''} (Restaurar)`;
+      } else {
+        els.btnRestoreAllHidden.classList.add('hidden');
+        els.btnRestoreAllHidden.classList.remove('flex');
+      }
+    }
+
+    // 6. Selected element bar in helper row
+    if (els.helperSelectionActions && els.helperDefaultMsg) {
+      if (state.selectedElement && state.selectedElement.isConnected) {
+        els.helperDefaultMsg.classList.add('hidden');
+        els.helperSelectionActions.classList.remove('hidden');
+        els.helperSelectionActions.classList.add('flex');
+
+        const hideTarget = getTargetHideElement(state.selectedElement);
+        const isSelectedHidden = state.hiddenElements.has(state.selectedElement) ||
+          (hideTarget && (hideTarget.classList.contains('sens-element-hidden') || hideTarget.getAttribute('data-sens-hidden') === 'true'));
+
+        if (els.helperSelectedLabel) {
+          const txt = cleanText(state.selectedElement);
+          els.helperSelectedLabel.textContent = txt ? (txt.length > 18 ? txt.slice(0, 16) + '…' : txt) : 'Elemento';
+        }
+        if (els.btnQuickHideText) {
+          els.btnQuickHideText.textContent = isSelectedHidden ? 'Mostrar' : 'Ocultar';
+        }
+        const quickIcon = els.btnQuickHideSelected ? els.btnQuickHideSelected.querySelector('.material-symbols-outlined') : null;
+        if (quickIcon) {
+          quickIcon.textContent = isSelectedHidden ? 'visibility' : 'visibility_off';
+        }
+      } else {
+        els.helperSelectionActions.classList.add('hidden');
+        els.helperSelectionActions.classList.remove('flex');
+        els.helperDefaultMsg.classList.remove('hidden');
+      }
+    }
+  }
+
   // Discover Editable Text Components & Bind to the 3 Universal Inputs + Extra Component Inputs
   function discoverAndBindTextNodes(rootEl) {
     const ignoredSelector = '.safe-zone-overlay, .card-safe-mask, .safe-guide, .grid-overlay-guideline, .material-symbols-outlined, script, style, svg';
@@ -665,11 +901,17 @@
       }
     });
 
-    // Make every candidate directly editable in-canvas via tap/click
+    // Make every candidate directly editable in-canvas via tap/click & selectable for hide/show
     candidates.forEach(item => {
       item.el.setAttribute('contenteditable', 'true');
       item.el.setAttribute('spellcheck', 'false');
       item.el.setAttribute('data-sens-editable', 'true');
+
+      item.el.addEventListener('focus', () => selectCanvasElement(item.el));
+      item.el.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        selectCanvasElement(item.el);
+      });
     });
 
     // Assign Primary Hook (first heading h1-h4, or largest text block)
@@ -725,6 +967,7 @@
 
     updateCharCounters();
     renderExtraComponentInputs();
+    updateVisibilityUI();
 
     // Listen to in-canvas edits to keep Step 3 inputs in sync
     candidates.forEach(item => {
@@ -777,10 +1020,17 @@
     els.extraLabel.textContent = `Componentes adicionales del template (${extras.length})`;
     els.extraList.innerHTML = extras.map((el, idx) => {
       const val = cleanText(el).replace(/"/g, '&quot;');
+      const isHidden = state.hiddenElements.has(el) || el.classList.contains('sens-element-hidden');
       return `
-        <div class="bg-surface p-2.5 rounded-xl border border-outline-variant/20 focus-within:border-secondary transition-colors">
-          <label class="block text-[9px] font-mono uppercase tracking-wider text-on-surface-variant mb-1">Componente #${idx + 1}</label>
-          <input type="text" data-extra-input="${idx}" value="${val}" class="w-full bg-transparent border-none p-0 text-xs font-medium text-on-surface focus:ring-0" />
+        <div id="field-wrap-extra-${idx}" class="bg-surface p-2.5 rounded-xl border border-outline-variant/20 focus-within:border-secondary transition-colors ${isHidden ? 'sens-field-muted' : ''}">
+          <div class="flex justify-between items-center gap-1.5 mb-1">
+            <label class="block text-[9px] font-mono uppercase tracking-wider text-on-surface-variant truncate">Componente #${idx + 1}</label>
+            <button type="button" data-vis-target="extra-${idx}" class="text-on-surface-variant hover:text-on-surface px-1.5 py-0.5 rounded hover:bg-surface-container transition-colors flex items-center gap-1 text-[9.5px] font-medium" title="Ocultar o mostrar del output">
+              <span class="material-symbols-outlined text-[14px]">${isHidden ? 'visibility_off' : 'visibility'}</span>
+              <span class="vis-label hidden sm:inline">${isHidden ? 'Oculto' : 'Visible'}</span>
+            </button>
+          </div>
+          <input type="text" data-extra-input="${idx}" value="${val}" ${isHidden ? 'disabled' : ''} class="w-full bg-transparent border-none p-0 text-xs font-medium text-on-surface focus:ring-0" />
         </div>
       `;
     }).join('');
@@ -791,6 +1041,17 @@
         const targetEl = state.textBindings.extraEls[idx];
         if (targetEl) {
           targetEl.textContent = inp.value;
+        }
+      });
+    });
+
+    els.extraList.querySelectorAll('[data-vis-target]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetKey = btn.getAttribute('data-vis-target');
+        const idx = parseInt(targetKey.replace('extra-', ''), 10);
+        const targetEl = state.textBindings.extraEls[idx];
+        if (targetEl) {
+          toggleElementVisibility(targetEl);
         }
       });
     });
@@ -1046,7 +1307,21 @@
         useCORS: true,
         allowTaint: true,
         backgroundColor: null,
-        logging: false
+        logging: false,
+        ignoreElements: (el) => {
+          if (!el) return false;
+          if (el.classList && (
+            el.classList.contains('safe-zone-overlay') ||
+            el.classList.contains('card-safe-mask') ||
+            el.classList.contains('safe-guide') ||
+            el.classList.contains('sens-element-hidden')
+          )) return true;
+          if (el.getAttribute && el.getAttribute('data-sens-hidden') === 'true') return true;
+          return false;
+        },
+        onclone: (clonedDoc) => {
+          clonedDoc.querySelectorAll('.sens-element-hidden, [data-sens-hidden="true"]').forEach(el => el.remove());
+        }
       });
 
       // 3. Enforce exact UHD pixel dimensions (2160x3840 or 2160x2700)
@@ -1534,7 +1809,14 @@
       const ignoreVideoAndGuides = (el) => {
         if (!el) return false;
         if (el.tagName === 'VIDEO' || el.tagName === 'CANVAS') return true;
-        if (el.classList && (el.classList.contains('sens-bg-video') || el.classList.contains('safe-zone-overlay') || el.classList.contains('card-safe-mask') || el.classList.contains('safe-guide'))) return true;
+        if (el.classList && (
+          el.classList.contains('sens-bg-video') ||
+          el.classList.contains('safe-zone-overlay') ||
+          el.classList.contains('card-safe-mask') ||
+          el.classList.contains('safe-guide') ||
+          el.classList.contains('sens-element-hidden')
+        )) return true;
+        if (el.getAttribute && el.getAttribute('data-sens-hidden') === 'true') return true;
         return false;
       };
 
@@ -1551,7 +1833,7 @@
           logging: false,
           ignoreElements: ignoreVideoAndGuides,
           onclone: (clonedDoc) => {
-            clonedDoc.querySelectorAll('video, canvas').forEach(v => v.remove());
+            clonedDoc.querySelectorAll('video, canvas, .sens-element-hidden, [data-sens-hidden="true"]').forEach(v => v.remove());
             clonedDoc.querySelectorAll('[data-sens-video-slot-el="1"]').forEach(el => {
               if (el.tagName === 'IMG') {
                 el.style.setProperty('display', 'none', 'important');
@@ -1591,7 +1873,7 @@
         logging: false,
         ignoreElements: ignoreVideoAndGuides,
         onclone: (clonedDoc) => {
-          clonedDoc.querySelectorAll('video, canvas').forEach(v => v.remove());
+          clonedDoc.querySelectorAll('video, canvas, .sens-element-hidden, [data-sens-hidden="true"]').forEach(v => v.remove());
           // Make the ancestor wrappers transparent so the video shines through,
           // EXCEPT if an inner card (like Polaroid T07 w-[88%], split cards T02/F02) holds text
           clonedDoc.querySelectorAll('[data-sens-fg-anc="1"]').forEach(anc => {
@@ -2211,6 +2493,56 @@
     els.resetTemplateBtn.addEventListener('click', () => {
       selectTemplate(state.activeTemplateId);
       showToast('Template restaurado a su estado original');
+    });
+
+    // Visibility Toggles for Step 3 Universal Fields
+    if (els.btnVisHook) {
+      els.btnVisHook.addEventListener('click', () => {
+        if (state.textBindings.hookEl) toggleElementVisibility(state.textBindings.hookEl);
+      });
+    }
+    if (els.btnVisBajada) {
+      els.btnVisBajada.addEventListener('click', () => {
+        if (state.textBindings.bajadaEl) toggleElementVisibility(state.textBindings.bajadaEl);
+      });
+    }
+    if (els.btnVisCta) {
+      els.btnVisCta.addEventListener('click', () => {
+        if (state.textBindings.ctaEl) toggleElementVisibility(state.textBindings.ctaEl);
+      });
+    }
+
+    // Quick Canvas Selection Action Pill (under preview)
+    if (els.btnQuickHideSelected) {
+      els.btnQuickHideSelected.addEventListener('click', () => {
+        if (state.selectedElement) {
+          toggleElementVisibility(state.selectedElement);
+        }
+      });
+    }
+    if (els.btnRestoreAllHidden) {
+      els.btnRestoreAllHidden.addEventListener('click', () => {
+        restoreAllHiddenElements();
+      });
+    }
+
+    // Stage Mount click listener for in-canvas element selection
+    if (els.stageMount) {
+      els.stageMount.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!target || target === els.stageMount) return;
+        selectCanvasElement(target);
+      });
+    }
+
+    // Click outside canvas deselects active element
+    document.addEventListener('pointerdown', (e) => {
+      if (!state.selectedElement) return;
+      const stage = document.getElementById('video-canvas');
+      const helper = document.getElementById('quick-interactive-helper');
+      if (stage && stage.contains(e.target)) return;
+      if (helper && helper.contains(e.target)) return;
+      clearCanvasSelection();
     });
 
     // Bottom Navigation Bar
