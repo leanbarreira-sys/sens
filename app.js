@@ -3518,6 +3518,10 @@ async function checkExistingSession() {
                 updateAuthNavButtons();
                 if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
                 if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
+                if (typeof renderDashboardData === 'function') renderDashboardData();
+                if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
+                if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
+                if (typeof updateNutriSummaryCardData === 'function') updateNutriSummaryCardData();
                 setupRealtimeProfileSubscription(session.user.id);
                 console.log('[SENS] Sesión activa de Supabase detectada:', session.user.email);
             }
@@ -6373,7 +6377,12 @@ function athleteHasAssignedRoutine(athId) {
         } catch (e) {}
     }
 
-    // 4. Perfiles demostrativos preasignados
+    // 4. Si el alumno completó el onboarding, cuenta con el plan activo
+    if (AppState.profile && AppState.profile.onboarding_completed) {
+        return true;
+    }
+
+    // 5. Perfiles demostrativos preasignados
     if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
         return true;
     }
@@ -14970,7 +14979,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         directiveText.textContent = userPlan?.directive_note || 'Priorizá 35-40g de proteína en cada una de las comidas principales y mantené hidratación constante antes y después de entrenar.';
     }
 
-    // 3. Estructurar Alimentos del Día
+    // 3. Estructurar Alimentos del Día (Estrictamente lo pautado por Nico o registrado por el alumno)
     const mealLabels = {
         desayuno: 'Desayuno',
         almuerzo: 'Almuerzo',
@@ -14981,49 +14990,53 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
     const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
 
-    const defaultMealsFallback = {
-        desayuno: [
-            { id: 'd679f46e-bed8-5759-8669-62707b9a3110', codigo: 'NUT-002', name: 'Huevo Entero de Gallina (Cocido / Duro o Poché)', image: 'Nutricion/images/nut-002-huevo-entero-de-gallina.webp', grams: 120, mealSlot: 'desayuno' },
-            { id: 'ab477ed5-01b7-5ed0-b2ba-309a145d4550', codigo: 'NUT-022', name: 'Avena Arrollada Tradicional (En Crudo para Cocinar o Remojar)', image: 'Nutricion/images/nut-022-avena-arrollada-tradicional.webp', grams: 60, mealSlot: 'desayuno' }
-        ],
-        almuerzo: [
-            { id: 'ae856777-a8d3-5238-9385-6bffce376820', codigo: 'NUT-001', name: 'Pechuga de Pollo a la Plancha (Sin Piel)', image: 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp', grams: 180, mealSlot: 'almuerzo' },
-            { id: 'ad77e728-2da8-5d10-90d2-58ddd37ce9d2', codigo: 'NUT-024', name: 'Arroz Integral o Yamaní Cocido', image: 'Nutricion/images/nut-024-arroz-integral-o-yamani-cocido.webp', grams: 150, mealSlot: 'almuerzo' }
-        ],
-        merienda: [
-            { id: '5f2ed125-2184-5830-86a6-a1e33c94581c', codigo: 'NUT-017', name: 'Yogur Griego Natural Sin Azúcar (Descremado / Skyr)', image: 'Nutricion/images/nut-017-yogur-griego-natural-sin-azucar.webp', grams: 170, mealSlot: 'merienda' },
-            { id: '46a1db17-597b-53d7-ab86-cc681f75d218', codigo: 'NUT-042', name: 'Almendras o Nueces Naturales (Peladas)', image: 'Nutricion/images/nut-042-almendras-o-nueces-naturales.webp', grams: 30, mealSlot: 'merienda' }
-        ],
-        cena: [
-            { id: 'da2fd14d-6afa-5d65-bb77-cf335f72d636', codigo: 'NUT-010', name: 'Salmón Rosado / Trucha Salmonada a la Plancha', image: 'Nutricion/images/nut-010-salmon-rosado-trucha-salmonada-a-la-plancha.webp', grams: 180, mealSlot: 'cena' },
-            { id: '2294c1d4-d80a-50d6-8382-fde68052d415', codigo: 'NUT-038', name: 'Brócoli Cocido al Vapor (Al Dente)', image: 'Nutricion/images/nut-038-brocoli-cocido-al-vapor.webp', grams: 150, mealSlot: 'cena' }
-        ],
-        snack: [
-            { id: '74f7cbc6-7d44-50fc-9b58-7efc3b091185', codigo: 'NUT-035', name: 'Manzana Roja o Verde con Cáscara', image: 'Nutricion/images/nut-035-manzana-roja-o-verde-con-cascara.webp', grams: 160, mealSlot: 'snack' }
-        ]
-    };
-
     let allDayFoods = [];
 
+    // 1. Alimentos prescritos por Nico (Coach OS)
     mealKeys.forEach(mKey => {
-        let foods = dayMeals[mKey]?.foods || dayMeals[mKey] || [];
-        if (!Array.isArray(foods) || foods.length === 0) {
-            foods = defaultMealsFallback[mKey] || [];
+        const foods = dayMeals[mKey]?.foods || dayMeals[mKey] || [];
+        if (Array.isArray(foods)) {
+            foods.forEach(f => {
+                allDayFoods.push(Object.assign({}, f, { mealSlot: mKey, isFromCoach: true }));
+            });
         }
-        foods.forEach(f => {
-            allDayFoods.push(Object.assign({}, f, { mealSlot: mKey }));
-        });
     });
 
-    // Agregar comidas personalizadas registradas por el usuario para hoy
+    // 2. Si el plan tiene alimentos a nivel global de prescripción (prescribed_foods)
+    if (userPlan && Array.isArray(userPlan.prescribed_foods) && userPlan.prescribed_foods.length > 0 && allDayFoods.length === 0) {
+        userPlan.prescribed_foods.forEach(f => {
+            allDayFoods.push(Object.assign({}, f, { mealSlot: f.mealSlot || 'almuerzo', isFromCoach: true }));
+        });
+    }
+
+    // 3. Alimentos personalizados registrados por el alumno para este día
     userCustomMeals.forEach(cm => {
-        allDayFoods.push(cm);
+        allDayFoods.push(Object.assign({}, cm, { isCustom: true }));
     });
 
     // 4. Renderizar Subsecciones Visuales con Container Encompassing Parent Card (Item 1 & 2)
     const foodListEl = document.getElementById('memberNutriFoodList');
     const activeFilter = AppState.activeNutriFilter || 'todas';
     const slotsToRender = activeFilter === 'todas' ? mealKeys : [activeFilter];
+
+    const coachCount = allDayFoods.filter(f => !f.isCustom).length;
+    const userCount = allDayFoods.filter(f => f.isCustom).length;
+
+    let overviewBannerHtml = `
+        <div class="sens-nutri-overview-card" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 16px; padding: 14px 18px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+            <div>
+                <span style="font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #705B3E; display: block; margin-bottom: 2px;">PAUTA NUTRICIONAL • ESTADO DEL DÍA</span>
+                <div style="font-size: 12.5px; font-weight: 700; color: #121214;">
+                    ${allDayFoods.length === 0 
+                        ? 'Sin alimentos pautados aún • Podés registrar lo que comés con + Registrar Comida o aguardar la pauta de Nico' 
+                        : `${coachCount > 0 ? coachCount + ' alimentos pautados por Nico' : 'Sin alimentos fijos de Nico'} ${userCount > 0 ? '• ' + userCount + ' cargados por vos' : ''}`}
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="if(typeof openCustomMealModalForSlot==='function') openCustomMealModalForSlot('almuerzo');" style="font-size: 11px; font-weight: 700; border-radius: 999px; padding: 7px 14px; background: #121214; color: #FFFFFF;">
+                + Registrar Comida
+            </button>
+        </div>
+    `;
 
     let subsectionsHtml = '';
 
@@ -15065,13 +15078,19 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
             const imgUrl = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
             const foodTitle = item.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
-            const portionText = item.isCustom ? 'Comida Personalizada' : (resolved?.unidades_caseras_total || `${grams}g`);
+            const portionText = item.isCustom ? 'Comida Registrada por vos' : (resolved?.unidades_caseras_total || `${grams}g`);
+            const originBadge = item.isCustom
+                ? `<span class="sens-nutri-origin-badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 999px;">Cargado por vos</span>`
+                : `<span class="sens-nutri-origin-badge" style="background: rgba(112, 91, 62, 0.12); color: #705B3E; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 999px;">Pauta Nico</span>`;
 
             return `
                 <div class="sens-nutri-food-card ${isLogged ? 'is-logged' : ''}" data-food-id="${foodKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
                     <img class="sens-nutri-food-thumb" src="${imgUrl}" alt="${foodTitle}" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                     <div class="sens-nutri-food-info">
-                        <span class="sens-nutri-food-meal-tag">${mealLabels[item.mealSlot] || item.mealSlot}</span>
+                        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                            <span class="sens-nutri-food-meal-tag">${mealLabels[item.mealSlot] || item.mealSlot}</span>
+                            ${originBadge}
+                        </div>
                         <div class="sens-nutri-food-title" title="${foodTitle}">${foodTitle}</div>
                         <div class="sens-nutri-food-meta">${grams}g • ${portionText}</div>
                         <div class="sens-nutri-food-macros">
@@ -15094,7 +15113,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
         const subtotalMeta = slotConsumedCount > 0
             ? `${slotConsumedKcal.toLocaleString('es-AR')} / ${slotKcal.toLocaleString('es-AR')} kcal • ${slotConsumedCount}/${slotFoods.length} consumidos`
-            : `${slotKcal.toLocaleString('es-AR')} kcal • ${slotFoods.length} items`;
+            : (slotFoods.length > 0 ? `${slotKcal.toLocaleString('es-AR')} kcal • ${slotFoods.length} items` : `0 kcal • Sin registrar`);
 
         subsectionsHtml += `
             <div class="sens-meal-subsection-block" data-meal-slot="${mKey}">
@@ -15112,14 +15131,14 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     </button>
                 </div>
                 <div class="sens-meal-foods-grid">
-                    ${cardsHtml || `<div style="padding: 16px; font-size: 12px; color: #575659; background: #FAF9F6; border-radius: 12px; border: 1px dashed rgba(18, 18, 20, 0.12); text-align: center;">No hay alimentos en ${mealLabels[mKey]}. Tocá <strong style="color: #705B3E;">+ Agregar</strong> para sumar desde la biblioteca o registrar calorías.</div>`}
+                    ${cardsHtml || `<div style="padding: 14px 16px; font-size: 11.5px; color: #575659; background: #FAF9F6; border-radius: 12px; border: 1px dashed rgba(18, 18, 20, 0.12); display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span>Sin alimentos en ${mealLabels[mKey]}.</span> <button type="button" class="btn-link-subtle" onclick="openCustomMealModalForSlot('${mKey}')" style="font-size: 11px; font-weight: 700; color: #705B3E; background: none; border: none; cursor: pointer; text-decoration: underline;">+ Registrar</button></div>`}
                 </div>
             </div>
         `;
     });
 
     if (foodListEl) {
-        foodListEl.innerHTML = subsectionsHtml;
+        foodListEl.innerHTML = overviewBannerHtml + subsectionsHtml;
 
         // Listener: + Agregar en cabecera de subsección
         foodListEl.querySelectorAll('.btn-quick-add-to-meal').forEach(btn => {
@@ -17967,7 +17986,13 @@ function renderDynamicWeekStrip() {
         if (dayData && dayData.isRestDay) {
             dayData = { title: 'Descanso', exercises: [], isRestDay: true };
         }
-        const modality = dayData.modality;
+        const isPlanOnline = Boolean(
+            (AppState.profile?.user_type && AppState.profile.user_type.includes('online')) ||
+            (AppState.profile?.active_plan_name && AppState.profile.active_plan_name.toLowerCase().includes('online'))
+        );
+        const defaultMod = isPlanOnline ? 'online' : 'presencial';
+        const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0) && !dayData.isRestDay;
+        const modality = dayData.modality || (hasExercises ? defaultMod : null);
         const execution = getAthleteWorkoutExecution(athId, dayDate);
         const isCompleted = Boolean(execution && execution.completed);
 
@@ -17976,7 +18001,6 @@ function renderDynamicWeekStrip() {
         const dayDateStart = new Date(dayDate);
         dayDateStart.setHours(0, 0, 0, 0);
         const isPast = dayDateStart < todayStart;
-        const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0);
 
         let statusBadge = '';
         if (isCompleted) {
@@ -17993,6 +18017,8 @@ function renderDynamicWeekStrip() {
             statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
         } else if (modality === 'autonomo') {
             statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
+        } else if (hasExercises) {
+            statusBadge = `<span class="sens-day-badge ${defaultMod}" title="${defaultMod === 'online' ? 'Online con Nico' : 'Presencial con Nico'}">${defaultMod === 'online' ? 'Online' : 'Pres'}</span>`;
         } else {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -18161,7 +18187,13 @@ function renderWorkoutDaysNav() {
         const heroNum = dayDate.getDate();
 
         // Estado limpio y consistente con la sección de Inicio (Cero píldoras de tipo de ejercicio)
-        const modality = dayData.modality;
+        const isPlanOnline = Boolean(
+            (AppState.profile?.user_type && AppState.profile.user_type.includes('online')) ||
+            (AppState.profile?.active_plan_name && AppState.profile.active_plan_name.toLowerCase().includes('online'))
+        );
+        const defaultMod = isPlanOnline ? 'online' : 'presencial';
+        const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0) && !dayData.isRestDay;
+        const modality = dayData.modality || (hasExercises ? defaultMod : null);
         const execution = getAthleteWorkoutExecution(athId, dayDate);
         const isCompleted = Boolean(execution && execution.completed);
 
@@ -18170,7 +18202,6 @@ function renderWorkoutDaysNav() {
         const dayDateStart = new Date(dayDate);
         dayDateStart.setHours(0, 0, 0, 0);
         const isPast = dayDateStart < todayStart;
-        const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0) && !dayData.isRestDay;
 
         let badgeHtml = '';
         if (isCompleted) {
@@ -18188,7 +18219,7 @@ function renderWorkoutDaysNav() {
         } else if (modality === 'autonomo') {
             badgeHtml = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
         } else if (hasExercises) {
-            badgeHtml = `<span class="sens-day-badge plan" style="background: rgba(229,203,167,0.15); color: #E5CBA7; font-weight: 700; font-size: 8.5px; border-radius: 4px; padding: 1px 4px;" title="Rutina planificada">Plan</span>`;
+            badgeHtml = `<span class="sens-day-badge ${defaultMod}" title="${defaultMod === 'online' ? 'Online con Nico' : 'Presencial con Nico'}">${defaultMod === 'online' ? 'Online' : 'Pres'}</span>`;
         } else {
             badgeHtml = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -18448,7 +18479,11 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     // 3. Modality Pill y Badge de Calorías Totales + Tiempo Promedio
-    const modality = dayData.modality;
+    const isPlanOnline = Boolean(
+        (AppState.profile?.user_type && AppState.profile.user_type.includes('online')) ||
+        (AppState.profile?.active_plan_name && AppState.profile.active_plan_name.toLowerCase().includes('online'))
+    );
+    const modality = dayData.modality || (exercises.length > 0 ? (isPlanOnline ? 'online' : 'presencial') : null);
     if (modalityPill) {
         if (modality === 'presencial') {
             modalityPill.textContent = 'Presencial';
@@ -18870,27 +18905,86 @@ function updateNutriSummaryCardData() {
         subText.textContent = userPlan?.directive_note || goalSubtexts[userGoal] || 'Plan calibrado por Nico para síntesis proteica & energía';
     }
 
-    // 6. Determinar día de la semana y calcular calorías reales por comida
+    // 6. Determinar día de la semana y calcular calorías reales por comida (solo alimentos pautados o registrados)
     const dayOfWeek = selectedDate.getDay(); // 0: Dom, 1: Lun, 2: Mar, ...
     const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
     const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
 
-    const getMealKcal = (mealKey, defaultPct) => {
-        const foods = dayMeals[mealKey];
-        if (Array.isArray(foods) && foods.length > 0) {
-            const sum = foods.reduce((acc, f) => acc + (f.calories || 0), 0);
-            if (sum > 0) return Math.round(sum);
+    const dateIso = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+    let userCustomMeals = [];
+    try {
+        userCustomMeals = JSON.parse(localStorage.getItem(`sens_user_logged_meals_${athId}_${dateIso}`) || '[]');
+    } catch (_) {}
+
+    let userConsumedFoods = {};
+    try {
+        userConsumedFoods = JSON.parse(localStorage.getItem(`sens_user_consumed_foods_${athId}_${dateIso}`) || '{}');
+    } catch (_) {}
+
+    const mealKeysList = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
+    let totalConsumedKcal = 0;
+
+    const getMealKcal = (mealKey) => {
+        let sum = 0;
+        const coachFoods = dayMeals[mealKey]?.foods || dayMeals[mealKey] || [];
+        if (Array.isArray(coachFoods)) {
+            coachFoods.forEach(f => {
+                const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : f;
+                const g = f.grams || res?.defaultGrams || 100;
+                const m = (typeof window.calculateFoodMacros === 'function') ? window.calculateFoodMacros(res, g) : { calories: f.calories || 0 };
+                const cVal = m.calories || f.calories || 0;
+                sum += cVal;
+                const foodKey = res?.id || res?.codigo || f.id || f.name;
+                if (userConsumedFoods[foodKey]) {
+                    totalConsumedKcal += cVal;
+                }
+            });
         }
-        return Math.round(targetKcal * defaultPct);
+        const userFoods = userCustomMeals.filter(cm => cm.mealSlot === mealKey);
+        userFoods.forEach(cm => {
+            const cVal = cm.calories || 0;
+            sum += cVal;
+            const foodKey = cm.id || cm.name;
+            if (userConsumedFoods[foodKey] !== false) {
+                totalConsumedKcal += cVal;
+            }
+        });
+        return Math.round(sum);
     };
 
-    if (calDesayuno) calDesayuno.textContent = `${getMealKcal('desayuno', 0.20)} kcal`;
-    if (calAlmuerzo) calAlmuerzo.textContent = `${getMealKcal('almuerzo', 0.35)} kcal`;
-    if (calMerienda) calMerienda.textContent = `${getMealKcal('merienda', 0.15)} kcal`;
-    if (calCena) calCena.textContent = `${getMealKcal('cena', 0.20)} kcal`;
-    if (calSnack) calSnack.textContent = `${getMealKcal('snack', 0.10)} kcal`;
+    const dKcal = getMealKcal('desayuno');
+    const aKcal = getMealKcal('almuerzo');
+    const mKcal = getMealKcal('merienda');
+    const cKcal = getMealKcal('cena');
+    const sKcal = getMealKcal('snack');
 
-    // 7. Lanzar Carrusel Dinámico 4:5 con Rotación de Comidas y Alimentos Oficiales
+    if (calDesayuno) calDesayuno.textContent = dKcal > 0 ? `${dKcal} cal` : '–';
+    if (calAlmuerzo) calAlmuerzo.textContent = aKcal > 0 ? `${aKcal} cal` : '–';
+    if (calMerienda) calMerienda.textContent = mKcal > 0 ? `${mKcal} cal` : '–';
+    if (calCena) calCena.textContent = cKcal > 0 ? `${cKcal} cal` : '–';
+    if (calSnack) calSnack.textContent = sKcal > 0 ? `${sKcal} cal` : '–';
+
+    const streakPill = document.getElementById('dashNutriStreakPill');
+    if (streakPill) {
+        const pillText = streakPill.querySelector('.streak-pill-text');
+        if (pillText) {
+            pillText.textContent = `${totalConsumedKcal.toLocaleString('es-AR')} / ${targetKcal.toLocaleString('es-AR')} cal`;
+        }
+    }
+
+    const totalAlimentosCargados = (dKcal > 0 ? 1 : 0) + (aKcal > 0 ? 1 : 0) + (mKcal > 0 ? 1 : 0) + (cKcal > 0 ? 1 : 0) + (sKcal > 0 ? 1 : 0);
+    if (caloriesHero) {
+        caloriesHero.textContent = `${targetKcal.toLocaleString('es-AR')} kcal Objetivo`;
+    }
+    if (subText) {
+        if (totalAlimentosCargados > 0) {
+            subText.textContent = `${totalConsumedKcal > 0 ? totalConsumedKcal.toLocaleString('es-AR') + ' kcal consumidas' : 'Sin ingestas registradas hoy'} • Tocá para ver o registrar alimentos.`;
+        } else {
+            subText.textContent = userPlan?.directive_note || `Objetivo diario: ${targetKcal.toLocaleString('es-AR')} kcal. Tocá para registrar tus comidas de hoy o aguardar a Nico.`;
+        }
+    }
+
+    // 7. Lanzar Carrusel Dinámico 4:5 solo si hay alimentos asignados o registrados
     if (typeof initDashNutriCarousel === 'function') {
         initDashNutriCarousel();
     }
@@ -18905,10 +18999,8 @@ let dashNutriCurrentMealIndex = 0;
 let dashNutriMealsData = [];
 
 /**
- * Carrusel Rotativo Automático 4:5 de Nutrición (Quiet Luxury / Senior UX Standards)
- * Alterna suavemente cada 2.5s entre las 5 ingestas del día (Desayuno, Almuerzo, Merienda, Cena, Snack).
- * Muestra la imagen HD real del primer alimento prescrito (o fallback de SENS_FOOD_LIBRARY),
- * resalta la pill correspondiente con sus calorías y sincroniza el copy editorial.
+ * Carrusel Rotativo Automático 4:5 de Nutrición (100% conectado a lo cargado por Nico o el Alumno)
+ * Si no hay alimentos prescritos ni registrados para hoy, NO inventa platos fantasma.
  */
 function initDashNutriCarousel() {
     const card = document.getElementById('dashNutriSummaryCard');
@@ -18917,7 +19009,7 @@ function initDashNutriCarousel() {
     const chipsRow = document.getElementById('dashNutri5calsRow');
     if (!card || !imgA || !imgB) return;
 
-    // Obtener plan de nutrición prescrito del alumno activo
+    // Obtener plan de nutrición del alumno activo
     const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
     let userPlan = null;
     try {
@@ -18926,16 +19018,20 @@ function initDashNutriCarousel() {
         if (raw) userPlan = JSON.parse(raw);
     } catch (e) {}
 
-    // Si no está en localStorage, intentar de AppState.profile
     if (!userPlan && AppState?.profile?.prescribed_nutrition) {
         userPlan = AppState.profile.prescribed_nutrition;
     }
 
-    // Determinar día de la semana para nutrición (day1 = Lunes ... day7 = Domingo)
     const selectedDate = AppState.selectedDate || new Date();
-    const dayOfWeek = selectedDate.getDay(); // 0: Dom, 1: Lun, 2: Mar, ...
+    const dayOfWeek = selectedDate.getDay();
     const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
     const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
+
+    const dateIso = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+    let userCustomMeals = [];
+    try {
+        userCustomMeals = JSON.parse(localStorage.getItem(`sens_user_logged_meals_${athId}_${dateIso}`) || '[]');
+    } catch (_) {}
 
     const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
     const mealLabels = {
@@ -18946,100 +19042,78 @@ function initDashNutriCarousel() {
         snack: 'Snack'
     };
 
-    // Alimentos representativos base de la Master DB de 500 alimentos si la comida aún no tiene prescripción
-    const fallbackFoodByMeal = {
-        desayuno: {
-            name: 'Huevo Entero de Gallina (Poché o Duro)',
-            image: 'Nutricion/images/nut-002-huevo-entero-de-gallina.webp',
-            portion: '2 unidades (100g)',
-            protein: 26,
-            carbs: 2,
-            fats: 19
-        },
-        almuerzo: {
-            name: 'Pechuga de Pollo a la Plancha',
-            image: 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp',
-            portion: '180g con Arroz Integral',
-            protein: 46,
-            carbs: 45,
-            fats: 6
-        },
-        merienda: {
-            name: 'Yogur Griego Natural sin Azúcar',
-            image: 'Nutricion/images/nut-017-yogur-griego-natural-sin-azucar.webp',
-            portion: '170g con Frutos Secos',
-            protein: 20,
-            carbs: 18,
-            fats: 8
-        },
-        cena: {
-            name: 'Salmón Rosado a la Plancha',
-            image: 'Nutricion/images/nut-010-salmon-rosado-trucha-salmonada-a-la-plancha.webp',
-            portion: '180g con Vegetales Asados',
-            protein: 38,
-            carbs: 12,
-            fats: 16
-        },
-        snack: {
-            name: 'Almendras o Nueces Naturales',
-            image: 'Nutricion/images/nut-042-almendras-o-nueces-naturales.webp',
-            portion: '30g (1 puñado)',
-            protein: 7,
-            carbs: 6,
-            fats: 18
-        }
-    };
+    // Recolectar solo comidas que tengan alimentos reales (de Nico o del usuario)
+    const activeMealsWithFoods = [];
+    mealKeys.forEach(key => {
+        const coachFoods = (dayMeals[key]?.foods || dayMeals[key] || []);
+        const userFoods = userCustomMeals.filter(cm => cm.mealSlot === key);
+        const combined = [...(Array.isArray(coachFoods) ? coachFoods : []), ...userFoods];
 
-    // Estructurar array de 5 ingestas
-    dashNutriMealsData = mealKeys.map(key => {
-        const mealFoods = dayMeals[key] || [];
-        const firstFood = mealFoods.length > 0 ? mealFoods[0] : null;
-        let foodName = '';
-        let foodImage = '';
-        let foodPortion = '';
-        let foodProt = 0;
-        let foodCarbs = 0;
-        let foodFats = 0;
-
-        if (firstFood) {
+        if (combined.length > 0) {
+            const firstFood = combined[0];
             const resolved = (typeof window.getResolvedFood === 'function')
                 ? window.getResolvedFood(firstFood, athId)
                 : firstFood;
-            foodName = firstFood.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
-            foodImage = resolved?.image || resolved?.image_url || resolved?.imagen_path || firstFood.image || '';
-            foodPortion = firstFood.grams ? `${firstFood.grams}g` : (resolved?.portion || '1 porción');
-            foodProt = firstFood.protein || resolved?.protPer100 || 25;
-            foodCarbs = firstFood.carbs || resolved?.carbsPer100 || 20;
-            foodFats = firstFood.fats || resolved?.fatsPer100 || 10;
+            const foodName = firstFood.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
+            const foodImage = resolved?.image || resolved?.image_url || resolved?.imagen_path || firstFood.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+            const foodPortion = firstFood.grams ? `${firstFood.grams}g` : (resolved?.portion || '1 porción');
+            const foodProt = firstFood.protein || resolved?.protPer100 || 25;
+            const foodCarbs = firstFood.carbs || resolved?.carbsPer100 || 20;
+            const foodFats = firstFood.fats || resolved?.fatsPer100 || 10;
+            const calEl = document.getElementById(`calMeal${key.charAt(0).toUpperCase() + key.slice(1)}`);
+            const mealKcal = calEl ? parseInt(calEl.textContent, 10) || 0 : 0;
+
+            activeMealsWithFoods.push({
+                key,
+                label: mealLabels[key],
+                foodName,
+                foodImage,
+                foodPortion,
+                foodProt: Math.round(foodProt),
+                foodCarbs: Math.round(foodCarbs),
+                foodFats: Math.round(foodFats),
+                mealKcal,
+                isCustom: Boolean(firstFood.isCustom)
+            });
         }
-
-        const fallback = fallbackFoodByMeal[key];
-        if (!foodImage) {
-            foodName = fallback.name;
-            foodImage = fallback.image;
-            foodPortion = fallback.portion;
-            foodProt = fallback.protein;
-            foodCarbs = fallback.carbs;
-            foodFats = fallback.fats;
-        }
-
-        const calEl = document.getElementById(`calMeal${key.charAt(0).toUpperCase() + key.slice(1)}`);
-        const mealKcal = calEl ? parseInt(calEl.textContent, 10) || 0 : 0;
-
-        return {
-            key,
-            label: mealLabels[key],
-            foodName,
-            foodImage,
-            foodPortion,
-            foodProt: Math.round(foodProt),
-            foodCarbs: Math.round(foodCarbs),
-            foodFats: Math.round(foodFats),
-            mealKcal
-        };
     });
 
+    dashNutriMealsData = activeMealsWithFoods;
+
     const dotsWrap = document.getElementById('dashNutriDotsIndicator');
+
+    function stopTimer() {
+        if (dashNutriCarouselTimer) {
+            clearInterval(dashNutriCarouselTimer);
+            dashNutriCarouselTimer = null;
+        }
+    }
+    window.stopDashNutriCarousel = stopTimer;
+
+    // Si NO hay alimentos cargados por nadie para hoy: estado limpio y objetivo transparente
+    if (dashNutriMealsData.length === 0) {
+        stopTimer();
+        if (imgA) {
+            imgA.classList.add('active');
+            imgA.style.opacity = '0.18';
+            imgA.style.filter = 'grayscale(80%)';
+        }
+        if (imgB) {
+            imgB.classList.remove('active');
+            imgB.style.opacity = '0';
+        }
+        if (dotsWrap) dotsWrap.innerHTML = '';
+        document.querySelectorAll('#dashNutri5calsRow .sens-5cals-chip').forEach(chip => {
+            chip.classList.remove('highlight');
+        });
+        return;
+    }
+
+    if (imgA) {
+        imgA.style.opacity = '';
+        imgA.style.filter = '';
+    }
+
     if (dotsWrap) {
         dotsWrap.innerHTML = dashNutriMealsData.map((_, i) => `<span class="sens-video-dot ${i === dashNutriCurrentMealIndex ? 'active' : ''}" data-nutri-idx="${i}"></span>`).join('');
         dotsWrap.querySelectorAll('.sens-video-dot').forEach(dot => {
@@ -19082,14 +19156,13 @@ function initDashNutriCarousel() {
         const item = dashNutriMealsData[dashNutriCurrentMealIndex];
         if (!item) return;
 
-        // 1. Cross-fade suave entre capas A y B
         const showingA = imgA.classList.contains('active');
         const activeImg = showingA ? imgA : imgB;
         const nextImg = showingA ? imgB : imgA;
 
         nextImg.src = item.foodImage;
         nextImg.onerror = () => {
-            nextImg.src = fallbackFoodByMeal[item.key]?.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+            nextImg.src = 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
         };
 
         if (instant) {
@@ -19102,20 +19175,20 @@ function initDashNutriCarousel() {
             });
         }
 
-        // 2. Resaltar pill en la fila de 5 comidas
+        // Resaltar pill en la fila de 5 comidas
         document.querySelectorAll('#dashNutri5calsRow .sens-5cals-chip').forEach(chip => {
             const isMatch = chip.getAttribute('data-meal-key') === item.key;
             chip.classList.toggle('highlight', isMatch);
         });
 
-        // 3. Actualizar dots indicadores (Item 1)
+        // Actualizar dots indicadores
         if (dotsWrap) {
             dotsWrap.querySelectorAll('.sens-video-dot').forEach((dot, i) => {
                 dot.classList.toggle('active', i === dashNutriCurrentMealIndex);
             });
         }
 
-        // 4. Sincronizar textos y métricas editoriales
+        // Sincronizar textos y métricas editoriales
         const eyebrow = document.getElementById('dashNutriDayDateLabel');
         const caloriesHero = document.getElementById('dashNutriCaloriesHero');
         const subText = document.getElementById('dashNutriSubText');
@@ -19123,15 +19196,16 @@ function initDashNutriCarousel() {
 
         const sDate = AppState.selectedDate || new Date();
         const isToday = isSameDay(sDate, new Date());
+        const originTag = item.isCustom ? 'Cargado por vos' : 'Pauta Nico';
 
         if (eyebrow) {
-            eyebrow.textContent = isToday ? `Nutrición de Hoy • ${item.label}` : `Nutrición • ${item.label}`;
+            eyebrow.textContent = isToday ? `Nutrición de Hoy • ${item.label} (${originTag})` : `Nutrición • ${item.label} (${originTag})`;
         }
         if (caloriesHero) {
-            caloriesHero.textContent = `${item.label} • ${item.mealKcal > 0 ? item.mealKcal.toLocaleString('es-AR') + ' kcal' : 'Nutrición SENS'}`;
+            caloriesHero.textContent = `${item.label} • ${item.mealKcal > 0 ? item.mealKcal.toLocaleString('es-AR') + ' kcal' : 'Registrado'}`;
         }
         if (subText) {
-            subText.textContent = `${item.foodName} (${item.foodPortion}) • ${item.foodProt}g Prot`;
+            subText.textContent = `${item.foodName} (${item.foodPortion}) • ${item.foodProt}g Prot • ${originTag}`;
         }
         if (targetBadge && item.foodProt > 0) {
             targetBadge.textContent = `${item.foodProt}g Prot • ${item.foodCarbs}g Carbs`;
@@ -19143,6 +19217,7 @@ function initDashNutriCarousel() {
         if (document.hidden) return;
         const dashViewEl = document.getElementById('dashView');
         if (dashViewEl && !dashViewEl.classList.contains('active')) return;
+        if (dashNutriMealsData.length <= 1) return;
         dashNutriCarouselTimer = setInterval(() => {
             if (document.hidden) return;
             const dv = document.getElementById('dashView');
@@ -19153,15 +19228,13 @@ function initDashNutriCarousel() {
             showMeal(dashNutriCurrentMealIndex + 1);
         }, 4200);
     }
-
-    function stopTimer() {
-        if (dashNutriCarouselTimer) {
-            clearInterval(dashNutriCarouselTimer);
-            dashNutriCarouselTimer = null;
-        }
-    }
-    window.stopDashNutriCarousel = stopTimer;
     window.startDashNutriCarousel = startTimer;
+
+    // Mostrar primera comida inmediatamente
+    showMeal(0, true);
+    if (dashNutriMealsData.length > 1) {
+        startTimer();
+    }
 
     // Interacción al clickear cada pill de comida
     if (chipsRow && !chipsRow._hasNutriCarouselBound) {
@@ -29762,12 +29835,18 @@ window.assignAutomatedStarterPlanClient = function(profileArg, anamnesisArg) {
         }
     ];
 
+    const isPlanOnline = Boolean(
+        (profile.user_type && profile.user_type.includes('online')) ||
+        (profile.active_plan_name && profile.active_plan_name.toLowerCase().includes('online'))
+    );
+    const starterModality = isPlanOnline ? 'online' : 'presencial';
+
     const prescribedWorkouts = {
-        day1: { title: 'Día 1: Empuje, Postura & Core', modality: 'online', exercises: day1Ex, completed: false },
+        day1: { title: 'Día 1: Empuje, Postura & Core', modality: starterModality, exercises: day1Ex, completed: false },
         day2: { title: 'Recuperación Activa & Pasos NEAT', modality: 'descanso', exercises: [], completed: false },
-        day3: { title: 'Día 2: Tracción & Cadena Posterior Cuidada', modality: 'online', exercises: day3Ex, completed: false },
+        day3: { title: 'Día 2: Tracción & Cadena Posterior Cuidada', modality: starterModality, exercises: day3Ex, completed: false },
         day4: { title: 'Recuperación Activa & Movilidad', modality: 'descanso', exercises: [], completed: false },
-        day5: { title: 'Día 3: Piernas, Estabilidad & Descompresión', modality: 'online', exercises: day5Ex, completed: false },
+        day5: { title: 'Día 3: Piernas, Estabilidad & Descompresión', modality: starterModality, exercises: day5Ex, completed: false },
         day6: { title: 'Actividad Recreativa / Caminata', modality: 'descanso', exercises: [], completed: false },
         day7: { title: 'Descanso Total', modality: 'descanso', exercises: [], completed: false }
     };
@@ -29778,14 +29857,8 @@ window.assignAutomatedStarterPlanClient = function(profileArg, anamnesisArg) {
         target_carbs: carbsG,
         target_fats: fatsG,
         target_water: waterLiters,
-        directive_note: `Prescripción Mifflin-St Jeor (${targetKcal} kcal · ${proteinG}g Proteína · ${waterMl}ml Agua). Completá tus 3 sesiones semanales para desbloquear tu Presupuesto Social de Fin de Semana (+500 kcal libres).`,
-        prescribed_foods: [
-            { id: 'f_pollo', grams: 200 },
-            { id: 'f_huevos', grams: 180 },
-            { id: 'f_yogur', grams: 200 },
-            { id: 'f_arroz', grams: 180 },
-            { id: 'f_palta', grams: 100 }
-        ]
+        directive_note: `Objetivo diario (${targetKcal} kcal · ${proteinG}g Proteína · ${waterLiters}L Agua). Aguardando asignación de alimentos específicos por Nico o podés registrar lo que vas consumiendo.`,
+        prescribed_foods: []
     };
 
     if (AppState.profile) {
