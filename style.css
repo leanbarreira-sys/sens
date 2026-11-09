@@ -31290,3 +31290,680 @@ body.in-portal #dashNutriSummaryCard .sens-duration-pill {
 }
 
 
+
+
+/* =============================================================================
+   SENS REFINED CONTRAST & LUXURY PALETTE FIXES (EXERCISE MODAL + NUTRITION VIEW + DASHBOARD)
+   ============================================================================= */
+
+/* 1. Botones del Modal de Ejercicio (#sensExerciseModalSheet) - Máximo Contraste y Claridad */
+body.in-portal #sensExerciseModalSheet,
+#sensExerciseModalSheet {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.1) !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnCloseExerciseModal,
+#sensExerciseModalSheet #btnCloseExerciseModal {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.15) !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnCloseExerciseModal:hover {
+    background: #E5E3DF !important;
+    color: #121214 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnToggleVideoAspect,
+#sensExerciseModalSheet #btnToggleVideoAspect {
+    background: rgba(18, 18, 20, 0.88) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-master-timer-card,
+#sensExerciseModalSheet .sens-master-timer-card {
+    background: #FAF7F2 !important;
+    border: 1.5px solid rgba(197, 168, 128, 0.35) !important;
+    border-radius: 18px !important;
+}
+
+body.in-portal #sensExerciseModalSheet #masterTimerModeBadge,
+#sensExerciseModalSheet #masterTimerModeBadge {
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #masterTimerModeBadge.in-set,
+#sensExerciseModalSheet #masterTimerModeBadge.in-set {
+    background: #FEF3C7 !important;
+    color: #92400E !important;
+    border: 1px solid #F59E0B !important;
+}
+
+body.in-portal #sensExerciseModalSheet #masterTimerModeBadge.in-rest,
+#sensExerciseModalSheet #masterTimerModeBadge.in-rest {
+    background: #DBEAFE !important;
+    color: #1E40AF !important;
+    border: 1px solid #3B82F6 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #masterTimerDisplay,
+#sensExerciseModalSheet #masterTimerDisplay {
+    color: #121214 !important;
+    font-weight: 900 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #masterTimerTargetSub,
+#sensExerciseModalSheet #masterTimerTargetSub {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary,
+#sensExerciseModalSheet .sens-btn-timer-primary {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease, background 0.15s ease !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary:active,
+#sensExerciseModalSheet .sens-btn-timer-primary:active {
+    transform: scale(0.97) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary.btn-master-finalizar-set,
+#sensExerciseModalSheet .sens-btn-timer-primary.btn-master-finalizar-set {
+    background: #059669 !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-secondary,
+#sensExerciseModalSheet .sens-btn-timer-secondary {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 2px solid #121214 !important;
+    font-weight: 800 !important;
+    font-size: 12.5px !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-secondary:hover,
+#sensExerciseModalSheet .sens-btn-timer-secondary:hover {
+    background: #F4F3F1 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-master-timer-rest-adjustments button,
+#sensExerciseModalSheet .sens-master-timer-rest-adjustments button {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1.5px solid rgba(18, 18, 20, 0.22) !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    border-radius: 8px !important;
+    padding: 5px 11px !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnMasterSkipRest,
+#sensExerciseModalSheet #btnMasterSkipRest {
+    background: #FEF3C7 !important;
+    color: #92400E !important;
+    border: 1.5px solid #D97706 !important;
+    font-weight: 800 !important;
+}
+
+/* Steppers Táctiles de Series */
+body.in-portal #sensExerciseModalSheet .sens-tactile-set-row,
+#sensExerciseModalSheet .sens-tactile-set-row {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 14px !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-tactile-set-row.completed,
+#sensExerciseModalSheet .sens-tactile-set-row.completed {
+    background: #F2FBF6 !important;
+    border-color: rgba(16, 185, 129, 0.45) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-capsule,
+#sensExerciseModalSheet .sens-stepper-capsule {
+    background: #F4F3F1 !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    border-radius: 10px !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-btn,
+#sensExerciseModalSheet .sens-stepper-btn {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1.5px solid rgba(18, 18, 20, 0.18) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    font-weight: 900 !important;
+    font-size: 16px !important;
+    border-radius: 7px !important;
+    cursor: pointer !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-btn:active,
+#sensExerciseModalSheet .sens-stepper-btn:active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    transform: scale(0.92) !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-input,
+#sensExerciseModalSheet .sens-stepper-input {
+    color: #121214 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-stepper-unit,
+#sensExerciseModalSheet .sens-stepper-unit {
+    color: #575659 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+}
+
+/* Botón de Check de Serie */
+body.in-portal #sensExerciseModalSheet .sens-check-set-btn,
+#sensExerciseModalSheet .sens-check-set-btn {
+    background: #FFFFFF !important;
+    color: #77767B !important;
+    border: 2px solid rgba(18, 18, 20, 0.22) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-check-set-btn svg,
+#sensExerciseModalSheet .sens-check-set-btn svg {
+    stroke: currentColor !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-check-set-btn.checked,
+body.in-portal #sensExerciseModalSheet .sens-check-set-btn.is-done,
+#sensExerciseModalSheet .sens-check-set-btn.checked,
+#sensExerciseModalSheet .sens-check-set-btn.is-done {
+    background: #059669 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #059669 !important;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.4) !important;
+}
+
+/* Botón Completar Todo el Ejercicio */
+body.in-portal #sensExerciseModalSheet #btnQuickCompleteAllSets,
+body.in-portal #sensExerciseModalSheet .sens-btn-complete-all,
+#sensExerciseModalSheet #btnQuickCompleteAllSets,
+#sensExerciseModalSheet .sens-btn-complete-all {
+    background: #FAF7F2 !important;
+    color: #705B3E !important;
+    border: 1.5px solid #C5A880 !important;
+    font-weight: 800 !important;
+    font-size: 12.5px !important;
+    padding: 12px 16px !important;
+    border-radius: 12px !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 8px rgba(112, 91, 62, 0.06) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    transition: all 0.15s ease !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnQuickCompleteAllSets:hover,
+#sensExerciseModalSheet #btnQuickCompleteAllSets:hover {
+    background: #F5EFE6 !important;
+    border-color: #B28F60 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnQuickCompleteAllSets.completed,
+#sensExerciseModalSheet #btnQuickCompleteAllSets.completed {
+    background: #ECFDF5 !important;
+    color: #047857 !important;
+    border: 1.5px solid #059669 !important;
+    font-weight: 800 !important;
+}
+
+/* Acordeón de Recomendaciones y Biomecánica */
+body.in-portal #sensExerciseModalSheet #sensExNotesAccordion,
+#sensExerciseModalSheet #sensExNotesAccordion {
+    background: #FAF7F2 !important;
+    border: 1px solid rgba(197, 168, 128, 0.35) !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    margin: 12px 0 16px !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnToggleExNotesAccordion,
+#sensExerciseModalSheet #btnToggleExNotesAccordion {
+    background: transparent !important;
+    color: #121214 !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+    padding: 11px 14px !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnToggleExNotesAccordion svg {
+    stroke: #705B3E !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnToggleExNotesAccordion .accordion-arrow {
+    color: #121214 !important;
+    font-weight: 900 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #modalExNotesBody,
+#sensExerciseModalSheet #modalExNotesBody {
+    background: #FFFFFF !important;
+    color: #27272A !important;
+    border-top: 1px solid rgba(197, 168, 128, 0.2) !important;
+    padding: 12px 14px !important;
+}
+
+/* Barra Sticky de Guardado */
+body.in-portal #sensExerciseModalSheet .sens-modal-sticky-save-bar,
+#sensExerciseModalSheet .sens-modal-sticky-save-bar {
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+}
+
+body.in-portal #sensExerciseModalSheet #modalExAutosaveIndicator,
+#sensExerciseModalSheet #modalExAutosaveIndicator {
+    color: #575659 !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnModalFinishExercise,
+body.in-portal #sensExerciseModalSheet .sens-sticky-save-btn,
+#sensExerciseModalSheet #btnModalFinishExercise,
+#sensExerciseModalSheet .sens-sticky-save-btn {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: none !important;
+    font-weight: 800 !important;
+    font-size: 14px !important;
+    border-radius: 12px !important;
+    padding: 14px 20px !important;
+    box-shadow: 0 4px 16px rgba(18, 18, 20, 0.18) !important;
+    cursor: pointer !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnModalFinishExercise *,
+#sensExerciseModalSheet #btnModalFinishExercise * {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+}
+
+/* =============================================================================
+   2. SECCIÓN NUTRICIÓN (#nutritionView): REEMPLAZO DE CAJAS NEGRAS POR GAMA SENS LUXURY
+   ============================================================================= */
+
+/* Tarjeta Hero Calórico Primario: Quiet Luxury Cálido (#FAF7F2 / Alabaster Champagne) */
+body.in-portal #nutritionView #sensNutriHeroCard,
+body.in-portal #nutritionView .sens-nutri-hero-primary-card,
+#sensNutriHeroCard,
+.sens-nutri-hero-primary-card {
+    background: #FAF7F2 !important;
+    border: 1.5px solid rgba(197, 168, 128, 0.38) !important;
+    border-radius: 24px !important;
+    padding: 22px !important;
+    box-shadow: 0 6px 24px rgba(112, 91, 62, 0.06) !important;
+    color: #121214 !important;
+    margin-bottom: 20px !important;
+}
+
+body.in-portal #nutritionView #sensNutriHeroCard .sens-card-domain-eyebrow,
+#sensNutriHeroCard .sens-card-domain-eyebrow {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+    font-size: 11px !important;
+}
+
+body.in-portal #nutritionView #sensNutriHeroCard .sens-nutri-hero-title,
+#sensNutriHeroCard .sens-nutri-hero-title {
+    color: #121214 !important;
+    font-weight: 800 !important;
+    font-size: 20px !important;
+    margin-top: 4px !important;
+}
+
+body.in-portal #nutritionView #nutriDailyGoalBadge,
+#nutriDailyGoalBadge {
+    background: rgba(251, 222, 185, 0.55) !important;
+    color: #705B3E !important;
+    border: 1px solid rgba(197, 168, 128, 0.4) !important;
+    font-weight: 800 !important;
+    font-size: 10.5px !important;
+    border-radius: 999px !important;
+    padding: 4px 11px !important;
+}
+
+body.in-portal #nutritionView #nutriConsumedNum,
+#nutriConsumedNum {
+    color: #121214 !important;
+    font-weight: 900 !important;
+    font-size: 2.4rem !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-hero-unit,
+.sens-nutri-hero-unit {
+    color: #575659 !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+}
+
+body.in-portal #nutritionView #nutriTargetKcal,
+#nutriTargetKcal {
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #nutritionView #nutriRemainingKcal,
+#nutriRemainingKcal {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+    font-size: 11.5px !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-stat-label,
+.sens-nutri-stat-label {
+    color: #77767B !important;
+    font-weight: 800 !important;
+    font-size: 10px !important;
+}
+
+/* Track de Calorías y Zona Óptima */
+body.in-portal #nutritionView .sens-nutri-progress-track,
+.sens-nutri-progress-track {
+    background: #ECE8E1 !important;
+    border-radius: 999px !important;
+    height: 10px !important;
+    position: relative !important;
+}
+
+body.in-portal #nutritionView #nutriSliderFill,
+#nutriSliderFill {
+    background: linear-gradient(90deg, #C5A880 0%, #705B3E 100%) !important;
+    border-radius: 999px !important;
+}
+
+body.in-portal #nutritionView #nutriOptimalZoneMarker,
+#nutriOptimalZoneMarker {
+    background: rgba(197, 168, 128, 0.35) !important;
+    border: 1px dashed #705B3E !important;
+    border-radius: 999px !important;
+}
+
+body.in-portal #nutritionView #nutriOptimalRangeText,
+#nutriOptimalRangeText {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-progress-labels span,
+.sens-nutri-progress-labels span {
+    color: #575659 !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+}
+
+/* Drawer Desplegable de Macros */
+body.in-portal #nutritionView #btnToggleMacroDrawer,
+#btnToggleMacroDrawer {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(197, 168, 128, 0.3) !important;
+    border-radius: 14px !important;
+    color: #121214 !important;
+    padding: 10px 14px !important;
+}
+
+body.in-portal #nutritionView #btnToggleMacroDrawer span,
+#btnToggleMacroDrawer span {
+    color: #121214 !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #nutritionView #btnToggleMacroDrawer svg {
+    stroke: #705B3E !important;
+}
+
+body.in-portal #nutritionView #nutriMacroQuickSummary,
+#nutriMacroQuickSummary {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #nutritionView .sens-macro-pill-card,
+.sens-macro-pill-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(197, 168, 128, 0.25) !important;
+    border-radius: 14px !important;
+    padding: 10px 12px !important;
+}
+
+body.in-portal #nutritionView .sens-macro-pill-label {
+    color: #575659 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #nutritionView .sens-macro-pill-val {
+    color: #121214 !important;
+    font-weight: 900 !important;
+}
+
+/* Módulo Desbloqueables en Nutrición: Oculto para evitar saturación visual y cuadrados negros */
+body.in-portal #nutriUnlockablesModule,
+#nutriUnlockablesModule {
+    display: none !important;
+}
+
+/* Subsecciones de Comida y Lista en #nutritionView */
+body.in-portal #nutritionView #sensMemberNutriPlanSection,
+#sensMemberNutriPlanSection {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03) !important;
+}
+
+body.in-portal #nutritionView .sens-meal-subsection-block,
+.sens-meal-subsection-block {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.02) !important;
+}
+
+body.in-portal #nutritionView .sens-meal-title {
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #nutritionView .sens-meal-subtotal-meta {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #nutritionView .btn-quick-add-to-meal,
+.btn-quick-add-to-meal {
+    background: #FAF7F2 !important;
+    border: 1px solid rgba(197, 168, 128, 0.4) !important;
+    color: #705B3E !important;
+    font-weight: 800 !important;
+    font-size: 11px !important;
+    border-radius: 999px !important;
+    padding: 5px 12px !important;
+}
+
+/* =============================================================================
+   3. INICIO: CARD DE NUTRICIÓN (#dashNutriSummaryCard) - UX IMPECABLE Y COMPACTA
+   ============================================================================= */
+
+body.in-portal #dashNutriSummaryCard,
+#dashNutriSummaryCard {
+    background: #FAF7F2 !important;
+    border: 1.5px solid rgba(197, 168, 128, 0.35) !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(112, 91, 62, 0.06) !important;
+    position: relative !important;
+    aspect-ratio: auto !important;
+    min-height: 200px !important;
+    height: auto !important;
+    padding: 16px 18px !important;
+}
+
+/* Ocultar flechas grandes y dots superpuestos que rompían la card */
+body.in-portal #dashNutriNavArrows,
+#dashNutriNavArrows,
+body.in-portal #dashNutriDotsIndicator,
+#dashNutriDotsIndicator {
+    display: none !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-nutri-top-badges {
+    position: static !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 12px !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-card-badge-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+body.in-portal #dashNutriSummaryCard #dashNutriGoalPill,
+#dashNutriGoalPill {
+    background: rgba(251, 222, 185, 0.55) !important;
+    color: #705B3E !important;
+    border: 1px solid rgba(197, 168, 128, 0.4) !important;
+    font-weight: 800 !important;
+    font-size: 10.5px !important;
+    border-radius: 999px !important;
+    padding: 3px 10px !important;
+}
+
+body.in-portal #dashNutriSummaryCard #dashNutriStreakPill,
+#dashNutriStreakPill {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    font-weight: 800 !important;
+    font-size: 11px !important;
+    border-radius: 999px !important;
+    padding: 3px 10px !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-nutri-card-content {
+    position: static !important;
+    padding: 0 !important;
+}
+
+body.in-portal #dashNutriSummaryCard #dashNutriCaloriesHero,
+#dashNutriCaloriesHero {
+    color: #121214 !important;
+    font-size: 19px !important;
+    font-weight: 900 !important;
+    margin: 0 0 4px 0 !important;
+    line-height: 1.2 !important;
+}
+
+body.in-portal #dashNutriSummaryCard #dashNutriSubText,
+#dashNutriSubText {
+    color: #705B3E !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.3 !important;
+}
+
+body.in-portal #dashNutriSummaryCard #dashGoNutriBtn,
+#dashGoNutriBtn {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.15) !important;
+}
+
+body.in-portal #dashNutriSummaryCard #dashNutri5calsRow,
+#dashNutri5calsRow {
+    display: flex !important;
+    gap: 6px !important;
+    justify-content: space-between !important;
+    margin-top: 14px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 2px !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip,
+.sens-5cals-chip {
+    flex: 1 !important;
+    min-width: 56px !important;
+    padding: 6px 4px !important;
+    font-size: 9.5px !important;
+    text-align: center !important;
+    border-radius: 10px !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(197, 168, 128, 0.25) !important;
+    color: #575659 !important;
+    box-shadow: 0 1px 4px rgba(18, 18, 20, 0.02) !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight,
+.sens-5cals-chip.highlight {
+    background: #FAF7F2 !important;
+    border-color: #C5A880 !important;
+    color: #705B3E !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip strong,
+.sens-5cals-chip strong {
+    display: block !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    color: #121214 !important;
+    margin-top: 2px !important;
+}
+
