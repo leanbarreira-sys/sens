@@ -346,21 +346,16 @@
                     </div>
                     <div class="sens-hero-followup play-entrance" id="sensHeroFollowup">
                         <p class="hero-description-train">
-                            Entrenamiento y nutrición personalizado. <br> Seguimiento presencial y a tu ritmo
-                            desde la App.
+                            Entrenamiento y nutrición personalizado. <br> Seguimiento presencial u online 1 a 1 con Nico.
                         </p>
                         <div class="hero-cta-group">
-                            <button type="button" class="btn btn-primary"
-                                onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()"
-                                data-agent-action="start_free_7day_app_trial">
-                                App Gratis | Registrate
-                            </button>
-                            <a href="#planes" class="btn hero-btn-apple-dark" data-agent-action="view_pricing_plans">
-                                Planes Personalizados
+                            <a href="#planes" class="btn btn-primary" data-agent-action="view_pricing_plans">
+                                Elegí tu Plan
                             </a>
-
+                            <a href="#sumate" class="btn hero-btn-apple-dark" data-agent-action="request_evaluation">
+                                Agendar Evaluación
+                            </a>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -371,14 +366,9 @@
             <div class="section-head">
                 <h2 class="section-main-title">MODALIDAD <span class="text-champagne"> SENS</span></h2>
                 <p class="section-lead">
-                    <b></b><span class="text-champagne">Personalizado Presencial/Online<br></span></b>
-                    Coach profesional brinda seguimiento de entrenamiento y nutrición personalizado para clientes a
-                    domicilio u Online<br>
-                    Se brinda una app gratuita para poder llegar a tus objetivos.<br><br>
-                    <span class="text-champagne">A tu ritmo<br></span>
-                    App con los mejores entrenamientos y guias de nuestros Coachs, para que puedas llegar a tus
-                    objetivos, a tu ritmo<br><br>
-
+                    <b><span class="text-champagne">Personalizado Presencial / Online<br></span></b>
+                    Seguimiento de entrenamiento y nutrición 1 a 1 con Nico, presencial en CABA u online.<br>
+                    App SENS bonificada 100% incluida con tu plan para registrar y acompañar tus objetivos.<br>
                 </p>
                 <span class="pill pill-dark" style="margin-top:12px; font-size:10px;">Beneficios SENS
                     →</span>
@@ -396,13 +386,12 @@
                             </video>
                             <div class="grad-bottom"></div>
                             <div class="ig-content pos-bottom">
-                                <div class="ig-light" style="font-size:13px;">APP GRATIS</div>
+                                <div class="ig-light" style="font-size:13px;">MÉTODO &amp; APP</div>
                                 <div class="ig-bold" style="font-size:22px; color:var(--accent-primary);">
                                     Nutrición y Entrenamiento</div>
                                 <div class="ig-body"
                                     style="font-size:12.5px; line-height:1.45; color:rgba(255,255,255,0.88); margin-top:8px;">
-                                    App gratuita con tu Plan de entrenamiento personalizado online o presencial.
-                                    Rutinas y recetas personalizadas.
+                                    App bonificada 100% con tu plan de entrenamiento personalizado presencial u online. Rutinas guiadas y recetas a medida.
                                 </div>
                             </div>
                         </div>
@@ -548,16 +537,13 @@
             <div class="section-head" style="margin-bottom: 18px;">
                 <h2 class="section-main-title">ELEGÍ TU PLAN </h2>
                 <p class="section-lead" style="font-size: 0.92rem; margin-bottom: 0; max-width: 600px;">
-                    Empezá hoy gratis en la App o sumate al seguimiento humano 1 a 1 con Nico.
+                    Sumate al seguimiento presencial u online 1 a 1 con Nico.
                 </p>
             </div>
 
-            <!-- Selector Segmentado Unificado de 3 Caminos (App Free & Premium / Online 1:1 / Presencial CABA) -->
+            <!-- Selector Segmentado Unificado: Presencial CABA / Online 1:1 -->
             <div class="pricing-selector-container" style="margin-bottom: 20px;">
                 <div class="pricing-main-nav" role="tablist" aria-label="Modalidad Principal">
-                    <button class="pricing-main-btn" data-mode="app" role="tab" aria-selected="false" id="btnModeApp">
-                        <span class="btn-text">App SENS</span>
-                    </button>
                     <button class="pricing-main-btn active" data-mode="presencial" role="tab" aria-selected="true"
                         id="btnModePresencial">
                         <span class="btn-text">Presencial</span>
@@ -580,132 +566,6 @@
                             Grupal
                         </button>
                     </div>
-                </div>
-            </div>
-
-            <!-- ============================================================ -->
-            <!-- VISTA 0: APP SENS (PLAN FREE 7D + PREMIUM MENSUAL Y 3 MESES) -->
-            <!-- ============================================================ -->
-            <div class="pricing-tab-content" id="tab-app" style="display:none;">
-                <div class="touch-carousel-wrap">
-                    <div class="touch-carousel pricing-carousel" id="appCarousel">
-                        <!-- 1. Plan App Free 7 Días -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <span class="train-plan-badge">100% OFF • 7 DÍAS</span>
-                                <h3 class="plan-title">Prueba Autónoma</h3>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$0</span>
-                                    <span class="plan-period">/ 7 días gratis</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Rutina base de 3 días en video HD y timer</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Cálculo basal y macros Mifflin-St Jeor</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Sistema de rachas diarias y hábitos</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>+7 días gratis por cada amigo invitado</span>
-                                    </li>
-                                </ul>
-                                <button type="button" class="btn btn-outline btn-full"
-                                    onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()"
-                                    data-agent-action="start_free_7day_app_trial">Probar 7 Días Gratis →</button>
-                            </div>
-                        </div>
-
-                        <!-- 2. Plan App Trimestral 90 Días (OPCIÓN DESTACADA) -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">MÁS ELEGIDO • -20% OFF</span>
-                                <h3 class="plan-title">Pack Trimestral 90 Días</h3>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$59.900</span>
-                                    <span class="plan-period">/ 3 meses (USD $45)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Acceso ilimitado a +1300 Ejercicios HD</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Nutrición de precisión + 500 alimentos</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Permiso Social (+500 kcal fin de semana)</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>12 semanas completas de progresión</span>
-                                    </li>
-                                </ul>
-                                <button type="button" class="btn btn-primary btn-full"
-                                    onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()"
-                                    data-agent-action="start_app_quarterly">Elegir Pack 90 Días →</button>
-                            </div>
-                        </div>
-
-                        <!-- 3. Plan App Mensual Flexible -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <span class="train-plan-badge">AUTÓNOMO FLEXIBLE</span>
-                                <h3 class="plan-title">Membresía Mensual</h3>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$24.900</span>
-                                    <span class="plan-period">/ mes (USD $19)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Acceso continuo a rutinas y videos HD</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Nutrición, déficit y superávit por objetivo</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Timer de series, descansos y RIR</span>
-                                    </li>
-                                    <li class="plan-feature-row">
-                                        <svg class="check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Cancelá cuando quieras sin permanencia</span>
-                                    </li>
-                                </ul>
-                                <button type="button" class="btn btn-outline btn-full"
-                                    onclick="window.openFreeAppTrialModal && window.openFreeAppTrialModal()"
-                                    data-agent-action="start_app_monthly">Elegir Mensual →</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-dots" id="appDots">
-                    <div class="carousel-dot active" data-index="0"></div>
-                    <div class="carousel-dot" data-index="1"></div>
-                    <div class="carousel-dot" data-index="2"></div>
                 </div>
             </div>
 
@@ -836,27 +696,32 @@
             </div>
 
             <!-- ============================================================ -->
-            <!-- VISTA 2B: PRESENCIAL GRUPOS (DÚOS Y TRÍOS)                   -->
+            <!-- VISTA 2B: PRESENCIAL GRUPAL (POR FRECUENCIA DE DÍAS)          -->
             <!-- ============================================================ -->
             <div class="pricing-tab-content" id="tab-presencial-grupos" style="display:none;">
                 <div class="touch-carousel-wrap">
                     <div class="touch-carousel pricing-carousel" id="groupsCarousel">
-                        <!-- 1. Dúos (OPCIÓN DESTACADA AL FRENTE) -->
+                        <!-- 1. 2x por Semana Grupal (OPCIÓN DESTACADA AL FRENTE - MÁS ELEGIDO) -->
                         <div class="carousel-slide">
                             <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">MÁS ELEGIDO GRUPOS</span>
-                                <h3 class="plan-title">Presencial Dúo (2 Personas)</h3>
-                                <div class="plan-concept-tagline">Entrená con tu pareja, amigo o colega con atención personalizada y corrección técnica de Nico.</div>
+                                <span class="train-plan-badge">MÁS ELEGIDO GRUPAL</span>
+                                <h3 class="plan-title">2x por Semana</h3>
+                                <div class="plan-concept-tagline">Presencial Grupal (2 o 3 personas) • Con tu pareja, amigo o grupo reducido con atención personalizada.</div>
                                 <div class="plan-price-wrap">
-                                    <span class="plan-amount">$100k - $195k</span>
-                                    <span class="plan-period">/ persona / mes</span>
+                                    <span class="plan-amount">$150.000</span>
+                                    <span class="plan-period">/ persona / mes (8 sesiones)</span>
                                 </div>
                                 <ul class="plan-features-list">
                                     <li class="plan-feature-row"><svg class="check" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>1x/sem ($100k) • 2x/sem ($150k) • 3x/sem ($195k) c/u</span></li>
+                                        </svg><span>2 sesiones semanales grupales (2 a 3 personas)</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Locación flexible: edificio, gym o estudio (CABA)</span></li>
                                     <li class="plan-feature-row"><svg class="check" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -866,35 +731,39 @@
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP SENS bonificada</span></li>
+                                        </svg><span>Membresía APP SENS bonificada 100%</span></li>
                                     <li class="plan-feature-row"><svg class="check" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento y corrección en vivo</span></li>
+                                        </svg><span>Seguimiento y corrección técnica en vivo con Nico</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
-                                    data-plan="Presencial Grupo - Dúo"
-                                    data-agent-action="select_plan_presencial_duo">Consultar Dúo</a>
+                                    data-plan="Presencial Grupal - 2x/Semana ($150.000 c/u)"
+                                    data-agent-action="select_plan_presencial_grupal_2x">Agendar Evaluación Grupal</a>
                             </div>
                         </div>
 
-                        <!-- 2. Tríos -->
+                        <!-- 2. 1x por Semana Grupal -->
                         <div class="carousel-slide">
                             <div class="train-plan-card">
-                                <span class="train-plan-badge">MÁXIMO AHORRO</span>
-                                <h3 class="plan-title">Presencial Trío (3 Personas)</h3>
-                                <div class="plan-concept-tagline">Grupo cerrado de 3 atletas manteniendo la supervisión técnica y progresión individualizada.</div>
+                                <h3 class="plan-title">1x por Semana</h3>
+                                <div class="plan-concept-tagline">Presencial Grupal (2 o 3 personas) • Con tu pareja, amigo o grupo reducido con atención personalizada.</div>
                                 <div class="plan-price-wrap">
-                                    <span class="plan-amount">$85k - $170k</span>
-                                    <span class="plan-period">/ persona / mes</span>
+                                    <span class="plan-amount">$100.000</span>
+                                    <span class="plan-period">/ persona / mes (4 sesiones)</span>
                                 </div>
                                 <ul class="plan-features-list">
                                     <li class="plan-feature-row"><svg class="check" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>1x/sem ($85k) • 2x/sem ($130k) • 3x/sem ($170k) c/u</span></li>
+                                        </svg><span>1 sesión semanal grupal (2 a 3 personas)</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Locación flexible: edificio, gym o estudio (CABA)</span></li>
                                     <li class="plan-feature-row"><svg class="check" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -904,16 +773,58 @@
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP SENS bonificada</span></li>
+                                        </svg><span>Membresía APP SENS bonificada 100%</span></li>
                                     <li class="plan-feature-row"><svg class="check" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento y corrección en vivo</span></li>
+                                        </svg><span>Seguimiento y corrección técnica en vivo con Nico</span></li>
                                 </ul>
                                 <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial Grupo - Trío"
-                                    data-agent-action="select_plan_presencial_trio">Consultar Trío</a>
+                                    data-plan="Presencial Grupal - 1x/Semana ($100.000 c/u)"
+                                    data-agent-action="select_plan_presencial_grupal_1x">Elegir 1x por Semana</a>
+                            </div>
+                        </div>
+
+                        <!-- 3. 3x por Semana Grupal -->
+                        <div class="carousel-slide">
+                            <div class="train-plan-card">
+                                <h3 class="plan-title">3x por Semana</h3>
+                                <div class="plan-concept-tagline">Presencial Grupal (2 o 3 personas) • Con tu pareja, amigo o grupo reducido con atención personalizada.</div>
+                                <div class="plan-price-wrap">
+                                    <span class="plan-amount">$195.000</span>
+                                    <span class="plan-period">/ persona / mes (12 sesiones)</span>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>3 sesiones semanales grupales (2 a 3 personas)</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Locación flexible: edificio, gym o estudio (CABA)</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Cuota de gimnasio / estudio incluida</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Membresía APP SENS bonificada 100%</span></li>
+                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Seguimiento y corrección técnica en vivo con Nico</span></li>
+                                </ul>
+                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
+                                    data-plan="Presencial Grupal - 3x/Semana ($195.000 c/u)"
+                                    data-agent-action="select_plan_presencial_grupal_3x">Elegir 3x por Semana</a>
                             </div>
                         </div>
                     </div>
@@ -922,8 +833,8 @@
                 <div class="carousel-dots" id="groupsDots">
                     <div class="carousel-dot active" data-index="0"></div>
                     <div class="carousel-dot" data-index="1"></div>
+                    <div class="carousel-dot" data-index="2"></div>
                 </div>
-            </div>
             </div>
 
             <!-- ============================================================ -->
@@ -1359,12 +1270,12 @@
                     <span>App</span>
                 </button>
 
-                <!-- Píldora de Categoría / Subir de Plan (Plan Free 7d ↑) -->
+                <!-- Píldora de Categoría / Modalidad Actual -->
                 <button type="button" class="pill pill-champagne" id="portalPlanBadge"
                     onclick="event.stopPropagation(); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();"
-                    title="Ver mi membresía y cómo escalar">
+                    title="Ver mi membresía y modalidades">
                     <span class="plan-status-dot"></span>
-                    <span id="portalPlanBadgeText">Plan Free (7d) ↑</span>
+                    <span id="portalPlanBadgeText">Presencial CABA</span>
                 </button>
 
                 <div class="user-avatar-wrap" id="userAvatarWrap">
@@ -1410,15 +1321,15 @@
                                         <span id="dropdownPlanStatusDot" class="sens-avatar-plan-status" style="color: #00210C !important;">Activo</span>
                                     </span>
                                 </div>
-                                <div id="dropdownUserPlan" class="sens-avatar-plan-title" style="font-size: 14px; font-weight: 800; color: #121214 !important; margin-top: 2px;">Plan Free (Prueba 7 Días)</div>
+                                <div id="dropdownUserPlan" class="sens-avatar-plan-title" style="font-size: 14px; font-weight: 800; color: #121214 !important; margin-top: 2px;">Seguimiento con Nico</div>
                                 <div id="dropdownPlanNextStepHint" class="sens-avatar-plan-hint" style="font-size: 11px; color: #575659 !important; line-height: 1.4; margin: 2px 0 8px 0;">
-                                    Escalá a App Premium ($24.900/mes o $59.900 Trimestral), Online 1:1 o Presencial CABA.
+                                    Modalidades oficiales: Presencial en CABA (Individual o Grupal) u Online 1:1 con Nico.
                                 </div>
                                 <button type="button" id="dropdownOpenUpgradeBtn"
                                     onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active'); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();"
                                     class="sens-avatar-upgrade-btn"
                                     style="background: #FBDEB9 !important; color: #271903 !important; border: 1px solid rgba(112, 91, 62, 0.25) !important; font-weight: 800; padding: 10px 14px; border-radius: 999px; box-shadow: 0 2px 8px rgba(112, 91, 62, 0.12);">
-                                    <span>Escalar mi Plan / Ver Ventajas →</span>
+                                    <span>Ver Modalidades y Planes →</span>
                                 </button>
                             </div>
                         </div>
@@ -2964,7 +2875,7 @@
             </section>
 
             <!-- =====================================================================
-                 VISTA DE ACTIVACIÓN / PAYWALL DE MEMBRESÍA (#activationPendingView)
+                 VISTA DE ACTIVACIÓN / SEGUIMIENTO SENS (#activationPendingView)
                  ===================================================================== -->
             <section class="portal-view" id="activationPendingView">
                 <div class="dash-welcome-card sens-soft-paywall-card" id="sensSoftPaywallCard"
@@ -2972,149 +2883,107 @@
                     <div style="display: flex; justify-content: center; margin-bottom: 16px;">
                         <span class="pill pill-champagne" id="paywallStatusBadge"
                             style="font-size: 10px; letter-spacing: 1.5px; font-weight: 800; text-transform: uppercase; background: #FAF7F2; color: #705B3E; border: 1px solid rgba(197,168,128,0.35); padding: 4px 12px; border-radius: 999px;">
-                            DÍA 8 • PERÍODO DE PRUEBA FINALIZADO
+                            ACTIVACIÓN DE MODALIDAD SENS
                         </span>
                     </div>
                     <h2 class="dash-heading" id="paywallMainHeading"
                         style="font-size: 1.7rem; margin-bottom: 12px; color: #121214; font-weight: 800;">
-                        Hola <span id="pendingUserName">Atleta</span>. <strong style="color: #705B3E;">Continuá tu evolución en SENS.</strong>
+                        Hola <span id="pendingUserName">Atleta</span>. <strong style="color: #705B3E;">Activá tu modalidad con Nico.</strong>
                     </h2>
                     <p class="dash-sub" id="paywallMainSub"
                         style="font-size: 0.92rem; line-height: 1.6; color: #575659; max-width: 580px; margin: 0 auto 24px;">
-                        Completaste tus 7 días de prueba en la App SENS. Elegí tu modalidad para conservar tu progreso, tu historial de sobrecarga progresiva y tu cálculo nutricional, o regalá un pase a un amigo para sumar +7 días sin cargo.
+                        El método SENS combina entrenamiento y nutrición personalizada con seguimiento humano 1 a 1 de Nico. La App SENS está 100% bonificada e incluida en tu plan. Elegí tu modalidad para comenzar:
                     </p>
 
                     <div
                         style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 14px; padding: 14px 18px; text-align: left; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                         <div>
                             <span
-                                style="font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 800; display: block; margin-bottom: 3px;">Modalidad Seleccionada</span>
-                            <strong id="pendingPlanName" style="font-size: 0.96rem; color: #121214;">App SENS Autónoma • Fuerza, Postura &amp; Nutrición</strong>
+                                style="font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 800; display: block; margin-bottom: 3px;">Modalidad de Entrenamiento</span>
+                            <strong id="pendingPlanName" style="font-size: 0.96rem; color: #121214;">Seguimiento Presencial CABA u Online 1:1</strong>
                         </div>
-                        <span style="font-size: 11.5px; color: #575659; font-variant-numeric: tabular-nums; font-weight: 600;">Mensual $24.900 ARS / Trimestral $59.900 ARS</span>
+                        <span style="font-size: 11.5px; color: #575659; font-variant-numeric: tabular-nums; font-weight: 600;">Presencial CABA • Online 1:1</span>
                     </div>
 
-                    <!-- Opciones de Suscripción Quiet Luxury (Pack Trimestral Recomendado vs Mensual) -->
+                    <!-- 2 Opciones Oficiales: Presencial CABA & Online 1:1 -->
                     <div id="sensPaywallOptionsGrid"
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; text-align: left; margin-bottom: 24px;">
-                        <!-- Opción 1: Pack Trimestral 90 Días (Recomendado) -->
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; text-align: left; margin-bottom: 24px;">
+                        <!-- Opción 1: Presencial CABA (Individual & Grupal) -->
                         <div
                             style="background: #FAF9F6; border: 1.5px solid #C5A880; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; position: relative; box-shadow: 0 8px 24px rgba(197, 168, 128, 0.12);">
                             <div>
                                 <div
                                     style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #121214; background: #E5CBA7; padding: 3px 8px; border-radius: 999px;">RECOMENDADO • 90 DÍAS</span>
-                                    <span style="font-size: 11px; font-weight: 800; color: #059669;">Ahorrás 20%</span>
+                                        style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #121214; background: #E5CBA7; padding: 3px 8px; border-radius: 999px;">CABA • EN VIVO</span>
+                                    <span style="font-size: 11px; font-weight: 800; color: #059669;">Gym Incluido</span>
                                 </div>
-                                <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Pack Trimestral (3 Meses)</h4>
-                                <div
-                                    style="font-size: 1.5rem; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; margin-bottom: 4px;">
-                                    $59.900 <span style="font-size: 12px; font-weight: 500; color: #71717A;">ARS</span>
-                                    <span style="font-size: 12px; font-weight: 600; color: #705B3E; margin-left: 6px;">/ USD $45</span>
+                                <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Presencial CABA (1 a 1 y Grupal)</h4>
+                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-size: 11.5px; font-variant-numeric: tabular-nums;">
+                                    <div style="color: #121214; margin-bottom: 4px;"><strong>• Individual:</strong> 1x $130k | 2x $200k | 3x $260k / mes</div>
+                                    <div style="color: #705B3E;"><strong>• Grupal (2-3 pers):</strong> 1x $100k | 2x $150k | 3x $195k c/u</div>
                                 </div>
                                 <p style="font-size: 12px; color: #575659; margin: 0; line-height: 1.45;">
-                                    Ciclo completo de 12 semanas de recomposición corporal, sobrecarga progresiva y permiso social de fin de semana.
+                                    Entrenamiento en vivo con corrección biomecánica. Cuota de gimnasio / estudio y App SENS bonificadas 100%.
                                 </p>
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <button type="button" class="btn btn-primary btn-full" id="btnPaywallTrimestralARS"
-                                    data-agent-action="subscribe_quarterly_ars"
-                                    style="padding: 12px 16px; font-size: 12px; font-weight: 800; background: #121214; color: #FFFFFF; border-radius: 999px; border: none; cursor: pointer;">
-                                    Activar Pack Trimestral ($59.900 ARS) →
-                                </button>
-                                <button type="button" class="btn btn-outline btn-full" id="btnPaywallTrimestralUSD"
-                                    data-agent-action="subscribe_quarterly_usd"
-                                    style="padding: 10px 14px; font-size: 11.5px; font-weight: 700; border: 1px solid rgba(197,168,128,0.4); color: #705B3E; background: transparent; border-radius: 999px; cursor: pointer;">
-                                    Abonar en USD ($45 Internacional)
-                                </button>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20coordinar%20mi%20evaluaci%C3%B3n%20para%20entrenamiento%20Presencial%20Individual%201%20a%201%20en%20CABA."
+                                    target="_blank" rel="noopener" class="btn btn-primary btn-full" id="btnPaywallPresencial1a1"
+                                    style="padding: 12px 16px; font-size: 12px; font-weight: 800; background: #121214; color: #FFFFFF; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
+                                    Coordinar Presencial Individual →
+                                </a>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20coordinar%20mi%20evaluaci%C3%B3n%20para%20entrenamiento%20Presencial%20Grupal%20en%20CABA."
+                                    target="_blank" rel="noopener" class="btn btn-outline btn-full" id="btnPaywallPresencialGrupo"
+                                    style="padding: 10px 14px; font-size: 11.5px; font-weight: 700; border: 1px solid rgba(197,168,128,0.5); color: #705B3E; background: transparent; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
+                                    Coordinar Presencial Grupal (c/u)
+                                </a>
                             </div>
                         </div>
 
-                        <!-- Opción 2: Suscripción Mensual Flexible -->
+                        <!-- Opción 2: Online 1:1 a Distancia -->
                         <div
                             style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
                             <div>
                                 <div
                                     style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E;">MENSUAL FLEXIBLE • 30 DÍAS</span>
-                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#705B3E"
-                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="2" y="5" width="20" height="14" rx="2" />
-                                        <line x1="2" y1="10" x2="22" y2="10" />
-                                    </svg>
+                                        style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E;">A DISTANCIA • 1 A 1</span>
+                                    <span style="font-size: 11px; font-weight: 700; color: #575659;">App Bonificada</span>
                                 </div>
-                                <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Membresía Mensual</h4>
-                                <div
-                                    style="font-size: 1.5rem; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; margin-bottom: 4px;">
-                                    $24.900 <span style="font-size: 12px; font-weight: 500; color: #71717A;">ARS / mes</span>
-                                    <span style="font-size: 12px; font-weight: 600; color: #705B3E; margin-left: 6px;">/ USD $19</span>
+                                <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Seguimiento Online 1:1 con Nico</h4>
+                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-size: 11.5px; font-variant-numeric: tabular-nums;">
+                                    <div style="color: #705B3E; margin-bottom: 4px;"><strong>• Online Premium:</strong> $90.000 / mes (Videollamadas 60m)</div>
+                                    <div style="color: #121214;"><strong>• Online Básico:</strong> $40.000 / mes (Plan a medida + WhatsApp)</div>
                                 </div>
                                 <p style="font-size: 12px; color: #575659; margin: 0; line-height: 1.45;">
-                                    Acceso completo mes a mes sin permanencia. Vía Mercado Pago (Argentina) o tarjeta internacional (USD $19).
+                                    Planificación personalizada por Nico, corrección por video, soporte continuo y App SENS bonificada 100%.
                                 </p>
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <button type="button" class="btn btn-outline btn-full" id="btnPaywallMercadoPago"
-                                    data-agent-action="subscribe_ars_mercadopago"
-                                    style="padding: 12px 16px; font-size: 12px; font-weight: 800; color: #121214; border: 1px solid rgba(18,18,20,0.22); background: transparent; border-radius: 999px; cursor: pointer;">
-                                    Suscribirme Mensual ($24.900 ARS) →
-                                </button>
-                                <button type="button" class="btn btn-outline btn-full" id="btnPaywallInternationalUSD"
-                                    data-agent-action="subscribe_usd_international"
-                                    style="padding: 10px 14px; font-size: 11.5px; font-weight: 700; border: 1px solid rgba(197,168,128,0.4); color: #705B3E; background: transparent; border-radius: 999px; cursor: pointer;">
-                                    Suscribirme en USD ($19 / mes)
-                                </button>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20comenzar%20mi%20Seguimiento%20Online%20Premium%201%20a%201%20(%2490.000%2Fmes)."
+                                    target="_blank" rel="noopener" class="btn btn-outline btn-full" id="btnPaywallOnlinePremium"
+                                    style="padding: 12px 16px; font-size: 12px; font-weight: 800; color: #121214; border: 1px solid rgba(18,18,20,0.22); background: transparent; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
+                                    Coordinar Online Premium ($90k) →
+                                </a>
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20comenzar%20mi%20Seguimiento%20Online%20B%C3%A1sico%20(%2440.000%2Fmes)."
+                                    target="_blank" rel="noopener" class="btn btn-outline btn-full" id="btnPaywallOnlineBasic"
+                                    style="padding: 10px 14px; font-size: 11.5px; font-weight: 700; border: 1px solid rgba(197,168,128,0.5); color: #705B3E; background: transparent; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
+                                    Coordinar Online Básico ($40k)
+                                </a>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Opción 3: Viral Loop / Invitar a un amigo (+7 días ambos) -->
-                    <div
-                        style="background: #FAF7F2; border: 1px solid rgba(197, 168, 128, 0.35); border-radius: 18px; padding: 20px 22px; text-align: left; margin-bottom: 24px;">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#705B3E"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                </svg>
-                                <span
-                                    style="font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E;">REGALAR PASE DE 14 DÍAS A UN AMIGO • +7 DÍAS GRATIS PARA VOS</span>
-                            </div>
-                            <span id="paywallReferralCodeBadge"
-                                style="font-size: 11px; font-weight: 800; color: #FFFFFF; background: #121214; padding: 4px 10px; border-radius: 999px; font-variant-numeric: tabular-nums; letter-spacing: 1px;">SENS-VIP</span>
-                        </div>
-                        <p style="font-size: 12px; color: #575659; margin: 0 0 14px 0; line-height: 1.5;">
-                            Compartí tu link único de invitación. Cuando tu amigo complete la evaluación y su primer registro, ambos suman <strong style="color: #705B3E;">+7 días reales de acceso completo</strong> sin cargo.
-                        </p>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button type="button" class="btn btn-outline btn-sm" id="btnPaywallCopyReferral"
-                                data-agent-action="copy_referral_link"
-                                style="flex: 1; min-width: 160px; padding: 10px 14px; font-size: 11.5px; font-weight: 700; color: #121214; border: 1px solid rgba(18,18,20,0.18); background: #FFFFFF; border-radius: 999px; cursor: pointer;">
-                                Copiar Link de Invitación
-                            </button>
-                            <button type="button" class="btn btn-primary btn-sm" id="btnPaywallShareReferralWA"
-                                data-agent-action="share_referral_whatsapp"
-                                style="flex: 1; min-width: 160px; padding: 10px 14px; font-size: 11.5px; font-weight: 800; background: #121214; color: #FFFFFF; border-radius: 999px; border: none; cursor: pointer;">
-                                Regalar Pase por WhatsApp →
-                            </button>
                         </div>
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <a href="#" id="btnNotifyPaymentWA" class="btn btn-outline btn-full" target="_blank"
+                        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20activar%20mi%20plan%20en%20SENS." id="btnNotifyPaymentWA" class="btn btn-outline btn-full" target="_blank"
                             rel="noopener"
                             style="padding: 12px 20px; font-size: 12.5px; font-weight: 700; color: #705B3E; border: 1px solid rgba(197,168,128,0.4); border-radius: 999px; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                            Ya aboné o entreno 1 a 1 con Nico • Validar por WhatsApp →
+                            Hablar directo con Nico por WhatsApp →
                         </a>
                         <button type="button" class="btn btn-outline btn-full" id="btnRefreshActivationStatus"
                             style="font-size: 11.5px; font-weight: 600; color: #71717A; border: 1px solid rgba(18,18,20,0.1); background: transparent; border-radius: 999px; padding: 8px 16px; cursor: pointer;">
-                            Verificar estado de mi suscripción
+                            Verificar estado de mi membresía
                         </button>
                     </div>
                 </div>
@@ -3133,7 +3002,7 @@
                     <span id="dashCircadianDate" style="display: none !important;"></span>
                 </div>
 
-                <!-- 0.1. Pill Sutil de Prueba Gratuita (7 Días) & Viral Loop (Inyectada por checkUserAccessStatus) -->
+                <!-- 0.1. Pill Ejecutiva de Modalidad Activa SENS (Inyectada por checkUserAccessStatus) -->
                 <div id="sensTrialStatusPillContainer" style="display: none; margin-bottom: 14px;"></div>
 
                 <!-- 0.2. Acceso Rápido PWA para Alumno (Instalar en Pantalla de Inicio) -->
@@ -3465,7 +3334,7 @@
                         </div>
                         <div class="sens-video-top-badges">
                             <div class="sens-card-badge-row">
-                                <span class="sens-modality-pill auto" id="dashWorkoutModalityPill">Autónomo</span>
+                                <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial</span>
                                 <div class="sens-video-dots-indicator" id="dashWorkoutDotsIndicator"></div>
                             </div>
                             <div class="sens-card-badge-row">
@@ -3979,7 +3848,7 @@
 
                 
 </div>
-                <!-- 7. Card de Upsell Nativo al Coaching 1 a 1 con Nico (Solo para usuarios en app_trial o app_subscribed) -->
+                <!-- 7. Card de Contacto Directo al Coaching 1 a 1 con Nico -->
                 <div class="sens-nico-1on1-upsell-card" id="dashNico1on1UpsellCard"
                     style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 24px; padding: 22px; margin-top: 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.04);">
                     <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 240px;">
@@ -4003,7 +3872,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Estoy%20usando%20la%20App%20SENS%20y%20quiero%20consultar%20disponibilidad%20de%20cupos%20para%20entrenamiento%201%20a%201."
+                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Estoy%20en%20SENS%20y%20quiero%20consultar%20disponibilidad%20de%20cupos%20para%20coaching%20presencial%20u%20online."
                         target="_blank" rel="noopener" class="sens-nico-upsell-cta-btn"
                         data-agent-action="inquire_nico_1on1_upsell"
                         style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: 1px solid rgba(255,255,255,0.15) !important; border-radius: 9999px !important; font-weight: 700 !important; font-size: 12.5px !important; padding: 12px 22px !important; white-space: nowrap !important; cursor: pointer !important; text-decoration: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; box-shadow: 0 4px 16px rgba(18, 18, 20, 0.16) !important;">
@@ -4902,139 +4771,77 @@
                                     style="font-size: 10px; font-weight: 800; color: #00210C; background: #9CF6B0; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums;">ACTIVO</span>
                             </div>
                             <h3 id="profileLadderCurrentTitle"
-                                style="font-size: 1.35rem; font-weight: 800; color: #121214; margin: 0 0 4px 0; letter-spacing: -0.01em;">Plan
-                                Free (Prueba 7 Días)</h3>
+                                style="font-size: 1.35rem; font-weight: 800; color: #121214; margin: 0 0 4px 0; letter-spacing: -0.01em;">Seguimiento con Nico</h3>
                             <p id="profileLadderCurrentDesc"
                                 style="font-size: 12.5px; color: #575659; margin: 0; line-height: 1.45;">
-                                Rutina base autónoma de 3 días + Cálculo nutricional Mifflin-St Jeor + Sistema de Rachas
-                                y Hábitos.
+                                Entrenamiento y nutrición personalizada con Nico. App SENS bonificada 100% incluida con tu plan.
                             </p>
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <button type="button" class="btn btn-primary btn-sm"
                                 onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal()"
                                 style="background: #121214 !important; color: #FFFFFF !important; border: none !important; border-radius: 999px; font-weight: 800; padding: 10px 18px; font-size: 12px;">
-                                Comparar Planes y Escalar →
-                            </button>
-                            <button type="button" class="btn btn-outline btn-sm" id="btnProfileShareGuestPass"
-                                style="background: #FBDEB9 !important; border: 1px solid rgba(112, 91, 62, 0.25) !important; color: #271903 !important; border-radius: 999px; font-weight: 800; padding: 10px 16px; font-size: 12px;">
-                                Invitar Amigo (+7 días gratis)
+                                Ver Modalidades y Planes →
                             </button>
                         </div>
                     </div>
 
                     <div
                         style="margin-bottom: 12px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #705B3E;">
-                        PLANES Y PRECIOS OFICIALES SENS • ALINEADOS A LA WEB DE INICIO:
+                        MODALIDADES Y PRECIOS OFICIALES SENS • ALINEADOS A LA WEB DE INICIO:
                     </div>
 
                     <div id="profileFourTiersGrid"
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 14px;">
-                        <!-- Nivel 1: Plan Free 7 Días ($0) -->
-                        <div class="sens-profile-tier-box" data-tier-box="app_trial"
-                            style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+                        <!-- Nivel 1: Seguimiento Presencial CABA (Individual & Grupal) -->
+                        <div class="sens-profile-tier-box" data-tier-box="presencial_1on1"
+                            onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('presencial_1on1')"
+                            style="cursor: pointer; background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; box-shadow: 0 8px 24px rgba(197, 168, 128, 0.12);">
                             <div>
                                 <div
                                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">1.
-                                        PLAN FREE</span>
+                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">1. PRESENCIAL CABA</span>
                                     <span class="tier-box-badge"
-                                        style="font-size: 9.5px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 8px; border-radius: 999px;">100% OFF • 7 DÍAS</span>
+                                        style="font-size: 9.5px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 8px; border-radius: 999px;">Gym Incluido</span>
                                 </div>
-                                <strong
-                                    style="font-size: 14px; color: #121214; display: block; margin-bottom: 2px;">Prueba
-                                    Autónoma</strong>
-                                <div style="font-size: 1.2rem; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; margin-bottom: 6px;">
-                                    $0 <span style="font-size: 11px; font-weight: 500; color: #575659;">/ 7 días gratis</span>
+                                <strong style="font-size: 14.5px; color: #121214; display: block; margin-bottom: 6px;">Individual 1:1 o Grupal (2 a 3 personas)</strong>
+                                <div style="background: #F4F3F1; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 11px; font-variant-numeric: tabular-nums; line-height: 1.5;">
+                                    <div style="color: #121214; margin-bottom: 3px;"><strong>• Individual 1 a 1:</strong> 1x $130k | 2x $200k | 3x $260k / mes</div>
+                                    <div style="color: #705B3E;"><strong>• Grupal (2-3 pers):</strong> 1x $100k | 2x $150k | 3x $195k / mes c/u</div>
                                 </div>
-                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Rutina base de 3 días en video HD y timer + cálculo basal y macros Mifflin-St Jeor + sistema de rachas diarias.</p>
+                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Entrenamiento presencial en vivo con Nico en CABA (1x, 2x o 3x/sem) con cuota de gimnasio y App SENS bonificadas 100%.</p>
                             </div>
-                            <span style="font-size: 11px; color: #705B3E; font-weight: 800;">+7 días gratis por amigo invitado ✓</span>
+                            <span style="font-size: 11.5px; color: #121214; font-weight: 800; background: #FBDEB9; padding: 7px 12px; border-radius: 999px; text-align: center;">Agendar Evaluación Presencial →</span>
                         </div>
 
-                        <!-- Nivel 2: App SENS Premium ($24.900 Mensual / $59.900 Trimestral -20% OFF) -->
-                        <div class="sens-profile-tier-box" data-tier-box="app_subscribed"
-                            onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('app_subscribed')"
-                            style="cursor: pointer; background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; box-shadow: 0 8px 24px rgba(197, 168, 128, 0.12);">
-                            <div>
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                    <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">2.
-                                        APP SENS PREMIUM</span>
-                                    <span class="tier-box-badge"
-                                        style="font-size: 9px; font-weight: 800; color: #271903; background: #FBDEB9; padding: 2px 8px; border-radius: 999px;">MÁS ELEGIDO • -20%</span>
-                                </div>
-                                <strong style="font-size: 14px; color: #121214; display: block; margin-bottom: 6px;">App
-                                    Autónoma Ilimitada</strong>
-                                <div style="background: #F4F3F1; border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; font-size: 11px; font-variant-numeric: tabular-nums;">
-                                    <div style="display: flex; justify-content: space-between; color: #121214; margin-bottom: 3px;">
-                                        <span>• Pack 90 Días (3 Meses):</span>
-                                        <strong>$59.900 <span style="color:#059669;">(USD $45)</span></strong>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; color: #575659;">
-                                        <span>• Membresía Mensual:</span>
-                                        <strong>$24.900 / mes <span style="color:#77767B;">(USD $19)</span></strong>
-                                    </div>
-                                </div>
-                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Acceso ilimitado a +1300 Ejercicios HD, Nutrición de precisión + 500 alimentos y 12 semanas de progresión.</p>
-                            </div>
-                            <span style="font-size: 11.5px; color: #121214; font-weight: 800; background: #FBDEB9; padding: 7px 12px; border-radius: 999px; text-align: center;">Activar App Premium →</span>
-                        </div>
-
-                        <!-- Nivel 3: Seguimiento Online 1:1 ($40.000 Básico / $90.000 Premium) -->
+                        <!-- Nivel 2: Seguimiento Online 1:1 ($40.000 Básico / $90.000 Premium) -->
                         <div class="sens-profile-tier-box" data-tier-box="online_1on1"
                             onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('online_1on1')"
-                            style="cursor: pointer; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
+                            style="cursor: pointer; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
                             <div>
                                 <div
                                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">3.
-                                        ONLINE 1:1 CON NICO</span>
+                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">2. ONLINE 1:1 CON NICO</span>
                                     <span class="tier-box-badge"
                                         style="font-size: 9.5px; font-weight: 800; color: #705B3E; background: rgba(251,222,185,0.45); padding: 2px 8px; border-radius: 999px;">A Distancia</span>
                                 </div>
                                 <strong
-                                    style="font-size: 14px; color: #121214; display: block; margin-bottom: 6px;">Online
-                                    Básico o Premium</strong>
-                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; font-size: 11px; font-variant-numeric: tabular-nums;">
-                                    <div style="display: flex; justify-content: space-between; color: #121214; margin-bottom: 3px;">
+                                    style="font-size: 14.5px; color: #121214; display: block; margin-bottom: 6px;">Online Básico o Premium</strong>
+                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 11px; font-variant-numeric: tabular-nums; line-height: 1.5;">
+                                    <div style="display: flex; justify-content: space-between; color: #705B3E; margin-bottom: 3px;">
+                                        <span>• Online Premium:</span>
+                                        <strong>$90.000 / mes (Videollamadas 60m)</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; color: #121214;">
                                         <span>• Online Básico:</span>
                                         <strong>$40.000 / mes</strong>
                                     </div>
-                                    <div style="display: flex; justify-content: space-between; color: #705B3E;">
-                                        <span>• Online Premium (VIP):</span>
-                                        <strong>$90.000 / mes</strong>
-                                    </div>
                                 </div>
-                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Rutina a medida por Nico, soporte por WhatsApp, corrección técnica por video, videollamadas y App bonificada 100%.</p>
+                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Rutina a medida por Nico, soporte por WhatsApp, corrección técnica por video, videollamadas y App SENS bonificada 100%.</p>
                             </div>
-                            <span style="font-size: 11px; color: #705B3E; font-weight: 800;">Postularme a Online 1:1 →</span>
-                        </div>
-
-                        <!-- Nivel 4: Seguimiento Presencial CABA (Individual 1x $130k, 2x $200k, 3x $260k | Grupal Dúo $100k-$195k, Trío $85k-$170k) -->
-                        <div class="sens-profile-tier-box" data-tier-box="presencial_1on1"
-                            onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('presencial_1on1')"
-                            style="cursor: pointer; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
-                            <div>
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                    <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">4.
-                                        PRESENCIAL CABA</span>
-                                    <span class="tier-box-badge"
-                                        style="font-size: 9.5px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 8px; border-radius: 999px;">Gym Incluido</span>
-                                </div>
-                                <strong style="font-size: 14px; color: #121214; display: block; margin-bottom: 6px;">Individual 1:1 o Grupal (Dúo/Trío)</strong>
-                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; font-size: 10.5px; font-variant-numeric: tabular-nums; line-height: 1.45;">
-                                    <div style="color: #121214; margin-bottom: 2px;"><strong>• 1 a 1:</strong> 1x $130k | 2x $200k | 3x $260k</div>
-                                    <div style="color: #705B3E;"><strong>• Dúo:</strong> $100k-$195k • <strong>Trío:</strong> $85k-$170k</div>
-                                </div>
-                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Entrená en vivo con Nico en CABA (1x, 2x o 3x/sem) con cuota de gimnasio y App SENS bonificadas.</p>
-                            </div>
-                            <span style="font-size: 11px; color: #705B3E; font-weight: 800;">Agendar Evaluación Presencial →</span>
+                            <span style="font-size: 11px; color: #705B3E; font-weight: 800; text-align: center;">Postularme a Online 1:1 →</span>
                         </div>
                     </div>
                 </div>
@@ -5382,29 +5189,22 @@
                         </button>
                         <div class="coach-business-tiers-banner" id="coachBusinessTiersBanner" style="display: none;">
                             <div class="coach-tier-mini-card">
-                                <span class="tier-mini-tag">NIVEL 1 • HIGH-TICKET CABA</span>
+                                <span class="tier-mini-tag">NIVEL 1 • PRESENCIAL CABA</span>
                                 <strong>Presencial Individual 1:1</strong>
                                 <span class="tier-mini-price">1x $130k • 2x $200k • 3x $260k</span>
-                                <small>Seguimiento 1:1 en vivo + Portal personalizado</small>
+                                <small>Seguimiento 1:1 en vivo + App SENS bonificada 100%</small>
                             </div>
                             <div class="coach-tier-mini-card">
-                                <span class="tier-mini-tag">NIVEL 2 • RENTABILIDAD HORA</span>
-                                <strong>Presencial Grupal (Dúo / Trío)</strong>
-                                <span class="tier-mini-price">Dúo $100k-$195k • Trío $85k-$170k</span>
-                                <small>Multiplica x2/x3 el valor hora de Nico con ficha propia</small>
+                                <span class="tier-mini-tag">NIVEL 2 • PRESENCIAL CABA</span>
+                                <strong>Presencial Grupal (2-3 personas)</strong>
+                                <span class="tier-mini-price">1x $100k • 2x $150k • 3x $195k por persona</span>
+                                <small>Grupos reducidos. Mismo método y seguimiento con Nico</small>
                             </div>
                             <div class="coach-tier-mini-card">
-                                <span class="tier-mini-tag">NIVEL 3 • ESCALA REMOTA</span>
+                                <span class="tier-mini-tag">NIVEL 3 • ONLINE CON NICO</span>
                                 <strong>Online Personalizado 1:1</strong>
                                 <span class="tier-mini-price">Premium $90k • Básico $40k</span>
-                                <small>Rutina y nutrición prescriptas por Nico a distancia</small>
-                            </div>
-                            <div class="coach-tier-mini-card highlight-saas">
-                                <span class="tier-mini-tag">NIVEL 4 • SAAS ESCALABLE</span>
-                                <strong>Suscripción App Generalista</strong>
-                                <span class="tier-mini-price">$19.900 / mes <small>(Payback Mes 1 • LTV
-                                        5.4x)</small></span>
-                                <small>Autónomo por algoritmo. Embudo de upsell al 1:1</small>
+                                <small>Rutina y nutrición prescriptas por Nico + App SENS</small>
                             </div>
                         </div>
                     </div>
@@ -5459,12 +5259,9 @@
                                     style="cursor: pointer; border: none; flex-shrink: 0;">Presencial 1:1</button>
                                 <button type="button" class="pill pill-dark coach-filter-tier"
                                     data-tier="presencial_grp"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;">Grupal Dúo/Trío</button>
+                                    style="cursor: pointer; border: none; flex-shrink: 0;">Presencial Grupal</button>
                                 <button type="button" class="pill pill-dark coach-filter-tier" data-tier="online"
                                     style="cursor: pointer; border: none; flex-shrink: 0;">Online 1:1</button>
-                                <button type="button" class="pill pill-dark coach-filter-tier" data-tier="app_sub"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;">Suscripción App
-                                    ($19.900)</button>
                             </div>
                         </div>
 
@@ -8112,7 +7909,7 @@
                 </div>
                 <div class="coach-sheet-action-text">
                     <strong>Cambiar Plan / Membresía</strong>
-                    <span>1:1 VIP, Grupal Dúo/Trío, Online o Suscripción App</span>
+                    <span>Presencial CABA (1:1 / Grupal) u Online 1:1</span>
                 </div>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6" />
@@ -8187,41 +7984,74 @@
             <button type="button" class="sheet-close-btn" id="btnClosePlanSheet" aria-label="Cerrar">&times;</button>
         </div>
         <div class="coach-plan-options-container"
-            style="padding: 14px 20px 24px 20px; display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto;">
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip">
+            style="padding: 14px 20px 24px 20px; display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto;">
+            
+            <div style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C5A880; margin-top: 4px; margin-bottom: 2px;">
+                PRESENCIAL INDIVIDUAL 1 A 1 (CABA)
+            </div>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip" data-plan-name="Presencial 1 a 1 (1x por semana)">
                 <div class="plan-opt-left">
-                    <strong>1. Presencial Individual 1 a 1 (CABA)</strong>
-                    <span>1x ($130k) • 2x ($200k) • 3x ($260k) / mes • Atención exclusiva</span>
+                    <strong>Presencial 1:1 • 1x por semana ($130.000 / mes)</strong>
+                    <span>4 sesiones al mes en vivo + Gym incluido</span>
                 </div>
-                <span class="pill pill-champagne">1:1 VIP</span>
+                <span class="pill pill-champagne">1x VIP</span>
             </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group">
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip" data-plan-name="Presencial 1 a 1 (2x por semana)">
                 <div class="plan-opt-left">
-                    <strong>2. Presencial Grupal (Dúo / Trío CABA)</strong>
-                    <span>Dúo ($100k-$195k) • Trío ($85k-$170k) • Seguimiento individual en App</span>
+                    <strong>Presencial 1:1 • 2x por semana ($200.000 / mes)</strong>
+                    <span>8 sesiones al mes en vivo + Gym incluido</span>
                 </div>
-                <span class="pill pill-dark">Dúo / Trío</span>
+                <span class="pill pill-champagne">2x VIP</span>
             </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_premium">
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip" data-plan-name="Presencial 1 a 1 (3x por semana)">
                 <div class="plan-opt-left">
-                    <strong>3A. Online Personalizado Premium ($90.000/mes)</strong>
-                    <span>Videollamadas con Nico, corrección por video y plan 100% a medida</span>
+                    <strong>Presencial 1:1 • 3x por semana ($260.000 / mes)</strong>
+                    <span>12 sesiones al mes en vivo + Gym incluido</span>
                 </div>
-                <span class="pill pill-champagne">Online VIP</span>
+                <span class="pill pill-champagne">3x VIP</span>
             </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_basic">
+
+            <div style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C5A880; margin-top: 10px; margin-bottom: 2px;">
+                PRESENCIAL GRUPAL (2 A 3 PERSONAS • CABA)
+            </div>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group" data-plan-name="Presencial Grupal (1x por semana)">
                 <div class="plan-opt-left">
-                    <strong>3B. Online Asesorado Básico ($40.000/mes)</strong>
-                    <span>Programación mensual de entrenamiento y nutrición por Nico</span>
+                    <strong>Grupal • 1x por semana ($100.000 / mes por pers.)</strong>
+                    <span>4 sesiones al mes por persona + Gym incluido</span>
                 </div>
-                <span class="pill pill-dark">Online</span>
+                <span class="pill pill-dark">Grupal 1x</span>
             </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_app_subscription">
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group" data-plan-name="Presencial Grupal (2x por semana)">
                 <div class="plan-opt-left">
-                    <strong>4. Suscripción App Generalista ($19.900/mes)</strong>
-                    <span>Acceso autónomo sin horas 1:1 de Nico • Rutinas y macros por objetivo</span>
+                    <strong>Grupal • 2x por semana ($150.000 / mes por pers.) [Más elegido]</strong>
+                    <span>8 sesiones al mes por persona + Gym incluido</span>
                 </div>
-                <span class="pill pill-dark">App SaaS</span>
+                <span class="pill pill-champagne">Grupal 2x</span>
+            </button>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group" data-plan-name="Presencial Grupal (3x por semana)">
+                <div class="plan-opt-left">
+                    <strong>Grupal • 3x por semana ($195.000 / mes por pers.)</strong>
+                    <span>12 sesiones al mes por persona + Gym incluido</span>
+                </div>
+                <span class="pill pill-dark">Grupal 3x</span>
+            </button>
+
+            <div style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C5A880; margin-top: 10px; margin-bottom: 2px;">
+                ONLINE 1 A 1 CON NICO
+            </div>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_premium" data-plan-name="Online 1:1 Premium (Seguimiento Diario)">
+                <div class="plan-opt-left">
+                    <strong>Online 1:1 Premium ($90.000 / mes)</strong>
+                    <span>Videollamadas 1:1, corrección técnica por video y WhatsApp directo</span>
+                </div>
+                <span class="pill pill-champagne">Online Premium</span>
+            </button>
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_basic" data-plan-name="Online 1:1 Básico">
+                <div class="plan-opt-left">
+                    <strong>Online 1:1 Básico ($40.000 / mes)</strong>
+                    <span>Rutina prescripta por Nico, balance calórico mensual y soporte por chat</span>
+                </div>
+                <span class="pill pill-dark">Online Básico</span>
             </button>
         </div>
     </div>
@@ -8651,7 +8481,7 @@
                                     style="margin-bottom: 0; font-size: 12px; height: 36px;">
                                     <option value="presencial">Presencial 1:1 con Nico</option>
                                     <option value="online">Online Asesorado (App)</option>
-                                    <option value="mixto">Mixto (Presencial + Autónomo)</option>
+                                    <option value="mixto">Mixto (Presencial + Online)</option>
                                 </select>
                             </div>
                             <div>
@@ -9010,7 +8840,7 @@
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
-                Instalar SENS (Gratis)
+                Instalar SENS App
             </button>
             <button type="button" class="btn-pwa-secondary-dismiss" onclick="dismissPwaMarketingPopup(true)">
                 Ahora no
@@ -9103,13 +8933,13 @@
                 <div>
                     <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                         <span
-                            style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #705B3E;">ESCALERA DE PLANES SENS</span>
+                            style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #705B3E;">MODALIDADES SENS</span>
                         <span id="modalCurrentPlanBadge"
-                            style="font-size: 9.5px; font-weight: 800; color: #121214; background: #E5CBA7; padding: 3px 10px; border-radius: 999px; font-variant-numeric: tabular-nums;">Plan Actual: Plan Free (7d)</span>
+                            style="font-size: 9.5px; font-weight: 800; color: #121214; background: #E5CBA7; padding: 3px 10px; border-radius: 999px; font-variant-numeric: tabular-nums;">Modalidad Oficial SENS</span>
                     </div>
-                    <h3 style="font-size: 1.35rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">Tu Plan Actual y Cómo Escalar en SENS</h3>
+                    <h3 style="font-size: 1.35rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">Modalidades Oficiales de Entrenamiento SENS</h3>
                     <p style="font-size: 12px; color: #575659; margin: 0; line-height: 1.45;">
-                        Compará las ventajas de cada modalidad: desde App Autónoma hasta Seguimiento 1 a 1 con Nico en CABA u Online.
+                        Elegí el seguimiento que mejor se adapte a tus objetivos: Presencial en CABA (Individual o Grupal) u Online 1:1 a distancia con Nico.
                     </p>
                 </div>
                 <button type="button" onclick="window.closeSensPlansUpgradeModal && window.closeSensPlansUpgradeModal()"
@@ -9117,108 +8947,72 @@
                     style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); color: #121214; width: 34px; height: 34px; border-radius: 50%; font-size: 15px; font-weight: 700; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">✕</button>
             </div>
 
-            <!-- Grid de los 4 Niveles -->
+            <!-- Grid de las 2 Modalidades Oficiales -->
             <div
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 14px; margin-bottom: 20px;">
-                <!-- 1. PLAN FREE -->
-                <div class="sens-modal-tier-card" data-modal-tier="app_trial"
-                    style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 18px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                <!-- 1. SEGUIMIENTO PRESENCIAL CABA -->
+                <div class="sens-modal-tier-card" data-modal-tier="presencial_1on1"
+                    style="background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 18px; padding: 20px 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 8px 24px rgba(197, 168, 128, 0.12);">
                     <div>
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-size: 9px; font-weight: 800; color: #705B3E; letter-spacing: 0.9px;">1. PLAN FREE</span>
+                            <span style="font-size: 9px; font-weight: 800; color: #705B3E; letter-spacing: 0.9px;">1. PRESENCIAL CABA</span>
                             <span class="modal-tier-status-tag"
-                                style="font-size: 9px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 7px; border-radius: 999px;">7 Días Gratis</span>
+                                style="font-size: 9px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 7px; border-radius: 999px;">Gym Incluido</span>
                         </div>
-                        <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">Prueba Autónoma</h4>
+                        <h4 style="font-size: 1.1rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">En Vivo con Nico (Palermo / Belgrano)</h4>
                         <div
-                            style="font-size: 1.25rem; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; margin-bottom: 8px;">
-                            $0 <span style="font-size: 10.5px; font-weight: 500; color: #71717A;">/ 7 días</span></div>
-                        <ul
-                            style="list-style: none; padding: 0; margin: 0; font-size: 11.2px; color: #575659; display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
-                            <li>✓ Rutina base 3 días en video HD</li>
-                            <li>✓ Calorías y macros Mifflin-St Jeor</li>
-                            <li>✓ Timer de series y descansos</li>
-                            <li>✓ +7 días gratis por amigo invitado</li>
-                        </ul>
-                    </div>
-                    <button type="button" id="btnModalShareFreeRef"
-                        style="width: 100%; background: #FAF9F6; color: #705B3E; border: 1px solid rgba(197,168,128,0.35); border-radius: 999px; padding: 9px 10px; font-size: 11px; font-weight: 700; cursor: pointer;">
-                        Sumar +7 Días Invitando Amigo →
-                    </button>
-                </div>
-
-                <!-- 2. PLAN APP PREMIUM (MENSUAL O 3 MESES) -->
-                <div class="sens-modal-tier-card" data-modal-tier="app_subscribed"
-                    style="background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 18px; padding: 18px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 8px 24px rgba(197, 168, 128, 0.12);">
-                    <div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-size: 9px; font-weight: 800; color: #705B3E; letter-spacing: 0.9px;">2. PLAN PREMIUM</span>
-                            <span class="modal-tier-status-tag"
-                                style="font-size: 8.5px; font-weight: 800; color: #121214; background: #E5CBA7; padding: 2px 7px; border-radius: 999px;">MÁS ELEGIDO</span>
-                        </div>
-                        <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">App SENS Ilimitada</h4>
-                        <div
-                            style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; font-variant-numeric: tabular-nums;">
-                            <div
-                                style="display: flex; justify-content: space-between; font-size: 11px; color: #121214; margin-bottom: 3px;">
-                                <span>• Pack 3 Meses:</span>
-                                <strong>$59.900 ARS <span style="color:#059669;font-weight:700;">(-20%)</span></strong>
-                            </div>
-                            <div
-                                style="display: flex; justify-content: space-between; font-size: 11px; color: #575659;">
-                                <span>• Mensual:</span>
-                                <strong>$24.900 ARS <span style="color:#71717A;font-weight:400;">(USD $19)</span></strong>
-                            </div>
+                            style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-variant-numeric: tabular-nums; font-size: 11px; line-height: 1.5;">
+                            <div style="color: #121214; margin-bottom: 3px;"><strong>• Individual 1 a 1:</strong> 1x $130k | 2x $200k | 3x $260k / mes</div>
+                            <div style="color: #705B3E;"><strong>• Grupal (2-3 pers):</strong> 1x $100k | 2x $150k | 3x $195k / mes c/u</div>
                         </div>
                         <ul
-                            style="list-style: none; padding: 0; margin: 0; font-size: 11.2px; color: #575659; display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
-                            <li>✓ Acceso a +1300 ejercicios HD y timer</li>
-                            <li>✓ Base 500 alimentos + macros diarios</li>
-                            <li>✓ Permiso Social (+500 kcal fin de sem.)</li>
-                            <li>✓ Historial en la nube sin pérdida</li>
+                            style="list-style: none; padding: 0; margin: 0; font-size: 11.5px; color: #575659; display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+                            <li>✓ App SENS 100% bonificada e incluida</li>
+                            <li>✓ Corrección biomecánica y técnica en vivo</li>
+                            <li>✓ Cuota y acceso de gimnasio / estudio incluidos</li>
+                            <li>✓ Planificación nutricional adaptada</li>
                         </ul>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <button type="button" id="btnModalActivateAppQuarterly"
-                            style="width: 100%; background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 9px 10px; font-size: 11px; font-weight: 800; cursor: pointer;">
-                            Activar 3 Meses ($59.900) →
+                        <button type="button" id="btnModalScalePresencial1a1"
+                            style="width: 100%; background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 10px 12px; font-size: 11.5px; font-weight: 800; cursor: pointer;">
+                            Agendar Presencial Individual (desde $130k) →
                         </button>
-                        <button type="button" id="btnModalActivateAppMonthly"
-                            style="width: 100%; background: transparent; color: #121214; border: 1px solid rgba(18,18,20,0.2); border-radius: 999px; padding: 7px 10px; font-size: 10.5px; font-weight: 700; cursor: pointer;">
-                            Activar Mensual ($24.900)
+                        <button type="button" id="btnModalScalePresencialGrupo"
+                            style="width: 100%; background: transparent; color: #121214; border: 1px solid rgba(18,18,20,0.22); border-radius: 999px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer;">
+                            Consultar Presencial Grupal (desde $100k c/u)
                         </button>
                     </div>
                 </div>
 
-                <!-- 3. SEGUIMIENTO ONLINE 1 A 1 -->
+                <!-- 2. SEGUIMIENTO ONLINE 1 A 1 -->
                 <div class="sens-modal-tier-card" data-modal-tier="online_1on1"
-                    style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 18px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+                    style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 20px 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
                     <div>
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-size: 9px; font-weight: 800; color: #705B3E; letter-spacing: 0.9px;">3. SEGUIMIENTO ONLINE</span>
+                            <span style="font-size: 9px; font-weight: 800; color: #705B3E; letter-spacing: 0.9px;">2. SEGUIMIENTO ONLINE</span>
                             <span class="modal-tier-status-tag"
                                 style="font-size: 9px; font-weight: 800; color: #705B3E; background: #FAF7F2; padding: 2px 7px; border-radius: 999px;">1 a 1 Distancia</span>
                         </div>
-                        <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">Plan a Medida con Nico</h4>
+                        <h4 style="font-size: 1.1rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Plan a Medida con Nico</h4>
                         <div
-                            style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; font-variant-numeric: tabular-nums;">
+                            style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-variant-numeric: tabular-nums; font-size: 11px; line-height: 1.5;">
                             <div
-                                style="display: flex; justify-content: space-between; font-size: 11px; color: #121214; margin-bottom: 3px;">
+                                style="display: flex; justify-content: space-between; color: #705B3E; margin-bottom: 3px;">
                                 <span>• Online Premium:</span>
-                                <strong>$90.000 / mes</strong>
+                                <strong>$90.000 / mes (Videollamadas 60m)</strong>
                             </div>
                             <div
-                                style="display: flex; justify-content: space-between; font-size: 11px; color: #575659;">
+                                style="display: flex; justify-content: space-between; color: #121214;">
                                 <span>• Online Básico:</span>
                                 <strong>$40.000 / mes</strong>
                             </div>
                         </div>
                         <ul
-                            style="list-style: none; padding: 0; margin: 0; font-size: 11.2px; color: #575659; display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
-                            <li>✓ App Premium 100% bonificada</li>
+                            style="list-style: none; padding: 0; margin: 0; font-size: 11.5px; color: #575659; display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+                            <li>✓ App SENS 100% bonificada e incluida</li>
                             <li>✓ Rutina diseñada a medida por Nico</li>
                             <li>✓ Soporte WhatsApp y corrección por video</li>
                             <li>✓ Videollamadas semanales (en Premium)</li>
@@ -9226,50 +9020,16 @@
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
                         <button type="button" id="btnModalScaleOnlinePremium"
-                            style="width: 100%; background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 9px 10px; font-size: 11px; font-weight: 800; cursor: pointer;">
+                            style="width: 100%; background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 10px 12px; font-size: 11.5px; font-weight: 800; cursor: pointer;">
                             Consultar Online Premium ($90k) →
                         </button>
                         <button type="button" id="btnModalScaleOnlineBasic"
-                            style="width: 100%; background: transparent; color: #121214; border: 1px solid rgba(18,18,20,0.2); border-radius: 999px; padding: 7px 10px; font-size: 10.5px; font-weight: 700; cursor: pointer;">
+                            style="width: 100%; background: transparent; color: #121214; border: 1px solid rgba(18,18,20,0.22); border-radius: 999px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer;">
                             Consultar Online Básico ($40k)
                         </button>
                     </div>
                 </div>
-
-                <!-- 4. SEGUIMIENTO PRESENCIAL CABA -->
-                <div class="sens-modal-tier-card" data-modal-tier="presencial_1on1"
-                    style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 18px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
-                    <div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-size: 9px; font-weight: 800; color: #705B3E; letter-spacing: 0.9px;">4. PRESENCIAL CABA</span>
-                            <span class="modal-tier-status-tag"
-                                style="font-size: 9px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 7px; border-radius: 999px;">Gym Incluido</span>
-                        </div>
-                        <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">En Vivo (Palermo / Belgrano)</h4>
-                        <div
-                            style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; font-variant-numeric: tabular-nums; font-size: 10.5px; line-height: 1.45;">
-                            <div style="color: #121214; margin-bottom: 2px;"><strong>• 1 a 1:</strong> 1x $130k | 2x $200k | 3x $260k</div>
-                            <div style="color: #705B3E; margin-bottom: 2px;"><strong>• Grupal:</strong> Dúo ($100k-$195k) • Trío ($85k-$170k)</div>
-                        </div>
-                        <ul
-                            style="list-style: none; padding: 0; margin: 0; font-size: 11.2px; color: #575659; display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
-                            <li>✓ App Premium + Nutrición incluidas</li>
-                            <li>✓ Corrección biomecánica en vivo</li>
-                            <li>✓ Acceso y cuota de gym incluidos</li>
-                        </ul>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <button type="button" id="btnModalScalePresencial1a1"
-                            style="width: 100%; background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 9px 10px; font-size: 11px; font-weight: 800; cursor: pointer;">
-                            Agendar Presencial 1 a 1 →
-                        </button>
-                        <button type="button" id="btnModalScalePresencialGrupo"
-                            style="width: 100%; background: transparent; color: #121214; border: 1px solid rgba(18,18,20,0.2); border-radius: 999px; padding: 7px 10px; font-size: 10.5px; font-weight: 700; cursor: pointer;">
-                            Consultar Dúo o Trío (c/u)
-                        </button>
-                    </div>
-                </div>
+            </div>
             </div>
 
             <!-- Pie de transparencia -->
@@ -9337,7 +9097,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=1.0"></script>
-    <script src="app.js?v=29.0"></script>
+    <script src="app.js?v=31.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
