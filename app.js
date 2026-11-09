@@ -11,20 +11,29 @@ const SUPABASE_CONFIG = {
     anonKey: window.__SUPABASE_ANON_KEY__ || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxemJra3hpbGp1Y2NlZ2JpcGtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3OTk5MzYsImV4cCI6MjEwNzM3NTkzNn0.UOhfid8S09kdfMqIPRkZiLySKGXYQ2Mb3m_YhCLYgs4'
 };
 
-// Configuración lista para conectar pasarelas de pago (Mercado Pago AR & Internacional USD)
+// Configuración de modalidad de pago SENS: 100% directa 1 a 1 con Nico (Transferencia / WhatsApp)
+// Cero pasarelas intermedias automáticas: Nico recibe el pago y libera el plan manualmente desde Coach OS.
 const SENS_PAYMENT_CONFIG = {
-    mercadopagoPublicKey: window.__MP_PUBLIC_KEY__ || '',
-    mercadopagoInitPoint: window.__MP_SUBSCRIPTION_INIT_POINT__ || '',
-    mercadopagoQuarterlyInitPoint: window.__MP_QUARTERLY_INIT_POINT__ || '',
-    mercadopagoWebhookEndpoint: '/functions/v1/mercadopago-webhook',
-    internationalProvider: window.__INTL_PAYMENT_PROVIDER__ || 'lemonsqueezy',
-    internationalCheckoutUrl: window.__INTL_CHECKOUT_URL__ || '',
-    internationalQuarterlyCheckoutUrl: window.__INTL_QUARTERLY_CHECKOUT_URL__ || '',
-    internationalWebhookEndpoint: '/functions/v1/international-payment-webhook',
-    monthlyPriceARS: 24900,
-    quarterlyPriceARS: 59900,
-    monthlyPriceUSD: 19,
-    quarterlyPriceUSD: 45
+    mode: 'manual_coach_approval',
+    coachPhone: '5491136329846',
+    coachName: 'Nico',
+    directValidationRequired: true,
+    plans: {
+        presencial_individual: {
+            '1x': 130000,
+            '2x': 200000,
+            '3x': 260000
+        },
+        presencial_grupal: {
+            '1x': 100000,
+            '2x': 150000,
+            '3x': 195000
+        },
+        online: {
+            premium: 90000,
+            basic: 40000
+        }
+    }
 };
 window.SENS_PAYMENT_CONFIG = SENS_PAYMENT_CONFIG;
 
@@ -3028,12 +3037,12 @@ function initAuthModal() {
             email: email,
             role: 'user_normal',
             user_type: 'client_presencial_vip',
-            subscription_status: 'trial',
-            trial_ends_at: trialEndsIso,
+            subscription_status: 'pending_activation',
+            trial_ends_at: null,
             referral_code: generatedRefCode,
             device_hash: deviceHash,
             active_plan_name: 'Presencial Personalizado 1 a 1 (CABA)',
-            billing_provider: 'manual',
+            billing_provider: 'manual_coach',
             onboarding_completed: false,
             created_at: new Date().toISOString()
         };
@@ -3079,7 +3088,7 @@ function initAuthModal() {
             type: 'Nueva Cuenta Creada (Atleta Registrado)',
             athleteName: fullName,
             athleteEmail: email,
-            details: 'El usuario se acaba de registrar en el portal. Su estado inicial es: PRUEBA GRATUITA (7 DÍAS).'
+            details: 'El usuario se acaba de registrar en el portal. Su estado inicial es: PENDIENTE DE VALIDACIÓN DE PAGO 1 A 1 CON NICO.'
         }).catch(() => {});
 
         // 4. Actualizar lista de atletas de coach si está en memoria
@@ -3480,7 +3489,13 @@ function setupRealtimeProfileSubscription(userId) {
                         if (typeof renderDashboardData === 'function') renderDashboardData();
                         if (typeof syncMemberNutritionPrescription === 'function') syncMemberNutritionPrescription(userId, updated.prescribed_nutrition);
 
-                        showSensToast('Tu plan fue actualizado por Nico en tiempo real.', 'champagne', 4000);
+                        const access = (typeof checkUserAccessStatus === 'function') ? checkUserAccessStatus(AppState.profile) : { hasAccess: true };
+                        if (access.hasAccess && AppState._activeViewId === 'activationPendingView') {
+                            showSensToast('¡Tu pago fue validado por Nico! Acceso desbloqueado al portal.', 'success', 5000);
+                            if (typeof openUserPortal === 'function') openUserPortal(false);
+                        } else {
+                            showSensToast('Tu perfil fue actualizado por Nico en tiempo real.', 'champagne', 4000);
+                        }
                     }
                 }
             )
@@ -3680,18 +3695,25 @@ function initPortalNavigation() {
         goWorkoutDetailBtn.addEventListener('click', () => switchPortalView('workoutView'));
     }
 
-    // Botón de re-verificación de membresía en Paywall
+    // Botón de re-verificación de membresía en Landing de Activación Pendiente (1 a 1 con Nico)
     const refreshActivationBtn = document.getElementById('btnRefreshActivationStatus');
     if (refreshActivationBtn) {
         refreshActivationBtn.addEventListener('click', async () => {
+            const originalContent = refreshActivationBtn.innerHTML;
+            refreshActivationBtn.disabled = true;
+            refreshActivationBtn.innerHTML = `<span>Comprobando estado con Nico...</span>`;
             if (supabaseClient && AppState.user) {
                 await loadProfileFromSupabase(AppState.user.id);
             }
+            refreshActivationBtn.disabled = false;
+            refreshActivationBtn.innerHTML = originalContent;
+
             const access = checkUserAccessStatus(AppState.profile);
             if (access.hasAccess) {
+                showSensToast('¡Pago validado y cuenta activada! Bienvenido a SENS.', 'success');
                 openUserPortal(false);
             } else {
-                showSensToast('Tu suscripción continúa en proceso de validación. Podés confirmar con Nico por WhatsApp.', 'alert');
+                showSensToast('Tu pago aún no fue validado por Nico. Escribile por WhatsApp con tu comprobante para acelerar la activación.', 'warning', 6000);
             }
         });
     }
@@ -3927,29 +3949,18 @@ window.formatPlanShortBadge = formatPlanShortBadge;
 function checkUserAccessStatus(profile) {
     const p = profile || AppState.profile || {};
     const isAdmin = isCurrentUserAdmin();
-    const status = p.subscription_status || 'active';
-    const planTier = p.plan_tier || 'presencial_1on1';
+    const status = p.subscription_status || 'pending_activation';
     const planDetails = (typeof getSensUserPlanDetails === 'function') ? getSensUserPlanDetails(p) : { daysRemaining: 30, shortBadge: 'Presencial CABA', title: 'Presencial Personalizado 1 a 1' };
     const daysRemaining = Number(planDetails.daysRemaining) || 0;
     const refCode = planDetails.referralCode || '';
     const referralUrl = planDetails.referralUrl || '';
 
-    let hasActivePremium = false;
-    if (
-        planTier === 'online_1on1' ||
-        planTier === 'presencial_1on1' ||
-        planTier === 'vip' ||
-        status === 'active' ||
-        status === 'vip_manual' ||
-        p.role === 'user_vip'
-    ) {
-        if (!p.premium_until || new Date(p.premium_until).getTime() > Date.now()) {
-            hasActivePremium = true;
-        }
-    }
-
-    const isTrialActive = !hasActivePremium && daysRemaining > 0 && status !== 'expired' && status !== 'canceled';
-    const hasAccess = isAdmin || hasActivePremium || isTrialActive;
+    // Modalidad de pago SENS: 100% directa 1 a 1 con Nico. Cero pasarelas automáticas ni trials autónomos.
+    // El acceso al portal solo se concede si Nico validó manualmente el pago (active, vip_manual, user_vip o admin).
+    const isManualValidated = Boolean(status === 'active' || status === 'vip_manual' || p.role === 'user_vip');
+    const hasActivePremium = isManualValidated && (!p.premium_until || new Date(p.premium_until).getTime() > Date.now());
+    const isTrialActive = false;
+    const hasAccess = Boolean(isAdmin || hasActivePremium || isManualValidated);
 
     // Actualizar el badge superior del Topbar (#portalPlanBadgeText)
     const topbarPlanText = document.getElementById('portalPlanBadgeText');
@@ -4023,7 +4034,7 @@ function checkUserAccessStatus(profile) {
         window.renderSensUnlockablesModule();
     }
 
-    // 4. Sincronizar Soft-Paywall cuando los 7 días expiraron o cuando se abre la vista de activación
+    // 4. Sincronizar Landing de Activación Pendiente (1 a 1 con Nico)
     renderSoftPaywallState(p, daysRemaining);
 
     return {
@@ -4046,16 +4057,39 @@ function renderSoftPaywallState(profile, daysRemaining) {
     const pendingPlanEl = document.getElementById('pendingPlanName');
     const badgeEl = document.getElementById('paywallStatusBadge');
     const notifyWaBtn = document.getElementById('btnNotifyPaymentWA');
+    const btnPres1a1 = document.getElementById('btnPaywallPresencial1a1');
+    const btnPresGrupo = document.getElementById('btnPaywallPresencialGrupo');
+    const btnOnlinePrem = document.getElementById('btnPaywallOnlinePremium');
+    const btnOnlineBasic = document.getElementById('btnPaywallOnlineBasic');
 
     if (pendingNameEl) pendingNameEl.textContent = athleteName;
     if (pendingPlanEl) pendingPlanEl.textContent = athletePlan;
     if (badgeEl) {
-        badgeEl.textContent = 'ACTIVACIÓN DE MODALIDAD SENS';
+        badgeEl.textContent = 'PAGO PENDIENTE DE VALIDACIÓN • 1 A 1 CON NICO';
     }
 
+    const baseWa = 'https://wa.me/5491136329846?text=';
+    const userTag = `${athleteName} (${athleteEmail || 'cuenta nueva'})`;
+
     if (notifyWaBtn) {
-        const msg = encodeURIComponent(`Hola Nico! Quiero activar mi seguimiento en SENS (${athleteName} - ${athleteEmail}) en la modalidad ${athletePlan}.`);
-        notifyWaBtn.href = `https://wa.me/5491136329846?text=${msg}`;
+        const msg = encodeURIComponent(`Hola Nico! Creé mi cuenta en SENS (${userTag}) y quiero validar el pago de mi plan (${athletePlan}) para activar mi acceso.`);
+        notifyWaBtn.href = `${baseWa}${msg}`;
+    }
+    if (btnPres1a1) {
+        const msg = encodeURIComponent(`Hola Nico! Soy ${userTag}. Quiero coordinar el pago para Presencial Individual 1 a 1 en CABA.`);
+        btnPres1a1.href = `${baseWa}${msg}`;
+    }
+    if (btnPresGrupo) {
+        const msg = encodeURIComponent(`Hola Nico! Soy ${userTag}. Quiero coordinar el pago para Presencial Grupal en CABA.`);
+        btnPresGrupo.href = `${baseWa}${msg}`;
+    }
+    if (btnOnlinePrem) {
+        const msg = encodeURIComponent(`Hola Nico! Soy ${userTag}. Quiero coordinar el pago para Online Premium 1 a 1 ($90.000/mes).`);
+        btnOnlinePrem.href = `${baseWa}${msg}`;
+    }
+    if (btnOnlineBasic) {
+        const msg = encodeURIComponent(`Hola Nico! Soy ${userTag}. Quiero coordinar el pago para Online Básico ($40.000/mes).`);
+        btnOnlineBasic.href = `${baseWa}${msg}`;
     }
 }
 
@@ -5561,14 +5595,27 @@ async function processDiagnosisSubmission() {
         onboardingSec.style.display = 'none';
     }
 
-    const subNav = document.getElementById('portalSubNav');
-    if (subNav) subNav.style.display = 'flex';
-    
-    renderDashboardData();
-    renderWorkoutDay(AppState.currentDay || 'day1');
-    switchPortalView('dashView');
-    window.scrollTo(0, 0);
-    showSensToast('¡Diagnóstico guardado con éxito! Bienvenido a tu espacio de entrenamiento.', 'success');
+    const access = checkUserAccessStatus(AppState.profile);
+    const isAdmin = isCurrentUserAdmin();
+
+    if (!access.hasAccess && !isAdmin) {
+        const subNav = document.getElementById('portalSubNav');
+        if (subNav) subNav.style.display = 'none';
+        document.querySelectorAll('.sens-floating-dock').forEach(dock => {
+            dock.style.display = 'none';
+        });
+        switchPortalView('activationPendingView');
+        window.scrollTo(0, 0);
+        showSensToast('¡Diagnóstico completado! Ahora validá tu pago 1 a 1 con Nico para desbloquear tu portal.', 'champagne', 6000);
+    } else {
+        const subNav = document.getElementById('portalSubNav');
+        if (subNav) subNav.style.display = 'flex';
+        renderDashboardData();
+        renderWorkoutDay(AppState.currentDay || 'day1');
+        switchPortalView('dashView');
+        window.scrollTo(0, 0);
+        showSensToast('¡Diagnóstico guardado con éxito! Bienvenido a tu espacio de entrenamiento.', 'success');
+    }
 }
 
 // Temporizador regresivo (deprecado en favor de compromiso estático de Nico en 24h)
