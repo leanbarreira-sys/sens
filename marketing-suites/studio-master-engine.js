@@ -1191,7 +1191,7 @@
     return canvas;
   }
 
-  async function renderStageToHighResCanvas(targetWidthPx) {
+  async function renderStageToHighResCanvas(targetWidthPx, opts) {
     const stageEl = document.getElementById('video-canvas');
     if (!stageEl || typeof window.html2canvas !== 'function') {
       throw new Error('Stage o html2canvas no disponible');
@@ -1342,17 +1342,50 @@
         },
         onclone: (clonedDoc) => {
           clonedDoc.querySelectorAll('.sens-element-hidden, [data-sens-hidden="true"]').forEach(el => el.remove());
+          const cRoot = clonedDoc.getElementById('video-canvas');
+          if (cRoot) {
+            cRoot.style.setProperty('box-shadow', 'none', 'important');
+            cRoot.style.setProperty('outline', 'none', 'important');
+            cRoot.style.setProperty('border', 'none', 'important');
+            cRoot.style.setProperty('border-radius', '0px', 'important');
+            cRoot.style.setProperty('margin', '0px', 'important');
+            cRoot.style.setProperty('filter', 'none', 'important');
+            if (cRoot.classList.contains('bg-surface-container') || cRoot.classList.contains('bg-surface')) {
+              cRoot.style.setProperty('background-color', '#080809', 'important');
+            }
+          }
+          clonedDoc.querySelectorAll('*').forEach(el => {
+            if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE') return;
+            const cls = typeof el.className === 'string' ? el.className : '';
+            if (cls.includes('shadow-') || cls.includes('ring-')) {
+              el.style.setProperty('box-shadow', 'none', 'important');
+            }
+          });
         }
       });
 
-      // 3. Enforce exact UHD pixel dimensions (2160x3840 or 2160x2700)
+      // 3. Enforce exact UHD pixel dimensions with Safe-Overscan Bleed Crop to completely eliminate white borders
       const finalCanvas = document.createElement('canvas');
       finalCanvas.width = targetW;
       finalCanvas.height = targetH;
       const fCtx = finalCanvas.getContext('2d');
       fCtx.imageSmoothingEnabled = true;
       fCtx.imageSmoothingQuality = 'high';
-      fCtx.drawImage(rawCanvas, 0, 0, targetW, targetH);
+
+      const isPureTransparent = Boolean(opts && opts.pureTransparentPng);
+      if (!isPureTransparent) {
+        // Solid dark obsidian foundation to eliminate transparent edge fringe
+        fCtx.fillStyle = '#080809';
+        fCtx.fillRect(0, 0, targetW, targetH);
+      }
+
+      // Safe-Overscan: Inset 0.3% (~3px at 1080p, ~6px at 2160p) to shave off any subpixel antialiasing/shadow seam
+      const cropX = Math.max(1, Math.round(rawCanvas.width * 0.003));
+      const cropY = Math.max(1, Math.round(rawCanvas.height * 0.003));
+      const srcW = Math.max(1, rawCanvas.width - (cropX * 2));
+      const srcH = Math.max(1, rawCanvas.height - (cropY * 2));
+
+      fCtx.drawImage(rawCanvas, cropX, cropY, srcW, srcH, 0, 0, targetW, targetH);
 
       return finalCanvas;
     } finally {
@@ -1373,18 +1406,18 @@
     if (!modal) {
       modal = document.createElement('div');
       modal.id = 'sens-studio-export-modal';
-      modal.className = 'fixed inset-0 bg-black/75 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none';
+      modal.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none';
       modal.innerHTML = `
-        <div class="w-full max-w-[340px] bg-surface rounded-3xl p-6 shadow-2xl border border-outline-variant/30 text-center flex flex-col items-center gap-3.5 transform transition-all duration-300 scale-95" id="sens-export-modal-card">
+        <div class="w-full max-w-[340px] bg-[#121214] text-white rounded-2xl p-6 shadow-2xl border border-secondary-fixed/30 text-center flex flex-col items-center gap-3.5 transform transition-all duration-300 scale-95" id="sens-export-modal-card">
           <div class="relative w-14 h-14 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full border-2 border-secondary-fixed/20 border-t-secondary animate-spin"></div>
             <span class="material-symbols-outlined text-secondary text-2xl">auto_videocam</span>
           </div>
           <div class="w-full">
-            <h4 id="sens-export-modal-title" class="font-headline-sm text-sm font-semibold text-on-surface">Exportando Media</h4>
-            <p id="sens-export-modal-step" class="text-xs text-on-surface-variant font-medium mt-1">Preparando capas y tipografía...</p>
+            <h4 id="sens-export-modal-title" class="font-headline-sm text-sm font-semibold text-white">Exportando Media</h4>
+            <p id="sens-export-modal-step" class="text-xs text-neutral-400 font-medium mt-1">Preparando capas y tipografía...</p>
           </div>
-          <div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden mt-1">
+          <div class="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden mt-1">
             <div id="sens-export-modal-bar" class="bg-secondary h-full transition-all duration-150" style="width: 10%;"></div>
           </div>
           <span id="sens-export-modal-pct" class="text-[11px] font-mono text-secondary font-bold">10%</span>
@@ -1633,16 +1666,41 @@
       if (!el || !el.style) return;
       if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE') return;
       if (!isFullBleedExportLayer(el, stageRect)) return;
+
       const cs = window.getComputedStyle(el);
-      if (!(parseFloat(cs.borderTopLeftRadius) || parseFloat(cs.borderTopRightRadius) || parseFloat(cs.borderBottomLeftRadius) || parseFloat(cs.borderBottomRightRadius))) return;
-      const prev = el.style.getPropertyValue('border-radius');
-      const prevPrio = el.style.getPropertyPriority('border-radius');
-      el.style.setProperty('border-radius', '0', 'important');
-      if (Array.isArray(cleanupList)) {
-        cleanupList.push(() => {
-          if (prev) el.style.setProperty('border-radius', prev, prevPrio);
-          else el.style.removeProperty('border-radius');
-        });
+      const hasRadius = Boolean(parseFloat(cs.borderTopLeftRadius) || parseFloat(cs.borderTopRightRadius) || parseFloat(cs.borderBottomLeftRadius) || parseFloat(cs.borderBottomRightRadius));
+      const hasShadow = Boolean(cs.boxShadow && cs.boxShadow !== 'none');
+      const isRoot = (el === stageEl || el.id === 'video-canvas');
+
+      if (hasRadius || hasShadow || isRoot) {
+        const prevRadius = el.style.getPropertyValue('border-radius');
+        const prevRadiusPrio = el.style.getPropertyPriority('border-radius');
+        const prevShadow = el.style.getPropertyValue('box-shadow');
+        const prevShadowPrio = el.style.getPropertyPriority('box-shadow');
+        const prevBorder = el.style.getPropertyValue('border');
+        const prevBorderPrio = el.style.getPropertyPriority('border');
+        const prevOutline = el.style.getPropertyValue('outline');
+        const prevOutlinePrio = el.style.getPropertyPriority('outline');
+
+        el.style.setProperty('border-radius', '0', 'important');
+        el.style.setProperty('box-shadow', 'none', 'important');
+        if (isRoot) {
+          el.style.setProperty('border', 'none', 'important');
+          el.style.setProperty('outline', 'none', 'important');
+        }
+
+        if (Array.isArray(cleanupList)) {
+          cleanupList.push(() => {
+            if (prevRadius) el.style.setProperty('border-radius', prevRadius, prevRadiusPrio);
+            else el.style.removeProperty('border-radius');
+            if (prevShadow) el.style.setProperty('box-shadow', prevShadow, prevShadowPrio);
+            else el.style.removeProperty('box-shadow');
+            if (prevBorder) el.style.setProperty('border', prevBorder, prevBorderPrio);
+            else el.style.removeProperty('border');
+            if (prevOutline) el.style.setProperty('outline', prevOutline, prevOutlinePrio);
+            else el.style.removeProperty('outline');
+          });
+        }
       }
     });
   }
@@ -1932,7 +1990,13 @@
         const bCtx = bgBaseCanvas.getContext('2d');
         bCtx.imageSmoothingEnabled = true;
         bCtx.imageSmoothingQuality = 'high';
-        bCtx.drawImage(rawBgBase, 0, 0, targetW, targetH);
+        bCtx.fillStyle = '#080809';
+        bCtx.fillRect(0, 0, targetW, targetH);
+        const bCropX = Math.max(1, Math.round(rawBgBase.width * 0.003));
+        const bCropY = Math.max(1, Math.round(rawBgBase.height * 0.003));
+        const bSrcW = Math.max(1, rawBgBase.width - (bCropX * 2));
+        const bSrcH = Math.max(1, rawBgBase.height - (bCropY * 2));
+        bCtx.drawImage(rawBgBase, bCropX, bCropY, bSrcW, bSrcH, 0, 0, targetW, targetH);
       }
 
       // LAYER 2 (fgOverlayCanvas): Capture ALL semi-transparent scrims, gradients, glass cards, badges & text in front of the video slot
@@ -1987,6 +2051,11 @@
             clonedRoot.style.setProperty('background', 'transparent', 'important');
             clonedRoot.style.setProperty('background-color', 'transparent', 'important');
             clonedRoot.style.setProperty('box-shadow', 'none', 'important');
+            clonedRoot.style.setProperty('border', 'none', 'important');
+            clonedRoot.style.setProperty('outline', 'none', 'important');
+            clonedRoot.style.setProperty('border-radius', '0px', 'important');
+            clonedRoot.style.setProperty('margin', '0px', 'important');
+            clonedRoot.style.setProperty('filter', 'none', 'important');
             // Only if the template is a pure typographic card (injected-bg) with an opaque paper gradient (e.g. F61 via-background),
             // soften that opaque paper layer slightly so the user's video is visible underneath while keeping dark text legible.
             if (isInjectedBgOnly) {
@@ -2007,7 +2076,11 @@
       const fCtx = fgOverlayCanvas.getContext('2d');
       fCtx.imageSmoothingEnabled = true;
       fCtx.imageSmoothingQuality = 'high';
-      fCtx.drawImage(rawOverlay, 0, 0, targetW, targetH);
+      const fCropX = Math.max(1, Math.round(rawOverlay.width * 0.003));
+      const fCropY = Math.max(1, Math.round(rawOverlay.height * 0.003));
+      const fSrcW = Math.max(1, rawOverlay.width - (fCropX * 2));
+      const fSrcH = Math.max(1, rawOverlay.height - (fCropY * 2));
+      fCtx.drawImage(rawOverlay, fCropX, fCropY, fSrcW, fSrcH, 0, 0, targetW, targetH);
 
       return { bgBaseCanvas, fgOverlayCanvas };
     } finally {
@@ -2083,7 +2156,7 @@
 
     const isMotionTemplate = state.group === 'motion' || (state.activeTemplateId && state.activeTemplateId.startsWith('M')) || state.motionLoop;
     const modalTitle = from4kBtn ? 'Exportando Video UHD 4K' : (isMotionTemplate ? 'Exportando Video Cinematográfico 60FPS' : 'Exportando Video UHD 60FPS');
-    showExportProgressModal(modalTitle, 'Preparando capas HD...', 15);
+    showExportProgressModal(modalTitle, 'Iniciando composición de alta fidelidad...', 15);
 
     try {
       if (from4kBtn) {
@@ -2152,19 +2225,10 @@
             }
           } catch (_) {}
         }
-      } else if (isMotionTemplate) {
-        // For motion templates without an uploaded video, split into background & foreground kinetic layers
-        updateExportProgress('Componiendo capas de animación cinética...', 22);
-        try {
-          const layers = await renderVideoLayersForComposite(outW, []);
-          bgBaseCanvas = layers.bgBaseCanvas;
-          fgOverlayCanvas = layers.fgOverlayCanvas;
-        } catch (layerErr) {
-          console.warn('Separated kinetic layers failed, falling back to baseFrame:', layerErr);
-          baseFrame = await renderStageToHighResCanvas(outW);
-        }
       } else {
-        updateExportProgress('Renderizando fotograma base UHD...', 22);
+        // Fast, high-fidelity single-pass render: preserves 100% authentic background image, typography, gradients and colors!
+        // Never strips the background, avoids redundant multi-pass delays and eliminates the grey screen bug completely!
+        updateExportProgress('Renderizando composición UHD...', 25);
         baseFrame = await renderStageToHighResCanvas(outW);
       }
 
@@ -2213,16 +2277,15 @@
         if (e.data && e.data.size > 0) chunks.push(e.data);
       };
 
-      let durationMs = 5000;
+      // Set optimal reel duration: 4.5s for kinetic templates, up to 15s max for custom uploaded videos
+      let durationMs = 4500;
       if (hasLiveVideo) {
         const primaryVid = activeVideoEntries[0].vid;
         if (primaryVid && primaryVid.duration && isFinite(primaryVid.duration) && primaryVid.duration > 0) {
-          durationMs = Math.min(90000, Math.max(3000, Math.round(primaryVid.duration * 1000)));
+          durationMs = Math.min(15000, Math.max(3000, Math.round(primaryVid.duration * 1000)));
         } else {
-          durationMs = 8000;
+          durationMs = 6000;
         }
-      } else if (isMotionTemplate) {
-        durationMs = 5000; // Optimal 5s reel loop
       }
 
       const startTime = performance.now();
@@ -2234,26 +2297,34 @@
         function drawTick(now) {
           const elapsed = now - startTime;
           const progress = Math.min(1, elapsed / durationMs);
-          const pctLabel = `${Math.round(progress * 100)}%`;
+          const pct = Math.round(progress * 100);
+          const pctLabel = `${pct}%`;
           if (from4kBtn) {
             els.export4kLabel.textContent = `Video ${pctLabel}`;
           } else {
             els.exportReelLabel.textContent = `Grabando 60FPS... ${pctLabel}`;
           }
-          updateExportProgress(`Grabando video 60 FPS (${pctLabel})...`, 25 + progress * 70);
+          updateExportProgress(`Grabando video UHD 60 FPS (${pctLabel})...`, 30 + progress * 65);
 
           ctx.clearRect(0, 0, outW, outH);
 
+          // 1. Solid luxury base
+          ctx.fillStyle = '#080809';
+          ctx.fillRect(0, 0, outW, outH);
+
+          // 2. Safe-Overscan Bleed Crop: trims 3px around edges to eliminate ANY white reborde or halo
+          const bleedX = Math.max(1, Math.round(outW * 0.003));
+          const bleedY = Math.max(1, Math.round(outH * 0.003));
+
           if (hasLiveVideo && fgOverlayCanvas) {
-            // 1. Draw template background / card container layer (Layer 0)
+            // Layer 0: Background
             if (bgBaseCanvas) {
-              ctx.drawImage(bgBaseCanvas, 0, 0, outW, outH);
-            } else {
-              ctx.fillStyle = '#121214';
-              ctx.fillRect(0, 0, outW, outH);
+              const srcW0 = Math.max(1, bgBaseCanvas.width - (bleedX * 2));
+              const srcH0 = Math.max(1, bgBaseCanvas.height - (bleedY * 2));
+              ctx.drawImage(bgBaseCanvas, bleedX, bleedY, srcW0, srcH0, 0, 0, outW, outH);
             }
 
-            // 2. Draw live moving <video> frame into exact slot rectangle (Layer 1)
+            // Layer 1: Live moving video
             for (const entry of activeVideoEntries) {
               const v = entry.vid;
               if (v.paused && !v.ended) {
@@ -2279,44 +2350,28 @@
               ctx.restore();
             }
 
-            // 3. Draw foreground scrim gradients, glass cards, badges & crisp typography (Layer 2)
-            ctx.drawImage(fgOverlayCanvas, 0, 0, outW, outH);
-          } else if (fgOverlayCanvas) {
-            // Kinetic motion rendering for animated templates (M01-M40)
-            // 1. Background layer with cinematic Ken Burns slow pan & zoom
-            if (bgBaseCanvas) {
-              const kbScale = 1.0 + 0.045 * Math.sin(progress * Math.PI);
-              const kbPanY = Math.sin(progress * Math.PI) * (outH * 0.012);
-              ctx.save();
-              ctx.translate(outW / 2, outH / 2);
-              ctx.scale(kbScale, kbScale);
-              ctx.drawImage(bgBaseCanvas, -outW / 2, -outH / 2 + kbPanY, outW, outH);
-              ctx.restore();
-            } else {
-              ctx.fillStyle = '#080809';
-              ctx.fillRect(0, 0, outW, outH);
-            }
-
-            // 2. Subtle kinetic breathing / somatic wave on typography & cards
-            const kineticScale = 1 + 0.012 * Math.sin(progress * Math.PI * 2);
-            ctx.save();
-            ctx.translate(outW / 2, outH / 2);
-            ctx.scale(kineticScale, kineticScale);
-            ctx.drawImage(fgOverlayCanvas, -outW / 2, -outH / 2, outW, outH);
-            ctx.restore();
+            // Layer 2: Foreground scrim gradients, glass cards, badges & typography with bleed crop
+            const srcWf = Math.max(1, fgOverlayCanvas.width - (bleedX * 2));
+            const srcHf = Math.max(1, fgOverlayCanvas.height - (bleedY * 2));
+            ctx.drawImage(fgOverlayCanvas, bleedX, bleedY, srcWf, srcHf, 0, 0, outW, outH);
           } else if (baseFrame) {
-            const scalePulse = 1 + 0.035 * Math.sin(progress * Math.PI * 2);
+            // Fluid 60FPS Kinetic motion loop on full-fidelity baseFrame
+            const scalePulse = 1.0 + 0.035 * Math.sin(progress * Math.PI);
+            const panY = Math.sin(progress * Math.PI) * (outH * 0.012);
+            const srcWb = Math.max(1, baseFrame.width - (bleedX * 2));
+            const srcHb = Math.max(1, baseFrame.height - (bleedY * 2));
+
             ctx.save();
             ctx.translate(outW / 2, outH / 2);
             ctx.scale(scalePulse, scalePulse);
-            ctx.drawImage(baseFrame, -outW / 2, -outH / 2, outW, outH);
+            ctx.drawImage(baseFrame, bleedX, bleedY, srcWb, srcHb, -outW / 2, -outH / 2 + panY, outW, outH);
             ctx.restore();
           }
 
           if (elapsed < durationMs) {
             requestAnimationFrame(drawTick);
           } else {
-            updateExportProgress('Empaquetando video UHD...', 98);
+            updateExportProgress('Finalizando empaquetado UHD...', 98);
             if (recorder.state === 'recording') {
               try { recorder.requestData(); } catch (_) {}
               recorder.stop();
