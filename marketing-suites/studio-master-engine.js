@@ -2146,7 +2146,221 @@
     }
   }
 
-  // Export 60FPS Reel / Video UHD (Records live <video> slots + transparent UI overlay at 60FPS, or kinetic Ken Burns motion)
+  // SENS Kinetic Motion Graphics Engine:
+  // Detects the authentic motion archetype of the active template (M01-M40 & Motion Hooks)
+  function detectTemplateMotionArchetype() {
+    const tpl = state.activeTemplate;
+    const html = (tpl && tpl.html) ? tpl.html : '';
+    const id = state.activeTemplateId || '';
+
+    if (html.includes('anim-laser') || html.includes('k-hud-scan') || id === 'M04' || id === 'M22' || id === 'M27' || id === 'M32' || id === 'M37') {
+      return 'laser';
+    }
+    if (html.includes('anim-shockwave') || id === 'M21' || id === 'M24' || id === 'M26' || id === 'M30' || id === 'M34' || id === 'M36' || id === 'M39') {
+      return 'shockwave';
+    }
+    if (html.includes('anim-flash') || html.includes('k-invert-flash') || id === 'M18' || id === 'M23' || id === 'M25' || id === 'M29' || id === 'M38') {
+      return 'flash';
+    }
+    if (html.includes('anim-slam') || html.includes('k-brutalism') || html.includes('slamZoomImpact') || id === 'M01' || id === 'M10' || id === 'M31' || id === 'M33' || id === 'M40') {
+      return 'slam';
+    }
+    if (html.includes('k-equalizer-bar') || id === 'M19') {
+      return 'equalizer';
+    }
+    if (html.includes('k-circle-draw') || html.includes('animate-spin') || id === 'M14') {
+      return 'gauge';
+    }
+    if (html.includes('k-rir-fill') || id === 'M15') {
+      return 'meter';
+    }
+    if (html.includes('k-swiss-curtain') || html.includes('k-split-wipe') || id === 'M02' || id === 'M09') {
+      return 'wipe';
+    }
+    if (html.includes('k-spring-pulse') || html.includes('anim-snap') || html.includes('k-stamp-pop') || id === 'M05' || id === 'M08' || id === 'M12' || id === 'M28' || id === 'M35') {
+      return 'pulse';
+    }
+    if (html.includes('k-text-scrub') || html.includes('anim-squeeze') || id === 'M07') {
+      return 'squeeze';
+    }
+    if (html.includes('k-asym-float') || id === 'M11') {
+      return 'float';
+    }
+    return 'kenburns';
+  }
+
+  // Renders authentic 60FPS motion graphic vector effects on top of the video or background
+  function renderKineticMotionOverlay(ctx, archetype, progress, elapsed, outW, outH) {
+    if (archetype === 'laser') {
+      // Biometric laser scanner with golden Champagne glow
+      const scanPeriod = 2200;
+      const cycle = (elapsed % scanPeriod) / scanPeriod;
+      const normY = 0.16 + 0.68 * (0.5 + 0.5 * Math.sin(cycle * Math.PI * 2 - Math.PI / 2));
+      const scanY = Math.round(outH * normY);
+
+      ctx.save();
+      const beamGrad = ctx.createLinearGradient(0, scanY - 16, 0, scanY + 16);
+      beamGrad.addColorStop(0, 'rgba(251, 222, 185, 0)');
+      beamGrad.addColorStop(0.5, 'rgba(251, 222, 185, 0.45)');
+      beamGrad.addColorStop(1, 'rgba(251, 222, 185, 0)');
+      ctx.fillStyle = beamGrad;
+      ctx.fillRect(0, scanY - 16, outW, 32);
+
+      ctx.fillStyle = '#fbdeb9';
+      ctx.shadowColor = '#fbdeb9';
+      ctx.shadowBlur = 18;
+      ctx.fillRect(0, scanY - 1.5, outW, 3);
+      ctx.restore();
+    } else if (archetype === 'shockwave') {
+      // Concentric biometric aura shockwaves
+      const wavePeriod = 2200;
+      const cycle = (elapsed % wavePeriod) / wavePeriod;
+      const ease = 1 - Math.pow(1 - cycle, 3);
+      const radius = 28 + ease * (outW * 0.65);
+      const alpha = Math.max(0, 1 - cycle);
+      const lineWidth = Math.max(1, (1 - cycle) * 7);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(outW / 2, outH / 2, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(251, 222, 185, ${alpha * 0.85})`;
+      ctx.lineWidth = lineWidth;
+      ctx.shadowColor = 'rgba(251, 222, 185, 0.6)';
+      ctx.shadowBlur = 16;
+      ctx.stroke();
+
+      if (cycle > 0.22) {
+        const c2 = (cycle - 0.22) / 0.78;
+        const ease2 = 1 - Math.pow(1 - c2, 3);
+        const r2 = 28 + ease2 * (outW * 0.50);
+        const a2 = Math.max(0, 1 - c2);
+        ctx.beginPath();
+        ctx.arc(outW / 2, outH / 2, r2, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(229, 203, 167, ${a2 * 0.55})`;
+        ctx.lineWidth = Math.max(1, (1 - c2) * 4);
+        ctx.stroke();
+      }
+      ctx.restore();
+    } else if (archetype === 'flash') {
+      // High-fashion strobe flash hook
+      const flashPeriod = 2600;
+      const cycle = (elapsed % flashPeriod) / flashPeriod;
+      let flashAlpha = 0;
+      if (cycle >= 0.02 && cycle <= 0.08) {
+        flashAlpha = 0.55 * Math.sin(((cycle - 0.02) / 0.06) * Math.PI);
+      } else if (cycle >= 0.14 && cycle <= 0.19) {
+        flashAlpha = 0.35 * Math.sin(((cycle - 0.14) / 0.05) * Math.PI);
+      }
+      if (flashAlpha > 0.01) {
+        ctx.save();
+        ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha})`;
+        ctx.fillRect(0, 0, outW, outH);
+        ctx.restore();
+      }
+    } else if (archetype === 'equalizer') {
+      // Audio waveform visualizer bars
+      const barCount = 14;
+      const barWidth = 6;
+      const gap = 8;
+      const totalW = barCount * barWidth + (barCount - 1) * gap;
+      const startX = (outW - totalW) / 2;
+      const baseY = outH * 0.84;
+
+      ctx.save();
+      for (let i = 0; i < barCount; i++) {
+        const freq = 3.2 + i * 0.6;
+        const phase = i * 0.45;
+        const h = 8 + 42 * Math.abs(Math.sin(elapsed * 0.005 * freq + phase));
+        const bx = startX + i * (barWidth + gap);
+        ctx.fillStyle = 'rgba(251, 222, 185, 0.9)';
+        ctx.shadowColor = '#fbdeb9';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        if (typeof ctx.roundRect === 'function') {
+          ctx.roundRect(bx, baseY - h / 2, barWidth, h, 3);
+        } else {
+          ctx.rect(bx, baseY - h / 2, barWidth, h);
+        }
+        ctx.fill();
+      }
+      ctx.restore();
+    } else if (archetype === 'gauge') {
+      // Concentric circular telemetry gauge
+      const cycle = (elapsed % 3200) / 3200;
+      const startAngle = -Math.PI / 2;
+      const endAngle = startAngle + cycle * Math.PI * 2;
+      const r = outW * 0.22;
+      const cx = outW / 2;
+      const cy = outH / 2;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(251, 222, 185, 0.16)';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.strokeStyle = '#fbdeb9';
+      ctx.lineWidth = 4;
+      ctx.shadowColor = '#fbdeb9';
+      ctx.shadowBlur = 14;
+      ctx.stroke();
+      ctx.restore();
+    } else if (archetype === 'meter') {
+      // Telemetry progress meter filling
+      const cycle = (elapsed % 3000) / 3000;
+      const barW = outW * 0.75;
+      const barH = 5;
+      const bx = (outW - barW) / 2;
+      const by = outH * 0.88;
+
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.fillRect(bx, by, barW, barH);
+
+      const fillW = barW * Math.min(1, cycle * 1.1);
+      ctx.fillStyle = '#fbdeb9';
+      ctx.shadowColor = '#fbdeb9';
+      ctx.shadowBlur = 12;
+      ctx.fillRect(bx, by, fillW, barH);
+      ctx.restore();
+    }
+  }
+
+  // Calculates kinetic matrix transforms (slam, pulse, float, squeeze)
+  function getKineticTransformForArchetype(archetype, progress, elapsed) {
+    let scale = 1.0;
+    let translateY = 0;
+    let opacity = 1.0;
+
+    if (archetype === 'slam') {
+      const cycle = (elapsed % 2800) / 2800;
+      if (cycle < 0.22) {
+        const t = cycle / 0.22;
+        const ease = Math.pow(1 - t, 2.5);
+        scale = 1.0 + ease * 1.15; // Monumental slam entry 2.15x -> 1.0x
+        opacity = Math.min(1, t * 2.8);
+      } else {
+        scale = 1.0 + 0.02 * Math.sin((cycle - 0.22) * Math.PI * 2);
+        opacity = 1.0;
+      }
+    } else if (archetype === 'pulse') {
+      const cycle = (elapsed % 2200) / 2200;
+      scale = 1.0 + 0.045 * Math.sin(cycle * Math.PI * 4);
+    } else if (archetype === 'float') {
+      translateY = Math.sin(progress * Math.PI * 2) * 14;
+    } else if (archetype === 'squeeze') {
+      scale = 1.0 + 0.03 * Math.sin(progress * Math.PI * 4);
+    } else {
+      scale = 1.0 + 0.025 * Math.sin(progress * Math.PI * 2);
+    }
+
+    return { scale, translateY, opacity };
+  }
+
+  // Export 60FPS / 30FPS Reel UHD (Hardware-synchronized frame-by-frame recording of video + live motion graphics)
   async function handleExportReel60FPS(opts) {
     const from4kBtn = Boolean(opts && opts.from4kBtn);
     const origReelText = els.exportReelLabel.textContent;
@@ -2155,7 +2369,7 @@
     els.export4kBtn.disabled = true;
 
     const isMotionTemplate = state.group === 'motion' || (state.activeTemplateId && state.activeTemplateId.startsWith('M')) || state.motionLoop;
-    const modalTitle = from4kBtn ? 'Exportando Video UHD 4K' : (isMotionTemplate ? 'Exportando Video Cinematográfico 60FPS' : 'Exportando Video UHD 60FPS');
+    const modalTitle = from4kBtn ? 'Exportando Video UHD 4K' : (isMotionTemplate ? 'Exportando Video Cinematográfico' : 'Exportando Video UHD');
     showExportProgressModal(modalTitle, 'Iniciando composición de alta fidelidad...', 15);
 
     try {
@@ -2201,7 +2415,6 @@
       let baseFrame = null;
 
       if (hasLiveVideo) {
-        // Ensure all loaded videos are playing and ready
         for (const entry of activeVideoEntries) {
           entry.vid.muted = true;
           entry.vid.loop = true;
@@ -2216,18 +2429,14 @@
         bgBaseCanvas = layers.bgBaseCanvas;
         fgOverlayCanvas = layers.fgOverlayCanvas;
 
-        // Re-verify all loaded videos are actively playing from t=0 right before recording starts
+        // Re-verify videos are ready from t=0
         for (const entry of activeVideoEntries) {
           try {
             entry.vid.currentTime = 0;
-            if (entry.vid.paused) {
-              await entry.vid.play();
-            }
+            if (entry.vid.paused) await entry.vid.play();
           } catch (_) {}
         }
       } else {
-        // Fast, high-fidelity single-pass render: preserves 100% authentic background image, typography, gradients and colors!
-        // Never strips the background, avoids redundant multi-pass delays and eliminates the grey screen bug completely!
         updateExportProgress('Renderizando composición UHD...', 25);
         baseFrame = await renderStageToHighResCanvas(outW);
       }
@@ -2239,8 +2448,10 @@
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
-      const fps = 60;
-      const stream = streamCanvas.captureStream ? streamCanvas.captureStream(fps) : (streamCanvas.mozCaptureStream ? streamCanvas.mozCaptureStream(fps) : null);
+      // 30 FPS for live video inputs (matches phone camera FPS 1:1, eliminates 3:2 judder)
+      // 60 FPS for kinetic motion graphics
+      const targetFps = hasLiveVideo ? 30 : 60;
+      const stream = streamCanvas.captureStream ? streamCanvas.captureStream(targetFps) : (streamCanvas.mozCaptureStream ? streamCanvas.mozCaptureStream(targetFps) : null);
       if (!stream) {
         throw new Error('Canvas captureStream no soportado en este navegador');
       }
@@ -2258,8 +2469,9 @@
         }
       }
 
+      // 10 Mbps is optimal for 1080x1920 without frame drops or hardware stutter
       let recorder = null;
-      const bitrateCandidates = [16000000, 10000000, 6000000, undefined];
+      const bitrateCandidates = [10000000, 8000000, 6000000, undefined];
       for (const br of bitrateCandidates) {
         try {
           const recOpts = { mimeType };
@@ -2277,7 +2489,6 @@
         if (e.data && e.data.size > 0) chunks.push(e.data);
       };
 
-      // Set optimal reel duration: 4.5s for kinetic templates, up to 15s max for custom uploaded videos
       let durationMs = 4500;
       if (hasLiveVideo) {
         const primaryVid = activeVideoEntries[0].vid;
@@ -2288,47 +2499,41 @@
         }
       }
 
-      const startTime = performance.now();
+      const archetype = detectTemplateMotionArchetype();
+      const totalFrames = Math.round((durationMs / 1000) * targetFps);
+      let frameIndex = 0;
 
       await new Promise((resolve) => {
         recorder.onstop = resolve;
-        recorder.start(100);
+        recorder.start(500);
 
-        function drawTick(now) {
-          const elapsed = now - startTime;
-          const progress = Math.min(1, elapsed / durationMs);
+        function drawTick() {
+          const frameTime = frameIndex / targetFps;
+          const elapsed = frameTime * 1000;
+          const progress = Math.min(1, frameIndex / totalFrames);
           const pct = Math.round(progress * 100);
           const pctLabel = `${pct}%`;
+
           if (from4kBtn) {
             els.export4kLabel.textContent = `Video ${pctLabel}`;
           } else {
-            els.exportReelLabel.textContent = `Grabando 60FPS... ${pctLabel}`;
+            els.exportReelLabel.textContent = `Grabando ${targetFps}FPS... ${pctLabel}`;
           }
-          updateExportProgress(`Grabando video UHD 60 FPS (${pctLabel})...`, 30 + progress * 65);
+          updateExportProgress(`Generando video UHD ${targetFps} FPS (${pctLabel})...`, 25 + progress * 70);
 
           ctx.clearRect(0, 0, outW, outH);
 
-          // 1. Solid luxury base
-          ctx.fillStyle = '#080809';
-          ctx.fillRect(0, 0, outW, outH);
-
-          // 2. Safe-Overscan Bleed Crop: trims 3px around edges to eliminate ANY white reborde or halo
+          // Safe-Overscan: trims 3px to eradicate any white border
           const bleedX = Math.max(1, Math.round(outW * 0.003));
           const bleedY = Math.max(1, Math.round(outH * 0.003));
 
-          if (hasLiveVideo && fgOverlayCanvas) {
-            // Layer 0: Background
-            if (bgBaseCanvas) {
-              const srcW0 = Math.max(1, bgBaseCanvas.width - (bleedX * 2));
-              const srcH0 = Math.max(1, bgBaseCanvas.height - (bleedY * 2));
-              ctx.drawImage(bgBaseCanvas, bleedX, bleedY, srcW0, srcH0, 0, 0, outW, outH);
-            }
-
-            // Layer 1: Live moving video
+          if (hasLiveVideo) {
+            // Synchronize video currentTime to exact recording frame time to eliminate frame-skip stutter
             for (const entry of activeVideoEntries) {
               const v = entry.vid;
-              if (v.paused && !v.ended) {
-                v.play().catch(() => {});
+              const expectedTime = frameTime % (v.duration || durationMs / 1000);
+              if (Math.abs(v.currentTime - expectedTime) > 0.08) {
+                try { v.currentTime = expectedTime; } catch (_) {}
               }
               const s = entry.slot;
               const vW = v.videoWidth || s.naturalWidth || 1080;
@@ -2350,25 +2555,50 @@
               ctx.restore();
             }
 
-            // Layer 2: Foreground scrim gradients, glass cards, badges & typography with bleed crop
-            const srcWf = Math.max(1, fgOverlayCanvas.width - (bleedX * 2));
-            const srcHf = Math.max(1, fgOverlayCanvas.height - (bleedY * 2));
-            ctx.drawImage(fgOverlayCanvas, bleedX, bleedY, srcWf, srcHf, 0, 0, outW, outH);
+            // Render live motion graphic effects directly on top of the video!
+            renderKineticMotionOverlay(ctx, archetype, progress, elapsed, outW, outH);
+
+            // Draw foreground typography and design overlay
+            if (fgOverlayCanvas) {
+              const kTrans = getKineticTransformForArchetype(archetype, progress, elapsed);
+              const srcWf = Math.max(1, fgOverlayCanvas.width - (bleedX * 2));
+              const srcHf = Math.max(1, fgOverlayCanvas.height - (bleedY * 2));
+
+              ctx.save();
+              if (kTrans.scale !== 1.0 || kTrans.translateY !== 0) {
+                ctx.translate(outW / 2, outH / 2);
+                ctx.scale(kTrans.scale, kTrans.scale);
+                ctx.globalAlpha = kTrans.opacity;
+                ctx.drawImage(fgOverlayCanvas, bleedX, bleedY, srcWf, srcHf, -outW / 2, -outH / 2 + kTrans.translateY, outW, outH);
+              } else {
+                ctx.globalAlpha = kTrans.opacity;
+                ctx.drawImage(fgOverlayCanvas, bleedX, bleedY, srcWf, srcHf, 0, 0, outW, outH);
+              }
+              ctx.restore();
+            }
           } else if (baseFrame) {
-            // Fluid 60FPS Kinetic motion loop on full-fidelity baseFrame
-            const scalePulse = 1.0 + 0.035 * Math.sin(progress * Math.PI);
-            const panY = Math.sin(progress * Math.PI) * (outH * 0.012);
+            // Photo / Kinetic template without uploaded video:
+            // 1. Ken Burns luxury cinematic slow pan & zoom on background
+            const kbScale = 1.0 + 0.035 * Math.sin(progress * Math.PI);
+            const kbPanY = Math.sin(progress * Math.PI) * (outH * 0.012);
+            const kTrans = getKineticTransformForArchetype(archetype, progress, elapsed);
+            const totalScale = kbScale * (archetype === 'slam' || archetype === 'pulse' ? kTrans.scale : 1.0);
+
             const srcWb = Math.max(1, baseFrame.width - (bleedX * 2));
             const srcHb = Math.max(1, baseFrame.height - (bleedY * 2));
 
             ctx.save();
             ctx.translate(outW / 2, outH / 2);
-            ctx.scale(scalePulse, scalePulse);
-            ctx.drawImage(baseFrame, bleedX, bleedY, srcWb, srcHb, -outW / 2, -outH / 2 + panY, outW, outH);
+            ctx.scale(totalScale, totalScale);
+            ctx.drawImage(baseFrame, bleedX, bleedY, srcWb, srcHb, -outW / 2, -outH / 2 + kbPanY + kTrans.translateY, outW, outH);
             ctx.restore();
+
+            // 2. Render authentic 60FPS motion graphic overlay (laser, shockwave, flash, equalizer, gauge, etc.)!
+            renderKineticMotionOverlay(ctx, archetype, progress, elapsed, outW, outH);
           }
 
-          if (elapsed < durationMs) {
+          frameIndex++;
+          if (frameIndex <= totalFrames) {
             requestAnimationFrame(drawTick);
           } else {
             updateExportProgress('Finalizando empaquetado UHD...', 98);
@@ -2378,14 +2608,15 @@
             }
           }
         }
+
         requestAnimationFrame(drawTick);
       });
 
       const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
       const blob = new Blob(chunks, { type: mimeType });
-      const filename = `SENS-VIDEO-60FPS-${state.activeTemplateId}-${outW}x${outH}.${ext}`;
+      const filename = `SENS-VIDEO-${targetFps}FPS-${state.activeTemplateId}-${outW}x${outH}.${ext}`;
       triggerFileDownload(blob, filename);
-      showToast(`Video 60FPS exportado (${outW}×${outH}px) • Listo para Reels`);
+      showToast(`Video ${targetFps}FPS exportado (${outW}×${outH}px) • Listo para Reels`);
     } catch (err) {
       console.error('Reel Export Error:', err);
       showToast('Error al exportar Video');
