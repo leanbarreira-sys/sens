@@ -6,7 +6,7 @@
 <title>SENS | Marketing Studio — Reels &amp; Videos 9:16 UHD (Estáticos &amp; Con animación)</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Playfair+Display:ital,wght@0,600;0,800;1,400;1,600&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&amp;family=Cinzel:wght@600;800&amp;family=Caveat:wght@600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="motion-animations.css?v=2.0"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -17,6 +17,21 @@
     theme: {
       extend: {
         colors: {
+          alabastro: '#FAF9F6',
+          alabastroDark: '#EFECE6',
+          carbon: {
+            DEFAULT: '#121214',
+            surface: '#1A1A1E',
+            elevated: '#24242A',
+            border: '#2E2E36',
+          },
+          champagne: {
+            DEFAULT: '#E5CBA7',
+            light: '#F4E8D7',
+            dark: '#B38E5D',
+          },
+          mineral: '#3E8E75',
+          bronce: '#8E6F3E',
           "primary-fixed": "#e5e1e4",
           "surface": "#faf9f6",
           "on-secondary-container": "#766143",
@@ -85,6 +100,11 @@
           "gutter-mobile": "1rem"
         },
         fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          serif: ['"Playfair Display"', 'serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+          cinzel: ['"Cinzel"', 'serif'],
+          hand: ['"Caveat"', 'cursive'],
           "headline": ["Plus Jakarta Sans", "sans-serif"],
           "body": ["Plus Jakarta Sans", "sans-serif"],
           "label": ["Plus Jakarta Sans", "sans-serif"],
@@ -131,6 +151,24 @@
   }
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+  .hero-title-shadow {
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
+  }
+  .glass-dark {
+    background: rgba(18, 18, 20, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(229, 203, 167, 0.18);
+  }
+  .glass-light {
+    background: rgba(250, 249, 246, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(18, 18, 20, 0.08);
+  }
+  .ticket-cutout-l {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 65%, 8px 60%, 0 55%);
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -607,7 +645,7 @@
   </button>
 </nav>
 
-<script src="templates-db-200.js?v=31.0"></script>
-<script src="studio-master-engine.js?v=31.0"></script>
+<script src="templates-db-200.js?v=32.0"></script>
+<script src="studio-master-engine.js?v=32.0"></script>
 </body>
 </html>
