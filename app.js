@@ -22050,9 +22050,9 @@ window.stopCoachMarketingStudio = stopCoachMarketingStudio;
 function syncMarketingSuiteIframe() {
     const iframe = document.getElementById('sensMarketingSuiteFrame');
     if (!iframe) return;
-    const targetUrl = 'marketing-suites/studio-master.html?v=30.0';
+    const targetUrl = 'marketing-suites/studio-master.html?v=31.0';
     const currentSrc = iframe.getAttribute('src') || '';
-    if (!currentSrc.includes('studio-master.html?v=30.0')) {
+    if (!currentSrc.includes('studio-master.html?v=31.0')) {
         iframe.src = targetUrl;
     } else if (iframe.contentWindow) {
         const tplId = MktStudioState.templateId || (MktStudioState.group === 'motion' ? 'M01' : 'E01');
@@ -22069,7 +22069,7 @@ window.addEventListener('message', function (e) {
     if (e && e.data && e.data.type === 'SENS_MKT_HEIGHT' && typeof e.data.height === 'number') {
         const frame = document.getElementById('sensMarketingSuiteFrame');
         if (frame) {
-            const h = Math.max(e.data.height + 24, 600);
+            const h = Math.max(e.data.height + 40, 850);
             frame.style.height = h + 'px';
             frame.style.minHeight = h + 'px';
         }

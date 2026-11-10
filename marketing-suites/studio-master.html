@@ -178,9 +178,9 @@
     display: none !important;
   }
 
-  /* When running embedded inside Coach OS iframe, hide redundant topbar & remove double padding */
+  /* When running embedded inside Coach OS iframe, adjust padding for flawless mobile dock clearance */
   body.is-embedded header {
-    display: none !important;
+    border-bottom-color: rgba(18, 18, 20, 0.08) !important;
   }
   body.is-embedded #sens-sticky-floating-bar {
     display: none !important;
@@ -189,7 +189,7 @@
     padding-top: 6px !important;
     padding-left: 10px !important;
     padding-right: 10px !important;
-    padding-bottom: 24px !important;
+    padding-bottom: max(180px, calc(150px + env(safe-area-inset-bottom, 24px))) !important;
   }
   body.is-embedded {
     overflow: hidden !important;
@@ -607,7 +607,7 @@
   </button>
 </nav>
 
-<script src="templates-db-200.js?v=30.0"></script>
-<script src="studio-master-engine.js?v=30.0"></script>
+<script src="templates-db-200.js?v=31.0"></script>
+<script src="studio-master-engine.js?v=31.0"></script>
 </body>
 </html>

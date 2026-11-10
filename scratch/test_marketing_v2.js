@@ -45,7 +45,7 @@ console.log('✓ studio-master.html verified (2 groupings, 40%-60% scrim, 9:16 l
 
 // 4. Check index.html iframe and script tags
 const indexHtml = fs.readFileSync('index.html', 'utf8');
-assert(indexHtml.includes('marketing-suites/studio-master.html?v=30.0'), 'index.html must point to studio-master.html?v=30.0');
+assert(indexHtml.includes('marketing-suites/studio-master.html?v=31.0'), 'index.html must point to studio-master.html?v=31.0');
 assert(indexHtml.includes('marketing_templates_catalog.js?v=2.0'), 'index.html must point to catalog?v=2.0');
 assert(indexHtml.includes('app.js?v=36.0'), 'index.html must point to app.js?v=36.0');
 console.log('✓ index.html references verified.');
