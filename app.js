@@ -3522,6 +3522,7 @@ async function checkExistingSession() {
                 if (typeof renderDynamicWeekStrip === 'function') renderDynamicWeekStrip();
                 if (typeof updateDynamicTrainingCard === 'function') updateDynamicTrainingCard(AppState.selectedDate);
                 if (typeof updateNutriSummaryCardData === 'function') updateNutriSummaryCardData();
+    if (typeof window.initUserTrackingModule === 'function') window.initUserTrackingModule();
                 setupRealtimeProfileSubscription(session.user.id);
                 console.log('[SENS] Sesión activa de Supabase detectada:', session.user.email);
             }
@@ -19091,24 +19092,56 @@ function initDashNutriCarousel() {
     }
     window.stopDashNutriCarousel = stopTimer;
 
-    // Si NO hay alimentos cargados por nadie para hoy: estado limpio y objetivo transparente
+    // Manejo de Estados Duales: Con Comidas Activas (4:5 Visual) vs. Sin Comidas (Item 3 & 4)
+    const emptyContent = document.getElementById('dashNutriEmptyContent');
+    const activeContent = card.querySelector('.sens-nutri-card-content');
+    const carouselStage = document.getElementById('dashNutriCarouselStage');
+
     if (dashNutriMealsData.length === 0) {
         stopTimer();
-        if (imgA) {
-            imgA.classList.add('active');
-            imgA.style.opacity = '0.18';
-            imgA.style.filter = 'grayscale(80%)';
+        card.classList.remove('has-active-meals');
+        card.classList.add('is-empty-day');
+
+        if (emptyContent) emptyContent.style.display = 'block';
+        if (activeContent) activeContent.style.display = 'none';
+        if (carouselStage) carouselStage.style.display = 'none';
+
+        // Item 3: Si no tenés nada cargado, marcar calorías hechas en el día, objetivo y cuánto falta
+        const consumedKcal = (typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, selectedDate) : 0;
+        const targetKcal = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, selectedDate) : 1950;
+        const remainingKcal = Math.max(0, targetKcal - consumedKcal);
+        const progressPct = targetKcal > 0 ? Math.min(100, Math.round((consumedKcal / targetKcal) * 100)) : 0;
+
+        const emptyConsumedEl = document.getElementById('dashNutriEmptyConsumedNum');
+        const emptyTargetEl = document.getElementById('dashNutriEmptyTargetNum');
+        const emptyRemainingEl = document.getElementById('dashNutriEmptyRemainingNum');
+        const emptyRemainingText = document.getElementById('dashNutriEmptyRemainingText');
+        const emptyFillEl = document.getElementById('dashNutriEmptyProgressFill');
+        const emptyFractionEl = document.getElementById('dashNutriEmptyCalsFraction');
+
+        if (emptyConsumedEl) emptyConsumedEl.textContent = consumedKcal.toLocaleString('es-AR');
+        if (emptyTargetEl) emptyTargetEl.textContent = `${targetKcal.toLocaleString('es-AR')} kcal`;
+        if (emptyRemainingEl) emptyRemainingEl.textContent = `${remainingKcal.toLocaleString('es-AR')} kcal`;
+        if (emptyRemainingText) {
+            emptyRemainingText.innerHTML = remainingKcal === 0 && consumedKcal > 0
+                ? '<strong style="color: #059669;">¡Meta calórica alcanzada! ✓</strong>'
+                : `Te faltan <strong id="dashNutriEmptyRemainingNum">${remainingKcal.toLocaleString('es-AR')} kcal</strong>`;
         }
-        if (imgB) {
-            imgB.classList.remove('active');
-            imgB.style.opacity = '0';
-        }
-        if (dotsWrap) dotsWrap.innerHTML = '';
+        if (emptyFillEl) emptyFillEl.style.width = `${progressPct}%`;
+        if (emptyFractionEl) emptyFractionEl.textContent = `${consumedKcal.toLocaleString('es-AR')} / ${targetKcal.toLocaleString('es-AR')} kcal`;
+
         document.querySelectorAll('#dashNutri5calsRow .sens-5cals-chip').forEach(chip => {
             chip.classList.remove('highlight');
         });
         return;
     }
+
+    // Item 4: Si tenés comidas de Nico o cargadas por vos, mostrar la card visual en formato rico como estaba antes
+    card.classList.remove('is-empty-day');
+    card.classList.add('has-active-meals');
+    if (emptyContent) emptyContent.style.display = 'none';
+    if (activeContent) activeContent.style.display = 'block';
+    if (carouselStage) carouselStage.style.display = 'block';
 
     if (imgA) {
         imgA.style.opacity = '';
@@ -19940,19 +19973,23 @@ function updateSensStreakCard(targetDate = null) {
         }
     }
 
+    if (streakLevelTag) {
+        streakLevelTag.textContent = 'Constancia y Disciplina Personal';
+    }
+
     if (streakSub) {
         if (dayRec.completedCount === 3) {
-            streakSub.textContent = '¡Día 100% completado! Racha perfecta asegurada.';
+            streakSub.textContent = '✓ ¡Hábitos del día completados! Registro asegurado en tu seguimiento propio.';
             streakSub.style.color = '#10B981';
         } else if (dayRec.completedCount >= 1) {
-            streakSub.textContent = `${dayRec.completedCount} de 3 objetivos cumplidos • ¡Seguí sumando hábitos hoy!`;
-            streakSub.style.color = '#E5CBA7';
+            streakSub.textContent = `${dayRec.completedCount} de 3 hábitos cumplidos hoy. Seguí sumando para tu registro personal.`;
+            streakSub.style.color = '#705B3E';
         } else if (isPast) {
-            streakSub.textContent = 'Día finalizado sin cumplir objetivos. Tocá ✕ para ver el detalle.';
-            streakSub.style.color = '#F87171';
+            streakSub.textContent = 'Día finalizado sin registro de hábitos. Podés consultar el detalle para retomar mañana.';
+            streakSub.style.color = '#71717A';
         } else {
-            streakSub.textContent = 'Completá tus objetivos de hoy para mantener la racha activa.';
-            streakSub.style.color = '#A1A1AA';
+            streakSub.textContent = 'Completá tus 3 hábitos de hoy (Entrenamiento, Nutrición y Pasos) para tu seguimiento propio.';
+            streakSub.style.color = '#575659';
         }
     }
 
@@ -29887,6 +29924,14 @@ window.assignAutomatedStarterPlanClient = function(profileArg, anamnesisArg) {
 
 // Evaluador y Renderizador del Módulo de Rachas & Recompensas Desbloqueables (Dashboard + Nutrición)
 window.renderSensUnlockablesModule = function() {
+    // Ítem 1: La racha no otorga premios ni días gratis, es puramente para autogestión y seguimiento propio
+    const dashGrid = document.getElementById('dashUnlockablesCardsGrid');
+    const nutriGrid = document.getElementById('nutriUnlockablesCardsGrid');
+    if (dashGrid) dashGrid.style.display = 'none';
+    if (nutriGrid) nutriGrid.style.display = 'none';
+    return;
+};
+window._legacyRenderSensUnlockablesModule = function() {
     const dashGrid = document.getElementById('dashUnlockablesCardsGrid');
     const nutriGrid = document.getElementById('nutriUnlockablesCardsGrid');
     if (!dashGrid && !nutriGrid) return;
@@ -30256,5 +30301,326 @@ if (document.readyState === 'loading') {
     try { SensPwaManager.init(); } catch (e) {}
     try { SensBatteryPerfGovernor.init(); } catch (e) {}
     try { if (typeof window.renderSensUnlockablesModule === 'function') window.renderSensUnlockablesModule(); } catch (e) {}
+}
+
+
+
+/* =============================================================================
+   MÓDULO DE SEGUIMIENTO DEL ALUMNO (CALORÍAS DIARIAS BIEN/MAL & EVOLUCIÓN DE PESO)
+   ============================================================================= */
+
+window.switchTrackingModuleTab = function(tabName) {
+    const tabCals = document.getElementById('btnTrackTabCals');
+    const tabWeight = document.getElementById('btnTrackTabWeight');
+    const panelCals = document.getElementById('sensTrackingPanelCals');
+    const panelWeight = document.getElementById('sensTrackingPanelWeight');
+
+    if (tabName === 'calories') {
+        if (tabCals) tabCals.classList.add('active');
+        if (tabWeight) tabWeight.classList.remove('active');
+        if (panelCals) panelCals.style.display = 'block';
+        if (panelWeight) panelWeight.style.display = 'none';
+        window.renderTrackingCalsBars();
+    } else {
+        if (tabCals) tabCals.classList.remove('active');
+        if (tabWeight) tabWeight.classList.add('active');
+        if (panelCals) panelCals.style.display = 'none';
+        if (panelWeight) panelWeight.style.display = 'block';
+        window.renderWeightLineChart();
+    }
+};
+
+window.renderTrackingCalsBars = function() {
+    const grid = document.getElementById('sensTrackingCalsBarsGrid');
+    const goalLabel = document.getElementById('sensTrackingCalsGoalLabel');
+    const copyEl = document.getElementById('sensTrackingCalsAdherenceCopy');
+    if (!grid) return;
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const sDate = AppState.selectedDate || new Date();
+    const mon = getMonday(sDate);
+    const dayNames = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const targetKcal = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, sDate) : 1950;
+    if (goalLabel) goalLabel.textContent = `Meta diaria: ${targetKcal.toLocaleString('es-AR')} kcal`;
+
+    let goodDaysCount = 0;
+    let daysWithRecords = 0;
+
+    const barsHtml = [];
+
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(mon);
+        d.setDate(mon.getDate() + i);
+        d.setHours(0, 0, 0, 0);
+
+        const isToday = isSameDay(d, today);
+        const isFuture = d > today;
+        const dayKcal = (typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, d) : 0;
+        const target = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, d) : targetKcal;
+
+        let statusClass = 'status-pending';
+        let badgeClass = 'badge-pending';
+        let badgeText = '–';
+        let barFillPct = 0;
+
+        if (isFuture) {
+            statusClass = 'status-pending';
+            badgeClass = 'badge-pending';
+            badgeText = '–';
+            barFillPct = 8;
+        } else if (dayKcal === 0 && isToday) {
+            statusClass = 'status-pending';
+            badgeClass = 'badge-pending';
+            badgeText = '0 kcal';
+            barFillPct = 12;
+        } else if (dayKcal === 0) {
+            statusClass = 'status-missed';
+            badgeClass = 'badge-bad';
+            badgeText = '✕ Sin reg.';
+            barFillPct = 10;
+        } else {
+            daysWithRecords++;
+            const pct = target > 0 ? (dayKcal / target) : 0;
+            barFillPct = Math.min(100, Math.max(14, Math.round(pct * 80)));
+
+            // Regla SENS: "Bien" si está dentro del ±12% del objetivo diario
+            const isGood = (pct >= 0.85 && pct <= 1.15);
+            if (isGood) {
+                goodDaysCount++;
+                statusClass = 'status-good';
+                badgeClass = 'badge-good';
+                badgeText = '✓ Bien';
+            } else {
+                statusClass = 'status-bad';
+                badgeClass = 'badge-bad';
+                badgeText = '✕ Desvío';
+            }
+        }
+
+        barsHtml.push(`
+            <div class="sens-cals-bar-col ${isToday ? 'is-today' : ''}" onclick="if(typeof AppState!=='undefined'){ AppState.selectedDate=new Date('${d.toISOString()}'); if(typeof renderPortalWeekStrip==='function') renderPortalWeekStrip(); if(typeof updateNutriSummaryCardData==='function') updateNutriSummaryCardData(); }" title="${dayNames[i]}: ${dayKcal > 0 ? dayKcal + ' kcal (' + badgeText + ')' : 'Sin registrar'}">
+                <span class="sens-cals-bar-val">${dayKcal > 0 ? dayKcal : (isFuture ? '' : '0')}</span>
+                <div class="sens-cals-bar-track">
+                    <div class="sens-cals-bar-fill ${statusClass}" style="height: ${barFillPct}%;"></div>
+                </div>
+                <span class="sens-cals-day-badge ${badgeClass}">${badgeText}</span>
+                <span class="sens-cals-day-label" style="${isToday ? 'color: #121214; font-weight: 900;' : ''}">${dayNames[i]}</span>
+            </div>
+        `);
+    }
+
+    grid.innerHTML = barsHtml.join('');
+
+    if (copyEl) {
+        if (daysWithRecords === 0) {
+            copyEl.textContent = 'Registrá tus comidas de la semana para evaluar tus días en objetivo vs. desvíos.';
+        } else {
+            const pctAdherence = Math.round((goodDaysCount / Math.max(1, daysWithRecords)) * 100);
+            copyEl.textContent = `${goodDaysCount} de ${daysWithRecords} días evaluados en objetivo (${pctAdherence}% adherencia calórica).`;
+        }
+    }
+};
+
+window.renderWeightLineChart = function() {
+    const container = document.getElementById('sensWeightLineSvgContainer');
+    const numEl = document.getElementById('sensTrackingCurrentWeightNum');
+    const deltaEl = document.getElementById('sensTrackingWeightDeltaPill');
+    const lastDateEl = document.getElementById('sensTrackingWeightLastDate');
+    if (!container) return;
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const profile = AppState.profile || {};
+    const anamnesis = AppState.anamnesis || {};
+
+    const storageKey = `sens_weight_history_${athId}`;
+    let history = [];
+    try {
+        history = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    } catch (_) {}
+
+    // Semilla inicial realista si el usuario no tiene historial guardado aún
+    const currentW = parseFloat(profile.current_weight || profile.weight_kg || anamnesis.weight || 75.0);
+    if (!Array.isArray(history) || history.length === 0) {
+        const now = new Date();
+        const d1 = new Date(now); d1.setDate(now.getDate() - 9);
+        const d2 = new Date(now); d2.setDate(now.getDate() - 6);
+        const d3 = new Date(now); d3.setDate(now.getDate() - 3);
+        history = [
+            { date: formatDateDDMM(d1), iso: d1.toISOString().slice(0, 10), weight: +(currentW + 1.2).toFixed(1) },
+            { date: formatDateDDMM(d2), iso: d2.toISOString().slice(0, 10), weight: +(currentW + 0.8).toFixed(1) },
+            { date: formatDateDDMM(d3), iso: d3.toISOString().slice(0, 10), weight: +(currentW + 0.3).toFixed(1) },
+            { date: 'Hoy', iso: now.toISOString().slice(0, 10), weight: currentW }
+        ];
+        try {
+            localStorage.setItem(storageKey, JSON.stringify(history));
+        } catch (_) {}
+    }
+
+    const latest = history[history.length - 1];
+    const initial = history[0];
+    const delta = +(latest.weight - initial.weight).toFixed(1);
+
+    if (numEl) numEl.textContent = latest.weight.toFixed(1);
+    if (deltaEl) {
+        if (delta <= 0) {
+            deltaEl.textContent = `${delta} kg vs inicio`;
+            deltaEl.style.background = '#ECFDF5';
+            deltaEl.style.color = '#047857';
+        } else {
+            deltaEl.textContent = `+${delta} kg vs inicio`;
+            deltaEl.style.background = '#FFFBEB';
+            deltaEl.style.color = '#B45309';
+        }
+    }
+    if (lastDateEl) {
+        lastDateEl.textContent = `Último pesaje: ${latest.date}`;
+    }
+
+    // Generar gráfico de línea SVG Responsive y Retina
+    const weights = history.map(h => h.weight);
+    const minW = Math.min(...weights) - 0.6;
+    const maxW = Math.max(...weights) + 0.6;
+    const range = (maxW - minW) || 1;
+
+    const W = 340;
+    const H = 115;
+    const padX = 30;
+    const padTop = 15;
+    const padBottom = 25;
+    const usableW = W - (padX * 2);
+    const usableH = H - padTop - padBottom;
+
+    const points = history.map((item, idx) => {
+        const x = padX + (idx / Math.max(1, history.length - 1)) * usableW;
+        const y = padTop + usableH - ((item.weight - minW) / range) * usableH;
+        return { x: +x.toFixed(1), y: +y.toFixed(1), weight: item.weight, label: item.date };
+    });
+
+    const pathD = points.reduce((acc, p, i) => {
+        return i === 0 ? `M ${p.x} ${p.y}` : `${acc} L ${p.x} ${p.y}`;
+    }, '');
+
+    const areaD = `${pathD} L ${points[points.length - 1].x} ${H - padBottom} L ${points[0].x} ${H - padBottom} Z`;
+
+    const svgHtml = `
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible;">
+            <defs>
+                <linearGradient id="sensWeightGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#C5A880" stop-opacity="0.32" />
+                    <stop offset="100%" stop-color="#C5A880" stop-opacity="0.0" />
+                </linearGradient>
+            </defs>
+
+            <!-- Líneas de Guía Horizontales -->
+            <line x1="${padX}" y1="${padTop}" x2="${W - padX}" y2="${padTop}" stroke="rgba(18,18,20,0.06)" stroke-dasharray="3,3" />
+            <line x1="${padX}" y1="${padTop + (usableH/2)}" x2="${W - padX}" y2="${padTop + (usableH/2)}" stroke="rgba(18,18,20,0.06)" stroke-dasharray="3,3" />
+            <line x1="${padX}" y1="${H - padBottom}" x2="${W - padX}" y2="${H - padBottom}" stroke="rgba(18,18,20,0.12)" />
+
+            <!-- Área Sombrada debajo de la curva -->
+            <path d="${areaD}" fill="url(#sensWeightGrad)" />
+
+            <!-- Línea de Tendencia Principal -->
+            <path d="${pathD}" fill="none" stroke="#705B3E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
+            <!-- Puntos de Datos y Etiquetas -->
+            ${points.map((p, i) => `
+                <circle cx="${p.x}" cy="${p.y}" r="4" fill="#FFFFFF" stroke="#705B3E" stroke-width="2.5" />
+                <text x="${p.x}" y="${p.y - 7}" text-anchor="middle" font-size="9" font-weight="800" fill="#121214">${p.weight}k</text>
+                <text x="${p.x}" y="${H - 8}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#77767B">${p.label}</text>
+            `).join('')}
+        </svg>
+    `;
+
+    container.innerHTML = svgHtml;
+};
+
+// Modal de Cargar Peso
+window.openLogWeightModal = function() {
+    const modal = document.getElementById('userLogWeightModal');
+    const inp = document.getElementById('inputModalWeightVal');
+    if (!modal) return;
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const profile = AppState.profile || {};
+    const currentW = parseFloat(profile.current_weight || 75.0);
+
+    if (inp) inp.value = currentW.toFixed(1);
+    modal.style.display = 'flex';
+};
+
+window.closeLogWeightModal = function() {
+    const modal = document.getElementById('userLogWeightModal');
+    if (modal) modal.style.display = 'none';
+};
+
+window.stepWeightModalInput = function(delta) {
+    const inp = document.getElementById('inputModalWeightVal');
+    if (!inp) return;
+    const cur = parseFloat(inp.value) || 75.0;
+    const next = Math.max(35, Math.min(250, +(cur + delta).toFixed(1)));
+    inp.value = next.toFixed(1);
+};
+
+window.saveWeightFromModal = function() {
+    const inp = document.getElementById('inputModalWeightVal');
+    if (!inp) return;
+    const newWeight = parseFloat(inp.value);
+    if (isNaN(newWeight) || newWeight <= 30 || newWeight > 260) {
+        showSensToast('Ingresá un peso válido en kg.', 'error');
+        return;
+    }
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const now = new Date();
+    const todayIso = now.toISOString().slice(0, 10);
+    const todayLabel = formatDateDDMM(now);
+
+    const storageKey = `sens_weight_history_${athId}`;
+    let history = [];
+    try {
+        history = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    } catch (_) {}
+
+    // Si ya había registro hoy, actualizar; si no, agregar
+    const existingIdx = history.findIndex(h => h.iso === todayIso);
+    if (existingIdx !== -1) {
+        history[existingIdx].weight = newWeight;
+        history[existingIdx].date = 'Hoy';
+    } else {
+        history.push({ date: 'Hoy', iso: todayIso, weight: newWeight });
+    }
+
+    // Mantener los últimos 14 pesajes
+    if (history.length > 14) history = history.slice(-14);
+
+    try {
+        localStorage.setItem(storageKey, JSON.stringify(history));
+        if (AppState.profile) {
+            AppState.profile.current_weight = newWeight;
+            localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+        }
+    } catch (_) {}
+
+    // Sincronizar en Supabase si está disponible
+    if (typeof supabaseClient !== 'undefined' && supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            supabaseClient.from('profiles').update({ current_weight: newWeight }).eq('id', athId).then();
+        } catch (_) {}
+    }
+
+    window.closeLogWeightModal();
+    window.renderWeightLineChart();
+    showSensToast(`Peso registrado: ${newWeight.toFixed(1)} kg ✓`, 'champagne');
+};
+
+// Sincronizar el renderizado del seguimiento al cambiar fechas o cargar el portal
+if (typeof window.initUserTrackingModule !== 'function') {
+    window.initUserTrackingModule = function() {
+        window.renderTrackingCalsBars();
+        window.renderWeightLineChart();
+    };
 }
 

@@ -138,7 +138,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=30.0">
+    <link rel="stylesheet" href="style.css?v=31.0">
     <script>
         (function () {
             try {
@@ -3119,10 +3119,9 @@
                             <div class="sens-streak-count-col">
                                 <div class="sens-streak-count-row">
                                     <span class="sens-streak-hero-num" id="sensStreakHeroNum">0</span>
-                                    <span class="sens-streak-hero-unit">DÍAS EN RACHA</span>
+                                    <span class="sens-streak-hero-unit">DÍAS CONSECUTIVOS</span>
                                 </div>
-                                <div class="sens-streak-level-tag" id="sensStreakLevelTag">Nivel 1 • Inicio del Hábito
-                                </div>
+                                <div class="sens-streak-level-tag" id="sensStreakLevelTag">Seguimiento de Hábitos &amp; Disciplina Propia</div>
                             </div>
                         </div>
                         <span class="sens-streak-status-pill" id="sensStreakStatusPill">En progreso</span>
@@ -3130,8 +3129,7 @@
 
                     <!-- Fila 2: Subtítulo con ancho completo (Zero Overlap) -->
                     <div class="sens-streak-sub-row">
-                        <div class="sens-streak-sub" id="sensStreakSubText">Completá tus objetivos de hoy para mantener
-                            la racha.</div>
+                        <div class="sens-streak-sub" id="sensStreakSubText">Seguimiento diario de tus 3 pilares biológicos (Entrenamiento, Nutrición y Pasos/Cardio).</div>
                     </div>
 
                     <!-- Fila 3: Tira Semanal de 7 Días Independiente y Distribuida (Lun - Dom) -->
@@ -3506,7 +3504,43 @@
                             </span>
                         </div>
                     </div>
-                    <div class="sens-nutri-card-content">
+                    
+                    <!-- Estado B: Sin Comidas Asignadas ni Cargadas para Hoy (Item 3) -->
+                    <div class="sens-nutri-empty-content" id="dashNutriEmptyContent" style="display: none;">
+                        <div class="sens-empty-nutri-header">
+                            <span class="sens-modality-pill" style="background: rgba(251,222,185,0.55); color: #705B3E; font-weight: 800; font-size: 10.5px; border-radius: 999px; padding: 3px 10px;">Objetivo del Día</span>
+                            <span class="sens-card-streak-pill" id="dashNutriEmptyStatusPill" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.1); color: #121214; font-weight: 800; font-size: 11px; padding: 3px 10px; border-radius: 999px;">
+                                <span class="streak-pill-dot" style="background: #F59E0B;"></span>
+                                <span id="dashNutriEmptyCalsFraction">0 / 1.950 kcal</span>
+                            </span>
+                        </div>
+
+                        <div class="sens-empty-cals-hero">
+                            <div class="sens-empty-hero-val-row">
+                                <span class="sens-empty-cals-big" id="dashNutriEmptyConsumedNum">0</span>
+                                <span class="sens-empty-cals-unit">kcal hechas hoy</span>
+                            </div>
+                            <div class="sens-empty-cals-target-row">
+                                <span>Meta diaria: <strong id="dashNutriEmptyTargetNum">1.950 kcal</strong></span>
+                                <span class="sens-empty-cals-remaining" id="dashNutriEmptyRemainingText">Te faltan <strong id="dashNutriEmptyRemainingNum">1.950 kcal</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Barra de Progreso a la Meta -->
+                        <div class="sens-empty-progress-track">
+                            <div class="sens-empty-progress-fill" id="dashNutriEmptyProgressFill" style="width: 0%;"></div>
+                        </div>
+
+                        <div class="sens-empty-actions-row">
+                            <button type="button" class="btn btn-primary sens-btn-empty-log-food" onclick="if(typeof openCustomMealModalForSlot==='function') openCustomMealModalForSlot('almuerzo'); event.stopPropagation();">
+                                + Registrar Comida
+                            </button>
+                            <button type="button" class="btn btn-outline sens-btn-empty-view-plan" onclick="if(typeof switchPortalView==='function') switchPortalView('nutritionView'); event.stopPropagation();">
+                                Ver Plan →
+                            </button>
+                        </div>
+                    </div>
+<div class="sens-nutri-card-content">
                         <div class="sens-card-top-info-row">
                             <div class="sens-card-info-stack">
                                 <span class="sens-card-domain-eyebrow" id="dashNutriDayDateLabel" style="display: none !important;">Nutrición de Hoy</span>
@@ -3553,7 +3587,77 @@
                 </div>
                 </div>
 
-                <!-- 4. Card de Balance Energético Diario: Ecuación Real + Gráfico Semanal (Quiet Luxury Obsidian) -->
+                
+                <!-- =========================================================================
+                     SECCIÓN DE SEGUIMIENTO DEL USUARIO: CALORÍAS (BIEN VS MAL) & PESO (LÍNEA)
+                     ========================================================================= -->
+                <div class="sens-tracking-section-card" id="dashUserTrackingCard">
+                    <div class="sens-tracking-top-row">
+                        <div>
+                            <span class="sens-card-domain-eyebrow" style="color: #705B3E; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">SEGUIMIENTO &amp; ADHERENCIA</span>
+                            <h3 class="sens-tracking-main-title">Mi Seguimiento Diario</h3>
+                        </div>
+                        <button type="button" class="sens-btn-quick-log-weight" id="btnOpenLogWeightModal" onclick="window.openLogWeightModal();" aria-label="Registrar peso de hoy">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span>+ Registrar Peso</span>
+                        </button>
+                    </div>
+
+                    <!-- Píldoras de Selección de Métrica -->
+                    <div class="sens-tracking-segmented-bar">
+                        <button type="button" class="sens-tracking-seg-pill active" id="btnTrackTabCals" onclick="window.switchTrackingModuleTab('calories');">
+                            Calorías Diarias (Bien vs. Desvío)
+                        </button>
+                        <button type="button" class="sens-tracking-seg-pill" id="btnTrackTabWeight" onclick="window.switchTrackingModuleTab('weight');">
+                            Evolución de Peso (Línea)
+                        </button>
+                    </div>
+
+                    <!-- Panel A: Gráfico Diario de Calorías (Bien vs. Mal) -->
+                    <div class="sens-tracking-tab-panel" id="sensTrackingPanelCals">
+                        <div class="sens-cals-chart-meta-row">
+                            <span class="sens-cals-meta-label" id="sensTrackingCalsGoalLabel">Meta Diaria: 1.950 kcal</span>
+                            <div class="sens-cals-legend-group">
+                                <span class="sens-legend-chip on-target"><span class="legend-dot dot-good"></span> En Objetivo (Bien)</span>
+                                <span class="sens-legend-chip off-target"><span class="legend-dot dot-bad"></span> Desvío</span>
+                                <span class="sens-legend-chip pending"><span class="legend-dot dot-pending"></span> Pendiente</span>
+                            </div>
+                        </div>
+
+                        <!-- Barras Semanales de Calorías -->
+                        <div class="sens-cals-bars-grid" id="sensTrackingCalsBarsGrid">
+                            <!-- Inyectado dinámicamente: 7 días Lun-Dom con Kcal reales y badge Bien/Desvío -->
+                        </div>
+
+                        <div class="sens-cals-summary-strip" id="sensTrackingCalsSummaryStrip">
+                            <span class="summary-check-icon">✓</span>
+                            <span id="sensTrackingCalsAdherenceCopy">Analizando tus días en objetivo...</span>
+                        </div>
+                    </div>
+
+                    <!-- Panel B: Gráfico Diario de Peso (Línea) -->
+                    <div class="sens-tracking-tab-panel" id="sensTrackingPanelWeight" style="display: none;">
+                        <div class="sens-weight-kpi-summary">
+                            <div class="sens-weight-stat-box">
+                                <span class="weight-label">Peso Actual</span>
+                                <div class="weight-value">
+                                    <span id="sensTrackingCurrentWeightNum">75.0</span> <span class="unit">kg</span>
+                                </div>
+                            </div>
+                            <div class="sens-weight-delta-box">
+                                <span class="weight-delta-pill" id="sensTrackingWeightDeltaPill">−1.2 kg vs inicio</span>
+                                <span class="weight-last-date" id="sensTrackingWeightLastDate">Último pesaje: Hoy</span>
+                            </div>
+                        </div>
+
+                        <!-- Gráfico de Línea SVG Responsive -->
+                        <div class="sens-weight-line-svg-container" id="sensWeightLineSvgContainer">
+                            <!-- Renderizado dinámicamente por renderWeightLineChart() -->
+                        </div>
+                    </div>
+                </div>
+
+<!-- 4. Card de Balance Energético Diario: Ecuación Real + Gráfico Semanal (Quiet Luxury Obsidian) -->
                 <div class="sens-metabolic-balance-card" id="dashObjectiveCard">
                     <!-- Encabezado de Balance Energético -->
                     <div class="sens-balance-header">
@@ -9105,7 +9209,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=1.0"></script>
-    <script src="app.js?v=34.0"></script>
+    <script src="app.js?v=35.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
@@ -9119,6 +9223,50 @@
             }, 350);
         })();
     </script>
+
+    <!-- =========================================================================
+         MODAL BOTTOM SHEET: REGISTRAR PESO CORPORAL DIARIO
+         ========================================================================= -->
+    <div class="sens-modal-sheet-wrap" id="userLogWeightModal" style="display: none;" onclick="if(event.target===this) window.closeLogWeightModal();">
+        <div class="sens-modal-sheet-box" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08); box-shadow: 0 -12px 48px rgba(18,18,20,0.16); max-width: 440px; margin: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div>
+                    <span class="pill pill-champagne" style="font-size: 10px; padding: 3px 10px; background: rgba(251,222,185,0.55); color: #705B3E; font-weight: 800;">SEGUIMIENTO CORPORAL</span>
+                    <h3 style="margin: 4px 0 0 0; font-size: 1.15rem; font-weight: 800; color: #121214;">Registrar Peso de Hoy</h3>
+                </div>
+                <button type="button" class="sens-modal-close-btn" onclick="window.closeLogWeightModal();" aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    ✕
+                </button>
+            </div>
+
+            <p style="font-size: 12px; color: #575659; margin: 0 0 16px 0; line-height: 1.45;">
+                Ingresá tu peso matutino en ayunas para actualizar tu gráfico de línea y calibrar tu balance calórico.
+            </p>
+
+            <!-- Stepper Central de Peso -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin: 16px 0 20px;">
+                <button type="button" onclick="window.stepWeightModalInput(-0.1);" style="width: 46px; height: 46px; border-radius: 12px; border: 1.5px solid rgba(18,18,20,0.15); background: #FAF7F2; color: #121214; font-size: 22px; font-weight: 800; cursor: pointer;">−</button>
+                <div style="display: flex; align-items: baseline; gap: 6px; background: #F4F3F1; padding: 8px 18px; border-radius: 14px; border: 1px solid rgba(18,18,20,0.1);">
+                    <input type="number" id="inputModalWeightVal" step="0.1" min="35" max="250" value="75.0" style="width: 80px; font-size: 28px; font-weight: 900; background: transparent; border: none; text-align: right; color: #121214;" aria-label="Peso en kg">
+                    <span style="font-size: 14px; font-weight: 800; color: #705B3E;">KG</span>
+                </div>
+                <button type="button" onclick="window.stepWeightModalInput(0.1);" style="width: 46px; height: 46px; border-radius: 12px; border: 1.5px solid rgba(18,18,20,0.15); background: #FAF7F2; color: #121214; font-size: 22px; font-weight: 800; cursor: pointer;">+</button>
+            </div>
+
+            <!-- Chips de Ajuste Rápido -->
+            <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
+                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(-0.5);" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">-0.5 kg</button>
+                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(-0.2);" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">-0.2 kg</button>
+                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(0.2);" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">+0.2 kg</button>
+                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(0.5);" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">+0.5 kg</button>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="window.saveWeightFromModal();" style="width: 100%; padding: 13px; font-size: 13.5px; font-weight: 800; border-radius: 12px; background: #121214; color: #FFFFFF; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(18,18,20,0.18);">
+                Guardar Registro de Peso ✓
+            </button>
+        </div>
+    </div>
+
 </body>
 
 </html>
