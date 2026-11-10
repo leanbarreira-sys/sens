@@ -75,44 +75,24 @@ function extractTitle(html, defaultTitle) {
 const templates = [];
 
 // =========================================================================
-// 1. MASTER SUITE (E01 - E20)
+// 1. MASTER SUITE (E01 - E20) — Senior Director UX Wellness Redesign
 // =========================================================================
 console.log('Processing 1. Master Suite (E01 - E20)...');
-const masterFile = path.join(baseDir, 'sens_master_suite_20_templates_9_16_ultra_variados_growth_marketing', 'code.html');
-const masterContent = fs.readFileSync(masterFile, 'utf8');
-const mStart = masterContent.indexOf('const masterTemplates = [');
-let mDepth = 0;
-let mEnd = -1;
-for (let i = mStart; i < masterContent.length; i++) {
-  if (masterContent[i] === '[') mDepth++;
-  else if (masterContent[i] === ']') {
-    mDepth--;
-    if (mDepth === 0) {
-      mEnd = i + 1;
-      break;
-    }
-  }
-}
-const mCode = masterContent.substring(mStart, mEnd);
-const mBox = {};
-new Function('sandbox', mCode + '; sandbox.masterTemplates = masterTemplates;')(mBox);
+const { redesignedE01toE20 } = require('./redesign_e01_e20.js');
 
-mBox.masterTemplates.forEach((t, i) => {
-  const num = i + 1;
-  const id = `E${String(num).padStart(2, '0')}`;
-  const html = cleanHtmlForStage(t.render);
-  const title = t.name ? t.name.replace(/^T\d+\s*•?\s*/i, '').trim() : extractTitle(html, `Master Template ${num}`);
+redesignedE01toE20.forEach((t) => {
+  const html = cleanHtmlForStage(t.html);
   templates.push({
-    id,
-    code: id,
-    num,
+    id: t.id,
+    code: t.id,
+    num: t.num,
     format: '9:16',
     group: 'static',
     groupName: 'Estáticos',
     blockId: 'b1',
     block: 'Master Growth Engine',
-    name: title,
-    title,
+    name: t.name,
+    title: t.title,
     thumbBg: extractBgUrl(html),
     defaultBg: extractBgUrl(html),
     html

@@ -398,12 +398,12 @@
   }
 
   function syncExportButtonsForMediaKind() {
-    const isVid = hasActiveVideoSlot();
+    const isVid = hasActiveVideoSlot() || state.group === 'motion' || (state.activeTemplateId && state.activeTemplateId.startsWith('M'));
     if (els.export4kLabel) {
       els.export4kLabel.textContent = isVid ? 'Video 4K UHD' : 'Portada 4K';
     }
     if (els.exportReelLabel) {
-      els.exportReelLabel.textContent = 'Exportar Video HD';
+      els.exportReelLabel.textContent = isVid ? 'Exportar Video UHD 60FPS' : 'Exportar Video HD';
     }
     if (els.exportOverlayPngLabel) {
       els.exportOverlayPngLabel.textContent = 'Capa PNG Transparente 4K';
@@ -1326,7 +1326,7 @@
       const rawCanvas = await window.html2canvas(stageEl, {
         scale: scale,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: null,
         logging: false,
         ignoreElements: (el) => {
@@ -1440,10 +1440,64 @@
     modal.classList.add('opacity-0', 'pointer-events-none');
   }
 
+  // Robust Cross-Frame Download Trigger:
+  // Works both in standalone windows and embedded inside Coach OS iframe (#sensMarketingSuiteFrame)
+  function triggerFileDownload(blobOrDataUrl, filename) {
+    if (!blobOrDataUrl) return;
+    let url = '';
+    let isBlob = false;
+    if (typeof blobOrDataUrl === 'string') {
+      url = blobOrDataUrl;
+    } else if (blobOrDataUrl instanceof Blob) {
+      url = URL.createObjectURL(blobOrDataUrl);
+      isBlob = true;
+    }
+    if (!url) return;
+
+    // 1. Direct in-frame trigger
+    try {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename || 'SENS-EXPORT';
+      a.rel = 'noopener';
+      a.target = '_self';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        try { a.remove(); } catch (_) {}
+      }, 2000);
+    } catch (err) {
+      console.warn('In-frame download click failed:', err);
+    }
+
+    // 2. PostMessage to parent Coach OS window (if nested in iframe)
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({
+          type: 'SENS_TRIGGER_DOWNLOAD',
+          url: url,
+          filename: filename
+        }, '*');
+      }
+    } catch (err) {
+      console.warn('Cross-frame download notification error:', err);
+    }
+
+    // 3. Keep blob URL active for 60 seconds so browser download completes cleanly
+    if (isBlob) {
+      setTimeout(() => {
+        try { URL.revokeObjectURL(url); } catch (_) {}
+      }, 60000);
+    }
+  }
+
   async function handleExport4K() {
-    // CRITICAL RULE: If the user uploaded a VIDEO into any template (even an image/feed template),
-    // the output MUST respect the video input and export a high-resolution video!
-    if (hasActiveVideoSlot()) {
+    // CRITICAL RULE: If the user uploaded a VIDEO into any template,
+    // OR if the template belongs to the animated/motion category (M01-M40),
+    // the output MUST export a UHD 60FPS video ready to use and upload!
+    const isMotionOrVid = hasActiveVideoSlot() || state.group === 'motion' || (state.activeTemplateId && state.activeTemplateId.startsWith('M'));
+    if (isMotionOrVid) {
       await handleExportReel60FPS({ from4kBtn: true });
       return;
     }
@@ -1457,12 +1511,8 @@
       const canvas4K = await renderStageToHighResCanvas(2160);
       updateExportProgress('Generando imagen UHD sin pérdidas...', 85);
       const dataUrl = canvas4K.toDataURL('image/png', 1.0);
-      const link = document.createElement('a');
-      link.download = `SENS-4K-UHD-${state.activeTemplateId}-${canvas4K.width}x${canvas4K.height}.png`;
-      link.href = dataUrl;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const filename = `SENS-4K-UHD-${state.activeTemplateId}-${canvas4K.width}x${canvas4K.height}.png`;
+      triggerFileDownload(dataUrl, filename);
       showToast(`Portada 4K descargada (${canvas4K.width}×${canvas4K.height}px)`);
     } catch (err) {
       console.error('Export 4K Error:', err);
@@ -1849,7 +1899,7 @@
         const rawBgBase = await window.html2canvas(stageEl, {
           scale: scale,
           useCORS: true,
-          allowTaint: true,
+          allowTaint: false,
           backgroundColor: null,
           logging: false,
           ignoreElements: ignoreVideoAndGuides,
@@ -1889,7 +1939,7 @@
       const rawOverlay = await window.html2canvas(stageEl, {
         scale: scale,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: null,
         logging: false,
         ignoreElements: ignoreVideoAndGuides,
@@ -2010,12 +2060,8 @@
 
       updateExportProgress('Generando archivo final...', 90);
       const dataUrl = fgOverlayCanvas.toDataURL('image/png', 1.0);
-      const link = document.createElement('a');
-      link.download = `SENS-CAPA-TRANSPARENTE-${state.activeTemplateId}-${outW}x${outH}.png`;
-      link.href = dataUrl;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const filename = `SENS-CAPA-TRANSPARENTE-${state.activeTemplateId}-${outW}x${outH}.png`;
+      triggerFileDownload(dataUrl, filename);
       showToast(`Capa PNG Transparente descargada (${outW}×${outH}px) • Lista para IG Edits`);
     } catch (err) {
       console.error('Transparent PNG Overlay Error:', err);
@@ -2027,14 +2073,17 @@
     }
   }
 
-  // Export 60FPS Reel / Video UHD (Records live <video> slots + transparent UI overlay at 60FPS, or animated Ken Burns if photo)
+  // Export 60FPS Reel / Video UHD (Records live <video> slots + transparent UI overlay at 60FPS, or kinetic Ken Burns motion)
   async function handleExportReel60FPS(opts) {
     const from4kBtn = Boolean(opts && opts.from4kBtn);
     const origReelText = els.exportReelLabel.textContent;
     const orig4kText = els.export4kLabel.textContent;
     els.exportReelBtn.disabled = true;
     els.export4kBtn.disabled = true;
-    showExportProgressModal(from4kBtn ? 'Exportando Video UHD' : 'Exportando Video 60FPS', 'Preparando capas HD...', 15);
+
+    const isMotionTemplate = state.group === 'motion' || (state.activeTemplateId && state.activeTemplateId.startsWith('M')) || state.motionLoop;
+    const modalTitle = from4kBtn ? 'Exportando Video UHD 4K' : (isMotionTemplate ? 'Exportando Video Cinematográfico 60FPS' : 'Exportando Video UHD 60FPS');
+    showExportProgressModal(modalTitle, 'Preparando capas HD...', 15);
 
     try {
       if (from4kBtn) {
@@ -2103,6 +2152,17 @@
             }
           } catch (_) {}
         }
+      } else if (isMotionTemplate) {
+        // For motion templates without an uploaded video, split into background & foreground kinetic layers
+        updateExportProgress('Componiendo capas de animación cinética...', 22);
+        try {
+          const layers = await renderVideoLayersForComposite(outW, []);
+          bgBaseCanvas = layers.bgBaseCanvas;
+          fgOverlayCanvas = layers.fgOverlayCanvas;
+        } catch (layerErr) {
+          console.warn('Separated kinetic layers failed, falling back to baseFrame:', layerErr);
+          baseFrame = await renderStageToHighResCanvas(outW);
+        }
       } else {
         updateExportProgress('Renderizando fotograma base UHD...', 22);
         baseFrame = await renderStageToHighResCanvas(outW);
@@ -2115,20 +2175,38 @@
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
-      const stream = streamCanvas.captureStream(60);
-      let mimeType = 'video/webm;codecs=vp9';
-      if (MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')) {
-        mimeType = 'video/mp4;codecs=avc1';
-      } else if (MediaRecorder.isTypeSupported('video/mp4')) {
-        mimeType = 'video/mp4';
-      } else if (!MediaRecorder.isTypeSupported(mimeType)) {
-        mimeType = 'video/webm';
+      const fps = 60;
+      const stream = streamCanvas.captureStream ? streamCanvas.captureStream(fps) : (streamCanvas.mozCaptureStream ? streamCanvas.mozCaptureStream(fps) : null);
+      if (!stream) {
+        throw new Error('Canvas captureStream no soportado en este navegador');
       }
 
-      const recorder = new MediaRecorder(stream, {
-        mimeType,
-        videoBitsPerSecond: 32000000 // 32 Mbps Cinema UHD bitrate
-      });
+      let mimeType = 'video/webm;codecs=vp9';
+      if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported) {
+        if (MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')) {
+          mimeType = 'video/mp4;codecs=avc1';
+        } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+          mimeType = 'video/mp4';
+        } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+          mimeType = 'video/webm;codecs=vp9';
+        } else if (MediaRecorder.isTypeSupported('video/webm')) {
+          mimeType = 'video/webm';
+        }
+      }
+
+      let recorder = null;
+      const bitrateCandidates = [16000000, 10000000, 6000000, undefined];
+      for (const br of bitrateCandidates) {
+        try {
+          const recOpts = { mimeType };
+          if (br) recOpts.videoBitsPerSecond = br;
+          recorder = new MediaRecorder(stream, recOpts);
+          if (recorder) break;
+        } catch (_) {}
+      }
+      if (!recorder) {
+        recorder = new MediaRecorder(stream);
+      }
 
       const chunks = [];
       recorder.ondataavailable = (e) => {
@@ -2143,6 +2221,8 @@
         } else {
           durationMs = 8000;
         }
+      } else if (isMotionTemplate) {
+        durationMs = 5000; // Optimal 5s reel loop
       }
 
       const startTime = performance.now();
@@ -2201,6 +2281,29 @@
 
             // 3. Draw foreground scrim gradients, glass cards, badges & crisp typography (Layer 2)
             ctx.drawImage(fgOverlayCanvas, 0, 0, outW, outH);
+          } else if (fgOverlayCanvas) {
+            // Kinetic motion rendering for animated templates (M01-M40)
+            // 1. Background layer with cinematic Ken Burns slow pan & zoom
+            if (bgBaseCanvas) {
+              const kbScale = 1.0 + 0.045 * Math.sin(progress * Math.PI);
+              const kbPanY = Math.sin(progress * Math.PI) * (outH * 0.012);
+              ctx.save();
+              ctx.translate(outW / 2, outH / 2);
+              ctx.scale(kbScale, kbScale);
+              ctx.drawImage(bgBaseCanvas, -outW / 2, -outH / 2 + kbPanY, outW, outH);
+              ctx.restore();
+            } else {
+              ctx.fillStyle = '#080809';
+              ctx.fillRect(0, 0, outW, outH);
+            }
+
+            // 2. Subtle kinetic breathing / somatic wave on typography & cards
+            const kineticScale = 1 + 0.012 * Math.sin(progress * Math.PI * 2);
+            ctx.save();
+            ctx.translate(outW / 2, outH / 2);
+            ctx.scale(kineticScale, kineticScale);
+            ctx.drawImage(fgOverlayCanvas, -outW / 2, -outH / 2, outW, outH);
+            ctx.restore();
           } else if (baseFrame) {
             const scalePulse = 1 + 0.035 * Math.sin(progress * Math.PI * 2);
             ctx.save();
@@ -2214,7 +2317,10 @@
             requestAnimationFrame(drawTick);
           } else {
             updateExportProgress('Empaquetando video UHD...', 98);
-            recorder.stop();
+            if (recorder.state === 'recording') {
+              try { recorder.requestData(); } catch (_) {}
+              recorder.stop();
+            }
           }
         }
         requestAnimationFrame(drawTick);
@@ -2222,15 +2328,9 @@
 
       const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
       const blob = new Blob(chunks, { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `SENS-VIDEO-60FPS-${state.activeTemplateId}-${outW}x${outH}.${ext}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 10000);
-      showToast(`Video 60FPS exportado (${outW}×${outH}px)`);
+      const filename = `SENS-VIDEO-60FPS-${state.activeTemplateId}-${outW}x${outH}.${ext}`;
+      triggerFileDownload(blob, filename);
+      showToast(`Video 60FPS exportado (${outW}×${outH}px) • Listo para Reels`);
     } catch (err) {
       console.error('Reel Export Error:', err);
       showToast('Error al exportar Video');

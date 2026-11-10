@@ -22064,14 +22064,29 @@ function syncMarketingSuiteIframe() {
 }
 window.syncMarketingSuiteIframe = syncMarketingSuiteIframe;
 
-// Dynamic height synchronization for Marketing Studio single seamless scroll (eliminates internal iframe scrollbar)
+// Dynamic height synchronization & cross-frame file download for Marketing Studio
 window.addEventListener('message', function (e) {
-    if (e && e.data && e.data.type === 'SENS_MKT_HEIGHT' && typeof e.data.height === 'number') {
+    if (!e || !e.data) return;
+    if (e.data.type === 'SENS_MKT_HEIGHT' && typeof e.data.height === 'number') {
         const frame = document.getElementById('sensMarketingSuiteFrame');
         if (frame) {
             const h = Math.max(e.data.height + 40, 850);
             frame.style.height = h + 'px';
             frame.style.minHeight = h + 'px';
+        }
+    } else if (e.data.type === 'SENS_TRIGGER_DOWNLOAD' && e.data.url) {
+        try {
+            const a = document.createElement('a');
+            a.href = e.data.url;
+            a.download = e.data.filename || 'SENS-EXPORT.mp4';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+                try { a.remove(); } catch (_) {}
+            }, 3000);
+        } catch (err) {
+            console.error('Parent window download execution error:', err);
         }
     }
 });
