@@ -21958,16 +21958,17 @@ function saveCoachDbItemEditorChanges() {
 // overlays adaptables y 100% de legibilidad en cualquier foto o video.
 // =============================================================================
 /* =============================================================================
-   SENS QUIET VITALITY — GROWTH STUDIO DE MARKETING (200 TEMPLATES 4K UHD)
-   100 Templates en 9:16 (Stories/Reels) y 100 en 4:5 (Feed/Carrusel)
-   Modo Híbrido: Edición Directa WYSIWYG + Panel con Límite Estricto de Caracteres
-   Soporte Universal de Foto & Video • Exportación en Ultra High Definition (UHD)
+   SENS QUIET VITALITY — GROWTH STUDIO DE MARKETING (140 TEMPLATES 9:16 UHD)
+   100 Templates Estáticos (E01-E100) y 40 Con Animación (M01-M40)
+   Opacidad Default 40%-60% • Márgenes Laterales Seguros para Mobile & Stories
+   Exportación en Ultra High Definition (UHD 4K 2160x3840 y 60 FPS)
    ============================================================================= */
 
 const MktStudioState = {
-    format: '9:16', // '9:16' o '4:5'
-    blockId: 'b1',   // 'b1' a 'b5'
-    templateId: 'T01',
+    group: 'static',   // 'static' o 'motion'
+    format: '9:16',    // Formato exclusivo 9:16
+    blockId: 'all',    // Subcategoría o 'all'
+    templateId: 'E01',
     mediaType: 'image', // 'image' o 'video'
     mediaUrl: 'img/hero-bg-opt.jpg',
     showSafeZones: false,
@@ -21991,15 +21992,17 @@ function getMktCatalog() {
 
 function getActiveMktTemplate() {
     const catalog = getMktCatalog();
-    let tpl = catalog.find(t => t.code === MktStudioState.templateId);
+    let tpl = catalog.find(t => (t.code === MktStudioState.templateId || t.id === MktStudioState.templateId));
     if (!tpl) {
-        tpl = catalog.find(t => t.format === MktStudioState.format && t.blockId === MktStudioState.blockId);
+        tpl = catalog.find(t => t.group === MktStudioState.group);
     }
     if (!tpl) {
         tpl = catalog[0] || {
-            code: 'T01',
+            code: 'E01',
+            id: 'E01',
             name: 'Template Inicial',
             format: '9:16',
+            group: 'static',
             blockId: 'b1',
             tag: 'SENS • PROTOCOLO',
             title: 'Tu punto de partida no es tu destino.',
@@ -22012,7 +22015,7 @@ function getActiveMktTemplate() {
 }
 
 function initCoachMarketingStudio() {
-    console.log('[SENS Marketing Studio] Inicializando suite de 200 templates Quiet Vitality...');
+    console.log('[SENS Marketing Studio] Inicializando suite de 140 templates 9:16 Quiet Vitality (Estáticos & Motion)...');
     const catalog = getMktCatalog();
     if (!catalog || catalog.length === 0) {
         console.warn('[SENS Marketing Studio] window.SENS_MARKETING_CATALOG no encontrado. Reintentando carga...');
@@ -22031,7 +22034,7 @@ function initCoachMarketingStudio() {
     syncMarketingSuiteIframe();
 
     // Cargar template inicial
-    loadMktTemplate(getActiveMktTemplate().code);
+    loadMktTemplate(getActiveMktTemplate().code || getActiveMktTemplate().id);
 }
 window.initCoachMarketingStudio = initCoachMarketingStudio;
 
@@ -22043,20 +22046,16 @@ function stopCoachMarketingStudio() {
 }
 window.stopCoachMarketingStudio = stopCoachMarketingStudio;
 
-// 1. SELECTOR DE FORMATO (9:16 vs 4:5)
+// 1. SINCRONIZACIÓN DE SUITE IFRAME (9:16)
 function syncMarketingSuiteIframe() {
     const iframe = document.getElementById('sensMarketingSuiteFrame');
     if (!iframe) return;
-    const targetUrl = 'marketing-suites/studio-master.html?v=29.2';
+    const targetUrl = 'marketing-suites/studio-master.html?v=30.0';
     const currentSrc = iframe.getAttribute('src') || '';
-    if (!currentSrc.includes('studio-master.html?v=29.2')) {
+    if (!currentSrc.includes('studio-master.html?v=30.0')) {
         iframe.src = targetUrl;
     } else if (iframe.contentWindow) {
-        const is916 = (MktStudioState.format === '9:16');
-        const prefix = is916 ? 'T' : 'F';
-        const bNum = parseInt((MktStudioState.blockId || 'b1').replace('b', ''), 10) || 1;
-        const startNum = (bNum - 1) * 20 + 1;
-        const tplId = `${prefix}${String(startNum).padStart(2, '0')}`;
+        const tplId = MktStudioState.templateId || (MktStudioState.group === 'motion' ? 'M01' : 'E01');
         try {
             iframe.contentWindow.postMessage({ type: 'SENS_SELECT_TEMPLATE', id: tplId }, '*');
             iframe.contentWindow.postMessage({ type: 'SENS_REQUEST_HEIGHT' }, '*');

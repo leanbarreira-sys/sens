@@ -1,0 +1,125 @@
+/* =============================================================================
+   SENS MOTION DESIGN STUDIO — KEYFRAMES & COREOGRAFÍAS 9:16 (GROWTH HOOKS & VOL 2)
+   ============================================================================= */
+@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}
+
+    @keyframes k-brutalism {
+      0%, 15% { transform: translateY(115%) skewY(8deg); opacity: 0; filter: blur(8px); }
+      35%, 85% { transform: translateY(0%) skewY(0deg); opacity: 1; filter: blur(0px); }
+      95%, 100% { transform: translateY(-115%) skewY(-6deg); opacity: 0; filter: blur(6px); }
+    }
+    @keyframes k-swiss-curtain {
+      0%, 20% { clip-path: inset(50% 0 50% 0); transform: scale(1.08); filter: blur(4px); }
+      40%, 80% { clip-path: inset(0 0 0 0); transform: scale(1); filter: blur(0); }
+      92%, 100% { clip-path: inset(0 0 100% 0); transform: scale(0.96); opacity: 0.3; }
+    }
+    @keyframes k-quote-grow {
+      0%, 15% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+      30%, 85% { transform: scale(1) rotate(0deg); opacity: 0.25; }
+      95%, 100% { transform: scale(1.4) rotate(10deg); opacity: 0; }
+    }
+    @keyframes k-hud-scan {
+      0% { top: 12%; opacity: 0.2; }
+      45% { top: 82%; opacity: 1; }
+      55% { top: 82%; opacity: 1; }
+      95% { top: 12%; opacity: 0.8; }
+      100% { top: 12%; opacity: 0.2; }
+    }
+    @keyframes k-spring-pulse {
+      0%, 15% { transform: scale(0.65); opacity: 0; filter: blur(6px); }
+      30% { transform: scale(1.12); opacity: 1; filter: blur(0); }
+      40% { transform: scale(0.96); }
+      50%, 85% { transform: scale(1); filter: drop-shadow(0 0 18px rgba(212,185,150,0.45)); }
+      95%, 100% { transform: scale(0.9); opacity: 0; }
+    }
+    @keyframes k-glass-slide {
+      0%, 18% { transform: translateY(120%); opacity: 0; backdrop-filter: blur(0px); }
+      35%, 85% { transform: translateY(0%); opacity: 1; backdrop-filter: blur(28px); }
+      95%, 100% { transform: translateY(-40px); opacity: 0; }
+    }
+    @keyframes k-text-scrub {
+      0%, 15% { letter-spacing: -0.05em; opacity: 0.15; filter: blur(4px); }
+      35%, 75% { letter-spacing: 0.08em; opacity: 1; filter: blur(0px); }
+      90%, 100% { letter-spacing: 0.18em; opacity: 0.2; filter: blur(3px); }
+    }
+    @keyframes k-stamp-pop {
+      0%, 20% { transform: scale(2.4) rotate(-12deg); opacity: 0; }
+      32% { transform: scale(0.94) rotate(2deg); opacity: 1; }
+      42%, 85% { transform: scale(1) rotate(0deg); opacity: 1; box-shadow: 0 0 24px rgba(251,222,185,0.7); }
+      95%, 100% { transform: scale(0.85); opacity: 0; }
+    }
+    @keyframes k-split-wipe {
+      0%, 20% { clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%); }
+      45%, 85% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+      95%, 100% { clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); }
+    }
+    @keyframes k-monolith {
+      0%, 15% { opacity: 0.05; transform: scaleY(0.7); }
+      35%, 80% { opacity: 1; transform: scaleY(1); }
+      90%, 100% { opacity: 0.1; transform: scaleY(1.05); }
+    }
+    @keyframes k-asym-float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-14px) rotate(1.2deg); }
+    }
+    @keyframes k-boarding-pulse {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.03); filter: brightness(1.15) drop-shadow(0 0 14px rgba(186,26,26,0.3)); }
+    }
+    @keyframes k-ticker-run {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes k-circle-draw {
+      0%, 15% { stroke-dashoffset: 440; transform: rotate(-90deg); }
+      45%, 85% { stroke-dashoffset: 80; transform: rotate(-90deg); }
+      95%, 100% { stroke-dashoffset: 0; transform: rotate(270deg); }
+    }
+    @keyframes k-rir-fill {
+      0%, 15% { width: 0%; }
+      45%, 85% { width: 88%; }
+      95%, 100% { width: 0%; }
+    }
+    @keyframes k-polaroid-lens {
+      0%, 18% { filter: blur(20px) contrast(1.4); transform: scale(1.12); }
+      38%, 85% { filter: blur(0px) contrast(1.02); transform: scale(1); }
+      95%, 100% { filter: blur(14px) contrast(1.2); transform: scale(1.05); }
+    }
+    @keyframes k-push-banner {
+      0%, 12% { transform: translateY(-130%) scale(0.94); opacity: 0; }
+      25% { transform: translateY(8px) scale(1.02); opacity: 1; }
+      32%, 85% { transform: translateY(0) scale(1); opacity: 1; }
+      95%, 100% { transform: translateY(-120%) scale(0.96); opacity: 0; }
+    }
+    @keyframes k-invert-flash {
+      0%, 38% { filter: invert(0); }
+      40%, 46% { filter: invert(1) contrast(1.8) hue-rotate(180deg); }
+      48%, 100% { filter: invert(0); }
+    }
+    @keyframes k-equalizer-bar {
+      0%, 100% { height: 18%; }
+      50% { height: 96%; }
+    }
+    @keyframes k-god-ray {
+      0%, 15% { opacity: 0; transform: translateY(-30px) rotate(-8deg); }
+      35%, 80% { opacity: 0.75; transform: translateY(0) rotate(0deg); }
+      95%, 100% { opacity: 0; transform: translateY(20px) rotate(4deg); }
+    }
+
+    /* Motion Core Classes */
+    .anim-paused * { animation-play-state: paused !important; }
+    .speed-05x * { animation-duration: 7s !important; }
+    .speed-1x * { animation-duration: 3.5s !important; }
+    .speed-15x * { animation-duration: 2.2s !important; }
+
+    .ease-sens { animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important; animation-iteration-count: infinite; }
+    .ratio-9-16 { aspect-ratio: 9 / 16; }
+    .safe-zone-overlay {
+      pointer-events: none;
+      box-shadow: inset 0 90px 0 0 rgba(186, 26, 26, 0.12), inset 0 -130px 0 0 rgba(186, 26, 26, 0.12), inset 18px 0 0 0 rgba(186, 26, 26, 0.08), inset -18px 0 0 0 rgba(186, 26, 26, 0.08);
+    }
+  
+
+@keyframes hookFlash { 0%, 100% { opacity: 0; } 5% { opacity: 0.95; } 12% { opacity: 0; } 18% { opacity: 0.4; } 25% { opacity: 0; } } @keyframes shockwaveExpand { 0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; border-width: 8px; } 50% { opacity: 0.85; border-width: 3px; } 100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; border-width: 0px; } } @keyframes slamZoomImpact { 0% { transform: scale(2.6); filter: blur(12px); opacity: 0; } 15% { transform: scale(0.92); filter: blur(0); opacity: 1; } 30% { transform: scale(1.08); } 45%, 100% { transform: scale(1); } } @keyframes rgbGlitchDisrupt { 0%, 100% { text-shadow: none; transform: translate(0); } 4% { text-shadow: -3px 0 #fbdeb9, 3px 0 #3c9458; transform: translate(2px, -1px); } 8% { text-shadow: 3px 0 #fbdeb9, -3px 0 #93000a; transform: translate(-2px, 1px); } 14% { text-shadow: none; transform: translate(0); } 55% { text-shadow: 2px -1px #fbdeb9, -2px 1px #000; } 58% { text-shadow: none; } } @keyframes laserSweepAgile { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 45% { top: 110%; opacity: 1; } 46%, 100% { top: -10%; opacity: 0; } } @keyframes trackingSqueeze { 0% { letter-spacing: 0.45em; transform: scale(1.3); filter: blur(6px); } 20% { letter-spacing: -0.04em; transform: scale(0.95); filter: blur(0); } 35%, 100% { letter-spacing: -0.01em; transform: scale(1); } } @keyframes rubberBandHyper { 0% { transform: scale3d(1, 1, 1); } 12% { transform: scale3d(1.35, 0.72, 1); } 24% { transform: scale3d(0.82, 1.25, 1); } 36% { transform: scale3d(1.15, 0.9, 1); } 48% { transform: scale3d(0.96, 1.04, 1); } 60%, 100% { transform: scale3d(1, 1, 1); } } @keyframes perspectiveFlip3D { 0% { transform: perspective(800px) rotateX(75deg) scale(0.6); opacity: 0; } 22% { transform: perspective(800px) rotateX(-12deg) scale(1.08); opacity: 1; } 35%, 100% { transform: perspective(800px) rotateX(0deg) scale(1); opacity: 1; } } .anim-slam { animation: slamZoomImpact 2.6s cubic-bezier(0.19, 1, 0.22, 1) infinite; } .anim-shockwave { animation: shockwaveExpand 2.6s cubic-bezier(0.1, 0.9, 0.2, 1) infinite; } .anim-flash { animation: hookFlash 2.6s ease-out infinite; } .anim-rgb { animation: rgbGlitchDisrupt 2.6s steps(2, start) infinite; } .anim-laser { animation: laserSweepAgile 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite; } .anim-squeeze { animation: trackingSqueeze 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite; } .anim-snap { animation: rubberBandHyper 2.6s ease-in-out infinite; } .anim-3d { animation: perspectiveFlip3D 2.6s cubic-bezier(0.19, 1, 0.22, 1) infinite; }
+@keyframes hookFlash { 0%, 100% { opacity: 0; } 5% { opacity: 0.95; } 12% { opacity: 0; } 18% { opacity: 0.4; } 25% { opacity: 0; } } @keyframes shockwaveExpand { 0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; border-width: 8px; } 50% { opacity: 0.85; border-width: 3px; } 100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; border-width: 0px; } } @keyframes slamZoomImpact { 0% { transform: scale(2.6); filter: blur(12px); opacity: 0; } 15% { transform: scale(0.92); filter: blur(0); opacity: 1; } 30% { transform: scale(1.08); } 45%, 100% { transform: scale(1); } } @keyframes rgbGlitchDisrupt { 0%, 100% { text-shadow: none; transform: translate(0); } 4% { text-shadow: -3px 0 #fbdeb9, 3px 0 #3c9458; transform: translate(2px, -1px); } 8% { text-shadow: 3px 0 #fbdeb9, -3px 0 #93000a; transform: translate(-2px, 1px); } 14% { text-shadow: none; transform: translate(0); } 55% { text-shadow: 2px -1px #fbdeb9, -2px 1px #000; } 58% { text-shadow: none; } } @keyframes laserSweepAgile { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 45% { top: 110%; opacity: 1; } 46%, 100% { top: -10%; opacity: 0; } } @keyframes trackingSqueeze { 0% { letter-spacing: 0.45em; transform: scale(1.3); filter: blur(6px); } 20% { letter-spacing: -0.04em; transform: scale(0.95); filter: blur(0); } 35%, 100% { letter-spacing: -0.01em; transform: scale(1); } } @keyframes rubberBandHyper { 0% { transform: scale3d(1, 1, 1); } 12% { transform: scale3d(1.35, 0.72, 1); } 24% { transform: scale3d(0.82, 1.25, 1); } 36% { transform: scale3d(1.15, 0.9, 1); } 48% { transform: scale3d(0.96, 1.04, 1); } 60%, 100% { transform: scale3d(1, 1, 1); } } @keyframes perspectiveFlip3D { 0% { transform: perspective(800px) rotateX(75deg) scale(0.6); opacity: 0; } 22% { transform: perspective(800px) rotateX(-12deg) scale(1.08); opacity: 1; } 35%, 100% { transform: perspective(800px) rotateX(0deg) scale(1); opacity: 1; } } .anim-slam { animation: slamZoomImpact 2.6s cubic-bezier(0.19, 1, 0.22, 1) infinite; } .anim-shockwave { animation: shockwaveExpand 2.6s cubic-bezier(0.1, 0.9, 0.2, 1) infinite; } .anim-flash { animation: hookFlash 2.6s ease-out infinite; } .anim-rgb { animation: rgbGlitchDisrupt 2.6s steps(2, start) infinite; } .anim-laser { animation: laserSweepAgile 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite; } .anim-squeeze { animation: trackingSqueeze 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite; } .anim-snap { animation: rubberBandHyper 2.6s ease-in-out infinite; } .anim-3d { animation: perspectiveFlip3D 2.6s cubic-bezier(0.19, 1, 0.22, 1) infinite; }
+@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}
