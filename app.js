@@ -729,14 +729,29 @@ function isCurrentUserAdmin() {
     const profile = AppState.profile || {};
     const user = AppState.user || {};
 
+    // Whitelist por email explícito para el Head Coach Nico y Administradores
+    const email = String(profile.email || user.email || '').trim().toLowerCase();
+    const adminEmails = [
+        'nico@sens.com',
+        'nicomaralle@gmail.com',
+        'lean.barreira@gmail.com',
+        'lean@sens.com',
+        'admin@sens.com'
+    ];
+    if (email && adminEmails.includes(email)) {
+        return true;
+    }
+
     // Verificación estricta por rol RBAC (admin / coach) en profile o claims de Auth
     return Boolean(
         profile.role === 'admin' ||
         profile.role === 'coach' ||
+        profile.is_admin === true ||
         profile.user_type === 'admin' ||
         profile.user_type === 'coach' ||
         user.role === 'admin' ||
         user.role === 'coach' ||
+        user.is_admin === true ||
         user.app_metadata?.role === 'admin' ||
         user.app_metadata?.role === 'coach' ||
         user.user_metadata?.role === 'admin' ||
@@ -4141,10 +4156,10 @@ function switchPortalView(viewId) {
     AppState._activeViewId = viewId;
 
     {
-        const isExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView' || (!isAdmin && !accessState.hasAccess));
+        const isSubNavExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView' || (!isAdmin && !accessState.hasAccess));
         const subNav = document.getElementById('portalSubNav');
         if (subNav) {
-            subNav.style.setProperty('display', isExcluded ? 'none' : 'flex', 'important');
+            subNav.style.setProperty('display', isSubNavExcluded ? 'none' : 'flex', 'important');
         }
         const athleteDock = document.getElementById('sensFloatingDock');
         const coachDock = document.getElementById('sensCoachFloatingDock');
@@ -4168,7 +4183,10 @@ function switchPortalView(viewId) {
         if (userDrop && !isSameView) userDrop.classList.remove('active');
         document.body.style.overflow = '';
 
-        if (isExcluded) {
+        const isUnvalidatedAthlete = (!isAdmin && !accessState.hasAccess);
+        const isDockExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || isUnvalidatedAthlete);
+
+        if (isDockExcluded) {
             if (athleteDock) athleteDock.style.setProperty('display', 'none', 'important');
             if (coachDock) coachDock.style.setProperty('display', 'none', 'important');
         } else if (viewId === 'coachHubView' && isAdmin) {
@@ -21201,8 +21219,18 @@ function initFloatingDock() {
     if (coachDock && !coachDock._hasCoachDockBound) {
         coachDock._hasCoachDockBound = true;
 
+        let lastCoachNavTime = 0;
         coachDock.querySelectorAll('.coach-dock-btn[data-coach-subtab]').forEach(btn => {
             const handleCoachNav = (e) => {
+                const now = Date.now();
+                if (now - lastCoachNavTime < 300) {
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                    return;
+                }
+                lastCoachNavTime = now;
                 if (e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -22121,9 +22149,9 @@ window.stopCoachMarketingStudio = stopCoachMarketingStudio;
 function syncMarketingSuiteIframe() {
     const iframe = document.getElementById('sensMarketingSuiteFrame');
     if (!iframe) return;
-    const targetUrl = 'marketing-suites/studio-master.html?v=31.0';
+    const targetUrl = 'marketing-suites/studio-master.html?v=36.0';
     const currentSrc = iframe.getAttribute('src') || '';
-    if (!currentSrc.includes('studio-master.html?v=31.0')) {
+    if (!currentSrc || !currentSrc.includes('studio-master.html')) {
         iframe.src = targetUrl;
     } else if (iframe.contentWindow) {
         const tplId = MktStudioState.templateId || (MktStudioState.group === 'motion' ? 'M01' : 'E01');
@@ -22136,14 +22164,18 @@ function syncMarketingSuiteIframe() {
 window.syncMarketingSuiteIframe = syncMarketingSuiteIframe;
 
 // Dynamic height synchronization & cross-frame file download for Marketing Studio
+let _sensLastMktHeight = 0;
 window.addEventListener('message', function (e) {
     if (!e || !e.data) return;
     if (e.data.type === 'SENS_MKT_HEIGHT' && typeof e.data.height === 'number') {
         const frame = document.getElementById('sensMarketingSuiteFrame');
         if (frame) {
-            const h = Math.max(e.data.height + 40, 850);
-            frame.style.height = h + 'px';
-            frame.style.minHeight = h + 'px';
+            const h = Math.min(Math.max(Math.round(e.data.height) + 20, 850), 4500);
+            if (Math.abs(h - _sensLastMktHeight) > 25) {
+                _sensLastMktHeight = h;
+                frame.style.height = h + 'px';
+                frame.style.minHeight = h + 'px';
+            }
         }
     } else if (e.data.type === 'SENS_TRIGGER_DOWNLOAD' && e.data.url) {
         try {

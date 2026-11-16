@@ -300,9 +300,13 @@
     text-decoration: line-through !important;
     color: var(--on-surface-variant) !important;
   }
+  body.is-embedded {
+    min-height: auto !important;
+    height: auto !important;
+  }
 </style>
 </head>
-<body class="bg-surface text-on-surface min-h-screen flex flex-col justify-between selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<body class="bg-surface text-on-surface flex flex-col justify-between selection:bg-secondary-fixed selection:text-on-secondary-fixed">
 
 <!-- TopAppBar -->
 <header class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b border-outline-variant/15 transition-all duration-300">
@@ -645,7 +649,7 @@
   </button>
 </nav>
 
-<script src="templates-db-200.js?v=35.0"></script>
-<script src="studio-master-engine.js?v=35.0"></script>
+<script src="templates-db-200.js?v=36.0"></script>
+<script src="studio-master-engine.js?v=36.0"></script>
 </body>
 </html>

@@ -267,13 +267,8 @@
     applyMotionLoopState(rootEl);
 
     // Notify parent frame to adjust height for single seamless scroll
-    if (window.self !== window.top) {
-      setTimeout(() => {
-        try {
-          const h = Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0);
-          window.parent.postMessage({ type: 'SENS_MKT_HEIGHT', height: h }, '*');
-        } catch (_) {}
-      }, 60);
+    if (window.self !== window.top && typeof reportHeightToParent === 'function') {
+      reportHeightToParent(false);
     }
   }
 
@@ -2997,29 +2992,49 @@
     });
 
     // Report height to parent Coach OS window to enable a single smooth page scroll
-    function reportHeightToParent() {
-      if (window.self === window.top) return;
-      try {
-        if (!document.body.classList.contains('is-embedded')) {
-          document.body.classList.add('is-embedded');
-        }
-        const h = Math.max(
-          document.body.scrollHeight || 0,
-          document.documentElement.scrollHeight || 0,
-          document.body.offsetHeight || 0,
-          document.documentElement.offsetHeight || 0
-        ) + 60;
-        if (h > 100) {
-          window.parent.postMessage({ type: 'SENS_MKT_HEIGHT', height: h }, '*');
-        }
-      } catch (_) {}
-    }
+    let _lastReportedH = 0;
+    let _reportHeightTimer = null;
 
-    window.addEventListener('resize', reportHeightToParent, { passive: true });
-    window.addEventListener('load', reportHeightToParent, { passive: true });
+    function reportHeightToParent(immediate = false) {
+      if (window.self === window.top) return;
+      if (_reportHeightTimer) clearTimeout(_reportHeightTimer);
+
+      const computeAndSend = () => {
+        try {
+          if (!document.body.classList.contains('is-embedded')) {
+            document.body.classList.add('is-embedded');
+          }
+          const rawH = Math.max(
+            document.body.scrollHeight || 0,
+            document.documentElement.scrollHeight || 0,
+            document.body.offsetHeight || 0,
+            document.documentElement.offsetHeight || 0
+          );
+          const h = Math.min(Math.max(rawH + 20, 850), 4500);
+          if (Math.abs(h - _lastReportedH) > 30) {
+            _lastReportedH = h;
+            window.parent.postMessage({ type: 'SENS_MKT_HEIGHT', height: h }, '*');
+          }
+        } catch (_) {}
+      };
+
+      if (immediate) {
+        computeAndSend();
+      } else {
+        _reportHeightTimer = setTimeout(computeAndSend, 150);
+      }
+    }
+    window.reportHeightToParent = reportHeightToParent;
+
+    window.addEventListener('resize', () => reportHeightToParent(false), { passive: true });
+    window.addEventListener('load', () => reportHeightToParent(true), { passive: true });
     if (typeof ResizeObserver !== 'undefined') {
       try {
-        const ro = new ResizeObserver(() => reportHeightToParent());
+        let roTimer = null;
+        const ro = new ResizeObserver(() => {
+          if (roTimer) clearTimeout(roTimer);
+          roTimer = setTimeout(() => reportHeightToParent(false), 200);
+        });
         ro.observe(document.body);
       } catch (_) {}
     }
@@ -3032,7 +3047,7 @@
       } else if (e.data.type === 'SENS_EXPORT_4K') {
         handleExport4K();
       } else if (e.data.type === 'SENS_REQUEST_HEIGHT') {
-        reportHeightToParent();
+        reportHeightToParent(true);
       }
     });
   }
