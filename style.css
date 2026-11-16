@@ -15684,12 +15684,23 @@ body.in-portal:has(#onboardingSection.active) #sensFloatingDock,
 body[data-active-view="onboardingSection"] #sensFloatingDock,
 #onboardingSection.active ~ #sensFloatingDock,
 #onboardingSection ~ #sensFloatingDock,
-body:has(#onboardingSection.active) .sens-floating-dock {
+body:has(#onboardingSection.active) .sens-floating-dock,
+body:has(#activationPendingView.active) #sensFloatingDock,
+body.in-portal:has(#activationPendingView.active) #sensFloatingDock,
+body[data-active-view="activationPendingView"] #sensFloatingDock,
+#activationPendingView.active ~ #sensFloatingDock,
+#activationPendingView ~ #sensFloatingDock,
+body:has(#activationPendingView.active) .sens-floating-dock,
+body.pending-activation #sensFloatingDock,
+body.pending-activation .sens-floating-dock,
+body:has(#activationPendingView.active) #portalSubNav,
+body[data-active-view="activationPendingView"] #portalSubNav,
+body.pending-activation #portalSubNav {
     display: none !important;
 }
 
 @media (max-width: 900px) {
-    body.in-portal #sensFloatingDock {
+    body.in-portal:not(.pending-activation):not([data-active-view="activationPendingView"]):not([data-active-view="onboardingSection"]) #sensFloatingDock {
         position: fixed !important;
         bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
         left: 50% !important;

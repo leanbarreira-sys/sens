@@ -3613,8 +3613,10 @@ async function checkExistingSession() {
                 if (!isAdmin && !isOnboardingDone && !localStorage.getItem('sens_in_portal')) {
                     startDiagnosisWizard(false);
                 } else {
-                    const isPending = Boolean(!isAdmin && AppState.profile && AppState.profile.subscription_status === 'pending_activation');
+                    const access = (typeof checkUserAccessStatus === 'function') ? checkUserAccessStatus(AppState.profile) : { hasAccess: true };
+                    const isPending = Boolean(!isAdmin && (!access || !access.hasAccess));
                     if (isPending) {
+                        document.body.classList.add('pending-activation');
                         switchPortalView('activationPendingView');
                     } else {
                         renderDashboardData();
@@ -3636,6 +3638,12 @@ function initPortalNavigation() {
 
     navItems.forEach(item => {
         item.addEventListener('click', () => {
+            const isAdmin = typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin();
+            const access = (typeof checkUserAccessStatus === 'function') ? checkUserAccessStatus(AppState.profile) : { hasAccess: true };
+            if (!isAdmin && !access.hasAccess) {
+                switchPortalView('activationPendingView');
+                return;
+            }
             const targetViewId = item.getAttribute('data-portal-tab');
             switchPortalView(targetViewId);
         });
@@ -3645,6 +3653,12 @@ function initPortalNavigation() {
     dockItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
+            const isAdmin = typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin();
+            const access = (typeof checkUserAccessStatus === 'function') ? checkUserAccessStatus(AppState.profile) : { hasAccess: true };
+            if (!isAdmin && !access.hasAccess) {
+                switchPortalView('activationPendingView');
+                return;
+            }
             const targetViewId = item.getAttribute('data-dock-tab');
             if (targetViewId) switchPortalView(targetViewId);
         });
@@ -4103,35 +4117,39 @@ function switchPortalView(viewId) {
     const now = Date.now();
     if (now - lastPortalNavTime < 200 && AppState._activeViewId === viewId) return;
     lastPortalNavTime = now;
-    AppState._activeViewId = viewId;
 
     const isAdmin = isCurrentUserAdmin();
     const profile = AppState.profile;
     const accessState = checkUserAccessStatus(profile) || { hasAccess: true };
 
+    // Bloqueo estricto de seguridad: usuarios pendientes de validación por Nico
+    // Jamás pueden acceder a contenido del portal (dashView, workoutView, nutritionView, trackingView, storeView, profileSettingsView, etc.)
+    if (!isAdmin && !accessState.hasAccess) {
+        if (viewId !== 'activationPendingView' && viewId !== 'onboardingSection') {
+            console.warn('[Security Guard] Acceso bloqueado: cuenta pendiente de validación por Nico.');
+            viewId = 'activationPendingView';
+        }
+    }
+
     // Bloqueo estricto de seguridad: usuarios no administradores jamás pueden acceder a Coach OS
     if (viewId === 'coachHubView' && !isAdmin) {
         console.warn('[Security Guard] Acceso denegado a Coach OS para usuario no administrador.');
         showSensToast('Acceso restringido: vista exclusiva del entrenador.', 'warning');
-        viewId = 'dashView';
+        viewId = (!accessState.hasAccess) ? 'activationPendingView' : 'dashView';
     }
 
+    AppState._activeViewId = viewId;
+
     {
+        const isExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView' || (!isAdmin && !accessState.hasAccess));
         const subNav = document.getElementById('portalSubNav');
-        const isExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView');
-        if (subNav) subNav.style.display = isExcluded ? 'none' : 'flex';
+        if (subNav) {
+            subNav.style.setProperty('display', isExcluded ? 'none' : 'flex', 'important');
+        }
         const athleteDock = document.getElementById('sensFloatingDock');
         const coachDock = document.getElementById('sensCoachFloatingDock');
-        const isAdmin = isCurrentUserAdmin();
         document.body.setAttribute('data-active-view', viewId);
-
-        // En Onboarding, el floating dock debe estar 100% oculto
-        if (viewId === 'onboardingSection') {
-            if (athleteDock) athleteDock.style.display = 'none';
-            if (coachDock) coachDock.style.display = 'none';
-        } else if (!isAdmin && athleteDock && window.innerWidth <= 900) {
-            athleteDock.style.display = 'grid';
-        }
+        document.body.classList.toggle('pending-activation', (!isAdmin && !accessState.hasAccess));
         document.body.classList.toggle('is-admin', isAdmin);
 
         const currentActiveView = document.querySelector('#app-container .portal-view.active');
@@ -4151,16 +4169,16 @@ function switchPortalView(viewId) {
         document.body.style.overflow = '';
 
         if (isExcluded) {
-            if (athleteDock) athleteDock.style.display = 'none';
-            if (coachDock) coachDock.style.display = 'none';
+            if (athleteDock) athleteDock.style.setProperty('display', 'none', 'important');
+            if (coachDock) coachDock.style.setProperty('display', 'none', 'important');
         } else if (viewId === 'coachHubView' && isAdmin) {
             document.body.classList.add('in-coach-mode');
-            if (athleteDock) athleteDock.style.display = 'none';
-            if (coachDock) coachDock.style.display = 'grid';
+            if (athleteDock) athleteDock.style.setProperty('display', 'none', 'important');
+            if (coachDock) coachDock.style.setProperty('display', 'grid', 'important');
         } else {
             document.body.classList.remove('in-coach-mode');
-            if (athleteDock) athleteDock.style.display = 'grid';
-            if (coachDock) coachDock.style.display = 'none';
+            if (athleteDock) athleteDock.style.setProperty('display', 'grid', 'important');
+            if (coachDock) coachDock.style.setProperty('display', 'none', 'important');
         }
 
         // Sincronizar toggle superior de versión para el Admin
@@ -4185,7 +4203,7 @@ function switchPortalView(viewId) {
     const views = document.querySelectorAll('.portal-view');
 
     navItems.forEach(item => {
-        if (item.getAttribute('data-portal-tab') === viewId) {
+        if (viewId !== 'activationPendingView' && item.getAttribute('data-portal-tab') === viewId) {
             item.classList.add('active');
         } else {
             item.classList.remove('active');
@@ -4194,7 +4212,7 @@ function switchPortalView(viewId) {
 
     const dockItems = document.querySelectorAll('.sens-dock-item[data-dock-tab]');
     dockItems.forEach(item => {
-        if (item.getAttribute('data-dock-tab') === viewId) {
+        if (viewId !== 'activationPendingView' && item.getAttribute('data-dock-tab') === viewId) {
             item.classList.add('active');
         } else {
             item.classList.remove('active');
@@ -4212,6 +4230,19 @@ function switchPortalView(viewId) {
             });
         }
     });
+
+    if (viewId === 'activationPendingView') {
+        const pendingNameEl = document.getElementById('pendingUserName');
+        if (pendingNameEl) {
+            const rawFullName = (profile && profile.full_name) || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || 'Atleta';
+            pendingNameEl.textContent = rawFullName.trim().split(/\s+/)[0] || 'Atleta';
+        }
+        if (typeof initFloatingDock === 'function') {
+            initFloatingDock();
+        }
+        if (window.scrollY > 80) window.scrollTo(0, 0);
+        return;
+    }
 
     if (viewId !== 'dashView' && typeof window.stopDashNutriCarousel === 'function') {
         window.stopDashNutriCarousel();
@@ -4403,9 +4434,18 @@ function openUserPortal(forceOnboarding = false) {
     // Aislamiento absoluto de Floating Dock en Mobile: Si no es admin, NUNCA mostrar dock de coach
     const coachDock = document.getElementById('sensCoachFloatingDock');
     const athleteDock = document.getElementById('sensFloatingDock');
+    const accessState = checkUserAccessStatus(profile) || { hasAccess: true };
+    const isLockedByAccess = Boolean(!isAdmin && !accessState.hasAccess);
+
     if (!isAdmin) {
-        if (coachDock) coachDock.style.display = 'none';
-        if (athleteDock) athleteDock.style.display = 'grid';
+        if (coachDock) coachDock.style.setProperty('display', 'none', 'important');
+        if (athleteDock) {
+            if (isLockedByAccess) {
+                athleteDock.style.setProperty('display', 'none', 'important');
+            } else {
+                athleteDock.style.display = 'grid';
+            }
+        }
         document.body.classList.remove('in-coach-mode');
     }
 
@@ -4446,9 +4486,9 @@ function openUserPortal(forceOnboarding = false) {
 
     if (mustDoOnboarding) {
         const subNav = document.getElementById('portalSubNav');
-        if (subNav) subNav.style.display = 'none';
+        if (subNav) subNav.style.setProperty('display', 'none', 'important');
         document.querySelectorAll('.sens-floating-dock').forEach(dock => {
-            dock.style.display = 'none';
+            dock.style.setProperty('display', 'none', 'important');
         });
         startDiagnosisWizard(false);
         window.scrollTo(0, 0);
@@ -4458,20 +4498,20 @@ function openUserPortal(forceOnboarding = false) {
     // -------------------------------------------------------------------------
     // 2. CONTROL DE MEMBRESÍA, TRIAL (7 DÍAS) & PAGOS (SOLO TRAS FINALIZAR EL ONBOARDING)
     // -------------------------------------------------------------------------
-    const accessState = checkUserAccessStatus(profile) || { hasAccess: true };
-    const isLockedByAccess = Boolean(
-        !isAdmin && 
-        profile && 
-        !accessState.hasAccess
-    );
-
     if (isLockedByAccess) {
         // Redirige al Soft-Paywall de Activación y oculta menús y dock
         const subNav = document.getElementById('portalSubNav');
-        if (subNav) subNav.style.display = 'none';
+        if (subNav) subNav.style.setProperty('display', 'none', 'important');
         document.querySelectorAll('.sens-floating-dock').forEach(dock => {
-            dock.style.display = 'none';
+            dock.style.setProperty('display', 'none', 'important');
         });
+        document.body.classList.add('pending-activation');
+
+        const pendingNameEl = document.getElementById('pendingUserName');
+        if (pendingNameEl) {
+            const athleteName = profile.full_name || (user.user_metadata && user.user_metadata.full_name) || 'Atleta';
+            pendingNameEl.textContent = athleteName.split(' ')[0];
+        }
 
         switchPortalView('activationPendingView');
         window.scrollTo(0, 0);
@@ -5169,11 +5209,18 @@ function initDiagnosisWizard() {
     if (exitDashBtn) {
         exitDashBtn.addEventListener('click', () => {
             try { localStorage.setItem('sens_skip_onboarding_temp', 'true'); } catch (_) {}
-            const subNav = document.getElementById('portalSubNav');
-            if (subNav) subNav.style.display = 'flex';
+            const isAdmin = isCurrentUserAdmin();
+            const access = checkUserAccessStatus(AppState.profile);
             document.body.style.overflow = '';
-            renderDashboardData();
-            switchPortalView('dashView');
+            if (!isAdmin && !access.hasAccess) {
+                openUserPortal(false);
+            } else {
+                const subNav = document.getElementById('portalSubNav');
+                if (subNav) subNav.style.display = 'flex';
+                renderDashboardData();
+                renderWorkoutDay(AppState.currentDay || 'day1');
+                switchPortalView('dashView');
+            }
             window.scrollTo(0, 0);
         });
     }
@@ -10436,6 +10483,19 @@ function initTopbarAvatar() {
         if (openUpgradeBtn) {
             openUpgradeBtn.textContent = (isAdmin && !isInspecting) ? 'Ver Escalera de Planes SENS →' : planDetails.ctaLabel;
         }
+
+        const access = (typeof checkUserAccessStatus === 'function') ? checkUserAccessStatus(profile) : { hasAccess: true };
+        const isPending = !isAdmin && (!access || !access.hasAccess);
+        if (isPending) {
+            if (topbarPlanText) topbarPlanText.textContent = 'Pago Pendiente';
+            if (statusDotEl) statusDotEl.textContent = 'Validación Pendiente';
+            if (nextHintEl) nextHintEl.textContent = 'Validá tu pago con Nico para activar tu portal de entrenamiento y nutrición.';
+            if (openUpgradeBtn) openUpgradeBtn.style.display = 'none';
+        }
+        const dropdownGoProfile = document.getElementById('dropdownGoProfile');
+        if (dropdownGoProfile) dropdownGoProfile.style.display = isPending ? 'none' : 'flex';
+        const dropdownGoDiagnosis = document.getElementById('dropdownGoDiagnosis');
+        if (dropdownGoDiagnosis) dropdownGoDiagnosis.style.display = isPending ? 'none' : 'flex';
 
         // 4. Iniciales
         let initials = 'LB';
@@ -21090,19 +21150,22 @@ function initFloatingDock() {
     const coachDock = document.getElementById('sensCoachFloatingDock');
     const isAdmin = typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin();
     const inCoach = document.body.classList.contains('in-coach-mode') || document.body.getAttribute('data-active-view') === 'coachHubView';
+    const activeView = document.body.getAttribute('data-active-view') || AppState._activeViewId;
+    const access = (typeof checkUserAccessStatus === 'function') ? checkUserAccessStatus(AppState.profile) : { hasAccess: true };
+    const isPending = !isAdmin && (!access || !access.hasAccess || activeView === 'activationPendingView' || activeView === 'onboardingSection');
 
     if (athleteDock) {
-        if (!isPortal || inCoach) {
-            athleteDock.style.display = 'none';
+        if (!isPortal || inCoach || isPending) {
+            athleteDock.style.setProperty('display', 'none', 'important');
         } else {
-            athleteDock.style.display = 'grid';
+            athleteDock.style.setProperty('display', 'grid', 'important');
         }
     }
     if (coachDock) {
         if (isPortal && inCoach && isAdmin) {
-            coachDock.style.display = 'grid';
+            coachDock.style.setProperty('display', 'grid', 'important');
         } else {
-            coachDock.style.display = 'none';
+            coachDock.style.setProperty('display', 'none', 'important');
         }
     }
 
@@ -21115,6 +21178,14 @@ function initFloatingDock() {
                 if (e) {
                     e.preventDefault();
                     e.stopPropagation();
+                }
+                const isAdminNow = typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin();
+                const accessNow = (typeof checkUserAccessStatus === 'function') ? checkUserAccessStatus(AppState.profile) : { hasAccess: true };
+                if (!isAdminNow && !accessNow.hasAccess) {
+                    if (typeof window.switchPortalView === 'function') {
+                        window.switchPortalView('activationPendingView');
+                    }
+                    return;
                 }
                 const targetTab = btn.getAttribute('data-dock-tab');
                 if (targetTab && typeof window.switchPortalView === 'function') {
