@@ -23027,11 +23027,16 @@ window.initCoachDatabasesTab = function() {
             saveCoachDbItemEditorChanges();
         });
     }
-
-    window.renderCoachDatabasesTab();
 };
 
-window.renderCoachDatabasesTab = function() {
+window.loadMoreCoachDbExercises = function() {
+    coachMasterLibState.pageLimit = (coachMasterLibState.pageLimit || 36) + 36;
+    window.renderCoachDatabasesTab(true);
+};
+
+window.renderCoachDatabasesTab = function(keepPageLimit = false) {
+    if (typeof isCurrentUserAdmin === 'function' && !isCurrentUserAdmin()) return;
+    if (!keepPageLimit) coachMasterLibState.pageLimit = 36;
     const athId = AppState.activeAthleteId || 'mock_vip';
 
     if (coachMasterLibState.domain === 'exercises') {
@@ -23062,12 +23067,15 @@ window.renderCoachDatabasesTab = function() {
             return true;
         });
 
+        const pageLimit = coachMasterLibState.pageLimit || 36;
+        const visibleExercises = filtered.slice(0, pageLimit);
+
         if (countLabel) {
-            countLabel.textContent = `Mostrando ${filtered.length} de 1.376 ejercicios del catálogo único SENS`;
+            countLabel.textContent = `Mostrando ${visibleExercises.length} de ${filtered.length} ejercicios del catálogo único SENS`;
         }
 
         let html = '';
-        filtered.forEach(ex => {
+        visibleExercises.forEach(ex => {
             const kcalData = (typeof window.calculateExerciseKcal === 'function')
                 ? window.calculateExerciseKcal(ex, ex.sets || 4, ex.reps || 10, 75)
                 : { kcalPerRep: 0.45, kcalPerSet: 7, totalKcal: 28 };
@@ -23150,6 +23158,16 @@ window.renderCoachDatabasesTab = function() {
                 </div>
             `;
         });
+
+        if (filtered.length > visibleExercises.length) {
+            html += `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 16px 0 24px;">
+                    <button type="button" class="btn btn-outline" onclick="window.loadMoreCoachDbExercises()" style="padding: 12px 24px; font-weight: 700; font-size: 13px;">
+                        Mostrar más ejercicios (${filtered.length - visibleExercises.length} restantes)
+                    </button>
+                </div>
+            `;
+        }
 
         grid.innerHTML = html || `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted);">No se encontraron ejercicios para este filtro.</div>`;
         if (window.SensBatteryPerfGovernor && typeof window.SensBatteryPerfGovernor.observeVideosInContainer === 'function') {
