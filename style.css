@@ -2216,12 +2216,12 @@ body.in-portal #homeFloatingSocial,
 }
 
 /* Botones Brandbook con Fondo Champagne - Máximo Contraste con Negro Onyx (#080809) */
-.btn-primary,
-a.btn-primary,
-button.btn-primary,
-a.btn-primary:link,
-a.btn-primary:visited,
-button.btn-primary:visited {
+.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]),
+a.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]),
+button.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]),
+a.btn-primary:link:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]),
+a.btn-primary:visited:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]),
+button.btn-primary:visited:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]) {
     background: var(--accent-primary);
     color: #080809 !important;
     -webkit-text-fill-color: #080809 !important;
@@ -2229,9 +2229,9 @@ button.btn-primary:visited {
     box-shadow: 0 4px 20px var(--accent-glow);
 }
 
-.btn-primary *,
-a.btn-primary *,
-button.btn-primary * {
+.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]) *,
+a.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]) *,
+button.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]) * {
     background: transparent !important;
     background-color: transparent !important;
     box-shadow: none !important;
@@ -2239,11 +2239,11 @@ button.btn-primary * {
     -webkit-text-fill-color: inherit;
 }
 
-.btn-primary:hover,
-a.btn-primary:hover,
-button.btn-primary:hover,
-a.btn-primary:visited:hover,
-button.btn-primary:visited:hover {
+.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):hover,
+a.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):hover,
+button.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):hover,
+a.btn-primary:visited:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):hover,
+button.btn-primary:visited:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):hover {
     background: var(--accent-hover);
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(229, 203, 167, 0.35);
@@ -2251,22 +2251,86 @@ button.btn-primary:visited:hover {
     -webkit-text-fill-color: #080809 !important;
 }
 
-.btn-primary:hover *,
-a.btn-primary:hover *,
-button.btn-primary:hover * {
+.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):hover *,
+a.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):hover *,
+button.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):hover * {
     background: transparent !important;
     box-shadow: none !important;
     transform: none !important;
 }
 
-.btn-primary:active,
-a.btn-primary:active,
-button.btn-primary:active,
-.btn-primary:focus,
-a.btn-primary:focus,
-button.btn-primary:focus {
+.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):active,
+a.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):active,
+button.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):active,
+.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):focus,
+a.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):focus,
+button.btn-primary:not(.btn-dark):not(.btn-onyx):not(.sens-btn-empty-log-food):not([style*="background: #121214"]):not([style*="background:#121214"]):not([style*="background: #080809"]):not([style*="background:#080809"]):focus {
     color: #080809 !important;
     -webkit-text-fill-color: #080809 !important;
+}
+
+/* =============================================================================
+   MÁXIMO CONTRASTE PARA BOTONES OSCUROS / ONYX (#121214 & #080809) - QUIET LUXURY
+   Garantiza que el texto del CTA sea siempre 100% visible (Blanco #FFFFFF) en iOS y Android
+   ============================================================================= */
+.btn-dark,
+.btn-onyx,
+button.btn-dark,
+button.btn-onyx,
+a.btn-dark,
+a.btn-onyx,
+.sens-btn-empty-log-food,
+.btn[style*="background: #121214"],
+.btn[style*="background:#121214"],
+.btn[style*="background: #080809"],
+.btn[style*="background:#080809"],
+.btn[style*="background: rgb(18, 18, 20)"],
+.btn[style*="background:rgb(18, 18, 20)"],
+button[style*="background: #121214"],
+button[style*="background:#121214"],
+button[style*="background: #080809"],
+button[style*="background:#080809"],
+a[style*="background: #121214"],
+a[style*="background:#121214"],
+a[style*="background: #080809"],
+a[style*="background:#080809"] {
+    background-color: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(18, 18, 20, 0.16) !important;
+}
+
+.btn-dark *,
+.btn-onyx *,
+button.btn-dark *,
+button.btn-onyx *,
+a.btn-dark *,
+a.btn-onyx *,
+.sens-btn-empty-log-food *,
+.btn[style*="background: #121214"] *,
+.btn[style*="background:#121214"] *,
+.btn[style*="background: #080809"] *,
+.btn[style*="background:#080809"] *,
+button[style*="background: #121214"] *,
+button[style*="background:#121214"] *,
+a[style*="background: #121214"] *,
+a[style*="background:#121214"] * {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+.btn-dark:hover,
+.btn-onyx:hover,
+button.btn-dark:hover,
+button.btn-onyx:hover,
+a.btn-dark:hover,
+a.btn-onyx:hover,
+.sens-btn-empty-log-food:hover,
+.btn[style*="background: #121214"]:hover,
+.btn[style*="background:#121214"]:hover {
+    background-color: #26262B !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
 }
 
 .btn-outline {
@@ -4397,12 +4461,21 @@ video.ig-img {
     overflow-x: auto;
 }
 
-@media (max-width: 768px) {
+/* Ocultar barra de navegación superior horizontal en Mobile/Tablet y estrictamente en Mi Perfil, Ficha Clínica y Coach OS */
+@media (max-width: 1024px) {
+    #portalSubNav,
     .portal-nav-bar,
     .desktop-only-nav,
     .desktop-only-btn {
         display: none !important;
     }
+}
+
+body[data-active-view="profileSettingsView"] #portalSubNav,
+body[data-active-view="clinicalDossierView"] #portalSubNav,
+body[data-active-view="coachHubView"] #portalSubNav,
+#portalSubNav.hide-on-view {
+    display: none !important;
 }
 
 .portal-nav-item {

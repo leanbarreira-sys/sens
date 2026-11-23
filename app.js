@@ -4302,10 +4302,15 @@ function switchPortalView(viewId) {
     AppState._activeViewId = viewId;
 
     {
-        const isSubNavExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView' || viewId === 'clinicalDossierView' || (!isAdmin && !accessState.hasAccess));
+        const isMobileDevice = (window.innerWidth <= 1024);
+        const isSubNavExcluded = isMobileDevice || (viewId === 'profileSettingsView' || viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView' || viewId === 'clinicalDossierView' || (!isAdmin && !accessState.hasAccess));
         const subNav = document.getElementById('portalSubNav');
         if (subNav) {
-            subNav.style.setProperty('display', isSubNavExcluded ? 'none' : 'flex', 'important');
+            if (isSubNavExcluded) {
+                subNav.style.setProperty('display', 'none', 'important');
+            } else {
+                subNav.style.removeProperty('display');
+            }
         }
         const athleteDock = document.getElementById('sensFloatingDock');
         const coachDock = document.getElementById('sensCoachFloatingDock');
@@ -7749,7 +7754,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         <span style="font-size: 11px; color: #705B3E; font-weight: 700;">¿Querés reprogramar este entrenamiento?</span>
                         <div style="display: flex; gap: 6px;">
                             <button type="button" class="btn btn-outline btn-xs btn-move-tomorrow" onclick="moveWorkoutToTomorrow('${dateIso}')" style="font-size: 10px; padding: 5px 9px; color: #705B3E; border-color: rgba(197,168,128,0.45); font-weight: 700; border-radius: 8px; background: #FFFFFF;">Pasar a Mañana →</button>
-                            <button type="button" class="btn btn-primary btn-xs btn-move-custom" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 10px; padding: 5px 9px; background: #121214; color: #FAF9F6; font-weight: 800; border: none; border-radius: 8px;">Elegir Fecha</button>
+                            <button type="button" class="btn btn-dark btn-xs btn-move-custom" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 10px; padding: 5px 9px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 800; border: none; border-radius: 8px;">Elegir Fecha</button>
                         </div>
                     </div>` : ''}
                 </div>
@@ -7846,7 +7851,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="font-size: 12px; padding: 7px 14px; border: 1px solid #121214; color: #121214; font-weight: 700; border-radius: 8px; background: #FFFFFF; cursor: pointer;">
                             Traer sesión a hoy
                         </button>
-                        <button type="button" class="btn btn-primary btn-xs" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="font-size: 12px; padding: 7px 14px; background: #121214; color: #FAF9F6; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">
+                        <button type="button" class="btn btn-dark btn-xs" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="font-size: 12px; padding: 7px 14px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">
                             Pasar para mañana
                         </button>
                     </div>
@@ -19156,7 +19161,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                     const athName = (AppState.profile?.full_name || 'Atleta').split(' ')[0];
                     const waText = encodeURIComponent(`Hola Nico! Soy ${athName}, completé mi diagnóstico en SENS y quiero consultar sobre la asignación de mi entrenamiento.`);
                     restActions.innerHTML = `
-                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" class="btn btn-primary btn-sm" style="font-size: 12px; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" class="btn btn-dark btn-sm" style="font-size: 12px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border-radius: 8px; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                             Consultar a Nico por WhatsApp →
                         </a>
                     `;
@@ -19177,7 +19182,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                         <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches" style="font-size: 12px; border: 1px solid #121214; color: #121214; background: #FFFFFF; font-weight: 700; border-radius: 8px; padding: 7px 14px; cursor: pointer;">
                             Ver estiramientos
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm" id="btnRestBringWorkout" onclick="openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))" style="font-size: 12px; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px; padding: 7px 14px; border: none; cursor: pointer;">
+                        <button type="button" class="btn btn-dark btn-sm" id="btnRestBringWorkout" onclick="openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))" style="font-size: 12px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border-radius: 8px; padding: 7px 14px; border: none; cursor: pointer;">
                             Reprogramar sesión
                         </button>
                     `;

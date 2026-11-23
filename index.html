@@ -142,8 +142,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '36.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '36.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '37.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '37.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3480,8 +3480,8 @@
                                 Nico está calibrando tu prescripción de ejercicios, series, cargas y videos demostrativos según tu diagnóstico inicial. Te avisaremos apenas esté listo.
                             </p>
                             <div class="sens-rest-actions" id="dashWorkoutRestActions" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Complet%C3%A9%20mi%20diagn%C3%B3stico%20en%20SENS%20y%20aguardo%20mi%20rutina." target="_blank" class="btn btn-primary btn-sm" id="btnRestTalkToNico"
-                                    style="font-size: 12px; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Complet%C3%A9%20mi%20diagn%C3%B3stico%20en%20SENS%20y%20aguardo%20mi%20rutina." target="_blank" class="btn btn-dark btn-sm" id="btnRestTalkToNico"
+                                    style="font-size: 12px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border-radius: 8px; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                                     Consultar a Nico por WhatsApp →
                                 </a>
                             </div>
@@ -3547,7 +3547,7 @@
                         </div>
 
                         <div class="sens-empty-actions-row">
-                            <button type="button" class="btn btn-primary sens-btn-empty-log-food" onclick="if(typeof openCustomMealModalForSlot==='function') openCustomMealModalForSlot('almuerzo'); event.stopPropagation();">
+                            <button type="button" class="btn btn-dark sens-btn-empty-log-food" onclick="if(typeof openCustomMealModalForSlot==='function') openCustomMealModalForSlot('almuerzo'); event.stopPropagation();" style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;">
                                 + Registrar Comida
                             </button>
                             <button type="button" class="btn btn-outline sens-btn-empty-view-plan" onclick="if(typeof switchPortalView==='function') switchPortalView('nutritionView'); event.stopPropagation();">
@@ -4909,8 +4909,8 @@
                             ¿Querés consultar tu plan, cambiar de frecuencia o coordinar sesiones?
                         </div>
                         <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS%20para%20hablar%201%20a%201%20sobre%20mi%20plan."
-                            target="_blank" rel="noopener" class="btn btn-primary btn-sm"
-                            style="background: #121214 !important; color: #FFFFFF !important; border: none !important; border-radius: 999px; font-weight: 800; padding: 10px 18px; font-size: 12px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                            target="_blank" rel="noopener" class="btn btn-dark btn-sm"
+                            style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none !important; border-radius: 999px; font-weight: 800; padding: 10px 18px; font-size: 12px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
                             Hablar 1 a 1 con Nico para ver tu plan →
                         </a>
                     </div>
@@ -9130,8 +9130,8 @@
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <a id="btnModalTalkToNico1on1"
                     href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20la%20App%20SENS%20para%20hablar%201%20a%201%20sobre%20mi%20plan."
-                    target="_blank" rel="noopener" class="btn btn-primary btn-full"
-                    style="background: #121214 !important; color: #FFFFFF !important; font-weight: 800; border-radius: 999px; padding: 12px 18px; text-decoration: none; text-align: center; font-size: 13px;">
+                    target="_blank" rel="noopener" class="btn btn-dark btn-full"
+                    style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 800; border-radius: 999px; padding: 12px 18px; text-decoration: none; text-align: center; font-size: 13px;">
                     Hablar 1 a 1 con Nico para ver tu plan →
                 </a>
                 <button type="button" class="btn btn-outline btn-full btn-sm"
@@ -9195,7 +9195,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=4.0"></script>
-    <script src="app.js?v=44.0"></script>
+    <script src="app.js?v=45.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
