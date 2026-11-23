@@ -4043,21 +4043,21 @@ function getSensUserPlanDetails(profile) {
     const tierCatalog = {
         online_1on1: {
             key: 'online_1on1',
-            shortBadge: 'Online 1:1',
-            title: p.active_plan_name && p.active_plan_name.toLowerCase().includes('online') ? p.active_plan_name : 'Seguimiento Online 1 a 1 con Nico',
-            statusLabel: 'ONLINE ACTIVO',
-            desc: 'Planificación personalizada por Nico, soporte por WhatsApp, corrección técnica y App SENS bonificada 100%.',
-            nextStepHint: 'Opciones: Online Básico ($40.000/mes) o Premium con videollamadas ($90.000/mes). Podés pasar a Presencial CABA cuando gustes.',
-            ctaLabel: 'Ver Modalidades Online / Presencial →'
+            shortBadge: 'Online Básico',
+            title: p.active_plan_name && p.active_plan_name.toLowerCase().includes('online') ? p.active_plan_name : 'Online Básico',
+            statusLabel: 'ONLINE BÁSICO',
+            desc: 'Planificación personalizada por Nico ($40.000 / mes) con soporte por WhatsApp, corrección técnica y App SENS bonificada 100%.',
+            nextStepHint: 'Online Básico: $40.000 / mes. Podés consultar por modalidad presencial en CABA.',
+            ctaLabel: 'Hablar con Nico por WhatsApp →'
         },
         presencial_1on1: {
             key: 'presencial_1on1',
-            shortBadge: isGroup ? 'Presencial Grupal' : 'Presencial CABA',
-            title: p.active_plan_name && p.active_plan_name.toLowerCase().includes('presencial') ? p.active_plan_name : 'Seguimiento Presencial CABA con Nico',
+            shortBadge: 'Presencial CABA',
+            title: p.active_plan_name && p.active_plan_name.toLowerCase().includes('presencial') ? p.active_plan_name : 'Entrenamiento Presencial Personalizado (1:1 o en Grupo)',
             statusLabel: 'PRESENCIAL ACTIVO',
-            desc: 'Entrenamiento en vivo con Nico en CABA (cuota de gimnasio / estudio incluida) + App SENS bonificada 100%.',
-            nextStepHint: 'Frecuencias por persona: Individual (1x $130k, 2x $200k, 3x $260k) o Grupal 2-3 personas (1x $100k, 2x $150k, 3x $195k c/u).',
-            ctaLabel: 'Ver Frecuencias 1x / 2x / 3x →'
+            desc: 'Entrenamiento presencial en CABA con Nico en formato 1:1 o grupos reducidos (cuota de gym/estudio y App SENS bonificadas 100%).',
+            nextStepHint: 'Modalidad presencial individual 1:1 o en grupo (2 a 3 personas): precio a consultar directamente con Nico.',
+            ctaLabel: 'Consultar Precio & Horarios →'
         }
     };
 
@@ -4738,12 +4738,11 @@ function renderDashboardData() {
     checkUserAccessStatus(profile);
 
     let rawFullName = (profile.full_name || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || '').trim();
-    if (!rawFullName || rawFullName.includes('@')) {
-        const emailPrefix = (AppState.user && AppState.user.email ? AppState.user.email.split('@')[0] : 'Atleta').replace(/[._-]/g, ' ').trim();
-        rawFullName = emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1);
+    let firstName = 'Atleta';
+    if (rawFullName && !rawFullName.includes('@')) {
+        const rawFirst = rawFullName.trim().split(/\s+/)[0] || 'Atleta';
+        firstName = rawFirst.charAt(0).toUpperCase() + rawFirst.slice(1);
     }
-    const rawFirst = rawFullName.trim().split(/\s+/)[0] || 'Atleta';
-    const firstName = rawFirst.charAt(0).toUpperCase() + rawFirst.slice(1);
 
     if (greetingNameEl) {
         greetingNameEl.textContent = firstName;

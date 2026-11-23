@@ -142,8 +142,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '37.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '37.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '38.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '38.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -545,401 +545,102 @@
             </section>
         </div>
 
-        <!-- Precios & Modalidades (Con Diferencial Real por Frecuencia & Sin Costo Gym) -->
+        <!-- Precios & Modalidades Oficiales SENS (2 Planes Únicos) -->
         <section class="section-sens" id="planes">
-            <div class="section-head" style="margin-bottom: 18px;">
-                <h2 class="section-main-title">ELEGÍ TU PLAN </h2>
-                <p class="section-lead" style="font-size: 0.92rem; margin-bottom: 0; max-width: 600px;">
-                    Sumate al seguimiento presencial u online 1 a 1 con Nico.
+            <div class="section-head" style="margin-bottom: 28px;">
+                <h2 class="section-main-title">ELEGÍ TU PLAN</h2>
+                <p class="section-lead" style="font-size: 0.95rem; margin-bottom: 0; max-width: 600px;">
+                    Sumate al seguimiento presencial personalizado en CABA o al programa online a distancia con Nico.
                 </p>
             </div>
 
-            <!-- Selector Segmentado Unificado: Presencial CABA / Online 1:1 -->
-            <div class="pricing-selector-container" style="margin-bottom: 20px;">
-                <div class="pricing-main-nav" role="tablist" aria-label="Modalidad Principal">
-                    <button class="pricing-main-btn active" data-mode="presencial" role="tab" aria-selected="true"
-                        id="btnModePresencial">
-                        <span class="btn-text">Presencial</span>
-                    </button>
-                    <button class="pricing-main-btn" data-mode="online" role="tab" aria-selected="false"
-                        id="btnModeOnline">
-                        <span class="btn-text">Online 1:1</span>
-                    </button>
+            <!-- Grilla de los 2 Únicos Planes SENS -->
+            <div class="plans-official-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 860px; margin: 0 auto 28px auto; text-align: left;">
+                
+                <!-- PLAN 1: ONLINE BÁSICO ($40.000 / mes) -->
+                <div class="train-plan-card" style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 32px 24px; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                    <div>
+                        <span class="plan-purpose-tag" style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 8px; display: block;">A DISTANCIA</span>
+                        <h3 class="plan-title" style="font-size: 1.5rem; font-weight: 800; color: #121214; margin: 0 0 8px 0;">ONLINE BÁSICO</h3>
+                        <div class="plan-concept-tagline" style="font-size: 13px; color: #575659; line-height: 1.45; margin-bottom: 20px;">
+                            Planificación individualizada por Nico con soporte continuo y corrección de técnica.
+                        </div>
+                        <div class="plan-price-wrap" style="display: flex; align-items: baseline; gap: 4px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
+                            <span class="plan-amount" style="font-size: 2.2rem; font-weight: 800; color: #121214;">$40.000</span>
+                            <span class="plan-period" style="font-size: 13px; color: #575659; font-weight: 600;">/ mes</span>
+                        </div>
+                        <ul class="plan-features-list" style="list-style: none; padding: 0; margin: 0 0 28px 0; display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: #121214;">
+                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
+                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Rutina a medida según tus objetivos</span>
+                            </li>
+                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
+                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Soporte continuo por WhatsApp</span>
+                            </li>
+                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
+                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Corrección técnica biomecánica por video</span>
+                            </li>
+                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
+                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Membresía APP SENS bonificada 100%</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
+                        data-plan="Online Básico ($40.000)"
+                        data-agent-action="select_plan_online_basic"
+                        style="padding: 14px; font-size: 13px; font-weight: 800; border-radius: 999px; text-align: center; text-decoration: none; border: 1.5px solid rgba(18,18,20,0.2); color: #121214;">
+                        Postularme a Básico
+                    </a>
                 </div>
 
-                <!-- Selector Nivel 2: Sub-selector Presencial (Visible en modo Presencial) -->
-                <div class="presencial-sub-selector-container" id="presencialSubSelector" style="display: flex;">
-                    <div class="pricing-sub-nav" role="tablist" aria-label="Tipo de Presencial">
-                        <button class="pricing-sub-btn active" data-sub="presencial-ind" role="tab" aria-selected="true"
-                            id="btnSubInd">
-                            Individual
-                        </button>
-                        <button class="pricing-sub-btn" data-sub="presencial-grupos" role="tab" aria-selected="false"
-                            id="btnSubGrupos">
-                            Grupal
-                        </button>
+                <!-- PLAN 2: ENTRENAMIENTO PRESENCIAL PERSONALIZADO (1:1 O EN GRUPO) -->
+                <div class="train-plan-card highlight" style="background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 20px; padding: 32px 24px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 12px 36px rgba(197, 168, 128, 0.16);">
+                    <span class="train-plan-badge" style="position: absolute; top: -11px; right: 24px; background: #C5A880; color: #121214; font-size: 9.5px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-radius: 999px;">MÁS ELEGIDO • CABA</span>
+                    <div>
+                        <span class="plan-purpose-tag" style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 8px; display: block;">PRESENCIAL CABA</span>
+                        <h3 class="plan-title" style="font-size: 1.5rem; font-weight: 800; color: #121214; margin: 0 0 8px 0;">PRESENCIAL 1:1 O EN GRUPO</h3>
+                        <div class="plan-concept-tagline" style="font-size: 13px; color: #575659; line-height: 1.45; margin-bottom: 20px;">
+                            Entrenamiento presencial en CABA con Nico. Formato individual 1 a 1 o grupos reducidos (2 a 3 personas).
+                        </div>
+                        <div class="plan-price-wrap" style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span class="plan-amount" style="font-size: 2.1rem; font-weight: 800; color: #121214;">A consultar</span>
+                                <span class="plan-period" style="font-size: 13px; color: #575659; font-weight: 600;">/ mes</span>
+                            </div>
+                            <span style="font-size: 11.5px; color: #705B3E; font-weight: 600;">Directo con Nico según frecuencia semanal y locación.</span>
+                        </div>
+                        <ul class="plan-features-list" style="list-style: none; padding: 0; margin: 0 0 28px 0; display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: #121214;">
+                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
+                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Modalidad Individual 1:1 o Grupal (2 a 3 personas)</span>
+                            </li>
+                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
+                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Frecuencia personalizada (1x, 2x o 3x por semana)</span>
+                            </li>
+                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
+                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Locación flexible en CABA (gimnasio, edificio o parque)</span>
+                            </li>
+                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
+                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Cuota de gimnasio / estudio y App SENS bonificadas 100%</span>
+                            </li>
+                        </ul>
                     </div>
+                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20consultar%20precio%20y%20disponibilidad%20para%20entrenamiento%20presencial%20(individual%20o%20en%20grupo)%20en%20CABA."
+                        target="_blank" rel="noopener" class="btn btn-dark btn-full plan-select-btn"
+                        data-plan="Presencial Personalizado 1:1 o en Grupo (A Consultar)"
+                        data-agent-action="select_plan_presencial_consultar"
+                        style="padding: 14px; font-size: 13px; font-weight: 800; border-radius: 999px; text-align: center; text-decoration: none; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;">
+                        Consultar Disponibilidad →
+                    </a>
                 </div>
+
             </div>
-
-            <!-- ============================================================ -->
-            <!-- VISTA 2A: PRESENCIAL INDIVIDUAL (ACTIVA POR DEFECTO)         -->
-            <!-- ============================================================ -->
-            <div class="pricing-tab-content active" id="tab-presencial-ind" style="display:block;">
-                <div class="touch-carousel-wrap">
-                    <div class="touch-carousel pricing-carousel" id="pricingCarousel">
-                        <!-- 1. 2x por Semana (OPCIÓN DESTACADA AL FRENTE - MÁS ELEGIDO) -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">MÁS ELEGIDO</span>
-                                <h3 class="plan-title">2x por Semana</h3>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$200.000</span>
-                                    <span class="plan-period">/ mes (8 sesiones)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>2 sesiones semanales presenciales (CABA)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Locación flexible: edificio, gym...</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP bonificada </span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento personalizado </span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
-                                    data-plan="Presencial 1a1 - 2x/Semana ($200.000)"
-                                    data-agent-action="select_plan_presencial_1a1_2x">Agendar Evaluación</a>
-                            </div>
-                        </div>
-
-                        <!-- 2. 1x por Semana -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <h3 class="plan-title">1x por Semana</h3>
-
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$130.000</span>
-                                    <span class="plan-period">/ mes (4 sesiones)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>1 sesión semanal presencial (CABA)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Locación flexible: edificio, gym...</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP bonificada </span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento personalizado </span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial 1a1 - 1x/Semana ($130.000)"
-                                    data-agent-action="select_plan_presencial_1a1_1x">Elegir 1x por Semana</a>
-                            </div>
-                        </div>
-
-                        <!-- 3. 3x por Semana -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <h3 class="plan-title">3x por Semana</h3>
-
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$260.000</span>
-                                    <span class="plan-period">/ mes (12 sesiones)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>3 sesiones semanales presencial (CABA)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Locación flexible: edificio, gym...</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP bonificada </span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento personalizado </span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial 1a1 - 3x/Semana ($260.000)"
-                                    data-agent-action="select_plan_presencial_1a1_3x">Elegir 3x por Semana</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-dots" id="pricingDots">
-                        <div class="carousel-dot active" data-index="0"></div>
-                        <div class="carousel-dot" data-index="1"></div>
-                        <div class="carousel-dot" data-index="2"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================================ -->
-            <!-- VISTA 2B: PRESENCIAL GRUPAL (POR FRECUENCIA DE DÍAS)          -->
-            <!-- ============================================================ -->
-            <div class="pricing-tab-content" id="tab-presencial-grupos" style="display:none;">
-                <div class="touch-carousel-wrap">
-                    <div class="touch-carousel pricing-carousel" id="groupsCarousel">
-                        <!-- 1. 2x por Semana Grupal (OPCIÓN DESTACADA AL FRENTE - MÁS ELEGIDO) -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">MÁS ELEGIDO GRUPAL</span>
-                                <h3 class="plan-title">2x por Semana</h3>
-                                <div class="plan-concept-tagline">Presencial Grupal (2 o 3 personas) • Con tu pareja, amigo o grupo reducido con atención personalizada.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$150.000</span>
-                                    <span class="plan-period">/ persona / mes (8 sesiones)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>2 sesiones semanales grupales (2 a 3 personas)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Locación flexible: edificio, gym o estudio (CABA)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Cuota de gimnasio / estudio incluida</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP SENS bonificada 100%</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento y corrección técnica en vivo con Nico</span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
-                                    data-plan="Presencial Grupal - 2x/Semana ($150.000 c/u)"
-                                    data-agent-action="select_plan_presencial_grupal_2x">Agendar Evaluación Grupal</a>
-                            </div>
-                        </div>
-
-                        <!-- 2. 1x por Semana Grupal -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <h3 class="plan-title">1x por Semana</h3>
-                                <div class="plan-concept-tagline">Presencial Grupal (2 o 3 personas) • Con tu pareja, amigo o grupo reducido con atención personalizada.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$100.000</span>
-                                    <span class="plan-period">/ persona / mes (4 sesiones)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>1 sesión semanal grupal (2 a 3 personas)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Locación flexible: edificio, gym o estudio (CABA)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Cuota de gimnasio / estudio incluida</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP SENS bonificada 100%</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento y corrección técnica en vivo con Nico</span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial Grupal - 1x/Semana ($100.000 c/u)"
-                                    data-agent-action="select_plan_presencial_grupal_1x">Elegir 1x por Semana</a>
-                            </div>
-                        </div>
-
-                        <!-- 3. 3x por Semana Grupal -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <h3 class="plan-title">3x por Semana</h3>
-                                <div class="plan-concept-tagline">Presencial Grupal (2 o 3 personas) • Con tu pareja, amigo o grupo reducido con atención personalizada.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$195.000</span>
-                                    <span class="plan-period">/ persona / mes (12 sesiones)</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>3 sesiones semanales grupales (2 a 3 personas)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Locación flexible: edificio, gym o estudio (CABA)</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Cuota de gimnasio / estudio incluida</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP SENS bonificada 100%</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Seguimiento y corrección técnica en vivo con Nico</span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Presencial Grupal - 3x/Semana ($195.000 c/u)"
-                                    data-agent-action="select_plan_presencial_grupal_3x">Elegir 3x por Semana</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-dots" id="groupsDots">
-                    <div class="carousel-dot active" data-index="0"></div>
-                    <div class="carousel-dot" data-index="1"></div>
-                    <div class="carousel-dot" data-index="2"></div>
-                </div>
-            </div>
-
-            <!-- ============================================================ -->
-            <!-- VISTA 1: ONLINE ASESORADO (SECUNDARIO)                       -->
-            <!-- ============================================================ -->
-            <div class="pricing-tab-content" id="tab-online" style="display:none;">
-                <div class="touch-carousel-wrap">
-                    <div class="touch-carousel pricing-carousel" id="onlineCarousel">
-                        <!-- 1. Online Básico -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card">
-                                <span class="plan-purpose-tag">A DISTANCIA</span>
-                                <h3 class="plan-title">Online Básico</h3>
-                                <div class="plan-concept-tagline">Planificación individualizada por Nico con soporte continuo y corrección de técnica.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$40.000</span>
-                                    <span class="plan-period">/ mes</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Rutina a medida según tus objetivos</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Soporte continuo por WhatsApp</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Corrección técnica biomecánica por video</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP SENS bonificada 100%</span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-outline btn-full plan-select-btn"
-                                    data-plan="Online Básico ($40.000)"
-                                    data-agent-action="select_plan_online_basic">Postularme a Básico</a>
-                            </div>
-                        </div>
-
-                        <!-- 2. Online Premium (OPCIÓN DESTACADA) -->
-                        <div class="carousel-slide">
-                            <div class="train-plan-card highlight">
-                                <span class="train-plan-badge">MÁS ELEGIDO ONLINE</span>
-                                <h3 class="plan-title">Online Premium</h3>
-                                <div class="plan-concept-tagline">Acompañamiento cercano con videollamada inicial de 60 min y llamadas semanales de 60 min.</div>
-                                <div class="plan-price-wrap">
-                                    <span class="plan-amount">$90.000</span>
-                                    <span class="plan-period">/ mes</span>
-                                </div>
-                                <ul class="plan-features-list">
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Videollamada inicial 60 min + semanales</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Soporte prioritario 1 a 1 con Nico</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Membresía APP SENS bonificada 100%</span></li>
-                                    <li class="plan-feature-row"><svg class="check" width="12" height="12"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg><span>Ajustes biomecánicos y nutricionales en vivo</span></li>
-                                </ul>
-                                <a href="#sumate" class="btn btn-primary btn-full plan-select-btn"
-                                    data-plan="Online Premium ($90.000)"
-                                    data-agent-action="select_plan_online_premium">Postularme a Premium</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-dots" id="onlineDots">
-                        <div class="carousel-dot active" data-index="0"></div>
-                        <div class="carousel-dot" data-index="1"></div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Nota de Transparencia Comercial Oficial SENS -->
             <div class="sens-transparency-note"
                 style="margin-top: 24px; padding: 14px 18px; border-radius: 16px; background: #F4F3F0; border: 1px solid rgba(18, 18, 20, 0.08); display: flex; align-items: flex-start; gap: 10px; max-width: 620px; margin-left: auto; margin-right: auto;">
@@ -2950,58 +2651,48 @@
                                         style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #121214; background: #E5CBA7; padding: 3px 8px; border-radius: 999px;">CABA • EN VIVO</span>
                                     <span style="font-size: 11px; font-weight: 800; color: #059669;">Gym Incluido</span>
                                 </div>
-                                <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Presencial CABA (Individual y Grupal)</h4>
-                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-size: 11.5px; font-variant-numeric: tabular-nums;">
-                                    <div style="color: #121214; margin-bottom: 4px;"><strong>• Individual:</strong> 1x $130k | 2x $200k | 3x $260k / mes</div>
-                                    <div style="color: #705B3E;"><strong>• Grupal (2-3 pers):</strong> 1x $100k | 2x $150k | 3x $195k c/u</div>
+                                <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Presencial 1:1 o en Grupo</h4>
+                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 12px; margin-bottom: 10px;">
+                                    <div style="font-size: 1.25rem; font-weight: 800; color: #121214; margin-bottom: 2px;">Precio a consultar</div>
+                                    <div style="font-size: 11px; color: #705B3E; font-weight: 600;">Coordinación directa según frecuencia (1x, 2x o 3x/sem) y locación en CABA.</div>
                                 </div>
                                 <p style="font-size: 12px; color: #575659; margin: 0; line-height: 1.45;">
-                                    Entrenamiento en vivo con corrección biomecánica. Cuota de gimnasio / estudio y App SENS bonificadas 100%.
+                                    Entrenamiento en vivo con Nico. Formato individual 1 a 1 o grupos reducidos (2 a 3 personas). Cuota de gimnasio / estudio y App SENS bonificadas 100%.
                                 </p>
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20coordinar%20el%20pago%20para%20Presencial%20Individual%201%20a%201%20en%20CABA."
-                                    target="_blank" rel="noopener" class="btn btn-primary btn-full" id="btnPaywallPresencial1a1"
-                                    style="padding: 12px 16px; font-size: 12px; font-weight: 800; background: #121214; color: #FFFFFF; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
-                                    Abonar Presencial Individual →
-                                </a>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20coordinar%20el%20pago%20para%20Presencial%20Grupal%20en%20CABA."
-                                    target="_blank" rel="noopener" class="btn btn-outline btn-full" id="btnPaywallPresencialGrupo"
-                                    style="padding: 10px 14px; font-size: 11.5px; font-weight: 700; border: 1px solid rgba(197,168,128,0.5); color: #705B3E; background: transparent; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
-                                    Abonar Presencial Grupal (por pers.)
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20consultar%20precio%20y%20coordinar%20mi%20plan%20Presencial%20(individual%20o%20en%20grupo)%20en%20CABA."
+                                    target="_blank" rel="noopener" class="btn btn-dark btn-full" id="btnPaywallPresencial1a1"
+                                    style="padding: 12px 16px; font-size: 12px; font-weight: 800; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
+                                    Consultar Presencial con Nico →
                                 </a>
                             </div>
                         </div>
 
-                        <!-- Opción 2: Online 1:1 a Distancia -->
+                        <!-- Opción 2: Online Básico a Distancia -->
                         <div
                             style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
                             <div>
                                 <div
                                     style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                                     <span
-                                        style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E;">A DISTANCIA • 1 A 1</span>
+                                        style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E;">A DISTANCIA</span>
                                     <span style="font-size: 11px; font-weight: 700; color: #575659;">App Bonificada</span>
                                 </div>
-                                <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Seguimiento Online 1:1 con Nico</h4>
-                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-size: 11.5px; font-variant-numeric: tabular-nums;">
-                                    <div style="color: #705B3E; margin-bottom: 4px;"><strong>• Online Premium:</strong> $90.000 / mes (Videollamadas 60m)</div>
-                                    <div style="color: #121214;"><strong>• Online Básico:</strong> $40.000 / mes (Plan a medida + WhatsApp)</div>
+                                <h4 style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Online Básico con Nico</h4>
+                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 12px; margin-bottom: 10px;">
+                                    <div style="font-size: 1.25rem; font-weight: 800; color: #121214; margin-bottom: 2px;">$40.000 <span style="font-size: 12px; color: #575659; font-weight: 600;">/ mes</span></div>
+                                    <div style="font-size: 11px; color: #705B3E; font-weight: 600;">Plan a medida según tus objetivos con corrección por video y WhatsApp.</div>
                                 </div>
                                 <p style="font-size: 12px; color: #575659; margin: 0; line-height: 1.45;">
-                                    Planificación personalizada por Nico, corrección por video, soporte continuo y App SENS bonificada 100%.
+                                    Planificación personalizada por Nico, corrección biomecánica por video, soporte continuo y App SENS bonificada 100%.
                                 </p>
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20coordinar%20el%20pago%20de%20Online%20Premium%201%20a%201%20(%2490.000%2Fmes)."
-                                    target="_blank" rel="noopener" class="btn btn-outline btn-full" id="btnPaywallOnlinePremium"
-                                    style="padding: 12px 16px; font-size: 12px; font-weight: 800; color: #121214; border: 1px solid rgba(18,18,20,0.22); background: transparent; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
-                                    Abonar Online Premium ($90k) →
-                                </a>
                                 <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Quiero%20coordinar%20el%20pago%20de%20Online%20B%C3%A1sico%20(%2440.000%2Fmes)."
                                     target="_blank" rel="noopener" class="btn btn-outline btn-full" id="btnPaywallOnlineBasic"
-                                    style="padding: 10px 14px; font-size: 11.5px; font-weight: 700; border: 1px solid rgba(197,168,128,0.5); color: #705B3E; background: transparent; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
-                                    Abonar Online Básico ($40k)
+                                    style="padding: 12px 16px; font-size: 12px; font-weight: 700; border: 1.5px solid rgba(18,18,20,0.2); color: #121214; background: #FFFFFF; border-radius: 999px; text-decoration: none; text-align: center; display: block;">
+                                    Abonar Online Básico ($40.000) →
                                 </a>
                             </div>
                         </div>
@@ -3036,7 +2727,7 @@
                 <!-- 0. Saludo Personalizado de Bienvenida -->
                 <div class="sens-dash-welcome-header" id="sensDashWelcomeHeader" style="margin-top: 0 !important; padding-top: 0 !important; margin-bottom: 6px !important;">
                     <h2 class="sens-dash-welcome-question" style="margin: 0 0 2px 0 !important; color: #121214 !important;">
-                        ¿<span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, entrenamos?
+                        ¿<span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Atleta</span>, entrenamos?
                     </h2>
                     <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
                     <span id="dashCircadianDate" style="display: none !important;"></span>
@@ -5306,8 +4997,8 @@
                                     <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                                 </svg>
                                 <span>Estructura de Planes &amp; Precios</span>
-                                <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 6px;">4
-                                    Niveles</span>
+                                <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 6px;">2
+                                    Planes</span>
                             </div>
                             <svg class="tiers-toggle-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
                                 <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -5316,22 +5007,16 @@
                         </button>
                         <div class="coach-business-tiers-banner" id="coachBusinessTiersBanner" style="display: none;">
                             <div class="coach-tier-mini-card">
-                                <span class="tier-mini-tag">NIVEL 1 • PRESENCIAL CABA</span>
-                                <strong>Presencial Individual 1:1</strong>
-                                <span class="tier-mini-price">1x $130k • 2x $200k • 3x $260k</span>
-                                <small>Seguimiento 1:1 en vivo + App SENS bonificada 100%</small>
+                                <span class="tier-mini-tag">MODALIDAD 1 • PRESENCIAL CABA</span>
+                                <strong>Presencial Personalizado (1:1 o en Grupo)</strong>
+                                <span class="tier-mini-price">Precio a consultar</span>
+                                <small>Sesiones en CABA 1:1 o grupos reducidos (2-3 personas). Acceso completo App SENS bonificado 100%.</small>
                             </div>
                             <div class="coach-tier-mini-card">
-                                <span class="tier-mini-tag">NIVEL 2 • PRESENCIAL CABA</span>
-                                <strong>Presencial Grupal (2-3 personas)</strong>
-                                <span class="tier-mini-price">1x $100k • 2x $150k • 3x $195k por persona</span>
-                                <small>Grupos reducidos. Mismo método y seguimiento con Nico</small>
-                            </div>
-                            <div class="coach-tier-mini-card">
-                                <span class="tier-mini-tag">NIVEL 3 • ONLINE CON NICO</span>
-                                <strong>Online Personalizado 1:1</strong>
-                                <span class="tier-mini-price">Premium $90k • Básico $40k</span>
-                                <small>Rutina y nutrición prescriptas por Nico + App SENS</small>
+                                <span class="tier-mini-tag">MODALIDAD 2 • REMOTO</span>
+                                <strong>Online Básico con Nico</strong>
+                                <span class="tier-mini-price">$40.000 / mes</span>
+                                <small>Planificación individualizada, soporte continuo por WhatsApp, corrección técnica y App SENS.</small>
                             </div>
                         </div>
                     </div>
@@ -8155,69 +7840,23 @@
             style="padding: 14px 20px 120px 20px; display: flex; flex-direction: column; gap: 8px; max-height: 72vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
             
             <div style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C5A880; margin-top: 4px; margin-bottom: 2px;">
-                PRESENCIAL INDIVIDUAL 1 A 1 (CABA)
+                MODALIDAD PRESENCIAL (CABA • EN VIVO)
             </div>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip" data-plan-name="Presencial 1 a 1 (1x por semana)">
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip" data-plan-name="Presencial Personalizado 1:1 o en Grupo">
                 <div class="plan-opt-left">
-                    <strong>Presencial 1:1 • 1x por semana ($130.000 / mes)</strong>
-                    <span>4 sesiones al mes en vivo + Gym incluido</span>
+                    <strong>Presencial Personalizado (1:1 o en Grupo)</strong>
+                    <span>Sesiones presenciales en vivo en CABA + Gym incluido + App SENS bonificada 100%</span>
                 </div>
-                <span class="pill pill-champagne">1x VIP</span>
-            </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip" data-plan-name="Presencial 1 a 1 (2x por semana)">
-                <div class="plan-opt-left">
-                    <strong>Presencial 1:1 • 2x por semana ($200.000 / mes)</strong>
-                    <span>8 sesiones al mes en vivo + Gym incluido</span>
-                </div>
-                <span class="pill pill-champagne">2x VIP</span>
-            </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_vip" data-plan-name="Presencial 1 a 1 (3x por semana)">
-                <div class="plan-opt-left">
-                    <strong>Presencial 1:1 • 3x por semana ($260.000 / mes)</strong>
-                    <span>12 sesiones al mes en vivo + Gym incluido</span>
-                </div>
-                <span class="pill pill-champagne">3x VIP</span>
+                <span class="pill pill-champagne">Presencial</span>
             </button>
 
             <div style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C5A880; margin-top: 10px; margin-bottom: 2px;">
-                PRESENCIAL GRUPAL (2 A 3 PERSONAS • CABA)
+                MODALIDAD A DISTANCIA (ONLINE)
             </div>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group" data-plan-name="Presencial Grupal (1x por semana)">
+            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_basic" data-plan-name="Online Básico ($40.000 / mes)">
                 <div class="plan-opt-left">
-                    <strong>Grupal • 1x por semana ($100.000 / mes por pers.)</strong>
-                    <span>4 sesiones al mes por persona + Gym incluido</span>
-                </div>
-                <span class="pill pill-dark">Grupal 1x</span>
-            </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group" data-plan-name="Presencial Grupal (2x por semana)">
-                <div class="plan-opt-left">
-                    <strong>Grupal • 2x por semana ($150.000 / mes por pers.) [Más elegido]</strong>
-                    <span>8 sesiones al mes por persona + Gym incluido</span>
-                </div>
-                <span class="pill pill-champagne">Grupal 2x</span>
-            </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_presencial_group" data-plan-name="Presencial Grupal (3x por semana)">
-                <div class="plan-opt-left">
-                    <strong>Grupal • 3x por semana ($195.000 / mes por pers.)</strong>
-                    <span>12 sesiones al mes por persona + Gym incluido</span>
-                </div>
-                <span class="pill pill-dark">Grupal 3x</span>
-            </button>
-
-            <div style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C5A880; margin-top: 10px; margin-bottom: 2px;">
-                ONLINE 1 A 1 CON NICO
-            </div>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_premium" data-plan-name="Online 1:1 Premium (Seguimiento Diario)">
-                <div class="plan-opt-left">
-                    <strong>Online 1:1 Premium ($90.000 / mes)</strong>
-                    <span>Videollamadas 1:1, corrección técnica por video y WhatsApp directo</span>
-                </div>
-                <span class="pill pill-champagne">Online Premium</span>
-            </button>
-            <button type="button" class="btn-coach-plan-opt" data-plan="client_online_basic" data-plan-name="Online 1:1 Básico">
-                <div class="plan-opt-left">
-                    <strong>Online 1:1 Básico ($40.000 / mes)</strong>
-                    <span>Rutina prescripta por Nico, balance calórico mensual y soporte por chat</span>
+                    <strong>Online Básico ($40.000 / mes)</strong>
+                    <span>Planificación individualizada por Nico con soporte continuo por WhatsApp y corrección técnica</span>
                 </div>
                 <span class="pill pill-dark">Online Básico</span>
             </button>
@@ -9195,7 +8834,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=4.0"></script>
-    <script src="app.js?v=45.0"></script>
+    <script src="app.js?v=46.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
