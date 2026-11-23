@@ -94,7 +94,6 @@ html {
     color: var(--text-main);
     font-family: var(--font-body);
     scroll-padding-top: 100px;
-    overflow-x: hidden;
     width: 100%;
 }
 
@@ -109,17 +108,15 @@ a:visited {
 
 body {
     font-family: var(--font-body);
-    overflow-x: hidden;
     width: 100%;
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-@media (min-width: 1024px) {
-    html, body {
-        overflow-x: clip;
-    }
+#publicLanding {
+    overflow-x: clip;
+    width: 100%;
 }
 
 /* Herencia universal de tipografía Brandbook en controles de formulario */

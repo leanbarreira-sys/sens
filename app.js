@@ -2704,14 +2704,21 @@ function setupCarouselSwipe(carouselId, dotsContainerId) {
             const videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const vid = entry.target;
-                    if (entry.isIntersecting) {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+                        carouselVideos.forEach(other => {
+                            if (other !== vid && !other.paused) {
+                                try { other.pause(); } catch (_) {}
+                            }
+                        });
                         const p = vid.play();
                         if (p !== undefined) p.catch(() => {});
                     } else {
-                        vid.pause();
+                        if (!vid.paused) {
+                            try { vid.pause(); } catch (_) {}
+                        }
                     }
                 });
-            }, { threshold: 0.15 });
+            }, { threshold: 0.6 });
 
             carouselVideos.forEach(v => videoObserver.observe(v));
         }
