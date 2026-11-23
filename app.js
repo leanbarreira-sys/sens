@@ -2574,12 +2574,25 @@ function initHeroPillsCarousel() {
 function initHeroScrollObserver() {
     const hero = document.getElementById('sensTrainHero');
     if (!hero) return;
-    const checkScroll = () => {
-        const isPast = window.scrollY > (hero.offsetHeight * 0.4);
-        document.body.classList.toggle('scrolled-past-hero', isPast);
-    };
-    window.addEventListener('scroll', checkScroll, { passive: true });
-    checkScroll();
+    if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+            const entry = entries[0];
+            if (!entry) return;
+            document.body.classList.toggle('scrolled-past-hero', !entry.isIntersecting);
+        }, { threshold: 0.45 });
+        obs.observe(hero);
+        return;
+    }
+    const heroH = hero.offsetHeight || 600;
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+            document.body.classList.toggle('scrolled-past-hero', window.scrollY > (heroH * 0.4));
+            ticking = false;
+        });
+    }, { passive: true });
 }
 
 function initCarousels() {

@@ -3,7 +3,7 @@
    Cache-First for Static Assets | Network-First for Navigation | Offline Support
    ============================================================================= */
 
-const CACHE_NAME = 'sens-pwa-v13.0.1';
+const CACHE_NAME = 'sens-pwa-v13.0.2';
 
 const PRECACHE_ASSETS = [
     './',
@@ -65,28 +65,48 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // HTML Navigation requests: Network-First bypassing HTTP cache (ensures fresh app shell immediately)
+    // HTML Navigation requests: Network-First (2.5s timeout fallback to cache so reload never hangs)
     if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
+        event.respondWith((async () => {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 2500);
+            try {
+                const networkResponse = await fetch(request, { cache: 'no-cache', signal: controller.signal });
+                clearTimeout(timer);
+                if (networkResponse && networkResponse.status === 200) {
+                    const copy = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+                }
+                return networkResponse;
+            } catch (_) {
+                clearTimeout(timer);
+                return (await caches.match('./index.html')) || (await caches.match(request)) || Response.error();
+            }
+        })());
+        return;
+    }
+
+    // Versioned JS/CSS (?v=...): Cache-First for instant 0ms reloads (cache-buster handles updates)
+    if ((url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) && url.search.includes('v=')) {
         event.respondWith(
-            fetch(request, { cache: 'no-store' })
-                .then((networkResponse) => {
+            caches.match(request).then((cached) => {
+                if (cached) return cached;
+                return fetch(request).then((networkResponse) => {
                     if (networkResponse && networkResponse.status === 200) {
                         const copy = networkResponse.clone();
                         caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
                     }
                     return networkResponse;
-                })
-                .catch(() => {
-                    return caches.match('./index.html') || caches.match(request);
-                })
+                });
+            })
         );
         return;
     }
 
-    // Static Assets (CSS, JS, HTML): Network-First bypassing HTTP cache so updates are always immediate & atomic
+    // Unversioned JS/CSS/HTML: Network-First with cache fallback
     if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css') || url.pathname.endsWith('.html')) {
         event.respondWith(
-            fetch(request, { cache: 'no-store' })
+            fetch(request, { cache: 'no-cache' })
                 .then((networkResponse) => {
                     if (networkResponse && networkResponse.status === 200) {
                         const copy = networkResponse.clone();

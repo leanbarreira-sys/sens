@@ -89,7 +89,7 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     background-color: var(--bg-pure);
     color: var(--text-main);
     font-family: var(--font-body);
