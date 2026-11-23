@@ -138,12 +138,12 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=34.0">
+    <link rel="stylesheet" href="style.css?v=35.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '38.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '38.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '39.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '39.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -549,42 +549,38 @@
         <section class="section-sens" id="planes">
             <div class="section-head" style="margin-bottom: 28px;">
                 <h2 class="section-main-title">ELEGÍ TU PLAN</h2>
-                <p class="section-lead" style="font-size: 0.95rem; margin-bottom: 0; max-width: 600px;">
-                    Sumate al seguimiento presencial personalizado en CABA o al programa online a distancia con Nico.
+                <p class="section-lead" style="font-size: 0.95rem; margin-bottom: 0; max-width: 560px;">
+                    Dos formas de entrenar con Nico: seguimiento online a tu ritmo o presencial personalizado en CABA.
                 </p>
             </div>
 
             <!-- Grilla de los 2 Únicos Planes SENS -->
-            <div class="plans-official-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 860px; margin: 0 auto 28px auto; text-align: left;">
+            <div class="plans-official-grid">
                 
                 <!-- PLAN 1: ONLINE BÁSICO ($40.000 / mes) -->
-                <div class="train-plan-card" style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 32px 24px; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                <div class="train-plan-card" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 24px; padding: 28px 24px; display: flex; flex-direction: column; justify-content: space-between; position: relative; text-align: left;">
                     <div>
-                        <span class="plan-purpose-tag" style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 8px; display: block;">A DISTANCIA</span>
-                        <h3 class="plan-title" style="font-size: 1.5rem; font-weight: 800; color: #121214; margin: 0 0 8px 0;">ONLINE BÁSICO</h3>
-                        <div class="plan-concept-tagline" style="font-size: 13px; color: #575659; line-height: 1.45; margin-bottom: 20px;">
-                            Planificación individualizada por Nico con soporte continuo y corrección de técnica.
-                        </div>
-                        <div class="plan-price-wrap" style="display: flex; align-items: baseline; gap: 4px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
-                            <span class="plan-amount" style="font-size: 2.2rem; font-weight: 800; color: #121214;">$40.000</span>
+                        <span class="plan-purpose-tag" style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 6px; display: block;">A DISTANCIA</span>
+                        <h3 class="plan-title" style="font-size: 1.4rem; font-weight: 800; color: #121214; margin: 0 0 8px 0;">ONLINE BÁSICO</h3>
+                        <p class="plan-concept-tagline" style="font-size: 13.5px; color: #575659; line-height: 1.45; margin: 0 0 18px 0;">
+                            Tu plan mensual diseñado por Nico para entrenar a tu ritmo desde cualquier lugar.
+                        </p>
+                        <div class="plan-price-wrap" style="display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
+                            <span class="plan-amount" style="font-size: 2.1rem; font-weight: 800; color: #121214;">$40.000</span>
                             <span class="plan-period" style="font-size: 13px; color: #575659; font-weight: 600;">/ mes</span>
                         </div>
-                        <ul class="plan-features-list" style="list-style: none; padding: 0; margin: 0 0 28px 0; display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: #121214;">
+                        <ul class="plan-features-list" style="list-style: none; padding: 0; margin: 0 0 24px 0; display: flex; flex-direction: column; gap: 11px; font-size: 13px; color: #121214;">
                             <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
                                 <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Rutina a medida según tus objetivos</span>
+                                <span>Rutina personalizada según tu nivel y objetivo</span>
                             </li>
                             <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
                                 <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Soporte continuo por WhatsApp</span>
+                                <span>Corrección técnica por video y soporte WhatsApp</span>
                             </li>
                             <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
                                 <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Corrección técnica biomecánica por video</span>
-                            </li>
-                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
-                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Membresía APP SENS bonificada 100%</span>
+                                <span>Acceso completo a la App SENS incluido</span>
                             </li>
                         </ul>
                     </div>
@@ -592,42 +588,34 @@
                         data-plan="Online Básico ($40.000)"
                         data-agent-action="select_plan_online_basic"
                         style="padding: 14px; font-size: 13px; font-weight: 800; border-radius: 999px; text-align: center; text-decoration: none; border: 1.5px solid rgba(18,18,20,0.2); color: #121214;">
-                        Postularme a Básico
+                        Empezar Online
                     </a>
                 </div>
 
                 <!-- PLAN 2: ENTRENAMIENTO PRESENCIAL PERSONALIZADO (1:1 O EN GRUPO) -->
-                <div class="train-plan-card highlight" style="background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 20px; padding: 32px 24px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 12px 36px rgba(197, 168, 128, 0.16);">
-                    <span class="train-plan-badge" style="position: absolute; top: -11px; right: 24px; background: #C5A880; color: #121214; font-size: 9.5px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-radius: 999px;">MÁS ELEGIDO • CABA</span>
+                <div class="train-plan-card highlight" style="background: #FFFFFF; border: 2px solid #C5A880; border-radius: 24px; padding: 28px 24px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 12px 36px rgba(197, 168, 128, 0.16); text-align: left;">
+                    <span class="train-plan-badge" style="position: absolute; top: -11px; right: 20px; background: #E5CBA7; color: #2A241C; font-size: 9.5px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-radius: 999px;">MÁS ELEGIDO</span>
                     <div>
-                        <span class="plan-purpose-tag" style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 8px; display: block;">PRESENCIAL CABA</span>
-                        <h3 class="plan-title" style="font-size: 1.5rem; font-weight: 800; color: #121214; margin: 0 0 8px 0;">PRESENCIAL 1:1 O EN GRUPO</h3>
-                        <div class="plan-concept-tagline" style="font-size: 13px; color: #575659; line-height: 1.45; margin-bottom: 20px;">
-                            Entrenamiento presencial en CABA con Nico. Formato individual 1 a 1 o grupos reducidos (2 a 3 personas).
+                        <span class="plan-purpose-tag" style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 6px; display: block;">CABA • 1:1 O GRUPO</span>
+                        <h3 class="plan-title" style="font-size: 1.4rem; font-weight: 800; color: #121214; margin: 0 0 8px 0;">PRESENCIAL CON NICO</h3>
+                        <p class="plan-concept-tagline" style="font-size: 13.5px; color: #575659; line-height: 1.45; margin: 0 0 18px 0;">
+                            Entrenamiento en vivo individual o en grupo reducido (2-3 personas), adaptado 100% a vos.
+                        </p>
+                        <div class="plan-price-wrap" style="display: flex; align-items: baseline; gap: 6px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
+                            <span class="plan-amount" style="font-size: 2.0rem; font-weight: 800; color: #121214;">Precio a consultar</span>
                         </div>
-                        <div class="plan-price-wrap" style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
-                            <div style="display: flex; align-items: baseline; gap: 6px;">
-                                <span class="plan-amount" style="font-size: 2.1rem; font-weight: 800; color: #121214;">A consultar</span>
-                                <span class="plan-period" style="font-size: 13px; color: #575659; font-weight: 600;">/ mes</span>
-                            </div>
-                            <span style="font-size: 11.5px; color: #705B3E; font-weight: 600;">Directo con Nico según frecuencia semanal y locación.</span>
-                        </div>
-                        <ul class="plan-features-list" style="list-style: none; padding: 0; margin: 0 0 28px 0; display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: #121214;">
+                        <ul class="plan-features-list" style="list-style: none; padding: 0; margin: 0 0 24px 0; display: flex; flex-direction: column; gap: 11px; font-size: 13px; color: #121214;">
                             <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
                                 <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Modalidad Individual 1:1 o Grupal (2 a 3 personas)</span>
+                                <span>Sesiones 1:1 o en grupo en gimnasio, estudio o tu edificio</span>
                             </li>
                             <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
                                 <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Frecuencia personalizada (1x, 2x o 3x por semana)</span>
+                                <span>Frecuencia a medida (1x, 2x o 3x por semana)</span>
                             </li>
                             <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
                                 <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Locación flexible en CABA (gimnasio, edificio o parque)</span>
-                            </li>
-                            <li class="plan-feature-row" style="display: flex; align-items: center; gap: 10px;">
-                                <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Cuota de gimnasio / estudio y App SENS bonificadas 100%</span>
+                                <span>Gimnasio / estudio y App SENS 100% incluidos</span>
                             </li>
                         </ul>
                     </div>
@@ -636,20 +624,10 @@
                         data-plan="Presencial Personalizado 1:1 o en Grupo (A Consultar)"
                         data-agent-action="select_plan_presencial_consultar"
                         style="padding: 14px; font-size: 13px; font-weight: 800; border-radius: 999px; text-align: center; text-decoration: none; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;">
-                        Consultar Disponibilidad →
+                        Consultar por WhatsApp →
                     </a>
                 </div>
 
-            </div>
-            <!-- Nota de Transparencia Comercial Oficial SENS -->
-            <div class="sens-transparency-note"
-                style="margin-top: 24px; padding: 14px 18px; border-radius: 16px; background: #F4F3F0; border: 1px solid rgba(18, 18, 20, 0.08); display: flex; align-items: flex-start; gap: 10px; max-width: 620px; margin-left: auto; margin-right: auto;">
-                <span class="material-symbols-outlined"
-                    style="color: #705B3E; font-size: 18px; margin-top: 1px; flex-shrink: 0;">info</span>
-                <p style="font-size: 11.5px; color: #5A5752; line-height: 1.5; margin: 0; text-align: left;">
-                    <strong>Nota de transparencia:</strong> En planes presenciales el acceso al espacio o estudio se
-                    coordina con Nico al momento de contratar el plan.
-                </p>
             </div>
         </section>
 

@@ -2828,17 +2828,20 @@ a.hero-btn-apple-dark:active {
 .touch-carousel-wrap {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
 }
 
 .touch-carousel {
     display: flex;
     gap: 16px;
     overflow-x: auto;
+    overflow-y: hidden !important;
     scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x pan-y !important;
+    touch-action: pan-x pan-y;
     overscroll-behavior-x: contain;
+    overscroll-behavior-y: auto !important;
     padding-top: 16px;
     padding-bottom: 16px;
     scrollbar-width: none;
@@ -3199,7 +3202,8 @@ a.hero-btn-apple-dark:active {
     .touch-carousel-wrap {
         position: relative;
         width: 100%;
-        overflow: hidden;
+        overflow-x: clip;
+        overflow-y: visible;
     }
     .touch-carousel {
         padding: 12px 16px 20px;
@@ -3207,9 +3211,11 @@ a.hero-btn-apple-dark:active {
         width: calc(100% + 32px);
         gap: 18px;
         scroll-padding: 0 16px;
-        touch-action: pan-x pan-y !important;
+        touch-action: pan-x pan-y;
         -webkit-overflow-scrolling: touch;
+        overflow-y: hidden !important;
         overscroll-behavior-x: contain;
+        overscroll-behavior-y: auto !important;
     }
     /* Aire y separación entre cards de Pilares - Cero Solapamiento */
     .pillars-carousel {
@@ -3220,6 +3226,8 @@ a.hero-btn-apple-dark:active {
         width: calc(100% + 36px) !important;
         scroll-padding: 0 18px !important;
         overflow-x: auto !important;
+        overflow-y: hidden !important;
+        overscroll-behavior-y: auto !important;
     }
     .pillars-carousel .carousel-slide {
         flex: 0 0 78% !important;
@@ -25840,6 +25848,42 @@ body:not(.in-portal) .sens-transparency-note {
     background: #F4F3F0 !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
     border-radius: 16px !important;
+}
+
+body:not(.in-portal) .plans-official-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+    max-width: 860px !important;
+    margin: 0 auto 20px auto !important;
+    box-sizing: border-box !important;
+}
+
+@media (min-width: 768px) {
+    body:not(.in-portal) .plans-official-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 24px !important;
+        align-items: stretch !important;
+    }
+}
+
+body:not(.in-portal) .plans-official-grid .train-plan-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+@media (min-width: 768px) {
+    body:not(.in-portal) .plans-official-grid .train-plan-card {
+        height: 100% !important;
+    }
 }
 
 body:not(.in-portal) .train-plan-card {
