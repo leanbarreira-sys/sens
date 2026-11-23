@@ -94,7 +94,7 @@ html {
     color: var(--text-main);
     font-family: var(--font-body);
     scroll-padding-top: 100px;
-    overflow-x: clip;
+    overflow-x: hidden;
     width: 100%;
 }
 
@@ -109,11 +109,17 @@ a:visited {
 
 body {
     font-family: var(--font-body);
-    overflow-x: clip;
+    overflow-x: hidden;
     width: 100%;
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+@media (min-width: 1024px) {
+    html, body {
+        overflow-x: clip;
+    }
 }
 
 /* Herencia universal de tipografía Brandbook en controles de formulario */
@@ -2828,8 +2834,7 @@ a.hero-btn-apple-dark:active {
 .touch-carousel-wrap {
     position: relative;
     width: 100%;
-    overflow-x: clip;
-    overflow-y: visible;
+    overflow: hidden;
 }
 
 .touch-carousel {
@@ -3202,8 +3207,7 @@ a.hero-btn-apple-dark:active {
     .touch-carousel-wrap {
         position: relative;
         width: 100%;
-        overflow-x: clip;
-        overflow-y: visible;
+        overflow: hidden;
     }
     .touch-carousel {
         padding: 12px 16px 20px;
@@ -25878,6 +25882,30 @@ body:not(.in-portal) .plans-official-grid .train-plan-card {
     justify-content: space-between !important;
     visibility: visible !important;
     opacity: 1 !important;
+    transform: none !important;
+    will-change: auto !important;
+    contain: none !important;
+    overflow: visible !important;
+}
+
+@media (max-width: 1023px) {
+    body:not(.in-portal) .navbar,
+    body:not(.in-portal) .navbar.scrolled,
+    body:not(.in-portal) .mobile-quick-bar {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(250, 249, 246, 0.98) !important;
+    }
+    body:not(.in-portal) #publicLanding,
+    body:not(.in-portal) #publicLanding .section-sens,
+    body:not(.in-portal) #sumate,
+    body:not(.in-portal) #sumate .lead-intake-card,
+    body:not(.in-portal) #wellness {
+        overflow: visible !important;
+        transform: none !important;
+        will-change: auto !important;
+        contain: none !important;
+    }
 }
 
 @media (min-width: 768px) {
