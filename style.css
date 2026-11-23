@@ -32504,3 +32504,128 @@ body.in-portal #dashNutriSummaryCard.is-empty-day .sens-nutri-empty-content,
     cursor: pointer !important;
 }
 
+/* =============================================================================
+   OPTIMIZACIONES iOS / iPHONE 15 & RESPONSIVIDAD COACH OS + MEMBER PORTAL
+   ============================================================================= */
+
+/* 1. Prevención estricta de auto-zoom en iOS Safari */
+@media screen and (max-width: 768px) {
+    input, select, textarea, .input-control, .sheet-search-input,
+    .health-detail-input, .tape-input-control {
+        font-size: 16px !important;
+    }
+}
+
+/* 2. Ocultamiento de Floating Docks cuando hay Bottom Sheets activos o Modales */
+body.sheet-is-open #sensCoachFloatingDock,
+body.sheet-is-open #sensFloatingDock,
+body:has(.native-bottom-sheet.active) #sensCoachFloatingDock,
+body:has(.native-bottom-sheet.active) #sensFloatingDock,
+body:has(#coachAthleteActionsBottomSheet.active) #sensCoachFloatingDock,
+body:has(#coachPlanPickerBottomSheet.active) #sensCoachFloatingDock,
+body:has(#athletePickerBottomSheet.active) #sensCoachFloatingDock,
+body:has(.modal-overlay.active) #sensCoachFloatingDock,
+body:has(.modal-overlay.active) #sensFloatingDock {
+    display: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* 3. Elevación de z-index de Native Bottom Sheets y Modales sobre cualquier menú */
+.native-bottom-sheet,
+#coachAthleteActionsBottomSheet,
+#coachPlanPickerBottomSheet,
+#athletePickerBottomSheet {
+    z-index: 100005 !important;
+}
+.native-sheet-backdrop,
+#coachAthleteActionsBackdrop,
+#coachPlanSheetBackdrop,
+#athleteSheetBackdrop {
+    z-index: 100004 !important;
+}
+.modal-overlay,
+#coachAthleteDossierModal,
+#quickBiometricsModal {
+    z-index: 100010 !important;
+}
+
+/* 4. Espaciado inferior generoso en Mobile para evitar que el Dock tape contenido */
+@media (max-width: 900px) {
+    .portal-view {
+        padding-bottom: calc(110px + env(safe-area-inset-bottom, 20px)) !important;
+    }
+    #coachAthletesListContainer {
+        padding-bottom: 130px !important;
+    }
+    .coach-action-sheet-body {
+        padding-bottom: calc(90px + env(safe-area-inset-bottom, 24px)) !important;
+    }
+}
+
+/* 5. Safe Areas para iPhone 15 con Dynamic Island y Barra Inferior */
+@supports (padding: max(0px)) {
+    body.in-portal .portal-topbar {
+        padding-top: max(12px, env(safe-area-inset-top, 12px)) !important;
+    }
+    .native-bottom-sheet {
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
+    }
+}
+
+/* 5. Tarjeta de Atleta en Coach OS con Barra Biométrica & Botones Directos */
+.coach-ath-bio-grid {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0 10px;
+    background: #FAF9F6;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    border-radius: 10px;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.coach-ath-bio-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+}
+
+.coach-ath-bio-label {
+    font-size: 9.5px;
+    color: #705B3E;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.coach-ath-bio-val {
+    color: #121214;
+    font-weight: 700;
+}
+
+.btn-coach-action-dossier {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFFFF;
+    color: #705B3E;
+    border: 1px solid rgba(112, 91, 62, 0.25);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-coach-action-dossier:hover,
+.btn-coach-action-dossier:active {
+    background: #FAF7F2;
+    border-color: #705B3E;
+}
+
+

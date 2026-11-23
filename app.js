@@ -711,13 +711,26 @@ var coachWorkoutState = window.coachWorkoutState || {
 window.coachWorkoutState = coachWorkoutState;
 
 // Restauración síncrona inmediata desde caché local para render instantáneo sin flashes
+// Anti-Account-Leak: Validación de coherencia estricta para garantizar que nunca se mezclen perfiles
 try {
     const cachedUser = localStorage.getItem('sens_active_user');
     const cachedProfile = localStorage.getItem('sens_active_profile');
     const cachedAnam = localStorage.getItem('sens_active_anamnesis');
     if (cachedUser) AppState.user = JSON.parse(cachedUser);
-    if (cachedProfile) AppState.profile = JSON.parse(cachedProfile);
-    if (cachedAnam) AppState.anamnesis = JSON.parse(cachedAnam);
+    if (cachedProfile) {
+        const parsedProf = JSON.parse(cachedProfile);
+        const uEmail = (AppState.user && AppState.user.email) ? AppState.user.email.trim().toLowerCase() : '';
+        const pEmail = (parsedProf && parsedProf.email) ? parsedProf.email.trim().toLowerCase() : '';
+        if (uEmail && pEmail && uEmail !== pEmail) {
+            console.warn('[SENS Security] Startup: discrepancia entre cuenta activa y perfil en caché. Purgando perfil contaminado.');
+            localStorage.removeItem('sens_active_profile');
+            localStorage.removeItem('sens_active_anamnesis');
+            AppState.profile = null;
+        } else {
+            AppState.profile = parsedProf;
+        }
+    }
+    if (cachedAnam && AppState.profile) AppState.anamnesis = JSON.parse(cachedAnam);
 } catch (_) {}
 
 function isCurrentUserAdmin() {
@@ -1833,32 +1846,47 @@ function initRoleSwitcher() {
 
 function applyDatabaseAthlete(athlete) {
     AppState.activeAthleteId = athlete.id;
+    let localProf = {};
+    let localAnam = {};
+    const emailKey = (athlete.email || '').toLowerCase();
+    if (emailKey) {
+        try {
+            localProf = JSON.parse(localStorage.getItem(`sens_profile_${emailKey}`) || '{}');
+            localAnam = JSON.parse(localStorage.getItem(`sens_anamnesis_${emailKey}`) || '{}');
+        } catch (_) {}
+    }
+
     AppState.profile = {
+        ...athlete,
+        ...localProf,
         id: athlete.id,
-        full_name: athlete.full_name || 'Atleta SENS',
-        active_plan_name: athlete.active_plan_name || 'Plan Personalizado',
-        current_weight: athlete.current_weight || 75,
-        goal: athlete.goal || 'Fuerza & Vitalidad',
-        subscription_status: athlete.subscription_status || 'pending_activation',
-        onboarding_completed: Boolean(athlete.onboarding_completed),
-        daily_step_target: athlete.daily_step_target || 10000
+        full_name: athlete.full_name || localProf.full_name || athlete.email || 'Atleta SENS',
+        active_plan_name: athlete.active_plan_name || localProf.active_plan_name || 'Plan Personalizado',
+        current_weight: athlete.current_weight || localProf.current_weight || localAnam.weight || (localAnam.tape_measurements && localAnam.tape_measurements.weight) || 75,
+        height: athlete.height || localProf.height || localAnam.height || 175,
+        age: athlete.age || localProf.age || localAnam.age || 30,
+        gender: athlete.gender || localProf.gender || localAnam.gender || 'other',
+        goal: athlete.goal || localProf.goal || localAnam.goal || localAnam.primary_goal || 'Fuerza & Vitalidad',
+        subscription_status: athlete.subscription_status || localProf.subscription_status || 'active',
+        onboarding_completed: true,
+        daily_step_target: athlete.daily_step_target || localProf.daily_step_target || 8000
     };
+
+    AppState.anamnesis = {
+        ...localAnam,
+        user_id: athlete.id,
+        goal: AppState.profile.goal,
+        weight: AppState.profile.current_weight,
+        height: AppState.profile.height,
+        age: AppState.profile.age,
+        gender: AppState.profile.gender
+    };
+
     AppState.user = {
         id: athlete.id,
         email: athlete.email || `${athlete.id.slice(0, 8)}@sens.com`,
         role: 'user_normal'
     };
-
-function formatPlanShortBadge(planName) {
-    if (!planName) return 'Plan SENS';
-    const lower = String(planName).toLowerCase();
-    if (lower.includes('presencial')) return 'Presencial CABA';
-    if (lower.includes('online')) return 'Online 1:1';
-    if (lower.includes('app') || lower.includes('premium') || lower.includes('autónom')) return 'App Premium';
-    if (lower.includes('free') || lower.includes('prueba') || lower.includes('trial') || lower.includes('gratuit')) return 'Plan Free';
-    return planName.length > 18 ? (planName.slice(0, 16) + '…') : planName;
-}
-window.formatPlanShortBadge = formatPlanShortBadge;
 
     updateCoachSubBadgeAndButton(athlete.subscription_status);
 
@@ -1873,6 +1901,17 @@ window.formatPlanShortBadge = formatPlanShortBadge;
     renderWorkoutDay(AppState.currentDay || 'day1');
     showSensToast(`Gestionando al alumno ${athlete.full_name || 'Atleta'}.`, 'champagne');
 }
+
+function formatPlanShortBadge(planName) {
+    if (!planName) return 'Plan SENS';
+    const lower = String(planName).toLowerCase();
+    if (lower.includes('presencial')) return 'Presencial CABA';
+    if (lower.includes('online')) return 'Online 1:1';
+    if (lower.includes('app') || lower.includes('premium') || lower.includes('autónom')) return 'App Premium';
+    if (lower.includes('free') || lower.includes('prueba') || lower.includes('trial') || lower.includes('gratuit')) return 'Plan Free';
+    return planName.length > 18 ? (planName.slice(0, 16) + '…') : planName;
+}
+window.formatPlanShortBadge = formatPlanShortBadge;
 
 function updateCoachSubBadgeAndButton(status) {
     const coachSubBadge = document.getElementById('coachSubStatusBadge');
@@ -2967,6 +3006,14 @@ function initAuthModal() {
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
 
+        // Anti-Account-Leak: purgar memoria previa antes de autenticar nueva cuenta
+        AppState.profile = null;
+        AppState.anamnesis = null;
+        try {
+            localStorage.removeItem('sens_active_profile');
+            localStorage.removeItem('sens_active_anamnesis');
+        } catch (_) {}
+
         showAuthAlert('Autenticando acceso...', 'info');
 
         if (supabaseClient) {
@@ -2979,13 +3026,14 @@ function initAuthModal() {
             await loadProfileFromSupabase(data.user.id);
         } else {
             AppState.user = { id: 'local-user-id', email };
-            const savedProfile = localStorage.getItem('sens_profile_' + email);
-            const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + email);
+            const savedProfile = localStorage.getItem('sens_profile_' + email.toLowerCase());
+            const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + email.toLowerCase());
             if (savedProfile) {
                 AppState.profile = JSON.parse(savedProfile);
             } else {
                 AppState.profile = {
                     full_name: email.split('@')[0],
+                    email: email,
                     daily_step_target: 10000,
                     active_plan_name: 'Plan Personalizado SENS TRAIN',
                     onboarding_completed: false
@@ -2995,6 +3043,7 @@ function initAuthModal() {
                 AppState.anamnesis = JSON.parse(savedAnamnesis);
             }
             localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
+            localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
         }
 
         showAuthAlert('¡Acceso concedido! Entrando a tu portal...', 'success');
@@ -3008,9 +3057,24 @@ function initAuthModal() {
     // Formulario Registro
     paneRegister.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const fullName = document.getElementById('regFullName').value.trim();
+        const rawFullName = document.getElementById('regFullName').value.trim();
         const email = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPassword').value;
+
+        // Si el usuario ingresó un email como nombre, formatearlo limpiamente
+        let fullName = rawFullName;
+        if (fullName.includes('@')) {
+            const lp = fullName.split('@')[0];
+            fullName = lp.charAt(0).toUpperCase() + lp.slice(1);
+        }
+
+        // Anti-Account-Leak: purgar memoria previa antes de registrar nueva cuenta
+        AppState.profile = null;
+        AppState.anamnesis = null;
+        try {
+            localStorage.removeItem('sens_active_profile');
+            localStorage.removeItem('sens_active_anamnesis');
+        } catch (_) {}
 
         let newUserId = 'local-user-' + Date.now();
         const pendingRefCode = localStorage.getItem('sens_pending_referral_code') || '';
@@ -3370,10 +3434,72 @@ async function loadProfileFromSupabase(userId) {
             .eq('id', userId)
             .maybeSingle();
 
-        if (data && !error) {
-            AppState.profile = data;
+        const emailKey = (AppState.user && AppState.user.email) ? AppState.user.email : '';
+        const emailLower = emailKey.trim().toLowerCase();
+        let localProfile = {};
+        let localAnam = {};
+        if (emailLower) {
             try {
-                localStorage.setItem('sens_active_profile', JSON.stringify(data));
+                localProfile = JSON.parse(localStorage.getItem('sens_profile_' + emailLower) || localStorage.getItem('sens_profile_' + emailKey) || '{}');
+            } catch (_) {}
+            try {
+                localAnam = JSON.parse(localStorage.getItem('sens_anamnesis_' + emailLower) || localStorage.getItem('sens_anamnesis_' + emailKey) || '{}');
+            } catch (_) {}
+        }
+        // Anti-Account-Leak: solo recurrir a sens_active_profile si el email coincide estrictamente con la cuenta en sesión
+        if (!localProfile.current_weight) {
+            try {
+                const act = JSON.parse(localStorage.getItem('sens_active_profile') || '{}');
+                if (act.email && act.email.trim().toLowerCase() === emailLower) {
+                    localProfile = { ...act, ...localProfile };
+                }
+            } catch (_) {}
+        }
+        if (!localAnam.tape_measurements) {
+            try {
+                const actAnam = JSON.parse(localStorage.getItem('sens_active_anamnesis') || '{}');
+                if (actAnam.user_id === userId || (actAnam.email && actAnam.email.trim().toLowerCase() === emailLower)) {
+                    localAnam = { ...actAnam, ...localAnam };
+                }
+            } catch (_) {}
+        }
+
+        if (data && !error) {
+            AppState.profile = {
+                ...localProfile,
+                ...data,
+                id: userId,
+                email: emailKey || (data && data.email) || '',
+                current_weight: data.current_weight || localProfile.current_weight || data.weight || localProfile.weight || localAnam.weight || (localAnam.tape_measurements && localAnam.tape_measurements.weight) || null,
+                height: data.height || localProfile.height || localAnam.height || (localAnam.tape_measurements && localAnam.tape_measurements.height) || null,
+                age: data.age || localProfile.age || localAnam.age || (localAnam.tape_measurements && localAnam.tape_measurements.age) || null,
+                gender: data.gender || localProfile.gender || localAnam.gender || null,
+                goal: data.goal || localProfile.goal || localAnam.goal || localAnam.primary_goal || null,
+                onboarding_completed: Boolean(data.onboarding_completed || localProfile.onboarding_completed)
+            };
+
+            // Auto-reparación: si Supabase tenía nulls pero localProfile tenía datos, sincronizar a Supabase
+            if ((!data.current_weight && localProfile.current_weight) || (!data.height && localProfile.height) || (!data.onboarding_completed && localProfile.onboarding_completed)) {
+                supabaseClient
+                    .from('profiles')
+                    .update({
+                        current_weight: AppState.profile.current_weight,
+                        height: AppState.profile.height,
+                        age: AppState.profile.age,
+                        gender: AppState.profile.gender,
+                        goal: AppState.profile.goal,
+                        onboarding_completed: AppState.profile.onboarding_completed,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', userId)
+                    .then();
+            }
+
+            try {
+                localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+                if (emailKey) {
+                    localStorage.setItem('sens_profile_' + emailKey, JSON.stringify(AppState.profile));
+                }
                 if (AppState.user) {
                     localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
                 }
@@ -3384,26 +3510,6 @@ async function loadProfileFromSupabase(userId) {
                     localStorage.setItem(`sens_prescribed_nutrition_${userId}`, JSON.stringify(data.prescribed_nutrition));
                 }
             } catch (_) {}
-            const emailKey = (AppState.user && AppState.user.email) ? AppState.user.email : '';
-            if (emailKey) {
-                const localSaved = localStorage.getItem('sens_profile_' + emailKey);
-                if (localSaved) {
-                    try {
-                        const parsed = JSON.parse(localSaved);
-                        if (parsed.onboarding_completed && !data.onboarding_completed) {
-                            AppState.profile.onboarding_completed = true;
-                            try {
-                                localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
-                            } catch (_) {}
-                            supabaseClient
-                                .from('profiles')
-                                .update({ onboarding_completed: true })
-                                .eq('id', userId)
-                                .then();
-                        }
-                    } catch (e) {}
-                }
-            }
         } else {
             // Perfil aún no creado en la tabla (ej: usuario creado desde dashboard o antes del trigger)
             const fallbackEmail = (AppState.user && AppState.user.email) ? AppState.user.email : '';
@@ -3412,13 +3518,18 @@ async function loadProfileFromSupabase(userId) {
 
             const initialProfile = {
                 id: userId,
-                full_name: fallbackName,
+                full_name: localProfile.full_name || fallbackName,
                 email: fallbackEmail,
                 role: 'user_normal',
                 user_type: 'client_presencial_vip',
                 subscription_status: 'pending_activation',
                 billing_provider: 'manual',
-                onboarding_completed: false
+                current_weight: localProfile.current_weight || null,
+                height: localProfile.height || null,
+                age: localProfile.age || null,
+                gender: localProfile.gender || null,
+                goal: localProfile.goal || null,
+                onboarding_completed: Boolean(localProfile.onboarding_completed)
             };
 
             try {
@@ -3431,6 +3542,9 @@ async function loadProfileFromSupabase(userId) {
                 AppState.profile = (created && !createErr) ? created : initialProfile;
                 try {
                     localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+                    if (emailKey) {
+                        localStorage.setItem('sens_profile_' + emailKey, JSON.stringify(AppState.profile));
+                    }
                     if (AppState.user) {
                         localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
                     }
@@ -3446,12 +3560,16 @@ async function loadProfileFromSupabase(userId) {
             .eq('user_id', userId)
             .maybeSingle();
 
-        if (anamData) {
-            AppState.anamnesis = anamData;
-            try {
-                localStorage.setItem('sens_active_anamnesis', JSON.stringify(anamData));
-            } catch (_) {}
-        }
+        AppState.anamnesis = {
+            ...localAnam,
+            ...(anamData || {})
+        };
+        try {
+            localStorage.setItem('sens_active_anamnesis', JSON.stringify(AppState.anamnesis));
+            if (emailKey) {
+                localStorage.setItem('sens_anamnesis_' + emailKey, JSON.stringify(AppState.anamnesis));
+            }
+        } catch (_) {}
 
         // Hidratar historial completo de daily_logs (ejercicios, nutrición, pasos, rachas)
         if (typeof SensCloudSyncEngine !== 'undefined') {
@@ -3525,6 +3643,18 @@ async function checkExistingSession() {
         try {
             const { data: { session }, error } = await supabaseClient.auth.getSession();
             if (session && session.user) {
+                // Anti-Account-Leak: si la sesión en Supabase pertenece a un usuario diferente al cargado en memoria/cache, limpiar
+                const prevEmail = ((AppState.user && AppState.user.email) || (AppState.profile && AppState.profile.email) || '').trim().toLowerCase();
+                const newEmail = (session.user.email || '').trim().toLowerCase();
+                if (prevEmail && newEmail && prevEmail !== newEmail) {
+                    console.warn(`[SENS Security] Cambio de usuario detectado en sesión previa: ${prevEmail} -> ${newEmail}. Limpiando memoria.`);
+                    AppState.profile = null;
+                    AppState.anamnesis = null;
+                    try {
+                        localStorage.removeItem('sens_active_profile');
+                        localStorage.removeItem('sens_active_anamnesis');
+                    } catch (_) {}
+                }
                 AppState.user = session.user;
                 try {
                     localStorage.setItem('sens_active_user', JSON.stringify(session.user));
@@ -3556,6 +3686,17 @@ async function checkExistingSession() {
             } else if (event === 'SIGNED_IN' && session && session.user) {
                 // Si la URL contiene type=recovery o estamos restableciendo clave, no forzar login regular
                 if (!window.location.hash.includes('type=recovery')) {
+                    const prevEmail = ((AppState.user && AppState.user.email) || (AppState.profile && AppState.profile.email) || '').trim().toLowerCase();
+                    const newEmail = (session.user.email || '').trim().toLowerCase();
+                    if (prevEmail && newEmail && prevEmail !== newEmail) {
+                        console.warn(`[SENS Security] SIGNED_IN: cambio de usuario detectado (${prevEmail} -> ${newEmail}). Purgando perfil contaminado.`);
+                        AppState.profile = null;
+                        AppState.anamnesis = null;
+                        try {
+                            localStorage.removeItem('sens_active_profile');
+                            localStorage.removeItem('sens_active_anamnesis');
+                        } catch (_) {}
+                    }
                     AppState.user = session.user;
                     try {
                         localStorage.setItem('sens_active_user', JSON.stringify(session.user));
@@ -3570,22 +3711,26 @@ async function checkExistingSession() {
                     }
                 }
             } else if (event === 'SIGNED_OUT') {
-                AppState.user = null;
-                AppState.profile = null;
-                AppState.anamnesis = null;
-                if (window._sensRealtimeProfileChannel && supabaseClient) {
-                    try { supabaseClient.removeChannel(window._sensRealtimeProfileChannel); } catch (_) {}
-                    window._sensRealtimeProfileChannel = null;
+                if (typeof window.performCompleteSensLogout === 'function') {
+                    window.performCompleteSensLogout();
+                } else {
+                    AppState.user = null;
+                    AppState.profile = null;
+                    AppState.anamnesis = null;
+                    if (window._sensRealtimeProfileChannel && supabaseClient) {
+                        try { supabaseClient.removeChannel(window._sensRealtimeProfileChannel); } catch (_) {}
+                        window._sensRealtimeProfileChannel = null;
+                    }
+                    try {
+                        localStorage.removeItem('sens_active_user');
+                        localStorage.removeItem('sens_active_profile');
+                        localStorage.removeItem('sens_active_anamnesis');
+                        localStorage.removeItem('sens_in_portal');
+                    } catch (_) {}
+                    updateAuthNavButtons();
+                    if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
+                    if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
                 }
-                try {
-                    localStorage.removeItem('sens_active_user');
-                    localStorage.removeItem('sens_active_profile');
-                    localStorage.removeItem('sens_active_anamnesis');
-                    localStorage.removeItem('sens_in_portal');
-                } catch (_) {}
-                updateAuthNavButtons();
-                if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
-                if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
             }
         });
     } else {
@@ -3679,22 +3824,55 @@ function initPortalNavigation() {
         });
     });
 
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            if (supabaseClient) supabaseClient.auth.signOut();
+    // Anti-Account-Leak: Función centralizada de cierre de sesión y purga de aislamiento
+    window.performCompleteSensLogout = async function() {
+        try {
+            if (supabaseClient) {
+                await supabaseClient.auth.signOut().catch(() => {});
+            }
+        } catch (_) {}
+        if (window._sensRealtimeProfileChannel && supabaseClient) {
+            try { supabaseClient.removeChannel(window._sensRealtimeProfileChannel); } catch (_) {}
+            window._sensRealtimeProfileChannel = null;
+        }
+        AppState.user = null;
+        AppState.profile = null;
+        AppState.anamnesis = null;
+        AppState.dailySteps = 0;
+        coachWorkoutState.activeAthleteId = null;
+        window._sensCoachAdminUser = null;
+        window._sensCoachAdminProfile = null;
+        window._lastAvatarToggleTs = 0;
+
+        try {
             localStorage.removeItem('sens_active_user');
+            localStorage.removeItem('sens_active_profile');
+            localStorage.removeItem('sens_active_anamnesis');
             localStorage.removeItem('sens_in_portal');
-            document.documentElement.classList.remove('in-portal-mode');
-            AppState.user = null;
-            AppState.profile = null;
-            document.body.classList.remove('in-portal');
-            const globalHeader = document.querySelector('header');
-            const mobileQuickBar = document.querySelector('.mobile-quick-bar');
-            if (globalHeader) globalHeader.style.display = '';
-            if (mobileQuickBar) mobileQuickBar.style.display = '';
-            const floatSocial = document.getElementById('homeFloatingSocial');
-            if (floatSocial) floatSocial.style.display = 'flex';
-            returnToPublicLanding();
+            localStorage.removeItem('sens_portal_view');
+            localStorage.removeItem('sens_coach_inspection');
+        } catch (_) {}
+
+        document.documentElement.classList.remove('in-portal-mode');
+        document.body.classList.remove('in-portal');
+        document.body.classList.remove('pending-activation');
+        const globalHeader = document.querySelector('header');
+        const mobileQuickBar = document.querySelector('.mobile-quick-bar');
+        if (globalHeader) globalHeader.style.display = '';
+        if (mobileQuickBar) mobileQuickBar.style.display = '';
+        const floatSocial = document.getElementById('homeFloatingSocial');
+        if (floatSocial) floatSocial.style.display = 'flex';
+
+        updateAuthNavButtons();
+        if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
+        if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
+        returnToPublicLanding();
+    };
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            window.performCompleteSensLogout();
         });
     }
 
@@ -3904,67 +4082,31 @@ window.openSensPlansUpgradeModal = function(focusTier = null) {
     const info = getSensUserPlanDetails(AppState.profile);
     const badge = document.getElementById('modalCurrentPlanBadge');
     if (badge) {
-        badge.textContent = `Modalidad Actual: ${info.shortBadge}`;
+        badge.innerHTML = `<span class="status-dot status-dot-active" style="display:inline-block; margin-right:4px;"></span>${escapeHTML(info.statusLabel || 'Activo')}`;
     }
 
-    // Resaltar el card de la modalidad actual o enfocada (Light Quiet Luxury)
-    modal.querySelectorAll('.sens-modal-tier-card').forEach(card => {
-        const t = card.getAttribute('data-modal-tier');
-        const isCurrent = (t === info.key);
-        const isFocused = (focusTier && t === focusTier);
-        if (isCurrent) {
-            card.style.borderColor = '#10B981';
-            card.style.boxShadow = '0 0 0 1px rgba(16, 185, 129, 0.35)';
-        } else if (isFocused || t === 'presencial_1on1') {
-            card.style.borderColor = '#C5A880';
-            card.style.boxShadow = '0 8px 24px rgba(197, 168, 128, 0.14)';
-        } else {
-            card.style.borderColor = 'rgba(18, 18, 20, 0.08)';
-            card.style.boxShadow = '0 2px 10px rgba(18, 18, 20, 0.02)';
-        }
-    });
+    const titleEl = document.getElementById('modalPlanTitle');
+    if (titleEl) {
+        titleEl.textContent = info.title || 'Seguimiento Personalizado con Nico';
+    }
 
     const athleteEmail = (AppState.user && AppState.user.email) || (AppState.profile && AppState.profile.email) || '';
     const athleteName = (AppState.profile && AppState.profile.full_name) || 'Atleta SENS';
 
-    const btnOnlinePrem = document.getElementById('btnModalScaleOnlinePremium');
-    if (btnOnlinePrem) {
-        btnOnlinePrem.onclick = () => {
-            const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero comenzar el Seguimiento Online Premium 1 a 1 con videollamadas ($90.000/mes).`);
-            window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
-        };
+    const btnTalk = document.getElementById('btnModalTalkToNico1on1');
+    if (btnTalk) {
+        const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero hablar 1 a 1 para ver mi plan.`);
+        btnTalk.href = `https://wa.me/5491136329846?text=${msg}`;
     }
 
-    const btnOnlineBasic = document.getElementById('btnModalScaleOnlineBasic');
-    if (btnOnlineBasic) {
-        btnOnlineBasic.onclick = () => {
-            const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero comenzar el Seguimiento Online Básico 1 a 1 ($40.000/mes).`);
-            window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
-        };
-    }
-
-    const btnPres1a1 = document.getElementById('btnModalScalePresencial1a1');
-    if (btnPres1a1) {
-        btnPres1a1.onclick = () => {
-            const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero consultar cupos para Seguimiento Presencial Individual 1 a 1 en CABA (1x $130k / 2x $200k / 3x $260k con gimnasio incluido).`);
-            window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
-        };
-    }
-
-    const btnPresGrupo = document.getElementById('btnModalScalePresencialGrupo');
-    if (btnPresGrupo) {
-        btnPresGrupo.onclick = () => {
-            const msg = encodeURIComponent(`Hola Nico! Estoy en la App SENS (${athleteName} - ${athleteEmail}) y quiero consultar por Seguimiento Presencial Grupal en CABA (1x $100k / 2x $150k / 3x $195k por persona con gimnasio incluido).`);
-            window.open(`https://wa.me/5491136329846?text=${msg}`, '_blank');
-        };
-    }
-
+    document.body.classList.add('sheet-is-open');
     modal.style.display = 'flex';
 };
 
 window.closeSensPlansUpgradeModal = function() {
     const modal = document.getElementById('sensPlansUpgradeModal');
     if (modal) modal.style.display = 'none';
+    document.body.classList.remove('sheet-is-open');
 };
 
 // =============================================================================
@@ -4083,7 +4225,11 @@ window.checkUserAccessStatus = checkUserAccessStatus;
 
 function renderSoftPaywallState(profile, daysRemaining) {
     const p = profile || AppState.profile || {};
-    const athleteName = p.full_name || 'Atleta';
+    let athleteName = p.full_name || 'Atleta';
+    if (athleteName.includes('@')) {
+        const lp = athleteName.split('@')[0];
+        athleteName = lp.charAt(0).toUpperCase() + lp.slice(1);
+    }
     const athleteEmail = (AppState.user && AppState.user.email) || p.email || '';
     const athletePlan = p.active_plan_name || 'Presencial CABA (Individual o Grupal)';
 
@@ -4156,7 +4302,7 @@ function switchPortalView(viewId) {
     AppState._activeViewId = viewId;
 
     {
-        const isSubNavExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView' || (!isAdmin && !accessState.hasAccess));
+        const isSubNavExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'coachHubView' || viewId === 'clinicalDossierView' || (!isAdmin && !accessState.hasAccess));
         const subNav = document.getElementById('portalSubNav');
         if (subNav) {
             subNav.style.setProperty('display', isSubNavExcluded ? 'none' : 'flex', 'important');
@@ -4184,7 +4330,7 @@ function switchPortalView(viewId) {
         document.body.style.overflow = '';
 
         const isUnvalidatedAthlete = (!isAdmin && !accessState.hasAccess);
-        const isDockExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || isUnvalidatedAthlete);
+        const isDockExcluded = (viewId === 'activationPendingView' || viewId === 'onboardingSection' || viewId === 'clinicalDossierView' || isUnvalidatedAthlete);
 
         if (isDockExcluded) {
             if (athleteDock) athleteDock.style.setProperty('display', 'none', 'important');
@@ -4240,8 +4386,10 @@ function switchPortalView(viewId) {
     views.forEach(v => {
         if (v.id === viewId) {
             v.classList.add('active');
+            v.style.removeProperty('display');
         } else {
             v.classList.remove('active');
+            v.style.removeProperty('display');
             // Pausar inmediatamente todos los decodificadores de video en vistas que pasan a segundo plano
             v.querySelectorAll('video').forEach(vid => {
                 try { if (!vid.paused) vid.pause(); } catch (_) {}
@@ -4252,7 +4400,11 @@ function switchPortalView(viewId) {
     if (viewId === 'activationPendingView') {
         const pendingNameEl = document.getElementById('pendingUserName');
         if (pendingNameEl) {
-            const rawFullName = (profile && profile.full_name) || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || 'Atleta';
+            let rawFullName = (profile && profile.full_name) || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || 'Atleta';
+            if (rawFullName.includes('@')) {
+                const lp = rawFullName.split('@')[0];
+                rawFullName = lp.charAt(0).toUpperCase() + lp.slice(1);
+            }
             pendingNameEl.textContent = rawFullName.trim().split(/\s+/)[0] || 'Atleta';
         }
         if (typeof initFloatingDock === 'function') {
@@ -5388,12 +5540,18 @@ async function processDiagnosisSubmission() {
     const genderInput = document.querySelector('input[name="diagGender"]:checked');
     const goalInput = document.querySelector('input[name="diagGoal"]:checked');
 
-    const fullName = (fullNameInput ? fullNameInput.value.trim() : '') || (AppState.user ? AppState.user.email.split('@')[0] : 'Atleta SENS');
-    const gender = genderInput ? genderInput.value : 'male';
-    const goal = goalInput ? goalInput.value : 'fat_loss';
-    const age = parseInt(ageInput ? ageInput.value : '45', 10);
-    const weight = parseFloat(weightInput ? weightInput.value : '78.0') || 78.0;
-    const height = parseFloat(heightInput ? heightInput.value : '175') || 175;
+    const rawFullName = fullNameInput ? fullNameInput.value.trim() : '';
+    const fullName = rawFullName || (AppState.profile?.full_name) || (AppState.user ? AppState.user.email.split('@')[0] : 'Atleta SENS');
+    const gender = genderInput ? genderInput.value : (AppState.profile?.gender || 'male');
+    const goal = goalInput ? goalInput.value : (AppState.profile?.goal || 'fat_loss');
+
+    const rawAgeVal = ageInput ? ageInput.value.trim() : '';
+    const rawWeightVal = weightInput ? weightInput.value.trim() : '';
+    const rawHeightVal = heightInput ? heightInput.value.trim() : '';
+
+    const age = rawAgeVal ? parseInt(rawAgeVal, 10) : (AppState.profile?.age || null);
+    const weight = rawWeightVal ? parseFloat(rawWeightVal) : (AppState.profile?.current_weight || null);
+    const height = rawHeightVal ? parseFloat(rawHeightVal) : (AppState.profile?.height || null);
 
     // Respuestas del Cuestionario de Salud (Switches)
     const parqResponses = {};
@@ -5534,6 +5692,9 @@ async function processDiagnosisSubmission() {
         user_id: AppState.user ? AppState.user.id : undefined,
         gender: gender || 'other',
         goal: goal || 'general_vitality',
+        weight: weight,
+        height: height,
+        age: age,
         parq_responses: parqResponses || {},
         has_medical_flags: Boolean(hasMedicalFlags),
         parq_notes: parqNotes || '',
@@ -5542,6 +5703,9 @@ async function processDiagnosisSubmission() {
         has_surgery: Boolean(hasSurgery),
         surgery_detail: surgeryDetail || '',
         tape_measurements: {
+            weight: weight,
+            height: height,
+            age: age,
             waist: tapeWaist,
             hip: tapeHip,
             arm: tapeArm,
@@ -5573,49 +5737,121 @@ async function processDiagnosisSubmission() {
     };
     AppState.anamnesis = cleanAnamnesisPayload;
 
-    // Auto-Prescripción Instantánea en 0 segundos (Fuerza 3 Días + Nutrición Mifflin-St Jeor)
-    // Si Nico aún no le prescribió una rutina manual, el sistema le asigna su plan maestro inmediatamente
-    if (typeof window.assignAutomatedStarterPlanClient === 'function') {
-        try {
-            window.assignAutomatedStarterPlanClient(AppState.profile, cleanAnamnesisPayload);
-        } catch (autoErr) {
-            console.warn('[SENS] Error en auto-prescripción local:', autoErr);
-        }
-    }
+    // Cálculo de requerimientos nutricionales basales de referencia (sin precargar rutinas fantasmas)
+    const weightNum = parseFloat(cleanProfilePayload.current_weight) || 75;
+    const heightNum = parseFloat(cleanProfilePayload.height) || 175;
+    const ageNum = parseInt(cleanProfilePayload.age, 10) || 30;
+    const genderStr = String(cleanProfilePayload.gender || 'male').toLowerCase();
+    let basalBmr = (10 * weightNum) + (6.25 * heightNum) - (5 * ageNum);
+    basalBmr += (genderStr === 'female' || genderStr === 'femenino') ? -161 : 5;
+    const calculatedKcal = Math.round(basalBmr * 1.45);
+    const calculatedProtein = Math.round(weightNum * 2.0);
+    const calculatedWater = Math.round(weightNum * 35);
 
-    const emailKey = AppState.user && AppState.user.email ? AppState.user.email : 'local_user';
-    localStorage.setItem(`sens_profile_${emailKey}`, JSON.stringify(AppState.profile));
-    localStorage.setItem(`sens_anamnesis_${emailKey}`, JSON.stringify(cleanAnamnesisPayload));
+    AppState.profile.daily_calorie_target = calculatedKcal;
+    AppState.profile.daily_protein_target_g = calculatedProtein;
+    AppState.profile.daily_water_ml = calculatedWater;
+    AppState.profile.prescribed_workouts = null;
+
+    const rawEmailKey = (AppState.user && AppState.user.email) ? AppState.user.email : (AppState.profile?.email || 'local_user');
+    const emailLower = rawEmailKey.trim().toLowerCase();
+    const targetUserIdKey = AppState.user ? AppState.user.id : emailLower;
+    try {
+        localStorage.removeItem(`sens_prescribed_workouts_${targetUserIdKey}`);
+        localStorage.removeItem(`sens_prescribed_workouts_${emailLower}`);
+        localStorage.removeItem(`sens_prescribed_workouts_${rawEmailKey}`);
+    } catch (_) {}
+    localStorage.setItem(`sens_profile_${emailLower}`, JSON.stringify(AppState.profile));
+    localStorage.setItem(`sens_anamnesis_${emailLower}`, JSON.stringify(cleanAnamnesisPayload));
+    if (emailLower !== rawEmailKey) {
+        localStorage.setItem(`sens_profile_${rawEmailKey}`, JSON.stringify(AppState.profile));
+        localStorage.setItem(`sens_anamnesis_${rawEmailKey}`, JSON.stringify(cleanAnamnesisPayload));
+    }
     try {
         localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
         localStorage.setItem('sens_active_anamnesis', JSON.stringify(cleanAnamnesisPayload));
     } catch (_) {}
     localStorage.removeItem('sens_onboarding_draft');
 
-    // Sincronización robusta con Supabase (actualiza profiles, dispara assign_automated_starter_plan y hace upsert/insert de anamnesis)
+    // Actualizar roster local y cache de Coach OS para disponibilidad inmediata sin recarga
+    try {
+        const localRoster = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
+        const targetUserId = AppState.user ? AppState.user.id : null;
+        const targetEmail = (AppState.user && AppState.user.email) ? AppState.user.email.toLowerCase() : '';
+        const idx = localRoster.findIndex(a => (targetUserId && a.id === targetUserId) || (targetEmail && a.email && a.email.toLowerCase() === targetEmail));
+        const updatedEntry = {
+            id: targetUserId || `usr-${Date.now()}`,
+            full_name: fullName,
+            email: targetEmail || 'atleta@sens.com',
+            user_type: AppState.profile.user_type || 'client_presencial_vip',
+            active_plan_name: cleanProfilePayload.active_plan_name || 'Presencial 1 a 1 VIP (CABA)',
+            subscription_status: AppState.profile.subscription_status || 'pending_activation',
+            current_weight: cleanProfilePayload.current_weight,
+            height: cleanProfilePayload.height,
+            age: cleanProfilePayload.age,
+            gender: cleanProfilePayload.gender,
+            goal: cleanProfilePayload.goal,
+            onboarding_completed: true,
+            created_at: new Date().toISOString()
+        };
+        if (idx >= 0) {
+            localRoster[idx] = { ...localRoster[idx], ...updatedEntry };
+        } else {
+            localRoster.unshift(updatedEntry);
+        }
+        localStorage.setItem('sens_registered_athletes', JSON.stringify(localRoster));
+
+        if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+            const cacheIdx = window.__coachAthletesCache.findIndex(a => (targetUserId && a.id === targetUserId) || (targetEmail && a.email && a.email.toLowerCase() === targetEmail));
+            if (cacheIdx >= 0) {
+                window.__coachAthletesCache[cacheIdx] = { ...window.__coachAthletesCache[cacheIdx], ...updatedEntry };
+            } else {
+                window.__coachAthletesCache.unshift(updatedEntry);
+            }
+        }
+    } catch (_) {}
+
+    // Sincronización robusta con Supabase (UPDATE seguro en profiles para evitar violación de seguridad RLS)
     if (supabaseClient && AppState.user && AppState.user.id) {
         try {
-            const { error: profError } = await supabaseClient
-                .from('profiles')
-                .upsert({
-                    id: AppState.user.id,
-                    email: AppState.user.email,
-                    ...cleanProfilePayload,
-                    prescribed_workouts: AppState.profile.prescribed_workouts || undefined,
-                    prescribed_nutrition: AppState.profile.prescribed_nutrition || undefined,
-                    daily_calorie_target: AppState.profile.daily_calorie_target || undefined,
-                    daily_protein_target_g: AppState.profile.daily_protein_target_g || undefined,
-                    daily_water_ml: AppState.profile.daily_water_ml || undefined
-                });
-            if (profError) {
-                console.error('[SENS] Error al actualizar perfil en Supabase:', profError);
-            } else {
-                console.log('[SENS] Perfil y onboarding completado guardados con éxito en Supabase.');
-            }
+            const safeProfileUpdate = {
+                full_name: cleanProfilePayload.full_name,
+                gender: cleanProfilePayload.gender,
+                goal: cleanProfilePayload.goal,
+                age: cleanProfilePayload.age,
+                current_weight: cleanProfilePayload.current_weight,
+                height: cleanProfilePayload.height,
+                daily_step_target: cleanProfilePayload.daily_step_target,
+                onboarding_completed: true,
+                device_hash: cleanProfilePayload.device_hash,
+                consent_timestamp: cleanProfilePayload.consent_timestamp,
+                consent_version: cleanProfilePayload.consent_version,
+                updated_at: new Date().toISOString()
+            };
+            if (AppState.profile.daily_calorie_target) safeProfileUpdate.daily_calorie_target = AppState.profile.daily_calorie_target;
+            if (AppState.profile.daily_protein_target_g) safeProfileUpdate.daily_protein_target_g = AppState.profile.daily_protein_target_g;
+            if (AppState.profile.daily_water_ml) safeProfileUpdate.daily_water_ml = AppState.profile.daily_water_ml;
+            if (AppState.profile.prescribed_workouts) safeProfileUpdate.prescribed_workouts = AppState.profile.prescribed_workouts;
+            if (AppState.profile.prescribed_nutrition) safeProfileUpdate.prescribed_nutrition = AppState.profile.prescribed_nutrition;
 
-            try {
-                await supabaseClient.rpc('assign_automated_starter_plan', { target_user_id: AppState.user.id });
-            } catch (_) {}
+            const { data: updateData, error: profError } = await supabaseClient
+                .from('profiles')
+                .update(safeProfileUpdate)
+                .eq('id', AppState.user.id)
+                .select();
+
+            if (profError) {
+                console.warn('[SENS] Error al actualizar perfil en Supabase, reintentando upsert seguro:', profError);
+                await supabaseClient
+                    .from('profiles')
+                    .upsert({
+                        id: AppState.user.id,
+                        email: AppState.user.email,
+                        ...safeProfileUpdate
+                    }, { onConflict: 'id' });
+            } else {
+                console.log('[SENS] Perfil y biometría guardados con éxito en Supabase.');
+            }
 
             const { data: existingAnam } = await supabaseClient
                 .from('anamnesis')
@@ -5682,6 +5918,9 @@ async function processDiagnosisSubmission() {
         if (subNav) subNav.style.display = 'flex';
         renderDashboardData();
         renderWorkoutDay(AppState.currentDay || 'day1');
+        if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
+        if (typeof syncCoachMasterCard === 'function') syncCoachMasterCard();
+        if (typeof renderCoachAthletesHub === 'function') renderCoachAthletesHub();
         switchPortalView('dashView');
         window.scrollTo(0, 0);
         showSensToast('¡Diagnóstico guardado con éxito! Bienvenido a tu espacio de entrenamiento.', 'success');
@@ -5978,28 +6217,69 @@ function restoreDiagnosisDraft() {
 
 // Rellenar formulario cuando se entra en "Modo Edición"
 function prefillDiagnosisForm() {
-    const p = AppState.profile || {};
-    const a = AppState.anamnesis || {};
+    let p = AppState.profile || {};
+    let a = AppState.anamnesis || {};
 
-    if (p.full_name && document.getElementById('diagFullName')) {
-        document.getElementById('diagFullName').value = p.full_name;
-    }
-    const userGender = p.gender || a.gender || 'male';
-    const gRadio = document.querySelector(`input[name="diagGender"][value="${userGender}"]`);
-    if (gRadio) gRadio.checked = true;
+    const rawEmail = (AppState.user && AppState.user.email) ? AppState.user.email : (p.email || '');
+    const emailLower = rawEmail.trim().toLowerCase();
 
-    const userGoal = p.goal || a.goal || 'fat_loss';
-    const goalRadio = document.querySelector(`input[name="diagGoal"][value="${userGoal}"]`);
-    if (goalRadio) goalRadio.checked = true;
+    // Recuperar datos biométricos de todas las capas si falta en memoria inmediata
+    if (!p.current_weight || !p.height || !p.age) {
+        try {
+            if (emailLower) {
+                const mailP = JSON.parse(localStorage.getItem(`sens_profile_${emailLower}`) || '{}');
+                p = { ...mailP, ...p };
+            }
+            const activeP = JSON.parse(localStorage.getItem('sens_active_profile') || '{}');
+            if (activeP.email && emailLower && activeP.email.trim().toLowerCase() === emailLower) {
+                p = { ...activeP, ...p };
+            }
+        } catch (_) {}
+    }
+    if (!a.active_injuries || !a.tape_measurements) {
+        try {
+            if (emailLower) {
+                const mailA = JSON.parse(localStorage.getItem(`sens_anamnesis_${emailLower}`) || '{}');
+                a = { ...mailA, ...a };
+            }
+            const activeA = JSON.parse(localStorage.getItem('sens_active_anamnesis') || '{}');
+            if (activeA.email && emailLower && activeA.email.trim().toLowerCase() === emailLower) {
+                a = { ...activeA, ...a };
+            }
+        } catch (_) {}
+    }
+    let draft = null;
+    try {
+        const rawDraft = localStorage.getItem('sens_onboarding_draft');
+        if (rawDraft) draft = JSON.parse(rawDraft);
+    } catch (_) {}
 
-    if (p.age && document.getElementById('diagAge')) {
-        document.getElementById('diagAge').value = p.age;
+    const resolvedFullName = p.full_name || (draft && draft.fullName) || (AppState.user?.user_metadata?.full_name) || '';
+    const resolvedWeight = p.current_weight || p.weight || a.weight || (a.tape_measurements && a.tape_measurements.weight) || (draft && draft.weight) || '';
+    const resolvedHeight = p.height || a.height || (a.tape_measurements && a.tape_measurements.height) || (draft && draft.height) || '';
+    const resolvedAge = p.age || a.age || (a.tape_measurements && a.tape_measurements.age) || (draft && draft.age) || '';
+    const resolvedGender = p.gender || a.gender || (draft && draft.gender) || 'male';
+    const resolvedGoal = p.goal || a.goal || (draft && draft.goal) || 'fat_loss';
+
+    const nameInput = document.getElementById('diagFullName');
+    if (nameInput) nameInput.value = resolvedFullName || '';
+
+    const ageInput = document.getElementById('diagAge');
+    if (ageInput) ageInput.value = resolvedAge || '';
+
+    const weightInput = document.getElementById('diagWeight');
+    if (weightInput) weightInput.value = resolvedWeight || '';
+
+    const heightInput = document.getElementById('diagHeight');
+    if (heightInput) heightInput.value = resolvedHeight || '';
+
+    if (resolvedGender) {
+        const gRadio = document.querySelector(`input[name="diagGender"][value="${resolvedGender}"]`);
+        if (gRadio) gRadio.checked = true;
     }
-    if (p.current_weight && document.getElementById('diagWeight')) {
-        document.getElementById('diagWeight').value = p.current_weight;
-    }
-    if (p.height && document.getElementById('diagHeight')) {
-        document.getElementById('diagHeight').value = p.height;
+    if (resolvedGoal) {
+        const goalRadio = document.querySelector(`input[name="diagGoal"][value="${resolvedGoal}"]`);
+        if (goalRadio) goalRadio.checked = true;
     }
 
     if (a.tape_measurements) {
@@ -6411,9 +6691,24 @@ function formatMuscleGroup(key) {
 function athleteHasAssignedRoutine(athId) {
     if (!athId) return false;
 
+    // Perfiles demostrativos preasignados
+    if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
+        return true;
+    }
+
+    const isAutoStarterPlan = (pw) => {
+        if (!pw || typeof pw !== 'object') return false;
+        if (pw.is_auto_starter) return true;
+        const d1 = pw.day1;
+        const d3 = pw.day3;
+        if (d1 && (d1.title?.includes('Empuje') || d1.title?.includes('Postura') || d1.title?.includes('Tren Superior'))) return true;
+        if (d3 && (d3.title?.includes('Tracción') || d3.title?.includes('Cadena Posterior'))) return true;
+        return false;
+    };
+
     // 1. Revisar en AppState.profile.prescribed_workouts (descargado de Supabase para el alumno activo)
     const profileWorkouts = AppState.profile?.prescribed_workouts;
-    if (profileWorkouts && typeof profileWorkouts === 'object') {
+    if (profileWorkouts && typeof profileWorkouts === 'object' && !isAutoStarterPlan(profileWorkouts)) {
         const hasExercises = Object.values(profileWorkouts).some(
             day => day && Array.isArray(day.exercises) && day.exercises.length > 0
         );
@@ -6422,8 +6717,8 @@ function athleteHasAssignedRoutine(athId) {
 
     // 2. Si está en cache de atletas de Coach OS
     if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
-        const cached = window.__coachAthletesCache.find(a => a.id === athId);
-        if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object') {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId || (a.email && a.email.toLowerCase() === String(athId).toLowerCase()));
+        if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object' && !isAutoStarterPlan(cached.prescribed_workouts)) {
             const hasExercises = Object.values(cached.prescribed_workouts).some(
                 day => day && Array.isArray(day.exercises) && day.exercises.length > 0
             );
@@ -6436,43 +6731,50 @@ function athleteHasAssignedRoutine(athId) {
     if (raw) {
         try {
             const data = JSON.parse(raw);
-            const hasExercises = Object.values(data).some(
-                day => day && Array.isArray(day.exercises) && day.exercises.length > 0
-            );
-            if (hasExercises) return true;
+            if (!isAutoStarterPlan(data)) {
+                const hasExercises = Object.values(data).some(
+                    day => day && Array.isArray(day.exercises) && day.exercises.length > 0
+                );
+                if (hasExercises) return true;
+            }
         } catch (e) {}
-    }
-
-    // 4. Si el alumno completó el onboarding, cuenta con el plan activo
-    if (AppState.profile && AppState.profile.onboarding_completed) {
-        return true;
-    }
-
-    // 5. Perfiles demostrativos preasignados
-    if (athId === 'usr-vip-001' || athId === 'mock_vip' || athId === 'usr-onl-003' || athId === 'mock_onl') {
-        return true;
     }
 
     return false;
 }
 
 function getActiveAthleteId() {
-    // 1. Si es un alumno regular, SIEMPRE retornar su ID propio de Supabase/perfil
-    if (typeof isCurrentUserAdmin === 'function' && !isCurrentUserAdmin()) {
-        if (typeof AppState !== 'undefined' && AppState.user && AppState.user.id) return AppState.user.id;
-        if (typeof AppState !== 'undefined' && AppState.profile && AppState.profile.id) return AppState.profile.id;
-    }
-    // 2. Si es el coach en Coach OS o impersonando a un atleta:
-    try {
-        if (typeof coachWorkoutState !== 'undefined' && coachWorkoutState && coachWorkoutState.activeAthleteId) {
-            return coachWorkoutState.activeAthleteId;
+    // 0. Si el usuario actual está navegando en el portal de alumno propio (dashView, workoutView, nutritionView, trackingView, profileSettingsView)
+    // y NO está en modo de inspección activa de un alumno por el coach:
+    const coachHubEl = document.getElementById('coachHubView');
+    const isCoachHubActive = coachHubEl && coachHubEl.classList.contains('active');
+    const isInspectingAStudent = Boolean(window._sensCoachInspectingAthlete && !isCoachHubActive);
+
+    if (!isCoachHubActive && !isInspectingAStudent) {
+        if (typeof AppState !== 'undefined') {
+            if (AppState.user && AppState.user.id) return AppState.user.id;
+            if (AppState.profile && AppState.profile.id) return AppState.profile.id;
+            const em = (AppState.user && AppState.user.email) || (AppState.profile && AppState.profile.email);
+            if (em) return em.trim().toLowerCase();
         }
-    } catch (_) {}
-    // 3. Fallbacks
+    }
+
+    // 1. Si es el coach en Coach OS o impersonando a un atleta:
+    if (isCoachHubActive || isInspectingAStudent) {
+        try {
+            if (typeof coachWorkoutState !== 'undefined' && coachWorkoutState && coachWorkoutState.activeAthleteId) {
+                return coachWorkoutState.activeAthleteId;
+            }
+        } catch (_) {}
+    }
+
+    // 2. Fallbacks
     if (typeof AppState !== 'undefined') {
+        if (AppState.activeAthleteId) return AppState.activeAthleteId;
         if (AppState.user && AppState.user.id) return AppState.user.id;
         if (AppState.profile && AppState.profile.id) return AppState.profile.id;
-        if (AppState.activeAthleteId) return AppState.activeAthleteId;
+        const em = (AppState.user && AppState.user.email) || (AppState.profile && AppState.profile.email);
+        if (em) return em.trim().toLowerCase();
     }
     return 'mock_vip';
 }
@@ -7304,8 +7606,8 @@ function renderWorkoutDay(dayKey, targetDate = null) {
 
     // Caso 1: Usuario nuevo sin rutina asignada por Nico
     if (!hasRoutine) {
-        if (heroTitle) heroTitle.textContent = 'Plan en Preparación';
-        if (summaryDayTag) summaryDayTag.textContent = 'Asignación Pendiente';
+        if (heroTitle) heroTitle.textContent = 'Plan en Calibración';
+        if (summaryDayTag) summaryDayTag.textContent = 'Esperando a Nico';
         const exVal = document.getElementById('metricValExercises');
         const minVal = document.getElementById('metricValMinutes');
         const kcalVal = document.getElementById('metricValKcal');
@@ -7313,6 +7615,9 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         if (minVal) minVal.textContent = '~0';
         if (kcalVal) kcalVal.textContent = '~0';
         if (coachCard) coachCard.style.display = 'none';
+
+        const attendanceBox = document.getElementById('workoutAttendanceBox');
+        if (attendanceBox) attendanceBox.style.display = 'none';
 
         container.innerHTML = `
             <div class="sens-empty-state-card" style="grid-column: 1 / -1; margin-bottom: 24px;">
@@ -7322,7 +7627,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                 <h3 class="sens-empty-state-title">Nico está trabajando en tu plan personalizado</h3>
                 <p class="sens-empty-state-desc">
                     Estamos analizando tu diagnóstico inicial, mapa de dolores articulares y requerimientos de movimiento para diseñar tu rutina con videos demostrativos y prescripción de cargas seguras.<br><br>
-                    Apenas Nico apruebe tu plan, vas a tener disponible aquí cada ejercicio con sus videos en bucle y descansos cronometrados.
+                    No verás ejercicios genéricos precargados: únicamente los movimientos y series que Nico prescriba para vos. Apenas apruebe tu plan, vas a tener disponible aquí cada ejercicio con sus videos en bucle y descansos cronometrados.
                 </p>
                 <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                     <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Complet%C3%A9%20mi%20diagn%C3%B3stico%20en%20SENS%20y%20aguardo%20mi%20rutina." target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="font-size: 12px; font-weight: 700;">
@@ -7334,6 +7639,9 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         `;
         return;
     }
+
+    const attendanceBox = document.getElementById('workoutAttendanceBox');
+    if (attendanceBox) attendanceBox.style.display = 'block';
 
     // Caso 2: Atleta con rutina asignada (Sincronizado con Calendario Dinámico y Rutina Base)
     const data = getCoachAthleteWorkoutData(athId);
@@ -7411,7 +7719,6 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     if (kcalCountEl) kcalCountEl.textContent = `~${totalWorkoutKcal} kcal`;
 
     // 3. Renderizar Asistencia y Registro de Sesión (Compacto y Ligero con Scoping por Fecha)
-    const attendanceBox = document.getElementById('workoutAttendanceBox');
     if (attendanceBox) {
         const isCompleted = Boolean(execution.completed);
         const isMissed = Boolean(execution.missed || execution.attended === false);
@@ -7513,11 +7820,17 @@ function renderWorkoutDay(dayKey, targetDate = null) {
             yAttendance = JSON.parse(localStorage.getItem(yAttendanceKey) || '{}');
         } catch (_) {}
 
+        const userCreatedRaw = AppState.profile?.created_at || (AppState.user && AppState.user.created_at) || null;
+        const userCreatedDate = userCreatedRaw ? new Date(userCreatedRaw) : new Date();
+        userCreatedDate.setHours(0, 0, 0, 0);
+        const yDateMidnight = new Date(yDate);
+        yDateMidnight.setHours(0, 0, 0, 0);
+
         const yHasExercises = yDayData && !yDayData.isRestDay && Array.isArray(yDayData.exercises) && yDayData.exercises.length > 0;
         const yWasMissed = yAttendance.attended === false || yAttendance.missed === true;
         const yWasNotCompleted = !yAttendance.completed && !yAttendance.attended;
 
-        if (yHasExercises && (yWasMissed || yWasNotCompleted)) {
+        if (yDateMidnight >= userCreatedDate && yHasExercises && (yWasMissed || yWasNotCompleted)) {
             missedRecoveryHtml = `
                 <div class="sens-missed-recovery-banner" style="background: linear-gradient(135deg, #FFFFFF 0%, #FAF7F2 100%); border: 1px solid rgba(197, 168, 128, 0.4); border-radius: 16px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: 0 4px 16px rgba(18, 18, 20, 0.04);">
                     <div style="display: flex; align-items: center; gap: 10px;">
@@ -7711,7 +8024,8 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
         ? data.calendar_schedule[dateIso]
         : ((data && data[dayKey]) ? data[dayKey] : null);
 
-    if (!day && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
+    const isMockAthlete = String(athId).startsWith('mock_') || athId === 'usr-vip-001';
+    if (!day && isMockAthlete && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
         day = WORKOUT_DAYS_DATA[dayKey];
     }
 
@@ -9121,7 +9435,8 @@ function saveAndFinishExercise(silent = false) {
             ? data.calendar_schedule[dateIso]
             : ((data && data[currentDayKey]) ? data[currentDayKey] : null);
 
-        if (!day && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[currentDayKey]) {
+        const isMockAthlete = String(athId).startsWith('mock_') || athId === 'usr-vip-001';
+        if (!day && isMockAthlete && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[currentDayKey]) {
             day = WORKOUT_DAYS_DATA[currentDayKey];
         }
 
@@ -9936,6 +10251,15 @@ function initProfileSettings() {
         });
     }
 
+    const viewFullDossierBtn = document.getElementById('btnSettingsViewFullDossier');
+    if (viewFullDossierBtn) {
+        viewFullDossierBtn.addEventListener('click', () => {
+            if (typeof window.openSensClinicalDossier === 'function') {
+                window.openSensClinicalDossier(null, { isCoach: false });
+            }
+        });
+    }
+
     const passwordForm = document.getElementById('formUpdatePassword');
     if (passwordForm) {
         passwordForm.addEventListener('submit', async (e) => {
@@ -10068,6 +10392,82 @@ function renderProfileSettingsData() {
             tagsHtml = '<span class="diag-tag">Ficha Biomecánica al día</span>';
         }
         diagTagsContainer.innerHTML = tagsHtml;
+    }
+
+    // Poblar Tarjeta 2: Biometría & Expediente Real (#userBiometricsProfileCard)
+    const bioWeightEl = document.getElementById('settingsBioWeight');
+    const bioHeightEl = document.getElementById('settingsBioHeight');
+    const bioAgeEl = document.getElementById('settingsBioAge');
+    const bioGenderEl = document.getElementById('settingsBioGender');
+    const bioGoalEl = document.getElementById('settingsBioGoal');
+    const bioInjuriesEl = document.getElementById('settingsBioInjuries');
+
+    let curWeight = profile.current_weight || profile.weight || anamnesis.weight || (anamnesis.tape_measurements && anamnesis.tape_measurements.weight);
+    let curHeight = profile.height || anamnesis.height || (anamnesis.tape_measurements && anamnesis.tape_measurements.height);
+    let curAge = profile.age || anamnesis.age || (anamnesis.tape_measurements && anamnesis.tape_measurements.age);
+    let curGender = profile.gender || anamnesis.gender;
+    let curGoal = profile.goal || anamnesis.goal || anamnesis.primary_goal;
+
+    // Multi-layer fallback de resiliencia: si aún faltan datos, buscar en persistencia local
+    if (!curWeight || !curHeight || !curAge) {
+        try {
+            const rawEm = (user.email || profile.email || '').trim().toLowerCase();
+            let localProf = {};
+            let localAnam = {};
+            if (rawEm) {
+                localProf = JSON.parse(localStorage.getItem(`sens_profile_${rawEm}`) || '{}');
+                localAnam = JSON.parse(localStorage.getItem(`sens_anamnesis_${rawEm}`) || '{}');
+            }
+            const activeP = JSON.parse(localStorage.getItem('sens_active_profile') || '{}');
+            if (activeP.email && rawEm && activeP.email.trim().toLowerCase() === rawEm) {
+                localProf = { ...activeP, ...localProf };
+            }
+            const activeA = JSON.parse(localStorage.getItem('sens_active_anamnesis') || '{}');
+            if (activeA.email && rawEm && activeA.email.trim().toLowerCase() === rawEm) {
+                localAnam = { ...activeA, ...localAnam };
+            }
+            if (!curWeight) curWeight = localProf.current_weight || localProf.weight || localAnam.weight || (localAnam.tape_measurements && localAnam.tape_measurements.weight);
+            if (!curHeight) curHeight = localProf.height || localAnam.height || (localAnam.tape_measurements && localAnam.tape_measurements.height);
+            if (!curAge) curAge = localProf.age || localAnam.age || (localAnam.tape_measurements && localAnam.tape_measurements.age);
+            if (!curGender) curGender = localProf.gender || localAnam.gender;
+            if (!curGoal) curGoal = localProf.goal || localAnam.goal || localAnam.primary_goal;
+        } catch (_) {}
+    }
+
+    const genderMap = { male: 'Masculino', female: 'Femenino', other: 'No especificado' };
+    const goalMap = {
+        hypertrophy: 'Hipertrofia & Fuerza Máxima',
+        muscle_gain: 'Fuerza & Masa Muscular',
+        fat_loss: 'Recomposición Corporal & Quema Grasa',
+        recomp: 'Recomposición Corporal',
+        posture: 'Postura, Columna & Anti-Sedentarismo',
+        posture_health: 'Postura, Columna & Salud Articular',
+        performance: 'Rendimiento Deportivo & Longevidad',
+        general_vitality: 'Vitalidad General & Salud Integral'
+    };
+
+    if (bioWeightEl) bioWeightEl.textContent = curWeight ? `${curWeight} kg` : '—';
+    if (bioHeightEl) bioHeightEl.textContent = curHeight ? `${curHeight} cm` : '—';
+    if (bioAgeEl) bioAgeEl.textContent = curAge ? `${curAge} años` : '—';
+    if (bioGenderEl) bioGenderEl.textContent = genderMap[curGender] || (curGender ? curGender : '—');
+    if (bioGoalEl) bioGoalEl.textContent = goalMap[curGoal] || (curGoal ? curGoal : 'Vitalidad General & Fuerza');
+
+    if (bioInjuriesEl) {
+        const injuries = (anamnesis.active_injuries && anamnesis.active_injuries.length)
+            ? anamnesis.active_injuries
+            : (anamnesis.pains_injuries && anamnesis.pains_injuries.length)
+                ? anamnesis.pains_injuries
+                : null;
+        if (Array.isArray(injuries) && injuries.length > 0) {
+            bioInjuriesEl.textContent = injuries.join(', ');
+            bioInjuriesEl.style.color = '#B45309';
+        } else if (typeof injuries === 'string' && injuries.trim()) {
+            bioInjuriesEl.textContent = injuries;
+            bioInjuriesEl.style.color = '#B45309';
+        } else {
+            bioInjuriesEl.textContent = 'Ninguna reportada (Apto sin restricciones)';
+            bioInjuriesEl.style.color = '#575659';
+        }
     }
 }
 
@@ -10437,19 +10837,45 @@ function initTopbarAvatar() {
     function syncAvatarData() {
         const isAdmin = isCurrentUserAdmin();
         const user = AppState.user;
-        const profile = AppState.profile;
-
-        // 1. Resolver Email Real
-        let email = '';
-        if (user && user.email) {
-            email = user.email;
-        } else if (profile && profile.email) {
-            email = profile.email;
-        }
+        let profile = AppState.profile;
 
         // Si estamos en modo de inspección activa de un alumno por el coach
         const inspectionBanner = document.getElementById('coachInspectionBanner');
         const isInspecting = Boolean(inspectionBanner && inspectionBanner.style.display !== 'none');
+
+        // 0. Anti-Account-Leak: Validación de consistencia estricta de cuenta
+        const userEmail = (user && user.email) ? user.email.trim().toLowerCase() : '';
+        const profileEmail = (profile && profile.email) ? profile.email.trim().toLowerCase() : '';
+
+        if (!isInspecting && userEmail && profileEmail && userEmail !== profileEmail) {
+            console.warn(`[SENS Security] syncAvatarData: detectada discordancia entre Auth (${userEmail}) y Perfil (${profileEmail}). Forzando recarga de perfil.`);
+            try {
+                const myScoped = localStorage.getItem(`sens_profile_${userEmail}`);
+                if (myScoped) {
+                    AppState.profile = JSON.parse(myScoped);
+                    profile = AppState.profile;
+                } else {
+                    AppState.profile = {
+                        id: user.id,
+                        email: user.email,
+                        full_name: (user.user_metadata && user.user_metadata.full_name) || userEmail.split('@')[0],
+                        subscription_status: 'pending_activation',
+                        active_plan_name: 'Presencial Personalizado 1 a 1 (CABA)'
+                    };
+                    profile = AppState.profile;
+                }
+            } catch (_) {}
+        }
+
+        // 1. Resolver Email Real
+        let email = '';
+        if (isInspecting && profile && profile.email) {
+            email = profile.email;
+        } else if (user && user.email) {
+            email = user.email;
+        } else if (profile && profile.email) {
+            email = profile.email;
+        }
 
         // 2. Resolver Nombre Real
         let fullName = '';
@@ -10470,6 +10896,12 @@ function initTopbarAvatar() {
             fullName = localPart.charAt(0).toUpperCase() + localPart.slice(1);
         } else {
             fullName = 'Mi Perfil SENS';
+        }
+
+        // Formato estético: si fullName tiene formato de email o arroba, formatearlo limpio
+        if (fullName.includes('@')) {
+            const lp = fullName.split('@')[0];
+            fullName = lp.charAt(0).toUpperCase() + lp.slice(1);
         }
 
         // 3. Resolver Plan & Modalidad en Menú Avatar y Topbar
@@ -11081,15 +11513,31 @@ function getConsolidatedCoachAthletes() {
         seenIds.add(ath.id);
         if (emailLower) seenEmails.add(emailLower);
 
+        let localProf = {};
+        let localAnam = {};
+        if (emailLower) {
+            try {
+                localProf = JSON.parse(localStorage.getItem(`sens_profile_${emailLower}`) || '{}');
+                localAnam = JSON.parse(localStorage.getItem(`sens_anamnesis_${emailLower}`) || '{}');
+            } catch (_) {}
+        }
+
         roster.push({
+            ...ath,
+            ...localProf,
             id: ath.id,
             isDb: true,
-            full_name: ath.full_name || ath.email || 'Atleta SENS',
-            email: ath.email || `${ath.id.slice(0, 8)}@sens.com`,
-            user_type: ath.user_type || 'client_presencial_vip',
-            active_plan_name: ath.active_plan_name || 'Presencial 1 a 1 VIP (CABA)',
-            subscription_status: ath.subscription_status || 'pending_activation',
-            current_weight: ath.current_weight || 75,
+            full_name: ath.full_name || localProf.full_name || ath.email || 'Atleta SENS',
+            email: ath.email || localProf.email || `${ath.id.slice(0, 8)}@sens.com`,
+            user_type: ath.user_type || localProf.user_type || 'client_presencial_vip',
+            active_plan_name: ath.active_plan_name || localProf.active_plan_name || 'Presencial 1 a 1 VIP (CABA)',
+            subscription_status: ath.subscription_status || localProf.subscription_status || 'pending_activation',
+            current_weight: ath.current_weight || ath.weight || localProf.current_weight || localProf.weight || localAnam.weight || (localAnam.tape_measurements && localAnam.tape_measurements.weight) || null,
+            height: ath.height || localProf.height || localAnam.height || (localAnam.tape_measurements && localAnam.tape_measurements.height) || null,
+            age: ath.age || localProf.age || localAnam.age || (localAnam.tape_measurements && localAnam.tape_measurements.age) || null,
+            gender: ath.gender || localProf.gender || localAnam.gender || null,
+            goal: ath.goal || localProf.goal || localAnam.goal || localAnam.primary_goal || null,
+            anamnesis: localAnam,
             created_at: ath.created_at || new Date().toISOString()
         });
     });
@@ -11107,16 +11555,33 @@ function getConsolidatedCoachAthletes() {
             if (!seenIds.has(localAth.id) && !seenEmails.has(emailLower)) {
                 seenIds.add(localAth.id);
                 if (emailLower) seenEmails.add(emailLower);
+
+                let localProf = {};
+                let localAnam = {};
+                if (emailLower) {
+                    try {
+                        localProf = JSON.parse(localStorage.getItem(`sens_profile_${emailLower}`) || '{}');
+                        localAnam = JSON.parse(localStorage.getItem(`sens_anamnesis_${emailLower}`) || '{}');
+                    } catch (_) {}
+                }
+
                 roster.push({
+                    ...localAth,
+                    ...localProf,
                     id: localAth.id,
                     isDb: false,
                     isLocal: true,
-                    full_name: localAth.full_name || localAth.email || 'Atleta SENS',
-                    email: localAth.email || 'atleta@sens.com',
-                    user_type: localAth.user_type || 'client_presencial_vip',
-                    active_plan_name: localAth.active_plan_name || 'Presencial 1 a 1 VIP (CABA)',
-                    subscription_status: localAth.subscription_status || 'pending_activation',
-                    current_weight: localAth.current_weight || 75,
+                    full_name: localAth.full_name || localProf.full_name || localAth.email || 'Atleta SENS',
+                    email: localAth.email || localProf.email || 'atleta@sens.com',
+                    user_type: localAth.user_type || localProf.user_type || 'client_presencial_vip',
+                    active_plan_name: localAth.active_plan_name || localProf.active_plan_name || 'Presencial 1 a 1 VIP (CABA)',
+                    subscription_status: localAth.subscription_status || localProf.subscription_status || 'pending_activation',
+                    current_weight: localAth.current_weight || localAth.weight || localProf.current_weight || localProf.weight || localAnam.weight || (localAnam.tape_measurements && localAnam.tape_measurements.weight) || null,
+                    height: localAth.height || localProf.height || localAnam.height || (localAnam.tape_measurements && localAnam.tape_measurements.height) || null,
+                    age: localAth.age || localProf.age || localAnam.age || (localAnam.tape_measurements && localAnam.tape_measurements.age) || null,
+                    gender: localAth.gender || localProf.gender || localAnam.gender || null,
+                    goal: localAth.goal || localProf.goal || localAnam.goal || localAnam.primary_goal || null,
+                    anamnesis: localAnam,
                     created_at: localAth.created_at || new Date().toISOString()
                 });
             }
@@ -11128,7 +11593,6 @@ function getConsolidatedCoachAthletes() {
 
 window.purgeAllMockUsersAndCache = function() {
     try {
-        localStorage.removeItem('sens_registered_athletes');
         localStorage.removeItem('sens_prescribed_workouts_usr-vip-001');
         localStorage.removeItem('sens_prescribed_workouts_mock_vip');
         localStorage.removeItem('sens_prescribed_workouts_mock_onl');
@@ -11141,6 +11605,18 @@ window.purgeAllMockUsersAndCache = function() {
             }
         }
         keysToRemove.forEach(k => localStorage.removeItem(k));
+
+        // Filtrar solo mocks de sens_registered_athletes, NO borrar alumnos reales
+        const localRoster = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
+        if (Array.isArray(localRoster) && localRoster.length > 0) {
+            const cleanRoster = localRoster.filter(a => {
+                if (!a) return false;
+                const em = (a.email || '').toLowerCase();
+                const id = a.id || '';
+                return !id.startsWith('mock_') && !em.includes('prueba@') && !em.includes('@duo.com') && !em.includes('@wellness.com') && !em.includes('roberto.gomez');
+            });
+            localStorage.setItem('sens_registered_athletes', JSON.stringify(cleanRoster));
+        }
         console.log('✓ Purga de usuarios mock y datos de prueba completada exitosamente.');
     } catch (e) {}
 };
@@ -11260,16 +11736,34 @@ function syncCoachMasterCard(athId) {
     if (workoutPlanBadge) workoutPlanBadge.textContent = planBadgeText;
 
     // Sincronización de Ficha Resumen 100% Solo Lectura en Planificador de Rutinas
-    const weightVal = athlete.current_weight || athlete.weight || 75;
-    const heightVal = athlete.height || 175;
+    let weightVal = athlete.current_weight || athlete.weight || null;
+    let heightVal = athlete.height || null;
+    let ageVal = athlete.age || null;
+    if (!weightVal || !heightVal) {
+        const emLower = (athlete.email || '').toLowerCase();
+        if (emLower) {
+            try {
+                const lp = JSON.parse(localStorage.getItem(`sens_profile_${emLower}`) || '{}');
+                const la = JSON.parse(localStorage.getItem(`sens_anamnesis_${emLower}`) || '{}');
+                const tape = la.tape_measurements || {};
+                weightVal = weightVal || lp.current_weight || lp.weight || la.weight || tape.weight || null;
+                heightVal = heightVal || lp.height || la.height || tape.height || null;
+                ageVal = ageVal || lp.age || la.age || tape.age || null;
+            } catch (_) {}
+        }
+    }
     const goalVal = athlete.goal || 'Recomposición Corporal';
     const restrictionsVal = athlete.restrictions || athlete.injuries || 'Sin lesiones reportadas';
     const levelVal = athlete.training_level || athlete.level || 'Intermedio / Avanzado';
     const freqVal = athlete.training_frequency || athlete.frequency || '3 a 4';
 
-    if (workoutWeightBadge) workoutWeightBadge.textContent = `${weightVal} kg`;
+    if (workoutWeightBadge) workoutWeightBadge.textContent = weightVal ? `${weightVal} kg` : '—';
     if (workoutGoalBadge) workoutGoalBadge.textContent = goalVal;
-    if (roClientBio) roClientBio.textContent = `${weightVal} kg • ${heightVal} cm`;
+    if (roClientBio) {
+        const wStr = weightVal ? `${weightVal} kg` : 'S/D';
+        const hStr = heightVal ? `${heightVal} cm` : 'S/D';
+        roClientBio.textContent = `${wStr} • ${hStr}`;
+    }
     if (roClientGoal) roClientGoal.textContent = goalVal;
     if (roClientRestrictions) roClientRestrictions.textContent = restrictionsVal;
     if (roClientLevel) roClientLevel.textContent = levelVal;
@@ -11451,8 +11945,21 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
                 ? '<span class="pill pill-dark" style="font-size: 9.5px; padding: 2px 7px;">Online 1:1</span>'
                 : '<span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">Presencial 1:1</span>';
 
-        const goalText = escapeHTML(ath.primary_goal || 'Rendimiento general y fuerza');
+        const goalMap = {
+            hypertrophy: 'Hipertrofia & Masa Muscular',
+            fat_loss: 'Recomposición & Quema Grasa',
+            posture: 'Postura, Columna & Movilidad',
+            performance: 'Rendimiento Deportivo & Fuerza',
+            general_vitality: 'Vitalidad General & Salud Integral'
+        };
+        const rawGoal = ath.goal || ath.primary_goal;
+        const goalText = escapeHTML(goalMap[rawGoal] || rawGoal || 'Rendimiento general y fuerza');
         const safeAthId = escapeHTML(ath.id);
+
+        const bioWeight = ath.current_weight ? `${ath.current_weight} kg` : '—';
+        const bioHeight = ath.height ? `${ath.height} cm` : '—';
+        const bioAge = ath.age ? `${ath.age} a` : '—';
+        const bioGender = (ath.gender === 'male') ? 'M' : (ath.gender === 'female') ? 'F' : (ath.gender ? String(ath.gender).slice(0, 3) : '—');
 
         html += `
             <div class="coach-athlete-card ${isPend ? 'is-pending' : ''}" data-athlete-id="${safeAthId}">
@@ -11470,6 +11977,13 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
                     </div>
                 </div>
 
+                <div class="coach-ath-bio-grid btn-hub-open-dossier" data-athlete-id="${safeAthId}" onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier('${safeAthId}', { isCoach: true });" style="cursor: pointer;" title="Abrir Ficha Biomecánica">
+                    <div class="coach-ath-bio-item"><span class="coach-ath-bio-label">Peso</span><span class="coach-ath-bio-val">${bioWeight}</span></div>
+                    <div class="coach-ath-bio-item"><span class="coach-ath-bio-label">Altura</span><span class="coach-ath-bio-val">${bioHeight}</span></div>
+                    <div class="coach-ath-bio-item"><span class="coach-ath-bio-label">Edad</span><span class="coach-ath-bio-val">${bioAge}</span></div>
+                    <div class="coach-ath-bio-item"><span class="coach-ath-bio-label">Sexo</span><span class="coach-ath-bio-val">${bioGender}</span></div>
+                </div>
+
                 <div class="coach-ath-goal-chip btn-open-athlete-actions-sheet" data-athlete-id="${safeAthId}" style="cursor: pointer;">
                     <span class="coach-ath-goal-label">Meta:</span>
                     <span class="coach-ath-goal-text">${goalText}</span>
@@ -11483,10 +11997,14 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
                     ` : `
                         <button type="button" class="btn-coach-action-manage btn-open-athlete-actions-sheet" data-athlete-id="${safeAthId}">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                            <span>Gestionar Alumno</span>
+                            <span>Gestionar</span>
                             <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                     `}
+                    <button type="button" class="btn-coach-action-dossier btn-hub-open-dossier" data-athlete-id="${safeAthId}" onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier('${safeAthId}', { isCoach: true });">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        <span>Ficha 360°</span>
+                    </button>
                     <button type="button" class="btn-coach-action-portal btn-hub-inspect-student" data-athlete-id="${safeAthId}">
                         <span>Ver Portal</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -11499,6 +12017,21 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
     container.innerHTML = html;
 
     // Delegación de eventos en las tarjetas de atletas
+    container.querySelectorAll('.btn-hub-open-dossier').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const athId = btn.getAttribute('data-athlete-id');
+            if (athId && typeof window.openSensClinicalDossier === 'function') {
+                window.openSensClinicalDossier(athId, { isCoach: true });
+            } else if (athId && typeof window.openCoachAthleteDossier === 'function') {
+                window.openCoachAthleteDossier(athId);
+            }
+        });
+    });
+
     container.querySelectorAll('.btn-hub-toggle-status').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             e.stopPropagation();
@@ -11595,12 +12128,22 @@ window.openCoachAthleteActionsSheet = function(athId) {
         waBtn.href = `https://wa.me/?text=${encodeURIComponent(`Hola ${ath.full_name}, te escribo de SENS para coordinar tu plan.`)}`;
     }
 
+    document.body.classList.add('sheet-is-open');
+    const coachDock = document.getElementById('sensCoachFloatingDock');
+    if (coachDock) coachDock.style.setProperty('display', 'none', 'important');
+    const athleteDock = document.getElementById('sensFloatingDock');
+    if (athleteDock) athleteDock.style.setProperty('display', 'none', 'important');
     backdrop.style.display = 'block';
     sheet.style.display = 'block';
     setTimeout(() => sheet.classList.add('active'), 10);
 };
 
 window.closeCoachAthleteActionsSheet = function() {
+    document.body.classList.remove('sheet-is-open');
+    const coachDock = document.getElementById('sensCoachFloatingDock');
+    if (coachDock && isCurrentUserAdmin()) coachDock.style.removeProperty('display');
+    const athleteDock = document.getElementById('sensFloatingDock');
+    if (athleteDock && !isCurrentUserAdmin()) athleteDock.style.removeProperty('display');
     const backdrop = document.getElementById('coachAthleteActionsBackdrop');
     const sheet = document.getElementById('coachAthleteActionsBottomSheet');
     if (backdrop && sheet) {
@@ -11624,6 +12167,11 @@ window.openCoachPlanSheet = function(athId) {
     const backdrop = document.getElementById('coachPlanSheetBackdrop');
     const sheet = document.getElementById('coachPlanPickerBottomSheet');
     if (backdrop && sheet) {
+        document.body.classList.add('sheet-is-open');
+        const coachDock = document.getElementById('sensCoachFloatingDock');
+        if (coachDock) coachDock.style.setProperty('display', 'none', 'important');
+        const athleteDock = document.getElementById('sensFloatingDock');
+        if (athleteDock) athleteDock.style.setProperty('display', 'none', 'important');
         backdrop.style.display = 'block';
         sheet.style.display = 'block';
         setTimeout(() => sheet.classList.add('active'), 10);
@@ -11631,6 +12179,11 @@ window.openCoachPlanSheet = function(athId) {
 };
 
 window.closeCoachPlanSheet = function() {
+    document.body.classList.remove('sheet-is-open');
+    const coachDock = document.getElementById('sensCoachFloatingDock');
+    if (coachDock && isCurrentUserAdmin()) coachDock.style.removeProperty('display');
+    const athleteDock = document.getElementById('sensFloatingDock');
+    if (athleteDock && !isCurrentUserAdmin()) athleteDock.style.removeProperty('display');
     const backdrop = document.getElementById('coachPlanSheetBackdrop');
     const sheet = document.getElementById('coachPlanPickerBottomSheet');
     if (backdrop && sheet) {
@@ -11643,32 +12196,62 @@ window.closeCoachPlanSheet = function() {
     coachAthletePendingPlanId = null;
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+window.openCoachCurrentWhatsApp = function() {
+    const athId = window.currentActionAthleteId;
+    if (!athId) return;
+    const athletes = (typeof getConsolidatedCoachAthletes === 'function') ? getConsolidatedCoachAthletes() : [];
+    const ath = athletes.find(a => a.id === athId) || { full_name: 'Alumno', phone: '' };
+    const name = ath.full_name || 'Alumno';
+    const text = encodeURIComponent(`Hola ${name}! Te contacto de SENS para coordinar detalles de tu plan.`);
+    const phone = ath.phone ? ath.phone.replace(/[^0-9]/g, '') : '';
+    const url = phone ? `https://wa.me/${phone}?text=${text}` : `https://wa.me/?text=${text}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+};
+
+function initCoachAthleteActionSheetListeners() {
     const closePlanSheetBtn = document.getElementById('btnClosePlanSheet');
     const planBackdrop = document.getElementById('coachPlanSheetBackdrop');
-    if (closePlanSheetBtn) closePlanSheetBtn.addEventListener('click', closeCoachPlanSheet);
-    if (planBackdrop) planBackdrop.addEventListener('click', closeCoachPlanSheet);
+    if (closePlanSheetBtn && !closePlanSheetBtn._bound) {
+        closePlanSheetBtn._bound = true;
+        closePlanSheetBtn.addEventListener('click', closeCoachPlanSheet);
+    }
+    if (planBackdrop && !planBackdrop._bound) {
+        planBackdrop._bound = true;
+        planBackdrop.addEventListener('click', closeCoachPlanSheet);
+    }
 
     // Bottom sheet de acciones del atleta
     const closeActionsSheetBtn = document.getElementById('btnCloseAthleteActionsSheet');
     const actionsBackdrop = document.getElementById('coachAthleteActionsBackdrop');
-    if (closeActionsSheetBtn) closeActionsSheetBtn.addEventListener('click', closeCoachAthleteActionsSheet);
-    if (actionsBackdrop) actionsBackdrop.addEventListener('click', closeCoachAthleteActionsSheet);
+    if (closeActionsSheetBtn && !closeActionsSheetBtn._bound) {
+        closeActionsSheetBtn._bound = true;
+        closeActionsSheetBtn.addEventListener('click', closeCoachAthleteActionsSheet);
+    }
+    if (actionsBackdrop && !actionsBackdrop._bound) {
+        actionsBackdrop._bound = true;
+        actionsBackdrop.addEventListener('click', closeCoachAthleteActionsSheet);
+    }
 
     const btnActionDossier = document.getElementById('sheetActionDossier');
-    if (btnActionDossier) {
-        btnActionDossier.addEventListener('click', () => {
+    if (btnActionDossier && !btnActionDossier._bound) {
+        btnActionDossier._bound = true;
+        btnActionDossier.addEventListener('click', (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             const athId = window.currentActionAthleteId;
             closeCoachAthleteActionsSheet();
-            if (athId && typeof window.openCoachAthleteDossier === 'function') {
+            if (athId && typeof window.openSensClinicalDossier === 'function') {
+                window.openSensClinicalDossier(athId, { isCoach: true });
+            } else if (athId && typeof window.openCoachAthleteDossier === 'function') {
                 window.openCoachAthleteDossier(athId);
             }
         });
     }
 
     const btnActionWorkouts = document.getElementById('sheetActionWorkouts');
-    if (btnActionWorkouts) {
-        btnActionWorkouts.addEventListener('click', () => {
+    if (btnActionWorkouts && !btnActionWorkouts._bound) {
+        btnActionWorkouts._bound = true;
+        btnActionWorkouts.addEventListener('click', (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             const athId = window.currentActionAthleteId;
             closeCoachAthleteActionsSheet();
             if (athId) selectAthleteForPrescription('workout', athId);
@@ -11676,8 +12259,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const btnActionNutrition = document.getElementById('sheetActionNutrition');
-    if (btnActionNutrition) {
-        btnActionNutrition.addEventListener('click', () => {
+    if (btnActionNutrition && !btnActionNutrition._bound) {
+        btnActionNutrition._bound = true;
+        btnActionNutrition.addEventListener('click', (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             const athId = window.currentActionAthleteId;
             closeCoachAthleteActionsSheet();
             if (athId) selectAthleteForPrescription('nutri', athId);
@@ -11685,8 +12270,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const btnActionChangePlan = document.getElementById('sheetActionChangePlan');
-    if (btnActionChangePlan) {
-        btnActionChangePlan.addEventListener('click', () => {
+    if (btnActionChangePlan && !btnActionChangePlan._bound) {
+        btnActionChangePlan._bound = true;
+        btnActionChangePlan.addEventListener('click', (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             const athId = window.currentActionAthleteId;
             closeCoachAthleteActionsSheet();
             if (athId) openCoachPlanSheet(athId);
@@ -11694,8 +12281,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const btnActionToggleStatus = document.getElementById('sheetActionToggleStatus');
-    if (btnActionToggleStatus) {
-        btnActionToggleStatus.addEventListener('click', async () => {
+    if (btnActionToggleStatus && !btnActionToggleStatus._bound) {
+        btnActionToggleStatus._bound = true;
+        btnActionToggleStatus.addEventListener('click', async (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             const athId = window.currentActionAthleteId;
             if (!athId) return;
             const athletes = getConsolidatedCoachAthletes();
@@ -11708,8 +12297,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const btnActionInspectPortal = document.getElementById('sheetActionInspectPortal');
-    if (btnActionInspectPortal) {
-        btnActionInspectPortal.addEventListener('click', () => {
+    if (btnActionInspectPortal && !btnActionInspectPortal._bound) {
+        btnActionInspectPortal._bound = true;
+        btnActionInspectPortal.addEventListener('click', (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             const athId = window.currentActionAthleteId;
             closeCoachAthleteActionsSheet();
             if (athId) inspectAthleteAsCoach(athId);
@@ -11717,17 +12308,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.querySelectorAll('.btn-coach-plan-opt').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            const planKey = btn.getAttribute('data-plan');
-            const planName = btn.getAttribute('data-plan-name');
-            if (coachAthletePendingPlanId && planKey) {
-                await updateAthletePlanType(coachAthletePendingPlanId, planKey, planName);
-                closeCoachPlanSheet();
-                renderCoachAthletesHub();
-            }
-        });
+        if (!btn._bound) {
+            btn._bound = true;
+            btn.addEventListener('click', async () => {
+                const planKey = btn.getAttribute('data-plan');
+                const planName = btn.getAttribute('data-plan-name');
+                if (coachAthletePendingPlanId && planKey) {
+                    await updateAthletePlanType(coachAthletePendingPlanId, planKey, planName);
+                    closeCoachPlanSheet();
+                    renderCoachAthletesHub();
+                }
+            });
+        }
     });
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCoachAthleteActionSheetListeners);
+} else {
+    initCoachAthleteActionSheetListeners();
+}
 
 async function updateAthleteSubscriptionStatus(athId, newStatus) {
     if (supabaseClient && !athId.startsWith('mock_')) {
@@ -11872,11 +12472,15 @@ function inspectAthleteAsCoach(athId) {
     // Guardar credenciales de sesión de Coach antes de impersonar al alumno
     window._isCoachAdminActive = true;
     sessionStorage.setItem('sens_coach_admin_active', 'true');
-    if (!window._sensCoachAdminUser && AppState.user && AppState.user.role !== 'user_normal') {
-        window._sensCoachAdminUser = { ...AppState.user };
+    if (!window._sensCoachAdminUser) {
+        window._sensCoachAdminUser = (AppState.user && AppState.user.role !== 'user_normal') 
+            ? { ...AppState.user } 
+            : { id: 'admin-coach-nico', email: 'nicomaralle@gmail.com', role: 'admin' };
     }
-    if (!window._sensCoachAdminProfile && AppState.profile && AppState.profile.role !== 'user_normal') {
-        window._sensCoachAdminProfile = { ...AppState.profile };
+    if (!window._sensCoachAdminProfile) {
+        window._sensCoachAdminProfile = (AppState.profile && AppState.profile.role !== 'user_normal') 
+            ? { ...AppState.profile } 
+            : { id: 'admin-coach-nico', email: 'nicomaralle@gmail.com', role: 'admin', user_type: 'admin' };
     }
 
     AppState.activeAthleteId = athId;
@@ -12893,18 +13497,30 @@ document.addEventListener('visibilitychange', () => {
 function getCoachAthleteWorkoutData(athId) {
     if (!athId) athId = getActiveAthleteId();
 
+    const isAutoStarter = (pw) => {
+        if (!pw || typeof pw !== 'object') return false;
+        if (pw.is_auto_starter) return true;
+        const d1 = pw.day1;
+        const d3 = pw.day3;
+        if (d1 && (d1.title?.includes('Empuje') || d1.title?.includes('Postura') || d1.title?.includes('Tren Superior'))) return true;
+        if (d3 && (d3.title?.includes('Tracción') || d3.title?.includes('Cadena Posterior'))) return true;
+        return false;
+    };
+
     // 1. Revisar primero en localStorage (fuente de verdad inmediata y sin lag de red)
     const rawLocal = localStorage.getItem(`sens_prescribed_workouts_${athId}`);
     if (rawLocal) {
         try {
             const parsed = JSON.parse(rawLocal);
-            if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
-                // Mantener sincronizado el cache en memoria de Coach OS
-                if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
-                    const cached = window.__coachAthletesCache.find(a => a.id === athId);
-                    if (cached) cached.prescribed_workouts = parsed;
+            if (parsed && typeof parsed === 'object' && !isAutoStarter(parsed) && Object.keys(parsed).length > 0) {
+                const hasEx = Object.values(parsed).some(d => d && Array.isArray(d.exercises) && d.exercises.length > 0);
+                if (hasEx) {
+                    if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+                        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+                        if (cached) cached.prescribed_workouts = parsed;
+                    }
+                    return sanitizeWorkoutDataWithMasterExercises(parsed, athId);
                 }
-                return sanitizeWorkoutDataWithMasterExercises(parsed, athId);
             }
         } catch (e) {}
     }
@@ -12913,9 +13529,12 @@ function getCoachAthleteWorkoutData(athId) {
     if (AppState.profile && AppState.profile.prescribed_workouts && typeof AppState.profile.prescribed_workouts === 'object') {
         if (!isCurrentUserAdmin() || AppState.profile.id === athId) {
             const pw = AppState.profile.prescribed_workouts;
-            if (Object.keys(pw).length > 0) {
-                try { localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(pw)); } catch (_) {}
-                return sanitizeWorkoutDataWithMasterExercises(pw, athId);
+            if (Object.keys(pw).length > 0 && !isAutoStarter(pw)) {
+                const hasEx = Object.values(pw).some(d => d && Array.isArray(d.exercises) && d.exercises.length > 0);
+                if (hasEx) {
+                    try { localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(pw)); } catch (_) {}
+                    return sanitizeWorkoutDataWithMasterExercises(pw, athId);
+                }
             }
         }
     }
@@ -12923,11 +13542,14 @@ function getCoachAthleteWorkoutData(athId) {
     // 3. Si está en cache de atletas de Coach OS
     if (window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
         const cached = window.__coachAthletesCache.find(a => a.id === athId);
-        if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object') {
+        if (cached && cached.prescribed_workouts && typeof cached.prescribed_workouts === 'object' && !isAutoStarter(cached.prescribed_workouts)) {
             const cp = cached.prescribed_workouts;
             if (Object.keys(cp).length > 0) {
-                try { localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(cp)); } catch (_) {}
-                return sanitizeWorkoutDataWithMasterExercises(cp, athId);
+                const hasEx = Object.values(cp).some(d => d && Array.isArray(d.exercises) && d.exercises.length > 0);
+                if (hasEx) {
+                    try { localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(cp)); } catch (_) {}
+                    return sanitizeWorkoutDataWithMasterExercises(cp, athId);
+                }
             }
         }
     }
@@ -12937,21 +13559,7 @@ function getCoachAthleteWorkoutData(athId) {
         return JSON.parse(JSON.stringify(WORKOUT_DAYS_DATA));
     }
 
-    // 4.5. Si el alumno ya completó su Onboarding y aún no tiene rutina manual de Nico,
-    // auto-prescribir el Programa Maestro de 3 Días de Fuerza y Postura SENS en 0 segundos
-    if (
-        !isCurrentUserAdmin() &&
-        AppState.profile &&
-        AppState.profile.onboarding_completed &&
-        typeof window.assignAutomatedStarterPlanClient === 'function'
-    ) {
-        const autoGenerated = window.assignAutomatedStarterPlanClient(AppState.profile, AppState.anamnesis);
-        if (autoGenerated && autoGenerated.prescribed_workouts) {
-            return sanitizeWorkoutDataWithMasterExercises(autoGenerated.prescribed_workouts, athId);
-        }
-    }
-
-    // 5. Alumno real sin rutina cargada por Nico todavía: todos los días en null (la línea "–")
+    // 5. Alumno real sin rutina cargada por Nico todavía: todos los días vacíos sin ejercicios
     return {
         day1: { title: 'Lunes', exercises: [], modality: null, completed: false },
         day2: { title: 'Martes', exercises: [], modality: null, completed: false },
@@ -18040,9 +18648,14 @@ function renderDynamicWeekStrip() {
     }
 
     const athId = getActiveAthleteId();
+    const hasRoutine = athleteHasAssignedRoutine(athId);
     const data = getCoachAthleteWorkoutData(athId);
     const dayNames = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
     let html = '';
+
+    const userCreatedRaw = AppState.profile?.created_at || (AppState.user && AppState.user.created_at) || null;
+    const userCreatedDate = userCreatedRaw ? new Date(userCreatedRaw) : new Date();
+    userCreatedDate.setHours(0, 0, 0, 0);
 
     for (let i = 0; i < 7; i++) {
         const dayDate = new Date(AppState.activeWeekStart);
@@ -18058,13 +18671,9 @@ function renderDynamicWeekStrip() {
         if (dayData && dayData.isRestDay) {
             dayData = { title: 'Descanso', exercises: [], isRestDay: true };
         }
-        const isPlanOnline = Boolean(
-            (AppState.profile?.user_type && AppState.profile.user_type.includes('online')) ||
-            (AppState.profile?.active_plan_name && AppState.profile.active_plan_name.toLowerCase().includes('online'))
-        );
-        const defaultMod = isPlanOnline ? 'online' : 'presencial';
+
         const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0) && !dayData.isRestDay;
-        const modality = dayData.modality || (hasExercises ? defaultMod : null);
+        const modality = dayData.modality || null;
         const execution = getAthleteWorkoutExecution(athId, dayDate);
         const isCompleted = Boolean(execution && execution.completed);
 
@@ -18073,24 +18682,30 @@ function renderDynamicWeekStrip() {
         const dayDateStart = new Date(dayDate);
         dayDateStart.setHours(0, 0, 0, 0);
         const isPast = dayDateStart < todayStart;
+        const isBeforeRegistration = dayDateStart < userCreatedDate;
 
         let statusBadge = '';
-        if (isCompleted) {
+        if (!hasRoutine || isBeforeRegistration) {
+            // Usuario nuevo sin prescripción de Nico o día anterior a su registro: jamás marcar como 'No realizado' ni inventar 'Pres'
+            statusBadge = `<span class="sens-day-badge rest" title="Sin sesión programada">–</span>`;
+        } else if (isCompleted) {
             statusBadge = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
         } else if (isPast) {
-            if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
+            if (hasExercises) {
                 statusBadge = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
             } else {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
-        } else if (modality === 'presencial') {
-            statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
-        } else if (modality === 'online') {
-            statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
-        } else if (modality === 'autonomo') {
-            statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
         } else if (hasExercises) {
-            statusBadge = `<span class="sens-day-badge ${defaultMod}" title="${defaultMod === 'online' ? 'Online con Nico' : 'Presencial con Nico'}">${defaultMod === 'online' ? 'Online' : 'Pres'}</span>`;
+            if (modality === 'online') {
+                statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
+            } else if (modality === 'autonomo') {
+                statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
+            } else if (modality === 'presencial') {
+                statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
+            } else {
+                statusBadge = `<span class="sens-day-badge presencial" title="Sesión asignada por Nico">Sesión</span>`;
+            }
         } else {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -18241,9 +18856,14 @@ function renderWorkoutDaysNav() {
     }
 
     const athId = getActiveAthleteId();
+    const hasRoutine = athleteHasAssignedRoutine(athId);
     const data = getCoachAthleteWorkoutData(athId);
     const dayNames = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
     let html = '';
+
+    const userCreatedRaw = AppState.profile?.created_at || (AppState.user && AppState.user.created_at) || null;
+    const userCreatedDate = userCreatedRaw ? new Date(userCreatedRaw) : new Date();
+    userCreatedDate.setHours(0, 0, 0, 0);
 
     for (let i = 0; i < 7; i++) {
         const dayDate = new Date(AppState.activeWeekStart);
@@ -18258,14 +18878,8 @@ function renderWorkoutDaysNav() {
             : (data && data[dayKey] ? data[dayKey] : {});
         const heroNum = dayDate.getDate();
 
-        // Estado limpio y consistente con la sección de Inicio (Cero píldoras de tipo de ejercicio)
-        const isPlanOnline = Boolean(
-            (AppState.profile?.user_type && AppState.profile.user_type.includes('online')) ||
-            (AppState.profile?.active_plan_name && AppState.profile.active_plan_name.toLowerCase().includes('online'))
-        );
-        const defaultMod = isPlanOnline ? 'online' : 'presencial';
         const hasExercises = Boolean(dayData.exercises && dayData.exercises.length > 0) && !dayData.isRestDay;
-        const modality = dayData.modality || (hasExercises ? defaultMod : null);
+        const modality = dayData.modality || null;
         const execution = getAthleteWorkoutExecution(athId, dayDate);
         const isCompleted = Boolean(execution && execution.completed);
 
@@ -18274,24 +18888,30 @@ function renderWorkoutDaysNav() {
         const dayDateStart = new Date(dayDate);
         dayDateStart.setHours(0, 0, 0, 0);
         const isPast = dayDateStart < todayStart;
+        const isBeforeRegistration = dayDateStart < userCreatedDate;
 
         let badgeHtml = '';
-        if (isCompleted) {
+        if (!hasRoutine || isBeforeRegistration) {
+            // Usuario nuevo sin prescripción de Nico o día anterior a su registro
+            badgeHtml = `<span class="sens-day-badge rest" title="Sin sesión programada">–</span>`;
+        } else if (isCompleted) {
             badgeHtml = `<span class="sens-day-badge done" title="Entrenamiento completado">✓</span>`;
         } else if (isPast) {
-            if (modality === 'presencial' || modality === 'online' || modality === 'autonomo' || hasExercises) {
+            if (hasExercises) {
                 badgeHtml = `<span class="sens-day-badge missed" title="No realizado">✕</span>`;
             } else {
                 badgeHtml = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
-        } else if (modality === 'presencial') {
-            badgeHtml = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
-        } else if (modality === 'online') {
-            badgeHtml = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
-        } else if (modality === 'autonomo') {
-            badgeHtml = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
         } else if (hasExercises) {
-            badgeHtml = `<span class="sens-day-badge ${defaultMod}" title="${defaultMod === 'online' ? 'Online con Nico' : 'Presencial con Nico'}">${defaultMod === 'online' ? 'Online' : 'Pres'}</span>`;
+            if (modality === 'online') {
+                badgeHtml = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
+            } else if (modality === 'autonomo') {
+                badgeHtml = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
+            } else if (modality === 'presencial') {
+                badgeHtml = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
+            } else {
+                badgeHtml = `<span class="sens-day-badge presencial" title="Sesión asignada por Nico">Sesión</span>`;
+            }
         } else {
             badgeHtml = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -18513,7 +19133,57 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     // Caso A: Descanso o sin ejercicios asignados
     if (!hasRoutine || exercises.length === 0 || isRest) {
         if (activePane) activePane.style.display = 'none';
-        if (restPane) restPane.style.display = 'block';
+        if (restPane) {
+            restPane.style.display = 'block';
+            const restBadge = document.getElementById('dashWorkoutRestBadge') || restPane.querySelector('.sens-rest-badge');
+            const streakPill = document.getElementById('dashWorkoutRestStreakPill');
+            const restTitle = document.getElementById('dashWorkoutRestTitle') || restPane.querySelector('.sens-rest-title');
+            const restDesc = document.getElementById('dashWorkoutRestDesc') || restPane.querySelector('.sens-rest-desc');
+            const restActions = document.getElementById('dashWorkoutRestActions') || restPane.querySelector('.sens-rest-actions');
+
+            if (!hasRoutine) {
+                if (restBadge) {
+                    restBadge.textContent = 'En Calibración con Nico';
+                    restBadge.style.color = '#705B3E';
+                }
+                if (streakPill) {
+                    streakPill.className = 'sens-card-streak-pill in-progress';
+                    streakPill.innerHTML = '<span class="streak-pill-dot" style="background: #705B3E;"></span><span class="streak-pill-text">Plan en Diseño</span>';
+                }
+                if (restTitle) restTitle.textContent = 'Tu entrenamiento está en diseño';
+                if (restDesc) restDesc.textContent = 'Nico está calibrando tu prescripción de ejercicios, series, cargas y videos demostrativos según tu diagnóstico inicial. Te avisaremos apenas esté listo.';
+                if (restActions) {
+                    const athName = (AppState.profile?.full_name || 'Atleta').split(' ')[0];
+                    const waText = encodeURIComponent(`Hola Nico! Soy ${athName}, completé mi diagnóstico en SENS y quiero consultar sobre la asignación de mi entrenamiento.`);
+                    restActions.innerHTML = `
+                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" class="btn btn-primary btn-sm" style="font-size: 12px; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            Consultar a Nico por WhatsApp →
+                        </a>
+                    `;
+                }
+            } else {
+                if (restBadge) {
+                    restBadge.textContent = 'Recuperación Activa';
+                    restBadge.style.color = '';
+                }
+                if (streakPill) {
+                    streakPill.className = 'sens-card-streak-pill done';
+                    streakPill.innerHTML = '<span class="streak-pill-dot"></span><span class="streak-pill-text">Descanso Activo ✓</span>';
+                }
+                if (restTitle) restTitle.textContent = 'Día de Descanso & Recuperación';
+                if (restDesc) restDesc.textContent = 'Día de descanso celular o recuperación activa. Podés realizar estiramientos guiados con Nico o reprogramar tu sesión.';
+                if (restActions) {
+                    restActions.innerHTML = `
+                        <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches" style="font-size: 12px; border: 1px solid #121214; color: #121214; background: #FFFFFF; font-weight: 700; border-radius: 8px; padding: 7px 14px; cursor: pointer;">
+                            Ver estiramientos
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnRestBringWorkout" onclick="openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))" style="font-size: 12px; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px; padding: 7px 14px; border: none; cursor: pointer;">
+                            Reprogramar sesión
+                        </button>
+                    `;
+                }
+            }
+        }
         if (typeof updateHomeCardsStreakPills === 'function') {
             updateHomeCardsStreakPills(selectedDate, athId);
         }
@@ -18551,11 +19221,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     // 3. Modality Pill y Badge de Calorías Totales + Tiempo Promedio
-    const isPlanOnline = Boolean(
-        (AppState.profile?.user_type && AppState.profile.user_type.includes('online')) ||
-        (AppState.profile?.active_plan_name && AppState.profile.active_plan_name.toLowerCase().includes('online'))
-    );
-    const modality = dayData.modality || (exercises.length > 0 ? (isPlanOnline ? 'online' : 'presencial') : null);
+    const modality = dayData.modality || null;
     if (modalityPill) {
         if (modality === 'presencial') {
             modalityPill.textContent = 'Presencial';
@@ -18570,7 +19236,6 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
             modalityPill.className = 'sens-modality-pill auto';
             modalityPill.style.display = 'inline-flex';
         } else {
-            modalityPill.textContent = '–';
             modalityPill.style.display = 'none';
         }
     }
@@ -19581,6 +20246,15 @@ const SensDailyStreakManager = {
         let totalExercises = 0;
         let completedExercises = 0;
 
+        const isMockAthlete = String(id).startsWith('mock_') || id === 'usr-vip-001';
+        const hasRoutine = (typeof athleteHasAssignedRoutine === 'function') ? athleteHasAssignedRoutine(id) : true;
+        let userCreatedDate = null;
+        if (AppState.profile && AppState.profile.created_at) {
+            userCreatedDate = new Date(AppState.profile.created_at);
+            userCreatedDate.setHours(0, 0, 0, 0);
+        }
+        const isBeforeRegistration = !isMockAthlete && Boolean(userCreatedDate && targetMidnight < userCreatedDate);
+
         const execution = getAthleteWorkoutExecution(id, sDate);
         const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(id) : null;
         let dayWorkout = null;
@@ -19588,11 +20262,15 @@ const SensDailyStreakManager = {
             dayWorkout = workoutData[dayKey];
         } else if (workoutData && workoutData.calendar_schedule && workoutData.calendar_schedule[dateIso]) {
             dayWorkout = workoutData.calendar_schedule[dateIso];
-        } else if (typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
+        } else if (isMockAthlete && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
             dayWorkout = WORKOUT_DAYS_DATA[dayKey];
         }
 
-        if (dayWorkout) {
+        if (!isMockAthlete && (!hasRoutine || isBeforeRegistration)) {
+            isRestDay = true;
+            workoutDone = true;
+            workoutMetric = !hasRoutine ? 'En Calibración' : 'Sin Registrar';
+        } else if (dayWorkout) {
             isRestDay = (dayWorkout.modality === 'descanso');
             if (Array.isArray(dayWorkout.exercises) && dayWorkout.exercises.length > 0) {
                 totalExercises = dayWorkout.exercises.length;
@@ -19736,6 +20414,10 @@ const SensDailyStreakManager = {
                 pillar: 'Pasos & Cardio',
                 detail: `Actividad insuficiente: ${steps.toLocaleString('es-AR')} pasos (mínimo: 10.000 pasos ó 90m caminata / 30m cardio).`
             });
+        }
+
+        if (isBeforeRegistration) {
+            missedReasons.length = 0;
         }
 
         const previous = records[dateIso] || null;
@@ -19886,8 +20568,18 @@ function renderStreakWeeklyDots(targetDate) {
 
         const isDone = Boolean(rec && rec.isQualified);
 
+        let userCreatedDate = null;
+        if (AppState.profile && AppState.profile.created_at) {
+            userCreatedDate = new Date(AppState.profile.created_at);
+            userCreatedDate.setHours(0, 0, 0, 0);
+        }
+        const isMockAth = String(athId).startsWith('mock_') || athId === 'usr-vip-001';
+        const isBeforeRegistration = !isMockAth && Boolean(userCreatedDate && d < userCreatedDate);
+
         let dotHtml = '';
-        if (isFuture) {
+        if (isBeforeRegistration) {
+            dotHtml = `<div class="sens-streak-dot-ring neutral" style="border-color: rgba(255,255,255,0.08); color: #52525B; font-size: 10px; display: flex; align-items: center; justify-content: center;" title="${dayLabels[i]} ${d.getDate()}: Previo al registro">–</div>`;
+        } else if (isFuture) {
             dotHtml = `<div class="sens-streak-dot-ring future" title="${dayLabels[i]} ${d.getDate()}: Planificado"></div>`;
         } else if (isPast) {
             if (isDone) {
@@ -20035,13 +20727,28 @@ function updateSensStreakCard(targetDate = null) {
     sDate.setHours(0, 0, 0, 0);
     const isPast = sDate < today;
 
+    let userCreatedDate = null;
+    if (AppState.profile && AppState.profile.created_at) {
+        userCreatedDate = new Date(AppState.profile.created_at);
+        userCreatedDate.setHours(0, 0, 0, 0);
+    }
+    const isMockAth = String(athId).startsWith('mock_') || athId === 'usr-vip-001';
+    const isBeforeRegistration = !isMockAth && Boolean(userCreatedDate && sDate < userCreatedDate);
+    const hasRoutine = (typeof athleteHasAssignedRoutine === 'function') ? athleteHasAssignedRoutine(athId) : true;
+
     if (streakStatusPill) {
-        if (dayRec.completedCount === 3) {
+        if (isBeforeRegistration) {
+            streakStatusPill.className = 'sens-streak-status-pill';
+            streakStatusPill.textContent = 'Sin registro previo';
+        } else if (dayRec.completedCount === 3) {
             streakStatusPill.className = 'sens-streak-status-pill perfect';
             streakStatusPill.textContent = 'Día Perfecto 100%';
         } else if (dayRec.completedCount >= 1) {
             streakStatusPill.className = 'sens-streak-status-pill';
             streakStatusPill.textContent = 'Racha Activa';
+        } else if (!isMockAth && !hasRoutine) {
+            streakStatusPill.className = 'sens-streak-status-pill';
+            streakStatusPill.textContent = 'Plan en Diseño';
         } else if (isPast) {
             streakStatusPill.className = 'sens-streak-status-pill lost';
             streakStatusPill.textContent = 'Racha no alcanzada';
@@ -20056,11 +20763,17 @@ function updateSensStreakCard(targetDate = null) {
     }
 
     if (streakSub) {
-        if (dayRec.completedCount === 3) {
+        if (isBeforeRegistration) {
+            streakSub.textContent = 'Día anterior al alta de tu cuenta SENS.';
+            streakSub.style.color = '#71717A';
+        } else if (dayRec.completedCount === 3) {
             streakSub.textContent = '✓ ¡Hábitos del día completados! Registro asegurado en tu seguimiento propio.';
             streakSub.style.color = '#10B981';
         } else if (dayRec.completedCount >= 1) {
             streakSub.textContent = `${dayRec.completedCount} de 3 hábitos cumplidos hoy. Seguí sumando para tu registro personal.`;
+            streakSub.style.color = '#705B3E';
+        } else if (!isMockAth && !hasRoutine) {
+            streakSub.textContent = 'Tu entrenamiento está en diseño con Nico. Podés consultar tus hábitos diarios.';
             streakSub.style.color = '#705B3E';
         } else if (isPast) {
             streakSub.textContent = 'Día finalizado sin registro de hábitos. Podés consultar el detalle para retomar mañana.';
@@ -20172,7 +20885,22 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     let wStatus = 'in-progress';
     let wText = '0/0 ejercicios';
 
-    if (isFutureDay) {
+    const isMockAth = String(athId).startsWith('mock_') || athId === 'usr-vip-001';
+    const hasRoutine = (typeof athleteHasAssignedRoutine === 'function') ? athleteHasAssignedRoutine(athId) : true;
+    let userCreatedDate = null;
+    if (AppState.profile && AppState.profile.created_at) {
+        userCreatedDate = new Date(AppState.profile.created_at);
+        userCreatedDate.setHours(0, 0, 0, 0);
+    }
+    const isBeforeRegistration = !isMockAth && Boolean(userCreatedDate && targetMidnight < userCreatedDate);
+
+    if (!isMockAth && !hasRoutine) {
+        wStatus = 'in-progress';
+        wText = 'Plan en Diseño';
+    } else if (isBeforeRegistration) {
+        wStatus = 'in-progress';
+        wText = '–';
+    } else if (isFutureDay) {
         const dayKey = (typeof getDayKeyFromDate === 'function') ? getDayKeyFromDate(sDate) : 'day1';
         const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(athId) : null;
         const dayWorkout = (workoutData && workoutData[dayKey]) ? workoutData[dayKey] : null;
@@ -20213,16 +20941,36 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
             }
         }
         if (isPastDay) {
-            wStatus = 'lost';
-            wText = total > 0 ? `${completed}/${total} ejercicios ✕` : 'Sesión no realizada ✕';
+            if (!isMockAth && !hasRoutine) {
+                wStatus = 'in-progress';
+                wText = 'Plan en Diseño';
+            } else if (isBeforeRegistration) {
+                wStatus = 'in-progress';
+                wText = '–';
+            } else if (total === 0) {
+                wStatus = 'in-progress';
+                wText = 'Descanso';
+            } else {
+                wStatus = 'lost';
+                wText = total > 0 ? `${completed}/${total} ejercicios ✕` : 'Sesión no realizada ✕';
+            }
         } else {
-            wStatus = 'in-progress';
-            wText = total > 0 ? `${completed}/${total} ejercicios` : '0/0 ejercicios';
+            if (!isMockAth && !hasRoutine) {
+                wStatus = 'in-progress';
+                wText = 'Plan en Diseño';
+            } else {
+                wStatus = 'in-progress';
+                wText = total > 0 ? `${completed}/${total} ejercicios` : '0/0 ejercicios';
+            }
         }
     }
 
     updatePill('dashWorkoutStreakPill', wStatus, wText, 'Progreso de entrenamiento para la racha diaria');
-    updatePill('dashWorkoutRestStreakPill', 'done', 'Descanso Activo ✓', 'Día de recuperación celular para la racha diaria');
+    if (!isMockAth && !hasRoutine) {
+        updatePill('dashWorkoutRestStreakPill', 'in-progress', 'Plan en Diseño', 'Rutina personalizada en diseño por Nico');
+    } else {
+        updatePill('dashWorkoutRestStreakPill', 'done', 'Descanso Activo ✓', 'Día de recuperación celular para la racha diaria');
+    }
 
     // 2. Pilar Nutrición
     const nRec = dayRec.nutrition || {};
@@ -20533,11 +21281,12 @@ function getDailyMetabolicMetrics(targetDate) {
 
     const dayKey = getDayKeyFromDate(targetDate);
     const data = getCoachAthleteWorkoutData(athId);
+    const isMockAthlete = String(athId).startsWith('mock_') || athId === 'usr-vip-001' || isDemo;
     let dayData = (data && data[dayKey]) ? data[dayKey] : {};
     if (!dayData || !dayData.exercises) {
         if (data && data.calendar_schedule && data.calendar_schedule[dateKey]) {
             dayData = data.calendar_schedule[dateKey];
-        } else if (typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
+        } else if (isMockAthlete && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
             dayData = WORKOUT_DAYS_DATA[dayKey];
         }
     }
@@ -21098,63 +21847,146 @@ function initQuickBiometricsModal() {
     const closeBtn = document.getElementById('btnCloseQuickBioModal');
     const form = document.getElementById('quickBioForm');
     const weightInp = document.getElementById('quickInputWeight');
+    const heightInp = document.getElementById('quickInputHeight');
+    const ageInp = document.getElementById('quickInputAge');
     const muscleInp = document.getElementById('quickInputMuscle');
     const fatInp = document.getElementById('quickInputFat');
     const stepsInp = document.getElementById('quickInputSteps');
 
     if (!modal) return;
 
-    if (openBtn) {
-        openBtn.addEventListener('click', (e) => {
+    const populateQuickInputs = () => {
+        let profile = AppState.profile || {};
+        let anamnesis = AppState.anamnesis || {};
+        const em = ((AppState.user && AppState.user.email) || profile.email || '').trim().toLowerCase();
+        if ((!profile.current_weight || !profile.height || !profile.age) && em) {
+            try {
+                let lp = JSON.parse(localStorage.getItem(`sens_profile_${em}`) || '{}');
+                let la = JSON.parse(localStorage.getItem(`sens_anamnesis_${em}`) || '{}');
+                const activeP = JSON.parse(localStorage.getItem('sens_active_profile') || '{}');
+                if (activeP.email && activeP.email.trim().toLowerCase() === em) {
+                    lp = { ...activeP, ...lp };
+                }
+                const activeA = JSON.parse(localStorage.getItem('sens_active_anamnesis') || '{}');
+                if (activeA.email && activeA.email.trim().toLowerCase() === em) {
+                    la = { ...activeA, ...la };
+                }
+                profile = { ...lp, ...profile };
+                anamnesis = { ...la, ...anamnesis };
+            } catch (_) {}
+        }
+        if (weightInp) weightInp.value = profile.current_weight || profile.weight || anamnesis.weight || (anamnesis.tape_measurements && anamnesis.tape_measurements.weight) || '';
+        if (heightInp) heightInp.value = profile.height || anamnesis.height || (anamnesis.tape_measurements && anamnesis.tape_measurements.height) || '';
+        if (ageInp) ageInp.value = profile.age || anamnesis.age || (anamnesis.tape_measurements && anamnesis.tape_measurements.age) || '';
+        if (muscleInp) muscleInp.value = profile.muscle_mass || '';
+        if (fatInp) fatInp.value = profile.body_fat || anamnesis.body_fat || '';
+        if (stepsInp) stepsInp.value = AppState.dailySteps || '';
+    };
+
+    const showQuickModal = (e) => {
+        if (e) {
             e.preventDefault();
             e.stopPropagation();
-            const profile = AppState.profile || {};
-            const anamnesis = AppState.anamnesis || {};
-            if (weightInp) weightInp.value = profile.current_weight || anamnesis.weight || '75.8';
-            if (muscleInp) muscleInp.value = profile.muscle_mass || '35.2';
-            if (fatInp) fatInp.value = profile.body_fat || anamnesis.body_fat || '13.8';
-            if (stepsInp) stepsInp.value = AppState.dailySteps || '8500';
-            modal.style.display = 'flex';
-        });
+        }
+        populateQuickInputs();
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+        modal.style.opacity = '1';
+        modal.style.pointerEvents = 'auto';
+        modal.style.zIndex = '100010';
+    };
+
+    const hideQuickModal = () => {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+        modal.style.pointerEvents = 'none';
+    };
+
+    if (openBtn) {
+        openBtn.addEventListener('click', showQuickModal);
+    }
+
+    // Botones adicionales en la tarjeta de perfil
+    const btnSettingsQuickBio = document.getElementById('btnSettingsQuickUpdateBio');
+    const btnSettingsQuickBioBottom = document.getElementById('btnSettingsQuickUpdateBioBottom');
+    if (btnSettingsQuickBio) {
+        btnSettingsQuickBio.addEventListener('click', showQuickModal);
+    }
+    if (btnSettingsQuickBioBottom) {
+        btnSettingsQuickBioBottom.addEventListener('click', showQuickModal);
     }
 
     if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+        closeBtn.addEventListener('click', hideQuickModal);
     }
 
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            modal.style.display = 'none';
+            hideQuickModal();
         }
     });
 
     if (form) {
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const w = parseFloat(weightInp?.value);
+            const h = parseFloat(heightInp?.value);
+            const a = parseInt(ageInp?.value, 10);
             const m = parseFloat(muscleInp?.value);
             const f = parseFloat(fatInp?.value);
             const s = parseInt(stepsInp?.value, 10);
 
             if (!AppState.profile) AppState.profile = {};
             if (!isNaN(w) && w > 0) AppState.profile.current_weight = w;
+            if (!isNaN(h) && h > 0) AppState.profile.height = h;
+            if (!isNaN(a) && a > 0) AppState.profile.age = a;
             if (!isNaN(m) && m > 0) AppState.profile.muscle_mass = m;
             if (!isNaN(f) && f > 0) AppState.profile.body_fat = f;
             if (!isNaN(s) && s > 0) AppState.dailySteps = s;
 
             const athId = getActiveAthleteId();
-            localStorage.setItem(`sens_profile_${athId}`, JSON.stringify(AppState.profile));
+            const rawEm = (AppState.user?.email || AppState.profile?.email || '').trim().toLowerCase();
+
+            try {
+                localStorage.setItem(`sens_profile_${athId}`, JSON.stringify(AppState.profile));
+                localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+                if (rawEm) localStorage.setItem(`sens_profile_${rawEm}`, JSON.stringify(AppState.profile));
+
+                // Sincronizar en roster de atletas registrados
+                const localRoster = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
+                const idx = localRoster.findIndex(r => r.id === athId || (rawEm && r.email && r.email.toLowerCase() === rawEm));
+                if (idx >= 0) {
+                    if (!isNaN(w) && w > 0) localRoster[idx].current_weight = w;
+                    if (!isNaN(h) && h > 0) localRoster[idx].height = h;
+                    if (!isNaN(a) && a > 0) localRoster[idx].age = a;
+                    localStorage.setItem('sens_registered_athletes', JSON.stringify(localRoster));
+                }
+            } catch (_) {}
+
+            // Sincronizar con Supabase profiles si está autenticado
+            if (supabaseClient && AppState.user && AppState.user.id && !String(AppState.user.id).startsWith('usr-')) {
+                try {
+                    const upPayload = { updated_at: new Date().toISOString() };
+                    if (!isNaN(w) && w > 0) upPayload.current_weight = w;
+                    if (!isNaN(h) && h > 0) upPayload.height = h;
+                    if (!isNaN(a) && a > 0) upPayload.age = a;
+                    await supabaseClient.from('profiles').update(upPayload).eq('id', AppState.user.id);
+                } catch (err) {
+                    console.warn('[QuickBio] Error sincronizando perfil en Supabase:', err);
+                }
+            }
 
             modal.style.display = 'none';
             if (typeof showSensToast === 'function') {
                 showSensToast('Métricas actualizadas con éxito.', 'champagne');
             }
 
-            // Actualizar reactivamente todas las tarjetas
+            // Actualizar reactivamente todas las vistas del portal
+            if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
             if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData();
             if (typeof updateBiometricsCardData === 'function') updateBiometricsCardData();
+            if (typeof syncCoachMasterCard === 'function') syncCoachMasterCard();
+            if (typeof renderCoachAthletesHub === 'function') renderCoachAthletesHub();
         });
     }
 }
@@ -21303,117 +22135,593 @@ function initCoachAthletePickerTriggers() {
 }
 
 // =============================================================================
-// MÓDULO F: FICHA CLÍNICA 360° SOLO LECTURA, GESTIÓN DE OBJETIVOS & COPILOTO IA
+// MÓDULO F: EXPEDIENTE COMPLETO 360° (FICHA CLÍNICA & BIOMECÁNICA SENS)
+// Accesible tanto por Nico (Coach OS) como por el propio Alumno (Mi Perfil)
 // =============================================================================
-window.openCoachAthleteDossier = function(athId) {
-    if (!isCurrentUserAdmin()) return;
+window.openSensClinicalDossier = async function(targetIdentifier, options = {}) {
     const modal = document.getElementById('coachAthleteDossierModal');
-    const titleEl = document.getElementById('dossierAthleteNameTitle');
-    const metaEl = document.getElementById('dossierAthleteSubMeta');
-    const bodyEl = document.getElementById('coachAthleteDossierBody');
-    if (!modal || !bodyEl) return;
+    const modalTitleEl = document.getElementById('dossierAthleteNameTitle');
+    const modalMetaEl = document.getElementById('dossierAthleteSubMeta');
+    const modalBodyEl = document.getElementById('coachAthleteDossierBody');
+    const modalFooterEl = document.getElementById('dossierModalFooterActions');
+    const modalEyebrowPill = document.getElementById('dossierEyebrowPill');
+    const modalSubtitlePill = document.getElementById('dossierSubtitlePill');
 
-    const targetId = athId || AppState.activeAthleteId || 'mock_vip';
-    const roster = getConsolidatedCoachAthletes();
-    const ath = roster.find(a => a.id === targetId) || roster[0];
-    if (!ath) return;
+    const pageBodyEl = document.getElementById('clinicalDossierPageBody');
+    const pageFooterEl = document.getElementById('clinicalDossierPageFooter');
+    const pageTitleEl = document.getElementById('pageDossierAthleteTitle');
+    const pageMetaEl = document.getElementById('pageDossierAthleteMeta');
+    const pageEyebrowPill = document.getElementById('pageDossierEyebrowPill');
+    const pageSubtitlePill = document.getElementById('pageDossierSubtitlePill');
+    const returnLabelEl = document.getElementById('labelReturnFromClinicalDossier');
 
-    if (titleEl) titleEl.textContent = ath.full_name;
-    if (metaEl) metaEl.textContent = `${ath.email} • ${formatPlanName(ath.user_type || 'client_presencial_vip')}`;
+    if (!modalBodyEl && !pageBodyEl) return;
 
-    const mockAnamnesisMap = {
-        mock_vip: {
-            age: 38, height: 178, weight: 78.5, targetWeight: 74.0, bodyFat: 15.2, muscleMass: 36.4,
-            goal: 'Recomposición Corporal & Postura',
-            injuries: 'Molestia lumbar leve al pasar +7hs sentado; hombro derecho sensible en press trasnuca.',
-            sleep: '6.5 a 7 hs / noche • Estrés laboral moderado-alto',
-            adherence: '92% asistencia presencial (11 de 12 sesiones completadas este mes)'
-        },
-        mock_duo: {
-            age: 34, height: 170, weight: 71.0, targetWeight: 67.5, bodyFat: 18.0, muscleMass: 31.2,
-            goal: 'Tono Muscular, Energía Diaria & Salud Articular',
-            injuries: 'Sin lesiones activas. Rigidez de cadera y tobillos.',
-            sleep: '7.5 hs / noche • Estrés moderado',
-            adherence: '88% asistencia en formato Grupal CABA'
-        },
-        mock_online_prem: {
-            age: 41, height: 181, weight: 84.2, targetWeight: 78.0, bodyFat: 19.5, muscleMass: 37.0,
-            goal: 'Déficit Calórico & Fuerza Base',
-            injuries: 'Tendinopatía rotuliana izquierda antigua (evitar rebote en sentadilla profunda).',
-            sleep: '6 hs / noche • Viajes frecuentes de trabajo',
-            adherence: '85% cumplimiento de check-ins online'
-        },
-        mock_online_basic: {
-            age: 29, height: 165, weight: 63.5, targetWeight: 61.0, bodyFat: 21.0, muscleMass: 26.8,
-            goal: 'Hipertrofia Tren Inferior & Glúteos',
-            injuries: 'Ninguna lesión reportada.',
-            sleep: '7.5 a 8 hs / noche • Buena recuperación',
-            adherence: '90% sesiones autónomas registradas'
-        },
-        mock_app_sub: {
-            age: 27, height: 163, weight: 59.0, targetWeight: 58.0, bodyFat: 20.2, muscleMass: 25.4,
-            goal: 'Mantenimiento, Vitalidad & Hábitos (Online con Nico)',
-            injuries: 'Tensión cervical por trabajo en computadora.',
-            sleep: '7 hs / noche',
-            adherence: 'Online 1:1 (3 sesiones / semana en App SENS)'
+    // Determinar si la vista es de Coach Nico o del Alumno
+    const isCoach = (options && options.isCoach !== undefined)
+        ? Boolean(options.isCoach)
+        : (typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin());
+
+    // Recordar la vista de retorno para jamás rebotar al Inicio
+    window._clinicalDossierReturnView = isCoach ? 'coachHubView' : 'profileSettingsView';
+
+    // 1. Identificar al atleta objetivo
+    let target = null;
+    let targetEmail = '';
+    let targetId = targetIdentifier;
+
+    if (!isCoach) {
+        // El alumno consulta su propia ficha oficial
+        target = AppState.profile || {};
+        targetEmail = ((AppState.user && AppState.user.email) || target.email || '').trim().toLowerCase();
+        targetId = (AppState.user && AppState.user.id) || target.id;
+    } else {
+        // Nico Coach consulta el expediente del alumno seleccionado
+        const roster = (typeof getConsolidatedCoachAthletes === 'function') ? getConsolidatedCoachAthletes() : [];
+        const normTarget = String(targetIdentifier || '').trim().toLowerCase();
+
+        target = roster.find(a => String(a.id || '').trim().toLowerCase() === normTarget)
+              || roster.find(a => String(a.email || '').trim().toLowerCase() === normTarget);
+
+        if (!target && normTarget) {
+            target = { id: targetIdentifier, email: targetIdentifier, full_name: targetIdentifier };
+        } else if (!target) {
+            target = roster[0] || AppState.profile || {};
         }
-    };
+        targetEmail = String(target.email || target.id || '').trim().toLowerCase();
+        targetId = target.id;
+    }
 
-    const bio = mockAnamnesisMap[ath.id] || {
-        age: 33, height: 174, weight: ath.current_weight || 75.0, targetWeight: 71.0, bodyFat: 16.5, muscleMass: 34.0,
-        goal: ath.goal || 'Recomposición Corporal & Salud Articular',
-        injuries: 'Sin dolores articulares agudos declarados en el diagnóstico inicial.',
-        sleep: '7 hs promedio • Nivel de estrés moderado',
-        adherence: 'En seguimiento activo dentro del portal SENS'
-    };
+    // 2. Extraer almacenamiento local por clave única de email
+    let localProf = {};
+    let localAnam = {};
+    if (targetEmail) {
+        try {
+            localProf = JSON.parse(localStorage.getItem(`sens_profile_${targetEmail}`) || '{}');
+            localAnam = JSON.parse(localStorage.getItem(`sens_anamnesis_${targetEmail}`) || '{}');
+        } catch (_) {}
+    }
 
-    bodyEl.innerHTML = `
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px;">
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
-                <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Peso Actual / Meta</span>
-                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${escapeHTML(bio.weight)} kg <span style="font-size: 12px; color: #E5CBA7;">→ ${escapeHTML(bio.targetWeight)} kg</span></strong>
+    // Si coincide con el usuario activo en sesión
+    const activeEmail = ((AppState.user && AppState.user.email) || (AppState.profile && AppState.profile.email) || '').trim().toLowerCase();
+    if (activeEmail && targetEmail && activeEmail === targetEmail) {
+        if (AppState.profile) localProf = { ...AppState.profile, ...localProf };
+        if (AppState.anamnesis) localAnam = { ...AppState.anamnesis, ...localAnam };
+        try {
+            const actP = JSON.parse(localStorage.getItem('sens_active_profile') || '{}');
+            if (actP.email && actP.email.trim().toLowerCase() === targetEmail) {
+                localProf = { ...actP, ...localProf };
+            }
+            const actA = JSON.parse(localStorage.getItem('sens_active_anamnesis') || '{}');
+            if (actA.email && actA.email.trim().toLowerCase() === targetEmail) {
+                localAnam = { ...actA, ...localAnam };
+            }
+        } catch (_) {}
+    }
+
+    // 3. Consultar Supabase en vivo si hay conexión
+    let dbProf = null;
+    let dbAnam = null;
+    if (supabaseClient && (targetId || targetEmail)) {
+        try {
+            const isUuid = (id) => typeof id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+            if (isUuid(targetId)) {
+                const { data } = await supabaseClient.from('profiles').select('*').eq('id', targetId).maybeSingle();
+                if (data) dbProf = data;
+            } else if (targetEmail) {
+                const { data } = await supabaseClient.from('profiles').select('*').eq('email', targetEmail).maybeSingle();
+                if (data) dbProf = data;
+            }
+            const effectiveUserId = (dbProf && dbProf.id) || (isUuid(targetId) ? targetId : null);
+            if (effectiveUserId) {
+                const { data } = await supabaseClient.from('anamnesis').select('*').eq('user_id', effectiveUserId).maybeSingle();
+                if (data) dbAnam = data;
+            }
+        } catch (err) {
+            console.warn('[SENS Dossier] Advertencia al sincronizar con Supabase:', err);
+        }
+    }
+
+    const mergedProf = { ...target, ...localProf, ...(dbProf || {}) };
+    const mergedAnam = { ...localAnam, ...(dbAnam || {}) };
+
+    // A. Identidad & Encabezado
+    let displayName = mergedProf.full_name || target.full_name || targetEmail.split('@')[0] || 'Atleta SENS';
+    if (displayName.includes('@')) {
+        const lp = displayName.split('@')[0];
+        displayName = lp.charAt(0).toUpperCase() + lp.slice(1);
+    }
+    const displayEmail = targetEmail || mergedProf.email || 'atleta@sens.com';
+    const displayPlan = (typeof formatPlanName === 'function') 
+        ? formatPlanName(mergedProf.user_type || mergedProf.active_plan_name || 'client_presencial_vip')
+        : (mergedProf.active_plan_name || 'Plan Personalizado SENS');
+
+    const isAct = (mergedProf.subscription_status === 'active');
+    const isPend = (mergedProf.subscription_status === 'pending_activation');
+    const statusText = isAct ? 'Membresía Activa con Nico' : (isPend ? 'Pendiente de Validación 1 a 1' : 'Acceso en Pausa');
+    const statusBadgeColor = isAct ? '#10B981' : (isPend ? '#F59E0B' : '#EF4444');
+    const statusBg = isAct ? 'rgba(16, 185, 129, 0.15)' : (isPend ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)');
+
+    // Actualizar encabezados del Modal (si aplica)
+    if (modalEyebrowPill) {
+        modalEyebrowPill.textContent = isCoach ? 'FICHA CLÍNICA 360° • COACH OS' : 'MI FICHA OFICIAL • SENS TRAIN';
+    }
+    if (modalSubtitlePill) {
+        modalSubtitlePill.textContent = isCoach ? 'Expediente Declarado por el Alumno' : 'Datos Declarados & Calibrados';
+    }
+    if (modalTitleEl) modalTitleEl.textContent = displayName;
+    if (modalMetaEl) {
+        modalMetaEl.innerHTML = `${displayEmail} • ${displayPlan} • <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; background: ${statusBg}; color: ${statusBadgeColor}; font-weight: 700; font-size: 11px;">${statusText}</span>`;
+    }
+
+    // Actualizar encabezados de la Vista de Página Dedicada
+    if (pageEyebrowPill) {
+        pageEyebrowPill.textContent = isCoach ? 'FICHA CLÍNICA 360° • COACH OS' : 'MI FICHA OFICIAL • SENS TRAIN';
+    }
+    if (pageSubtitlePill) {
+        pageSubtitlePill.textContent = isCoach ? 'Expediente Declarado por el Alumno' : 'Datos Declarados & Calibrados';
+    }
+    if (pageTitleEl) pageTitleEl.textContent = displayName;
+    if (pageMetaEl) {
+        pageMetaEl.innerHTML = `${displayEmail} • ${displayPlan} • <span style="display: inline-block; padding: 2px 8px; border-radius: 999px; background: ${statusBg}; color: ${statusBadgeColor}; font-weight: 700; font-size: 11px;">${statusText}</span>`;
+    }
+    if (returnLabelEl) {
+        returnLabelEl.textContent = isCoach ? '← Volver a Coach OS' : '← Volver a Mi Perfil';
+    }
+
+    // B. Medidas Biométricas & Antropometría
+    const tape = mergedAnam.tape_measurements || {};
+    const weightVal = mergedProf.current_weight || mergedProf.weight || mergedAnam.weight || tape.weight || '—';
+    const heightVal = mergedProf.height || mergedAnam.height || tape.height || '—';
+    const ageVal = mergedProf.age || mergedAnam.age || tape.age || '—';
+    const genderRaw = String(mergedProf.gender || mergedAnam.gender || '').toLowerCase();
+    const genderVal = (genderRaw === 'male' || genderRaw === 'masculino') ? 'Masculino' : (genderRaw === 'female' || genderRaw === 'femenino') ? 'Femenino' : (genderRaw || 'No especificado');
+
+    // Perímetros
+    const waistVal = tape.waist || mergedAnam.tape_waist || '—';
+    const hipVal = tape.hip || mergedAnam.tape_hip || '—';
+    const armVal = tape.arm || mergedAnam.tape_arm || '—';
+    const thighVal = tape.thigh || mergedAnam.tape_thigh || '—';
+
+    // Estimación IMC y TMB
+    let bmiVal = '—';
+    let bmrVal = '—';
+    if (weightVal !== '—' && heightVal !== '—') {
+        const hM = parseFloat(heightVal) / 100;
+        const wKg = parseFloat(weightVal);
+        if (hM > 0 && wKg > 0) {
+            bmiVal = (wKg / (hM * hM)).toFixed(1);
+            let bmrCalc = (10 * wKg) + (6.25 * parseFloat(heightVal)) - (5 * (parseFloat(ageVal) || 30));
+            bmrCalc += (genderVal === 'Femenino') ? -161 : 5;
+            bmrVal = `${Math.round(bmrCalc)} kcal`;
+        }
+    }
+
+    // C. Objetivo & Obstáculo Histórico
+    const goalMap = {
+        fat_loss: 'Recomposición Corporal & Quema de Grasa',
+        muscle_gain: 'Fuerza Máxima & Masa Muscular (Hipertrofia)',
+        recomp: 'Recomposición Corporal Integral (Fuerza + Déficit Controlado)',
+        posture_health: 'Postura, Columna & Anti-Sedentarismo',
+        hypertrophy: 'Hipertrofia & Fuerza Máxima',
+        performance: 'Rendimiento Deportivo & Longevidad',
+        general_vitality: 'Vitalidad General & Salud Integral'
+    };
+    const rawGoal = mergedProf.goal || mergedAnam.goal || mergedAnam.primary_goal || '';
+    const goalLabel = goalMap[rawGoal] || rawGoal || 'Vitalidad & Rendimiento Integral';
+
+    const hurdleMap = {
+        time: 'Falta de tiempo en el día a día',
+        consistency: 'Dificultad para mantener constancia',
+        pain: 'Dolores o molestias que frenan el progreso',
+        guidance: 'Falta de planificación clara y guía técnica'
+    };
+    const hurdleKey = mergedAnam.historical_hurdle || '';
+    const hurdleLabel = hurdleMap[hurdleKey] || hurdleKey || 'Sin barrera histórica reportada';
+    const hurdleDetail = mergedAnam.historical_hurdle_detail || '';
+
+    // D. Articulaciones, Dolores & Historial Médico
+    const selectedInjuries = mergedAnam.active_injuries || mergedAnam.pains_injuries || [];
+    const intensities = mergedAnam.injury_intensities || {};
+    let injuriesListHtml = '';
+    if (Array.isArray(selectedInjuries) && selectedInjuries.length > 0) {
+        injuriesListHtml = selectedInjuries.map(k => {
+            const level = intensities[k] ? `(Nivel ${intensities[k]})` : '';
+            return `<span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(239, 68, 68, 0.15); color: #B91C1C; border: 1px solid rgba(239, 68, 68, 0.35); padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700;">
+                ⚠ ${k.toUpperCase()} ${level}
+            </span>`;
+        }).join(' ');
+    } else {
+        injuriesListHtml = `<span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(16, 185, 129, 0.12); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700;">
+            ✓ Sin lesiones activas reportadas
+        </span>`;
+    }
+
+    const hasSurgery = Boolean(mergedAnam.has_surgery);
+    const surgeryDetail = mergedAnam.surgery_detail || '';
+    const hasMedicalFlags = Boolean(mergedAnam.has_medical_flags);
+    const parqNotes = mergedAnam.parq_notes || '';
+
+    // E. Contexto Deportivo & Equipamiento
+    const expMap = { beginner: 'Principiante', intermediate: 'Intermedio', advanced: 'Avanzado' };
+    const expLabel = expMap[mergedAnam.experience_level] || mergedAnam.experience_level || 'Intermedio';
+    const weeklyFreq = mergedAnam.weekly_frequency ? `${mergedAnam.weekly_frequency} días / semana` : '3 días / semana';
+    const equipList = Array.isArray(mergedAnam.available_equipment) ? mergedAnam.available_equipment : [mergedAnam.available_equipment].filter(Boolean);
+    const equipMap = {
+        gym: 'Gimnasio Comercial Completo',
+        gym_complete: 'Gimnasio Comercial Completo',
+        dumbbells: 'Mancuernas',
+        bands: 'Bandas elásticas',
+        bodyweight: 'Peso corporal / Calistenia'
+    };
+    const equipLabel = equipList.map(eq => equipMap[eq] || eq).join(', ') || 'Gimnasio Comercial Completo';
+
+    // F. Estilo de Vida & Recuperación (Carga Alostática)
+    const sleepHours = mergedAnam.sleep_hours ? `${mergedAnam.sleep_hours} hs / noche` : '7.0 hs habituales';
+    const stressLevel = mergedAnam.stress_level ? `${mergedAnam.stress_level} / 10` : 'Moderado (6/10)';
+    const neatMap = { sedentary: 'Sedentario (oficina/escritorio)', moderate: 'Moderado (caminatas diarias)', active: 'Activo / Físico' };
+    const neatLabel = neatMap[mergedAnam.neat_level] || mergedAnam.neat_level || 'Moderado';
+    const waterBaseline = mergedAnam.water_liters_baseline ? `${mergedAnam.water_liters_baseline} L / día` : '2.5 L / día';
+
+    // G. Movilidad
+    const mobTests = mergedAnam.mobility_tests || {};
+    const mobMap = { ok: 'Rango óptimo y libre', limited: 'Rango limitado', pain: 'Molestia / Dolor al mover', skipped: 'Omitido' };
+    const mobShoulder = mobMap[mobTests.shoulder] || mobTests.shoulder || 'Rango óptimo';
+    const mobPosterior = mobMap[mobTests.posterior] || mobTests.posterior || 'Rango óptimo';
+
+    // Helper de escape HTML
+    const safe = (txt) => typeof escapeHTML === 'function' ? escapeHTML(String(txt || '')) : String(txt || '');
+
+    // Construcción del contenido visual de la ficha (Light Quiet Luxury de Alto Contraste)
+    const dossierCardsHtml = `
+        <!-- SECCIÓN 1: BIOMETRÍA & ANTROPOMETRÍA -->
+        <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 18px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.02);">
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                <span>1. Biometría &amp; Antropometría Declarada</span>
+                <span style="font-size: 10px; color: #575659; font-weight: 600;">Calibrado SENS</span>
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
-                <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Masa Muscular / Grasa</span>
-                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${escapeHTML(bio.muscleMass)} kg • ${escapeHTML(bio.bodyFat)}%</strong>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 14px;">
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 12px; padding: 10px 14px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Peso Actual</span>
+                    <strong style="font-size: 1.3rem; color: #121214; font-weight: 800;">${weightVal !== '—' ? weightVal + ' kg' : '—'}</strong>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 12px; padding: 10px 14px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Altura</span>
+                    <strong style="font-size: 1.3rem; color: #121214; font-weight: 800;">${heightVal !== '—' ? heightVal + ' cm' : '—'}</strong>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 12px; padding: 10px 14px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Edad</span>
+                    <strong style="font-size: 1.3rem; color: #121214; font-weight: 800;">${ageVal !== '—' ? ageVal + ' años' : '—'}</strong>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 12px; padding: 10px 14px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Sexo Biológico</span>
+                    <strong style="font-size: 1.15rem; color: #121214; font-weight: 700;">${safe(genderVal)}</strong>
+                </div>
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
-                <span style="font-size: 10px; color: #A1A1AA; text-transform: uppercase;">Edad &amp; Altura</span>
-                <strong style="display: block; font-size: 1.15rem; color: #FFFFFF; margin-top: 3px;">${escapeHTML(bio.age)} años • ${escapeHTML(bio.height)} cm</strong>
+
+            <!-- Perímetros con Cinta Métrica & Metabolismo -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; background: #F4F3F1; border-radius: 12px; padding: 12px;">
+                <div>
+                    <span style="font-size: 9.5px; color: #705B3E; font-weight: 700; text-transform: uppercase; display: block;">Cintura</span>
+                    <span style="font-size: 13.5px; font-weight: 800; color: #121214;">${waistVal !== '—' ? waistVal + ' cm' : 'No declarada'}</span>
+                </div>
+                <div>
+                    <span style="font-size: 9.5px; color: #705B3E; font-weight: 700; text-transform: uppercase; display: block;">Cadera</span>
+                    <span style="font-size: 13.5px; font-weight: 800; color: #121214;">${hipVal !== '—' ? hipVal + ' cm' : 'No declarada'}</span>
+                </div>
+                <div>
+                    <span style="font-size: 9.5px; color: #705B3E; font-weight: 700; text-transform: uppercase; display: block;">Brazo</span>
+                    <span style="font-size: 13.5px; font-weight: 800; color: #121214;">${armVal !== '—' ? armVal + ' cm' : 'No declarado'}</span>
+                </div>
+                <div>
+                    <span style="font-size: 9.5px; color: #705B3E; font-weight: 700; text-transform: uppercase; display: block;">Muslo</span>
+                    <span style="font-size: 13.5px; font-weight: 800; color: #121214;">${thighVal !== '—' ? thighVal + ' cm' : 'No declarado'}</span>
+                </div>
+                <div>
+                    <span style="font-size: 9.5px; color: #705B3E; font-weight: 700; text-transform: uppercase; display: block;">IMC Estimado</span>
+                    <span style="font-size: 13.5px; font-weight: 800; color: #121214;">${bmiVal !== '—' ? bmiVal + ' kg/m²' : '—'}</span>
+                </div>
+                <div>
+                    <span style="font-size: 9.5px; color: #705B3E; font-weight: 700; text-transform: uppercase; display: block;">Tasa Metabólica Basal</span>
+                    <span style="font-size: 13.5px; font-weight: 800; color: #121214;">${bmrVal !== '—' ? bmrVal : '—'}</span>
+                </div>
             </div>
         </div>
-        <div style="background: rgba(229, 203, 167, 0.06); border: 1px solid rgba(229, 203, 167, 0.22); border-radius: 12px; padding: 14px;">
-            <div style="font-size: 10.5px; font-weight: 800; color: #E5CBA7; text-transform: uppercase; margin-bottom: 4px;">Mapa Articular, Lesiones &amp; Postura (Solo Lectura)</div>
-            <p style="font-size: 12.5px; color: #E4E4E7; margin: 0;">${escapeHTML(bio.injuries)}</p>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
-                <div style="font-size: 10px; font-weight: 800; color: #A1A1AA; text-transform: uppercase; margin-bottom: 4px;">Descanso &amp; Estilo de Vida</div>
-                <p style="font-size: 12px; color: #E4E4E7; margin: 0;">${escapeHTML(bio.sleep)}</p>
+
+        <!-- SECCIÓN 2: OBJETIVO PRIORITARIO & OBSTÁCULO DECLARADO -->
+        <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 18px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.02);">
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 8px;">
+                2. Objetivo Principal &amp; Diagnóstico de Adherencia
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;">
-                <div style="font-size: 10px; font-weight: 800; color: #A1A1AA; text-transform: uppercase; margin-bottom: 4px;">Adherencia &amp; Avances</div>
-                <p style="font-size: 12px; color: #10B981; font-weight: 700; margin: 0;">${escapeHTML(bio.adherence)}</p>
+            <div style="font-size: 15px; color: #121214; font-weight: 800; margin-bottom: 6px;">
+                ${safe(goalLabel)}
+            </div>
+            <div style="font-size: 12.5px; color: #575659; line-height: 1.5; margin-bottom: 10px;">
+                <strong style="color: #121214;">Mayor Obstáculo Histórico:</strong> ${safe(hurdleLabel)}
+            </div>
+            ${hurdleDetail ? `
+                <div style="background: #FAF9F6; border-left: 3px solid #705B3E; border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: #121214; font-style: italic;">
+                    "${safe(hurdleDetail)}"
+                </div>
+            ` : ''}
+        </div>
+
+        <!-- SECCIÓN 3: ATENCIÓN ARTICULAR, HISTORIAL DE LESIONES & PAR-Q+ -->
+        <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 18px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.02);">
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 10px;">
+                3. Mapa Articular, Lesiones &amp; Historial Médico (PAR-Q+)
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                ${injuriesListHtml}
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; color: #575659;">
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.05); border-radius: 10px; padding: 10px 12px;">
+                    <strong style="color: #121214;">Cirugías Previas:</strong> 
+                    <span style="color: ${hasSurgery ? '#DC2626' : '#059669'}; font-weight: 600; margin-left: 4px;">
+                        ${hasSurgery ? ('Sí • ' + safe(surgeryDetail || 'Declarada en diagnóstico')) : 'Sin cirugías previas reportadas'}
+                    </span>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.05); border-radius: 10px; padding: 10px 12px;">
+                    <strong style="color: #121214;">Cuestionario PAR-Q+ (Cardiovascular):</strong> 
+                    <span style="color: ${hasMedicalFlags ? '#D97706' : '#059669'}; font-weight: 600; margin-left: 4px;">
+                        ${hasMedicalFlags ? ('Banderas médicas reportadas • ' + safe(parqNotes || 'Requiere consulta')) : 'Apto físico declarado sin restricciones cardiovasculares'}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4: CONTEXTO DEPORTIVO, FRECUENCIA & EQUIPAMIENTO -->
+        <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 18px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.02);">
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 10px;">
+                4. Contexto Deportivo &amp; Equipamiento Disponible
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 12.5px; margin-bottom: 10px;">
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 10px 12px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Nivel de Experiencia</span>
+                    <strong style="color: #121214; font-size: 13.5px;">${safe(expLabel)}</strong>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 10px 12px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Disponibilidad Semanal</span>
+                    <strong style="color: #121214; font-size: 13.5px;">${safe(weeklyFreq)}</strong>
+                </div>
+            </div>
+            <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.05); border-radius: 10px; padding: 10px 12px; font-size: 12.5px; color: #575659;">
+                <strong style="color: #121214;">Equipamiento:</strong> ${safe(equipLabel)}
+            </div>
+        </div>
+
+        <!-- SECCIÓN 5: ESTILO DE VIDA, RECUPERACIÓN & CARGA ALOSTÁTICA -->
+        <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 18px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.02);">
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 10px;">
+                5. Estilo de Vida, Sueño &amp; Carga Alostática
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; font-size: 12px;">
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 10px 12px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Sueño Habitual</span>
+                    <strong style="color: #121214; font-size: 13.5px;">${safe(sleepHours)}</strong>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 10px 12px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Nivel de Estrés</span>
+                    <strong style="color: #121214; font-size: 13.5px;">${safe(stressLevel)}</strong>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 10px 12px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Actividad Diaria (NEAT)</span>
+                    <strong style="color: #121214; font-size: 13.5px;">${safe(neatLabel)}</strong>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 10px 12px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Ingesta Basal Agua</span>
+                    <strong style="color: #121214; font-size: 13.5px;">${safe(waterBaseline)}</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 6: MOVILIDAD FUNCIONAL -->
+        <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 18px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.02); margin-bottom: 6px;">
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #705B3E; margin-bottom: 10px;">
+                6. Evaluación Funcional de Movilidad
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 12px;">
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 10px 12px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Movilidad de Hombros</span>
+                    <strong style="color: #121214; font-size: 13px;">${safe(mobShoulder)}</strong>
+                </div>
+                <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 10px; padding: 10px 12px;">
+                    <span style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700; display: block;">Cadena Posterior / Isquios</span>
+                    <strong style="color: #121214; font-size: 13px;">${safe(mobPosterior)}</strong>
+                </div>
             </div>
         </div>
     `;
 
-    const btnGoNutri = document.getElementById('btnDossierGoNutrition');
-    const btnGoWork = document.getElementById('btnDossierGoWorkouts');
-    if (btnGoNutri) {
-        btnGoNutri.onclick = () => {
-            modal.style.display = 'none';
-            selectAthleteForPrescription('nutri', ath.id);
-        };
+    // Inyectar contenido en la vista de página dedicada
+    if (pageBodyEl) {
+        pageBodyEl.innerHTML = dossierCardsHtml;
     }
-    if (btnGoWork) {
-        btnGoWork.onclick = () => {
-            modal.style.display = 'none';
-            selectAthleteForPrescription('workout', ath.id);
-        };
+    // Inyectar también en el modal para máxima compatibilidad
+    if (modalBodyEl) {
+        modalBodyEl.innerHTML = dossierCardsHtml;
     }
 
-    modal.style.display = 'flex';
+    // 4. Inyección de Botones de Acción en el Footer de la Página Dedicada
+    if (pageFooterEl) {
+        if (isCoach) {
+            pageFooterEl.innerHTML = `
+                <button type="button" class="btn btn-outline btn-sm" id="btnPageDossierReturn" onclick="window.returnFromClinicalDossier();" style="border-color: rgba(18, 18, 20, 0.2); color: #121214; font-weight: 700; border-radius: 999px; padding: 8px 18px;">
+                    ← Volver a Coach OS
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" id="btnPageDossierGoNutrition" style="border-color: rgba(112,91,62,0.35); color: #705B3E; font-weight: 700; border-radius: 999px; padding: 8px 18px;">
+                    Prescribir Nutrición →
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnPageDossierGoWorkouts" style="font-weight: 800; border-radius: 999px; padding: 8px 18px;">
+                    Prescribir Entrenamiento →
+                </button>
+                <a href="https://wa.me/?text=${encodeURIComponent('Hola ' + displayName + '! Te contacto desde SENS Coach OS para coordinar detalles de tu plan.')}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="border-color: rgba(16, 185, 129, 0.4); color: #059669; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 8px 18px;">
+                    WhatsApp Alumno
+                </a>
+            `;
+            const btnGoNutri = document.getElementById('btnPageDossierGoNutrition');
+            const btnGoWork = document.getElementById('btnPageDossierGoWorkouts');
+            if (btnGoNutri) {
+                btnGoNutri.onclick = () => {
+                    if (typeof selectAthleteForPrescription === 'function') selectAthleteForPrescription('nutri', targetId);
+                };
+            }
+            if (btnGoWork) {
+                btnGoWork.onclick = () => {
+                    if (typeof selectAthleteForPrescription === 'function') selectAthleteForPrescription('workout', targetId);
+                };
+            }
+        } else {
+            pageFooterEl.innerHTML = `
+                <button type="button" class="btn btn-outline btn-sm" id="btnPageDossierReturn" onclick="window.returnFromClinicalDossier();" style="border-color: rgba(18, 18, 20, 0.2); color: #121214; font-weight: 700; border-radius: 999px; padding: 8px 18px;">
+                    ← Volver a Mi Perfil
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnPageDossierStudentEdit" style="font-weight: 800; border-radius: 999px; padding: 8px 18px;">
+                    Modificar Datos ✎
+                </button>
+                <a href="https://wa.me/5491136329846?text=${encodeURIComponent('Hola Nico! Te contacto desde mi Ficha SENS para coordinar detalles de mi plan.')}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="border-color: rgba(112,91,62,0.35); color: #705B3E; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 8px 18px;">
+                    Hablar 1 a 1 con Nico
+                </a>
+            `;
+            const btnEdit = document.getElementById('btnPageDossierStudentEdit');
+            if (btnEdit) {
+                btnEdit.onclick = () => {
+                    window.returnFromClinicalDossier();
+                    const triggerBtn = document.getElementById('btnSettingsQuickUpdateBio');
+                    if (triggerBtn) triggerBtn.click();
+                };
+            }
+        }
+    }
+
+    // Inyección de Botones en Footer del Modal
+    if (modalFooterEl) {
+        if (isCoach) {
+            modalFooterEl.innerHTML = `
+                <button type="button" class="btn btn-outline btn-sm" id="btnDossierGoNutrition" style="border-color: rgba(229,203,167,0.35); color: #E5CBA7; font-weight: 700;">
+                    Prescribir Nutrición →
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnDossierGoWorkouts" style="font-weight: 800;">
+                    Prescribir Entrenamiento →
+                </button>
+                <a href="https://wa.me/?text=${encodeURIComponent('Hola ' + displayName + '! Te contacto desde SENS Coach OS para coordinar detalles de tu plan.')}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.18); color: #FAF9F6; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                    WhatsApp Alumno
+                </a>
+                <button type="button" class="btn btn-outline btn-sm" id="btnDossierCloseModal" style="border-color: rgba(255,255,255,0.12); color: #A1A1AA;">
+                    Cerrar
+                </button>
+            `;
+            const btnGoNutri = document.getElementById('btnDossierGoNutrition');
+            const btnGoWork = document.getElementById('btnDossierGoWorkouts');
+            if (btnGoNutri) {
+                btnGoNutri.onclick = () => {
+                    window.closeSensClinicalDossier();
+                    if (typeof selectAthleteForPrescription === 'function') selectAthleteForPrescription('nutri', targetId);
+                };
+            }
+            if (btnGoWork) {
+                btnGoWork.onclick = () => {
+                    window.closeSensClinicalDossier();
+                    if (typeof selectAthleteForPrescription === 'function') selectAthleteForPrescription('workout', targetId);
+                };
+            }
+        } else {
+            modalFooterEl.innerHTML = `
+                <button type="button" class="btn btn-primary btn-sm" id="btnDossierStudentEditQuick" style="font-weight: 800;">
+                    Modificar Datos ✎
+                </button>
+                <a href="https://wa.me/5491136329846?text=${encodeURIComponent('Hola Nico! Te contacto desde mi Ficha SENS para coordinar detalles de mi plan.')}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="border-color: rgba(229,203,167,0.4); color: #E5CBA7; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                    Hablar 1 a 1 con Nico
+                </a>
+                <button type="button" class="btn btn-outline btn-sm" id="btnDossierCloseModal" style="border-color: rgba(255,255,255,0.12); color: #A1A1AA;">
+                    Cerrar
+                </button>
+            `;
+            const btnEdit = document.getElementById('btnDossierStudentEditQuick');
+            if (btnEdit) {
+                btnEdit.onclick = () => {
+                    window.closeSensClinicalDossier();
+                    const triggerBtn = document.getElementById('btnSettingsQuickUpdateBio');
+                    if (triggerBtn) triggerBtn.click();
+                };
+            }
+        }
+
+        const btnCloseBottom = document.getElementById('btnDossierCloseModal');
+        if (btnCloseBottom) {
+            btnCloseBottom.onclick = () => window.closeSensClinicalDossier();
+        }
+    }
+
+    // Cerrar bottom sheet de acciones si estuviera abierto
+    if (typeof window.closeCoachAthleteActionsSheet === 'function') {
+        window.closeCoachAthleteActionsSheet();
+    }
+
+    // Cambiar a la vista de página dedicada del Expediente Clínico 360°
+    if (typeof switchPortalView === 'function') {
+        switchPortalView('clinicalDossierView');
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+};
+
+// Retorno unificado desde el Expediente Clínico 360°
+window.returnFromClinicalDossier = function() {
+    const isCoach = (typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin());
+    const dest = window._clinicalDossierReturnView || (isCoach ? 'coachHubView' : 'profileSettingsView');
+    if (typeof switchPortalView === 'function') {
+        switchPortalView(dest);
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+};
+
+// Cierre centralizado de la Ficha Clínica 360° (Modal)
+window.closeSensClinicalDossier = function() {
+    const modal = document.getElementById('coachAthleteDossierModal');
+    if (modal) {
+        modal.classList.remove('active');
+        modal.style.opacity = '0';
+        modal.style.pointerEvents = 'none';
+        setTimeout(() => {
+            if (!modal.classList.contains('active')) {
+                modal.style.display = 'none';
+            }
+        }, 200);
+    }
+    const coachDock = document.getElementById('sensCoachFloatingDock');
+    if (coachDock && typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin()) {
+        coachDock.style.removeProperty('display');
+    }
+    const athleteDock = document.getElementById('sensFloatingDock');
+    if (athleteDock && (!coachDock || coachDock.style.display === 'none')) {
+        athleteDock.style.removeProperty('display');
+    }
+};
+
+// Alias para compatibilidad con código existente
+window.openCoachAthleteDossier = function(athId) {
+    return window.openSensClinicalDossier(athId, { isCoach: true });
 };
 
 window.initCoachDossierAndCopilots = function() {
@@ -21422,9 +22730,13 @@ window.initCoachDossierAndCopilots = function() {
     const openFromWorkoutBtn = document.getElementById('btnWorkoutOpenReadonlyDossier');
 
     if (closeDossierBtn && dossierModal) {
-        closeDossierBtn.addEventListener('click', () => { dossierModal.style.display = 'none'; });
+        closeDossierBtn.addEventListener('click', () => {
+            window.closeSensClinicalDossier();
+        });
         dossierModal.addEventListener('click', (e) => {
-            if (e.target === dossierModal) dossierModal.style.display = 'none';
+            if (e.target === dossierModal) {
+                window.closeSensClinicalDossier();
+            }
         });
     }
     if (openFromWorkoutBtn) {
@@ -29997,13 +31309,13 @@ window.assignAutomatedStarterPlanClient = function(profileArg, anamnesisArg) {
     const starterModality = isPlanOnline ? 'online' : 'presencial';
 
     const prescribedWorkouts = {
-        day1: { title: 'Día 1: Empuje, Postura & Core', modality: starterModality, exercises: day1Ex, completed: false },
-        day2: { title: 'Recuperación Activa & Pasos NEAT', modality: 'descanso', exercises: [], completed: false },
-        day3: { title: 'Día 2: Tracción & Cadena Posterior Cuidada', modality: starterModality, exercises: day3Ex, completed: false },
-        day4: { title: 'Recuperación Activa & Movilidad', modality: 'descanso', exercises: [], completed: false },
-        day5: { title: 'Día 3: Piernas, Estabilidad & Descompresión', modality: starterModality, exercises: day5Ex, completed: false },
-        day6: { title: 'Actividad Recreativa / Caminata', modality: 'descanso', exercises: [], completed: false },
-        day7: { title: 'Descanso Total', modality: 'descanso', exercises: [], completed: false }
+        day1: { title: 'Lunes', modality: null, exercises: [], completed: false },
+        day2: { title: 'Martes', modality: null, exercises: [], completed: false },
+        day3: { title: 'Miércoles', modality: null, exercises: [], completed: false },
+        day4: { title: 'Jueves', modality: null, exercises: [], completed: false },
+        day5: { title: 'Viernes', modality: null, exercises: [], completed: false },
+        day6: { title: 'Sábado', modality: null, exercises: [], completed: false },
+        day7: { title: 'Domingo', modality: null, exercises: [], completed: false }
     };
 
     const prescribedNutrition = {
@@ -30017,7 +31329,7 @@ window.assignAutomatedStarterPlanClient = function(profileArg, anamnesisArg) {
     };
 
     if (AppState.profile) {
-        AppState.profile.prescribed_workouts = prescribedWorkouts;
+        AppState.profile.prescribed_workouts = null;
         AppState.profile.prescribed_nutrition = prescribedNutrition;
         AppState.profile.daily_calories = targetKcal;
         AppState.profile.daily_calorie_target = targetKcal;
@@ -30026,6 +31338,17 @@ window.assignAutomatedStarterPlanClient = function(profileArg, anamnesisArg) {
         AppState.profile.daily_fats_target_g = fatsG;
         AppState.profile.daily_water_ml = waterMl;
     }
+
+    try {
+        localStorage.removeItem(`sens_prescribed_workouts_${athId}`);
+        localStorage.setItem(`sens_prescribed_nutrition_${athId}`, JSON.stringify(prescribedNutrition));
+        localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
+    } catch (_) {}
+
+    return {
+        prescribed_workouts: null,
+        prescribed_nutrition: prescribedNutrition
+    };
 
     try {
         localStorage.setItem(`sens_prescribed_workouts_${athId}`, JSON.stringify(prescribedWorkouts));

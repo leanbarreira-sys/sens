@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>MAKES SENS. | SENS Train &amp; Wellness con Nico</title>
     <!-- SEO Meta Tags & Generative Engine Optimization (GEO) -->
         <script>
@@ -138,12 +138,12 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=32.0">
+    <link rel="stylesheet" href="style.css?v=34.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '27.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '27.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '36.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '36.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -154,6 +154,19 @@
                             regs.forEach(function (r) { r.update(); });
                         });
                     }
+                }
+                // Purga de seguridad Anti-Account-Leak
+                var u = localStorage.getItem('sens_active_user');
+                var p = localStorage.getItem('sens_active_profile');
+                if (u && p) {
+                    try {
+                        var uObj = JSON.parse(u);
+                        var pObj = JSON.parse(p);
+                        if (uObj.email && pObj.email && uObj.email.trim().toLowerCase() !== pObj.email.trim().toLowerCase()) {
+                            localStorage.removeItem('sens_active_profile');
+                            localStorage.removeItem('sens_active_anamnesis');
+                        }
+                    } catch (_) {}
                 }
             } catch (e) { }
         })();
@@ -1664,18 +1677,18 @@
                                 <div class="input-row-three">
                                     <div class="input-group">
                                         <label class="input-label" for="diagAge">Edad (años)</label>
-                                        <input type="number" id="diagAge" class="input-control" placeholder="Ej: 46"
-                                            min="16" max="99" value="45" required>
+                                        <input type="number" id="diagAge" class="input-control" placeholder="Ej: 35"
+                                            min="16" max="99" required>
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="diagWeight">Peso Actual (kg)</label>
                                         <input type="number" step="0.1" id="diagWeight" class="input-control"
-                                            placeholder="Ej: 78.5" value="78.0" required>
+                                            placeholder="Ej: 74.5" required>
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="diagHeight">Altura (cm)</label>
-                                        <input type="number" id="diagHeight" class="input-control" placeholder="Ej: 176"
-                                            value="175" required>
+                                        <input type="number" id="diagHeight" class="input-control" placeholder="Ej: 175"
+                                            required>
                                     </div>
                                 </div>
 
@@ -3083,24 +3096,23 @@
                     <div class="sens-week-strip-wrap" id="portalWeekStrip">
                         <button type="button" class="sens-week-day-pill" data-day-key="day1"><span
                                 class="sens-day-name">LUN</span><span class="sens-day-hero-num">–</span>
-                            <div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div>
+                            <div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div>
                         </button>
                         <button type="button" class="sens-week-day-pill" data-day-key="day2"><span
                                 class="sens-day-name">MAR</span><span class="sens-day-hero-num">–</span>
-                            <div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div>
+                            <div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div>
                         </button>
                         <button type="button" class="sens-week-day-pill" data-day-key="day3"><span
                                 class="sens-day-name">MIÉ</span><span class="sens-day-hero-num">–</span>
-                            <div class="sens-day-modality-indicator"><span class="sens-day-badge done">✓</span></div>
+                            <div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div>
                         </button>
                         <button type="button" class="sens-week-day-pill" data-day-key="day4"><span
                                 class="sens-day-name">JUE</span><span class="sens-day-hero-num">–</span>
-                            <div class="sens-day-modality-indicator"><span class="sens-day-badge online">Online</span>
-                            </div>
+                            <div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div>
                         </button>
                         <button type="button" class="sens-week-day-pill active is-today" data-day-key="day5"><span
                                 class="sens-day-name">VIE</span><span class="sens-day-hero-num">–</span>
-                            <div class="sens-day-modality-indicator"><span class="sens-day-badge auto">Aut</span></div>
+                            <div class="sens-day-modality-indicator"><span class="sens-day-badge rest">–</span></div>
                         </button>
                         <button type="button" class="sens-week-day-pill" data-day-key="day6"><span
                                 class="sens-day-name">SÁB</span><span class="sens-day-hero-num">–</span>
@@ -3359,26 +3371,25 @@
                         </div>
                         <div class="sens-video-top-badges">
                             <div class="sens-card-badge-row">
-                                <span class="sens-modality-pill" id="dashWorkoutModalityPill">Presencial</span>
+                                <span class="sens-modality-pill" id="dashWorkoutModalityPill" style="display: none;">Plan SENS</span>
                                 <div class="sens-video-dots-indicator" id="dashWorkoutDotsIndicator"></div>
                             </div>
                             <div class="sens-card-badge-row">
                                 <span class="sens-card-streak-pill in-progress" id="dashWorkoutStreakPill"
                                     title="Progreso de racha">
                                     <span class="streak-pill-dot"></span>
-                                    <span class="streak-pill-text">0/0 ejercicios</span>
+                                    <span class="streak-pill-text">Plan en Diseño</span>
                                 </span>
-                                <span class="sens-duration-pill" id="dashWorkoutDurationPill">~340 kcal | ~45 min</span>
+                                <span class="sens-duration-pill" id="dashWorkoutDurationPill" style="display: none;">~45 min</span>
                             </div>
                         </div>
                         <div class="sens-training-card-content">
                             <div class="sens-card-top-info-row">
                                 <div class="sens-card-info-stack">
                                     <span class="sens-card-domain-eyebrow" id="dashWorkoutDayDateLabel" style="display: none !important;">Entrenamiento de Hoy</span>
-                                    <h3 class="sens-card-title-white" id="dashWorkoutFocusTitle">Piernas</h3>
+                                    <h3 class="sens-card-title-white" id="dashWorkoutFocusTitle">Tu Entrenamiento</h3>
                                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                        <p class="sens-card-sub-white" id="dashWorkoutSubFocus" style="margin: 0;">5
-                                            ejercicios | 15 series</p>
+                                        <p class="sens-card-sub-white" id="dashWorkoutSubFocus" style="margin: 0;">Prescripción personalizada por Nico</p>
                                         <button type="button" class="btn-reschedule-home-chip sens-tactile-pill" id="btnDashRescheduleWorkout"
                                             onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))"
                                             title="Reubicar sesión a otra fecha">
@@ -3452,32 +3463,27 @@
                         </div>
                     </div>
 
-                    <!-- Estado B: Día de Descanso (¿Hoy Descansamos? MAKES SENS.) -->
+                    <!-- Estado B: Día de Descanso o En Calibración de Plan -->
                     <div class="sens-training-card-rest" id="dashWorkoutRestPane" style="display: none;">
                         <div class="sens-rest-card-inner">
                             <div
                                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                <div class="sens-rest-badge">Recuperación Activa</div>
-                                <span class="sens-card-streak-pill done" id="dashWorkoutRestStreakPill"
+                                <div class="sens-rest-badge" id="dashWorkoutRestBadge">En Calibración con Nico</div>
+                                <span class="sens-card-streak-pill in-progress" id="dashWorkoutRestStreakPill"
                                     title="Progreso de racha">
-                                    <span class="streak-pill-dot"></span>
-                                    <span class="streak-pill-text">Descanso Activo ✓</span>
+                                    <span class="streak-pill-dot" style="background: #705B3E;"></span>
+                                    <span class="streak-pill-text">Plan en Diseño</span>
                                 </span>
                             </div>
-                            <h3 class="sens-rest-title" style="color: #121214; font-size: 17px; font-weight: 800; margin: 4px 0 6px 0;">¿No pudiste entrenar hoy?</h3>
-                            <p class="sens-rest-desc" style="color: #575659; font-size: 13px; line-height: 1.4; margin-bottom: 12px;">
-                                Día de descanso celular o recuperación. Podés reprogramar tu sesión o realizar estiramientos guiados con Nico.
+                            <h3 class="sens-rest-title" id="dashWorkoutRestTitle" style="color: #121214; font-size: 17px; font-weight: 800; margin: 4px 0 6px 0;">Tu entrenamiento está en diseño</h3>
+                            <p class="sens-rest-desc" id="dashWorkoutRestDesc" style="color: #575659; font-size: 13px; line-height: 1.4; margin-bottom: 12px;">
+                                Nico está calibrando tu prescripción de ejercicios, series, cargas y videos demostrativos según tu diagnóstico inicial. Te avisaremos apenas esté listo.
                             </p>
-                            <div class="sens-rest-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches"
-                                    style="font-size: 12px; border: 1px solid #121214; color: #121214; background: #FFFFFF; font-weight: 700; border-radius: 8px; padding: 7px 14px; cursor: pointer;">
-                                    Ver estiramientos
-                                </button>
-                                <button type="button" class="btn btn-primary btn-sm" id="btnRestBringWorkout"
-                                    onclick="openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))"
-                                    style="font-size: 12px; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px; padding: 7px 14px; border: none; cursor: pointer;">
-                                    Reprogramar sesión
-                                </button>
+                            <div class="sens-rest-actions" id="dashWorkoutRestActions" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Complet%C3%A9%20mi%20diagn%C3%B3stico%20en%20SENS%20y%20aguardo%20mi%20rutina." target="_blank" class="btn btn-primary btn-sm" id="btnRestTalkToNico"
+                                    style="font-size: 12px; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                    Consultar a Nico por WhatsApp →
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -4878,92 +4884,35 @@
                     <p class="view-subtitle" style="color: #575659;">Gestioná tu membresía activa, compará los planes oficiales y actualizá tu ficha biomecánica.</p>
                 </div>
 
-                <!-- Tarjeta Destacada Full-Width: Tu Plan Actual & Escalera de Planes SENS (Light Quiet Luxury Alineado a Inicio/Landing) -->
+                <!-- Tarjeta Destacada: Tu Plan en SENS (100% coordinado 1 a 1 con Nico, sin auto-edición en app) -->
                 <div id="profilePlanLadderHeroCard"
-                    style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 24px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(18, 18, 20, 0.04);">
-                    <div
-                        style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid rgba(18, 18, 20, 0.06); margin-bottom: 18px;">
+                    style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 22px; margin-bottom: 22px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
+                    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 12px;">
                         <div>
                             <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                                <span
-                                    style="font-size: 10px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; color: #705B3E;">TU
-                                    PLAN ACTUAL EN SENS</span>
+                                <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; color: #705B3E;">TU PLAN EN SENS</span>
                                 <span id="profileLadderCurrentStatusPill"
-                                    style="font-size: 10px; font-weight: 800; color: #00210C; background: #9CF6B0; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums;">ACTIVO</span>
+                                    style="font-size: 10px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums;">
+                                    <span class="status-dot status-dot-active" style="display: inline-block; margin-right: 4px;"></span>ACTIVO
+                                </span>
                             </div>
                             <h3 id="profileLadderCurrentTitle"
-                                style="font-size: 1.35rem; font-weight: 800; color: #121214; margin: 0 0 4px 0; letter-spacing: -0.01em;">Seguimiento con Nico</h3>
+                                style="font-size: 1.3rem; font-weight: 800; color: #121214; margin: 0 0 4px 0; letter-spacing: -0.01em;">Seguimiento con Nico</h3>
                             <p id="profileLadderCurrentDesc"
-                                style="font-size: 12.5px; color: #575659; margin: 0; line-height: 1.45;">
-                                Entrenamiento y nutrición personalizada con Nico. App SENS bonificada 100% incluida con tu plan.
+                                style="font-size: 12.5px; color: #575659; margin: 0; line-height: 1.5;">
+                                Tu programación de entrenamiento, calorías y volumen son calibrados y asignados personalmente por Nico. No se modifica desde la app.
                             </p>
                         </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <button type="button" class="btn btn-primary btn-sm"
-                                onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal()"
-                                style="background: #121214 !important; color: #FFFFFF !important; border: none !important; border-radius: 999px; font-weight: 800; padding: 10px 18px; font-size: 12px;">
-                                Ver Modalidades y Planes →
-                            </button>
-                        </div>
                     </div>
-
-                    <div
-                        style="margin-bottom: 12px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #705B3E;">
-                        MODALIDADES Y PRECIOS OFICIALES SENS • ALINEADOS A LA WEB DE INICIO:
-                    </div>
-
-                    <div id="profileFourTiersGrid"
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
-                        <!-- Nivel 1: Seguimiento Presencial CABA (Individual & Grupal) -->
-                        <div class="sens-profile-tier-box" data-tier-box="presencial_1on1"
-                            onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('presencial_1on1')"
-                            style="cursor: pointer; background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; box-shadow: 0 8px 24px rgba(197, 168, 128, 0.12);">
-                            <div>
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                    <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">1. PRESENCIAL CABA</span>
-                                    <span class="tier-box-badge"
-                                        style="font-size: 9.5px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 8px; border-radius: 999px;">Gym Incluido</span>
-                                </div>
-                                <strong style="font-size: 14.5px; color: #121214; display: block; margin-bottom: 6px;">Individual 1:1 o Grupal (2 a 3 personas)</strong>
-                                <div style="background: #F4F3F1; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 11px; font-variant-numeric: tabular-nums; line-height: 1.5;">
-                                    <div style="color: #121214; margin-bottom: 3px;"><strong>• Individual 1 a 1:</strong> 1x $130k | 2x $200k | 3x $260k / mes</div>
-                                    <div style="color: #705B3E;"><strong>• Grupal (2-3 pers):</strong> 1x $100k | 2x $150k | 3x $195k / mes c/u</div>
-                                </div>
-                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Entrenamiento presencial en vivo con Nico en CABA (1x, 2x o 3x/sem) con cuota de gimnasio y App SENS bonificadas 100%.</p>
-                            </div>
-                            <span style="font-size: 11.5px; color: #121214; font-weight: 800; background: #FBDEB9; padding: 7px 12px; border-radius: 999px; text-align: center;">Agendar Evaluación Presencial →</span>
+                    <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                        <div style="font-size: 12px; color: #121214; font-weight: 600;">
+                            ¿Querés consultar tu plan, cambiar de frecuencia o coordinar sesiones?
                         </div>
-
-                        <!-- Nivel 2: Seguimiento Online 1:1 ($40.000 Básico / $90.000 Premium) -->
-                        <div class="sens-profile-tier-box" data-tier-box="online_1on1"
-                            onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal('online_1on1')"
-                            style="cursor: pointer; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
-                            <div>
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                    <span
-                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; letter-spacing: 0.8px;">2. ONLINE 1:1 CON NICO</span>
-                                    <span class="tier-box-badge"
-                                        style="font-size: 9.5px; font-weight: 800; color: #705B3E; background: rgba(251,222,185,0.45); padding: 2px 8px; border-radius: 999px;">A Distancia</span>
-                                </div>
-                                <strong
-                                    style="font-size: 14.5px; color: #121214; display: block; margin-bottom: 6px;">Online Básico o Premium</strong>
-                                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 11px; font-variant-numeric: tabular-nums; line-height: 1.5;">
-                                    <div style="display: flex; justify-content: space-between; color: #705B3E; margin-bottom: 3px;">
-                                        <span>• Online Premium:</span>
-                                        <strong>$90.000 / mes (Videollamadas 60m)</strong>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; color: #121214;">
-                                        <span>• Online Básico:</span>
-                                        <strong>$40.000 / mes</strong>
-                                    </div>
-                                </div>
-                                <p style="font-size: 11.5px; color: #575659; margin: 0; line-height: 1.45;">Rutina a medida por Nico, soporte por WhatsApp, corrección técnica por video, videollamadas y App SENS bonificada 100%.</p>
-                            </div>
-                            <span style="font-size: 11px; color: #705B3E; font-weight: 800; text-align: center;">Postularme a Online 1:1 →</span>
-                        </div>
+                        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS%20para%20hablar%201%20a%201%20sobre%20mi%20plan."
+                            target="_blank" rel="noopener" class="btn btn-primary btn-sm"
+                            style="background: #121214 !important; color: #FFFFFF !important; border: none !important; border-radius: 999px; font-weight: 800; padding: 10px 18px; font-size: 12px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                            Hablar 1 a 1 con Nico para ver tu plan →
+                        </a>
                     </div>
                 </div>
 
@@ -5000,39 +4949,88 @@
                             </div>
                             <div
                                 style="margin-top: 6px; padding-top: 14px; border-top: 1px solid rgba(18,18,20,0.06); display: flex; flex-direction: column; gap: 8px;">
-                                <button type="button" class="btn btn-primary btn-full btn-sm"
-                                    onclick="window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal()"
-                                    style="font-weight: 800; border-radius: 999px;">
-                                    Escalar mi Plan / Ver Beneficios →
-                                </button>
-                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS."
-                                    target="_blank" rel="noopener" class="btn btn-outline btn-full btn-sm"
-                                    style="display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px;">
-                                    Contactar a Nico por WhatsApp
+                                <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS%20para%20hablar%201%20a%201%20sobre%20mi%20plan."
+                                    target="_blank" rel="noopener" class="btn btn-primary btn-full btn-sm"
+                                    style="font-weight: 800; border-radius: 999px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    Hablar 1 a 1 con Nico sobre mi Plan →
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tarjeta 2: Ficha Biomecánica & Diagnóstico -->
-                    <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
+                    <!-- Tarjeta 2: Mis Datos & Ficha Biomecánica -->
+                    <div class="card-panel" id="userBiometricsProfileCard" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
                         <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-                            <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0;">Ficha Biomecánica</h3>
-                            <span class="pill pill-champagne"
-                                style="font-size: 10px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 700;">Auditada por Nico</span>
+                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
+                            <div>
+                                <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0;">Mis Datos &amp; Biometría</h3>
+                                <span style="font-size: 11px; color: #705B3E; font-weight: 600;">Calibrados con Nico</span>
+                            </div>
+                            <button type="button" id="btnSettingsQuickUpdateBio" class="pill pill-champagne"
+                                style="font-size: 10.5px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 800; cursor: pointer; border: none; padding: 6px 14px; border-radius: 999px;">
+                                Modificar Datos ✎
+                            </button>
                         </div>
-                        <p style="font-size: 12.5px; color: #575659; line-height: 1.5; margin-bottom: 16px;">
-                            Tus respuestas de la evaluación inicial calibran tus rutinas, volumen semanal, calorías y cargas asignadas por Nico.
+                        <p style="font-size: 12px; color: #575659; line-height: 1.45; margin-bottom: 14px;">
+                            Datos reales que calibran tus series, cargas de fuerza y balance nutricional diario con Nico.
                         </p>
-                        <div id="settingsDiagTags"
-                            style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
-                            <span class="diag-tag">Cargando ficha...</span>
+
+                        <!-- Grilla de Biometría Clara y Simple -->
+                        <div id="settingsBiometricsGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px;">
+                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Peso Actual</div>
+                                <div id="settingsBioWeight" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— kg</div>
+                            </div>
+                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Altura</div>
+                                <div id="settingsBioHeight" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— cm</div>
+                            </div>
+                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Edad</div>
+                                <div id="settingsBioAge" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— años</div>
+                            </div>
+                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Sexo Biológico</div>
+                                <div id="settingsBioGender" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">—</div>
+                            </div>
                         </div>
-                        <button type="button" class="btn btn-outline btn-full" id="btnSettingsEditDiag"
-                            style="border-color: rgba(112, 91, 62, 0.35); color: #705B3E; font-weight: 700; border-radius: 999px;">
-                            Re-evaluar / Editar Diagnóstico
-                        </button>
+
+                        <!-- Objetivo & Atención Articular -->
+                        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Objetivo Prioritario</div>
+                                <div id="settingsBioGoal" style="font-size: 13px; font-weight: 700; color: #121214; margin-top: 2px;">—</div>
+                            </div>
+                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Atención Articular / Lesiones</div>
+                                <div id="settingsBioInjuries" style="font-size: 12px; color: #575659; margin-top: 2px;">—</div>
+                            </div>
+                        </div>
+
+                        <!-- Contenedor legacy para compatibilidad -->
+                        <div id="settingsDiagTags" style="display: none;"></div>
+
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <button type="button" class="btn btn-outline btn-full" id="btnSettingsViewFullDossier"
+                                onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier(null, { isCoach: false });"
+                                style="background: #121214; color: #FFFFFF; font-weight: 800; border-radius: 999px; border: none; padding: 12px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                </svg>
+                                Ver información cargada (Ficha Completa) →
+                            </button>
+                            <button type="button" class="btn btn-outline btn-full btn-sm" id="btnSettingsQuickUpdateBioBottom"
+                                style="border-color: rgba(18, 18, 20, 0.15); color: #121214; font-weight: 700; border-radius: 999px;">
+                                Modificar Peso y Biometría ✎
+                            </button>
+                            <button type="button" class="btn btn-outline btn-full btn-sm" id="btnSettingsEditDiag"
+                                style="border-color: rgba(112, 91, 62, 0.35); color: #705B3E; font-weight: 700; border-radius: 999px;">
+                                Re-evaluar Diagnóstico Completo (8 Pasos)
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Tarjeta 0: App Oficial SENS (PWA) & Preferencias -->
@@ -5254,6 +5252,14 @@
                                 <div class="param-label">Frecuencia</div>
                                 <div class="param-value" id="roClientFrequency">3 a 4 sesiones / sem</div>
                             </div>
+                        </div>
+                        <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+                            <button type="button" class="btn btn-outline btn-sm" id="btnQuickOpenDossierFromSummary"
+                                onclick="if(event){event.preventDefault();event.stopPropagation();} const curAth=AppState.activeAthleteId||(typeof getActiveAthleteId==='function'?getActiveAthleteId():null); if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier(curAth, { isCoach: true });"
+                                style="font-size: 11px; font-weight: 800; border-color: rgba(112,91,62,0.35); color: #705B3E; background: #FAF9F6; border-radius: 999px; padding: 5px 14px; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;">
+                                <span>Ver Expediente Completo 360°</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -6733,6 +6739,41 @@
                     </div>
                 </div>
             </section>
+
+            <!-- =====================================================================
+                 MÓDULO: FICHA CLÍNICA & BIOMECÁNICA 360° (EXPEDIENTE OFICIAL DEL ALUMNO)
+                 Vista de Página Dedicada para Nico Coach OS y para el Alumno en Perfil
+                 ===================================================================== -->
+            <section class="portal-view" id="clinicalDossierView" style="padding-bottom: calc(120px + env(safe-area-inset-bottom, 24px)); max-width: 900px; margin: 0 auto; padding-left: 16px; padding-right: 16px;">
+                <div class="view-header" style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-outline btn-sm" id="btnReturnFromClinicalDossier"
+                            onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.returnFromClinicalDossier==='function'){window.returnFromClinicalDossier();}else{history.back();}"
+                            style="border-color: rgba(18, 18, 20, 0.15); color: #121214; background: #FFFFFF; font-weight: 700; border-radius: 999px; padding: 7px 16px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 6px rgba(18,18,20,0.04);">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                            <span id="labelReturnFromClinicalDossier">← Volver</span>
+                        </button>
+                        
+                        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                            <span class="pill pill-champagne" id="pageDossierEyebrowPill" style="font-size: 10px; font-weight: 800; background: rgba(251, 222, 185, 0.65); color: #705B3E;">FICHA CLÍNICA 360°</span>
+                            <span class="pill pill-dark" id="pageDossierSubtitlePill" style="font-size: 10px; background: #121214; color: #FFFFFF;">Expediente Declarado</span>
+                        </div>
+                    </div>
+                    
+                    <h2 class="view-title" id="pageDossierAthleteTitle" style="color: #121214; margin-top: 6px; font-size: 1.55rem; font-weight: 800; line-height: 1.25;">Expediente del Alumno</h2>
+                    <p class="view-subtitle" id="pageDossierAthleteMeta" style="color: #575659; margin-top: 4px; font-size: 12.5px;">Cargando ficha clínica y datos biomecánicos...</p>
+                </div>
+
+                <!-- Contenido Completo de la Ficha 360° -->
+                <div id="clinicalDossierPageBody" style="display: flex; flex-direction: column; gap: 16px;">
+                    <!-- Inyectado dinámicamente con alta fidelidad y contraste -->
+                </div>
+
+                <!-- Footer de Acciones de la Ficha de Página -->
+                <div id="clinicalDossierPageFooter" style="margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(18, 18, 20, 0.08); display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                    <!-- Botones según rol inyectados dinámicamente -->
+                </div>
+            </section>
         </div>
     </div>
 
@@ -7966,8 +8007,9 @@
                 aria-label="Cerrar">&times;</button>
         </div>
         <div class="coach-action-sheet-body"
-            style="padding: 10px 18px 30px 18px; display: flex; flex-direction: column; gap: 8px;">
-            <button type="button" class="coach-sheet-action-item" id="sheetActionDossier">
+            style="padding: 10px 18px 120px 18px; display: flex; flex-direction: column; gap: 8px; max-height: 75vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
+            <button type="button" class="coach-sheet-action-item" id="sheetActionDossier"
+                onclick="if(event){event.preventDefault();event.stopPropagation();} const athId=window.currentActionAthleteId; if(typeof window.closeCoachAthleteActionsSheet==='function') window.closeCoachAthleteActionsSheet(); if(typeof window.openSensClinicalDossier==='function'){window.openSensClinicalDossier(athId, { isCoach: true });}">
                 <div class="coach-sheet-action-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -7985,7 +8027,8 @@
                 </svg>
             </button>
 
-            <button type="button" class="coach-sheet-action-item" id="sheetActionWorkouts">
+            <button type="button" class="coach-sheet-action-item" id="sheetActionWorkouts"
+                onclick="if(event){event.preventDefault();event.stopPropagation();} const athId=window.currentActionAthleteId; if(typeof window.closeCoachAthleteActionsSheet==='function') window.closeCoachAthleteActionsSheet(); if(athId && typeof selectAthleteForPrescription==='function') selectAthleteForPrescription('workout', athId);">
                 <div class="coach-sheet-action-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M6 5v14" />
@@ -8004,7 +8047,8 @@
                 </svg>
             </button>
 
-            <button type="button" class="coach-sheet-action-item" id="sheetActionNutrition">
+            <button type="button" class="coach-sheet-action-item" id="sheetActionNutrition"
+                onclick="if(event){event.preventDefault();event.stopPropagation();} const athId=window.currentActionAthleteId; if(typeof window.closeCoachAthleteActionsSheet==='function') window.closeCoachAthleteActionsSheet(); if(athId && typeof selectAthleteForPrescription==='function') selectAthleteForPrescription('nutri', athId);">
                 <div class="coach-sheet-action-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 20V10" />
@@ -8021,7 +8065,8 @@
                 </svg>
             </button>
 
-            <button type="button" class="coach-sheet-action-item" id="sheetActionChangePlan">
+            <button type="button" class="coach-sheet-action-item" id="sheetActionChangePlan"
+                onclick="if(event){event.preventDefault();event.stopPropagation();} const athId=window.currentActionAthleteId; if(typeof window.closeCoachAthleteActionsSheet==='function') window.closeCoachAthleteActionsSheet(); if(athId && typeof openCoachPlanSheet==='function') openCoachPlanSheet(athId);">
                 <div class="coach-sheet-action-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
@@ -8053,8 +8098,9 @@
                 </svg>
             </button>
 
-            <a href="#" target="_blank" rel="noopener" class="coach-sheet-action-item whatsapp"
-                id="sheetActionWhatsApp">
+            <a href="javascript:void(0)" class="coach-sheet-action-item whatsapp"
+                id="sheetActionWhatsApp"
+                onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openCoachCurrentWhatsApp==='function'){window.openCoachCurrentWhatsApp();}else{const b=document.getElementById('sheetActionWhatsApp'); if(b && b.getAttribute('data-href')) window.open(b.getAttribute('data-href'), '_blank');}">
                 <div class="coach-sheet-action-icon wa-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2">
                         <path
@@ -8070,7 +8116,8 @@
                 </svg>
             </a>
 
-            <button type="button" class="coach-sheet-action-item inspect-portal" id="sheetActionInspectPortal">
+            <button type="button" class="coach-sheet-action-item inspect-portal" id="sheetActionInspectPortal"
+                onclick="if(event){event.preventDefault();event.stopPropagation();} const athId=window.currentActionAthleteId; if(typeof window.closeCoachAthleteActionsSheet==='function') window.closeCoachAthleteActionsSheet(); if(athId && typeof inspectAthleteAsCoach==='function') inspectAthleteAsCoach(athId);">
                 <div class="coach-sheet-action-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -8105,7 +8152,7 @@
             <button type="button" class="sheet-close-btn" id="btnClosePlanSheet" aria-label="Cerrar">&times;</button>
         </div>
         <div class="coach-plan-options-container"
-            style="padding: 14px 20px 24px 20px; display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto;">
+            style="padding: 14px 20px 120px 20px; display: flex; flex-direction: column; gap: 8px; max-height: 72vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
             
             <div style="font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #C5A880; margin-top: 4px; margin-bottom: 2px;">
                 PRESENCIAL INDIVIDUAL 1 A 1 (CABA)
@@ -8180,37 +8227,32 @@
     <!-- =========================================================================
          MODAL / SHEET DE FICHA CLÍNICA 360° DEL ALUMNO (100% SOLO LECTURA PARA NICO)
          ========================================================================= -->
-    <div class="modal-overlay" id="coachAthleteDossierModal" style="display: none;">
+    <div class="modal-overlay" id="coachAthleteDossierModal" style="display: none; position: fixed; inset: 0; z-index: 100010; align-items: center; justify-content: center; background: rgba(18, 18, 20, 0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); padding: 16px;">
         <div class="modal-card"
-            style="max-width: 680px; max-height: 88vh; overflow-y: auto; background: #121215; color: #FFFFFF; border: 1px solid rgba(229, 203, 167, 0.25);">
+            style="max-width: 680px; max-height: 88vh; overflow-y: auto; background: #121215; color: #FFFFFF; border: 1px solid rgba(229, 203, 167, 0.25); text-align: left; border-radius: 20px; padding: 24px 22px; width: 100%;">
             <div
                 style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px; margin-bottom: 16px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800;">FICHA CLÍNICA 360°
-                            • SOLO LECTURA</span>
-                        <span class="pill pill-dark" style="font-size: 9.5px;">Datos declarados por el usuario
-                            (Inalterables por Admin)</span>
+                        <span class="pill pill-champagne" id="dossierEyebrowPill" style="font-size: 9.5px; font-weight: 800;">FICHA CLÍNICA &amp; BIOMECÁNICA 360°</span>
+                        <span class="pill pill-dark" id="dossierSubtitlePill" style="font-size: 9.5px;">Expediente Completo del Alumno</span>
                     </div>
                     <h3 id="dossierAthleteNameTitle"
                         style="font-size: 1.4rem; font-weight: 800; color: #FFFFFF; margin-top: 6px;">Alumno SENS</h3>
-                    <p id="dossierAthleteSubMeta" style="font-size: 12px; color: #A1A1AA; margin: 2px 0 0 0;">Ficha del
-                        Alumno • Plan SENS</p>
+                    <p id="dossierAthleteSubMeta" style="font-size: 12px; color: #A1A1AA; margin: 2px 0 0 0;">Ficha del Alumno • Plan SENS</p>
                 </div>
                 <button type="button" class="modal-close-btn" id="btnCloseAthleteDossierModal"
-                    style="position: static; font-size: 24px;">&times;</button>
+                    aria-label="Cerrar Ficha"
+                    style="position: static; font-size: 24px; color: #FAF9F6; background: transparent; border: none; cursor: pointer; line-height: 1; padding: 4px 8px;">&times;</button>
             </div>
 
             <div id="coachAthleteDossierBody" style="display: flex; flex-direction: column; gap: 14px;">
                 <!-- Inyectado dinámicamente con biometría, avances, historia clínica, lesiones, sueño, estrés y adherencia -->
             </div>
 
-            <div
+            <div id="dossierModalFooterActions"
                 style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; flex-wrap: wrap;">
-                <button type="button" class="btn btn-outline btn-sm" id="btnDossierGoNutrition">Prescribir Nutrición
-                    →</button>
-                <button type="button" class="btn btn-primary btn-sm" id="btnDossierGoWorkouts">Prescribir Entrenamiento
-                    &amp; Objetivos →</button>
+                <!-- Botones inyectados dinámicamente según rol (Coach o Alumno) -->
             </div>
         </div>
     </div>
@@ -8434,13 +8476,26 @@
                     style="background: #F4F3F1; border: none; color: #575659; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
             </div>
             <form id="quickBioForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+                    <div>
+                        <label
+                            style="display: block; font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;">Peso (kg)</label>
+                        <input type="number" step="0.1" id="quickInputWeight" class="input-control" placeholder="Ej: 75.8"
+                            required
+                            style="width: 100%; background: #FAF9F6 !important; border: 1px solid rgba(18, 18, 20, 0.1) !important; color: #121214 !important; font-weight: 700; border-radius: 12px; padding: 10px 12px; font-size: 14px;">
+                    </div>
+                    <div>
+                        <label
+                            style="display: block; font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;">Altura (cm)</label>
+                        <input type="number" step="1" id="quickInputHeight" class="input-control" placeholder="Ej: 175"
+                            style="width: 100%; background: #FAF9F6 !important; border: 1px solid rgba(18, 18, 20, 0.1) !important; color: #121214 !important; font-weight: 700; border-radius: 12px; padding: 10px 12px; font-size: 14px;">
+                    </div>
+                </div>
                 <div style="margin-bottom: 14px;">
                     <label
-                        style="display: block; font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;">Peso
-                        de Hoy (kg)</label>
-                    <input type="number" step="0.1" id="quickInputWeight" class="input-control" placeholder="Ej: 75.8"
-                        required
-                        style="width: 100%; background: #FAF9F6 !important; border: 1px solid rgba(18, 18, 20, 0.1) !important; color: #121214 !important; font-weight: 700; border-radius: 12px; padding: 10px 14px; font-size: 14px;">
+                        style="display: block; font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;">Edad (años)</label>
+                    <input type="number" id="quickInputAge" class="input-control" placeholder="Ej: 35"
+                        style="width: 100%; background: #FAF9F6 !important; border: 1px solid rgba(18, 18, 20, 0.1) !important; color: #121214 !important; font-weight: 700; border-radius: 12px; padding: 10px 12px; font-size: 14px;">
                 </div>
                 <div style="margin-bottom: 14px;">
                     <label
@@ -9044,123 +9099,45 @@
          MODAL / BOTTOM SHEET: TU PLAN ACTUAL & ESCALERA DE PLANES SENS (4 NIVELES)
          ========================================================================= -->
     <div id="sensPlansUpgradeModal" class="sens-plans-upgrade-modal-overlay"
-        style="display: none; position: fixed; inset: 0; z-index: 10010; background: rgba(18, 18, 20, 0.65); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); align-items: center; justify-content: center; padding: 16px; overflow-y: auto;"
+        style="display: none; position: fixed; inset: 0; z-index: 10010; background: rgba(18, 18, 20, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); align-items: center; justify-content: center; padding: 16px; overflow-y: auto;"
         onclick="if(event.target===this) window.closeSensPlansUpgradeModal && window.closeSensPlansUpgradeModal();">
         <div class="sens-plans-upgrade-modal-dialog"
-            style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 24px; width: 100%; max-width: 960px; max-height: 92vh; overflow-y: auto; padding: 26px 24px; box-shadow: 0 24px 64px rgba(0,0,0,0.22); color: #121214;">
+            style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 24px; width: 100%; max-width: 520px; padding: 26px 24px; box-shadow: 0 24px 64px rgba(0,0,0,0.22); color: #121214;">
             <!-- Header -->
-            <div
-                style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid rgba(18,18,20,0.06); margin-bottom: 20px;">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid rgba(18,18,20,0.06); margin-bottom: 18px;">
                 <div>
                     <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                        <span
-                            style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #705B3E;">MODALIDADES SENS</span>
-                        <span id="modalCurrentPlanBadge"
-                            style="font-size: 9.5px; font-weight: 800; color: #121214; background: #E5CBA7; padding: 3px 10px; border-radius: 999px; font-variant-numeric: tabular-nums;">Modalidad Oficial SENS</span>
+                        <span style="font-size: 9.5px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #705B3E;">MEMBRESÍA &amp; PROGRAMACIÓN</span>
+                        <span id="modalCurrentPlanBadge" style="font-size: 9.5px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 8px; border-radius: 999px;">
+                            <span class="status-dot status-dot-active" style="display: inline-block; margin-right: 4px;"></span>Activo
+                        </span>
                     </div>
-                    <h3 style="font-size: 1.35rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">Modalidades Oficiales de Entrenamiento SENS</h3>
-                    <p style="font-size: 12px; color: #575659; margin: 0; line-height: 1.45;">
-                        Elegí el seguimiento que mejor se adapte a tus objetivos: Presencial en CABA (Individual o Grupal) u Online 1:1 a distancia con Nico.
-                    </p>
+                    <h3 style="font-size: 1.3rem; font-weight: 800; color: #121214; margin: 0 0 4px 0;">Tu Plan en SENS</h3>
                 </div>
                 <button type="button" onclick="window.closeSensPlansUpgradeModal && window.closeSensPlansUpgradeModal()"
-                    aria-label="Cerrar comparador de planes"
+                    aria-label="Cerrar modal"
                     style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); color: #121214; width: 34px; height: 34px; border-radius: 50%; font-size: 15px; font-weight: 700; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">✕</button>
             </div>
 
-            <!-- Grid de las 2 Modalidades Oficiales -->
-            <div
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
-                <!-- 1. SEGUIMIENTO PRESENCIAL CABA -->
-                <div class="sens-modal-tier-card" data-modal-tier="presencial_1on1"
-                    style="background: #FFFFFF; border: 1.5px solid #C5A880; border-radius: 18px; padding: 20px 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 8px 24px rgba(197, 168, 128, 0.12);">
-                    <div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-size: 9px; font-weight: 800; color: #705B3E; letter-spacing: 0.9px;">1. PRESENCIAL CABA</span>
-                            <span class="modal-tier-status-tag"
-                                style="font-size: 9px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 7px; border-radius: 999px;">Gym Incluido</span>
-                        </div>
-                        <h4 style="font-size: 1.1rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">En Vivo con Nico (Palermo / Belgrano)</h4>
-                        <div
-                            style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-variant-numeric: tabular-nums; font-size: 11px; line-height: 1.5;">
-                            <div style="color: #121214; margin-bottom: 3px;"><strong>• Individual 1 a 1:</strong> 1x $130k | 2x $200k | 3x $260k / mes</div>
-                            <div style="color: #705B3E;"><strong>• Grupal (2-3 pers):</strong> 1x $100k | 2x $150k | 3x $195k / mes c/u</div>
-                        </div>
-                        <ul
-                            style="list-style: none; padding: 0; margin: 0; font-size: 11.5px; color: #575659; display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
-                            <li>✓ App SENS 100% bonificada e incluida</li>
-                            <li>✓ Corrección biomecánica y técnica en vivo</li>
-                            <li>✓ Cuota y acceso de gimnasio / estudio incluidos</li>
-                            <li>✓ Planificación nutricional adaptada</li>
-                        </ul>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <button type="button" id="btnModalScalePresencial1a1"
-                            style="width: 100%; background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 10px 12px; font-size: 11.5px; font-weight: 800; cursor: pointer;">
-                            Agendar Presencial Individual (desde $130k) →
-                        </button>
-                        <button type="button" id="btnModalScalePresencialGrupo"
-                            style="width: 100%; background: transparent; color: #121214; border: 1px solid rgba(18,18,20,0.22); border-radius: 999px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer;">
-                            Consultar Presencial Grupal (desde $100k c/u)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 2. SEGUIMIENTO ONLINE 1 A 1 -->
-                <div class="sens-modal-tier-card" data-modal-tier="online_1on1"
-                    style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 20px 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
-                    <div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-size: 9px; font-weight: 800; color: #705B3E; letter-spacing: 0.9px;">2. SEGUIMIENTO ONLINE</span>
-                            <span class="modal-tier-status-tag"
-                                style="font-size: 9px; font-weight: 800; color: #705B3E; background: #FAF7F2; padding: 2px 7px; border-radius: 999px;">1 a 1 Distancia</span>
-                        </div>
-                        <h4 style="font-size: 1.1rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Plan a Medida con Nico</h4>
-                        <div
-                            style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-variant-numeric: tabular-nums; font-size: 11px; line-height: 1.5;">
-                            <div
-                                style="display: flex; justify-content: space-between; color: #705B3E; margin-bottom: 3px;">
-                                <span>• Online Premium:</span>
-                                <strong>$90.000 / mes (Videollamadas 60m)</strong>
-                            </div>
-                            <div
-                                style="display: flex; justify-content: space-between; color: #121214;">
-                                <span>• Online Básico:</span>
-                                <strong>$40.000 / mes</strong>
-                            </div>
-                        </div>
-                        <ul
-                            style="list-style: none; padding: 0; margin: 0; font-size: 11.5px; color: #575659; display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
-                            <li>✓ App SENS 100% bonificada e incluida</li>
-                            <li>✓ Rutina diseñada a medida por Nico</li>
-                            <li>✓ Soporte WhatsApp y corrección por video</li>
-                            <li>✓ Videollamadas semanales (en Premium)</li>
-                        </ul>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <button type="button" id="btnModalScaleOnlinePremium"
-                            style="width: 100%; background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 10px 12px; font-size: 11.5px; font-weight: 800; cursor: pointer;">
-                            Consultar Online Premium ($90k) →
-                        </button>
-                        <button type="button" id="btnModalScaleOnlineBasic"
-                            style="width: 100%; background: transparent; color: #121214; border: 1px solid rgba(18,18,20,0.22); border-radius: 999px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer;">
-                            Consultar Online Básico ($40k)
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 16px; padding: 18px; margin-bottom: 18px;">
+                <div style="font-size: 11px; text-transform: uppercase; color: #705B3E; font-weight: 800; letter-spacing: 0.8px; margin-bottom: 4px;">Modalidad Asignada</div>
+                <div id="modalPlanTitle" style="font-size: 16px; font-weight: 800; color: #121214; margin-bottom: 8px;">Seguimiento con Nico</div>
+                <p style="font-size: 12.5px; color: #575659; margin: 0; line-height: 1.5;">
+                    En SENS tu plan es 100% personalizado: volumen de fuerza, progresión y hábitos nutricionales son calibrados directamente por Nico. No se modifica automáticamente desde la app.
+                </p>
             </div>
 
-            <!-- Pie de transparencia -->
-            <div
-                style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.06); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: #575659;">
-                <span><strong>Transparencia SENS:</strong> Podés subir o cambiar de modalidad en cualquier momento conservando el 100% de tu historial de entrenamientos, rachas y métricas.</span>
-                <button type="button"
-                    onclick="window.closeSensPlansUpgradeModal && window.closeSensPlansUpgradeModal(); if(typeof switchPortalView==='function') switchPortalView('activationPendingView');"
-                    style="background: transparent; border: none; color: #705B3E; font-weight: 800; font-size: 11.5px; cursor: pointer; text-decoration: underline;">
-                    Validar Pago con Nico →
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a id="btnModalTalkToNico1on1"
+                    href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20la%20App%20SENS%20para%20hablar%201%20a%201%20sobre%20mi%20plan."
+                    target="_blank" rel="noopener" class="btn btn-primary btn-full"
+                    style="background: #121214 !important; color: #FFFFFF !important; font-weight: 800; border-radius: 999px; padding: 12px 18px; text-decoration: none; text-align: center; font-size: 13px;">
+                    Hablar 1 a 1 con Nico para ver tu plan →
+                </a>
+                <button type="button" class="btn btn-outline btn-full btn-sm"
+                    onclick="window.closeSensPlansUpgradeModal && window.closeSensPlansUpgradeModal()"
+                    style="border-color: rgba(18,18,20,0.15); color: #575659; font-weight: 700; border-radius: 999px;">
+                    Cerrar
                 </button>
             </div>
         </div>
@@ -9218,7 +9195,7 @@
 
     <!-- Script Principal de la Aplicación -->
     <script src="marketing_templates_catalog.js?v=4.0"></script>
-    <script src="app.js?v=40.0"></script>
+    <script src="app.js?v=44.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
