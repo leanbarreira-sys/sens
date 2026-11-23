@@ -12068,11 +12068,14 @@ let coachAthletePendingPlanId = null;
 
 function formatPlanName(key) {
     switch (key) {
-        case 'client_presencial_vip': return 'Presencial 1 a 1 (CABA)';
-        case 'client_presencial_group': return 'Presencial Grupal (CABA)';
-        case 'client_online_premium': return 'Online 1:1 Premium (Diario)';
-        case 'client_online_basic': return 'Online 1:1 Básico';
-        default: return 'Presencial 1 a 1 (CABA)';
+        case 'client_presencial_vip':
+        case 'client_presencial_group':
+            return 'Presencial Personalizado';
+        case 'client_online_premium':
+        case 'client_online_basic':
+            return 'Online Básico ($40.000 / mes)';
+        default:
+            return 'Presencial Personalizado';
     }
 }
 
@@ -12317,10 +12320,12 @@ function initCoachAthleteActionSheetListeners() {
             btn.addEventListener('click', async () => {
                 const planKey = btn.getAttribute('data-plan');
                 const planName = btn.getAttribute('data-plan-name');
-                if (coachAthletePendingPlanId && planKey) {
-                    await updateAthletePlanType(coachAthletePendingPlanId, planKey, planName);
+                const targetAthId = coachAthletePendingPlanId;
+                if (targetAthId && planKey) {
                     closeCoachPlanSheet();
-                    renderCoachAthletesHub();
+                    await updateAthletePlanType(targetAthId, planKey, planName);
+                    if (typeof renderCoachAthletesHub === 'function') renderCoachAthletesHub();
+                    if (typeof renderAthleteBottomSheetList === 'function') renderAthleteBottomSheetList();
                 }
             });
         }
@@ -12372,38 +12377,29 @@ async function updateAthleteSubscriptionStatus(athId, newStatus) {
 
 async function updateAthletePlanType(athId, newPlanKey, specificPlanName = null) {
     const planNames = {
-        client_presencial_vip: 'Presencial 1 a 1 (CABA)',
-        client_presencial_group: 'Presencial Grupal (CABA)',
-        client_online_premium: 'Online 1:1 Premium (Seguimiento Diario)',
-        client_online_basic: 'Online 1:1 Básico'
+        client_presencial_vip: 'Presencial Personalizado (1:1 o en Grupo)',
+        client_presencial_group: 'Presencial Personalizado (1:1 o en Grupo)',
+        client_online_premium: 'Online Básico ($40.000 / mes)',
+        client_online_basic: 'Online Básico ($40.000 / mes)'
     };
-    const newPlanName = specificPlanName || planNames[newPlanKey] || 'Presencial 1 a 1 (CABA)';
+    const newPlanName = specificPlanName || planNames[newPlanKey] || 'Presencial Personalizado (1:1 o en Grupo)';
     const newPlanTier = (newPlanKey === 'client_online_premium' || newPlanKey === 'client_online_basic') ? 'online_1on1' : 'presencial_1on1';
+    const badgeText = newPlanTier === 'online_1on1' ? 'Online Básico • $40.000/mes' : 'Presencial CABA • 1:1 o Grupo';
 
-    let badgeText = 'Presencial 1:1';
-    if (newPlanKey === 'client_presencial_group') {
-        badgeText = newPlanName.includes('1x') ? 'Grupal • 4 Sesiones/mes'
-                  : newPlanName.includes('3x') ? 'Grupal • 12 Sesiones/mes'
-                  : 'Grupal • 8 Sesiones/mes';
-    } else if (newPlanKey === 'client_presencial_vip') {
-        badgeText = newPlanName.includes('1x') ? '1:1 VIP • 4 Sesiones/mes'
-                  : newPlanName.includes('3x') ? '1:1 VIP • 12 Sesiones/mes'
-                  : '1:1 VIP • 8 Sesiones/mes';
-    } else if (newPlanKey === 'client_online_premium') {
-        badgeText = 'Online Premium • Videollamadas';
-    } else {
-        badgeText = 'Online Básico • Mensual';
-    }
-
+    let dbUpdateOk = false;
     if (supabaseClient && !athId.startsWith('mock_')) {
         try {
-            await supabaseClient.from('profiles').update({
+            const { error } = await supabaseClient.from('profiles').update({
                 user_type: newPlanKey,
                 active_plan_name: newPlanName,
                 plan_tier: newPlanTier,
-                plan_badge_text: badgeText,
                 subscription_status: 'active'
             }).eq('id', athId);
+            if (error) {
+                console.warn('Error al actualizar plan en Supabase:', error);
+            } else {
+                dbUpdateOk = true;
+            }
         } catch (e) {
             console.warn('Error al actualizar plan en Supabase:', e);
         }
@@ -12417,9 +12413,15 @@ async function updateAthletePlanType(athId, newPlanKey, specificPlanName = null)
             cached.plan_tier = newPlanTier;
             cached.plan_badge_text = badgeText;
             cached.subscription_status = 'active';
+            try {
+                if (typeof SENS_COACH_ATHLETES_CACHE_KEY !== 'undefined') {
+                    localStorage.setItem(SENS_COACH_ATHLETES_CACHE_KEY, JSON.stringify(window.__coachAthletesCache));
+                }
+            } catch (_) {}
         }
     }
-    if (athId.startsWith('mock_')) {
+
+    try {
         const stored = JSON.parse(localStorage.getItem(`sens_athlete_override_${athId}`) || '{}');
         stored.user_type = newPlanKey;
         stored.active_plan_name = newPlanName;
@@ -12427,7 +12429,7 @@ async function updateAthletePlanType(athId, newPlanKey, specificPlanName = null)
         stored.plan_badge_text = badgeText;
         stored.subscription_status = 'active';
         localStorage.setItem(`sens_athlete_override_${athId}`, JSON.stringify(stored));
-    }
+    } catch (_) {}
 
     try {
         const localList = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
@@ -12442,9 +12444,20 @@ async function updateAthletePlanType(athId, newPlanKey, specificPlanName = null)
         }
     } catch (_) {}
 
-    loadCoachAthletesList();
-    renderCoachAthletesHub();
+    if (AppState.profile && AppState.user && AppState.user.id === athId) {
+        AppState.profile.user_type = newPlanKey;
+        AppState.profile.active_plan_name = newPlanName;
+        AppState.profile.plan_tier = newPlanTier;
+        AppState.profile.subscription_status = 'active';
+    }
+
+    if (typeof renderCoachAthletesHub === 'function') renderCoachAthletesHub();
+    if (typeof renderAthleteBottomSheetList === 'function') renderAthleteBottomSheetList();
     showSensToast(`Plan actualizado a: ${newPlanName}`, 'champagne');
+
+    if (dbUpdateOk) {
+        await loadCoachAthletesList(true);
+    }
 }
 
 function selectAthleteForPrescription(type, athId) {
