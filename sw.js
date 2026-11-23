@@ -3,16 +3,11 @@
    Cache-First for Static Assets | Network-First for Navigation | Offline Support
    ============================================================================= */
 
-const CACHE_NAME = 'sens-pwa-v12.0.7';
+const CACHE_NAME = 'sens-pwa-v13.0.0';
 
 const PRECACHE_ASSETS = [
     './',
     './index.html',
-    './style.css',
-    './marketing_templates_catalog.js',
-    './app.js',
-    './nutrition_db.js',
-    './exercises_db.js',
     './manifest.json',
     './img/logo-NEGRO.png',
     './img/logo-blanco.png',
@@ -70,10 +65,10 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // HTML Navigation requests: Network-First with Cache fallback (ensures fresh app shell)
+    // HTML Navigation requests: Network-First bypassing HTTP cache (ensures fresh app shell immediately)
     if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
         event.respondWith(
-            fetch(request)
+            fetch(request, { cache: 'no-store' })
                 .then((networkResponse) => {
                     if (networkResponse && networkResponse.status === 200) {
                         const copy = networkResponse.clone();
@@ -88,10 +83,10 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Static Assets (CSS, JS, Fonts, Images): Network-First for JS/CSS/HTML so updates are always immediate
+    // Static Assets (CSS, JS, HTML): Network-First bypassing HTTP cache so updates are always immediate & atomic
     if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css') || url.pathname.endsWith('.html')) {
         event.respondWith(
-            fetch(request)
+            fetch(request, { cache: 'no-store' })
                 .then((networkResponse) => {
                     if (networkResponse && networkResponse.status === 200) {
                         const copy = networkResponse.clone();
@@ -113,9 +108,8 @@ self.addEventListener('fetch', (event) => {
                     }
                     return networkResponse;
                 })
-                .catch((err) => {
-                    // Fallback silently if offline
-                    return null;
+                .catch(() => {
+                    return cachedResponse || Response.error();
                 });
 
             return cachedResponse || fetchPromise;

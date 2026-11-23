@@ -7241,19 +7241,18 @@ input[type="range"]::-webkit-slider-thumb:hover {
     animation: none;
 }
 
-/* Transiciones Suaves al Scrollear por Secciones (Luxury Fade & Float) */
+/* Transiciones Suaves al Scrollear por Secciones (Sin ocultar contenido con opacity: 0 para evitar espacios en blanco) */
 .sens-reveal {
-    opacity: 0;
-    transform: translateY(26px);
-    filter: blur(4px);
-    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform, filter;
+    opacity: 1;
+    transform: translateY(0);
+    filter: none;
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sens-reveal.is-revealed {
     opacity: 1 !important;
     transform: translateY(0) !important;
-    filter: blur(0) !important;
+    filter: none !important;
 }
 
 /* En Desktop (>= 992px): Legacy Dark Split Mode (Desactivado en Landing Quiet Light Luxury) */
@@ -25283,6 +25282,7 @@ body:not(.in-portal) #pilares .pill-dark {
 }
 
 body:not(.in-portal) #pilares .carousel-slide .ig-post {
+    background: #121214 !important;
     border-radius: 20px !important;
     border: 1px solid rgba(18, 18, 20, 0.1) !important;
     box-shadow: 0 6px 24px -4px rgba(18, 18, 20, 0.08) !important;

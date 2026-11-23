@@ -2406,35 +2406,9 @@ function initLuxuryScrollReveals() {
         '.section-head, .carousel-slide, .method-step, .price-card-landing, .guarantee-card, .faq-item, .transformation-preview-card, .about-coach-card, .card-panel'
     );
     if (!targets.length) return;
-
-    if (!('IntersectionObserver' in window)) {
-        targets.forEach(el => el.classList.add('is-revealed'));
-        return;
-    }
-
-    const windowH = window.innerHeight;
-
-    const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-revealed');
-                obs.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -30px 0px'
-    });
-
     targets.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        // Si el elemento ya está dentro del viewport inicial, NO aplicarle sens-reveal para evitar el flash de ocultamiento y re-aparición
-        if (rect.top < windowH && rect.bottom > 0) {
-            el.classList.add('is-revealed');
-            return;
-        }
-        el.classList.add('sens-reveal');
-        observer.observe(el);
+        el.classList.remove('sens-reveal');
+        el.classList.add('is-revealed');
     });
 }
 
@@ -30802,8 +30776,9 @@ const SensPwaManager = {
     registerServiceWorker() {
         if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js', { scope: './' }).then(reg => { try { reg.update(); } catch(_) {} return reg; })
+                navigator.serviceWorker.register('./sw.js', { scope: './', updateViaCache: 'none' })
                     .then((reg) => {
+                        try { reg.update(); } catch (_) {}
                         console.log('[SENS PWA] Service Worker activo y listo.');
                     })
                     .catch((err) => {
