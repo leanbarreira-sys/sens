@@ -4961,6 +4961,39 @@ function openUserPortal(forceOnboarding = false) {
     window.scrollTo(0, 0);
 }
 
+window.getAthleteDisplayFirstName = function() {
+    const profile = AppState.profile || {};
+    const anamnesis = AppState.anamnesis || {};
+    const meta = (AppState.user && AppState.user.user_metadata) || {};
+
+    const candidates = [
+        profile.first_name,
+        anamnesis.first_name,
+        meta.first_name,
+        profile.full_name,
+        anamnesis.full_name,
+        meta.full_name,
+        profile.name,
+        meta.name
+    ];
+
+    for (let i = 0; i < candidates.length; i++) {
+        const raw = String(candidates[i] || '').trim();
+        if (raw && !raw.includes('@')) {
+            const first = raw.split(/\s+/)[0];
+            if (first) return first.charAt(0).toUpperCase() + first.slice(1);
+        }
+    }
+
+    const email = String(profile.email || (AppState.user && AppState.user.email) || '').trim();
+    if (email && email.includes('@')) {
+        const local = email.split('@')[0].replace(/[._-]+/g, ' ').trim().split(/\s+/)[0];
+        if (local) return local.charAt(0).toUpperCase() + local.slice(1);
+    }
+
+    return 'Atleta';
+};
+
 function renderDashboardData() {
     const userNameEl = document.getElementById('dashUserName');
     const greetingNameEl = document.getElementById('dashGreetingAthleteName');
@@ -4976,12 +5009,9 @@ function renderDashboardData() {
 
     checkUserAccessStatus(profile);
 
-    let rawFullName = (profile.full_name || (AppState.user && AppState.user.user_metadata && AppState.user.user_metadata.full_name) || '').trim();
-    let firstName = 'Atleta';
-    if (rawFullName && !rawFullName.includes('@')) {
-        const rawFirst = rawFullName.trim().split(/\s+/)[0] || 'Atleta';
-        firstName = rawFirst.charAt(0).toUpperCase() + rawFirst.slice(1);
-    }
+    const firstName = window.getAthleteDisplayFirstName();
+    const nutriGreetingEl = document.getElementById('nutriGreetingAthleteName');
+    if (nutriGreetingEl) nutriGreetingEl.textContent = firstName;
 
     if (greetingNameEl) {
         greetingNameEl.textContent = firstName;
@@ -7835,8 +7865,10 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         adminBar.style.display = isAdmin ? 'flex' : 'none';
     }
 
-    // 1. Saludo Personalizado
-    const athleteName = (AppState.profile?.full_name || AppState.profile?.name || AppState.user?.email?.split('@')[0] || 'Atleta').trim().split(' ')[0] || 'Atleta';
+    // 1. Saludo Personalizado (siempre nombre real, nunca email ni hardcode)
+    const athleteName = (typeof window.getAthleteDisplayFirstName === 'function')
+        ? window.getAthleteDisplayFirstName()
+        : 'Atleta';
     if (greetingAthleteName) {
         greetingAthleteName.textContent = athleteName;
     }
@@ -15634,6 +15666,10 @@ window.getFoodUnitInfo = getFoodUnitInfo;
  * con paridad total con Inicio y Entrenamiento
  */
 function renderNutriDaysNav() {
+    const nutriGreetingEl = document.getElementById('nutriGreetingAthleteName');
+    if (nutriGreetingEl && typeof window.getAthleteDisplayFirstName === 'function') {
+        nutriGreetingEl.textContent = window.getAthleteDisplayFirstName();
+    }
     const container = document.getElementById('nutriDaysNav');
     if (!container) return;
 

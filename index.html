@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '66.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '66.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '67.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '67.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -2651,7 +2651,7 @@
                 <!-- 0. Saludo Personalizado de Bienvenida -->
                 <div class="sens-dash-welcome-header" id="sensDashWelcomeHeader" style="margin-top: 0 !important; padding-top: 0 !important; margin-bottom: 6px !important;">
                     <h2 class="sens-dash-welcome-question" style="margin: 0 0 2px 0 !important; color: #121214 !important;">
-                        ¿<span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete">Atleta</span>, entrenamos?
+                        <span id="dashGreetingAthleteName" class="sens-dash-welcome-athlete"></span>, ¿cómo venimos hoy?
                     </h2>
                     <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
                     <span id="dashCircadianDate" style="display: none !important;"></span>
@@ -3575,17 +3575,12 @@
                  ===================================================================== -->
             <section class="portal-view" id="workoutView">
                 <!-- 0. Saludo Personalizado de Bienvenida -->
-                <div class="sens-dash-welcome-header" id="workoutWelcomeHeader" style="margin-bottom: 12px;">
-                    <div style="display: none !important;">
-                        <span class="sens-dash-welcome-slogan">SENS WORKOUT • FASE ACTIVA</span>
-                        <span id="workoutCircadianDate" style="font-size: 11px; font-weight: 500; color: #77767B;"></span>
-                    </div>
-                    <div class="sens-dash-welcome-question" style="margin-bottom: 0;">
-                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete">Lean</span>, ¿entrenamos hoy?
-                    </div>
-                    <p style="display: none !important;">
-                        Fase 2 • Hipertrofia Funcional &amp; Estabilidad
-                    </p>
+                <div class="sens-dash-welcome-header" id="workoutWelcomeHeader" style="margin-top: 0 !important; padding-top: 0 !important; margin-bottom: 10px !important;">
+                    <h2 class="sens-dash-welcome-question" style="margin: 0 0 2px 0 !important; color: #121214 !important;">
+                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete"></span>, ¿entrenamos hoy?
+                    </h2>
+                    <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
+                    <span id="workoutCircadianDate" style="display: none !important;"></span>
                 </div>
 
                 <!-- 1. Cuadro Resumen Ligero de la Sesión y Registro de Asistencia (Ocultado a pedido del usuario) -->
@@ -3930,6 +3925,12 @@
                  ===================================================================== -->
             <!-- Sub-vista 1: Nutrición & Hábitos -->
             <section class="portal-view" id="nutritionView">
+                <div class="sens-dash-welcome-header" id="nutriWelcomeHeader" style="margin-top: 0 !important; padding-top: 0 !important; margin-bottom: 10px !important;">
+                    <h2 class="sens-dash-welcome-question" style="margin: 0 0 2px 0 !important; color: #121214 !important;">
+                        <span id="nutriGreetingAthleteName" class="sens-dash-welcome-athlete"></span>, ¿qué comemos hoy?
+                    </h2>
+                    <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
+                </div>
                 <!-- 1. Navegador de Semanas & Calendario Semanal de Nutrición (Paridad 1:1 con Inicio y Entrenamiento) -->
                 <div class="sens-calendar-sticky-wrapper" id="nutriCalendarStickyWrapper" style="margin-bottom: 16px;">
                     <div class="sens-week-nav-bar">
@@ -8854,7 +8855,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=69.0"></script>
+    <script defer src="app.js?v=70.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
