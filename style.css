@@ -35031,11 +35031,23 @@ body.in-portal #coachHubView .coach-payment-card-lux {
     font-weight: 700 !important;
 }
 
+body.in-portal #coachDeleteAthleteModalSheet .coach-del-eyebrow,
 .coach-del-eyebrow {
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 0.7px;
-    color: #DC2626;
+    color: #B91C1C !important;
+    -webkit-text-fill-color: #B91C1C !important;
+}
+
+body.in-portal #coachDeleteAthleteModalSheet #coachDelTitle {
+    color: #121214 !important;
+    -webkit-text-fill-color: #121214 !important;
+}
+
+body.in-portal #coachDeleteAthleteModalSheet #coachDelAthleteSub {
+    color: #575659 !important;
+    -webkit-text-fill-color: #575659 !important;
 }
 
 .coach-del-body {
@@ -35044,23 +35056,41 @@ body.in-portal #coachHubView .coach-payment-card-lux {
     gap: 14px;
 }
 
+body.in-portal #coachDeleteAthleteModalSheet .coach-del-warn,
 .coach-del-warn {
     margin: 0;
     font-size: 13px;
     line-height: 1.5;
-    color: #3F3F46;
-    background: rgba(239, 68, 68, 0.06);
-    border: 1px solid rgba(239, 68, 68, 0.18);
+    color: #1F2937 !important;
+    -webkit-text-fill-color: #1F2937 !important;
+    background: #FEF2F2 !important;
+    border: 1px solid rgba(185, 28, 28, 0.24) !important;
     border-radius: 12px;
     padding: 12px 14px;
 }
 
+body.in-portal #coachDeleteAthleteModalSheet .coach-del-warn strong,
+.coach-del-warn strong {
+    color: #7F1D1D !important;
+    -webkit-text-fill-color: #7F1D1D !important;
+}
+
+body.in-portal #coachDeleteAthleteModalSheet .coach-del-warn code,
 .coach-del-warn code {
-    background: #FFFFFF;
-    color: #B91C1C;
+    background: #FFFFFF !important;
+    color: #991B1B !important;
+    -webkit-text-fill-color: #991B1B !important;
+    border: 1px solid rgba(185, 28, 28, 0.2) !important;
     padding: 1px 6px;
     border-radius: 6px;
     font-weight: 800;
+}
+
+body.in-portal #coachDeleteAthleteModalSheet #coachDelConfirmInput {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    -webkit-text-fill-color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.22) !important;
 }
 
 .coach-del-actions {
@@ -35069,12 +35099,20 @@ body.in-portal #coachHubView .coach-payment-card-lux {
     gap: 8px;
 }
 
+body.in-portal #coachDeleteAthleteModalSheet .btn-coach-evo-secondary {
+    background: #F4F3F0 !important;
+    color: #121214 !important;
+    -webkit-text-fill-color: #121214 !important;
+}
+
+body.in-portal #coachDeleteAthleteModalSheet .btn-coach-del-step,
+body.in-portal #coachDeleteAthleteModalSheet .btn-coach-del-final,
 .btn-coach-del-step,
 .btn-coach-del-final {
     padding: 12px 14px;
     border-radius: 12px;
     border: none;
-    background: #DC2626 !important;
+    background: #B91C1C !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
     font-size: 13px;
