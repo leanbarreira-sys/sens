@@ -31763,6 +31763,7 @@ body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary,
 #sensExerciseModalSheet .sens-btn-timer-primary {
     background: #121214 !important;
     color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
     border: none !important;
     font-weight: 800 !important;
     font-size: 13px !important;
@@ -31780,6 +31781,7 @@ body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary.btn-master-finali
 #sensExerciseModalSheet .sens-btn-timer-primary.btn-master-finalizar-set {
     background: #059669 !important;
     color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
 }
 
 body.in-portal #sensExerciseModalSheet .sens-btn-timer-secondary,
@@ -32499,16 +32501,17 @@ body.in-portal .legend-dot.dot-pending,
     background: #D4D4D8 !important;
 }
 
-/* Grid de 7 Barras Semanales */
+/* Grid de 7 Barras Semanales (Quiet Luxury: sin solapamiento en mobile) */
 body.in-portal .sens-cals-bars-grid,
 .sens-cals-bars-grid {
     display: grid !important;
     grid-template-columns: repeat(7, 1fr) !important;
     gap: 6px !important;
     align-items: end !important;
-    height: 140px !important;
-    margin-bottom: 16px !important;
-    padding-top: 24px !important;
+    height: auto !important;
+    min-height: 136px !important;
+    margin-bottom: 2px !important;
+    padding-top: 8px !important;
 }
 
 body.in-portal .sens-cals-bar-col,
@@ -32601,12 +32604,43 @@ body.in-portal .sens-cals-day-badge.badge-pending,
     color: #71717A !important;
 }
 
+body.in-portal .sens-cals-day-dot,
+.sens-cals-day-dot {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    margin-top: 7px !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+}
+
+body.in-portal .sens-cals-day-dot.badge-good,
+.sens-cals-day-dot.badge-good {
+    background: #10B981 !important;
+}
+
+body.in-portal .sens-cals-day-dot.badge-bad,
+.sens-cals-day-dot.badge-bad {
+    background: #F59E0B !important;
+}
+
+body.in-portal .sens-cals-day-dot.badge-missed,
+.sens-cals-day-dot.badge-missed {
+    background: #FCA5A5 !important;
+}
+
+body.in-portal .sens-cals-day-dot.badge-pending,
+.sens-cals-day-dot.badge-pending {
+    background: #D4D4D8 !important;
+}
+
 body.in-portal .sens-cals-day-label,
 .sens-cals-day-label {
     font-size: 10px !important;
     font-weight: 800 !important;
     color: #77767B !important;
-    margin-top: 3px !important;
+    margin-top: 4px !important;
+    line-height: 1 !important;
 }
 
 body.in-portal .sens-cals-summary-strip,

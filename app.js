@@ -32249,8 +32249,8 @@ window.renderTrackingCalsBars = function() {
             barFillPct = 12;
         } else if (dayKcal === 0) {
             statusClass = 'status-missed';
-            badgeClass = 'badge-bad';
-            badgeText = '✕ Sin reg.';
+            badgeClass = 'badge-missed';
+            badgeText = 'Sin registrar';
             barFillPct = 10;
         } else {
             daysWithRecords++;
@@ -32277,7 +32277,7 @@ window.renderTrackingCalsBars = function() {
                 <div class="sens-cals-bar-track">
                     <div class="sens-cals-bar-fill ${statusClass}" style="height: ${barFillPct}%;"></div>
                 </div>
-                <span class="sens-cals-day-badge ${badgeClass}">${badgeText}</span>
+                <span class="sens-cals-day-dot ${badgeClass}" aria-label="${badgeText}"></span>
                 <span class="sens-cals-day-label" style="${isToday ? 'color: #121214; font-weight: 900;' : ''}">${dayNames[i]}</span>
             </div>
         `);
@@ -32285,13 +32285,9 @@ window.renderTrackingCalsBars = function() {
 
     grid.innerHTML = barsHtml.join('');
 
-    if (copyEl) {
-        if (daysWithRecords === 0) {
-            copyEl.textContent = 'Registrá tus comidas de la semana para evaluar tus días en objetivo vs. desvíos.';
-        } else {
-            const pctAdherence = Math.round((goodDaysCount / Math.max(1, daysWithRecords)) * 100);
-            copyEl.textContent = `${goodDaysCount} de ${daysWithRecords} días evaluados en objetivo (${pctAdherence}% adherencia calórica).`;
-        }
+    if (goalLabel && daysWithRecords > 0) {
+        const pctAdherence = Math.round((goodDaysCount / Math.max(1, daysWithRecords)) * 100);
+        goalLabel.textContent = `Meta diaria: ${targetKcal.toLocaleString('es-AR')} kcal • ${pctAdherence}% adherencia`;
     }
 };
 
