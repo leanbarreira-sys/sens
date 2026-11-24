@@ -29616,22 +29616,27 @@ const CoachWorkoutsMaster = {
                         <span class="wrow-title">${ex.name}</span>
                     </div>
                     <div class="wcol-param">
+                        <span class="wcol-mobile-lbl">Sets</span>
                         <input type="number" min="1" max="20" value="${ex.sets || 3}" class="wizard-row-compact-input row-inp-sets" data-idx="${idx}" title="Series">
                     </div>
                     <div class="wcol-param">
+                        <span class="wcol-mobile-lbl">Reps</span>
                         <input type="text" value="${ex.reps || '10-12'}" class="wizard-row-compact-input row-inp-reps" data-idx="${idx}" title="Repeticiones">
                     </div>
                     <div class="wcol-param">
+                        <span class="wcol-mobile-lbl">Kg</span>
                         <input type="number" step="0.5" value="${ex.defaultWeight !== undefined ? ex.defaultWeight : 20}" class="wizard-row-compact-input row-inp-weight" data-idx="${idx}" title="Peso (kg)">
                     </div>
                     <div class="wcol-param">
+                        <span class="wcol-mobile-lbl">RIR</span>
                         <input type="number" min="0" max="10" step="0.5" value="${ex.rir !== undefined ? ex.rir : 2}" class="wizard-row-compact-input row-inp-rir" data-idx="${idx}" title="RIR / RPE">
                     </div>
                     <div class="wcol-param">
+                        <span class="wcol-mobile-lbl">Desc</span>
                         <input type="number" step="15" value="${ex.rest || 75}" class="wizard-row-compact-input row-inp-rest" data-idx="${idx}" title="Descanso (s)">
                     </div>
                     <div class="wcol-notes">
-                        <input type="text" placeholder="Indicaciones ad-hoc..." value="${ex.notes || ''}" class="wizard-row-compact-notes row-inp-notes" data-idx="${idx}" title="Notas biomecánicas o indicaciones ad-hoc">
+                        <input type="text" placeholder="Notas técnicas (opcional)..." value="${ex.notes || ''}" class="wizard-row-compact-notes row-inp-notes" data-idx="${idx}" title="Notas biomecánicas o indicaciones ad-hoc">
                     </div>
                     <div class="wcol-act">
                         <button type="button" class="btn-remove-row-ex" data-idx="${idx}" title="Remover de la sesión">
