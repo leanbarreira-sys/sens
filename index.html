@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '78.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '78.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '79.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '79.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3749,12 +3749,12 @@
                         <div class="sens-master-timer-digits" id="masterTimerDisplay">00:00</div>
                         <div class="sens-master-timer-actions">
                             <button type="button" class="btn btn-primary sens-btn-timer-primary"
-                                id="btnMasterTimerPrimary">
+                                id="btnMasterTimerPrimary" title="Inicia el cronómetro para medir la duración de tu serie">
                                 Iniciar Serie
                             </button>
                             <button type="button" class="btn btn-outline sens-btn-timer-secondary"
-                                id="btnMasterFinishSetAndRest" title="Finaliza la serie actual e inicia el descanso">
-                                Finalizar Serie &amp; Descansar
+                                id="btnMasterFinishSetAndRest" title="Marca el próximo set como completado e inicia el descanso sin usar cronómetro">
+                                Completar Set &amp; Descansar
                             </button>
                         </div>
                         <div class="sens-master-timer-rest-adjustments" id="masterTimerRestControls"
@@ -9037,7 +9037,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=76.0"></script>
+    <script defer src="app.js?v=77.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

@@ -9407,6 +9407,7 @@ function updateMasterTimerUI() {
     const modeBadge = document.getElementById('masterTimerModeBadge');
     const modeLabel = document.getElementById('masterTimerModeLabel');
     const primaryBtn = document.getElementById('btnMasterTimerPrimary');
+    const finishAndRestBtn = document.getElementById('btnMasterFinishSetAndRest');
     const restControls = document.getElementById('masterTimerRestControls');
     const targetSub = document.getElementById('masterTimerTargetSub');
 
@@ -9426,9 +9427,10 @@ function updateMasterTimerUI() {
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-set';
         if (modeLabel) modeLabel.textContent = 'SERIE EN CURSO';
         if (primaryBtn) {
-            primaryBtn.textContent = 'Finalizar Serie ✓';
+            primaryBtn.textContent = 'Finalizar Serie & Descansar ✓';
             primaryBtn.classList.add('btn-master-finalizar-set');
         }
+        if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
         if (restControls) restControls.style.display = 'none';
 
     } else if (masterTimerState.mode === 'in_rest') {
@@ -9443,9 +9445,10 @@ function updateMasterTimerUI() {
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-rest';
         if (modeLabel) modeLabel.textContent = 'DESCANSO ACTIVO';
         if (primaryBtn) {
-            primaryBtn.textContent = 'Iniciar Nueva Serie →';
+            primaryBtn.textContent = 'Iniciar Siguiente Serie →';
             primaryBtn.classList.remove('btn-master-finalizar-set');
         }
+        if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
         if (restControls) restControls.style.display = 'flex';
 
     } else {
@@ -9458,6 +9461,10 @@ function updateMasterTimerUI() {
         if (primaryBtn) {
             primaryBtn.textContent = 'Iniciar Serie';
             primaryBtn.classList.remove('btn-master-finalizar-set');
+        }
+        if (finishAndRestBtn) {
+            finishAndRestBtn.textContent = 'Completar Set & Descansar';
+            finishAndRestBtn.style.display = '';
         }
         if (restControls) restControls.style.display = 'none';
     }
