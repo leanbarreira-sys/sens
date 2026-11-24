@@ -34555,3 +34555,111 @@ body.in-portal #btnSaveCoachPayment *,
         grid-template-columns: 1fr;
     }
 }
+
+/* =============================================================================
+   COACH OS: CENTRO DE MANDO SIMPLIFICADO & FILTROS QUIET LUXURY
+   ============================================================================= */
+.coach-stats-grid-simple {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+}
+
+.coach-stats-grid-simple .coach-stat-card {
+    padding: 14px 16px !important;
+    border-radius: 16px !important;
+}
+
+.coach-stats-grid-simple .coach-stat-label {
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    color: #575659 !important;
+}
+
+.coach-stats-grid-simple .coach-stat-val {
+    font-size: 1.55rem !important;
+    font-weight: 700 !important;
+    margin-top: 4px !important;
+}
+
+.coach-clean-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 0;
+    scrollbar-width: none;
+}
+
+.coach-clean-filter-row::-webkit-scrollbar {
+    display: none;
+}
+
+.coach-clean-filter-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #8A8884;
+    flex-shrink: 0;
+    margin-right: 2px;
+}
+
+body.in-portal .coach-clean-chip,
+.coach-clean-chip {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(18, 18, 20, 0.1);
+    background: #FAF9F6 !important;
+    color: #575659 !important;
+    -webkit-text-fill-color: #575659 !important;
+    font-size: 12px;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+body.in-portal .coach-clean-chip.active,
+.coach-clean-chip.active {
+    background: #F6EFE4 !important;
+    border-color: rgba(112, 91, 62, 0.38) !important;
+    color: #121214 !important;
+    -webkit-text-fill-color: #121214 !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal #coachHubView .coach-athlete-card-clean {
+    padding: 14px 15px !important;
+    border-radius: 18px !important;
+    gap: 12px !important;
+}
+
+body.in-portal #coachHubView .coach-athlete-card-clean .coach-ath-name {
+    font-weight: 600 !important;
+    font-size: 14.5px !important;
+}
+
+.coach-ath-sub-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #71717A;
+    margin-top: 2px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.coach-ath-sub-line > span:first-child {
+    color: #705B3E;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.coach-ath-sub-line .coach-ath-email {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

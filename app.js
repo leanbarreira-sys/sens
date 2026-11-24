@@ -12169,7 +12169,7 @@ function initCoachAthletesHub() {
     if (searchInput) {
         searchInput.addEventListener('input', () => {
             const term = searchInput.value.trim().toLowerCase();
-            const activeFilter = document.querySelector('.coach-filter-status.pill-champagne')?.getAttribute('data-status') || 'all';
+            const activeFilter = document.querySelector('.coach-filter-status.active, .coach-filter-status.pill-champagne')?.getAttribute('data-status') || 'all';
             renderCoachAthletesHub(activeFilter, term);
         });
     }
@@ -12177,11 +12177,11 @@ function initCoachAthletesHub() {
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => {
-                b.classList.remove('pill-champagne');
-                b.classList.add('pill-dark');
+                b.classList.remove('active', 'pill-champagne');
+                if (b.classList.contains('pill')) b.classList.add('pill-dark');
             });
             btn.classList.remove('pill-dark');
-            btn.classList.add('pill-champagne');
+            btn.classList.add('active');
             const status = btn.getAttribute('data-status') || 'all';
             const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
             renderCoachAthletesHub(status, term);
@@ -12191,13 +12191,13 @@ function initCoachAthletesHub() {
     tierBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             tierBtns.forEach(b => {
-                b.classList.remove('pill-champagne');
-                b.classList.add('pill-dark');
+                b.classList.remove('active', 'pill-champagne');
+                if (b.classList.contains('pill')) b.classList.add('pill-dark');
             });
             btn.classList.remove('pill-dark');
-            btn.classList.add('pill-champagne');
+            btn.classList.add('active');
             coachAthletesTierFilter = btn.getAttribute('data-tier') || 'all';
-            const activeStatus = document.querySelector('.coach-filter-status.pill-champagne')?.getAttribute('data-status') || 'all';
+            const activeStatus = document.querySelector('.coach-filter-status.active, .coach-filter-status.pill-champagne')?.getAttribute('data-status') || 'all';
             const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
             renderCoachAthletesHub(activeStatus, term);
         });
@@ -12338,8 +12338,10 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
         const bioAge = ath.age ? `${ath.age} a` : '—';
         const bioGender = (ath.gender === 'male') ? 'M' : (ath.gender === 'female') ? 'F' : (ath.gender ? String(ath.gender).slice(0, 3) : '—');
 
+        const planLabel = isGroup ? 'Grupal' : isOnline ? 'Online' : 'Presencial 1:1';
+
         html += `
-            <div class="coach-athlete-card ${isPend ? 'is-pending' : ''}" data-athlete-id="${safeAthId}">
+            <div class="coach-athlete-card coach-athlete-card-clean ${isPend ? 'is-pending' : ''}" data-athlete-id="${safeAthId}">
                 <div class="coach-ath-card-head btn-open-athlete-actions-sheet" data-athlete-id="${safeAthId}" style="cursor: pointer;">
                     <div class="coach-ath-avatar-circle">${escapeHTML(initials)}</div>
                     <div class="coach-ath-primary-info">
@@ -12347,44 +12349,29 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
                             <span class="coach-ath-name">${escapeHTML(ath.full_name)}</span>
                             ${statusBadgeHtml}
                         </div>
-                        <div class="coach-ath-sub-row">
-                            ${planBadgeHtml}
+                        <div class="coach-ath-sub-line">
+                            <span>${planLabel}</span>
+                            <span aria-hidden="true">•</span>
                             <span class="coach-ath-email">${escapeHTML(ath.email)}</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="coach-ath-bio-grid btn-hub-open-dossier" data-athlete-id="${safeAthId}" onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier('${safeAthId}', { isCoach: true });" style="cursor: pointer;" title="Abrir Ficha Biomecánica">
-                    <div class="coach-ath-bio-item"><span class="coach-ath-bio-label">Peso</span><span class="coach-ath-bio-val">${bioWeight}</span></div>
-                    <div class="coach-ath-bio-item"><span class="coach-ath-bio-label">Altura</span><span class="coach-ath-bio-val">${bioHeight}</span></div>
-                    <div class="coach-ath-bio-item"><span class="coach-ath-bio-label">Edad</span><span class="coach-ath-bio-val">${bioAge}</span></div>
-                    <div class="coach-ath-bio-item"><span class="coach-ath-bio-label">Sexo</span><span class="coach-ath-bio-val">${bioGender}</span></div>
-                </div>
-
-                <div class="coach-ath-goal-chip btn-open-athlete-actions-sheet" data-athlete-id="${safeAthId}" style="cursor: pointer;">
-                    <span class="coach-ath-goal-label">Meta:</span>
-                    <span class="coach-ath-goal-text">${goalText}</span>
-                </div>
-
                 <div class="coach-ath-action-row">
                     ${isPend ? `
                         <button type="button" class="btn-coach-action-primary btn-hub-toggle-status" data-athlete-id="${safeAthId}" data-current-status="pending_activation">
-                            Aprobar Acceso ✓
+                            Aprobar ✓
                         </button>
                     ` : `
                         <button type="button" class="btn-coach-action-manage btn-open-athlete-actions-sheet" data-athlete-id="${safeAthId}">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                             <span>Gestionar</span>
-                            <svg width="8" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                     `}
                     <button type="button" class="btn-coach-action-dossier btn-hub-open-dossier" data-athlete-id="${safeAthId}" onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier('${safeAthId}', { isCoach: true });">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                        <span>Ficha 360°</span>
+                        <span>Ficha</span>
                     </button>
                     <button type="button" class="btn-coach-action-portal btn-hub-inspect-student" data-athlete-id="${safeAthId}">
-                        <span>Ver Portal</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        <span>Portal →</span>
                     </button>
                 </div>
             </div>

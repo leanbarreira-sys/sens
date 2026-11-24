@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=57.0">
+    <link rel="stylesheet" href="style.css?v=58.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '70.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '70.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '71.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '71.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4688,16 +4688,6 @@
                  ===================================================================== -->
             <section class="portal-view subtab-paneAthletes" id="coachHubView">
                 <div class="coach-hub-header">
-                    <div class="coach-hub-badge-row">
-                        <span class="pill pill-champagne"
-                            style="font-size: 9px; font-weight: 800; letter-spacing: 0.5px;">COACH OS</span>
-                        <span class="pill" id="coachPendingCountBadge"
-                            style="font-size: 9px; font-weight: 700; color: #D97706; background: rgba(245, 158, 11, 0.12); border: none;">0
-                            Pendientes</span>
-                        <span class="pill" id="coachActiveCountBadge"
-                            style="font-size: 9px; font-weight: 700; color: #059669; background: rgba(16, 185, 129, 0.12); border: none;">0
-                            Activos</span>
-                    </div>
                     <div class="coach-hub-title-row">
                         <h2 class="coach-hub-title">Centro de Mando <span class="text-champagne">Nico</span></h2>
                         <button type="button" class="btn-coach-refresh-circle" id="btnCoachHubRefreshTable"
@@ -4826,30 +4816,17 @@
                      ESTACIÓN 1: GESTIÓN DE ALUMNOS, ACCESOS & MODELO DE NEGOCIO
                      ================================================================= -->
                 <div class="coach-subpane active" id="paneAthletes">
-                    <!-- Stat Bar Mobile 2x2 -->
-                    <div class="coach-stats-grid">
+                    <!-- Resumen Ejecutivo Simple: 2 Cards -->
+                    <div class="coach-stats-grid coach-stats-grid-simple">
                         <div class="coach-stat-card">
-                            <span class="coach-stat-label">Total Usuarios</span>
-                            <div class="coach-stat-val" id="kpiCoachTotalAthletes">0</div>
-                            <span class="coach-stat-sub">En base de datos SENS</span>
+                            <span class="coach-stat-label"><span class="status-dot status-dot-active"
+                                    style="display:inline-block; margin-right:6px;"></span>Membresías activas</span>
+                            <div class="coach-stat-val text-success" id="kpiCoachActiveAthletes">0</div>
                         </div>
                         <div class="coach-stat-card highlight-pending">
                             <span class="coach-stat-label"><span class="status-dot status-dot-pending"
-                                    style="display:inline-block; margin-right:6px;"></span>Pendientes</span>
+                                    style="display:inline-block; margin-right:6px;"></span>Membresías pendientes</span>
                             <div class="coach-stat-val text-warning" id="kpiCoachPendingAthletes">0</div>
-                            <span class="coach-stat-sub">Requieren activación</span>
-                        </div>
-                        <div class="coach-stat-card">
-                            <span class="coach-stat-label"><span class="status-dot status-dot-active"
-                                    style="display:inline-block; margin-right:6px;"></span>Membresías</span>
-                            <div class="coach-stat-val text-success" id="kpiCoachActiveAthletes">0</div>
-                            <span class="coach-stat-sub" id="kpiCoachMrrEstimate">Activas con acceso</span>
-                        </div>
-                        <div class="coach-stat-card">
-                            <span class="coach-stat-label">Mix Alumnos</span>
-                            <div class="coach-stat-val" id="kpiCoachPresencialVsOnline" style="font-size: 1.15rem;">0 /
-                                0</div>
-                            <span class="coach-stat-sub">Presencial vs. Digital</span>
                         </div>
                     </div>
 
@@ -4916,43 +4893,21 @@
                             </div>
 
                             <!-- Filtro 1: Por Estado de Acceso -->
-                            <div class="coach-horizontal-pills"
-                                style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; align-items: center;">
-                                <span
-                                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800; flex-shrink: 0;">Estado:</span>
-                                <button type="button" class="pill pill-champagne coach-filter-status" data-status="all"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;">Todos</button>
-                                <button type="button" class="pill pill-dark coach-filter-status"
-                                    data-status="pending_activation"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;"><span
-                                        class="status-dot status-dot-pending"
-                                        style="display:inline-block; margin-right:5px;"></span>Pendientes</button>
-                                <button type="button" class="pill pill-dark coach-filter-status" data-status="active"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;"><span
-                                        class="status-dot status-dot-active"
-                                        style="display:inline-block; margin-right:5px;"></span>Activos</button>
-                                <button type="button" class="pill pill-dark coach-filter-status" data-status="paused"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;"><span
-                                        class="status-dot status-dot-paused"
-                                        style="display:inline-block; margin-right:5px;"></span>Pausados /
-                                    Vencidos</button>
+                            <div class="coach-clean-filter-row">
+                                <span class="coach-clean-filter-label">Estado</span>
+                                <button type="button" class="coach-clean-chip coach-filter-status active" data-status="all">Todos</button>
+                                <button type="button" class="coach-clean-chip coach-filter-status" data-status="pending_activation">Pendientes</button>
+                                <button type="button" class="coach-clean-chip coach-filter-status" data-status="active">Activos</button>
+                                <button type="button" class="coach-clean-chip coach-filter-status" data-status="paused">Pausados</button>
                             </div>
 
-                            <!-- Filtro 2: Por Nivel de Negocio -->
-                            <div class="coach-horizontal-pills" id="coachFilterTierBar"
-                                style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; align-items: center;">
-                                <span
-                                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800; flex-shrink: 0;">Plan:</span>
-                                <button type="button" class="pill pill-champagne coach-filter-tier" data-tier="all"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;">Todos los Planes</button>
-                                <button type="button" class="pill pill-dark coach-filter-tier"
-                                    data-tier="presencial_ind"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;">Presencial 1:1</button>
-                                <button type="button" class="pill pill-dark coach-filter-tier"
-                                    data-tier="presencial_grp"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;">Presencial Grupal</button>
-                                <button type="button" class="pill pill-dark coach-filter-tier" data-tier="online"
-                                    style="cursor: pointer; border: none; flex-shrink: 0;">Online 1:1</button>
+                            <!-- Filtro 2: Por Modalidad -->
+                            <div class="coach-clean-filter-row" id="coachFilterTierBar">
+                                <span class="coach-clean-filter-label">Plan</span>
+                                <button type="button" class="coach-clean-chip coach-filter-tier active" data-tier="all">Todos</button>
+                                <button type="button" class="coach-clean-chip coach-filter-tier" data-tier="presencial_ind">Presencial 1:1</button>
+                                <button type="button" class="coach-clean-chip coach-filter-tier" data-tier="presencial_grp">Grupal</button>
+                                <button type="button" class="coach-clean-chip coach-filter-tier" data-tier="online">Online</button>
                             </div>
                         </div>
 
@@ -8989,7 +8944,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=71.0"></script>
+    <script defer src="app.js?v=72.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
