@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=65.0">
+    <link rel="stylesheet" href="style.css?v=66.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '80.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '80.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '81.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '81.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -5263,32 +5263,26 @@
                     <div class="coach-surface-card-light">
 
                         <!-- ENCABEZADO Y SELECTOR TOGGLE DE VISIÓN -->
-                        <!-- ENCABEZADO Y SELECTOR TOGGLE DE VISIÓN -->
-                        <div style="margin-bottom: 16px;">
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                        <div class="coach-workouts-header-wrap">
+                            <div class="coach-workouts-header-top">
                                 <div>
-                                    <span class="pill pill-champagne"
-                                        style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;">PRESCRIPCIÓN
-                                        DETERMINISTA &amp; PERIODIZACIÓN</span>
-                                    <h3
-                                        style="font-size: 1.25rem; font-weight: 800; margin: 4px 0 0 0; color: #121214;">
-                                        Planificador de Rutinas
-                                    </h3>
-                                    <p style="font-size: 11.5px; color: #52525B; margin: 2px 0 0 0;">
-                                        Cargá masivamente la semana o gestioná el mes completo desde el calendario.
+                                    <span class="pill pill-champagne coach-workouts-eyebrow">PRESCRIPCIÓN &amp; PERIODIZACIÓN</span>
+                                    <h3 class="coach-workouts-title">Planificador de Rutinas</h3>
+                                    <p class="coach-workouts-subtitle">
+                                        Diseñá la semana o gestioná el mes completo desde el calendario.
                                     </p>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                    <button type="button" class="btn btn-primary btn-sm"
+                                <div class="coach-workouts-header-actions">
+                                    <button type="button" class="btn btn-primary btn-sm coach-workouts-btn-auto"
                                         id="btnQuickAssignStarterRoutine"
-                                        onclick="window.applyCoachInstantWorkoutPlan && window.applyCoachInstantWorkoutPlan()"
-                                        style="font-weight: 800; padding: 6px 13px; font-size: 11px; border-radius: 8px; background: #9E7D4B; color: #FFFFFF; border: none; cursor: pointer;">
-                                        ⚡ Auto-Asignar Rutina 3 Días
+                                        onclick="window.applyCoachInstantWorkoutPlan && window.applyCoachInstantWorkoutPlan()">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                        </svg>
+                                        <span>Auto-Asignar 3 Días</span>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-sm" id="btnOpenCoachTemplatesModal"
-                                        style="border-color: #9E7D4B; color: #9E7D4B; font-weight: 700; padding: 5px 12px; font-size: 11px; border-radius: 8px; background: #FFFFFF; display: inline-flex; align-items: center; gap: 4px;">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                    <button type="button" class="btn btn-outline btn-sm coach-workouts-btn-templates" id="btnOpenCoachTemplatesModal">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2">
                                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                                             <polyline points="14 2 14 8 20 8" />
@@ -5430,9 +5424,8 @@
                                     <!-- Inyectado dinámicamente con los 7 días de Lunes a Domingo -->
                                 </div>
 
-                                <div style="display: flex; justify-content: flex-end;">
-                                    <button type="button" class="btn btn-primary" id="btnWizardNextToStep2"
-                                        style="padding: 10px 22px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
+                                <div class="coach-wizard-cta-row coach-wizard-cta-end">
+                                    <button type="button" class="btn btn-primary coach-wizard-btn-next" id="btnWizardNextToStep2">
                                         Continuar: Asignar Músculos →
                                     </button>
                                 </div>
@@ -5453,13 +5446,11 @@
                                     <!-- Inyectado dinámicamente con las tarjetas de los días elegidos en el paso 1 -->
                                 </div>
 
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <button type="button" class="btn btn-outline" id="btnWizardBackToStep1"
-                                        style="font-size: 12px; padding: 9px 18px;">
+                                <div class="coach-wizard-cta-row">
+                                    <button type="button" class="btn btn-outline coach-wizard-btn-back" id="btnWizardBackToStep1">
                                         ← Volver a Días
                                     </button>
-                                    <button type="button" class="btn btn-primary" id="btnWizardNextToStep3"
-                                        style="padding: 10px 22px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
+                                    <button type="button" class="btn btn-primary coach-wizard-btn-next" id="btnWizardNextToStep3">
                                         Continuar: Seleccionar Ejercicios →
                                     </button>
                                 </div>
@@ -5585,13 +5576,11 @@
                                     </div>
                                 </div>
 
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <button type="button" class="btn btn-outline" id="btnWizardBackToStep2"
-                                        style="font-size: 12px; padding: 9px 18px;">
+                                <div class="coach-wizard-cta-row">
+                                    <button type="button" class="btn btn-outline coach-wizard-btn-back" id="btnWizardBackToStep2">
                                         ← Volver a Músculos
                                     </button>
-                                    <button type="button" class="btn btn-primary" id="btnWizardNextToStep4"
-                                        style="padding: 10px 22px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B;">
+                                    <button type="button" class="btn btn-primary coach-wizard-btn-next" id="btnWizardNextToStep4">
                                         Continuar: Duplicar Semanas →
                                     </button>
                                 </div>
@@ -5676,15 +5665,12 @@
                                     </label>
                                 </div>
 
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                                    <button type="button" class="btn btn-outline" id="btnWizardBackToStep3"
-                                        style="font-size: 12px; padding: 9px 18px;">
+                                <div class="coach-wizard-cta-row">
+                                    <button type="button" class="btn btn-outline coach-wizard-btn-back" id="btnWizardBackToStep3">
                                         ← Volver a Ejercicios
                                     </button>
-                                    <button type="button" class="btn btn-primary" id="btnWizardExecuteSaveAll"
-                                        style="padding: 12px 28px; font-weight: 800; font-size: 13px; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #09090B; box-shadow: 0 4px 15px rgba(229,203,167,0.4);">
-                                        ✓ Confirmar y Publicar Rutina Masiva en Supabase
+                                    <button type="button" class="btn btn-primary coach-wizard-btn-publish" id="btnWizardExecuteSaveAll">
+                                        ✓ Confirmar y Publicar Rutina
                                     </button>
                                 </div>
                             </div>
