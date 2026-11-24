@@ -34023,3 +34023,40 @@ body.in-portal .sens-tracking-seg-pill,
     margin-left: 2px;
     color: #705B3E;
 }
+
+
+/* =============================================================================
+   STICKY FOOTER EN BOTTOM SHEET DE COMIDA PERSONALIZADA (#userCustomMealModal)
+   ============================================================================= */
+#userCustomMealModal .sens-custom-meal-sheet-box {
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: 92dvh !important;
+    height: 92dvh !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+.sens-custom-meal-sheet-header {
+    flex-shrink: 0 !important;
+    padding: 18px 20px 0 !important;
+    background: #FFFFFF !important;
+}
+
+.sens-custom-meal-sheet-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    padding: 14px 20px 18px !important;
+}
+
+.sens-custom-meal-sheet-footer {
+    flex-shrink: 0 !important;
+    padding: 12px 20px max(18px, calc(env(safe-area-inset-bottom, 0px) + 12px)) !important;
+    background: #FFFFFF !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 -8px 24px rgba(18, 18, 20, 0.06) !important;
+    z-index: 5 !important;
+}

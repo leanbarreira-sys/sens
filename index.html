@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=53.0">
+    <link rel="stylesheet" href="style.css?v=54.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '65.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '65.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '66.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '66.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -7256,45 +7256,49 @@
          MODAL DE CARGA DE COMIDA PERSONALIZADA (BÚSQUEDA 500 ALIMENTOS O CALORÍAS)
          ========================================================================= -->
     <div class="sens-modal-sheet-wrap" id="userCustomMealModal">
-        <div class="sens-modal-sheet-box" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <h3 style="font-size: 1.25rem; font-weight: 800; color: #121214; margin: 0;">Registrar Comida
-                    Personalizada</h3>
-                <button type="button" class="sens-modal-close-btn" id="btnCloseUserCustomMealModal"
-                    aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
+        <div class="sens-modal-sheet-box sens-custom-meal-sheet-box" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
+            <div class="sens-custom-meal-sheet-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #121214; margin: 0;">Registrar Comida
+                        Personalizada</h3>
+                    <button type="button" class="sens-modal-close-btn" id="btnCloseUserCustomMealModal"
+                        aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
 
-            <!-- Selector de Momento de Ingesta -->
-            <div style="margin-bottom: 14px;">
-                <label
-                    style="display: block; font-size: 12px; font-weight: 700; color: #575659; margin-bottom: 6px;">Momento
-                    de la comida:</label>
-                <div class="sens-nutri-filter-scroll" id="customMealSlotRow" style="margin-bottom: 0;">
-                    <button type="button" class="sens-nutri-tab-pill active" data-slot="desayuno">Desayuno</button>
-                    <button type="button" class="sens-nutri-tab-pill" data-slot="almuerzo">Almuerzo</button>
-                    <button type="button" class="sens-nutri-tab-pill" data-slot="merienda">Merienda</button>
-                    <button type="button" class="sens-nutri-tab-pill" data-slot="cena">Cena</button>
-                    <button type="button" class="sens-nutri-tab-pill" data-slot="snack">Snack</button>
+                <!-- Selector de Momento de Ingesta -->
+                <div style="margin-bottom: 10px;">
+                    <label
+                        style="display: block; font-size: 12px; font-weight: 700; color: #575659; margin-bottom: 6px;">Momento
+                        de la comida:</label>
+                    <div class="sens-nutri-filter-scroll" id="customMealSlotRow" style="margin-bottom: 0;">
+                        <button type="button" class="sens-nutri-tab-pill active" data-slot="desayuno">Desayuno</button>
+                        <button type="button" class="sens-nutri-tab-pill" data-slot="almuerzo">Almuerzo</button>
+                        <button type="button" class="sens-nutri-tab-pill" data-slot="merienda">Merienda</button>
+                        <button type="button" class="sens-nutri-tab-pill" data-slot="cena">Cena</button>
+                        <button type="button" class="sens-nutri-tab-pill" data-slot="snack">Snack</button>
+                    </div>
+                </div>
+
+                <!-- Pestañas de Modo: Búsqueda vs Manual -->
+                <div style="display: flex; border-bottom: 1px solid rgba(18,18,20,0.08); margin-bottom: 0;">
+                    <button type="button" class="btn-clean" id="tabCustomSearchMode"
+                        style="flex: 1; padding: 8px 10px; font-size: 12.5px; font-weight: 700; color: #121214; background: transparent !important; border: none !important; border-bottom: 2px solid #121214 !important; text-align: center; cursor: pointer;">
+                        Buscar en Biblioteca (500 Alimentos)
+                    </button>
+                    <button type="button" class="btn-clean" id="tabCustomManualMode"
+                        style="flex: 1; padding: 8px 10px; font-size: 12.5px; font-weight: 700; color: #77767B; background: transparent !important; border: none !important; border-bottom: 2px solid transparent !important; text-align: center; cursor: pointer;">
+                        Carga Rápida de Calorías
+                    </button>
                 </div>
             </div>
 
-            <!-- Pestañas de Modo: Búsqueda vs Manual -->
-            <div style="display: flex; border-bottom: 1px solid rgba(18,18,20,0.08); margin-bottom: 16px;">
-                <button type="button" class="btn-clean" id="tabCustomSearchMode"
-                    style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #121214; background: transparent !important; border: none !important; border-bottom: 2px solid #121214 !important; text-align: center; cursor: pointer;">
-                    Buscar en Biblioteca (500 Alimentos)
-                </button>
-                <button type="button" class="btn-clean" id="tabCustomManualMode"
-                    style="flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; color: #77767B; background: transparent !important; border: none !important; border-bottom: 2px solid transparent !important; text-align: center; cursor: pointer;">
-                    Carga Rápida de Calorías
-                </button>
-            </div>
+            <div class="sens-custom-meal-sheet-body">
 
             <!-- MODO A: Búsqueda y Selección Multi-ingrediente con Filtro de Calorías (Item 8) -->
             <div id="paneCustomSearch">
@@ -7403,11 +7407,15 @@
                 </div>
             </div>
 
-            <!-- Botón Guardar Comida en el Día -->
-            <button type="button" class="btn btn-primary" id="btnSaveCustomMealToDay"
-                style="width: 100%; padding: 14px; font-weight: 800; background: #121214 !important; color: #FFFFFF !important; border: none; border-radius: 999px; cursor: pointer; margin-top: 10px; margin-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 24px));">
-                Guardar Comida en el Día
-            </button>
+            </div>
+
+            <!-- Footer Sticky: Botón Guardar Comida en el Día siempre visible -->
+            <div class="sens-custom-meal-sheet-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveCustomMealToDay"
+                    style="width: 100%; padding: 14px; font-weight: 800; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none; border-radius: 999px; cursor: pointer;">
+                    Guardar Comida en el Día
+                </button>
+            </div>
         </div>
     </div>
 
@@ -8846,7 +8854,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=68.0"></script>
+    <script defer src="app.js?v=69.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

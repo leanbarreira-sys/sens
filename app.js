@@ -16186,7 +16186,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     </button>
                 </div>
                 <div class="sens-meal-foods-grid">
-                    ${cardsHtml || `<div style="padding: 14px 16px; font-size: 11.5px; color: #575659; background: #FAF9F6; border-radius: 12px; border: 1px dashed rgba(18, 18, 20, 0.12); display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span>Sin alimentos en ${mealLabels[mKey]}.</span> <button type="button" class="btn-link-subtle" onclick="openCustomMealModalForSlot('${mKey}')" style="font-size: 11px; font-weight: 700; color: #705B3E; background: none; border: none; cursor: pointer; text-decoration: underline;">+ Registrar</button></div>`}
+                    ${cardsHtml || `<div style="padding: 14px 16px; font-size: 11.5px; color: #575659; background: #FAF9F6; border-radius: 12px; border: 1px dashed rgba(18, 18, 20, 0.12);">Sin alimentos en ${mealLabels[mKey]}. Usá <strong>+ Agregar</strong> arriba para sumar.</div>`}
                 </div>
             </div>
         `;
