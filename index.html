@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=60.0">
+    <link rel="stylesheet" href="style.css?v=61.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '73.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '73.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '74.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '74.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -7805,6 +7805,26 @@
                     <polyline points="9 18 15 12 9 6" />
                 </svg>
             </button>
+
+            <button type="button" class="coach-sheet-action-item danger-delete" id="sheetActionDeleteAthlete"
+                onclick="if(event){event.preventDefault();event.stopPropagation();} const athId=window.currentActionAthleteId; if(typeof window.closeCoachAthleteActionsSheet==='function') window.closeCoachAthleteActionsSheet(); if(athId && typeof window.openCoachDeleteAthleteModal==='function') window.openCoachDeleteAthleteModal(athId);">
+                <div class="coach-sheet-action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                        <path d="M10 11v6" />
+                        <path d="M14 11v6" />
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                    </svg>
+                </div>
+                <div class="coach-sheet-action-text">
+                    <strong style="color: #F87171;">Eliminar Usuario</strong>
+                    <span>Borrar cuenta y toda su información de Supabase</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F87171" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6" />
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -7834,6 +7854,42 @@
             <div class="sens-modal-sticky-save-bar coach-evo-footer">
                 <button type="button" class="btn-coach-evo-secondary" id="btnCoachEvoOpenWorkout">Ajustar Rutina</button>
                 <button type="button" class="btn sens-sticky-save-btn" id="btnCoachEvoDone">Listo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE DOBLE REVALIDACIÓN: ELIMINAR USUARIO DE SUPABASE -->
+    <div class="sens-exercise-modal-backdrop" id="coachDeleteAthleteModalBackdrop" style="display: none;">
+        <div class="sens-exercise-modal-sheet coach-delete-modal-sheet" id="coachDeleteAthleteModalSheet" role="dialog" aria-modal="true" aria-labelledby="coachDelTitle">
+            <div class="sheet-drag-handle-wrap"><span class="sheet-drag-handle"></span></div>
+            <div class="sens-exercise-modal-top">
+                <div style="min-width: 0;">
+                    <span class="coach-del-eyebrow">ACCIÓN IRREVERSIBLE</span>
+                    <h3 id="coachDelTitle" style="font-size: 1.12rem; font-weight: 700; color: #121214; margin: 2px 0 0;">Eliminar Usuario</h3>
+                    <p id="coachDelAthleteSub" style="font-size: 12px; color: #575659; margin: 2px 0 0;"></p>
+                </div>
+                <button type="button" class="sens-modal-close-btn" id="btnCloseCoachDeleteModal" aria-label="Cerrar">✕</button>
+            </div>
+
+            <div id="coachDelStep1" class="coach-del-body">
+                <p class="coach-del-warn">
+                    Vas a eliminar permanentemente a este alumno y todos sus datos en Supabase: perfil, rutinas, nutrición, historial de pagos, entrenamientos y acceso.
+                </p>
+                <div class="coach-del-actions">
+                    <button type="button" class="btn-coach-evo-secondary" id="btnCoachDelCancel1">Cancelar</button>
+                    <button type="button" class="btn-coach-del-step" id="btnCoachDelProceedStep2">Continuar</button>
+                </div>
+            </div>
+
+            <div id="coachDelStep2" class="coach-del-body" style="display: none;">
+                <p class="coach-del-warn">
+                    <strong>Segunda validación:</strong> escribí <code>ELIMINAR</code> para confirmar que querés borrar definitivamente a <strong id="coachDelConfirmName">este alumno</strong>.
+                </p>
+                <input type="text" id="coachDelConfirmInput" class="input-control" placeholder="Escribí ELIMINAR" autocomplete="off" style="margin-bottom: 0;">
+                <div class="coach-del-actions">
+                    <button type="button" class="btn-coach-evo-secondary" id="btnCoachDelBack1">Volver</button>
+                    <button type="button" class="btn-coach-del-final" id="btnCoachDelConfirmFinal" disabled>Eliminar definitivamente</button>
+                </div>
             </div>
         </div>
     </div>
@@ -8981,7 +9037,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=74.0"></script>
+    <script defer src="app.js?v=75.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

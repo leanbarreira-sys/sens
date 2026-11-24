@@ -35000,3 +35000,89 @@ body.in-portal #coachHubView .coach-payment-card-lux {
     -webkit-text-fill-color: #FFFFFF !important;
     border-radius: 12px !important;
 }
+
+/* =============================================================================
+   MODAL DOBLE REVALIDACIÓN: ELIMINAR USUARIO (COACH OS)
+   ============================================================================= */
+.coach-delete-modal-sheet {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    padding: 0 18px max(22px, calc(env(safe-area-inset-bottom, 0px) + 16px)) !important;
+}
+
+.coach-delete-modal-sheet .sheet-drag-handle-wrap {
+    padding-top: 10px !important;
+}
+
+.coach-delete-modal-sheet .sens-exercise-modal-top {
+    margin: 0 -18px 12px !important;
+    padding: 10px 18px !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    align-items: flex-start !important;
+}
+
+.coach-delete-modal-sheet .sens-modal-close-btn {
+    flex-shrink: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    font-weight: 700 !important;
+}
+
+.coach-del-eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    color: #DC2626;
+}
+
+.coach-del-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.coach-del-warn {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #3F3F46;
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.18);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.coach-del-warn code {
+    background: #FFFFFF;
+    color: #B91C1C;
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-weight: 800;
+}
+
+.coach-del-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.btn-coach-del-step,
+.btn-coach-del-final {
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: none;
+    background: #DC2626 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-coach-del-final:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

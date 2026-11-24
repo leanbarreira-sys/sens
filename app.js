@@ -13621,6 +13621,184 @@ async function openCoachAthleteEvolutionSheet(athId) {
 }
 window.openCoachAthleteEvolutionSheet = openCoachAthleteEvolutionSheet;
 
+// -----------------------------------------------------------------------------
+// SUB-MÓDULO 1D: ELIMINACIÓN COMPLETA DE USUARIO CON DOBLE REVALIDACIÓN
+// -----------------------------------------------------------------------------
+let pendingDeleteAthleteId = null;
+
+function closeCoachDeleteAthleteModal() {
+    const backdrop = document.getElementById('coachDeleteAthleteModalBackdrop');
+    if (backdrop) backdrop.style.display = 'none';
+    pendingDeleteAthleteId = null;
+}
+
+function bindCoachDeleteAthleteModalEvents() {
+    if (window._coachDeleteModalBound) return;
+    window._coachDeleteModalBound = true;
+
+    const backdrop = document.getElementById('coachDeleteAthleteModalBackdrop');
+    const btnClose = document.getElementById('btnCloseCoachDeleteModal');
+    const btnCancel1 = document.getElementById('btnCoachDelCancel1');
+    const btnProceed2 = document.getElementById('btnCoachDelProceedStep2');
+    const btnBack1 = document.getElementById('btnCoachDelBack1');
+    const inputConfirm = document.getElementById('coachDelConfirmInput');
+    const btnFinal = document.getElementById('btnCoachDelConfirmFinal');
+
+    if (btnClose) btnClose.addEventListener('click', closeCoachDeleteAthleteModal);
+    if (btnCancel1) btnCancel1.addEventListener('click', closeCoachDeleteAthleteModal);
+    if (backdrop) {
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closeCoachDeleteAthleteModal();
+        });
+    }
+
+    if (btnProceed2) {
+        btnProceed2.addEventListener('click', () => {
+            const s1 = document.getElementById('coachDelStep1');
+            const s2 = document.getElementById('coachDelStep2');
+            if (s1) s1.style.display = 'none';
+            if (s2) s2.style.display = 'flex';
+            if (inputConfirm) {
+                inputConfirm.value = '';
+                inputConfirm.focus();
+            }
+            if (btnFinal) btnFinal.disabled = true;
+        });
+    }
+
+    if (btnBack1) {
+        btnBack1.addEventListener('click', () => {
+            const s1 = document.getElementById('coachDelStep1');
+            const s2 = document.getElementById('coachDelStep2');
+            if (s2) s2.style.display = 'none';
+            if (s1) s1.style.display = 'flex';
+        });
+    }
+
+    if (inputConfirm && btnFinal) {
+        inputConfirm.addEventListener('input', () => {
+            const matches = inputConfirm.value.trim().toUpperCase() === 'ELIMINAR';
+            btnFinal.disabled = !matches;
+        });
+    }
+
+    if (btnFinal) {
+        btnFinal.addEventListener('click', async () => {
+            if (!pendingDeleteAthleteId) return;
+            if ((inputConfirm?.value || '').trim().toUpperCase() !== 'ELIMINAR') return;
+            btnFinal.disabled = true;
+            btnFinal.textContent = 'Eliminando...';
+            await executeCoachDeleteAthlete(pendingDeleteAthleteId);
+            btnFinal.textContent = 'Eliminar definitivamente';
+        });
+    }
+}
+
+function openCoachDeleteAthleteModal(athId) {
+    bindCoachDeleteAthleteModalEvents();
+    const athletes = getConsolidatedCoachAthletes();
+    const ath = athletes.find(a => a.id === athId);
+    if (!ath) return;
+
+    if (ath.role === 'admin' || ath.role === 'coach' || (AppState.user && AppState.user.id === ath.id)) {
+        showSensToast('No podés eliminar una cuenta de Coach/Admin.', 'champagne');
+        return;
+    }
+
+    pendingDeleteAthleteId = ath.id;
+    const subEl = document.getElementById('coachDelAthleteSub');
+    const nameEl = document.getElementById('coachDelConfirmName');
+    const s1 = document.getElementById('coachDelStep1');
+    const s2 = document.getElementById('coachDelStep2');
+    const inputConfirm = document.getElementById('coachDelConfirmInput');
+    const btnFinal = document.getElementById('btnCoachDelConfirmFinal');
+    const backdrop = document.getElementById('coachDeleteAthleteModalBackdrop');
+
+    if (subEl) subEl.textContent = `${ath.full_name} (${ath.email})`;
+    if (nameEl) nameEl.textContent = ath.full_name;
+    if (s1) s1.style.display = 'flex';
+    if (s2) s2.style.display = 'none';
+    if (inputConfirm) inputConfirm.value = '';
+    if (btnFinal) btnFinal.disabled = true;
+    if (backdrop) backdrop.style.display = 'flex';
+}
+
+async function executeCoachDeleteAthlete(athId) {
+    const athletes = getConsolidatedCoachAthletes();
+    const ath = athletes.find(a => a.id === athId);
+    const emailLower = (ath && ath.email) ? ath.email.toLowerCase() : '';
+    let rpcFullDeleteOk = false;
+
+    if (supabaseClient && athId && !String(athId).startsWith('mock_')) {
+        try {
+            const { data, error } = await supabaseClient.rpc('admin_delete_athlete_complete', {
+                target_user_id: athId
+            });
+            if (!error && data && data.ok) {
+                rpcFullDeleteOk = true;
+            } else if (error) {
+                console.warn('[CoachDeleteAthlete] RPC fallback:', error.message || error);
+                // Fallback: limpiar tablas accesibles vía RLS de Admin
+                const tables = [
+                    'workout_logs',
+                    'daily_logs',
+                    'user_workout_plans',
+                    'user_nutrition_guidelines',
+                    'anamnesis',
+                    'posture_evaluations',
+                    'payment_transactions'
+                ];
+                for (const t of tables) {
+                    try { await supabaseClient.from(t).delete().eq('user_id', athId); } catch (_) {}
+                }
+                try { await supabaseClient.from('profiles').delete().eq('id', athId); } catch (_) {}
+            }
+        } catch (e) {
+            console.warn('[CoachDeleteAthlete] Error Supabase:', e);
+        }
+    }
+
+    // Limpiar caches locales del Coach y del alumno
+    if (Array.isArray(window.__coachAthletesCache)) {
+        window.__coachAthletesCache = window.__coachAthletesCache.filter(a => a.id !== athId);
+    }
+    try {
+        const cachedList = JSON.parse(localStorage.getItem(SENS_COACH_ATHLETES_CACHE_KEY) || '[]');
+        localStorage.setItem(SENS_COACH_ATHLETES_CACHE_KEY, JSON.stringify(cachedList.filter(a => a.id !== athId)));
+    } catch (_) {}
+    try {
+        const localReg = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
+        localStorage.setItem('sens_registered_athletes', JSON.stringify(localReg.filter(a => a.id !== athId)));
+    } catch (_) {}
+    try {
+        localStorage.removeItem(`sens_athlete_override_${athId}`);
+        localStorage.removeItem(`sens_coach_directive_${athId}`);
+        if (emailLower) {
+            localStorage.removeItem(`sens_profile_${emailLower}`);
+            localStorage.removeItem(`sens_anamnesis_${emailLower}`);
+        }
+        const payStore = getCoachPaymentsStore();
+        if (payStore && payStore[athId]) {
+            delete payStore[athId];
+            saveCoachPaymentsStore(payStore);
+        }
+    } catch (_) {}
+
+    closeCoachDeleteAthleteModal();
+    renderCoachAthletesHub();
+    renderAthleteBottomSheetList();
+    renderCoachPaymentsHub();
+
+    showSensToast(
+        rpcFullDeleteOk
+            ? 'Usuario y toda su información eliminados definitivamente de Supabase.'
+            : 'Datos y perfil eliminados. Ejecutá supabase_admin_delete_user.sql en Supabase para borrar también auth.users.',
+        'champagne'
+    );
+}
+
+window.openCoachDeleteAthleteModal = openCoachDeleteAthleteModal;
+
 async function updateAthletePlanType(athId, newPlanKey, specificPlanName = null) {
     const planNames = {
         client_presencial_vip: 'Presencial Personalizado (1:1 o en Grupo)',
