@@ -35382,3 +35382,23 @@ body.in-portal #sensExerciseModalSheet #btnModalFinishExercise {
     border-radius: 14px !important;
     font-variant-numeric: tabular-nums;
 }
+
+body.in-portal #sensExerciseModalSheet #btnModalFinishExercise,
+body.in-portal #sensExerciseModalSheet .sens-sticky-save-btn,
+body.in-portal #sensCoachExercisePreviewSheet #btnCoachPreviewAdd,
+body.in-portal #sensCoachExercisePreviewSheet .sens-sticky-save-btn,
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+body.in-portal #sensExerciseModalSheet #btnModalFinishExercise *,
+body.in-portal #sensExerciseModalSheet .sens-sticky-save-btn *,
+body.in-portal #sensCoachExercisePreviewSheet #btnCoachPreviewAdd *,
+body.in-portal #sensCoachExercisePreviewSheet .sens-sticky-save-btn *,
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary * {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+}
