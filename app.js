@@ -721,7 +721,7 @@ function getWeekRangeLabel(monday) {
 const AppState = {
     user: null,
     profile: null,
-    currentDay: 'day1',
+    currentDay: getDayKeyFromDate(new Date()),
     selectedDate: new Date(),
     activeWeekStart: getMonday(new Date()),
     activeTimerInterval: null,
@@ -4650,9 +4650,7 @@ function switchPortalView(viewId) {
         }
     }
     if (viewId === 'workoutView') {
-        if (!AppState.currentDay) {
-            AppState.currentDay = getDayKeyFromDate(AppState.selectedDate || new Date());
-        }
+        AppState.currentDay = getDayKeyFromDate(AppState.selectedDate || new Date());
         if (typeof renderWorkoutDaysNav === 'function') renderWorkoutDaysNav();
         if (typeof renderWorkoutDay === 'function') renderWorkoutDay(AppState.currentDay);
     }
@@ -7843,9 +7841,11 @@ window.toggleExerciseFinished = function(exId, dayKey, targetDateStr = null) {
 };
 
 function renderWorkoutDay(dayKey, targetDate = null) {
-    AppState.currentDay = dayKey;
     const athId = getActiveAthleteId();
     const effectiveDate = targetDate ? (targetDate instanceof Date ? targetDate : new Date(targetDate + 'T12:00:00')) : (AppState.selectedDate || getDateFromDayKey(dayKey));
+    const resolvedDayKey = getDayKeyFromDate(effectiveDate) || dayKey;
+    AppState.currentDay = resolvedDayKey;
+    dayKey = resolvedDayKey;
     const dateIso = getFormattedDateKey(effectiveDate);
     const execution = getAthleteWorkoutExecution(athId, effectiveDate);
 
@@ -7926,7 +7926,8 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     if (!dayData.title) dayData.title = `Día: ${dayKey}`;
     const filterGroup = AppState.selectedMuscleFilter || 'all';
     const sourceLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined') ? SENS_EXERCISE_LIBRARY : EXERCISE_CATALOG;
-    const allDayExercises = Array.isArray(dayData.exercises) ? dayData.exercises : [];
+    const isRestDay = Boolean(dayData && (dayData.isRestDay || dayData.modality === 'descanso'));
+    const allDayExercises = (!isRestDay && Array.isArray(dayData.exercises)) ? dayData.exercises : [];
 
     let exercisesToShow = allDayExercises;
     if (filterGroup !== 'all') {
