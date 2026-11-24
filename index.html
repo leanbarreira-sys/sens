@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=46.0">
+    <link rel="stylesheet" href="style.css?v=47.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '56.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '56.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '57.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '57.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8892,13 +8892,13 @@
             </details>
 
             <div id="coachExSheetStatusMsg" class="coach-ex-sheet-status" style="display: none;"></div>
-
-            <!-- Footer Fijo en Zona del Pulgar -->
-            <div class="coach-ex-sheet-footer">
-                <button type="button" class="coach-ex-btn-cancel" onclick="window.closeCoachExerciseSheet && window.closeCoachExerciseSheet();">Cancelar</button>
-                <button type="submit" class="coach-ex-btn-save" id="btnCoachExSheetSubmit">Guardar en Base SENS</button>
-            </div>
         </form>
+
+        <!-- Footer Fijo en Zona del Pulgar -->
+        <div class="coach-ex-sheet-footer">
+            <button type="button" class="coach-ex-btn-cancel" onclick="window.closeCoachExerciseSheet && window.closeCoachExerciseSheet();">Cancelar</button>
+            <button type="submit" form="coachExerciseEditorForm" class="coach-ex-btn-save" id="btnCoachExSheetSubmit">Guardar en Base SENS</button>
+        </div>
     </div>
 
     <!-- Script Principal de la Aplicación -->
