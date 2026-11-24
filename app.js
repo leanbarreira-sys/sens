@@ -11703,8 +11703,18 @@ function renderAthleteBottomSheetList(filter = 'all', searchQuery = '') {
         let statusClass = isPending ? 'pending' : status === 'paused' ? 'paused' : 'active';
         let statusLabel = isPending ? 'Pendiente' : status === 'paused' ? 'Pausado' : 'Activo';
 
+        const rawPlan = (ath.active_plan_name || ath.user_type || '').toLowerCase();
+        let shortPlan = 'Presencial';
+        if (rawPlan.includes('vip') || rawPlan.includes('1:1') || rawPlan.includes('1 a 1')) shortPlan = '1:1 VIP';
+        else if (rawPlan.includes('grupal') || rawPlan.includes('group') || rawPlan.includes('dúo') || rawPlan.includes('duo')) shortPlan = 'Grupal';
+        else if (rawPlan.includes('online_premium') || rawPlan.includes('online pro') || (rawPlan.includes('online') && rawPlan.includes('premium'))) shortPlan = 'Online Pro';
+        else if (rawPlan.includes('online')) shortPlan = 'Online';
+
+        const cleanEmail = (ath.email && !ath.email.endsWith('@sens.com')) ? ath.email.trim() : '';
+        const subMeta = cleanEmail ? `${statusLabel} · ${cleanEmail}` : statusLabel;
+
         const quickApproveBtn = isPending
-            ? `<button type="button" class="btn btn-primary btn-sm btn-sheet-quick-approve" data-athlete-id="${escapeHTML(ath.id)}" style="padding: 3px 8px; font-size: 10px; font-weight: 800; border-radius: 12px; margin-left: 8px;">Aprobar</button>`
+            ? `<button type="button" class="btn btn-primary btn-sm btn-sheet-quick-approve" data-athlete-id="${escapeHTML(ath.id)}" style="padding: 4px 10px; font-size: 10.5px; font-weight: 700; border-radius: 999px; margin-left: 8px; background: #121214; color: #FFFFFF; border: none;">Aprobar</button>`
             : '';
 
         html += `
@@ -11717,9 +11727,9 @@ function renderAthleteBottomSheetList(filter = 'all', searchQuery = '') {
                     <div class="sheet-athlete-info">
                         <div class="sheet-athlete-name-row">
                             <span class="sheet-athlete-name">${escapeHTML(ath.full_name)}</span>
-                            <span class="sheet-plan-badge">${escapeHTML(ath.active_plan_name || 'Plan SENS')}</span>
+                            <span class="sheet-plan-badge">${escapeHTML(shortPlan)}</span>
                         </div>
-                        <span class="sheet-athlete-sub">${escapeHTML(ath.email)} • ${statusLabel}</span>
+                        <span class="sheet-athlete-sub">${escapeHTML(subMeta)}</span>
                     </div>
                 </div>
                 <div class="sheet-athlete-right">
