@@ -15659,15 +15659,19 @@ function renderNutriDaysNav() {
         const dayKey = 'day' + (i + 1);
         const heroNum = dayDate.getDate();
 
-        const dateIso = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, '0')}-${String(dayDate.getDate()).padStart(2, '0')}`;
-        const hasCustomMeals = Boolean(localStorage.getItem(`sens_user_logged_meals_${athId}_${dateIso}`));
-        const hasAdjustments = Boolean(localStorage.getItem(`sens_user_adjusted_meals_${athId}_${dateIso}`));
-        const hasConsumed = Boolean(localStorage.getItem(`sens_user_consumed_foods_${athId}_${dateIso}`));
-        const isLogged = hasCustomMeals || hasAdjustments || hasConsumed;
+        const dayKcal = (typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, dayDate) : 0;
+        const dayTarget = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, dayDate) : 1950;
+        const minTarget = Math.round(dayTarget * 0.90);
+        const maxTarget = Math.round(dayTarget * 1.10);
+        const isInRange = dayTarget > 0 && dayKcal >= minTarget && dayKcal <= maxTarget;
 
         let badgeHtml = '';
-        if (isLogged) {
-            badgeHtml = `<span class="sens-day-badge done" title="Plan nutricional registrado">✓</span>`;
+        if (isInRange) {
+            badgeHtml = `<span class="sens-day-badge done" title="En rango óptimo (±10%)">✓</span>`;
+        } else if (dayKcal > maxTarget && dayTarget > 0) {
+            badgeHtml = `<span class="sens-day-badge missed" title="Superó +10% del objetivo">✕</span>`;
+        } else if (dayKcal > 0) {
+            badgeHtml = `<span class="sens-day-badge auto" title="En progreso (debajo del 90% del objetivo)">•</span>`;
         } else if (isToday) {
             badgeHtml = `<span class="sens-day-badge auto" title="Hoy">Hoy</span>`;
         } else {
@@ -15860,7 +15864,7 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
 
         if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
             if (typeof window.showSensCelebrationToast === 'function') {
-                window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron en el rango óptimo (-20% / +10%).`);
+                window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron en el rango óptimo (-10% / +10%).`);
             }
         } else if (nutriStatus === 'exceeded') {
             if (typeof showSensToast === 'function') {
@@ -17332,7 +17336,7 @@ function initUserCustomMealModal(athId) {
 
                 if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
                     if (typeof window.showSensCelebrationToast === 'function') {
-                        window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron en el rango óptimo (-20% / +10%).`);
+                        window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron en el rango óptimo (-10% / +10%).`);
                     }
                 } else if (nutriStatus === 'exceeded') {
                     if (typeof showSensToast === 'function') {
@@ -20714,7 +20718,7 @@ const SensDailyStreakManager = {
             }
         }
 
-        const minTarget = Math.round(targetCals * 0.80);
+        const minTarget = Math.round(targetCals * 0.90);
         const maxTarget = Math.round(targetCals * 1.10);
 
         if (consumedCals >= minTarget && consumedCals <= maxTarget) {
@@ -21379,7 +21383,7 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
         }
     }
 
-    updatePill('dashNutriStreakPill', nStatus, nText, 'Progreso calórico para la racha diaria (-20% a +10% del objetivo)');
+    updatePill('dashNutriStreakPill', nStatus, nText, 'Progreso calórico para la racha diaria (-10% a +10% del objetivo)');
 
     // 3. Pilar Balance Energético / Actividad (Formato Conciso Quiet Luxury)
     const cRec = dayRec.cardio || {};
@@ -32280,8 +32284,8 @@ window.renderTrackingCalsBars = function() {
             const pct = target > 0 ? (dayKcal / target) : 0;
             barFillPct = Math.min(100, Math.max(14, Math.round(pct * 80)));
 
-            // Regla SENS: "Bien" si está dentro del ±12% del objetivo diario
-            const isGood = (pct >= 0.85 && pct <= 1.15);
+            // Regla SENS: "Bien" si está dentro del ±10% del objetivo diario
+            const isGood = (pct >= 0.90 && pct <= 1.10);
             if (isGood) {
                 goodDaysCount++;
                 statusClass = 'status-good';
