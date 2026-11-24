@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=58.0">
+    <link rel="stylesheet" href="style.css?v=59.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '71.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '71.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '72.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '72.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4892,22 +4892,13 @@
                                     style="margin-bottom: 0; width: 100%;">
                             </div>
 
-                            <!-- Filtro 1: Por Estado de Acceso -->
+                            <!-- Filtro: Por Estado de Acceso -->
                             <div class="coach-clean-filter-row">
                                 <span class="coach-clean-filter-label">Estado</span>
                                 <button type="button" class="coach-clean-chip coach-filter-status active" data-status="all">Todos</button>
                                 <button type="button" class="coach-clean-chip coach-filter-status" data-status="pending_activation">Pendientes</button>
                                 <button type="button" class="coach-clean-chip coach-filter-status" data-status="active">Activos</button>
                                 <button type="button" class="coach-clean-chip coach-filter-status" data-status="paused">Pausados</button>
-                            </div>
-
-                            <!-- Filtro 2: Por Modalidad -->
-                            <div class="coach-clean-filter-row" id="coachFilterTierBar">
-                                <span class="coach-clean-filter-label">Plan</span>
-                                <button type="button" class="coach-clean-chip coach-filter-tier active" data-tier="all">Todos</button>
-                                <button type="button" class="coach-clean-chip coach-filter-tier" data-tier="presencial_ind">Presencial 1:1</button>
-                                <button type="button" class="coach-clean-chip coach-filter-tier" data-tier="presencial_grp">Grupal</button>
-                                <button type="button" class="coach-clean-chip coach-filter-tier" data-tier="online">Online</button>
                             </div>
                         </div>
 
@@ -4954,12 +4945,12 @@
                                 <input type="text" id="coachSearchPaymentsInput" class="input-control" placeholder="Buscar alumno para ver pagos o vencimiento..." style="margin-bottom: 0; width: 100%;">
                             </div>
 
-                            <div class="coach-horizontal-pills" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; margin-top: 10px; align-items: center;">
-                                <button type="button" class="pill pill-champagne coach-pay-filter-btn" data-pay-filter="all" style="cursor: pointer; border: none; flex-shrink: 0;">Todos</button>
-                                <button type="button" class="pill pill-dark coach-pay-filter-btn" data-pay-filter="expiring" style="cursor: pointer; border: none; flex-shrink: 0;">Por vencer</button>
-                                <button type="button" class="pill pill-dark coach-pay-filter-btn" data-pay-filter="expired" style="cursor: pointer; border: none; flex-shrink: 0;">Vencidos</button>
-                                <button type="button" class="pill pill-dark coach-pay-filter-btn" data-pay-filter="ok" style="cursor: pointer; border: none; flex-shrink: 0;">Al día</button>
-                                <button type="button" class="pill pill-dark coach-pay-filter-btn" data-pay-filter="paused" style="cursor: pointer; border: none; flex-shrink: 0;">Pausados</button>
+                            <div class="coach-clean-filter-row" style="margin-top: 10px;">
+                                <button type="button" class="coach-clean-chip coach-pay-filter-btn active" data-pay-filter="all">Todos</button>
+                                <button type="button" class="coach-clean-chip coach-pay-filter-btn" data-pay-filter="expiring">Por vencer</button>
+                                <button type="button" class="coach-clean-chip coach-pay-filter-btn" data-pay-filter="expired">Vencidos</button>
+                                <button type="button" class="coach-clean-chip coach-pay-filter-btn" data-pay-filter="ok">Al día</button>
+                                <button type="button" class="coach-clean-chip coach-pay-filter-btn" data-pay-filter="paused">Pausados</button>
                             </div>
 
                             <div class="coach-payments-list" id="coachPaymentsListContainer" style="margin-top: 14px;">
@@ -8944,7 +8935,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=72.0"></script>
+    <script defer src="app.js?v=73.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

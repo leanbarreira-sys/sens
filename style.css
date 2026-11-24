@@ -31220,15 +31220,26 @@ body.in-portal #coachHubView .btn-coach-action-dossier {
     box-shadow: none !important;
 }
 
-body.in-portal #coachHubView .btn-coach-action-portal {
+body.in-portal #coachHubView .btn-coach-action-portal,
+body.in-portal #coachHubView .btn-coach-action-portal span {
     background: #121214 !important;
-    color: #FAF9F6 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
     border: none !important;
     border-radius: 12px !important;
     font-weight: 700 !important;
     font-size: 12px !important;
-    padding: 9px 14px !important;
     box-shadow: 0 2px 8px rgba(18, 18, 20, 0.12) !important;
+}
+
+body.in-portal #coachHubView .btn-coach-action-portal {
+    padding: 9px 14px !important;
+}
+
+body.in-portal #coachHubView .btn-coach-action-portal span {
+    padding: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
 }
 
 body.in-portal #coachHubView .btn-coach-action-primary {
@@ -34662,4 +34673,86 @@ body.in-portal #coachHubView .coach-athlete-card-clean .coach-ath-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* =============================================================================
+   SR-DIRECTOR-UX-WELLNESS: TARJETAS DE PAGOS & VENCIMIENTOS SIMPLIFICADAS
+   ============================================================================= */
+body.in-portal #coachHubView .coach-payment-card-lux {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 18px !important;
+    padding: 14px 16px !important;
+    gap: 12px !important;
+    box-shadow: 0 2px 12px rgba(18, 18, 20, 0.04) !important;
+}
+
+.coach-payment-identity {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.coach-payment-name-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.coach-payment-name-row .coach-ath-name {
+    font-size: 14.5px !important;
+    font-weight: 600 !important;
+    color: #121214 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.coach-payment-subline {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    font-variant-numeric: tabular-nums;
+}
+
+.coach-payment-lastpay {
+    font-size: 11.5px;
+    color: #71717A;
+    font-weight: 500;
+}
+
+.coach-payment-card-lux .coach-pay-expiry-pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border: none !important;
+}
+
+.coach-payment-card-lux .btn-coach-toggle-access {
+    min-height: 36px;
+    padding: 6px 13px;
+    font-weight: 600;
+    border: none !important;
+}
+
+.coach-payment-card-lux .btn-coach-toggle-access.is-active {
+    background: rgba(220, 38, 38, 0.08) !important;
+    color: #B91C1C !important;
+    -webkit-text-fill-color: #B91C1C !important;
+}
+
+.coach-payment-card-lux .btn-coach-register-pay,
+.coach-payment-card-lux .btn-coach-toggle-history {
+    min-height: 40px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.coach-payment-card-lux .btn-coach-toggle-history {
+    background: #F4F3F0 !important;
+    border: none !important;
 }

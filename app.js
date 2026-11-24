@@ -13057,34 +13057,26 @@ function renderCoachPaymentsHub() {
             : '<div style="font-size:12px; color:#71717A; padding:8px 0;">Todavía no registraste pagos para este alumno.</div>';
 
         html += `
-            <div class="coach-payment-card" data-athlete-id="${safeId}">
+            <div class="coach-payment-card coach-payment-card-lux" data-athlete-id="${safeId}">
                 <div class="coach-payment-card-head">
-                    <div style="min-width:0;">
-                        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    <div class="coach-payment-identity">
+                        <div class="coach-payment-name-row">
+                            <span class="status-dot ${isAct ? 'status-dot-active' : isPend ? 'status-dot-pending' : 'status-dot-paused'}"></span>
                             <strong class="coach-ath-name">${escapeHTML(ath.full_name)}</strong>
-                            ${statusBadge}
                         </div>
-                        <div style="font-size:11.5px; color:#575659; margin-top:2px;">${escapeHTML(ath.active_plan_name || 'Plan SENS')}</div>
+                        <div class="coach-payment-subline">
+                            ${expiryBadge}
+                            <span class="coach-payment-lastpay">Último: ${lastPayText}</span>
+                        </div>
                     </div>
                     <button type="button" class="btn-coach-toggle-access ${isAct ? 'is-active' : 'is-paused'}" data-ath-id="${safeId}" data-next-status="${isAct ? 'paused' : 'active'}">
                         ${isAct ? 'Pausar' : 'Activar'}
                     </button>
                 </div>
 
-                <div class="coach-payment-meta-grid">
-                    <div class="coach-payment-meta-box">
-                        <span>Último pago</span>
-                        <strong>${lastPayText}</strong>
-                    </div>
-                    <div class="coach-payment-meta-box">
-                        <span>Estado de vencimiento</span>
-                        <div>${expiryBadge}</div>
-                    </div>
-                </div>
-
                 <div class="coach-payment-actions-bar">
                     <button type="button" class="btn-coach-register-pay" data-ath-id="${safeId}">
-                        + Registrar Pago
+                        + Registrar pago
                     </button>
                     <button type="button" class="btn-coach-toggle-history" data-ath-id="${safeId}">
                         Historial (${history.length}) ▾
@@ -13288,11 +13280,11 @@ function initCoachPaymentsHub() {
     document.querySelectorAll('.coach-pay-filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.coach-pay-filter-btn').forEach(b => {
-                b.classList.remove('pill-champagne');
-                b.classList.add('pill-dark');
+                b.classList.remove('active', 'pill-champagne');
+                if (b.classList.contains('pill')) b.classList.add('pill-dark');
             });
             btn.classList.remove('pill-dark');
-            btn.classList.add('pill-champagne');
+            btn.classList.add('active');
             coachPaymentsCurrentFilter = btn.getAttribute('data-pay-filter') || 'all';
             renderCoachPaymentsHub();
         });
