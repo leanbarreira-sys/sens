@@ -23342,17 +23342,17 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
     const activeBurnBadge = document.getElementById('dashActiveBurnBadge');
     if (activeBurnBadge) {
         const livePanelBurn = liveStepsBurn + liveCardioBurn;
-        activeBurnBadge.textContent = `+${livePanelBurn.toLocaleString('es-AR')} kcal`;
+        activeBurnBadge.textContent = `−${livePanelBurn.toLocaleString('es-AR')} kcal`;
     }
 
     const stepsSubBurn = document.getElementById('dashStepsSubBurn');
     if (stepsSubBurn) {
-        stepsSubBurn.textContent = `~${liveStepsBurn} kcal`;
+        stepsSubBurn.textContent = `−${liveStepsBurn} kcal`;
     }
 
     const cardioSubBurn = document.getElementById('dashCardioSubBurn');
     if (cardioSubBurn) {
-        cardioSubBurn.textContent = `~${liveCardioBurn} kcal`;
+        cardioSubBurn.textContent = `−${liveCardioBurn} kcal`;
     }
 
     const netBoxEl = document.getElementById('dashBalanceNetBox');
@@ -33511,7 +33511,7 @@ window.switchTrackingModuleTab = function(tabName) {
 window.renderTrackingCalsBars = function() {
     const grid = document.getElementById('sensTrackingCalsBarsGrid');
     const goalLabel = document.getElementById('sensTrackingCalsGoalLabel');
-    const copyEl = document.getElementById('sensTrackingCalsAdherenceCopy');
+    const breakdownBox = document.getElementById('sensCalsDifferentialBreakdown');
     if (!grid) return;
 
     const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
@@ -33521,11 +33521,18 @@ window.renderTrackingCalsBars = function() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    const profile = AppState.profile || {};
+    const userGoal = String(profile.goal || 'fat_loss').toLowerCase();
+    const isMuscleGain = userGoal.includes('muscle') || userGoal.includes('gain') || userGoal.includes('hipertrofia');
+    const isMaintenance = userGoal.includes('maint') || userGoal.includes('general') || userGoal.includes('vitality');
+    const goalText = isMuscleGain ? 'Superávit' : (isMaintenance ? 'Equilibrio' : 'Déficit');
+
     const targetKcal = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, sDate) : 1950;
-    if (goalLabel) goalLabel.textContent = `Meta diaria: ${targetKcal.toLocaleString('es-AR')} kcal`;
+    if (goalLabel) goalLabel.textContent = `Objetivo: ${goalText} · Meta ${targetKcal.toLocaleString('es-AR')} kcal`;
 
     let goodDaysCount = 0;
     let daysWithRecords = 0;
+    let selectedDayMetrics = null;
 
     const barsHtml = [];
 
@@ -33535,42 +33542,65 @@ window.renderTrackingCalsBars = function() {
         d.setHours(0, 0, 0, 0);
 
         const isToday = isSameDay(d, today);
+        const isSelected = isSameDay(d, sDate);
         const isFuture = d > today;
-        const dayKcal = (typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, d) : 0;
-        const target = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, d) : targetKcal;
+
+        const m = (typeof getDailyMetabolicMetrics === 'function') ? getDailyMetabolicMetrics(d) : null;
+        const intake = m ? (Number(m.targetIntake) || 0) : ((typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, d) : 0);
+        const basal = m ? (Number(m.bmr) || 0) : 1650;
+        const workout = m ? (Number(m.workoutBurn) || 0) : 0;
+        const cardio = m ? ((Number(m.stepsBurn) || 0) + (Number(m.cardioBurn) || 0)) : 0;
+        const totalBurn = basal + workout + cardio;
+        const netDiff = intake - totalBurn;
+
+        if (isSelected) {
+            selectedDayMetrics = { d, intake, basal, workout, cardio, totalBurn, netDiff };
+        }
 
         let statusClass = 'status-pending';
         let badgeClass = 'badge-pending';
         let badgeText = '–';
         let barFillPct = 0;
+        let topValText = isFuture ? '' : '0';
 
         if (isFuture) {
             statusClass = 'status-pending';
             badgeClass = 'badge-pending';
             badgeText = '–';
             barFillPct = 8;
-        } else if (dayKcal === 0 && isToday) {
+            topValText = '';
+        } else if (intake === 0 && isToday) {
             statusClass = 'status-pending';
             badgeClass = 'badge-pending';
-            badgeText = '0 kcal';
+            badgeText = 'Pendiente';
             barFillPct = 12;
-        } else if (dayKcal === 0) {
+            topValText = '0';
+        } else if (intake === 0) {
             statusClass = 'status-missed';
             badgeClass = 'badge-missed';
             badgeText = 'Sin registrar';
             barFillPct = 10;
+            topValText = '–';
         } else {
             daysWithRecords++;
-            const pct = target > 0 ? (dayKcal / target) : 0;
-            barFillPct = Math.min(100, Math.max(14, Math.round(pct * 80)));
+            const absNet = Math.abs(netDiff);
+            barFillPct = Math.min(100, Math.max(18, Math.round((absNet / 800) * 100)));
+            topValText = `${netDiff > 0 ? '+' : ''}${netDiff}`;
 
-            // Regla SENS: "Bien" si está dentro del ±10% del objetivo diario
-            const isGood = (pct >= 0.90 && pct <= 1.10);
+            let isGood = false;
+            if (isMuscleGain) {
+                isGood = (netDiff >= 100 && netDiff <= 600);
+            } else if (isMaintenance) {
+                isGood = (Math.abs(netDiff) <= 250);
+            } else {
+                isGood = (netDiff <= -150 && netDiff >= -950);
+            }
+
             if (isGood) {
                 goodDaysCount++;
                 statusClass = 'status-good';
                 badgeClass = 'badge-good';
-                badgeText = '✓ Bien';
+                badgeText = '✓ En objetivo';
             } else {
                 statusClass = 'status-bad';
                 badgeClass = 'badge-bad';
@@ -33578,14 +33608,18 @@ window.renderTrackingCalsBars = function() {
             }
         }
 
+        const tooltipText = intake > 0
+            ? `${dayNames[i]}: Neto ${netDiff > 0 ? '+' : ''}${netDiff} kcal (Nutrición +${intake} | Basal −${basal} | Ejerc −${workout} | Cardio −${cardio})`
+            : `${dayNames[i]}: ${badgeText}`;
+
         barsHtml.push(`
-            <div class="sens-cals-bar-col ${isToday ? 'is-today' : ''}" onclick="if(typeof AppState!=='undefined'){ AppState.selectedDate=new Date('${d.toISOString()}'); if(typeof renderPortalWeekStrip==='function') renderPortalWeekStrip(); if(typeof updateNutriSummaryCardData==='function') updateNutriSummaryCardData(); }" title="${dayNames[i]}: ${dayKcal > 0 ? dayKcal + ' kcal (' + badgeText + ')' : 'Sin registrar'}">
-                <span class="sens-cals-bar-val">${dayKcal > 0 ? dayKcal : (isFuture ? '' : '0')}</span>
+            <div class="sens-cals-bar-col ${isToday ? 'is-today' : ''} ${isSelected ? 'is-selected' : ''}" onclick="if(typeof AppState!=='undefined'){ AppState.selectedDate=new Date('${d.toISOString()}'); if(typeof renderPortalWeekStrip==='function') renderPortalWeekStrip(); if(typeof updateNutriSummaryCardData==='function') updateNutriSummaryCardData(); if(typeof renderTrackingCalsBars==='function') renderTrackingCalsBars(); if(typeof renderObjectiveBalanceCard==='function') renderObjectiveBalanceCard(); }" title="${tooltipText}">
+                <span class="sens-cals-bar-val">${topValText}</span>
                 <div class="sens-cals-bar-track">
                     <div class="sens-cals-bar-fill ${statusClass}" style="height: ${barFillPct}%;"></div>
                 </div>
                 <span class="sens-cals-day-dot ${badgeClass}" aria-label="${badgeText}"></span>
-                <span class="sens-cals-day-label" style="${isToday ? 'color: #121214; font-weight: 900;' : ''}">${dayNames[i]}</span>
+                <span class="sens-cals-day-label" style="${isToday || isSelected ? 'color: #121214; font-weight: 900;' : ''}">${dayNames[i]}</span>
             </div>
         `);
     }
@@ -33594,7 +33628,58 @@ window.renderTrackingCalsBars = function() {
 
     if (goalLabel && daysWithRecords > 0) {
         const pctAdherence = Math.round((goodDaysCount / Math.max(1, daysWithRecords)) * 100);
-        goalLabel.textContent = `Meta diaria: ${targetKcal.toLocaleString('es-AR')} kcal • ${pctAdherence}% adherencia`;
+        goalLabel.textContent = `Objetivo: ${goalText} · ${pctAdherence}% adherencia`;
+    }
+
+    if (breakdownBox) {
+        const sel = selectedDayMetrics || (() => {
+            const m = (typeof getDailyMetabolicMetrics === 'function') ? getDailyMetabolicMetrics(sDate) : null;
+            const intake = m ? (Number(m.targetIntake) || 0) : 0;
+            const basal = m ? (Number(m.bmr) || 0) : 1650;
+            const workout = m ? (Number(m.workoutBurn) || 0) : 0;
+            const cardio = m ? ((Number(m.stepsBurn) || 0) + (Number(m.cardioBurn) || 0)) : 0;
+            return { d: sDate, intake, basal, workout, cardio, totalBurn: basal + workout + cardio, netDiff: intake - (basal + workout + cardio) };
+        })();
+
+        const netSign = sel.netDiff > 0 ? '+' : '';
+        const netDirection = sel.intake === 0
+            ? 'Registrá tus comidas para ver tu diferencial'
+            : sel.netDiff < 0
+                ? 'Déficit · Perdiendo calorías'
+                : sel.netDiff > 0
+                    ? 'Superávit · Ganando calorías'
+                    : 'Equilibrio calórico';
+
+        const netClass = sel.intake === 0
+            ? 'is-neutral'
+            : ((isMuscleGain && sel.netDiff >= 100 && sel.netDiff <= 600) || (!isMuscleGain && !isMaintenance && sel.netDiff <= -150 && sel.netDiff >= -950) || (isMaintenance && Math.abs(sel.netDiff) <= 250))
+                ? 'is-good'
+                : 'is-warn';
+
+        breakdownBox.innerHTML = `
+            <div class="sens-cals-pillars-grid">
+                <div class="sens-cals-pillar-tile is-plus">
+                    <span class="pillar-lbl">Nutrición</span>
+                    <strong class="pillar-val">+${sel.intake.toLocaleString('es-AR')}</strong>
+                </div>
+                <div class="sens-cals-pillar-tile">
+                    <span class="pillar-lbl">Basal</span>
+                    <strong class="pillar-val">−${sel.basal.toLocaleString('es-AR')}</strong>
+                </div>
+                <div class="sens-cals-pillar-tile">
+                    <span class="pillar-lbl">Ejercicio</span>
+                    <strong class="pillar-val">−${sel.workout.toLocaleString('es-AR')}</strong>
+                </div>
+                <div class="sens-cals-pillar-tile">
+                    <span class="pillar-lbl">Cardio</span>
+                    <strong class="pillar-val">−${sel.cardio.toLocaleString('es-AR')}</strong>
+                </div>
+            </div>
+            <div class="sens-cals-net-summary ${netClass}">
+                <span class="net-summary-desc">${netDirection}</span>
+                <strong class="net-summary-val">${sel.intake > 0 ? `${netSign}${sel.netDiff.toLocaleString('es-AR')} kcal` : '—'}</strong>
+            </div>
+        `;
     }
 };
 

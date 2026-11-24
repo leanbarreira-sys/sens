@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=70.0">
+    <link rel="stylesheet" href="style.css?v=71.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '86.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '86.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '87.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '87.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3248,20 +3248,25 @@
                         </button>
                     </div>
 
-                    <!-- Panel A: Gráfico Diario de Calorías (Bien vs. Mal) -->
+                    <!-- Panel A: Gráfico Diario de Diferencial Calórico (Nutrición - Basal - Ejercicio - Cardio) -->
                     <div class="sens-tracking-tab-panel" id="sensTrackingPanelCals">
                         <div class="sens-cals-chart-meta-row">
-                            <span class="sens-cals-meta-label" id="sensTrackingCalsGoalLabel">Meta Diaria: 1.950 kcal</span>
+                            <span class="sens-cals-meta-label" id="sensTrackingCalsGoalLabel">Diferencial Calórico Diario</span>
                             <div class="sens-cals-legend-group">
-                                <span class="sens-legend-chip on-target"><span class="legend-dot dot-good"></span> En Objetivo (Bien)</span>
+                                <span class="sens-legend-chip on-target"><span class="legend-dot dot-good"></span> En Objetivo</span>
                                 <span class="sens-legend-chip off-target"><span class="legend-dot dot-bad"></span> Desvío</span>
                                 <span class="sens-legend-chip pending"><span class="legend-dot dot-pending"></span> Pendiente</span>
                             </div>
                         </div>
 
-                        <!-- Barras Semanales de Calorías -->
+                        <!-- Barras Semanales de Diferencial Calórico -->
                         <div class="sens-cals-bars-grid" id="sensTrackingCalsBarsGrid">
-                            <!-- Inyectado dinámicamente: 7 días Lun-Dom con Kcal reales y punto de estado -->
+                            <!-- Inyectado dinámicamente: 7 días Lun-Dom con diferencial neto (Nutrición vs Basal + Ejercicio + Cardio) -->
+                        </div>
+
+                        <!-- Desglose del Día Seleccionado: Nutrición vs Basal + Ejercicio + Cardio -->
+                        <div class="sens-cals-diff-breakdown" id="sensCalsDifferentialBreakdown">
+                            <!-- Inyectado dinámicamente por renderTrackingCalsBars() -->
                         </div>
                     </div>
 
@@ -3360,8 +3365,8 @@
                             <!-- Panel Táctil de Gasto Activo: Pasos y Cardio del Día -->
                             <div class="sens-activity-logger-panel" id="sensActivityLoggerPanel" style="margin-top: 14px;">
                                 <div class="sens-act-header">
-                                    <span class="sens-act-header-title">Actividad Diaria</span>
-                                    <span class="sens-act-badge" id="dashActiveBurnBadge">+0 kcal</span>
+                                    <span class="sens-act-header-title">Movimiento &amp; Cardio</span>
+                                    <span class="sens-act-badge" id="dashActiveBurnBadge">−0 kcal</span>
                                     <span class="sens-card-streak-pill in-progress" id="dashActivityLoggerStreakPill" style="display: none !important;">
                                         <span class="streak-pill-dot"></span>
                                         <span class="streak-pill-text">0 / 10k pasos</span>
@@ -8985,7 +8990,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=82.0"></script>
+    <script defer src="app.js?v=83.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
