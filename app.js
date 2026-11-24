@@ -32791,10 +32791,21 @@ if (typeof window.initUserTrackingModule !== 'function') {
                     return;
                 }
 
+                const generateExerciseUuid = () => {
+                    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+                        return crypto.randomUUID();
+                    }
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                        const r = (Math.random() * 16) | 0;
+                        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+                        return v.toString(16);
+                    });
+                };
+
                 const editId = (document.getElementById('coachExEditId')?.value || '').trim();
                 const assignAfterSave = (document.getElementById('coachExAssignAfterSave')?.value === 'true');
                 const existingEx = editId ? findExerciseById(editId) : null;
-                const finalId = editId || `ex_coach_${slugifyExerciseName(nameVal)}_${Date.now().toString(36)}`;
+                const finalId = editId || generateExerciseUuid();
 
                 const type1 = getChipActive('coachExTypeChips', 'muscular');
                 const muscle2 = getChipActive('coachExMuscleChips', 'piernas');

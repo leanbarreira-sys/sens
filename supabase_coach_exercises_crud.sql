@@ -1,27 +1,57 @@
 -- =============================================================================
 -- SENS COACH OS — CRUD DE EJERCICIOS, FAVORITOS Y STORAGE DE MEDIA (IDEMPOTENTE)
 -- Ejecutar una sola vez en el SQL Editor de Supabase.
--- No altera ni borra ninguno de los 1.376 ejercicios existentes.
+-- Compatible con cualquier versión previa de public.sens_exercise_library.
+-- No altera ni borra ejercicios existentes.
 -- =============================================================================
 
--- 1. Columnas adicionales en public.sens_exercise_library (100% retrocompatible)
+-- 1. Asegurar todas las columnas necesarias en public.sens_exercise_library
 ALTER TABLE public.sens_exercise_library
+    ADD COLUMN IF NOT EXISTS name_es TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS name_en TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS name_pt TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS nivel_1_tipo TEXT DEFAULT 'muscular',
+    ADD COLUMN IF NOT EXISTS nivel_2_grupo_muscular TEXT DEFAULT 'piernas',
+    ADD COLUMN IF NOT EXISTS nivel_3_submusculo_piernas TEXT,
+    ADD COLUMN IF NOT EXISTS cue_technical_es TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS cue_technical_en TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS cue_technical_pt TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS summary_detailed_movement_es TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS summary_detailed_movement_en TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS summary_detailed_movement_pt TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS detailed_movement_es TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS detailed_movement_en TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS detailed_movement_pt TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS calories_per_rep NUMERIC(5,2) NOT NULL DEFAULT 0.45,
+    ADD COLUMN IF NOT EXISTS video_local_path TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS default_rest_seconds INTEGER NOT NULL DEFAULT 90,
     ADD COLUMN IF NOT EXISTS is_custom BOOLEAN NOT NULL DEFAULT false,
     ADD COLUMN IF NOT EXISTS is_favorite BOOLEAN NOT NULL DEFAULT false,
     ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now());
 
--- Permitir ejercicios sin video/foto inicial (media opcional y editable luego)
-ALTER TABLE public.sens_exercise_library
-    ALTER COLUMN video_local_path SET DEFAULT '',
-    ALTER COLUMN cue_technical_es SET DEFAULT '',
-    ALTER COLUMN cue_technical_en SET DEFAULT '',
-    ALTER COLUMN cue_technical_pt SET DEFAULT '',
-    ALTER COLUMN summary_detailed_movement_es SET DEFAULT '',
-    ALTER COLUMN summary_detailed_movement_en SET DEFAULT '',
-    ALTER COLUMN summary_detailed_movement_pt SET DEFAULT '',
-    ALTER COLUMN detailed_movement_es SET DEFAULT '',
-    ALTER COLUMN detailed_movement_en SET DEFAULT '',
-    ALTER COLUMN detailed_movement_pt SET DEFAULT '';
+-- Hacer opcionales / con default las columnas heredadas (si existen) para evitar errores NOT NULL
+DO $$
+DECLARE
+    col_name TEXT;
+    legacy_cols TEXT[] := ARRAY[
+        'name', 'category', 'muscle_group', 'primary_muscle', 'execution',
+        'video_local_path', 'cue_technical_es', 'cue_technical_en', 'cue_technical_pt',
+        'summary_detailed_movement_es', 'summary_detailed_movement_en', 'summary_detailed_movement_pt',
+        'detailed_movement_es', 'detailed_movement_en', 'detailed_movement_pt'
+    ];
+BEGIN
+    FOREACH col_name IN ARRAY legacy_cols LOOP
+        IF EXISTS (
+            SELECT 1 FROM information_schema.columns
+            WHERE table_schema = 'public'
+              AND table_name = 'sens_exercise_library'
+              AND column_name = col_name
+        ) THEN
+            EXECUTE format('ALTER TABLE public.sens_exercise_library ALTER COLUMN %I SET DEFAULT ''''', col_name);
+            EXECUTE format('ALTER TABLE public.sens_exercise_library ALTER COLUMN %I DROP NOT NULL', col_name);
+        END IF;
+    END LOOP;
+END $$;
 
 -- Índice liviano para sincronizar solo ejercicios creados/editados/favoritos al abrir el Portal
 CREATE INDEX IF NOT EXISTS idx_sens_ex_custom_fav_updated
@@ -32,7 +62,7 @@ DO $$
 BEGIN
     IF NOT EXISTS (
         SELECT 1 FROM pg_policies
-        WHERE tablename = 'sens_exercise_library' AND policyname = 'Admins can insert sens_exercise_library'
+        WHERE schemaname = 'public' AND tablename = 'sens_exercise_library' AND policyname = 'Admins can insert sens_exercise_library'
     ) THEN
         CREATE POLICY "Admins can insert sens_exercise_library"
             ON public.sens_exercise_library FOR INSERT
@@ -46,7 +76,7 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM pg_policies
-        WHERE tablename = 'sens_exercise_library' AND policyname = 'Admins can update sens_exercise_library'
+        WHERE schemaname = 'public' AND tablename = 'sens_exercise_library' AND policyname = 'Admins can update sens_exercise_library'
     ) THEN
         CREATE POLICY "Admins can update sens_exercise_library"
             ON public.sens_exercise_library FOR UPDATE
@@ -66,7 +96,7 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM pg_policies
-        WHERE tablename = 'sens_exercise_library' AND policyname = 'Admins can delete custom sens_exercise_library'
+        WHERE schemaname = 'public' AND tablename = 'sens_exercise_library' AND policyname = 'Admins can delete custom sens_exercise_library'
     ) THEN
         CREATE POLICY "Admins can delete custom sens_exercise_library"
             ON public.sens_exercise_library FOR DELETE
