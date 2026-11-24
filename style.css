@@ -25351,7 +25351,7 @@ body:not(.in-portal) #metodo div[style*="Con SENS"] {
    Estilo 100% fiel al prototipo Quiet Light Luxury y capturas de usuario
    ========================================================================== */
 body:not(.in-portal) .sens-metodo-section {
-    padding: 0 20px !important;
+    padding: 36px 20px 12px 20px !important;
     margin-bottom: 48px !important;
     max-width: 680px !important;
     margin-left: auto !important;
@@ -26953,23 +26953,19 @@ body:not(.in-portal) .mobile-quick-bar .mobile-quick-secondary-btn:active {
         display: none !important;
     }
 
-    /* 7. Cómo Sumarte & Trilogy Split Grid */
+    /* 7. Cómo Sumarte (Centrado limpio sin Ecosistema Integrado) */
     body:not(.in-portal) .sens-sumate-wellness-desktop-wrapper {
-        display: grid !important;
-        grid-template-columns: 7fr 5fr !important;
-        gap: 40px !important;
-        max-width: 1520px !important;
+        display: block !important;
+        max-width: 680px !important;
         margin: 0 auto !important;
-        padding: 0 48px !important;
-        align-items: stretch !important;
+        padding: 0 24px !important;
     }
 
     body:not(.in-portal) #sumate .lead-intake-card {
-        grid-column: 1 !important;
         width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        height: 100% !important;
+        max-width: 680px !important;
+        margin: 0 auto !important;
+        height: auto !important;
         padding: 36px !important;
         border-radius: 28px !important;
         display: flex !important;
