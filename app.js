@@ -23412,13 +23412,16 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
             html += `
                 <div class="coach-master-lib-card">
                     ${hasMedia ? `
-                        <div style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #121214; border: 1px solid rgba(18,18,20,0.08);">
+                        <div class="coach-lib-media-thumb" ${media.isVideo ? `onclick="window.openCoachExercisePreviewModal && window.openCoachExercisePreviewModal('${safeId}')"` : ''} style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; margin-bottom: 10px; background: #FAF7F2; border: 1px solid rgba(112, 91, 62, 0.16); cursor: ${media.isVideo ? 'pointer' : 'default'};">
                             ${media.isVideo ? `
-                                <video muted loop playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover;">
-                                    <source src="${media.url}" type="video/mp4">
-                                </video>
+                                <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg, #FAF7F2 0%, #F1ECE3 100%);">
+                                    <div style="width: 38px; height: 38px; border-radius: 50%; background: #FFFFFF; border: 1px solid rgba(112, 91, 62, 0.28); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(18,18,20,0.06);">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#705B3E" stroke="none"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                                    </div>
+                                    <span style="font-size: 10px; font-weight: 800; color: #705B3E; letter-spacing: 0.6px; text-transform: uppercase;">Video HD • Tocar para ver</span>
+                                </div>
                             ` : `
-                                <img src="${media.url}" alt="${exTitle}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" />
+                                <img src="${media.url}" alt="${exTitle}" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
                             `}
                         </div>
                     ` : ''}

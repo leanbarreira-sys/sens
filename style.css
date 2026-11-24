@@ -33624,3 +33624,103 @@ body:has(.modal-overlay.active) #sensFloatingDock {
     background: #121214;
     transform: scale(1.06);
 }
+
+
+/* ============================================================================
+   COACH OS: QUIET LIGHT LUXURY FILTER BOXES + iOS / SMALL-SCREEN HARDENING
+   ============================================================================ */
+
+body.in-portal #coachHubView .coach-taxonomy-level-box {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 10px !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.03) !important;
+    color: #121214 !important;
+}
+
+body.in-portal #coachHubView .taxonomy-level-label,
+body.in-portal #coachHubView .coach-taxonomy-level-label {
+    display: block !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.7px !important;
+    text-transform: uppercase !important;
+    color: #705B3E !important;
+    margin-bottom: 8px !important;
+}
+
+body.in-portal #coachHubView .coach-horizontal-pills {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    padding-bottom: 2px;
+}
+
+body.in-portal #coachHubView .coach-horizontal-pills::-webkit-scrollbar {
+    display: none !important;
+}
+
+body.in-portal #coachHubView .coach-horizontal-pills .pill {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    touch-action: manipulation !important;
+}
+
+/* iOS Safari & Old Mobile Fluidity (Zero 300ms tap delay, Zero input auto-zoom, dvh fallback) */
+.coach-ex-editor-sheet {
+    max-height: 90vh;
+    max-height: 90dvh;
+}
+
+body.in-portal button,
+body.in-portal .pill,
+body.in-portal .coach-ex-chip,
+body.in-portal .sens-dock-item,
+body.in-portal .coach-lib-edit-btn,
+body.in-portal .coach-lib-fav-btn,
+body.in-portal .wizard-feed-add-btn,
+body.in-portal .wizard-feed-edit-btn {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 900px) {
+    /* Prevenir auto-zoom en iOS Safari al enfocar inputs (<16px) */
+    .coach-ex-input,
+    .coach-ex-textarea,
+    #coachMasterExSearchInput,
+    #wizardExSearchInput,
+    #coachAthletesSearchInput,
+    #coachMasterFoodSearchInput {
+        font-size: 16px !important;
+    }
+
+    body.in-portal,
+    body.in-portal #coachHubView {
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+    }
+}
+
+/* Pantallas muy angostas (iPhone SE 1ra gen 320px / Android antiguos 360px) */
+@media (max-width: 374px) {
+    body.in-portal #sensCoachFloatingDock,
+    #sensCoachFloatingDock.coach-mode-dock {
+        width: calc(100% - 12px) !important;
+        padding: 4px !important;
+    }
+
+    body.in-portal #sensCoachFloatingDock .sens-dock-item span,
+    body.in-portal #sensCoachFloatingDock .coach-dock-btn span {
+        font-size: 8.5px !important;
+    }
+
+    #coachMasterExercisesGrid {
+        grid-template-columns: 1fr !important;
+    }
+}
