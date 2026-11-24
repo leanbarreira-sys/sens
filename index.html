@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=48.0">
+    <link rel="stylesheet" href="style.css?v=49.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '58.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '58.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '59.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '59.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8865,7 +8865,7 @@
                             </label>
                             <input type="file" id="coachExMediaFileInput" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" style="display: none;">
                         </div>
-                        <input type="text" id="coachExMediaUrlInput" class="coach-ex-input" placeholder="O pegá un link directo (https://...mp4 / .gif / .jpg)" style="margin-top: 8px; font-size: 12px;">
+                        <input type="text" id="coachExMediaUrlInput" class="coach-ex-input" placeholder="O pegá link de YouTube / Shorts / .mp4 / .gif / .jpg" style="margin-top: 8px; font-size: 12px;">
                     </div>
 
                     <div class="coach-ex-field">
@@ -8896,13 +8896,14 @@
 
         <!-- Footer Fijo en Zona del Pulgar -->
         <div class="coach-ex-sheet-footer">
+            <button type="button" class="coach-ex-btn-delete" id="btnCoachExDelete" style="display: none;" title="Eliminar ejercicio permanentemente">Eliminar</button>
             <button type="button" class="coach-ex-btn-cancel" onclick="window.closeCoachExerciseSheet && window.closeCoachExerciseSheet();">Cancelar</button>
             <button type="submit" form="coachExerciseEditorForm" class="coach-ex-btn-save" id="btnCoachExSheetSubmit">Guardar en Base SENS</button>
         </div>
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=61.0"></script>
+    <script defer src="app.js?v=62.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

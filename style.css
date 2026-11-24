@@ -33724,3 +33724,59 @@ body.in-portal .wizard-feed-edit-btn {
         grid-template-columns: 1fr !important;
     }
 }
+
+
+/* ============================================================================
+   COACH OS: YOUTUBE / SHORTS EMBED + PERMANENT DELETE ACTIONS
+   ============================================================================ */
+
+.coach-ex-media-preview iframe,
+.sens-yt-embed-frame {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    display: block;
+    background: #121214;
+}
+
+.coach-ex-btn-delete {
+    padding: 12px 14px;
+    border-radius: 999px;
+    border: 1px solid #FECACA;
+    background: #FEF2F2;
+    color: #B91C1C;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    touch-action: manipulation;
+    transition: background 0.15s ease;
+}
+
+.coach-ex-btn-delete:hover {
+    background: #FEE2E2;
+}
+
+#paneLibrary .coach-lib-delete-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid rgba(185, 28, 28, 0.2);
+    background: #FEF2F2;
+    color: #B91C1C;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    touch-action: manipulation;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+#paneLibrary .coach-lib-delete-btn:hover {
+    background: #FEE2E2;
+    border-color: #DC2626;
+}

@@ -1065,7 +1065,7 @@ window.ensurePortalBundlesLoaded = function() {
     window._sensPortalBundlesPromise = Promise.all([
         typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
         nutriChain,
-        needExercisesDb ? loadScriptOnce('exercises_db.js?v=12.0') : Promise.resolve(),
+        needExercisesDb ? loadScriptOnce('exercises_db.js?v=13.0') : Promise.resolve(),
         typeof window.SENS_MARKETING_CATALOG === 'undefined' ? loadScriptOnce('marketing_templates_catalog.js?v=4.0') : Promise.resolve()
     ]).then(() => {
         if (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY) && SENS_EXERCISE_LIBRARY.length > 0) {
@@ -8371,9 +8371,11 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
     if (modalRir) modalRir.textContent = `RIR ${ex.rir !== undefined ? ex.rir : 2} (RPE ${10 - (ex.rir !== undefined ? ex.rir : 2)})`;
     if (modalKcal) modalKcal.textContent = `~${kcalData.totalKcal} kcal`;
 
-    // 3. Media 4:5 y Skeleton (Soporte Dual Video MP4 y GIF optimizado)
+    // 3. Media 4:5 y Skeleton (Soporte Dual Video MP4, YouTube/Shorts y GIF optimizado)
     const modalSkeleton = document.getElementById('modalExVideoSkeleton');
-    if (mediaInfo.isVideo) {
+    if (typeof window.applySensMediaToElements === 'function') {
+        window.applySensMediaToElements(modalVideo, modalGif, modalSkeleton, mediaInfo);
+    } else if (mediaInfo.isVideo) {
         if (modalGif) modalGif.style.display = 'none';
         if (modalVideo) {
             modalVideo.style.display = 'block';
@@ -9747,6 +9749,11 @@ function closeExerciseExecutionModalForce() {
 
     const modalVideo = document.getElementById('modalExVideo');
     if (modalVideo) modalVideo.pause();
+    const ytFrame = backdrop ? backdrop.querySelector('.sens-yt-embed-frame') : null;
+    if (ytFrame) {
+        ytFrame.src = '';
+        ytFrame.style.display = 'none';
+    }
 
     const currentDayKey = modalExerciseState.dayKey || AppState.currentDay || 'day1';
     const targetDate = modalExerciseState.effectiveDate || getDateFromDayKey(currentDayKey);
@@ -9871,7 +9878,9 @@ window.openCoachExercisePreviewModal = function(exId, options = {}) {
         ? resolveExerciseMediaUrl(ex.video_local_path || ex.video_url || ex.video)
         : { url: ex.video_local_path || ex.video || '', isVideo: true, isGif: false };
 
-    if (mediaInfo.isVideo) {
+    if (typeof window.applySensMediaToElements === 'function') {
+        window.applySensMediaToElements(video, gif, skeleton, mediaInfo);
+    } else if (mediaInfo.isVideo) {
         if (gif) gif.style.display = 'none';
         if (video) {
             video.style.display = 'block';
@@ -9990,8 +9999,82 @@ window.closeCoachExercisePreviewModal = function() {
     if (!modal) return;
     const video = document.getElementById('coachPreviewVideo');
     if (video) video.pause();
+    const ytFrame = modal.querySelector('.sens-yt-embed-frame');
+    if (ytFrame) {
+        ytFrame.src = '';
+        ytFrame.style.display = 'none';
+    }
     modal.style.display = 'none';
     document.body.style.overflow = '';
+};
+
+window.applySensMediaToElements = function(videoEl, gifEl, skeletonEl, mediaInfo) {
+    const container = (videoEl && videoEl.parentElement) || (gifEl && gifEl.parentElement) || null;
+    let ytFrame = container ? container.querySelector('.sens-yt-embed-frame') : null;
+
+    if (mediaInfo && mediaInfo.isYouTube && mediaInfo.embedUrl) {
+        if (videoEl) {
+            try { videoEl.pause(); } catch (_) {}
+            videoEl.removeAttribute('src');
+            videoEl.style.display = 'none';
+        }
+        if (gifEl) {
+            gifEl.removeAttribute('src');
+            gifEl.style.display = 'none';
+        }
+        if (skeletonEl) skeletonEl.style.display = 'none';
+
+        if (container) {
+            if (!ytFrame) {
+                ytFrame = document.createElement('iframe');
+                ytFrame.className = 'sens-yt-embed-frame';
+                ytFrame.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                ytFrame.setAttribute('allowfullscreen', '');
+                ytFrame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+                ytFrame.setAttribute('title', 'Video demostrativo de ejercicio');
+                container.appendChild(ytFrame);
+            }
+            if (ytFrame.src !== mediaInfo.embedUrl) {
+                ytFrame.src = mediaInfo.embedUrl;
+            }
+            ytFrame.style.display = 'block';
+        }
+        return;
+    }
+
+    if (ytFrame) {
+        ytFrame.src = '';
+        ytFrame.style.display = 'none';
+    }
+
+    if (mediaInfo && mediaInfo.url) {
+        if (mediaInfo.isVideo) {
+            if (gifEl) gifEl.style.display = 'none';
+            if (skeletonEl) skeletonEl.style.display = 'none';
+            if (videoEl) {
+                videoEl.style.display = 'block';
+                videoEl.src = mediaInfo.url;
+                videoEl.play().catch(() => {});
+            }
+        } else {
+            if (videoEl) {
+                try { videoEl.pause(); } catch (_) {}
+                videoEl.style.display = 'none';
+            }
+            if (skeletonEl) skeletonEl.style.display = 'none';
+            if (gifEl) {
+                gifEl.src = mediaInfo.url;
+                gifEl.style.display = 'block';
+            }
+        }
+    } else {
+        if (videoEl) {
+            try { videoEl.pause(); } catch (_) {}
+            videoEl.style.display = 'none';
+        }
+        if (gifEl) gifEl.style.display = 'none';
+        if (skeletonEl) skeletonEl.style.display = 'flex';
+    }
 };
 
 window.toggleCoachPreviewDeepBiomechanics = function() {
@@ -23413,7 +23496,15 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
                 <div class="coach-master-lib-card">
                     ${hasMedia ? `
                         <div class="coach-lib-media-thumb" ${media.isVideo ? `onclick="window.openCoachExercisePreviewModal && window.openCoachExercisePreviewModal('${safeId}')"` : ''} style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; margin-bottom: 10px; background: #FAF7F2; border: 1px solid rgba(112, 91, 62, 0.16); cursor: ${media.isVideo ? 'pointer' : 'default'};">
-                            ${media.isVideo ? `
+                            ${media.isYouTube ? `
+                                <img src="${media.thumbUrl}" alt="${exTitle}" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
+                                <div style="position: absolute; inset: 0; background: rgba(18,18,20,0.22); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#121214" stroke="none"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                                    </div>
+                                    <span style="font-size: 9.5px; font-weight: 800; color: #FFFFFF; background: rgba(18,18,20,0.75); padding: 2px 8px; border-radius: 999px; letter-spacing: 0.4px;">YOUTUBE • TOCAR PARA VER</span>
+                                </div>
+                            ` : (media.isVideo ? `
                                 <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg, #FAF7F2 0%, #F1ECE3 100%);">
                                     <div style="width: 38px; height: 38px; border-radius: 50%; background: #FFFFFF; border: 1px solid rgba(112, 91, 62, 0.28); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(18,18,20,0.06);">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#705B3E" stroke="none"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
@@ -23422,7 +23513,7 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
                                 </div>
                             ` : `
                                 <img src="${media.url}" alt="${exTitle}" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
-                            `}
+                            `)}
                         </div>
                     ` : ''}
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
@@ -23453,6 +23544,11 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
                         <button type="button" class="coach-lib-edit-btn"
                             onclick="window.openCoachExerciseSheet && window.openCoachExerciseSheet('${safeId}', { assignAfterSave: false })">
                             Editar / Media
+                        </button>
+                        <button type="button" class="coach-lib-delete-btn"
+                            title="Eliminar ejercicio permanentemente"
+                            onclick="window.deleteCoachExercisePermanently && window.deleteCoachExercisePermanently('${safeId}')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         </button>
                     </div>
                 </div>
@@ -28063,7 +28159,16 @@ const CoachWorkoutsMaster = {
             // Al tocar la tarjeta, se abre el modal individual con el video reproduciéndose a máxima calidad sin lag.
             let mediaHtml = '';
             if (media.url) {
-                if (media.isGif) {
+                if (media.isYouTube) {
+                    mediaHtml = `
+                        <img src="${media.thumbUrl}" alt="${exName}" class="wizard-feed-video-bg" loading="lazy" decoding="async">
+                        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; z-index: 2;">
+                            <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center;">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="#121214" stroke="none"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                            </div>
+                        </div>
+                    `;
+                } else if (media.isGif) {
                     mediaHtml = `<img src="${media.url}" alt="${exName}" class="wizard-feed-video-bg" loading="lazy" decoding="async">`;
                 } else if (media.isVideo) {
                     mediaHtml = `
@@ -32548,8 +32653,56 @@ if (typeof window.initUserTrackingModule !== 'function') {
         } catch (_) {}
     }
 
+    const DELETED_EX_STORAGE_KEY = 'sens_deleted_exercise_ids';
+
+    function getDeletedExerciseIds() {
+        try {
+            const raw = localStorage.getItem(DELETED_EX_STORAGE_KEY);
+            const arr = raw ? JSON.parse(raw) : [];
+            return Array.isArray(arr) ? arr : [];
+        } catch (_) {
+            return [];
+        }
+    }
+
+    function addDeletedExerciseId(exId) {
+        if (!exId) return;
+        try {
+            const list = getDeletedExerciseIds();
+            if (!list.includes(exId)) {
+                list.push(exId);
+                localStorage.setItem(DELETED_EX_STORAGE_KEY, JSON.stringify(list));
+            }
+        } catch (_) {}
+    }
+
+    function removeExerciseFromMemory(exId) {
+        if (!exId) return;
+        if (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY)) {
+            for (let i = SENS_EXERCISE_LIBRARY.length - 1; i >= 0; i--) {
+                if (SENS_EXERCISE_LIBRARY[i] && SENS_EXERCISE_LIBRARY[i].id === exId) {
+                    SENS_EXERCISE_LIBRARY.splice(i, 1);
+                }
+            }
+        }
+        if (typeof EXERCISE_CATALOG !== 'undefined' && Array.isArray(EXERCISE_CATALOG)) {
+            for (let i = EXERCISE_CATALOG.length - 1; i >= 0; i--) {
+                if (EXERCISE_CATALOG[i] && EXERCISE_CATALOG[i].id === exId) {
+                    EXERCISE_CATALOG.splice(i, 1);
+                }
+            }
+        }
+        if (typeof window.hydrateExerciseLibraryInMemory === 'function') {
+            try { window.hydrateExerciseLibraryInMemory(); } catch (_) {}
+        }
+    }
+
     window.syncCustomExercisesFromSupabase = async function (force = false) {
         if (window._sensCustomExercisesSynced && !force) return;
+
+        // Aplicar eliminaciones locales inmediatamente para evitar que reaparezcan ejercicios base borrados
+        getDeletedExerciseIds().forEach(id => removeExerciseFromMemory(id));
+
         const client = await getSbClient();
         if (!client) return;
 
@@ -32565,7 +32718,14 @@ if (typeof window.initUserTrackingModule !== 'function') {
             }
 
             if (Array.isArray(data) && data.length > 0) {
-                data.forEach(row => window.upsertExerciseInMemory(row));
+                data.forEach(row => {
+                    if (row && row.is_deleted) {
+                        addDeletedExerciseId(row.id);
+                        removeExerciseFromMemory(row.id);
+                    } else if (row && !getDeletedExerciseIds().includes(row.id)) {
+                        window.upsertExerciseInMemory(row);
+                    }
+                });
             }
             window._sensCustomExercisesSynced = true;
             refreshExerciseViewsAfterChange();
@@ -32727,7 +32887,9 @@ if (typeof window.initUserTrackingModule !== 'function') {
             return;
         }
 
-        if (resolved.isVideo) {
+        if (resolved.isYouTube && resolved.embedUrl) {
+            inner.innerHTML = `<iframe src="${resolved.embedUrl}" class="sens-yt-embed-frame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="Preview YouTube"></iframe>`;
+        } else if (resolved.isVideo) {
             inner.innerHTML = `<video src="${resolved.url}" muted loop autoplay playsinline controls></video>`;
         } else {
             inner.innerHTML = `<img src="${resolved.url}" alt="Preview de ejercicio" />`;
@@ -32833,6 +32995,16 @@ if (typeof window.initUserTrackingModule !== 'function') {
                     if (lbl) lbl.textContent = 'Subir Foto / GIF / Video';
                     if (submitBtn) submitBtn.disabled = false;
                     fileInput.value = '';
+                }
+            });
+        }
+
+        const deleteBtn = document.getElementById('btnCoachExDelete');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => {
+                const editId = (document.getElementById('coachExEditId')?.value || '').trim();
+                if (editId && typeof window.deleteCoachExercisePermanently === 'function') {
+                    window.deleteCoachExercisePermanently(editId);
                 }
             });
         }
@@ -32956,6 +33128,89 @@ if (typeof window.initUserTrackingModule !== 'function') {
         }
     }
 
+    window.deleteCoachExercisePermanently = async function (exerciseId) {
+        if (!exerciseId) return;
+        const existingEx = findExerciseById(exerciseId);
+        const exName = (existingEx && (existingEx.name_es || existingEx.name)) || 'este ejercicio';
+        if (!window.confirm(`¿Eliminar permanentemente "${exName}" de la Biblioteca SENS? Esta acción no se puede deshacer.`)) {
+            return;
+        }
+
+        const client = await getSbClient();
+        if (!client) {
+            if (typeof showSensToast === 'function') showSensToast('No hay conexión activa con Supabase.', 'error');
+            return;
+        }
+
+        const deleteBtn = document.getElementById('btnCoachExDelete');
+        if (deleteBtn) {
+            deleteBtn.disabled = true;
+            deleteBtn.textContent = 'Eliminando...';
+        }
+
+        try {
+            let dbHandled = false;
+
+            if (existingEx && existingEx.is_custom) {
+                const { error: delErr } = await client
+                    .from('sens_exercise_library')
+                    .delete()
+                    .eq('id', exerciseId);
+                if (!delErr) {
+                    dbHandled = true;
+                } else {
+                    console.warn('[SENS Delete] Direct delete fallback:', delErr.message || delErr);
+                }
+            }
+
+            if (!dbHandled) {
+                // Para ejercicios base del catálogo (o si DELETE falló por RLS), marcar tombstone is_deleted = true
+                const tombstonePayload = existingEx
+                    ? Object.assign(buildFullSupabasePayload(existingEx, {}), { is_deleted: true })
+                    : { id: exerciseId, is_deleted: true, updated_at: new Date().toISOString() };
+
+                const { error: upsertErr } = await client
+                    .from('sens_exercise_library')
+                    .upsert(tombstonePayload, { onConflict: 'id' });
+
+                if (upsertErr) {
+                    // Fallback si la columna is_deleted aún no fue migrada en Supabase
+                    const { error: delFallbackErr } = await client
+                        .from('sens_exercise_library')
+                        .delete()
+                        .eq('id', exerciseId);
+                    if (delFallbackErr) {
+                        console.warn('[SENS Delete] Supabase fallback warning:', upsertErr.message, delFallbackErr.message);
+                    }
+                }
+            }
+
+            addDeletedExerciseId(exerciseId);
+            removeExerciseFromMemory(exerciseId);
+            refreshExerciseViewsAfterChange();
+
+            const openEditId = (document.getElementById('coachExEditId')?.value || '').trim();
+            if (openEditId === exerciseId && typeof window.closeCoachExerciseSheet === 'function') {
+                window.closeCoachExerciseSheet();
+            }
+
+            if (typeof showSensToast === 'function') {
+                showSensToast(`"${exName}" eliminado permanentemente de SENS.`, 'champagne');
+            }
+        } catch (err) {
+            console.error('[SENS Delete] Exception:', err);
+            setSheetStatus(`No se pudo eliminar: ${err.message || 'error inesperado'}.`, 'error');
+            if (typeof showSensToast === 'function') {
+                showSensToast('Error al eliminar el ejercicio.', 'error');
+            }
+        } finally {
+            if (deleteBtn) {
+                deleteBtn.disabled = false;
+                deleteBtn.textContent = 'Eliminar';
+            }
+        }
+    };
+
     window.openCoachExerciseSheet = function (exerciseId = null, options = {}) {
         bindCoachExerciseSheetOnce();
 
@@ -32972,12 +33227,14 @@ if (typeof window.initUserTrackingModule !== 'function') {
         const eyebrowEl = document.getElementById('coachExSheetEyebrow');
         const titleEl = document.getElementById('coachExSheetTitle');
         const submitBtn = document.getElementById('btnCoachExSheetSubmit');
+        const deleteBtn = document.getElementById('btnCoachExDelete');
         const detailsEl = document.getElementById('coachExOptionalDetails');
 
         if (existingEx) {
             if (eyebrowEl) eyebrowEl.textContent = existingEx.is_custom ? 'EJERCICIO PROPIO • BASE SENS' : 'EDITAR BASE MAESTRA SENS';
             if (titleEl) titleEl.textContent = 'Editar Ejercicio';
             if (submitBtn) submitBtn.textContent = 'Guardar Cambios';
+            if (deleteBtn) deleteBtn.style.display = 'inline-flex';
 
             document.getElementById('coachExNameInput').value = existingEx.name_es || existingEx.name || '';
             setChipActive('coachExTypeChips', (existingEx.nivel_1_tipo || 'muscular').toLowerCase());
@@ -32996,6 +33253,7 @@ if (typeof window.initUserTrackingModule !== 'function') {
             if (eyebrowEl) eyebrowEl.textContent = 'BASE MAESTRA SENS';
             if (titleEl) titleEl.textContent = assignAfterSave ? 'Nuevo Ejercicio para la Rutina' : 'Nuevo Ejercicio';
             if (submitBtn) submitBtn.textContent = assignAfterSave ? 'Guardar y Agregar al Día' : 'Guardar en Base SENS';
+            if (deleteBtn) deleteBtn.style.display = 'none';
 
             document.getElementById('coachExNameInput').value = '';
             setChipActive('coachExTypeChips', 'muscular');
@@ -33027,6 +33285,8 @@ if (typeof window.initUserTrackingModule !== 'function') {
     window.closeCoachExerciseSheet = function () {
         const sheet = document.getElementById('coachExerciseEditorSheet');
         const backdrop = document.getElementById('coachExerciseSheetBackdrop');
+        const previewInner = document.getElementById('coachExMediaPreviewInner');
+        if (previewInner) previewInner.innerHTML = '';
         if (sheet) sheet.style.display = 'none';
         if (backdrop) backdrop.style.display = 'none';
         document.body.style.overflow = '';

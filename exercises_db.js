@@ -51012,10 +51012,23 @@ function resolveExerciseMediaUrl(video_local_path) {
     const cleanNoQuery = clean.split('?')[0].toLowerCase();
     const filename = cleanNoQuery.split('/').pop();
     const isExternal = /^https?:\/\//i.test(clean) || /^data:/i.test(clean);
-    const isVideo = /\.(mp4|webm|mov|m4v)$/i.test(cleanNoQuery);
-    const isGif = /\.(gif|jpg|jpeg|png|webp|avif)$/i.test(cleanNoQuery);
 
-    // Preservar URLs externas (Supabase Storage o links directos); para rutas locales mantener el mapeo del repo
+    // Detectar enlaces de YouTube (videos normales, youtu.be, Shorts, Embed, Live)
+    let youtubeId = null;
+    if (isExternal) {
+        const ytMatch = clean.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{6,15})/i);
+        if (ytMatch && ytMatch[1]) {
+            youtubeId = ytMatch[1];
+        }
+    }
+    const isYouTube = Boolean(youtubeId);
+    const embedUrl = isYouTube ? `https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1` : '';
+    const thumbUrl = isYouTube ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : '';
+
+    const isVideo = isYouTube || /\.(mp4|webm|mov|m4v)$/i.test(cleanNoQuery);
+    const isGif = !isYouTube && /\.(gif|jpg|jpeg|png|webp|avif)$/i.test(cleanNoQuery);
+
+    // Preservar URLs externas (YouTube, Supabase Storage o links directos); para rutas locales mantener el mapeo del repo
     let resolvedUrl = isExternal
         ? clean
         : (isVideo
@@ -51024,11 +51037,17 @@ function resolveExerciseMediaUrl(video_local_path) {
 
     return {
         url: resolvedUrl,
+        embedUrl,
+        thumbUrl,
+        youtubeId,
+        isYouTube,
         isVideo,
         isGif,
         filename,
         renderHtml: (extraClass = '', extraStyle = '') => {
-            if (isVideo) {
+            if (isYouTube) {
+                return `<iframe src="${embedUrl}" class="${extraClass}" style="width:100%;height:100%;border:0;${extraStyle}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+            } else if (isVideo) {
                 return `<video autoplay loop muted playsinline preload="metadata" class="${extraClass}" style="${extraStyle}"><source src="${resolvedUrl}" type="video/mp4"></video>`;
             } else {
                 return `<img src="${resolvedUrl}" alt="" loading="lazy" class="${extraClass}" style="${extraStyle}">`;

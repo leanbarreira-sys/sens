@@ -27,6 +27,7 @@ ALTER TABLE public.sens_exercise_library
     ADD COLUMN IF NOT EXISTS default_rest_seconds INTEGER NOT NULL DEFAULT 90,
     ADD COLUMN IF NOT EXISTS is_custom BOOLEAN NOT NULL DEFAULT false,
     ADD COLUMN IF NOT EXISTS is_favorite BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN NOT NULL DEFAULT false,
     ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now());
 
 -- Hacer opcionales / con default las columnas heredadas (si existen) para evitar errores NOT NULL
@@ -94,19 +95,16 @@ BEGIN
             );
     END IF;
 
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_policies
-        WHERE schemaname = 'public' AND tablename = 'sens_exercise_library' AND policyname = 'Admins can delete custom sens_exercise_library'
-    ) THEN
-        CREATE POLICY "Admins can delete custom sens_exercise_library"
-            ON public.sens_exercise_library FOR DELETE
-            USING (
-                is_custom = true AND EXISTS (
-                    SELECT 1 FROM public.profiles p
-                    WHERE p.id = auth.uid() AND p.role = 'admin'
-                )
-            );
-    END IF;
+    DROP POLICY IF EXISTS "Admins can delete custom sens_exercise_library" ON public.sens_exercise_library;
+    DROP POLICY IF EXISTS "Admins can delete sens_exercise_library" ON public.sens_exercise_library;
+    CREATE POLICY "Admins can delete sens_exercise_library"
+        ON public.sens_exercise_library FOR DELETE
+        USING (
+            EXISTS (
+                SELECT 1 FROM public.profiles p
+                WHERE p.id = auth.uid() AND p.role = 'admin'
+            )
+        );
 END $$;
 
 -- 3. Bucket público de Supabase Storage para fotos, GIFs y videos subidos por el Coach
