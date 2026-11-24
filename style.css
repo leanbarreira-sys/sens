@@ -35204,3 +35204,181 @@ body.in-portal #coachDeleteAthleteModalSheet .btn-coach-del-final,
     font-weight: 600;
     text-align: right;
 }
+
+/* =============================================================================
+   SECCIÓN ENTRENO (#workoutView): QUIET LUXURY UX POLISH (iOS & ANDROID)
+   ============================================================================= */
+body.in-portal #workoutView {
+    padding-top: 4px !important;
+}
+
+body.in-portal #workoutView #workoutWelcomeHeader {
+    margin-bottom: 12px !important;
+}
+
+body.in-portal #workoutView #workoutCalendarStickyWrapper {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.05) !important;
+    border-radius: 20px !important;
+    padding: 12px 12px 10px !important;
+    box-shadow: 0 4px 18px rgba(18, 18, 20, 0.035) !important;
+    margin-bottom: 12px !important;
+}
+
+body.in-portal #workoutView .sens-workout-filters-row {
+    gap: 6px !important;
+    padding: 2px 0 6px !important;
+    margin-bottom: 10px !important;
+    scrollbar-width: none;
+}
+
+body.in-portal #workoutView .sens-workout-filters-row::-webkit-scrollbar {
+    display: none;
+}
+
+body.in-portal #workoutView .workout-filter-chip {
+    min-height: 36px !important;
+    padding: 7px 14px !important;
+    border-radius: 9999px !important;
+    background: #F4F2EE !important;
+    border: 1px solid transparent !important;
+    color: #575659 !important;
+    -webkit-text-fill-color: #575659 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.in-portal #workoutView .workout-filter-chip.active {
+    background: #F6EFE4 !important;
+    border: 1px solid rgba(112, 91, 62, 0.36) !important;
+    color: #121214 !important;
+    -webkit-text-fill-color: #121214 !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #workoutView .sens-coach-daily-note-card {
+    background: #FAF7F2 !important;
+    border: 1px solid rgba(197, 168, 128, 0.3) !important;
+    border-radius: 18px !important;
+    padding: 13px 15px !important;
+    margin-bottom: 16px !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #workoutView .sens-coach-note-title {
+    color: #705B3E !important;
+    font-weight: 700 !important;
+    font-size: 11.5px !important;
+}
+
+body.in-portal #workoutView .sens-coach-note-body {
+    color: #2A241C !important;
+    font-size: 12.5px !important;
+    line-height: 1.48 !important;
+}
+
+body.in-portal #workoutView .sens-workout-type-section {
+    margin-bottom: 20px !important;
+}
+
+body.in-portal #workoutView .sens-workout-type-header {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 0 !important;
+    padding: 4px 2px 10px !important;
+    margin-bottom: 10px !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #workoutView .sens-workout-type-title {
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    color: #121214 !important;
+}
+
+body.in-portal #workoutView .sens-workout-type-count {
+    background: #F4F2EE !important;
+    color: #575659 !important;
+    font-weight: 600 !important;
+    font-variant-numeric: tabular-nums;
+}
+
+body.in-portal #workoutView .sens-muscle-header {
+    padding: 2px 2px 8px !important;
+}
+
+body.in-portal #workoutView .sens-muscle-title {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em !important;
+    color: #705B3E !important;
+}
+
+body.in-portal #workoutView .sens-ex-compact-card {
+    border: 1px solid rgba(18, 18, 20, 0.05) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 6px 24px rgba(18, 18, 20, 0.045) !important;
+    transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.16s ease !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.in-portal #workoutView .sens-ex-compact-card:active {
+    transform: scale(0.985);
+}
+
+body.in-portal #workoutView .sens-ex-compact-card.is-done {
+    background: #F7FBF9 !important;
+    border-color: rgba(16, 185, 129, 0.32) !important;
+}
+
+body.in-portal #workoutView .sens-ex-compact-body {
+    padding: 13px 14px 14px !important;
+}
+
+body.in-portal #workoutView .sens-ex-compact-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.015em !important;
+    line-height: 1.28 !important;
+}
+
+body.in-portal #workoutView .sens-ex-compact-sub {
+    font-weight: 500 !important;
+    font-size: 11.5px !important;
+}
+
+body.in-portal #workoutView .sens-ex-compact-footer {
+    border-top: 1px solid rgba(18, 18, 20, 0.05) !important;
+    padding-top: 9px !important;
+    margin-top: 9px !important;
+    font-variant-numeric: tabular-nums;
+}
+
+body.in-portal #workoutView .sens-ex-compact-meta-pill {
+    background: #F6F4F0 !important;
+    border-radius: 999px !important;
+    padding: 4px 9px !important;
+    font-weight: 600 !important;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Ergonomía táctil iOS & Android en el modal de ejecución */
+body.in-portal #sensExerciseModalSheet .sens-tactile-set-row {
+    border-radius: 16px !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    font-variant-numeric: tabular-nums;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary,
+body.in-portal #sensExerciseModalSheet .sens-btn-timer-secondary,
+body.in-portal #sensExerciseModalSheet #btnQuickCompleteAllSets,
+body.in-portal #sensExerciseModalSheet #btnModalFinishExercise {
+    min-height: 46px !important;
+    border-radius: 14px !important;
+    font-variant-numeric: tabular-nums;
+}
