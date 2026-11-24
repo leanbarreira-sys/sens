@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=55.0">
+    <link rel="stylesheet" href="style.css?v=56.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '68.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '68.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '69.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '69.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4853,6 +4853,18 @@
                         </div>
                     </div>
 
+                    <!-- Sub-navegación desde el inicio: Alumnos vs. Pagos & Vencimientos -->
+                    <div class="coach-subview-switcher" id="coachAthletesSubviewSwitcher" role="tablist" aria-label="Subsección de Alumnos">
+                        <button type="button" class="coach-subview-tab active" id="btnCoachSubviewRoster" data-athletes-section="roster">
+                            <span>Lista de Alumnos</span>
+                        </button>
+                        <button type="button" class="coach-subview-tab" id="btnCoachSubviewPayments" data-athletes-section="payments">
+                            <span>Pagos &amp; Vencimientos</span>
+                            <span class="coach-subview-badge" id="coachPaymentsAlertBadge" style="display: none;">0</span>
+                        </button>
+                    </div>
+
+                    <div id="coachAthletesRosterSection">
                     <!-- Acordeón Desplegable del Modelo Comercial de Nico (No bloquea la lista de alumnos) -->
                     <div class="coach-business-tiers-wrapper" id="coachBusinessTiersWrapper">
                         <button type="button" class="coach-tiers-toggle-btn" id="btnToggleBusinessTiers"
@@ -4947,6 +4959,128 @@
                         <!-- Lista de Atletas (Tarjetas Mobile-First con Ficha 360° Solo Lectura + Gestión de Accesos) -->
                         <div class="coach-athletes-list" id="coachAthletesListContainer" style="margin-top: 18px;">
                             <!-- Inyectado dinámicamente por app.js -->
+                        </div>
+                    </div>
+                    </div><!-- /#coachAthletesRosterSection -->
+
+                    <!-- SUBSECCIÓN: PAGOS, HISTORIAL & VENCIMIENTOS POR ALUMNO -->
+                    <div id="coachAthletesPaymentsSection" style="display: none;">
+                        <div class="coach-payments-kpis">
+                            <div class="coach-pay-kpi ok">
+                                <span class="coach-pay-kpi-label">Al día</span>
+                                <strong class="coach-pay-kpi-val" id="kpiPayUpToDate">0</strong>
+                            </div>
+                            <div class="coach-pay-kpi expiring">
+                                <span class="coach-pay-kpi-label">Por vencer (&le;5d)</span>
+                                <strong class="coach-pay-kpi-val" id="kpiPayExpiring">0</strong>
+                            </div>
+                            <div class="coach-pay-kpi expired">
+                                <span class="coach-pay-kpi-label">Vencidos / Pausados</span>
+                                <strong class="coach-pay-kpi-val" id="kpiPayExpired">0</strong>
+                            </div>
+                        </div>
+
+                        <div class="coach-surface-card" style="margin-top: 12px; padding: 14px 16px;">
+                            <div class="coach-payments-autopause-row">
+                                <label class="coach-autopause-toggle-label" for="toggleCoachAutoPauseExpired">
+                                    <input type="checkbox" id="toggleCoachAutoPauseExpired">
+                                    <span>Auto-pausar alumnos al vencer</span>
+                                </label>
+                                <button type="button" class="btn-coach-pause-expired" id="btnCoachPauseAllExpired" style="display: none;">
+                                    Pausar vencidos (<span id="coachExpiredActiveCount">0</span>)
+                                </button>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; align-items: center; width: 100%; margin-top: 12px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6; flex-shrink: 0;">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                                <input type="text" id="coachSearchPaymentsInput" class="input-control" placeholder="Buscar alumno para ver pagos o vencimiento..." style="margin-bottom: 0; width: 100%;">
+                            </div>
+
+                            <div class="coach-horizontal-pills" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; margin-top: 10px; align-items: center;">
+                                <button type="button" class="pill pill-champagne coach-pay-filter-btn" data-pay-filter="all" style="cursor: pointer; border: none; flex-shrink: 0;">Todos</button>
+                                <button type="button" class="pill pill-dark coach-pay-filter-btn" data-pay-filter="expiring" style="cursor: pointer; border: none; flex-shrink: 0;">Por vencer</button>
+                                <button type="button" class="pill pill-dark coach-pay-filter-btn" data-pay-filter="expired" style="cursor: pointer; border: none; flex-shrink: 0;">Vencidos</button>
+                                <button type="button" class="pill pill-dark coach-pay-filter-btn" data-pay-filter="ok" style="cursor: pointer; border: none; flex-shrink: 0;">Al día</button>
+                                <button type="button" class="pill pill-dark coach-pay-filter-btn" data-pay-filter="paused" style="cursor: pointer; border: none; flex-shrink: 0;">Pausados</button>
+                            </div>
+
+                            <div class="coach-payments-list" id="coachPaymentsListContainer" style="margin-top: 14px;">
+                                <!-- Inyectado dinámicamente por app.js -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MODAL / BOTTOM SHEET: REGISTRAR PAGO & VENCIMIENTO -->
+                    <div class="sens-exercise-modal-backdrop" id="coachPaymentModalBackdrop" style="display: none;">
+                        <div class="sens-exercise-modal-sheet coach-payment-modal-sheet" id="coachPaymentModalSheet" role="dialog" aria-modal="true" aria-labelledby="coachPayModalTitle">
+                            <div class="sheet-drag-handle-wrap"><span class="sheet-drag-handle"></span></div>
+                            <div class="sens-exercise-modal-top">
+                                <div style="min-width: 0;">
+                                    <span class="pill pill-champagne" style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.4px;">PAGO &amp; VENCIMIENTO</span>
+                                    <h3 id="coachPayModalTitle" style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 4px 0 0;">Registrar Pago</h3>
+                                    <p id="coachPayModalAthleteSub" style="font-size: 12px; color: #575659; margin: 2px 0 0;"></p>
+                                </div>
+                                <button type="button" class="sens-modal-close-btn" id="btnCloseCoachPaymentModal" aria-label="Cerrar modal">✕</button>
+                            </div>
+
+                            <div class="coach-pay-modal-body">
+                                <input type="hidden" id="coachPayModalAthleteId">
+
+                                <div class="coach-pay-form-grid">
+                                    <div>
+                                        <label class="coach-pay-field-label" for="coachPayAmountInput">Monto (ARS)</label>
+                                        <input type="number" id="coachPayAmountInput" class="input-control" placeholder="40000" min="0" step="500">
+                                    </div>
+                                    <div>
+                                        <label class="coach-pay-field-label" for="coachPayMethodSelect">Método de pago</label>
+                                        <select id="coachPayMethodSelect" class="input-control">
+                                            <option value="manual_transfer">Transferencia</option>
+                                            <option value="cash">Efectivo</option>
+                                            <option value="mercadopago">Mercado Pago</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="coach-pay-form-grid">
+                                    <div>
+                                        <label class="coach-pay-field-label" for="coachPayDateInput">Fecha de pago</label>
+                                        <input type="date" id="coachPayDateInput" class="input-control">
+                                    </div>
+                                    <div>
+                                        <label class="coach-pay-field-label" for="coachPayExpiresInput">Vence el</label>
+                                        <input type="date" id="coachPayExpiresInput" class="input-control">
+                                    </div>
+                                </div>
+
+                                <div class="coach-pay-duration-pills">
+                                    <span class="coach-pay-field-label" style="margin: 0;">Extender rápido:</span>
+                                    <button type="button" class="coach-pay-dur-btn active" data-pay-days="30">+30 días</button>
+                                    <button type="button" class="coach-pay-dur-btn" data-pay-days="60">+60 días</button>
+                                    <button type="button" class="coach-pay-dur-btn" data-pay-days="90">+90 días</button>
+                                </div>
+
+                                <div>
+                                    <label class="coach-pay-field-label" for="coachPayNotesInput">Nota (opcional)</label>
+                                    <input type="text" id="coachPayNotesInput" class="input-control" placeholder="Ej: Cuota Noviembre • Alias MP">
+                                </div>
+
+                                <label class="coach-pay-autoactivate-row" for="coachPayAutoActivateCheck">
+                                    <input type="checkbox" id="coachPayAutoActivateCheck" checked>
+                                    <div>
+                                        <strong>Activar alumno automáticamente al guardar</strong>
+                                        <span>Actualiza el acceso a Activo hasta la fecha de vencimiento.</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="sens-modal-sticky-save-bar">
+                                <button type="button" class="btn sens-sticky-save-btn" id="btnSaveCoachPayment">
+                                    <span>Guardar Pago &amp; Actualizar Vencimiento</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -8855,7 +8989,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=70.0"></script>
+    <script defer src="app.js?v=71.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

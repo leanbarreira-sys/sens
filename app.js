@@ -4348,7 +4348,7 @@ function checkUserAccessStatus(profile) {
     const isManualValidated = Boolean(status === 'active' || status === 'vip_manual' || p.role === 'user_vip');
     const hasActivePremium = isManualValidated && (!p.premium_until || new Date(p.premium_until).getTime() > Date.now());
     const isTrialActive = false;
-    const hasAccess = Boolean(isAdmin || hasActivePremium || isManualValidated);
+    const hasAccess = Boolean(isAdmin || hasActivePremium);
 
     // Actualizar el badge superior del Topbar (#portalPlanBadgeText)
     const topbarPlanText = document.getElementById('portalPlanBadgeText');
@@ -11880,23 +11880,29 @@ function getConsolidatedCoachAthletes() {
 
         let localProf = {};
         let localAnam = {};
+        let overrideProf = {};
         if (emailLower) {
             try {
                 localProf = JSON.parse(localStorage.getItem(`sens_profile_${emailLower}`) || '{}');
                 localAnam = JSON.parse(localStorage.getItem(`sens_anamnesis_${emailLower}`) || '{}');
             } catch (_) {}
         }
+        try {
+            overrideProf = JSON.parse(localStorage.getItem(`sens_athlete_override_${ath.id}`) || '{}');
+        } catch (_) {}
 
         roster.push({
             ...ath,
             ...localProf,
+            ...overrideProf,
             id: ath.id,
             isDb: true,
             full_name: ath.full_name || localProf.full_name || ath.email || 'Atleta SENS',
             email: ath.email || localProf.email || `${ath.id.slice(0, 8)}@sens.com`,
             user_type: ath.user_type || localProf.user_type || 'client_presencial_vip',
             active_plan_name: ath.active_plan_name || localProf.active_plan_name || 'Presencial 1 a 1 VIP (CABA)',
-            subscription_status: ath.subscription_status || localProf.subscription_status || 'pending_activation',
+            subscription_status: overrideProf.subscription_status || ath.subscription_status || localProf.subscription_status || 'pending_activation',
+            premium_until: overrideProf.premium_until || ath.premium_until || localProf.premium_until || null,
             current_weight: ath.current_weight || ath.weight || localProf.current_weight || localProf.weight || localAnam.weight || (localAnam.tape_measurements && localAnam.tape_measurements.weight) || null,
             height: ath.height || localProf.height || localAnam.height || (localAnam.tape_measurements && localAnam.tape_measurements.height) || null,
             age: ath.age || localProf.age || localAnam.age || (localAnam.tape_measurements && localAnam.tape_measurements.age) || null,
@@ -12223,6 +12229,7 @@ function initCoachAthletesHub() {
     }
 
     syncCoachMasterCard();
+    if (typeof initCoachPaymentsHub === 'function') initCoachPaymentsHub();
 }
 
 function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
@@ -12733,6 +12740,7 @@ async function updateAthleteSubscriptionStatus(athId, newStatus) {
 
     renderCoachAthletesHub();
     renderAthleteBottomSheetList();
+    if (typeof renderCoachPaymentsHub === 'function') renderCoachPaymentsHub();
     showSensToast(
         newStatus === 'active' 
             ? '¡Atleta aprobado con éxito! Acceso y entrenamientos habilitados.' 
@@ -12740,6 +12748,602 @@ async function updateAthleteSubscriptionStatus(athId, newStatus) {
         'champagne'
     );
 }
+
+// -----------------------------------------------------------------------------
+// SUB-MÓDULO 1B: HISTORIAL DE PAGOS, VENCIMIENTOS & AUTO-PAUSADO (COACH OS)
+// -----------------------------------------------------------------------------
+const SENS_COACH_PAYMENTS_STORAGE_KEY = 'sens_coach_payments_v1';
+const SENS_COACH_AUTOPAUSE_KEY = 'sens_coach_auto_pause_expired';
+window.__coachPaymentsCache = window.__coachPaymentsCache || null;
+let coachPaymentsCurrentFilter = 'all';
+
+function getCoachPaymentsStore() {
+    if (window.__coachPaymentsCache && typeof window.__coachPaymentsCache === 'object') {
+        return window.__coachPaymentsCache;
+    }
+    try {
+        const parsed = JSON.parse(localStorage.getItem(SENS_COACH_PAYMENTS_STORAGE_KEY) || '{}');
+        window.__coachPaymentsCache = (parsed && typeof parsed === 'object') ? parsed : {};
+    } catch (_) {
+        window.__coachPaymentsCache = {};
+    }
+    return window.__coachPaymentsCache;
+}
+
+function saveCoachPaymentsStore(store) {
+    window.__coachPaymentsCache = store;
+    try {
+        localStorage.setItem(SENS_COACH_PAYMENTS_STORAGE_KEY, JSON.stringify(store));
+    } catch (_) {}
+}
+
+function getAthletePaymentHistory(athId) {
+    const store = getCoachPaymentsStore();
+    const list = Array.isArray(store[athId]) ? store[athId] : [];
+    return [...list].sort((a, b) => new Date(b.paid_at || b.created_at || 0).getTime() - new Date(a.paid_at || a.created_at || 0).getTime());
+}
+
+function formatPaymentDateShort(isoOrYmd) {
+    if (!isoOrYmd) return '—';
+    const d = new Date(isoOrYmd.length === 10 ? `${isoOrYmd}T12:00:00` : isoOrYmd);
+    if (Number.isNaN(d.getTime())) return '—';
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+}
+
+function toInputDateYmd(dateObjOrIso) {
+    const d = dateObjOrIso ? new Date(dateObjOrIso) : new Date();
+    if (Number.isNaN(d.getTime())) return new Date().toISOString().slice(0, 10);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+}
+
+function getAthleteExpirationInfo(ath) {
+    const history = getAthletePaymentHistory(ath.id);
+    const latestPay = history[0] || null;
+    const rawExpiry = ath.premium_until || (latestPay && latestPay.expires_at) || null;
+    if (!rawExpiry) {
+        return { state: 'none', daysLeft: null, expiryDate: null, latestPay };
+    }
+    const expDate = new Date(rawExpiry.length === 10 ? `${rawExpiry}T23:59:59` : rawExpiry);
+    if (Number.isNaN(expDate.getTime())) {
+        return { state: 'none', daysLeft: null, expiryDate: null, latestPay };
+    }
+    const now = new Date();
+    const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const startExp = new Date(expDate.getFullYear(), expDate.getMonth(), expDate.getDate()).getTime();
+    const daysLeft = Math.round((startExp - startToday) / 86400000);
+    const state = daysLeft < 0 ? 'expired' : daysLeft <= 5 ? 'expiring' : 'ok';
+    return { state, daysLeft, expiryDate: expDate, latestPay };
+}
+
+async function loadCoachPaymentsFromSupabase() {
+    if (!supabaseClient || !isCurrentUserAdmin()) return;
+    try {
+        const { data, error } = await supabaseClient
+            .from('payment_transactions')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(500);
+        if (error || !Array.isArray(data)) return;
+
+        const nextStore = { ...getCoachPaymentsStore() };
+        const grouped = {};
+        data.forEach(row => {
+            if (!row.user_id) return;
+            const meta = (row.webhook_payload && typeof row.webhook_payload === 'object') ? row.webhook_payload : {};
+            if (!grouped[row.user_id]) grouped[row.user_id] = [];
+            grouped[row.user_id].push({
+                id: row.id,
+                user_id: row.user_id,
+                amount: Number(row.amount) || 0,
+                currency: row.currency || 'ARS',
+                provider: row.provider || 'manual_transfer',
+                paid_at: meta.paid_at || (row.created_at ? row.created_at.slice(0, 10) : toInputDateYmd()),
+                expires_at: meta.expires_at || null,
+                notes: meta.notes || '',
+                created_at: row.created_at,
+                fromDb: true
+            });
+        });
+
+        Object.keys(grouped).forEach(uid => {
+            const localOnly = (nextStore[uid] || []).filter(item => !item.fromDb && !grouped[uid].some(dbItem => dbItem.id === item.id));
+            nextStore[uid] = [...grouped[uid], ...localOnly];
+        });
+        saveCoachPaymentsStore(nextStore);
+    } catch (e) {
+        console.warn('[CoachPayments] No se pudo sincronizar payment_transactions:', e);
+    }
+}
+
+async function applyAutoPauseIfEnabled(athletes) {
+    const enabled = localStorage.getItem(SENS_COACH_AUTOPAUSE_KEY) === '1';
+    if (!enabled) return false;
+    const toPause = athletes.filter(ath => {
+        if (ath.subscription_status !== 'active') return false;
+        const info = getAthleteExpirationInfo(ath);
+        return info.state === 'expired';
+    });
+    if (toPause.length === 0) return false;
+
+    for (const ath of toPause) {
+        await updateAthleteSubscriptionStatusSilent(ath.id, 'paused');
+    }
+    return toPause.length;
+}
+
+async function updateAthleteSubscriptionStatusSilent(athId, newStatus, premiumUntilIso = undefined) {
+    const patch = { subscription_status: newStatus };
+    if (premiumUntilIso !== undefined) patch.premium_until = premiumUntilIso;
+
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            await supabaseClient.from('profiles').update(patch).eq('id', athId);
+        } catch (e) {
+            console.warn('Error al actualizar perfil en Supabase:', e);
+        }
+    }
+
+    if (window.__coachAthletesCache) {
+        const cached = window.__coachAthletesCache.find(a => a.id === athId);
+        if (cached) {
+            cached.subscription_status = newStatus;
+            if (premiumUntilIso !== undefined) cached.premium_until = premiumUntilIso;
+        }
+    }
+
+    try {
+        const stored = JSON.parse(localStorage.getItem(`sens_athlete_override_${athId}`) || '{}');
+        stored.subscription_status = newStatus;
+        if (premiumUntilIso !== undefined) stored.premium_until = premiumUntilIso;
+        localStorage.setItem(`sens_athlete_override_${athId}`, JSON.stringify(stored));
+
+        const localList = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
+        const targetLocal = localList.find(a => a.id === athId);
+        if (targetLocal) {
+            targetLocal.subscription_status = newStatus;
+            if (premiumUntilIso !== undefined) targetLocal.premium_until = premiumUntilIso;
+            localStorage.setItem('sens_registered_athletes', JSON.stringify(localList));
+        }
+    } catch (_) {}
+}
+
+async function pauseAllExpiredAthletes() {
+    const athletes = getConsolidatedCoachAthletes();
+    const expiredActive = athletes.filter(ath => ath.subscription_status === 'active' && getAthleteExpirationInfo(ath).state === 'expired');
+    if (expiredActive.length === 0) {
+        showSensToast('No hay alumnos activos con vencimiento caducado.', 'champagne');
+        return;
+    }
+    for (const ath of expiredActive) {
+        await updateAthleteSubscriptionStatusSilent(ath.id, 'paused');
+    }
+    renderCoachAthletesHub();
+    renderAthleteBottomSheetList();
+    renderCoachPaymentsHub();
+    showSensToast(`${expiredActive.length} alumno(s) vencido(s) pausados automáticamente.`, 'champagne');
+}
+
+function switchCoachAthletesSection(section) {
+    const isPayments = section === 'payments';
+    const rosterSec = document.getElementById('coachAthletesRosterSection');
+    const paymentsSec = document.getElementById('coachAthletesPaymentsSection');
+    const btnRoster = document.getElementById('btnCoachSubviewRoster');
+    const btnPayments = document.getElementById('btnCoachSubviewPayments');
+
+    if (rosterSec) rosterSec.style.display = isPayments ? 'none' : 'block';
+    if (paymentsSec) paymentsSec.style.display = isPayments ? 'block' : 'none';
+    if (btnRoster) btnRoster.classList.toggle('active', !isPayments);
+    if (btnPayments) btnPayments.classList.toggle('active', isPayments);
+
+    if (isPayments) {
+        renderCoachPaymentsHub();
+        loadCoachPaymentsFromSupabase().then(() => renderCoachPaymentsHub());
+    }
+}
+
+function renderCoachPaymentsHub() {
+    const container = document.getElementById('coachPaymentsListContainer');
+    const allAthletes = getConsolidatedCoachAthletes();
+
+    let upToDateCount = 0;
+    let expiringCount = 0;
+    let expiredOrPausedCount = 0;
+    let expiredStillActiveCount = 0;
+
+    allAthletes.forEach(ath => {
+        const info = getAthleteExpirationInfo(ath);
+        if (ath.subscription_status === 'paused' || info.state === 'expired') {
+            expiredOrPausedCount++;
+            if (ath.subscription_status === 'active' && info.state === 'expired') {
+                expiredStillActiveCount++;
+            }
+        } else if (info.state === 'expiring') {
+            expiringCount++;
+        } else if (info.state === 'ok') {
+            upToDateCount++;
+        }
+    });
+
+    const elOk = document.getElementById('kpiPayUpToDate');
+    const elExp = document.getElementById('kpiPayExpiring');
+    const elDead = document.getElementById('kpiPayExpired');
+    const alertBadge = document.getElementById('coachPaymentsAlertBadge');
+    const btnPauseAll = document.getElementById('btnCoachPauseAllExpired');
+    const expiredActiveEl = document.getElementById('coachExpiredActiveCount');
+
+    if (elOk) elOk.textContent = upToDateCount;
+    if (elExp) elExp.textContent = expiringCount;
+    if (elDead) elDead.textContent = expiredOrPausedCount;
+
+    const attentionCount = expiringCount + expiredStillActiveCount;
+    if (alertBadge) {
+        alertBadge.style.display = attentionCount > 0 ? 'inline-flex' : 'none';
+        alertBadge.textContent = attentionCount;
+    }
+    if (btnPauseAll && expiredActiveEl) {
+        btnPauseAll.style.display = expiredStillActiveCount > 0 ? 'inline-flex' : 'none';
+        expiredActiveEl.textContent = expiredStillActiveCount;
+    }
+
+    if (!container) return;
+
+    const searchInput = document.getElementById('coachSearchPaymentsInput');
+    const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+    let filtered = allAthletes.filter(ath => {
+        if (searchTerm) {
+            const match = (ath.full_name || '').toLowerCase().includes(searchTerm) || (ath.email || '').toLowerCase().includes(searchTerm);
+            if (!match) return false;
+        }
+        const info = getAthleteExpirationInfo(ath);
+        if (coachPaymentsCurrentFilter === 'expiring') return info.state === 'expiring';
+        if (coachPaymentsCurrentFilter === 'expired') return info.state === 'expired';
+        if (coachPaymentsCurrentFilter === 'ok') return info.state === 'ok';
+        if (coachPaymentsCurrentFilter === 'paused') return ath.subscription_status === 'paused';
+        return true;
+    });
+
+    // Ordenar: vencidos primero, luego por vencer, luego sin fecha, luego vigentes
+    const rank = { expired: 0, expiring: 1, none: 2, ok: 3 };
+    filtered.sort((a, b) => {
+        const ia = getAthleteExpirationInfo(a);
+        const ib = getAthleteExpirationInfo(b);
+        if (rank[ia.state] !== rank[ib.state]) return rank[ia.state] - rank[ib.state];
+        return (a.full_name || '').localeCompare(b.full_name || '');
+    });
+
+    if (filtered.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:28px 16px; color:#71717A; font-size:13px;">No hay alumnos en este filtro de pagos.</div>`;
+        return;
+    }
+
+    const providerLabels = { manual_transfer: 'Transferencia', cash: 'Efectivo', mercadopago: 'Mercado Pago' };
+    let html = '';
+
+    filtered.forEach(ath => {
+        const safeId = escapeHTML(ath.id);
+        const info = getAthleteExpirationInfo(ath);
+        const history = getAthletePaymentHistory(ath.id);
+        const isAct = ath.subscription_status === 'active';
+        const isPend = ath.subscription_status === 'pending_activation';
+
+        const statusBadge = isAct
+            ? '<span class="coach-ath-badge active"><span class="status-dot status-dot-active"></span>Activo</span>'
+            : isPend
+                ? '<span class="coach-ath-badge pending"><span class="status-dot status-dot-pending"></span>Pendiente</span>'
+                : '<span class="coach-ath-badge paused"><span class="status-dot status-dot-paused"></span>Pausado</span>';
+
+        let expiryBadge = '<span class="coach-pay-expiry-pill none">Sin vencimiento</span>';
+        if (info.state === 'expired') {
+            const ago = Math.abs(info.daysLeft);
+            expiryBadge = `<span class="coach-pay-expiry-pill expired">Venció ${formatPaymentDateShort(info.expiryDate.toISOString())} (${ago === 0 ? 'hoy' : `hace ${ago}d`})</span>`;
+        } else if (info.state === 'expiring') {
+            expiryBadge = `<span class="coach-pay-expiry-pill expiring">Vence ${formatPaymentDateShort(info.expiryDate.toISOString())} (${info.daysLeft === 0 ? 'hoy' : `en ${info.daysLeft}d`})</span>`;
+        } else if (info.state === 'ok') {
+            expiryBadge = `<span class="coach-pay-expiry-pill ok">Vence ${formatPaymentDateShort(info.expiryDate.toISOString())} (en ${info.daysLeft}d)</span>`;
+        }
+
+        const lastPayText = info.latestPay
+            ? `${formatPaymentDateShort(info.latestPay.paid_at)} • $${Number(info.latestPay.amount || 0).toLocaleString('es-AR')}`
+            : 'Sin pagos registrados';
+
+        const historyRowsHtml = history.length > 0
+            ? history.map(item => `
+                <div class="coach-payment-history-row">
+                    <div>
+                        <strong>${formatPaymentDateShort(item.paid_at)}</strong>
+                        <span>${escapeHTML(providerLabels[item.provider] || 'Transferencia')}${item.expires_at ? ` • Vence ${formatPaymentDateShort(item.expires_at)}` : ''}</span>
+                        ${item.notes ? `<small>${escapeHTML(item.notes)}</small>` : ''}
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <strong style="color:#121214;">$${Number(item.amount || 0).toLocaleString('es-AR')}</strong>
+                        <button type="button" class="btn-coach-del-payment" data-ath-id="${safeId}" data-pay-id="${escapeHTML(item.id)}" title="Eliminar registro">✕</button>
+                    </div>
+                </div>
+            `).join('')
+            : '<div style="font-size:12px; color:#71717A; padding:8px 0;">Todavía no registraste pagos para este alumno.</div>';
+
+        html += `
+            <div class="coach-payment-card" data-athlete-id="${safeId}">
+                <div class="coach-payment-card-head">
+                    <div style="min-width:0;">
+                        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                            <strong class="coach-ath-name">${escapeHTML(ath.full_name)}</strong>
+                            ${statusBadge}
+                        </div>
+                        <div style="font-size:11.5px; color:#575659; margin-top:2px;">${escapeHTML(ath.active_plan_name || 'Plan SENS')}</div>
+                    </div>
+                    <button type="button" class="btn-coach-toggle-access ${isAct ? 'is-active' : 'is-paused'}" data-ath-id="${safeId}" data-next-status="${isAct ? 'paused' : 'active'}">
+                        ${isAct ? 'Pausar' : 'Activar'}
+                    </button>
+                </div>
+
+                <div class="coach-payment-meta-grid">
+                    <div class="coach-payment-meta-box">
+                        <span>Último pago</span>
+                        <strong>${lastPayText}</strong>
+                    </div>
+                    <div class="coach-payment-meta-box">
+                        <span>Estado de vencimiento</span>
+                        <div>${expiryBadge}</div>
+                    </div>
+                </div>
+
+                <div class="coach-payment-actions-bar">
+                    <button type="button" class="btn-coach-register-pay" data-ath-id="${safeId}">
+                        + Registrar Pago
+                    </button>
+                    <button type="button" class="btn-coach-toggle-history" data-ath-id="${safeId}">
+                        Historial (${history.length}) ▾
+                    </button>
+                </div>
+
+                <div class="coach-payment-history-list" id="coachPayHistory_${safeId}" style="display: none;">
+                    ${historyRowsHtml}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.btn-coach-register-pay').forEach(btn => {
+        btn.addEventListener('click', () => openCoachPaymentModal(btn.getAttribute('data-ath-id')));
+    });
+
+    container.querySelectorAll('.btn-coach-toggle-access').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const athId = btn.getAttribute('data-ath-id');
+            const nextStatus = btn.getAttribute('data-next-status');
+            await updateAthleteSubscriptionStatus(athId, nextStatus);
+        });
+    });
+
+    container.querySelectorAll('.btn-coach-toggle-history').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const athId = btn.getAttribute('data-ath-id');
+            const panel = document.getElementById(`coachPayHistory_${athId}`);
+            if (panel) {
+                const open = panel.style.display === 'block';
+                panel.style.display = open ? 'none' : 'block';
+            }
+        });
+    });
+
+    container.querySelectorAll('.btn-coach-del-payment').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const athId = btn.getAttribute('data-ath-id');
+            const payId = btn.getAttribute('data-pay-id');
+            await deleteCoachPaymentRecord(athId, payId);
+        });
+    });
+}
+
+function openCoachPaymentModal(athId) {
+    const athletes = getConsolidatedCoachAthletes();
+    const ath = athletes.find(a => a.id === athId);
+    if (!ath) return;
+
+    const backdrop = document.getElementById('coachPaymentModalBackdrop');
+    if (!backdrop) return;
+
+    const idEl = document.getElementById('coachPayModalAthleteId');
+    const subEl = document.getElementById('coachPayModalAthleteSub');
+    const amtEl = document.getElementById('coachPayAmountInput');
+    const dateEl = document.getElementById('coachPayDateInput');
+    const expEl = document.getElementById('coachPayExpiresInput');
+    const notesEl = document.getElementById('coachPayNotesInput');
+    const autoActEl = document.getElementById('coachPayAutoActivateCheck');
+
+    if (idEl) idEl.value = ath.id;
+    if (subEl) subEl.textContent = `${ath.full_name} • ${ath.active_plan_name || 'Plan SENS'}`;
+    if (amtEl) {
+        const isOnline = ath.user_type === 'client_online_basic' || ath.user_type === 'client_online_premium';
+        const lastPay = getAthletePaymentHistory(ath.id)[0];
+        amtEl.value = lastPay ? lastPay.amount : (isOnline ? 40000 : 60000);
+    }
+    const todayYmd = toInputDateYmd(new Date());
+    if (dateEl) dateEl.value = todayYmd;
+    if (notesEl) notesEl.value = '';
+    if (autoActEl) autoActEl.checked = true;
+
+    const baseDate = (ath.premium_until && new Date(ath.premium_until).getTime() > Date.now())
+        ? new Date(ath.premium_until)
+        : new Date();
+    const expDate = new Date(baseDate.getTime() + 30 * 86400000);
+    if (expEl) expEl.value = toInputDateYmd(expDate);
+
+    document.querySelectorAll('.coach-pay-dur-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-pay-days') === '30'));
+    backdrop.style.display = 'flex';
+}
+
+function closeCoachPaymentModal() {
+    const backdrop = document.getElementById('coachPaymentModalBackdrop');
+    if (backdrop) backdrop.style.display = 'none';
+}
+
+async function saveCoachPaymentRecord() {
+    const athId = document.getElementById('coachPayModalAthleteId')?.value;
+    if (!athId) return;
+
+    const amount = Number(document.getElementById('coachPayAmountInput')?.value || 0);
+    const provider = document.getElementById('coachPayMethodSelect')?.value || 'manual_transfer';
+    const paidAt = document.getElementById('coachPayDateInput')?.value || toInputDateYmd();
+    const expiresAt = document.getElementById('coachPayExpiresInput')?.value || null;
+    const notes = (document.getElementById('coachPayNotesInput')?.value || '').trim();
+    const autoActivate = Boolean(document.getElementById('coachPayAutoActivateCheck')?.checked);
+
+    const record = {
+        id: (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : `pay_${Date.now()}`,
+        user_id: athId,
+        amount,
+        currency: 'ARS',
+        provider,
+        paid_at: paidAt,
+        expires_at: expiresAt,
+        notes,
+        created_at: new Date().toISOString(),
+        fromDb: false
+    };
+
+    if (supabaseClient && !athId.startsWith('mock_')) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('payment_transactions')
+                .insert([{
+                    user_id: athId,
+                    provider,
+                    amount,
+                    currency: 'ARS',
+                    status: 'approved',
+                    webhook_payload: { paid_at: paidAt, expires_at: expiresAt, notes }
+                }])
+                .select()
+                .single();
+            if (!error && data && data.id) {
+                record.id = data.id;
+                record.fromDb = true;
+            }
+        } catch (e) {
+            console.warn('[CoachPayments] Fallback local para payment_transactions:', e);
+        }
+    }
+
+    const store = getCoachPaymentsStore();
+    const list = Array.isArray(store[athId]) ? store[athId] : [];
+    store[athId] = [record, ...list];
+    saveCoachPaymentsStore(store);
+
+    const premiumUntilIso = expiresAt ? new Date(`${expiresAt}T23:59:59`).toISOString() : undefined;
+    const athletes = getConsolidatedCoachAthletes();
+    const ath = athletes.find(a => a.id === athId);
+    const nextStatus = autoActivate ? 'active' : (ath ? ath.subscription_status : 'active');
+    await updateAthleteSubscriptionStatusSilent(athId, nextStatus, premiumUntilIso);
+
+    closeCoachPaymentModal();
+    renderCoachAthletesHub();
+    renderAthleteBottomSheetList();
+    renderCoachPaymentsHub();
+    showSensToast('Pago registrado y vencimiento actualizado.', 'champagne');
+}
+
+async function deleteCoachPaymentRecord(athId, payId) {
+    const store = getCoachPaymentsStore();
+    const list = Array.isArray(store[athId]) ? store[athId] : [];
+    store[athId] = list.filter(p => p.id !== payId);
+    saveCoachPaymentsStore(store);
+
+    if (supabaseClient && payId && !String(payId).startsWith('pay_')) {
+        try {
+            await supabaseClient.from('payment_transactions').delete().eq('id', payId);
+        } catch (_) {}
+    }
+
+    renderCoachPaymentsHub();
+    showSensToast('Registro de pago eliminado.', 'champagne');
+}
+
+function initCoachPaymentsHub() {
+    if (window._coachPaymentsHubInitialized) return;
+    window._coachPaymentsHubInitialized = true;
+
+    const btnRoster = document.getElementById('btnCoachSubviewRoster');
+    const btnPayments = document.getElementById('btnCoachSubviewPayments');
+    if (btnRoster) btnRoster.addEventListener('click', () => switchCoachAthletesSection('roster'));
+    if (btnPayments) btnPayments.addEventListener('click', () => switchCoachAthletesSection('payments'));
+
+    const autoPauseToggle = document.getElementById('toggleCoachAutoPauseExpired');
+    if (autoPauseToggle) {
+        autoPauseToggle.checked = localStorage.getItem(SENS_COACH_AUTOPAUSE_KEY) === '1';
+        autoPauseToggle.addEventListener('change', async () => {
+            localStorage.setItem(SENS_COACH_AUTOPAUSE_KEY, autoPauseToggle.checked ? '1' : '0');
+            if (autoPauseToggle.checked) {
+                const count = await applyAutoPauseIfEnabled(getConsolidatedCoachAthletes());
+                if (count > 0) showSensToast(`${count} alumno(s) vencido(s) pausados automáticamente.`, 'champagne');
+                renderCoachAthletesHub();
+            }
+            renderCoachPaymentsHub();
+        });
+    }
+
+    const btnPauseAll = document.getElementById('btnCoachPauseAllExpired');
+    if (btnPauseAll) btnPauseAll.addEventListener('click', pauseAllExpiredAthletes);
+
+    const searchPay = document.getElementById('coachSearchPaymentsInput');
+    if (searchPay) searchPay.addEventListener('input', () => renderCoachPaymentsHub());
+
+    document.querySelectorAll('.coach-pay-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.coach-pay-filter-btn').forEach(b => {
+                b.classList.remove('pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('pill-champagne');
+            coachPaymentsCurrentFilter = btn.getAttribute('data-pay-filter') || 'all';
+            renderCoachPaymentsHub();
+        });
+    });
+
+    const btnClosePay = document.getElementById('btnCloseCoachPaymentModal');
+    const payBackdrop = document.getElementById('coachPaymentModalBackdrop');
+    if (btnClosePay) btnClosePay.addEventListener('click', closeCoachPaymentModal);
+    if (payBackdrop) {
+        payBackdrop.addEventListener('click', (e) => {
+            if (e.target === payBackdrop) closeCoachPaymentModal();
+        });
+    }
+
+    document.querySelectorAll('.coach-pay-dur-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.coach-pay-dur-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const days = Number(btn.getAttribute('data-pay-days') || 30);
+            const paidVal = document.getElementById('coachPayDateInput')?.value;
+            const base = paidVal ? new Date(`${paidVal}T12:00:00`) : new Date();
+            const exp = new Date(base.getTime() + days * 86400000);
+            const expEl = document.getElementById('coachPayExpiresInput');
+            if (expEl) expEl.value = toInputDateYmd(exp);
+        });
+    });
+
+    const btnSavePay = document.getElementById('btnSaveCoachPayment');
+    if (btnSavePay) btnSavePay.addEventListener('click', saveCoachPaymentRecord);
+
+    loadCoachPaymentsFromSupabase().then(async () => {
+        await applyAutoPauseIfEnabled(getConsolidatedCoachAthletes());
+        renderCoachPaymentsHub();
+    });
+}
+window.switchCoachAthletesSection = switchCoachAthletesSection;
+window.renderCoachPaymentsHub = renderCoachPaymentsHub;
+window.openCoachPaymentModal = openCoachPaymentModal;
 
 async function updateAthletePlanType(athId, newPlanKey, specificPlanName = null) {
     const planNames = {
