@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=51.0">
+    <link rel="stylesheet" href="style.css?v=52.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '62.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '62.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '63.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '63.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3177,6 +3177,16 @@
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
                             </button>
+                        </div>
+                        <!-- Progreso diario hacia la meta del coach -->
+                        <div class="sens-nutri-active-progress-wrap" id="dashNutriActiveProgressWrap">
+                            <div class="sens-nutri-active-progress-meta">
+                                <span id="dashNutriActivePctText">0% del objetivo</span>
+                                <span id="dashNutriActiveRemainingText">Restan <strong>0 kcal</strong></span>
+                            </div>
+                            <div class="sens-nutri-active-progress-track">
+                                <div class="sens-nutri-active-progress-fill" id="dashNutriActiveProgressFill" style="width: 0%;"></div>
+                            </div>
                         </div>
                         <div class="sens-nutri-5cals-row" id="dashNutri5calsRow">
                             <div class="sens-5cals-chip highlight" data-meal-key="desayuno" title="Ver Desayuno">
@@ -8890,7 +8900,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=65.0"></script>
+    <script defer src="app.js?v=66.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

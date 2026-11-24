@@ -32748,6 +32748,58 @@ body.in-portal #dashNutriSummaryCard.has-active-meals,
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15) !important;
 }
 
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-top-badges,
+#dashNutriSummaryCard.has-active-meals .sens-nutri-top-badges {
+    position: relative !important;
+    z-index: 6 !important;
+    padding: 14px 16px 0 !important;
+    margin-bottom: 0 !important;
+}
+
+body.in-portal #dashNutriSummaryCard.has-active-meals #dashNutriGoalPill,
+#dashNutriSummaryCard.has-active-meals #dashNutriGoalPill {
+    background: rgba(18, 18, 20, 0.72) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    color: #E5CBA7 !important;
+    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+}
+
+.sens-nutri-active-progress-wrap {
+    margin: 10px 0 12px !important;
+}
+
+.sens-nutri-active-progress-meta {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    margin-bottom: 5px !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+.sens-nutri-active-progress-meta strong {
+    color: #E5CBA7 !important;
+    font-weight: 800 !important;
+}
+
+.sens-nutri-active-progress-track {
+    width: 100% !important;
+    height: 4px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    overflow: hidden !important;
+}
+
+.sens-nutri-active-progress-fill {
+    height: 100% !important;
+    border-radius: 999px !important;
+    background: linear-gradient(90deg, #E5CBA7 0%, #C5A880 100%) !important;
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
 body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-carousel-stage,
 #dashNutriSummaryCard.has-active-meals .sens-nutri-carousel-stage {
     display: block !important;

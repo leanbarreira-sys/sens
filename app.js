@@ -20246,6 +20246,22 @@ function initDashNutriCarousel() {
     if (activeContent) activeContent.style.display = 'block';
     if (carouselStage) carouselStage.style.display = 'block';
 
+    // Sincronizar barra de progreso, % diario y calorías restantes en el estado con comidas
+    const activeConsumedKcal = (typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, selectedDate) : 0;
+    const activeTargetKcal = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, selectedDate) : 1950;
+    const activeRemainingKcal = Math.max(0, activeTargetKcal - activeConsumedKcal);
+    const activePct = activeTargetKcal > 0 ? Math.min(100, Math.round((activeConsumedKcal / activeTargetKcal) * 100)) : 0;
+    const activePctEl = document.getElementById('dashNutriActivePctText');
+    const activeRemEl = document.getElementById('dashNutriActiveRemainingText');
+    const activeFillEl = document.getElementById('dashNutriActiveProgressFill');
+    if (activePctEl) activePctEl.textContent = `${activePct}% del objetivo`;
+    if (activeRemEl) {
+        activeRemEl.innerHTML = activeRemainingKcal === 0 && activeConsumedKcal > 0
+            ? '<strong style="color: #34D399;">¡Meta alcanzada! ✓</strong>'
+            : `Restan <strong>${activeRemainingKcal.toLocaleString('es-AR')} kcal</strong>`;
+    }
+    if (activeFillEl) activeFillEl.style.width = `${activePct}%`;
+
     if (imgA) {
         imgA.style.opacity = '';
         imgA.style.filter = '';
