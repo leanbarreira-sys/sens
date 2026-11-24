@@ -13324,6 +13324,303 @@ window.switchCoachAthletesSection = switchCoachAthletesSection;
 window.renderCoachPaymentsHub = renderCoachPaymentsHub;
 window.openCoachPaymentModal = openCoachPaymentModal;
 
+// -----------------------------------------------------------------------------
+// SUB-MÓDULO 1C: EVOLUCIÓN COMPLETA, CARGAS & SEGUIMIENTO POR ALUMNO (GESTIONAR)
+// -----------------------------------------------------------------------------
+const coachEvolutionSheetState = {
+    athleteId: null,
+    activeTab: 'summary',
+    workoutLogs: [],
+    dailyLogs: []
+};
+
+function closeCoachAthleteEvolutionSheet() {
+    const backdrop = document.getElementById('coachAthleteEvolutionModalBackdrop');
+    if (backdrop) backdrop.style.display = 'none';
+}
+
+function bindCoachEvolutionSheetEvents() {
+    if (window._coachEvoSheetBound) return;
+    window._coachEvoSheetBound = true;
+
+    const backdrop = document.getElementById('coachAthleteEvolutionModalBackdrop');
+    const btnClose = document.getElementById('btnCloseCoachEvolutionSheet');
+    const btnDone = document.getElementById('btnCoachEvoDone');
+    const btnWorkout = document.getElementById('btnCoachEvoOpenWorkout');
+
+    if (btnClose) btnClose.addEventListener('click', closeCoachAthleteEvolutionSheet);
+    if (btnDone) btnDone.addEventListener('click', closeCoachAthleteEvolutionSheet);
+    if (backdrop) {
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closeCoachAthleteEvolutionSheet();
+        });
+    }
+    if (btnWorkout) {
+        btnWorkout.addEventListener('click', () => {
+            const id = coachEvolutionSheetState.athleteId;
+            closeCoachAthleteEvolutionSheet();
+            if (id && typeof selectAthleteForPrescription === 'function') {
+                selectAthleteForPrescription('workout', id);
+            }
+        });
+    }
+
+    document.querySelectorAll('#coachAthleteEvolutionSheet .coach-evo-tab').forEach(tabBtn => {
+        tabBtn.addEventListener('click', () => {
+            document.querySelectorAll('#coachAthleteEvolutionSheet .coach-evo-tab').forEach(b => b.classList.remove('active'));
+            tabBtn.classList.add('active');
+            coachEvolutionSheetState.activeTab = tabBtn.getAttribute('data-evo-tab') || 'summary';
+            renderCoachEvolutionSheetBody();
+        });
+    });
+}
+
+async function fetchAthleteEvolutionData(athId) {
+    let workoutLogs = [];
+    let dailyLogs = [];
+
+    if (supabaseClient && athId && !String(athId).startsWith('mock_')) {
+        try {
+            const [wRes, dRes] = await Promise.all([
+                supabaseClient.from('workout_logs').select('*').eq('user_id', athId).order('created_at', { ascending: false }).limit(250),
+                supabaseClient.from('daily_logs').select('*').eq('user_id', athId).order('log_date', { ascending: false }).limit(30)
+            ]);
+            if (!wRes.error && Array.isArray(wRes.data)) workoutLogs = wRes.data;
+            if (!dRes.error && Array.isArray(dRes.data)) dailyLogs = dRes.data;
+        } catch (e) {
+            console.warn('[CoachEvolutionSheet] Error leyendo logs de Supabase:', e);
+        }
+    }
+
+    if (workoutLogs.length === 0) {
+        try {
+            const localW = JSON.parse(localStorage.getItem('sens_workout_logs') || '[]');
+            workoutLogs = localW.filter(l => !l.user_id || l.user_id === athId).slice(-200).reverse();
+        } catch (_) {}
+    }
+    if (dailyLogs.length === 0) {
+        try {
+            const localD = JSON.parse(localStorage.getItem('sens_daily_logs') || '{}');
+            dailyLogs = Object.entries(localD)
+                .map(([dateKey, val]) => ({ log_date: dateKey, ...(val || {}) }))
+                .sort((a, b) => String(b.log_date || '').localeCompare(String(a.log_date || '')))
+                .slice(0, 30);
+        } catch (_) {}
+    }
+
+    return { workoutLogs, dailyLogs };
+}
+
+function summarizeExerciseLoads(workoutLogs) {
+    const map = {};
+    workoutLogs.forEach(log => {
+        const name = (log.exercise_name || log.exercise_id || 'Ejercicio').trim();
+        const weight = Number(log.weight_kg ?? log.weight ?? 0) || 0;
+        const reps = Number(log.reps_completed ?? log.reps ?? 0) || 0;
+        const sets = Number(log.sets_completed ?? 1) || 1;
+        const ts = new Date(log.created_at || log.logged_at || Date.now()).getTime();
+        const e1rm = (weight > 0 && reps > 0) ? Math.round(weight * (1 + reps / 30)) : 0;
+
+        if (!map[name]) {
+            map[name] = { name, maxWeight: 0, maxE1rm: 0, totalSets: 0, tonnage: 0, entries: [] };
+        }
+        map[name].totalSets += sets;
+        map[name].tonnage += (weight * reps * sets);
+        if (weight > map[name].maxWeight) map[name].maxWeight = weight;
+        if (e1rm > map[name].maxE1rm) map[name].maxE1rm = e1rm;
+        map[name].entries.push({ weight, reps, ts, date: log.created_at || log.logged_at || '' });
+    });
+
+    return Object.values(map).map(item => {
+        item.entries.sort((a, b) => b.ts - a.ts);
+        const latest = item.entries[0] || { weight: 0, reps: 0, date: '' };
+        const prev = item.entries.find(e => e.date.slice(0, 10) !== latest.date.slice(0, 10)) || item.entries[1] || null;
+        const deltaKg = prev ? Number((latest.weight - prev.weight).toFixed(1)) : 0;
+        return { ...item, latest, deltaKg };
+    }).sort((a, b) => b.latest.ts - a.latest.ts);
+}
+
+function renderCoachEvolutionSheetBody() {
+    const body = document.getElementById('coachEvoSheetBody');
+    if (!body) return;
+
+    const athId = coachEvolutionSheetState.athleteId;
+    const athletes = getConsolidatedCoachAthletes();
+    const ath = athletes.find(a => a.id === athId) || { id: athId, full_name: 'Alumno SENS' };
+    const { workoutLogs, dailyLogs } = coachEvolutionSheetState;
+    const tab = coachEvolutionSheetState.activeTab || 'summary';
+
+    const exerciseSummaries = summarizeExerciseLoads(workoutLogs);
+    const totalTonnage = Math.round(exerciseSummaries.reduce((acc, ex) => acc + ex.tonnage, 0));
+    const sessionDays = new Set(workoutLogs.map(l => String(l.created_at || l.logged_at || '').slice(0, 10)).filter(Boolean)).size;
+    const trackedDays = dailyLogs.filter(d => Number(d.calories_consumed || d.kcal || 0) > 0 || Number(d.water_ml || 0) > 0 || Number(d.steps || 0) > 0).length;
+    const latestWeight = (dailyLogs.find(d => Number(d.weight_kg || d.weight || 0) > 0)?.weight_kg) || ath.current_weight || null;
+
+    if (tab === 'summary') {
+        const savedNote = localStorage.getItem(`sens_coach_directive_${athId}`) || '';
+        const avgKcal = trackedDays > 0
+            ? Math.round(dailyLogs.reduce((acc, d) => acc + (Number(d.calories_consumed || d.kcal || 0) || 0), 0) / trackedDays)
+            : 0;
+        const topPRsHtml = exerciseSummaries.slice(0, 3).map(ex => `
+            <div class="coach-evo-mini-row">
+                <span>${escapeHTML(ex.name)}</span>
+                <strong>${ex.maxWeight > 0 ? `${ex.maxWeight} kg máx` : `${ex.totalSets} series`}</strong>
+            </div>
+        `).join('');
+
+        body.innerHTML = `
+            <div class="coach-evo-kpi-grid">
+                <div class="coach-evo-kpi">
+                    <span>Sesiones reales</span>
+                    <strong>${sessionDays}</strong>
+                </div>
+                <div class="coach-evo-kpi">
+                    <span>Tonelaje total</span>
+                    <strong>${totalTonnage > 0 ? `${totalTonnage.toLocaleString('es-AR')} kg` : '—'}</strong>
+                </div>
+                <div class="coach-evo-kpi">
+                    <span>Días seguimiento</span>
+                    <strong>${trackedDays}</strong>
+                </div>
+                <div class="coach-evo-kpi">
+                    <span>Peso actual</span>
+                    <strong>${latestWeight ? `${latestWeight} kg` : '—'}</strong>
+                </div>
+            </div>
+
+            <div class="coach-evo-card">
+                <div class="coach-evo-card-title">Resumen de adherencia</div>
+                <div class="coach-evo-mini-row">
+                    <span>Promedio calórico registrado</span>
+                    <strong>${avgKcal > 0 ? `${avgKcal.toLocaleString('es-AR')} kcal/día` : 'Sin registros'}</strong>
+                </div>
+                <div class="coach-evo-mini-row">
+                    <span>Ejercicios con carga registrada</span>
+                    <strong>${exerciseSummaries.length}</strong>
+                </div>
+            </div>
+
+            ${topPRsHtml ? `
+                <div class="coach-evo-card">
+                    <div class="coach-evo-card-title">Marcas destacadas</div>
+                    ${topPRsHtml}
+                </div>
+            ` : ''}
+
+            <div class="coach-evo-card">
+                <div class="coach-evo-card-title">Nota técnica de Nico para el alumno</div>
+                <textarea id="coachEvoDirectiveInput" class="input-control" rows="2" placeholder="Ej: Subir +2.5 kg en sentadilla la próxima semana si RIR ≥ 2..." style="margin-bottom:8px;">${escapeHTML(savedNote)}</textarea>
+                <button type="button" class="btn-coach-evo-note-save" id="btnSaveCoachEvoDirective">Guardar Nota</button>
+            </div>
+        `;
+
+        const btnNote = document.getElementById('btnSaveCoachEvoDirective');
+        if (btnNote) {
+            btnNote.addEventListener('click', () => {
+                const txt = (document.getElementById('coachEvoDirectiveInput')?.value || '').trim();
+                try { localStorage.setItem(`sens_coach_directive_${athId}`, txt); } catch (_) {}
+                showSensToast('Nota técnica guardada para este alumno.', 'champagne');
+            });
+        }
+        return;
+    }
+
+    if (tab === 'loads') {
+        if (exerciseSummaries.length === 0) {
+            body.innerHTML = `<div class="coach-evo-empty">Este alumno todavía no registró series con carga. Apenas cargue sus pesos en Entrenar, vas a ver aquí su progresión y PRs por ejercicio.</div>`;
+            return;
+        }
+        body.innerHTML = exerciseSummaries.map(ex => {
+            const deltaClass = ex.deltaKg > 0 ? 'up' : ex.deltaKg < 0 ? 'down' : 'flat';
+            const deltaLabel = ex.deltaKg > 0 ? `+${ex.deltaKg} kg` : ex.deltaKg < 0 ? `${ex.deltaKg} kg` : '=';
+            return `
+                <div class="coach-evo-load-card">
+                    <div class="coach-evo-load-head">
+                        <strong>${escapeHTML(ex.name)}</strong>
+                        <span class="coach-evo-delta ${deltaClass}">${deltaLabel}</span>
+                    </div>
+                    <div class="coach-evo-load-metrics">
+                        <span>Última: <strong>${ex.latest.weight} kg × ${ex.latest.reps}</strong></span>
+                        <span>PR: <strong>${ex.maxWeight} kg</strong></span>
+                        <span>e1RM: <strong>${ex.maxE1rm > 0 ? `${ex.maxE1rm} kg` : '—'}</strong></span>
+                        <span>${ex.totalSets} series</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        return;
+    }
+
+    // tab === 'tracking'
+    const dailyHtml = dailyLogs.length > 0
+        ? dailyLogs.slice(0, 14).map(d => {
+            const kcal = Number(d.calories_consumed || d.kcal || 0);
+            const prot = Number(d.protein_g || d.protein || 0);
+            const steps = Number(d.steps || 0);
+            const water = Number(d.water_ml || 0);
+            return `
+                <div class="coach-evo-track-row">
+                    <strong>${formatPaymentDateShort(d.log_date)}</strong>
+                    <span>${kcal > 0 ? `${kcal} kcal` : '— kcal'} • ${prot > 0 ? `${prot}g P` : '— P'}${steps > 0 ? ` • ${steps.toLocaleString('es-AR')} pasos` : ''}${water > 0 ? ` • ${(water / 1000).toFixed(1)}L` : ''}</span>
+                </div>
+            `;
+        }).join('')
+        : '<div class="coach-evo-empty">Sin registros diarios de nutrición o hábitos todavía.</div>';
+
+    const sessionsHtml = workoutLogs.slice(0, 12).map(l => `
+        <div class="coach-evo-track-row">
+            <strong>${formatPaymentDateShort(l.created_at || l.logged_at)} • ${escapeHTML(l.exercise_name || 'Ejercicio')}</strong>
+            <span>${Number(l.weight_kg ?? l.weight ?? 0)} kg × ${Number(l.reps_completed ?? l.reps ?? 0)} reps</span>
+        </div>
+    `).join('');
+
+    body.innerHTML = `
+        <div class="coach-evo-card">
+            <div class="coach-evo-card-title">Seguimiento diario (Nutrición &amp; Hábitos)</div>
+            ${dailyHtml}
+        </div>
+        ${sessionsHtml ? `
+            <div class="coach-evo-card">
+                <div class="coach-evo-card-title">Últimas series registradas</div>
+                ${sessionsHtml}
+            </div>
+        ` : ''}
+    `;
+}
+
+async function openCoachAthleteEvolutionSheet(athId) {
+    bindCoachEvolutionSheetEvents();
+    const backdrop = document.getElementById('coachAthleteEvolutionModalBackdrop');
+    const titleEl = document.getElementById('coachEvoSheetTitle');
+    const subEl = document.getElementById('coachEvoSheetSub');
+    const body = document.getElementById('coachEvoSheetBody');
+    if (!backdrop) return;
+
+    const athletes = getConsolidatedCoachAthletes();
+    const ath = athletes.find(a => a.id === athId);
+    coachEvolutionSheetState.athleteId = athId;
+    coachEvolutionSheetState.activeTab = 'summary';
+
+    document.querySelectorAll('#coachAthleteEvolutionSheet .coach-evo-tab').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-evo-tab') === 'summary');
+    });
+
+    if (titleEl) titleEl.textContent = ath ? ath.full_name : 'Evolución del Alumno';
+    if (subEl) subEl.textContent = ath ? `${ath.active_plan_name || 'Plan SENS'}` : '';
+    if (body) body.innerHTML = `<div class="coach-evo-empty">Cargando evolución real del alumno...</div>`;
+    backdrop.style.display = 'flex';
+
+    const data = await fetchAthleteEvolutionData(athId);
+    coachEvolutionSheetState.workoutLogs = data.workoutLogs;
+    coachEvolutionSheetState.dailyLogs = data.dailyLogs;
+    if (subEl && ath) {
+        const sCount = new Set(data.workoutLogs.map(l => String(l.created_at || l.logged_at || '').slice(0, 10)).filter(Boolean)).size;
+        subEl.textContent = `${ath.active_plan_name || 'Plan SENS'} • ${sCount} sesión(es) registradas`;
+    }
+    renderCoachEvolutionSheetBody();
+}
+window.openCoachAthleteEvolutionSheet = openCoachAthleteEvolutionSheet;
+
 async function updateAthletePlanType(athId, newPlanKey, specificPlanName = null) {
     const planNames = {
         client_presencial_vip: 'Presencial Personalizado (1:1 o en Grupo)',
