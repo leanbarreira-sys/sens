@@ -13125,7 +13125,7 @@ body.in-portal .sens-training-video-card,
     color: #E5CBA7 !important;
     margin: 0 0 2px 0;
     line-height: 1.2;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+    text-shadow: none;
 }
 
 .sens-card-title-white {
@@ -27278,10 +27278,28 @@ body.in-portal .sens-training-video-card .sens-video-overlay-gradient {
     background: linear-gradient(to top, rgba(18, 18, 20, 0.88) 0%, rgba(18, 18, 20, 0.45) 50%, rgba(18, 18, 20, 0.1) 75%, transparent 100%) !important;
 }
 
-body.in-portal .sens-card-domain-eyebrow,
+body.in-portal .sens-card-domain-eyebrow {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    text-shadow: none !important;
+    color: #705B3E !important;
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin-bottom: 4px !important;
+    border: none !important;
+    display: inline-block !important;
+}
+
 body.in-portal .sens-workout-modality-pill {
-    background: rgba(255, 255, 255, 0.85) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
     backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    text-shadow: none !important;
     color: #121214 !important;
     font-size: 10px !important;
     font-weight: 700 !important;
@@ -27933,11 +27951,28 @@ body.in-portal #dashTrainingVideoCard {
 }
 
 /* Tag de Sesión del Día */
-body.in-portal .sens-card-domain-eyebrow,
+body.in-portal .sens-card-domain-eyebrow {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    text-shadow: none !important;
+    color: #705B3E !important;
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    padding: 0 !important;
+    margin-bottom: 4px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    display: inline-block !important;
+}
+
 body.in-portal .sens-workout-modality-pill {
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
+    text-shadow: none !important;
     color: #121214 !important;
     font-size: 10.5px !important;
     font-weight: 700 !important;
