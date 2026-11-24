@@ -29031,16 +29031,13 @@ const CoachWorkoutsMaster = {
         this.daysConfig.forEach(day => {
             const isChecked = day.selected ? 'checked' : '';
             html += `
-                <div class="wizard-day-card ${day.selected ? 'active' : ''}" data-date="${day.dateStr}" style="background: #FFFFFF; border: 1.5px solid ${day.selected ? '#9E7D4B' : '#E4E4E7'}; border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <input type="checkbox" class="wizard-day-checkbox" data-date="${day.dateStr}" ${isChecked} style="width: 18px; height: 18px; accent-color: #9E7D4B; cursor: pointer;">
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                <strong style="font-size: 13.5px; font-weight: 700; color: #121214;">${day.dayOfWeek} ${day.dayMonthStr}</strong>
-                                ${day.isCycleStart ? '<span class="pill pill-champagne" style="font-size: 8.5px; padding: 1px 6px; font-weight: 800;">Inicio Ciclo</span>' : ''}
-                                ${day.isToday ? '<span class="pill" style="font-size: 8.5px; padding: 1px 6px; font-weight: 800; background: #121214; color: #FFF;">Hoy</span>' : ''}
-                            </div>
-                            <div style="font-size: 11px; color: #71717A;">${day.dateStr}</div>
+                <div class="wizard-day-card ${day.selected ? 'active' : ''}" data-date="${day.dateStr}">
+                    <div class="wizard-day-card-left">
+                        <input type="checkbox" class="wizard-day-checkbox" data-date="${day.dateStr}" ${isChecked}>
+                        <div class="wizard-day-card-meta">
+                            <strong class="wizard-day-card-title">${day.dayOfWeek} ${day.dayMonthStr}</strong>
+                            ${day.isCycleStart ? '<span class="wizard-day-tag-start">Inicio</span>' : ''}
+                            ${day.isToday ? '<span class="wizard-day-tag-today">Hoy</span>' : ''}
                         </div>
                     </div>
                     <div class="wizard-modality-selector">
@@ -29062,7 +29059,6 @@ const CoachWorkoutsMaster = {
                     const card = container.querySelector(`.wizard-day-card[data-date="${dateStr}"]`);
                     if (card) {
                         card.classList.toggle('active', chk.checked);
-                        card.style.borderColor = chk.checked ? '#9E7D4B' : '#E4E4E7';
                     }
                 }
             });
@@ -29126,13 +29122,11 @@ const CoachWorkoutsMaster = {
             const modLabel = day.modality === 'presencial' ? 'Presencial' : 'Online';
 
             html += `
-                <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; padding: 14px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                        <div>
-                            <strong style="font-size: 13.5px; color: #121214;">${day.label}</strong>
-                            <span class="pill pill-champagne" style="font-size: 9.5px; margin-left: 8px;">${modLabel}</span>
-                        </div>
-                        <span style="font-size: 11px; color: #71717A;">Tocá los grupos para este día</span>
+                <div class="wizard-step2-day-card">
+                    <div class="wizard-step2-day-header">
+                        <strong class="wizard-step2-day-title">${day.label}</strong>
+                        <span class="wizard-step2-mod-pill">${modLabel}</span>
+                    </div>
                     </div>
                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                         ${chipsHtml}
