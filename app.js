@@ -1071,6 +1071,9 @@ window.ensurePortalBundlesLoaded = function() {
         if (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY) && SENS_EXERCISE_LIBRARY.length > 0) {
             EXERCISE_CATALOG = SENS_EXERCISE_LIBRARY;
             window.EXERCISE_CATALOG = EXERCISE_CATALOG;
+            if (typeof window.syncCustomExercisesFromSupabase === 'function') {
+                window.syncCustomExercisesFromSupabase().catch(() => {});
+            }
         }
         if (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0) {
             FOOD_CATALOG = SENS_FOOD_LIBRARY;
@@ -11348,9 +11351,9 @@ function initCoachOS() {
 
     // Función unificada para cambiar de Sub-Tab en Coach Hub (sincroniza Subnav y Dock Inferior)
     window.switchCoachSubTab = function(targetPaneId) {
-        // Biblioteca y Evolución ocultas por el momento: redirigir a Alumnos si se invocan por error
+        // Evolución oculta por el momento: redirigir a Alumnos si se invoca por error (Biblioteca activa)
         let resolvedPaneId = targetPaneId;
-        if (targetPaneId === 'paneDatabases' || targetPaneId === 'paneLibrary' || targetPaneId === 'paneEvolution') {
+        if (targetPaneId === 'paneDatabases' || targetPaneId === 'paneEvolution') {
             resolvedPaneId = 'paneAthletes';
         }
         document.querySelectorAll('#coachHubSubnav .coach-subnav-btn').forEach(b => {
@@ -11399,8 +11402,13 @@ function initCoachOS() {
         if (resolvedPaneId === 'paneEvolution' && typeof CoachEvolutionEngine !== 'undefined' && typeof CoachEvolutionEngine.renderEvolutionPanel === 'function') {
             CoachEvolutionEngine.renderEvolutionPanel();
         }
-        if (resolvedPaneId === 'paneLibrary' && typeof window.renderCoachDatabasesTab === 'function') {
-            window.renderCoachDatabasesTab();
+        if (resolvedPaneId === 'paneLibrary') {
+            if (typeof window.syncCustomExercisesFromSupabase === 'function' && !window._sensCustomExercisesSynced) {
+                window.syncCustomExercisesFromSupabase().catch(() => {});
+            }
+            if (typeof window.renderCoachDatabasesTab === 'function') {
+                window.renderCoachDatabasesTab();
+            }
         }
         if (resolvedPaneId === 'paneMarketing') {
             if (typeof window.renderCoachMarketingStudio === 'function') {
@@ -23056,6 +23064,7 @@ window.initCoachDossierAndCopilots = function() {
 // =============================================================================
 let coachMasterLibState = {
     domain: 'exercises',
+    quickFilter: 'all',
     exType: 'all',
     exMuscle: 'all',
     exLegsSub: 'all',
@@ -23066,6 +23075,20 @@ let coachMasterLibState = {
 };
 
 window.initCoachDatabasesTab = function() {
+    // Filtros Rápidos del Coach (Todos / Favoritos / Mis Ejercicios / Sin Video/Foto)
+    document.querySelectorAll('#coachLibQuickFilterBar .lib-quick-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#coachLibQuickFilterBar .lib-quick-btn').forEach(b => {
+                b.classList.remove('active', 'pill-champagne');
+                b.classList.add('pill-dark');
+            });
+            btn.classList.remove('pill-dark');
+            btn.classList.add('active', 'pill-champagne');
+            coachMasterLibState.quickFilter = btn.getAttribute('data-quick') || 'all';
+            window.renderCoachDatabasesTab();
+        });
+    });
+
     // Switcher de dominio (Mapa de Ejercicios vs Catálogo de Nutrición)
     document.querySelectorAll('#coachLibDomainSwitcher .coach-domain-switch-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -23204,7 +23227,13 @@ window.initCoachDatabasesTab = function() {
 
     const newExBtn = document.getElementById('btnCoachCreateNewExercise');
     if (newExBtn) {
-        newExBtn.addEventListener('click', () => window.openCoachDbItemEditor('exercise', null));
+        newExBtn.addEventListener('click', () => {
+            if (typeof window.openCoachExerciseSheet === 'function') {
+                window.openCoachExerciseSheet(null, { assignAfterSave: false });
+            } else {
+                window.openCoachDbItemEditor('exercise', null);
+            }
+        });
     }
 
     // Inicializar Modal Editor de Gobernanza (Base Maestra vs Alumno Puntual)
@@ -23267,6 +23296,18 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
             const exMuscle = (ex.nivel_2_grupo_muscular || ex.group_level2 || '').toLowerCase().trim();
             const exSub = (ex.nivel_3_submusculo_piernas || ex.sub_level3 || '').toLowerCase().trim();
 
+            // Filtros rápidos del Coach (Favoritos / Mis Ejercicios / Sin Video/Foto)
+            const qf = coachMasterLibState.quickFilter || 'all';
+            if (qf === 'favorites') {
+                const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+                if (!isFav) return false;
+            } else if (qf === 'custom') {
+                if (!ex.is_custom) return false;
+            } else if (qf === 'no_media') {
+                const mPath = (ex.video_local_path || ex.video_url || ex.video || '').trim();
+                if (mPath.length > 0) return false;
+            }
+
             if (coachMasterLibState.exType !== 'all' && exType !== coachMasterLibState.exType) return false;
             if ((coachMasterLibState.exType === 'all' || coachMasterLibState.exType === 'muscular') && coachMasterLibState.exMuscle !== 'all') {
                 if (exMuscle !== coachMasterLibState.exMuscle) return false;
@@ -23280,6 +23321,17 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
                 if (!hay.includes(q)) return false;
             }
             return true;
+        });
+
+        // Ordenar: Custom recientes y Favoritos primero
+        filtered.sort((a, b) => {
+            const aCustom = a.is_custom ? 1 : 0;
+            const bCustom = b.is_custom ? 1 : 0;
+            if (bCustom !== aCustom) return bCustom - aCustom;
+            const aFav = (a.is_favorite || a.favorite) ? 1 : 0;
+            const bFav = (b.is_favorite || b.favorite) ? 1 : 0;
+            if (bFav !== aFav) return bFav - aFav;
+            return (a.name_es || a.name || '').localeCompare(b.name_es || b.name || '');
         });
 
         const pageLimit = coachMasterLibState.pageLimit || 36;
@@ -23300,74 +23352,56 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
             const subTag = tax.subMuscleLabel ? ` • ${tax.subMuscleLabel.toUpperCase()}` : (ex.nivel_3_submusculo_piernas ? ` • ${ex.nivel_3_submusculo_piernas.toUpperCase()}` : '');
 
             const media = (typeof resolveExerciseMediaUrl === 'function')
-                ? resolveExerciseMediaUrl(ex.video_local_path)
-                : { url: ex.video_local_path, isVideo: true, isGif: false };
+                ? resolveExerciseMediaUrl(ex.video_local_path || ex.video_url || '')
+                : { url: ex.video_local_path || ex.video_url || '', isVideo: true, isGif: false };
 
-            const parsedSteps = (typeof parseExerciseSummarySteps === 'function' && ex.summary_detailed_movement_es)
-                ? parseExerciseSummarySteps(ex.summary_detailed_movement_es)
-                : [];
+            const isFav = Boolean(ex.is_favorite || ex.favorite || (typeof window.isExerciseFavorite === 'function' && window.isExerciseFavorite(ex.id)));
+            const isCustom = Boolean(ex.is_custom);
+            const hasMedia = Boolean(media && media.url);
+            const exTitle = ex.name_es || ex.name || 'Ejercicio sin nombre';
+            const safeId = String(ex.id || '').replace(/'/g, "\\'");
 
             html += `
                 <div class="coach-master-lib-card">
-                    ${media.url ? `
-                        <div style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: #000; border: 1px solid rgba(229,203,167,0.18);">
+                    ${hasMedia ? `
+                        <div style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #121214; border: 1px solid rgba(18,18,20,0.08);">
                             ${media.isVideo ? `
-                                <video muted loop playsinline preload="none" style="width: 100%; height: 100%; object-fit: cover;">
+                                <video muted loop playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover;">
                                     <source src="${media.url}" type="video/mp4">
                                 </video>
                             ` : `
-                                <img src="${media.url}" alt="${ex.name_es || ex.name}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" />
+                                <img src="${media.url}" alt="${exTitle}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" />
                             `}
                         </div>
                     ` : ''}
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
                         <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-                            <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">${typeTag}</span>
-                            <span class="pill pill-dark" style="font-size: 9px;">${groupTag}${subTag}</span>
-                            ${ex._hasAthleteOverride ? `<span class="pill pill-champagne" style="font-size: 8.5px; background: rgba(16,185,129,0.18); color: #10B981;">Personalizado Alumno</span>` : ''}
+                            <span class="coach-lib-pill-type">${typeTag}</span>
+                            <span class="coach-lib-pill-group">${groupTag}${subTag}</span>
+                            ${isCustom ? `<span class="coach-lib-pill-custom">Propio</span>` : ''}
+                            ${!hasMedia ? `<span class="coach-lib-pill-nomedia">Sin media</span>` : ''}
                         </div>
-                        <span class="pill pill-dark" style="font-size: 9.5px; color: #E5CBA7; border: 1px solid rgba(229,203,167,0.35); font-variant-numeric: tabular-nums;">
-                            ~${kcalData.kcalPerSet} kcal/serie (${kcalData.kcalPerRep} kcal/rep)
+                        <span style="font-size: 10px; font-weight: 700; color: #705B3E; font-variant-numeric: tabular-nums; white-space: nowrap;">
+                            ${kcalData.kcalPerRep} kcal/rep
                         </span>
                     </div>
-                    <h4 style="font-size: 1rem; font-weight: 800; margin: 0 0 2px 0;">${ex.name_es || ex.name}</h4>
-                    <div style="font-size: 10.5px; color: #A1A1AA; margin-bottom: 8px;">
-                        <span style="color: #E5CBA7;">EN:</span> ${ex.name_en || ex.name} • <span style="color: #E5CBA7;">PT:</span> ${ex.name_pt || ex.name}
+                    <h4 style="font-size: 15px; font-weight: 800; margin: 0 0 4px 0; line-height: 1.3;">${exTitle}</h4>
+                    <div style="font-size: 11px; color: #6B6A6E; margin-bottom: 6px; font-variant-numeric: tabular-nums;">
+                        ${ex.default_rest_seconds || ex.rest || 90}s descanso • ${ex.sets || 4}×${ex.reps || 10} (~${kcalData.totalKcal} kcal)
                     </div>
-                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
-                        Músculo: <strong>${tax.muscleLabel || 'Principal'}</strong> • Base: ${ex.sets || 4} series × ${ex.reps || 10} reps (~${kcalData.totalKcal} kcal totales • ${ex.default_rest_seconds || 90}s descanso)
+                    <div class="coach-lib-cue-box">
+                        <strong style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: #705B3E; display: block; margin-bottom: 2px;">Cue Técnico</strong>
+                        ${ex.cue_technical_es || ex.cue || 'Sin cue cargado aún.'}
                     </div>
-                    <div style="font-size: 11.5px; line-height: 1.45; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
-                        <div class="sens-coach-cue-banner" style="margin: 4px 0 8px 0; padding: 8px 10px;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2.2" style="flex-shrink:0;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                            <div class="sens-coach-cue-content">
-                                <span class="sens-coach-cue-label">Cue Biomecánico Nico</span>
-                                <span class="sens-coach-cue-text">${ex.cue_technical_es || ex.cue || 'Control continuo del movimiento.'}</span>
-                            </div>
-                        </div>
-                        ${parsedSteps.length > 0 ? `
-                            <div class="sens-summary-steps-grid" style="margin-bottom: 6px;">
-                                ${parsedSteps.map(st => `
-                                    <div class="sens-summary-step-card" style="padding: 6px 8px;">
-                                        <div class="sens-step-badge" style="width: 18px; height: 18px; font-size: 10px;">${st.step}</div>
-                                        <div class="sens-step-body">
-                                            <strong class="sens-step-label" style="font-size: 10.5px;">${st.label}</strong>
-                                            <p class="sens-step-text" style="font-size: 10.5px;">${st.text}</p>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : ''}
-                        ${ex.detailed_movement_es ? `
-                            <details style="background: rgba(255,255,255,0.03); border-radius: 6px; padding: 6px 10px; margin-top: 4px; border: 1px solid rgba(255,255,255,0.06);">
-                                <summary style="font-size: 11px; font-weight: 700; color: #9E7D4B; cursor: pointer;">Ver biomecánica avanzada (Setup & Fases) ▾</summary>
-                                <div style="font-size: 11px; color: #D1D1D5; margin-top: 6px; white-space: pre-line; line-height: 1.45;">${ex.detailed_movement_es}</div>
-                            </details>
-                        ` : ''}
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06);">
-                        <button type="button" class="btn btn-outline btn-sm" onclick="window.openCoachDbItemEditor('exercise', '${ex.id}')" style="font-size: 11px; font-weight: 700; flex: 1;">
-                            Editar Ficha (Base o Alumno)
+                    <div class="coach-lib-card-footer">
+                        <button type="button" class="coach-lib-fav-btn ${isFav ? 'is-fav' : ''}"
+                            title="${isFav ? 'Quitar de favoritos' : 'Marcar como favorito'}"
+                            onclick="window.toggleCoachExerciseFavorite && window.toggleCoachExerciseFavorite('${safeId}')">
+                            ${isFav ? '★' : '☆'}
+                        </button>
+                        <button type="button" class="coach-lib-edit-btn"
+                            onclick="window.openCoachExerciseSheet && window.openCoachExerciseSheet('${safeId}', { assignAfterSave: false })">
+                            Editar / Media
                         </button>
                     </div>
                 </div>
@@ -28003,6 +28037,9 @@ const CoachWorkoutsMaster = {
                 <div class="wizard-feed-ex-card ${isAdded ? 'is-added' : ''}" data-ex-id="${ex.id}">
                     ${mediaHtml}
                     <div class="wizard-feed-card-gradient"></div>
+                    <button type="button" class="wizard-feed-edit-btn" title="Editar ejercicio o agregar video/foto" onclick="event.stopPropagation(); window.openCoachExerciseSheet && window.openCoachExerciseSheet('${ex.id}', { assignAfterSave: false });">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </button>
                     <div class="wizard-feed-top-pills">
                         ${favPill}
                         <span class="pill pill-champagne" style="font-size: 8px; font-weight: 800; padding: 2px 6px; white-space: nowrap !important; flex-shrink: 0;">${muscleTag}</span>
@@ -28041,10 +28078,10 @@ const CoachWorkoutsMaster = {
             });
         }
 
-        // Al tocar la card (fuera del botón "+ Agregar"), abre la vista técnica profunda
+        // Al tocar la card (fuera del botón "+ Agregar" o "Editar"), abre la vista técnica profunda
         grid.querySelectorAll('.wizard-feed-ex-card').forEach(card => {
             card.addEventListener('click', (e) => {
-                if (e.target.closest('.btn-wizard-add-ex')) return;
+                if (e.target.closest('.btn-wizard-add-ex') || e.target.closest('.wizard-feed-edit-btn')) return;
                 const exId = card.getAttribute('data-ex-id');
                 const exObj = sourceLib.find(x => x.id === exId);
                 if (exObj && typeof window.openCoachExercisePreviewModal === 'function') {
@@ -32308,3 +32345,612 @@ if (typeof window.initUserTrackingModule !== 'function') {
     };
 }
 
+
+
+// =============================================================================
+// COACH OS: EXERCISE MASTER CRUD & SUPABASE SYNC ENGINE
+// =============================================================================
+(function () {
+    let _sheetBound = false;
+    let _isUploadingMedia = false;
+
+    function getSbClient() {
+        if (typeof ensureSupabaseClient === 'function') return ensureSupabaseClient();
+        if (window.supabaseClient) return window.supabaseClient;
+        if (typeof supabaseClient !== 'undefined') return supabaseClient;
+        return null;
+    }
+
+    function mapMuscleToBioCategory(muscle) {
+        const m = String(muscle || '').toLowerCase().trim();
+        if (m === 'piernas') return 'piernas';
+        if (m === 'pecho') return 'pecho';
+        if (m === 'espalda' || m === 'zona_lumbar') return 'espalda';
+        if (m === 'hombros') return 'hombros';
+        if (m === 'biceps' || m === 'triceps' || m === 'antebrazos') return 'brazos';
+        return 'core';
+    }
+
+    function slugifyExerciseName(str) {
+        return String(str || 'ejercicio')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '_')
+            .replace(/^_+|_+$/g, '')
+            .slice(0, 36) || 'ejercicio';
+    }
+
+    window.normalizeSupabaseExerciseRow = function (row) {
+        if (!row || !row.id) return null;
+        const nameEs = (row.name_es || row.name || '').trim();
+        const type1 = (row.nivel_1_tipo || 'muscular').toLowerCase().trim();
+        const muscle2 = (row.nivel_2_grupo_muscular || 'piernas').toLowerCase().trim();
+        const sub3 = muscle2 === 'piernas' ? (row.nivel_3_submusculo_piernas || null) : null;
+        const videoPath = (row.video_local_path || '').trim();
+        const cueEs = (row.cue_technical_es || '').trim();
+        const summaryEs = (row.summary_detailed_movement_es || '').trim();
+        const detailedEs = (row.detailed_movement_es || summaryEs || '').trim();
+        const restSec = parseInt(row.default_rest_seconds, 10) || 90;
+        const kcalRep = parseFloat(row.calories_per_rep);
+        const safeKcal = Number.isFinite(kcalRep) && kcalRep > 0 ? kcalRep : 0.45;
+        const isFav = Boolean(row.is_favorite);
+        const isCustom = Boolean(row.is_custom);
+
+        return {
+            id: row.id,
+            name: nameEs,
+            name_es: nameEs,
+            name_en: (row.name_en || nameEs).trim(),
+            name_pt: (row.name_pt || nameEs).trim(),
+            nivel_1_tipo: type1,
+            nivel_2_grupo_muscular: muscle2,
+            nivel_3_submusculo_piernas: sub3,
+            type_level1: type1,
+            group_level2: muscle2,
+            sub_level3: sub3,
+            primary_muscle: muscle2,
+            muscle_group: muscle2,
+            sub_muscle: sub3,
+            category: mapMuscleToBioCategory(muscle2),
+            cue: cueEs,
+            cue_technical_es: cueEs,
+            cue_technical_en: (row.cue_technical_en || cueEs).trim(),
+            cue_technical_pt: (row.cue_technical_pt || cueEs).trim(),
+            summary_detailed_movement_es: summaryEs,
+            summary_detailed_movement_en: (row.summary_detailed_movement_en || summaryEs).trim(),
+            summary_detailed_movement_pt: (row.summary_detailed_movement_pt || summaryEs).trim(),
+            detailed_movement_es: detailedEs,
+            detailed_movement_en: (row.detailed_movement_en || detailedEs).trim(),
+            detailed_movement_pt: (row.detailed_movement_pt || detailedEs).trim(),
+            execution: summaryEs || detailedEs,
+            default_rest_seconds: restSec,
+            rest: restSec,
+            calories_per_rep: safeKcal,
+            kcal_per_rep: safeKcal,
+            default_sets: row.default_sets || 4,
+            default_reps: row.default_reps || '10-12',
+            sets: row.sets || 4,
+            reps: row.reps || 10,
+            video_local_path: videoPath,
+            video_url: videoPath,
+            video: videoPath,
+            is_favorite: isFav,
+            favorite: isFav,
+            is_custom: isCustom,
+            updated_at: row.updated_at || null
+        };
+    };
+
+    window.upsertExerciseInMemory = function (row) {
+        const normalized = window.normalizeSupabaseExerciseRow(row);
+        if (!normalized) return null;
+
+        const targetLib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY))
+            ? SENS_EXERCISE_LIBRARY
+            : (typeof EXERCISE_CATALOG !== 'undefined' && Array.isArray(EXERCISE_CATALOG) ? EXERCISE_CATALOG : null);
+
+        if (targetLib) {
+            const idx = targetLib.findIndex(item => item && item.id === normalized.id);
+            if (idx >= 0) {
+                targetLib[idx] = Object.assign({}, targetLib[idx], normalized);
+            } else {
+                targetLib.unshift(normalized);
+            }
+            if (typeof EXERCISE_CATALOG !== 'undefined' && Array.isArray(EXERCISE_CATALOG) && EXERCISE_CATALOG !== targetLib) {
+                const idx2 = EXERCISE_CATALOG.findIndex(item => item && item.id === normalized.id);
+                if (idx2 >= 0) {
+                    EXERCISE_CATALOG[idx2] = Object.assign({}, EXERCISE_CATALOG[idx2], normalized);
+                } else {
+                    EXERCISE_CATALOG.unshift(normalized);
+                }
+            }
+        }
+
+        if (typeof window.hydrateExerciseLibraryInMemory === 'function') {
+            try { window.hydrateExerciseLibraryInMemory(); } catch (_) {}
+        }
+        return normalized;
+    };
+
+    function refreshExerciseViewsAfterChange() {
+        try {
+            const libPane = document.getElementById('paneLibrary');
+            if (libPane && libPane.classList.contains('active') && typeof window.renderCoachDatabasesTab === 'function') {
+                window.renderCoachDatabasesTab(true);
+            }
+        } catch (_) {}
+
+        try {
+            if (window.CoachWorkoutsMaster && typeof window.CoachWorkoutsMaster.renderStep3Catalog === 'function') {
+                const selectedDays = (window.CoachWorkoutsMaster.daysConfig || []).filter(d => d.selected);
+                const activeDay = selectedDays[window.CoachWorkoutsMaster.step3ActiveDayIndex || 0];
+                if (activeDay) {
+                    window.CoachWorkoutsMaster.renderStep3Catalog(activeDay);
+                }
+            }
+        } catch (_) {}
+    }
+
+    window.syncCustomExercisesFromSupabase = async function (force = false) {
+        if (window._sensCustomExercisesSynced && !force) return;
+        const client = getSbClient();
+        if (!client) return;
+
+        try {
+            const { data, error } = await client
+                .from('sens_exercise_library')
+                .select('*')
+                .or('is_custom.eq.true,is_favorite.eq.true,updated_at.not.is.null');
+
+            if (error) {
+                console.warn('[SENS Exercise Sync] Warning:', error.message || error);
+                return;
+            }
+
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(row => window.upsertExerciseInMemory(row));
+            }
+            window._sensCustomExercisesSynced = true;
+            refreshExerciseViewsAfterChange();
+        } catch (err) {
+            console.warn('[SENS Exercise Sync] Exception:', err);
+        }
+    };
+
+    function buildFullSupabasePayload(existingEx, overrides) {
+        const nameEs = (overrides.name_es !== undefined ? overrides.name_es : (existingEx && (existingEx.name_es || existingEx.name)) || '').trim();
+        const cueEs = (overrides.cue_technical_es !== undefined ? overrides.cue_technical_es : (existingEx && (existingEx.cue_technical_es || existingEx.cue)) || '').trim();
+        const summaryEs = (overrides.summary_detailed_movement_es !== undefined ? overrides.summary_detailed_movement_es : (existingEx && (existingEx.summary_detailed_movement_es || existingEx.execution)) || '').trim();
+        const detailedEs = (overrides.detailed_movement_es !== undefined ? overrides.detailed_movement_es : (existingEx && existingEx.detailed_movement_es) || summaryEs || '').trim();
+        const type1 = (overrides.nivel_1_tipo || (existingEx && existingEx.nivel_1_tipo) || 'muscular').toLowerCase().trim();
+        const muscle2 = (overrides.nivel_2_grupo_muscular || (existingEx && existingEx.nivel_2_grupo_muscular) || 'piernas').toLowerCase().trim();
+        const sub3 = muscle2 === 'piernas'
+            ? (overrides.nivel_3_submusculo_piernas !== undefined ? overrides.nivel_3_submusculo_piernas : (existingEx && existingEx.nivel_3_submusculo_piernas) || 'cuadriceps')
+            : null;
+        const videoPath = (overrides.video_local_path !== undefined ? overrides.video_local_path : (existingEx && (existingEx.video_local_path || existingEx.video_url)) || '').trim();
+        const restSec = parseInt(overrides.default_rest_seconds !== undefined ? overrides.default_rest_seconds : (existingEx && (existingEx.default_rest_seconds || existingEx.rest)), 10) || 90;
+        const kcalRaw = parseFloat(overrides.calories_per_rep !== undefined ? overrides.calories_per_rep : (existingEx && (existingEx.calories_per_rep || existingEx.kcal_per_rep)));
+        const kcalRep = Number.isFinite(kcalRaw) && kcalRaw > 0 ? kcalRaw : 0.45;
+        const isFav = overrides.is_favorite !== undefined ? Boolean(overrides.is_favorite) : Boolean(existingEx && (existingEx.is_favorite || existingEx.favorite));
+        const isCustom = overrides.is_custom !== undefined ? Boolean(overrides.is_custom) : Boolean(existingEx && existingEx.is_custom);
+
+        return {
+            id: overrides.id || (existingEx && existingEx.id),
+            name_es: nameEs,
+            name_en: (existingEx && existingEx.name_en && existingEx.name_en !== existingEx.name_es) ? existingEx.name_en : nameEs,
+            name_pt: (existingEx && existingEx.name_pt && existingEx.name_pt !== existingEx.name_es) ? existingEx.name_pt : nameEs,
+            nivel_1_tipo: type1,
+            nivel_2_grupo_muscular: muscle2,
+            nivel_3_submusculo_piernas: sub3,
+            video_local_path: videoPath,
+            calories_per_rep: kcalRep,
+            default_rest_seconds: restSec,
+            cue_technical_es: cueEs,
+            cue_technical_en: (existingEx && existingEx.cue_technical_en) || cueEs,
+            cue_technical_pt: (existingEx && existingEx.cue_technical_pt) || cueEs,
+            summary_detailed_movement_es: summaryEs,
+            summary_detailed_movement_en: (existingEx && existingEx.summary_detailed_movement_en) || summaryEs,
+            summary_detailed_movement_pt: (existingEx && existingEx.summary_detailed_movement_pt) || summaryEs,
+            detailed_movement_es: detailedEs,
+            detailed_movement_en: (existingEx && existingEx.detailed_movement_en) || detailedEs,
+            detailed_movement_pt: (existingEx && existingEx.detailed_movement_pt) || detailedEs,
+            is_favorite: isFav,
+            is_custom: isCustom,
+            updated_at: new Date().toISOString()
+        };
+    }
+
+    function findExerciseById(exId) {
+        if (!exId) return null;
+        const lib = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY))
+            ? SENS_EXERCISE_LIBRARY
+            : (typeof EXERCISE_CATALOG !== 'undefined' ? EXERCISE_CATALOG : []);
+        return lib.find(e => e && e.id === exId) || null;
+    }
+
+    window.toggleCoachExerciseFavorite = async function (exerciseId) {
+        const ex = findExerciseById(exerciseId);
+        if (!ex) return;
+        const client = getSbClient();
+        if (!client) {
+            if (typeof showSensToast === 'function') showSensToast('Sin conexión a Supabase para guardar favorito.', 'error');
+            return;
+        }
+
+        const nextFav = !Boolean(ex.is_favorite || ex.favorite);
+        const payload = buildFullSupabasePayload(ex, { is_favorite: nextFav });
+
+        try {
+            const { data, error } = await client
+                .from('sens_exercise_library')
+                .upsert(payload, { onConflict: 'id' })
+                .select()
+                .single();
+
+            if (error) {
+                console.error('[SENS Favorite] Upsert error:', error);
+                if (typeof showSensToast === 'function') {
+                    showSensToast('No se pudo guardar favorito en Supabase. Ejecutá la migración SQL de ejercicios.', 'error');
+                }
+                return;
+            }
+
+            window.upsertExerciseInMemory(data || payload);
+            refreshExerciseViewsAfterChange();
+            if (typeof showSensToast === 'function') {
+                showSensToast(nextFav ? '★ Marcado como Favorito en Base SENS.' : 'Quitado de Favoritos.', 'champagne');
+            }
+        } catch (err) {
+            console.error('[SENS Favorite] Exception:', err);
+            if (typeof showSensToast === 'function') showSensToast('Error al actualizar favorito en Supabase.', 'error');
+        }
+    };
+
+    function setChipActive(containerId, val) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const chips = container.querySelectorAll('.coach-ex-chip');
+        let matched = false;
+        chips.forEach(c => {
+            const isMatch = c.getAttribute('data-val') === val;
+            c.classList.toggle('active', isMatch);
+            if (isMatch) matched = true;
+        });
+        if (!matched && chips.length > 0) {
+            chips[0].classList.add('active');
+        }
+    }
+
+    function getChipActive(containerId, fallback) {
+        const container = document.getElementById(containerId);
+        if (!container) return fallback;
+        const active = container.querySelector('.coach-ex-chip.active');
+        return active ? (active.getAttribute('data-val') || fallback) : fallback;
+    }
+
+    function updateLegsSubVisibility() {
+        const muscle = getChipActive('coachExMuscleChips', 'piernas');
+        const legsBox = document.getElementById('coachExLegsSubField');
+        if (legsBox) {
+            legsBox.style.display = muscle === 'piernas' ? 'flex' : 'none';
+        }
+    }
+
+    function setSheetStatus(msg, type = 'info') {
+        const el = document.getElementById('coachExSheetStatusMsg');
+        if (!el) return;
+        if (!msg) {
+            el.style.display = 'none';
+            el.textContent = '';
+            el.className = 'coach-ex-sheet-status';
+            return;
+        }
+        el.textContent = msg;
+        el.className = `coach-ex-sheet-status ${type === 'error' ? 'is-error' : 'is-info'}`;
+        el.style.display = 'block';
+    }
+
+    function renderMediaPreview(rawUrl) {
+        const box = document.getElementById('coachExMediaPreviewBox');
+        const inner = document.getElementById('coachExMediaPreviewInner');
+        if (!box || !inner) return;
+        const trimmed = String(rawUrl || '').trim();
+        if (!trimmed) {
+            box.style.display = 'none';
+            inner.innerHTML = '';
+            return;
+        }
+        const resolved = (typeof resolveExerciseMediaUrl === 'function')
+            ? resolveExerciseMediaUrl(trimmed)
+            : { url: trimmed, isVideo: /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(trimmed), isGif: true };
+
+        if (!resolved || !resolved.url) {
+            box.style.display = 'none';
+            inner.innerHTML = '';
+            return;
+        }
+
+        if (resolved.isVideo) {
+            inner.innerHTML = `<video src="${resolved.url}" muted loop autoplay playsinline controls></video>`;
+        } else {
+            inner.innerHTML = `<img src="${resolved.url}" alt="Preview de ejercicio" />`;
+        }
+        box.style.display = 'block';
+    }
+
+    function bindCoachExerciseSheetOnce() {
+        if (_sheetBound) return;
+        _sheetBound = true;
+
+        ['coachExTypeChips', 'coachExMuscleChips', 'coachExLegsSubChips'].forEach(cid => {
+            const container = document.getElementById(cid);
+            if (!container) return;
+            container.querySelectorAll('.coach-ex-chip').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    container.querySelectorAll('.coach-ex-chip').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    if (cid === 'coachExMuscleChips') updateLegsSubVisibility();
+                });
+            });
+        });
+
+        const urlInput = document.getElementById('coachExMediaUrlInput');
+        if (urlInput) {
+            urlInput.addEventListener('input', () => renderMediaPreview(urlInput.value));
+        }
+
+        const removeMediaBtn = document.getElementById('btnCoachExRemoveMedia');
+        if (removeMediaBtn) {
+            removeMediaBtn.addEventListener('click', () => {
+                const inp = document.getElementById('coachExMediaUrlInput');
+                const fileInp = document.getElementById('coachExMediaFileInput');
+                if (inp) inp.value = '';
+                if (fileInp) fileInp.value = '';
+                renderMediaPreview('');
+            });
+        }
+
+        const fileInput = document.getElementById('coachExMediaFileInput');
+        if (fileInput) {
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (!file) return;
+
+                if (file.size > 25 * 1024 * 1024) {
+                    setSheetStatus('El archivo supera los 25 MB. Comprimí el video o usá un link externo.', 'error');
+                    fileInput.value = '';
+                    return;
+                }
+
+                const client = getSbClient();
+                if (!client) {
+                    setSheetStatus('No se detectó sesión activa de Supabase para subir media.', 'error');
+                    return;
+                }
+
+                const lbl = document.getElementById('coachExUploadBtnLabel');
+                const submitBtn = document.getElementById('btnCoachExSheetSubmit');
+                _isUploadingMedia = true;
+                if (lbl) lbl.textContent = 'Subiendo archivo...';
+                if (submitBtn) submitBtn.disabled = true;
+                setSheetStatus('Subiendo media a SENS Storage...', 'info');
+
+                try {
+                    const ext = (file.name.split('.').pop() || 'mp4').toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const editId = (document.getElementById('coachExEditId') && document.getElementById('coachExEditId').value) || 'new';
+                    const safeName = slugifyExerciseName(document.getElementById('coachExNameInput')?.value || editId);
+                    const storagePath = `coach/${safeName}_${Date.now()}.${ext}`;
+
+                    const { error: uploadErr } = await client.storage
+                        .from('exercise-media')
+                        .upload(storagePath, file, { cacheControl: '3600', upsert: true, contentType: file.type || undefined });
+
+                    if (uploadErr) {
+                        throw uploadErr;
+                    }
+
+                    const { data: pubData } = client.storage.from('exercise-media').getPublicUrl(storagePath);
+                    const publicUrl = pubData && pubData.publicUrl ? pubData.publicUrl : '';
+                    if (!publicUrl) throw new Error('No se pudo obtener la URL pública del archivo.');
+
+                    const mediaInp = document.getElementById('coachExMediaUrlInput');
+                    if (mediaInp) mediaInp.value = publicUrl;
+                    renderMediaPreview(publicUrl);
+                    setSheetStatus('Media subida correctamente. Tocá Guardar para confirmar.', 'info');
+                } catch (err) {
+                    console.error('[SENS Media Upload] Error:', err);
+                    setSheetStatus(`Error al subir archivo (${err.message || 'revisá el bucket exercise-media en Supabase'}).`, 'error');
+                } finally {
+                    _isUploadingMedia = false;
+                    if (lbl) lbl.textContent = 'Subir Foto / GIF / Video';
+                    if (submitBtn) submitBtn.disabled = false;
+                    fileInput.value = '';
+                }
+            });
+        }
+
+        const form = document.getElementById('coachExerciseEditorForm');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (_isUploadingMedia) {
+                    setSheetStatus('Esperá a que termine de subirse el archivo.', 'info');
+                    return;
+                }
+
+                const nameVal = (document.getElementById('coachExNameInput')?.value || '').trim();
+                if (!nameVal) {
+                    setSheetStatus('Ingresá el nombre del ejercicio.', 'error');
+                    return;
+                }
+
+                const client = getSbClient();
+                if (!client) {
+                    setSheetStatus('No hay conexión activa con Supabase.', 'error');
+                    return;
+                }
+
+                const editId = (document.getElementById('coachExEditId')?.value || '').trim();
+                const assignAfterSave = (document.getElementById('coachExAssignAfterSave')?.value === 'true');
+                const existingEx = editId ? findExerciseById(editId) : null;
+                const finalId = editId || `ex_coach_${slugifyExerciseName(nameVal)}_${Date.now().toString(36)}`;
+
+                const type1 = getChipActive('coachExTypeChips', 'muscular');
+                const muscle2 = getChipActive('coachExMuscleChips', 'piernas');
+                const sub3 = muscle2 === 'piernas' ? getChipActive('coachExLegsSubChips', 'cuadriceps') : null;
+                const isFav = Boolean(document.getElementById('coachExIsFavoriteToggle')?.checked);
+                const mediaUrl = (document.getElementById('coachExMediaUrlInput')?.value || '').trim();
+                const cueEs = (document.getElementById('coachExCueInput')?.value || '').trim();
+                const stepsEs = (document.getElementById('coachExStepsInput')?.value || '').trim();
+                const restSec = parseInt(document.getElementById('coachExRestInput')?.value, 10) || 90;
+                const kcalRep = parseFloat(document.getElementById('coachExKcalInput')?.value) || 0.45;
+
+                const payload = buildFullSupabasePayload(existingEx, {
+                    id: finalId,
+                    name_es: nameVal,
+                    nivel_1_tipo: type1,
+                    nivel_2_grupo_muscular: muscle2,
+                    nivel_3_submusculo_piernas: sub3,
+                    video_local_path: mediaUrl,
+                    cue_technical_es: cueEs,
+                    summary_detailed_movement_es: stepsEs,
+                    detailed_movement_es: stepsEs || (existingEx && existingEx.detailed_movement_es) || '',
+                    default_rest_seconds: restSec,
+                    calories_per_rep: kcalRep,
+                    is_favorite: isFav,
+                    is_custom: editId ? Boolean(existingEx && existingEx.is_custom) : true
+                });
+
+                const submitBtn = document.getElementById('btnCoachExSheetSubmit');
+                const prevText = submitBtn ? submitBtn.textContent : 'Guardar';
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Guardando en Supabase...';
+                }
+                setSheetStatus('', 'info');
+
+                try {
+                    const { data, error } = await client
+                        .from('sens_exercise_library')
+                        .upsert(payload, { onConflict: 'id' })
+                        .select()
+                        .single();
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    const savedObj = window.upsertExerciseInMemory(data || payload);
+                    refreshExerciseViewsAfterChange();
+
+                    // Si se creó desde el Workout Wizard, sumarlo inmediatamente al día activo
+                    if (assignAfterSave && savedObj && window.CoachWorkoutsMaster) {
+                        const selectedDays = (window.CoachWorkoutsMaster.daysConfig || []).filter(d => d.selected);
+                        const activeDay = selectedDays[window.CoachWorkoutsMaster.step3ActiveDayIndex || 0];
+                        if (activeDay && typeof window.CoachWorkoutsMaster.addExerciseToActiveDay === 'function') {
+                            window.CoachWorkoutsMaster.addExerciseToActiveDay(activeDay, savedObj);
+                        }
+                    }
+
+                    window.closeCoachExerciseSheet();
+                    if (typeof showSensToast === 'function') {
+                        showSensToast(
+                            editId
+                                ? 'Ejercicio actualizado en la Base Maestra SENS.'
+                                : (assignAfterSave ? 'Ejercicio guardado en Base SENS y agregado al día.' : 'Nuevo ejercicio guardado en Base SENS.'),
+                            'champagne'
+                        );
+                    }
+                } catch (err) {
+                    console.error('[SENS Exercise CRUD] Save error:', err);
+                    setSheetStatus(
+                        `No se pudo guardar en Supabase: ${err.message || 'verificá permisos de admin y la migración SQL'}.`,
+                        'error'
+                    );
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = prevText;
+                    }
+                }
+            });
+        }
+    }
+
+    window.openCoachExerciseSheet = function (exerciseId = null, options = {}) {
+        bindCoachExerciseSheetOnce();
+
+        const sheet = document.getElementById('coachExerciseEditorSheet');
+        const backdrop = document.getElementById('coachExerciseSheetBackdrop');
+        if (!sheet || !backdrop) return;
+
+        const existingEx = exerciseId ? findExerciseById(exerciseId) : null;
+        const assignAfterSave = Boolean(options && options.assignAfterSave);
+
+        document.getElementById('coachExEditId').value = existingEx ? existingEx.id : '';
+        document.getElementById('coachExAssignAfterSave').value = assignAfterSave ? 'true' : 'false';
+
+        const eyebrowEl = document.getElementById('coachExSheetEyebrow');
+        const titleEl = document.getElementById('coachExSheetTitle');
+        const submitBtn = document.getElementById('btnCoachExSheetSubmit');
+        const detailsEl = document.getElementById('coachExOptionalDetails');
+
+        if (existingEx) {
+            if (eyebrowEl) eyebrowEl.textContent = existingEx.is_custom ? 'EJERCICIO PROPIO • BASE SENS' : 'EDITAR BASE MAESTRA SENS';
+            if (titleEl) titleEl.textContent = 'Editar Ejercicio';
+            if (submitBtn) submitBtn.textContent = 'Guardar Cambios';
+
+            document.getElementById('coachExNameInput').value = existingEx.name_es || existingEx.name || '';
+            setChipActive('coachExTypeChips', (existingEx.nivel_1_tipo || 'muscular').toLowerCase());
+            setChipActive('coachExMuscleChips', (existingEx.nivel_2_grupo_muscular || 'piernas').toLowerCase());
+            setChipActive('coachExLegsSubChips', (existingEx.nivel_3_submusculo_piernas || 'cuadriceps').toLowerCase());
+            document.getElementById('coachExIsFavoriteToggle').checked = Boolean(existingEx.is_favorite || existingEx.favorite);
+            const mediaPath = existingEx.video_local_path || existingEx.video_url || '';
+            document.getElementById('coachExMediaUrlInput').value = mediaPath;
+            renderMediaPreview(mediaPath);
+            document.getElementById('coachExCueInput').value = existingEx.cue_technical_es || existingEx.cue || '';
+            document.getElementById('coachExStepsInput').value = existingEx.summary_detailed_movement_es || existingEx.execution || '';
+            document.getElementById('coachExRestInput').value = existingEx.default_rest_seconds || existingEx.rest || 90;
+            document.getElementById('coachExKcalInput').value = existingEx.calories_per_rep || existingEx.kcal_per_rep || 0.45;
+            if (detailsEl) detailsEl.open = true;
+        } else {
+            if (eyebrowEl) eyebrowEl.textContent = 'BASE MAESTRA SENS';
+            if (titleEl) titleEl.textContent = assignAfterSave ? 'Nuevo Ejercicio para la Rutina' : 'Nuevo Ejercicio';
+            if (submitBtn) submitBtn.textContent = assignAfterSave ? 'Guardar y Agregar al Día' : 'Guardar en Base SENS';
+
+            document.getElementById('coachExNameInput').value = '';
+            setChipActive('coachExTypeChips', 'muscular');
+            setChipActive('coachExMuscleChips', 'piernas');
+            setChipActive('coachExLegsSubChips', 'cuadriceps');
+            document.getElementById('coachExIsFavoriteToggle').checked = false;
+            document.getElementById('coachExMediaUrlInput').value = '';
+            renderMediaPreview('');
+            document.getElementById('coachExCueInput').value = '';
+            document.getElementById('coachExStepsInput').value = '';
+            document.getElementById('coachExRestInput').value = 90;
+            document.getElementById('coachExKcalInput').value = 0.45;
+            if (detailsEl) detailsEl.open = false;
+        }
+
+        updateLegsSubVisibility();
+        setSheetStatus('', 'info');
+
+        backdrop.style.display = 'block';
+        sheet.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(() => {
+            const nameInp = document.getElementById('coachExNameInput');
+            if (nameInp && !existingEx) nameInp.focus();
+        }, 120);
+    };
+
+    window.closeCoachExerciseSheet = function () {
+        const sheet = document.getElementById('coachExerciseEditorSheet');
+        const backdrop = document.getElementById('coachExerciseSheetBackdrop');
+        if (sheet) sheet.style.display = 'none';
+        if (backdrop) backdrop.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+})();

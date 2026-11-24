@@ -51009,14 +51009,18 @@ function resolveExerciseMediaUrl(video_local_path) {
     }
 
     const clean = String(video_local_path).trim().replace(/\\/g, '/');
-    const filename = clean.split('/').pop();
-    const isVideo = clean.toLowerCase().endsWith('.mp4');
-    const isGif = clean.toLowerCase().endsWith('.gif');
+    const cleanNoQuery = clean.split('?')[0].toLowerCase();
+    const filename = cleanNoQuery.split('/').pop();
+    const isExternal = /^https?:\/\//i.test(clean) || /^data:/i.test(clean);
+    const isVideo = /\.(mp4|webm|mov|m4v)$/i.test(cleanNoQuery);
+    const isGif = /\.(gif|jpg|jpeg|png|webp|avif)$/i.test(cleanNoQuery);
 
-    // Rutas directas verificadas en el repositorio
-    let resolvedUrl = isVideo 
-        ? `EJERCICIOS/videos_loop_final/${filename}`
-        : `EJERCICIOS/exercises-final/videos/${filename}`;
+    // Preservar URLs externas (Supabase Storage o links directos); para rutas locales mantener el mapeo del repo
+    let resolvedUrl = isExternal
+        ? clean
+        : (isVideo
+            ? `EJERCICIOS/videos_loop_final/${filename}`
+            : `EJERCICIOS/exercises-final/videos/${filename}`);
 
     return {
         url: resolvedUrl,

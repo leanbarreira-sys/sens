@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=43.0">
+    <link rel="stylesheet" href="style.css?v=44.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '52.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '52.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '53.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '53.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4778,8 +4778,8 @@
                     <button type="button" class="coach-subnav-btn" data-subtab="paneNutrition">
                         Nutrición &amp; Macros
                     </button>
-                    <button type="button" class="coach-subnav-btn" data-subtab="paneLibrary" style="display: none !important;">
-                        Biblioteca Maestra
+                    <button type="button" class="coach-subnav-btn" data-subtab="paneLibrary">
+                        Biblioteca
                     </button>
                     <button type="button" class="coach-subnav-btn" data-subtab="paneMarketing">
                         Marketing Studio
@@ -5522,9 +5522,16 @@
                                             <div style="font-size: 10.5px; color: #71717A;">Tocá "+ Agregar" para sumar
                                                 ejercicios a este día</div>
                                         </div>
-                                        <input type="text" id="wizardExSearchInput"
-                                            placeholder="Buscar ejercicio por nombre..." class="input-control"
-                                            style="max-width: 240px; height: 32px; font-size: 11.5px; margin: 0; background: #FFFFFF; color: #121214;">
+                                        <div style="display: flex; align-items: center; gap: 8px; flex: 1; justify-content: flex-end; min-width: 220px;">
+                                            <input type="text" id="wizardExSearchInput"
+                                                placeholder="Buscar ejercicio por nombre..." class="input-control"
+                                                style="max-width: 240px; height: 34px; font-size: 12px; margin: 0; background: #FFFFFF; color: #121214;">
+                                            <button type="button" id="btnWizardCreateNewExercise"
+                                                onclick="if(typeof window.openCoachExerciseSheet==='function') window.openCoachExerciseSheet(null, { assignAfterSave: true });"
+                                                style="height: 34px; padding: 0 12px; border-radius: 999px; background: #121214; color: #FAF9F6; border: none; font-size: 11px; font-weight: 800; white-space: nowrap; cursor: pointer; flex-shrink: 0;">
+                                                + Nuevo
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <!-- Sub-Filtros de Grupos Musculares -->
@@ -6138,12 +6145,23 @@
                         <div id="coachLibExercisesSection">
                             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
                                 <input type="text" id="coachMasterExSearchInput" class="input-control"
-                                    placeholder="Buscar ejercicio, músculo, técnica o patrón..."
-                                    style="flex: 1; min-width: 220px; margin-bottom: 0;">
-                                <button type="button" class="btn btn-outline btn-sm" id="btnCoachCreateNewExercise"
-                                    style="font-weight: 800; border-color: #9E7D4B; color: #9E7D4B;">
+                                    placeholder="Buscar ejercicio, músculo o técnica..."
+                                    style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                                <button type="button" class="btn btn-dark btn-sm" id="btnCoachCreateNewExercise"
+                                    style="font-weight: 800; background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 8px 16px; white-space: nowrap;">
                                     + Nuevo Ejercicio
                                 </button>
+                            </div>
+
+                            <!-- Filtros Rápidos del Coach (Todos / Favoritos / Mis Ejercicios / Sin Media) -->
+                            <div class="coach-taxonomy-level-box" style="margin-bottom: 8px;">
+                                <span class="taxonomy-level-label">Vista:</span>
+                                <div class="coach-horizontal-pills" id="coachLibQuickFilterBar">
+                                    <button type="button" class="pill pill-champagne lib-quick-btn active" data-quick="all">Todos</button>
+                                    <button type="button" class="pill pill-dark lib-quick-btn" data-quick="favorites">★ Favoritos</button>
+                                    <button type="button" class="pill pill-dark lib-quick-btn" data-quick="custom">Mis Ejercicios</button>
+                                    <button type="button" class="pill pill-dark lib-quick-btn" data-quick="no_media">Sin Video/Foto</button>
+                                </div>
                             </div>
 
                             <!-- NIVEL 1: POR TIPO (Muscular, Movilidad, Cardio) -->
@@ -7522,7 +7540,6 @@
             <span>Nutrición</span>
         </button>
         <button type="button" class="sens-dock-item coach-dock-btn" data-coach-subtab="paneLibrary"
-            style="display: none !important;"
             onclick="if(typeof window.switchCoachSubTab==='function')window.switchCoachSubTab('paneLibrary');">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -8749,8 +8766,140 @@
         </div>
     </div>
 
+    <!-- =========================================================================
+         NATIVE BOTTOM SHEET: CREAR / EDITAR EJERCICIO EN BASE MAESTRA (COACH OS)
+         ========================================================================= -->
+    <div id="coachExerciseSheetBackdrop" class="native-sheet-backdrop" style="display: none;"
+        onclick="window.closeCoachExerciseSheet && window.closeCoachExerciseSheet();"></div>
+    <div id="coachExerciseEditorSheet" class="coach-ex-editor-sheet" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="coachExSheetTitle">
+        <div class="coach-ex-sheet-handle-wrap" onclick="window.closeCoachExerciseSheet && window.closeCoachExerciseSheet();">
+            <div class="coach-ex-sheet-handle"></div>
+        </div>
+        <div class="coach-ex-sheet-header">
+            <div>
+                <span class="coach-ex-sheet-eyebrow" id="coachExSheetEyebrow">BASE MAESTRA SENS</span>
+                <h3 class="coach-ex-sheet-title" id="coachExSheetTitle">Nuevo Ejercicio</h3>
+            </div>
+            <button type="button" class="coach-ex-sheet-close" onclick="window.closeCoachExerciseSheet && window.closeCoachExerciseSheet();" aria-label="Cerrar">✕</button>
+        </div>
+
+        <form id="coachExerciseEditorForm" class="coach-ex-sheet-body">
+            <input type="hidden" id="coachExEditId" value="">
+            <input type="hidden" id="coachExAssignAfterSave" value="false">
+
+            <!-- BLOQUE 1: OBLIGATORIOS (ALTA EN 10 SEGUNDOS) -->
+            <div class="coach-ex-field">
+                <label class="coach-ex-label" for="coachExNameInput">Nombre del Ejercicio *</label>
+                <input type="text" id="coachExNameInput" class="coach-ex-input" placeholder="Ej: Press Pallof con Banda" required autocomplete="off">
+            </div>
+
+            <div class="coach-ex-field">
+                <span class="coach-ex-label">1. Tipo *</span>
+                <div class="coach-ex-chips-row" id="coachExTypeChips">
+                    <button type="button" class="coach-ex-chip active" data-val="muscular">Muscular</button>
+                    <button type="button" class="coach-ex-chip" data-val="movilidad">Movilidad</button>
+                    <button type="button" class="coach-ex-chip" data-val="cardio">Cardio</button>
+                </div>
+            </div>
+
+            <div class="coach-ex-field">
+                <span class="coach-ex-label">2. Grupo Muscular *</span>
+                <div class="coach-ex-chips-wrap" id="coachExMuscleChips">
+                    <button type="button" class="coach-ex-chip active" data-val="piernas">Piernas</button>
+                    <button type="button" class="coach-ex-chip" data-val="espalda">Espalda</button>
+                    <button type="button" class="coach-ex-chip" data-val="pecho">Pecho</button>
+                    <button type="button" class="coach-ex-chip" data-val="hombros">Hombros</button>
+                    <button type="button" class="coach-ex-chip" data-val="biceps">Bíceps</button>
+                    <button type="button" class="coach-ex-chip" data-val="triceps">Tríceps</button>
+                    <button type="button" class="coach-ex-chip" data-val="abdominales">Abdominales</button>
+                    <button type="button" class="coach-ex-chip" data-val="zona_lumbar">Zona Lumbar</button>
+                    <button type="button" class="coach-ex-chip" data-val="antebrazos">Antebrazos</button>
+                </div>
+            </div>
+
+            <div class="coach-ex-field" id="coachExLegsSubField">
+                <span class="coach-ex-label">3. Foco de Piernas</span>
+                <div class="coach-ex-chips-wrap" id="coachExLegsSubChips">
+                    <button type="button" class="coach-ex-chip active" data-val="cuadriceps">Cuádriceps</button>
+                    <button type="button" class="coach-ex-chip" data-val="isquios">Isquios</button>
+                    <button type="button" class="coach-ex-chip" data-val="gluteos">Glúteos</button>
+                    <button type="button" class="coach-ex-chip" data-val="gemelos">Gemelos</button>
+                    <button type="button" class="coach-ex-chip" data-val="abductores">Abductores</button>
+                    <button type="button" class="coach-ex-chip" data-val="aductores">Aductores</button>
+                </div>
+            </div>
+
+            <!-- Toggle Rápido de Favorito -->
+            <div class="coach-ex-fav-row">
+                <div>
+                    <div class="coach-ex-fav-title">★ Marcar como Favorito</div>
+                    <div class="coach-ex-fav-sub">Aparece primero en tus filtros y armado de rutinas</div>
+                </div>
+                <label class="coach-ex-switch">
+                    <input type="checkbox" id="coachExIsFavoriteToggle">
+                    <span class="coach-ex-switch-slider"></span>
+                </label>
+            </div>
+
+            <!-- BLOQUE 2: OPCIONALES DESPLEGABLES (MEDIA + DETALLES TÉCNICOS) -->
+            <details class="coach-ex-optional-details" id="coachExOptionalDetails">
+                <summary class="coach-ex-optional-summary">
+                    <span>Media (Video / Foto / GIF) y Detalles Técnicos</span>
+                    <span class="coach-ex-optional-tag">Opcional</span>
+                </summary>
+                <div class="coach-ex-optional-content">
+                    <!-- Zona de Carga de Media -->
+                    <div class="coach-ex-field">
+                        <span class="coach-ex-label">Imagen, GIF o Video (editable cuando quieras)</span>
+                        <div id="coachExMediaPreviewBox" class="coach-ex-media-preview" style="display: none;">
+                            <div id="coachExMediaPreviewInner"></div>
+                            <button type="button" class="coach-ex-media-remove-btn" id="btnCoachExRemoveMedia">Quitar media</button>
+                        </div>
+                        <div class="coach-ex-media-actions">
+                            <label class="coach-ex-upload-btn" for="coachExMediaFileInput">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                <span id="coachExUploadBtnLabel">Subir Foto / GIF / Video</span>
+                            </label>
+                            <input type="file" id="coachExMediaFileInput" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" style="display: none;">
+                        </div>
+                        <input type="text" id="coachExMediaUrlInput" class="coach-ex-input" placeholder="O pegá un link directo (https://...mp4 / .gif / .jpg)" style="margin-top: 8px; font-size: 12px;">
+                    </div>
+
+                    <div class="coach-ex-field">
+                        <label class="coach-ex-label" for="coachExCueInput">Cue Técnico de Nico (1 línea)</label>
+                        <input type="text" id="coachExCueInput" class="coach-ex-input" placeholder="Ej: Abdomen firme, evitar rotación del torso, bajar en 3s.">
+                    </div>
+
+                    <div class="coach-ex-field">
+                        <label class="coach-ex-label" for="coachExStepsInput">Pasos de Ejecución</label>
+                        <textarea id="coachExStepsInput" class="coach-ex-textarea" rows="3" placeholder="1. Posición inicial... 2. Ejecución controlada... 3. Respiración y bloqueo..."></textarea>
+                    </div>
+
+                    <div class="coach-ex-two-col">
+                        <div class="coach-ex-field">
+                            <label class="coach-ex-label" for="coachExRestInput">Descanso (seg)</label>
+                            <input type="number" id="coachExRestInput" class="coach-ex-input" value="90" min="15" max="300" step="15">
+                        </div>
+                        <div class="coach-ex-field">
+                            <label class="coach-ex-label" for="coachExKcalInput">Kcal / Rep</label>
+                            <input type="number" id="coachExKcalInput" class="coach-ex-input" value="0.45" min="0.05" max="5" step="0.05">
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <div id="coachExSheetStatusMsg" class="coach-ex-sheet-status" style="display: none;"></div>
+
+            <!-- Footer Fijo en Zona del Pulgar -->
+            <div class="coach-ex-sheet-footer">
+                <button type="button" class="coach-ex-btn-cancel" onclick="window.closeCoachExerciseSheet && window.closeCoachExerciseSheet();">Cancelar</button>
+                <button type="submit" class="coach-ex-btn-save" id="btnCoachExSheetSubmit">Guardar en Base SENS</button>
+            </div>
+        </form>
+    </div>
+
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=56.0"></script>
+    <script defer src="app.js?v=57.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
