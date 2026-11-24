@@ -7014,6 +7014,18 @@ function athleteHasAssignedRoutine(athId) {
     return false;
 }
 
+function getAthleteDefaultModality(athId) {
+    let ath = null;
+    if (athId && window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+        ath = window.__coachAthletesCache.find(a => a && (a.id === athId || (a.email && a.email.toLowerCase() === String(athId).toLowerCase())));
+    }
+    if (!ath && typeof AppState !== 'undefined' && AppState.profile && (!athId || AppState.profile.id === athId)) {
+        ath = AppState.profile;
+    }
+    const rawType = String(ath?.user_type || ath?.plan_tier || '').toLowerCase();
+    return rawType.includes('online') ? 'online' : 'presencial';
+}
+
 function getActiveAthleteId() {
     // 0. Si el usuario actual está navegando en el portal de alumno propio (dashView, workoutView, nutritionView, trackingView, profileSettingsView)
     // y NO está en modo de inspección activa de un alumno por el coach:
@@ -27205,11 +27217,12 @@ const CoachRoutineTemplatesManager = {
         });
 
         // Actualizar daysConfig
+        const athDefaultMod = getAthleteDefaultModality(CoachWorkoutsMaster.activeAthleteId || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null));
         CoachWorkoutsMaster.daysConfig.forEach(dc => {
             const tDay = dowMap[dc.dayOfWeekIdx];
             if (tDay) {
                 dc.selected = true;
-                dc.modality = tDay.modality || 'presencial';
+                dc.modality = athDefaultMod === 'online' ? 'online' : (tDay.modality || athDefaultMod);
                 dc.muscles = [...(tDay.muscles || [])];
                 CoachWorkoutsMaster.wizardDraft[dc.dateStr] = {
                     dateStr: dc.dateStr,
@@ -27483,7 +27496,7 @@ const CoachQuickAddManager = {
             workoutData.calendar_schedule[dateStr] = {
                 dateStr: dateStr,
                 title: `Entrenamiento del ${dateStr}`,
-                modality: 'presencial',
+                modality: getAthleteDefaultModality(athId),
                 completed: false,
                 exercises: []
             };
@@ -28925,6 +28938,7 @@ const CoachWorkoutsMaster = {
         const newWizardDraft = {};
 
         const targetAthId = this.activeAthleteId || (typeof coachWorkoutState !== 'undefined' ? coachWorkoutState.activeAthleteId : null);
+        const athleteDefaultModality = getAthleteDefaultModality(targetAthId);
         const athleteWorkouts = targetAthId ? getCoachAthleteWorkoutData(targetAthId) : null;
         const datedSchedule = athleteWorkouts?.calendar_schedule || {};
 
@@ -28986,7 +29000,7 @@ const CoachWorkoutsMaster = {
             }
 
             // 4. Modalidad
-            const dayModality = (prev && prev.modality) || (datedDay && datedDay.modality) || (weeklyDay && weeklyDay.modality) || 'presencial';
+            const dayModality = (prev && prev.modality) || (datedDay && datedDay.modality) || (weeklyDay && weeklyDay.modality) || athleteDefaultModality;
 
             // 5. Selección de día
             const hasExercises = exercises.length > 0;

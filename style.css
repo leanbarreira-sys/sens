@@ -35894,3 +35894,92 @@ body.in-portal #sensExerciseModalSheet .sens-btn-timer-primary * {
     gap: 5px;
     cursor: pointer;
 }
+
+/* Compact & Refined CTAs + Filter Chips in Coach Entreno (#paneWorkouts) */
+#paneWorkouts .coach-workouts-btn-auto,
+#paneWorkouts .coach-workouts-btn-templates {
+    min-height: 32px !important;
+    padding: 5px 11px !important;
+    font-size: 11px !important;
+    border-radius: 9px !important;
+}
+
+#paneWorkouts .coach-vision-tab-btn {
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+    font-size: 11px !important;
+}
+
+#paneWorkouts .coach-cycle-control-bar {
+    padding: 8px 12px !important;
+    border-radius: 12px !important;
+}
+
+#paneWorkouts .coach-cycle-select,
+#paneWorkouts .coach-cycle-template-btn {
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 3px 10px !important;
+    font-size: 11px !important;
+    border-radius: 8px !important;
+}
+
+#paneWorkouts .wizard-mod-btn {
+    min-height: 26px !important;
+    padding: 3px 9px !important;
+    font-size: 10.5px !important;
+}
+
+#paneWorkouts .coach-muscle-filter-chip,
+#paneWorkouts .wizard-muscle-chip {
+    min-height: 28px !important;
+    padding: 4px 10px !important;
+    font-size: 10.5px !important;
+    border-radius: 999px !important;
+}
+
+#paneWorkouts .coach-wizard-btn-back,
+#paneWorkouts .coach-wizard-btn-next,
+#paneWorkouts .coach-wizard-btn-publish {
+    min-height: 36px !important;
+    padding: 7px 16px !important;
+    font-size: 11.5px !important;
+    border-radius: 10px !important;
+}
+
+#paneWorkouts .coach-month-arrow-btn {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+#paneWorkouts .coach-month-lote-btn {
+    min-height: 30px !important;
+    padding: 4px 11px !important;
+    font-size: 11px !important;
+}
+
+@media (max-width: 520px) {
+    #paneWorkouts .coach-workouts-header-actions {
+        width: auto !important;
+    }
+
+    #paneWorkouts .coach-workouts-btn-auto {
+        flex: 0 0 auto !important;
+    }
+
+    #paneWorkouts .coach-wizard-cta-row {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    #paneWorkouts .coach-wizard-cta-row.coach-wizard-cta-end {
+        justify-content: flex-end !important;
+    }
+
+    #paneWorkouts .coach-wizard-btn-back,
+    #paneWorkouts .coach-wizard-btn-next,
+    #paneWorkouts .coach-wizard-btn-publish {
+        width: auto !important;
+    }
+}
