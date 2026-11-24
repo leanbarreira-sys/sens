@@ -34060,3 +34060,63 @@ body.in-portal .sens-tracking-seg-pill,
     box-shadow: 0 -8px 24px rgba(18, 18, 20, 0.06) !important;
     z-index: 5 !important;
 }
+
+/* =============================================================================
+   BOTTOM SHEET DE ENTRENAMIENTO: ELEVACIÓN SOBRE TOPBAR/DOCK + X Y CTA STICKY
+   ============================================================================= */
+.sens-exercise-modal-backdrop,
+#sensExerciseModalBackdrop,
+#sensCoachExercisePreviewModal {
+    z-index: 100020 !important;
+}
+
+body.in-portal .sens-exercise-modal-sheet,
+#sensExerciseModalSheet,
+#sensCoachExercisePreviewSheet {
+    max-height: min(90dvh, calc(100dvh - max(16px, env(safe-area-inset-top, 16px)))) !important;
+    padding: 0 18px 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+}
+
+#sensExerciseModalSheet .sheet-drag-handle-wrap,
+#sensCoachExercisePreviewSheet .sheet-drag-handle-wrap {
+    padding-top: 10px !important;
+    padding-bottom: 2px !important;
+}
+
+#sensExerciseModalSheet .sens-exercise-modal-top,
+#sensCoachExercisePreviewSheet .sens-exercise-modal-top {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    margin: 0 -18px 10px !important;
+    padding: 10px 18px 10px !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    align-items: flex-start !important;
+}
+
+#sensExerciseModalSheet #btnCloseExerciseModal,
+#sensCoachExercisePreviewSheet .sens-modal-close-btn {
+    flex-shrink: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+}
+
+body.in-portal #sensExerciseModalSheet .sens-modal-sticky-save-bar,
+#sensExerciseModalSheet .sens-modal-sticky-save-bar,
+#sensCoachExercisePreviewSheet .sens-modal-sticky-save-bar {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 20 !important;
+    margin: 18px -18px 0 !important;
+    padding: 12px 18px max(16px, calc(env(safe-area-inset-bottom, 0px) + 12px)) !important;
+    width: auto !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 -8px 24px rgba(18, 18, 20, 0.06) !important;
+}
