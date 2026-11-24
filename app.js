@@ -13411,24 +13411,60 @@ async function fetchAthleteEvolutionData(athId) {
     return { workoutLogs, dailyLogs };
 }
 
-function summarizeExerciseLoads(workoutLogs) {
+function normalizeMuscleGroupLabel(rawGroup, exName) {
+    const src = `${rawGroup || ''} ${exName || ''}`.toLowerCase();
+    if (/cuadr|pierna|sentadilla|prensa|estocad|búlgar|bulgar|femoral|isquio|glút|glut|hip thrust|pantorrilla|gemelo/.test(src)) return 'Piernas & Glúteos';
+    if (/espalda|dorsal|remo|jalón|jalon|dominada|pull|peso muerto/.test(src)) return 'Espalda';
+    if (/pecho|pector|press banca|press inclinado|apertura|fondo|flexion|push/.test(src)) return 'Pecho';
+    if (/hombro|deltoid|militar|vuelo|lateral|elevaci/.test(src)) return 'Hombros';
+    if (/bícep|bicep|trícep|tricep|curl|extensión de codo|martillo|brazo/.test(src)) return 'Brazos';
+    if (/core|abdom|plancha|crunch|rueda|pallof/.test(src)) return 'Core';
+    return rawGroup ? String(rawGroup).trim() : 'General';
+}
+
+function buildExerciseMuscleLookup(athId) {
+    const lookup = {};
+    try {
+        const wData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(athId) : null;
+        if (wData && typeof wData === 'object') {
+            ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'].forEach(dk => {
+                const dayObj = wData[dk];
+                if (dayObj && Array.isArray(dayObj.exercises)) {
+                    dayObj.exercises.forEach(ex => {
+                        const key = String(ex.name || ex.exercise_name || '').trim().toLowerCase();
+                        if (key) {
+                            lookup[key] = normalizeMuscleGroupLabel(ex.primary_muscle || ex.muscle_group || dayObj.focus, key);
+                        }
+                    });
+                }
+            });
+        }
+    } catch (_) {}
+    return lookup;
+}
+
+function summarizeExerciseLoads(workoutLogs, athId = null) {
+    const muscleLookup = athId ? buildExerciseMuscleLookup(athId) : {};
     const map = {};
     workoutLogs.forEach(log => {
         const name = (log.exercise_name || log.exercise_id || 'Ejercicio').trim();
         const weight = Number(log.weight_kg ?? log.weight ?? 0) || 0;
         const reps = Number(log.reps_completed ?? log.reps ?? 0) || 0;
         const sets = Number(log.sets_completed ?? 1) || 1;
-        const ts = new Date(log.created_at || log.logged_at || Date.now()).getTime();
+        const dateStr = log.created_at || log.logged_at || '';
+        const ts = new Date(dateStr || Date.now()).getTime();
         const e1rm = (weight > 0 && reps > 0) ? Math.round(weight * (1 + reps / 30)) : 0;
+        const rawMuscle = log.muscle_group || muscleLookup[name.toLowerCase()] || '';
+        const muscleGroup = normalizeMuscleGroupLabel(rawMuscle, name);
 
         if (!map[name]) {
-            map[name] = { name, maxWeight: 0, maxE1rm: 0, totalSets: 0, tonnage: 0, entries: [] };
+            map[name] = { name, muscleGroup, maxWeight: 0, maxE1rm: 0, totalSets: 0, tonnage: 0, entries: [] };
         }
         map[name].totalSets += sets;
         map[name].tonnage += (weight * reps * sets);
         if (weight > map[name].maxWeight) map[name].maxWeight = weight;
         if (e1rm > map[name].maxE1rm) map[name].maxE1rm = e1rm;
-        map[name].entries.push({ weight, reps, ts, date: log.created_at || log.logged_at || '' });
+        map[name].entries.push({ weight, reps, sets, ts, date: dateStr, rpe: log.rpe || log.rir || null });
     });
 
     return Object.values(map).map(item => {
@@ -13436,7 +13472,20 @@ function summarizeExerciseLoads(workoutLogs) {
         const latest = item.entries[0] || { weight: 0, reps: 0, date: '' };
         const prev = item.entries.find(e => e.date.slice(0, 10) !== latest.date.slice(0, 10)) || item.entries[1] || null;
         const deltaKg = prev ? Number((latest.weight - prev.weight).toFixed(1)) : 0;
-        return { ...item, latest, deltaKg };
+
+        // Agrupar series por fecha (últimas 4 sesiones reales)
+        const byDate = {};
+        item.entries.forEach(e => {
+            const dk = (e.date || '').slice(0, 10) || 'Reciente';
+            if (!byDate[dk]) byDate[dk] = [];
+            byDate[dk].push(`${e.weight}kg×${e.reps}`);
+        });
+        const recentSessions = Object.entries(byDate).slice(0, 4).map(([dk, setsArr]) => ({
+            dateLabel: dk === 'Reciente' ? 'Reciente' : formatPaymentDateShort(dk),
+            setsSummary: setsArr.slice(0, 6).join(' · ')
+        }));
+
+        return { ...item, latest, deltaKg, recentSessions };
     }).sort((a, b) => b.latest.ts - a.latest.ts);
 }
 
@@ -13450,7 +13499,7 @@ function renderCoachEvolutionSheetBody() {
     const { workoutLogs, dailyLogs } = coachEvolutionSheetState;
     const tab = coachEvolutionSheetState.activeTab || 'summary';
 
-    const exerciseSummaries = summarizeExerciseLoads(workoutLogs);
+    const exerciseSummaries = summarizeExerciseLoads(workoutLogs, athId);
     const totalTonnage = Math.round(exerciseSummaries.reduce((acc, ex) => acc + ex.tonnage, 0));
     const sessionDays = new Set(workoutLogs.map(l => String(l.created_at || l.logged_at || '').slice(0, 10)).filter(Boolean)).size;
     const trackedDays = dailyLogs.filter(d => Number(d.calories_consumed || d.kcal || 0) > 0 || Number(d.water_ml || 0) > 0 || Number(d.steps || 0) > 0).length;
@@ -13526,28 +13575,126 @@ function renderCoachEvolutionSheetBody() {
     }
 
     if (tab === 'loads') {
-        if (exerciseSummaries.length === 0) {
-            body.innerHTML = `<div class="coach-evo-empty">Este alumno todavía no registró series con carga. Apenas cargue sus pesos en Entrenar, vas a ver aquí su progresión y PRs por ejercicio.</div>`;
-            return;
-        }
-        body.innerHTML = exerciseSummaries.map(ex => {
-            const deltaClass = ex.deltaKg > 0 ? 'up' : ex.deltaKg < 0 ? 'down' : 'flat';
-            const deltaLabel = ex.deltaKg > 0 ? `+${ex.deltaKg} kg` : ex.deltaKg < 0 ? `${ex.deltaKg} kg` : '=';
-            return `
-                <div class="coach-evo-load-card">
-                    <div class="coach-evo-load-head">
-                        <strong>${escapeHTML(ex.name)}</strong>
-                        <span class="coach-evo-delta ${deltaClass}">${deltaLabel}</span>
+        const activeMuscle = coachEvolutionSheetState.muscleFilter || 'all';
+        const muscleStats = {};
+        exerciseSummaries.forEach(ex => {
+            if (!muscleStats[ex.muscleGroup]) {
+                muscleStats[ex.muscleGroup] = { group: ex.muscleGroup, sets: 0, tonnage: 0, exercises: 0 };
+            }
+            muscleStats[ex.muscleGroup].sets += ex.totalSets;
+            muscleStats[ex.muscleGroup].tonnage += ex.tonnage;
+            muscleStats[ex.muscleGroup].exercises += 1;
+        });
+        const muscleList = Object.values(muscleStats).sort((a, b) => b.sets - a.sets);
+        const maxSets = Math.max(1, ...muscleList.map(m => m.sets));
+
+        const muscleFilterHtml = muscleList.length > 0 ? `
+            <div class="coach-clean-filter-row" style="margin-bottom: 4px;">
+                <button type="button" class="coach-clean-chip coach-evo-muscle-chip ${activeMuscle === 'all' ? 'active' : ''}" data-evo-muscle="all">Todos</button>
+                ${muscleList.map(m => `
+                    <button type="button" class="coach-clean-chip coach-evo-muscle-chip ${activeMuscle === m.group ? 'active' : ''}" data-evo-muscle="${escapeHTML(m.group)}">${escapeHTML(m.group)}</button>
+                `).join('')}
+            </div>
+        ` : '';
+
+        const muscleBreakdownHtml = muscleList.length > 0 ? `
+            <div class="coach-evo-card">
+                <div class="coach-evo-card-title">Volumen realizado por grupo muscular</div>
+                ${muscleList.map(m => {
+                    const pct = Math.round((m.sets / maxSets) * 100);
+                    return `
+                        <div class="coach-evo-muscle-bar-row">
+                            <div class="coach-evo-muscle-bar-head">
+                                <strong>${escapeHTML(m.group)}</strong>
+                                <span>${m.sets} series · ${m.exercises} ej. · ${Math.round(m.tonnage).toLocaleString('es-AR')} kg</span>
+                            </div>
+                            <div class="coach-evo-muscle-track"><div style="width:${pct}%;"></div></div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        ` : '';
+
+        const filteredEx = activeMuscle === 'all'
+            ? exerciseSummaries
+            : exerciseSummaries.filter(ex => ex.muscleGroup === activeMuscle);
+
+        const exCardsHtml = filteredEx.length > 0
+            ? filteredEx.map(ex => {
+                const deltaClass = ex.deltaKg > 0 ? 'up' : ex.deltaKg < 0 ? 'down' : 'flat';
+                const deltaLabel = ex.deltaKg > 0 ? `+${ex.deltaKg} kg` : ex.deltaKg < 0 ? `${ex.deltaKg} kg` : '=';
+                const sessionsHtml = ex.recentSessions.map(s => `
+                    <div class="coach-evo-session-line">
+                        <span>${escapeHTML(s.dateLabel)}</span>
+                        <strong>${escapeHTML(s.setsSummary)}</strong>
                     </div>
-                    <div class="coach-evo-load-metrics">
-                        <span>Última: <strong>${ex.latest.weight} kg × ${ex.latest.reps}</strong></span>
-                        <span>PR: <strong>${ex.maxWeight} kg</strong></span>
-                        <span>e1RM: <strong>${ex.maxE1rm > 0 ? `${ex.maxE1rm} kg` : '—'}</strong></span>
-                        <span>${ex.totalSets} series</span>
+                `).join('');
+                return `
+                    <div class="coach-evo-load-card">
+                        <div class="coach-evo-load-head">
+                            <div style="min-width:0;">
+                                <strong>${escapeHTML(ex.name)}</strong>
+                                <span class="coach-evo-muscle-tag">${escapeHTML(ex.muscleGroup)}</span>
+                            </div>
+                            <span class="coach-evo-delta ${deltaClass}">${deltaLabel}</span>
+                        </div>
+                        <div class="coach-evo-load-metrics">
+                            <span>PR: <strong>${ex.maxWeight} kg</strong></span>
+                            <span>e1RM: <strong>${ex.maxE1rm > 0 ? `${ex.maxE1rm} kg` : '—'}</strong></span>
+                            <span>Ton: <strong>${Math.round(ex.tonnage).toLocaleString('es-AR')} kg</strong></span>
+                            <span>${ex.totalSets} series</span>
+                        </div>
+                        <div class="coach-evo-sessions-list">${sessionsHtml}</div>
                     </div>
-                </div>
-            `;
-        }).join('');
+                `;
+            }).join('')
+            : `<div class="coach-evo-empty">Todavía no hay series registradas${activeMuscle !== 'all' ? ` para ${escapeHTML(activeMuscle)}` : ''}.</div>`;
+
+        // Plan prescripto actual como referencia de base
+        let prescribedHtml = '';
+        try {
+            const wData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(athId) : null;
+            if (wData && typeof wData === 'object') {
+                const dayRows = [];
+                ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'].forEach((dk, idx) => {
+                    const d = wData[dk];
+                    if (d && Array.isArray(d.exercises) && d.exercises.length > 0) {
+                        const exList = d.exercises.map(ex => {
+                            const w = ex.defaultWeight ? ` · ${ex.defaultWeight}kg` : '';
+                            return `${escapeHTML(ex.name || 'Ejercicio')} (${ex.sets || 3}×${ex.reps || '10'}${w})`;
+                        }).join(', ');
+                        dayRows.push(`
+                            <div class="coach-evo-track-row" style="flex-direction:column; align-items:flex-start; gap:3px;">
+                                <strong>Día ${idx + 1}${d.focus ? ` · ${escapeHTML(d.focus)}` : ''}</strong>
+                                <span>${exList}</span>
+                            </div>
+                        `);
+                    }
+                });
+                if (dayRows.length > 0) {
+                    prescribedHtml = `
+                        <div class="coach-evo-card">
+                            <div class="coach-evo-card-title">Rutina prescripta actual (referencia)</div>
+                            ${dayRows.join('')}
+                        </div>
+                    `;
+                }
+            }
+        } catch (_) {}
+
+        body.innerHTML = `
+            ${muscleFilterHtml}
+            ${muscleBreakdownHtml}
+            ${exCardsHtml}
+            ${prescribedHtml}
+        `;
+
+        body.querySelectorAll('.coach-evo-muscle-chip').forEach(btn => {
+            btn.addEventListener('click', () => {
+                coachEvolutionSheetState.muscleFilter = btn.getAttribute('data-evo-muscle') || 'all';
+                renderCoachEvolutionSheetBody();
+            });
+        });
         return;
     }
 
@@ -13600,6 +13747,7 @@ async function openCoachAthleteEvolutionSheet(athId) {
     const ath = athletes.find(a => a.id === athId);
     coachEvolutionSheetState.athleteId = athId;
     coachEvolutionSheetState.activeTab = 'summary';
+    coachEvolutionSheetState.muscleFilter = 'all';
 
     document.querySelectorAll('#coachAthleteEvolutionSheet .coach-evo-tab').forEach(b => {
         b.classList.toggle('active', b.getAttribute('data-evo-tab') === 'summary');
