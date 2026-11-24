@@ -1060,7 +1060,7 @@ window.ensurePortalBundlesLoaded = function() {
 
     // Cargar nutrition_db.js ANTES que coach_nutrition_master.js para respetar dependencias
     const nutriChain = (needNutritionDb ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve())
-        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=12.0') : Promise.resolve()));
+        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=13.0') : Promise.resolve()));
 
     window._sensPortalBundlesPromise = Promise.all([
         typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
@@ -15254,25 +15254,37 @@ window.renderNutritionPrescriptionForMember = function(athId) {
     syncMemberNutritionPrescription(targetId);
 };
 
+window.getResolvedNutritionPrescription = function(athId) {
+    let supaData = null;
+    if (AppState.profile && AppState.profile.prescribed_nutrition && typeof AppState.profile.prescribed_nutrition === 'object') {
+        if (!isCurrentUserAdmin() || AppState.profile.id === athId) {
+            supaData = AppState.profile.prescribed_nutrition;
+        }
+    }
+    if (!supaData && window.__coachAthletesCache && Array.isArray(window.__coachAthletesCache)) {
+        const cached = window.__coachAthletesCache.find(a => a && a.id === athId);
+        if (cached && cached.prescribed_nutrition && typeof cached.prescribed_nutrition === 'object') {
+            supaData = cached.prescribed_nutrition;
+        }
+    }
+
+    let localData = null;
+    try {
+        const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`) ||
+                    localStorage.getItem(`sens_coach_assigned_nutrition_${athId}`);
+        if (raw) localData = JSON.parse(raw);
+    } catch (e) {}
+
+    if (supaData && localData) {
+        const supaTs = supaData.updated_at ? Date.parse(supaData.updated_at) || 0 : 0;
+        const localTs = localData.updated_at ? Date.parse(localData.updated_at) || 0 : 0;
+        return supaTs >= localTs ? supaData : localData;
+    }
+    return supaData || localData || null;
+};
+
 function syncMemberNutritionPrescription(athId, forcedData = null) {
-    let data = forcedData;
-    if (!data) {
-        if (AppState.profile && AppState.profile.prescribed_nutrition && typeof AppState.profile.prescribed_nutrition === 'object') {
-            if (!isCurrentUserAdmin() || AppState.profile.id === athId) {
-                data = AppState.profile.prescribed_nutrition;
-            }
-        }
-        if (!data && window.__coachAthletesCache) {
-            const cached = window.__coachAthletesCache.find(a => a.id === athId);
-            if (cached && cached.prescribed_nutrition) data = cached.prescribed_nutrition;
-        }
-    }
-    if (!data) {
-        const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`);
-        if (raw) {
-            try { data = JSON.parse(raw); } catch (e) {}
-        }
-    }
+    let data = forcedData || window.getResolvedNutritionPrescription(athId);
 
     if (!data) {
         if (!athId.startsWith('mock_') && athId !== 'usr-vip-001' && athId !== 'usr-onl-003') {
@@ -15876,16 +15888,10 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         userConsumedFoods = JSON.parse(localStorage.getItem(consumedStorageKey) || '{}');
     } catch (e) {}
 
-    // 2. Obtener Plan del Coach
-    let userPlan = null;
-    try {
-        const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`) ||
-                    localStorage.getItem(`sens_coach_assigned_nutrition_${athId}`);
-        if (raw) userPlan = JSON.parse(raw);
-    } catch (e) {}
-    if (!userPlan && AppState.profile?.prescribed_nutrition) {
-        userPlan = AppState.profile.prescribed_nutrition;
-    }
+    // 2. Obtener Plan del Coach (Single Source of Truth)
+    let userPlan = (typeof window.getResolvedNutritionPrescription === 'function')
+        ? window.getResolvedNutritionPrescription(athId)
+        : null;
 
     // Auto-sanitización y vinculación con la Base de 500 Alimentos (garantiza fotos WebP reales en todo momento)
     const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
@@ -16171,7 +16177,10 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         }
     });
 
-    const targetKcal = userPlan?.target_calories || 1950;
+    const targetKcal = parseInt(userPlan?.days?.[dayKey]?.target_calories || userPlan?.target_calories, 10) || 2000;
+    const targetProt = parseInt(userPlan?.target_protein || userPlan?.macros?.protein, 10) || 150;
+    const targetCarbs = parseInt(userPlan?.target_carbs || userPlan?.macros?.carbs, 10) || 200;
+    const targetFats = parseInt(userPlan?.target_fats || userPlan?.macros?.fats, 10) || 65;
     const consumedNum = document.getElementById('nutriConsumedNum');
     const targetKcalEl = document.getElementById('nutriTargetKcal');
     const remainingEl = document.getElementById('nutriRemainingKcal');
@@ -16208,11 +16217,11 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         sliderFill.style.background = totalConsumedKcal > (targetKcal * 1.1) ? 'linear-gradient(90deg, #F59E0B, #EF4444)' : 'linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%)';
     }
 
-    // Resumen y Desglose de Macronutrientes en Acordeón Integrado (ESTRICTAMENTE SOBRE LO CONSUMIDO)
+    // Resumen y Desglose de Macronutrientes en Acordeón Integrado (Consumido / Meta del Coach)
     const quickSummary = document.getElementById('nutriMacroQuickSummary');
-    if (carbsGramsEl) carbsGramsEl.innerHTML = `${Math.round(totalConsumedCarbs)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
-    if (fatsGramsEl) fatsGramsEl.innerHTML = `${Math.round(totalConsumedFats)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
-    if (protGramsEl) protGramsEl.innerHTML = `${Math.round(totalConsumedProt)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+    if (carbsGramsEl) carbsGramsEl.innerHTML = `${Math.round(totalConsumedCarbs)}<span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">/${targetCarbs}g</span>`;
+    if (fatsGramsEl) fatsGramsEl.innerHTML = `${Math.round(totalConsumedFats)}<span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">/${targetFats}g</span>`;
+    if (protGramsEl) protGramsEl.innerHTML = `${Math.round(totalConsumedProt)}<span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">/${targetProt}g</span>`;
 
     const totalMacroGrams = (totalConsumedCarbs + totalConsumedProt + totalConsumedFats);
     let carbPct = 0;
@@ -18142,20 +18151,23 @@ function initPortionRulerModal() {
             const consumedNum = document.getElementById('nutriConsumedNum');
             if (consumedNum) consumedNum.textContent = totalCal.toLocaleString('es-AR');
 
-            const targetKcal = 1800;
+            const resolvedPlan = (typeof window.getResolvedNutritionPrescription === 'function')
+                ? window.getResolvedNutritionPrescription(typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : '')
+                : null;
+            const targetKcal = parseInt(resolvedPlan?.target_calories, 10) || 2000;
             const sliderFill = document.getElementById('nutriSliderFill');
             if (sliderFill) {
-                const ratioPct = Math.min(100, Math.round((totalCal / targetKcal) * 77));
+                const ratioPct = Math.min(100, Math.round((totalCal / targetKcal) * 100));
                 sliderFill.style.width = `${ratioPct}%`;
             }
 
-            // Sincronizar macros totales en pantalla
-            const carbsEl = document.getElementById('nutriCarbsGrams');
-            const fatsEl = document.getElementById('nutriFatsGrams');
-            const protEl = document.getElementById('nutriProtGrams');
-            if (carbsEl) carbsEl.innerHTML = `${Math.round(totalCal * 0.12)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
-            if (fatsEl) fatsEl.innerHTML = `${Math.round(totalCal * 0.038)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
-            if (protEl) protEl.innerHTML = `${Math.round(totalCal * 0.105)}<span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">g</span>`;
+            if (typeof renderMemberNutritionPlan === 'function') {
+                const ath = typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : '';
+                if (ath) renderMemberNutritionPlan(ath, AppState.nutriSelectedDate || new Date());
+            }
+            if (typeof updateNutriSummaryCardData === 'function') {
+                updateNutriSummaryCardData();
+            }
 
             // Sincronizar Anillo Concéntrico de Calorías
             const svgCals = document.getElementById('svgConcentricCals');
@@ -19829,13 +19841,10 @@ function updateNutriSummaryCardData() {
     const selectedDate = AppState.selectedDate || new Date();
     const isToday = isSameDay(selectedDate, new Date());
 
-    // 1. Obtener plan nutricional del Coach OS (prioridad máxima)
-    let userPlan = null;
-    try {
-        const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`) ||
-                    localStorage.getItem(`sens_coach_assigned_nutrition_${athId}`);
-        if (raw) userPlan = JSON.parse(raw);
-    } catch (e) {}
+    // 1. Obtener plan nutricional del Coach OS (Single Source of Truth: Supabase > LocalStorage)
+    let userPlan = (typeof window.getResolvedNutritionPrescription === 'function')
+        ? window.getResolvedNutritionPrescription(athId)
+        : null;
     if (!userPlan && profile.prescribed_nutrition) {
         userPlan = profile.prescribed_nutrition;
     }
@@ -19883,11 +19892,11 @@ function updateNutriSummaryCardData() {
         else targetKcal = Math.round(tdee);
     }
 
-    // 4. Proteínas y Carbohidratos Recomendados
+    // 4. Proteínas y Carbohidratos Recomendados (leer target_protein / target_carbs de CoachNutritionMaster)
     const weightRaw = profile.current_weight || anamnesis.weight;
     const currentWeight = weightRaw ? parseFloat(weightRaw) : (isDemo ? 75.8 : 75.0);
-    const recProtein = userPlan?.macros?.protein || (profile.target_protein ? Math.round(profile.target_protein) : Math.round(Math.max(130, currentWeight * 2.0)));
-    const recCarbs = userPlan?.macros?.carbs || (profile.target_carbs ? Math.round(profile.target_carbs) : Math.round((targetKcal * 0.40) / 4));
+    const recProtein = parseInt(userPlan?.target_protein || userPlan?.macros?.protein, 10) || (profile.target_protein ? Math.round(profile.target_protein) : Math.round(Math.max(130, currentWeight * 2.0)));
+    const recCarbs = parseInt(userPlan?.target_carbs || userPlan?.macros?.carbs, 10) || (profile.target_carbs ? Math.round(profile.target_carbs) : Math.round((targetKcal * 0.40) / 4));
 
     if (targetBadge) {
         targetBadge.textContent = `${recProtein}g Prot • ${recCarbs}g Carbs`;

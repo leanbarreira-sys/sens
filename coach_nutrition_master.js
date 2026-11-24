@@ -140,19 +140,41 @@ const CoachNutritionMaster = {
         };
     },
 
-    // Cargar Plan del Atleta
+    // Cargar Plan del Atleta (Prioridad: Supabase Cache > LocalStorage > Mifflin-St Jeor)
     loadAthletePlan() {
         const athId = this.activeAthleteId;
         const ath = this.getAthleteProfile();
         const meta = this.calculateMetabolicNeeds(ath);
         this.recommendedKcal = meta.recommendedKcal;
 
-        let data = null;
+        let supaData = null;
+        if (typeof window.__coachAthletesCache !== 'undefined' && Array.isArray(window.__coachAthletesCache)) {
+            const cachedAth = window.__coachAthletesCache.find(a => a && a.id === athId);
+            if (cachedAth && cachedAth.prescribed_nutrition && typeof cachedAth.prescribed_nutrition === 'object') {
+                supaData = cachedAth.prescribed_nutrition;
+            }
+        }
+        if (!supaData && typeof AppState !== 'undefined' && AppState.profile && AppState.profile.id === athId && AppState.profile.prescribed_nutrition) {
+            supaData = AppState.profile.prescribed_nutrition;
+        }
+
+        let localData = null;
         if (typeof localStorage !== 'undefined') {
             try {
                 const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`);
-                if (raw) data = JSON.parse(raw);
+                if (raw) localData = JSON.parse(raw);
             } catch (e) {}
+        }
+
+        let data = null;
+        if (supaData && localData) {
+            const supaTs = supaData.updated_at ? Date.parse(supaData.updated_at) || 0 : 0;
+            const localTs = localData.updated_at ? Date.parse(localData.updated_at) || 0 : 0;
+            data = supaTs >= localTs ? JSON.parse(JSON.stringify(supaData)) : localData;
+        } else if (supaData) {
+            data = JSON.parse(JSON.stringify(supaData));
+        } else if (localData) {
+            data = localData;
         }
 
         if (!data) {
@@ -413,27 +435,50 @@ const CoachNutritionMaster = {
         const btnReset = document.getElementById('btnResetToRecommendedKcal');
         const btnNext = document.getElementById('btnNutriGoStep2');
 
+        const applyKcalToPlan = (val) => {
+            const safeVal = Math.max(1000, parseInt(val, 10) || meta.recommendedKcal);
+            this.dayPlanCache.target_calories = safeVal;
+            if (this.dayPlanCache.days && typeof this.dayPlanCache.days === 'object') {
+                Object.keys(this.dayPlanCache.days).forEach(dKey => {
+                    const d = this.dayPlanCache.days[dKey];
+                    if (d) {
+                        d.target_calories = safeVal;
+                        if (d.meals) {
+                            if (d.meals.desayuno) d.meals.desayuno.target_kcal = Math.round(safeVal * 0.20);
+                            if (d.meals.almuerzo) d.meals.almuerzo.target_kcal = Math.round(safeVal * 0.35);
+                            if (d.meals.merienda) d.meals.merienda.target_kcal = Math.round(safeVal * 0.15);
+                            if (d.meals.cena) d.meals.cena.target_kcal = Math.round(safeVal * 0.20);
+                            if (d.meals.snack) d.meals.snack.target_kcal = Math.round(safeVal * 0.10);
+                        }
+                    }
+                });
+            }
+        };
+
         if (input) {
-            input.addEventListener('change', () => {
+            const onKcalEdit = () => {
                 const val = parseInt(input.value, 10) || meta.recommendedKcal;
-                if (val !== meta.recommendedKcal) {
+                applyKcalToPlan(val);
+                if (val !== meta.recommendedKcal && !this.isManualKcalConfirmed) {
                     if (newLabel) newLabel.textContent = val;
                     if (confirmBox) confirmBox.style.display = 'block';
                 } else {
                     if (confirmBox) confirmBox.style.display = 'none';
-                    this.dayPlanCache.target_calories = val;
                 }
-            });
+            };
+            input.addEventListener('input', onKcalEdit);
+            input.addEventListener('change', onKcalEdit);
         }
 
         if (btnConfirm) {
             btnConfirm.addEventListener('click', () => {
                 const val = parseInt(input.value, 10) || meta.recommendedKcal;
-                this.dayPlanCache.target_calories = val;
+                applyKcalToPlan(val);
                 this.isManualKcalConfirmed = true;
                 if (confirmBox) confirmBox.style.display = 'none';
+                this.savePlan();
                 if (typeof showSensToast === 'function') {
-                    showSensToast(`Objetivo manual de ${val} kcal confirmado.`, 'champagne');
+                    showSensToast(`Objetivo manual de ${val} kcal guardado y sincronizado.`, 'champagne');
                 }
             });
         }
@@ -441,7 +486,7 @@ const CoachNutritionMaster = {
         if (btnCancel) {
             btnCancel.addEventListener('click', () => {
                 if (input) input.value = meta.recommendedKcal;
-                this.dayPlanCache.target_calories = meta.recommendedKcal;
+                applyKcalToPlan(meta.recommendedKcal);
                 if (confirmBox) confirmBox.style.display = 'none';
             });
         }
@@ -449,7 +494,7 @@ const CoachNutritionMaster = {
         if (btnReset) {
             btnReset.addEventListener('click', () => {
                 if (input) input.value = meta.recommendedKcal;
-                this.dayPlanCache.target_calories = meta.recommendedKcal;
+                applyKcalToPlan(meta.recommendedKcal);
                 if (confirmBox) confirmBox.style.display = 'none';
             });
         }
@@ -458,14 +503,18 @@ const CoachNutritionMaster = {
             btn.addEventListener('click', () => {
                 const k = parseInt(btn.getAttribute('data-kcal'), 10);
                 if (input) input.value = k;
-                input.dispatchEvent(new Event('change'));
+                applyKcalToPlan(k);
+                this.isManualKcalConfirmed = true;
+                if (confirmBox) confirmBox.style.display = 'none';
+                this.savePlan();
             });
         });
 
         if (btnNext) {
             btnNext.addEventListener('click', () => {
                 const val = parseInt(input.value, 10) || meta.recommendedKcal;
-                this.dayPlanCache.target_calories = val;
+                applyKcalToPlan(val);
+                this.savePlan();
                 this.goToStep(2);
             });
         }
@@ -598,21 +647,34 @@ const CoachNutritionMaster = {
         const btnReset = document.getElementById('btnResetSuggestedMacros');
         const btnNext = document.getElementById('btnNutriGoStep3');
 
+        const syncMacroInputsToCache = () => {
+            this.dayPlanCache.target_protein = parseInt(pInput?.value, 10) || meta.protGrams;
+            this.dayPlanCache.target_carbs = parseInt(cInput?.value, 10) || meta.carbsGrams;
+            this.dayPlanCache.target_fats = parseInt(fInput?.value, 10) || meta.fatsGrams;
+            this.dayPlanCache.target_water = parseFloat(wInput?.value) || meta.waterLiters;
+        };
+
+        [pInput, cInput, fInput, wInput].forEach(inp => {
+            if (inp) {
+                inp.addEventListener('input', syncMacroInputsToCache);
+                inp.addEventListener('change', syncMacroInputsToCache);
+            }
+        });
+
         if (btnReset) {
             btnReset.addEventListener('click', () => {
                 if (pInput) pInput.value = meta.protGrams;
                 if (fInput) fInput.value = meta.fatsGrams;
                 if (cInput) cInput.value = meta.carbsGrams;
                 if (wInput) wInput.value = meta.waterLiters;
+                syncMacroInputsToCache();
             });
         }
 
         if (btnNext) {
             btnNext.addEventListener('click', () => {
-                this.dayPlanCache.target_protein = parseInt(pInput?.value, 10) || meta.protGrams;
-                this.dayPlanCache.target_carbs = parseInt(cInput?.value, 10) || meta.carbsGrams;
-                this.dayPlanCache.target_fats = parseInt(fInput?.value, 10) || meta.fatsGrams;
-                this.dayPlanCache.target_water = parseFloat(wInput?.value) || meta.waterLiters;
+                syncMacroInputsToCache();
+                this.savePlan();
                 this.goToStep(3);
             });
         }
@@ -1609,6 +1671,18 @@ const CoachNutritionMaster = {
             });
         });
         this.dayPlanCache.prescribed_foods = allFoods;
+        this.dayPlanCache.updated_at = new Date().toISOString();
+
+        // Sincronizar cache en memoria de Coach OS y perfil activo para evitar que vuelva a defaults al cambiar de pestaña
+        if (typeof window.__coachAthletesCache !== 'undefined' && Array.isArray(window.__coachAthletesCache)) {
+            const cachedAth = window.__coachAthletesCache.find(a => a && a.id === athId);
+            if (cachedAth) {
+                cachedAth.prescribed_nutrition = JSON.parse(JSON.stringify(this.dayPlanCache));
+            }
+        }
+        if (typeof AppState !== 'undefined' && AppState.profile && AppState.profile.id === athId) {
+            AppState.profile.prescribed_nutrition = JSON.parse(JSON.stringify(this.dayPlanCache));
+        }
 
         // 1. Guardar en LocalStorage sincronizado en todas las claves de acceso
         if (typeof localStorage !== 'undefined') {
@@ -1634,15 +1708,27 @@ const CoachNutritionMaster = {
 
         // 3. Guardar en Supabase si está disponible
         let supabaseSuccess = false;
+        let supabaseErrMsg = '';
         try {
-            if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-                const { error } = await supabaseClient
+            const sbClient = (typeof window.ensureSupabaseClient === 'function')
+                ? await window.ensureSupabaseClient()
+                : (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+            if (sbClient && !String(athId).startsWith('mock_')) {
+                const { error } = await sbClient
                     .from('profiles')
                     .update({ prescribed_nutrition: this.dayPlanCache })
                     .eq('id', athId);
-                if (!error) supabaseSuccess = true;
+                if (!error) {
+                    supabaseSuccess = true;
+                } else {
+                    supabaseErrMsg = error.message || 'Error RLS/BD en Supabase';
+                    console.warn('[CoachNutritionMaster] Error guardando en Supabase:', error);
+                }
             }
-        } catch (e) {}
+        } catch (e) {
+            supabaseErrMsg = e && e.message ? e.message : 'Error de conexión';
+            console.warn('[CoachNutritionMaster] Excepción guardando en Supabase:', e);
+        }
 
         const now = new Date();
         const timeStr = now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -1651,7 +1737,9 @@ const CoachNutritionMaster = {
         const notice = document.getElementById('coachNutriSaveNotice');
         if (notice) {
             notice.style.display = 'flex';
-            notice.innerHTML = `<span style="font-size: 16px;">✓</span> <span>Plan nutricional de <strong>${athId}</strong> sincronizado exitosamente con el portal a las <strong>${timeStr}</strong> • Prescripción activa.</span>`;
+            notice.innerHTML = supabaseErrMsg
+                ? `<span style="font-size: 16px;">⚠</span> <span>Guardado localmente a las <strong>${timeStr}</strong>, pero Supabase devolvió: <em>${supabaseErrMsg}</em></span>`
+                : `<span style="font-size: 16px;">✓</span> <span>Plan nutricional sincronizado con Supabase a las <strong>${timeStr}</strong> • Prescripción activa (${this.dayPlanCache.target_calories} kcal).</span>`;
         }
 
         if (btnSave) {
