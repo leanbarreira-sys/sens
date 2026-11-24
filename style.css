@@ -25922,7 +25922,10 @@ body:not(.in-portal) .train-plan-card {
 body:not(.in-portal) .train-plan-card.highlight {
     background: #FFFFFF !important;
     border: 2px solid #E5CBA7 !important;
-    box-shadow: 0 8px 32px -4px rgba(112, 91, 62, 0.12) !important;
+    box-shadow: 0 2px 12px rgba(18, 18, 20, 0.06) !important;
+    isolation: auto !important;
+    filter: none !important;
+    backface-visibility: visible !important;
 }
 
 body:not(.in-portal) .train-plan-badge {

@@ -946,14 +946,14 @@ const MOCK_USER_PROFILES = {
 // CATÁLOGO MAESTRO: 52 EJERCICIOS CURADOS POR NICO (BASE MAESTRA UNIFICADA)
 // Fuente oficial de verdad: exercises_db.js (SENS_EXERCISE_LIBRARY)
 // -----------------------------------------------------------------------------
-const EXERCISE_CATALOG = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_EXERCISE_LIBRARY.length > 0)
+let EXERCISE_CATALOG = (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && SENS_EXERCISE_LIBRARY.length > 0)
     ? SENS_EXERCISE_LIBRARY
     : [];
 
 // -----------------------------------------------------------------------------
 // CATÁLOGO DE ALIMENTOS BASE & HÁBITOS (500 Alimentos SENS Master DB)
 // -----------------------------------------------------------------------------
-const FOOD_CATALOG = (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0)
+let FOOD_CATALOG = (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0)
     ? SENS_FOOD_LIBRARY
     : (typeof window !== 'undefined' && Array.isArray(window.SENS_FOOD_LIBRARY) && window.SENS_FOOD_LIBRARY.length > 0)
         ? window.SENS_FOOD_LIBRARY
@@ -965,6 +965,96 @@ if (typeof window !== 'undefined') {
         window.SENS_FOOD_LIBRARY = FOOD_CATALOG;
     }
 }
+
+// -----------------------------------------------------------------------------
+// CARGADOR ON-DEMAND DEL PORTAL (Ahorra ~14.5 MB de JS/Fonts en la Landing)
+// -----------------------------------------------------------------------------
+window._sensPortalBundlesPromise = null;
+window._sensPortalSubsystemsInitialized = false;
+
+window.initPortalSubsystemsOnce = function() {
+    if (window._sensPortalSubsystemsInitialized) return;
+    window._sensPortalSubsystemsInitialized = true;
+    const safeRun = (fn) => { try { if (typeof fn === 'function') fn(); } catch (e) { console.warn('[SENS Portal Init]', e); } };
+    safeRun(typeof initRoleSwitcher === 'function' ? initRoleSwitcher : null);
+    safeRun(typeof initExerciseCatalogModal === 'function' ? initExerciseCatalogModal : null);
+    safeRun(typeof initPortalNavigation === 'function' ? initPortalNavigation : null);
+    safeRun(typeof initOnboardingWizard === 'function' ? initOnboardingWizard : null);
+    safeRun(typeof initWorkoutManager === 'function' ? initWorkoutManager : null);
+    safeRun(typeof initNutritionHabits === 'function' ? initNutritionHabits : null);
+    safeRun(typeof initDailyTracking === 'function' ? initDailyTracking : null);
+    safeRun(typeof initTopbarAvatar === 'function' ? initTopbarAvatar : null);
+    safeRun(typeof initCoachOS === 'function' ? initCoachOS : null);
+    safeRun(typeof initCoachAthletePickerTriggers === 'function' ? initCoachAthletePickerTriggers : null);
+    safeRun(typeof initQuickActionButtons === 'function' ? initQuickActionButtons : null);
+    safeRun(typeof renderMonthlyCalendar === 'function' ? renderMonthlyCalendar : null);
+    safeRun(typeof initWorkoutStopwatch === 'function' ? initWorkoutStopwatch : null);
+    safeRun(typeof initPortionRulerModal === 'function' ? initPortionRulerModal : null);
+    safeRun(typeof initWorkoutBlockAccordions === 'function' ? initWorkoutBlockAccordions : null);
+    safeRun(typeof initWeekStripCalendar === 'function' ? initWeekStripCalendar : null);
+    safeRun(typeof initFloatingDock === 'function' ? initFloatingDock : null);
+    safeRun(typeof initQuickBiometricsModal === 'function' ? initQuickBiometricsModal : null);
+    safeRun(typeof updateDashboardRings === 'function' ? updateDashboardRings : null);
+    safeRun(typeof updateMetabolicEquation === 'function' ? updateMetabolicEquation : null);
+    safeRun(typeof initCharts === 'function' ? initCharts : null);
+};
+
+window.ensurePortalBundlesLoaded = function() {
+    if (window._sensPortalBundlesPromise) return window._sensPortalBundlesPromise;
+
+    const loadScriptOnce = (src) => new Promise((resolve) => {
+        if (document.querySelector('script[data-sens-lazy="' + src + '"]')) {
+            resolve();
+            return;
+        }
+        const s = document.createElement('script');
+        s.src = src;
+        s.async = false;
+        s.setAttribute('data-sens-lazy', src);
+        s.onload = () => resolve();
+        s.onerror = () => { console.warn('[SENS Lazy] Failed to load:', src); resolve(); };
+        document.body.appendChild(s);
+    });
+
+    const loadStylesheetOnce = (href) => {
+        if (document.querySelector('link[data-sens-lazy="' + href + '"]')) return;
+        const l = document.createElement('link');
+        l.rel = 'stylesheet';
+        l.href = href;
+        l.setAttribute('data-sens-lazy', href);
+        document.head.appendChild(l);
+    };
+
+    // Cargar Material Symbols Outlined (3.5 MB) únicamente al abrir el Portal
+    loadStylesheetOnce('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+    window._sensPortalBundlesPromise = Promise.all([
+        typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
+        typeof SENS_FOOD_LIBRARY === 'undefined' ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve(),
+        typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=12.0') : Promise.resolve(),
+        typeof SENS_EXERCISE_LIBRARY === 'undefined' ? loadScriptOnce('exercises_db.js?v=12.0') : Promise.resolve(),
+        typeof window.SENS_MARKETING_CATALOG === 'undefined' ? loadScriptOnce('marketing_templates_catalog.js?v=4.0') : Promise.resolve()
+    ]).then(() => {
+        if (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY) && SENS_EXERCISE_LIBRARY.length > 0) {
+            EXERCISE_CATALOG = SENS_EXERCISE_LIBRARY;
+            window.EXERCISE_CATALOG = EXERCISE_CATALOG;
+        }
+        if (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0) {
+            FOOD_CATALOG = SENS_FOOD_LIBRARY;
+            window.FOOD_CATALOG = FOOD_CATALOG;
+            window.SENS_FOOD_LIBRARY = FOOD_CATALOG;
+        }
+        window.initPortalSubsystemsOnce();
+        // Refrescar vistas del portal con las bases ya hidratadas
+        try { if (typeof initCharts === 'function') initCharts(); } catch (_) {}
+        try { if (typeof renderNutritionHabits === 'function') renderNutritionHabits(); } catch (_) {}
+        try { if (typeof renderWorkoutManager === 'function') renderWorkoutManager(); } catch (_) {}
+        try { if (typeof updateDashboardRings === 'function') updateDashboardRings(); } catch (_) {}
+        try { if (typeof updateMetabolicEquation === 'function') updateMetabolicEquation(); } catch (_) {}
+    });
+
+    return window._sensPortalBundlesPromise;
+};
 
 // Hidratación y gobernanza de Base Maestra vs. Alumno Puntual para Alimentos (SENS Master v2)
 window.getResolvedFood = function(foodOrId, athleteId) {
@@ -1480,36 +1570,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Inicializadores ligeros de la Landing Pública (cero bloqueo de main-thread)
     initNavbarScroll();
     initHeroVideo();
     initLuxuryScrollReveals();
     initPricingTabs();
     initLeadCapture();
-    initRoleSwitcher();
-    initExerciseCatalogModal();
     initCarousels();
     initAuthModal();
-    initPortalNavigation();
-    initOnboardingWizard();
-    initWorkoutManager();
-    initNutritionHabits();
-    initDailyTracking();
-    initCharts();
-    checkExistingSession();
-    // SUITE 2.0 WORLD-CLASS:
-    initTopbarAvatar();
-    initCoachOS();
-    initCoachAthletePickerTriggers();
-    initQuickActionButtons();
-    renderMonthlyCalendar();
-    initWorkoutStopwatch();
-    initPortionRulerModal();
-    initWorkoutBlockAccordions();
-    initWeekStripCalendar();
-    initFloatingDock();
-    initQuickBiometricsModal();
-    updateDashboardRings();
-    updateMetabolicEquation();
+
+    if (isSavedPortal) {
+        if (typeof window.initPortalSubsystemsOnce === 'function') {
+            window.initPortalSubsystemsOnce();
+        }
+        if (typeof window.ensurePortalBundlesLoaded === 'function') {
+            window.ensurePortalBundlesLoaded();
+        }
+    }
+
+    // Verificar sesión de Supabase sin bloquear el primer pintado ni la barra de carga
+    setTimeout(() => {
+        try { checkExistingSession(); } catch (e) { console.warn('[SENS] checkExistingSession error:', e); }
+    }, 0);
 });
 
 // =============================================================================
@@ -4486,6 +4568,12 @@ function openUserPortal(forceOnboarding = false) {
         localStorage.setItem('sens_in_portal', 'true');
         document.documentElement.classList.add('in-portal-mode');
     } catch (_) {}
+    if (typeof window.initPortalSubsystemsOnce === 'function') {
+        window.initPortalSubsystemsOnce();
+    }
+    if (typeof window.ensurePortalBundlesLoaded === 'function') {
+        window.ensurePortalBundlesLoaded();
+    }
     const portal = document.getElementById('app-container');
     const publicLanding = document.getElementById('publicLanding');
     const userEmailEl = document.getElementById('portalUserEmail');
