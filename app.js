@@ -123,16 +123,46 @@ const isSupabaseConfigured = Boolean(
 );
 
 let supabaseClient = null;
-if (isSupabaseConfigured) {
-    try {
-        supabaseClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-        console.log('[SENS] Conectado a Supabase en la nube.');
-    } catch (e) {
-        console.warn('[SENS] Error al inicializar Supabase, usando almacenamiento local de respaldo:', e);
+function initSupabaseClientSync() {
+    if (supabaseClient) return supabaseClient;
+    if (
+        window.supabase &&
+        SUPABASE_CONFIG.url &&
+        !SUPABASE_CONFIG.url.includes('YOUR_SUPABASE') &&
+        SUPABASE_CONFIG.anonKey &&
+        !SUPABASE_CONFIG.anonKey.includes('YOUR_SUPABASE')
+    ) {
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+            console.log('[SENS] Conectado a Supabase en la nube.');
+        } catch (e) {
+            console.warn('[SENS] Error al inicializar Supabase:', e);
+        }
     }
-} else {
-    console.log('[SENS] Modo Demo Activo (LocalStorage). La aplicación funciona al 100% de manera autónoma.');
+    return supabaseClient;
 }
+initSupabaseClientSync();
+
+window.ensureSupabaseClient = async function() {
+    if (initSupabaseClientSync()) return supabaseClient;
+    // Si el CDN tardó o falló al parsear, cargarlo on-demand antes de autenticar
+    await new Promise((resolve) => {
+        const existing = document.querySelector('script[src*="supabase-js"]');
+        if (window.supabase) { resolve(); return; }
+        const timer = setTimeout(resolve, 6000);
+        if (existing) {
+            existing.addEventListener('load', () => { clearTimeout(timer); resolve(); }, { once: true });
+            existing.addEventListener('error', () => { clearTimeout(timer); resolve(); }, { once: true });
+            return;
+        }
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+        s.onload = () => { clearTimeout(timer); resolve(); };
+        s.onerror = () => { clearTimeout(timer); resolve(); };
+        document.head.appendChild(s);
+    });
+    return initSupabaseClientSync();
+};
 
 /**
  * =============================================================================
@@ -961,9 +991,6 @@ let FOOD_CATALOG = (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SE
 
 if (typeof window !== 'undefined') {
     window.FOOD_CATALOG = FOOD_CATALOG;
-    if (typeof window.SENS_FOOD_LIBRARY === 'undefined') {
-        window.SENS_FOOD_LIBRARY = FOOD_CATALOG;
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1028,11 +1055,17 @@ window.ensurePortalBundlesLoaded = function() {
     // Cargar Material Symbols Outlined (3.5 MB) únicamente al abrir el Portal
     loadStylesheetOnce('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
+    const needNutritionDb = !(typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0);
+    const needExercisesDb = !(typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY) && SENS_EXERCISE_LIBRARY.length > 0);
+
+    // Cargar nutrition_db.js ANTES que coach_nutrition_master.js para respetar dependencias
+    const nutriChain = (needNutritionDb ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve())
+        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=12.0') : Promise.resolve()));
+
     window._sensPortalBundlesPromise = Promise.all([
         typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
-        typeof SENS_FOOD_LIBRARY === 'undefined' ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve(),
-        typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=12.0') : Promise.resolve(),
-        typeof SENS_EXERCISE_LIBRARY === 'undefined' ? loadScriptOnce('exercises_db.js?v=12.0') : Promise.resolve(),
+        nutriChain,
+        needExercisesDb ? loadScriptOnce('exercises_db.js?v=12.0') : Promise.resolve(),
         typeof window.SENS_MARKETING_CATALOG === 'undefined' ? loadScriptOnce('marketing_templates_catalog.js?v=4.0') : Promise.resolve()
     ]).then(() => {
         if (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY) && SENS_EXERCISE_LIBRARY.length > 0) {
@@ -1045,12 +1078,24 @@ window.ensurePortalBundlesLoaded = function() {
             window.SENS_FOOD_LIBRARY = FOOD_CATALOG;
         }
         window.initPortalSubsystemsOnce();
-        // Refrescar vistas del portal con las bases ya hidratadas
+        // Refrescar vistas reales del portal con las bases ya hidratadas
         try { if (typeof initCharts === 'function') initCharts(); } catch (_) {}
-        try { if (typeof renderNutritionHabits === 'function') renderNutritionHabits(); } catch (_) {}
-        try { if (typeof renderWorkoutManager === 'function') renderWorkoutManager(); } catch (_) {}
+        try { if (typeof renderDashboardData === 'function') renderDashboardData(); } catch (_) {}
+        try { if (typeof renderWorkoutDay === 'function') renderWorkoutDay(AppState.currentDay || 'day1'); } catch (_) {}
+        try {
+            const athId = AppState.activeAthleteId || (AppState.user && AppState.user.id);
+            if (athId && typeof syncMemberNutritionPrescription === 'function') syncMemberNutritionPrescription(athId);
+        } catch (_) {}
+        try {
+            if (typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin() && typeof renderCoachAthletesHub === 'function') {
+                renderCoachAthletesHub();
+            }
+        } catch (_) {}
         try { if (typeof updateDashboardRings === 'function') updateDashboardRings(); } catch (_) {}
         try { if (typeof updateMetabolicEquation === 'function') updateMetabolicEquation(); } catch (_) {}
+    }).catch((err) => {
+        console.warn('[SENS Lazy] Portal bundle load warning:', err);
+        window._sensPortalBundlesPromise = null;
     });
 
     return window._sensPortalBundlesPromise;
@@ -3079,8 +3124,17 @@ function initAuthModal() {
     // Formulario Iniciar Sesión
     paneLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (window._sensLoginInProgress) return;
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
+        const submitBtn = document.getElementById('submitLoginBtn');
+
+        window._sensLoginInProgress = true;
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.dataset.origText = submitBtn.dataset.origText || submitBtn.textContent;
+            submitBtn.textContent = 'Ingresando...';
+        }
 
         // Anti-Account-Leak: purgar memoria previa antes de autenticar nueva cuenta
         AppState.profile = null;
@@ -3092,42 +3146,63 @@ function initAuthModal() {
 
         showAuthAlert('Autenticando acceso...', 'info');
 
-        if (supabaseClient) {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) {
-                showAuthAlert(formatAuthErrorMessage(error.message), 'error');
+        try {
+            const client = (typeof window.ensureSupabaseClient === 'function')
+                ? await window.ensureSupabaseClient()
+                : supabaseClient;
+
+            if (client) {
+                const { data, error } = await client.auth.signInWithPassword({ email, password });
+                if (error) {
+                    showAuthAlert(formatAuthErrorMessage(error.message), 'error');
+                    return;
+                }
+                if (!data || !data.user) {
+                    showAuthAlert('No se pudo validar tu sesión. Intentá nuevamente.', 'error');
+                    return;
+                }
+                AppState.user = data.user;
+                try {
+                    localStorage.setItem('sens_active_user', JSON.stringify(data.user));
+                } catch (_) {}
+
+                // Cargar perfil con timeout de seguridad (6s) para nunca colgar el login en red móvil
+                await Promise.race([
+                    loadProfileFromSupabase(data.user.id),
+                    new Promise((resolve) => setTimeout(resolve, 6000))
+                ]);
+            } else {
+                showAuthAlert('No pudimos conectar con el servidor de autenticación. Revisá tu conexión e intentá nuevamente.', 'error');
                 return;
             }
-            AppState.user = data.user;
-            await loadProfileFromSupabase(data.user.id);
-        } else {
-            AppState.user = { id: 'local-user-id', email };
-            const savedProfile = localStorage.getItem('sens_profile_' + email.toLowerCase());
-            const savedAnamnesis = localStorage.getItem('sens_anamnesis_' + email.toLowerCase());
-            if (savedProfile) {
-                AppState.profile = JSON.parse(savedProfile);
-            } else {
-                AppState.profile = {
-                    full_name: email.split('@')[0],
-                    email: email,
-                    daily_step_target: 10000,
-                    active_plan_name: 'Plan Personalizado SENS TRAIN',
-                    onboarding_completed: false
-                };
-            }
-            if (savedAnamnesis) {
-                AppState.anamnesis = JSON.parse(savedAnamnesis);
-            }
-            localStorage.setItem('sens_active_user', JSON.stringify(AppState.user));
-            localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
-        }
 
-        showAuthAlert('¡Acceso concedido! Entrando a tu portal...', 'success');
-        updateAuthNavButtons();
-        setTimeout(() => {
-            showAuthModal(false);
-            openUserPortal(false);
-        }, 600);
+            showAuthAlert('¡Acceso concedido! Entrando a tu portal...', 'success');
+            try { updateAuthNavButtons(); } catch (_) {}
+            setTimeout(() => {
+                try { showAuthModal(false); } catch (_) {}
+                try {
+                    openUserPortal(false);
+                } catch (portalErr) {
+                    console.error('[SENS Login] Error abriendo portal:', portalErr);
+                    // Fallback seguro para garantizar entrada al portal
+                    const portalEl = document.getElementById('app-container');
+                    const landingEl = document.getElementById('publicLanding');
+                    if (portalEl) portalEl.classList.add('active');
+                    if (landingEl) landingEl.style.display = 'none';
+                    document.documentElement.classList.add('in-portal-mode');
+                    document.body.classList.add('in-portal');
+                }
+            }, 350);
+        } catch (loginErr) {
+            console.error('[SENS Login] Excepción en inicio de sesión:', loginErr);
+            showAuthAlert(formatAuthErrorMessage(loginErr && loginErr.message ? loginErr.message : 'Error inesperado al iniciar sesión. Intentá nuevamente.'), 'error');
+        } finally {
+            window._sensLoginInProgress = false;
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = submitBtn.dataset.origText || 'Ingresar a mi Portal';
+            }
+        }
     });
 
     // Formulario Registro
@@ -3715,7 +3790,10 @@ function setupRealtimeProfileSubscription(userId) {
 }
 
 async function checkExistingSession() {
-    if (supabaseClient) {
+    const client = (typeof window.ensureSupabaseClient === 'function')
+        ? await window.ensureSupabaseClient()
+        : supabaseClient;
+    if (client) {
         try {
             const { data: { session }, error } = await supabaseClient.auth.getSession();
             if (session && session.user) {
@@ -3760,6 +3838,8 @@ async function checkExistingSession() {
                     window.openResetPasswordModal();
                 }
             } else if (event === 'SIGNED_IN' && session && session.user) {
+                // Evitar race condition mientras el formulario de login ya está cargando el perfil
+                if (window._sensLoginInProgress) return;
                 // Si la URL contiene type=recovery o estamos restableciendo clave, no forzar login regular
                 if (!window.location.hash.includes('type=recovery')) {
                     const prevEmail = ((AppState.user && AppState.user.email) || (AppState.profile && AppState.profile.email) || '').trim().toLowerCase();
@@ -3787,6 +3867,7 @@ async function checkExistingSession() {
                     }
                 }
             } else if (event === 'SIGNED_OUT') {
+                if (window._sensIsLoggingOut) return;
                 if (typeof window.performCompleteSensLogout === 'function') {
                     window.performCompleteSensLogout();
                 } else {
@@ -3902,11 +3983,15 @@ function initPortalNavigation() {
 
     // Anti-Account-Leak: Función centralizada de cierre de sesión y purga de aislamiento
     window.performCompleteSensLogout = async function() {
+        if (window._sensIsLoggingOut) return;
+        window._sensIsLoggingOut = true;
         try {
             if (supabaseClient) {
                 await supabaseClient.auth.signOut().catch(() => {});
             }
-        } catch (_) {}
+        } catch (_) {} finally {
+            setTimeout(() => { window._sensIsLoggingOut = false; }, 400);
+        }
         if (window._sensRealtimeProfileChannel && supabaseClient) {
             try { supabaseClient.removeChannel(window._sensRealtimeProfileChannel); } catch (_) {}
             window._sensRealtimeProfileChannel = null;
@@ -4778,27 +4863,34 @@ function openUserPortal(forceOnboarding = false) {
     // -------------------------------------------------------------------------
     // 3. DASHBOARD PRINCIPAL (O COACH OS SI ES ADMIN)
     // -------------------------------------------------------------------------
-    document.getElementById('portalSubNav').style.display = 'flex';
+    const portalSubNavEl = document.getElementById('portalSubNav');
+    if (portalSubNavEl) portalSubNavEl.style.display = 'flex';
     if (athleteDock) athleteDock.style.display = isAdmin ? 'none' : 'grid';
     if (coachDock) coachDock.style.display = isAdmin ? 'grid' : 'none';
 
     if (isAdmin && window._isCoachAdminActive !== false) {
-        switchPortalView('coachHubView');
-        renderCoachAthletesHub();
+        try { switchPortalView('coachHubView'); } catch (e) { console.warn('[SENS Portal] switchPortalView coachHubView:', e); }
+        try { renderCoachAthletesHub(); } catch (e) { console.warn('[SENS Portal] renderCoachAthletesHub:', e); }
     } else {
-        renderDashboardData();
-        renderWorkoutDay(AppState.currentDay || 'day1');
+        try { renderDashboardData(); } catch (e) { console.warn('[SENS Portal] renderDashboardData:', e); }
+        try { renderWorkoutDay(AppState.currentDay || 'day1'); } catch (e) { console.warn('[SENS Portal] renderWorkoutDay:', e); }
         const athId = (AppState.user && AppState.user.id) || 'mock_vip';
-        if (typeof syncMemberNutritionPrescription === 'function') {
-            syncMemberNutritionPrescription(athId);
-        }
-        if (typeof initFloatingDock === 'function') {
-            initFloatingDock();
-        }
-        switchPortalView('dashView');
-        if (typeof updateSensStreakCard === 'function') {
-            updateSensStreakCard(new Date());
-        }
+        try {
+            if (typeof syncMemberNutritionPrescription === 'function') {
+                syncMemberNutritionPrescription(athId);
+            }
+        } catch (e) { console.warn('[SENS Portal] syncMemberNutritionPrescription:', e); }
+        try {
+            if (typeof initFloatingDock === 'function') {
+                initFloatingDock();
+            }
+        } catch (e) { console.warn('[SENS Portal] initFloatingDock:', e); }
+        try { switchPortalView('dashView'); } catch (e) { console.warn('[SENS Portal] switchPortalView dashView:', e); }
+        try {
+            if (typeof updateSensStreakCard === 'function') {
+                updateSensStreakCard(new Date());
+            }
+        } catch (e) { console.warn('[SENS Portal] updateSensStreakCard:', e); }
     }
 
     window.scrollTo(0, 0);
