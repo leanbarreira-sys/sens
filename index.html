@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=50.0">
+    <link rel="stylesheet" href="style.css?v=51.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '61.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '61.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '62.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '62.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3137,22 +3137,14 @@
                     
                     <!-- Estado B: Sin Comidas Asignadas ni Cargadas para Hoy (Item 3) -->
                     <div class="sens-nutri-empty-content" id="dashNutriEmptyContent" style="display: none;">
-                        <div class="sens-empty-nutri-header">
-                            <span class="sens-modality-pill" style="background: rgba(251,222,185,0.55); color: #705B3E; font-weight: 800; font-size: 10.5px; border-radius: 999px; padding: 3px 10px;">Objetivo del Día</span>
-                            <span class="sens-card-streak-pill" id="dashNutriEmptyStatusPill" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.1); color: #121214; font-weight: 800; font-size: 11px; padding: 3px 10px; border-radius: 999px;">
-                                <span class="streak-pill-dot" style="background: #F59E0B;"></span>
-                                <span id="dashNutriEmptyCalsFraction">0 / 1.950 kcal</span>
-                            </span>
-                        </div>
-
                         <div class="sens-empty-cals-hero">
                             <div class="sens-empty-hero-val-row">
                                 <span class="sens-empty-cals-big" id="dashNutriEmptyConsumedNum">0</span>
-                                <span class="sens-empty-cals-unit">kcal hechas hoy</span>
+                                <span class="sens-empty-cals-unit">kcal consumidas hoy</span>
                             </div>
                             <div class="sens-empty-cals-target-row">
-                                <span>Meta diaria: <strong id="dashNutriEmptyTargetNum">1.950 kcal</strong></span>
-                                <span class="sens-empty-cals-remaining" id="dashNutriEmptyRemainingText">Te faltan <strong id="dashNutriEmptyRemainingNum">1.950 kcal</strong></span>
+                                <span id="dashNutriEmptyTargetNum">0% del objetivo</span>
+                                <span class="sens-empty-cals-remaining" id="dashNutriEmptyRemainingText">Restan <strong id="dashNutriEmptyRemainingNum">1.950 kcal</strong></span>
                             </div>
                         </div>
 
@@ -8898,7 +8890,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=64.0"></script>
+    <script defer src="app.js?v=65.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

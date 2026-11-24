@@ -32243,6 +32243,8 @@ body.in-portal #dashNutriSummaryCard .sens-nutri-top-badges {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
     margin-bottom: 12px !important;
 }
 

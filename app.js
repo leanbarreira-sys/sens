@@ -20223,12 +20223,12 @@ function initDashNutriCarousel() {
         const emptyFractionEl = document.getElementById('dashNutriEmptyCalsFraction');
 
         if (emptyConsumedEl) emptyConsumedEl.textContent = consumedKcal.toLocaleString('es-AR');
-        if (emptyTargetEl) emptyTargetEl.textContent = `${targetKcal.toLocaleString('es-AR')} kcal`;
+        if (emptyTargetEl) emptyTargetEl.textContent = `${progressPct}% del objetivo`;
         if (emptyRemainingEl) emptyRemainingEl.textContent = `${remainingKcal.toLocaleString('es-AR')} kcal`;
         if (emptyRemainingText) {
             emptyRemainingText.innerHTML = remainingKcal === 0 && consumedKcal > 0
                 ? '<strong style="color: #059669;">¡Meta calórica alcanzada! ✓</strong>'
-                : `Te faltan <strong id="dashNutriEmptyRemainingNum">${remainingKcal.toLocaleString('es-AR')} kcal</strong>`;
+                : `Restan <strong id="dashNutriEmptyRemainingNum">${remainingKcal.toLocaleString('es-AR')} kcal</strong>`;
         }
         if (emptyFillEl) emptyFillEl.style.width = `${progressPct}%`;
         if (emptyFractionEl) emptyFractionEl.textContent = `${consumedKcal.toLocaleString('es-AR')} / ${targetKcal.toLocaleString('es-AR')} kcal`;
@@ -21337,7 +21337,10 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     let nStatus = 'in-progress';
     let nText = '0/0 cal';
     const consumed = nRec.consumed || 0;
-    const target = nRec.target || 1950;
+    const prescribedTarget = (typeof getAthletePrescribedCalories === 'function')
+        ? getAthletePrescribedCalories(athId, sDate)
+        : 0;
+    const target = prescribedTarget || nRec.target || 1950;
     const consumedStr = consumed.toLocaleString('es-AR');
     const targetStr = target.toLocaleString('es-AR');
 
