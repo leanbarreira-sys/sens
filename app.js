@@ -32209,22 +32209,29 @@ if (document.readyState === 'loading') {
 
 window.switchTrackingModuleTab = function(tabName) {
     const tabCals = document.getElementById('btnTrackTabCals');
+    const tabBalance = document.getElementById('btnTrackTabBalance');
     const tabWeight = document.getElementById('btnTrackTabWeight');
     const panelCals = document.getElementById('sensTrackingPanelCals');
+    const panelBalance = document.getElementById('sensTrackingPanelBalance');
     const panelWeight = document.getElementById('sensTrackingPanelWeight');
 
-    if (tabName === 'calories') {
-        if (tabCals) tabCals.classList.add('active');
-        if (tabWeight) tabWeight.classList.remove('active');
-        if (panelCals) panelCals.style.display = 'block';
-        if (panelWeight) panelWeight.style.display = 'none';
-        window.renderTrackingCalsBars();
-    } else {
-        if (tabCals) tabCals.classList.remove('active');
+    [tabCals, tabBalance, tabWeight].forEach(t => t && t.classList.remove('active'));
+    [panelCals, panelBalance, panelWeight].forEach(p => { if (p) p.style.display = 'none'; });
+
+    if (tabName === 'balance') {
+        if (tabBalance) tabBalance.classList.add('active');
+        if (panelBalance) panelBalance.style.display = 'block';
+        if (typeof updateObjectiveCardData === 'function') {
+            updateObjectiveCardData(AppState.selectedDate || new Date());
+        }
+    } else if (tabName === 'weight') {
         if (tabWeight) tabWeight.classList.add('active');
-        if (panelCals) panelCals.style.display = 'none';
         if (panelWeight) panelWeight.style.display = 'block';
-        window.renderWeightLineChart();
+        if (typeof window.renderWeightLineChart === 'function') window.renderWeightLineChart();
+    } else {
+        if (tabCals) tabCals.classList.add('active');
+        if (panelCals) panelCals.style.display = 'block';
+        if (typeof window.renderTrackingCalsBars === 'function') window.renderTrackingCalsBars();
     }
 };
 

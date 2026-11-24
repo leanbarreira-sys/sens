@@ -33868,3 +33868,158 @@ body.in-portal .wizard-feed-edit-btn {
     background: #FEE2E2;
     border-color: #DC2626;
 }
+
+
+/* =============================================================================
+   UNIFIED TRACKING CARD: 3 COMPACT TABS + VERTICAL BALANCE LEDGER (+ vs -)
+   ============================================================================= */
+body.in-portal .sens-tracking-segmented-bar,
+.sens-tracking-segmented-bar {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4px !important;
+}
+
+body.in-portal .sens-tracking-seg-pill,
+.sens-tracking-seg-pill {
+    white-space: nowrap !important;
+    padding: 9px 6px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+}
+
+.sens-balance-ledger {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sens-ledger-group {
+    background: #FAF7F2;
+    border-radius: 14px;
+    padding: 12px 14px;
+}
+
+.sens-ledger-group-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #705B3E;
+    margin-bottom: 8px;
+}
+
+.sens-ledger-sign {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.sens-ledger-sign.plus {
+    background: rgba(5, 150, 105, 0.14);
+    color: #059669;
+}
+
+.sens-ledger-sign.minus {
+    background: rgba(18, 18, 20, 0.08);
+    color: #121214;
+}
+
+.sens-ledger-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 12.5px;
+    color: #3F3F46;
+}
+
+.sens-ledger-row.is-subtotal {
+    border-top: 1px solid rgba(112, 91, 62, 0.14);
+    margin-top: 6px;
+    padding-top: 8px;
+    font-weight: 800;
+    color: #121214;
+}
+
+.sens-ledger-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.sens-ledger-sub {
+    font-size: 11px;
+    color: #77767B;
+    font-weight: 600;
+}
+
+.sens-ledger-val {
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.sens-ledger-val .unit {
+    font-size: 10.5px;
+    font-weight: 700;
+    opacity: 0.72;
+}
+
+.sens-ledger-val.plus {
+    color: #059669;
+}
+
+.sens-ledger-val.minus {
+    color: #52525B;
+}
+
+.sens-ledger-val.minus-total {
+    color: #121214;
+}
+
+.sens-ledger-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: rgba(229, 203, 167, 0.22);
+    border-radius: 14px;
+    padding: 12px 14px;
+}
+
+.sens-ledger-result-label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #705B3E;
+}
+
+.sens-ledger-result-val {
+    font-size: 20px;
+    font-weight: 900;
+    color: #121214;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sens-ledger-result-val .unit {
+    font-size: 12px;
+    font-weight: 700;
+    margin-left: 2px;
+    color: #705B3E;
+}
