@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=45.0">
+    <link rel="stylesheet" href="style.css?v=46.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '54.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '54.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '55.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '55.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8844,10 +8844,13 @@
             <!-- BLOQUE 2: OPCIONALES DESPLEGABLES (MEDIA + DETALLES TÉCNICOS) -->
             <details class="coach-ex-optional-details" id="coachExOptionalDetails">
                 <summary class="coach-ex-optional-summary">
-                    <span>Media (Video / Foto / GIF) y Detalles Técnicos</span>
+                    <span>Descripción, Cue y Media (Video / Foto / GIF)</span>
                     <span class="coach-ex-optional-tag">Opcional</span>
                 </summary>
                 <div class="coach-ex-optional-content">
+                    <p style="margin: 0; font-size: 11px; color: #6B6A6E; line-height: 1.4;">
+                        Podés dejar esto vacío ahora para cargar el ejercicio rápido y completarlo o editarlo cuando quieras desde <strong>Biblioteca → Editar / Media</strong> o desde el lápiz en el Wizard.
+                    </p>
                     <!-- Zona de Carga de Media -->
                     <div class="coach-ex-field">
                         <span class="coach-ex-label">Imagen, GIF o Video (editable cuando quieras)</span>
@@ -8899,7 +8902,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=58.0"></script>
+    <script defer src="app.js?v=59.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

@@ -30955,22 +30955,22 @@ body.in-portal #userAvatarDropdown.active,
     display: none !important;
 }
 
-/* Dock Inferior Móvil del Coach — 4 Estaciones en Light Quiet Luxury (Paridad 100% con el del Usuario) */
+/* Dock Inferior Móvil del Coach — 5 Estaciones en 1 sola fila Light Quiet Luxury */
 body.in-portal.is-admin.in-coach-mode #sensCoachFloatingDock,
 body.in-portal.is-admin[data-active-view="coachHubView"] #sensCoachFloatingDock,
 body.in-portal #sensCoachFloatingDock,
 #sensCoachFloatingDock.coach-mode-dock {
-    width: calc(100% - 32px) !important;
-    max-width: 360px !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 4px !important;
+    width: calc(100% - 20px) !important;
+    max-width: 400px !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 2px !important;
     background: rgba(255, 255, 255, 0.96) !important;
     backdrop-filter: blur(24px) !important;
     -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
     box-shadow: 0 10px 32px -4px rgba(18, 18, 20, 0.12), 0 2px 6px rgba(18, 18, 20, 0.04) !important;
     border-radius: 9999px !important;
-    padding: 5px 8px !important;
+    padding: 4px 6px !important;
 }
 
 body.in-portal #sensCoachFloatingDock .sens-dock-item,
@@ -30979,11 +30979,12 @@ body.in-portal #sensCoachFloatingDock .coach-dock-btn {
     background: transparent !important;
     border: none !important;
     border-radius: 9999px !important;
-    font-size: 10.5px !important;
+    font-size: 9.5px !important;
     font-weight: 600 !important;
     white-space: nowrap !important;
-    padding: 7px 4px !important;
-    gap: 3px !important;
+    padding: 6px 2px !important;
+    gap: 2px !important;
+    min-width: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -30992,18 +30993,21 @@ body.in-portal #sensCoachFloatingDock .coach-dock-btn {
 
 body.in-portal #sensCoachFloatingDock .sens-dock-item svg,
 body.in-portal #sensCoachFloatingDock .coach-dock-btn svg {
-    width: 18px !important;
-    height: 18px !important;
+    width: 16px !important;
+    height: 16px !important;
     stroke: currentColor !important;
     stroke-width: 2 !important;
 }
 
 body.in-portal #sensCoachFloatingDock .sens-dock-item span,
 body.in-portal #sensCoachFloatingDock .coach-dock-btn span {
-    font-size: 10px !important;
+    font-size: 9.5px !important;
     font-weight: 600 !important;
-    letter-spacing: -0.01em !important;
+    letter-spacing: -0.02em !important;
     line-height: 1.1 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
 }
 
 body.in-portal #sensCoachFloatingDock .sens-dock-item.active,
@@ -31237,7 +31241,7 @@ body.in-portal #coachHubView .btn-coach-action-primary {
     padding: 9px 14px !important;
 }
 
-/* Subnav de Coach Hub */
+/* Subnav de Coach Hub: visible en Desktop, oculto en Mobile (en Mobile manda el Dock Inferior) */
 body.in-portal #coachHubSubnav {
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -31248,6 +31252,12 @@ body.in-portal #coachHubSubnav {
     border-radius: 14px !important;
     border: 1px solid rgba(18, 18, 20, 0.06) !important;
     scrollbar-width: none !important;
+}
+
+@media (max-width: 900px) {
+    body.in-portal #coachHubSubnav {
+        display: none !important;
+    }
 }
 
 body.in-portal #coachHubSubnav::-webkit-scrollbar {
@@ -33134,9 +33144,12 @@ body:has(.modal-overlay.active) #sensFloatingDock {
 }
 
 .coach-ex-sheet-body {
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
     padding: 16px 20px 0;
     display: flex;
     flex-direction: column;
@@ -33202,6 +33215,7 @@ body:has(.modal-overlay.active) #sensFloatingDock {
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
+    touch-action: manipulation;
     transition: all 0.15s ease;
     -webkit-tap-highlight-color: transparent;
 }

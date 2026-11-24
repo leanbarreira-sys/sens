@@ -32739,6 +32739,17 @@ if (typeof window.initUserTrackingModule !== 'function') {
             });
         });
 
+        const detailsEl = document.getElementById('coachExOptionalDetails');
+        if (detailsEl) {
+            detailsEl.addEventListener('toggle', () => {
+                if (detailsEl.open) {
+                    setTimeout(() => {
+                        try { detailsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (_) {}
+                    }, 60);
+                }
+            });
+        }
+
         const urlInput = document.getElementById('coachExMediaUrlInput');
         if (urlInput) {
             urlInput.addEventListener('input', () => renderMediaPreview(urlInput.value));
