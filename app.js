@@ -3823,7 +3823,27 @@ async function checkExistingSession() {
                 if (typeof updateNutriSummaryCardData === 'function') updateNutriSummaryCardData();
     if (typeof window.initUserTrackingModule === 'function') window.initUserTrackingModule();
                 setupRealtimeProfileSubscription(session.user.id);
+                // Auto-recuperación de vista activa: si el usuario está en modo portal pero ninguna vista está activa (o cambió su rol admin tras cargar perfil), re-hidratar portal
+                if (document.body.classList.contains('in-portal')) {
+                    const hasActiveView = Boolean(document.querySelector('#app-container .portal-view.active'));
+                    const adminNow = (typeof isCurrentUserAdmin === 'function') ? isCurrentUserAdmin() : false;
+                    const adminToggle = document.getElementById('topbarAdminToggle');
+                    const adminMismatch = adminNow && adminToggle && adminToggle.style.display === 'none';
+                    if (!hasActiveView || adminMismatch) {
+                        try { openUserPortal(false); } catch (e) { console.warn('[SENS] Recovery openUserPortal:', e); }
+                    }
+                }
                 console.log('[SENS] Sesión activa de Supabase detectada:', session.user.email);
+            } else if (document.body.classList.contains('in-portal') && !AppState.user) {
+                // Sesión expirada o estado corrupto de sens_in_portal sin usuario real: volver limpiamente a la landing
+                try {
+                    localStorage.removeItem('sens_in_portal');
+                    localStorage.removeItem('sens_active_user');
+                    localStorage.removeItem('sens_active_profile');
+                } catch (_) {}
+                document.documentElement.classList.remove('in-portal-mode');
+                document.body.classList.remove('in-portal');
+                if (typeof returnToPublicLanding === 'function') returnToPublicLanding();
             }
         } catch (e) {
             console.warn('[SENS] Error al restaurar sesión previa:', e);
@@ -23646,10 +23666,16 @@ function initCoachMarketingStudio() {
     console.log('[SENS Marketing Studio] Inicializando suite de 140 templates 9:16 Quiet Vitality (Estáticos & Motion)...');
     const catalog = getMktCatalog();
     if (!catalog || catalog.length === 0) {
-        console.warn('[SENS Marketing Studio] window.SENS_MARKETING_CATALOG no encontrado. Reintentando carga...');
-        setTimeout(initCoachMarketingStudio, 200);
+        window._mktStudioRetries = (window._mktStudioRetries || 0) + 1;
+        if (window._mktStudioRetries <= 15) {
+            if (typeof window.ensurePortalBundlesLoaded === 'function') {
+                window.ensurePortalBundlesLoaded();
+            }
+            setTimeout(initCoachMarketingStudio, 250);
+        }
         return;
     }
+    window._mktStudioRetries = 0;
 
     bindMktFormatButtons();
     bindMktBlockTabs();
