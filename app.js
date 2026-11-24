@@ -3187,13 +3187,25 @@ function initAuthModal() {
                     openUserPortal(false);
                 } catch (portalErr) {
                     console.error('[SENS Login] Error abriendo portal:', portalErr);
-                    // Fallback seguro para garantizar entrada al portal
+                    // Fallback seguro para garantizar entrada al portal con vista activa (cero pantalla blanca)
                     const portalEl = document.getElementById('app-container');
                     const landingEl = document.getElementById('publicLanding');
                     if (portalEl) portalEl.classList.add('active');
                     if (landingEl) landingEl.style.display = 'none';
                     document.documentElement.classList.add('in-portal-mode');
                     document.body.classList.add('in-portal');
+                    const fallbackView = (typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin()) ? 'coachHubView' : 'dashView';
+                    try {
+                        if (typeof switchPortalView === 'function') {
+                            switchPortalView(fallbackView);
+                        } else {
+                            const vEl = document.getElementById(fallbackView);
+                            if (vEl) vEl.classList.add('active');
+                        }
+                    } catch (_) {
+                        const vEl = document.getElementById(fallbackView);
+                        if (vEl) vEl.classList.add('active');
+                    }
                 }
             }, 350);
         } catch (loginErr) {
@@ -3582,7 +3594,12 @@ function clearAuthAlert() {
 
 async function loadProfileFromSupabase(userId) {
     try {
-        const { data, error } = await supabaseClient
+        const client = (typeof window.ensureSupabaseClient === 'function')
+            ? await window.ensureSupabaseClient()
+            : supabaseClient;
+        if (!client) return;
+
+        const { data, error } = await client
             .from('profiles')
             .select('*')
             .eq('id', userId)
@@ -3725,9 +3742,17 @@ async function loadProfileFromSupabase(userId) {
             }
         } catch (_) {}
 
-        // Hidratar historial completo de daily_logs (ejercicios, nutrición, pasos, rachas)
+        // Hidratar historial completo de daily_logs en segundo plano (sin bloquear el login ni la entrada al portal)
         if (typeof SensCloudSyncEngine !== 'undefined') {
-            await SensCloudSyncEngine.hydrateAthleteCloudHistory(userId);
+            SensCloudSyncEngine.hydrateAthleteCloudHistory(userId)
+                .then(() => {
+                    try {
+                        if (typeof renderDashboardData === 'function') renderDashboardData();
+                        if (typeof updateDashboardRings === 'function') updateDashboardRings();
+                        if (typeof updateSensStreakCard === 'function') updateSensStreakCard(new Date());
+                    } catch (_) {}
+                })
+                .catch(() => {});
         }
     } catch (e) {
         console.error('Error cargando perfil:', e);
@@ -4822,8 +4847,8 @@ function openUserPortal(forceOnboarding = false) {
     });
 
     if (isAdmin) {
-        loadCoachAthletesList();
-        renderCoachAthletesHub();
+        try { loadCoachAthletesList(); } catch (e) { console.warn('[SENS Portal] loadCoachAthletesList:', e); }
+        try { renderCoachAthletesHub(); } catch (e) { console.warn('[SENS Portal] renderCoachAthletesHub:', e); }
     }
 
     const navCoachHub = document.getElementById('navCoachHub');
@@ -4918,6 +4943,20 @@ function openUserPortal(forceOnboarding = false) {
             }
         } catch (e) { console.warn('[SENS Portal] updateSensStreakCard:', e); }
     }
+
+    // Salvaguarda final anti-pantalla-blanca: garantizar que SIEMPRE haya una .portal-view.active
+    try {
+        if (!document.querySelector('#app-container .portal-view.active')) {
+            const safeViewId = (isAdmin && window._isCoachAdminActive !== false) ? 'coachHubView' : 'dashView';
+            if (typeof switchPortalView === 'function') {
+                switchPortalView(safeViewId);
+            }
+            if (!document.querySelector('#app-container .portal-view.active')) {
+                const safeEl = document.getElementById(safeViewId);
+                if (safeEl) safeEl.classList.add('active');
+            }
+        }
+    } catch (_) {}
 
     window.scrollTo(0, 0);
 }
@@ -32354,10 +32393,15 @@ if (typeof window.initUserTrackingModule !== 'function') {
     let _sheetBound = false;
     let _isUploadingMedia = false;
 
-    function getSbClient() {
-        if (typeof ensureSupabaseClient === 'function') return ensureSupabaseClient();
+    async function getSbClient() {
+        if (typeof window.ensureSupabaseClient === 'function') {
+            try {
+                const c = await window.ensureSupabaseClient();
+                if (c) return c;
+            } catch (_) {}
+        }
         if (window.supabaseClient) return window.supabaseClient;
-        if (typeof supabaseClient !== 'undefined') return supabaseClient;
+        if (typeof supabaseClient !== 'undefined' && supabaseClient) return supabaseClient;
         return null;
     }
 
@@ -32494,7 +32538,7 @@ if (typeof window.initUserTrackingModule !== 'function') {
 
     window.syncCustomExercisesFromSupabase = async function (force = false) {
         if (window._sensCustomExercisesSynced && !force) return;
-        const client = getSbClient();
+        const client = await getSbClient();
         if (!client) return;
 
         try {
@@ -32572,7 +32616,7 @@ if (typeof window.initUserTrackingModule !== 'function') {
     window.toggleCoachExerciseFavorite = async function (exerciseId) {
         const ex = findExerciseById(exerciseId);
         if (!ex) return;
-        const client = getSbClient();
+        const client = await getSbClient();
         if (!client) {
             if (typeof showSensToast === 'function') showSensToast('Sin conexión a Supabase para guardar favorito.', 'error');
             return;
@@ -32723,7 +32767,7 @@ if (typeof window.initUserTrackingModule !== 'function') {
                     return;
                 }
 
-                const client = getSbClient();
+                const client = await getSbClient();
                 if (!client) {
                     setSheetStatus('No se detectó sesión activa de Supabase para subir media.', 'error');
                     return;
@@ -32785,7 +32829,7 @@ if (typeof window.initUserTrackingModule !== 'function') {
                     return;
                 }
 
-                const client = getSbClient();
+                const client = await getSbClient();
                 if (!client) {
                     setSheetStatus('No hay conexión activa con Supabase.', 'error');
                     return;

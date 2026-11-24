@@ -30948,12 +30948,9 @@ body.in-portal #userAvatarDropdown.active,
     }
 }
 
-/* 7.2 OCULTAR SECCIÓN BIBLIOTECA Y EVOLUCIÓN POR EL MOMENTO */
-#coachHubSubnav [data-subtab="paneLibrary"],
+/* 7.2 OCULTAR SECCIÓN EVOLUCIÓN POR EL MOMENTO (BIBLIOTECA ACTIVA) */
 #coachHubSubnav [data-subtab="paneEvolution"],
-#sensCoachFloatingDock [data-coach-subtab="paneLibrary"],
 #sensCoachFloatingDock [data-coach-subtab="paneEvolution"],
-#paneLibrary,
 #paneEvolution {
     display: none !important;
 }
