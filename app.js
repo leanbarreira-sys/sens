@@ -3867,9 +3867,11 @@ async function checkExistingSession() {
                     }
                 }
             } else if (event === 'SIGNED_OUT') {
-                if (window._sensIsLoggingOut) return;
+                if (window._sensIsLoggingOut || window._sensLoginInProgress) return;
+                // Solo limpiar estado local si había una sesión activa — NUNCA volver a llamar signOut() desde el listener SIGNED_OUT
+                if (!AppState.user && !document.body.classList.contains('in-portal')) return;
                 if (typeof window.performCompleteSensLogout === 'function') {
-                    window.performCompleteSensLogout();
+                    window.performCompleteSensLogout({ skipSignOut: true });
                 } else {
                     AppState.user = null;
                     AppState.profile = null;
@@ -3982,15 +3984,16 @@ function initPortalNavigation() {
     });
 
     // Anti-Account-Leak: Función centralizada de cierre de sesión y purga de aislamiento
-    window.performCompleteSensLogout = async function() {
+    window.performCompleteSensLogout = async function(options = {}) {
+        const skipSignOut = Boolean(options && options.skipSignOut);
         if (window._sensIsLoggingOut) return;
         window._sensIsLoggingOut = true;
         try {
-            if (supabaseClient) {
+            if (!skipSignOut && supabaseClient) {
                 await supabaseClient.auth.signOut().catch(() => {});
             }
         } catch (_) {} finally {
-            setTimeout(() => { window._sensIsLoggingOut = false; }, 400);
+            setTimeout(() => { window._sensIsLoggingOut = false; }, 1200);
         }
         if (window._sensRealtimeProfileChannel && supabaseClient) {
             try { supabaseClient.removeChannel(window._sensRealtimeProfileChannel); } catch (_) {}
