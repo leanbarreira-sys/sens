@@ -12033,7 +12033,12 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
 
         const goalMap = {
             hypertrophy: 'Hipertrofia & Masa Muscular',
+            muscle_gain: 'Ganancia Muscular & Fuerza',
+            recomposition: 'Recomposición Corporal',
             fat_loss: 'Recomposición & Quema Grasa',
+            weight_loss: 'Descenso de Grasa Corporal',
+            strength: 'Fuerza & Rendimiento',
+            mobility: 'Movilidad & Salud Articular',
             posture: 'Postura, Columna & Movilidad',
             performance: 'Rendimiento Deportivo & Fuerza',
             general_vitality: 'Vitalidad General & Salud Integral'

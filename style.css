@@ -31036,15 +31036,208 @@ body.in-portal #coachHubView .coach-hub-header {
 }
 
 body.in-portal #coachHubView .coach-hub-title {
-    font-family: 'Cormorant Garamond', Georgia, serif !important;
-    font-size: 1.65rem !important;
-    font-weight: 600 !important;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: 1.32rem !important;
+    font-weight: 800 !important;
     color: #121214 !important;
-    letter-spacing: -0.02em !important;
+    letter-spacing: -0.025em !important;
+    text-transform: none !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
 }
 
 body.in-portal #coachHubView .coach-hub-title .text-champagne {
     color: #705B3E !important;
+}
+
+/* Coach OS Quiet Light Luxury — KPIs, Acordeón de Planes, Filtros y Tarjetas de Alumnos */
+body.in-portal #coachHubView .coach-stat-val {
+    font-variant-numeric: tabular-nums !important;
+    color: #121214 !important;
+}
+
+body.in-portal #coachHubView .coach-tiers-toggle-btn {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.03) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #coachHubView .coach-tiers-toggle-btn svg {
+    color: #705B3E !important;
+    stroke: #705B3E !important;
+}
+
+body.in-portal #coachHubView .coach-business-tiers-banner {
+    background: transparent !important;
+    border: none !important;
+}
+
+body.in-portal #coachHubView .coach-tier-mini-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.07) !important;
+    border-radius: 16px !important;
+    color: #121214 !important;
+    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.03) !important;
+}
+
+body.in-portal #coachHubView .coach-tier-mini-card .tier-mini-tag {
+    color: #705B3E !important;
+}
+
+body.in-portal #coachHubView .coach-tier-mini-card strong,
+body.in-portal #coachHubView .coach-tier-mini-card .tier-mini-price {
+    color: #121214 !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+body.in-portal #coachHubView .coach-tier-mini-card small {
+    color: #575659 !important;
+}
+
+/* Filtros horizontales sin scrollbar visible ni contraste negro agresivo */
+body.in-portal #coachHubView .coach-horizontal-pills {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    padding-bottom: 0 !important;
+}
+
+body.in-portal #coachHubView .coach-horizontal-pills::-webkit-scrollbar {
+    display: none !important;
+}
+
+body.in-portal #coachHubView .coach-horizontal-pills .pill-dark,
+body.in-portal #coachHubView .coach-filter-status,
+body.in-portal #coachHubView .coach-filter-plan {
+    background: #F4F3F0 !important;
+    color: #575659 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    font-weight: 700 !important;
+    font-size: 10.5px !important;
+    padding: 6px 12px !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #coachHubView .coach-horizontal-pills .pill-champagne,
+body.in-portal #coachHubView .coach-filter-status.active,
+body.in-portal #coachHubView .coach-filter-plan.active {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border: none !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.12) !important;
+}
+
+/* Tarjetas de Alumnos (Quiet Light Luxury — Cero tarjetas negras con alto contraste) */
+body.in-portal #coachHubView .coach-athlete-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 22px !important;
+    padding: 18px 16px !important;
+    box-shadow: 0 4px 18px rgba(18, 18, 20, 0.04) !important;
+    color: #121214 !important;
+}
+
+body.in-portal #coachHubView .coach-athlete-card.is-pending {
+    border-color: rgba(217, 119, 6, 0.35) !important;
+    background: #FFFDF9 !important;
+}
+
+body.in-portal #coachHubView .coach-ath-avatar-circle {
+    background: #F4EFE6 !important;
+    color: #705B3E !important;
+    border: 1px solid rgba(197, 168, 128, 0.35) !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #coachHubView .coach-ath-name {
+    color: #121214 !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
+    letter-spacing: -0.01em !important;
+}
+
+body.in-portal #coachHubView .coach-ath-email {
+    color: #575659 !important;
+    font-size: 12px !important;
+}
+
+body.in-portal #coachHubView .coach-ath-bio-grid {
+    background: #FAF9F6 !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 14px !important;
+    padding: 10px 12px !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #coachHubView .coach-ath-bio-label {
+    color: #705B3E !important;
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+}
+
+body.in-portal #coachHubView .coach-ath-bio-val {
+    color: #121214 !important;
+    font-weight: 800 !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+body.in-portal #coachHubView .coach-ath-goal-chip {
+    background: rgba(229, 203, 167, 0.18) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 9px 12px !important;
+}
+
+body.in-portal #coachHubView .coach-ath-goal-label {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+    font-size: 10px !important;
+    letter-spacing: 0.06em !important;
+}
+
+body.in-portal #coachHubView .coach-ath-goal-text {
+    color: #121214 !important;
+    font-weight: 700 !important;
+    font-size: 12.5px !important;
+}
+
+body.in-portal #coachHubView .btn-coach-action-manage,
+body.in-portal #coachHubView .btn-coach-action-dossier {
+    background: #F4F3F0 !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.07) !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+    padding: 9px 13px !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #coachHubView .btn-coach-action-portal {
+    background: #121214 !important;
+    color: #FAF9F6 !important;
+    border: none !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+    padding: 9px 14px !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.12) !important;
+}
+
+body.in-portal #coachHubView .btn-coach-action-primary {
+    background: #E5CBA7 !important;
+    color: #2A241C !important;
+    border: none !important;
+    border-radius: 12px !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    padding: 9px 14px !important;
 }
 
 /* Subnav de Coach Hub */
