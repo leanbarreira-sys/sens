@@ -8207,13 +8207,15 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         <div class="sens-video-skeleton compact">
                             <div class="sens-skeleton-shimmer"></div>
                         </div>
-                        ${media.isVideo ? `
+                        ${media.isYouTube ? `
+                            <img src="${media.thumbUrl}" alt="${exTitle}" loading="lazy" decoding="async" class="sens-ex-compact-video" onload="this.previousElementSibling?.classList.add('is-hidden')" style="object-fit: cover; width: 100%; height: 100%;" />
+                        ` : (media.isVideo ? `
                             <video muted loop playsinline preload="none" class="sens-ex-compact-video" oncanplay="this.previousElementSibling?.classList.add('is-hidden')">
                                 <source src="${media.url}" type="video/mp4">
                             </video>
                         ` : `
                             <img src="${media.url}" alt="${exTitle}" loading="lazy" class="sens-ex-compact-video" onload="this.previousElementSibling?.classList.add('is-hidden')" style="object-fit: cover; width: 100%; height: 100%;" />
-                        `}
+                        `)}
                         <div class="sens-ex-compact-overlay"></div>
                         <div class="sens-ex-compact-top">
                             <span class="ex-compact-sets-badge">${ex.sets || 3} × ${ex.reps || 10}</span>
@@ -29846,19 +29848,11 @@ const CoachWorkoutsMaster = {
     getThumbnail(ex) {
         if (ex.poster_url) return ex.poster_url;
         if (ex.thumbnail) return ex.thumbnail;
-        if (ex.video_local_path && typeof resolveExerciseMediaUrl === 'function') {
-            const resolved = resolveExerciseMediaUrl(ex.video_local_path);
-            if (resolved && resolved.type === 'gif') return resolved.src;
-        }
-        const url = ex.video_url || ex.video || '';
-        if (url.includes('youtube.com') || url.includes('youtu.be')) {
-            let videoId = '';
-            if (url.includes('v=')) {
-                videoId = url.split('v=')[1].split('&')[0];
-            } else if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1].split('?')[0];
-            }
-            if (videoId) return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+        const rawUrl = ex.video_local_path || ex.video_url || ex.video || '';
+        if (rawUrl && typeof resolveExerciseMediaUrl === 'function') {
+            const resolved = resolveExerciseMediaUrl(rawUrl);
+            if (resolved && resolved.isYouTube && resolved.thumbUrl) return resolved.thumbUrl;
+            if (resolved && resolved.isGif && resolved.url) return resolved.url;
         }
         return '';
     }
