@@ -21989,15 +21989,18 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
         dateLabel.textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
     }
 
+    const prescribedKcal = Number(metrics.prescribedCalories) || 1950;
+    const targetDelta = prescribedKcal - liveTdee;
+
     if (goalPill) {
-        goalPill.textContent = isMuscleGain ? 'Meta: +300 kcal' : 'Meta: -400 kcal';
-        goalPill.style.background = 'rgba(229, 203, 167, 0.12)';
-        goalPill.style.color = '#E5CBA7';
-        goalPill.style.borderColor = 'rgba(229, 203, 167, 0.3)';
+        goalPill.textContent = `Meta: ${prescribedKcal.toLocaleString('es-AR')} kcal`;
+        goalPill.style.background = 'rgba(112, 91, 62, 0.10)';
+        goalPill.style.color = '#705B3E';
+        goalPill.style.borderColor = 'transparent';
     }
 
     if (graphGoalTarget) {
-        graphGoalTarget.textContent = isMuscleGain ? '+300 kcal/día' : '-400 kcal/día';
+        graphGoalTarget.textContent = `${targetDelta >= 0 ? '+' : ''}${targetDelta.toLocaleString('es-AR')} kcal/día`;
     }
 
     if (ingestaNum) {
@@ -22013,7 +22016,8 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
             const logged = JSON.parse(localStorage.getItem(logKey) || '{}');
             count = Object.keys(logged).length;
         } catch (e) {}
-        mealsSubEl.textContent = count > 0 ? `${count} ${count === 1 ? 'comida' : 'comidas'}` : '0 comidas';
+        const countLabel = count > 0 ? `${count} ${count === 1 ? 'comida' : 'comidas'}` : '0 comidas';
+        mealsSubEl.textContent = `${countLabel} · Meta ${prescribedKcal.toLocaleString('es-AR')}`;
     }
 
     if (tdeeNum) {
