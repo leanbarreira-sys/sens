@@ -34280,10 +34280,12 @@ body.in-portal #sensExerciseModalSheet .sens-modal-sticky-save-bar,
     border-color: rgba(220, 38, 38, 0.25);
 }
 
+body.in-portal .btn-coach-toggle-access.is-paused,
 .btn-coach-toggle-access.is-paused {
-    background: #121214;
-    color: #FFFFFF;
-    border-color: #121214;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border-color: #121214 !important;
 }
 
 .coach-payment-meta-grid {
@@ -34335,24 +34337,28 @@ body.in-portal #sensExerciseModalSheet .sens-modal-sticky-save-bar,
     gap: 8px;
 }
 
+body.in-portal .btn-coach-register-pay,
 .btn-coach-register-pay {
     flex: 1;
     padding: 9px 12px;
     border-radius: 10px;
     border: none;
-    background: #121214;
-    color: #FFFFFF;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
     font-size: 12px;
     font-weight: 800;
     cursor: pointer;
 }
 
+body.in-portal .btn-coach-toggle-history,
 .btn-coach-toggle-history {
     padding: 9px 12px;
     border-radius: 10px;
     border: 1px solid rgba(18, 18, 20, 0.12);
-    background: #FFFFFF;
-    color: #121214;
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    -webkit-text-fill-color: #121214 !important;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
@@ -34480,10 +34486,12 @@ body.in-portal #sensExerciseModalSheet .sens-modal-sticky-save-bar,
     cursor: pointer;
 }
 
+body.in-portal .coach-pay-dur-btn.active,
 .coach-pay-dur-btn.active {
-    background: #121214;
-    color: #FFFFFF;
-    border-color: #121214;
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border-color: #121214 !important;
 }
 
 .coach-pay-autoactivate-row {
@@ -34527,11 +34535,18 @@ body.in-portal #sensExerciseModalSheet .sens-modal-sticky-save-bar,
     width: auto !important;
 }
 
+body.in-portal #btnSaveCoachPayment,
 .coach-payment-modal-sheet .sens-sticky-save-btn {
     background: #121214 !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
     border-radius: 12px !important;
+}
+
+body.in-portal #btnSaveCoachPayment *,
+.coach-payment-modal-sheet .sens-sticky-save-btn * {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
 }
 
 @media (max-width: 420px) {
