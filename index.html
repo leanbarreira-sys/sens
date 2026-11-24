@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '83.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '83.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '84.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '84.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -5361,7 +5361,6 @@
 
                             <!-- PASO 1: Selección de Días y Modalidades (Lunes a Domingo + Inicio Dinámico) -->
                             <div class="wizard-pane-step" id="wizardPaneStep1">
-                                <div style="margin-bottom: 14px;">
                                 <div class="coach-step-header-compact">
                                     <h4 class="coach-step-title">1. Días y modalidad</h4>
                                     <p class="coach-step-sub">Elegí los días de entrenamiento y cuándo arranca el ciclo.</p>
