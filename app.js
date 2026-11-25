@@ -13138,7 +13138,7 @@ function renderCoachPrivateNotesHub(athIdOverride) {
 
     const entries = Array.isArray(rec.entries) ? rec.entries : [];
     if (entries.length === 0) {
-        entriesList.innerHTML = '<div style="font-size: 11.5px; color: rgba(255,255,255,0.5); padding: 12px; text-align: center; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.14); border-radius: 10px;">Sin avances en bitácora todavía.</div>';
+        entriesList.innerHTML = '<div style="font-size: 11.5px; color: #71717A; padding: 12px; text-align: center; background: #FFFFFF; border: 1px dashed rgba(18,18,20,0.16); border-radius: 10px;">Sin avances en bitácora todavía.</div>';
         return;
     }
 
@@ -13147,16 +13147,16 @@ function renderCoachPrivateNotesHub(athIdOverride) {
         const dateLabel = `${d.toLocaleDateString('es-AR')} · ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
         const safeId = escapeHTML(entry.id);
         return `
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 12px;">
+            <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.1); border-radius: 10px; padding: 10px 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap;">
-                    <span style="font-size: 10px; font-weight: 800; color: #E5CBA7;">${dateLabel}${entry.edited ? ' · Editado' : ''}</span>
+                    <span style="font-size: 10px; font-weight: 800; color: #705B3E;">${dateLabel}${entry.edited ? ' · Editado' : ''}</span>
                     <div style="display: flex; gap: 5px;">
-                        <button type="button" class="btn-coach-note-copy" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #FFFFFF; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Copiar</button>
-                        <button type="button" class="btn-coach-note-edit" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #E5CBA7; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Editar</button>
-                        <button type="button" class="btn-coach-note-del" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #F87171; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Borrar</button>
+                        <button type="button" class="btn-coach-note-copy" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #52525B; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.14); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Copiar</button>
+                        <button type="button" class="btn-coach-note-edit" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #121214; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.14); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Editar</button>
+                        <button type="button" class="btn-coach-note-del" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #DC2626; background: #FEF2F2; border: 1px solid rgba(220,38,38,0.22); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Borrar</button>
                     </div>
                 </div>
-                <div class="coach-note-entry-body" data-entry-id="${safeId}" style="font-size: 12.5px; color: #FFFFFF; white-space: pre-wrap; line-height: 1.45;">${escapeHTML(entry.text || '')}</div>
+                <div class="coach-note-entry-body" data-entry-id="${safeId}" style="font-size: 12.5px; color: #121214; white-space: pre-wrap; line-height: 1.45;">${escapeHTML(entry.text || '')}</div>
             </div>
         `;
     }).join('');
@@ -13180,10 +13180,10 @@ function renderCoachPrivateNotesHub(athIdOverride) {
             const bodyEl = entriesList.querySelector(`.coach-note-entry-body[data-entry-id="${id}"]`);
             if (!bodyEl || bodyEl.querySelector('textarea')) return;
             bodyEl.innerHTML = `
-                <textarea class="coach-note-inline-edit" rows="3" style="width:100%; font-size:12.5px; margin-bottom:6px; background:rgba(255,255,255,0.08); color:#FFF; border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:6px 8px; box-sizing:border-box;">${escapeHTML(found.text || '')}</textarea>
+                <textarea class="coach-note-inline-edit" rows="3" style="width:100%; font-size:12.5px; margin-bottom:6px; background:#FAF9F6; color:#121214; border:1px solid rgba(18,18,20,0.2); border-radius:8px; padding:6px 8px; box-sizing:border-box;">${escapeHTML(found.text || '')}</textarea>
                 <div style="display:flex; gap:6px; justify-content:flex-end;">
-                    <button type="button" class="btn-cancel-inline-note" style="font-size:10.5px; padding:4px 10px; background:rgba(255,255,255,0.08); color:#FFF; border:1px solid rgba(255,255,255,0.16); border-radius:6px; cursor:pointer;">Cancelar</button>
-                    <button type="button" class="btn-save-inline-note" style="font-size:10.5px; padding:4px 12px; background:#E5CBA7; color:#080809; font-weight:800; border:none; border-radius:6px; cursor:pointer;">Guardar</button>
+                    <button type="button" class="btn-cancel-inline-note" style="font-size:10.5px; padding:4px 10px; background:#FFFFFF; color:#121214; border:1px solid rgba(18,18,20,0.16); border-radius:6px; cursor:pointer;">Cancelar</button>
+                    <button type="button" class="btn-save-inline-note" style="font-size:10.5px; padding:4px 12px; background:#121214; color:#FFFFFF; font-weight:800; border:none; border-radius:6px; cursor:pointer;">Guardar</button>
                 </div>
             `;
             bodyEl.querySelector('.btn-cancel-inline-note').addEventListener('click', () => renderCoachPrivateNotesHub(athId));
