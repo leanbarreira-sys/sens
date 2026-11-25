@@ -30588,6 +30588,10 @@ body.in-portal .sens-nutri-food-meta {
     font-size: 11.5px !important;
 }
 
+body.in-portal .sens-nutri-food-macros span.prot { color: #705B3E !important; font-weight: 700 !important; }
+body.in-portal .sens-nutri-food-macros span.carb { color: #0284C7 !important; font-weight: 700 !important; }
+body.in-portal .sens-nutri-food-macros span.fat { color: #B45309 !important; font-weight: 700 !important; }
+
 body.in-portal .sens-nutri-kcal-badge {
     background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;

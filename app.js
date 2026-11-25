@@ -556,6 +556,18 @@ function calculateAthleteBMR(athId = null) {
 }
 window.calculateAthleteBMR = calculateAthleteBMR;
 
+window.getNutritionFoodRowKey = function(mealSlot, occIdx, item, resolved) {
+    const baseKey = resolved?.id || resolved?.codigo || item?.id || item?.codigo || item?.name || 'food';
+    return `${mealSlot || 'meal'}__${occIdx}__${baseKey}`;
+};
+
+window.isNutritionFoodRowLogged = function(consumedMap, rowKey, legacyKey, isCustom) {
+    if (!consumedMap) return Boolean(isCustom);
+    if (consumedMap[rowKey] !== undefined) return Boolean(consumedMap[rowKey]);
+    if (isCustom) return consumedMap[legacyKey] !== false;
+    return Boolean(consumedMap[legacyKey]);
+};
+
 window.getResolvedNutritionDayEntry = function(userPlan, targetDate = null) {
     if (!userPlan) return null;
     const sDate = targetDate ? (targetDate instanceof Date ? targetDate : new Date(targetDate)) : (AppState.nutriSelectedDate || AppState.selectedDate || new Date());
@@ -649,11 +661,12 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
         let totalConsumed = 0;
 
         if (Array.isArray(customMeals)) {
-            customMeals.forEach(cm => {
+            customMeals.forEach((cm, cmIdx) => {
                 const fid = cm.id || cm.codigo || cm.name;
-                const isConsumed = consumedMap ? (consumedMap[fid] !== false) : true;
+                const rowKey = window.getNutritionFoodRowKey(cm.mealSlot || 'almuerzo', `c${cmIdx}`, cm, cm);
+                const isConsumed = window.isNutritionFoodRowLogged(consumedMap, rowKey, fid, true);
                 if (isConsumed) {
-                    const adjGrams = userAdjusted[fid] ? parseInt(userAdjusted[fid], 10) : (cm.grams || 100);
+                    const adjGrams = userAdjusted[rowKey] ? parseInt(userAdjusted[rowKey], 10) : (userAdjusted[fid] ? parseInt(userAdjusted[fid], 10) : (cm.grams || 100));
                     let cmCal = Number(cm.calories) || 0;
                     if (cmCal > 0 && cm.grams && adjGrams !== cm.grams) {
                         cmCal = Math.round(cmCal * (adjGrams / cm.grams));
@@ -694,13 +707,14 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
                 if (!Array.isArray(foods) || foods.length === 0) {
                     foods = defaultFallback[mKey] || [];
                 }
-                foods.forEach(f => {
-                    const fid = f.id || f.codigo || f.name;
-                    if (consumedMap[fid]) {
-                        const grams = userAdjusted[fid] ? parseInt(userAdjusted[fid], 10) : (f.grams || 100);
-                        const resolved = (typeof window.getResolvedFood === 'function')
-                            ? window.getResolvedFood(f, id)
-                            : f;
+                foods.forEach((f, fIdx) => {
+                    const resolved = (typeof window.getResolvedFood === 'function')
+                        ? window.getResolvedFood(f, id)
+                        : f;
+                    const fid = resolved?.id || resolved?.codigo || f.id || f.codigo || f.name;
+                    const rowKey = window.getNutritionFoodRowKey(mKey, fIdx, f, resolved);
+                    if (window.isNutritionFoodRowLogged(consumedMap, rowKey, fid, false)) {
+                        const grams = userAdjusted[rowKey] ? parseInt(userAdjusted[rowKey], 10) : (userAdjusted[fid] ? parseInt(userAdjusted[fid], 10) : (f.grams || 100));
                         const macros = (typeof window.calculateFoodMacros === 'function')
                             ? window.calculateFoodMacros(resolved, grams)
                             : { calories: f.calories || Math.round(grams * 1.5) };
@@ -18270,8 +18284,8 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     mealKeys.forEach(mKey => {
         const foods = dayMeals[mKey]?.foods || dayMeals[mKey] || [];
         if (Array.isArray(foods)) {
-            foods.forEach(f => {
-                allDayFoods.push(Object.assign({}, f, { mealSlot: mKey, isFromCoach: true }));
+            foods.forEach((f, fIdx) => {
+                allDayFoods.push(Object.assign({}, f, { mealSlot: mKey, isFromCoach: true, _occIdx: fIdx }));
             });
         }
     });
@@ -18305,8 +18319,8 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     });
 
     // 3. Alimentos personalizados registrados por el alumno para este día
-    userCustomMeals.forEach(cm => {
-        allDayFoods.push(Object.assign({}, cm, { isCustom: true }));
+    userCustomMeals.forEach((cm, cmIdx) => {
+        allDayFoods.push(Object.assign({}, cm, { isCustom: true, _occIdx: `c${cmIdx}` }));
     });
 
     // 4. Renderizar Subsecciones Visuales con Container Encompassing Parent Card (Item 1 & 2)
@@ -18327,13 +18341,16 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         let slotConsumedKcal = 0;
         let slotConsumedCount = 0;
 
-        const cardsHtml = slotFoods.map(item => {
+        const cardsHtml = slotFoods.map((item, sIdx) => {
             const resolved = (typeof window.getResolvedFood === 'function')
                 ? window.getResolvedFood(item, athId)
                 : item;
 
             const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
-            const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
+            const occIdx = item._occIdx !== undefined ? item._occIdx : sIdx;
+            const rowKey = window.getNutritionFoodRowKey(mKey, occIdx, item, resolved);
+            item._rowKey = rowKey;
+            const grams = userAdjusted[rowKey] ? parseInt(userAdjusted[rowKey], 10) : (userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100));
 
             let macros;
             if (item.isCustom && Number(item.calories) > 0) {
@@ -18352,7 +18369,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
             slotKcal += macros.calories;
 
-            const isLogged = item.isCustom ? (userConsumedFoods[foodKey] !== false) : Boolean(userConsumedFoods[foodKey]);
+            const isLogged = window.isNutritionFoodRowLogged(userConsumedFoods, rowKey, foodKey, item.isCustom);
             if (isLogged) {
                 slotConsumedKcal += macros.calories;
                 slotConsumedCount++;
@@ -18366,7 +18383,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                 : `<span class="sens-nutri-origin-badge" style="background: rgba(112, 91, 62, 0.12); color: #705B3E; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 999px;">Pauta Nico</span>`;
 
             return `
-                <div class="sens-nutri-food-card ${isLogged ? 'is-logged' : ''}" data-food-id="${foodKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
+                <div class="sens-nutri-food-card ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
                     <img class="sens-nutri-food-thumb" src="${imgUrl}" alt="${foodTitle}" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                     <div class="sens-nutri-food-info">
                         <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
@@ -18383,7 +18400,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     </div>
                     <div class="sens-nutri-food-right" style="display: flex; align-items: center; gap: 8px;">
                         <div class="sens-nutri-kcal-badge">${macros.calories} kcal</div>
-                        <button type="button" class="sens-btn-quick-log ${isLogged ? 'is-logged' : ''}" data-food-id="${foodKey}" data-meal-slot="${item.mealSlot}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}">
+                        <button type="button" class="sens-btn-quick-log ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
@@ -18449,7 +18466,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                 if (e.target.closest('.sens-btn-quick-log, .btn-quick-add-to-meal')) return;
                 const foodKey = card.getAttribute('data-food-id');
                 const mealSlot = card.getAttribute('data-meal-slot');
-                const item = allDayFoods.find(f => (f.id === foodKey || f.codigo === foodKey || f.name === foodKey));
+                const item = allDayFoods.find(f => (f._rowKey === foodKey || f.id === foodKey || f.codigo === foodKey || f.name === foodKey));
                 if (item) {
                     openUserFoodDetailModal(item, mealSlot);
                 }
@@ -18463,12 +18480,13 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     let totalConsumedCarbs = 0;
     let totalConsumedFats = 0;
 
-    allDayFoods.forEach(item => {
+    allDayFoods.forEach((item, idx) => {
         const resolved = (typeof window.getResolvedFood === 'function')
             ? window.getResolvedFood(item, athId)
             : item;
         const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
-        const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
+        const rowKey = item._rowKey || window.getNutritionFoodRowKey(item.mealSlot || 'almuerzo', item._occIdx !== undefined ? item._occIdx : idx, item, resolved);
+        const grams = userAdjusted[rowKey] ? parseInt(userAdjusted[rowKey], 10) : (userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100));
 
         let macros;
         if (item.isCustom && Number(item.calories) > 0) {
@@ -18485,7 +18503,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                 : { calories: Math.round(grams * 1.5), protein: 20, carbs: 15, fats: 5 };
         }
 
-        const isLogged = item.isCustom ? (userConsumedFoods[foodKey] !== false) : Boolean(userConsumedFoods[foodKey]);
+        const isLogged = window.isNutritionFoodRowLogged(userConsumedFoods, rowKey, foodKey, item.isCustom);
         if (isLogged) {
             totalConsumedKcal += macros.calories;
             totalConsumedProt += macros.protein;
@@ -22266,24 +22284,27 @@ function updateNutriSummaryCardData() {
         let sum = 0;
         const coachFoods = dayMeals[mealKey]?.foods || dayMeals[mealKey] || [];
         if (Array.isArray(coachFoods)) {
-            coachFoods.forEach(f => {
+            coachFoods.forEach((f, fIdx) => {
                 const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : f;
                 const g = f.grams || res?.defaultGrams || 100;
                 const m = (typeof window.calculateFoodMacros === 'function') ? window.calculateFoodMacros(res, g) : { calories: f.calories || 0 };
                 const cVal = m.calories || f.calories || 0;
                 sum += cVal;
                 const foodKey = res?.id || res?.codigo || f.id || f.name;
-                if (userConsumedFoods[foodKey]) {
+                const rowKey = window.getNutritionFoodRowKey(mealKey, fIdx, f, res);
+                if (window.isNutritionFoodRowLogged(userConsumedFoods, rowKey, foodKey, false)) {
                     totalConsumedKcal += cVal;
                 }
             });
         }
         const userFoods = userCustomMeals.filter(cm => cm.mealSlot === mealKey);
-        userFoods.forEach(cm => {
+        userFoods.forEach((cm, uIdx) => {
             const cVal = cm.calories || 0;
             sum += cVal;
             const foodKey = cm.id || cm.name;
-            if (userConsumedFoods[foodKey] !== false) {
+            const globalIdx = userCustomMeals.indexOf(cm);
+            const rowKey = window.getNutritionFoodRowKey(mealKey, `c${globalIdx >= 0 ? globalIdx : uIdx}`, cm, cm);
+            if (window.isNutritionFoodRowLogged(userConsumedFoods, rowKey, foodKey, true)) {
                 totalConsumedKcal += cVal;
             }
         });
@@ -22409,10 +22430,14 @@ function initDashNutriCarousel() {
                 : firstFood;
             const foodName = firstFood.name || firstFood.nombre_alimento_o_plato || resolved?.nombre_alimento_o_plato || resolved?.name || resolved?.name_es || 'Alimento SENS';
             const foodImage = resolved?.image || resolved?.image_url || resolved?.imagen_path || firstFood.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
-            const foodPortion = firstFood.grams ? `${firstFood.grams}g` : (resolved?.portion || '1 porción');
-            const foodProt = firstFood.protein || resolved?.protPer100 || 25;
-            const foodCarbs = firstFood.carbs || resolved?.carbsPer100 || 20;
-            const foodFats = firstFood.fats || resolved?.fatsPer100 || 10;
+            const ffGrams = firstFood.grams || resolved?.defaultGrams || resolved?.porcion_total_g_ml || 100;
+            const foodPortion = ffGrams ? `${ffGrams}g` : (resolved?.portion || '1 porción');
+            const ffMacros = (firstFood.isCustom && Number(firstFood.calories) > 0)
+                ? { protein: Number(firstFood.protein) || 0, carbs: Number(firstFood.carbs) || 0, fats: Number(firstFood.fats) || 0 }
+                : ((typeof window.calculateFoodMacros === 'function') ? window.calculateFoodMacros(resolved, ffGrams) : { protein: 0, carbs: 0, fats: 0 });
+            const foodProt = ffMacros.protein;
+            const foodCarbs = ffMacros.carbs;
+            const foodFats = ffMacros.fats;
             const calEl = document.getElementById(`calMeal${key.charAt(0).toUpperCase() + key.slice(1)}`);
             const mealKcal = calEl ? parseInt(calEl.textContent, 10) || 0 : 0;
 
