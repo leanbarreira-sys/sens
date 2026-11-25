@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '95.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '95.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '96.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '96.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4562,6 +4562,22 @@
                         </button>
                     </div>
 
+                    <!-- Tarjeta 2.5: Guías Personalizadas del Coach (URLs makesens.com.ar/xxxxx) -->
+                    <div class="card-panel" id="profileCoachGuidesCard" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+                            <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0;">Guías del Coach</h3>
+                            <span class="pill pill-champagne" style="font-size: 10px;">Personalizadas</span>
+                        </div>
+                        <p style="font-size: 12.5px; color: #575659; line-height: 1.45; margin: 0 0 14px 0;">
+                            Accesos y guías exclusivas creadas por tu entrenador para tu proceso.
+                        </p>
+                        <div id="profileCoachGuidesList" style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="font-size: 12px; color: #71717A; padding: 12px; text-align: center; background: #FAF9F6; border: 1px dashed rgba(18,18,20,0.14); border-radius: 12px;">
+                                Todavía no tenés guías personalizadas asignadas.
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Tarjeta 3: Seguridad, Contraseña & Sesión -->
                     <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
                         <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0 0 16px 0;">Seguridad
@@ -7633,6 +7649,17 @@
                         <span style="font-size: 11px; font-weight: 700; line-height: 1.15; color: #15803D;">WhatsApp</span>
                     </a>
 
+                    <button type="button" id="sheetActionLandings"
+                        onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.showCoachSheetLandingsView==='function') window.showCoachSheetLandingsView(window.currentActionAthleteId);"
+                        style="position: relative; background: #FDF8F0; border: 1px solid rgba(158,125,75,0.45); border-radius: 14px; min-height: 74px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #705B3E; box-shadow: 0 2px 6px rgba(158,125,75,0.08); cursor: pointer;">
+                        <span id="sheetActionLandingsDot" style="display: none; position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; border-radius: 50%; background: #9E7D4B;"></span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#705B3E" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                        </svg>
+                        <span style="font-size: 11px; font-weight: 800; line-height: 1.15; color: #705B3E;">Guías HTML</span>
+                    </button>
+
                     <button type="button" id="sheetActionInspectPortal"
                         onclick="if(event){event.preventDefault();event.stopPropagation();} const athId=window.currentActionAthleteId; if(typeof window.closeCoachAthleteActionsSheet==='function') window.closeCoachAthleteActionsSheet(); if(athId && typeof inspectAthleteAsCoach==='function') inspectAthleteAsCoach(athId);"
                         style="background: #121214; border: 1px solid #121214; border-radius: 14px; min-height: 74px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #FFFFFF; box-shadow: 0 2px 8px rgba(18,18,20,0.16); cursor: pointer;">
@@ -7687,6 +7714,57 @@
                         </div>
                     </div>
                     <div id="coachNotesEntriesList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                </div>
+            </div>
+
+            <!-- Vista 3: Guías / Landings HTML por Usuario (makesens.com.ar/xxxxx) -->
+            <div id="coachSheetLandingsView" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <button type="button" id="btnBackFromLandingsToGrid"
+                        onclick="if(typeof window.showCoachSheetActionsGrid==='function') window.showCoachSheetActionsGrid();"
+                        style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.14); color: #121214; border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                        ← Volver
+                    </button>
+                    <span style="font-size: 10.5px; font-weight: 700; color: #705B3E; background: rgba(158,125,75,0.12); padding: 4px 10px; border-radius: 999px;">Landing del Usuario</span>
+                </div>
+
+                <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.1); border-radius: 14px; padding: 12px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <label for="coachLandingSlugInput" style="display: block; font-size: 11px; font-weight: 800; color: #121214; margin-bottom: 4px;">Link personalizado</label>
+                        <div style="display: flex; align-items: center; border: 1px solid rgba(18,18,20,0.18); border-radius: 10px; overflow: hidden; background: #FAF9F6;">
+                            <span style="padding: 8px 9px; font-size: 12px; font-weight: 700; color: #705B3E; background: rgba(158,125,75,0.12); border-right: 1px solid rgba(18,18,20,0.1); white-space: nowrap;">makesens.com.ar/</span>
+                            <input type="text" id="coachLandingSlugInput" placeholder="ej: guia-franco"
+                                style="flex: 1; min-width: 0; border: none; outline: none; background: #FFFFFF; color: #121214; padding: 8px 10px; font-size: 12.5px; font-weight: 700;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="coachLandingTitleInput" style="display: block; font-size: 11px; font-weight: 800; color: #121214; margin-bottom: 4px;">Título visible en el perfil del alumno</label>
+                        <input type="text" id="coachLandingTitleInput" placeholder="Ej: Guía de Suplementación y Post-Entreno"
+                            style="width: 100%; border: 1px solid rgba(18,18,20,0.16); border-radius: 10px; padding: 8px 10px; font-size: 12.5px; color: #121214; background: #FFFFFF; outline: none; box-sizing: border-box;">
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap;">
+                            <label for="coachLandingHtmlTextarea" style="font-size: 11px; font-weight: 800; color: #121214;">Archivo o código HTML</label>
+                            <label for="coachLandingFileInput" style="font-size: 10.5px; font-weight: 800; color: #705B3E; background: #FDF8F0; border: 1px solid rgba(158,125,75,0.4); border-radius: 8px; padding: 4px 10px; cursor: pointer;">
+                                Subir .html
+                            </label>
+                            <input type="file" id="coachLandingFileInput" accept=".html,.htm,text/html" style="display: none;">
+                        </div>
+                        <textarea id="coachLandingHtmlTextarea" rows="5" placeholder="Subí un archivo .html o pegá el código HTML completo de la landing..."
+                            style="width: 100%; resize: vertical; font-family: monospace; font-size: 11.5px; line-height: 1.4; background: #FAF9F6; color: #121214; border: 1px solid rgba(18,18,20,0.16); border-radius: 10px; padding: 8px 10px; outline: none; box-sizing: border-box;"></textarea>
+                    </div>
+
+                    <button type="button" id="btnCoachSaveLanding"
+                        style="width: 100%; padding: 10px 14px; border-radius: 10px; background: #121214; color: #FFFFFF; font-size: 12px; font-weight: 800; border: none; cursor: pointer;">
+                        Guardar y Crear Link
+                    </button>
+                </div>
+
+                <div>
+                    <span style="display: block; font-size: 11.5px; font-weight: 800; color: #121214; margin-bottom: 8px;">Links guardados para este alumno</span>
+                    <div id="coachAthleteLandingsList" style="display: flex; flex-direction: column; gap: 8px;"></div>
                 </div>
             </div>
         </div>
@@ -8901,7 +8979,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=90.0"></script>
+    <script defer src="app.js?v=91.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

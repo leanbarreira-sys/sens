@@ -4726,6 +4726,7 @@ function switchPortalView(viewId) {
     }
     if (viewId === 'profileSettingsView') {
         renderProfileSettingsData();
+        if (typeof window.renderProfileCoachGuides === 'function') window.renderProfileCoachGuides();
     }
     if (viewId === 'coachHubView') {
         if (typeof syncCoachMasterCard === 'function') syncCoachMasterCard(AppState.activeAthleteId);
@@ -12606,6 +12607,10 @@ window.openCoachAthleteActionsSheet = function(athId) {
     if (notesDot) {
         notesDot.style.display = (typeof window.hasCoachPrivateNotes === 'function' && window.hasCoachPrivateNotes(athId)) ? 'block' : 'none';
     }
+    const landingsDot = document.getElementById('sheetActionLandingsDot');
+    if (landingsDot) {
+        landingsDot.style.display = (typeof window.hasCoachAthleteLandings === 'function' && window.hasCoachAthleteLandings(athId)) ? 'block' : 'none';
+    }
     if (typeof window.showCoachSheetActionsGrid === 'function') {
         window.showCoachSheetActionsGrid();
     }
@@ -13113,8 +13118,10 @@ window.hasCoachPrivateNotes = function(athId) {
 window.showCoachSheetActionsGrid = function() {
     const gridView = document.getElementById('coachSheetActionsGridView');
     const notesView = document.getElementById('coachSheetNotesView');
+    const landingsView = document.getElementById('coachSheetLandingsView');
     if (gridView) gridView.style.display = 'block';
     if (notesView) notesView.style.display = 'none';
+    if (landingsView) landingsView.style.display = 'none';
 };
 
 window.showCoachSheetNotesView = function(athId) {
@@ -13124,8 +13131,10 @@ window.showCoachSheetNotesView = function(athId) {
     window._coachNotesSelectedAthleteId = targetId;
     const gridView = document.getElementById('coachSheetActionsGridView');
     const notesView = document.getElementById('coachSheetNotesView');
+    const landingsView = document.getElementById('coachSheetLandingsView');
     if (gridView) gridView.style.display = 'none';
     if (notesView) notesView.style.display = 'block';
+    if (landingsView) landingsView.style.display = 'none';
     initCoachPrivateNotesHub();
     renderCoachPrivateNotesHub(targetId);
 };
@@ -13346,6 +13355,432 @@ function initCoachPrivateNotesHub() {
 
 window.renderCoachPrivateNotesHub = renderCoachPrivateNotesHub;
 window.initCoachPrivateNotesHub = initCoachPrivateNotesHub;
+
+/* =============================================================================
+   GUÍAS / LANDINGS HTML PERSONALIZADAS POR USUARIO (makesens.com.ar/xxxxx)
+   ============================================================================= */
+const SENS_COACH_LANDINGS_KEY = 'sens_coach_landings_v1';
+
+function normalizeLandingSlug(raw) {
+    return String(raw || '')
+        .trim()
+        .toLowerCase()
+        .replace(/^https?:\/\/[^/]+/i, '')
+        .replace(/^\//, '')
+        .replace(/[^a-z0-9-_]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+}
+
+function getCoachLandingsMap() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(SENS_COACH_LANDINGS_KEY) || '{}');
+        return (parsed && typeof parsed === 'object') ? parsed : {};
+    } catch (_) {
+        return {};
+    }
+}
+
+function saveCoachLandingsMap(map) {
+    try {
+        localStorage.setItem(SENS_COACH_LANDINGS_KEY, JSON.stringify(map || {}));
+    } catch (_) {}
+}
+
+window.hasCoachAthleteLandings = function(athId) {
+    if (!athId) return false;
+    const map = getCoachLandingsMap();
+    if (Object.values(map).some(item => item && item.athleteId === athId)) return true;
+    const roster = (typeof getConsolidatedCoachAthletes === 'function') ? getConsolidatedCoachAthletes() : [];
+    const ath = roster.find(a => a.id === athId);
+    const guides = ath?.anamnesis_data?.coach_guides;
+    return Array.isArray(guides) && guides.length > 0;
+};
+
+async function syncAthleteCoachGuidesToProfile(athId, mapOverride) {
+    if (!athId) return;
+    const map = mapOverride || getCoachLandingsMap();
+    const guides = Object.values(map)
+        .filter(item => item && item.athleteId === athId)
+        .sort((a, b) => (Date.parse(b.updatedAt || 0) || 0) - (Date.parse(a.updatedAt || 0) || 0))
+        .map(item => ({
+            slug: item.slug,
+            title: item.title || item.slug,
+            url: `https://makesens.com.ar/${item.slug}`,
+            html: item.html,
+            updatedAt: item.updatedAt
+        }));
+
+    if (typeof supabaseClient !== 'undefined' && supabaseClient && athId !== 'mock_vip') {
+        try {
+            const { data: profRow } = await supabaseClient
+                .from('profiles')
+                .select('anamnesis_data')
+                .eq('id', athId)
+                .maybeSingle();
+            const currentAnam = (profRow && profRow.anamnesis_data && typeof profRow.anamnesis_data === 'object')
+                ? profRow.anamnesis_data
+                : {};
+            const nextAnam = { ...currentAnam, coach_guides: guides };
+            await supabaseClient.from('profiles').update({ anamnesis_data: nextAnam }).eq('id', athId);
+        } catch (err) {
+            console.warn('[SENS Landings] syncAthleteCoachGuidesToProfile error:', err);
+        }
+    }
+
+    if (AppState?.profile?.id === athId) {
+        if (!AppState.profile.anamnesis_data || typeof AppState.profile.anamnesis_data !== 'object') {
+            AppState.profile.anamnesis_data = {};
+        }
+        AppState.profile.anamnesis_data.coach_guides = guides;
+        if (typeof window.renderProfileCoachGuides === 'function') window.renderProfileCoachGuides();
+    }
+}
+
+window.showCoachSheetLandingsView = function(athId) {
+    const targetId = athId || window.currentActionAthleteId;
+    if (!targetId) return;
+    window.currentActionAthleteId = targetId;
+    window._coachLandingsSelectedAthleteId = targetId;
+    const gridView = document.getElementById('coachSheetActionsGridView');
+    const notesView = document.getElementById('coachSheetNotesView');
+    const landingsView = document.getElementById('coachSheetLandingsView');
+    if (gridView) gridView.style.display = 'none';
+    if (notesView) notesView.style.display = 'none';
+    if (landingsView) landingsView.style.display = 'block';
+    initCoachSheetLandings();
+    renderCoachAthleteLandingsList(targetId);
+};
+
+function renderCoachAthleteLandingsList(athIdOverride) {
+    const listEl = document.getElementById('coachAthleteLandingsList');
+    if (!listEl) return;
+    const athId = athIdOverride || window._coachLandingsSelectedAthleteId || window.currentActionAthleteId;
+    if (!athId) return;
+
+    const map = getCoachLandingsMap();
+    const items = Object.values(map)
+        .filter(item => item && item.athleteId === athId)
+        .sort((a, b) => (Date.parse(b.updatedAt || 0) || 0) - (Date.parse(a.updatedAt || 0) || 0));
+
+    const dot = document.getElementById('sheetActionLandingsDot');
+    if (dot) dot.style.display = items.length > 0 ? 'block' : 'none';
+
+    if (items.length === 0) {
+        listEl.innerHTML = '<div style="font-size: 11.5px; color: #71717A; padding: 12px; text-align: center; background: #FFFFFF; border: 1px dashed rgba(18,18,20,0.16); border-radius: 10px;">Sin guías HTML creadas para este alumno.</div>';
+        return;
+    }
+
+    listEl.innerHTML = items.map(item => {
+        const safeSlug = escapeHTML(item.slug);
+        const safeTitle = escapeHTML(item.title || item.slug);
+        const fullUrl = `https://makesens.com.ar/${item.slug}`;
+        return `
+            <div style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.1); border-radius: 10px; padding: 10px 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                    <div style="min-width: 0;">
+                        <strong style="font-size: 12.5px; color: #121214; display: block;">${safeTitle}</strong>
+                        <a href="/${safeSlug}" onclick="event.preventDefault(); if(typeof window.openSensCustomLanding==='function') window.openSensCustomLanding('${safeSlug}');" style="font-size: 11px; font-weight: 700; color: #705B3E; word-break: break-all;">makesens.com.ar/${safeSlug}</a>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button type="button" class="btn-landing-open" data-slug="${safeSlug}" style="font-size: 10.5px; font-weight: 700; color: #FFFFFF; background: #121214; border: none; border-radius: 6px; padding: 4px 9px; cursor: pointer;">Abrir</button>
+                    <button type="button" class="btn-landing-copy" data-url="${escapeHTML(fullUrl)}" style="font-size: 10.5px; font-weight: 700; color: #121214; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.14); border-radius: 6px; padding: 4px 9px; cursor: pointer;">Copiar link</button>
+                    <button type="button" class="btn-landing-edit" data-slug="${safeSlug}" style="font-size: 10.5px; font-weight: 700; color: #705B3E; background: #FDF8F0; border: 1px solid rgba(158,125,75,0.35); border-radius: 6px; padding: 4px 9px; cursor: pointer;">Editar</button>
+                    <button type="button" class="btn-landing-del" data-slug="${safeSlug}" style="font-size: 10.5px; font-weight: 700; color: #DC2626; background: #FEF2F2; border: 1px solid rgba(220,38,38,0.22); border-radius: 6px; padding: 4px 9px; cursor: pointer;">Borrar</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    listEl.querySelectorAll('.btn-landing-open').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const slug = btn.getAttribute('data-slug');
+            if (slug && typeof window.openSensCustomLanding === 'function') window.openSensCustomLanding(slug);
+        });
+    });
+
+    listEl.querySelectorAll('.btn-landing-copy').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const url = btn.getAttribute('data-url');
+            if (url && navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    if (typeof showSensToast === 'function') showSensToast('Link copiado: ' + url, 'champagne');
+                }).catch(() => {});
+            }
+        });
+    });
+
+    listEl.querySelectorAll('.btn-landing-edit').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const slug = btn.getAttribute('data-slug');
+            const cur = getCoachLandingsMap()[slug];
+            if (!cur) return;
+            const slugInp = document.getElementById('coachLandingSlugInput');
+            const titleInp = document.getElementById('coachLandingTitleInput');
+            const htmlTa = document.getElementById('coachLandingHtmlTextarea');
+            if (slugInp) slugInp.value = cur.slug || '';
+            if (titleInp) titleInp.value = cur.title || '';
+            if (htmlTa) htmlTa.value = cur.html || '';
+        });
+    });
+
+    listEl.querySelectorAll('.btn-landing-del').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const slug = btn.getAttribute('data-slug');
+            if (!slug) return;
+            const curMap = getCoachLandingsMap();
+            delete curMap[slug];
+            saveCoachLandingsMap(curMap);
+            renderCoachAthleteLandingsList(athId);
+            if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+                try { await supabaseClient.from('coach_landings').delete().eq('slug', slug); } catch (_) {}
+            }
+            await syncAthleteCoachGuidesToProfile(athId, curMap);
+            if (typeof showSensToast === 'function') showSensToast('Guía eliminada.', 'champagne');
+        });
+    });
+}
+
+function initCoachSheetLandings() {
+    if (window._coachSheetLandingsInitialized) return;
+    window._coachSheetLandingsInitialized = true;
+
+    const fileInput = document.getElementById('coachLandingFileInput');
+    const slugInput = document.getElementById('coachLandingSlugInput');
+    const titleInput = document.getElementById('coachLandingTitleInput');
+    const htmlTextarea = document.getElementById('coachLandingHtmlTextarea');
+    const btnSave = document.getElementById('btnCoachSaveLanding');
+
+    if (fileInput && htmlTextarea) {
+        fileInput.addEventListener('change', (ev) => {
+            const file = ev.target?.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                htmlTextarea.value = String(reader.result || '');
+                if (slugInput && !slugInput.value.trim()) {
+                    slugInput.value = normalizeLandingSlug(file.name.replace(/\.html?$/i, ''));
+                }
+                if (titleInput && !titleInput.value.trim()) {
+                    titleInput.value = file.name.replace(/\.html?$/i, '').replace(/[-_]+/g, ' ');
+                }
+            };
+            reader.readAsText(file);
+        });
+    }
+
+    if (btnSave) {
+        btnSave.addEventListener('click', async () => {
+            const athId = window._coachLandingsSelectedAthleteId || window.currentActionAthleteId;
+            if (!athId) return;
+            const slug = normalizeLandingSlug(slugInput?.value || '');
+            const html = (htmlTextarea?.value || '').trim();
+            const title = (titleInput?.value || '').trim() || slug;
+
+            if (!slug) {
+                if (typeof showSensToast === 'function') showSensToast('Ingresá un nombre de link válido (ej: guia-nico).', 'champagne');
+                return;
+            }
+            if (!html) {
+                if (typeof showSensToast === 'function') showSensToast('Subí un archivo .html o pegá el código HTML.', 'champagne');
+                return;
+            }
+
+            if (slugInput) slugInput.value = slug;
+            const nowIso = new Date().toISOString();
+            const map = getCoachLandingsMap();
+            map[slug] = { slug, athleteId: athId, title, html, updatedAt: nowIso };
+            saveCoachLandingsMap(map);
+            renderCoachAthleteLandingsList(athId);
+
+            if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+                try {
+                    await supabaseClient.from('coach_landings').upsert({
+                        slug,
+                        athlete_id: athId === 'mock_vip' ? null : athId,
+                        title,
+                        html_content: html,
+                        updated_at: nowIso
+                    }, { onConflict: 'slug' });
+                } catch (err) {
+                    console.warn('[SENS Landings] Supabase upsert skipped/error:', err);
+                }
+            }
+
+            await syncAthleteCoachGuidesToProfile(athId, map);
+            if (typeof showSensToast === 'function') {
+                showSensToast(`Link creado: makesens.com.ar/${slug}`, 'champagne');
+            }
+        });
+    }
+}
+
+window.openSensCustomLanding = async function(slug, htmlOverride = null, isDirectRoute = false) {
+    const cleanSlug = normalizeLandingSlug(slug);
+    let html = htmlOverride;
+    let title = cleanSlug;
+
+    if (!html && cleanSlug) {
+        const localRec = getCoachLandingsMap()[cleanSlug];
+        if (localRec && localRec.html) {
+            html = localRec.html;
+            title = localRec.title || cleanSlug;
+        }
+    }
+
+    if (!html && cleanSlug && AppState?.profile?.anamnesis_data?.coach_guides) {
+        const g = AppState.profile.anamnesis_data.coach_guides.find(x => x && normalizeLandingSlug(x.slug) === cleanSlug);
+        if (g && g.html) {
+            html = g.html;
+            title = g.title || cleanSlug;
+        }
+    }
+
+    if (!html && cleanSlug && typeof supabaseClient !== 'undefined' && supabaseClient) {
+        try {
+            const { data } = await supabaseClient
+                .from('coach_landings')
+                .select('title, html_content')
+                .eq('slug', cleanSlug)
+                .maybeSingle();
+            if (data && data.html_content) {
+                html = data.html_content;
+                title = data.title || cleanSlug;
+            }
+        } catch (_) {}
+    }
+
+    if (!html) {
+        if (isDirectRoute) return false;
+        if (typeof showSensToast === 'function') showSensToast('No se encontró el HTML de esta guía.', 'champagne');
+        return false;
+    }
+
+    let overlay = document.getElementById('sensCustomLandingOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'sensCustomLandingOverlay';
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:200000;background:#FFFFFF;display:flex;flex-direction:column;';
+        overlay.innerHTML = `
+            <button type="button" id="btnCloseSensCustomLanding"
+                style="position:fixed;top:14px;left:14px;z-index:200001;background:rgba(18,18,20,0.88);color:#FFFFFF;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+                ← Volver a SENS
+            </button>
+            <iframe id="sensCustomLandingFrame" style="width:100%;height:100%;border:0;flex:1;background:#FFFFFF;"></iframe>
+        `;
+        document.body.appendChild(overlay);
+        const closeBtn = document.getElementById('btnCloseSensCustomLanding');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                overlay.style.display = 'none';
+                const frame = document.getElementById('sensCustomLandingFrame');
+                if (frame) frame.srcdoc = '';
+            });
+        }
+    }
+
+    const backBtn = document.getElementById('btnCloseSensCustomLanding');
+    if (backBtn) backBtn.style.display = isDirectRoute ? 'none' : 'inline-flex';
+    const frame = document.getElementById('sensCustomLandingFrame');
+    if (frame) frame.srcdoc = html;
+    if (title) document.title = `${title} · SENS`;
+    overlay.style.display = 'flex';
+    return true;
+};
+
+window.renderProfileCoachGuides = function() {
+    const listEl = document.getElementById('profileCoachGuidesList');
+    if (!listEl) return;
+
+    const athIds = new Set([
+        (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : null,
+        AppState?.profile?.id,
+        AppState?.user?.id,
+        AppState?.activeAthleteId
+    ].filter(Boolean));
+    const profileGuides = Array.isArray(AppState?.profile?.anamnesis_data?.coach_guides)
+        ? AppState.profile.anamnesis_data.coach_guides
+        : [];
+    const localMap = getCoachLandingsMap();
+    const localGuides = Object.values(localMap)
+        .filter(item => item && athIds.has(item.athleteId))
+        .map(item => ({
+            slug: item.slug,
+            title: item.title || item.slug,
+            url: `https://makesens.com.ar/${item.slug}`,
+            html: item.html,
+            updatedAt: item.updatedAt
+        }));
+
+    const mergedBySlug = new Map();
+    [...profileGuides, ...localGuides].forEach(g => {
+        if (!g || !g.slug) return;
+        const k = normalizeLandingSlug(g.slug);
+        const prev = mergedBySlug.get(k);
+        if (!prev || (Date.parse(g.updatedAt || 0) || 0) >= (Date.parse(prev.updatedAt || 0) || 0)) {
+            mergedBySlug.set(k, { ...g, slug: k, url: `https://makesens.com.ar/${k}` });
+        }
+    });
+
+    const guides = Array.from(mergedBySlug.values());
+    if (guides.length === 0) {
+        listEl.innerHTML = '<div style="font-size: 12px; color: #71717A; padding: 12px; text-align: center; background: #FAF9F6; border: 1px dashed rgba(18,18,20,0.14); border-radius: 12px;">Todavía no tenés guías personalizadas asignadas.</div>';
+        return;
+    }
+
+    listEl.innerHTML = guides.map(g => {
+        const safeSlug = escapeHTML(g.slug);
+        const safeTitle = escapeHTML(g.title || g.slug);
+        const safeUrl = escapeHTML(g.url);
+        return `
+            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); border-radius: 14px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div style="min-width: 0; flex: 1;">
+                    <strong style="font-size: 13px; color: #121214; display: block;">${safeTitle}</strong>
+                    <a href="/${safeSlug}" onclick="event.preventDefault(); if(typeof window.openSensCustomLanding==='function') window.openSensCustomLanding('${safeSlug}');" style="font-size: 11.5px; font-weight: 700; color: #705B3E; word-break: break-all;">makesens.com.ar/${safeSlug}</a>
+                </div>
+                <div style="display: flex; gap: 6px; flex-shrink: 0;">
+                    <button type="button" class="btn-profile-guide-open" data-slug="${safeSlug}" style="background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer;">Abrir</button>
+                    <button type="button" class="btn-profile-guide-copy" data-url="${safeUrl}" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.14); border-radius: 999px; padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer;">Copiar</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    listEl.querySelectorAll('.btn-profile-guide-open').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const slug = btn.getAttribute('data-slug');
+            if (slug && typeof window.openSensCustomLanding === 'function') window.openSensCustomLanding(slug);
+        });
+    });
+
+    listEl.querySelectorAll('.btn-profile-guide-copy').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const url = btn.getAttribute('data-url');
+            if (url && navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    if (typeof showSensToast === 'function') showSensToast('Link copiado.', 'champagne');
+                }).catch(() => {});
+            }
+        });
+    });
+};
+
+async function checkAndRenderCustomLandingRoute() {
+    const params = new URLSearchParams(window.location.search || '');
+    const querySlug = params.get('guia') || params.get('landing');
+    const pathClean = (window.location.pathname || '/').replace(/^\/+|\/+$/g, '');
+    const reserved = new Set(['', 'index.html', 'portal', 'app', 'login', 'register']);
+    const slug = querySlug || (!reserved.has(pathClean.toLowerCase()) ? pathClean : '');
+    if (!slug) return;
+    await window.openSensCustomLanding(slug, null, true);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { checkAndRenderCustomLandingRoute(); });
+} else {
+    checkAndRenderCustomLandingRoute();
+}
 
 function renderCoachPaymentsHub() {
     const container = document.getElementById('coachPaymentsListContainer');
