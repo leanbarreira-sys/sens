@@ -1774,6 +1774,31 @@ const CoachNutritionMaster = {
             btnSave.style.opacity = '0.7';
         }
 
+        // Enriquecer cada alimento con sus macros reales para que el alumno siempre tenga calorías/macros offline y cross-device
+        const enrichDayMeals = (dayObj) => {
+            if (!dayObj || !dayObj.meals) return;
+            Object.values(dayObj.meals).forEach(m => {
+                if (Array.isArray(m.foods)) {
+                    m.foods.forEach(f => {
+                        const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : null;
+                        if (res) {
+                            if (res.calorias_kcal !== undefined) f.calorias_kcal = res.calorias_kcal;
+                            if (res.proteinas_g !== undefined) f.proteinas_g = res.proteinas_g;
+                            if (res.carbohidratos_g !== undefined) f.carbohidratos_g = res.carbohidratos_g;
+                            if (res.grasas_g !== undefined) f.grasas_g = res.grasas_g;
+                            if (res.porcion_total_g_ml !== undefined) f.porcion_total_g_ml = res.porcion_total_g_ml;
+                            if (res.calPer100 !== undefined) f.calPer100 = res.calPer100;
+                            if (res.protPer100 !== undefined) f.protPer100 = res.protPer100;
+                            if (res.carbsPer100 !== undefined) f.carbsPer100 = res.carbsPer100;
+                            if (res.fatsPer100 !== undefined) f.fatsPer100 = res.fatsPer100;
+                        }
+                    });
+                }
+            });
+        };
+        if (this.dayPlanCache.days) Object.values(this.dayPlanCache.days).forEach(enrichDayMeals);
+        if (this.dayPlanCache.calendar_schedule) Object.values(this.dayPlanCache.calendar_schedule).forEach(enrichDayMeals);
+
         // Aplanar alimentos para compatibilidad con código anterior
         const allFoods = [];
         Object.keys(this.dayPlanCache.days).forEach(dKey => {

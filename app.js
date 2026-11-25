@@ -607,12 +607,7 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
         : `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
 
     // 1. Si existe registro persistido para la fecha exacta
-    const rawCals = localStorage.getItem(`sens_cals_${dateIso}`);
-    if (rawCals !== null && !isNaN(parseInt(rawCals, 10))) {
-        return Math.max(0, parseInt(rawCals, 10));
-    }
-
-    // 2. Cálculo dinámico a partir de comidas registradas / alimentos consumidos de esa fecha
+    // 1. Cálculo dinámico a partir de comidas registradas / alimentos consumidos de esa fecha
     const consumedFoodsKey = `sens_user_consumed_foods_${id}_${dateIso}`;
     const customMealsKey = `sens_user_logged_meals_${id}_${dateIso}`;
     const adjustedMealsKey = `sens_user_adjusted_meals_${id}_${dateIso}`;
@@ -643,7 +638,16 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
                 const fid = cm.id || cm.codigo || cm.name;
                 const isConsumed = consumedMap ? (consumedMap[fid] !== false) : true;
                 if (isConsumed) {
-                    totalConsumed += (parseInt(cm.calories, 10) || 0);
+                    const adjGrams = userAdjusted[fid] ? parseInt(userAdjusted[fid], 10) : (cm.grams || 100);
+                    let cmCal = Number(cm.calories) || 0;
+                    if (cmCal > 0 && cm.grams && adjGrams !== cm.grams) {
+                        cmCal = Math.round(cmCal * (adjGrams / cm.grams));
+                    } else if (cmCal <= 0) {
+                        const resCm = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(cm, id) : cm;
+                        const macCm = (typeof window.calculateFoodMacros === 'function') ? window.calculateFoodMacros(resCm, adjGrams) : { calories: 0 };
+                        cmCal = macCm.calories || 0;
+                    }
+                    totalConsumed += cmCal;
                 }
             });
         }
@@ -681,7 +685,7 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
                     if (consumedMap[fid]) {
                         const grams = userAdjusted[fid] ? parseInt(userAdjusted[fid], 10) : (f.grams || 100);
                         const resolved = (typeof window.getResolvedFood === 'function')
-                            ? window.getResolvedFood(fid, id)
+                            ? window.getResolvedFood(f, id)
                             : f;
                         const macros = (typeof window.calculateFoodMacros === 'function')
                             ? window.calculateFoodMacros(resolved, grams)
@@ -696,6 +700,12 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
             try { localStorage.setItem(`sens_cals_${dateIso}`, totalConsumed); } catch (e) {}
             return totalConsumed;
         }
+    }
+
+    // 2. Fallback directo si hay calorías cacheadas en localStorage
+    const rawCals = localStorage.getItem(`sens_cals_${dateIso}`);
+    if (rawCals !== null && !isNaN(parseInt(rawCals, 10)) && parseInt(rawCals, 10) > 0) {
+        return parseInt(rawCals, 10);
     }
 
     // 3. Fallback para hoy si ya existe en AppState.dailyNutrition
@@ -1060,7 +1070,7 @@ window.ensurePortalBundlesLoaded = function() {
 
     // Cargar nutrition_db.js ANTES que coach_nutrition_master.js para respetar dependencias
     const nutriChain = (needNutritionDb ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve())
-        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=17.0') : Promise.resolve()));
+        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=18.0') : Promise.resolve()));
 
     window._sensPortalBundlesPromise = Promise.all([
         typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
@@ -18186,6 +18196,15 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                                 f.codigo = res.codigo;
                                 f.name = res.nombre_alimento_o_plato || res.name;
                                 f.image = res.imagen_url || res.image;
+                                if (res.calorias_kcal !== undefined) f.calorias_kcal = res.calorias_kcal;
+                                if (res.proteinas_g !== undefined) f.proteinas_g = res.proteinas_g;
+                                if (res.carbohidratos_g !== undefined) f.carbohidratos_g = res.carbohidratos_g;
+                                if (res.grasas_g !== undefined) f.grasas_g = res.grasas_g;
+                                if (res.porcion_total_g_ml !== undefined) f.porcion_total_g_ml = res.porcion_total_g_ml;
+                                if (res.calPer100 !== undefined) f.calPer100 = res.calPer100;
+                                if (res.protPer100 !== undefined) f.protPer100 = res.protPer100;
+                                if (res.carbsPer100 !== undefined) f.carbsPer100 = res.carbsPer100;
+                                if (res.fatsPer100 !== undefined) f.fatsPer100 = res.fatsPer100;
                             }
                         });
                     }
@@ -18297,12 +18316,13 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
 
             let macros;
-            if (item.isCustom && item.calories !== undefined) {
+            if (item.isCustom && Number(item.calories) > 0) {
+                const factor = (item.grams && grams !== item.grams) ? (grams / item.grams) : 1;
                 macros = {
-                    calories: item.calories,
-                    protein: item.protein || 0,
-                    carbs: item.carbs || 0,
-                    fats: item.fats || 0
+                    calories: Math.round(Number(item.calories) * factor),
+                    protein: Math.round((Number(item.protein) || 0) * factor * 10) / 10,
+                    carbs: Math.round((Number(item.carbs) || 0) * factor * 10) / 10,
+                    fats: Math.round((Number(item.fats) || 0) * factor * 10) / 10
                 };
             } else {
                 macros = (typeof window.calculateFoodMacros === 'function')
@@ -18431,12 +18451,13 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         const grams = userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100);
 
         let macros;
-        if (item.isCustom && item.calories !== undefined) {
+        if (item.isCustom && Number(item.calories) > 0) {
+            const factor = (item.grams && grams !== item.grams) ? (grams / item.grams) : 1;
             macros = {
-                calories: item.calories,
-                protein: item.protein || 0,
-                carbs: item.carbs || 0,
-                fats: item.fats || 0
+                calories: Math.round(Number(item.calories) * factor),
+                protein: Math.round((Number(item.protein) || 0) * factor * 10) / 10,
+                carbs: Math.round((Number(item.carbs) || 0) * factor * 10) / 10,
+                fats: Math.round((Number(item.fats) || 0) * factor * 10) / 10
             };
         } else {
             macros = (typeof window.calculateFoodMacros === 'function')
