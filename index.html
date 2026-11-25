@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '101.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '101.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '102.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '102.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -6171,10 +6171,10 @@
                             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
                                 <input type="text" id="coachMasterFoodSearchInput" class="input-control"
                                     placeholder="Buscar alimento, comida, macronutriente o beneficio..."
-                                    style="flex: 1; min-width: 220px; margin-bottom: 0;">
-                                <button type="button" class="btn btn-outline btn-sm" id="btnCoachCreateNewFood"
-                                    style="font-weight: 800; border-color: #9E7D4B; color: #9E7D4B;">
-                                    + Nuevo Alimento / Plato
+                                    style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                                <button type="button" class="btn btn-dark btn-sm" id="btnCoachCreateNewFood"
+                                    style="font-weight: 800; background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 8px 16px; white-space: nowrap;">
+                                    + Nuevo Alimento
                                 </button>
                             </div>
 
