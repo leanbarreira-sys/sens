@@ -1060,7 +1060,7 @@ window.ensurePortalBundlesLoaded = function() {
 
     // Cargar nutrition_db.js ANTES que coach_nutrition_master.js para respetar dependencias
     const nutriChain = (needNutritionDb ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve())
-        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=16.0') : Promise.resolve()));
+        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=17.0') : Promise.resolve()));
 
     window._sensPortalBundlesPromise = Promise.all([
         typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
@@ -1147,11 +1147,11 @@ window.getResolvedFood = function(foodOrId, athleteId) {
         .replace(/\s+/g, ' ')
         .trim();
 
-    // 1. Match por código exacto (NUT-001 ... NUT-500) — Máxima prioridad inmutable
-    if (searchCode) {
+    // 1. Match por código exacto (NUT-001 ... NUT-500) — Máxima prioridad inmutable (ignorar 'CUSTOM' genérico)
+    if (searchCode && searchCode !== 'CUSTOM') {
         baseFood = catalog.find(f => f.codigo && f.codigo.toUpperCase() === searchCode);
     }
-    // 2. Match por ID exacto (UUID)
+    // 2. Match por ID exacto (UUID o fd-custom-...)
     if (!baseFood && searchId) {
         baseFood = catalog.find(f => f.id === searchId || (f.codigo && f.codigo.toUpperCase() === searchId.toUpperCase()));
     }
@@ -1177,7 +1177,15 @@ window.getResolvedFood = function(foodOrId, athleteId) {
         }
     }
 
-    // 4. Si aún no se encuentra y se pasó un objeto, usar el objeto
+    // 4. Si aún no se encuentra en catálogo, buscar directo en overrides globales (alimentos nuevos custom)
+    if (!baseFood && searchId) {
+        try {
+            const gOv = JSON.parse(localStorage.getItem('sens_global_food_overrides_v1') || '{}');
+            if (gOv[searchId]) baseFood = gOv[searchId];
+        } catch (_) {}
+    }
+
+    // 5. Si aún no se encuentra y se pasó un objeto, usar el objeto
     if (!baseFood && typeof foodOrId === 'object') {
         baseFood = foodOrId;
     }
@@ -1225,7 +1233,8 @@ window.getResolvedFood = function(foodOrId, athleteId) {
 window.calculateFoodMacros = function(food, grams = null) {
     if (!food) return { calories: 0, protein: 0, carbs: 0, fats: 0, grams: 0, fiber: 0 };
     const porcionBase = Number(food.porcion_total_g_ml || food.defaultGrams || 100) || 100;
-    const targetGrams = (typeof grams === 'number' && grams > 0) ? grams : porcionBase;
+    const numGrams = Number(grams);
+    const targetGrams = (Number.isFinite(numGrams) && numGrams > 0) ? numGrams : porcionBase;
     
     let cal, prot, carb, fat, fib;
     if (food.calPer100 !== undefined && !isNaN(food.calPer100) && food.calPer100 > 0) {
@@ -1277,27 +1286,39 @@ window.hydrateFoodCatalogInMemory = function() {
             }
         }
 
-        // 2. Aplicar overrides a alimentos existentes
-        const existingIds = new Set();
+        // 2. Aplicar overrides a alimentos existentes (FOOD_CATALOG y SENS_FOOD_LIBRARY por separado)
+        const existingFoodCatalogIds = new Set();
         FOOD_CATALOG.forEach(f => {
             if (!f || !f.id) return;
-            existingIds.add(f.id);
+            existingFoodCatalogIds.add(f.id);
             if (globalOverrides[f.id]) {
                 Object.assign(f, globalOverrides[f.id], { _hasGlobalOverride: true });
             }
         });
 
-        // 3. Re-inyectar alimentos nuevos creados por el Coach (fd-custom-...)
-        Object.keys(globalOverrides).forEach(id => {
-            if (deletedIds.has(id) || existingIds.has(id)) return;
-            const item = globalOverrides[id];
-            if (!item || !item.name) return;
-            const hydrated = { ...item, id, _hasGlobalOverride: true, _isCustom: true };
-            FOOD_CATALOG.unshift(hydrated);
-            if (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY !== FOOD_CATALOG) {
-                if (!SENS_FOOD_LIBRARY.some(x => x && x.id === id)) {
-                    SENS_FOOD_LIBRARY.unshift(hydrated);
+        const hasSensLib = typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY !== FOOD_CATALOG;
+        const existingSensLibIds = new Set();
+        if (hasSensLib) {
+            SENS_FOOD_LIBRARY.forEach(f => {
+                if (!f || !f.id) return;
+                existingSensLibIds.add(f.id);
+                if (globalOverrides[f.id]) {
+                    Object.assign(f, globalOverrides[f.id], { _hasGlobalOverride: true });
                 }
+            });
+        }
+
+        // 3. Re-inyectar alimentos nuevos creados por el Coach (fd-custom-...) en ambas bases
+        Object.keys(globalOverrides).forEach(id => {
+            if (deletedIds.has(id)) return;
+            const item = globalOverrides[id];
+            if (!item || !(item.name || item.nombre_alimento_o_plato)) return;
+            const hydrated = { ...item, id, _hasGlobalOverride: true, _isCustom: true };
+            if (!existingFoodCatalogIds.has(id)) {
+                FOOD_CATALOG.unshift(hydrated);
+            }
+            if (hasSensLib && !existingSensLibIds.has(id)) {
+                SENS_FOOD_LIBRARY.unshift(hydrated);
             }
         });
     } catch (e) {}
@@ -35862,7 +35883,7 @@ if (typeof window.initUserTrackingModule !== 'function') {
 
                 const payload = {
                     id: foodId,
-                    codigo: existing?.codigo || 'CUSTOM',
+                    codigo: existing?.codigo || ('CUSTOM-' + String(foodId).replace(/[^a-zA-Z0-9]/g, '').slice(-6).toUpperCase()),
                     name,
                     nombre_alimento_o_plato: name,
                     tipo_item: activeType,

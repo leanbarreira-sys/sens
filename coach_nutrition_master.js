@@ -1587,7 +1587,16 @@ const CoachNutritionMaster = {
             codigo: food.codigo,
             name: food.nombre_alimento_o_plato || food.name,
             image: food.imagen_url || food.image,
-            grams: food.defaultGrams || food.porcion_total_g_ml || 100
+            grams: food.defaultGrams || food.porcion_total_g_ml || 100,
+            porcion_total_g_ml: food.porcion_total_g_ml || food.defaultGrams || 100,
+            calorias_kcal: food.calorias_kcal,
+            proteinas_g: food.proteinas_g,
+            carbohidratos_g: food.carbohidratos_g,
+            grasas_g: food.grasas_g,
+            calPer100: food.calPer100,
+            protPer100: food.protPer100,
+            carbsPer100: food.carbsPer100,
+            fatsPer100: food.fatsPer100
         });
 
         this.closeFoodPickerModal();
