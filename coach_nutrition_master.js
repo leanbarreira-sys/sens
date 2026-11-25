@@ -1782,6 +1782,8 @@ const CoachNutritionMaster = {
                     m.foods.forEach(f => {
                         const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : null;
                         if (res) {
+                            if (!f.name && (res.nombre_alimento_o_plato || res.name)) f.name = res.nombre_alimento_o_plato || res.name;
+                            if (!f.image && (res.imagen_url || res.image)) f.image = res.imagen_url || res.image;
                             if (res.calorias_kcal !== undefined) f.calorias_kcal = res.calorias_kcal;
                             if (res.proteinas_g !== undefined) f.proteinas_g = res.proteinas_g;
                             if (res.carbohidratos_g !== undefined) f.carbohidratos_g = res.carbohidratos_g;

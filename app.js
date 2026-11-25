@@ -1070,7 +1070,7 @@ window.ensurePortalBundlesLoaded = function() {
 
     // Cargar nutrition_db.js ANTES que coach_nutrition_master.js para respetar dependencias
     const nutriChain = (needNutritionDb ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve())
-        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=18.0') : Promise.resolve()));
+        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=19.0') : Promise.resolve()));
 
     window._sensPortalBundlesPromise = Promise.all([
         typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
@@ -18339,7 +18339,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             }
 
             const imgUrl = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
-            const foodTitle = item.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
+            const foodTitle = item.name || item.nombre_alimento_o_plato || resolved?.nombre_alimento_o_plato || resolved?.name || resolved?.name_es || 'Alimento SENS';
             const portionText = item.isCustom ? 'Comida Registrada por vos' : (resolved?.unidades_caseras_total || `${grams}g`);
             const originBadge = item.isCustom
                 ? `<span class="sens-nutri-origin-badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 999px;">Cargado por vos</span>`
@@ -19177,7 +19177,7 @@ function initUserCustomMealModal(athId) {
 
             return `
                 <div style="display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 10px; padding: 6px 10px;">
-                    <span style="font-size: 12px; color: #121214; font-weight: 700;">${item.food.name}</span>
+                    <span style="font-size: 12px; color: #121214; font-weight: 700;">${item.food.nombre_alimento_o_plato || item.food.name || 'Alimento SENS'}</span>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <input type="number" class="input-tray-grams" data-tray-idx="${idx}" value="${item.grams}" min="10" max="800" style="width: 55px; background: #F4F3F1; border: 1px solid rgba(18, 18, 20, 0.12); color: #121214; font-weight: 700; font-size: 12px; padding: 2px 4px; border-radius: 6px; text-align: center;">
                         <span style="font-size: 11px; color: #705B3E; font-weight: 800;">${macros.calories} kcal</span>
@@ -19502,15 +19502,26 @@ function initUserCustomMealModal(athId) {
 
                     userCustomMeals.push({
                         id: `custom-food-${item.food.codigo || item.food.id}-${Date.now()}`,
-                        name: item.food.name,
+                        foodId: item.food.id,
+                        codigo: item.food.codigo,
+                        name: item.food.nombre_alimento_o_plato || item.food.name || 'Alimento SENS',
                         calories: macros.calories,
                         protein: macros.protein,
                         carbs: macros.carbs,
                         fats: macros.fats,
+                        calorias_kcal: item.food.calorias_kcal,
+                        proteinas_g: item.food.proteinas_g,
+                        carbohidratos_g: item.food.carbohidratos_g,
+                        grasas_g: item.food.grasas_g,
+                        porcion_total_g_ml: item.food.porcion_total_g_ml || item.grams,
+                        calPer100: item.food.calPer100,
+                        protPer100: item.food.protPer100,
+                        carbsPer100: item.food.carbsPer100,
+                        fatsPer100: item.food.fatsPer100,
                         grams: item.grams,
                         isCustom: true,
                         mealSlot: userActiveNutriMealSlot,
-                        image: item.food.image
+                        image: item.food.imagen_url || item.food.image_url || item.food.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'
                     });
                 });
                 userCustomTrayItems = [];
@@ -22371,7 +22382,7 @@ function initDashNutriCarousel() {
             const resolved = (typeof window.getResolvedFood === 'function')
                 ? window.getResolvedFood(firstFood, athId)
                 : firstFood;
-            const foodName = firstFood.name || resolved?.name || resolved?.name_es || 'Alimento SENS';
+            const foodName = firstFood.name || firstFood.nombre_alimento_o_plato || resolved?.nombre_alimento_o_plato || resolved?.name || resolved?.name_es || 'Alimento SENS';
             const foodImage = resolved?.image || resolved?.image_url || resolved?.imagen_path || firstFood.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
             const foodPortion = firstFood.grams ? `${firstFood.grams}g` : (resolved?.portion || '1 porción');
             const foodProt = firstFood.protein || resolved?.protPer100 || 25;
