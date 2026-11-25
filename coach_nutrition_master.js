@@ -2392,12 +2392,13 @@ const CoachNutritionMaster = {
             foods.forEach((f, fIdx) => {
                 const res = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f) : f;
                 const grams = parseFloat(f.grams) || 100;
-                const baseGrams = parseFloat(res.porcion_total_g_ml) || 100;
-                const ratio = grams / (baseGrams > 0 ? baseGrams : 100);
-                const itemKcal = Math.round((res.calorias_kcal || 0) * ratio);
+                const mac = (typeof window.calculateFoodMacros === 'function')
+                    ? window.calculateFoodMacros(res, grams)
+                    : { calories: Math.round(res.calorias_kcal || 0), protein: res.proteinas_g || 0, carbs: res.carbohidratos_g || 0, fats: res.grasas_g || 0 };
+                const itemKcal = mac.calories;
                 mealKcalSum += itemKcal;
 
-                const imgSrc = res.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+                const imgSrc = res.image_url || res.imagen_url || res.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
 
                 foodRowsHtml += `
                     <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 8px; margin-bottom: 6px;">
@@ -2405,7 +2406,7 @@ const CoachNutritionMaster = {
                             <img src="${imgSrc}" alt="${res.name}" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; background: #000; flex-shrink: 0;" />
                             <div style="min-width: 0;">
                                 <strong style="font-size: 11.5px; color: #121214; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${res.name}</strong>
-                                <span style="font-size: 10px; color: #71717A;">${itemKcal} kcal • P:${Math.round((res.proteinas_g || 0) * ratio)}g C:${Math.round((res.carbohidratos_g || 0) * ratio)}g G:${Math.round((res.grasas_g || 0) * ratio)}g</span>
+                                <span style="font-size: 10px; color: #71717A;">${itemKcal} kcal • P:${Math.round(mac.protein)}g C:${Math.round(mac.carbs)}g G:${Math.round(mac.fats)}g</span>
                             </div>
                         </div>
 

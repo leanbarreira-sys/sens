@@ -556,6 +556,18 @@ function calculateAthleteBMR(athId = null) {
 }
 window.calculateAthleteBMR = calculateAthleteBMR;
 
+window.getResolvedNutritionDayEntry = function(userPlan, targetDate = null) {
+    if (!userPlan) return null;
+    const sDate = targetDate ? (targetDate instanceof Date ? targetDate : new Date(targetDate)) : (AppState.nutriSelectedDate || AppState.selectedDate || new Date());
+    const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+    if (userPlan.calendar_schedule && userPlan.calendar_schedule[dateIso]) {
+        return userPlan.calendar_schedule[dateIso];
+    }
+    const dayOfWeek = sDate.getDay();
+    const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
+    return userPlan.days?.[dayKey] || userPlan.days?.['day1'] || null;
+};
+
 function getAthletePrescribedCalories(athId = null, targetDate = null) {
     const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
     const profile = (AppState.profile && AppState.profile.id === id) ? AppState.profile : (AppState.profile || {});
@@ -576,8 +588,11 @@ function getAthletePrescribedCalories(athId = null, targetDate = null) {
         }
     } catch (e) {}
 
+    const dayEntry = window.getResolvedNutritionDayEntry(userPlan, targetDate);
     let targetKcal = 0;
-    if (userPlan && userPlan.target_calories) {
+    if (dayEntry && dayEntry.target_calories) {
+        targetKcal = parseInt(dayEntry.target_calories, 10);
+    } else if (userPlan && userPlan.target_calories) {
         targetKcal = parseInt(userPlan.target_calories, 10);
     } else if (profile.daily_calories) {
         targetKcal = parseInt(profile.daily_calories, 10);
@@ -663,9 +678,8 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
                 userPlan = AppState.profile.prescribed_nutrition;
             }
 
-            const dayOfWeek = sDate.getDay();
-            const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
-            const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
+            const dayEntry = window.getResolvedNutritionDayEntry(userPlan, sDate);
+            const dayMeals = dayEntry?.meals || {};
 
             const defaultFallback = {
                 desayuno: [],
@@ -1070,7 +1084,7 @@ window.ensurePortalBundlesLoaded = function() {
 
     // Cargar nutrition_db.js ANTES que coach_nutrition_master.js para respetar dependencias
     const nutriChain = (needNutritionDb ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve())
-        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=19.0') : Promise.resolve()));
+        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=20.0') : Promise.resolve()));
 
     window._sensPortalBundlesPromise = Promise.all([
         typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
@@ -18179,11 +18193,12 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         ? window.getResolvedNutritionPrescription(athId)
         : null;
 
-    // Auto-sanitización y vinculación con la Base de 500 Alimentos (garantiza fotos WebP reales en todo momento)
+    // Auto-sanitización y vinculación con la Base de 500 Alimentos (garantiza fotos WebP reales y macros en todo momento)
     const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
-    if (userPlan && userPlan.days) {
-        Object.keys(userPlan.days).forEach(dKey => {
-            const d = userPlan.days[dKey];
+    const sanitizeNutritionDaysMap = (daysMap) => {
+        if (!daysMap) return;
+        Object.keys(daysMap).forEach(dKey => {
+            const d = daysMap[dKey];
             if (d && d.meals) {
                 mealKeys.forEach(mKey => {
                     const slot = d.meals[mKey];
@@ -18211,6 +18226,10 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                 });
             }
         });
+    };
+    if (userPlan) {
+        sanitizeNutritionDaysMap(userPlan.days);
+        sanitizeNutritionDaysMap(userPlan.calendar_schedule);
     }
 
     // Directiva del Coach y Objetivo
@@ -18242,7 +18261,8 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         snack: 'Snacks'
     };
 
-    const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
+    const resolvedDayEntry = window.getResolvedNutritionDayEntry(userPlan, sDate);
+    const dayMeals = resolvedDayEntry?.meals || {};
 
     let allDayFoods = [];
 
@@ -18474,7 +18494,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         }
     });
 
-    const targetKcal = parseInt(userPlan?.days?.[dayKey]?.target_calories || userPlan?.target_calories, 10) || 2000;
+    const targetKcal = parseInt(resolvedDayEntry?.target_calories || userPlan?.days?.[dayKey]?.target_calories || userPlan?.target_calories, 10) || 2000;
     const targetProt = parseInt(userPlan?.target_protein || userPlan?.macros?.protein, 10) || 150;
     const targetCarbs = parseInt(userPlan?.target_carbs || userPlan?.macros?.carbs, 10) || 200;
     const targetFats = parseInt(userPlan?.target_fats || userPlan?.macros?.fats, 10) || 65;
@@ -22175,8 +22195,11 @@ function updateNutriSummaryCardData() {
     }
 
     // 3. Resolución Robusta de Calorías Objetivo (Coach -> Perfil -> Anamnesis -> TDEE Mifflin-St Jeor)
+    const dayEntry = window.getResolvedNutritionDayEntry(userPlan, selectedDate);
     let targetKcal = 0;
-    if (userPlan && userPlan.target_calories) {
+    if (dayEntry && dayEntry.target_calories) {
+        targetKcal = parseInt(dayEntry.target_calories, 10);
+    } else if (userPlan && userPlan.target_calories) {
         targetKcal = parseInt(userPlan.target_calories, 10);
     } else if (profile.daily_calories) {
         targetKcal = parseInt(profile.daily_calories, 10);
@@ -22222,7 +22245,8 @@ function updateNutriSummaryCardData() {
     // 6. Determinar día de la semana y calcular calorías reales por comida (solo alimentos pautados o registrados)
     const dayOfWeek = selectedDate.getDay(); // 0: Dom, 1: Lun, 2: Mar, ...
     const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
-    const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
+    const resolvedDayEntry = window.getResolvedNutritionDayEntry(userPlan, selectedDate);
+    const dayMeals = resolvedDayEntry?.meals || {};
 
     const dateIso = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
     let userCustomMeals = [];
@@ -22353,7 +22377,8 @@ function initDashNutriCarousel() {
     const selectedDate = AppState.selectedDate || new Date();
     const dayOfWeek = selectedDate.getDay();
     const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
-    const dayMeals = userPlan?.days?.[dayKey]?.meals || userPlan?.days?.['day1']?.meals || {};
+    const resolvedDayEntry = window.getResolvedNutritionDayEntry(userPlan, selectedDate);
+    const dayMeals = resolvedDayEntry?.meals || {};
 
     const dateIso = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
     let userCustomMeals = [];
