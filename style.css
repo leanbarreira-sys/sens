@@ -36351,3 +36351,122 @@ body.in-portal #sensActivityLoggerPanel .sens-act-metric-sub,
     border-radius: 999px !important;
     font-variant-numeric: tabular-nums;
 }
+
+/* ============================================================================
+   2-CARD DAILY TRACKING & WEEKLY DIVERGING BALANCE CHART (QUIET LUXURY)
+   ============================================================================ */
+.sens-tracking-segmented-2col {
+    grid-template-columns: repeat(2, 1fr) !important;
+}
+
+.sens-activity-logger-clean {
+    margin-top: 6px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.sens-balance-legend-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.sens-balance-legend-pills .bal-leg-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #575659;
+    white-space: nowrap;
+}
+
+.sens-balance-legend-pills .bal-leg-item i {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.sens-balance-legend-pills .dot-intake { background: #10B981; }
+.sens-balance-legend-pills .dot-basal { background: #94A3B8; }
+.sens-balance-legend-pills .dot-workout { background: #C4A47C; }
+.sens-balance-legend-pills .dot-cardio { background: #3B82F6; }
+.sens-balance-legend-pills .dot-net { background: #121214; }
+
+.sens-weekly-balance-svg-wrap {
+    width: 100%;
+    margin: 4px 0 6px 0;
+}
+
+.sens-weekly-balance-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    font-family: var(--font-main);
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-weekly-balance-totals {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(18, 18, 20, 0.1);
+}
+
+.sens-weekly-balance-totals .week-tot-col {
+    background: #FAF9F6;
+    border: 1px solid rgba(18, 18, 20, 0.06);
+    border-radius: 10px;
+    padding: 8px 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.sens-weekly-balance-totals .week-tot-col.is-net {
+    background: #121214;
+    border-color: #121214;
+}
+
+.sens-weekly-balance-totals .week-tot-lbl {
+    font-size: 8.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #71717A;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sens-weekly-balance-totals .week-tot-col.is-net .week-tot-lbl {
+    color: #E5CBA7;
+}
+
+.sens-weekly-balance-totals .week-tot-val {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #121214;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.sens-weekly-balance-totals .week-tot-val.is-plus {
+    color: #059669;
+}
+
+.sens-weekly-balance-totals .week-tot-val.is-deficit {
+    color: #34D399;
+}
+
+.sens-weekly-balance-totals .week-tot-val.is-surplus {
+    color: #FBBF24;
+}

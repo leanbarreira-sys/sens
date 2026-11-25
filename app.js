@@ -33481,38 +33481,34 @@ if (document.readyState === 'loading') {
    ============================================================================= */
 
 window.switchTrackingModuleTab = function(tabName) {
-    const tabCals = document.getElementById('btnTrackTabCals');
     const tabBalance = document.getElementById('btnTrackTabBalance');
     const tabWeight = document.getElementById('btnTrackTabWeight');
-    const panelCals = document.getElementById('sensTrackingPanelCals');
     const panelBalance = document.getElementById('sensTrackingPanelBalance');
     const panelWeight = document.getElementById('sensTrackingPanelWeight');
 
-    [tabCals, tabBalance, tabWeight].forEach(t => t && t.classList.remove('active'));
-    [panelCals, panelBalance, panelWeight].forEach(p => { if (p) p.style.display = 'none'; });
+    [tabBalance, tabWeight].forEach(t => t && t.classList.remove('active'));
+    [panelBalance, panelWeight].forEach(p => { if (p) p.style.display = 'none'; });
 
-    if (tabName === 'balance') {
+    if (tabName === 'weight') {
+        if (tabWeight) tabWeight.classList.add('active');
+        if (panelWeight) panelWeight.style.display = 'block';
+        if (typeof window.renderWeightLineChart === 'function') window.renderWeightLineChart();
+    } else {
         if (tabBalance) tabBalance.classList.add('active');
         if (panelBalance) panelBalance.style.display = 'block';
         if (typeof updateObjectiveCardData === 'function') {
             updateObjectiveCardData(AppState.selectedDate || new Date());
         }
-    } else if (tabName === 'weight') {
-        if (tabWeight) tabWeight.classList.add('active');
-        if (panelWeight) panelWeight.style.display = 'block';
-        if (typeof window.renderWeightLineChart === 'function') window.renderWeightLineChart();
-    } else {
-        if (tabCals) tabCals.classList.add('active');
-        if (panelCals) panelCals.style.display = 'block';
-        if (typeof window.renderTrackingCalsBars === 'function') window.renderTrackingCalsBars();
     }
+    if (typeof window.renderTrackingCalsBars === 'function') window.renderTrackingCalsBars();
 };
 
 window.renderTrackingCalsBars = function() {
-    const grid = document.getElementById('sensTrackingCalsBarsGrid');
+    const svgWrap = document.getElementById('sensWeeklyBalanceSvgWrap');
     const goalLabel = document.getElementById('sensTrackingCalsGoalLabel');
     const breakdownBox = document.getElementById('sensCalsDifferentialBreakdown');
-    if (!grid) return;
+    const totalsBox = document.getElementById('sensWeeklyBalanceTotals');
+    if (!svgWrap) return;
 
     const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
     const sDate = AppState.selectedDate || new Date();
@@ -33530,11 +33526,13 @@ window.renderTrackingCalsBars = function() {
     const targetKcal = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, sDate) : 1950;
     if (goalLabel) goalLabel.textContent = `Objetivo: ${goalText} · Meta ${targetKcal.toLocaleString('es-AR')} kcal`;
 
+    const daysData = [];
+    let maxMag = 2200;
+    let selectedDayMetrics = null;
+    let weekIntakeSum = 0;
+    let weekBurnSum = 0;
     let goodDaysCount = 0;
     let daysWithRecords = 0;
-    let selectedDayMetrics = null;
-
-    const barsHtml = [];
 
     for (let i = 0; i < 7; i++) {
         const d = new Date(mon);
@@ -33553,108 +33551,134 @@ window.renderTrackingCalsBars = function() {
         const totalBurn = basal + workout + cardio;
         const netDiff = intake - totalBurn;
 
-        if (isSelected) {
-            selectedDayMetrics = { d, intake, basal, workout, cardio, totalBurn, netDiff };
+        if (!isFuture) {
+            weekIntakeSum += intake;
+            weekBurnSum += totalBurn;
         }
+        if (intake > maxMag) maxMag = intake;
+        if (totalBurn > maxMag) maxMag = totalBurn;
 
-        let statusClass = 'status-pending';
-        let badgeClass = 'badge-pending';
-        let badgeText = '–';
-        let barFillPct = 0;
-        let topValText = isFuture ? '' : '0';
-
-        if (isFuture) {
-            statusClass = 'status-pending';
-            badgeClass = 'badge-pending';
-            badgeText = '–';
-            barFillPct = 8;
-            topValText = '';
-        } else if (intake === 0 && isToday) {
-            statusClass = 'status-pending';
-            badgeClass = 'badge-pending';
-            badgeText = 'Pendiente';
-            barFillPct = 12;
-            topValText = '0';
-        } else if (intake === 0) {
-            statusClass = 'status-missed';
-            badgeClass = 'badge-missed';
-            badgeText = 'Sin registrar';
-            barFillPct = 10;
-            topValText = '–';
-        } else {
+        let isGood = false;
+        if (!isFuture && intake > 0) {
             daysWithRecords++;
-            const absNet = Math.abs(netDiff);
-            barFillPct = Math.min(100, Math.max(18, Math.round((absNet / 800) * 100)));
-            topValText = `${netDiff > 0 ? '+' : ''}${netDiff}`;
-
-            let isGood = false;
-            if (isMuscleGain) {
-                isGood = (netDiff >= 100 && netDiff <= 600);
-            } else if (isMaintenance) {
-                isGood = (Math.abs(netDiff) <= 250);
-            } else {
-                isGood = (netDiff <= -150 && netDiff >= -950);
-            }
-
-            if (isGood) {
-                goodDaysCount++;
-                statusClass = 'status-good';
-                badgeClass = 'badge-good';
-                badgeText = '✓ En objetivo';
-            } else {
-                statusClass = 'status-bad';
-                badgeClass = 'badge-bad';
-                badgeText = '✕ Desvío';
-            }
+            if (isMuscleGain) isGood = (netDiff >= 100 && netDiff <= 600);
+            else if (isMaintenance) isGood = (Math.abs(netDiff) <= 250);
+            else isGood = (netDiff <= -150 && netDiff >= -950);
+            if (isGood) goodDaysCount++;
         }
 
-        const tooltipText = intake > 0
-            ? `${dayNames[i]}: Neto ${netDiff > 0 ? '+' : ''}${netDiff} kcal (Nutrición +${intake} | Basal −${basal} | Ejerc −${workout} | Cardio −${cardio})`
-            : `${dayNames[i]}: ${badgeText}`;
-
-        barsHtml.push(`
-            <div class="sens-cals-bar-col ${isToday ? 'is-today' : ''} ${isSelected ? 'is-selected' : ''}" onclick="if(typeof AppState!=='undefined'){ AppState.selectedDate=new Date('${d.toISOString()}'); if(typeof renderPortalWeekStrip==='function') renderPortalWeekStrip(); if(typeof updateNutriSummaryCardData==='function') updateNutriSummaryCardData(); if(typeof renderTrackingCalsBars==='function') renderTrackingCalsBars(); if(typeof renderObjectiveBalanceCard==='function') renderObjectiveBalanceCard(); }" title="${tooltipText}">
-                <span class="sens-cals-bar-val">${topValText}</span>
-                <div class="sens-cals-bar-track">
-                    <div class="sens-cals-bar-fill ${statusClass}" style="height: ${barFillPct}%;"></div>
-                </div>
-                <span class="sens-cals-day-dot ${badgeClass}" aria-label="${badgeText}"></span>
-                <span class="sens-cals-day-label" style="${isToday || isSelected ? 'color: #121214; font-weight: 900;' : ''}">${dayNames[i]}</span>
-            </div>
-        `);
+        const entry = { i, label: dayNames[i], d, isToday, isSelected, isFuture, intake, basal, workout, cardio, totalBurn, netDiff, isGood };
+        daysData.push(entry);
+        if (isSelected) selectedDayMetrics = entry;
     }
-
-    grid.innerHTML = barsHtml.join('');
 
     if (goalLabel && daysWithRecords > 0) {
         const pctAdherence = Math.round((goodDaysCount / Math.max(1, daysWithRecords)) * 100);
         goalLabel.textContent = `Objetivo: ${goalText} · ${pctAdherence}% adherencia`;
     }
 
-    if (breakdownBox) {
-        const sel = selectedDayMetrics || (() => {
-            const m = (typeof getDailyMetabolicMetrics === 'function') ? getDailyMetabolicMetrics(sDate) : null;
-            const intake = m ? (Number(m.targetIntake) || 0) : 0;
-            const basal = m ? (Number(m.bmr) || 0) : 1650;
-            const workout = m ? (Number(m.workoutBurn) || 0) : 0;
-            const cardio = m ? ((Number(m.stepsBurn) || 0) + (Number(m.cardioBurn) || 0)) : 0;
-            return { d: sDate, intake, basal, workout, cardio, totalBurn: basal + workout + cardio, netDiff: intake - (basal + workout + cardio) };
-        })();
+    // Construir gráfico SVG divergente: Barras (+ Nutrición arriba / - Basal, Ejercicio, Cardio abajo) + Línea de Balance Neto
+    const W = 350;
+    const H = 196;
+    const padX = 12;
+    const topY = 18;
+    const midY = 96;
+    const botY = 166;
+    const halfH = midY - topY; // ~78px arriba y ~70px abajo
+    const downH = botY - midY;
+    const colW = (W - padX * 2) / 7;
+    const barW = 20;
 
+    let barsSvg = '';
+    const linePts = [];
+    let dotsSvg = '';
+    let xLabelsSvg = '';
+
+    daysData.forEach((day, idx) => {
+        const cx = padX + colW * idx + colW / 2;
+        const bx = cx - barW / 2;
+
+        // Fondo de selección del día
+        if (day.isSelected || day.isToday) {
+            barsSvg += `<rect x="${(cx - colW / 2 + 2).toFixed(1)}" y="6" width="${(colW - 4).toFixed(1)}" height="${H - 12}" rx="8" fill="${day.isSelected ? 'rgba(229,203,167,0.18)' : 'rgba(18,18,20,0.03)'}"/>`;
+        }
+
+        // Barra arriba (+ Nutrición)
+        const inH = day.intake > 0 ? Math.max(4, (day.intake / maxMag) * (halfH - 6)) : 0;
+        if (inH > 0) {
+            barsSvg += `<rect x="${bx.toFixed(1)}" y="${(midY - inH).toFixed(1)}" width="${barW}" height="${inH.toFixed(1)}" rx="4" fill="#10B981" opacity="${day.isFuture ? '0.25' : '0.9'}"/>`;
+        }
+
+        // Barras apiladas abajo (- Basal, - Ejercicio, - Cardio)
+        const scaleDown = (downH - 6) / maxMag;
+        const bH = day.isFuture ? 0 : Math.max(2, day.basal * scaleDown);
+        const wH = day.isFuture ? 0 : (day.workout > 0 ? Math.max(3, day.workout * scaleDown) : 0);
+        const cH = day.isFuture ? 0 : (day.cardio > 0 ? Math.max(3, day.cardio * scaleDown) : 0);
+
+        let curY = midY;
+        if (bH > 0) {
+            barsSvg += `<rect x="${bx.toFixed(1)}" y="${curY.toFixed(1)}" width="${barW}" height="${bH.toFixed(1)}" rx="2" fill="#94A3B8" opacity="0.82"/>`;
+            curY += bH;
+        }
+        if (wH > 0) {
+            barsSvg += `<rect x="${bx.toFixed(1)}" y="${curY.toFixed(1)}" width="${barW}" height="${wH.toFixed(1)}" rx="2" fill="#C4A47C"/>`;
+            curY += wH;
+        }
+        if (cH > 0) {
+            barsSvg += `<rect x="${bx.toFixed(1)}" y="${curY.toFixed(1)}" width="${barW}" height="${cH.toFixed(1)}" rx="2" fill="#3B82F6"/>`;
+        }
+
+        // Punto de línea neta
+        if (!day.isFuture) {
+            const clampedNet = Math.max(-maxMag, Math.min(maxMag, day.netDiff));
+            const netY = midY - (clampedNet / maxMag) * (halfH - 10);
+            linePts.push(`${cx.toFixed(1)},${netY.toFixed(1)}`);
+
+            const dotColor = day.intake === 0 ? '#71717A' : (day.isGood ? '#059669' : '#D97706');
+            const netLabel = day.intake === 0 ? '' : `${day.netDiff > 0 ? '+' : ''}${day.netDiff}`;
+            dotsSvg += `<circle cx="${cx.toFixed(1)}" cy="${netY.toFixed(1)}" r="4" fill="#FFFFFF" stroke="${dotColor}" stroke-width="2.5"/>`;
+            if (netLabel) {
+                const lblY = day.netDiff >= 0 ? Math.max(12, netY - 7) : Math.min(botY + 10, netY + 13);
+                dotsSvg += `<text x="${cx.toFixed(1)}" y="${lblY.toFixed(1)}" text-anchor="middle" font-size="8.5" font-weight="800" fill="${dotColor}">${netLabel}</text>`;
+            }
+        }
+
+        // Eje X clickable
+        const lblColor = (day.isSelected || day.isToday) ? '#121214' : '#71717A';
+        const lblWeight = (day.isSelected || day.isToday) ? '900' : '700';
+        xLabelsSvg += `<text x="${cx.toFixed(1)}" y="${H - 4}" text-anchor="middle" font-size="9.5" font-weight="${lblWeight}" fill="${lblColor}">${day.label}</text>`;
+        // Hitbox invisible para seleccionar día
+        xLabelsSvg += `<rect x="${(cx - colW / 2).toFixed(1)}" y="0" width="${colW.toFixed(1)}" height="${H}" fill="transparent" style="cursor:pointer;" onclick="if(typeof AppState!=='undefined'){ AppState.selectedDate=new Date('${day.d.toISOString()}'); if(typeof renderPortalWeekStrip==='function') renderPortalWeekStrip(); if(typeof updateNutriSummaryCardData==='function') updateNutriSummaryCardData(); if(typeof renderTrackingCalsBars==='function') renderTrackingCalsBars(); if(typeof renderObjectiveBalanceCard==='function') renderObjectiveBalanceCard(); }"/>`;
+    });
+
+    const polylineSvg = linePts.length > 1
+        ? `<polyline fill="none" stroke="#121214" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${linePts.join(' ')}"/>`
+        : '';
+
+    svgWrap.innerHTML = `
+        <svg viewBox="0 0 ${W} ${H}" class="sens-weekly-balance-svg" role="img" aria-label="Balance calórico semanal">
+            <line x1="${padX}" y1="${midY}" x2="${W - padX}" y2="${midY}" stroke="rgba(18,18,20,0.22)" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="${padX}" y="${midY - 3}" font-size="7.5" font-weight="700" fill="#71717A">0</text>
+            ${barsSvg}
+            ${polylineSvg}
+            ${dotsSvg}
+            ${xLabelsSvg}
+        </svg>
+    `;
+
+    // Desglose del día seleccionado
+    if (breakdownBox) {
+        const sel = selectedDayMetrics || daysData[0];
         const netSign = sel.netDiff > 0 ? '+' : '';
         const netDirection = sel.intake === 0
-            ? 'Registrá tus comidas para ver tu diferencial'
+            ? 'Registrá tus comidas para ver el balance del día'
             : sel.netDiff < 0
                 ? 'Déficit · Perdiendo calorías'
                 : sel.netDiff > 0
                     ? 'Superávit · Ganando calorías'
                     : 'Equilibrio calórico';
 
-        const netClass = sel.intake === 0
-            ? 'is-neutral'
-            : ((isMuscleGain && sel.netDiff >= 100 && sel.netDiff <= 600) || (!isMuscleGain && !isMaintenance && sel.netDiff <= -150 && sel.netDiff >= -950) || (isMaintenance && Math.abs(sel.netDiff) <= 250))
-                ? 'is-good'
-                : 'is-warn';
+        const netClass = sel.intake === 0 ? 'is-neutral' : (sel.isGood ? 'is-good' : 'is-warn');
 
         breakdownBox.innerHTML = `
             <div class="sens-cals-pillars-grid">
@@ -33676,8 +33700,28 @@ window.renderTrackingCalsBars = function() {
                 </div>
             </div>
             <div class="sens-cals-net-summary ${netClass}">
-                <span class="net-summary-desc">${netDirection}</span>
+                <span class="net-summary-desc">${sel.label}: ${netDirection}</span>
                 <strong class="net-summary-val">${sel.intake > 0 ? `${netSign}${sel.netDiff.toLocaleString('es-AR')} kcal` : '—'}</strong>
+            </div>
+        `;
+    }
+
+    // Suma total de la semana (hasta hoy)
+    if (totalsBox) {
+        const weekNet = weekIntakeSum - weekBurnSum;
+        const weekSign = weekNet > 0 ? '+' : '';
+        totalsBox.innerHTML = `
+            <div class="week-tot-col">
+                <span class="week-tot-lbl">Sumado (Semana)</span>
+                <strong class="week-tot-val is-plus">+${weekIntakeSum.toLocaleString('es-AR')} kcal</strong>
+            </div>
+            <div class="week-tot-col">
+                <span class="week-tot-lbl">Gastado (Semana)</span>
+                <strong class="week-tot-val is-minus">−${weekBurnSum.toLocaleString('es-AR')} kcal</strong>
+            </div>
+            <div class="week-tot-col is-net">
+                <span class="week-tot-lbl">Balance Semanal</span>
+                <strong class="week-tot-val ${weekNet <= 0 ? 'is-deficit' : 'is-surplus'}">${weekSign}${weekNet.toLocaleString('es-AR')} kcal</strong>
             </div>
         `;
     }
