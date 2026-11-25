@@ -32,13 +32,13 @@ CREATE POLICY "coach_landings_admin_write"
         EXISTS (
             SELECT 1 FROM public.profiles p
             WHERE p.id = auth.uid()
-              AND (p.role IN ('admin', 'coach') OR p.is_admin = TRUE)
+              AND p.role IN ('admin', 'coach')
         )
     )
     WITH CHECK (
         EXISTS (
             SELECT 1 FROM public.profiles p
             WHERE p.id = auth.uid()
-              AND (p.role IN ('admin', 'coach') OR p.is_admin = TRUE)
+              AND p.role IN ('admin', 'coach')
         )
     );
