@@ -36470,3 +36470,47 @@ body.in-portal #sensActivityLoggerPanel .sens-act-metric-sub,
 .sens-weekly-balance-totals .week-tot-val.is-surplus {
     color: #FBBF24;
 }
+
+/* ============================================================================
+   CARD STYLING FOR BOTH TRACKING CARDS + 2-COL SEGMENTED BAR FIX
+   ============================================================================ */
+body.in-portal .sens-tracking-section-card,
+.sens-tracking-section-card,
+body.in-portal #dashWeightAndActivityCard,
+body.in-portal #dashWeeklyBalanceCard {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.07) !important;
+    border-radius: 22px !important;
+    padding: 18px 16px !important;
+    margin: 14px 0 !important;
+    box-shadow: 0 6px 24px rgba(18, 18, 20, 0.04) !important;
+    color: #121214 !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+}
+
+body.in-portal .sens-tracking-section-card .sens-tracking-top-row,
+.sens-tracking-section-card .sens-tracking-top-row {
+    align-items: center !important;
+    margin-bottom: 14px !important;
+}
+
+body.in-portal .sens-tracking-section-card .sens-btn-quick-log-weight {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+    border: none !important;
+    background: #FAF7F2 !important;
+    color: #705B3E !important;
+    box-shadow: 0 1px 4px rgba(112, 91, 62, 0.12) !important;
+}
+
+body.in-portal .sens-tracking-segmented-bar.sens-tracking-segmented-2col,
+.sens-tracking-segmented-bar.sens-tracking-segmented-2col {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
