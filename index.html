@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '91.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '91.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '92.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '92.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4769,7 +4769,7 @@
                         </div>
                     </div>
 
-                    <!-- Sub-navegación desde el inicio: Alumnos vs. Pagos & Vencimientos -->
+                    <!-- Sub-navegación desde el inicio: Alumnos vs. Pagos & Vencimientos vs. Notas -->
                     <div class="coach-subview-switcher" id="coachAthletesSubviewSwitcher" role="tablist" aria-label="Subsección de Alumnos">
                         <button type="button" class="coach-subview-tab active" id="btnCoachSubviewRoster" data-athletes-section="roster">
                             <span>Lista de Alumnos</span>
@@ -4777,6 +4777,9 @@
                         <button type="button" class="coach-subview-tab" id="btnCoachSubviewPayments" data-athletes-section="payments">
                             <span>Pagos &amp; Vencimientos</span>
                             <span class="coach-subview-badge" id="coachPaymentsAlertBadge" style="display: none;">0</span>
+                        </button>
+                        <button type="button" class="coach-subview-tab" id="btnCoachSubviewNotes" data-athletes-section="notes">
+                            <span>Notas</span>
                         </button>
                     </div>
 
@@ -4965,6 +4968,49 @@
                                 <button type="button" class="btn sens-sticky-save-btn" id="btnSaveCoachPayment">
                                     <span>Guardar Pago &amp; Actualizar Vencimiento</span>
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUBSECCIÓN: NOTAS PRIVADAS DEL COACH POR ALUMNO -->
+                    <div id="coachAthletesNotesSection" style="display: none;">
+                        <div class="coach-surface-card" style="padding: 18px 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+                                <div>
+                                    <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #9E7D4B;">SOLO VISIBLE PARA EL COACH</span>
+                                    <h3 style="margin: 2px 0 0 0; font-size: 1.05rem; font-weight: 800; color: #121214;">Notas &amp; Seguimiento Privado</h3>
+                                </div>
+                                <span id="coachNotesSavedStatus" style="font-size: 11px; font-weight: 700; color: #71717A; background: #F4F4F5; padding: 4px 10px; border-radius: 999px;">Sin cambios pendientes</span>
+                            </div>
+
+                            <div style="margin-bottom: 14px;">
+                                <label for="coachNotesAthleteSelect" style="display: block; font-size: 11px; font-weight: 700; color: #52525B; margin-bottom: 5px; text-transform: uppercase;">Alumno</label>
+                                <select id="coachNotesAthleteSelect" class="input-control" style="margin-bottom: 0; font-weight: 700;"></select>
+                            </div>
+
+                            <!-- Bloc Libre -->
+                            <div style="margin-bottom: 18px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 6px;">
+                                    <label for="coachNotesFreeTextarea" style="font-size: 12px; font-weight: 800; color: #121214;">Bloc de Notas Libre (escribir, pegar o editar)</label>
+                                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnCoachNotesInsertDate" style="font-size: 11px; padding: 4px 10px; font-weight: 700;">+ Fecha</button>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btnCoachNotesCopyAll" style="font-size: 11px; padding: 4px 10px; font-weight: 700;">Copiar todo</button>
+                                        <button type="button" class="btn btn-primary btn-sm" id="btnCoachNotesSaveFree" style="font-size: 11px; padding: 4px 12px; font-weight: 800; background: #121214; color: #FFFFFF; border: none;">Guardar</button>
+                                    </div>
+                                </div>
+                                <textarea id="coachNotesFreeTextarea" rows="7" class="input-control" placeholder="Escribí, pegá o editá libremente observaciones, objetivos, lesiones, historial o avances del alumno..." style="width: 100%; resize: vertical; line-height: 1.5; font-size: 13.5px; margin-bottom: 0;"></textarea>
+                            </div>
+
+                            <!-- Bitácora de Avances -->
+                            <div style="border-top: 1px solid #E4E4E7; padding-top: 16px;">
+                                <span style="display: block; font-size: 12px; font-weight: 800; color: #121214; margin-bottom: 8px;">Bitácora de Avances &amp; Comentarios</span>
+                                <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+                                    <textarea id="coachNotesNewEntryInput" rows="2" class="input-control" placeholder="Sumar una nueva nota o avance (ej: Mejoró postura en sentadilla, subir carga próxima semana)..." style="width: 100%; resize: vertical; font-size: 13px; margin-bottom: 0;"></textarea>
+                                    <div style="display: flex; justify-content: flex-end;">
+                                        <button type="button" class="btn btn-primary btn-sm" id="btnCoachNotesAddEntry" style="font-size: 11.5px; padding: 7px 14px; font-weight: 800; background: linear-gradient(135deg, #E5CBA7 0%, #C4A47C 100%); color: #080809; border: none;">+ Sumar avance</button>
+                                    </div>
+                                </div>
+                                <div id="coachNotesEntriesList" style="display: flex; flex-direction: column; gap: 8px;"></div>
                             </div>
                         </div>
                     </div>
@@ -8924,7 +8970,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=86.0"></script>
+    <script defer src="app.js?v=87.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

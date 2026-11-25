@@ -184,9 +184,20 @@ const CoachNutritionMaster = {
                 target_carbs: meta.carbsGrams,
                 target_fats: meta.fatsGrams,
                 target_water: meta.waterLiters,
+                meal_percentages: { desayuno: 20, almuerzo: 35, merienda: 15, cena: 20, snack: 10 },
                 directive_note: 'Priorizá 35-40g de proteína en cada una de las comidas principales y mantené hidratación constante antes y después de entrenar.',
                 days: {}
             };
+        }
+
+        if (!data.meal_percentages || typeof data.meal_percentages !== 'object') {
+            data.meal_percentages = { desayuno: 20, almuerzo: 35, merienda: 15, cena: 20, snack: 10 };
+        } else {
+            const defPcts = { desayuno: 20, almuerzo: 35, merienda: 15, cena: 20, snack: 10 };
+            Object.keys(defPcts).forEach(mk => {
+                const v = Number(data.meal_percentages[mk]);
+                if (!Number.isFinite(v) || v < 0) data.meal_percentages[mk] = defPcts[mk];
+            });
         }
 
         // Asegurar que existan los 7 días de la semana
@@ -204,17 +215,18 @@ const CoachNutritionMaster = {
             data.days = {};
         }
 
+        const pcts = data.meal_percentages;
         Object.keys(dayNames).forEach(k => {
             if (!data.days[k]) {
                 data.days[k] = {
                     title: dayNames[k],
                     target_calories: data.target_calories || meta.recommendedKcal,
                     meals: {
-                        desayuno: { target_kcal: Math.round(data.target_calories * 0.20), foods: [] },
-                        almuerzo: { target_kcal: Math.round(data.target_calories * 0.35), foods: [] },
-                        merienda: { target_kcal: Math.round(data.target_calories * 0.15), foods: [] },
-                        cena: { target_kcal: Math.round(data.target_calories * 0.20), foods: [] },
-                        snack: { target_kcal: Math.round(data.target_calories * 0.10), foods: [] }
+                        desayuno: { target_kcal: Math.round((data.target_calories || meta.recommendedKcal) * (pcts.desayuno / 100)), foods: [] },
+                        almuerzo: { target_kcal: Math.round((data.target_calories || meta.recommendedKcal) * (pcts.almuerzo / 100)), foods: [] },
+                        merienda: { target_kcal: Math.round((data.target_calories || meta.recommendedKcal) * (pcts.merienda / 100)), foods: [] },
+                        cena: { target_kcal: Math.round((data.target_calories || meta.recommendedKcal) * (pcts.cena / 100)), foods: [] },
+                        snack: { target_kcal: Math.round((data.target_calories || meta.recommendedKcal) * (pcts.snack / 100)), foods: [] }
                     }
                 };
             }
@@ -438,21 +450,7 @@ const CoachNutritionMaster = {
         const applyKcalToPlan = (val) => {
             const safeVal = Math.max(1000, parseInt(val, 10) || meta.recommendedKcal);
             this.dayPlanCache.target_calories = safeVal;
-            if (this.dayPlanCache.days && typeof this.dayPlanCache.days === 'object') {
-                Object.keys(this.dayPlanCache.days).forEach(dKey => {
-                    const d = this.dayPlanCache.days[dKey];
-                    if (d) {
-                        d.target_calories = safeVal;
-                        if (d.meals) {
-                            if (d.meals.desayuno) d.meals.desayuno.target_kcal = Math.round(safeVal * 0.20);
-                            if (d.meals.almuerzo) d.meals.almuerzo.target_kcal = Math.round(safeVal * 0.35);
-                            if (d.meals.merienda) d.meals.merienda.target_kcal = Math.round(safeVal * 0.15);
-                            if (d.meals.cena) d.meals.cena.target_kcal = Math.round(safeVal * 0.20);
-                            if (d.meals.snack) d.meals.snack.target_kcal = Math.round(safeVal * 0.10);
-                        }
-                    }
-                });
-            }
+            this.syncMealTargetsFromPercentages(safeVal);
         };
 
         if (input) {
@@ -591,38 +589,57 @@ const CoachNutritionMaster = {
                     </div>
                 </div>
 
-                <!-- Reparto Orientativo por Comida -->
+                <!-- Reparto Editable por Comida -->
                 <div style="border-top: 1px solid #E4E4E7; padding-top: 14px;">
-                    <span style="font-size: 12px; font-weight: 800; color: #121214; display: block; margin-bottom: 8px;">
-                        Distribución de Calorías en las 5 Ingestas del Día
-                    </span>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; text-align: center;">
-                        <div style="background: #F8F9FA; padding: 8px; border-radius: 8px; border: 1px solid #E4E4E7;">
-                            <span style="font-size: 10px; color: #71717A; text-transform: uppercase;">Desayuno</span>
-                            <div style="font-size: 13px; font-weight: 800; color: #121214;">${Math.round(kcal * 0.20)} kcal</div>
-                            <span style="font-size: 9.5px; color: #9E7D4B;">20%</span>
-                        </div>
-                        <div style="background: #F8F9FA; padding: 8px; border-radius: 8px; border: 1px solid #E4E4E7;">
-                            <span style="font-size: 10px; color: #71717A; text-transform: uppercase;">Almuerzo</span>
-                            <div style="font-size: 13px; font-weight: 800; color: #121214;">${Math.round(kcal * 0.35)} kcal</div>
-                            <span style="font-size: 9.5px; color: #9E7D4B;">35%</span>
-                        </div>
-                        <div style="background: #F8F9FA; padding: 8px; border-radius: 8px; border: 1px solid #E4E4E7;">
-                            <span style="font-size: 10px; color: #71717A; text-transform: uppercase;">Merienda</span>
-                            <div style="font-size: 13px; font-weight: 800; color: #121214;">${Math.round(kcal * 0.15)} kcal</div>
-                            <span style="font-size: 9.5px; color: #9E7D4B;">15%</span>
-                        </div>
-                        <div style="background: #F8F9FA; padding: 8px; border-radius: 8px; border: 1px solid #E4E4E7;">
-                            <span style="font-size: 10px; color: #71717A; text-transform: uppercase;">Cena</span>
-                            <div style="font-size: 13px; font-weight: 800; color: #121214;">${Math.round(kcal * 0.20)} kcal</div>
-                            <span style="font-size: 9.5px; color: #9E7D4B;">20%</span>
-                        </div>
-                        <div style="background: #F8F9FA; padding: 8px; border-radius: 8px; border: 1px solid #E4E4E7;">
-                            <span style="font-size: 10px; color: #71717A; text-transform: uppercase;">Snack</span>
-                            <div style="font-size: 13px; font-weight: 800; color: #121214;">${Math.round(kcal * 0.10)} kcal</div>
-                            <span style="font-size: 9.5px; color: #9E7D4B;">10%</span>
-                        </div>
-                    </div>
+                    ${(() => {
+                        const mealPcts = this.getMealPercentages();
+                        const totalPct = Math.round(
+                            (mealPcts.desayuno || 0) +
+                            (mealPcts.almuerzo || 0) +
+                            (mealPcts.merienda || 0) +
+                            (mealPcts.cena || 0) +
+                            (mealPcts.snack || 0)
+                        );
+                        const isTotalOk = totalPct === 100;
+                        const mealCfg = [
+                            { key: 'desayuno', label: 'Desayuno' },
+                            { key: 'almuerzo', label: 'Almuerzo' },
+                            { key: 'merienda', label: 'Merienda' },
+                            { key: 'cena', label: 'Cena' },
+                            { key: 'snack', label: 'Snack' }
+                        ];
+                        return `
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                                <span style="font-size: 12px; font-weight: 800; color: #121214;">
+                                    Distribución de Calorías en las 5 Ingestas del Día
+                                </span>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span id="nutriMealDistTotalBadge" style="font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: ${isTotalOk ? 'rgba(16, 185, 129, 0.12)' : 'rgba(217, 119, 6, 0.14)'}; color: ${isTotalOk ? '#059669' : '#B45309'}; border: 1px solid ${isTotalOk ? 'rgba(16, 185, 129, 0.35)' : 'rgba(217, 119, 6, 0.35)'};">
+                                        Total: ${totalPct}%
+                                    </span>
+                                    <button type="button" id="btnResetMealPercentages" style="font-size: 10.5px; font-weight: 700; color: #705B3E; background: transparent; border: 1px solid rgba(112, 91, 62, 0.3); border-radius: 999px; padding: 3px 9px; cursor: pointer;">
+                                        Restablecer
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; text-align: center;">
+                                ${mealCfg.map(m => {
+                                    const pctVal = mealPcts[m.key];
+                                    const mealKcalVal = Math.round(kcal * (pctVal / 100));
+                                    return `
+                                        <div style="background: #F8F9FA; padding: 9px 8px; border-radius: 10px; border: 1px solid #E4E4E7; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                            <span style="font-size: 10px; font-weight: 700; color: #52525B; text-transform: uppercase;">${m.label}</span>
+                                            <div id="nutriMealDistKcal_${m.key}" style="font-size: 13px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums;">${mealKcalVal} kcal</div>
+                                            <div style="display: inline-flex; align-items: center; gap: 2px; background: #FFFFFF; border: 1px solid #D4D4D8; border-radius: 7px; padding: 2px 6px;">
+                                                <input type="number" class="nutri-meal-pct-input" data-meal="${m.key}" value="${pctVal}" min="0" max="100" step="1" aria-label="Porcentaje ${m.label}" style="width: 38px; border: none; outline: none; background: transparent; text-align: center; font-size: 12px; font-weight: 800; color: #705B3E; padding: 0; font-variant-numeric: tabular-nums;">
+                                                <span style="font-size: 10.5px; font-weight: 800; color: #9E7D4B;">%</span>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        `;
+                    })()}
                 </div>
             </div>
 
@@ -639,6 +656,38 @@ const CoachNutritionMaster = {
         this.bindStep2Events(ath, meta);
     },
 
+    getMealPercentages() {
+        const defaults = { desayuno: 20, almuerzo: 35, merienda: 15, cena: 20, snack: 10 };
+        const stored = (this.dayPlanCache && this.dayPlanCache.meal_percentages) || {};
+        const out = {};
+        Object.keys(defaults).forEach(k => {
+            const v = Number(stored[k]);
+            out[k] = (Number.isFinite(v) && v >= 0 && v <= 100) ? v : defaults[k];
+        });
+        return out;
+    },
+
+    syncMealTargetsFromPercentages(kcalOverride) {
+        if (!this.dayPlanCache) return;
+        const targetKcal = Math.max(1000, parseInt(kcalOverride || this.dayPlanCache.target_calories, 10) || 2150);
+        const pcts = this.getMealPercentages();
+        if (this.dayPlanCache.days && typeof this.dayPlanCache.days === 'object') {
+            Object.keys(this.dayPlanCache.days).forEach(dKey => {
+                const d = this.dayPlanCache.days[dKey];
+                if (d) {
+                    d.target_calories = targetKcal;
+                    if (d.meals) {
+                        Object.keys(pcts).forEach(mKey => {
+                            if (d.meals[mKey]) {
+                                d.meals[mKey].target_kcal = Math.round(targetKcal * (pcts[mKey] / 100));
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    },
+
     bindStep2Events(ath, meta) {
         const pInput = document.getElementById('macroProtInput');
         const cInput = document.getElementById('macroCarbsInput');
@@ -646,6 +695,9 @@ const CoachNutritionMaster = {
         const wInput = document.getElementById('macroWaterInput');
         const btnReset = document.getElementById('btnResetSuggestedMacros');
         const btnNext = document.getElementById('btnNutriGoStep3');
+        const pctInputs = document.querySelectorAll('.nutri-meal-pct-input');
+        const totalPctBadge = document.getElementById('nutriMealDistTotalBadge');
+        const btnResetMealPcts = document.getElementById('btnResetMealPercentages');
 
         const syncMacroInputsToCache = () => {
             this.dayPlanCache.target_protein = parseInt(pInput?.value, 10) || meta.protGrams;
@@ -653,6 +705,54 @@ const CoachNutritionMaster = {
             this.dayPlanCache.target_fats = parseInt(fInput?.value, 10) || meta.fatsGrams;
             this.dayPlanCache.target_water = parseFloat(wInput?.value) || meta.waterLiters;
         };
+
+        const syncMealPercentagesFromDom = () => {
+            const targetKcal = this.dayPlanCache.target_calories || meta.recommendedKcal;
+            if (!this.dayPlanCache.meal_percentages || typeof this.dayPlanCache.meal_percentages !== 'object') {
+                this.dayPlanCache.meal_percentages = { desayuno: 20, almuerzo: 35, merienda: 15, cena: 20, snack: 10 };
+            }
+            let sum = 0;
+            pctInputs.forEach(inp => {
+                const mKey = inp.getAttribute('data-meal');
+                if (!mKey) return;
+                let val = parseFloat(inp.value);
+                if (!Number.isFinite(val) || val < 0) val = 0;
+                if (val > 100) val = 100;
+                this.dayPlanCache.meal_percentages[mKey] = val;
+                sum += val;
+                const kcalLabel = document.getElementById(`nutriMealDistKcal_${mKey}`);
+                if (kcalLabel) kcalLabel.textContent = `${Math.round(targetKcal * (val / 100))} kcal`;
+            });
+            const roundedSum = Math.round(sum);
+            if (totalPctBadge) {
+                const ok = roundedSum === 100;
+                totalPctBadge.textContent = `Total: ${roundedSum}%`;
+                totalPctBadge.style.background = ok ? 'rgba(16, 185, 129, 0.12)' : 'rgba(217, 119, 6, 0.14)';
+                totalPctBadge.style.color = ok ? '#059669' : '#B45309';
+                totalPctBadge.style.borderColor = ok ? 'rgba(16, 185, 129, 0.35)' : 'rgba(217, 119, 6, 0.35)';
+            }
+            this.syncMealTargetsFromPercentages(targetKcal);
+        };
+
+        pctInputs.forEach(inp => {
+            inp.addEventListener('input', syncMealPercentagesFromDom);
+            inp.addEventListener('change', () => {
+                syncMealPercentagesFromDom();
+                this.savePlan();
+            });
+        });
+
+        if (btnResetMealPcts) {
+            btnResetMealPcts.addEventListener('click', () => {
+                const defaults = { desayuno: 20, almuerzo: 35, merienda: 15, cena: 20, snack: 10 };
+                pctInputs.forEach(inp => {
+                    const mKey = inp.getAttribute('data-meal');
+                    if (mKey && defaults[mKey] !== undefined) inp.value = defaults[mKey];
+                });
+                syncMealPercentagesFromDom();
+                this.savePlan();
+            });
+        }
 
         [pInput, cInput, fInput, wInput].forEach(inp => {
             if (inp) {
@@ -674,6 +774,7 @@ const CoachNutritionMaster = {
         if (btnNext) {
             btnNext.addEventListener('click', () => {
                 syncMacroInputsToCache();
+                syncMealPercentagesFromDom();
                 this.savePlan();
                 this.goToStep(3);
             });
@@ -864,14 +965,18 @@ const CoachNutritionMaster = {
     },
 
     renderMealSection(mealKey, mealData, dayKcal) {
-        const mealTitles = {
-            desayuno: 'Desayuno (20%)',
-            almuerzo: 'Almuerzo (35%)',
-            merienda: 'Merienda (15%)',
-            cena: 'Cena (20%)',
-            snack: 'Snacks / Colación (10%)'
+        const mealNames = {
+            desayuno: 'Desayuno',
+            almuerzo: 'Almuerzo',
+            merienda: 'Merienda',
+            cena: 'Cena',
+            snack: 'Snacks / Colación'
         };
-        const title = mealTitles[mealKey] || mealKey.toUpperCase();
+        const pcts = this.getMealPercentages();
+        const pct = pcts[mealKey] !== undefined ? pcts[mealKey] : 20;
+        const baseKcal = Math.max(1000, parseInt(dayKcal || (this.dayPlanCache && this.dayPlanCache.target_calories), 10) || 2150);
+        const targetMealKcal = Math.round(baseKcal * (pct / 100));
+        const title = `${mealNames[mealKey] || mealKey.toUpperCase()} (${pct}% · Meta ${targetMealKcal} kcal)`;
         const foods = (mealData && Array.isArray(mealData.foods)) ? mealData.foods : [];
 
         let mealCalories = 0;
@@ -886,9 +991,9 @@ const CoachNutritionMaster = {
         return `
             <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
                 <div style="background: #F8F9FA; padding: 10px 14px; border-bottom: 1px solid #E4E4E7; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         <span style="font-size: 12px; font-weight: 800; color: #121214; text-transform: uppercase;">${title}</span>
-                        <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">${mealCalories} kcal • ${Math.round(mealProt)}g Prot</span>
+                        <span class="pill pill-champagne" style="font-size: 9.5px; padding: 2px 7px;">${mealCalories} / ${targetMealKcal} kcal • ${Math.round(mealProt)}g Prot</span>
                     </div>
                     <button type="button" class="btn btn-outline btn-sm btn-open-food-modal" data-meal="${mealKey}" style="font-size: 11px; padding: 5px 12px; font-weight: 700; border-color: #9E7D4B; color: #9E7D4B; display: inline-flex; align-items: center; gap: 4px;">
                         <span>+ Agregar Alimento</span>
@@ -2234,8 +2339,11 @@ const CoachNutritionMaster = {
         let mealsHtml = '';
         const mealsObj = (dPlan && dPlan.meals) ? dPlan.meals : {};
 
+        const mealPcts = this.getMealPercentages();
         Object.keys(mealLabels).forEach(mKey => {
             const m = mealsObj[mKey] || { target_kcal: 400, foods: [] };
+            const pct = mealPcts[mKey] !== undefined ? mealPcts[mKey] : 20;
+            const targetMealKcal = Math.round(targetCalories * (pct / 100));
             const foods = m.foods || [];
 
             let foodRowsHtml = '';
@@ -2274,8 +2382,8 @@ const CoachNutritionMaster = {
                 <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; padding: 12px; margin-bottom: 10px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <div>
-                            <strong style="font-size: 12px; text-transform: uppercase; color: #9E7D4B; letter-spacing: 0.5px;">${mealLabels[mKey]}</strong>
-                            <span style="font-size: 10.5px; color: #71717A; margin-left: 6px;">${mealKcalSum} kcal prescriptas</span>
+                            <strong style="font-size: 12px; text-transform: uppercase; color: #9E7D4B; letter-spacing: 0.5px;">${mealLabels[mKey]} (${pct}% · Meta ${targetMealKcal} kcal)</strong>
+                            <span style="font-size: 10.5px; color: #71717A; margin-left: 6px;">${mealKcalSum} / ${targetMealKcal} kcal prescriptas</span>
                         </div>
                         <button type="button" class="btn btn-outline btn-sm btn-open-food-modal-workstation" data-meal="${mKey}" style="font-size: 10px; padding: 3px 8px; border-color: #9E7D4B; color: #9E7D4B; font-weight: 700;">
                             + Agregar Alimento
