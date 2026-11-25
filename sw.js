@@ -3,7 +3,7 @@
    Zero-Stale Architecture: Native HTTP for versioned assets, Network-First HTML
    ============================================================================= */
 
-const CACHE_NAME = 'sens-pwa-v14.0.0';
+const CACHE_NAME = 'sens-pwa-v15.0.0';
 
 // Install: activate immediately without stale precaching of HTML/JS/CSS
 self.addEventListener('install', (event) => {
@@ -41,7 +41,7 @@ self.addEventListener('fetch', (event) => {
     if (request.mode === 'navigate') {
         event.respondWith((async () => {
             try {
-                const networkResponse = await fetch(request, { cache: 'no-cache' });
+                const networkResponse = await fetch(request, { cache: 'no-store' });
                 if (networkResponse && networkResponse.status === 200) {
                     const copy = networkResponse.clone();
                     caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', copy));

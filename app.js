@@ -1878,10 +1878,18 @@ async function loadCoachAthletesList(forceRefresh = false) {
                     .from('profiles')
                     .select('*')
                     .order('created_at', { ascending: false });
-                if (!error && data && data.length > 0) {
+                if (!error && Array.isArray(data)) {
                     dbAthletes = data;
                     try {
                         localStorage.setItem(SENS_COACH_ATHLETES_CACHE_KEY, JSON.stringify(dbAthletes));
+                        // Purgar de sens_registered_athletes cualquier alumno que ya no exista en Supabase
+                        const dbIds = new Set(dbAthletes.map(a => a.id));
+                        const dbEmails = new Set(dbAthletes.map(a => (a.email || '').toLowerCase()).filter(Boolean));
+                        const rawReg = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
+                        if (Array.isArray(rawReg) && rawReg.length > 0) {
+                            const cleanedReg = rawReg.filter(r => dbIds.has(r.id) || (r.email && dbEmails.has(r.email.toLowerCase())));
+                            localStorage.setItem('sens_registered_athletes', JSON.stringify(cleanedReg));
+                        }
                     } catch (_) {}
                 } else if (prevCache.length > 0) {
                     console.warn('[CoachAthletes] Supabase retornó 0 filas; preservando caché persistente de', prevCache.length, 'atletas.');
@@ -3817,6 +3825,46 @@ function setupRealtimeProfileSubscription(userId) {
     }
 }
 
+function setupCoachRealtimeRosterSubscription() {
+    if (!supabaseClient || !isCurrentUserAdmin()) return;
+    if (window._sensCoachRosterChannel) {
+        try { supabaseClient.removeChannel(window._sensCoachRosterChannel); } catch (_) {}
+        window._sensCoachRosterChannel = null;
+    }
+
+    let rosterDebounce = null;
+    const triggerCoachSync = () => {
+        if (rosterDebounce) clearTimeout(rosterDebounce);
+        rosterDebounce = setTimeout(() => {
+            if (typeof loadCoachAthletesList === 'function') {
+                loadCoachAthletesList(true);
+            }
+            if (typeof syncCoachMasterCard === 'function' && AppState.activeAthleteId) {
+                syncCoachMasterCard(AppState.activeAthleteId);
+            }
+        }, 350);
+    };
+
+    try {
+        window._sensCoachRosterChannel = supabaseClient
+            .channel('coach-roster-realtime-all')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'profiles' },
+                () => { triggerCoachSync(); }
+            )
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'workout_logs' },
+                () => { triggerCoachSync(); }
+            )
+            .subscribe();
+    } catch (e) {
+        console.warn('[SENS Coach Realtime] Error al inicializar suscripción global:', e);
+    }
+}
+window.setupCoachRealtimeRosterSubscription = setupCoachRealtimeRosterSubscription;
+
 async function checkExistingSession() {
     const client = (typeof window.ensureSupabaseClient === 'function')
         ? await window.ensureSupabaseClient()
@@ -3910,8 +3958,9 @@ async function checkExistingSession() {
                     if (typeof window.__syncAvatarData === 'function') window.__syncAvatarData();
                     if (typeof renderProfileSettingsData === 'function') renderProfileSettingsData();
                     setupRealtimeProfileSubscription(session.user.id);
-                    if (isCurrentUserAdmin() && typeof loadCoachAthletesList === 'function') {
-                        loadCoachAthletesList(true);
+                    if (isCurrentUserAdmin()) {
+                        setupCoachRealtimeRosterSubscription();
+                        if (typeof loadCoachAthletesList === 'function') loadCoachAthletesList(true);
                     }
                 }
             } else if (event === 'SIGNED_OUT') {
@@ -3927,6 +3976,10 @@ async function checkExistingSession() {
                     if (window._sensRealtimeProfileChannel && supabaseClient) {
                         try { supabaseClient.removeChannel(window._sensRealtimeProfileChannel); } catch (_) {}
                         window._sensRealtimeProfileChannel = null;
+                    }
+                    if (window._sensCoachRosterChannel && supabaseClient) {
+                        try { supabaseClient.removeChannel(window._sensCoachRosterChannel); } catch (_) {}
+                        window._sensCoachRosterChannel = null;
                     }
                     try {
                         localStorage.removeItem('sens_active_user');
@@ -15109,9 +15162,40 @@ async function refreshAthletePrescribedWorkouts() {
 }
 window.refreshAthletePrescribedWorkouts = refreshAthletePrescribedWorkouts;
 
-document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') refreshAthletePrescribedWorkouts();
-});
+(function setupSensIosResumeSync() {
+    let lastResumeSyncAt = 0;
+    const runForegroundSync = () => {
+        const now = Date.now();
+        if (now - lastResumeSyncAt < 4000) return;
+        lastResumeSyncAt = now;
+
+        // 1. Verificar actualizaciones de Service Worker en iOS PWA
+        if ('serviceWorker' in navigator) {
+            try {
+                navigator.serviceWorker.getRegistration().then(reg => { if (reg) reg.update(); }).catch(() => {});
+            } catch (_) {}
+        }
+
+        // 2. Sincronizar datos en vivo y reabrir WebSockets suspendidos por iOS
+        if (typeof isCurrentUserAdmin === 'function' && isCurrentUserAdmin()) {
+            if (typeof loadCoachAthletesList === 'function') loadCoachAthletesList(true);
+            if (typeof setupCoachRealtimeRosterSubscription === 'function') setupCoachRealtimeRosterSubscription();
+        } else {
+            refreshAthletePrescribedWorkouts();
+            if (typeof setupRealtimeProfileSubscription === 'function' && AppState?.user?.id) {
+                setupRealtimeProfileSubscription(AppState.user.id);
+            }
+        }
+    };
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') runForegroundSync();
+    });
+    window.addEventListener('pageshow', (ev) => {
+        if (ev && ev.persisted) runForegroundSync();
+    });
+    window.addEventListener('online', runForegroundSync);
+})();
 
 function getCoachAthleteWorkoutData(athId) {
     if (!athId) athId = getActiveAthleteId();
@@ -32514,6 +32598,17 @@ const SensPwaManager = {
 
     registerServiceWorker() {
         if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+            const hadController = Boolean(navigator.serviceWorker.controller);
+            let swRefreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!hadController || swRefreshing) return;
+                try {
+                    if (sessionStorage.getItem('sens_sw_reloaded_v15')) return;
+                    sessionStorage.setItem('sens_sw_reloaded_v15', '1');
+                } catch (_) {}
+                swRefreshing = true;
+                window.location.reload();
+            });
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js', { scope: './', updateViaCache: 'none' })
                     .then((reg) => {
