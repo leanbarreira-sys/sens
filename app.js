@@ -33744,18 +33744,19 @@ window.renderWeightLineChart = function() {
         history = JSON.parse(localStorage.getItem(storageKey) || '[]');
     } catch (_) {}
 
-    // Semilla inicial realista si el usuario no tiene historial guardado aún
+    // Solo usar datos reales: si es usuario nuevo sin historial (o tenía la semilla sintética legacy), conservar únicamente su peso inicial real
     const currentW = parseFloat(profile.current_weight || profile.weight_kg || anamnesis.weight || 75.0);
-    if (!Array.isArray(history) || history.length === 0) {
-        const now = new Date();
-        const d1 = new Date(now); d1.setDate(now.getDate() - 9);
-        const d2 = new Date(now); d2.setDate(now.getDate() - 6);
-        const d3 = new Date(now); d3.setDate(now.getDate() - 3);
+    const isLegacySyntheticSeed = Array.isArray(history) && history.length === 4 &&
+        Math.abs((history[0]?.weight || 0) - (history[3]?.weight || 0) - 1.2) < 0.05 &&
+        Math.abs((history[1]?.weight || 0) - (history[3]?.weight || 0) - 0.8) < 0.05 &&
+        Math.abs((history[2]?.weight || 0) - (history[3]?.weight || 0) - 0.3) < 0.05;
+
+    if (!Array.isArray(history) || history.length === 0 || isLegacySyntheticSeed) {
+        const regIso = (profile.created_at || (AppState.user && AppState.user.created_at) || new Date().toISOString()).slice(0, 10);
+        const regDateObj = new Date(regIso + 'T12:00:00');
+        const regLabel = isNaN(regDateObj.getTime()) ? 'Inicio' : formatDateDDMM(regDateObj);
         history = [
-            { date: formatDateDDMM(d1), iso: d1.toISOString().slice(0, 10), weight: +(currentW + 1.2).toFixed(1) },
-            { date: formatDateDDMM(d2), iso: d2.toISOString().slice(0, 10), weight: +(currentW + 0.8).toFixed(1) },
-            { date: formatDateDDMM(d3), iso: d3.toISOString().slice(0, 10), weight: +(currentW + 0.3).toFixed(1) },
-            { date: 'Hoy', iso: now.toISOString().slice(0, 10), weight: currentW }
+            { date: regLabel, iso: regIso, weight: +currentW.toFixed(1) }
         ];
         try {
             localStorage.setItem(storageKey, JSON.stringify(history));
@@ -33768,7 +33769,11 @@ window.renderWeightLineChart = function() {
 
     if (numEl) numEl.textContent = latest.weight.toFixed(1);
     if (deltaEl) {
-        if (delta <= 0) {
+        if (history.length <= 1) {
+            deltaEl.textContent = 'Peso inicial registrado';
+            deltaEl.style.background = '#FAF7F2';
+            deltaEl.style.color = '#705B3E';
+        } else if (delta <= 0) {
             deltaEl.textContent = `${delta} kg vs inicio`;
             deltaEl.style.background = '#ECFDF5';
             deltaEl.style.color = '#047857';
@@ -33796,17 +33801,21 @@ window.renderWeightLineChart = function() {
     const usableW = W - (padX * 2);
     const usableH = H - padTop - padBottom;
 
-    const points = history.map((item, idx) => {
-        const x = padX + (idx / Math.max(1, history.length - 1)) * usableW;
-        const y = padTop + usableH - ((item.weight - minW) / range) * usableH;
-        return { x: +x.toFixed(1), y: +y.toFixed(1), weight: item.weight, label: item.date };
-    });
+    const points = history.length === 1
+        ? [{ x: +(W / 2).toFixed(1), y: +(padTop + usableH / 2).toFixed(1), weight: history[0].weight, label: history[0].date }]
+        : history.map((item, idx) => {
+            const x = padX + (idx / Math.max(1, history.length - 1)) * usableW;
+            const y = padTop + usableH - ((item.weight - minW) / range) * usableH;
+            return { x: +x.toFixed(1), y: +y.toFixed(1), weight: item.weight, label: item.date };
+        });
 
-    const pathD = points.reduce((acc, p, i) => {
-        return i === 0 ? `M ${p.x} ${p.y}` : `${acc} L ${p.x} ${p.y}`;
-    }, '');
+    const pathD = points.length === 1
+        ? `M ${padX} ${points[0].y} L ${W - padX} ${points[0].y}`
+        : points.reduce((acc, p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `${acc} L ${p.x} ${p.y}`), '');
 
-    const areaD = `${pathD} L ${points[points.length - 1].x} ${H - padBottom} L ${points[0].x} ${H - padBottom} Z`;
+    const areaD = points.length === 1
+        ? `M ${padX} ${points[0].y} L ${W - padX} ${points[0].y} L ${W - padX} ${H - padBottom} L ${padX} ${H - padBottom} Z`
+        : `${pathD} L ${points[points.length - 1].x} ${H - padBottom} L ${points[0].x} ${H - padBottom} Z`;
 
     const svgHtml = `
         <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible;">
@@ -33852,11 +33861,15 @@ window.openLogWeightModal = function() {
 
     if (inp) inp.value = currentW.toFixed(1);
     modal.style.display = 'flex';
+    modal.classList.add('active');
 };
 
 window.closeLogWeightModal = function() {
     const modal = document.getElementById('userLogWeightModal');
-    if (modal) modal.style.display = 'none';
+    if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+    }
 };
 
 window.stepWeightModalInput = function(delta) {

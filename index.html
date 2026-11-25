@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=73.0">
+    <link rel="stylesheet" href="style.css?v=74.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '89.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '89.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '90.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '90.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8924,7 +8924,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=84.0"></script>
+    <script defer src="app.js?v=85.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
@@ -8943,41 +8943,44 @@
          MODAL BOTTOM SHEET: REGISTRAR PESO CORPORAL DIARIO
          ========================================================================= -->
     <div class="sens-modal-sheet-wrap" id="userLogWeightModal" style="display: none;" onclick="if(event.target===this) window.closeLogWeightModal();">
-        <div class="sens-modal-sheet-box" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08); box-shadow: 0 -12px 48px rgba(18,18,20,0.16); max-width: 440px; margin: auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div class="sens-modal-sheet-box sens-weight-bottom-sheet">
+            <div class="sheet-drag-handle-wrap" style="padding: 0 0 12px 0;">
+                <div class="sheet-drag-handle"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div>
-                    <span class="pill pill-champagne" style="font-size: 10px; padding: 3px 10px; background: rgba(251,222,185,0.55); color: #705B3E; font-weight: 800;">SEGUIMIENTO CORPORAL</span>
-                    <h3 style="margin: 4px 0 0 0; font-size: 1.15rem; font-weight: 800; color: #121214;">Registrar Peso de Hoy</h3>
+                    <span class="pill pill-champagne" style="font-size: 9.5px; padding: 3px 10px; background: rgba(229,203,167,0.28); color: #705B3E; font-weight: 800; border: none;">SEGUIMIENTO CORPORAL</span>
+                    <h3 style="margin: 5px 0 0 0; font-size: 1.15rem; font-weight: 800; color: #121214;">Registrar Peso</h3>
                 </div>
-                <button type="button" class="sens-modal-close-btn" onclick="window.closeLogWeightModal();" aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <button type="button" class="sens-modal-close-btn" onclick="window.closeLogWeightModal();" aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                     ✕
                 </button>
             </div>
 
             <p style="font-size: 12px; color: #575659; margin: 0 0 16px 0; line-height: 1.45;">
-                Ingresá tu peso matutino en ayunas para actualizar tu gráfico de línea y calibrar tu balance calórico.
+                Ingresá tu peso matutino en ayunas para actualizar tu evolución y calibrar tu balance calórico.
             </p>
 
             <!-- Stepper Central de Peso -->
-            <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin: 16px 0 20px;">
-                <button type="button" onclick="window.stepWeightModalInput(-0.1);" style="width: 46px; height: 46px; border-radius: 12px; border: 1.5px solid rgba(18,18,20,0.15); background: #FAF7F2; color: #121214; font-size: 22px; font-weight: 800; cursor: pointer;">−</button>
-                <div style="display: flex; align-items: baseline; gap: 6px; background: #F4F3F1; padding: 8px 18px; border-radius: 14px; border: 1px solid rgba(18,18,20,0.1);">
-                    <input type="number" id="inputModalWeightVal" step="0.1" min="35" max="250" value="75.0" style="width: 80px; font-size: 28px; font-weight: 900; background: transparent; border: none; text-align: right; color: #121214;" aria-label="Peso en kg">
-                    <span style="font-size: 14px; font-weight: 800; color: #705B3E;">KG</span>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin: 14px 0 18px;">
+                <button type="button" onclick="window.stepWeightModalInput(-0.1);" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(18,18,20,0.1); background: #FAF9F6; color: #121214; font-size: 20px; font-weight: 800; cursor: pointer;">−</button>
+                <div style="display: flex; align-items: baseline; gap: 6px; background: #F4F3F1; padding: 8px 18px; border-radius: 14px;">
+                    <input type="number" id="inputModalWeightVal" step="0.1" min="35" max="250" value="75.0" style="width: 82px; font-size: 28px; font-weight: 900; font-variant-numeric: tabular-nums; background: transparent; border: none; text-align: right; color: #121214;" aria-label="Peso en kg">
+                    <span style="font-size: 13px; font-weight: 800; color: #705B3E;">KG</span>
                 </div>
-                <button type="button" onclick="window.stepWeightModalInput(0.1);" style="width: 46px; height: 46px; border-radius: 12px; border: 1.5px solid rgba(18,18,20,0.15); background: #FAF7F2; color: #121214; font-size: 22px; font-weight: 800; cursor: pointer;">+</button>
+                <button type="button" onclick="window.stepWeightModalInput(0.1);" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(18,18,20,0.1); background: #FAF9F6; color: #121214; font-size: 20px; font-weight: 800; cursor: pointer;">+</button>
             </div>
 
             <!-- Chips de Ajuste Rápido -->
-            <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
-                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(-0.5);" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">-0.5 kg</button>
-                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(-0.2);" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">-0.2 kg</button>
-                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(0.2);" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">+0.2 kg</button>
-                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(0.5);" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.12); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">+0.5 kg</button>
+            <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 18px; flex-wrap: wrap;">
+                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(-0.5);" style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">−0.5 kg</button>
+                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(-0.2);" style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">−0.2 kg</button>
+                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(0.2);" style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">+0.2 kg</button>
+                <button type="button" class="btn-micro-chip" onclick="window.stepWeightModalInput(0.5);" style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 700; color: #121214; cursor: pointer;">+0.5 kg</button>
             </div>
 
-            <button type="button" class="btn btn-primary" onclick="window.saveWeightFromModal();" style="width: 100%; padding: 13px; font-size: 13.5px; font-weight: 800; border-radius: 12px; background: #121214; color: #FFFFFF; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(18,18,20,0.18);">
-                Guardar Registro de Peso ✓
+            <button type="button" class="btn btn-primary sens-weight-save-btn" onclick="window.saveWeightFromModal();">
+                Guardar Peso ✓
             </button>
         </div>
     </div>
