@@ -12453,9 +12453,6 @@ function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
                     <button type="button" class="btn-coach-action-dossier btn-hub-open-dossier" data-athlete-id="${safeAthId}" onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier('${safeAthId}', { isCoach: true });">
                         <span>Ficha</span>
                     </button>
-                    <button type="button" class="btn-coach-action-dossier btn-hub-open-notes" data-athlete-id="${safeAthId}" onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openCoachAthleteNotes==='function') window.openCoachAthleteNotes('${safeAthId}');">
-                        <span>${(typeof window.hasCoachPrivateNotes === 'function' && window.hasCoachPrivateNotes(safeAthId)) ? 'Notas •' : 'Notas'}</span>
-                    </button>
                     <button type="button" class="btn-coach-action-portal btn-hub-inspect-student" data-athlete-id="${safeAthId}">
                         <span>Portal →</span>
                     </button>
@@ -12568,12 +12565,16 @@ window.openCoachAthleteActionsSheet = function(athId) {
     }
 
     const toggleTitle = document.getElementById('sheetActionToggleStatusTitle');
-    const toggleSub = document.getElementById('sheetActionToggleStatusSub');
     if (toggleTitle) {
-        toggleTitle.textContent = isAct ? 'Pausar Acceso del Alumno' : 'Aprobar / Activar Acceso';
+        toggleTitle.textContent = isAct ? 'Pausar' : 'Activar';
     }
-    if (toggleSub) {
-        toggleSub.textContent = isAct ? 'Desactivará el acceso al portal temporalmente' : 'Dará acceso completo e inmediato al portal';
+
+    const notesDot = document.getElementById('sheetActionNotesDot');
+    if (notesDot) {
+        notesDot.style.display = (typeof window.hasCoachPrivateNotes === 'function' && window.hasCoachPrivateNotes(athId)) ? 'block' : 'none';
+    }
+    if (typeof window.showCoachSheetActionsGrid === 'function') {
+        window.showCoachSheetActionsGrid();
     }
 
     const waBtn = document.getElementById('sheetActionWhatsApp');
@@ -13004,33 +13005,24 @@ async function pauseAllExpiredAthletes() {
 
 function switchCoachAthletesSection(section) {
     const isPayments = section === 'payments';
-    const isNotes = section === 'notes';
-    const isRoster = !isPayments && !isNotes;
     const rosterSec = document.getElementById('coachAthletesRosterSection');
     const paymentsSec = document.getElementById('coachAthletesPaymentsSection');
-    const notesSec = document.getElementById('coachAthletesNotesSection');
     const btnRoster = document.getElementById('btnCoachSubviewRoster');
     const btnPayments = document.getElementById('btnCoachSubviewPayments');
-    const btnNotes = document.getElementById('btnCoachSubviewNotes');
 
-    if (rosterSec) rosterSec.style.display = isRoster ? 'block' : 'none';
+    if (rosterSec) rosterSec.style.display = isPayments ? 'none' : 'block';
     if (paymentsSec) paymentsSec.style.display = isPayments ? 'block' : 'none';
-    if (notesSec) notesSec.style.display = isNotes ? 'block' : 'none';
-    if (btnRoster) btnRoster.classList.toggle('active', isRoster);
+    if (btnRoster) btnRoster.classList.toggle('active', !isPayments);
     if (btnPayments) btnPayments.classList.toggle('active', isPayments);
-    if (btnNotes) btnNotes.classList.toggle('active', isNotes);
 
     if (isPayments) {
         renderCoachPaymentsHub();
         loadCoachPaymentsFromSupabase().then(() => renderCoachPaymentsHub());
-    } else if (isNotes) {
-        if (typeof window.initCoachPrivateNotesHub === 'function') window.initCoachPrivateNotesHub();
-        if (typeof window.renderCoachPrivateNotesHub === 'function') window.renderCoachPrivateNotesHub();
     }
 }
 
 /* =============================================================================
-   NOTAS PRIVADAS DEL COACH POR ALUMNO (SOLO COACH — INICIO DE COACH)
+   NOTAS PRIVADAS DEL COACH POR ALUMNO (DENTRO DE GESTIÓN DE USUARIO)
    ============================================================================= */
 const SENS_COACH_PRIVATE_NOTES_KEY = 'sens_coach_private_notes_map';
 
@@ -13085,43 +13077,53 @@ window.hasCoachPrivateNotes = function(athId) {
     return Boolean((rec.freeText && rec.freeText.trim()) || (Array.isArray(rec.entries) && rec.entries.length > 0));
 };
 
-window.openCoachAthleteNotes = function(athId) {
-    if (athId) {
-        AppState.activeAthleteId = athId;
-        window._coachNotesSelectedAthleteId = athId;
-    }
-    switchCoachAthletesSection('notes');
+window.showCoachSheetActionsGrid = function() {
+    const gridView = document.getElementById('coachSheetActionsGridView');
+    const notesView = document.getElementById('coachSheetNotesView');
+    if (gridView) gridView.style.display = 'block';
+    if (notesView) notesView.style.display = 'none';
 };
 
-function renderCoachPrivateNotesHub() {
-    const sel = document.getElementById('coachNotesAthleteSelect');
+window.showCoachSheetNotesView = function(athId) {
+    const targetId = athId || window.currentActionAthleteId;
+    if (!targetId) return;
+    window.currentActionAthleteId = targetId;
+    window._coachNotesSelectedAthleteId = targetId;
+    const gridView = document.getElementById('coachSheetActionsGridView');
+    const notesView = document.getElementById('coachSheetNotesView');
+    if (gridView) gridView.style.display = 'none';
+    if (notesView) notesView.style.display = 'block';
+    initCoachPrivateNotesHub();
+    renderCoachPrivateNotesHub(targetId);
+};
+
+window.openCoachAthleteNotes = function(athId) {
+    const targetId = athId || window.currentActionAthleteId;
+    if (!targetId) return;
+    if (typeof window.openCoachAthleteActionsSheet === 'function') {
+        window.openCoachAthleteActionsSheet(targetId);
+    }
+    window.showCoachSheetNotesView(targetId);
+};
+
+function renderCoachPrivateNotesHub(athIdOverride) {
     const textarea = document.getElementById('coachNotesFreeTextarea');
     const entriesList = document.getElementById('coachNotesEntriesList');
     const statusEl = document.getElementById('coachNotesSavedStatus');
-    if (!sel || !textarea || !entriesList) return;
+    const notesDot = document.getElementById('sheetActionNotesDot');
+    if (!textarea || !entriesList) return;
 
-    const roster = getConsolidatedCoachAthletes();
-    if (roster.length === 0) {
-        sel.innerHTML = '<option value="">Sin alumnos registrados</option>';
-        textarea.value = '';
-        textarea.disabled = true;
-        entriesList.innerHTML = '<div style="font-size: 12px; color: #71717A; padding: 12px; text-align: center; background: #F8F9FA; border-radius: 10px;">Agregá o esperá el alta de un alumno para cargar notas privadas.</div>';
-        return;
-    }
-
-    textarea.disabled = false;
-    const preferredId = window._coachNotesSelectedAthleteId || AppState.activeAthleteId || roster[0].id;
-    const activeAth = roster.find(a => a.id === preferredId) || roster[0];
-    window._coachNotesSelectedAthleteId = activeAth.id;
-
-    sel.innerHTML = roster.map(a => {
-        const hasN = window.hasCoachPrivateNotes(a.id) ? ' •' : '';
-        return `<option value="${escapeHTML(a.id)}" ${a.id === activeAth.id ? 'selected' : ''}>${escapeHTML(a.full_name || a.email || 'Alumno')}${hasN}</option>`;
-    }).join('');
+    const athId = athIdOverride || window._coachNotesSelectedAthleteId || window.currentActionAthleteId;
+    if (!athId) return;
+    window._coachNotesSelectedAthleteId = athId;
 
     const map = getCoachPrivateNotesMap();
-    const rec = map[activeAth.id] || { freeText: '', entries: [], updatedAt: null };
+    const rec = map[athId] || { freeText: '', entries: [], updatedAt: null };
     textarea.value = rec.freeText || '';
+
+    if (notesDot) {
+        notesDot.style.display = window.hasCoachPrivateNotes(athId) ? 'block' : 'none';
+    }
 
     if (statusEl) {
         if (rec.updatedAt) {
@@ -13130,13 +13132,13 @@ function renderCoachPrivateNotesHub() {
             const mm = String(d.getMinutes()).padStart(2, '0');
             statusEl.textContent = `Guardado ${d.toLocaleDateString('es-AR')} ${hh}:${mm}`;
         } else {
-            statusEl.textContent = 'Sin notas guardadas aún';
+            statusEl.textContent = 'Solo visible para vos';
         }
     }
 
     const entries = Array.isArray(rec.entries) ? rec.entries : [];
     if (entries.length === 0) {
-        entriesList.innerHTML = '<div style="font-size: 12px; color: #A1A1AA; padding: 12px; text-align: center; background: #FAFAFA; border: 1px dashed #E4E4E7; border-radius: 10px;">Todavía no hay avances en la bitácora de este alumno.</div>';
+        entriesList.innerHTML = '<div style="font-size: 11.5px; color: rgba(255,255,255,0.5); padding: 12px; text-align: center; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.14); border-radius: 10px;">Sin avances en bitácora todavía.</div>';
         return;
     }
 
@@ -13145,16 +13147,16 @@ function renderCoachPrivateNotesHub() {
         const dateLabel = `${d.toLocaleDateString('es-AR')} · ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
         const safeId = escapeHTML(entry.id);
         return `
-            <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 10px; padding: 10px 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
-                    <span style="font-size: 10.5px; font-weight: 800; color: #9E7D4B;">${dateLabel}${entry.edited ? ' · Editado' : ''}</span>
-                    <div style="display: flex; gap: 6px;">
-                        <button type="button" class="btn-coach-note-copy" data-entry-id="${safeId}" style="font-size: 10.5px; font-weight: 700; color: #52525B; background: #FFFFFF; border: 1px solid #D4D4D8; border-radius: 6px; padding: 2px 8px; cursor: pointer;">Copiar</button>
-                        <button type="button" class="btn-coach-note-edit" data-entry-id="${safeId}" style="font-size: 10.5px; font-weight: 700; color: #121214; background: #FFFFFF; border: 1px solid #D4D4D8; border-radius: 6px; padding: 2px 8px; cursor: pointer;">Editar</button>
-                        <button type="button" class="btn-coach-note-del" data-entry-id="${safeId}" style="font-size: 10.5px; font-weight: 700; color: #DC2626; background: #FFFFFF; border: 1px solid rgba(220,38,38,0.25); border-radius: 6px; padding: 2px 8px; cursor: pointer;">Eliminar</button>
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap;">
+                    <span style="font-size: 10px; font-weight: 800; color: #E5CBA7;">${dateLabel}${entry.edited ? ' · Editado' : ''}</span>
+                    <div style="display: flex; gap: 5px;">
+                        <button type="button" class="btn-coach-note-copy" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #FFFFFF; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Copiar</button>
+                        <button type="button" class="btn-coach-note-edit" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #E5CBA7; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Editar</button>
+                        <button type="button" class="btn-coach-note-del" data-entry-id="${safeId}" style="font-size: 10px; font-weight: 700; color: #F87171; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); border-radius: 6px; padding: 2px 7px; cursor: pointer;">Borrar</button>
                     </div>
                 </div>
-                <div class="coach-note-entry-body" data-entry-id="${safeId}" style="font-size: 13px; color: #121214; white-space: pre-wrap; line-height: 1.45;">${escapeHTML(entry.text || '')}</div>
+                <div class="coach-note-entry-body" data-entry-id="${safeId}" style="font-size: 12.5px; color: #FFFFFF; white-space: pre-wrap; line-height: 1.45;">${escapeHTML(entry.text || '')}</div>
             </div>
         `;
     }).join('');
@@ -13176,26 +13178,25 @@ function renderCoachPrivateNotesHub() {
             const found = entries.find(x => x.id === id);
             if (!found) return;
             const bodyEl = entriesList.querySelector(`.coach-note-entry-body[data-entry-id="${id}"]`);
-            if (!bodyEl) return;
-            if (bodyEl.querySelector('textarea')) return;
+            if (!bodyEl || bodyEl.querySelector('textarea')) return;
             bodyEl.innerHTML = `
-                <textarea class="input-control coach-note-inline-edit" rows="3" style="width:100%; font-size:13px; margin-bottom:6px;">${escapeHTML(found.text || '')}</textarea>
+                <textarea class="coach-note-inline-edit" rows="3" style="width:100%; font-size:12.5px; margin-bottom:6px; background:rgba(255,255,255,0.08); color:#FFF; border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:6px 8px; box-sizing:border-box;">${escapeHTML(found.text || '')}</textarea>
                 <div style="display:flex; gap:6px; justify-content:flex-end;">
-                    <button type="button" class="btn btn-outline btn-sm btn-cancel-inline-note" style="font-size:11px; padding:4px 10px;">Cancelar</button>
-                    <button type="button" class="btn btn-primary btn-sm btn-save-inline-note" style="font-size:11px; padding:4px 12px; background:#121214; color:#FFF; border:none;">Guardar</button>
+                    <button type="button" class="btn-cancel-inline-note" style="font-size:10.5px; padding:4px 10px; background:rgba(255,255,255,0.08); color:#FFF; border:1px solid rgba(255,255,255,0.16); border-radius:6px; cursor:pointer;">Cancelar</button>
+                    <button type="button" class="btn-save-inline-note" style="font-size:10.5px; padding:4px 12px; background:#E5CBA7; color:#080809; font-weight:800; border:none; border-radius:6px; cursor:pointer;">Guardar</button>
                 </div>
             `;
-            bodyEl.querySelector('.btn-cancel-inline-note').addEventListener('click', () => renderCoachPrivateNotesHub());
+            bodyEl.querySelector('.btn-cancel-inline-note').addEventListener('click', () => renderCoachPrivateNotesHub(athId));
             bodyEl.querySelector('.btn-save-inline-note').addEventListener('click', async () => {
                 const newVal = (bodyEl.querySelector('.coach-note-inline-edit').value || '').trim();
                 if (!newVal) return;
                 const curMap = getCoachPrivateNotesMap();
-                const curRec = curMap[activeAth.id] || { freeText: '', entries: [] };
+                const curRec = curMap[athId] || { freeText: '', entries: [] };
                 curRec.entries = (curRec.entries || []).map(x => x.id === id ? { ...x, text: newVal, edited: true, updatedAt: new Date().toISOString() } : x);
                 curRec.updatedAt = new Date().toISOString();
-                curMap[activeAth.id] = curRec;
+                curMap[athId] = curRec;
                 const syncPromise = persistCoachPrivateNotesMap(curMap);
-                renderCoachPrivateNotesHub();
+                renderCoachPrivateNotesHub(athId);
                 showSensToast('Avance actualizado.', 'champagne');
                 await syncPromise;
             });
@@ -13206,13 +13207,12 @@ function renderCoachPrivateNotesHub() {
         btn.addEventListener('click', async () => {
             const id = btn.getAttribute('data-entry-id');
             const curMap = getCoachPrivateNotesMap();
-            const curRec = curMap[activeAth.id] || { freeText: '', entries: [] };
+            const curRec = curMap[athId] || { freeText: '', entries: [] };
             curRec.entries = (curRec.entries || []).filter(x => x.id !== id);
             curRec.updatedAt = new Date().toISOString();
-            curMap[activeAth.id] = curRec;
+            curMap[athId] = curRec;
             const syncPromise = persistCoachPrivateNotesMap(curMap);
-            renderCoachPrivateNotesHub();
-            renderCoachAthletesHub();
+            renderCoachPrivateNotesHub(athId);
             await syncPromise;
         });
     });
@@ -13222,7 +13222,6 @@ function initCoachPrivateNotesHub() {
     if (window._coachPrivateNotesInitialized) return;
     window._coachPrivateNotesInitialized = true;
 
-    const sel = document.getElementById('coachNotesAthleteSelect');
     const textarea = document.getElementById('coachNotesFreeTextarea');
     const statusEl = document.getElementById('coachNotesSavedStatus');
     const btnSave = document.getElementById('btnCoachNotesSaveFree');
@@ -13233,28 +13232,23 @@ function initCoachPrivateNotesHub() {
 
     let saveTimer = null;
     const saveFreeTextNow = async (showToastMsg = false) => {
-        const athId = window._coachNotesSelectedAthleteId || sel?.value;
+        const athId = window._coachNotesSelectedAthleteId || window.currentActionAthleteId;
         if (!athId || !textarea) return;
         const map = getCoachPrivateNotesMap();
         const cur = map[athId] || { freeText: '', entries: [] };
         cur.freeText = textarea.value;
         cur.updatedAt = new Date().toISOString();
         map[athId] = cur;
-        await persistCoachPrivateNotesMap(map);
+        const syncPromise = persistCoachPrivateNotesMap(map);
         if (statusEl) {
             const d = new Date(cur.updatedAt);
             statusEl.textContent = `Guardado ${d.toLocaleDateString('es-AR')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
         }
+        const notesDot = document.getElementById('sheetActionNotesDot');
+        if (notesDot) notesDot.style.display = window.hasCoachPrivateNotes(athId) ? 'block' : 'none';
         if (showToastMsg && typeof showSensToast === 'function') showSensToast('Nota guardada.', 'champagne');
-        renderCoachAthletesHub();
+        await syncPromise;
     };
-
-    if (sel) {
-        sel.addEventListener('change', () => {
-            window._coachNotesSelectedAthleteId = sel.value;
-            renderCoachPrivateNotesHub();
-        });
-    }
 
     if (textarea) {
         textarea.addEventListener('input', () => {
@@ -13296,7 +13290,7 @@ function initCoachPrivateNotesHub() {
         btnAddEntry.addEventListener('click', async () => {
             const txt = (newEntryInput.value || '').trim();
             if (!txt) return;
-            const athId = window._coachNotesSelectedAthleteId || sel?.value;
+            const athId = window._coachNotesSelectedAthleteId || window.currentActionAthleteId;
             if (!athId) return;
             const map = getCoachPrivateNotesMap();
             const cur = map[athId] || { freeText: textarea?.value || '', entries: [] };
@@ -13310,8 +13304,7 @@ function initCoachPrivateNotesHub() {
             map[athId] = cur;
             newEntryInput.value = '';
             const syncPromise = persistCoachPrivateNotesMap(map);
-            renderCoachPrivateNotesHub();
-            renderCoachAthletesHub();
+            renderCoachPrivateNotesHub(athId);
             if (typeof showSensToast === 'function') showSensToast('Avance agregado a la bitácora.', 'champagne');
             await syncPromise;
         });
@@ -13641,10 +13634,8 @@ function initCoachPaymentsHub() {
 
     const btnRoster = document.getElementById('btnCoachSubviewRoster');
     const btnPayments = document.getElementById('btnCoachSubviewPayments');
-    const btnNotes = document.getElementById('btnCoachSubviewNotes');
     if (btnRoster) btnRoster.addEventListener('click', () => switchCoachAthletesSection('roster'));
     if (btnPayments) btnPayments.addEventListener('click', () => switchCoachAthletesSection('payments'));
-    if (btnNotes) btnNotes.addEventListener('click', () => switchCoachAthletesSection('notes'));
     initCoachPrivateNotesHub();
 
     const autoPauseToggle = document.getElementById('toggleCoachAutoPauseExpired');
