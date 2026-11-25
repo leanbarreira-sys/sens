@@ -36581,3 +36581,56 @@ body.in-portal .sens-tracking-segmented-bar.sens-tracking-segmented-2col,
     color: #FFFFFF !important;
     border-color: #121214 !important;
 }
+
+/* Switcher de dominio Biblioteca General (Ejercicios vs Catálogo de Nutrición) */
+.coach-lib-domain-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: #EFECE6;
+    border: 1px solid rgba(18, 18, 20, 0.08);
+    border-radius: 999px;
+    max-width: 100%;
+}
+
+.coach-domain-switch-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    min-height: 36px;
+    font-size: 12.5px;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #52525B;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    touch-action: manipulation;
+    transition: background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.coach-domain-switch-btn:hover {
+    color: #121214;
+}
+
+.coach-domain-switch-btn.active {
+    background: #121214;
+    color: #FFFFFF;
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.14);
+}
+
+@media (max-width: 640px) {
+    .coach-lib-domain-switcher {
+        display: flex;
+        width: 100%;
+    }
+    .coach-domain-switch-btn {
+        flex: 1 1 0;
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}

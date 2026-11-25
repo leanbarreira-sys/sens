@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=75.0">
+    <link rel="stylesheet" href="style.css?v=76.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '100.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '100.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '101.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '101.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8984,14 +8984,16 @@
     <div class="coach-ex-editor-sheet" id="coachFoodSheetModal" role="dialog" aria-modal="true"
         aria-label="Editor de Alimento SENS"
         style="display: none; z-index: 100020; background: #FAF9F6 !important; color: #121214 !important;">
-        <div class="sheet-drag-handle-wrap"><div class="sheet-drag-handle"></div></div>
-        <div class="sheet-header" style="padding: 4px 18px 12px 18px; border-bottom: 1px solid rgba(18,18,20,0.08);">
+        <div class="coach-ex-sheet-handle-wrap" onclick="window.closeCoachFoodSheet && window.closeCoachFoodSheet();">
+            <div class="coach-ex-sheet-handle"></div>
+        </div>
+        <div class="coach-ex-sheet-header">
             <div>
-                <span style="font-size: 10px; font-weight: 800; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.7px;">CATÁLOGO NUTRICIÓN SENS</span>
-                <h3 class="sheet-title" id="coachFoodSheetTitle" style="font-size: 1.1rem; color: #121214 !important; margin: 2px 0 0 0;">Nuevo Alimento</h3>
+                <span class="coach-ex-sheet-eyebrow">CATÁLOGO NUTRICIÓN SENS</span>
+                <h3 class="coach-ex-sheet-title" id="coachFoodSheetTitle">Nuevo Alimento</h3>
             </div>
-            <button type="button" class="sheet-close-btn" aria-label="Cerrar"
-                onclick="window.closeCoachFoodSheet && window.closeCoachFoodSheet();">&times;</button>
+            <button type="button" class="coach-ex-sheet-close" aria-label="Cerrar"
+                onclick="window.closeCoachFoodSheet && window.closeCoachFoodSheet();">✕</button>
         </div>
 
         <form id="coachFoodEditorForm" style="padding: 14px 18px 20px 18px; overflow-y: auto; max-height: 62vh; display: flex; flex-direction: column; gap: 12px;">
