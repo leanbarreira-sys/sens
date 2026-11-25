@@ -1381,9 +1381,13 @@ const CoachNutritionMaster = {
                     </div>
 
                     <!-- Header de Resultados -->
-                    <div style="padding: 8px 20px; font-size: 11px; color: #575659; display: flex; justify-content: space-between; background: #F4F3F1;">
+                    <div style="padding: 8px 20px; font-size: 11px; color: #575659; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; background: #F4F3F1;">
                         <span id="foodPickerCountBadge">Cargando catálogo...</span>
-                        <span>Tocá "Detalle" para ver foto HD y receta</span>
+                        <button type="button" id="btnFoodPickerCreateNewFood"
+                            onclick="if(typeof window.openCoachFoodSheet==='function') window.openCoachFoodSheet(null, { assignAfterSave: true, targetMeal: CoachNutritionMaster.activeMealKey });"
+                            style="background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 5px 12px; font-size: 11px; font-weight: 800; cursor: pointer;">
+                            + Nuevo Alimento
+                        </button>
                     </div>
 
                     <!-- Grid de Resultados -->
@@ -3020,7 +3024,7 @@ const CoachNutritionMaster = {
                         <span style="font-size: 11.5px; color: #71717A;">Creá nuevos alimentos, editá macros o administrá la biblioteca</span>
                     </div>
                     <button type="button" id="btnCoachLibCreateNewFood"
-                        onclick="if(typeof window.openCoachDbItemEditor==='function') window.openCoachDbItemEditor('food', null);"
+                        onclick="if(typeof window.openCoachFoodSheet==='function') window.openCoachFoodSheet(null, { assignAfterSave: false }); else if(typeof window.openCoachDbItemEditor==='function') window.openCoachDbItemEditor('food', null);"
                         style="background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 8px 16px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(18,18,20,0.16);">
                         <span>+ Nuevo Alimento</span>
                     </button>
@@ -3063,7 +3067,7 @@ const CoachNutritionMaster = {
                                     </div>
                                     <div style="display: flex; gap: 6px; padding-top: 2px;">
                                         <button type="button" class="btn-lib-edit-food" data-food-id="${safeId}"
-                                            onclick="if(typeof window.openCoachDbItemEditor==='function') window.openCoachDbItemEditor('food', '${safeId}');"
+                                            onclick="if(typeof window.openCoachFoodSheet==='function') window.openCoachFoodSheet('${safeId}', { assignAfterSave: false }); else if(typeof window.openCoachDbItemEditor==='function') window.openCoachDbItemEditor('food', '${safeId}');"
                                             style="flex: 1; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.14); color: #121214; border-radius: 8px; padding: 5px 8px; font-size: 11px; font-weight: 700; cursor: pointer;">
                                             Editar
                                         </button>

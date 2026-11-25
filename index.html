@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '96.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '96.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '97.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '97.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8978,8 +8978,121 @@
         </div>
     </div>
 
+    <!-- Bottom Sheet Nativo: Crear / Editar Alimento (Biblioteca & Wizard Nutrición) -->
+    <div class="native-sheet-backdrop" id="coachFoodSheetBackdrop" style="display: none; z-index: 100019;"
+        onclick="window.closeCoachFoodSheet && window.closeCoachFoodSheet();"></div>
+    <div class="native-bottom-sheet coach-ex-editor-sheet" id="coachFoodSheetModal" role="dialog" aria-modal="true"
+        aria-label="Editor de Alimento SENS"
+        style="display: none; z-index: 100020; background: #FAF9F6 !important; color: #121214 !important;">
+        <div class="sheet-drag-handle-wrap"><div class="sheet-drag-handle"></div></div>
+        <div class="sheet-header" style="padding: 4px 18px 12px 18px; border-bottom: 1px solid rgba(18,18,20,0.08);">
+            <div>
+                <span style="font-size: 10px; font-weight: 800; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.7px;">CATÁLOGO NUTRICIÓN SENS</span>
+                <h3 class="sheet-title" id="coachFoodSheetTitle" style="font-size: 1.1rem; color: #121214 !important; margin: 2px 0 0 0;">Nuevo Alimento</h3>
+            </div>
+            <button type="button" class="sheet-close-btn" aria-label="Cerrar"
+                onclick="window.closeCoachFoodSheet && window.closeCoachFoodSheet();">&times;</button>
+        </div>
+
+        <form id="coachFoodEditorForm" style="padding: 14px 18px 20px 18px; overflow-y: auto; max-height: 62vh; display: flex; flex-direction: column; gap: 12px;">
+            <input type="hidden" id="cfSheetFoodId" value="">
+
+            <div>
+                <label class="input-label" for="cfSheetName" style="color: #121214; font-weight: 700;">Nombre del alimento o plato *</label>
+                <input type="text" id="cfSheetName" class="input-control" required placeholder="Ej: Bowl de Pollo Teriyaki &amp; Arroz"
+                    style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+            </div>
+
+            <div>
+                <label class="input-label" style="color: #121214; font-weight: 700;">Tipo de ítem</label>
+                <div style="display: flex; gap: 8px;" id="cfSheetTypePills">
+                    <button type="button" class="cf-type-pill active" data-val="Alimento Base"
+                        style="flex: 1; padding: 8px 10px; border-radius: 10px; font-size: 12px; font-weight: 800; border: 1.5px solid #121214; background: #121214; color: #FFFFFF; cursor: pointer;">
+                        Alimento Base
+                    </button>
+                    <button type="button" class="cf-type-pill" data-val="Receta"
+                        style="flex: 1; padding: 8px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; border: 1px solid rgba(18,18,20,0.16); background: #FFFFFF; color: #121214; cursor: pointer;">
+                        Receta / Plato
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <label class="input-label" style="color: #121214; font-weight: 700;">Momentos ideales</label>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="cfSheetMealPills">
+                    <button type="button" class="cf-meal-pill active" data-meal="desayuno_merienda"
+                        style="padding: 6px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700; border: 1px solid #9E7D4B; background: #FDF8F0; color: #705B3E; cursor: pointer;">
+                        Desayuno / Merienda
+                    </button>
+                    <button type="button" class="cf-meal-pill active" data-meal="almuerzo_cena"
+                        style="padding: 6px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700; border: 1px solid #9E7D4B; background: #FDF8F0; color: #705B3E; cursor: pointer;">
+                        Almuerzo / Cena
+                    </button>
+                    <button type="button" class="cf-meal-pill active" data-meal="snack"
+                        style="padding: 6px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700; border: 1px solid #9E7D4B; background: #FDF8F0; color: #705B3E; cursor: pointer;">
+                        Snack
+                    </button>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                <div>
+                    <label class="input-label" for="cfSheetKcal" style="font-size: 10.5px; color: #121214; font-weight: 700;">Kcal</label>
+                    <input type="number" id="cfSheetKcal" step="1" min="0" value="150" class="input-control"
+                        style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16); padding: 8px 6px; text-align: center; font-weight: 700;">
+                </div>
+                <div>
+                    <label class="input-label" for="cfSheetProt" style="font-size: 10.5px; color: #121214; font-weight: 700;">Prot (g)</label>
+                    <input type="number" id="cfSheetProt" step="0.1" min="0" value="20" class="input-control"
+                        style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16); padding: 8px 6px; text-align: center; font-weight: 700;">
+                </div>
+                <div>
+                    <label class="input-label" for="cfSheetCarbs" style="font-size: 10.5px; color: #121214; font-weight: 700;">Carbs (g)</label>
+                    <input type="number" id="cfSheetCarbs" step="0.1" min="0" value="10" class="input-control"
+                        style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16); padding: 8px 6px; text-align: center; font-weight: 700;">
+                </div>
+                <div>
+                    <label class="input-label" for="cfSheetFats" style="font-size: 10.5px; color: #121214; font-weight: 700;">Grasas (g)</label>
+                    <input type="number" id="cfSheetFats" step="0.1" min="0" value="4" class="input-control"
+                        style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16); padding: 8px 6px; text-align: center; font-weight: 700;">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px;">
+                <div>
+                    <label class="input-label" for="cfSheetGrams" style="color: #121214; font-weight: 700;">Porción (g/ml)</label>
+                    <input type="number" id="cfSheetGrams" step="5" min="5" value="100" class="input-control"
+                        style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+                </div>
+                <div>
+                    <label class="input-label" for="cfSheetPortion" style="color: #121214; font-weight: 700;">Equivalencia</label>
+                    <input type="text" id="cfSheetPortion" placeholder="Ej: 150g (1 porción)" class="input-control"
+                        style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+                </div>
+            </div>
+
+            <div>
+                <label class="input-label" for="cfSheetImageUrl" style="color: #121214; font-weight: 700;">URL de imagen (opcional)</label>
+                <input type="text" id="cfSheetImageUrl" placeholder="https://... (si queda vacío usa imagen SENS)" class="input-control"
+                    style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+            </div>
+
+            <div>
+                <label class="input-label" for="cfSheetNote" style="color: #121214; font-weight: 700;">Preparación / Nota del Coach</label>
+                <textarea id="cfSheetNote" rows="2" placeholder="Indicaciones prácticas o tips de cocción..." class="input-control"
+                    style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16); resize: vertical;"></textarea>
+            </div>
+        </form>
+
+        <div class="coach-ex-sheet-footer" style="border-top: 1px solid rgba(18,18,20,0.08); background: #FAF9F6;">
+            <button type="button" class="coach-ex-btn-delete" id="btnCoachFoodDelete" style="display: none;">Eliminar</button>
+            <button type="button" class="coach-ex-btn-cancel" onclick="window.closeCoachFoodSheet && window.closeCoachFoodSheet();">Cancelar</button>
+            <button type="submit" form="coachFoodEditorForm" class="coach-ex-btn-save" id="btnCoachFoodSheetSubmit">Guardar Alimento</button>
+        </div>
+    </div>
+
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=91.0"></script>
+    <script defer src="app.js?v=92.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
