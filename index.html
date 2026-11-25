@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=74.0">
+    <link rel="stylesheet" href="style.css?v=75.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '98.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '98.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '100.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '100.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8981,7 +8981,7 @@
     <!-- Bottom Sheet Nativo: Crear / Editar Alimento (Biblioteca & Wizard Nutrición) -->
     <div class="native-sheet-backdrop" id="coachFoodSheetBackdrop" style="display: none; z-index: 100019;"
         onclick="window.closeCoachFoodSheet && window.closeCoachFoodSheet();"></div>
-    <div class="native-bottom-sheet coach-ex-editor-sheet" id="coachFoodSheetModal" role="dialog" aria-modal="true"
+    <div class="coach-ex-editor-sheet" id="coachFoodSheetModal" role="dialog" aria-modal="true"
         aria-label="Editor de Alimento SENS"
         style="display: none; z-index: 100020; background: #FAF9F6 !important; color: #121214 !important;">
         <div class="sheet-drag-handle-wrap"><div class="sheet-drag-handle"></div></div>
@@ -9092,7 +9092,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=93.0"></script>
+    <script defer src="app.js?v=95.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

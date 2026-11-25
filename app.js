@@ -11667,6 +11667,9 @@ function initCoachOS() {
             CoachEvolutionEngine.renderEvolutionPanel();
         }
         if (resolvedPaneId === 'paneLibrary') {
+            if (typeof window.initCoachDatabasesTab === 'function') {
+                window.initCoachDatabasesTab();
+            }
             if (typeof window.syncCustomExercisesFromSupabase === 'function' && !window._sensCustomExercisesSynced) {
                 window.syncCustomExercisesFromSupabase().catch(() => {});
             }
@@ -25398,6 +25401,8 @@ let coachMasterLibState = {
 };
 
 window.initCoachDatabasesTab = function() {
+    if (window._coachDbTabInitialized) return;
+    window._coachDbTabInitialized = true;
     // Filtros Rápidos del Coach (Todos / Favoritos / Mis Ejercicios / Sin Video/Foto)
     document.querySelectorAll('#coachLibQuickFilterBar .lib-quick-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -25555,6 +25560,18 @@ window.initCoachDatabasesTab = function() {
                 window.openCoachExerciseSheet(null, { assignAfterSave: false });
             } else {
                 window.openCoachDbItemEditor('exercise', null);
+            }
+        });
+    }
+
+    const newFoodBtn = document.getElementById('btnCoachCreateNewFood');
+    if (newFoodBtn && !newFoodBtn.dataset.foodSheetBound) {
+        newFoodBtn.dataset.foodSheetBound = '1';
+        newFoodBtn.addEventListener('click', () => {
+            if (typeof window.openCoachFoodSheet === 'function') {
+                window.openCoachFoodSheet(null, { assignAfterSave: false });
+            } else if (typeof window.openCoachDbItemEditor === 'function') {
+                window.openCoachDbItemEditor('food', null);
             }
         });
     }
@@ -25765,44 +25782,101 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
         const foodGrid = document.getElementById('coachMasterFoodsGrid');
         if (!foodGrid) return;
 
-        const resolvedFoods = FOOD_CATALOG.map(f => (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : f);
-        const filteredFoods = resolvedFoods.filter(f => {
-            if (coachMasterLibState.foodMeal !== 'all' && (!Array.isArray(f.meals) || !f.meals.includes(coachMasterLibState.foodMeal))) return false;
-            if (coachMasterLibState.foodGoal !== 'all' && (!Array.isArray(f.goals) || !f.goals.includes(coachMasterLibState.foodGoal))) return false;
+        const foodPool = (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0)
+            ? SENS_FOOD_LIBRARY
+            : (Array.isArray(FOOD_CATALOG) ? FOOD_CATALOG : []);
+        const normStr = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+
+        const filteredFoods = foodPool.filter(f => {
+            if (!f) return false;
+            const mealSel = coachMasterLibState.foodMeal || 'all';
+            if (mealSel !== 'all') {
+                const mealsArr = Array.isArray(f.meals) ? f.meals.map(m => normStr(m)) : [];
+                if (mealSel === 'desayuno' || mealSel === 'merienda') {
+                    if (!f.desayuno_merienda && !mealsArr.includes(mealSel)) return false;
+                } else if (mealSel === 'almuerzo' || mealSel === 'cena') {
+                    if (!f.almuerzo_cena && !mealsArr.includes(mealSel)) return false;
+                } else if (mealSel === 'snacks' || mealSel === 'snack') {
+                    if (!f.snack && !mealsArr.includes('snack') && !mealsArr.includes('snacks')) return false;
+                }
+            }
+
+            const goalSel = coachMasterLibState.foodGoal || 'all';
+            if (goalSel !== 'all') {
+                const tags = normStr(`${f.etiquetas_dieta_filtros || ''} ${f.categoria_nutricional || ''} ${f.categoria || ''}`);
+                const goalsArr = Array.isArray(f.goals) ? f.goals.map(g => normStr(g)) : [];
+                if (goalsArr.length > 0) {
+                    if (!goalsArr.includes(goalSel)) return false;
+                } else {
+                    const kcalVal = Number(f.calorias_kcal ?? f.calPer100 ?? 0);
+                    const protVal = Number(f.proteinas_g ?? f.protPer100 ?? 0);
+                    if (goalSel === 'deficit' && !(tags.includes('deficit') || tags.includes('saciedad') || tags.includes('bajo') || kcalVal <= 280)) return false;
+                    if (goalSel === 'recomposicion' && !(tags.includes('recomp') || tags.includes('magr') || tags.includes('balance') || protVal >= 15)) return false;
+                    if (goalSel === 'hipertrofia' && !(tags.includes('hipertrof') || tags.includes('masa') || tags.includes('prote') || tags.includes('energ') || protVal >= 18 || kcalVal >= 250)) return false;
+                    if (goalSel === 'digestivo' && !(tags.includes('digest') || tags.includes('fibra') || tags.includes('salud') || tags.includes('liger') || tags.includes('veget') || tags.includes('fruta'))) return false;
+                }
+            }
+
             if (coachMasterLibState.foodSearch) {
-                const q = coachMasterLibState.foodSearch;
-                const hay = `${f.name} ${f.cat || ''} ${f.coachNote || ''}`.toLowerCase();
+                const q = normStr(coachMasterLibState.foodSearch);
+                const hay = normStr(`${f.nombre_alimento_o_plato || f.name || ''} ${f.codigo || ''} ${f.categoria_nutricional || f.cat || ''} ${f.preparacion || f.coachNote || ''}`);
                 if (!hay.includes(q)) return false;
             }
             return true;
         });
 
+        const visibleFoods = filteredFoods.slice(0, 60);
         let html = '';
-        filteredFoods.forEach(f => {
-            const mealsStr = Array.isArray(f.meals) ? f.meals.map(m => m.toUpperCase()).join(' • ') : 'TODAS LAS COMIDAS';
-            const goalsStr = Array.isArray(f.goals) ? f.goals.map(g => g.toUpperCase()).join(' • ') : 'GENERAL';
+        visibleFoods.forEach(f => {
+            const safeId = escapeHTML(f.id || '');
+            const foodName = escapeHTML(f.nombre_alimento_o_plato || f.name || 'Alimento SENS');
+            const kcal = Math.round(Number(f.calorias_kcal ?? f.calPer100 ?? 0));
+            const prot = Math.round((Number(f.proteinas_g ?? f.protPer100 ?? 0)) * 10) / 10;
+            const carbs = Math.round((Number(f.carbohidratos_g ?? f.carbsPer100 ?? 0)) * 10) / 10;
+            const fats = Math.round((Number(f.grasas_g ?? f.fatsPer100 ?? 0)) * 10) / 10;
+            const portion = escapeHTML(f.portion || `${f.porcion_total_g_ml || f.defaultGrams || 100}g`);
+            const imgSrc = escapeHTML(f.imagen_url || f.image_url || f.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp');
+            const note = escapeHTML(f.preparacion || f.coachNote || 'Priorizar alimento fresco y medir porción en crudo.');
+
+            const mealTags = [];
+            if (f.desayuno_merienda || (Array.isArray(f.meals) && (f.meals.includes('desayuno') || f.meals.includes('merienda')))) mealTags.push('DES/MER');
+            if (f.almuerzo_cena || (Array.isArray(f.meals) && (f.meals.includes('almuerzo') || f.meals.includes('cena')))) mealTags.push('ALM/CEN');
+            if (f.snack || (Array.isArray(f.meals) && f.meals.includes('snack'))) mealTags.push('SNACK');
+            const mealsStr = mealTags.length ? mealTags.join(' • ') : 'TODAS';
 
             html += `
                 <div class="coach-master-lib-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
-                        <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">${mealsStr}</span>
-                        <span class="pill pill-dark" style="font-size: 9.5px; color: #E5CBA7;">${f.calPer100} kcal / 100g</span>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <img src="${imgSrc}" alt="${foodName}" style="width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: #121214; flex-shrink: 0;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                        <div style="min-width: 0; flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 3px;">
+                                <span class="pill pill-champagne" style="font-size: 9px; font-weight: 800;">${mealsStr}</span>
+                                <span style="font-size: 11px; font-weight: 800; color: #705B3E;">${kcal} kcal</span>
+                            </div>
+                            <h4 style="font-size: 0.95rem; font-weight: 800; margin: 0; line-height: 1.25; color: #121214;">${foodName}</h4>
+                        </div>
                     </div>
-                    <h4 style="font-size: 1rem; font-weight: 800; margin: 0 0 4px 0;">${f.name}</h4>
-                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
-                        Objetivos: <strong>${goalsStr}</strong> • Porción sugerida: ${f.portion || `${f.defaultGrams || 100}g`}
+                    <div style="font-size: 11px; color: #71717A; margin-bottom: 8px;">
+                        Porción: <strong>${portion}</strong>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: rgba(0,0,0,0.03); padding: 8px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-size: 11px;">
-                        <div><strong style="display:block; color:#9E7D4B;">${f.protPer100}g</strong>Proteína</div>
-                        <div><strong style="display:block; color:#9E7D4B;">${f.carbsPer100}g</strong>Carbos</div>
-                        <div><strong style="display:block; color:#9E7D4B;">${f.fatsPer100}g</strong>Grasas</div>
+                        <div><strong style="display:block; color:#9E7D4B;">${prot}g</strong>Proteína</div>
+                        <div><strong style="display:block; color:#9E7D4B;">${carbs}g</strong>Carbos</div>
+                        <div><strong style="display:block; color:#9E7D4B;">${fats}g</strong>Grasas</div>
                     </div>
-                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-bottom: 12px;">
-                        <strong style="color: #9E7D4B;">Consejo Nutricional Nico:</strong> ${f.coachNote || 'Priorizar alimento fresco y medir porción en crudo.'}
+                    <div style="font-size: 11.5px; color: #52525B; margin-bottom: 12px;">
+                        <strong style="color: #9E7D4B;">Nota:</strong> ${note}
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06);">
-                        <button type="button" class="btn btn-outline btn-sm" onclick="window.openCoachDbItemEditor('food', '${f.id}')" style="font-size: 11px; font-weight: 700; flex: 1;">
-                            Editar Alimento (Base o Alumno)
+                        <button type="button" class="btn btn-outline btn-sm"
+                            onclick="if(typeof window.openCoachFoodSheet==='function') window.openCoachFoodSheet('${safeId}', { assignAfterSave: false }); else if(typeof window.openCoachDbItemEditor==='function') window.openCoachDbItemEditor('food', '${safeId}');"
+                            style="font-size: 11px; font-weight: 700; flex: 1;">
+                            Editar Alimento
+                        </button>
+                        <button type="button" class="coach-lib-delete-btn"
+                            title="Eliminar alimento"
+                            onclick="if(typeof window.deleteCoachLibraryFood==='function') window.deleteCoachLibraryFood('${safeId}');">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         </button>
                     </div>
                 </div>
