@@ -1060,7 +1060,7 @@ window.ensurePortalBundlesLoaded = function() {
 
     // Cargar nutrition_db.js ANTES que coach_nutrition_master.js para respetar dependencias
     const nutriChain = (needNutritionDb ? loadScriptOnce('nutrition_db.js?v=11.0') : Promise.resolve())
-        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=14.0') : Promise.resolve()));
+        .then(() => (typeof window.CoachNutritionMaster === 'undefined' ? loadScriptOnce('coach_nutrition_master.js?v=15.0') : Promise.resolve()));
 
     window._sensPortalBundlesPromise = Promise.all([
         typeof Chart === 'undefined' ? loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js') : Promise.resolve(),
@@ -1079,6 +1079,7 @@ window.ensurePortalBundlesLoaded = function() {
             FOOD_CATALOG = SENS_FOOD_LIBRARY;
             window.FOOD_CATALOG = FOOD_CATALOG;
             window.SENS_FOOD_LIBRARY = FOOD_CATALOG;
+            if (typeof window.hydrateFoodCatalogInMemory === 'function') window.hydrateFoodCatalogInMemory();
         }
         window.initPortalSubsystemsOnce();
         // Refrescar vistas reales del portal con las bases ya hidratadas
@@ -1262,9 +1263,41 @@ window.calculateFoodMacros = function(food, grams = null) {
 window.hydrateFoodCatalogInMemory = function() {
     try {
         const globalOverrides = JSON.parse(localStorage.getItem('sens_global_food_overrides_v1') || '{}');
+        const deletedIds = new Set(JSON.parse(localStorage.getItem('sens_deleted_foods_v1') || '[]'));
+
+        // 1. Filtrar alimentos eliminados
+        if (deletedIds.size > 0) {
+            for (let i = FOOD_CATALOG.length - 1; i >= 0; i--) {
+                if (deletedIds.has(FOOD_CATALOG[i]?.id)) FOOD_CATALOG.splice(i, 1);
+            }
+            if (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY !== FOOD_CATALOG) {
+                for (let i = SENS_FOOD_LIBRARY.length - 1; i >= 0; i--) {
+                    if (deletedIds.has(SENS_FOOD_LIBRARY[i]?.id)) SENS_FOOD_LIBRARY.splice(i, 1);
+                }
+            }
+        }
+
+        // 2. Aplicar overrides a alimentos existentes
+        const existingIds = new Set();
         FOOD_CATALOG.forEach(f => {
+            if (!f || !f.id) return;
+            existingIds.add(f.id);
             if (globalOverrides[f.id]) {
                 Object.assign(f, globalOverrides[f.id], { _hasGlobalOverride: true });
+            }
+        });
+
+        // 3. Re-inyectar alimentos nuevos creados por el Coach (fd-custom-...)
+        Object.keys(globalOverrides).forEach(id => {
+            if (deletedIds.has(id) || existingIds.has(id)) return;
+            const item = globalOverrides[id];
+            if (!item || !item.name) return;
+            const hydrated = { ...item, id, _hasGlobalOverride: true, _isCustom: true };
+            FOOD_CATALOG.unshift(hydrated);
+            if (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY !== FOOD_CATALOG) {
+                if (!SENS_FOOD_LIBRARY.some(x => x && x.id === id)) {
+                    SENS_FOOD_LIBRARY.unshift(hydrated);
+                }
             }
         });
     } catch (e) {}
@@ -25305,6 +25338,7 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
 };
 
 window.openCoachDbItemEditor = function(itemType, itemId) {
+    if (typeof window.initCoachDatabasesTab === 'function') window.initCoachDatabasesTab();
     const modal = document.getElementById('coachDbItemEditorModal');
     if (!modal) return;
 
@@ -25358,7 +25392,15 @@ window.openCoachDbItemEditor = function(itemType, itemId) {
         if (foodWrap) foodWrap.style.display = 'flex';
         if (domainBadge) domainBadge.textContent = 'GOBERNANZA • FICHA NUTRICIONAL DE ALIMENTO';
 
-        const rawFood = itemId ? FOOD_CATALOG.find(x => x.id === itemId) : null;
+        if (!itemId) {
+            const globalRadio = document.querySelector('input[name="dbEditScopeRadio"][value="global"]');
+            if (globalRadio) globalRadio.checked = true;
+        }
+
+        const foodPool = (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0)
+            ? SENS_FOOD_LIBRARY
+            : FOOD_CATALOG;
+        const rawFood = itemId ? (foodPool.find(x => x.id === itemId) || FOOD_CATALOG.find(x => x.id === itemId)) : null;
         const food = rawFood && typeof window.getResolvedFood === 'function' ? window.getResolvedFood(rawFood, athId) : (rawFood || {
             name: '', calPer100: 150, protPer100: 20, carbsPer100: 10, fatsPer100: 5, defaultGrams: 150, portion: '150g (1 porción)',
             meals: ['almuerzo', 'cena'], coachNote: ''
@@ -25366,14 +25408,16 @@ window.openCoachDbItemEditor = function(itemType, itemId) {
 
         if (titleEl) titleEl.textContent = itemId ? `Editar: ${food.name}` : 'Crear Nuevo Alimento en Catálogo';
         document.getElementById('dbEditNameInput').value = food.name || '';
-        document.getElementById('dbEditFoodKcal100').value = food.calPer100 || 0;
-        document.getElementById('dbEditFoodProt100').value = food.protPer100 || 0;
-        document.getElementById('dbEditFoodCarbs100').value = food.carbsPer100 || 0;
-        document.getElementById('dbEditFoodFats100').value = food.fatsPer100 || 0;
-        document.getElementById('dbEditFoodDefaultGrams').value = food.defaultGrams || 100;
+        document.getElementById('dbEditFoodKcal100').value = food.calPer100 ?? food.calorias_kcal ?? 0;
+        document.getElementById('dbEditFoodProt100').value = food.protPer100 ?? food.proteinas_g ?? 0;
+        document.getElementById('dbEditFoodCarbs100').value = food.carbsPer100 ?? food.carbohidratos_g ?? 0;
+        document.getElementById('dbEditFoodFats100').value = food.fatsPer100 ?? food.grasas_g ?? 0;
+        document.getElementById('dbEditFoodDefaultGrams').value = food.defaultGrams || food.porcion_total_g_ml || 100;
         document.getElementById('dbEditFoodPortionLabel').value = food.portion || '100g';
-        document.getElementById('dbEditFoodMealsInput').value = Array.isArray(food.meals) ? food.meals.join(', ') : 'almuerzo, cena';
-        document.getElementById('dbEditFoodNoteInput').value = food.coachNote || '';
+        document.getElementById('dbEditFoodMealsInput').value = Array.isArray(food.meals)
+            ? food.meals.join(', ')
+            : (Array.isArray(food.recommended_meals) ? food.recommended_meals.join(', ') : 'almuerzo, cena');
+        document.getElementById('dbEditFoodNoteInput').value = food.coachNote || food.preparacion || '';
     }
 
     modal.style.display = 'flex';
@@ -25424,16 +25468,38 @@ function saveCoachDbItemEditorChanges() {
         }
     } else {
         const mealsArr = document.getElementById('dbEditFoodMealsInput').value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        const kcal100 = parseFloat(document.getElementById('dbEditFoodKcal100').value) || 0;
+        const prot100 = parseFloat(document.getElementById('dbEditFoodProt100').value) || 0;
+        const carbs100 = parseFloat(document.getElementById('dbEditFoodCarbs100').value) || 0;
+        const fats100 = parseFloat(document.getElementById('dbEditFoodFats100').value) || 0;
+        const defGrams = parseInt(document.getElementById('dbEditFoodDefaultGrams').value, 10) || 100;
+        const portionStr = document.getElementById('dbEditFoodPortionLabel').value.trim() || `${defGrams}g`;
+        const noteStr = document.getElementById('dbEditFoodNoteInput').value.trim();
+        const mealsFinal = mealsArr.length ? mealsArr : ['almuerzo', 'cena'];
+
+        const existingPool = (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY)) ? SENS_FOOD_LIBRARY : FOOD_CATALOG;
+        const existingFood = itemId ? (existingPool.find(x => x.id === itemId) || FOOD_CATALOG.find(x => x.id === itemId)) : null;
+
         const payload = {
             name,
-            calPer100: parseFloat(document.getElementById('dbEditFoodKcal100').value) || 0,
-            protPer100: parseFloat(document.getElementById('dbEditFoodProt100').value) || 0,
-            carbsPer100: parseFloat(document.getElementById('dbEditFoodCarbs100').value) || 0,
-            fatsPer100: parseFloat(document.getElementById('dbEditFoodFats100').value) || 0,
-            defaultGrams: parseInt(document.getElementById('dbEditFoodDefaultGrams').value, 10) || 100,
-            portion: document.getElementById('dbEditFoodPortionLabel').value.trim() || '100g',
-            meals: mealsArr.length ? mealsArr : ['almuerzo', 'cena'],
-            coachNote: document.getElementById('dbEditFoodNoteInput').value.trim()
+            calPer100: kcal100,
+            protPer100: prot100,
+            carbsPer100: carbs100,
+            fatsPer100: fats100,
+            defaultGrams: defGrams,
+            portion: portionStr,
+            meals: mealsFinal,
+            coachNote: noteStr,
+            calorias_kcal: Math.round((kcal100 * defGrams) / 100),
+            proteinas_g: Math.round(((prot100 * defGrams) / 100) * 10) / 10,
+            carbohidratos_g: Math.round(((carbs100 * defGrams) / 100) * 10) / 10,
+            grasas_g: Math.round(((fats100 * defGrams) / 100) * 10) / 10,
+            porcion_total_g_ml: defGrams,
+            recommended_meals: mealsFinal,
+            preparacion: noteStr,
+            codigo: existingFood?.codigo || 'CUSTOM',
+            categoria: existingFood?.categoria || 'Personalizado',
+            image_url: existingFood?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'
         };
 
         if (!itemId) {
@@ -25441,28 +25507,59 @@ function saveCoachDbItemEditorChanges() {
             payload.id = itemId;
             payload.cat = 'proteinas';
             payload.goals = ['recomposicion', 'deficit', 'hipertrofia'];
+            payload._isCustom = true;
             FOOD_CATALOG.unshift(payload);
+            if (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY !== FOOD_CATALOG) {
+                SENS_FOOD_LIBRARY.unshift(payload);
+            }
         }
 
         if (scope === 'global') {
             const globalFoodOverrides = JSON.parse(localStorage.getItem('sens_global_food_overrides_v1') || '{}');
-            globalFoodOverrides[itemId] = payload;
+            globalFoodOverrides[itemId] = { ...payload, id: itemId };
             localStorage.setItem('sens_global_food_overrides_v1', JSON.stringify(globalFoodOverrides));
             if (typeof window.hydrateFoodCatalogInMemory === 'function') window.hydrateFoodCatalogInMemory();
             showSensToast(`Catálogo Nutricional Maestro actualizado para TODOS: ${name}`, 'champagne');
         } else {
             const athFoodOverrides = JSON.parse(localStorage.getItem(`sens_athlete_food_overrides_${athId}`) || '{}');
-            athFoodOverrides[itemId] = payload;
+            athFoodOverrides[itemId] = { ...payload, id: itemId };
             localStorage.setItem(`sens_athlete_food_overrides_${athId}`, JSON.stringify(athFoodOverrides));
             showSensToast(`Alimento "${name}" personalizado solo para el alumno activo.`, 'champagne');
         }
     }
 
     document.getElementById('coachDbItemEditorModal').style.display = 'none';
-    window.renderCoachDatabasesTab();
+    if (typeof window.renderCoachDatabasesTab === 'function') window.renderCoachDatabasesTab();
+    if (typeof window.CoachNutritionMaster !== 'undefined' && typeof window.CoachNutritionMaster.renderLibraryVision === 'function') {
+        window.CoachNutritionMaster.renderLibraryVision();
+    }
     renderCoachFoodSelectionGrid(coachNutritionFilterState.lastPrescribedFoods);
     renderCoachAssignedExercises();
 }
+
+window.deleteCoachLibraryFood = function(foodId) {
+    if (!foodId) return;
+    try {
+        const deleted = JSON.parse(localStorage.getItem('sens_deleted_foods_v1') || '[]');
+        if (!deleted.includes(foodId)) deleted.push(foodId);
+        localStorage.setItem('sens_deleted_foods_v1', JSON.stringify(deleted));
+
+        const globalFoodOverrides = JSON.parse(localStorage.getItem('sens_global_food_overrides_v1') || '{}');
+        if (globalFoodOverrides[foodId]) {
+            delete globalFoodOverrides[foodId];
+            localStorage.setItem('sens_global_food_overrides_v1', JSON.stringify(globalFoodOverrides));
+        }
+
+        if (typeof window.hydrateFoodCatalogInMemory === 'function') window.hydrateFoodCatalogInMemory();
+        if (typeof window.CoachNutritionMaster !== 'undefined' && typeof window.CoachNutritionMaster.renderLibraryVision === 'function') {
+            window.CoachNutritionMaster.renderLibraryVision();
+        }
+        if (typeof window.renderCoachDatabasesTab === 'function') window.renderCoachDatabasesTab();
+        if (typeof showSensToast === 'function') showSensToast('Alimento eliminado del catálogo.', 'champagne');
+    } catch (e) {
+        console.warn('[SENS Food Library] delete error:', e);
+    }
+};
 
 // =============================================================================
 // ESTACIÓN 5: GROWTH MARKETING STUDIO SENS (8 ARQUETIPOS ESPACIALES & BRANDBOOK)

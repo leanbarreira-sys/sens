@@ -2990,45 +2990,110 @@ const CoachNutritionMaster = {
     },
 
     // -------------------------------------------------------------------------
-    // VISIÓN BIBLIOTECA (Exploración de los 500 Alimentos)
+    // VISIÓN BIBLIOTECA (Catálogo Maestro + Alta / Edición / Borrado de Alimentos)
     // -------------------------------------------------------------------------
     renderLibraryVision() {
         const container = document.getElementById('coachNutritionLibView');
-        if (!container || typeof SENS_FOOD_LIBRARY === 'undefined') return;
+        const foodPool = (typeof window.FOOD_CATALOG !== 'undefined' && Array.isArray(window.FOOD_CATALOG) && window.FOOD_CATALOG.length > 0)
+            ? window.FOOD_CATALOG
+            : (typeof SENS_FOOD_LIBRARY !== 'undefined' ? SENS_FOOD_LIBRARY : []);
+        if (!container || !Array.isArray(foodPool)) return;
+
+        const q = (this._libSearchQuery || '').trim().toLowerCase();
+        const filtered = q
+            ? foodPool.filter(f => {
+                const hay = `${f.name || ''} ${f.codigo || ''} ${f.categoria || ''} ${f.portion || ''}`.toLowerCase();
+                return hay.includes(q);
+            })
+            : foodPool;
+        const shown = filtered.slice(0, 60);
+
+        const esc = (s) => (typeof window.escapeHTML === 'function')
+            ? window.escapeHTML(String(s ?? ''))
+            : String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
         container.innerHTML = `
-            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+            <div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 18px 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
                     <div>
-                        <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #121214;">Catálogo Maestro de 500 Alimentos &amp; Recetas</h4>
-                        <span style="font-size: 11.5px; color: #71717A;">Imágenes en alta definición, micronutrientes, porciones y equivalentes</span>
+                        <h4 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #121214;">Catálogo Maestro de Alimentos (${foodPool.length})</h4>
+                        <span style="font-size: 11.5px; color: #71717A;">Creá nuevos alimentos, editá macros o administrá la biblioteca</span>
                     </div>
+                    <button type="button" id="btnCoachLibCreateNewFood"
+                        onclick="if(typeof window.openCoachDbItemEditor==='function') window.openCoachDbItemEditor('food', null);"
+                        style="background: #121214; color: #FFFFFF; border: none; border-radius: 999px; padding: 8px 16px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(18,18,20,0.16);">
+                        <span>+ Nuevo Alimento</span>
+                    </button>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;">
-                    ${SENS_FOOD_LIBRARY.slice(0, 48).map(f => `
-                        <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
-                            <img src="${f.image_url}" alt="${f.name}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000;">
-                            <div style="padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                                <div>
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span class="pill pill-champagne" style="font-size: 8.5px;">${f.codigo}</span>
-                                        <span style="font-size: 10.5px; font-weight: 700; color: #9E7D4B;">${f.calorias_kcal} kcal</span>
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 14px;">
+                    <input type="text" id="coachNutriLibSearchInput" class="input-control" value="${esc(this._libSearchQuery || '')}"
+                        placeholder="Buscar alimento por nombre, código o categoría..."
+                        style="margin-bottom: 0; width: 100%; font-size: 13px;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;">
+                    ${shown.length === 0 ? `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 28px 16px; color: #71717A; background: #FAF9F6; border: 1px dashed #E4E4E7; border-radius: 12px; font-size: 13px;">
+                            No se encontraron alimentos con "${esc(q)}". Tocá <strong>+ Nuevo Alimento</strong> para crearlo.
+                        </div>
+                    ` : shown.map(f => {
+                        const safeId = esc(f.id || '');
+                        const kcal = f.calorias_kcal ?? f.calPer100 ?? 0;
+                        const prot = f.proteinas_g ?? f.protPer100 ?? 0;
+                        const carbs = f.carbohidratos_g ?? f.carbsPer100 ?? 0;
+                        const fats = f.grasas_g ?? f.fatsPer100 ?? 0;
+                        const imgSrc = f.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
+                        return `
+                            <div style="background: #F8F9FA; border: 1px solid #E4E4E7; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+                                <img src="${esc(imgSrc)}" alt="${esc(f.name || 'Alimento')}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #121214;">
+                                <div style="padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;">
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                            <span class="pill pill-champagne" style="font-size: 8.5px;">${esc(f.codigo || (f._isCustom ? 'CUSTOM' : 'SENS'))}</span>
+                                            <span style="font-size: 10.5px; font-weight: 700; color: #9E7D4B;">${kcal} kcal</span>
+                                        </div>
+                                        <strong style="font-size: 12.5px; color: #121214; display: block; line-height: 1.25; margin-bottom: 3px;">${esc(f.name || 'Sin nombre')}</strong>
+                                        <p style="font-size: 10.5px; color: #71717A; margin: 0; line-height: 1.3;">${esc(f.portion || '100g')}</p>
                                     </div>
-                                    <strong style="font-size: 12px; color: #121214; display: block; line-height: 1.25; margin-bottom: 4px;">${f.name}</strong>
-                                    <p style="font-size: 10.5px; color: #71717A; margin: 0 0 8px 0; line-height: 1.3;">${f.portion}</p>
-                                </div>
-                                <div style="font-size: 10px; color: #52525B; border-top: 1px solid #E4E4E7; padding-top: 6px; display: flex; justify-content: space-between;">
-                                    <span>P: <strong>${f.proteinas_g}g</strong></span>
-                                    <span>C: <strong>${f.carbohidratos_g}g</strong></span>
-                                    <span>G: <strong>${f.grasas_g}g</strong></span>
+                                    <div style="font-size: 10px; color: #52525B; border-top: 1px solid #E4E4E7; padding-top: 6px; display: flex; justify-content: space-between;">
+                                        <span>P: <strong>${prot}g</strong></span>
+                                        <span>C: <strong>${carbs}g</strong></span>
+                                        <span>G: <strong>${fats}g</strong></span>
+                                    </div>
+                                    <div style="display: flex; gap: 6px; padding-top: 2px;">
+                                        <button type="button" class="btn-lib-edit-food" data-food-id="${safeId}"
+                                            onclick="if(typeof window.openCoachDbItemEditor==='function') window.openCoachDbItemEditor('food', '${safeId}');"
+                                            style="flex: 1; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.14); color: #121214; border-radius: 8px; padding: 5px 8px; font-size: 11px; font-weight: 700; cursor: pointer;">
+                                            Editar
+                                        </button>
+                                        <button type="button" class="btn-lib-delete-food" data-food-id="${safeId}"
+                                            onclick="if(typeof window.deleteCoachLibraryFood==='function') window.deleteCoachLibraryFood('${safeId}');"
+                                            style="background: #FEF2F2; border: 1px solid rgba(220,38,38,0.22); color: #DC2626; border-radius: 8px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer;">
+                                            Eliminar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </div>
             </div>
         `;
+
+        const searchInp = document.getElementById('coachNutriLibSearchInput');
+        if (searchInp) {
+            searchInp.addEventListener('input', () => {
+                this._libSearchQuery = searchInp.value;
+                this.renderLibraryVision();
+                const refocused = document.getElementById('coachNutriLibSearchInput');
+                if (refocused) {
+                    refocused.focus();
+                    const len = refocused.value.length;
+                    refocused.setSelectionRange(len, len);
+                }
+            });
+        }
     },
 
     bindEvents() {
