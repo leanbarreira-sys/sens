@@ -10764,6 +10764,7 @@ function initProfileSettings() {
 }
 
 function renderProfileSettingsData() {
+    if (typeof window.renderProfileCoachGuides === 'function') window.renderProfileCoachGuides();
     const profile = AppState.profile || {};
     const user = AppState.user || {};
     const anamnesis = AppState.anamnesis || {};
@@ -13437,6 +13438,36 @@ async function syncAthleteCoachGuidesToProfile(athId, mapOverride) {
     }
 }
 
+window.syncLandingsFromSupabaseForAthlete = async function(athIdsInput) {
+    if (typeof supabaseClient === 'undefined' || !supabaseClient) return [];
+    const ids = (Array.isArray(athIdsInput) ? athIdsInput : [athIdsInput])
+        .filter(id => typeof id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id));
+    if (ids.length === 0) return [];
+    try {
+        const { data, error } = await supabaseClient
+            .from('coach_landings')
+            .select('slug, athlete_id, title, html_content, updated_at')
+            .in('athlete_id', ids)
+            .order('updated_at', { ascending: false });
+        if (error || !Array.isArray(data)) return [];
+        const map = getCoachLandingsMap();
+        data.forEach(row => {
+            if (!row || !row.slug) return;
+            map[row.slug] = {
+                slug: row.slug,
+                athleteId: row.athlete_id,
+                title: row.title || row.slug,
+                html: row.html_content || '',
+                updatedAt: row.updated_at || new Date().toISOString()
+            };
+        });
+        saveCoachLandingsMap(map);
+        return data;
+    } catch (_) {
+        return [];
+    }
+};
+
 window.showCoachSheetLandingsView = function(athId) {
     const targetId = athId || window.currentActionAthleteId;
     if (!targetId) return;
@@ -13450,6 +13481,9 @@ window.showCoachSheetLandingsView = function(athId) {
     if (landingsView) landingsView.style.display = 'block';
     initCoachSheetLandings();
     renderCoachAthleteLandingsList(targetId);
+    window.syncLandingsFromSupabaseForAthlete(targetId).then((rows) => {
+        if (rows && rows.length > 0) renderCoachAthleteLandingsList(targetId);
+    });
 };
 
 function renderCoachAthleteLandingsList(athIdOverride) {
@@ -13689,7 +13723,7 @@ window.openSensCustomLanding = async function(slug, htmlOverride = null, isDirec
     return true;
 };
 
-window.renderProfileCoachGuides = function() {
+window.renderProfileCoachGuides = function(skipRemoteFetch = false) {
     const listEl = document.getElementById('profileCoachGuidesList');
     if (!listEl) return;
 
@@ -13699,6 +13733,13 @@ window.renderProfileCoachGuides = function() {
         AppState?.user?.id,
         AppState?.activeAthleteId
     ].filter(Boolean));
+    if (!skipRemoteFetch && typeof window.syncLandingsFromSupabaseForAthlete === 'function') {
+        window.syncLandingsFromSupabaseForAthlete(Array.from(athIds)).then((rows) => {
+            if (rows && rows.length > 0) {
+                window.renderProfileCoachGuides(true);
+            }
+        });
+    }
     const profileGuides = Array.isArray(AppState?.profile?.anamnesis_data?.coach_guides)
         ? AppState.profile.anamnesis_data.coach_guides
         : [];
