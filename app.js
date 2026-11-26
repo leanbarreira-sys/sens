@@ -10080,9 +10080,10 @@ function saveAndFinishExercise(silent = false) {
                 persistExerciseDraftLocally();
                 syncExerciseSetsLogsForDate(athId, currentExId, modalExerciseState.setsData, dateIso);
                 const anyDone = modalExerciseState.setsData && modalExerciseState.setsData.some(s => s.completed);
+                const allExSetsDone = Boolean(modalExerciseState.setsData && modalExerciseState.setsData.length > 0 && modalExerciseState.setsData.every(s => s.completed));
                 const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
                 const completedMap = Object.assign({}, currentExecution.completedExercises || {});
-                completedMap[currentExId] = Boolean(anyDone);
+                completedMap[currentExId] = allExSetsDone;
                 const allDone = day.exercises.length > 0 && day.exercises.every(e => Boolean(completedMap[e.id]));
                 const durationMins = allDone ? (currentExecution.durationMinutes || Math.max(30, day.exercises.length * 9)) : (currentExecution.durationMinutes || 0);
 
