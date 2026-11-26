@@ -21755,8 +21755,11 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         dayDateLabel.textContent = isToday ? 'Entrenamiento de Hoy' : `Entrenamiento del ${formatDateDDMM(selectedDate)}`;
     }
 
+    const trainingCardEl = document.getElementById('dashTrainingCard');
+
     // Caso A: Descanso o sin ejercicios asignados
     if (!hasRoutine || exercises.length === 0 || isRest) {
+        if (trainingCardEl) trainingCardEl.classList.add('is-rest-mode');
         if (activePane) activePane.style.display = 'none';
         if (restPane) {
             restPane.style.display = 'block';
@@ -21795,15 +21798,12 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                     streakPill.className = 'sens-card-streak-pill done';
                     streakPill.innerHTML = '<span class="streak-pill-dot"></span><span class="streak-pill-text">Descanso Activo ✓</span>';
                 }
-                if (restTitle) restTitle.textContent = 'Día de Regeneración';
-                if (restDesc) restDesc.textContent = 'Hoy tu cuerpo asimila el estímulo previo. Movilidad suave o caminata ligera mantienen tu ritmo sin fatiga.';
+                if (restTitle) restTitle.textContent = 'Día de Descanso';
+                if (restDesc) restDesc.textContent = 'Hoy tu cuerpo asimila el estímulo previo. Caminata ligera o descanso completo.';
                 if (restActions) {
                     restActions.innerHTML = `
-                        <button type="button" class="btn btn-dark btn-sm" id="btnRestSeeStretches" onclick="event.stopPropagation(); if(typeof AppState!=='undefined') AppState.selectedMuscleFilter='core_movilidad'; if(typeof switchPortalView==='function') switchPortalView('workoutView');" style="cursor: pointer;">
-                            Movilidad Guiada →
-                        </button>
                         <button type="button" class="btn btn-sm" id="btnRestBringWorkout" onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()));" style="cursor: pointer;">
-                            Reprogramar
+                            Reprogramar sesión →
                         </button>
                     `;
                 }
@@ -21816,6 +21816,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
     }
 
     // Caso B: Con entrenamiento programado
+    if (trainingCardEl) trainingCardEl.classList.remove('is-rest-mode');
     if (activePane) activePane.style.display = 'block';
     if (restPane) restPane.style.display = 'none';
 

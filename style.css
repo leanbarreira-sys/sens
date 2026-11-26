@@ -28246,42 +28246,59 @@ body.in-portal .coach-week-day-pill.is-today .sens-day-hero-num {
 }
 
 /* 3. Corrección de Contraste en Card de Descanso / Sin Ejercicios */
+body.in-portal .sens-training-card.is-rest-mode {
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: auto !important;
+}
+
 body.in-portal .sens-workout-rest-pane,
 body.in-portal #dashWorkoutRestPane {
+    position: relative !important;
+    inset: auto !important;
+    height: auto !important;
     background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
     border-radius: 24px !important;
-    padding: 24px 20px !important;
+    padding: 20px 18px !important;
     color: #121214 !important;
-    text-align: center !important;
+    text-align: left !important;
     box-shadow: 0 4px 24px rgba(18, 18, 20, 0.04) !important;
+}
+
+body.in-portal .sens-rest-card-inner {
+    max-width: 100% !important;
+    width: 100% !important;
+    align-items: stretch !important;
+    gap: 4px !important;
 }
 
 body.in-portal .sens-workout-rest-pane h3,
 body.in-portal .sens-rest-title {
     color: #121214 !important;
-    font-size: 20px !important;
-    font-weight: 700 !important;
-    margin: 8px 0 6px !important;
+    font-size: 19px !important;
+    font-weight: 800 !important;
+    margin: 2px 0 4px !important;
 }
 
 body.in-portal .sens-workout-rest-pane p,
 body.in-portal .sens-rest-desc {
     color: #575659 !important;
     font-size: 13px !important;
-    line-height: 1.5 !important;
-    margin: 0 0 16px !important;
+    line-height: 1.45 !important;
+    margin: 0 0 12px !important;
 }
 
 body.in-portal .sens-rest-badge {
-    background: rgba(251, 222, 185, 0.5) !important;
-    color: #705B3E !important;
+    background: transparent !important;
+    color: #9E7D4B !important;
     font-size: 10px !important;
-    font-weight: 700 !important;
-    border-radius: 9999px !important;
-    padding: 4px 10px !important;
+    font-weight: 800 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
+    letter-spacing: 0.9px !important;
 }
 
 body.in-portal #btnRestSeeStretches {
@@ -28291,9 +28308,11 @@ body.in-portal #btnRestSeeStretches {
     -webkit-text-fill-color: #FFFFFF !important;
     font-size: 12.5px !important;
     font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
     border-radius: 9999px !important;
-    min-height: 40px !important;
-    padding: 9px 18px !important;
+    min-height: 38px !important;
+    padding: 8px 16px !important;
     transition: transform 0.16s ease, opacity 0.16s ease !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -28307,10 +28326,12 @@ body.in-portal #btnRestBringWorkout {
     color: #121214 !important;
     -webkit-text-fill-color: #121214 !important;
     font-size: 12.5px !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
     border-radius: 9999px !important;
-    min-height: 40px !important;
-    padding: 9px 16px !important;
+    min-height: 38px !important;
+    padding: 8px 16px !important;
     transition: background 0.16s ease !important;
     display: inline-flex !important;
     align-items: center !important;
