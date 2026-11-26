@@ -35008,7 +35008,7 @@ window.renderTrackingCalsBars = function() {
             if (isGood) goodDaysCount++;
         }
 
-        const hasPendingWorkout = Boolean(m && m.totalExCount > 0 && m.completedExCount < m.totalExCount);
+        const hasPendingWorkout = Boolean(m && m.totalExCount > 0 && m.completedExCount === 0 && workout === 0);
         const hasPendingCardio = (cardio === 0);
         const dateIso = (typeof getFormattedDateKey === 'function') ? getFormattedDateKey(d) : d.toISOString().slice(0, 10);
         const entry = { i, label: dayNames[i], d, dateIso, isToday, isSelected, isFuture, hasActivity, hasPendingWorkout, hasPendingCardio, intake, basal, workout, cardio, totalBurn, netDiff, isGood };
