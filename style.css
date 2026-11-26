@@ -10869,11 +10869,11 @@ body.in-portal .sens-coach-daily-note-card {
 }
 
 .ex-compact-check-btn.completed {
-    background: #10B981 !important;
-    border-color: #10B981 !important;
+    background: #22C55E !important;
+    border-color: #22C55E !important;
     color: #FFFFFF !important;
     font-weight: 900;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
 }
 
 .ex-compact-check-btn.is-future {
@@ -30686,8 +30686,8 @@ body.in-portal .sens-btn-quick-log {
 }
 
 body.in-portal .sens-btn-quick-log.is-logged {
-    background: #10B981 !important;
-    border-color: #10B981 !important;
+    background: #22C55E !important;
+    border-color: #22C55E !important;
     color: #FFFFFF !important;
 }
 
