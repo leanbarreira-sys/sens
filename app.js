@@ -23452,6 +23452,14 @@ function syncAllStreakAndPillTelemetry(targetDate = null) {
         renderNutriDaysNav();
     }
 
+    // 8. Re-renderizar gráficos de Balance Calórico General y Semanal en tiempo real
+    if (typeof window.renderTrackingCalsBars === 'function') {
+        window.renderTrackingCalsBars();
+    }
+    if (typeof window.renderWeeklyBalanceChart === 'function') {
+        window.renderWeeklyBalanceChart(d);
+    }
+
     return evalResult;
 }
 window.syncAllStreakAndPillTelemetry = syncAllStreakAndPillTelemetry;
