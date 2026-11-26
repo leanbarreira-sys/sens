@@ -38518,3 +38518,102 @@ body.in-portal .sens-streak-rule-popover .sens-popover-close-btn {
     background: #F4F2EE !important;
     border-radius: 50%;
 }
+
+/* ============================================================================
+   MOVIMIENTO HERO CARD — QUIET LUXURY OBSIDIAN PARITY (CON ENTRENO & NUTRI)
+   ============================================================================ */
+body.in-portal #dashWeightAndActivityCard {
+    background: linear-gradient(160deg, #18181B 0%, #0B0B0D 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 12px 30px rgba(18, 18, 20, 0.14) !important;
+    padding: 14px 14px 12px !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-tracking-top-row {
+    margin-bottom: 8px !important;
+}
+
+body.in-portal #dashWeightAndActivityCard #dashCardioDomainPill {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #E5CBA7 !important;
+    border: none !important;
+}
+
+body.in-portal #dashWeightAndActivityCard #dashActiveBurnBadge.sens-domain-streak-light {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-activity-logger-panel,
+body.in-portal #dashWeightAndActivityCard .sens-activity-logger-panel.sens-activity-logger-clean {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-module {
+    background: rgba(255, 255, 255, 0.055) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 7px 10px !important;
+    margin-bottom: 0 !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-metric-title {
+    color: #FFFFFF !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-metric-sub {
+    color: #A1A1AA !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-stepper-control {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-stepper-btn {
+    background: rgba(255, 255, 255, 0.10) !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-input,
+body.in-portal #dashWeightAndActivityCard .sens-act-unit-tag {
+    color: #FFFFFF !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-quick-chip,
+body.in-portal #dashWeightAndActivityCard .sens-cardio-type-btn {
+    background: rgba(255, 255, 255, 0.07) !important;
+    color: #D4D4D8 !important;
+    border: none !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-quick-chip.active,
+body.in-portal #dashWeightAndActivityCard .sens-cardio-type-btn.active {
+    background: #E5CBA7 !important;
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-cardio-progress-wrap {
+    margin: 9px 0 0 0 !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-cardio-progress-meta {
+    color: #A1A1AA !important;
+    margin-bottom: 5px !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-cardio-progress-meta strong {
+    color: #FFFFFF !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-cardio-progress-track {
+    background: rgba(255, 255, 255, 0.14) !important;
+}
