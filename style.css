@@ -28246,6 +28246,7 @@ body.in-portal .coach-week-day-pill.is-today .sens-day-hero-num {
 }
 
 /* 3. Corrección de Contraste en Card de Descanso / Sin Ejercicios */
+body.in-portal #dashTrainingVideoCard.is-rest-mode,
 body.in-portal .sens-training-video-card.is-rest-mode {
     min-height: 0 !important;
     height: auto !important;
@@ -32922,14 +32923,14 @@ body.in-portal #dashNutriSummaryCard.is-empty-day,
 #dashNutriSummaryCard.is-empty-day {
     position: relative !important;
     aspect-ratio: auto !important;
-    min-height: 220px !important;
+    min-height: 0 !important;
     height: auto !important;
-    background: #FAF7F2 !important;
-    border: 1.5px solid rgba(197, 168, 128, 0.38) !important;
-    border-radius: 22px !important;
-    padding: 18px 20px !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 24px !important;
+    padding: 20px 18px !important;
     overflow: hidden !important;
-    box-shadow: 0 6px 24px rgba(112, 91, 62, 0.06) !important;
+    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.04) !important;
 }
 
 body.in-portal #dashNutriSummaryCard.is-empty-day .sens-nutri-carousel-stage,
