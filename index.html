@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '181.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '181.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '182.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '182.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3712,7 +3712,7 @@
                             </button>
                             <button type="button" class="btn btn-outline sens-btn-timer-secondary"
                                 id="btnMasterFinishSetAndRest" title="Marca el próximo set como completado e inicia el descanso sin usar cronómetro">
-                                Completar Set &amp; Descansar
+                                Completar Set
                             </button>
                         </div>
                         <div class="sens-master-timer-rest-adjustments" id="masterTimerRestControls"
@@ -3727,7 +3727,7 @@
                     <!-- 2. Series del Ejercicio Inmediatamente Debajo del Reloj (Mobile-First Touch Ergonomics) -->
                     <div class="sens-tactile-series-section">
                         <div class="sens-series-section-header">
-                            <h4>Ajuste Granular de Series &amp; Cargas</h4>
+                            <h4>Series y cargas</h4>
                             <span class="sens-series-count" id="modalExSeriesCount">0 de 4 series completadas</span>
                         </div>
                         <div class="sens-tactile-series-list" id="modalExSeriesList">
@@ -3736,7 +3736,7 @@
                         <!-- Botón de Completar Todo el Ejercicio con Feedback Inmediato -->
                         <button type="button" class="sens-btn-complete-all" id="btnQuickCompleteAllSets">
                             <span style="font-size: 14px; font-weight: 900;">✓</span>
-                            <span>Marcar Todo el Ejercicio como Realizado</span>
+                            <span>Completar todas las series</span>
                         </button>
                     </div>
 
@@ -3766,11 +3766,11 @@
                             <span>Progreso autoguardado</span>
                         </div>
                         <button type="button" class="btn sens-sticky-save-btn" id="btnModalFinishExercise">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>Guardar Progreso &amp; Finalizar</span>
+                            <span>Guardar y finalizar</span>
                         </button>
                     </div>
                 </div>
