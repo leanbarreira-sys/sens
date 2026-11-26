@@ -35157,7 +35157,7 @@ window.renderTrackingCalsBars = function() {
     // Construir gráfico SVG divergente: Fila superior de totales netos + Barras (+ Nutrición / - Gasto) + Línea Neta
     const W = 350;
     const H = 216;
-    const padX = 12;
+    const padX = 28;
     const topY = 36;
     const midY = 114;
     const botY = 184;
@@ -35197,10 +35197,10 @@ window.renderTrackingCalsBars = function() {
             topTotalsSvg += `<text x="${cx.toFixed(1)}" y="18.5" text-anchor="middle" font-size="9" font-weight="700" fill="#A1A1AA">—</text>`;
         }
 
-        // Barra arriba (+ Nutrición)
+        // Barra arriba (+ Nutrición, tono neutro para no confundir con meta cumplida)
         const inH = day.intake > 0 ? Math.max(4, (day.intake / maxMag) * (halfH - 6)) : 0;
         if (inH > 0) {
-            barsSvg += `<rect x="${bx.toFixed(1)}" y="${(midY - inH).toFixed(1)}" width="${barW}" height="${inH.toFixed(1)}" rx="4" fill="#22C55E" opacity="${day.isFuture ? '0.25' : '0.9'}"/>`;
+            barsSvg += `<rect x="${bx.toFixed(1)}" y="${(midY - inH).toFixed(1)}" width="${barW}" height="${inH.toFixed(1)}" rx="4" fill="#1E1E22" opacity="${day.isFuture ? '0.25' : '0.88'}"/>`;
         }
 
         // Barras apiladas abajo (- Basal, - Ejercicio, - Cardio)
@@ -35246,8 +35246,10 @@ window.renderTrackingCalsBars = function() {
 
     svgWrap.innerHTML = `
         <svg viewBox="0 0 ${W} ${H}" class="sens-weekly-balance-svg" role="img" aria-label="Balance calórico semanal">
-            <line x1="${padX}" y1="${midY}" x2="${W - padX}" y2="${midY}" stroke="rgba(18,18,20,0.22)" stroke-width="1" stroke-dasharray="3 3"/>
-            <text x="${padX}" y="${midY - 3}" font-size="7.5" font-weight="700" fill="#71717A">0</text>
+            <line x1="${padX}" y1="${midY}" x2="${W - 8}" y2="${midY}" stroke="rgba(18,18,20,0.22)" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="2" y="${topY + 10}" font-size="7" font-weight="700" fill="#71717A">+ Suma</text>
+            <text x="2" y="${midY + 2.5}" font-size="7.5" font-weight="800" fill="#71717A">0</text>
+            <text x="2" y="${botY - 6}" font-size="7" font-weight="700" fill="#71717A">− Resta</text>
             ${barsSvg}
             ${topTotalsSvg}
             ${polylineSvg}

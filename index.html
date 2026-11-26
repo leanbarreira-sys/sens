@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=97.0">
+    <link rel="stylesheet" href="style.css?v=98.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '204.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '204.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '205.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '205.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3333,10 +3333,10 @@
                             <span class="sens-balance-goal-pill" id="dashObjectiveGoalPill">Meta —</span>
                         </div>
                         <div class="sens-balance-legend-pills" style="margin-bottom: 8px;">
-                            <span class="bal-leg-item"><i class="dot-intake"></i>Suma (Comida)</span>
-                            <span class="bal-leg-item"><i class="dot-basal"></i>Basal</span>
-                            <span class="bal-leg-item"><i class="dot-workout"></i>Ejercicio</span>
-                            <span class="bal-leg-item"><i class="dot-cardio"></i>Cardio</span>
+                            <span class="bal-leg-item"><i class="dot-intake"></i>+ Comida</span>
+                            <span class="bal-leg-item"><i class="dot-basal"></i>− Basal</span>
+                            <span class="bal-leg-item"><i class="dot-workout"></i>− Ejercicio</span>
+                            <span class="bal-leg-item"><i class="dot-cardio"></i>− Cardio</span>
                             <span class="bal-leg-item"><i class="dot-net"></i>Neto</span>
                         </div>
 
@@ -9057,7 +9057,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=135.0"></script>
+    <script defer src="app.js?v=136.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
