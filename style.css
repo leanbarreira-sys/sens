@@ -37558,23 +37558,69 @@ body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight strong {
     color: #E5CBA7 !important;
 }
 
-/* 3. Registro Diario: Segmented iOS, Pills borderless, sin micro-pills repetidas, CTA Onyx */
-body.in-portal #dashWeightAndActivityCard .sens-btn-quick-log-weight {
+/* 3. Movimiento Diario (Cardio & Pasos) + Barra % + Balance & Peso */
+body.in-portal #dashWeightAndActivityCard #dashActiveBurnBadge,
+body.in-portal #dashWeeklyBalanceCard .sens-btn-quick-log-weight {
     background: #F4F2EE !important;
     color: #575659 !important;
     border: none !important;
     box-shadow: none !important;
     font-weight: 600 !important;
+    font-size: 11px !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+    font-variant-numeric: tabular-nums;
 }
 
-body.in-portal #dashWeightAndActivityCard .sens-tracking-segmented-bar {
+.sens-cardio-progress-wrap {
+    margin: 0 0 14px 0;
+}
+
+.sens-cardio-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #575659;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-cardio-progress-meta strong {
+    color: #121214;
+    font-weight: 700;
+}
+
+.sens-cardio-progress-track {
+    width: 100%;
+    height: 4px;
+    background: #F4F2EE;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.sens-cardio-progress-fill {
+    height: 100%;
+    background: #C5A880;
+    border-radius: 999px;
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+}
+
+.sens-cardio-progress-fill.is-complete {
+    background: #22C55E;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-tracking-segmented-bar,
+body.in-portal #dashWeeklyBalanceCard .sens-tracking-segmented-bar {
     background: #F4F3F1 !important;
     border: none !important;
     padding: 4px !important;
     border-radius: 12px !important;
 }
 
-body.in-portal #dashWeightAndActivityCard .sens-tracking-seg-pill {
+body.in-portal #dashWeightAndActivityCard .sens-tracking-seg-pill,
+body.in-portal #dashWeeklyBalanceCard .sens-tracking-seg-pill {
     background: transparent !important;
     color: #6F6E73 !important;
     border: none !important;
@@ -37583,7 +37629,8 @@ body.in-portal #dashWeightAndActivityCard .sens-tracking-seg-pill {
     box-shadow: none !important;
 }
 
-body.in-portal #dashWeightAndActivityCard .sens-tracking-seg-pill.active {
+body.in-portal #dashWeightAndActivityCard .sens-tracking-seg-pill.active,
+body.in-portal #dashWeeklyBalanceCard .sens-tracking-seg-pill.active {
     background: #FFFFFF !important;
     color: #121214 !important;
     box-shadow: 0 2px 6px rgba(18, 18, 20, 0.08) !important;

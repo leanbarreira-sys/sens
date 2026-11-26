@@ -24683,11 +24683,31 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
         }
     }
 
-    // Actualizar Panel Táctil de Actividad Diaria (Pasos & Cardio)
+    // Actualizar Panel Táctil de Actividad Diaria (Pasos & Cardio + Barra % Meta)
     const activeBurnBadge = document.getElementById('dashActiveBurnBadge');
+    const livePanelBurn = liveStepsBurn + liveCardioBurn;
     if (activeBurnBadge) {
-        const livePanelBurn = liveStepsBurn + liveCardioBurn;
         activeBurnBadge.textContent = `−${livePanelBurn.toLocaleString('es-AR')} kcal`;
+    }
+
+    const cardioPctEl = document.getElementById('dashCardioActivePctText');
+    const cardioRemEl = document.getElementById('dashCardioActiveRemainingText');
+    const cardioFillEl = document.getElementById('dashCardioActiveProgressFill');
+    const targetSteps = 10000;
+    const eqSteps = (Number(liveSteps) || 0) + ((Number(liveCardioMins) || 0) * 120);
+    const cPct = Math.min(100, Math.round((eqSteps / targetSteps) * 100));
+    const remSteps = Math.max(0, targetSteps - eqSteps);
+    if (cardioPctEl) cardioPctEl.textContent = `${cPct}% de tu meta`;
+    if (cardioRemEl) {
+        if (cPct >= 100) {
+            cardioRemEl.innerHTML = '<strong>Meta diaria cumplida</strong>';
+        } else {
+            cardioRemEl.innerHTML = `Restan <strong>${remSteps.toLocaleString('es-AR')} pasos</strong>`;
+        }
+    }
+    if (cardioFillEl) {
+        cardioFillEl.style.width = `${cPct}%`;
+        cardioFillEl.classList.toggle('is-complete', cPct >= 100);
     }
 
     const stepsSubBurn = document.getElementById('dashStepsSubBurn');
