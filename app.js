@@ -34923,10 +34923,9 @@ window.renderTrackingCalsBars = function() {
     const userGoal = String(profile.goal || 'fat_loss').toLowerCase();
     const isMuscleGain = userGoal.includes('muscle') || userGoal.includes('gain') || userGoal.includes('hipertrofia');
     const isMaintenance = userGoal.includes('maint') || userGoal.includes('general') || userGoal.includes('vitality');
-    const goalText = isMuscleGain ? 'Superávit' : (isMaintenance ? 'Equilibrio' : 'Déficit');
+    const goalText = isMuscleGain ? 'Aumento' : (isMaintenance ? 'Mantener' : 'Déficit');
 
-    const targetKcal = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, sDate) : 1950;
-    if (goalLabel) goalLabel.textContent = `Objetivo: ${goalText} · Meta ${targetKcal.toLocaleString('es-AR')} kcal`;
+    if (goalLabel) goalLabel.textContent = goalText;
 
     const daysData = [];
     let maxMag = 2200;
@@ -34979,7 +34978,7 @@ window.renderTrackingCalsBars = function() {
 
     if (goalLabel && daysWithRecords > 0) {
         const pctAdherence = Math.round((goodDaysCount / Math.max(1, daysWithRecords)) * 100);
-        goalLabel.textContent = `Objetivo: ${goalText} · ${pctAdherence}% adherencia`;
+        goalLabel.textContent = `${goalText} · ${pctAdherence}% adherencia`;
     }
 
     // Construir gráfico SVG divergente: Fila superior de totales netos + Barras (+ Nutrición / - Gasto) + Línea Neta
