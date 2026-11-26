@@ -21755,7 +21755,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         dayDateLabel.textContent = isToday ? 'Entrenamiento de Hoy' : `Entrenamiento del ${formatDateDDMM(selectedDate)}`;
     }
 
-    const trainingCardEl = document.getElementById('dashTrainingCard');
+    const trainingCardEl = document.getElementById('dashTrainingVideoCard');
 
     // Caso A: Descanso o sin ejercicios asignados
     if (!hasRoutine || exercises.length === 0 || isRest) {
@@ -21775,6 +21775,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                     restBadge.style.color = '#705B3E';
                 }
                 if (streakPill) {
+                    streakPill.style.display = 'inline-flex';
                     streakPill.className = 'sens-card-streak-pill in-progress';
                     streakPill.innerHTML = '<span class="streak-pill-dot" style="background: #705B3E;"></span><span class="streak-pill-text">Plan en Diseño</span>';
                 }
@@ -21795,8 +21796,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                     restBadge.style.color = '';
                 }
                 if (streakPill) {
-                    streakPill.className = 'sens-card-streak-pill done';
-                    streakPill.innerHTML = '<span class="streak-pill-dot"></span><span class="streak-pill-text">Descanso Activo ✓</span>';
+                    streakPill.style.display = 'none';
                 }
                 if (restTitle) restTitle.textContent = 'Día de Descanso';
                 if (restDesc) restDesc.textContent = 'Hoy tu cuerpo asimila el estímulo previo. Caminata ligera o descanso completo.';
@@ -23618,10 +23618,12 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     }
 
     updatePill('dashWorkoutStreakPill', wStatus, wText, 'Progreso de entrenamiento para la racha diaria');
+    const restStreakEl = document.getElementById('dashWorkoutRestStreakPill');
     if (!isMockAth && !hasRoutine) {
+        if (restStreakEl) restStreakEl.style.display = 'inline-flex';
         updatePill('dashWorkoutRestStreakPill', 'in-progress', 'Plan en Diseño', 'Rutina personalizada en diseño por Nico');
-    } else {
-        updatePill('dashWorkoutRestStreakPill', 'done', 'Descanso Activo ✓', 'Día de recuperación celular para la racha diaria');
+    } else if (restStreakEl) {
+        restStreakEl.style.display = 'none';
     }
 
     // 2. Pilar Nutrición
