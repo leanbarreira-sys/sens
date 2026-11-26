@@ -22119,24 +22119,11 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         }).join('');
     }
 
-    // 3. Modality Pill y Badge de Calorías Totales + Tiempo Promedio
-    const modality = dayData.modality || null;
+    // 3. Domain Pill unificada: Entrenamiento con micro-SVG (sin modalidad operativa)
     if (modalityPill) {
-        if (modality === 'presencial') {
-            modalityPill.textContent = 'Presencial';
-            modalityPill.className = 'sens-modality-pill';
-            modalityPill.style.display = 'inline-flex';
-        } else if (modality === 'online') {
-            modalityPill.textContent = 'Online';
-            modalityPill.className = 'sens-modality-pill online';
-            modalityPill.style.display = 'inline-flex';
-        } else if (modality === 'autonomo') {
-            modalityPill.textContent = 'Autónomo';
-            modalityPill.className = 'sens-modality-pill auto';
-            modalityPill.style.display = 'inline-flex';
-        } else {
-            modalityPill.style.display = 'none';
-        }
+        modalityPill.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M6.5 6.5h11M6.5 17.5h11M3 10v4M21 10v4M5 8v8M19 8v8M9 12h6"/></svg><span>Entrenamiento</span>`;
+        modalityPill.className = 'sens-modality-pill';
+        modalityPill.style.display = 'inline-flex';
     }
 
     if (durationPill) {
@@ -22475,16 +22462,9 @@ function updateNutriSummaryCardData() {
         nutriDayLabel.textContent = isToday ? 'Nutrición de Hoy' : `Nutrición del ${formatDateDDMM(selectedDate)}`;
     }
 
-    // 2. Objetivo Biológico del Atleta (SENS Brandbook / Nico Coach)
-    const userGoal = userPlan?.goal || profile.goal || anamnesis.goal || 'fat_loss';
+    // 2. Domain Pill unificada: Nutrición con micro-SVG
     if (goalPill) {
-        const goalLabels = {
-            fat_loss: 'Déficit Calórico',
-            muscle_gain: 'Superávit Hipertrofia',
-            recomp: 'Recomposición Magra',
-            posture_health: 'Salud Postural'
-        };
-        goalPill.textContent = goalLabels[userGoal] || 'Nutrición SENS';
+        goalPill.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg><span>Nutrición</span>`;
     }
 
     // 3. Resolución Robusta de Calorías Objetivo (Coach -> Perfil -> Anamnesis -> TDEE Mifflin-St Jeor)

@@ -37470,6 +37470,9 @@ body.in-portal .sens-empty-actions-row .sens-btn-empty-view-plan {
 body.in-portal #dashWorkoutActivePane #dashWorkoutModalityPill,
 body.in-portal #dashNutriSummaryCard #dashNutriGoalPill,
 body.in-portal #dashNutriSummaryCard.has-active-meals #dashNutriGoalPill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
     background: rgba(18, 18, 20, 0.64) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
