@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '186.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '186.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '187.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '187.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));

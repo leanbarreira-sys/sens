@@ -8703,7 +8703,7 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
         ? `${tax.muscleLabel.toUpperCase()} • ${tax.subMuscleLabel.toUpperCase()}`
         : (tax.muscleLabel ? tax.muscleLabel.toUpperCase() : 'PIERNAS & GLÚTEOS');
 
-    const currentLang = (typeof localStorage !== 'undefined' ? localStorage.getItem('sens_lang') : null) || 'es';
+    const currentLang = 'es';
     const localizedName = catalogMatch['name_' + currentLang] || catalogMatch.name_es || catalogMatch.name || ex.name;
     const localizedCue = catalogMatch['cue_technical_' + currentLang] || catalogMatch.cue_technical_es || catalogMatch.cue || ex.notes || 'Foco en cadencia 3-0-1-0 y rango completo sin compensaciones.';
     const localizedDetailed = catalogMatch['detailed_movement_' + currentLang] || catalogMatch.detailed_movement_es || catalogMatch.execution || '';
@@ -8774,7 +8774,7 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
                         <span class="sens-ex-step-num">${st.step || st.num || (idx + 1)}</span>
                         <div class="sens-ex-step-body">
                             <strong class="sens-ex-step-label">${st.label}</strong>
-                            <p class="sens-ex-step-text">${st.text}</p>
+                            <div class="sens-ex-step-text" style="color: #575659 !important;">${st.text}</div>
                         </div>
                     </div>
                 `).join('')}
@@ -8790,15 +8790,6 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
 
     if (modalNotes) {
         modalNotes.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
-                <span style="font-size: 10.5px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.06em;">Idioma</span>
-                <div class="sens-ex-lang-seg">
-                    <button type="button" class="sens-ex-lang-btn ${currentLang === 'es' ? 'active' : ''}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}', '${dateIso}')">ES</button>
-                    <button type="button" class="sens-ex-lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}', '${dateIso}')">EN</button>
-                    <button type="button" class="sens-ex-lang-btn ${currentLang === 'pt' ? 'active' : ''}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}', '${dateIso}')">PT</button>
-                </div>
-            </div>
-
             <div style="margin-bottom: 14px;">
                 <span style="display: block; font-size: 10.5px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;">Técnica en 3 pasos clave</span>
                 ${stepsCardsHtml}
@@ -10201,7 +10192,7 @@ window.openCoachExercisePreviewModal = function(exId, options = {}) {
     const tax = (typeof getExerciseTaxonomy === 'function')
         ? getExerciseTaxonomy(ex)
         : { muscleLabel: 'Piernas', typeLabel: 'Muscular' };
-    const currentLang = (typeof localStorage !== 'undefined' ? localStorage.getItem('sens_lang') : null) || 'es';
+    const currentLang = 'es';
     const localizedName = ex['name_' + currentLang] || ex.name_es || ex.name || 'Ejercicio';
     const localizedDetailed = ex['detailed_movement_' + currentLang] || ex.detailed_movement_es || ex.execution || '';
     const commonMistakes = ex.common_mistakes || 'Evitar rebotes articulares, pérdida de neutralidad lumbar o apnea.';

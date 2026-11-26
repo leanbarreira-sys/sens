@@ -38286,7 +38286,7 @@ body.in-portal #sensExerciseModalSheet #btnModalFinishExercise {
     display: block;
     font-size: 12.5px;
     font-weight: 700;
-    color: #121214;
+    color: #121214 !important;
     margin-bottom: 2px;
 }
 
@@ -38294,7 +38294,7 @@ body.in-portal #sensExerciseModalSheet #btnModalFinishExercise {
     margin: 0;
     font-size: 12.5px;
     line-height: 1.5;
-    color: #575659;
+    color: #575659 !important;
 }
 
 body.in-portal #sensExerciseModalSheet .sens-tactile-set-row {
