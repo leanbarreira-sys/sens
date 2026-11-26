@@ -28284,16 +28284,38 @@ body.in-portal .sens-rest-badge {
     letter-spacing: 0.1em !important;
 }
 
-body.in-portal #btnRestSeeStretches,
+body.in-portal #btnRestSeeStretches {
+    background: #121214 !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    min-height: 40px !important;
+    padding: 9px 18px !important;
+    transition: transform 0.16s ease, opacity 0.16s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    touch-action: manipulation !important;
+}
+
 body.in-portal #btnRestBringWorkout {
-    background: #FAF9F6 !important;
-    border: 1px solid rgba(18, 18, 20, 0.15) !important;
+    background: #F4F3F1 !important;
+    border: none !important;
     color: #121214 !important;
-    font-size: 12px !important;
+    -webkit-text-fill-color: #121214 !important;
+    font-size: 12.5px !important;
     font-weight: 600 !important;
     border-radius: 9999px !important;
-    padding: 10px 18px !important;
-    transition: all 0.2s ease !important;
+    min-height: 40px !important;
+    padding: 9px 16px !important;
+    transition: background 0.16s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    touch-action: manipulation !important;
 }
 
 body.in-portal #btnRestSeeStretches:hover,

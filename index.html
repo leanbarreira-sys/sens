@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=80.0">
+    <link rel="stylesheet" href="style.css?v=81.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '110.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '110.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '111.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '111.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3081,7 +3081,7 @@
                     <div class="sens-training-card-rest" id="dashWorkoutRestPane" style="display: none;">
                         <div class="sens-rest-card-inner">
                             <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
                                 <div class="sens-rest-badge" id="dashWorkoutRestBadge">En Calibración con Nico</div>
                                 <span class="sens-card-streak-pill in-progress" id="dashWorkoutRestStreakPill"
                                     title="Progreso de racha">
@@ -5098,7 +5098,7 @@
                         <div
                             style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 14px; padding: 16px; margin-bottom: 20px;">
                             <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
                                 <strong style="font-size: 13px; color: #121214;">Series Semanales por Grupo
                                     Muscular</strong>
                                 <span class="pill pill-champagne" style="font-size: 9.5px;">Rango Óptimo: 10 - 18
@@ -9093,7 +9093,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=102.0"></script>
+    <script defer src="app.js?v=103.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

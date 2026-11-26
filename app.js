@@ -21781,7 +21781,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                     const athName = (AppState.profile?.full_name || 'Atleta').split(' ')[0];
                     const waText = encodeURIComponent(`Hola Nico! Soy ${athName}, completé mi diagnóstico en SENS y quiero consultar sobre la asignación de mi entrenamiento.`);
                     restActions.innerHTML = `
-                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" class="btn btn-dark btn-sm" style="font-size: 12px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border-radius: 8px; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" class="btn btn-dark btn-sm" style="font-size: 12.5px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border-radius: 9999px; min-height: 40px; padding: 9px 18px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                             Consultar a Nico por WhatsApp →
                         </a>
                     `;
@@ -21795,15 +21795,15 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                     streakPill.className = 'sens-card-streak-pill done';
                     streakPill.innerHTML = '<span class="streak-pill-dot"></span><span class="streak-pill-text">Descanso Activo ✓</span>';
                 }
-                if (restTitle) restTitle.textContent = 'Día de Descanso & Recuperación';
-                if (restDesc) restDesc.textContent = 'Día de descanso celular o recuperación activa. Podés realizar estiramientos guiados con Nico o reprogramar tu sesión.';
+                if (restTitle) restTitle.textContent = 'Día de Regeneración';
+                if (restDesc) restDesc.textContent = 'Hoy tu cuerpo asimila el estímulo previo. Movilidad suave o caminata ligera mantienen tu ritmo sin fatiga.';
                 if (restActions) {
                     restActions.innerHTML = `
-                        <button type="button" class="btn btn-outline btn-sm" id="btnRestSeeStretches" style="font-size: 12px; border: 1px solid #121214; color: #121214; background: #FFFFFF; font-weight: 700; border-radius: 8px; padding: 7px 14px; cursor: pointer;">
-                            Ver estiramientos
+                        <button type="button" class="btn btn-dark btn-sm" id="btnRestSeeStretches" onclick="event.stopPropagation(); if(typeof AppState!=='undefined') AppState.selectedMuscleFilter='core_movilidad'; if(typeof switchPortalView==='function') switchPortalView('workoutView');" style="cursor: pointer;">
+                            Movilidad Guiada →
                         </button>
-                        <button type="button" class="btn btn-dark btn-sm" id="btnRestBringWorkout" onclick="openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()))" style="font-size: 12px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border-radius: 8px; padding: 7px 14px; border: none; cursor: pointer;">
-                            Reprogramar sesión
+                        <button type="button" class="btn btn-sm" id="btnRestBringWorkout" onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()));" style="cursor: pointer;">
+                            Reprogramar
                         </button>
                     `;
                 }
