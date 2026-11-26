@@ -37255,7 +37255,33 @@ body.in-portal .sens-tracking-segmented-bar.sens-tracking-segmented-2col,
    UNIFICACIÓN QUIET LUXURY EN INICIO (#dashView): PILLS, HEROES, TRACKING & BALANCE
    ============================================================================= */
 
-/* 1. Hero Cards hermanadas: Márgenes exactos y Pills sobre fotografía en vidrio oscuro */
+/* 1. Hero Cards Compactas (Opción A: ~224px, hermanadas 1:1, sin carruseles ni cuadritos) */
+body.in-portal #dashWorkoutActivePane,
+body.in-portal #dashNutriSummaryCard.has-active-meals {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: 224px !important;
+    min-height: 224px !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+    background: #09090B !important;
+    padding: 0 !important;
+    box-shadow: 0 10px 28px rgba(18, 18, 20, 0.12) !important;
+}
+
+body.in-portal #dashWorkoutActivePane .sens-video-overlay-gradient,
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-overlay-gradient {
+    background: linear-gradient(180deg, rgba(9, 9, 11, 0.36) 0%, rgba(9, 9, 11, 0.22) 38%, rgba(9, 9, 11, 0.90) 100%) !important;
+}
+
+body.in-portal #dashWorkoutNavArrows,
+body.in-portal #dashWorkoutDotsIndicator,
+body.in-portal #dashWorkoutTypeIconsWrap,
+body.in-portal #dashWorkoutSwapDayBtn,
+body.in-portal #dashNutri5calsRow {
+    display: none !important;
+}
+
 body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-top-badges,
 body.in-portal #dashWorkoutActivePane .sens-video-top-badges {
     position: absolute !important;
@@ -37264,8 +37290,60 @@ body.in-portal #dashWorkoutActivePane .sens-video-top-badges {
     right: 14px !important;
     padding: 0 !important;
     margin: 0 !important;
-    gap: 7px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 8px !important;
     z-index: 6 !important;
+}
+
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-card-badge-row,
+body.in-portal #dashWorkoutActivePane .sens-card-badge-row {
+    width: auto !important;
+    min-height: 0 !important;
+}
+
+body.in-portal #dashWorkoutActivePane .sens-training-card-content,
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-card-content {
+    position: absolute !important;
+    top: auto !important;
+    bottom: 16px !important;
+    left: 16px !important;
+    right: 16px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 6 !important;
+}
+
+body.in-portal #dashWorkoutActivePane .sens-card-title-white,
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-card-title-white {
+    font-size: 19px !important;
+    font-weight: 800 !important;
+    line-height: 1.18 !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 0 4px 0 !important;
+}
+
+body.in-portal #dashWorkoutActivePane .sens-card-sub-white,
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-card-sub-white {
+    font-size: 12.5px !important;
+    color: rgba(255, 255, 255, 0.78) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin: 0 !important;
+}
+
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-active-progress-wrap {
+    margin: 10px 0 0 !important;
+}
+
+body.in-portal #dashWorkoutActivePane .sens-btn-circle-arrow,
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-btn-circle-arrow {
+    width: 38px !important;
+    height: 38px !important;
+    flex-shrink: 0 !important;
 }
 
 body.in-portal #dashWorkoutActivePane #dashWorkoutModalityPill,
