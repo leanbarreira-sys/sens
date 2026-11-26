@@ -18615,7 +18615,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     <div class="sens-ex-compact-overlay"></div>
                     <div class="sens-ex-compact-top">
                         <span class="ex-compact-sets-badge sens-nutri-kcal-badge" style="font-variant-numeric: tabular-nums;">${macros.calories} kcal</span>
-                        <button type="button" class="sens-btn-quick-log ex-compact-check-btn ${isLogged ? 'is-logged completed' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-is-custom="${item.isCustom ? '1' : '0'}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}" style="border: ${isLogged ? 'none' : '1.5px solid rgba(255,255,255,0.55)'}; background: ${isLogged ? '#10B981' : 'rgba(18,18,20,0.45)'}; color: #FFFFFF; cursor: pointer;">
+                        <button type="button" class="sens-btn-quick-log ex-compact-check-btn ${isLogged ? 'is-logged completed' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-is-custom="${item.isCustom ? '1' : '0'}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}" style="border: ${isLogged ? 'none' : '1.5px solid rgba(255,255,255,0.55)'}; background: ${isLogged ? '#22C55E' : 'rgba(18,18,20,0.45)'}; color: #FFFFFF; cursor: pointer;">
                             ✓
                         </button>
                     </div>
@@ -18803,6 +18803,13 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     }
     if (optimalRangeEl) {
         optimalRangeEl.textContent = `Rango óptimo: ${minOptKcal.toLocaleString('es-AR')} - ${maxOptKcal.toLocaleString('es-AR')} kcal`;
+    }
+    const optZoneEl = document.getElementById('nutriOptimalZoneMarker');
+    if (optZoneEl) {
+        const leftPct = (minOptKcal / maxScaleKcal) * 100;
+        const widthPct = ((maxOptKcal - minOptKcal) / maxScaleKcal) * 100;
+        optZoneEl.style.left = `${leftPct.toFixed(2)}%`;
+        optZoneEl.style.width = `${widthPct.toFixed(2)}%`;
     }
     if (sliderFill) {
         const pct = Math.min(100, Math.max(0, Math.round((totalConsumedKcal / maxScaleKcal) * 100)));
