@@ -18117,6 +18117,28 @@ function formatStepsHtml(stepsText) {
 /**
  * Marca o desmarca un alimento como consumido hoy desde la card directa (Item 5)
  */
+window.handleNutritionStreakTransition = function(streakEval) {
+    if (!streakEval || !streakEval.current || !streakEval.current.nutrition) return;
+    const nutriStatus = streakEval.current.nutrition.status;
+    const prevStatus = streakEval.previous?.nutrition?.status;
+    const consumedKcal = streakEval.current.nutrition.consumed || 0;
+    const targetKcal = streakEval.current.nutrition.target || 1950;
+
+    if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
+        if (typeof window.showSensCelebrationToast === 'function') {
+            window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) están en el rango óptimo (-10% / +10%).`);
+        }
+    } else if (nutriStatus === 'exceeded' && prevStatus !== 'exceeded') {
+        if (typeof showSensToast === 'function') {
+            showSensToast(`Superaste el rango óptimo de hoy: ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 4500);
+        }
+    } else if (prevStatus === 'on_track' && nutriStatus === 'pending') {
+        if (typeof showSensToast === 'function') {
+            showSensToast(`Saliste del rango óptimo de hoy: ${consumedKcal.toLocaleString('es-AR')} kcal (debajo del mínimo).`, 'warning', 4000);
+        }
+    }
+};
+
 function toggleFoodLoggedStatus(foodKey, mealSlot, isCustom = null) {
     const sDate = AppState.nutriSelectedDate || new Date();
     if (isFutureDate(sDate)) {
@@ -18160,27 +18182,12 @@ function toggleFoodLoggedStatus(foodKey, mealSlot, isCustom = null) {
     }
 
     renderMemberNutritionPlan(athId, sDate);
-    renderNutriDaysNav();
 
     if (typeof syncAllStreakAndPillTelemetry === 'function') {
         const streakEval = syncAllStreakAndPillTelemetry(sDate);
-        const nutriStatus = streakEval?.current?.nutrition?.status;
-        const prevStatus = streakEval?.previous?.nutrition?.status;
-        const consumedKcal = streakEval?.current?.nutrition?.consumed || 0;
-        const targetKcal = streakEval?.current?.nutrition?.target || 1950;
-
-        if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
-            if (typeof window.showSensCelebrationToast === 'function') {
-                window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron en el rango óptimo (-10% / +10%).`);
-            }
-        } else if (nutriStatus === 'exceeded') {
-            if (typeof showSensToast === 'function') {
-                showSensToast(`Perdiste el objetivo de racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
-            }
-        } else if (prevStatus === 'on_track' && nutriStatus === 'pending') {
-            if (typeof showSensToast === 'function') {
-                showSensToast(`Perdiste el objetivo de racha nutricional de hoy: calorías consumidas (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron debajo del mínimo óptimo.`, 'warning', 4500);
-            }
+        if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
+        if (typeof window.handleNutritionStreakTransition === 'function') {
+            window.handleNutritionStreakTransition(streakEval);
         }
     } else {
         if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(sDate);
@@ -18188,6 +18195,7 @@ function toggleFoodLoggedStatus(foodKey, mealSlot, isCustom = null) {
             SensDailyStreakManager.evaluateDay(sDate, athId);
         }
         if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
+        if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
     }
 }
 
@@ -20603,12 +20611,20 @@ function initPortionRulerModal() {
                 sliderFill.style.width = `${ratioPct}%`;
             }
 
+            const nutriDate = AppState.nutriSelectedDate || new Date();
             if (typeof renderMemberNutritionPlan === 'function') {
                 const ath = typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : '';
-                if (ath) renderMemberNutritionPlan(ath, AppState.nutriSelectedDate || new Date());
+                if (ath) renderMemberNutritionPlan(ath, nutriDate);
             }
-            if (typeof updateNutriSummaryCardData === 'function') {
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                const streakEval = syncAllStreakAndPillTelemetry(nutriDate);
+                if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
+                if (typeof window.handleNutritionStreakTransition === 'function') {
+                    window.handleNutritionStreakTransition(streakEval);
+                }
+            } else if (typeof updateNutriSummaryCardData === 'function') {
                 updateNutriSummaryCardData();
+                if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
             }
 
             // Sincronizar Anillo Concéntrico de Calorías
@@ -23397,6 +23413,14 @@ function syncAllStreakAndPillTelemetry(targetDate = null) {
     // 6. Actualizar Módulo de Rachas & Recompensas Desbloqueables (Presupuesto Social de Fin de Semana)
     if (typeof window.renderSensUnlockablesModule === 'function') {
         window.renderSensUnlockablesModule();
+    }
+
+    // 7. Sincronizar tiras de calendario (Inicio y Nutrición) con el estado recién evaluado
+    if (typeof renderDynamicWeekStrip === 'function') {
+        renderDynamicWeekStrip();
+    }
+    if (typeof renderNutriDaysNav === 'function') {
+        renderNutriDaysNav();
     }
 
     return evalResult;
