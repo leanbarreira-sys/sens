@@ -18119,7 +18119,7 @@ function formatStepsHtml(stepsText) {
 /**
  * Marca o desmarca un alimento como consumido hoy desde la card directa (Item 5)
  */
-function toggleFoodLoggedStatus(foodKey, mealSlot) {
+function toggleFoodLoggedStatus(foodKey, mealSlot, isCustom = null) {
     const sDate = AppState.nutriSelectedDate || new Date();
     if (isFutureDate(sDate)) {
         if (typeof showSensToast === 'function') {
@@ -18137,9 +18137,20 @@ function toggleFoodLoggedStatus(foodKey, mealSlot) {
         loggedFoods = JSON.parse(localStorage.getItem(logKey) || '{}');
     } catch (e) {}
 
-    const isCurrentlyLogged = Boolean(loggedFoods[foodKey]);
+    let resolvedIsCustom = isCustom;
+    if (resolvedIsCustom === null && typeof document !== 'undefined') {
+        const btnEl = document.querySelector(`.sens-btn-quick-log[data-food-id="${CSS.escape ? CSS.escape(foodKey) : foodKey}"]`);
+        if (btnEl) {
+            resolvedIsCustom = btnEl.getAttribute('data-is-custom') === '1';
+        }
+    }
+
+    const isCurrentlyLogged = (typeof window.isNutritionFoodRowLogged === 'function')
+        ? window.isNutritionFoodRowLogged(loggedFoods, foodKey, foodKey, Boolean(resolvedIsCustom))
+        : Boolean(loggedFoods[foodKey]);
+
     if (isCurrentlyLogged) {
-        delete loggedFoods[foodKey];
+        loggedFoods[foodKey] = false;
         if (typeof showSensToast === 'function') showSensToast('Alimento desmarcado de hoy.', 'info', 1500);
     } else {
         loggedFoods[foodKey] = true;
@@ -18473,7 +18484,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     </div>
                     <div class="sens-nutri-food-right" style="display: flex; align-items: center; gap: 8px;">
                         <div class="sens-nutri-kcal-badge">${macros.calories} kcal</div>
-                        <button type="button" class="sens-btn-quick-log ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}">
+                        <button type="button" class="sens-btn-quick-log ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-is-custom="${item.isCustom ? '1' : '0'}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
@@ -18529,7 +18540,8 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                 e.stopPropagation();
                 const fid = btn.getAttribute('data-food-id');
                 const slot = btn.getAttribute('data-meal-slot');
-                toggleFoodLoggedStatus(fid, slot);
+                const isCustom = btn.getAttribute('data-is-custom') === '1';
+                toggleFoodLoggedStatus(fid, slot, isCustom);
             });
         });
 
