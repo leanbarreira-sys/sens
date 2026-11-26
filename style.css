@@ -37402,18 +37402,29 @@ body.in-portal #dashNutriSummaryCard.is-empty-day .sens-nutri-top-badges {
     flex-direction: row !important;
     justify-content: space-between !important;
     align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
     margin-bottom: 12px !important;
     padding: 0 !important;
 }
 
+body.in-portal #dashNutriSummaryCard.is-empty-day .sens-card-badge-row {
+    width: auto !important;
+    min-height: 0 !important;
+}
+
 body.in-portal #dashNutriSummaryCard.is-empty-day #dashNutriGoalPill,
 body.in-portal #dashNutriSummaryCard.is-empty-day #dashNutriStreakPill,
+body.in-portal #dashNutriSummaryCard.is-empty-day #dashNutriStreakPill.in-progress,
+body.in-portal #dashNutriSummaryCard.is-empty-day #dashNutriStreakPill.done,
+body.in-portal #dashNutriSummaryCard.is-empty-day #dashNutriStreakPill.missed,
 body.in-portal #dashTrainingVideoCard.is-rest-mode .sens-rest-badge,
 body.in-portal #dashTrainingVideoCard.is-rest-mode #dashWorkoutRestStreakPill {
     background: #F4F2EE !important;
     color: #575659 !important;
     -webkit-text-fill-color: #575659 !important;
     border: none !important;
+    box-shadow: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     font-size: 11px !important;
@@ -37434,8 +37445,12 @@ body.in-portal .sens-empty-actions-row .sens-btn-empty-log-food {
     -webkit-text-fill-color: #FFFFFF !important;
     border: none !important;
     border-radius: 999px !important;
-    font-size: 13px !important;
+    font-size: 12.5px !important;
     font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+    padding: 12px 14px !important;
 }
 
 body.in-portal .sens-empty-actions-row .sens-btn-empty-view-plan {
@@ -37444,8 +37459,12 @@ body.in-portal .sens-empty-actions-row .sens-btn-empty-view-plan {
     -webkit-text-fill-color: #121214 !important;
     border: none !important;
     border-radius: 999px !important;
-    font-size: 13px !important;
+    font-size: 12.5px !important;
     font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+    padding: 12px 14px !important;
 }
 
 body.in-portal #dashWorkoutActivePane #dashWorkoutModalityPill,
