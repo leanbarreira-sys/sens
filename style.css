@@ -28548,12 +28548,32 @@ body.in-portal .sens-act-header-title {
     letter-spacing: 0.1em !important;
 }
 
+body.in-portal #dashWeightAndActivityCard {
+    padding: 14px 14px 12px !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-activity-logger-panel,
+body.in-portal .sens-activity-logger-panel.sens-activity-logger-clean {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+
 body.in-portal .sens-act-module {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 13px !important;
-    padding: 8px 11px !important;
+    background: #FAF9F6 !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 7px 10px !important;
     margin-bottom: 0 !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-label-group {
+    flex-direction: row !important;
+    align-items: baseline !important;
+    gap: 6px !important;
 }
 
 body.in-portal .sens-act-metric-title {
@@ -28565,36 +28585,38 @@ body.in-portal .sens-act-metric-title {
 body.in-portal .sens-act-metric-sub {
     color: #77767B !important;
     font-size: 10.5px !important;
+    font-weight: 600 !important;
 }
 
 body.in-portal .sens-act-stepper-control {
-    background: #F4F3F1 !important;
+    background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
     border-radius: 9999px !important;
     display: inline-flex !important;
     align-items: center !important;
     padding: 2px !important;
-    height: 30px !important;
+    height: 28px !important;
     box-sizing: border-box !important;
 }
 
 body.in-portal #dashWeightAndActivityCard .sens-act-stepper-btn {
-    width: 24px !important;
-    height: 24px !important;
-    font-size: 13px !important;
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 12.5px !important;
 }
 
 body.in-portal #dashWeightAndActivityCard .sens-act-chips-row,
 body.in-portal #dashWeightAndActivityCard .sens-cardio-types-grid {
-    margin-top: 6px !important;
+    margin-top: 5px !important;
     gap: 5px !important;
 }
 
 body.in-portal #dashWeightAndActivityCard .sens-act-quick-chip,
 body.in-portal #dashWeightAndActivityCard .sens-cardio-type-btn {
-    padding: 4px 8px !important;
+    padding: 3px 8px !important;
     font-size: 10.5px !important;
     min-height: 0 !important;
+    border: none !important;
 }
 
 body.in-portal .sens-act-stepper-btn {
