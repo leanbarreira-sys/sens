@@ -18606,6 +18606,15 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             ? `${slotConsumedKcal.toLocaleString('es-AR')} / ${slotKcal.toLocaleString('es-AR')} kcal • ${slotConsumedCount}/${slotFoods.length}`
             : (slotFoods.length > 0 ? `${slotKcal.toLocaleString('es-AR')} kcal • ${slotFoods.length} items` : `Sin registrar`);
 
+        const addCardHtml = `
+            <button type="button" class="sens-ex-compact-card btn-quick-add-to-meal" data-meal-slot="${mKey}" title="Agregar alimento a ${mealLabels[mKey]}" style="background: #FAF7F2 !important; border: 1.5px dashed rgba(158, 125, 75, 0.38) !important; box-shadow: none !important; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; padding: 14px;">
+                <span style="width: 36px; height: 36px; border-radius: 50%; background: rgba(158, 125, 75, 0.14); color: #705B3E; display: inline-flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </span>
+                <span style="font-size: 12px; font-weight: 700; color: #705B3E; text-align: center; line-height: 1.25;">Sumar a<br>${mealLabels[mKey]}</span>
+            </button>
+        `;
+
         subsectionsHtml += `
             <div class="sens-workout-muscle-group-block" data-meal-slot="${mKey}">
                 <div class="sens-workout-muscle-label-row">
@@ -18615,7 +18624,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     </div>
                     <div class="sens-carousel-nav-controls">
                         <button type="button" class="btn-quick-add-to-meal sens-carousel-hint-pill" data-meal-slot="${mKey}" title="Agregar alimento a ${mealLabels[mKey]}" style="border: none; cursor: pointer;">+ Agregar</button>
-                        ${slotFoods.length > 1 ? `
+                        ${slotFoods.length > 0 ? `
                             <button type="button" class="sens-carousel-arrow-btn" aria-label="Anterior" onclick="scrollWorkoutCarousel(this, -1)" title="Anterior">‹</button>
                             <button type="button" class="sens-carousel-arrow-btn" aria-label="Siguiente" onclick="scrollWorkoutCarousel(this, 1)" title="Siguiente">›</button>
                         ` : ''}
@@ -18625,10 +18634,14 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                     <div class="sens-carousel-wrap">
                         <div class="sens-workout-carousel">
                             ${cardsHtml}
+                            ${addCardHtml}
                         </div>
                     </div>
                 ` : `
-                    <div style="padding: 12px 14px; font-size: 12px; color: #6E6E73; background: #FFFFFF; border-radius: 16px; border: 1px dashed rgba(18, 18, 20, 0.12);">Sin alimentos en ${mealLabels[mKey]}. Tocá <strong>+ Agregar</strong> para sumar.</div>
+                    <button type="button" class="btn-quick-add-to-meal" data-meal-slot="${mKey}" style="width: 100%; padding: 13px 16px; font-size: 12.5px; font-weight: 600; color: #705B3E; background: #FAF7F2; border-radius: 16px; border: 1.5px dashed rgba(158, 125, 75, 0.35); display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>Sumar alimento a ${mealLabels[mKey]}</span>
+                    </button>
                 `}
             </div>
         `;
@@ -19139,7 +19152,7 @@ function initUserFoodDetailModal() {
                 : (item.id || resolved?.id));
 
             if (item.isCustom) {
-                const customKey = `sens_user_custom_meals_${athId}_${dateIso}`;
+                const customKey = `sens_user_logged_meals_${athId}_${dateIso}`;
                 let customList = [];
                 try { customList = JSON.parse(localStorage.getItem(customKey) || '[]'); } catch (e) {}
                 const cIdx = (typeof item._occIdx === 'string' && item._occIdx.startsWith('c')) ? parseInt(item._occIdx.slice(1), 10) : -1;

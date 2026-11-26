@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '157.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '157.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '158.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '158.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4061,8 +4061,8 @@
                         <!-- Renderizado dinámico desde app.js / SENS_FOOD_LIBRARY -->
                     </div>
 
-                    <!-- Botón para Registrar Comida Personalizada (Fuera de Plan) -->
-                    <button type="button" class="sens-btn-custom-meal" id="btnOpenCustomMealModal">
+                    <!-- Botón legado oculto (reemplazado por + Agregar en cada comida) -->
+                    <button type="button" class="sens-btn-custom-meal" id="btnOpenCustomMealModal" style="display: none !important;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
