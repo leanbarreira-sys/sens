@@ -22622,6 +22622,47 @@ function initDashNutriCarousel() {
     const activeContent = card.querySelector('.sens-nutri-card-content');
     const carouselStage = document.getElementById('dashNutriCarouselStage');
 
+    const applyNutriBar = (pctEl, remEl, fillEl, consumed, target, isDarkSurface) => {
+        const safeTarget = Math.max(1, Number(target) || 1950);
+        const safeConsumed = Math.max(0, Number(consumed) || 0);
+        const realPct = Math.round((safeConsumed / safeTarget) * 100);
+        const barWidth = Math.min(100, realPct);
+        const minOpt = Math.round(safeTarget * 0.80);
+        const maxOpt = Math.round(safeTarget * 1.10);
+        const isExceeded = safeConsumed > maxOpt;
+        const isInRange = safeConsumed >= minOpt && safeConsumed <= maxOpt;
+        const remaining = Math.max(0, safeTarget - safeConsumed);
+        const overKcal = Math.max(0, safeConsumed - safeTarget);
+
+        const greenColor = isDarkSurface ? '#34D399' : '#059669';
+        const redColor = isDarkSurface ? '#FB7185' : '#DC2626';
+
+        if (pctEl) pctEl.textContent = `${realPct}% del objetivo`;
+        if (remEl) {
+            if (isExceeded) {
+                remEl.innerHTML = `<strong style="color: ${redColor};">Excedido +${overKcal.toLocaleString('es-AR')} kcal</strong>`;
+            } else if (isInRange) {
+                if (safeConsumed >= Math.round(safeTarget * 0.95)) {
+                    remEl.innerHTML = `<strong style="color: ${greenColor};">Meta alcanzada ✓</strong>`;
+                } else {
+                    remEl.innerHTML = `<strong style="color: ${greenColor};">En rango ✓</strong> · Restan ${remaining.toLocaleString('es-AR')} kcal`;
+                }
+            } else {
+                remEl.innerHTML = `Restan <strong>${remaining.toLocaleString('es-AR')} kcal</strong>`;
+            }
+        }
+        if (fillEl) {
+            fillEl.style.width = `${barWidth}%`;
+            if (isExceeded) {
+                fillEl.style.background = 'linear-gradient(90deg, #F59E0B, #EF4444)';
+            } else if (isInRange) {
+                fillEl.style.background = greenColor;
+            } else {
+                fillEl.style.background = '';
+            }
+        }
+    };
+
     if (dashNutriMealsData.length === 0) {
         stopTimer();
         card.classList.remove('has-active-meals');
@@ -22634,25 +22675,15 @@ function initDashNutriCarousel() {
         // Item 3: Si no tenés nada cargado, marcar calorías hechas en el día, objetivo y cuánto falta
         const consumedKcal = (typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, selectedDate) : 0;
         const targetKcal = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, selectedDate) : 1950;
-        const remainingKcal = Math.max(0, targetKcal - consumedKcal);
-        const progressPct = targetKcal > 0 ? Math.min(100, Math.round((consumedKcal / targetKcal) * 100)) : 0;
 
         const emptyConsumedEl = document.getElementById('dashNutriEmptyConsumedNum');
         const emptyTargetEl = document.getElementById('dashNutriEmptyTargetNum');
-        const emptyRemainingEl = document.getElementById('dashNutriEmptyRemainingNum');
         const emptyRemainingText = document.getElementById('dashNutriEmptyRemainingText');
         const emptyFillEl = document.getElementById('dashNutriEmptyProgressFill');
         const emptyFractionEl = document.getElementById('dashNutriEmptyCalsFraction');
 
         if (emptyConsumedEl) emptyConsumedEl.textContent = consumedKcal.toLocaleString('es-AR');
-        if (emptyTargetEl) emptyTargetEl.textContent = `${progressPct}% del objetivo`;
-        if (emptyRemainingEl) emptyRemainingEl.textContent = `${remainingKcal.toLocaleString('es-AR')} kcal`;
-        if (emptyRemainingText) {
-            emptyRemainingText.innerHTML = remainingKcal === 0 && consumedKcal > 0
-                ? '<strong style="color: #059669;">¡Meta calórica alcanzada! ✓</strong>'
-                : `Restan <strong id="dashNutriEmptyRemainingNum">${remainingKcal.toLocaleString('es-AR')} kcal</strong>`;
-        }
-        if (emptyFillEl) emptyFillEl.style.width = `${progressPct}%`;
+        applyNutriBar(emptyTargetEl, emptyRemainingText, emptyFillEl, consumedKcal, targetKcal, false);
         if (emptyFractionEl) emptyFractionEl.textContent = `${consumedKcal.toLocaleString('es-AR')} / ${targetKcal.toLocaleString('es-AR')} kcal`;
 
         document.querySelectorAll('#dashNutri5calsRow .sens-5cals-chip').forEach(chip => {
@@ -22668,21 +22699,13 @@ function initDashNutriCarousel() {
     if (activeContent) activeContent.style.display = 'block';
     if (carouselStage) carouselStage.style.display = 'block';
 
-    // Sincronizar barra de progreso, % diario y calorías restantes en el estado con comidas
+    // Sincronizar barra de progreso, % diario y estado alineado con la pill de racha
     const activeConsumedKcal = (typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, selectedDate) : 0;
     const activeTargetKcal = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, selectedDate) : 1950;
-    const activeRemainingKcal = Math.max(0, activeTargetKcal - activeConsumedKcal);
-    const activePct = activeTargetKcal > 0 ? Math.min(100, Math.round((activeConsumedKcal / activeTargetKcal) * 100)) : 0;
     const activePctEl = document.getElementById('dashNutriActivePctText');
     const activeRemEl = document.getElementById('dashNutriActiveRemainingText');
     const activeFillEl = document.getElementById('dashNutriActiveProgressFill');
-    if (activePctEl) activePctEl.textContent = `${activePct}% del objetivo`;
-    if (activeRemEl) {
-        activeRemEl.innerHTML = activeRemainingKcal === 0 && activeConsumedKcal > 0
-            ? '<strong style="color: #34D399;">¡Meta alcanzada! ✓</strong>'
-            : `Restan <strong>${activeRemainingKcal.toLocaleString('es-AR')} kcal</strong>`;
-    }
-    if (activeFillEl) activeFillEl.style.width = `${activePct}%`;
+    applyNutriBar(activePctEl, activeRemEl, activeFillEl, activeConsumedKcal, activeTargetKcal, true);
 
     if (imgA) {
         imgA.style.opacity = '';
