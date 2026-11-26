@@ -18728,18 +18728,19 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     if (targetKcalEl) targetKcalEl.textContent = `${targetKcal.toLocaleString('es-AR')} kcal`;
     if (remainingEl) {
         const diff = targetKcal - totalConsumedKcal;
+        const completionPct = targetKcal > 0 ? Math.max(0, Math.round((totalConsumedKcal / targetKcal) * 100)) : 0;
         if (totalConsumedKcal === 0) {
-            remainingEl.textContent = `Restan ${targetKcal.toLocaleString('es-AR')} kcal para tu objetivo`;
+            remainingEl.textContent = '0% completado';
             remainingEl.style.color = '#6E6E73';
         } else if (totalConsumedKcal < minOptKcal) {
-            remainingEl.textContent = `Faltan ${diff.toLocaleString('es-AR')} kcal para tu objetivo`;
+            remainingEl.textContent = `${completionPct}% completado`;
             remainingEl.style.color = '#9E7D4B';
         } else if (totalConsumedKcal <= maxOptKcal) {
-            remainingEl.textContent = diff === 0 ? 'Objetivo exacto alcanzado' : 'En rango óptimo';
+            remainingEl.textContent = diff === 0 ? 'Objetivo exacto ✓' : 'En rango óptimo ✓';
             remainingEl.style.color = '#059669';
         } else {
             const overMax = totalConsumedKcal - maxOptKcal;
-            remainingEl.textContent = `+${overMax.toLocaleString('es-AR')} kcal sobre el rango óptimo`;
+            remainingEl.textContent = `+${overMax.toLocaleString('es-AR')} kcal sobre rango`;
             remainingEl.style.color = '#DC2626';
         }
     }

@@ -32173,15 +32173,15 @@ body.in-portal #nutritionView #nutriConsumedNum,
 #nutriConsumedNum {
     color: #121214 !important;
     font-weight: 800 !important;
-    font-size: 2.25rem !important;
-    letter-spacing: -0.03em !important;
+    font-size: 18px !important;
+    letter-spacing: -0.02em !important;
 }
 
 body.in-portal #nutritionView .sens-nutri-hero-unit,
 .sens-nutri-hero-unit {
     color: #6E6E73 !important;
     font-weight: 600 !important;
-    font-size: 13px !important;
+    font-size: 12.5px !important;
 }
 
 body.in-portal #nutritionView #nutriTargetKcal,
