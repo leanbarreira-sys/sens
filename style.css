@@ -28551,20 +28551,20 @@ body.in-portal .sens-act-header-title {
 body.in-portal .sens-act-module {
     background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 16px !important;
-    padding: 12px 14px !important;
-    margin-bottom: 12px !important;
+    border-radius: 13px !important;
+    padding: 8px 11px !important;
+    margin-bottom: 0 !important;
 }
 
 body.in-portal .sens-act-metric-title {
     color: #121214 !important;
-    font-size: 13.5px !important;
+    font-size: 12.5px !important;
     font-weight: 700 !important;
 }
 
 body.in-portal .sens-act-metric-sub {
     color: #77767B !important;
-    font-size: 11px !important;
+    font-size: 10.5px !important;
 }
 
 body.in-portal .sens-act-stepper-control {
@@ -28573,9 +28573,28 @@ body.in-portal .sens-act-stepper-control {
     border-radius: 9999px !important;
     display: inline-flex !important;
     align-items: center !important;
-    padding: 3px !important;
-    height: 36px !important;
+    padding: 2px !important;
+    height: 30px !important;
     box-sizing: border-box !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-stepper-btn {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 13px !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-chips-row,
+body.in-portal #dashWeightAndActivityCard .sens-cardio-types-grid {
+    margin-top: 6px !important;
+    gap: 5px !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-act-quick-chip,
+body.in-portal #dashWeightAndActivityCard .sens-cardio-type-btn {
+    padding: 4px 8px !important;
+    font-size: 10.5px !important;
+    min-height: 0 !important;
 }
 
 body.in-portal .sens-act-stepper-btn {
@@ -37873,7 +37892,7 @@ body.in-portal #dashWeeklyBalanceCard .sens-btn-quick-log-weight {
 }
 
 .sens-cardio-progress-wrap {
-    margin: 0 0 14px 0;
+    margin: 10px 0 0 0;
 }
 
 .sens-cardio-progress-meta {
@@ -37883,7 +37902,7 @@ body.in-portal #dashWeeklyBalanceCard .sens-btn-quick-log-weight {
     font-size: 11px;
     font-weight: 600;
     color: #575659;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     font-variant-numeric: tabular-nums;
 }
 

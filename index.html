@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=92.0">
+    <link rel="stylesheet" href="style.css?v=93.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '199.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '199.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '200.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '200.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3238,20 +3238,9 @@
                      CARD 3: MOVIMIENTO & CARDIO DIARIO (3ER PILAR DIARIO CON PROGRESO %)
                      ========================================================================= -->
                 <div class="sens-tracking-section-card" id="dashWeightAndActivityCard">
-                    <div class="sens-tracking-top-row" style="margin-bottom: 12px !important;">
+                    <div class="sens-tracking-top-row" style="margin-bottom: 8px !important;">
                         <span class="sens-domain-pill-light" id="dashCardioDomainPill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Movimiento</span></span>
                         <span class="sens-card-streak-pill sens-domain-streak-light in-progress" id="dashActiveBurnBadge"><span class="streak-pill-dot"></span><span class="streak-pill-text">0/390 cal</span></span>
-                    </div>
-
-                    <!-- Barra de Progreso % de Movimiento Diario (hermanada con Entrenamiento y Nutrición) -->
-                    <div class="sens-cardio-progress-wrap" id="dashCardioActiveProgressWrap">
-                        <div class="sens-cardio-progress-meta">
-                            <span id="dashCardioActivePctText">0% de tu meta</span>
-                            <span id="dashCardioActiveRemainingText">Restan <strong>10.000 pasos</strong></span>
-                        </div>
-                        <div class="sens-cardio-progress-track">
-                            <div class="sens-cardio-progress-fill" id="dashCardioActiveProgressFill" style="width: 0%;"></div>
-                        </div>
                     </div>
 
                     <!-- Panel Movimiento & Cardio -->
@@ -3279,7 +3268,7 @@
                         </div>
 
                         <!-- Cardio del Día -->
-                        <div class="sens-act-module" style="margin-top: 8px;">
+                        <div class="sens-act-module" style="margin-top: 6px;">
                             <div class="sens-act-module-top">
                                 <div class="sens-act-label-group">
                                     <span class="sens-act-metric-title">Cardio</span>
@@ -3300,6 +3289,17 @@
                                 <button type="button" class="sens-cardio-type-btn" data-type="ciclismo" data-rate="8.5" onclick="setCardioType('ciclismo', 8.5, this)"><span>Bici</span></button>
                                 <button type="button" class="sens-cardio-type-btn" data-type="otro" data-rate="7.5" onclick="setCardioType('otro', 7.5, this)"><span>Otro</span></button>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progreso % de Movimiento Diario (abajo, hermanada con Entrenamiento y Nutrición) -->
+                    <div class="sens-cardio-progress-wrap" id="dashCardioActiveProgressWrap">
+                        <div class="sens-cardio-progress-meta">
+                            <span id="dashCardioActivePctText">0% de tu meta</span>
+                            <span id="dashCardioActiveRemainingText">Restan <strong>10.000 pasos</strong></span>
+                        </div>
+                        <div class="sens-cardio-progress-track">
+                            <div class="sens-cardio-progress-fill" id="dashCardioActiveProgressFill" style="width: 0%;"></div>
                         </div>
                     </div>
                 </div>
