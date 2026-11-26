@@ -35944,10 +35944,12 @@ body.in-portal #nutritionView .sens-workout-type-title {
 }
 
 body.in-portal #workoutView .sens-workout-type-count,
+body.in-portal #workoutView .sens-workout-type-badge,
 body.in-portal #nutritionView .sens-workout-type-count,
 body.in-portal #nutritionView .sens-workout-type-badge {
     background: #F4F2EE !important;
     color: #575659 !important;
+    border: none !important;
     font-weight: 600 !important;
     font-size: 11px !important;
     padding: 4px 10px !important;

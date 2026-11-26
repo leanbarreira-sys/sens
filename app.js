@@ -8492,7 +8492,6 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                             <span class="sens-workout-muscle-count">${list.length} ejercicio${list.length > 1 ? 's' : ''}</span>
                         </div>
                         <div class="sens-carousel-nav-controls">
-                            <span class="sens-carousel-hint-pill">Deslizá →</span>
                             <button type="button" class="sens-carousel-arrow-btn" aria-label="Anterior" onclick="scrollWorkoutCarousel(this, -1)" title="Anterior">‹</button>
                             <button type="button" class="sens-carousel-arrow-btn" aria-label="Siguiente" onclick="scrollWorkoutCarousel(this, 1)" title="Siguiente">›</button>
                         </div>
