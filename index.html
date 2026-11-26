@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '146.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '146.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '147.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '147.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -2686,7 +2686,7 @@
                 </div>
 
                 <!-- 0.4. Navegador de Semanas & Strip Calendar Semanal (Dinámico Pasado y Futuro) -->
-                <div class="sens-calendar-sticky-wrapper" id="sensCalendarStickyWrapper">
+                <div class="sens-calendar-sticky-wrapper" id="sensCalendarStickyWrapper" style="margin-bottom: 12px;">
                     <div class="sens-week-nav-bar">
                         <button type="button" class="sens-week-arrow-btn" id="btnWeekPrev" aria-label="Semana anterior"
                             title="Semana anterior">
@@ -3550,7 +3550,7 @@
 
                 <!-- 2. Navegador de Semanas & Calendario Semanal (Paridad con Inicio) -->
                 <div class="sens-calendar-sticky-wrapper" id="workoutCalendarStickyWrapper"
-                    style="margin-bottom: 14px;">
+                    style="margin-bottom: 12px;">
                     <div class="sens-week-nav-bar">
                         <button type="button" class="sens-week-arrow-btn" id="btnWorkoutWeekPrev"
                             aria-label="Semana anterior" title="Semana anterior">
@@ -3875,7 +3875,7 @@
                     <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
                 </div>
                 <!-- 1. Navegador de Semanas & Calendario Semanal de Nutrición (Paridad 1:1 con Inicio y Entrenamiento) -->
-                <div class="sens-calendar-sticky-wrapper" id="nutriCalendarStickyWrapper" style="margin-bottom: 16px;">
+                <div class="sens-calendar-sticky-wrapper" id="nutriCalendarStickyWrapper" style="margin-bottom: 12px;">
                     <div class="sens-week-nav-bar">
                         <button type="button" class="sens-week-arrow-btn" id="btnNutriWeekPrev"
                             aria-label="Semana anterior" title="Semana anterior">

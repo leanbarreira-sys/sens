@@ -18071,11 +18071,9 @@ function renderNutriDaysNav() {
         } else if (dayKcal > maxTarget && dayTarget > 0) {
             badgeHtml = `<span class="sens-day-badge missed" title="Superó +10% del objetivo">✕</span>`;
         } else if (dayKcal > 0) {
-            badgeHtml = `<span class="sens-day-badge auto" title="En progreso (debajo del 90% del objetivo)">•</span>`;
-        } else if (isToday) {
-            badgeHtml = `<span class="sens-day-badge auto" title="Hoy">Hoy</span>`;
+            badgeHtml = `<span class="sens-day-dot scheduled" title="En progreso (debajo del 90% del objetivo)"></span>`;
         } else {
-            badgeHtml = `<span class="sens-day-badge rest" title="Pauta activa">–</span>`;
+            badgeHtml = `<span class="sens-day-badge rest" title="Sin registros">–</span>`;
         }
 
         html += `
@@ -21537,15 +21535,8 @@ function renderDynamicWeekStrip() {
                 statusBadge = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
         } else if (hasExercises) {
-            if (modality === 'online') {
-                statusBadge = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
-            } else if (modality === 'autonomo') {
-                statusBadge = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
-            } else if (modality === 'presencial') {
-                statusBadge = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
-            } else {
-                statusBadge = `<span class="sens-day-badge presencial" title="Sesión asignada por Nico">Sesión</span>`;
-            }
+            const modLabel = modality === 'online' ? 'Online con Nico' : (modality === 'autonomo' ? 'Sesión autónoma' : (modality === 'presencial' ? 'Presencial con Nico' : 'Sesión programada'));
+            statusBadge = `<span class="sens-day-dot scheduled" title="${modLabel}"></span>`;
         } else {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -21743,15 +21734,8 @@ function renderWorkoutDaysNav() {
                 badgeHtml = `<span class="sens-day-badge rest" title="Descanso">–</span>`;
             }
         } else if (hasExercises) {
-            if (modality === 'online') {
-                badgeHtml = `<span class="sens-day-badge online" title="Online con Nico">Online</span>`;
-            } else if (modality === 'autonomo') {
-                badgeHtml = `<span class="sens-day-badge auto" title="Sesión autónoma">Aut</span>`;
-            } else if (modality === 'presencial') {
-                badgeHtml = `<span class="sens-day-badge presencial" title="Presencial con Nico">Pres</span>`;
-            } else {
-                badgeHtml = `<span class="sens-day-badge presencial" title="Sesión asignada por Nico">Sesión</span>`;
-            }
+            const modLabel = modality === 'online' ? 'Online con Nico' : (modality === 'autonomo' ? 'Sesión autónoma' : (modality === 'presencial' ? 'Presencial con Nico' : 'Sesión programada'));
+            badgeHtml = `<span class="sens-day-dot scheduled" title="${modLabel}"></span>`;
         } else {
             badgeHtml = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
