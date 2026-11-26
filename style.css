@@ -34513,16 +34513,35 @@ body.in-portal .sens-tracking-seg-pill,
 
 .sens-ufd-ingredient-row {
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 10px;
     font-size: 13px;
-    line-height: 1.4;
+    line-height: 1.45;
+}
+
+.sens-ufd-ingredient-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #C5A880;
+    flex-shrink: 0;
+    margin-top: 7px;
+}
+
+.sens-ufd-ingredient-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 6px;
+    row-gap: 2px;
+    min-width: 0;
+    flex: 1;
 }
 
 .sens-ufd-ingredient-name {
     color: #121214;
-    font-weight: 500;
+    font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .sens-ufd-ingredient-qty {
@@ -34530,7 +34549,7 @@ body.in-portal .sens-tracking-seg-pill,
     font-weight: 700;
     font-size: 12.5px;
     font-variant-numeric: tabular-nums;
-    flex-shrink: 0;
+    overflow-wrap: anywhere;
 }
 
 .sens-ufd-steps-list {

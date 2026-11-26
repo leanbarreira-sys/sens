@@ -18160,20 +18160,20 @@ function parseNumberedList(text) {
 }
 
 function formatIngredientsHtml(ings) {
-    if (!ings) return '<div class="sens-ingredient-item-row"><span class="sens-ingredient-bullet">•</span><span>Alimento de alta pureza biológica sin conservantes añadidos.</span></div>';
+    if (!ings) return '';
     let list = [];
     if (Array.isArray(ings)) {
         list = ings;
     } else if (typeof ings === 'string') {
         const trimmed = ings.trim();
-        if (/\b\d+\.\s*/.test(trimmed)) {
-            list = trimmed.split(/(?=\b\d+\.\s*)/g).map(s => s.trim()).filter(Boolean);
-        } else if (trimmed.includes('•')) {
+        if (trimmed.includes('•')) {
             list = trimmed.split('•').map(s => s.trim()).filter(Boolean);
         } else if (trimmed.includes('\n')) {
             list = trimmed.split('\n').map(s => s.trim()).filter(Boolean);
-        } else if (trimmed.includes(',')) {
-            list = trimmed.split(',').map(s => s.trim()).filter(Boolean);
+        } else if (/(?:^|\s)\d+\.\s+/.test(trimmed)) {
+            list = trimmed.split(/(?=(?:^|\s)\d+\.\s+)/g).map(s => s.trim()).filter(Boolean);
+        } else if (trimmed.includes(';')) {
+            list = trimmed.split(';').map(s => s.trim()).filter(Boolean);
         } else {
             list = [trimmed];
         }
@@ -18187,14 +18187,20 @@ function formatIngredientsHtml(ings) {
             const qty = clean.slice(colonIdx + 1).trim();
             return `
                 <div class="sens-ufd-ingredient-row">
-                    <span class="sens-ufd-ingredient-name">${label}</span>
-                    <span class="sens-ufd-ingredient-qty">${qty}</span>
+                    <span class="sens-ufd-ingredient-dot"></span>
+                    <div class="sens-ufd-ingredient-body">
+                        <span class="sens-ufd-ingredient-name">${label}</span>
+                        <span class="sens-ufd-ingredient-qty">${qty}</span>
+                    </div>
                 </div>
             `;
         }
         return `
             <div class="sens-ufd-ingredient-row">
-                <span class="sens-ufd-ingredient-name">${clean}</span>
+                <span class="sens-ufd-ingredient-dot"></span>
+                <div class="sens-ufd-ingredient-body">
+                    <span class="sens-ufd-ingredient-name">${clean}</span>
+                </div>
             </div>
         `;
     }).join('');
