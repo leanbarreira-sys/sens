@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=90.0">
+    <link rel="stylesheet" href="style.css?v=91.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '152.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '152.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '153.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '153.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -908,12 +908,13 @@
                     <span>App</span>
                 </button>
 
-                <!-- Píldora de Categoría / Modalidad Actual -->
-                <button type="button" class="pill pill-champagne" id="portalPlanBadge"
+                <!-- Píldora de Categoría / Subir de Categoría (Quiet Luxury) -->
+                <button type="button" class="btn-topbar-plan-pill" id="portalPlanBadge"
                     onclick="event.stopPropagation(); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();"
-                    title="Ver mi membresía y modalidades">
+                    title="Ver mi membresía y subir de categoría">
                     <span class="plan-status-dot"></span>
                     <span id="portalPlanBadgeText">Presencial CABA</span>
+                    <span class="plan-upgrade-arrow">↑</span>
                 </button>
 
                 <div class="user-avatar-wrap" id="userAvatarWrap">
@@ -3447,32 +3448,6 @@
                     </div>
                 </div>
 
-                <div style="display: none !important;">
-<!-- 6. Sección Tienda Oficial MercadoLibre (Equipamiento & Suplementos) -->
-                <div class="sens-store-banner-card" id="dashStoreCard">
-                    <div class="sens-store-banner-left">
-                        <div class="sens-store-banner-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="9" cy="21" r="1" />
-                                <circle cx="20" cy="21" r="1" />
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                            </svg>
-                        </div>
-                        <div>
-                            <span class="sens-store-badge">SELECCIÓN OFICIAL SENS</span>
-                            <div class="sens-store-banner-title">Equipamiento &amp; Suplementación</div>
-                            <div class="sens-store-banner-desc">Mancuernas, bandas elásticas, colchoneta y suplementos
-                                recomendados por Nico.</div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-sm btn-store-entry" id="btnDashOpenStore">
-                        Ver Tienda →
-                    </button>
-                </div>
-
-                
-</div>
                 <!-- 7. Card de Contacto Directo al Coaching 1 a 1 con Nico -->
                 <div class="sens-nico-1on1-upsell-card" id="dashNico1on1UpsellCard"
                     style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 24px; padding: 22px; margin-top: 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.04);">
@@ -3517,35 +3492,10 @@
                 <!-- 0. Saludo Personalizado de Bienvenida -->
                 <div class="sens-dash-welcome-header" id="workoutWelcomeHeader">
                     <h2 class="sens-dash-welcome-question">
-                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete"></span>, ¿entrenamos hoy?
+                        <span id="workoutGreetingAthleteName" class="sens-dash-welcome-athlete"></span>, ¿entrenamos juntos hoy?
                     </h2>
                     <span class="sens-dash-welcome-slogan">MAKES SENS.</span>
                     <span id="workoutCircadianDate" style="display: none !important;"></span>
-                </div>
-
-                <!-- 1. Cuadro Resumen Ligero de la Sesión y Registro de Asistencia (Ocultado a pedido del usuario) -->
-                <div class="sens-workout-summary-card" id="workoutSummaryCard" style="display: none !important;">
-                    <div class="sens-workout-summary-top">
-                        <div class="sens-workout-summary-info">
-                            <span class="sens-workout-day-tag" id="workoutSummaryDayTag">Sesión del Día</span>
-                            <h3 class="sens-workout-summary-title" id="heroWorkoutTitle">Cargando sesión...</h3>
-                        </div>
-                        <div class="sens-workout-metrics-strip" id="workoutMetricsStrip">
-                            <span class="sens-summary-metric" id="metricPillExercises"><strong
-                                    id="metricValExercises">0</strong> ejerc.</span>
-                            <span class="sens-summary-metric-sep">•</span>
-                            <span class="sens-summary-metric" id="metricPillMinutes"><strong
-                                    id="metricValMinutes">~0</strong></span>
-                            <span class="sens-summary-metric-sep">•</span>
-                            <span class="sens-summary-metric" id="metricPillKcal"><strong
-                                    id="metricValKcal">~0</strong></span>
-                        </div>
-                    </div>
-
-                    <!-- Caja de Registro de Asistencia Táctil (Interactivo) -->
-                    <div class="sens-workout-attendance-box" id="workoutAttendanceBox">
-                        <!-- Inyectado dinámicamente por app.js -->
-                    </div>
                 </div>
 
                 <!-- 2. Navegador de Semanas & Calendario Semanal (Paridad con Inicio) -->
@@ -9076,7 +9026,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=127.0"></script>
+    <script defer src="app.js?v=128.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

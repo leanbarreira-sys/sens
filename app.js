@@ -2119,9 +2119,11 @@ function applyDatabaseAthlete(athlete) {
     updateCoachSubBadgeAndButton(athlete.subscription_status);
 
     const planBadgeEl = document.getElementById('portalPlanBadge');
+    const planBadgeTextEl = document.getElementById('portalPlanBadgeText');
     const userEmailEl = document.getElementById('portalUserEmail');
     const roleContextBadge = document.getElementById('roleContextBadge');
-    if (planBadgeEl) planBadgeEl.textContent = formatPlanShortBadge(athlete.active_plan_name);
+    if (planBadgeTextEl) planBadgeTextEl.textContent = formatPlanShortBadge(athlete.active_plan_name);
+    else if (planBadgeEl) planBadgeEl.textContent = formatPlanShortBadge(athlete.active_plan_name);
     if (userEmailEl) userEmailEl.textContent = athlete.email || athlete.full_name;
     if (roleContextBadge) roleContextBadge.textContent = `${athlete.active_plan_name || 'Plan'} • Alumno Real`;
 
@@ -2189,12 +2191,14 @@ function applyUserProfile(userTypeKey) {
 
     // Actualizar elementos visuales del Portal
     const planBadgeEl = document.getElementById('portalPlanBadge');
+    const planBadgeTextEl = document.getElementById('portalPlanBadgeText');
     const userEmailEl = document.getElementById('portalUserEmail');
     const roleContextBadge = document.getElementById('roleContextBadge');
     const adminIndicatorBadge = document.getElementById('adminIndicatorBadge');
     const adminAddBtn = document.getElementById('btnAdminAddExercise');
 
-    if (planBadgeEl) planBadgeEl.textContent = formatPlanShortBadge(mock.active_plan_name);
+    if (planBadgeTextEl) planBadgeTextEl.textContent = formatPlanShortBadge(mock.active_plan_name);
+    else if (planBadgeEl) planBadgeEl.textContent = formatPlanShortBadge(mock.active_plan_name);
     if (userEmailEl) userEmailEl.textContent = mock.email;
     if (roleContextBadge) roleContextBadge.textContent = mock.plan_badge_text;
 
@@ -5129,7 +5133,8 @@ window.getAthleteDisplayFirstName = function() {
 
     const email = String(profile.email || (AppState.user && AppState.user.email) || '').trim();
     if (email && email.includes('@')) {
-        const local = email.split('@')[0].replace(/[._-]+/g, ' ').trim().split(/\s+/)[0];
+        let local = email.split('@')[0].replace(/[._-]+/g, ' ').trim().split(/\s+/)[0];
+        if (local.toLowerCase().includes('lean')) return 'Lean';
         if (local) return local.charAt(0).toUpperCase() + local.slice(1);
     }
 
@@ -8563,26 +8568,78 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     if (typeof getDailyMetabolicMetrics === 'function') {
         const dayMet = getDailyMetabolicMetrics(effectiveDate);
         const doneKcal = Math.round(dayMet?.workoutBurn || 0);
-        const totalKcal = Math.round(dayMet?.plannedWorkoutBurn || 0);
+        const totalKcal = Math.round(dayMet?.plannedWorkoutBurn || totalWorkoutKcal);
         const doneEx = dayMet?.completedExCount || 0;
-        const totalEx = dayMet?.totalExCount || exercisesToShow.length;
+        const totalEx = dayMet?.totalExCount || allDayExercises.length;
         if (totalEx > 0) {
             const allDone = doneEx >= totalEx && totalEx > 0;
+            const isCompleted = Boolean(execution && execution.completed);
+            const isMissed = Boolean(execution && (execution.missed || execution.attended === false));
+            const activeDuration = execution.durationMinutes || estMinutes;
+
             workoutBurnMiniHtml = `
-                <div id="workoutDailyBurnMiniCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
-                    <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
-                        <div style="width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: #FAF7F2; color: #9E7D4B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7v10"/><path d="M18 7v10"/><path d="M3 10v4"/><path d="M21 10v4"/><path d="M6 12h12"/></svg>
+                <div id="workoutDailyBurnMiniCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 16px rgba(18, 18, 20, 0.035);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+                            <div style="width: 38px; height: 38px; min-width: 38px; border-radius: 50%; background: #FAF7F2; color: #705B3E; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7v10"/><path d="M18 7v10"/><path d="M3 10v4"/><path d="M21 10v4"/><path d="M6 12h12"/></svg>
+                            </div>
+                            <div style="min-width: 0; flex: 1;">
+                                <div style="font-size: 10.5px; font-weight: 700; color: #705B3E; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2;">${dayData.title || 'Sesión de Entrenamiento'}</div>
+                                <div style="font-size: 12px; font-weight: 500; color: #575659; margin-top: 2px; line-height: 1.3;">~${activeDuration} min • ${allDayExercises.length} ejerc. • ~${totalWorkoutKcal} kcal</div>
+                            </div>
                         </div>
-                        <div style="min-width: 0; flex: 1;">
-                            <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2;">Gasto aproximado</div>
-                            <div style="font-size: 12.5px; font-weight: 500; color: #6E6E73; margin-top: 2px; line-height: 1.3;">${doneEx} de ${totalEx} ejercicios</div>
+                        <div style="text-align: right; flex-shrink: 0;">
+                            <div style="font-size: 17px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; line-height: 1.15; letter-spacing: -0.02em;">~${(doneKcal > 0 ? doneKcal : totalWorkoutKcal).toLocaleString('es-AR')}<span style="font-size: 12px; font-weight: 600; color: #575659; margin-left: 2px;">kcal</span></div>
+                            <div style="font-size: 11px; font-weight: 700; color: ${allDone ? '#059669' : '#705B3E'}; margin-top: 2px;">${allDone ? 'Completado ✓' : (isCompleted ? 'Registrado ✓' : 'Meta diaria')}</div>
                         </div>
                     </div>
-                    <div style="text-align: right; flex-shrink: 0;">
-                        <div style="font-size: 18px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; line-height: 1.15; letter-spacing: -0.02em;">~${doneKcal.toLocaleString('es-AR')}<span style="font-size: 12.5px; font-weight: 600; color: #6E6E73; margin-left: 2px;">kcal</span></div>
-                        <div style="font-size: 11px; font-weight: 600; color: ${allDone ? '#059669' : '#6E6E73'}; margin-top: 2px; font-variant-numeric: tabular-nums;">${allDone ? 'Sesión completa ✓' : `Meta: ~${totalKcal.toLocaleString('es-AR')} kcal`}</div>
-                    </div>
+
+                    <!-- Fila de Asistencia Táctil (Quiet Luxury) -->
+                    ${isCompleted ? `
+                        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.06); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span style="width: 7px; height: 7px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                                <span style="font-size: 11.5px; font-weight: 700; color: #121214;">Sesión registrada (${activeDuration} min)</span>
+                            </div>
+                            <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 11px; color: #705B3E; background: none; border: none; cursor: pointer; text-decoration: underline; font-weight: 700;">
+                                Cambiar
+                            </button>
+                        </div>
+                    ` : (isMissed ? `
+                        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.06); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                            <span style="font-size: 11.5px; color: #575659; font-weight: 600;">✕ Descanso confirmado</span>
+                            <button type="button" class="btn-link-subtle" onclick="resetWorkoutAttendance('${dayKey}', '${dateIso}')" style="font-size: 11px; color: #705B3E; background: none; border: none; cursor: pointer; font-weight: 700;">
+                                Cambiar a completado →
+                            </button>
+                        </div>
+                    ` : `
+                        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.06);">
+                            <div id="workoutAttendancePendingPane" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                                <span style="font-size: 12px; font-weight: 700; color: #121214;">¿Entrenaste hoy?</span>
+                                <div style="display: flex; gap: 6px;">
+                                    <button type="button" class="btn-workout-attended" onclick="showWorkoutTimePicker('${dayKey}', ${estMinutes}, '${dateIso}')" style="background: #121214; color: #FFFFFF; -webkit-text-fill-color: #FFFFFF; border: none; border-radius: 9999px; padding: 6px 14px; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        <span>Sí, asistí</span>
+                                    </button>
+                                    <button type="button" class="btn-workout-missed" onclick="markWorkoutAttendanceMissed('${dayKey}', '${dateIso}')" style="background: #F4F3F1; color: #575659; -webkit-text-fill-color: #575659; border: none; border-radius: 9999px; padding: 6px 12px; font-size: 11.5px; font-weight: 600; cursor: pointer;">
+                                        No fui
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="workoutAttendanceTimingPane" style="display: none; margin-top: 8px; flex-direction: column; gap: 8px;">
+                                <div style="font-size: 11px; color: #121214; font-weight: 700;">¿Cuánto tiempo estuviste?</div>
+                                <div class="workout-time-chips" style="display: flex; gap: 5px; flex-wrap: wrap; align-items: center;">
+                                    <button type="button" class="workout-time-chip ${estMinutes <= 35 ? 'selected' : ''}" data-min="30" onclick="selectWorkoutDurationChip(30)">30m</button>
+                                    <button type="button" class="workout-time-chip ${estMinutes > 35 && estMinutes <= 50 ? 'selected' : ''}" data-min="45" onclick="selectWorkoutDurationChip(45)">45m</button>
+                                    <button type="button" class="workout-time-chip ${estMinutes > 50 && estMinutes <= 65 ? 'selected' : ''}" data-min="60" onclick="selectWorkoutDurationChip(60)">60m</button>
+                                    <button type="button" class="workout-time-chip ${estMinutes > 65 && estMinutes <= 80 ? 'selected' : ''}" data-min="75" onclick="selectWorkoutDurationChip(75)">75m</button>
+                                    <button type="button" class="workout-time-chip ${estMinutes > 80 ? 'selected' : ''}" data-min="90" onclick="selectWorkoutDurationChip(90)">90m</button>
+                                    <button type="button" class="btn btn-primary btn-sm btn-confirm-time" onclick="confirmWorkoutSessionAttendance('${dayKey}', '${dateIso}')" style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none; border-radius: 9999px; padding: 5px 14px; font-size: 11px; font-weight: 800; cursor: pointer;">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                    `)}
                 </div>
             `;
         }
@@ -21524,7 +21581,36 @@ function renderDynamicWeekStrip() {
             }
         } else if (hasExercises) {
             const modLabel = modality === 'online' ? 'Online con Nico' : (modality === 'autonomo' ? 'Sesión autónoma' : (modality === 'presencial' ? 'Presencial con Nico' : 'Sesión programada'));
-            statusBadge = `<span class="sens-day-dot scheduled" title="${modLabel}"></span>`;
+            const typeIcons = [];
+            const exList = dayData.exercises || [];
+            const hasMuscular = exList.some(e => {
+                const tax = typeof getExerciseTaxonomy === 'function' ? getExerciseTaxonomy(e) : null;
+                return !tax || tax.type === 'muscular';
+            });
+            const hasCardio = exList.some(e => {
+                const tax = typeof getExerciseTaxonomy === 'function' ? getExerciseTaxonomy(e) : null;
+                return tax && tax.type === 'cardio';
+            });
+            const hasMovOrYoga = exList.some(e => {
+                const tax = typeof getExerciseTaxonomy === 'function' ? getExerciseTaxonomy(e) : null;
+                return tax && (tax.type === 'movilidad' || tax.type === 'yoga');
+            });
+
+            if (hasMuscular) {
+                typeIcons.push('<span class="sens-day-micro-icon" title="Fuerza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M2 12h20M2 10v4M5 8v8M7 6v12M17 6v12M19 8v8M22 10v4"/></svg></span>');
+            }
+            if (hasCardio) {
+                typeIcons.push('<span class="sens-day-micro-icon" title="Cardio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="14" cy="4" r="2"/><path d="m10 21 3-5 3 2 3-5"/><path d="m6 13 4-2 3 3 4-2"/></svg></span>');
+            }
+            if (hasMovOrYoga) {
+                typeIcons.push('<span class="sens-day-micro-icon" title="Movilidad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="5" r="2"/><path d="M12 9v5"/><path d="m7 13 5 3 5-3"/></svg></span>');
+            }
+
+            if (typeIcons.length === 0) {
+                statusBadge = `<span class="sens-day-dot scheduled" title="${modLabel}"></span>`;
+            } else {
+                statusBadge = typeIcons.slice(0, 3).join('');
+            }
         } else {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
@@ -21723,7 +21809,36 @@ function renderWorkoutDaysNav() {
             }
         } else if (hasExercises) {
             const modLabel = modality === 'online' ? 'Online con Nico' : (modality === 'autonomo' ? 'Sesión autónoma' : (modality === 'presencial' ? 'Presencial con Nico' : 'Sesión programada'));
-            badgeHtml = `<span class="sens-day-dot scheduled" title="${modLabel}"></span>`;
+            const typeIcons = [];
+            const exList = dayData.exercises || [];
+            const hasMuscular = exList.some(e => {
+                const tax = typeof getExerciseTaxonomy === 'function' ? getExerciseTaxonomy(e) : null;
+                return !tax || tax.type === 'muscular';
+            });
+            const hasCardio = exList.some(e => {
+                const tax = typeof getExerciseTaxonomy === 'function' ? getExerciseTaxonomy(e) : null;
+                return tax && tax.type === 'cardio';
+            });
+            const hasMovOrYoga = exList.some(e => {
+                const tax = typeof getExerciseTaxonomy === 'function' ? getExerciseTaxonomy(e) : null;
+                return tax && (tax.type === 'movilidad' || tax.type === 'yoga');
+            });
+
+            if (hasMuscular) {
+                typeIcons.push('<span class="sens-day-micro-icon" title="Fuerza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M2 12h20M2 10v4M5 8v8M7 6v12M17 6v12M19 8v8M22 10v4"/></svg></span>');
+            }
+            if (hasCardio) {
+                typeIcons.push('<span class="sens-day-micro-icon" title="Cardio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="14" cy="4" r="2"/><path d="m10 21 3-5 3 2 3-5"/><path d="m6 13 4-2 3 3 4-2"/></svg></span>');
+            }
+            if (hasMovOrYoga) {
+                typeIcons.push('<span class="sens-day-micro-icon" title="Movilidad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="5" r="2"/><path d="M12 9v5"/><path d="m7 13 5 3 5-3"/></svg></span>');
+            }
+
+            if (typeIcons.length === 0) {
+                badgeHtml = `<span class="sens-day-dot scheduled" title="${modLabel}"></span>`;
+            } else {
+                badgeHtml = typeIcons.slice(0, 3).join('');
+            }
         } else {
             badgeHtml = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
