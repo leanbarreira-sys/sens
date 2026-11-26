@@ -18902,6 +18902,8 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo', isFromSearch =
     if (removeBtn) {
         removeBtn.style.display = isFromSearch ? 'none' : 'flex';
     }
+    const tabPortion = document.getElementById('ufdTabPortionBtn');
+    if (tabPortion) tabPortion.click();
 
     // Poblar elementos
     const catPill = document.getElementById('ufdCategoryPill');
@@ -19125,9 +19127,12 @@ function initUserFoodDetailModal() {
     };
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (removeBtn) {
-        removeBtn.addEventListener('click', () => {
-            if (!userActiveFoodForDetail) return;
+    window.removeActiveUserFoodFromDay = function() {
+        try {
+            if (!userActiveFoodForDetail) {
+                closeModal();
+                return;
+            }
             const { item, resolved, mealSlot, athId, dateIso } = userActiveFoodForDetail;
             const rk = item._rowKey || (typeof window.getNutritionFoodRowKey === 'function'
                 ? window.getNutritionFoodRowKey(mealSlot || 'almuerzo', item._occIdx !== undefined ? item._occIdx : 0, item, resolved)
@@ -19141,7 +19146,7 @@ function initUserFoodDetailModal() {
                 if (cIdx >= 0 && cIdx < customList.length) {
                     customList.splice(cIdx, 1);
                 } else {
-                    const matchIdx = customList.findIndex(cm => cm.id && item.id && cm.id === item.id);
+                    const matchIdx = customList.findIndex(cm => (cm.id && item.id && cm.id === item.id) || (cm.name && item.name && cm.name === item.name && cm.mealSlot === item.mealSlot));
                     if (matchIdx >= 0) customList.splice(matchIdx, 1);
                 }
                 localStorage.setItem(customKey, JSON.stringify(customList));
@@ -19154,7 +19159,6 @@ function initUserFoodDetailModal() {
                 localStorage.setItem(removedKey, JSON.stringify(removedArr));
             }
 
-            // Limpiar consumo del alimento quitado
             const consumedKey = `sens_user_consumed_foods_${athId}_${dateIso}`;
             try {
                 const consumed = JSON.parse(localStorage.getItem(consumedKey) || '{}');
@@ -19174,8 +19178,11 @@ function initUserFoodDetailModal() {
                 if (typeof updateSensStreakCard === 'function') updateSensStreakCard(targetD);
             }
             if (typeof showToast === 'function') showToast('Alimento quitado del día');
-        });
-    }
+        } catch (err) {
+            console.error('Error removing food:', err);
+            closeModal();
+        }
+    };
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
