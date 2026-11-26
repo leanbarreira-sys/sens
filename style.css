@@ -37363,8 +37363,13 @@ body.in-portal #dashNutriSummaryCard.has-active-meals .sens-card-sub-white {
     margin: 0 !important;
 }
 
+body.in-portal #dashWorkoutActivePane .sens-nutri-active-progress-wrap,
 body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-active-progress-wrap {
     margin: 10px 0 0 !important;
+}
+
+body.in-portal #dashWorkoutActiveProgressFill.is-complete {
+    background: #22C55E !important;
 }
 
 body.in-portal #dashWorkoutActivePane .sens-btn-circle-arrow,
@@ -37372,6 +37377,75 @@ body.in-portal #dashNutriSummaryCard.has-active-meals .sens-btn-circle-arrow {
     width: 38px !important;
     height: 38px !important;
     flex-shrink: 0 !important;
+}
+
+/* 1b. Empty States (#dashTrainingVideoCard.is-rest-mode y #dashNutriSummaryCard.is-empty-day) consistentes */
+body.in-portal #dashTrainingVideoCard.is-rest-mode,
+body.in-portal #dashNutriSummaryCard.is-empty-day {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.07) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 6px 24px rgba(18, 18, 20, 0.04) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+}
+
+body.in-portal #dashTrainingVideoCard.is-rest-mode #dashWorkoutRestPane,
+body.in-portal #dashNutriSummaryCard.is-empty-day {
+    padding: 18px 16px !important;
+}
+
+body.in-portal #dashNutriSummaryCard.is-empty-day .sens-nutri-top-badges {
+    position: static !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
+}
+
+body.in-portal #dashNutriSummaryCard.is-empty-day #dashNutriGoalPill,
+body.in-portal #dashNutriSummaryCard.is-empty-day #dashNutriStreakPill,
+body.in-portal #dashTrainingVideoCard.is-rest-mode .sens-rest-badge,
+body.in-portal #dashTrainingVideoCard.is-rest-mode #dashWorkoutRestStreakPill {
+    background: #F4F2EE !important;
+    color: #575659 !important;
+    -webkit-text-fill-color: #575659 !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+}
+
+body.in-portal #dashNutriSummaryCard.is-empty-day #dashNutriStreakPill .streak-pill-text,
+body.in-portal #dashTrainingVideoCard.is-rest-mode #dashWorkoutRestStreakPill .streak-pill-text {
+    color: #575659 !important;
+    -webkit-text-fill-color: #575659 !important;
+}
+
+body.in-portal .sens-empty-actions-row .sens-btn-empty-log-food {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-empty-actions-row .sens-btn-empty-view-plan {
+    background: #F4F2EE !important;
+    color: #121214 !important;
+    -webkit-text-fill-color: #121214 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
 }
 
 body.in-portal #dashWorkoutActivePane #dashWorkoutModalityPill,

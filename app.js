@@ -23931,6 +23931,28 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     }
 
     updatePill('dashWorkoutStreakPill', wStatus, wText, 'Progreso de entrenamiento para la racha diaria');
+    const wPctEl = document.getElementById('dashWorkoutActivePctText');
+    const wRemEl = document.getElementById('dashWorkoutActiveRemainingText');
+    const wFillEl = document.getElementById('dashWorkoutActiveProgressFill');
+    const wProgMatch = String(wText || '').match(/(\d+)\s*\/\s*(\d+)/);
+    const progCompleted = wProgMatch ? parseInt(wProgMatch[1], 10) : (wStatus === 'done' ? 1 : 0);
+    const progTotal = wProgMatch ? parseInt(wProgMatch[2], 10) : (wStatus === 'done' ? 1 : 0);
+    const wPct = progTotal > 0 ? Math.min(100, Math.round((progCompleted / progTotal) * 100)) : 0;
+    const wRem = Math.max(0, progTotal - progCompleted);
+    if (wPctEl) wPctEl.textContent = `${wPct}% completado`;
+    if (wRemEl) {
+        if (progTotal === 0) {
+            wRemEl.textContent = wText || 'Sin sesión';
+        } else if (wRem === 0) {
+            wRemEl.innerHTML = '<strong>Sesión completa</strong>';
+        } else {
+            wRemEl.innerHTML = `Restan <strong>${wRem} ejercicio${wRem === 1 ? '' : 's'}</strong>`;
+        }
+    }
+    if (wFillEl) {
+        wFillEl.style.width = `${wPct}%`;
+        wFillEl.classList.toggle('is-complete', progTotal > 0 && wPct >= 100);
+    }
     const restStreakEl = document.getElementById('dashWorkoutRestStreakPill');
     if (!isMockAth && !hasRoutine) {
         if (restStreakEl) restStreakEl.style.display = 'inline-flex';
