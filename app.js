@@ -18500,12 +18500,23 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         });
     }
 
-    // Filtrar cualquier alimento de ejemplo/mock que haya quedado en dayMeals de sesiones previas sin validación de Nico
-    allDayFoods = allDayFoods.filter(f => {
+    // Filtrar cualquier alimento de ejemplo/mock o eliminado manualmente por el alumno para este día
+    let removedSet = new Set();
+    try {
+        const removedArr = JSON.parse(localStorage.getItem(`sens_user_removed_foods_${athId}_${dateIso}`) || '[]');
+        if (Array.isArray(removedArr)) removedSet = new Set(removedArr);
+    } catch (e) {}
+
+    allDayFoods = allDayFoods.filter((f, fIdx) => {
         if (f.isCustom) return true;
         const fid = f.id || f.codigo || f.name;
         if (mockSampleIds.has(fid) && !userPlan?.is_coach_verified) {
             return false;
+        }
+        if (removedSet.size > 0) {
+            const resolved = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : f;
+            const rk = window.getNutritionFoodRowKey(f.mealSlot || 'almuerzo', f._occIdx !== undefined ? f._occIdx : fIdx, f, resolved);
+            if (removedSet.has(rk)) return false;
         }
         return true;
     });
@@ -18887,6 +18898,10 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo', isFromSearch =
     if (confirmBtn) {
         confirmBtn.textContent = isFromSearch ? 'Registrar en mi Día' : 'Guardar Ajuste de Porción';
     }
+    const removeBtn = document.getElementById('btnRemoveUfdFood');
+    if (removeBtn) {
+        removeBtn.style.display = isFromSearch ? 'none' : 'flex';
+    }
 
     // Poblar elementos
     const catPill = document.getElementById('ufdCategoryPill');
@@ -19094,6 +19109,7 @@ function initUserFoodDetailModal() {
     const gramsRow = document.getElementById('ufdGramsStepperRow');
     const unitsRow = document.getElementById('ufdUnitsStepperRow');
     const confirmBtn = document.getElementById('btnConfirmUfdPortion');
+    const removeBtn = document.getElementById('btnRemoveUfdFood');
 
     if (!modal || modal._hasDetailBound) return;
     modal._hasDetailBound = true;
@@ -19109,6 +19125,57 @@ function initUserFoodDetailModal() {
     };
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (removeBtn) {
+        removeBtn.addEventListener('click', () => {
+            if (!userActiveFoodForDetail) return;
+            const { item, resolved, mealSlot, athId, dateIso } = userActiveFoodForDetail;
+            const rk = item._rowKey || (typeof window.getNutritionFoodRowKey === 'function'
+                ? window.getNutritionFoodRowKey(mealSlot || 'almuerzo', item._occIdx !== undefined ? item._occIdx : 0, item, resolved)
+                : (item.id || resolved?.id));
+
+            if (item.isCustom) {
+                const customKey = `sens_user_custom_meals_${athId}_${dateIso}`;
+                let customList = [];
+                try { customList = JSON.parse(localStorage.getItem(customKey) || '[]'); } catch (e) {}
+                const cIdx = (typeof item._occIdx === 'string' && item._occIdx.startsWith('c')) ? parseInt(item._occIdx.slice(1), 10) : -1;
+                if (cIdx >= 0 && cIdx < customList.length) {
+                    customList.splice(cIdx, 1);
+                } else {
+                    const matchIdx = customList.findIndex(cm => cm.id && item.id && cm.id === item.id);
+                    if (matchIdx >= 0) customList.splice(matchIdx, 1);
+                }
+                localStorage.setItem(customKey, JSON.stringify(customList));
+            } else if (rk) {
+                const removedKey = `sens_user_removed_foods_${athId}_${dateIso}`;
+                let removedArr = [];
+                try { removedArr = JSON.parse(localStorage.getItem(removedKey) || '[]'); } catch (e) {}
+                if (!Array.isArray(removedArr)) removedArr = [];
+                if (!removedArr.includes(rk)) removedArr.push(rk);
+                localStorage.setItem(removedKey, JSON.stringify(removedArr));
+            }
+
+            // Limpiar consumo del alimento quitado
+            const consumedKey = `sens_user_consumed_foods_${athId}_${dateIso}`;
+            try {
+                const consumed = JSON.parse(localStorage.getItem(consumedKey) || '{}');
+                if (rk && consumed[rk] !== undefined) delete consumed[rk];
+                if (item.id && consumed[item.id] !== undefined) delete consumed[item.id];
+                localStorage.setItem(consumedKey, JSON.stringify(consumed));
+            } catch (e) {}
+
+            closeModal();
+            const targetD = AppState.nutriSelectedDate || AppState.selectedDate || new Date();
+            renderMemberNutritionPlan(athId, targetD);
+            if (typeof renderNutriDaysNav === 'function') renderNutriDaysNav();
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                syncAllStreakAndPillTelemetry(targetD);
+            } else {
+                if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(targetD);
+                if (typeof updateSensStreakCard === 'function') updateSensStreakCard(targetD);
+            }
+            if (typeof showToast === 'function') showToast('Alimento quitado del día');
+        });
+    }
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });

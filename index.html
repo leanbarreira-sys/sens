@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '155.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '155.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '156.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '156.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -7099,7 +7099,7 @@
 
             <!-- Botones de Acción: Intercambiar Equivalente + Guardar Ajuste -->
             <div
-                style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 24px));">
+                style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-bottom: 10px;">
                 <button type="button" class="btn btn-outline" id="btnOpenUfdSwapModal"
                     style="padding: 13px 10px; font-weight: 700; font-size: 12.5px; border-color: rgba(112,91,62,0.35); color: #705B3E; background: #FAF9F6; border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 6px;">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -7115,6 +7115,11 @@
                     Guardar Porción
                 </button>
             </div>
+            <button type="button" id="btnRemoveUfdFood"
+                style="width: 100%; padding: 11px 14px; margin-bottom: max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px)); background: rgba(220, 38, 38, 0.06); border: none; border-radius: 999px; color: #DC2626; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <span>Quitar alimento de este día</span>
+            </button>
         </div>
     </div>
 
