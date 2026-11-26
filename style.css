@@ -38522,12 +38522,22 @@ body.in-portal .sens-streak-rule-popover .sens-popover-close-btn {
 /* ============================================================================
    MOVIMIENTO HERO CARD — QUIET LUXURY OBSIDIAN PARITY (CON ENTRENO & NUTRI)
    ============================================================================ */
+body.in-portal .sens-nutri-summary-card {
+    margin-top: 0 !important;
+    margin-bottom: 14px !important;
+}
+
 body.in-portal #dashWeightAndActivityCard {
     background: linear-gradient(160deg, #18181B 0%, #0B0B0D 100%) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: 0 12px 30px rgba(18, 18, 20, 0.14) !important;
     padding: 14px 14px 12px !important;
+    margin: 0 0 14px 0 !important;
     color: #FFFFFF !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard {
+    margin: 0 0 14px 0 !important;
 }
 
 body.in-portal #dashWeightAndActivityCard .sens-tracking-top-row {
