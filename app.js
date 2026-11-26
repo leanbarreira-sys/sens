@@ -8393,6 +8393,8 @@ function renderWorkoutDay(dayKey, targetDate = null) {
 
     // 5. Estado Vacío si no hay ejercicios para el filtro
     if (exercisesToShow.length === 0) {
+        const burnSlot = document.getElementById('workoutBurnSummarySlot');
+        if (burnSlot) burnSlot.innerHTML = '';
         if (missedRecoveryHtml) {
             container.innerHTML = missedRecoveryHtml + `
                 <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: -6px 0 24px 0;">
@@ -8567,10 +8569,10 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         if (totalEx > 0) {
             const allDone = doneEx >= totalEx && totalEx > 0;
             workoutBurnMiniHtml = `
-                <div id="workoutDailyBurnMiniCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
+                <div id="workoutDailyBurnMiniCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 12px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
                     <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
                         <div style="width: 34px; height: 34px; border-radius: 50%; background: #FAF7F2; color: #9E7D4B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7v10"/><path d="M18 7v10"/><path d="M3 10v4"/><path d="M21 10v4"/><path d="M6 12h12"/></svg>
                         </div>
                         <div style="min-width: 0;">
                             <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em;">Gasto aproximado</div>
@@ -8586,7 +8588,13 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         }
     }
 
-    container.innerHTML = missedRecoveryHtml + workoutBurnMiniHtml + groupedHtml;
+    const burnSlot = document.getElementById('workoutBurnSummarySlot');
+    if (burnSlot) {
+        burnSlot.innerHTML = workoutBurnMiniHtml;
+        container.innerHTML = missedRecoveryHtml + groupedHtml;
+    } else {
+        container.innerHTML = missedRecoveryHtml + workoutBurnMiniHtml + groupedHtml;
+    }
     if (window.SensBatteryPerfGovernor && typeof window.SensBatteryPerfGovernor.observeVideosInContainer === 'function') {
         window.SensBatteryPerfGovernor.observeVideosInContainer(container);
     }

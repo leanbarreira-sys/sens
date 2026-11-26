@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '144.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '144.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '145.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '145.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3571,6 +3571,9 @@
                         <!-- Inyectado dinámicamente con los 7 días y micro-iconos por app.js -->
                     </div>
                 </div>
+
+                <!-- 2b. Resumen Compacto de Gasto y Ejercicios del Día -->
+                <div id="workoutBurnSummarySlot"></div>
 
                 <!-- 3. Filtros Rápidos de Entrenamiento (1 Sola Row Horizontal Swipeable) -->
                 <div class="sens-workout-filters-row" id="workoutMuscleFiltersStrip">
