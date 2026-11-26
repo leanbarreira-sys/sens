@@ -35545,6 +35545,27 @@ body.in-portal #nutritionView .sens-nutri-tab-pill.active {
     box-shadow: none !important;
 }
 
+body.in-portal #nutritionView .sens-ex-compact-card.sens-nutri-food-card {
+    padding: 0 !important;
+    background: #080809 !important;
+    border: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+body.in-portal #nutritionView .sens-ex-compact-card.sens-nutri-food-card .ex-compact-check-btn {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 50% !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+
 body.in-portal #workoutView .sens-coach-daily-note-card {
     background: #FAF7F2 !important;
     border: 1px solid rgba(197, 168, 128, 0.3) !important;
