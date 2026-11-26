@@ -7834,19 +7834,17 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
     if (modalTitleEl) {
         modalTitleEl.textContent = isBringingToRestDay
             ? `Entrenar el ${sourceDayName} ${sourceDateShort}`
-            : 'Reprogramar Sesión';
+            : 'Reprogramar sesión';
     }
     if (modalSubEl) {
         modalSubEl.textContent = isBringingToRestDay
-            ? `Elegí qué sesión de tu semana querés traer al ${sourceDayName} ${sourceDateShort}.`
-            : 'Mové esta sesión a otro día de tu semana para no perder el estímulo.';
+            ? 'Elegí qué sesión de tu semana querés traer a este día.'
+            : 'Elegí a qué día querés mover o intercambiar esta sesión.';
     }
-    if (quickLabelEl) quickLabelEl.style.display = isBringingToRestDay ? 'none' : 'block';
-    if (quickRowEl) quickRowEl.style.display = isBringingToRestDay ? 'none' : 'flex';
     if (listLabelEl) {
         listLabelEl.textContent = isBringingToRestDay
-            ? 'Sesiones disponibles para traer:'
-            : 'O elegí una fecha de la semana:';
+            ? 'Sesiones disponibles'
+            : 'Próximos días';
     }
 
     const summaryEl = document.getElementById('moveWorkoutSourceSummary');
@@ -7857,38 +7855,11 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
         } else {
             summaryEl.style.display = 'block';
             summaryEl.innerHTML = `
-                <div class="sens-move-source-card" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                    <div style="min-width: 0; flex: 1;">
-                        <span class="sens-move-source-kicker" style="font-size: 10px; color: #705B3E; text-transform: uppercase; font-weight: 700;">Sesión actual</span>
-                        <h4 class="sens-move-source-title" style="font-size: 14px; font-weight: 800; color: #121214; margin: 2px 0 0 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${sessionTitle}</h4>
-                        <span class="sens-move-source-meta" style="font-size: 11px; color: #575659;">${sourceDayName} ${sourceDateShort} • ${exCount} ejercicios</span>
-                    </div>
-                    <span class="sens-move-reubicar-tag" style="font-size: 9.5px; font-weight: 800; background: #E5CBA7; color: #1A140A; padding: 4px 10px; border-radius: 9999px; flex-shrink: 0;">Mover</span>
+                <div style="background: #FAF9F6; border-radius: 14px; padding: 12px 14px; text-align: left;">
+                    <div style="font-size: 11px; color: #9E7D4B; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">${sourceDayName} ${sourceDateShort} · ${exCount} ejercicios</div>
+                    <div style="font-size: 13.5px; font-weight: 800; color: #121214; margin-top: 3px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${sessionTitle}</div>
                 </div>
             `;
-        }
-    }
-
-    // Configurar atajos (solo cuando el día origen tiene entrenamiento)
-    const btnTomorrow = document.getElementById('btnQuickMoveTomorrow');
-    const btnDayAfter = document.getElementById('btnQuickMoveDayAfter');
-
-    if (!isBringingToRestDay) {
-        const d1 = new Date(sDate);
-        d1.setDate(d1.getDate() + 1);
-        const d1Iso = getFormattedDateKey(d1);
-
-        const d2 = new Date(sDate);
-        d2.setDate(d2.getDate() + 2);
-        const d2Iso = getFormattedDateKey(d2);
-
-        if (btnTomorrow) {
-            btnTomorrow.textContent = `Mañana (${d1.getDate()}/${d1.getMonth() + 1}) →`;
-            btnTomorrow.onclick = () => window.moveWorkoutSession(sourceDateIso, d1Iso, 'replace');
-        }
-        if (btnDayAfter) {
-            btnDayAfter.textContent = `Pasado Mañana (${d2.getDate()}/${d2.getMonth() + 1}) →`;
-            btnDayAfter.onclick = () => window.moveWorkoutSession(sourceDateIso, d2Iso, 'replace');
         }
     }
 
@@ -7914,36 +7885,35 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
             const hasWk = Boolean(curSession && Array.isArray(curSession.exercises) && curSession.exercises.length > 0 && !curSession.isRestDay);
             if (isBringingToRestDay && !hasWk) continue;
 
-            const title = hasWk ? cleanSessionTitle(curSession.title) : 'Día Libre / Descanso';
+            const title = hasWk ? cleanSessionTitle(curSession.title) : 'Día libre';
             const dow = dayNamesShort[curD.getDay()];
-            const dateLabel = `${curD.getDate()}/${curD.getMonth() + 1}`;
             const isToday = offset === 0;
 
             const actionHtml = isBringingToRestDay
-                ? `<button type="button" class="btn btn-dark btn-xs btn-sens-move-select" onclick="window.moveWorkoutSession('${curIso}', '${sourceDateIso}', 'swap')" style="font-size: 11.5px; padding: 8px 14px; min-height: 36px; background: #121214; color: #FFFFFF; font-weight: 700; text-transform: none; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
-                        <span>Traer a ${sourceDayShort} ${parseInt(sParts[2], 10)}</span><span>→</span>
+                ? `<button type="button" class="btn btn-dark" onclick="window.moveWorkoutSession('${curIso}', '${sourceDateIso}', 'swap')" style="font-size: 12px; padding: 8px 14px; min-height: 36px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap;">
+                        Traer a ${sourceDayShort} ${parseInt(sParts[2], 10)}
                    </button>`
                 : (hasWk
-                    ? `<button type="button" class="btn btn-outline btn-xs btn-sens-move-swap" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 11px; padding: 7px 12px; min-height: 34px; color: #705B3E; border: 1px solid rgba(197,168,128,0.55); background: #FFFFFF; font-weight: 700; text-transform: none; border-radius: 9999px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;" title="Intercambia los entrenamientos de ambos días">
-                            <span>⇄</span><span>Intercambiar</span>
+                    ? `<button type="button" class="btn btn-outline" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 12px; padding: 8px 14px; min-height: 36px; background: #F4F3F1 !important; color: #121214 !important; -webkit-text-fill-color: #121214 !important; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap;" title="Intercambia los entrenamientos de ambos días">
+                            Intercambiar
                        </button>`
-                    : `<button type="button" class="btn btn-primary btn-xs btn-sens-move-select" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'replace')" style="font-size: 11px; padding: 7px 12px; min-height: 34px; background: #121214; color: #FFFFFF; font-weight: 700; text-transform: none; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
-                            <span>Mover</span><span>→</span>
+                    : `<button type="button" class="btn btn-dark" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'replace')" style="font-size: 12px; padding: 8px 16px; min-height: 36px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap;">
+                            Mover
                        </button>`);
 
             html += `
-                <div class="sens-move-day-row" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 14px; padding: 11px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <div class="sens-move-day-row" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 14px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left;">
                     <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
-                        <div style="width: 40px; height: 40px; border-radius: 11px; background: ${hasWk ? '#F6EFE4' : '#F4F3F1'}; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <span style="font-size: 8.5px; font-weight: 800; color: ${hasWk ? '#705B3E' : '#77767B'}; line-height: 1.1;">${dow}</span>
+                        <div style="width: 40px; height: 40px; border-radius: 11px; background: ${hasWk ? '#FAF7F2' : '#F4F3F1'}; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="font-size: 8.5px; font-weight: 800; color: ${hasWk ? '#9E7D4B' : '#77767B'}; line-height: 1.1;">${dow}</span>
                             <span style="font-size: 13px; font-weight: 800; color: #121214; line-height: 1.1;">${curD.getDate()}</span>
                         </div>
-                        <div style="min-width: 0; flex: 1;">
-                            <div style="font-size: 12.5px; font-weight: 700; color: #121214; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                        <div style="min-width: 0; flex: 1; text-align: left;">
+                            <div style="font-size: 13px; font-weight: 700; color: #121214; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: left;">
                                 ${isToday ? 'Hoy · ' : ''}${title}
                             </div>
-                            <span style="font-size: 11px; color: #575659; display: block; margin-top: 2px;">
-                                ${hasWk ? `${dateLabel} • ${curSession.exercises.length} ejercicios` : `${dateLabel} • Día libre`}
+                            <span style="font-size: 11.5px; color: #6E6E73; display: block; margin-top: 2px; text-align: left;">
+                                ${hasWk ? `${curSession.exercises.length} ejercicios` : 'Sin sesión asignada'}
                             </span>
                         </div>
                     </div>

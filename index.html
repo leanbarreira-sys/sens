@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '117.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '117.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '118.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '118.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -6451,38 +6451,25 @@
         <div class="modal-card sens-move-workout-modal-card"
             style="max-width: 520px; max-height: 90vh; display: flex; flex-direction: column;">
             <div class="sens-move-modal-header"
-                style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 12px; margin-bottom: 14px;">
-                <div>
-                    <span class="sens-move-modal-kicker">FLEXIBILIDAD DE PLANIFICACIÓN</span>
-                    <h3 id="moveWorkoutModalTitle" class="sens-move-modal-title">Pasar Entrenamiento a Otro Día</h3>
-                    <p id="moveWorkoutModalSubtitle" class="sens-move-modal-sub">
-                        Mové la sesión a otra fecha para no perder el estímulo prescripto.
+                style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding-bottom: 10px; margin-bottom: 12px; text-align: left;">
+                <div style="text-align: left;">
+                    <h3 id="moveWorkoutModalTitle" class="sens-move-modal-title" style="margin: 0; font-size: 18px; font-weight: 800; color: #121214; letter-spacing: -0.015em; text-align: left;">Reprogramar sesión</h3>
+                    <p id="moveWorkoutModalSubtitle" class="sens-move-modal-sub" style="margin: 4px 0 0 0; font-size: 12.5px; color: #6E6E73; line-height: 1.35; text-align: left;">
+                        Elegí a qué día querés mover esta sesión.
                     </p>
                 </div>
                 <button type="button" class="modal-close-btn" id="btnCloseMoveWorkoutModal"
                     onclick="closeMoveWorkoutModal()"
-                    style="position: static; font-size: 24px; cursor: pointer; background: transparent; border: none;">&times;</button>
+                    style="position: static; font-size: 24px; line-height: 1; color: #6E6E73; cursor: pointer; background: transparent; border: none; padding: 2px 4px;">&times;</button>
             </div>
 
             <!-- Resumen de la sesión a mover -->
-            <div id="moveWorkoutSourceSummary" class="sens-move-source-summary">
+            <div id="moveWorkoutSourceSummary" class="sens-move-source-summary" style="margin-bottom: 14px; text-align: left;">
                 <!-- Inyectado dinámicamente -->
             </div>
 
-            <div class="sens-move-section-label" id="moveWorkoutQuickLabel">
-                Atajos Rápidos:
-            </div>
-            <div id="moveWorkoutQuickRow" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-                <button type="button" class="btn-quick-move-pill" id="btnQuickMoveTomorrow">
-                    Pasar a Mañana →
-                </button>
-                <button type="button" class="btn-quick-move-pill" id="btnQuickMoveDayAfter">
-                    Pasar a Pasado Mañana →
-                </button>
-            </div>
-
-            <div class="sens-move-section-label" id="moveWorkoutListLabel">
-                O elegí una fecha de la semana:
+            <div class="sens-move-section-label" id="moveWorkoutListLabel" style="font-size: 11px; font-weight: 700; color: #6E6E73; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; text-align: left;">
+                Elegí el día
             </div>
             <div id="moveWorkoutTargetDaysList" class="sens-move-target-list"
                 style="overflow-y: auto; max-height: 52vh; display: flex; flex-direction: column; gap: 8px; padding-right: 2px; margin-bottom: 6px;">
@@ -9096,7 +9083,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=108.0"></script>
+    <script defer src="app.js?v=109.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
