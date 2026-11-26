@@ -34859,13 +34859,16 @@ window.renderTrackingCalsBars = function() {
 
         const m = (typeof getDailyMetabolicMetrics === 'function') ? getDailyMetabolicMetrics(d) : null;
         const intake = m ? (Number(m.targetIntake) || 0) : ((typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, d) : 0);
-        const basal = m ? (Number(m.bmr) || 0) : 1650;
+        const rawBasal = m ? (Number(m.bmr) || 0) : 1650;
         const workout = m ? (Number(m.workoutBurn) || 0) : 0;
         const cardio = m ? ((Number(m.stepsBurn) || 0) + (Number(m.cardioBurn) || 0)) : 0;
+        const hasActivity = (intake > 0 || workout > 0 || cardio > 0);
+        // No contar basal en días sin ninguna carga (nutrición, ejercicio o cardio) para no distorsionar el balance semanal
+        const basal = (!isFuture && hasActivity) ? rawBasal : 0;
         const totalBurn = basal + workout + cardio;
         const netDiff = intake - totalBurn;
 
-        if (!isFuture) {
+        if (!isFuture && hasActivity) {
             weekIntakeSum += intake;
             weekBurnSum += totalBurn;
         }
@@ -34881,7 +34884,7 @@ window.renderTrackingCalsBars = function() {
             if (isGood) goodDaysCount++;
         }
 
-        const entry = { i, label: dayNames[i], d, isToday, isSelected, isFuture, intake, basal, workout, cardio, totalBurn, netDiff, isGood };
+        const entry = { i, label: dayNames[i], d, isToday, isSelected, isFuture, hasActivity, intake, basal, workout, cardio, totalBurn, netDiff, isGood };
         daysData.push(entry);
         if (isSelected) selectedDayMetrics = entry;
     }
@@ -34919,13 +34922,15 @@ window.renderTrackingCalsBars = function() {
         }
 
         // Total neto del día afuera del gráfico, arriba de cada columna (escalable a los 7 días)
-        if (!day.isFuture && day.intake > 0) {
+        if (!day.isFuture && day.hasActivity) {
             const netLabel = `${day.netDiff > 0 ? '+' : ''}${day.netDiff}`;
             const pillW = Math.max(36, colW - 5);
-            const pillFill = day.isGood
-                ? (day.isSelected ? 'rgba(5, 150, 105, 0.18)' : 'rgba(5, 150, 105, 0.11)')
-                : (day.isSelected ? 'rgba(217, 119, 6, 0.20)' : 'rgba(217, 119, 6, 0.12)');
-            const pillTextFill = day.isGood ? '#047857' : '#B45309';
+            const pillFill = day.intake === 0
+                ? 'rgba(113, 113, 122, 0.12)'
+                : day.isGood
+                    ? (day.isSelected ? 'rgba(5, 150, 105, 0.18)' : 'rgba(5, 150, 105, 0.11)')
+                    : (day.isSelected ? 'rgba(217, 119, 6, 0.20)' : 'rgba(217, 119, 6, 0.12)');
+            const pillTextFill = day.intake === 0 ? '#52525B' : (day.isGood ? '#047857' : '#B45309');
             topTotalsSvg += `<rect x="${(cx - pillW / 2).toFixed(1)}" y="6" width="${pillW.toFixed(1)}" height="19" rx="6" fill="${pillFill}"/>`;
             topTotalsSvg += `<text x="${cx.toFixed(1)}" y="18.5" text-anchor="middle" font-size="9" font-weight="800" fill="${pillTextFill}" style="font-variant-numeric: tabular-nums;">${netLabel}</text>`;
         } else if (!day.isFuture) {
@@ -34940,7 +34945,7 @@ window.renderTrackingCalsBars = function() {
 
         // Barras apiladas abajo (- Basal, - Ejercicio, - Cardio)
         const scaleDown = (downH - 6) / maxMag;
-        const bH = day.isFuture ? 0 : Math.max(2, day.basal * scaleDown);
+        const bH = (day.isFuture || !day.hasActivity) ? 0 : Math.max(2, day.basal * scaleDown);
         const wH = day.isFuture ? 0 : (day.workout > 0 ? Math.max(3, day.workout * scaleDown) : 0);
         const cH = day.isFuture ? 0 : (day.cardio > 0 ? Math.max(3, day.cardio * scaleDown) : 0);
 
@@ -34958,7 +34963,7 @@ window.renderTrackingCalsBars = function() {
         }
 
         // Punto de línea neta (limpio, sin texto superpuesto sobre las barras)
-        if (!day.isFuture) {
+        if (!day.isFuture && day.hasActivity) {
             const clampedNet = Math.max(-maxMag, Math.min(maxMag, day.netDiff));
             const netY = midY - (clampedNet / maxMag) * (halfH - 10);
             linePts.push(`${cx.toFixed(1)},${netY.toFixed(1)}`);
