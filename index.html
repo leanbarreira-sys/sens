@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=85.0">
+    <link rel="stylesheet" href="style.css?v=86.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '121.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '121.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '122.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '122.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4381,232 +4381,259 @@
                     <span class="pill pill-champagne" style="font-size: 10px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 700;">MI PERFIL &amp; MEMBRESÍA</span>
                 </div>
 
-                <!-- Tarjeta Destacada: Tu Plan en SENS (100% coordinado 1 a 1 con Nico, sin auto-edición en app) -->
-                <div id="profilePlanLadderHeroCard"
-                    style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 22px; margin-bottom: 22px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
-                    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 12px;">
-                        <div>
-                            <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                                <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; color: #705B3E;">TU PLAN EN SENS</span>
-                                <span id="profileLadderCurrentStatusPill"
-                                    style="font-size: 10px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums;">
-                                    <span class="status-dot status-dot-active" style="display: inline-block; margin-right: 4px;"></span>ACTIVO
+                <div class="sens-profile-accordion-stack" id="profileSettingsAccordionStack">
+                    <!-- 1. Plan -->
+                    <div class="card-panel sens-profile-acc-card" id="profilePlanLadderHeroCard">
+                        <button type="button" class="sens-profile-acc-trigger" aria-expanded="false" onclick="window.toggleProfileAccordionCard(this)">
+                            <span class="sens-profile-acc-left">
+                                <span class="sens-profile-acc-icon">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                                 </span>
+                                <span class="sens-profile-acc-title">Plan</span>
+                            </span>
+                            <svg class="sens-profile-acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="sens-profile-acc-body">
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+                                <div>
+                                    <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                        <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; color: #705B3E;">TU PLAN EN SENS</span>
+                                        <span id="profileLadderCurrentStatusPill"
+                                            style="font-size: 10px; font-weight: 800; color: #059669; background: #ECFDF5; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums;">
+                                            <span class="status-dot status-dot-active" style="display: inline-block; margin-right: 4px;"></span>ACTIVO
+                                        </span>
+                                    </div>
+                                    <h3 id="profileLadderCurrentTitle"
+                                        style="font-size: 1.2rem; font-weight: 800; color: #121214; margin: 0 0 4px 0; letter-spacing: -0.01em;">Seguimiento con Nico</h3>
+                                    <p id="profileLadderCurrentDesc"
+                                        style="font-size: 12.5px; color: #575659; margin: 0; line-height: 1.5;">
+                                        Tu programación de entrenamiento, calorías y volumen son calibrados y asignados personalmente por Nico. No se modifica desde la app.
+                                    </p>
+                                </div>
                             </div>
-                            <h3 id="profileLadderCurrentTitle"
-                                style="font-size: 1.3rem; font-weight: 800; color: #121214; margin: 0 0 4px 0; letter-spacing: -0.01em;">Seguimiento con Nico</h3>
-                            <p id="profileLadderCurrentDesc"
-                                style="font-size: 12.5px; color: #575659; margin: 0; line-height: 1.5;">
-                                Tu programación de entrenamiento, calorías y volumen son calibrados y asignados personalmente por Nico. No se modifica desde la app.
-                            </p>
-                        </div>
-                    </div>
-                    <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-                        <div style="font-size: 12px; color: #121214; font-weight: 600;">
-                            ¿Querés consultar tu plan, cambiar de frecuencia o coordinar sesiones?
-                        </div>
-                        <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS%20para%20hablar%201%20a%201%20sobre%20mi%20plan."
-                            target="_blank" rel="noopener" class="btn btn-dark btn-sm"
-                            style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none !important; border-radius: 999px; font-weight: 800; padding: 10px 18px; font-size: 12px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-                            Hablar 1 a 1 con Nico para ver tu plan →
-                        </a>
-                    </div>
-                </div>
-
-                <div class="profile-settings-grid"
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                    <!-- Tarjeta 1: Mi Cuenta & Membresía -->
-                    <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
-                            <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0;">Datos de Cuenta</h3>
-                            <span class="pill pill-champagne" id="settingsSubBadge">Activa</span>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 14px;">
-                            <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
-                                <label
-                                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Nombre
-                                    Completo</label>
-                                <div id="settingsProfileName"
-                                    style="font-size: 15px; color: #121214; font-weight: 700;">—</div>
-                            </div>
-                            <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
-                                <label
-                                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Email
-                                    de Acceso</label>
-                                <div id="settingsProfileEmail"
-                                    style="font-size: 14px; color: #121214; font-weight: 600;">—</div>
-                            </div>
-                            <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
-                                <label
-                                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Plan
-                                    Contratado</label>
-                                <div id="settingsProfilePlan"
-                                    style="font-size: 14px; color: #705B3E; font-weight: 800;">—</div>
-                            </div>
-                            <div
-                                style="margin-top: 6px; padding-top: 14px; border-top: 1px solid rgba(18,18,20,0.06); display: flex; flex-direction: column; gap: 8px;">
+                            <div style="background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                                <div style="font-size: 12px; color: #121214; font-weight: 600;">
+                                    ¿Querés consultar tu plan, cambiar de frecuencia o coordinar sesiones?
+                                </div>
                                 <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS%20para%20hablar%201%20a%201%20sobre%20mi%20plan."
-                                    target="_blank" rel="noopener" class="btn btn-primary btn-full btn-sm"
-                                    style="font-weight: 800; border-radius: 999px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                    Hablar 1 a 1 con Nico sobre mi Plan →
+                                    target="_blank" rel="noopener" class="btn btn-dark btn-sm"
+                                    style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none !important; border-radius: 999px; font-weight: 800; padding: 10px 18px; font-size: 12px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                                    Hablar 1 a 1 con Nico para ver tu plan →
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tarjeta 2: Mis Datos & Ficha Biomecánica -->
-                    <div class="card-panel" id="userBiometricsProfileCard" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
-                            <div>
-                                <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0;">Mis Datos &amp; Biometría</h3>
-                                <span style="font-size: 11px; color: #705B3E; font-weight: 600;">Calibrados con Nico</span>
-                            </div>
-                            <button type="button" id="btnSettingsQuickUpdateBio" class="pill pill-champagne"
-                                style="font-size: 10.5px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 800; cursor: pointer; border: none; padding: 6px 14px; border-radius: 999px;">
-                                Modificar Datos ✎
-                            </button>
-                        </div>
-                        <p style="font-size: 12px; color: #575659; line-height: 1.45; margin-bottom: 14px;">
-                            Datos reales que calibran tus series, cargas de fuerza y balance nutricional diario con Nico.
-                        </p>
-
-                        <!-- Grilla de Biometría Clara y Simple -->
-                        <div id="settingsBiometricsGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px;">
-                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
-                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Peso Actual</div>
-                                <div id="settingsBioWeight" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— kg</div>
-                            </div>
-                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
-                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Altura</div>
-                                <div id="settingsBioHeight" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— cm</div>
-                            </div>
-                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
-                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Edad</div>
-                                <div id="settingsBioAge" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— años</div>
-                            </div>
-                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
-                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Sexo Biológico</div>
-                                <div id="settingsBioGender" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">—</div>
-                            </div>
-                        </div>
-
-                        <!-- Objetivo & Atención Articular -->
-                        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
-                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
-                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Objetivo Prioritario</div>
-                                <div id="settingsBioGoal" style="font-size: 13px; font-weight: 700; color: #121214; margin-top: 2px;">—</div>
-                            </div>
-                            <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
-                                <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Atención Articular / Lesiones</div>
-                                <div id="settingsBioInjuries" style="font-size: 12px; color: #575659; margin-top: 2px;">—</div>
-                            </div>
-                        </div>
-
-                        <!-- Contenedor legacy para compatibilidad -->
-                        <div id="settingsDiagTags" style="display: none;"></div>
-
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <button type="button" class="btn btn-outline btn-full" id="btnSettingsViewFullDossier"
-                                onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier(null, { isCoach: false });"
-                                style="background: #121214; color: #FFFFFF; font-weight: 800; border-radius: 999px; border: none; padding: 12px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                    <polyline points="14 2 14 8 20 8" />
-                                    <line x1="16" y1="13" x2="8" y2="13" />
-                                    <line x1="16" y1="17" x2="8" y2="17" />
-                                </svg>
-                                Ver información cargada (Ficha Completa) →
-                            </button>
-                            <button type="button" class="btn btn-outline btn-full btn-sm" id="btnSettingsQuickUpdateBioBottom"
-                                style="border-color: rgba(18, 18, 20, 0.15); color: #121214; font-weight: 700; border-radius: 999px;">
-                                Modificar Peso y Biometría ✎
-                            </button>
-                            <button type="button" class="btn btn-outline btn-full btn-sm" id="btnSettingsEditDiag"
-                                style="border-color: rgba(112, 91, 62, 0.35); color: #705B3E; font-weight: 700; border-radius: 999px;">
-                                Re-evaluar Diagnóstico Completo (8 Pasos)
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Tarjeta 0: App Oficial SENS (PWA) & Preferencias -->
-                    <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-                            <h3
-                                style="font-size: 1.15rem; color: #121214; font-weight: 700; display: flex; align-items: center; gap: 8px; margin: 0;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#705B3E"
-                                    stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-                                    <line x1="12" y1="18" x2="12.01" y2="18" />
-                                </svg>
-                                App Oficial SENS
-                            </h3>
-                            <span class="pill pill-champagne" id="settingsPwaStatusBadge">PWA Nativa</span>
-                        </div>
-                        <p style="font-size: 12.5px; color: #575659; line-height: 1.45; margin-bottom: 16px;">
-                            Tené acceso instantáneo a tus videos de entrenamiento en bucle y registro metabólico directamente
-                            desde la pantalla de inicio de tu iPhone o Android.
-                        </p>
-                        <button type="button" class="btn btn-primary btn-full btn-sm btn-pwa-trigger"
-                            onclick="triggerPwaInstall()"
-                            style="display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; border-radius: 999px;">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="7 10 12 15 17 10" />
-                                <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            <span id="btnProfileInstallText">Instalar App en este Dispositivo</span>
+                    <!-- 2. Datos de tu cuenta -->
+                    <div class="card-panel sens-profile-acc-card" id="profileAccountDataCard">
+                        <button type="button" class="sens-profile-acc-trigger" aria-expanded="false" onclick="window.toggleProfileAccordionCard(this)">
+                            <span class="sens-profile-acc-left">
+                                <span class="sens-profile-acc-icon">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </span>
+                                <span class="sens-profile-acc-title">Datos de tu cuenta</span>
+                            </span>
+                            <svg class="sens-profile-acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                         </button>
-                    </div>
-
-                    <!-- Tarjeta 2.5: Guías Personalizadas del Coach (URLs makesens.com.ar/xxxxx) -->
-                    <div class="card-panel" id="profileCoachGuidesCard" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
-                            <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0;">Guías del Coach</h3>
-                            <span class="pill pill-champagne" style="font-size: 10px;">Personalizadas</span>
-                        </div>
-                        <p style="font-size: 12.5px; color: #575659; line-height: 1.45; margin: 0 0 14px 0;">
-                            Accesos y guías exclusivas creadas por tu entrenador para tu proceso.
-                        </p>
-                        <div id="profileCoachGuidesList" style="display: flex; flex-direction: column; gap: 8px;">
-                            <div style="font-size: 12px; color: #71717A; padding: 12px; text-align: center; background: #FAF9F6; border: 1px dashed rgba(18,18,20,0.14); border-radius: 12px;">
-                                Todavía no tenés guías personalizadas asignadas.
+                        <div class="sens-profile-acc-body">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                                <span style="font-size: 11px; font-weight: 700; color: #6E6E73; text-transform: uppercase; letter-spacing: 0.06em;">Estado</span>
+                                <span class="pill pill-champagne" id="settingsSubBadge">Activa</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
+                                    <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Nombre Completo</label>
+                                    <div id="settingsProfileName" style="font-size: 15px; color: #121214; font-weight: 700;">—</div>
+                                </div>
+                                <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
+                                    <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Email de Acceso</label>
+                                    <div id="settingsProfileEmail" style="font-size: 14px; color: #121214; font-weight: 600;">—</div>
+                                </div>
+                                <div style="background: #F4F3F1; border-radius: 12px; padding: 10px 14px;">
+                                    <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #705B3E; font-weight: 700; display: block; margin-bottom: 2px;">Plan Contratado</label>
+                                    <div id="settingsProfilePlan" style="font-size: 14px; color: #705B3E; font-weight: 800;">—</div>
+                                </div>
+                                <div style="margin-top: 4px; padding-top: 12px; border-top: 1px solid rgba(18,18,20,0.06);">
+                                    <a href="https://wa.me/5491136329846?text=Hola%20Nico!%20Te%20contacto%20desde%20mi%20perfil%20SENS%20para%20hablar%201%20a%201%20sobre%20mi%20plan."
+                                        target="_blank" rel="noopener" class="btn btn-primary btn-full btn-sm"
+                                        style="font-weight: 800; border-radius: 999px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        Hablar 1 a 1 con Nico sobre mi Plan →
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tarjeta 3: Seguridad, Contraseña & Sesión -->
-                    <div class="card-panel" style="padding: 24px; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
-                        <h3 style="font-size: 1.15rem; color: #121214; font-weight: 700; margin: 0 0 16px 0;">Seguridad
-                            &amp; Acceso</h3>
-                        <form id="formUpdatePassword" style="display: flex; flex-direction: column; gap: 12px;">
-                            <div class="input-group">
-                                <label class="input-label" for="settingsNewPassword" style="color: #575659;">Nueva
-                                    Contraseña</label>
-                                <input type="password" id="settingsNewPassword" class="input-control"
-                                    placeholder="Mínimo 6 caracteres" minlength="6" required
-                                    autocomplete="new-password">
+                    <!-- 3. Datos de tu cuerpo -->
+                    <div class="card-panel sens-profile-acc-card" id="userBiometricsProfileCard">
+                        <button type="button" class="sens-profile-acc-trigger" aria-expanded="false" onclick="window.toggleProfileAccordionCard(this)">
+                            <span class="sens-profile-acc-left">
+                                <span class="sens-profile-acc-icon">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                </span>
+                                <span class="sens-profile-acc-title">Datos de tu cuerpo</span>
+                            </span>
+                            <svg class="sens-profile-acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="sens-profile-acc-body">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 8px; flex-wrap: wrap;">
+                                <span style="font-size: 11px; color: #705B3E; font-weight: 600;">Calibrados con Nico</span>
+                                <button type="button" id="btnSettingsQuickUpdateBio" class="pill pill-champagne"
+                                    style="font-size: 10.5px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 800; cursor: pointer; border: none; padding: 6px 14px; border-radius: 999px;">
+                                    Modificar Datos ✎
+                                </button>
                             </div>
-                            <div class="input-group">
-                                <label class="input-label" for="settingsConfirmPassword"
-                                    style="color: #575659;">Confirmar Contraseña</label>
-                                <input type="password" id="settingsConfirmPassword" class="input-control"
-                                    placeholder="Repetí tu nueva contraseña" minlength="6" required
-                                    autocomplete="new-password">
+                            <p style="font-size: 12px; color: #575659; line-height: 1.45; margin-bottom: 14px;">
+                                Datos reales que calibran tus series, cargas de fuerza y balance nutricional diario con Nico.
+                            </p>
+
+                            <div id="settingsBiometricsGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px;">
+                                <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                    <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Peso Actual</div>
+                                    <div id="settingsBioWeight" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— kg</div>
+                                </div>
+                                <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                    <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Altura</div>
+                                    <div id="settingsBioHeight" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— cm</div>
+                                </div>
+                                <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                    <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Edad</div>
+                                    <div id="settingsBioAge" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">— años</div>
+                                </div>
+                                <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                    <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Sexo Biológico</div>
+                                    <div id="settingsBioGender" style="font-size: 16px; font-weight: 800; color: #121214; margin-top: 2px;">—</div>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-full" id="btnSubmitNewPassword"
-                                style="margin-top: 4px; border-radius: 999px;">
-                                Guardar Nueva Contraseña
-                            </button>
-                        </form>
-                        <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(18,18,20,0.06);">
-                            <button type="button" class="btn btn-outline btn-full btn-sm"
-                                onclick="document.getElementById('logoutBtn')?.click()"
-                                style="border-color: rgba(220, 38, 38, 0.25); color: #DC2626; font-weight: 700; border-radius: 999px;">
-                                Cerrar Sesión en este Dispositivo
+
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+                                <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                    <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Objetivo Prioritario</div>
+                                    <div id="settingsBioGoal" style="font-size: 13px; font-weight: 700; color: #121214; margin-top: 2px;">—</div>
+                                </div>
+                                <div style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.06); border-radius: 12px; padding: 10px 12px;">
+                                    <div style="font-size: 10px; text-transform: uppercase; color: #705B3E; font-weight: 700;">Atención Articular / Lesiones</div>
+                                    <div id="settingsBioInjuries" style="font-size: 12px; color: #575659; margin-top: 2px;">—</div>
+                                </div>
+                            </div>
+
+                            <div id="settingsDiagTags" style="display: none;"></div>
+
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <button type="button" class="btn btn-outline btn-full" id="btnSettingsViewFullDossier"
+                                    onclick="if(event){event.preventDefault();event.stopPropagation();} if(typeof window.openSensClinicalDossier==='function') window.openSensClinicalDossier(null, { isCoach: false });"
+                                    style="background: #121214; color: #FFFFFF; font-weight: 800; border-radius: 999px; border: none; padding: 12px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                    </svg>
+                                    Ver información cargada (Ficha Completa) →
+                                </button>
+                                <button type="button" class="btn btn-outline btn-full btn-sm" id="btnSettingsQuickUpdateBioBottom"
+                                    style="border-color: rgba(18, 18, 20, 0.15); color: #121214; font-weight: 700; border-radius: 999px;">
+                                    Modificar Peso y Biometría ✎
+                                </button>
+                                <button type="button" class="btn btn-outline btn-full btn-sm" id="btnSettingsEditDiag"
+                                    style="border-color: rgba(112, 91, 62, 0.35); color: #705B3E; font-weight: 700; border-radius: 999px;">
+                                    Re-evaluar Diagnóstico Completo (8 Pasos)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Contraseña -->
+                    <div class="card-panel sens-profile-acc-card" id="profilePasswordCard">
+                        <button type="button" class="sens-profile-acc-trigger" aria-expanded="false" onclick="window.toggleProfileAccordionCard(this)">
+                            <span class="sens-profile-acc-left">
+                                <span class="sens-profile-acc-icon">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                                <span class="sens-profile-acc-title">Contraseña</span>
+                            </span>
+                            <svg class="sens-profile-acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="sens-profile-acc-body">
+                            <form id="formUpdatePassword" style="display: flex; flex-direction: column; gap: 12px;">
+                                <div class="input-group">
+                                    <label class="input-label" for="settingsNewPassword" style="color: #575659;">Nueva Contraseña</label>
+                                    <input type="password" id="settingsNewPassword" class="input-control"
+                                        placeholder="Mínimo 6 caracteres" minlength="6" required
+                                        autocomplete="new-password">
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label" for="settingsConfirmPassword" style="color: #575659;">Confirmar Contraseña</label>
+                                    <input type="password" id="settingsConfirmPassword" class="input-control"
+                                        placeholder="Repetí tu nueva contraseña" minlength="6" required
+                                        autocomplete="new-password">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-full" id="btnSubmitNewPassword"
+                                    style="margin-top: 4px; border-radius: 999px;">
+                                    Guardar Nueva Contraseña
+                                </button>
+                            </form>
+                            <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(18,18,20,0.06);">
+                                <button type="button" class="btn btn-outline btn-full btn-sm"
+                                    onclick="document.getElementById('logoutBtn')?.click()"
+                                    style="border-color: rgba(220, 38, 38, 0.25); color: #DC2626; font-weight: 700; border-radius: 999px;">
+                                    Cerrar Sesión en este Dispositivo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Guías del coach -->
+                    <div class="card-panel sens-profile-acc-card" id="profileCoachGuidesCard">
+                        <button type="button" class="sens-profile-acc-trigger" aria-expanded="false" onclick="window.toggleProfileAccordionCard(this)">
+                            <span class="sens-profile-acc-left">
+                                <span class="sens-profile-acc-icon">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                                </span>
+                                <span class="sens-profile-acc-title">Guías del coach</span>
+                            </span>
+                            <svg class="sens-profile-acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="sens-profile-acc-body">
+                            <p style="font-size: 12.5px; color: #575659; line-height: 1.45; margin: 0 0 12px 0;">
+                                Accesos y guías exclusivas creadas por tu entrenador para tu proceso.
+                            </p>
+                            <div id="profileCoachGuidesList" style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="font-size: 12px; color: #71717A; padding: 12px; text-align: center; background: #FAF9F6; border: 1px dashed rgba(18,18,20,0.14); border-radius: 12px;">
+                                    Todavía no tenés guías personalizadas asignadas.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Descargar app -->
+                    <div class="card-panel sens-profile-acc-card" id="profileDownloadAppCard">
+                        <button type="button" class="sens-profile-acc-trigger" aria-expanded="false" onclick="window.toggleProfileAccordionCard(this)">
+                            <span class="sens-profile-acc-left">
+                                <span class="sens-profile-acc-icon">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                                </span>
+                                <span class="sens-profile-acc-title">Descargar app</span>
+                            </span>
+                            <svg class="sens-profile-acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="sens-profile-acc-body">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                                <span style="font-size: 11px; font-weight: 700; color: #6E6E73; text-transform: uppercase; letter-spacing: 0.06em;">App Oficial SENS</span>
+                                <span class="pill pill-champagne" id="settingsPwaStatusBadge">PWA Nativa</span>
+                            </div>
+                            <p style="font-size: 12.5px; color: #575659; line-height: 1.45; margin-bottom: 14px;">
+                                Tené acceso instantáneo a tus videos de entrenamiento en bucle y registro metabólico directamente desde la pantalla de inicio de tu iPhone o Android.
+                            </p>
+                            <button type="button" class="btn btn-primary btn-full btn-sm btn-pwa-trigger"
+                                onclick="triggerPwaInstall()"
+                                style="display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; border-radius: 999px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                <span id="btnProfileInstallText">Instalar App en este Dispositivo</span>
                             </button>
                         </div>
                     </div>
@@ -4620,14 +4647,12 @@
 
                     <!-- Tarjeta 5: SENS Coach OS (Solo visible para Admin / Nico) -->
                     <div class="card-panel coach-only-card" id="settingsCoachCard"
-                        style="padding: 24px; display: none; border: 1.5px solid #C5A880; background: #FAF7F2; border-radius: 20px;">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-                            <h3 style="font-size: 1.15rem; color: #121214; font-weight: 800; margin: 0;">SENS Coach OS</h3>
+                        style="padding: 20px; display: none; border: 1.5px solid #C5A880; background: #FAF7F2; border-radius: 18px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                            <h3 style="font-size: 1.05rem; color: #121214; font-weight: 800; margin: 0;">SENS Coach OS</h3>
                             <span class="pill pill-champagne" style="font-size: 10px;">Panel Master</span>
                         </div>
-                        <p
-                            style="font-size: 12.5px; color: #575659; line-height: 1.5; margin-bottom: 16px;">
+                        <p style="font-size: 12.5px; color: #575659; line-height: 1.5; margin-bottom: 14px;">
                             Acceso directo al Centro de Mando: gestión de alumnos, biblioteca biomecánica, favoritos y estudio de marketing UHD.
                         </p>
                         <button type="button" class="btn btn-primary btn-full btn-coach-hub-entry"
@@ -9081,7 +9106,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=110.0"></script>
+    <script defer src="app.js?v=111.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

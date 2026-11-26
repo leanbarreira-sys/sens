@@ -7952,6 +7952,27 @@ window.closeMoveWorkoutModal = function() {
     }
 };
 
+window.toggleProfileAccordionCard = function(triggerBtn) {
+    if (!triggerBtn) return;
+    const card = triggerBtn.closest('.sens-profile-acc-card');
+    if (!card) return;
+    const stack = document.getElementById('profileSettingsAccordionStack');
+    const wasOpen = card.classList.contains('is-open');
+
+    if (stack) {
+        stack.querySelectorAll('.sens-profile-acc-card.is-open').forEach((openCard) => {
+            openCard.classList.remove('is-open');
+            const btn = openCard.querySelector('.sens-profile-acc-trigger');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
+    }
+
+    if (!wasOpen) {
+        card.classList.add('is-open');
+        triggerBtn.setAttribute('aria-expanded', 'true');
+    }
+};
+
 window.moveWorkoutToTomorrow = function(sourceDateIso) {
     if (!sourceDateIso) sourceDateIso = getFormattedDateKey(AppState.selectedDate || new Date());
     const sourceDate = new Date(sourceDateIso + 'T12:00:00');
