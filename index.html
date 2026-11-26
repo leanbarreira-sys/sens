@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '114.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '114.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '115.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '115.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -6466,10 +6466,10 @@
                 <!-- Inyectado dinámicamente -->
             </div>
 
-            <div class="sens-move-section-label">
+            <div class="sens-move-section-label" id="moveWorkoutQuickLabel">
                 Atajos Rápidos:
             </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <div id="moveWorkoutQuickRow" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
                 <button type="button" class="btn-quick-move-pill" id="btnQuickMoveTomorrow">
                     Pasar a Mañana →
                 </button>
@@ -6478,11 +6478,11 @@
                 </button>
             </div>
 
-            <div class="sens-move-section-label">
+            <div class="sens-move-section-label" id="moveWorkoutListLabel">
                 O elegí una fecha de la semana:
             </div>
             <div id="moveWorkoutTargetDaysList" class="sens-move-target-list"
-                style="overflow-y: auto; max-height: 240px; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; margin-bottom: 10px;">
+                style="overflow-y: auto; max-height: 52vh; display: flex; flex-direction: column; gap: 8px; padding-right: 2px; margin-bottom: 6px;">
                 <!-- Inyectado dinámicamente con los días de la semana -->
             </div>
         </div>
@@ -9093,7 +9093,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=105.0"></script>
+    <script defer src="app.js?v=106.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
