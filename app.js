@@ -880,15 +880,27 @@ async function sendCoachEmailAlert({ type, athleteName, athleteEmail, athletePho
 // -----------------------------------------------------------------------------
 // TOASTS DE LUJO Y ANIMACIONES HÁPTICAS (SR-DIRECTOR-UX-WELLNESS)
 // -----------------------------------------------------------------------------
-function showSensToast(message, type = 'champagne', duration = 3400) {
+function showSensToast(message, type = 'champagne', duration = 2600) {
     let toast = document.getElementById('sensGlobalToast');
     if (!toast) {
         toast = document.createElement('div');
         toast.id = 'sensGlobalToast';
         document.body.appendChild(toast);
     }
-    toast.innerHTML = message;
-    toast.className = `sens-luxury-toast sens-toast-${type} show`;
+    const cleanMsg = String(message || '')
+        .replace(/^\s*[✓✔✕×•]+\s*/g, '')
+        .trim();
+
+    const iconMap = {
+        success: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+        champagne: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+        warning: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+        error: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+        info: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+    };
+    const safeType = iconMap[type] ? type : 'champagne';
+    toast.innerHTML = `<span class="sens-toast-icon">${iconMap[safeType]}</span><span class="sens-toast-msg">${cleanMsg}</span>`;
+    toast.className = `sens-luxury-toast sens-toast-${safeType} show`;
     if (window.__sensToastTimeout) clearTimeout(window.__sensToastTimeout);
     window.__sensToastTimeout = setTimeout(() => {
         toast.classList.remove('show');
@@ -7018,7 +7030,7 @@ function initWorkoutManager() {
     const finishBtn = document.getElementById('btnFinishWorkoutSession');
     if (finishBtn) {
         finishBtn.addEventListener('click', async () => {
-            showSensToast('Excelente trabajo. Rutina registrada con éxito en tu historial.', 'success', 3600);
+            showSensToast('Entrenamiento guardado', 'success', 2600);
             // Guardar log en Supabase
             if (supabaseClient && AppState.user) {
                 try {
@@ -10089,7 +10101,7 @@ function saveAndFinishExercise(silent = false) {
                 });
 
                 if (!silent && typeof showSensToast === 'function') {
-                    showSensToast(`✓ Progreso de ${ex.name} guardado con éxito.`, 'champagne', 2200);
+                    showSensToast('Progreso guardado', 'success', 2000);
                 }
             }
         }
@@ -19905,7 +19917,7 @@ function initUserCustomMealModal(athId) {
             }
 
             if (typeof showSensToast === 'function') {
-                showSensToast(`Comida registrada con éxito en ${userActiveNutriMealSlot.toUpperCase()}.`, 'champagne');
+                showSensToast('Comida registrada', 'success', 2200);
             }
         });
     }

@@ -4689,32 +4689,35 @@ body[data-active-view="coachHubView"] #portalSubNav,
 }
 
 /* =============================================================================
-   SENS LUXURY TOAST (QUIET LUXURY OBSIDIAN & CHAMPAGNE)
+   SENS LUXURY TOAST (QUIET LUXURY LIGHT SURFACE)
    ============================================================================= */
 .sens-luxury-toast {
     position: fixed;
-    bottom: 88px;
+    bottom: 90px;
     left: 50%;
-    transform: translateX(-50%) translateY(24px) scale(0.96);
-    background: rgba(18, 18, 20, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    color: #FFFFFF;
-    padding: 12px 22px;
-    border-radius: 9999px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.25px;
-    line-height: 1.35;
-    text-align: center;
-    max-width: 90vw;
+    transform: translateX(-50%) translateY(16px) scale(0.97);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    color: #121214;
+    padding: 9px 14px 9px 10px;
+    border-radius: 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    text-align: left;
+    max-width: min(350px, calc(100vw - 32px));
     width: max-content;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    box-shadow: 0 10px 28px rgba(18, 18, 20, 0.10), 0 2px 6px rgba(18, 18, 20, 0.04);
     z-index: 99999;
     opacity: 0;
     pointer-events: none;
-    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(18, 18, 20, 0.08);
 }
 
 .sens-luxury-toast.show {
@@ -4723,22 +4726,54 @@ body[data-active-view="coachHubView"] #portalSubNav,
     pointer-events: auto;
 }
 
-.sens-luxury-toast.sens-toast-champagne {
-    border-color: rgba(229, 203, 167, 0.45);
-    color: #E5CBA7;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 18px rgba(229, 203, 167, 0.2);
+.sens-toast-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #FAF7F2;
+    color: #9E7D4B;
+}
+
+.sens-toast-msg {
+    min-width: 0;
+}
+
+.sens-luxury-toast.sens-toast-success .sens-toast-icon {
+    background: #EAFBF0;
+    color: #22C55E;
+}
+
+.sens-luxury-toast.sens-toast-champagne .sens-toast-icon {
+    background: #FAF7F2;
+    color: #9E7D4B;
 }
 
 .sens-luxury-toast.sens-toast-warning {
-    border-color: rgba(245, 158, 11, 0.55);
-    background: rgba(26, 20, 14, 0.96);
-    color: #FBBF24;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 18px rgba(245, 158, 11, 0.25);
+    border-color: rgba(217, 119, 6, 0.22);
 }
 
-.sens-luxury-toast.sens-toast-info {
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #F4F4F6;
+.sens-luxury-toast.sens-toast-warning .sens-toast-icon {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.sens-luxury-toast.sens-toast-error {
+    border-color: rgba(239, 68, 68, 0.22);
+}
+
+.sens-luxury-toast.sens-toast-error .sens-toast-icon {
+    background: #FEF2F2;
+    color: #EF4444;
+}
+
+.sens-luxury-toast.sens-toast-info .sens-toast-icon,
+.sens-luxury-toast.sens-toast-dark .sens-toast-icon {
+    background: #F4F4F6;
+    color: #6E6E73;
 }
 
 /* Contenedor de Pasos */
