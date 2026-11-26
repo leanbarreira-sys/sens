@@ -5172,6 +5172,7 @@ function renderDashboardData() {
     }
     const avatarInitialsEl = document.getElementById('topbarAvatarInitials') || document.getElementById('userAvatarInitials');
     if (avatarInitialsEl) {
+        const rawFullName = (profile.full_name || firstName || 'S').trim();
         avatarInitialsEl.textContent = firstName.slice(0, 1).toUpperCase() + (rawFullName.split(' ')[1] ? rawFullName.split(' ')[1].slice(0, 1).toUpperCase() : 'B');
     }
     if (profile.active_plan_name) {

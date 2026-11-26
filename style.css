@@ -22826,9 +22826,9 @@ body:has(.modal.show) #sensCoachFloatingDock {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 8px 12px;
     padding-bottom: 8px;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
 }
 
 .sens-streak-badge-wrap {
@@ -22836,6 +22836,7 @@ body:has(.modal.show) #sensCoachFloatingDock {
     align-items: center;
     gap: 12px;
     min-width: 0;
+    flex: 1 1 190px;
 }
 
 .sens-streak-flame-icon {
@@ -22883,6 +22884,7 @@ body:has(.modal.show) #sensCoachFloatingDock {
     display: flex;
     align-items: baseline;
     gap: 6px;
+    flex-wrap: wrap;
 }
 
 .sens-streak-hero-num {
@@ -22892,6 +22894,7 @@ body:has(.modal.show) #sensCoachFloatingDock {
     font-variant-numeric: tabular-nums;
     line-height: 1;
     letter-spacing: -0.5px;
+    flex-shrink: 0;
 }
 
 .sens-streak-hero-unit {
@@ -27878,12 +27881,13 @@ body.in-portal .sens-streak-level-tag {
 body.in-portal .sens-streak-status-pill {
     background: #F4F3F1 !important;
     color: #575659 !important;
-    font-size: 11px !important;
+    font-size: 10.5px !important;
     font-weight: 600 !important;
     border-radius: 9999px !important;
-    padding: 4px 12px !important;
+    padding: 4px 10px !important;
     border: none !important;
     text-transform: none !important;
+    max-width: 100%;
 }
 
 /* Well de Meta Semanal y Progreso (Fila 3) */
