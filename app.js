@@ -18569,29 +18569,17 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
             const imgUrl = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
             const foodTitle = item.name || item.nombre_alimento_o_plato || resolved?.nombre_alimento_o_plato || resolved?.name || resolved?.name_es || 'Alimento SENS';
-            const portionText = item.isCustom ? 'Comida Registrada por vos' : (resolved?.unidades_caseras_total || `${grams}g`);
-            const originBadge = item.isCustom
-                ? `<span class="sens-nutri-origin-badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 999px;">Cargado por vos</span>`
-                : `<span class="sens-nutri-origin-badge" style="background: rgba(112, 91, 62, 0.12); color: #705B3E; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 999px;">Pauta Nico</span>`;
+            const sourceLabel = item.isCustom ? 'Agregado' : 'Plan';
 
             return `
                 <div class="sens-nutri-food-card ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
                     <img class="sens-nutri-food-thumb" src="${imgUrl}" alt="${foodTitle}" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                     <div class="sens-nutri-food-info">
-                        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
-                            <span class="sens-nutri-food-meal-tag">${mealLabels[item.mealSlot] || item.mealSlot}</span>
-                            ${originBadge}
-                        </div>
                         <div class="sens-nutri-food-title" title="${foodTitle}">${foodTitle}</div>
-                        <div class="sens-nutri-food-meta">${grams}g • ${portionText}</div>
-                        <div class="sens-nutri-food-macros">
-                            <span class="prot">${Math.round(macros.protein)}g P</span>
-                            <span class="carb">${Math.round(macros.carbs)}g C</span>
-                            <span class="fat">${Math.round(macros.fats)}g G</span>
-                        </div>
+                        <div class="sens-nutri-food-meta" style="margin-top: 2px;">${grams}g • ${sourceLabel}</div>
                     </div>
-                    <div class="sens-nutri-food-right" style="display: flex; align-items: center; gap: 8px;">
-                        <div class="sens-nutri-kcal-badge">${macros.calories} kcal</div>
+                    <div class="sens-nutri-food-right" style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                        <div class="sens-nutri-kcal-badge" style="font-variant-numeric: tabular-nums;">${macros.calories} kcal</div>
                         <button type="button" class="sens-btn-quick-log ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-is-custom="${item.isCustom ? '1' : '0'}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -19911,7 +19899,7 @@ function renderSmartMacroRecommender(allDayFoods, athId, targetKcal, consumedKca
 
     card.style.display = 'block';
     if (meta) {
-        meta.textContent = `Faltan ${remKcal.toLocaleString('es-AR')} kcal • ${Math.round(remProt)}g Prot`;
+        meta.textContent = `Faltan ${remKcal.toLocaleString('es-AR')} kcal`;
     }
 
     const library = (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY))
@@ -19953,7 +19941,7 @@ function renderSmartMacroRecommender(allDayFoods, athId, targetKcal, consumedKca
                     <img src="${img}" style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(18, 18, 20, 0.08);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                     <div style="min-width: 0; flex: 1;">
                         <span style="font-size: 11.5px; font-weight: 700; color: #121214; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${name}</span>
-                        <span style="font-size: 10px; color: #705B3E; font-weight: 800;">${cal} kcal • ${p}g P</span>
+                        <span style="font-size: 10.5px; color: #705B3E; font-weight: 800; font-variant-numeric: tabular-nums;">${cal} kcal</span>
                     </div>
                 </div>
             </div>
