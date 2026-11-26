@@ -34905,6 +34905,26 @@ window.switchTrackingModuleTab = function(tabName) {
     if (typeof window.renderTrackingCalsBars === 'function') window.renderTrackingCalsBars();
 };
 
+window.navigateFromBalanceCta = function(dateIso, target) {
+    try {
+        if (dateIso && typeof AppState !== 'undefined') {
+            AppState.selectedDate = new Date(`${dateIso}T12:00:00`);
+            if (typeof renderPortalWeekStrip === 'function') renderPortalWeekStrip();
+        }
+        if (target === 'nutrition') {
+            if (typeof window.switchPortalTab === 'function') window.switchPortalTab('nutritionView');
+        } else if (target === 'workout') {
+            if (typeof window.switchPortalTab === 'function') window.switchPortalTab('workoutView');
+        } else if (target === 'cardio') {
+            if (typeof window.switchTrackingModuleTab === 'function') window.switchTrackingModuleTab('balance');
+            setTimeout(() => {
+                const el = document.getElementById('sensActivityLoggerPanel') || document.getElementById('dashStepsInput');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 80);
+        }
+    } catch (_) {}
+};
+
 window.renderTrackingCalsBars = function() {
     const svgWrap = document.getElementById('sensWeeklyBalanceSvgWrap');
     const goalLabel = document.getElementById('sensTrackingCalsGoalLabel');
@@ -34971,7 +34991,10 @@ window.renderTrackingCalsBars = function() {
             if (isGood) goodDaysCount++;
         }
 
-        const entry = { i, label: dayNames[i], d, isToday, isSelected, isFuture, hasActivity, intake, basal, workout, cardio, totalBurn, netDiff, isGood };
+        const hasPendingWorkout = Boolean(m && m.totalExCount > 0 && m.completedExCount < m.totalExCount);
+        const hasPendingCardio = (cardio === 0);
+        const dateIso = (typeof getFormattedDateKey === 'function') ? getFormattedDateKey(d) : d.toISOString().slice(0, 10);
+        const entry = { i, label: dayNames[i], d, dateIso, isToday, isSelected, isFuture, hasActivity, hasPendingWorkout, hasPendingCardio, intake, basal, workout, cardio, totalBurn, netDiff, isGood };
         daysData.push(entry);
         if (isSelected) selectedDayMetrics = entry;
     }
@@ -35097,6 +35120,31 @@ window.renderTrackingCalsBars = function() {
 
         const netClass = sel.intake === 0 ? 'is-neutral' : (sel.isGood ? 'is-good' : 'is-warn');
 
+        const pendingCtas = [];
+        if (!sel.isFuture) {
+            if (sel.intake === 0) pendingCtas.push({ key: 'nutrition', text: 'Registrá tus comidas' });
+            if (sel.hasPendingWorkout) pendingCtas.push({ key: 'workout', text: 'Registrá tu entrenamiento' });
+            if (sel.hasPendingCardio) pendingCtas.push({ key: 'cardio', text: 'Registrá tu cardio/pasos' });
+        }
+
+        const pendingCtasHtml = pendingCtas.length > 0 ? `
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: ${sel.intake > 0 ? '8px' : '10px'};">
+                ${pendingCtas.map(c => `
+                    <button type="button" onclick="window.navigateFromBalanceCta('${sel.dateIso}', '${c.key}')" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 10px; border: none; background: #F4F4F6; color: #121214; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left;">
+                        <span>${sel.label}: ${c.text}</span>
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: #705B3E; flex-shrink: 0;">Ir <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+                    </button>
+                `).join('')}
+            </div>
+        ` : '';
+
+        const summaryBarHtml = (sel.intake > 0 || pendingCtas.length === 0) ? `
+            <div class="sens-cals-net-summary ${netClass}">
+                <span class="net-summary-desc">${sel.label}: ${netDirection}</span>
+                <strong class="net-summary-val">${sel.intake > 0 ? `${netSign}${sel.netDiff.toLocaleString('es-AR')} kcal` : '—'}</strong>
+            </div>
+        ` : '';
+
         breakdownBox.innerHTML = `
             <div class="sens-cals-pillars-grid">
                 <div class="sens-cals-pillar-tile is-plus">
@@ -35116,10 +35164,8 @@ window.renderTrackingCalsBars = function() {
                     <strong class="pillar-val">−${sel.cardio.toLocaleString('es-AR')}</strong>
                 </div>
             </div>
-            <div class="sens-cals-net-summary ${netClass}">
-                <span class="net-summary-desc">${sel.label}: ${netDirection}</span>
-                <strong class="net-summary-val">${sel.intake > 0 ? `${netSign}${sel.netDiff.toLocaleString('es-AR')} kcal` : '—'}</strong>
-            </div>
+            ${summaryBarHtml}
+            ${pendingCtasHtml}
         `;
     }
 
