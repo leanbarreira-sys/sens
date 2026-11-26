@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '120.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '120.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '121.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '121.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4377,10 +4377,8 @@
                  MÓDULO: MI PERFIL, AJUSTES DE CUENTA & FICHA BIOMECÁNICA
                  ===================================================================== -->
             <section class="portal-view" id="profileSettingsView">
-                <div class="view-header" style="margin-bottom: 18px;">
+                <div class="view-header" style="margin-top: 8px; margin-bottom: 14px;">
                     <span class="pill pill-champagne" style="font-size: 10px; background: rgba(251, 222, 185, 0.55); color: #705B3E; font-weight: 700;">MI PERFIL &amp; MEMBRESÍA</span>
-                    <h2 class="view-title" style="margin-top: 6px; color: #121214;">Perfil, Plan Actual y <strong style="color: #705B3E;">Planes SENS</strong></h2>
-                    <p class="view-subtitle" style="color: #575659;">Gestioná tu membresía activa, compará los planes oficiales y actualizá tu ficha biomecánica.</p>
                 </div>
 
                 <!-- Tarjeta Destacada: Tu Plan en SENS (100% coordinado 1 a 1 con Nico, sin auto-edición en app) -->
