@@ -35048,19 +35048,21 @@ window.renderTrackingCalsBars = function() {
     const isMuscleGain = userGoal.includes('muscle') || userGoal.includes('gain') || userGoal.includes('hipertrofia');
     const isMaintenance = userGoal.includes('maint') || userGoal.includes('general') || userGoal.includes('vitality');
     const goalText = isMuscleGain ? 'Aumento' : (isMaintenance ? 'Mantener' : 'Déficit');
+    const goalRangeShort = isMuscleGain
+        ? '+150 a +450'
+        : (isMaintenance ? '±150' : '−200 a −600');
     const goalPill = document.getElementById('dashObjectiveGoalPill');
     if (goalPill) {
-        goalPill.textContent = isMuscleGain
-            ? 'Meta neta: +150 a +450 kcal'
-            : (isMaintenance ? 'Meta neta: ±150 kcal' : 'Meta neta: −200 a −600 kcal');
+        goalPill.innerHTML = `<span class="bal-goal-dot" style="width:6px;height:6px;border-radius:50%;background:#9E7D4B;flex-shrink:0;"></span><span>Meta: ${goalRangeShort} cal</span>`;
+        goalPill.classList.remove('is-good', 'is-warn');
         goalPill.style.background = '';
         goalPill.style.color = '';
     }
 
     if (goalLabel) {
         goalLabel.textContent = isMaintenance
-            ? 'Comida igual a gasto total'
-            : 'Comida menos gasto total del día';
+            ? 'Balance neto diario'
+            : 'Comida vs gasto del día';
     }
 
     const daysData = [];
@@ -35156,9 +35158,9 @@ window.renderTrackingCalsBars = function() {
             const pillFill = day.intake === 0
                 ? 'rgba(113, 113, 122, 0.12)'
                 : day.isGood
-                    ? (day.isSelected ? 'rgba(5, 150, 105, 0.18)' : 'rgba(5, 150, 105, 0.11)')
-                    : (day.isSelected ? 'rgba(217, 119, 6, 0.20)' : 'rgba(217, 119, 6, 0.12)');
-            const pillTextFill = day.intake === 0 ? '#52525B' : (day.isGood ? '#047857' : '#B45309');
+                    ? (day.isSelected ? 'rgba(34, 197, 94, 0.18)' : 'rgba(34, 197, 94, 0.11)')
+                    : (day.isSelected ? 'rgba(239, 68, 68, 0.16)' : 'rgba(239, 68, 68, 0.10)');
+            const pillTextFill = day.intake === 0 ? '#52525B' : (day.isGood ? '#16A34A' : '#EF4444');
             topTotalsSvg += `<rect x="${(cx - pillW / 2).toFixed(1)}" y="6" width="${pillW.toFixed(1)}" height="19" rx="6" fill="${pillFill}"/>`;
             topTotalsSvg += `<text x="${cx.toFixed(1)}" y="18.5" text-anchor="middle" font-size="9" font-weight="800" fill="${pillTextFill}" style="font-variant-numeric: tabular-nums;">${netLabel}</text>`;
         } else if (!day.isFuture) {
@@ -35196,7 +35198,7 @@ window.renderTrackingCalsBars = function() {
             const netY = midY - (clampedNet / maxMag) * (halfH - 10);
             linePts.push(`${cx.toFixed(1)},${netY.toFixed(1)}`);
 
-            const dotColor = day.intake === 0 ? '#71717A' : (day.isGood ? '#16A34A' : '#D97706');
+            const dotColor = day.intake === 0 ? '#71717A' : (day.isGood ? '#22C55E' : '#EF4444');
             dotsSvg += `<circle cx="${cx.toFixed(1)}" cy="${netY.toFixed(1)}" r="4" fill="#FFFFFF" stroke="${dotColor}" stroke-width="2.5"/>`;
         }
 
@@ -35228,6 +35230,15 @@ window.renderTrackingCalsBars = function() {
     if (breakdownBox) {
         const sel = selectedDayMetrics || daysData[0];
         const netSign = sel.netDiff > 0 ? '+' : '';
+        if (goalPill) {
+            const hasIntake = sel && sel.intake > 0;
+            const dotBg = !hasIntake ? '#9E7D4B' : (sel.isGood ? '#22C55E' : '#EF4444');
+            goalPill.classList.toggle('is-good', Boolean(hasIntake && sel.isGood));
+            goalPill.classList.toggle('is-warn', Boolean(hasIntake && !sel.isGood));
+            goalPill.innerHTML = hasIntake
+                ? `<span class="bal-goal-dot" style="width:6px;height:6px;border-radius:50%;background:${dotBg};flex-shrink:0;"></span><span>${netSign}${sel.netDiff.toLocaleString('es-AR')} / ${goalRangeShort} cal</span>`
+                : `<span class="bal-goal-dot" style="width:6px;height:6px;border-radius:50%;background:${dotBg};flex-shrink:0;"></span><span>Meta: ${goalRangeShort} cal</span>`;
+        }
         const netDirection = sel.intake === 0
             ? 'Registrá tus comidas para ver el balance del día'
             : sel.netDiff < 0

@@ -37968,12 +37968,46 @@ body.in-portal #dashWeeklyBalanceCard .sens-cals-pillar-tile.is-plus .pillar-val
     color: #121214 !important;
 }
 
-body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary,
-body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary.is-good,
-body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary.is-warn {
+body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary {
     background: #FAF7F2 !important;
     color: #705B3E !important;
     border: none !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary.is-good {
+    background: rgba(34, 197, 94, 0.12) !important;
+    color: #16A34A !important;
+    border: none !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary.is-warn {
+    background: rgba(239, 68, 68, 0.10) !important;
+    color: #EF4444 !important;
+    border: none !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard #dashObjectiveGoalPill.sens-balance-goal-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    background: #F4F2EE !important;
+    color: #705B3E !important;
+    border: none !important;
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    flex-shrink: 0 !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard #dashObjectiveGoalPill.sens-balance-goal-pill.is-good {
+    background: rgba(34, 197, 94, 0.12) !important;
+    color: #16A34A !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard #dashObjectiveGoalPill.sens-balance-goal-pill.is-warn {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #EF4444 !important;
 }
 
 body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals {
