@@ -8591,10 +8591,8 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         <div class="sens-nutri-progress-track">
                             <div class="sens-nutri-progress-fill" style="width: ${exPct}%; background: ${barColor} !important;"></div>
                         </div>
-                        <div class="sens-nutri-progress-labels">
-                            <span>0 ejercicios</span>
-                            <span>${doneEx} de ${totalEx} ejercicios</span>
-                            <span>${totalEx} ejercicios</span>
+                        <div class="sens-nutri-progress-labels" style="justify-content: center;">
+                            <span>${doneEx} de ${totalEx} ${totalEx === 1 ? 'ejercicio' : 'ejercicios'}</span>
                         </div>
                     </div>
                 </div>
