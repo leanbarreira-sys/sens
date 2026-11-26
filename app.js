@@ -662,8 +662,9 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
 
         if (Array.isArray(customMeals)) {
             customMeals.forEach((cm, cmIdx) => {
-                const fid = cm.id || cm.codigo || cm.name;
-                const rowKey = window.getNutritionFoodRowKey(cm.mealSlot || 'almuerzo', `c${cmIdx}`, cm, cm);
+                const resCm = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(cm, id) : cm;
+                const fid = resCm?.id || resCm?.codigo || cm.id || cm.codigo || cm.name;
+                const rowKey = window.getNutritionFoodRowKey(cm.mealSlot || 'almuerzo', `c${cmIdx}`, cm, resCm);
                 const isConsumed = window.isNutritionFoodRowLogged(consumedMap, rowKey, fid, true);
                 if (isConsumed) {
                     const adjGrams = userAdjusted[rowKey] ? parseInt(userAdjusted[rowKey], 10) : (userAdjusted[fid] ? parseInt(userAdjusted[fid], 10) : (cm.grams || 100));
@@ -671,7 +672,6 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
                     if (cmCal > 0 && cm.grams && adjGrams !== cm.grams) {
                         cmCal = Math.round(cmCal * (adjGrams / cm.grams));
                     } else if (cmCal <= 0) {
-                        const resCm = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(cm, id) : cm;
                         const macCm = (typeof window.calculateFoodMacros === 'function') ? window.calculateFoodMacros(resCm, adjGrams) : { calories: 0 };
                         cmCal = macCm.calories || 0;
                     }
@@ -724,10 +724,8 @@ function getAthleteConsumedCalories(athId = null, targetDate = null) {
             });
         }
 
-        if (totalConsumed > 0) {
-            try { localStorage.setItem(`sens_cals_${dateIso}`, totalConsumed); } catch (e) {}
-            return totalConsumed;
-        }
+        try { localStorage.setItem(`sens_cals_${dateIso}`, totalConsumed); } catch (e) {}
+        return totalConsumed;
     }
 
     // 2. Fallback directo si hay calorías cacheadas en localStorage
@@ -22406,9 +22404,10 @@ function updateNutriSummaryCardData() {
         userFoods.forEach((cm, uIdx) => {
             const cVal = cm.calories || 0;
             sum += cVal;
-            const foodKey = cm.id || cm.name;
+            const resCm = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(cm, athId) : cm;
+            const foodKey = resCm?.id || resCm?.codigo || cm.id || cm.codigo || cm.name;
             const globalIdx = userCustomMeals.indexOf(cm);
-            const rowKey = window.getNutritionFoodRowKey(mealKey, `c${globalIdx >= 0 ? globalIdx : uIdx}`, cm, cm);
+            const rowKey = window.getNutritionFoodRowKey(mealKey, `c${globalIdx >= 0 ? globalIdx : uIdx}`, cm, resCm);
             if (window.isNutritionFoodRowLogged(userConsumedFoods, rowKey, foodKey, true)) {
                 totalConsumedKcal += cVal;
             }
