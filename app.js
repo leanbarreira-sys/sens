@@ -7831,6 +7831,10 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
     const sourceDayShort = dayNamesShort[sDate.getDay()];
     const sourceDateShort = `${parseInt(sParts[2], 10)}/${parseInt(sParts[1], 10)}`;
 
+    const today = new Date();
+    const todayIso = getFormattedDateKey(today);
+    const isSourceInPast = sourceDateIso < todayIso;
+
     if (modalTitleEl) {
         modalTitleEl.textContent = isBringingToRestDay
             ? `Entrenar el ${sourceDayName} ${sourceDateShort}`
@@ -7839,12 +7843,14 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
     if (modalSubEl) {
         modalSubEl.textContent = isBringingToRestDay
             ? 'Elegí qué sesión de tu semana querés traer a este día.'
-            : 'Elegí a qué día querés mover o intercambiar esta sesión.';
+            : (isSourceInPast
+                ? 'Elegí un día libre para recuperar esta sesión.'
+                : 'Elegí un día libre para moverla o uno ocupado para intercambiar.');
     }
     if (listLabelEl) {
         listLabelEl.textContent = isBringingToRestDay
             ? 'Sesiones disponibles'
-            : 'Próximos días';
+            : (isSourceInPast ? 'Días libres disponibles' : 'Próximos días');
     }
 
     const summaryEl = document.getElementById('moveWorkoutSourceSummary');
@@ -7863,13 +7869,13 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
         }
     }
 
-    // Lista de fechas de los próximos 7 días a partir de hoy
+    // Lista de fechas: si estamos trayendo a un día de descanso incluimos ayer (-1) por si quedó pendiente
     const listEl = document.getElementById('moveWorkoutTargetDaysList');
     if (listEl) {
         let html = '';
-        const today = new Date();
+        const startOffset = isBringingToRestDay ? -1 : 0;
 
-        for (let offset = 0; offset < 7; offset++) {
+        for (let offset = startOffset; offset < 7; offset++) {
             const curD = new Date(today);
             curD.setDate(today.getDate() + offset);
             const curIso = getFormattedDateKey(curD);
@@ -7884,21 +7890,25 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
 
             const hasWk = Boolean(curSession && Array.isArray(curSession.exercises) && curSession.exercises.length > 0 && !curSession.isRestDay);
             if (isBringingToRestDay && !hasWk) continue;
+            // Nunca intercambiar una sesión futura hacia un día pasado ya vencido
+            if (isSourceInPast && hasWk) continue;
 
             const title = hasWk ? cleanSessionTitle(curSession.title) : 'Día libre';
             const dow = dayNamesShort[curD.getDay()];
             const isToday = offset === 0;
+            const isYesterday = offset === -1;
+            const dayTag = isToday ? 'Hoy · ' : (isYesterday ? 'Ayer · ' : '');
 
             const actionHtml = isBringingToRestDay
                 ? `<button type="button" class="btn btn-dark" onclick="window.moveWorkoutSession('${curIso}', '${sourceDateIso}', 'swap')" style="font-size: 12px; padding: 8px 14px; min-height: 36px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap;">
                         Traer a ${sourceDayShort} ${parseInt(sParts[2], 10)}
                    </button>`
                 : (hasWk
-                    ? `<button type="button" class="btn btn-outline" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 12px; padding: 8px 14px; min-height: 36px; background: #F4F3F1 !important; color: #121214 !important; -webkit-text-fill-color: #121214 !important; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap;" title="Intercambia los entrenamientos de ambos días">
+                    ? `<button type="button" class="btn btn-outline" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'swap')" style="font-size: 12px; padding: 8px 14px; min-height: 36px; background: #F4F3F1 !important; color: #121214 !important; -webkit-text-fill-color: #121214 !important; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap;" title="Intercambia ${sourceDayShort} con ${dow}">
                             Intercambiar
                        </button>`
                     : `<button type="button" class="btn btn-dark" onclick="window.moveWorkoutSession('${sourceDateIso}', '${curIso}', 'replace')" style="font-size: 12px; padding: 8px 16px; min-height: 36px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer; white-space: nowrap;">
-                            Mover
+                            Mover aquí
                        </button>`);
 
             html += `
@@ -7910,7 +7920,7 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
                         </div>
                         <div style="min-width: 0; flex: 1; text-align: left;">
                             <div style="font-size: 13px; font-weight: 700; color: #121214; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: left;">
-                                ${isToday ? 'Hoy · ' : ''}${title}
+                                ${dayTag}${title}
                             </div>
                             <span style="font-size: 11.5px; color: #6E6E73; display: block; margin-top: 2px; text-align: left;">
                                 ${hasWk ? `${curSession.exercises.length} ejercicios` : 'Sin sesión asignada'}
@@ -7925,7 +7935,7 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
         }
 
         if (!html) {
-            html = `<div style="text-align: center; padding: 20px 14px; font-size: 12.5px; color: #575659; background: #FAF9F6; border-radius: 14px;">No tenés sesiones programadas en los próximos días para traer a hoy.</div>`;
+            html = `<div style="text-align: center; padding: 20px 14px; font-size: 12.5px; color: #575659; background: #FAF9F6; border-radius: 14px;">${isSourceInPast ? 'No tenés días libres próximos esta semana para mover esta sesión.' : 'No tenés sesiones programadas en los próximos días para traer a hoy.'}</div>`;
         }
         listEl.innerHTML = html;
     }
@@ -8320,7 +8330,14 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     // 5. Estado Vacío si no hay ejercicios para el filtro
     if (exercisesToShow.length === 0) {
         if (missedRecoveryHtml) {
-            container.innerHTML = missedRecoveryHtml + (isAdmin ? `<div style="display: flex; justify-content: center; margin-bottom: 24px;"><button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()" style="border-radius: 9999px; text-transform: none; letter-spacing: 0;">+ Asignar ejercicios desde el catálogo (Nico)</button></div>` : '');
+            container.innerHTML = missedRecoveryHtml + `
+                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: -6px 0 24px 0;">
+                    <button type="button" onclick="openMoveWorkoutModal('${dateIso}')" style="background: transparent; border: none; color: #6E6E73; font-size: 12.5px; font-weight: 600; padding: 6px 12px; cursor: pointer;">
+                        ¿Querés adelantar otra sesión a hoy? <span style="color: #121214; font-weight: 700;">Ver semana →</span>
+                    </button>
+                    ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()" style="border-radius: 9999px; text-transform: none; letter-spacing: 0;">+ Asignar ejercicios (Nico)</button>` : ''}
+                </div>
+            `;
             return;
         }
         container.innerHTML = `
