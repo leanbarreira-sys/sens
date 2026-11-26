@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '171.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '171.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '172.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '172.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3238,12 +3238,9 @@
                      CARD 3: MOVIMIENTO & CARDIO DIARIO (3ER PILAR DIARIO CON PROGRESO %)
                      ========================================================================= -->
                 <div class="sens-tracking-section-card" id="dashWeightAndActivityCard">
-                    <div class="sens-tracking-top-row" style="margin-bottom: 10px !important;">
-                        <div>
-                            <span class="sens-card-domain-eyebrow" style="color: #705B3E; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>MOVIMIENTO DIARIO</span></span>
-                            <h3 class="sens-tracking-main-title">Cardio &amp; Pasos</h3>
-                        </div>
-                        <span class="sens-act-badge" id="dashActiveBurnBadge">−0 kcal</span>
+                    <div class="sens-tracking-top-row" style="margin-bottom: 12px !important;">
+                        <span class="sens-domain-pill-light" id="dashCardioDomainPill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Movimiento</span></span>
+                        <span class="sens-card-streak-pill sens-domain-streak-light in-progress" id="dashActiveBurnBadge"><span class="streak-pill-dot"></span><span class="streak-pill-text">0/390 cal</span></span>
                     </div>
 
                     <!-- Barra de Progreso % de Movimiento Diario (hermanada con Entrenamiento y Nutrición) -->
@@ -3319,12 +3316,9 @@
                      ========================================================================= -->
                 <div class="sens-tracking-section-card" id="dashWeeklyBalanceCard">
                     <div class="sens-tracking-top-row" style="margin-bottom: 12px !important;">
-                        <div>
-                            <span class="sens-card-domain-eyebrow" style="color: #705B3E; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>ANALÍTICA &amp; PROGRESO</span></span>
-                            <h3 class="sens-tracking-main-title">Balance &amp; Peso</h3>
-                        </div>
+                        <span class="sens-domain-pill-light" id="dashAnalyticsDomainPill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analítica</span></span>
                         <button type="button" class="sens-btn-quick-log-weight" id="btnOpenLogWeightModal" onclick="window.openLogWeightModal();" aria-label="Registrar peso de hoy">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             <span>Registrar Peso</span>
                         </button>
                     </div>

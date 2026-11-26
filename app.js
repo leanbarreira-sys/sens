@@ -22760,8 +22760,10 @@ function initDashNutriCarousel() {
         }
         if (fillEl) {
             fillEl.style.width = `${barWidth}%`;
+            fillEl.classList.toggle('is-exceeded', isExceeded);
+            fillEl.classList.toggle('is-in-range', !isExceeded && isInRange);
             if (isExceeded) {
-                fillEl.style.background = 'linear-gradient(90deg, #F59E0B, #EF4444)';
+                fillEl.style.background = '#EF4444';
             } else if (isInRange) {
                 fillEl.style.background = greenColor;
             } else {
@@ -23862,7 +23864,7 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
     } else if (wRec.done) {
         wStatus = 'done';
         const total = wRec.totalExercises || 0;
-        wText = total > 0 ? `${total}/${total} ejercicios ✓` : 'Sesión completada ✓';
+        wText = total > 0 ? `${total}/${total} ejercicios` : 'Sesión completada';
     } else {
         let completed = wRec.completedExercises;
         let total = wRec.totalExercises;
@@ -23897,7 +23899,7 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
                 wText = 'Descanso';
             } else {
                 wStatus = 'lost';
-                wText = total > 0 ? `${completed}/${total} ejercicios ✕` : 'Sesión no realizada ✕';
+                wText = total > 0 ? `${completed}/${total} ejercicios` : 'Sin sesión';
             }
         } else {
             if (!isMockAth && !hasRoutine) {
@@ -23955,17 +23957,17 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
 
     if (isFutureDay) {
         nStatus = 'in-progress';
-        nText = `0 / ${targetStr} cal`;
+        nText = `0/${targetStr} cal`;
     } else if (nRec.done) {
         nStatus = 'done';
-        nText = `${consumedStr}/${targetStr} cal ✓`;
+        nText = `${consumedStr}/${targetStr} cal`;
     } else if (nRec.status === 'exceeded') {
         nStatus = 'exceeded';
-        nText = `${consumedStr}/${targetStr} cal • Superado ✕`;
+        nText = `${consumedStr}/${targetStr} cal`;
     } else {
         if (isPastDay) {
             nStatus = 'lost';
-            nText = consumed > 0 ? `${consumedStr}/${targetStr} cal ✕` : 'Sin registro calórico ✕';
+            nText = consumed > 0 ? `${consumedStr}/${targetStr} cal` : 'Sin registro';
         } else {
             nStatus = 'in-progress';
             nText = `${consumedStr}/${targetStr} cal`;
@@ -24666,8 +24668,12 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
     // Actualizar Panel Táctil de Actividad Diaria (Pasos & Cardio + Barra % Meta)
     const activeBurnBadge = document.getElementById('dashActiveBurnBadge');
     const livePanelBurn = liveStepsBurn + liveCardioBurn;
+    const targetBurn = Math.max(250, Math.round(10000 * (weight * 0.00052)));
+    const isBurnDone = livePanelBurn >= targetBurn;
     if (activeBurnBadge) {
-        activeBurnBadge.textContent = `−${livePanelBurn.toLocaleString('es-AR')} kcal`;
+        activeBurnBadge.classList.toggle('done', isBurnDone);
+        activeBurnBadge.classList.toggle('in-progress', !isBurnDone);
+        activeBurnBadge.innerHTML = `<span class="streak-pill-dot"></span><span class="streak-pill-text">${livePanelBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} cal</span>`;
     }
 
     const cardioPctEl = document.getElementById('dashCardioActivePctText');
