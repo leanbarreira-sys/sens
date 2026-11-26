@@ -8768,13 +8768,13 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
     let stepsCardsHtml = '';
     if (parsedSteps.length > 0) {
         stepsCardsHtml = `
-            <div class="sens-summary-steps-grid">
-                ${parsedSteps.map(st => `
-                    <div class="sens-summary-step-card">
-                        <div class="sens-step-badge">${st.step}</div>
-                        <div class="sens-step-body">
-                            <strong class="sens-step-label">${st.label}</strong>
-                            <p class="sens-step-text">${st.text}</p>
+            <div class="sens-ex-steps-list">
+                ${parsedSteps.map((st, idx) => `
+                    <div class="sens-ex-step-row">
+                        <span class="sens-ex-step-num">${st.step || st.num || (idx + 1)}</span>
+                        <div class="sens-ex-step-body">
+                            <strong class="sens-ex-step-label">${st.label}</strong>
+                            <p class="sens-ex-step-text">${st.text}</p>
                         </div>
                     </div>
                 `).join('')}
@@ -8782,7 +8782,7 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
         `;
     } else if (localizedSummary) {
         stepsCardsHtml = `
-            <div style="font-size: 12px; color: #121214; line-height: 1.5; margin-bottom: 12px; background: #F4F3F1; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(18, 18, 20, 0.06);">
+            <div style="font-size: 12.5px; color: #121214; line-height: 1.55; margin-bottom: 14px; background: #F7F6F3; padding: 12px 14px; border-radius: 14px;">
                 ${localizedSummary}
             </div>
         `;
@@ -8790,43 +8790,40 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
 
     if (modalNotes) {
         modalNotes.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(18, 18, 20, 0.08); padding-bottom: 10px;">
-                <span style="font-size: 11px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.5px;">Idioma / Language:</span>
-                <div style="display: flex; gap: 6px;">
-                    <button type="button" class="pill ${currentLang === 'es' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 3px 9px; cursor: pointer;">ES</button>
-                    <button type="button" class="pill ${currentLang === 'en' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 3px 9px; cursor: pointer;">EN</button>
-                    <button type="button" class="pill ${currentLang === 'pt' ? 'pill-champagne' : 'pill-dark'}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}', '${dateIso}')" style="font-size: 9.5px; padding: 3px 9px; cursor: pointer;">PT</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(18, 18, 20, 0.06);">
+                <span style="font-size: 10.5px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.06em;">Idioma</span>
+                <div class="sens-ex-lang-seg">
+                    <button type="button" class="sens-ex-lang-btn ${currentLang === 'es' ? 'active' : ''}" onclick="window.switchModalExerciseLanguage('es', '${ex.id}', '${dayKey}', '${dateIso}')">ES</button>
+                    <button type="button" class="sens-ex-lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="window.switchModalExerciseLanguage('en', '${ex.id}', '${dayKey}', '${dateIso}')">EN</button>
+                    <button type="button" class="sens-ex-lang-btn ${currentLang === 'pt' ? 'active' : ''}" onclick="window.switchModalExerciseLanguage('pt', '${ex.id}', '${dayKey}', '${dateIso}')">PT</button>
                 </div>
             </div>
 
             <div style="margin-bottom: 14px;">
-                <div style="font-size: 11.5px; font-weight: 800; color: #705B3E; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                    Técnica en 3 Pasos Clave
-                </div>
+                <span style="display: block; font-size: 10.5px; font-weight: 800; color: #705B3E; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;">Técnica en 3 pasos clave</span>
                 ${stepsCardsHtml}
             </div>
 
             ${localizedDetailed ? `
                 <div style="margin-bottom: 14px;">
-                    <button type="button" class="sens-btn-deep-biomechanics" onclick="window.toggleDeepBiomechanics()" id="btnToggleDeepBiomechanics">
-                        <span>Ver Biomecánica Avanzada (Setup & Fases)</span>
-                        <svg id="iconDeepBiomechanics" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    <button type="button" class="sens-btn-deep-biomechanics" onclick="window.toggleDeepBiomechanics()" id="btnToggleDeepBiomechanics" style="background: #F7F6F3; border: none; border-radius: 12px; padding: 10px 12px; font-size: 12px; font-weight: 700; color: #121214;">
+                        <span>Biomecánica avanzada (Setup & Fases)</span>
+                        <svg id="iconDeepBiomechanics" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
-                    <div id="modalExDeepBiomechanics" class="sens-deep-biomechanics-body" style="display: none;">
-                        <div style="font-size: 11.5px; line-height: 1.6; color: #575659; white-space: pre-line;">${localizedDetailed}</div>
+                    <div id="modalExDeepBiomechanics" class="sens-deep-biomechanics-body" style="display: none; background: #F7F6F3; border: none; border-radius: 12px; padding: 10px 12px; margin-top: 6px;">
+                        <div style="font-size: 12px; line-height: 1.55; color: #575659; white-space: pre-line;">${localizedDetailed}</div>
                     </div>
                 </div>
             ` : ''}
 
-            <div style="margin-bottom: 10px; background: rgba(186, 26, 26, 0.06); border: 1px solid rgba(186, 26, 26, 0.18); border-radius: 10px; padding: 10px 12px;">
-                <strong style="color: #BA1A1A; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Cómo NO hacerlo (Errores a evitar):</strong>
-                <span style="font-size: 11.5px; color: #121214; line-height: 1.45;">${commonMistakes}</span>
+            <div style="margin-bottom: 10px; background: rgba(239, 68, 68, 0.07); border: none; border-radius: 14px; padding: 12px 14px;">
+                <span style="display: block; font-size: 10.5px; font-weight: 800; color: #EF4444; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;">Errores a evitar</span>
+                <span style="font-size: 12.5px; color: #121214; line-height: 1.5;">${commonMistakes}</span>
             </div>
 
-            <div style="background: rgba(251, 222, 185, 0.28); border: 1px solid rgba(197, 168, 128, 0.38); border-radius: 10px; padding: 10px 12px;">
-                <strong style="color: #705B3E; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase;">Recomendación de Nico:</strong>
-                <span style="font-size: 11.5px; color: #121214; line-height: 1.45;">${nicoRecs}</span>
+            <div class="sens-ufd-editorial-note" style="margin-bottom: 0;">
+                <span class="sens-ufd-editorial-kicker">Recomendación de Nico</span>
+                <span style="font-size: 12.5px; color: #121214; line-height: 1.5;">${nicoRecs}</span>
             </div>
         `;
     }
@@ -9761,9 +9758,9 @@ function updateMasterTimerUI() {
             display.classList.remove('in-rest');
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-set';
-        if (modeLabel) modeLabel.textContent = 'SERIE EN CURSO';
+        if (modeLabel) modeLabel.textContent = 'Serie en curso';
         if (primaryBtn) {
-            primaryBtn.textContent = 'Finalizar Serie & Descansar ✓';
+            primaryBtn.textContent = 'Finalizar serie ✓';
             primaryBtn.classList.add('btn-master-finalizar-set');
         }
         if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
@@ -9779,9 +9776,9 @@ function updateMasterTimerUI() {
             display.classList.add('in-rest');
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-rest';
-        if (modeLabel) modeLabel.textContent = 'DESCANSO ACTIVO';
+        if (modeLabel) modeLabel.textContent = 'Descanso activo';
         if (primaryBtn) {
-            primaryBtn.textContent = 'Iniciar Siguiente Serie →';
+            primaryBtn.textContent = 'Siguiente serie →';
             primaryBtn.classList.remove('btn-master-finalizar-set');
         }
         if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
@@ -9793,13 +9790,13 @@ function updateMasterTimerUI() {
             display.classList.remove('in-rest');
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill';
-        if (modeLabel) modeLabel.textContent = 'EN ESPERA';
+        if (modeLabel) modeLabel.textContent = 'En espera';
         if (primaryBtn) {
-            primaryBtn.textContent = 'Iniciar Serie';
+            primaryBtn.textContent = 'Iniciar serie';
             primaryBtn.classList.remove('btn-master-finalizar-set');
         }
         if (finishAndRestBtn) {
-            finishAndRestBtn.textContent = 'Completar Set & Descansar';
+            finishAndRestBtn.textContent = 'Completar set';
             finishAndRestBtn.style.display = '';
         }
         if (restControls) restControls.style.display = 'none';
