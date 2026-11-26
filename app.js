@@ -9426,103 +9426,30 @@ const SensGamification = {
             if (!ctx) return;
             const now = ctx.currentTime;
 
-            // Compresor Maestro (impacto acústico grueso, sin saturación ni sonido 'lata')
-            const compressor = ctx.createDynamicsCompressor();
-            compressor.threshold.setValueAtTime(-14, now);
-            compressor.knee.setValueAtTime(10, now);
-            compressor.ratio.setValueAtTime(4, now);
-            compressor.attack.setValueAtTime(0.003, now);
-            compressor.release.setValueAtTime(0.25, now);
-            compressor.connect(ctx.destination);
-
-            // Filtro de Resonancia Acústica (corte dinámico de frecuencias tipo campana de bronce)
             const filter = ctx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(4200, now);
-            filter.frequency.exponentialRampToValueAtTime(800, now + 2.4);
-            filter.Q.setValueAtTime(2.2, now);
-            filter.connect(compressor);
+            filter.frequency.setValueAtTime(1600, now);
+            filter.connect(ctx.destination);
 
-            // Cola de Reverberación Espacial (sensación de estadio o sala olímpica)
-            const delay = ctx.createDelay();
-            delay.delayTime.setValueAtTime(0.14, now);
-            const delayFeedback = ctx.createGain();
-            delayFeedback.gain.setValueAtTime(0.24, now);
-            const delayDamp = ctx.createBiquadFilter();
-            delayDamp.type = 'lowpass';
-            delayDamp.frequency.setValueAtTime(2200, now);
-
-            filter.connect(delay);
-            delay.connect(delayDamp);
-            delayDamp.connect(delayFeedback);
-            delayFeedback.connect(delay);
-            delayDamp.connect(compressor);
-
-            // Golpe de Fondo (sub-grave atlético que emula el trabado de discos de barra olímpica)
-            const subOsc = ctx.createOscillator();
-            const subGain = ctx.createGain();
-            subOsc.type = 'sine';
-            subOsc.frequency.setValueAtTime(120, now);
-            subOsc.frequency.exponentialRampToValueAtTime(45, now + 0.18);
-            subGain.gain.setValueAtTime(0.35, now);
-            subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-            subOsc.connect(subGain);
-            subGain.connect(compressor);
-            subOsc.start(now);
-            subOsc.stop(now + 0.25);
-
-            // Acorde Ascendente de Triunfo en Tonalidad A Mayor / D Mayor Pentatónica
-            // Sonido rico, musical, de alta lealtad y euforia deportiva
+            // Chime cálido minimalista (intervalo de quinta justa C5 -> G5, estilo Apple/Oura)
             const notes = [
-                { f: 440.00, start: 0.00, dur: 1.8, gain: 0.28 }, // A4
-                { f: 554.37, start: 0.09, dur: 1.9, gain: 0.30 }, // C#5
-                { f: 659.25, start: 0.19, dur: 2.1, gain: 0.32 }, // E5
-                { f: 880.00, start: 0.31, dur: 2.6, gain: 0.40 }  // A5 Clímax
+                { f: 523.25, start: 0.00, dur: 0.45, gain: 0.10 }, // C5
+                { f: 783.99, start: 0.11, dur: 0.65, gain: 0.11 }  // G5
             ];
 
             notes.forEach(note => {
-                const noteTime = now + note.start;
-
-                // 1. Fundamental acampanada
-                const oscFund = ctx.createOscillator();
-                const gainFund = ctx.createGain();
-                oscFund.type = 'sine';
-                oscFund.frequency.setValueAtTime(note.f, noteTime);
-
-                gainFund.gain.setValueAtTime(0.0001, noteTime);
-                gainFund.gain.linearRampToValueAtTime(note.gain, noteTime + 0.012);
-                gainFund.gain.exponentialRampToValueAtTime(0.0001, noteTime + note.dur);
-
-                oscFund.connect(gainFund);
-                gainFund.connect(filter);
-                oscFund.start(noteTime);
-                oscFund.stop(noteTime + note.dur + 0.05);
-
-                // 2. Segundo armónico (2x) - cuerpo de bronce
-                const oscH2 = ctx.createOscillator();
-                const gainH2 = ctx.createGain();
-                oscH2.type = 'sine';
-                oscH2.frequency.setValueAtTime(note.f * 2, noteTime);
-                gainH2.gain.setValueAtTime(0.0001, noteTime);
-                gainH2.gain.linearRampToValueAtTime(note.gain * 0.35, noteTime + 0.01);
-                gainH2.gain.exponentialRampToValueAtTime(0.0001, noteTime + note.dur * 0.7);
-                oscH2.connect(gainH2);
-                gainH2.connect(filter);
-                oscH2.start(noteTime);
-                oscH2.stop(noteTime + note.dur * 0.75);
-
-                // 3. Sobretono modal de campana (2.76x) - brillo de victoria
-                const oscBell = ctx.createOscillator();
-                const gainBell = ctx.createGain();
-                oscBell.type = 'sine';
-                oscBell.frequency.setValueAtTime(note.f * 2.756, noteTime);
-                gainBell.gain.setValueAtTime(0.0001, noteTime);
-                gainBell.gain.linearRampToValueAtTime(note.gain * 0.20, noteTime + 0.008);
-                gainBell.gain.exponentialRampToValueAtTime(0.0001, noteTime + note.dur * 0.5);
-                oscBell.connect(gainBell);
-                gainBell.connect(filter);
-                oscBell.start(noteTime);
-                oscBell.stop(noteTime + note.dur * 0.55);
+                const t = now + note.start;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(note.f, t);
+                gain.gain.setValueAtTime(0.0001, t);
+                gain.gain.linearRampToValueAtTime(note.gain, t + 0.015);
+                gain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur);
+                osc.connect(gain);
+                gain.connect(filter);
+                osc.start(t);
+                osc.stop(t + note.dur + 0.04);
             });
         } catch (e) {}
     },
@@ -9556,26 +9483,84 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
     const overlay = document.getElementById('sensCongratsOverlay');
     const titleEl = document.getElementById('sensCongratsTitle');
     const subtitleEl = document.getElementById('sensCongratsSubtitle');
-    const quoteEl = document.getElementById('sensCongratsQuote');
     const levelPillEl = document.getElementById('sensCongratsLevelPill');
     const bumpNumEl = document.getElementById('sensBumpNumber');
+    const bumpLabelEl = document.getElementById('sensBumpLabel');
+    const ringFillEl = document.getElementById('sensCongratsRingFill');
+    const weekStripEl = document.getElementById('sensCongratsWeekStrip');
+    const pillarsRowEl = document.getElementById('sensCongratsPillarsRow');
+    const milestoneTextEl = document.getElementById('sensCongratsMilestoneText');
     const continueBtn = document.getElementById('btnSensCongratsContinue');
 
     const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
     const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 1;
     const levelInfo = SensGamification.getStreakLevel(streakDays);
+    const today = new Date();
+    const dayRec = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.getDayRecord(athId, today) : { completedCount: 1, workout: {}, nutrition: {}, cardio: {} };
 
-    if (titleEl) titleEl.textContent = title || '¡OBJETIVO CUMPLIDO!';
-    if (subtitleEl) subtitleEl.textContent = subtitle || 'Racha SENS Activa';
-    if (quoteEl) {
-        quoteEl.textContent = quote || '"Gran trabajo. Cada hábito ejecutado con intención consolida tu rendimiento y longevidad celular."';
-    }
-    if (levelPillEl) levelPillEl.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
+    if (titleEl) titleEl.textContent = title || 'Objetivo cumplido';
+    if (subtitleEl) subtitleEl.textContent = subtitle || 'Racha diaria activa';
+    if (levelPillEl) levelPillEl.textContent = `Nivel ${levelInfo.level} · ${levelInfo.title}`;
     if (bumpNumEl) bumpNumEl.textContent = streakDays;
+    if (bumpLabelEl) bumpLabelEl.textContent = streakDays === 1 ? 'DÍA EN RACHA' : 'DÍAS EN RACHA';
+
+    // Anillo SVG animado proporcional a los pilares completados hoy (1/3, 2/3, 3/3)
+    if (ringFillEl) {
+        const circumference = 2 * Math.PI * 48; // r=48 -> ~301.59
+        const ratio = Math.max(0.33, Math.min(1, (dayRec.completedCount || 1) / 3));
+        ringFillEl.style.strokeDasharray = `${circumference}`;
+        ringFillEl.style.strokeDashoffset = `${circumference}`;
+        setTimeout(() => {
+            ringFillEl.style.strokeDashoffset = `${circumference * (1 - ratio)}`;
+        }, 40);
+    }
+
+    // Mini strip semanal de 7 días (L M M J V S D) para reforzar racha
+    if (weekStripEl && typeof getMonday === 'function' && typeof SensDailyStreakManager !== 'undefined') {
+        const mon = getMonday(today);
+        const letters = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+        const todayIso = SensDailyStreakManager.getDateKey(today);
+        weekStripEl.innerHTML = letters.map((lbl, idx) => {
+            const d = new Date(mon);
+            d.setDate(mon.getDate() + idx);
+            const dIso = SensDailyStreakManager.getDateKey(d);
+            const rec = SensDailyStreakManager.getDayRecord(athId, d);
+            const isToday = dIso === todayIso;
+            const isDone = rec.completedCount > 0;
+            return `
+                <div class="sens-celeb-day ${isDone ? 'is-done' : ''} ${isToday ? 'is-today' : ''}">
+                    <span class="sens-celeb-day-lbl">${lbl}</span>
+                    <span class="sens-celeb-day-dot">${isDone ? '✓' : ''}</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Pilares de hoy (Entreno / Nutrición / Movimiento)
+    if (pillarsRowEl) {
+        const pList = [
+            { label: 'Entreno', done: Boolean(dayRec.workout?.done) },
+            { label: 'Nutrición', done: Boolean(dayRec.nutrition?.done) },
+            { label: 'Movimiento', done: Boolean(dayRec.cardio?.done) }
+        ];
+        pillarsRowEl.innerHTML = pList.map(p => `
+            <span class="sens-celeb-pillar ${p.done ? 'is-done' : ''}">
+                <span class="sens-celeb-pillar-dot"></span>
+                <span>${p.label}</span>
+            </span>
+        `).join('');
+    }
+
+    if (milestoneTextEl) {
+        const nextMilestone = streakDays < 3 ? 3 : (streakDays < 7 ? 7 : (streakDays < 14 ? 14 : 30));
+        const remDays = Math.max(0, nextMilestone - streakDays);
+        milestoneTextEl.textContent = remDays > 0
+            ? `Faltan ${remDays} ${remDays === 1 ? 'día' : 'días'} para tu hito de ${nextMilestone} días`
+            : `Hito de ${nextMilestone} días alcanzado`;
+    }
 
     SensGamification.playCelebrationFanfare();
     SensGamification.playHapticFeedback();
-    SensConfetti.burst(300);
 
     if (overlay) {
         overlay.style.display = 'flex';
@@ -9591,7 +9576,7 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
         if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
         window._sensCelebrationTimer = setTimeout(() => {
             overlay.style.display = 'none';
-        }, 5000);
+        }, 5500);
     } else {
         if (typeof showSensToast === 'function') {
             showSensToast(`${title}: ${subtitle}`, 'champagne', 4000);
@@ -22119,9 +22104,9 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
         }).join('');
     }
 
-    // 3. Domain Pill unificada: Entrenamiento con micro-SVG (sin modalidad operativa)
+    // 3. Domain Pill unificada: Entrenamiento con micro-SVG de mancuerna legible
     if (modalityPill) {
-        modalityPill.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M6.5 6.5h11M6.5 17.5h11M3 10v4M21 10v4M5 8v8M19 8v8M9 12h6"/></svg><span>Entrenamiento</span>`;
+        modalityPill.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg><span>Entrenamiento</span>`;
         modalityPill.className = 'sens-modality-pill';
         modalityPill.style.display = 'inline-flex';
     }
@@ -23665,6 +23650,8 @@ function updateSensStreakCard(targetDate = null) {
         : { level: 1, title: 'Semilla del Hábito' };
 
     if (streakNum) streakNum.textContent = streakDays;
+    const streakUnit = document.getElementById('sensStreakHeroUnit');
+    if (streakUnit) streakUnit.textContent = streakDays === 1 ? 'día' : 'días';
     if (streakLevelTag) streakLevelTag.textContent = `Nivel ${levelInfo.level} • ${levelInfo.title}`;
     if (flameIcon) flameIcon.classList.toggle('active-glow', streakDays > 0);
 

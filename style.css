@@ -37423,6 +37423,217 @@ body.in-portal #dashWeightAndActivityCard #dashActiveBurnBadge.sens-domain-strea
     box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18) !important;
 }
 
+/* =============================================================================
+   PANTALLA DE CELEBRACIÓN & GAMIFICATION QUIET LUXURY (#sensCongratsOverlay)
+   ============================================================================= */
+#sensCongratsOverlay.sens-congrats-overlay {
+    z-index: 100080 !important;
+    background: rgba(8, 8, 9, 0.86) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card {
+    background: radial-gradient(circle at 50% 0%, rgba(229, 203, 167, 0.10) 0%, #121215 58%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-radius: 28px !important;
+    padding: 28px 22px 24px !important;
+    max-width: 356px !important;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75) !important;
+}
+
+#sensCongratsOverlay .sens-congrats-level-pill {
+    display: inline-block;
+    background: rgba(229, 203, 167, 0.14) !important;
+    color: #E5CBA7 !important;
+    border: none !important;
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    padding: 5px 12px !important;
+    border-radius: 999px !important;
+    margin-bottom: 18px !important;
+}
+
+.sens-celeb-ring-box {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sens-celeb-ring-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.sens-celeb-ring-track {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-width: 6;
+}
+
+.sens-celeb-ring-fill {
+    fill: none;
+    stroke: #E5CBA7;
+    stroke-width: 6;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sens-celeb-ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#sensCongratsOverlay .sens-bump-number {
+    font-size: 32px !important;
+    font-weight: 900 !important;
+    color: #FFFFFF !important;
+    line-height: 1 !important;
+    font-variant-numeric: tabular-nums;
+}
+
+#sensCongratsOverlay .sens-bump-label {
+    font-size: 8.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    margin-top: 4px !important;
+}
+
+#sensCongratsOverlay .sens-congrats-title {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 0 6px !important;
+}
+
+#sensCongratsOverlay .sens-congrats-subtitle {
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.72) !important;
+    margin: 0 0 18px !important;
+    line-height: 1.4 !important;
+}
+
+.sens-celeb-week-strip {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
+    padding: 10px 10px;
+    margin-bottom: 12px;
+}
+
+.sens-celeb-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.sens-celeb-day-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.sens-celeb-day.is-today .sens-celeb-day-lbl {
+    color: #E5CBA7;
+}
+
+.sens-celeb-day-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    color: #080809;
+    font-size: 11px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sens-celeb-day.is-done .sens-celeb-day-dot {
+    background: #E5CBA7;
+}
+
+.sens-celeb-day.is-today.is-done .sens-celeb-day-dot {
+    background: #22C55E;
+    color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+}
+
+.sens-celeb-pillars-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.sens-celeb-pillar {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.sens-celeb-pillar-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.sens-celeb-pillar.is-done {
+    color: #FFFFFF;
+    background: rgba(34, 197, 94, 0.14);
+}
+
+.sens-celeb-pillar.is-done .sens-celeb-pillar-dot {
+    background: #22C55E;
+}
+
+.sens-celeb-milestone-text {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #E5CBA7;
+    margin: 0 0 18px;
+}
+
+#sensCongratsOverlay .sens-btn-congrats-continue {
+    width: 100% !important;
+    padding: 13px 16px !important;
+    background: #E5CBA7 !important;
+    color: #080809 !important;
+    -webkit-text-fill-color: #080809 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    cursor: pointer;
+}
+
 body.in-portal #dashWorkoutActivePane .sens-btn-circle-arrow,
 body.in-portal #dashNutriSummaryCard.has-active-meals .sens-btn-circle-arrow {
     width: 38px !important;
