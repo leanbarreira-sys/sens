@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '141.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '141.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '142.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '142.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3897,63 +3897,51 @@
                     </div>
                 </div>
 
-                <!-- 2. Hero Calórico Primario: "Calorías Consumidas del Día" + Objetivo Claro + Desglose Integrado (Items 2 & 4) -->
-                <div class="sens-nutri-hero-primary-card" id="sensNutriHeroCard">
-                    <!-- Cabecera Editorial con Objetivo Claro -->
-                    <div class="sens-nutri-hero-header">
-                        <div class="sens-nutri-hero-top-row">
-                            <span class="sens-card-domain-eyebrow">Registro Nutricional</span>
-                            <span class="pill pill-champagne" id="nutriDailyGoalBadge">Meta: Déficit Calórico</span>
-                        </div>
-                        <h2 class="sens-nutri-hero-title">Calorías del Día</h2>
-                    </div>
-
-                    <!-- Métricas Tabulares Destacadas -->
-                    <div class="sens-nutri-hero-stats-row">
-                        <div class="sens-nutri-hero-stat-main">
-                            <span class="sens-nutri-hero-val" id="nutriConsumedNum">0</span>
-                            <span class="sens-nutri-hero-unit">kcal consumidas</span>
-                        </div>
-                        <div class="sens-nutri-hero-stat-target">
-                            <span class="sens-nutri-stat-label">Objetivo Diario</span>
-                            <span class="sens-nutri-target-val" id="nutriTargetKcal">1.950 kcal</span>
-                            <span class="sens-nutri-remaining-val" id="nutriRemainingKcal">Restan 1.950 kcal</span>
-                        </div>
-                    </div>
-
-                    <!-- Barra de Progreso y Zona de Rango Óptimo -->
-                    <div class="sens-nutri-progress-track-wrap">
-                        <div class="sens-nutri-progress-track">
-                            <div class="sens-nutri-progress-fill" id="nutriSliderFill" style="width: 0%;"></div>
-                            <div class="sens-nutri-optimal-zone" id="nutriOptimalZoneMarker"
-                                style="left: 69%; width: 16%;" title="Zona calórica óptima"></div>
-                        </div>
-                        <div class="sens-nutri-progress-labels">
-                            <span>0 kcal</span>
-                            <span id="nutriOptimalRangeText">Rango óptimo: 1.750 - 2.140 kcal</span>
-                            <span id="nutriMaxKcalLabel">2.400 kcal</span>
-                        </div>
-                    </div>
-
-                    <!-- Desglose de Macronutrientes Integrado como Detalle (Item 4) -->
-                    <div class="sens-nutri-macro-accordion-wrap">
-                        <button type="button" class="sens-btn-macro-drawer-toggle" id="btnToggleMacroDrawer">
-                            <div class="sens-macro-toggle-left">
-                                <span class="sens-macro-toggle-title-row">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9E7D4B"
-                                        stroke-width="2">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <path d="M12 2a10 10 0 0 1 10 10" />
-                                        <path d="M12 12 21.2 7.8" />
-                                    </svg>
-                                    <span>Desglose de Macronutrientes</span>
-                                </span>
-                                <span class="sens-macro-toggle-summary" id="nutriMacroQuickSummary">0g Prot • 0g Carbs • 0g Grasas</span>
+                <!-- 2. Hero Calórico Compacto (Estilo Entrenar) + Detalle Expandible al Tocar -->
+                <div class="sens-nutri-hero-primary-card" id="sensNutriHeroCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 12px 16px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
+                    <!-- Fila Compacta Siempre Visible (Tocar para expandir detalle) -->
+                    <div role="button" tabindex="0" onclick="var d=document.getElementById('sensNutriHeroDetailWrap'); var c=document.getElementById('nutriHeroChevron'); if(d){ var open=d.style.display!=='none'; d.style.display=open?'none':'block'; if(c) c.style.transform=open?'rotate(0deg)':'rotate(180deg)'; }" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                            <div style="width: 34px; height: 34px; border-radius: 50%; background: #FAF7F2; color: #9E7D4B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
                             </div>
-                            <span class="sens-accordion-chevron" id="macroDrawerChevron">▾</span>
-                        </button>
+                            <div style="min-width: 0;">
+                                <div style="display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em;">
+                                    <span>Calorías del día</span>
+                                    <span id="nutriHeroChevron" style="display: inline-block; font-size: 10px; transition: transform 0.2s ease;">▾</span>
+                                </div>
+                                <div id="nutriRemainingKcal" style="font-size: 12.5px; font-weight: 600; color: #6E6E73; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Restan 1.950 kcal</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right; flex-shrink: 0;">
+                            <div style="font-size: 17px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; line-height: 1.15;"><span id="nutriConsumedNum">0</span> kcal</div>
+                            <div style="font-size: 11px; font-weight: 700; color: #6E6E73; margin-top: 2px;">Meta: <span id="nutriTargetKcal">1.950 kcal</span></div>
+                        </div>
+                    </div>
 
-                        <div class="sens-nutri-macro-drawer-body" id="sensNutriMacroDrawerBody" style="display: none;">
+                    <!-- Panel de Detalle Expandible (Barra de Rango Óptimo + Macros) -->
+                    <div id="sensNutriHeroDetailWrap" style="display: none; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(18, 18, 20, 0.07);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+                            <span class="pill pill-champagne" id="nutriDailyGoalBadge">Meta: Déficit Calórico</span>
+                            <span class="sens-macro-toggle-summary" id="nutriMacroQuickSummary" style="font-size: 11.5px; color: #6E6E73; font-weight: 600;">0g Prot • 0g Carbs • 0g Grasas</span>
+                        </div>
+
+                        <!-- Barra de Progreso y Zona de Rango Óptimo -->
+                        <div class="sens-nutri-progress-track-wrap" style="margin-bottom: 12px;">
+                            <div class="sens-nutri-progress-track">
+                                <div class="sens-nutri-progress-fill" id="nutriSliderFill" style="width: 0%;"></div>
+                                <div class="sens-nutri-optimal-zone" id="nutriOptimalZoneMarker"
+                                    style="left: 69%; width: 16%;" title="Zona calórica óptima"></div>
+                            </div>
+                            <div class="sens-nutri-progress-labels">
+                                <span>0 kcal</span>
+                                <span id="nutriOptimalRangeText">Rango óptimo: 1.750 - 2.140 kcal</span>
+                                <span id="nutriMaxKcalLabel">2.400 kcal</span>
+                            </div>
+                        </div>
+
+                        <!-- Desglose de Macronutrientes -->
+                        <div class="sens-nutri-macro-drawer-body" id="sensNutriMacroDrawerBody" style="display: block;">
                             <div class="sens-macros-trio-grid">
                                 <div class="sens-macro-pill-card carb">
                                     <span class="sens-macro-title"
