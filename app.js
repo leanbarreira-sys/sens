@@ -18801,7 +18801,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         } else {
             const overMax = totalConsumedKcal - maxOptKcal;
             remainingEl.textContent = `+${overMax.toLocaleString('es-AR')} kcal sobre rango`;
-            remainingEl.style.color = '#DC2626';
+            remainingEl.style.color = '#EF4444';
         }
     }
     if (optimalRangeEl) {
@@ -22747,7 +22747,7 @@ function initDashNutriCarousel() {
         const overKcal = Math.max(0, safeConsumed - safeTarget);
 
         const greenColor = isDarkSurface ? '#22C55E' : '#16A34A';
-        const redColor = isDarkSurface ? '#FB7185' : '#DC2626';
+        const redColor = '#EF4444';
 
         if (pctEl) pctEl.textContent = `${realPct}% del objetivo`;
         if (remEl) {
@@ -23439,16 +23439,16 @@ window.showStreakMissedDetail = function(dateIso = null) {
 
     if (rec.isQualified) {
         if (titleEl) titleEl.textContent = `${capitalizedDay} • Racha Activa (${rec.completedCount} / 3)`;
-        titleEl.style.color = '#10B981';
+        titleEl.style.color = '#22C55E';
         listEl.innerHTML = `
-            <div style="font-size: 12px; color: #10B981; font-weight: 700; padding: 4px 0;">
+            <div style="font-size: 12px; color: #22C55E; font-weight: 700; padding: 4px 0;">
                 ✓ ¡Racha asegurada! Cumpliste con tus hábitos biológicos programados.
             </div>
         `;
         if (tipEl) tipEl.textContent = '"La disciplina consistente es el único atajo comprobado a la recomposición y longevidad celular."';
     } else {
         if (titleEl) titleEl.textContent = `${capitalizedDay} • Racha no alcanzada`;
-        titleEl.style.color = '#F87171';
+        titleEl.style.color = '#EF4444';
 
         const reasons = (rec.missedReasons && rec.missedReasons.length > 0) ? rec.missedReasons : [
             { pillar: 'Objetivos', detail: 'No se completaron todos los requisitos del día.' }
@@ -23458,7 +23458,7 @@ window.showStreakMissedDetail = function(dateIso = null) {
             <div class="sens-missed-reason-item">
                 <span class="sens-missed-cross-badge">✕</span>
                 <div>
-                    <strong style="color: #F87171;">${r.pillar}:</strong>
+                    <strong style="color: #EF4444;">${r.pillar}:</strong>
                     <span>${r.detail}</span>
                 </div>
             </div>

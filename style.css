@@ -38048,6 +38048,38 @@ body.in-portal .sens-pillar-pill.is-done {
     border: none !important;
 }
 
+/* Unificación global de Rojo Acento (#EF4444) cuando no se cumple objetivo / excedido */
+body.in-portal .sens-pillar-pill.exceeded,
+body.in-portal .sens-pillar-pill.missed,
+body.in-portal .sens-streak-status-pill.missed {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #EF4444 !important;
+    border: none !important;
+}
+
+body.in-portal .sens-card-streak-pill.exceeded,
+body.in-portal .sens-card-streak-pill.missed,
+body.in-portal .sens-card-streak-pill.lost {
+    color: #EF4444 !important;
+}
+
+body.in-portal .sens-card-streak-pill.exceeded .streak-pill-dot,
+body.in-portal .sens-card-streak-pill.missed .streak-pill-dot,
+body.in-portal .sens-card-streak-pill.lost .streak-pill-dot,
+body.in-portal .sens-missed-cross-badge,
+body.in-portal .sens-nutri-progress-fill.is-exceeded {
+    background: #EF4444 !important;
+    background-color: #EF4444 !important;
+    border-color: #EF4444 !important;
+    color: #FFFFFF !important;
+}
+
+body.in-portal .sens-streak-dot-ring.missed {
+    background: rgba(239, 68, 68, 0.14) !important;
+    border-color: #EF4444 !important;
+    color: #EF4444 !important;
+}
+
 body.in-portal .sens-streak-rule-popover .sens-streak-popover-badge {
     background: #FAF7F2 !important;
     color: #705B3E !important;
