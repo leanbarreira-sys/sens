@@ -23360,6 +23360,7 @@ function updateSensStreakCard(targetDate = null) {
     const streakSub = document.getElementById('sensStreakSubText');
     const streakStatusPill = document.getElementById('sensStreakStatusPill');
     const streakLevelTag = document.getElementById('sensStreakLevelTag');
+    if (streakLevelTag) streakLevelTag.style.display = 'none';
     const flameIcon = document.getElementById('sensStreakFlameIcon');
 
     const streakDays = SensDailyStreakManager.calculateStreak(athId);
@@ -23409,7 +23410,7 @@ function updateSensStreakCard(targetDate = null) {
     }
 
     if (streakLevelTag) {
-        streakLevelTag.textContent = 'Constancia y Disciplina Personal';
+        streakLevelTag.style.display = 'none';
     }
 
     if (streakSub) {
