@@ -38322,16 +38322,36 @@ body.in-portal #sensExerciseModalSheet .sens-tactile-set-row.completed .sens-set
     box-shadow: none !important;
 }
 
+body.in-portal #sensExerciseModalSheet #btnMasterFinishSetAndRest {
+    display: none !important;
+}
+
 body.in-portal #sensExerciseModalSheet .sens-stepper-capsule {
     background: #FFFFFF !important;
     border: none !important;
+    border-radius: 12px !important;
+    padding: 4px 5px !important;
+    gap: 4px !important;
+    align-items: center !important;
     box-shadow: 0 1px 3px rgba(18, 18, 20, 0.05) !important;
 }
 
 body.in-portal #sensExerciseModalSheet .sens-stepper-btn {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    border-radius: 50% !important;
     background: #F4F2EE !important;
+    color: #121214 !important;
     border: none !important;
     box-shadow: none !important;
+    padding: 0 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 body.in-portal #sensExerciseModalSheet .sens-check-set-btn {

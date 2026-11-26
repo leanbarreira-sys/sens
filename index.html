@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '185.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '185.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '186.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '186.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3700,18 +3700,18 @@
                         <div class="sens-master-timer-top">
                             <div class="sens-timer-mode-pill" id="masterTimerModeBadge">
                                 <span class="status-dot-active" id="masterTimerStatusDot"></span>
-                                <span id="masterTimerModeLabel">EN ESPERA</span>
+                                <span id="masterTimerModeLabel">Descanso</span>
                             </div>
                             <span class="sens-timer-target-sub" id="masterTimerTargetSub">Descanso prescrito: 90s</span>
                         </div>
-                        <div class="sens-master-timer-digits" id="masterTimerDisplay">00:00</div>
+                        <div class="sens-master-timer-digits" id="masterTimerDisplay">01:30</div>
                         <div class="sens-master-timer-actions">
                             <button type="button" class="btn btn-primary sens-btn-timer-primary"
-                                id="btnMasterTimerPrimary" title="Inicia el cronómetro para medir la duración de tu serie">
-                                Iniciar Serie
+                                id="btnMasterTimerPrimary" title="Iniciar cronómetro de descanso entre series">
+                                Iniciar descanso
                             </button>
                             <button type="button" class="btn btn-outline sens-btn-timer-secondary"
-                                id="btnMasterFinishSetAndRest" title="Marca el próximo set como completado e inicia el descanso sin usar cronómetro">
+                                id="btnMasterFinishSetAndRest" style="display: none !important;">
                                 Completar Set
                             </button>
                         </div>

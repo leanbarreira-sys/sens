@@ -9748,25 +9748,7 @@ function updateMasterTimerUI() {
         targetSub.textContent = `Descanso prescrito: ${masterTimerState.targetRest}s`;
     }
 
-    if (masterTimerState.mode === 'in_set') {
-        const m = Math.floor(masterTimerState.tutSeconds / 60);
-        const s = masterTimerState.tutSeconds % 60;
-        const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-
-        if (display) {
-            display.textContent = timeStr;
-            display.classList.remove('in-rest');
-        }
-        if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-set';
-        if (modeLabel) modeLabel.textContent = 'Serie en curso';
-        if (primaryBtn) {
-            primaryBtn.textContent = 'Finalizar serie ✓';
-            primaryBtn.classList.add('btn-master-finalizar-set');
-        }
-        if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
-        if (restControls) restControls.style.display = 'none';
-
-    } else if (masterTimerState.mode === 'in_rest') {
+    if (masterTimerState.mode === 'in_rest') {
         const m = Math.floor(masterTimerState.restRemaining / 60);
         const s = masterTimerState.restRemaining % 60;
         const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
@@ -9776,29 +9758,27 @@ function updateMasterTimerUI() {
             display.classList.add('in-rest');
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-rest';
-        if (modeLabel) modeLabel.textContent = 'Descanso activo';
-        if (primaryBtn) {
-            primaryBtn.textContent = 'Siguiente serie →';
-            primaryBtn.classList.remove('btn-master-finalizar-set');
-        }
+        if (modeLabel) modeLabel.textContent = 'Descansando';
+        if (primaryBtn) primaryBtn.style.display = 'none';
         if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
         if (restControls) restControls.style.display = 'flex';
 
     } else {
+        const targetSec = Math.max(0, Number(masterTimerState.targetRest) || 75);
+        const m = Math.floor(targetSec / 60);
+        const s = targetSec % 60;
         if (display) {
-            display.textContent = '00:00';
+            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
             display.classList.remove('in-rest');
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill';
-        if (modeLabel) modeLabel.textContent = 'En espera';
+        if (modeLabel) modeLabel.textContent = 'Descanso';
         if (primaryBtn) {
-            primaryBtn.textContent = 'Iniciar serie';
+            primaryBtn.style.display = '';
+            primaryBtn.textContent = `Iniciar descanso · ${targetSec}s`;
             primaryBtn.classList.remove('btn-master-finalizar-set');
         }
-        if (finishAndRestBtn) {
-            finishAndRestBtn.textContent = 'Completar set';
-            finishAndRestBtn.style.display = '';
-        }
+        if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
         if (restControls) restControls.style.display = 'none';
     }
 }
@@ -9881,16 +9861,16 @@ function initMasterTimerListeners() {
     }
 
     primaryBtn.addEventListener('click', () => {
-        if (masterTimerState.mode === 'idle') {
-            startMasterTutTimer();
-        } else if (masterTimerState.mode === 'in_set') {
-            // Flujo Senior: INICIAR SERIE -> FINALIZAR SERIE -> AUTOMÁTICAMENTE DESCANSO
-            executeFinishSetAndStartRest();
-        } else if (masterTimerState.mode === 'in_rest') {
-            // DESCANSO -> INICIAR NUEVA SERIE
+        if (masterTimerState.mode === 'in_rest') {
             clearInterval(masterTimerState.interval);
-            masterTimerState.tutSeconds = 0;
-            startMasterTutTimer();
+            masterTimerState.interval = null;
+            masterTimerState.mode = 'idle';
+            masterTimerState.restEndAtMs = null;
+            persistMasterTimerState();
+            updateMasterTimerUI();
+        } else {
+            playBeep(540, 0.14);
+            startMasterRestCountdown();
         }
     });
 
