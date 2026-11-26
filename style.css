@@ -37255,33 +37255,71 @@ body.in-portal .sens-tracking-segmented-bar.sens-tracking-segmented-2col,
    UNIFICACIÓN QUIET LUXURY EN INICIO (#dashView): PILLS, HEROES, TRACKING & BALANCE
    ============================================================================= */
 
-/* 1. Hero Cards hermanadas: Pills sobre fotografía en vidrio oscuro */
-body.in-portal #dashWorkoutSummaryCard .sens-modality-pill,
-body.in-portal #dashNutriSummaryCard .sens-modality-pill {
+/* 1. Hero Cards hermanadas: Márgenes exactos y Pills sobre fotografía en vidrio oscuro */
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-top-badges,
+body.in-portal #dashWorkoutActivePane .sens-video-top-badges {
+    position: absolute !important;
+    top: 14px !important;
+    left: 14px !important;
+    right: 14px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 7px !important;
+    z-index: 6 !important;
+}
+
+body.in-portal #dashWorkoutActivePane #dashWorkoutModalityPill,
+body.in-portal #dashNutriSummaryCard #dashNutriGoalPill,
+body.in-portal #dashNutriSummaryCard.has-active-meals #dashNutriGoalPill {
     background: rgba(18, 18, 20, 0.64) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(229, 203, 167, 0.34) !important;
     color: #E5CBA7 !important;
     -webkit-text-fill-color: #E5CBA7 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
 }
 
-body.in-portal #dashWorkoutSummaryCard .sens-card-streak-pill,
-body.in-portal #dashNutriSummaryCard .sens-card-streak-pill {
+body.in-portal #dashWorkoutActivePane #dashWorkoutStreakPill,
+body.in-portal #dashWorkoutActivePane #dashWorkoutStreakPill.done,
+body.in-portal #dashWorkoutActivePane #dashWorkoutStreakPill.in-progress,
+body.in-portal #dashNutriSummaryCard #dashNutriStreakPill,
+body.in-portal #dashNutriSummaryCard #dashNutriStreakPill.done,
+body.in-portal #dashNutriSummaryCard #dashNutriStreakPill.in-progress,
+body.in-portal #dashNutriSummaryCard.has-active-meals #dashNutriStreakPill {
     background: rgba(18, 18, 20, 0.68) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+}
+
+body.in-portal #dashWorkoutActivePane #dashWorkoutStreakPill .streak-pill-text,
+body.in-portal #dashNutriSummaryCard #dashNutriStreakPill .streak-pill-text {
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
 }
 
-body.in-portal #dashWorkoutSummaryCard .sens-card-streak-pill.done .streak-pill-dot {
+body.in-portal #dashWorkoutActivePane #dashWorkoutStreakPill.in-progress .streak-pill-dot,
+body.in-portal #dashNutriSummaryCard #dashNutriStreakPill.in-progress .streak-pill-dot {
+    background: #E5CBA7 !important;
+}
+
+body.in-portal #dashWorkoutActivePane #dashWorkoutStreakPill.done .streak-pill-dot,
+body.in-portal #dashNutriSummaryCard #dashNutriStreakPill.done .streak-pill-dot {
     background: #22C55E !important;
     box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22) !important;
 }
 
-body.in-portal #dashWorkoutSummaryCard .sens-btn-swap-day {
+body.in-portal #dashWorkoutActivePane .sens-btn-swap-day {
     background: rgba(18, 18, 20, 0.62) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
