@@ -38020,3 +38020,38 @@ body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* Fix de contraste para Tooltips de Reglas SENS (.sens-streak-rule-popover) */
+body.in-portal .sens-tooltip-popover.sens-streak-rule-popover {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border: 1px solid rgba(18, 18, 20, 0.12) !important;
+    box-shadow: 0 14px 36px rgba(18, 18, 20, 0.16) !important;
+    z-index: 9999 !important;
+}
+
+body.in-portal .sens-streak-rule-popover .sens-streak-popover-badge {
+    background: #FAF7F2 !important;
+    color: #705B3E !important;
+    border: none !important;
+}
+
+body.in-portal .sens-streak-rule-popover .sens-streak-popover-title {
+    color: #121214 !important;
+}
+
+body.in-portal .sens-streak-rule-popover .sens-streak-popover-text {
+    color: #3F3F46 !important;
+    opacity: 1 !important;
+}
+
+body.in-portal .sens-streak-rule-popover .sens-streak-popover-text strong {
+    color: #705B3E !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-streak-rule-popover .sens-popover-close-btn {
+    color: #575659 !important;
+    background: #F4F2EE !important;
+    border-radius: 50%;
+}

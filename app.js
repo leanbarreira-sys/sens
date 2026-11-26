@@ -18067,7 +18067,7 @@ function renderNutriDaysNav() {
 
         const dayKcal = (typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, dayDate) : 0;
         const dayTarget = (typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, dayDate) : 1950;
-        const minTarget = Math.round(dayTarget * 0.90);
+        const minTarget = Math.round(dayTarget * 0.80);
         const maxTarget = Math.round(dayTarget * 1.10);
         const isInRange = dayTarget > 0 && dayKcal >= minTarget && dayKcal <= maxTarget;
 
@@ -18780,7 +18780,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     const fatsGramsEl = document.getElementById('nutriFatsGrams');
     const protGramsEl = document.getElementById('nutriProtGrams');
 
-    const minOptKcal = Math.round(targetKcal * 0.9);
+    const minOptKcal = Math.round(targetKcal * 0.80);
     const maxOptKcal = Math.round(targetKcal * 1.1);
     const maxScaleKcal = Math.max(1, Math.round(targetKcal * 1.3));
     const maxKcalLabelEl = document.getElementById('nutriMaxKcalLabel');
@@ -22741,7 +22741,7 @@ function initDashNutriCarousel() {
         const safeConsumed = Math.max(0, Number(consumed) || 0);
         const realPct = Math.round((safeConsumed / safeTarget) * 100);
         const barWidth = Math.min(100, realPct);
-        const minOpt = Math.round(safeTarget * 0.90);
+        const minOpt = Math.round(safeTarget * 0.80);
         const maxOpt = Math.round(safeTarget * 1.10);
         const isExceeded = safeConsumed > maxOpt;
         const isInRange = safeConsumed >= minOpt && safeConsumed <= maxOpt;
@@ -23275,7 +23275,7 @@ const SensDailyStreakManager = {
             }
         }
 
-        const minTarget = Math.round(targetCals * 0.90);
+        const minTarget = Math.round(targetCals * 0.80);
         const maxTarget = Math.round(targetCals * 1.10);
 
         if (consumedCals >= minTarget && consumedCals <= maxTarget) {
