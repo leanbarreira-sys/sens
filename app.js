@@ -18178,12 +18178,23 @@ function formatIngredientsHtml(ings) {
             list = [trimmed];
         }
     }
+    list = list.filter(item => !/peso neto comestible/i.test(item));
     return list.map((item) => {
         const clean = item.replace(/^\d+\.\s*/, '').trim();
+        const colonIdx = clean.indexOf(':');
+        if (colonIdx > 0 && colonIdx < clean.length - 1) {
+            const label = clean.slice(0, colonIdx).trim();
+            const qty = clean.slice(colonIdx + 1).trim();
+            return `
+                <div class="sens-ufd-ingredient-row">
+                    <span class="sens-ufd-ingredient-name">${label}</span>
+                    <span class="sens-ufd-ingredient-qty">${qty}</span>
+                </div>
+            `;
+        }
         return `
-            <div class="sens-ingredient-item-row">
-                <span class="sens-ingredient-bullet">•</span>
-                <span style="color: #121214;">${clean}</span>
+            <div class="sens-ufd-ingredient-row">
+                <span class="sens-ufd-ingredient-name">${clean}</span>
             </div>
         `;
     }).join('');
@@ -18916,7 +18927,7 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo', isFromSearch =
     // Ajustar texto del botón principal si viene desde el buscador de comidas personalizadas
     const confirmBtn = document.getElementById('btnConfirmUfdPortion');
     if (confirmBtn) {
-        confirmBtn.textContent = isFromSearch ? 'Registrar en mi Día' : 'Guardar Ajuste de Porción';
+        confirmBtn.textContent = isFromSearch ? 'Registrar en mi día' : 'Guardar porción';
     }
     const removeBtn = document.getElementById('btnRemoveUfdFood');
     if (removeBtn) {
@@ -18967,84 +18978,57 @@ function openUserFoodDetailModal(foodItem, mealSlot = 'almuerzo', isFromSearch =
         badgesRow.innerHTML = bHtml;
     }
 
-    // Ingredientes reales con viñetas limpias
-    if (ingrText) {
+    // Ingredientes reales (oculto en Alimento Base simple para evitar redundancia)
+    const ingrWrap = document.getElementById('ufdIngredientsWrap');
+    if (ingrText && ingrWrap) {
         const ings = resolved?.ingredientes_y_gramajes || resolved?.ingredientes_principales;
-        ingrText.innerHTML = formatIngredientsHtml(ings);
+        const formattedIngs = formatIngredientsHtml(ings);
+        const isBaseSimple = resolved?.tipo_item === 'Alimento Base' && !String(ings || '').includes(',') && !String(ings || '').includes('•') && !String(ings || '').includes('\n');
+        if (!ings || !formattedIngs.trim() || isBaseSimple) {
+            ingrWrap.style.display = 'none';
+        } else {
+            ingrWrap.style.display = 'block';
+            ingrText.innerHTML = formattedIngs;
+        }
     }
 
-    // Pasos de preparación numerados 1., 2., 3.
+    // Pasos de preparación escaneables directamente (sin "Ver más")
     const fullSteps = resolved?.paso_a_paso_preparacion || resolved?.pasos_preparacion || resolved?.preparacion || 'Cocción a temperatura controlada preservando perfil enzimático.';
     const stepItems = parseNumberedList(fullSteps);
+    const prepTimeBadge = document.getElementById('ufdPrepTimeBadge');
+    if (prepTimeBadge) {
+        if (resolved?.tiempo_preparacion_min) {
+            prepTimeBadge.textContent = `${resolved.tiempo_preparacion_min} min`;
+            prepTimeBadge.style.display = 'inline-block';
+        } else {
+            prepTimeBadge.style.display = 'none';
+        }
+    }
 
-    const previewEl = document.getElementById('ufdStepsPreview');
     const fullEl = document.getElementById('ufdStepsFull');
-    const toggleStepsBtn = document.getElementById('btnToggleUfdSteps');
-    const stepsToggleText = document.getElementById('ufdStepsToggleText');
-    const stepsArrow = document.getElementById('ufdStepsArrow');
-
-    if (previewEl && fullEl) {
-        fullEl.style.display = 'none';
-        previewEl.style.display = 'block';
-        if (stepsToggleText) stepsToggleText.textContent = 'Ver más';
-        if (stepsArrow) stepsArrow.textContent = '▾';
-
-        if (stepItems.length > 1) {
-            previewEl.innerHTML = formatSingleStepRowHtml(stepItems[0], 1);
-            fullEl.innerHTML = stepItems.map((s, idx) => formatSingleStepRowHtml(s, idx + 1)).join('');
-            if (toggleStepsBtn) toggleStepsBtn.style.display = 'inline-flex';
-        } else {
-            previewEl.innerHTML = formatSingleStepRowHtml(stepItems[0] || fullSteps, 1);
-            fullEl.innerHTML = '';
-            if (toggleStepsBtn) toggleStepsBtn.style.display = 'none';
-        }
+    if (fullEl) {
+        fullEl.style.display = 'flex';
+        fullEl.innerHTML = (stepItems.length > 0 ? stepItems : [fullSteps]).slice(0, 4).map((s, idx) => formatSingleStepRowHtml(s, idx + 1)).join('');
     }
 
-    if (toggleStepsBtn && !toggleStepsBtn._hasToggleBound) {
-        toggleStepsBtn._hasToggleBound = true;
-        toggleStepsBtn.addEventListener('click', () => {
-            if (!fullEl || !previewEl) return;
-            const isClosed = fullEl.style.display === 'none';
-            if (isClosed) {
-                previewEl.style.display = 'none';
-                fullEl.style.display = 'flex';
-                fullEl.style.flexDirection = 'column';
-                fullEl.style.gap = '8px';
-                if (stepsToggleText) stepsToggleText.textContent = 'Ver menos';
-                if (stepsArrow) stepsArrow.textContent = '▴';
-            } else {
-                previewEl.style.display = 'block';
-                fullEl.style.display = 'none';
-                if (stepsToggleText) stepsToggleText.textContent = 'Ver más';
-                if (stepsArrow) stepsArrow.textContent = '▾';
-            }
-        });
-    }
-
-    // TRUCO DEL CHEF SENS (NUEVO)
-    if (chefCard && chefText) {
-        if (resolved?.truco_del_chef) {
-            chefText.textContent = resolved.truco_del_chef;
-            chefCard.style.display = 'block';
-        } else {
-            chefCard.style.display = 'none';
-        }
-    }
-
-    // TIP NUTRICIONISTA DEPORTIVO
+    // Bloque Único Editorial: Nota del Chef & Coach
+    const editorialKicker = document.getElementById('ufdEditorialKicker');
     if (tipText) {
-        tipText.textContent = resolved?.tip_nutricionista_deportivo || resolved?.tip_coach_nico || 'Optimizá la masticación y acompañá con ingesta pausada de agua para facilitar vaciado gástrico.';
-    }
-
-    // REEMPLAZOS EQUIVALENTES
-    if (eqCard && eqText) {
-        if (resolved?.reemplazos_equivalentes) {
-            eqText.textContent = resolved.reemplazos_equivalentes;
-            eqCard.style.display = 'block';
+        const chefTrick = (resolved?.truco_del_chef || '').trim();
+        const coachTip = (resolved?.tip_nutricionista_deportivo || resolved?.tip_coach_nico || '').trim();
+        if (chefTrick && coachTip && chefTrick !== coachTip) {
+            if (editorialKicker) editorialKicker.textContent = 'Nota del Chef & Coach';
+            tipText.innerHTML = `${chefTrick}<br><span style="display:block; margin-top:6px; color:#575659;">${coachTip}</span>`;
+        } else if (chefTrick) {
+            if (editorialKicker) editorialKicker.textContent = 'Nota del Chef SENS';
+            tipText.textContent = chefTrick;
         } else {
-            eqCard.style.display = 'none';
+            if (editorialKicker) editorialKicker.textContent = 'Nota del Coach';
+            tipText.textContent = coachTip || 'Optimizá la masticación y acompañá con ingesta pausada de agua para facilitar vaciado gástrico.';
         }
     }
+    if (chefCard) chefCard.style.display = 'none';
+    if (eqCard) eqCard.style.display = 'none';
 
     // ALÉRGENOS
     if (allergensText) {

@@ -34473,6 +34473,126 @@ body.in-portal .sens-tracking-seg-pill,
 }
 
 /* =============================================================================
+   EDITORIAL QUIET LUXURY PARA RECETA & TIPS (#ufdPaneRecipe)
+   ============================================================================= */
+.sens-ufd-recipe-section {
+    padding: 4px 0 16px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.06);
+}
+
+.sens-ufd-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sens-ufd-section-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #121214;
+    letter-spacing: -0.01em;
+}
+
+.sens-ufd-prep-time {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #705B3E;
+    background: #FAF7F2;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+}
+
+.sens-ufd-ingredients-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sens-ufd-ingredient-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.sens-ufd-ingredient-name {
+    color: #121214;
+    font-weight: 500;
+}
+
+.sens-ufd-ingredient-qty {
+    color: #705B3E;
+    font-weight: 700;
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
+
+.sens-ufd-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#ufdPaneRecipe .sens-step-item-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #121214;
+    border-bottom: none !important;
+    padding: 0 !important;
+}
+
+#ufdPaneRecipe .sens-step-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #F4F3F1 !important;
+    color: #121214 !important;
+    font-size: 11px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    border: none !important;
+}
+
+.sens-ufd-editorial-note {
+    background: #FAF7F2;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+}
+
+.sens-ufd-editorial-kicker {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #705B3E;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+}
+
+.sens-ufd-editorial-copy {
+    margin: 0;
+    font-size: 13px;
+    color: #121214;
+    line-height: 1.5;
+}
+
+/* =============================================================================
    BOTTOM SHEET DE ENTRENAMIENTO: ELEVACIÓN SOBRE TOPBAR/DOCK + X Y CTA STICKY
    ============================================================================= */
 .sens-exercise-modal-backdrop,

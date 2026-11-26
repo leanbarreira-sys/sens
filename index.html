@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '159.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '159.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '160.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '160.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -7063,66 +7063,43 @@
             </div>
             </div>
 
-            <!-- Sección 2: Receta & Tips (Oculta hasta tocar tab) -->
+            <!-- Sección 2: Receta & Tips (Editorial Quiet Luxury) -->
             <div id="ufdPaneRecipe" style="display: none;">
-            <!-- Ingredientes y Preparación con Despliegue "Ver Más" (Item 3) -->
-            <div id="ufdIngredientsWrap"
-                style="margin-bottom: 14px; font-size: 12.5px; color: #575659; line-height: 1.5; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 12px 14px;">
-                <strong style="color: #121214; display: block; margin-bottom: 6px; font-size: 12px;">Ingredientes
-                    Principales:</strong>
-                <div id="ufdIngredientsText" style="display: flex; flex-direction: column; gap: 4px; color: #121214;">-</div>
-            </div>
-
-            <div id="ufdStepsWrap"
-                style="margin-bottom: 14px; font-size: 12px; color: #575659; line-height: 1.5; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 12px 14px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <strong style="color: #121214; font-size: 12.5px;">Pasos de Preparación:</strong>
-                    <button type="button" class="sens-btn-disclosure" id="btnToggleUfdSteps" style="color: #705B3E; font-weight: 700;">
-                        <span id="ufdStepsToggleText">Ver más</span>
-                        <span id="ufdStepsArrow">▾</span>
-                    </button>
+                <!-- Ingredientes (solo Recetas / multi-ingrediente) -->
+                <div id="ufdIngredientsWrap" class="sens-ufd-recipe-section">
+                    <div class="sens-ufd-section-head">
+                        <span class="sens-ufd-section-title">Ingredientes</span>
+                    </div>
+                    <div id="ufdIngredientsText" class="sens-ufd-ingredients-list">-</div>
                 </div>
-                <div id="ufdStepsPreview" style="color: #575659; font-size: 12px; line-height: 1.5;">-</div>
-                <div id="ufdStepsFull"
-                    style="display: none; color: #575659; font-size: 12px; line-height: 1.6; margin-top: 8px; border-top: 1px solid rgba(18,18,20,0.06); padding-top: 8px;">
-                </div>
-            </div>
 
-            <!-- TRUCO DEL CHEF (NUEVO SENS V2) -->
-            <div class="sens-chef-trick-card" id="ufdChefTrickWrap" style="margin-bottom: 14px; display: none; background: #FAF7F2; border: 1px solid rgba(197, 168, 128, 0.35); border-radius: 14px; padding: 12px 14px;">
-                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-                    <strong
-                        style="color: #705B3E; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;">Truco
-                        del Chef SENS</strong>
+                <!-- Pasos de Preparación (escaneables de un vistazo) -->
+                <div id="ufdStepsWrap" class="sens-ufd-recipe-section">
+                    <div class="sens-ufd-section-head">
+                        <span class="sens-ufd-section-title">Preparación</span>
+                        <span id="ufdPrepTimeBadge" class="sens-ufd-prep-time" style="display: none;"></span>
+                    </div>
+                    <div id="ufdStepsPreview" style="display: none;"></div>
+                    <div id="ufdStepsFull" class="sens-ufd-steps-list"></div>
                 </div>
-                <p id="ufdChefTrickText" style="margin: 0; font-size: 12px; color: #121214; line-height: 1.5;">-</p>
-            </div>
 
-            <!-- Tip del Coach / Nutricionista Deportivo -->
-            <div class="sens-nutri-directive-card" id="ufdTipWrap" style="margin-bottom: 14px; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.06); border-left: 4px solid #705B3E; border-radius: 14px; padding: 12px 14px;">
-                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-                    <strong
-                        style="color: #705B3E; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;">Tip
-                        Nutricionista Deportivo</strong>
+                <!-- Bloque Único Editorial: Nota del Coach / Chef -->
+                <div id="ufdTipWrap" class="sens-ufd-editorial-note">
+                    <span class="sens-ufd-editorial-kicker" id="ufdEditorialKicker">Nota del Chef &amp; Coach</span>
+                    <p id="ufdCoachTipText" class="sens-ufd-editorial-copy">-</p>
                 </div>
-                <p id="ufdCoachTipText" style="margin: 0; font-size: 12px; color: #121214; line-height: 1.5;">-</p>
-            </div>
 
-            <!-- Reemplazos Equivalentes & Micronutrientes -->
-            <div id="ufdEquivalentsWrap"
-                style="margin-bottom: 14px; font-size: 11.5px; color: #575659; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.06); border-radius: 14px; padding: 10px 12px; display: none;">
-                <strong style="color: #121214; font-size: 11.5px; display: block; margin-bottom: 4px;">Reemplazos
-                    Equivalentes:</strong>
-                <span id="ufdEquivalentsText" style="color: #575659; line-height: 1.4;">-</span>
-            </div>
+                <!-- Contenedores ocultos por compatibilidad de IDs -->
+                <div id="ufdChefTrickWrap" style="display: none;"><p id="ufdChefTrickText"></p></div>
+                <div id="ufdEquivalentsWrap" style="display: none;"><span id="ufdEquivalentsText"></span></div>
             </div>
 
             <!-- Botones de Acción: Intercambiar Equivalente + Guardar Ajuste -->
             <div
                 style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-bottom: 10px;">
                 <button type="button" class="btn btn-outline" id="btnOpenUfdSwapModal"
-                    style="padding: 13px 10px; font-weight: 700; font-size: 12.5px; border-color: rgba(112,91,62,0.35); color: #705B3E; background: #FAF9F6; border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    style="padding: 13px 10px; font-weight: 700; font-size: 13px; border: none; color: #121214; background: #F4F3F1; border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="17 1 21 5 17 9"></polyline>
                         <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
                         <polyline points="7 23 3 19 7 15"></polyline>
@@ -7131,8 +7108,8 @@
                     <span>Intercambiar</span>
                 </button>
                 <button type="button" class="btn btn-primary" id="btnConfirmUfdPortion"
-                    style="padding: 13px 14px; font-weight: 800; font-size: 12.5px; background: #121214 !important; color: #FFFFFF !important; border: none; border-radius: 999px;">
-                    Guardar Porción
+                    style="padding: 13px 14px; font-weight: 700; font-size: 13px; background: #121214 !important; color: #FFFFFF !important; border: none; border-radius: 999px; cursor: pointer;">
+                    Guardar porción
                 </button>
             </div>
             <button type="button" id="btnRemoveUfdFood" onclick="window.removeActiveUserFoodFromDay && window.removeActiveUserFoodFromDay()"
