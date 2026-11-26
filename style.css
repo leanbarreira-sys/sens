@@ -29361,7 +29361,7 @@ body.in-portal .portal-body,
         padding-top: 2px !important;
         padding-left: 12px !important;
         padding-right: 12px !important;
-        padding-bottom: 84px !important;
+        padding-bottom: calc(82px + env(safe-area-inset-bottom, 8px)) !important;
     }
 
     body.in-portal .sens-dash-welcome-header,
@@ -33237,7 +33237,7 @@ body:has(.modal-overlay.active) #sensFloatingDock {
 /* 4. Espaciado inferior generoso en Mobile para evitar que el Dock tape contenido */
 @media (max-width: 900px) {
     .portal-view {
-        padding-bottom: calc(110px + env(safe-area-inset-bottom, 20px)) !important;
+        padding-bottom: 12px !important;
     }
     #coachAthletesListContainer {
         padding-bottom: 130px !important;
