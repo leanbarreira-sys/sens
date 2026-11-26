@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=86.0">
+    <link rel="stylesheet" href="style.css?v=87.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '122.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '122.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '123.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '123.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3904,14 +3904,11 @@
                 <div class="sens-nutri-hero-primary-card" id="sensNutriHeroCard">
                     <!-- Cabecera Editorial con Objetivo Claro -->
                     <div class="sens-nutri-hero-header">
-                        <div>
-                            <span class="sens-card-domain-eyebrow"
-                                style="color: #E5CBA7; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Registro
-                                Nutricional Diario</span>
-                            <h2 class="sens-nutri-hero-title">Calorías Consumidas del Día</h2>
+                        <div class="sens-nutri-hero-top-row">
+                            <span class="sens-card-domain-eyebrow">Registro Nutricional</span>
+                            <span class="pill pill-champagne" id="nutriDailyGoalBadge">Meta: Déficit Calórico</span>
                         </div>
-                        <span class="pill pill-champagne" id="nutriDailyGoalBadge"
-                            style="font-size: 10.5px; padding: 4px 10px;">Meta: Déficit Calórico</span>
+                        <h2 class="sens-nutri-hero-title">Calorías del Día</h2>
                     </div>
 
                     <!-- Métricas Tabulares Destacadas -->
@@ -3945,15 +3942,16 @@
                     <div class="sens-nutri-macro-accordion-wrap">
                         <button type="button" class="sens-btn-macro-drawer-toggle" id="btnToggleMacroDrawer">
                             <div class="sens-macro-toggle-left">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E5CBA7"
-                                    stroke-width="2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path d="M12 2a10 10 0 0 1 10 10" />
-                                    <path d="M12 12 21.2 7.8" />
-                                </svg>
-                                <span>Desglose de Macronutrientes</span>
-                                <span class="sens-macro-toggle-summary" id="nutriMacroQuickSummary">0g Prot • 0g Carbs •
-                                    0g Grasas</span>
+                                <span class="sens-macro-toggle-title-row">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9E7D4B"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 2a10 10 0 0 1 10 10" />
+                                        <path d="M12 12 21.2 7.8" />
+                                    </svg>
+                                    <span>Desglose de Macronutrientes</span>
+                                </span>
+                                <span class="sens-macro-toggle-summary" id="nutriMacroQuickSummary">0g Prot • 0g Carbs • 0g Grasas</span>
                             </div>
                             <span class="sens-accordion-chevron" id="macroDrawerChevron">▾</span>
                         </button>

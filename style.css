@@ -32085,57 +32085,81 @@ body.in-portal #sensExerciseModalSheet #btnModalFinishExercise *,
    2. SECCIÓN NUTRICIÓN (#nutritionView): REEMPLAZO DE CAJAS NEGRAS POR GAMA SENS LUXURY
    ============================================================================= */
 
-/* Tarjeta Hero Calórico Primario: Quiet Luxury Cálido (#FAF7F2 / Alabaster Champagne) */
+/* Tarjeta Hero Calórico Primario: Quiet Luxury Light (#FFFFFF) alineado con el resto de la app */
 body.in-portal #nutritionView #sensNutriHeroCard,
 body.in-portal #nutritionView .sens-nutri-hero-primary-card,
 #sensNutriHeroCard,
 .sens-nutri-hero-primary-card {
-    background: #FAF7F2 !important;
-    border: 1.5px solid rgba(197, 168, 128, 0.38) !important;
-    border-radius: 24px !important;
-    padding: 22px !important;
-    box-shadow: 0 6px 24px rgba(112, 91, 62, 0.06) !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 18px 20px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03) !important;
     color: #121214 !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 16px !important;
+}
+
+body.in-portal #nutritionView #sensNutriHeroCard .sens-nutri-hero-header,
+#sensNutriHeroCard .sens-nutri-hero-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+}
+
+body.in-portal #nutritionView #sensNutriHeroCard .sens-nutri-hero-top-row,
+#sensNutriHeroCard .sens-nutri-hero-top-row {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
 }
 
 body.in-portal #nutritionView #sensNutriHeroCard .sens-card-domain-eyebrow,
 #sensNutriHeroCard .sens-card-domain-eyebrow {
-    color: #705B3E !important;
-    font-weight: 800 !important;
-    font-size: 11px !important;
+    color: #9E7D4B !important;
+    font-weight: 700 !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.08em !important;
+    white-space: nowrap !important;
 }
 
 body.in-portal #nutritionView #sensNutriHeroCard .sens-nutri-hero-title,
 #sensNutriHeroCard .sens-nutri-hero-title {
     color: #121214 !important;
     font-weight: 800 !important;
-    font-size: 20px !important;
-    margin-top: 4px !important;
+    font-size: 18px !important;
+    letter-spacing: -0.015em !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
 }
 
 body.in-portal #nutritionView #nutriDailyGoalBadge,
 #nutriDailyGoalBadge {
-    background: rgba(251, 222, 185, 0.55) !important;
-    color: #705B3E !important;
-    border: 1px solid rgba(197, 168, 128, 0.4) !important;
-    font-weight: 800 !important;
+    background: #FAF7F2 !important;
+    color: #9E7D4B !important;
+    border: none !important;
+    font-weight: 700 !important;
     font-size: 10.5px !important;
-    border-radius: 999px !important;
-    padding: 4px 11px !important;
+    border-radius: 9999px !important;
+    padding: 4px 10px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
 }
 
 body.in-portal #nutritionView #nutriConsumedNum,
 #nutriConsumedNum {
     color: #121214 !important;
-    font-weight: 900 !important;
-    font-size: 2.4rem !important;
+    font-weight: 800 !important;
+    font-size: 2.25rem !important;
+    letter-spacing: -0.03em !important;
 }
 
 body.in-portal #nutritionView .sens-nutri-hero-unit,
 .sens-nutri-hero-unit {
-    color: #575659 !important;
-    font-weight: 700 !important;
+    color: #6E6E73 !important;
+    font-weight: 600 !important;
     font-size: 13px !important;
 }
 
@@ -32147,72 +32171,105 @@ body.in-portal #nutritionView #nutriTargetKcal,
 
 body.in-portal #nutritionView #nutriRemainingKcal,
 #nutriRemainingKcal {
-    color: #705B3E !important;
+    color: #9E7D4B !important;
     font-weight: 700 !important;
     font-size: 11.5px !important;
 }
 
 body.in-portal #nutritionView .sens-nutri-stat-label,
 .sens-nutri-stat-label {
-    color: #77767B !important;
-    font-weight: 800 !important;
+    color: #6E6E73 !important;
+    font-weight: 700 !important;
     font-size: 10px !important;
+    letter-spacing: 0.05em !important;
 }
 
 /* Track de Calorías y Zona Óptima */
 body.in-portal #nutritionView .sens-nutri-progress-track,
 .sens-nutri-progress-track {
-    background: #ECE8E1 !important;
-    border-radius: 999px !important;
-    height: 10px !important;
+    background: #F4F3F1 !important;
+    border-radius: 9999px !important;
+    height: 8px !important;
     position: relative !important;
 }
 
 body.in-portal #nutritionView #nutriSliderFill,
 #nutriSliderFill {
-    background: linear-gradient(90deg, #C5A880 0%, #705B3E 100%) !important;
-    border-radius: 999px !important;
+    background: linear-gradient(90deg, #9E7D4B 0%, #121214 100%) !important;
+    border-radius: 9999px !important;
 }
 
 body.in-portal #nutritionView #nutriOptimalZoneMarker,
 #nutriOptimalZoneMarker {
-    background: rgba(197, 168, 128, 0.35) !important;
-    border: 1px dashed #705B3E !important;
-    border-radius: 999px !important;
+    background: rgba(158, 125, 75, 0.22) !important;
+    border: 1px dashed rgba(158, 125, 75, 0.65) !important;
+    border-radius: 9999px !important;
 }
 
 body.in-portal #nutritionView #nutriOptimalRangeText,
 #nutriOptimalRangeText {
-    color: #705B3E !important;
+    color: #9E7D4B !important;
     font-weight: 700 !important;
     font-size: 11px !important;
 }
 
 body.in-portal #nutritionView .sens-nutri-progress-labels span,
 .sens-nutri-progress-labels span {
-    color: #575659 !important;
-    font-size: 10px !important;
+    color: #6E6E73 !important;
+    font-size: 10.5px !important;
     font-weight: 600 !important;
 }
 
-/* Drawer Desplegable de Macros */
-body.in-portal #nutritionView #btnToggleMacroDrawer,
-#btnToggleMacroDrawer {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(197, 168, 128, 0.3) !important;
-    border-radius: 14px !important;
-    color: #121214 !important;
-    padding: 10px 14px !important;
+/* Drawer Desplegable de Macros: tonal Quiet Luxury sin borde ni card anidada */
+body.in-portal #nutritionView .sens-nutri-macro-accordion-wrap,
+.sens-nutri-macro-accordion-wrap {
+    border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
+    padding-top: 12px !important;
+    margin-top: 14px !important;
 }
 
-body.in-portal #nutritionView #btnToggleMacroDrawer span,
-#btnToggleMacroDrawer span {
+body.in-portal #nutritionView #btnToggleMacroDrawer,
+#btnToggleMacroDrawer {
+    background: #FAF9F6 !important;
+    border: none !important;
+    border-radius: 14px !important;
     color: #121214 !important;
+    padding: 11px 14px !important;
+    text-align: left !important;
+    gap: 10px !important;
+}
+
+body.in-portal #nutritionView #btnToggleMacroDrawer .sens-macro-toggle-left,
+#btnToggleMacroDrawer .sens-macro-toggle-left {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 2px !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+}
+
+body.in-portal #nutritionView #btnToggleMacroDrawer .sens-macro-toggle-title-row,
+#btnToggleMacroDrawer .sens-macro-toggle-title-row {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
+    color: #121214 !important;
+}
+
+body.in-portal #nutritionView #btnToggleMacroDrawer .sens-macro-toggle-summary,
+#btnToggleMacroDrawer .sens-macro-toggle-summary {
+    color: #6E6E73 !important;
+    font-weight: 500 !important;
+    font-size: 11.5px !important;
+    text-align: left !important;
+    line-height: 1.35 !important;
 }
 
 body.in-portal #nutritionView #btnToggleMacroDrawer svg {
-    stroke: #705B3E !important;
+    stroke: #9E7D4B !important;
 }
 
 body.in-portal #nutritionView #nutriMacroQuickSummary,
