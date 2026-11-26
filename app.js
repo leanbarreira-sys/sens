@@ -8526,11 +8526,13 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         <div class="sens-ex-compact-overlay"></div>
                         <div class="sens-ex-compact-top">
                             <span class="ex-compact-sets-badge">${ex.sets || 3} × ${ex.reps || 10}</span>
-                            <button type="button" class="ex-compact-check-btn ${isExDone ? 'completed' : ''} ${isFuture ? 'is-future' : ''}" 
-                                    title="${isFuture ? `Disponible a partir del ${dayName}` : (isExDone ? 'Desmarcar ejercicio' : 'Marcar como finalizado')}" 
-                                    onclick="event.stopPropagation(); toggleExerciseFinished('${ex.id}', '${dayKey}', '${dateIso}')">
-                                ${isFuture ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` : '✓'}
-                            </button>
+                            ${isFuture ? `
+                                <span class="ex-compact-check-btn is-future" title="Disponible a partir del ${dayName}">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                            ` : (isExDone ? `
+                                <span class="ex-compact-check-btn completed" title="Ejercicio completado">✓</span>
+                            ` : '')}
                         </div>
                         <div class="sens-ex-compact-bottom">
                             <div class="ex-compact-title" title="${exTitle}">${exTitle}</div>
@@ -34914,12 +34916,15 @@ window.navigateFromBalanceCta = function(dateIso, target) {
     try {
         if (dateIso && typeof AppState !== 'undefined') {
             AppState.selectedDate = new Date(`${dateIso}T12:00:00`);
+            if (typeof getDayKeyFromDate === 'function') {
+                AppState.currentDay = getDayKeyFromDate(AppState.selectedDate);
+            }
             if (typeof renderPortalWeekStrip === 'function') renderPortalWeekStrip();
         }
         if (target === 'nutrition') {
-            if (typeof window.switchPortalTab === 'function') window.switchPortalTab('nutritionView');
+            if (typeof window.switchPortalView === 'function') window.switchPortalView('nutritionView');
         } else if (target === 'workout') {
-            if (typeof window.switchPortalTab === 'function') window.switchPortalTab('workoutView');
+            if (typeof window.switchPortalView === 'function') window.switchPortalView('workoutView');
         } else if (target === 'cardio') {
             if (typeof window.switchTrackingModuleTab === 'function') window.switchTrackingModuleTab('balance');
             setTimeout(() => {
