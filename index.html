@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '191.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '191.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '192.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '192.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3700,15 +3700,15 @@
                         <div class="sens-master-timer-top">
                             <div class="sens-timer-mode-pill" id="masterTimerModeBadge">
                                 <span class="status-dot-active" id="masterTimerStatusDot"></span>
-                                <span id="masterTimerModeLabel">Descanso</span>
+                                <span id="masterTimerModeLabel">Listo</span>
                             </div>
                             <span class="sens-timer-target-sub" id="masterTimerTargetSub">Descanso prescrito: 90s</span>
                         </div>
-                        <div class="sens-master-timer-digits" id="masterTimerDisplay">01:30</div>
+                        <div class="sens-master-timer-digits" id="masterTimerDisplay">00:00</div>
                         <div class="sens-master-timer-actions">
                             <button type="button" class="btn btn-primary sens-btn-timer-primary"
-                                id="btnMasterTimerPrimary" title="Iniciar cronómetro de descanso entre series">
-                                Iniciar descanso
+                                id="btnMasterTimerPrimary" title="Iniciar serie">
+                                Iniciar serie
                             </button>
                             <button type="button" class="btn btn-outline sens-btn-timer-secondary"
                                 id="btnMasterFinishSetAndRest" style="display: none !important;">
@@ -3770,7 +3770,7 @@
                                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>Guardar y finalizar</span>
+                            <span>Finalizar</span>
                         </button>
                     </div>
                 </div>
@@ -9060,7 +9060,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=128.0"></script>
+    <script defer src="app.js?v=129.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

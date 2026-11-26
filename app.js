@@ -9740,7 +9740,30 @@ function updateMasterTimerUI() {
         targetSub.textContent = `Descanso prescrito: ${masterTimerState.targetRest}s`;
     }
 
-    if (masterTimerState.mode === 'in_rest') {
+    const setsArr = (modalExerciseState && Array.isArray(modalExerciseState.setsData)) ? modalExerciseState.setsData : [];
+    const nextPending = setsArr.find(s => !s.completed);
+    const allSetsDone = setsArr.length > 0 && !nextPending;
+
+    if (masterTimerState.mode === 'in_set') {
+        const m = Math.floor(masterTimerState.tutSeconds / 60);
+        const s = masterTimerState.tutSeconds % 60;
+        const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+        if (display) {
+            display.textContent = timeStr;
+            display.classList.remove('in-rest');
+        }
+        if (modeBadge) modeBadge.className = 'sens-timer-mode-pill in-set';
+        if (modeLabel) modeLabel.textContent = nextPending ? `Serie ${nextPending.setNumber} en curso` : 'Serie en curso';
+        if (primaryBtn) {
+            primaryBtn.style.display = '';
+            primaryBtn.textContent = allSetsDone ? 'Finalizar serie ✓' : 'Finalizar serie';
+            primaryBtn.classList.add('btn-master-finalizar-set');
+        }
+        if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
+        if (restControls) restControls.style.display = 'none';
+
+    } else if (masterTimerState.mode === 'in_rest') {
         const m = Math.floor(masterTimerState.restRemaining / 60);
         const s = masterTimerState.restRemaining % 60;
         const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
@@ -9756,19 +9779,18 @@ function updateMasterTimerUI() {
         if (restControls) restControls.style.display = 'flex';
 
     } else {
-        const targetSec = Math.max(0, Number(masterTimerState.targetRest) || 75);
-        const m = Math.floor(targetSec / 60);
-        const s = targetSec % 60;
         if (display) {
-            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            display.textContent = '00:00';
             display.classList.remove('in-rest');
         }
         if (modeBadge) modeBadge.className = 'sens-timer-mode-pill';
-        if (modeLabel) modeLabel.textContent = 'Descanso';
+        if (modeLabel) modeLabel.textContent = allSetsDone ? 'Completado' : 'Listo';
         if (primaryBtn) {
             primaryBtn.style.display = '';
-            primaryBtn.textContent = `Iniciar descanso · ${targetSec}s`;
-            primaryBtn.classList.remove('btn-master-finalizar-set');
+            primaryBtn.textContent = allSetsDone
+                ? 'Ejercicio completado ✓'
+                : (nextPending ? `Iniciar serie ${nextPending.setNumber}` : 'Iniciar serie');
+            primaryBtn.classList.toggle('btn-master-finalizar-set', allSetsDone);
         }
         if (finishAndRestBtn) finishAndRestBtn.style.display = 'none';
         if (restControls) restControls.style.display = 'none';
@@ -9840,20 +9862,35 @@ function initMasterTimerListeners() {
             nextSet.completed = true;
             const athId = getActiveAthleteId();
             logCompletedSetToDb(athId, modalExerciseState.exId, nextSet.setNumber, nextSet.weight, nextSet.reps);
+            if (typeof autoSaveModalExerciseDraft === 'function') autoSaveModalExerciseDraft();
             renderModalSeriesList();
-            showSensToast(`Set ${nextSet.setNumber} completado (${nextSet.weight} kg × ${nextSet.reps} reps)`, 'champagne', 2200);
 
             const allDone = modalExerciseState.setsData.every(s => s.completed);
             if (allDone) {
-                triggerCongratsCelebration();
+                clearInterval(masterTimerState.interval);
+                masterTimerState.interval = null;
+                masterTimerState.mode = 'idle';
+                masterTimerState.tutSeconds = 0;
+                masterTimerState.tutAccumulatedMs = 0;
+                masterTimerState.tutStartedAtMs = null;
+                masterTimerState.restEndAtMs = null;
+                persistMasterTimerState();
+                updateMasterTimerUI();
+                if (typeof triggerCongratsCelebration === 'function') triggerCongratsCelebration();
+                if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry();
+                showSensToast('✓ ¡Todas las series completadas y guardadas!', 'champagne', 2600);
+                return;
             }
+            showSensToast(`Serie ${nextSet.setNumber} guardada · Iniciando descanso`, 'champagne', 2200);
         }
         playBeep(620, 0.2);
         startMasterRestCountdown();
     }
 
     primaryBtn.addEventListener('click', () => {
-        if (masterTimerState.mode === 'in_rest') {
+        if (masterTimerState.mode === 'in_set') {
+            executeFinishSetAndStartRest();
+        } else if (masterTimerState.mode === 'in_rest') {
             clearInterval(masterTimerState.interval);
             masterTimerState.interval = null;
             masterTimerState.mode = 'idle';
@@ -9861,8 +9898,14 @@ function initMasterTimerListeners() {
             persistMasterTimerState();
             updateMasterTimerUI();
         } else {
-            playBeep(540, 0.14);
-            startMasterRestCountdown();
+            const hasPending = modalExerciseState?.setsData?.some(s => !s.completed);
+            if (!hasPending && modalExerciseState?.setsData?.length) {
+                const finishBtn = document.getElementById('btnModalFinishExercise');
+                if (finishBtn) finishBtn.click();
+                return;
+            }
+            playBeep(540, 0.12);
+            startMasterTutTimer();
         }
     });
 
