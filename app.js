@@ -7251,6 +7251,51 @@ async function logCompletedSetToDb(athId, exId, setNumber, weightKg, repsComplet
 }
 
 /**
+ * Sincroniza exactamente los sets completados/desmarcados de un ejercicio para una fecha YYYY-MM-DD
+ * evitando residuos fantasmas al desmarcar series y guardar.
+ */
+async function syncExerciseSetsLogsForDate(athId, exId, setsData, dateIso = null) {
+    if (!athId || !exId) return;
+    const dayIsoMatch = dateIso ? String(dateIso).slice(0, 10) : new Date().toISOString().slice(0, 10);
+    const effectiveIso = `${dayIsoMatch}T12:00:00.000Z`;
+    const list = Array.isArray(setsData) ? setsData : [];
+
+    try {
+        const current = getAthleteExerciseLogs(athId, exId);
+        const otherDays = current.filter(s => !(s.completed_at && s.completed_at.slice(0, 10) === dayIsoMatch));
+        const completedToday = list
+            .filter(s => Boolean(s && s.completed))
+            .map(s => ({
+                user_id: athId,
+                exercise_id: exId,
+                set_number: s.setNumber,
+                weight_kg: Number(s.weight) || 0,
+                reps_completed: Number(s.reps) || 0,
+                completed_at: effectiveIso
+            }));
+        localStorage.setItem(`sens_set_logs_${athId}_${exId}`, JSON.stringify([...otherDays, ...completedToday]));
+    } catch (e) {}
+
+    if (supabaseClient && AppState.user) {
+        try {
+            const uncheckedSets = list.filter(s => s && !s.completed).map(s => s.setNumber);
+            if (uncheckedSets.length > 0) {
+                await supabaseClient
+                    .from('workout_logs')
+                    .delete()
+                    .eq('user_id', athId)
+                    .eq('exercise_id', exId)
+                    .in('set_number', uncheckedSets)
+                    .gte('completed_at', `${dayIsoMatch}T00:00:00.000Z`)
+                    .lte('completed_at', `${dayIsoMatch}T23:59:59.999Z`);
+            }
+        } catch (err) {
+            console.log('Sync uncheck workout_logs offline');
+        }
+    }
+}
+
+/**
  * Almacenamiento diario de ejecución de entrenamiento (Scoping estricto por fecha YYYY-MM-DD)
  * Evita la polución de plantillas semanales recurrentes (day1..day7)
  */
@@ -8781,19 +8826,29 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
         updateMasterTimerUI();
     }
 
-    // 3. Inicializar Series con Scoping Estricto por Fecha
+    // 3. Inicializar Series con Scoping Estricto por Fecha (priorizando draft exacto del día + logs)
     const savedLogs = getAthleteExerciseLogs(athId, exId);
+    let savedDraft = null;
+    try {
+        const rawDraft = localStorage.getItem(`sens_ex_draft_${athId}_${dateIso}_${exId}`);
+        if (rawDraft) {
+            const parsed = JSON.parse(rawDraft);
+            if (Array.isArray(parsed) && parsed.length > 0) savedDraft = parsed;
+        }
+    } catch (_) {}
+
     modalExerciseState.setsData = [];
     const totalSets = ex.sets || 4;
     for (let i = 1; i <= totalSets; i++) {
+        const draftSet = savedDraft ? savedDraft.find(d => Number(d.setNumber) === i) : null;
         const existingForDate = savedLogs.find(l => l.set_number === i && l.completed_at && l.completed_at.slice(0, 10) === dateIso);
         const latestAnyLog = savedLogs.slice().reverse().find(l => l.set_number === i) || savedLogs[savedLogs.length - 1];
         modalExerciseState.setsData.push({
             setNumber: i,
             targetReps: ex.reps || '10-12',
-            weight: existingForDate ? existingForDate.weight_kg : (latestAnyLog ? latestAnyLog.weight_kg : (ex.defaultWeight || 16)),
-            reps: existingForDate ? existingForDate.reps_completed : (latestAnyLog ? latestAnyLog.reps_completed : (ex.defaultReps || 10)),
-            completed: Boolean(existingForDate)
+            weight: draftSet ? draftSet.weight : (existingForDate ? existingForDate.weight_kg : (latestAnyLog ? latestAnyLog.weight_kg : (ex.defaultWeight || 16))),
+            reps: draftSet ? draftSet.reps : (existingForDate ? existingForDate.reps_completed : (latestAnyLog ? latestAnyLog.reps_completed : (ex.defaultReps || 10))),
+            completed: draftSet ? Boolean(draftSet.completed) : Boolean(existingForDate)
         });
     }
 
@@ -9025,6 +9080,7 @@ window.toggleSetCompleted = function(idx) {
     if (!s) return;
     s.completed = !s.completed;
     renderModalSeriesList();
+    persistExerciseDraftLocally();
 
     const athId = getActiveAthleteId();
     const data = getCoachAthleteWorkoutData(athId) || {};
@@ -9082,6 +9138,7 @@ window.toggleSetCompleted = function(idx) {
         }
     } else {
         const wasDayCompleted = Boolean(currentExecution.completed);
+        syncExerciseSetsLogsForDate(athId, modalExerciseState.exId, modalExerciseState.setsData, dateIso);
         if (day && Array.isArray(day.exercises)) {
             const anyDone = modalExerciseState.setsData.some(x => x.completed);
             const completedMap = Object.assign({}, currentExecution.completedExercises || {});
@@ -9093,6 +9150,8 @@ window.toggleSetCompleted = function(idx) {
                 completed: false
             });
 
+            AppState.selectedDate = effectiveDate;
+            AppState.currentDay = currentDayKey;
             if (typeof updateObjectiveCardData === 'function') {
                 updateObjectiveCardData(effectiveDate);
             }
@@ -9132,6 +9191,8 @@ window.completeAllExerciseSets = function() {
     if (allDone) {
         modalExerciseState.setsData.forEach(s => { s.completed = false; });
         renderModalSeriesList();
+        persistExerciseDraftLocally();
+        syncExerciseSetsLogsForDate(athId, modalExerciseState.exId, modalExerciseState.setsData, dateIso);
 
         let wasDayCompleted = Boolean(currentExecution.completed);
         if (day && Array.isArray(day.exercises)) {
@@ -9167,6 +9228,8 @@ window.completeAllExerciseSets = function() {
     });
 
     renderModalSeriesList();
+    persistExerciseDraftLocally();
+    syncExerciseSetsLogsForDate(athId, modalExerciseState.exId, modalExerciseState.setsData, dateIso);
 
     if (day && Array.isArray(day.exercises)) {
         const completedMap = Object.assign({}, currentExecution.completedExercises || {});
@@ -9988,6 +10051,8 @@ function saveAndFinishExercise(silent = false) {
         if (day && Array.isArray(day.exercises)) {
             const ex = day.exercises.find(e => e.id === currentExId);
             if (ex) {
+                persistExerciseDraftLocally();
+                syncExerciseSetsLogsForDate(athId, currentExId, modalExerciseState.setsData, dateIso);
                 const anyDone = modalExerciseState.setsData && modalExerciseState.setsData.some(s => s.completed);
                 const currentExecution = getAthleteWorkoutExecution(athId, effectiveDate);
                 const completedMap = Object.assign({}, currentExecution.completedExercises || {});
@@ -9999,7 +10064,7 @@ function saveAndFinishExercise(silent = false) {
                     dayKey: currentDayKey,
                     completedExercises: completedMap,
                     completed: allDone,
-                    attended: allDone ? true : currentExecution.attended,
+                    attended: allDone ? true : (anyDone ? currentExecution.attended : false),
                     durationMinutes: durationMins
                 });
 
