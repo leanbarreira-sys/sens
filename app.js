@@ -8319,8 +8319,9 @@ function renderWorkoutDay(dayKey, targetDate = null) {
 
         if (yDateMidnight >= userCreatedDate && yHasExercises && (yWasMissed || yWasNotCompleted)) {
             const cleanMissedTitle = (yDayData.title || 'Entrenamiento')
-                .replace(/^(?:Lunes|Martes|Miércoles|Miercoles|Jueves|Viernes|Sábado|Sabado|Domingo)\s*[-–—:]\s*/i, '')
+                .replace(/^(?:Lunes|Martes|Miércoles|Miercoles|Jueves|Viernes|Sábado|Sabado|Domingo)\s*[-–—:+]\s*/i, '')
                 .trim() || 'Entrenamiento';
+            const missedEyebrow = exercisesToShow.length === 0 ? 'Hoy es descanso · Sesión pendiente de ayer' : 'Sesión pendiente de ayer';
             missedRecoveryHtml = `
                 <div class="sens-missed-recovery-banner" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 16px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 2px 12px rgba(18, 18, 20, 0.03);">
                     <div style="display: flex; align-items: flex-start; gap: 12px;">
@@ -8328,7 +8329,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
                         </div>
                         <div style="min-width: 0; flex: 1;">
-                            <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.2;">Sesión pendiente de ayer</div>
+                            <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.2;">${missedEyebrow}</div>
                             <div style="font-size: 15px; font-weight: 800; color: #121214; letter-spacing: -0.015em; margin-top: 3px; line-height: 1.25;">¿No pudiste entrenar ayer?</div>
                             <div style="font-size: 12.5px; color: #6E6E73; margin-top: 3px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${cleanMissedTitle} · ${yDayData.exercises.length} ejercicios</div>
                         </div>
@@ -8348,20 +8349,27 @@ function renderWorkoutDay(dayKey, targetDate = null) {
 
     // 5. Estado Vacío si no hay ejercicios para el filtro
     if (exercisesToShow.length === 0) {
-        container.innerHTML = missedRecoveryHtml + `
-            <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 32px 20px; text-align: center; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03);">
-                <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(251, 222, 185, 0.35); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; color: #705B3E;">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        if (missedRecoveryHtml) {
+            container.innerHTML = missedRecoveryHtml + (isAdmin ? `<div style="display: flex; justify-content: center; margin-bottom: 24px;"><button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()" style="border-radius: 9999px; text-transform: none; letter-spacing: 0;">+ Asignar ejercicios desde el catálogo (Nico)</button></div>` : '');
+            return;
+        }
+        container.innerHTML = `
+            <div style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 16px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 2px 12px rgba(18, 18, 20, 0.03);">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <div style="width: 38px; height: 38px; border-radius: 50%; background: #FAF7F2; display: flex; align-items: center; justify-content: center; color: #9E7D4B; flex-shrink: 0; margin-top: 2px;">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <div style="min-width: 0; flex: 1;">
+                        <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.2;">Recuperación activa</div>
+                        <div style="font-size: 15px; font-weight: 800; color: #121214; letter-spacing: -0.015em; margin-top: 3px; line-height: 1.25;">Día de Descanso</div>
+                        <div style="font-size: 12.5px; color: #6E6E73; margin-top: 3px; line-height: 1.4;">No tenés ejercicios asignados para esta fecha. Si querés entrenar hoy, podés traer otra sesión de tu semana.</div>
+                    </div>
                 </div>
-                <h4 style="font-size: 1.05rem; font-weight: 800; color: #121214; margin: 0 0 6px 0;">Día de Descanso &amp; Recuperación</h4>
-                <p style="color: #575659; font-size: 12px; margin-bottom: 14px; max-width: 380px; margin-left: auto; margin-right: auto; line-height: 1.5;">
-                    No tenés ejercicios asignados para esta fecha. Si querés entrenar hoy, podés pasar un entrenamiento de otro día de tu semana.
-                </p>
-                <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-                    <button type="button" class="btn btn-outline btn-sm" onclick="openMoveWorkoutModal('${dateIso}')" style="font-size: 11.5px; border-color: rgba(197, 168, 128, 0.5); color: #705B3E; background: #FAF9F6; font-weight: 700; border-radius: 10px;">
-                        ⇄ Traer entrenamiento a esta fecha
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-outline" onclick="openMoveWorkoutModal('${dateIso}')" style="min-height: 40px; padding: 9px 16px; background: #F4F3F1 !important; color: #121214 !important; -webkit-text-fill-color: #121214 !important; font-size: 12.5px; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer;">
+                        Traer entrenamiento a esta fecha →
                     </button>
-                    ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()">+ Asignar ejercicios desde el catálogo (Nico)</button>` : ''}
+                    ${isAdmin ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('btnOpenExerciseLibraryModal').click()" style="min-height: 40px; padding: 9px 16px; border-radius: 9999px; text-transform: none; letter-spacing: 0;">+ Asignar ejercicios (Nico)</button>` : ''}
                 </div>
             </div>
         `;
