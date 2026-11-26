@@ -8460,7 +8460,8 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     });
 
     let groupedHtml = '';
-    const activeLang = (typeof localStorage !== 'undefined' ? localStorage.getItem('sens_lang') : null) || 'es';
+    const activeLang = 'es';
+    try { if (typeof localStorage !== 'undefined') localStorage.removeItem('sens_lang'); } catch (_) {}
 
     Object.values(typeGroups).forEach(tg => {
         const muscleKeys = Object.keys(tg.muscles);
@@ -11168,7 +11169,7 @@ function updateDashboardRings() {
     }
     if (workoutText) {
         workoutText.textContent = hasTrainedToday ? 'Completado' : '-';
-        workoutText.style.color = hasTrainedToday ? '#10B981' : 'var(--text-muted)';
+        workoutText.style.color = hasTrainedToday ? '#16A34A' : 'var(--text-muted)';
     }
 
     // 2. Anillo de Pasos (meta: 10.000)
