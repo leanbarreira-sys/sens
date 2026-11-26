@@ -18479,7 +18479,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     };
     const goalText = goalLabels[userGoal] || 'Nutrición SENS';
     if (goalPill) goalPill.textContent = goalText;
-    if (dailyGoalBadge) dailyGoalBadge.textContent = `Meta: ${goalText}`;
+    if (dailyGoalBadge) dailyGoalBadge.textContent = goalText;
     if (directiveText) {
         directiveText.textContent = userPlan?.directive_note || 'Priorizá 35-40g de proteína en cada una de las comidas principales y mantené hidratación constante antes y después de entrenar.';
     }

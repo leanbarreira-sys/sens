@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '184.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '184.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '185.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '185.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3926,8 +3926,9 @@
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
                             </div>
                             <div style="min-width: 0; flex: 1;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
+                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                     <span style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2;">Calorías del día</span>
+                                    <span id="nutriDailyGoalBadge" style="font-size: 9.5px; font-weight: 800; color: #705B3E; background: #FAF7F2; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap;">Déficit Calórico</span>
                                     <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
                                         <button type="button" class="sens-tooltip-btn" onclick="window.toggleSensTooltip(this, event);" aria-label="Regla de rango óptimo nutrición" title="Ver regla">?</button>
                                         <div class="sens-tooltip-popover sens-streak-rule-popover" onclick="event.stopPropagation();">
@@ -3971,23 +3972,9 @@
                         <span id="nutriHeroChevron" style="display: inline-block; transition: transform 0.2s ease;">▾</span>
                     </div>
 
-                    <!-- Panel de Detalle Expandible (Macros + Objetivo + Directiva + Recomendaciones) -->
+                    <!-- Panel de Detalle Expandible (Macros + Directiva) -->
                     <div id="sensNutriHeroDetailWrap" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(18, 18, 20, 0.07);">
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
-                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                <span class="pill pill-champagne" id="nutriDailyGoalBadge">Meta: Déficit Calórico</span>
-                                <span class="pill pill-champagne" id="memberNutriPlanGoalPill" style="display: none;">Déficit Calórico</span>
-                            </div>
-                            <button type="button" class="btn btn-outline btn-sm" id="btnOpenShoppingListModal"
-                                style="border-color: rgba(112, 91, 62, 0.25); color: #121214; font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; background: #FFFFFF;">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#705B3E" stroke-width="2.5">
-                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                </svg>
-                                <span>Lista del Súper</span>
-                            </button>
-                        </div>
+                        <span class="pill pill-champagne" id="memberNutriPlanGoalPill" style="display: none;">Déficit Calórico</span>
                         <span class="sens-macro-toggle-summary" id="nutriMacroQuickSummary" style="display: block; font-size: 11.5px; color: #6E6E73; font-weight: 600; margin-bottom: 10px;">0g Prot • 0g Carbs • 0g Grasas</span>
 
                         <!-- Desglose de Macronutrientes -->
@@ -4040,7 +4027,7 @@
                             <span id="memberNutriDirectiveText" style="color: #121214;">Priorizá 35-40g de proteína en cada una de las comidas principales y mantené hidratación constante antes y después de entrenar.</span>
                         </div>
 
-                        <div class="sens-smart-recommender-card" id="sensSmartMacroRecommender" style="display: none; background: #FAF9F6; border: 1px solid rgba(18, 18, 20, 0.07); border-radius: 14px; padding: 12px 14px; margin-top: 10px;">
+                        <div class="sens-smart-recommender-card" id="sensSmartMacroRecommender" style="display: none !important;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
                                 <strong style="font-size: 10.5px; color: #705B3E; text-transform: uppercase; letter-spacing: 0.08em;">Recomendación Inteligente</strong>
                                 <span id="recommenderRemainingMeta" style="font-size: 11px; font-weight: 700; color: #575659; font-variant-numeric: tabular-nums;">-</span>
