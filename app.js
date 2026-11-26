@@ -8869,15 +8869,6 @@ window.openExerciseExecutionModal = function(exId, dayKey, targetDateStr = null)
     initBottomSheetPullDownDismiss();
     initExitConfirmationListeners();
 
-    // Asegurar botón completar todo
-    const btnCompleteAll = document.getElementById('btnQuickCompleteAllSets');
-    if (btnCompleteAll && !btnCompleteAll._hasBound) {
-        btnCompleteAll._hasBound = true;
-        btnCompleteAll.addEventListener('click', () => {
-            window.completeAllExerciseSets();
-        });
-    }
-
     // 5. Configurar estado 9:16 completo en el video modal
     const videoWrap = document.getElementById('modalExVideoWrap');
     const aspectBtn = document.getElementById('btnToggleVideoAspect');
@@ -9024,16 +9015,6 @@ function renderModalSeriesList() {
                 </button>
             </div>
         `).join('');
-    }
-
-    // Estado del Botón Completar Todo
-    const btnCompleteAll = document.getElementById('btnQuickCompleteAllSets');
-    if (btnCompleteAll) {
-        const allDone = totalCount > 0 && completedCount === totalCount;
-        btnCompleteAll.classList.toggle('completed', allDone);
-        btnCompleteAll.innerHTML = allDone
-            ? '<span style="font-size: 14px; font-weight: 900;">✓</span> <span>Ejercicio Completado al 100%</span>'
-            : '<span style="font-size: 14px; font-weight: 900;">✓</span> <span>Marcar Todo el Ejercicio como Realizado</span>';
     }
 }
 
