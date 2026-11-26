@@ -35434,7 +35434,7 @@ body.in-portal #coachDeleteAthleteModalSheet .btn-coach-del-final,
 /* =============================================================================
    SECCIONES INICIO, ENTRENO Y NUTRICIÓN: PARIDAD MILIMÉTRICA TOP & CALENDARIOS
    ============================================================================= */
-body.in-portal #dashboardView,
+body.in-portal #dashView,
 body.in-portal #workoutView,
 body.in-portal #nutritionView {
     padding-top: 4px !important;
