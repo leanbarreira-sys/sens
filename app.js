@@ -9512,10 +9512,16 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
     const levelInfo = SensGamification.getStreakLevel(streakDays);
     const today = new Date();
     const dayRec = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.getDayRecord(athId, today) : { completedCount: 1, workout: {}, nutrition: {}, cardio: {} };
+    const isPerfectDay = (dayRec.completedCount >= 3);
 
-    if (titleEl) titleEl.textContent = title || 'Objetivo cumplido';
-    if (subtitleEl) subtitleEl.textContent = subtitle || 'Racha diaria activa';
-    if (levelPillEl) levelPillEl.textContent = `Nivel ${levelInfo.level} · ${levelInfo.title}`;
+    if (overlay) {
+        const cardEl = overlay.querySelector('.sens-congrats-card');
+        if (cardEl) cardEl.classList.toggle('is-perfect-day', isPerfectDay);
+    }
+
+    if (titleEl) titleEl.textContent = isPerfectDay ? 'Día perfecto completado' : (title || 'Objetivo cumplido');
+    if (subtitleEl) subtitleEl.textContent = isPerfectDay ? 'Entreno, nutrición y movimiento al 100% hoy' : (subtitle || 'Racha diaria activa');
+    if (levelPillEl) levelPillEl.textContent = isPerfectDay ? '3 DE 3 PILARES · MÁXIMA RACHA' : `Nivel ${levelInfo.level} · ${levelInfo.title}`;
     if (bumpNumEl) bumpNumEl.textContent = streakDays;
     if (bumpLabelEl) bumpLabelEl.textContent = streakDays === 1 ? 'DÍA EN RACHA' : 'DÍAS EN RACHA';
 
@@ -9523,6 +9529,7 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
     if (ringFillEl) {
         const circumference = 2 * Math.PI * 48; // r=48 -> ~301.59
         const ratio = Math.max(0.33, Math.min(1, (dayRec.completedCount || 1) / 3));
+        ringFillEl.style.stroke = isPerfectDay ? '#22C55E' : '#E5CBA7';
         ringFillEl.style.strokeDasharray = `${circumference}`;
         ringFillEl.style.strokeDashoffset = `${circumference}`;
         setTimeout(() => {
@@ -24178,49 +24185,43 @@ window.saveActivityChanges = function(isExplicitSave = false) {
 
         const saveBtnText = document.getElementById('btnSaveActivityText');
         if (saveBtnText) {
-            saveBtnText.innerHTML = `✓ Actividad Guardada`;
+            saveBtnText.textContent = 'Actividad Guardada';
             setTimeout(() => {
                 const btn = document.getElementById('btnSaveActivityText');
-                if (btn) btn.textContent = 'Guardar Actividad & Balance';
+                if (btn) btn.textContent = 'Guardar Movimiento';
             }, 2400);
         }
 
         // Evaluar si califica para racha de movimiento (equivalente en calorías a 10.000 pasos o más)
-        const targetBurn = Math.max(250, Math.round(10000 * (weight * 0.00052)));
-        const qualifies = (stepsBurn + cardioBurn) >= targetBurn;
+        const weightKg = (typeof getAthleteWeightKg === 'function' ? getAthleteWeightKg(athId) : 0) || Number(AppState?.profile?.weight) || 75;
+        const targetBurn = Math.max(250, Math.round(10000 * (weightKg * 0.00052)));
+        const stepsBurn = Math.round(steps * (weightKg * 0.00052));
+        const cardioBurn = Math.round(cardioMinutes * cardioRate);
+        const totalBurn = stepsBurn + cardioBurn;
+        const qualifies = totalBurn >= targetBurn;
 
         if (qualifies) {
-            const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 1;
             const evalResult = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.evaluateDay(targetDate, athId) : null;
             const isAllThreeDone = (evalResult?.current?.completedCount === 3);
 
-            if (isAllThreeDone) {
-                if (typeof window.showSensCelebrationToast === 'function') {
-                    window.showSensCelebrationToast(
-                        '¡DÍA PERFECTO 100%!',
-                        'Fuerza, Nutrición y Balance completados hoy • Racha Máxima',
-                        '"La consistencia implacable en los tres pilares biológicos te posiciona en el 1% de disciplina y rendimiento celular."'
-                    );
-                }
-            } else {
-                if (typeof window.showSensCelebrationToast === 'function') {
-                    window.showSensCelebrationToast(
-                        '¡META AERÓBICA CONQUISTADA!',
-                        `${steps >= 10000 ? `${steps.toLocaleString('es-AR')} Pasos` : `${cardioMinutes}m de ${cardioType}`} • Racha SENS Activa`,
-                        '"El gasto activo diario optimiza tu partición de nutrientes, mejora la sensibilidad a la insulina y eleva tu tasa metabólica."'
-                    );
-                }
+            if (typeof window.showSensCelebrationToast === 'function') {
+                window.showSensCelebrationToast(
+                    isAllThreeDone ? 'Día perfecto completado' : 'Meta de movimiento cumplida',
+                    isAllThreeDone
+                        ? 'Entreno, nutrición y movimiento al 100% hoy'
+                        : `${totalBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} cal de movimiento diario`
+                );
             }
         } else {
             if (wasCardioDone) {
                 if (typeof showSensToast === 'function') {
-                    showSensToast('Perdiste el objetivo de racha de actividad de hoy (mínimo 10.000 pasos ó 30m cardio).', 'warning', 4500);
+                    showSensToast(`Movimiento debajo de la meta (${totalBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} cal).`, 'warning', 4200);
                 }
             } else {
-                const missingSteps = Math.max(0, 10000 - steps);
-                const msg = (steps > 0 || cardioMinutes > 0)
-                    ? `✓ Actividad guardada (${steps.toLocaleString('es-AR')} pasos • ${cardioMinutes}m). Faltan ${missingSteps.toLocaleString('es-AR')} pasos para sumar racha diaria.`
-                    : `✓ Balance guardado. Completá pasos o cardio para sumar a tu racha diaria.`;
+                const missingKcal = Math.max(0, targetBurn - totalBurn);
+                const msg = totalBurn > 0
+                    ? `Actividad guardada (${totalBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} cal). Faltan ${missingKcal.toLocaleString('es-AR')} cal para sumar racha.`
+                    : `Actividad guardada. Sumá pasos o cardio hasta ${targetBurn.toLocaleString('es-AR')} cal para tu racha.`;
                 if (typeof showSensToast === 'function') {
                     showSensToast(msg, 'champagne', 4200);
                 }

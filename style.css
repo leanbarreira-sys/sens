@@ -38003,3 +38003,20 @@ body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.
 body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.is-net .week-tot-val.is-surplus {
     color: #E5CBA7 !important;
 }
+
+/* Estado Success Máximo (3 de 3 Pilares Completados) */
+#sensCongratsOverlay .sens-congrats-card.is-perfect-day {
+    background: radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.16) 0%, #121215 58%) !important;
+    border-color: rgba(34, 197, 94, 0.28) !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-perfect-day .sens-congrats-level-pill {
+    background: rgba(34, 197, 94, 0.16) !important;
+    color: #4ADE80 !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-perfect-day .sens-btn-congrats-continue {
+    background: #22C55E !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
