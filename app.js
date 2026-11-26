@@ -19947,7 +19947,8 @@ function renderSmartMacroRecommender(allDayFoods, athId, targetKcal, consumedKca
     const card = document.getElementById('sensSmartMacroRecommender');
     const meta = document.getElementById('recommenderRemainingMeta');
     const container = document.getElementById('smartRecommenderSuggestions');
-    if (!card || !container) return;
+    if (card) card.style.display = 'none';
+    return;
 
     const remKcal = targetKcal - consumedKcal;
     const remProt = Math.max(0, targetProt - consumedProt);

@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '188.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '188.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '189.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '189.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3931,7 +3931,7 @@
                                     <span id="nutriDailyGoalBadge" style="font-size: 9.5px; font-weight: 800; color: #705B3E; background: #FAF7F2; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap;">Déficit Calórico</span>
                                     <div class="sens-tooltip-wrap" onclick="event.stopPropagation();">
                                         <button type="button" class="sens-tooltip-btn" onclick="window.toggleSensTooltip(this, event);" aria-label="Regla de rango óptimo nutrición" title="Ver regla">?</button>
-                                        <div class="sens-tooltip-popover sens-streak-rule-popover" onclick="event.stopPropagation();">
+                                        <div class="sens-tooltip-popover sens-streak-rule-popover pos-bottom" onclick="event.stopPropagation();">
                                             <div class="sens-streak-popover-header">
                                                 <span class="sens-streak-popover-badge">Regla SENS</span>
                                                 <strong class="sens-streak-popover-title">Nutrición</strong>
@@ -4027,15 +4027,6 @@
                             <span id="memberNutriDirectiveText" style="color: #121214;">Priorizá 35-40g de proteína en cada una de las comidas principales y mantené hidratación constante antes y después de entrenar.</span>
                         </div>
 
-                        <div class="sens-smart-recommender-card" id="sensSmartMacroRecommender" style="display: none !important;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-                                <strong style="font-size: 10.5px; color: #705B3E; text-transform: uppercase; letter-spacing: 0.08em;">Recomendación Inteligente</strong>
-                                <span id="recommenderRemainingMeta" style="font-size: 11px; font-weight: 700; color: #575659; font-variant-numeric: tabular-nums;">-</span>
-                            </div>
-                            <div id="smartRecommenderSuggestions" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
-                                <!-- Sugerencias inyectadas por app.js -->
-                            </div>
-                        </div>
                     </div>
                 </div>
 

@@ -38056,6 +38056,10 @@ body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.
 }
 
 /* Fix de contraste para Tooltips de Reglas SENS (.sens-streak-rule-popover) */
+body.in-portal #sensNutriHeroCard {
+    overflow: visible !important;
+}
+
 body.in-portal .sens-tooltip-popover.sens-streak-rule-popover {
     background: #FFFFFF !important;
     color: #121214 !important;
