@@ -37270,6 +37270,12 @@ body.in-portal #dashNutriSummaryCard.has-active-meals {
     box-shadow: 0 10px 28px rgba(18, 18, 20, 0.12) !important;
 }
 
+body.in-portal .sens-dash-cards-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+}
+
 body.in-portal #dashTrainingVideoCard:not(.is-rest-mode) {
     margin: 0 !important;
 }
@@ -37283,11 +37289,25 @@ body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-overlay-gradie
 body.in-portal #dashTrainingVideoCard #dashWorkoutNavArrows,
 body.in-portal #dashTrainingVideoCard #dashWorkoutDotsIndicator,
 body.in-portal #dashTrainingVideoCard #dashWorkoutTypeIconsWrap,
-body.in-portal #dashTrainingVideoCard .sens-btn-swap-day,
-body.in-portal #dashWorkoutActivePane .sens-btn-swap-day,
+body.in-portal #dashTrainingVideoCard #btnDashRescheduleWorkout,
+body.in-portal #dashTrainingVideoCard .btn-reschedule-home-chip,
 body.in-portal #dashNutriSummaryCard #dashNutri5calsRow,
 body.in-portal #dashNutriSummaryCard.has-active-meals #dashNutri5calsRow {
     display: none !important;
+}
+
+body.in-portal #dashWorkoutActivePane .sens-card-top-info-row,
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-card-top-info-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+}
+
+body.in-portal #dashWorkoutActivePane .sens-card-info-stack,
+body.in-portal #dashNutriSummaryCard.has-active-meals .sens-card-info-stack {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
 }
 
 body.in-portal #dashNutriSummaryCard.has-active-meals .sens-nutri-top-badges,
