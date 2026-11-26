@@ -35432,23 +35432,79 @@ body.in-portal #coachDeleteAthleteModalSheet .btn-coach-del-final,
 }
 
 /* =============================================================================
-   SECCIÓN ENTRENO (#workoutView): QUIET LUXURY UX POLISH (iOS & ANDROID)
+   SECCIONES INICIO, ENTRENO Y NUTRICIÓN: PARIDAD MILIMÉTRICA TOP & CALENDARIOS
    ============================================================================= */
-body.in-portal #workoutView {
+body.in-portal #dashboardView,
+body.in-portal #workoutView,
+body.in-portal #nutritionView {
     padding-top: 4px !important;
 }
 
-body.in-portal #workoutView #workoutWelcomeHeader {
+body.in-portal #sensDashWelcomeHeader,
+body.in-portal #workoutWelcomeHeader,
+body.in-portal #nutriWelcomeHeader {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
     margin-bottom: 12px !important;
 }
 
-body.in-portal #workoutView #workoutCalendarStickyWrapper {
+body.in-portal #sensCalendarStickyWrapper,
+body.in-portal #workoutCalendarStickyWrapper,
+body.in-portal #nutriCalendarStickyWrapper {
     background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.05) !important;
     border-radius: 20px !important;
     padding: 12px 12px 10px !important;
     box-shadow: 0 4px 18px rgba(18, 18, 20, 0.035) !important;
     margin-bottom: 12px !important;
+}
+
+body.in-portal #portalWeekStrip,
+body.in-portal #workoutDaysNav,
+body.in-portal #nutriDaysNav {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+
+body.in-portal .sens-week-day-pill.is-today:not(.active) {
+    background: #FAF7F2 !important;
+    border: 1px solid rgba(158, 125, 75, 0.28) !important;
+    box-shadow: none !important;
+}
+
+body.in-portal .sens-week-day-pill.is-today:not(.active) .sens-day-name {
+    color: #9E7D4B !important;
+}
+
+body.in-portal .sens-week-day-pill.is-today:not(.active) .sens-day-hero-num {
+    color: #121214 !important;
+}
+
+body.in-portal .sens-week-day-pill.active {
+    background: #121214 !important;
+    border: 1px solid #121214 !important;
+    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.16) !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-name {
+    color: rgba(255, 255, 255, 0.72) !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-hero-num {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-week-day-pill.active .sens-day-dot.scheduled {
+    background: #E5CBA7 !important;
 }
 
 body.in-portal #workoutView .sens-workout-filters-row {
