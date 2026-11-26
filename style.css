@@ -38172,7 +38172,7 @@ body.in-portal #sensExerciseModalSheet .sens-btn-timer-secondary {
     text-transform: none !important;
     letter-spacing: 0 !important;
     white-space: nowrap !important;
-    display: inline-flex !important;
+    display: inline-flex;
     align-items: center !important;
     justify-content: center !important;
 }
