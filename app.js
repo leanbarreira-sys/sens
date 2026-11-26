@@ -35150,7 +35150,10 @@ window.renderTrackingCalsBars = function() {
             <div style="display: flex; flex-direction: column; gap: 6px; margin-top: ${sel.intake > 0 ? '8px' : '10px'};">
                 ${pendingCtas.map(c => `
                     <button type="button" onclick="window.navigateFromBalanceCta('${sel.dateIso}', '${c.key}')" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 10px; border: none; background: #F4F4F6; color: #121214; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left;">
-                        <span>${sel.label}: ${c.text}</span>
+                        <span style="display: inline-flex; align-items: center; gap: 8px; min-width: 0;">
+                            <span style="width: 6px; height: 6px; border-radius: 50%; background: #D97706; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16); flex-shrink: 0;"></span>
+                            <span>${sel.label}: ${c.text}</span>
+                        </span>
                         <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: #705B3E; flex-shrink: 0;">Ir <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
                     </button>
                 `).join('')}
