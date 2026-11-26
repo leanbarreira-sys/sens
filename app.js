@@ -8318,23 +8318,27 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         const yWasNotCompleted = !yAttendance.completed && !yAttendance.attended;
 
         if (yDateMidnight >= userCreatedDate && yHasExercises && (yWasMissed || yWasNotCompleted)) {
+            const cleanMissedTitle = (yDayData.title || 'Entrenamiento')
+                .replace(/^(?:Lunes|Martes|Miércoles|Miercoles|Jueves|Viernes|Sábado|Sabado|Domingo)\s*[-–—:]\s*/i, '')
+                .trim() || 'Entrenamiento';
             missedRecoveryHtml = `
-                <div class="sens-missed-recovery-banner" style="background: linear-gradient(135deg, #FFFFFF 0%, #FAF7F2 100%); border: 1px solid rgba(197, 168, 128, 0.4); border-radius: 16px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: 0 4px 16px rgba(18, 18, 20, 0.04);">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(251, 222, 185, 0.38); display: flex; align-items: center; justify-content: center; color: #705B3E; flex-shrink: 0;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <div class="sens-missed-recovery-banner" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 16px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 2px 12px rgba(18, 18, 20, 0.03);">
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 38px; height: 38px; border-radius: 50%; background: #FAF7F2; display: flex; align-items: center; justify-content: center; color: #9E7D4B; flex-shrink: 0; margin-top: 2px;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
                         </div>
-                        <div>
-                            <div style="font-size: 13px; font-weight: 800; color: #121214;">¿No pudiste entrenar ayer?</div>
-                            <div style="font-size: 11.5px; color: #575659; margin-top: 2px;">Tenías asignado <strong style="color: #121214;">${yDayData.title || 'Entrenamiento'}</strong> (${yDayData.exercises.length} ejercicios). Podés traerlo a hoy o reprogramarlo.</div>
+                        <div style="min-width: 0; flex: 1;">
+                            <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.2;">Sesión pendiente de ayer</div>
+                            <div style="font-size: 15px; font-weight: 800; color: #121214; letter-spacing: -0.015em; margin-top: 3px; line-height: 1.25;">¿No pudiste entrenar ayer?</div>
+                            <div style="font-size: 12.5px; color: #6E6E73; margin-top: 3px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${cleanMissedTitle} · ${yDayData.exercises.length} ejercicios</div>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-outline btn-xs" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="font-size: 12px; padding: 7px 14px; border: 1px solid #121214; color: #121214; font-weight: 700; border-radius: 8px; background: #FFFFFF; cursor: pointer;">
-                            Traer sesión a hoy
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" class="btn btn-dark" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="flex: 1; min-height: 40px; padding: 9px 14px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-size: 12.5px; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer;">
+                            Traer a hoy
                         </button>
-                        <button type="button" class="btn btn-dark btn-xs" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="font-size: 12px; padding: 7px 14px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">
-                            Pasar para mañana
+                        <button type="button" class="btn btn-outline" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="min-height: 40px; padding: 9px 16px; background: #F4F3F1 !important; color: #121214 !important; -webkit-text-fill-color: #121214 !important; font-size: 12.5px; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer;">
+                            Elegir otro día →
                         </button>
                     </div>
                 </div>
@@ -21837,9 +21841,12 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                     const athName = (AppState.profile?.full_name || 'Atleta').split(' ')[0];
                     const waText = encodeURIComponent(`Hola Nico! Soy ${athName}, completé mi diagnóstico en SENS y quiero consultar sobre la asignación de mi entrenamiento.`);
                     restActions.innerHTML = `
-                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" class="btn btn-dark btn-sm" style="font-size: 12.5px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-weight: 700; border-radius: 9999px; min-height: 40px; padding: 9px 18px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                            Consultar a Nico por WhatsApp →
+                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" class="btn btn-dark sens-btn-empty-log-food" onclick="event.stopPropagation();" style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                            Consultar a Nico
                         </a>
+                        <button type="button" class="btn btn-outline sens-btn-empty-view-plan" id="btnRestGoWorkout" onclick="event.stopPropagation(); if(typeof switchPortalView==='function') switchPortalView('workoutView');">
+                            Ir a Entrenar →
+                        </button>
                     `;
                 }
             } else {
@@ -21854,8 +21861,11 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                 if (restDesc) restDesc.textContent = 'Hoy tu cuerpo asimila el estímulo previo. Caminata ligera o descanso completo.';
                 if (restActions) {
                     restActions.innerHTML = `
-                        <button type="button" class="btn btn-sm" id="btnRestBringWorkout" onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()));" style="cursor: pointer;">
-                            Reprogramar sesión →
+                        <button type="button" class="btn btn-dark sens-btn-empty-log-food" id="btnRestRescheduleWorkout" onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()));" style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;">
+                            Reprogramar sesión
+                        </button>
+                        <button type="button" class="btn btn-outline sens-btn-empty-view-plan" id="btnRestGoWorkout" onclick="event.stopPropagation(); if(typeof switchPortalView==='function') switchPortalView('workoutView');">
+                            Ir a Entrenar →
                         </button>
                     `;
                 }
