@@ -8568,7 +8568,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         if (totalEx > 0) {
             const allDone = doneEx >= totalEx && totalEx > 0;
             const exPct = Math.min(100, Math.round((doneEx / totalEx) * 100));
-            const statusText = allDone ? '<span style="color:#059669;font-weight:700;">Sesión completa</span>' : `En progreso · ${exPct}%`;
+            const statusText = allDone ? '<span style="color:#16A34A;font-weight:700;">Sesión completa</span>' : `En progreso · ${exPct}%`;
             const barColor = allDone ? '#22C55E' : '#C5A880';
             workoutBurnMiniHtml = `
                 <div id="workoutDailyBurnMiniCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
@@ -18799,7 +18799,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             remainingEl.style.color = '#9E7D4B';
         } else if (totalConsumedKcal <= maxOptKcal) {
             remainingEl.textContent = diff === 0 ? 'Objetivo exacto ✓' : 'En rango óptimo ✓';
-            remainingEl.style.color = '#059669';
+            remainingEl.style.color = '#16A34A';
         } else {
             const overMax = totalConsumedKcal - maxOptKcal;
             remainingEl.textContent = `+${overMax.toLocaleString('es-AR')} kcal sobre rango`;
@@ -18815,7 +18815,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
         if (totalConsumedKcal > maxOptKcal) {
             sliderFill.style.background = '#EF4444';
         } else if (totalConsumedKcal >= minOptKcal) {
-            sliderFill.style.background = '#10B981';
+            sliderFill.style.background = '#22C55E';
         } else {
             sliderFill.style.background = '#C5A880';
         }
@@ -22748,7 +22748,7 @@ function initDashNutriCarousel() {
         const remaining = Math.max(0, safeTarget - safeConsumed);
         const overKcal = Math.max(0, safeConsumed - safeTarget);
 
-        const greenColor = isDarkSurface ? '#34D399' : '#059669';
+        const greenColor = isDarkSurface ? '#22C55E' : '#16A34A';
         const redColor = isDarkSurface ? '#FB7185' : '#DC2626';
 
         if (pctEl) pctEl.textContent = `${realPct}% del objetivo`;
@@ -22772,7 +22772,7 @@ function initDashNutriCarousel() {
             if (isExceeded) {
                 fillEl.style.background = '#EF4444';
             } else if (isInRange) {
-                fillEl.style.background = greenColor;
+                fillEl.style.background = '#22C55E';
             } else {
                 fillEl.style.background = '';
             }
@@ -23730,7 +23730,7 @@ function updateSensStreakCard(targetDate = null) {
             streakSub.style.color = '#71717A';
         } else if (dayRec.completedCount === 3) {
             streakSub.textContent = '✓ ¡Hábitos del día completados! Registro asegurado en tu seguimiento propio.';
-            streakSub.style.color = '#10B981';
+            streakSub.style.color = '#16A34A';
         } else if (dayRec.completedCount >= 1) {
             streakSub.textContent = `${dayRec.completedCount} de 3 hábitos cumplidos hoy. Seguí sumando para tu registro personal.`;
             streakSub.style.color = '#705B3E';
@@ -35170,7 +35170,7 @@ window.renderTrackingCalsBars = function() {
         // Barra arriba (+ Nutrición)
         const inH = day.intake > 0 ? Math.max(4, (day.intake / maxMag) * (halfH - 6)) : 0;
         if (inH > 0) {
-            barsSvg += `<rect x="${bx.toFixed(1)}" y="${(midY - inH).toFixed(1)}" width="${barW}" height="${inH.toFixed(1)}" rx="4" fill="#10B981" opacity="${day.isFuture ? '0.25' : '0.9'}"/>`;
+            barsSvg += `<rect x="${bx.toFixed(1)}" y="${(midY - inH).toFixed(1)}" width="${barW}" height="${inH.toFixed(1)}" rx="4" fill="#22C55E" opacity="${day.isFuture ? '0.25' : '0.9'}"/>`;
         }
 
         // Barras apiladas abajo (- Basal, - Ejercicio, - Cardio)
@@ -35198,7 +35198,7 @@ window.renderTrackingCalsBars = function() {
             const netY = midY - (clampedNet / maxMag) * (halfH - 10);
             linePts.push(`${cx.toFixed(1)},${netY.toFixed(1)}`);
 
-            const dotColor = day.intake === 0 ? '#71717A' : (day.isGood ? '#059669' : '#D97706');
+            const dotColor = day.intake === 0 ? '#71717A' : (day.isGood ? '#16A34A' : '#D97706');
             dotsSvg += `<circle cx="${cx.toFixed(1)}" cy="${netY.toFixed(1)}" r="4" fill="#FFFFFF" stroke="${dotColor}" stroke-width="2.5"/>`;
         }
 
