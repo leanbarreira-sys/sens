@@ -24544,10 +24544,15 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
     const targetDelta = prescribedKcal - liveTdee;
 
     if (goalPill) {
-        goalPill.textContent = `Meta: ${prescribedKcal.toLocaleString('es-AR')} kcal`;
-        goalPill.style.background = 'rgba(112, 91, 62, 0.10)';
-        goalPill.style.color = '#705B3E';
-        goalPill.style.borderColor = 'transparent';
+        const goalLower = String(userGoal || '').toLowerCase();
+        const isGain = goalLower.includes('muscle') || goalLower.includes('gain') || goalLower.includes('hipertrofia');
+        const isMaint = goalLower.includes('maint') || goalLower.includes('general') || goalLower.includes('vitality');
+        goalPill.textContent = isGain
+            ? 'Meta neta: +150 a +450 kcal'
+            : (isMaint ? 'Meta neta: ±150 kcal' : 'Meta neta: −200 a −600 kcal');
+        goalPill.style.background = '';
+        goalPill.style.color = '';
+        goalPill.style.borderColor = '';
     }
 
     if (graphGoalTarget) {
@@ -34944,8 +34949,20 @@ window.renderTrackingCalsBars = function() {
     const isMuscleGain = userGoal.includes('muscle') || userGoal.includes('gain') || userGoal.includes('hipertrofia');
     const isMaintenance = userGoal.includes('maint') || userGoal.includes('general') || userGoal.includes('vitality');
     const goalText = isMuscleGain ? 'Aumento' : (isMaintenance ? 'Mantener' : 'Déficit');
+    const goalPill = document.getElementById('dashObjectiveGoalPill');
+    if (goalPill) {
+        goalPill.textContent = isMuscleGain
+            ? 'Meta neta: +150 a +450 kcal'
+            : (isMaintenance ? 'Meta neta: ±150 kcal' : 'Meta neta: −200 a −600 kcal');
+        goalPill.style.background = '';
+        goalPill.style.color = '';
+    }
 
-    if (goalLabel) goalLabel.textContent = goalText;
+    if (goalLabel) {
+        goalLabel.textContent = isMaintenance
+            ? `${goalText} · Comida igual a gasto total`
+            : `${goalText} · Comida menos gasto total del día`;
+    }
 
     const daysData = [];
     let maxMag = 2200;
@@ -34999,9 +35016,11 @@ window.renderTrackingCalsBars = function() {
         if (isSelected) selectedDayMetrics = entry;
     }
 
-    if (goalLabel && daysWithRecords > 0) {
-        const pctAdherence = Math.round((goodDaysCount / Math.max(1, daysWithRecords)) * 100);
-        goalLabel.textContent = `${goalText} · ${pctAdherence}% adherencia`;
+    if (goalLabel && isMaintenance) {
+        const selBurn = (selectedDayMetrics && selectedDayMetrics.totalBurn > 0) ? selectedDayMetrics.totalBurn : 0;
+        if (selBurn > 0) {
+            goalLabel.textContent = `${goalText} · Para mantener hoy: ~${selBurn.toLocaleString('es-AR')} kcal`;
+        }
     }
 
     // Construir gráfico SVG divergente: Fila superior de totales netos + Barras (+ Nutrición / - Gasto) + Línea Neta
