@@ -3891,8 +3891,13 @@ function setupRealtimeProfileSubscription(userId) {
                 (payload) => {
                     console.log('[SENS Realtime] Actualización en perfil recibida:', payload);
                     if (payload && payload.new) {
+                        const prevProfile = AppState.profile || {};
                         const updated = payload.new;
-                        AppState.profile = { ...AppState.profile, ...updated };
+                        const coachPlanChanged =
+                            (JSON.stringify(prevProfile.prescribed_workouts || null) !== JSON.stringify(updated.prescribed_workouts || null)) ||
+                            (JSON.stringify(prevProfile.prescribed_nutrition || null) !== JSON.stringify(updated.prescribed_nutrition || null)) ||
+                            ((prevProfile.directive_note || '') !== (updated.directive_note || ''));
+                        AppState.profile = { ...prevProfile, ...updated };
                         try {
                             localStorage.setItem('sens_active_profile', JSON.stringify(AppState.profile));
                             if (updated.prescribed_workouts && typeof updated.prescribed_workouts === 'object') {
@@ -3912,11 +3917,12 @@ function setupRealtimeProfileSubscription(userId) {
                         if (typeof syncMemberNutritionPrescription === 'function') syncMemberNutritionPrescription(userId, updated.prescribed_nutrition);
 
                         const access = (typeof checkUserAccessStatus === 'function') ? checkUserAccessStatus(AppState.profile) : { hasAccess: true };
+                        const isSelfAdmin = (typeof isCurrentUserAdmin === 'function') && isCurrentUserAdmin();
                         if (access.hasAccess && AppState._activeViewId === 'activationPendingView') {
-                            showSensToast('¡Tu pago fue validado por Nico! Acceso desbloqueado al portal.', 'success', 5000);
+                            showSensToast('Acceso activado', 'success', 4000);
                             if (typeof openUserPortal === 'function') openUserPortal(false);
-                        } else {
-                            showSensToast('Tu perfil fue actualizado por Nico en tiempo real.', 'champagne', 4000);
+                        } else if (coachPlanChanged && !isSelfAdmin) {
+                            showSensToast('Plan actualizado', 'champagne', 2600);
                         }
                     }
                 }
