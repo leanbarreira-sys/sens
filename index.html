@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '206.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '206.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '207.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '207.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3337,7 +3337,6 @@
                             <span class="bal-leg-item"><i class="dot-basal"></i>− Basal</span>
                             <span class="bal-leg-item"><i class="dot-workout"></i>− Ejercicio</span>
                             <span class="bal-leg-item"><i class="dot-cardio"></i>− Cardio</span>
-                            <span class="bal-leg-item"><i class="dot-net"></i>Neto</span>
                         </div>
 
                         <!-- Gráfico Divergente: Barras (+ Nutrición / - Basal, Ejercicio, Cardio) + Línea Neta -->
