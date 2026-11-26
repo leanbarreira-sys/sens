@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '158.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '158.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '159.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '159.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -7247,13 +7247,15 @@
          MODAL DE CARGA DE COMIDA PERSONALIZADA (BÚSQUEDA 500 ALIMENTOS O CALORÍAS)
          ========================================================================= -->
     <div class="sens-modal-sheet-wrap" id="userCustomMealModal">
-        <div class="sens-modal-sheet-box sens-custom-meal-sheet-box" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
+        <div class="sens-modal-sheet-box sens-custom-meal-sheet-box">
+            <div class="sheet-drag-handle-wrap" style="padding: 10px 0 2px; flex-shrink: 0;">
+                <div class="sheet-drag-handle"></div>
+            </div>
             <div class="sens-custom-meal-sheet-header">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #121214; margin: 0;">Registrar Comida
-                        Personalizada</h3>
+                    <h3 id="customMealModalTitle" style="font-size: 1.15rem; font-weight: 800; color: #121214; margin: 0; letter-spacing: -0.02em;">Agregar alimento</h3>
                     <button type="button" class="sens-modal-close-btn" id="btnCloseUserCustomMealModal"
-                        aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: 1px solid rgba(18,18,20,0.08);">
+                        aria-label="Cerrar modal" style="background: #F4F3F1; color: #121214; border: none; width: 34px; height: 34px;">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                             stroke-linecap="round">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -7263,103 +7265,71 @@
                 </div>
 
                 <!-- Selector de Momento de Ingesta -->
-                <div style="margin-bottom: 10px;">
-                    <label
-                        style="display: block; font-size: 12px; font-weight: 700; color: #575659; margin-bottom: 6px;">Momento
-                        de la comida:</label>
-                    <div class="sens-nutri-filter-scroll" id="customMealSlotRow" style="margin-bottom: 0;">
-                        <button type="button" class="sens-nutri-tab-pill active" data-slot="desayuno">Desayuno</button>
-                        <button type="button" class="sens-nutri-tab-pill" data-slot="almuerzo">Almuerzo</button>
-                        <button type="button" class="sens-nutri-tab-pill" data-slot="merienda">Merienda</button>
-                        <button type="button" class="sens-nutri-tab-pill" data-slot="cena">Cena</button>
-                        <button type="button" class="sens-nutri-tab-pill" data-slot="snack">Snack</button>
-                    </div>
+                <div class="sens-nutri-filter-scroll sens-custom-slot-row" id="customMealSlotRow">
+                    <button type="button" class="sens-nutri-tab-pill active" data-slot="desayuno">Desayuno</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-slot="almuerzo">Almuerzo</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-slot="merienda">Merienda</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-slot="cena">Cena</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-slot="snack">Snack</button>
                 </div>
 
-                <!-- Pestañas de Modo: Búsqueda vs Manual -->
-                <div style="display: flex; border-bottom: 1px solid rgba(18,18,20,0.08); margin-bottom: 0;">
-                    <button type="button" class="btn-clean" id="tabCustomSearchMode"
-                        style="flex: 1; padding: 8px 10px; font-size: 12.5px; font-weight: 700; color: #121214; background: transparent !important; border: none !important; border-bottom: 2px solid #121214 !important; text-align: center; cursor: pointer;">
-                        Buscar en Biblioteca (500 Alimentos)
-                    </button>
-                    <button type="button" class="btn-clean" id="tabCustomManualMode"
-                        style="flex: 1; padding: 8px 10px; font-size: 12.5px; font-weight: 700; color: #77767B; background: transparent !important; border: none !important; border-bottom: 2px solid transparent !important; text-align: center; cursor: pointer;">
-                        Carga Rápida de Calorías
-                    </button>
+                <!-- Segmented Control iOS: Biblioteca vs Carga Rápida -->
+                <div class="sens-segmented-control" role="tablist">
+                    <button type="button" class="sens-segmented-btn active" id="tabCustomSearchMode" role="tab">Biblioteca</button>
+                    <button type="button" class="sens-segmented-btn" id="tabCustomManualMode" role="tab">Carga rápida</button>
                 </div>
             </div>
 
             <div class="sens-custom-meal-sheet-body">
 
-            <!-- MODO A: Búsqueda y Selección Multi-ingrediente con Filtro de Calorías (Item 8) -->
+            <!-- MODO A: Búsqueda y Selección -->
             <div id="paneCustomSearch">
-                <!-- Selector Segmentado: Todos vs Recetas vs Alimentos Base -->
-                <div class="sens-nutri-filter-scroll" id="customSearchTypeRow" style="margin-bottom: 10px;">
-                    <button type="button" class="sens-nutri-tab-pill active" data-type="all">Todos (500)</button>
-                    <button type="button" class="sens-nutri-tab-pill" data-type="Receta">Recetas (380)</button>
-                    <button type="button" class="sens-nutri-tab-pill" data-type="Alimento Base">Alimentos Base
-                        (120)</button>
-                    <button type="button" class="sens-nutri-tab-pill" data-type="vianda">Vianda Fría (289)</button>
+                <!-- Buscador Apple-grade -->
+                <div class="sens-search-field-wrap">
+                    <svg class="sens-search-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="customFoodSearchInput" class="sens-search-field-input"
+                        placeholder="Buscar alimento o receta...">
                 </div>
 
-                <input type="text" id="customFoodSearchInput" class="input-control"
-                    placeholder="Buscar alimento o receta (ej: Pollo, Omelette, Bowl, Avena)..."
-                    style="font-size: 13px; margin-bottom: 10px; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.1); color: #121214; width: 100%; border-radius: 12px; padding: 10px 14px;">
-
-                <!-- Chips de Rango Calórico (Item 8) -->
-                <div class="sens-kcal-filter-row" id="customKcalFilterRow">
-                    <button type="button" class="sens-kcal-chip active" data-range="all">Todas las Calorías</button>
-                    <button type="button" class="sens-kcal-chip" data-range="under200">&lt; 200 kcal</button>
-                    <button type="button" class="sens-kcal-chip" data-range="200-400">200 - 400 kcal</button>
-                    <button type="button" class="sens-kcal-chip" data-range="400-600">400 - 600 kcal</button>
-                    <button type="button" class="sens-kcal-chip" data-range="over600">&gt; 600 kcal</button>
+                <!-- Fila Única Unificada de Filtros -->
+                <div class="sens-nutri-filter-scroll sens-custom-unified-filters" id="customUnifiedFilterRow">
+                    <button type="button" class="sens-nutri-tab-pill active" data-filter="all">Todos</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-filter="Receta">Recetas</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-filter="Alimento Base">Base</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-filter="vianda">Vianda</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-filter="under200">&lt; 200 kcal</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-filter="200-400">200–400 kcal</button>
+                    <button type="button" class="sens-nutri-tab-pill" data-filter="over400">400+ kcal</button>
                 </div>
 
-                <!-- Entradas Exactas de Mín / Máx kcal -->
-                <div class="sens-kcal-range-inputs">
-                    <span style="font-size: 11px; color: #575659;">Rango exacto:</span>
-                    <input type="number" id="customKcalMinInput" class="sens-kcal-range-input" placeholder="Mín kcal"
-                        min="0" max="2500" step="50">
-                    <span style="color: #575659; font-size: 11px;">–</span>
-                    <input type="number" id="customKcalMaxInput" class="sens-kcal-range-input" placeholder="Máx kcal"
-                        min="0" max="2500" step="50">
-                    <button type="button" class="btn btn-outline btn-sm" id="btnResetKcalFilter"
-                        style="padding: 4px 8px; font-size: 10.5px; border-color: rgba(18,18,20,0.15); color: #575659; cursor: pointer;">Limpiar</button>
-                </div>
-
-                <!-- Bandeja de Ingredientes Seleccionados (Item 6: Brand Remove UX) -->
+                <!-- Bandeja de Ingredientes Seleccionados -->
                 <div id="customSelectedIngredientsTray"
-                    style="display: none; background: #FAF7F2; border: 1px solid rgba(197, 168, 128, 0.35); border-radius: 12px; padding: 12px; margin-bottom: 12px;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span style="font-size: 11.5px; font-weight: 700; color: #705B3E;">Comida compuesta:</span>
-                        <strong id="customTrayTotalKcal" style="font-size: 13px; color: #121214;">0 kcal</strong>
+                    style="display: none; background: #FAF7F2; border-radius: 14px; padding: 12px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 11.5px; font-weight: 700; color: #705B3E; text-transform: uppercase; letter-spacing: 0.04em;">Seleccionados</span>
+                        <strong id="customTrayTotalKcal" style="font-size: 13px; color: #121214; font-variant-numeric: tabular-nums;">0 kcal</strong>
                     </div>
                     <div id="customTrayItemsList" style="display: flex; flex-direction: column; gap: 6px;"></div>
                 </div>
 
-                <!-- Resultados de Búsqueda con Inspección de Pasos e Ingredientes (Item 8) -->
-                <div id="customSearchResultsList"
-                    style="max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;">
-                </div>
+                <!-- Resultados de Búsqueda (scroll fluido del sheet) -->
+                <div id="customSearchResultsList" class="sens-custom-results-list"></div>
             </div>
 
-            <!-- MODO B: Carga Manual Directa Simplificada y de Alta Visibilidad (Item 5) -->
+            <!-- MODO B: Carga Manual Directa (Onyx & Champagne) -->
             <div id="paneCustomManual" style="display: none;">
-                <div style="margin-bottom: 12px;">
-                    <label
-                        style="display: block; font-size: 12px; font-weight: 700; color: #121214; margin-bottom: 6px;">Nombre
-                        del plato:</label>
-                    <input type="text" id="manualMealNameInput" class="input-control"
-                        placeholder="Ej: Cena con amigos, Plato libre..."
-                        style="font-size: 13px; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.1); color: #121214; width: 100%; border-radius: 10px; padding: 10px 14px;">
-                </div>
-
-                <!-- Presets Rápidos de Calorías para Carga Instantánea -->
                 <div style="margin-bottom: 14px;">
                     <label
-                        style="display: block; font-size: 11.5px; font-weight: 700; color: #575659; margin-bottom: 6px;">Presets
-                        Rápidos:</label>
+                        style="display: block; font-size: 12px; font-weight: 700; color: #575659; margin-bottom: 6px;">Nombre del plato</label>
+                    <input type="text" id="manualMealNameInput" class="input-control"
+                        placeholder="Ej: Cena afuera, Plato libre..."
+                        style="font-size: 14px; background: #F4F3F1; border: none; color: #121214; width: 100%; border-radius: 12px; padding: 12px 14px;">
+                </div>
+
+                <!-- Presets Rápidos de Calorías -->
+                <div style="margin-bottom: 16px;">
+                    <label
+                        style="display: block; font-size: 12px; font-weight: 700; color: #575659; margin-bottom: 8px;">Estimación rápida</label>
                     <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="manualKcalPresetsWrap">
                         <button type="button" class="sens-kcal-chip" data-kcal="250">250 kcal</button>
                         <button type="button" class="sens-kcal-chip" data-kcal="400">400 kcal</button>
@@ -7369,42 +7339,42 @@
                     </div>
                 </div>
 
-                <!-- Grid de Valores Nutricionales Destacados -->
+                <!-- Grid de Valores Nutricionales -->
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px;">
                     <div>
                         <label
-                            style="display: block; font-size: 10px; font-weight: 800; color: #121214; margin-bottom: 4px; text-transform: uppercase;">Calorías</label>
+                            style="display: block; font-size: 10.5px; font-weight: 700; color: #121214; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.03em;">Kcal</label>
                         <input type="number" id="manualMealKcalInput" class="input-control" placeholder="550" min="0"
-                            style="font-size: 15px; font-weight: 800; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.12); color: #121214; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
+                            style="font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; background: #F4F3F1; border: none; color: #121214; width: 100%; border-radius: 12px; padding: 10px 8px; text-align: center;">
                     </div>
                     <div>
                         <label
-                            style="display: block; font-size: 10px; font-weight: 800; color: #705B3E; margin-bottom: 4px; text-transform: uppercase;">Proteína</label>
-                        <input type="number" id="manualMealProtInput" class="input-control" placeholder="35g" min="0"
-                            style="font-size: 13.5px; font-weight: 700; background: #FAF7F2; border: 1px solid rgba(197,168,128,0.4); color: #705B3E; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
+                            style="display: block; font-size: 10.5px; font-weight: 700; color: #705B3E; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.03em;">Prot (g)</label>
+                        <input type="number" id="manualMealProtInput" class="input-control" placeholder="35" min="0"
+                            style="font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; background: #FAF7F2; border: none; color: #705B3E; width: 100%; border-radius: 12px; padding: 10px 8px; text-align: center;">
                     </div>
                     <div>
                         <label
-                            style="display: block; font-size: 10px; font-weight: 800; color: #0284C7; margin-bottom: 4px; text-transform: uppercase;">Carbos</label>
-                        <input type="number" id="manualMealCarbsInput" class="input-control" placeholder="50g" min="0"
-                            style="font-size: 13.5px; font-weight: 700; background: #F4F3F1; border: 1px solid rgba(2,132,199,0.25); color: #0284C7; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
+                            style="display: block; font-size: 10.5px; font-weight: 700; color: #575659; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.03em;">Carbs (g)</label>
+                        <input type="number" id="manualMealCarbsInput" class="input-control" placeholder="50" min="0"
+                            style="font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; background: #F4F3F1; border: none; color: #121214; width: 100%; border-radius: 12px; padding: 10px 8px; text-align: center;">
                     </div>
                     <div>
                         <label
-                            style="display: block; font-size: 10px; font-weight: 800; color: #D97706; margin-bottom: 4px; text-transform: uppercase;">Grasas</label>
-                        <input type="number" id="manualMealFatsInput" class="input-control" placeholder="15g" min="0"
-                            style="font-size: 13.5px; font-weight: 700; background: #F4F3F1; border: 1px solid rgba(217,119,6,0.25); color: #D97706; width: 100%; border-radius: 10px; padding: 8px 10px; text-align: center;">
+                            style="display: block; font-size: 10.5px; font-weight: 700; color: #575659; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.03em;">Grasas (g)</label>
+                        <input type="number" id="manualMealFatsInput" class="input-control" placeholder="15" min="0"
+                            style="font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; background: #F4F3F1; border: none; color: #121214; width: 100%; border-radius: 12px; padding: 10px 8px; text-align: center;">
                     </div>
                 </div>
             </div>
 
             </div>
 
-            <!-- Footer Sticky: Botón Guardar Comida en el Día siempre visible -->
-            <div class="sens-custom-meal-sheet-footer">
+            <!-- Footer Sticky Inteligente -->
+            <div class="sens-custom-meal-sheet-footer" style="display: none;">
                 <button type="button" class="btn btn-primary" id="btnSaveCustomMealToDay"
-                    style="width: 100%; padding: 14px; font-weight: 800; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none; border-radius: 999px; cursor: pointer;">
-                    Guardar Comida en el Día
+                    style="width: 100%; padding: 14px; font-size: 14px; font-weight: 700; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none; border-radius: 999px; cursor: pointer;">
+                    Guardar en tu día
                 </button>
             </div>
         </div>

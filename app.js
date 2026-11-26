@@ -18317,38 +18317,46 @@ function openCustomMealModalForSlot(slot) {
     userCustomTrayItems = [];
     userActiveNutriMealSlot = slot || 'almuerzo';
 
+    const mealTitleMap = {
+        desayuno: 'Desayuno',
+        almuerzo: 'Almuerzo',
+        merienda: 'Merienda',
+        cena: 'Cena',
+        snack: 'Snacks'
+    };
+    const titleEl = document.getElementById('customMealModalTitle');
+    if (titleEl) {
+        titleEl.textContent = `Agregar a ${mealTitleMap[userActiveNutriMealSlot] || 'tu día'}`;
+    }
+
     const slotPills = modal.querySelectorAll('#customMealSlotRow .sens-nutri-tab-pill');
     slotPills.forEach(pill => {
         const isMatch = pill.getAttribute('data-slot') === userActiveNutriMealSlot;
         pill.classList.toggle('active', isMatch);
     });
 
-    // Reset de pestañas Modo Búsqueda vs Manual
+    // Reset de pestañas Modo Búsqueda vs Manual (Segmented Control)
     const tabSearch = document.getElementById('tabCustomSearchMode');
     const tabManual = document.getElementById('tabCustomManualMode');
     const paneSearch = document.getElementById('paneCustomSearch');
     const paneManual = document.getElementById('paneCustomManual');
     if (tabSearch && tabManual && paneSearch && paneManual) {
-        tabSearch.style.color = '#121214';
-        tabSearch.style.borderBottomColor = '#705B3E';
-        tabManual.style.color = '#8A898C';
-        tabManual.style.borderBottomColor = 'transparent';
+        tabSearch.classList.add('active');
+        tabManual.classList.remove('active');
         paneSearch.style.display = 'block';
         paneManual.style.display = 'none';
     }
 
-    // Reset de Filtros de Calorías
-    const kcalChips = modal.querySelectorAll('#customKcalFilterRow .sens-kcal-chip');
-    kcalChips.forEach(c => c.classList.remove('active'));
-    const allChip = modal.querySelector('#customKcalFilterRow .sens-kcal-chip[data-range="all"]');
-    if (allChip) allChip.classList.add('active');
-
-    const minInput = document.getElementById('customKcalMinInput');
-    const maxInput = document.getElementById('customKcalMaxInput');
-    if (minInput) minInput.value = '';
-    if (maxInput) maxInput.value = '';
+    // Reset de Filtros unificados
+    window._sensActiveItemType = 'all';
+    window._sensActiveKcalRange = 'all';
+    const unifiedPills = modal.querySelectorAll('#customUnifiedFilterRow .sens-nutri-tab-pill');
+    unifiedPills.forEach(p => {
+        p.classList.toggle('active', p.getAttribute('data-filter') === 'all');
+    });
 
     modal.classList.add('active');
+    document.body.classList.add('sens-modal-open');
     document.body.style.overflow = 'hidden';
 
     const searchInput = document.getElementById('customFoodSearchInput');
@@ -18623,7 +18631,6 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                         <span class="sens-workout-muscle-count">${subtotalMeta}</span>
                     </div>
                     <div class="sens-carousel-nav-controls">
-                        <button type="button" class="btn-quick-add-to-meal sens-carousel-hint-pill" data-meal-slot="${mKey}" title="Agregar alimento a ${mealLabels[mKey]}" style="border: none; cursor: pointer;">+ Agregar</button>
                         ${slotFoods.length > 0 ? `
                             <button type="button" class="sens-carousel-arrow-btn" aria-label="Anterior" onclick="scrollWorkoutCarousel(this, -1)" title="Anterior">‹</button>
                             <button type="button" class="sens-carousel-arrow-btn" aria-label="Siguiente" onclick="scrollWorkoutCarousel(this, 1)" title="Siguiente">›</button>
@@ -19401,34 +19408,56 @@ function initUserCustomMealModal(athId) {
     const trayList = document.getElementById('customTrayItemsList');
     const trayTotalKcal = document.getElementById('customTrayTotalKcal');
     const saveBtn = document.getElementById('btnSaveCustomMealToDay');
+    const footerEl = modal ? modal.querySelector('.sens-custom-meal-sheet-footer') : null;
 
-    // Controles de Filtro Calórico (Item 8)
-    const kcalChips = modal ? modal.querySelectorAll('#customKcalFilterRow .sens-kcal-chip') : [];
-    const minInput = document.getElementById('customKcalMinInput');
-    const maxInput = document.getElementById('customKcalMaxInput');
-    const resetKcalBtn = document.getElementById('btnResetKcalFilter');
-    window._sensActiveKcalRange = 'all';
+    window._sensActiveKcalRange = window._sensActiveKcalRange || 'all';
+    window._sensActiveItemType = window._sensActiveItemType || 'all';
 
     if (!modal) return;
+
+    const mealTitleMap = {
+        desayuno: 'Desayuno',
+        almuerzo: 'Almuerzo',
+        merienda: 'Merienda',
+        cena: 'Cena',
+        snack: 'Snacks'
+    };
+
+    const syncCustomFooterState = () => {
+        const isManualActive = paneManual && paneManual.style.display === 'block';
+        const mealLabel = mealTitleMap[userActiveNutriMealSlot] || 'tu día';
+        if (isManualActive) {
+            if (footerEl) footerEl.style.display = 'block';
+            if (saveBtn) saveBtn.textContent = `Guardar en ${mealLabel}`;
+            return;
+        }
+        const count = userCustomTrayItems.length;
+        if (count === 0) {
+            if (footerEl) footerEl.style.display = 'none';
+            return;
+        }
+        let totalKcal = 0;
+        userCustomTrayItems.forEach(item => {
+            const macros = (typeof window.calculateFoodMacros === 'function')
+                ? window.calculateFoodMacros(item.food, item.grams)
+                : { calories: Math.round(item.grams * 1.5) };
+            totalKcal += macros.calories;
+        });
+        if (footerEl) footerEl.style.display = 'block';
+        if (saveBtn) {
+            const itemWord = count === 1 ? 'alimento' : 'alimentos';
+            saveBtn.textContent = `Sumar ${count} ${itemWord} (${totalKcal} kcal)`;
+        }
+    };
 
     if (openBtn && !openBtn._hasCustomMealBound) {
         openBtn._hasCustomMealBound = true;
         openBtn.addEventListener('click', () => {
-            userCustomTrayItems = [];
-            window.renderCustomTray();
-            modal.classList.add('active');
-            document.body.classList.add('sens-modal-open');
-            document.body.style.overflow = 'hidden';
-            if (searchInput) {
-                searchInput.value = '';
-            }
-            window._sensActiveKcalRange = 'all';
-            window.renderCustomSearchResults('');
+            openCustomMealModalForSlot(userActiveNutriMealSlot || 'almuerzo');
         });
     }
 
     if (modal._hasCustomLogicBound) {
-        // Asegurar que siempre se expongan los helpers
         window.renderCustomSearchResults = window.renderCustomSearchResults || renderSearchResults;
         window.renderCustomTray = window.renderCustomTray || renderCustomTray;
         return;
@@ -19450,27 +19479,21 @@ function initUserCustomMealModal(athId) {
         if (e.target === modal) closeModal();
     });
 
-    // Pestañas de Modo
+    // Segmented Control: Biblioteca vs Carga Rápida
     if (tabSearch && tabManual) {
         tabSearch.addEventListener('click', () => {
-            tabSearch.style.color = '#121214';
-            tabSearch.style.borderBottomColor = '#705B3E';
-            tabSearch.style.background = 'transparent';
-            tabManual.style.color = '#8A898C';
-            tabManual.style.borderBottomColor = 'transparent';
-            tabManual.style.background = 'transparent';
+            tabSearch.classList.add('active');
+            tabManual.classList.remove('active');
             if (paneSearch) paneSearch.style.display = 'block';
             if (paneManual) paneManual.style.display = 'none';
+            syncCustomFooterState();
         });
         tabManual.addEventListener('click', () => {
-            tabManual.style.color = '#121214';
-            tabManual.style.borderBottomColor = '#705B3E';
-            tabManual.style.background = 'transparent';
-            tabSearch.style.color = '#8A898C';
-            tabSearch.style.borderBottomColor = 'transparent';
-            tabSearch.style.background = 'transparent';
+            tabManual.classList.add('active');
+            tabSearch.classList.remove('active');
             if (paneManual) paneManual.style.display = 'block';
             if (paneSearch) paneSearch.style.display = 'none';
+            syncCustomFooterState();
         });
     }
 
@@ -19481,28 +19504,41 @@ function initUserCustomMealModal(athId) {
             slotPills.forEach(p => p.classList.remove('active'));
             pill.classList.add('active');
             userActiveNutriMealSlot = pill.getAttribute('data-slot') || 'almuerzo';
+            const titleEl = document.getElementById('customMealModalTitle');
+            if (titleEl) {
+                titleEl.textContent = `Agregar a ${mealTitleMap[userActiveNutriMealSlot] || 'tu día'}`;
+            }
+            syncCustomFooterState();
             renderSearchResults(searchInput ? searchInput.value : '');
         });
     });
 
-    // Selector de Tipo de Ítem (Todos, Recetas, Alimentos Base, Vianda Fría)
-    const typePills = modal.querySelectorAll('#customSearchTypeRow .sens-nutri-tab-pill');
-    typePills.forEach(pill => {
+    // Filtro Unificado (Tipo + Calorías en una única fila limpia)
+    const unifiedPills = modal.querySelectorAll('#customUnifiedFilterRow .sens-nutri-tab-pill');
+    unifiedPills.forEach(pill => {
         pill.addEventListener('click', () => {
-            typePills.forEach(p => p.classList.remove('active'));
+            unifiedPills.forEach(p => p.classList.remove('active'));
             pill.classList.add('active');
-            window._sensActiveItemType = pill.getAttribute('data-type') || 'all';
+            const filterVal = pill.getAttribute('data-filter') || 'all';
+            window._sensActiveItemType = 'all';
+            window._sensActiveKcalRange = 'all';
+            if (filterVal === 'Receta' || filterVal === 'Alimento Base' || filterVal === 'vianda') {
+                window._sensActiveItemType = filterVal;
+            } else if (filterVal === 'under200' || filterVal === '200-400' || filterVal === 'over400') {
+                window._sensActiveKcalRange = filterVal;
+            }
             renderSearchResults(searchInput ? searchInput.value : '');
         });
     });
 
-    // Renderizado de Tray con Botones de Marca SENS (Item 6)
+    // Renderizado de Tray
     function renderCustomTray() {
         if (!tray || !trayList) return;
         if (userCustomTrayItems.length === 0) {
             tray.style.display = 'none';
             trayList.innerHTML = '';
             if (trayTotalKcal) trayTotalKcal.textContent = '0 kcal';
+            syncCustomFooterState();
             return;
         }
 
@@ -19516,12 +19552,12 @@ function initUserCustomMealModal(athId) {
             sumKcal += macros.calories;
 
             return `
-                <div style="display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 10px; padding: 6px 10px;">
-                    <span style="font-size: 12px; color: #121214; font-weight: 700;">${item.food.nombre_alimento_o_plato || item.food.name || 'Alimento SENS'}</span>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" class="input-tray-grams" data-tray-idx="${idx}" value="${item.grams}" min="10" max="800" style="width: 55px; background: #F4F3F1; border: 1px solid rgba(18, 18, 20, 0.12); color: #121214; font-weight: 700; font-size: 12px; padding: 2px 4px; border-radius: 6px; text-align: center;">
-                        <span style="font-size: 11px; color: #705B3E; font-weight: 800;">${macros.calories} kcal</span>
-                        <button type="button" class="sens-btn-remove-luxury btn-remove-tray-item" data-tray-idx="${idx}" title="Eliminar de la bandeja">
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; border-radius: 12px; padding: 8px 12px; gap: 8px;">
+                    <span style="font-size: 13px; color: #121214; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;">${item.food.nombre_alimento_o_plato || item.food.name || 'Alimento SENS'}</span>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                        <input type="number" class="input-tray-grams" data-tray-idx="${idx}" value="${item.grams}" min="10" max="800" style="width: 52px; background: #F4F3F1; border: none; color: #121214; font-weight: 700; font-size: 12.5px; font-variant-numeric: tabular-nums; padding: 4px 6px; border-radius: 8px; text-align: center;">
+                        <span style="font-size: 12px; color: #705B3E; font-weight: 700; font-variant-numeric: tabular-nums;">${macros.calories} kcal</span>
+                        <button type="button" class="sens-btn-remove-luxury btn-remove-tray-item" data-tray-idx="${idx}" title="Quitar">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
                     </div>
@@ -19529,9 +19565,9 @@ function initUserCustomMealModal(athId) {
             `;
         }).join('');
 
-        if (trayTotalKcal) trayTotalKcal.textContent = `${sumKcal} kcal Totales`;
+        if (trayTotalKcal) trayTotalKcal.textContent = `${sumKcal} kcal`;
+        syncCustomFooterState();
 
-        // Eventos en inputs de gramos y eliminar
         trayList.querySelectorAll('.input-tray-grams').forEach(inp => {
             inp.addEventListener('input', (e) => {
                 const idx = parseInt(e.target.getAttribute('data-tray-idx'), 10);
@@ -19552,13 +19588,13 @@ function initUserCustomMealModal(athId) {
         });
     }
 
-    // Renderizado de Resultados de Búsqueda con Filtro de Calorías, Momento y Tipo (Bug #4 e Items 4 & 8)
+    // Renderizado de Resultados de Búsqueda (Quiet Luxury Apple-grade Rows)
     function renderSearchResults(query = '') {
         if (!searchResults) return;
         const library = (typeof getGlobalFoodCatalog === 'function') ? getGlobalFoodCatalog() : (window.SENS_FOOD_LIBRARY || []);
         if (!library || library.length === 0) {
             searchResults.innerHTML = `
-                <div style="text-align: center; padding: 24px 14px; color: #A1A1AA; font-size: 12px; background: rgba(255,255,255,0.02); border-radius: 10px;">
+                <div style="text-align: center; padding: 28px 16px; color: #6F6E73; font-size: 13px; background: #FAF9F6; border-radius: 14px;">
                     Cargando biblioteca de alimentos...
                 </div>
             `;
@@ -19569,7 +19605,7 @@ function initUserCustomMealModal(athId) {
 
         let matches = library;
 
-        // 1. Filtro estricto por Momento de Ingesta (Bug #4)
+        // 1. Filtro estricto por Momento de Ingesta
         const currentSlot = userActiveNutriMealSlot || 'almuerzo';
         if (currentSlot === 'desayuno' || currentSlot === 'merienda') {
             matches = matches.filter(f => f.desayuno_merienda === true);
@@ -19579,7 +19615,7 @@ function initUserCustomMealModal(athId) {
             matches = matches.filter(f => f.snack === true);
         }
 
-        // 2. Filtro por Tipo de Ítem (Segmented Control)
+        // 2. Filtro por Tipo de Ítem
         const activeType = window._sensActiveItemType || 'all';
         if (activeType === 'Receta') {
             matches = matches.filter(f => f.tipo_item === 'Receta');
@@ -19589,7 +19625,7 @@ function initUserCustomMealModal(athId) {
             matches = matches.filter(f => f.apto_vianda_fria === true);
         }
 
-        // 3. Filtro por Texto Búsqueda (Sin sensibilidad a acentos)
+        // 3. Filtro por Texto Búsqueda
         if (q.length > 0) {
             matches = matches.filter(f => {
                 return norm(f.name).includes(q) ||
@@ -19611,16 +19647,8 @@ function initUserCustomMealModal(athId) {
         } else if (activeRange === '200-400') {
             minCal = 200;
             maxCal = 400;
-        } else if (activeRange === '400-600') {
+        } else if (activeRange === 'over400') {
             minCal = 400;
-            maxCal = 600;
-        } else if (activeRange === 'over600') {
-            minCal = 600;
-        } else if (activeRange === 'custom') {
-            const minVal = parseInt(minInput?.value, 10);
-            const maxVal = parseInt(maxInput?.value, 10);
-            if (!isNaN(minVal)) minCal = minVal;
-            if (!isNaN(maxVal)) maxCal = maxVal;
         }
 
         matches = matches.filter(f => {
@@ -19632,8 +19660,8 @@ function initUserCustomMealModal(athId) {
 
         if (matches.length === 0) {
             searchResults.innerHTML = `
-                <div style="text-align: center; padding: 24px 14px; color: #575659; font-size: 12px; background: #FAF9F6; border-radius: 12px; border: 1px dashed rgba(18, 18, 20, 0.12);">
-                    No se encontraron alimentos para "<strong style="color: #121214;">${escapeSensHtml(query)}</strong>" en el momento ${currentSlot} y filtros seleccionados.<br>Probá cambiar el filtro o usar la carga rápida de calorías.
+                <div style="text-align: center; padding: 28px 16px; color: #6F6E73; font-size: 13px; background: #FAF9F6; border-radius: 16px;">
+                    Sin resultados${query ? ` para "<strong style="color: #121214;">${escapeSensHtml(query)}</strong>"` : ''}.<br>Probá otro filtro o usá Carga rápida.
                 </div>
             `;
             return;
@@ -19642,34 +19670,25 @@ function initUserCustomMealModal(athId) {
         searchResults.innerHTML = matches.map(f => {
             const cal = Number(f.calorias_kcal !== undefined ? f.calorias_kcal : (f.calories || 0)) || 0;
             const prot = Number(f.proteinas_g !== undefined ? f.proteinas_g : (f.protein || 0)) || 0;
+            const grams = f.porcion_total_g_ml || 100;
             const img = f.imagen_url || f.image || f.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
             const fid = f.id || f.codigo;
-            const steps = f.paso_a_paso_preparacion || f.pasos_preparacion || 'Cocción saludable preservando micronutrientes.';
-            const ingrs = f.ingredientes_y_gramajes || f.ingredientes_principales || 'Alimento natural de alta calidad biológica.';
             const foodName = f.nombre_alimento_o_plato || f.name || 'Alimento SENS';
 
             return `
-                <div class="sens-search-result-card" style="flex-shrink: 0 !important; background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 14px; overflow: hidden; margin-bottom: 6px; box-shadow: 0 2px 8px rgba(18, 18, 20, 0.02);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; gap: 8px;">
-                        <div class="sens-search-card-click-trigger" data-food-id="${fid}" style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; cursor: pointer;" title="Toca para ver foto grande y desglose completo">
-                            <img src="${img}" style="width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #F4F3F1; border: 1px solid rgba(18, 18, 20, 0.08);" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
-                            <div style="min-width: 0; flex: 1;">
-                                <div style="font-size: 13px; font-weight: 700; color: #121214; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.25;">${foodName}</div>
-                                <div style="font-size: 11px; color: #575659; font-variant-numeric: tabular-nums; margin-top: 2px;">
-                                    ${f.porcion_total_g_ml || 100}g • <span style="color: #705B3E; font-weight: 800;">${cal} kcal</span> • <span style="color: #0284C7; font-weight: 700;">${prot}g Prot</span>
-                                    ${f.apto_vianda_fria ? ' • <span style="color: #0369A1; font-weight: 600;">Vianda</span>' : ''}
-                                </div>
+                <div class="sens-search-result-card" data-food-id="${fid}">
+                    <div class="sens-search-card-click-trigger" data-food-id="${fid}" title="Toca para ver detalle y porción">
+                        <img src="${img}" class="sens-search-row-thumb" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                        <div class="sens-search-row-info">
+                            <div class="sens-search-row-title">${foodName}</div>
+                            <div class="sens-search-row-meta">
+                                <span class="sens-search-row-kcal">${cal} kcal</span> · ${prot}g P · ${grams}g
                             </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
-                            <button type="button" class="btn btn-outline btn-sm btn-inspect-food-item" data-food-id="${fid}" style="padding: 5px 9px; font-size: 11px; border-color: rgba(197, 168, 128, 0.45); color: #705B3E; background: #FAF9F6; font-weight: 700; border-radius: 8px;" title="Ver foto y desglose completo">
-                                <span>Detalle ↗</span>
-                            </button>
-                            <button type="button" class="btn btn-outline btn-sm btn-add-food-to-tray" data-food-id="${fid}" style="padding: 5px 10px; font-size: 11px; border-color: #121214; background: #121214; color: #FAF9F6; font-weight: 700; border-radius: 8px;" title="Añadir a comida compuesta">
-                                + Agregar
-                            </button>
-                        </div>
                     </div>
+                    <button type="button" class="sens-search-row-add-btn btn-add-food-to-tray" data-food-id="${fid}" aria-label="Sumar ${foodName}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
                 </div>
             `;
         }).join('');
@@ -19686,15 +19705,17 @@ function initUserCustomMealModal(athId) {
                         grams: found.defaultGrams || found.porcion_total_g_ml || 100
                     });
                     renderCustomTray();
+                    btn.classList.add('added');
+                    setTimeout(() => btn.classList.remove('added'), 650);
                     if (typeof showSensToast === 'function') {
-                        showSensToast(`${found.name || found.nombre_alimento_o_plato} añadido a la bandeja.`, 'champagne');
+                        showSensToast(`${found.name || found.nombre_alimento_o_plato} sumado`, 'champagne');
                     }
                 }
             });
         });
 
-        // Listeners para ver desglose completo con foto grande (Item C)
-        searchResults.querySelectorAll('.sens-search-card-click-trigger, .btn-inspect-food-item').forEach(el => {
+        // Tocar la fila completa abre el detalle con foto y slider de porción
+        searchResults.querySelectorAll('.sens-search-card-click-trigger').forEach(el => {
             el.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const fid = el.getAttribute('data-food-id');
@@ -19712,45 +19733,7 @@ function initUserCustomMealModal(athId) {
 
     // Poblar inicialmente la lista de búsqueda
     renderSearchResults('');
-
-    // Handlers de Filtros de Calorías (Item 8)
-    const applyKcalFilter = () => {
-        const q = searchInput ? searchInput.value : '';
-        renderSearchResults(q);
-    };
-
-    kcalChips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            kcalChips.forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            window._sensActiveKcalRange = chip.getAttribute('data-range') || 'all';
-            if (minInput) minInput.value = '';
-            if (maxInput) maxInput.value = '';
-            applyKcalFilter();
-        });
-    });
-
-    if (minInput) minInput.addEventListener('input', () => {
-        kcalChips.forEach(c => c.classList.remove('active'));
-        window._sensActiveKcalRange = 'custom';
-        applyKcalFilter();
-    });
-    if (maxInput) maxInput.addEventListener('input', () => {
-        kcalChips.forEach(c => c.classList.remove('active'));
-        window._sensActiveKcalRange = 'custom';
-        applyKcalFilter();
-    });
-    if (resetKcalBtn) {
-        resetKcalBtn.addEventListener('click', () => {
-            kcalChips.forEach(c => c.classList.remove('active'));
-            const allChip = modal.querySelector('#customKcalFilterRow .sens-kcal-chip[data-range="all"]');
-            if (allChip) allChip.classList.add('active');
-            window._sensActiveKcalRange = 'all';
-            if (minInput) minInput.value = '';
-            if (maxInput) maxInput.value = '';
-            applyKcalFilter();
-        });
-    }
+    syncCustomFooterState();
 
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
