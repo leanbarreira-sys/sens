@@ -18526,6 +18526,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     let overviewBannerHtml = ""; // Eliminada la pauta nutricional redundante por UX standard
 
     let subsectionsHtml = '';
+    let totalPlanDayKcal = 0;
 
     slotsToRender.forEach(mKey => {
         const slotFoods = allDayFoods.filter(f => f.mealSlot === mKey);
@@ -18560,6 +18561,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             }
 
             slotKcal += macros.calories;
+            totalPlanDayKcal += macros.calories;
 
             const isLogged = window.isNutritionFoodRowLogged(userConsumedFoods, rowKey, foodKey, item.isCustom);
             if (isLogged) {
@@ -18571,52 +18573,71 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             const foodTitle = item.name || item.nombre_alimento_o_plato || resolved?.nombre_alimento_o_plato || resolved?.name || resolved?.name_es || 'Alimento SENS';
 
             return `
-                <div class="sens-nutri-food-card ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
-                    <img class="sens-nutri-food-thumb" src="${imgUrl}" alt="${foodTitle}" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
-                    <div class="sens-nutri-food-info">
-                        <div class="sens-nutri-food-title" title="${foodTitle}">${foodTitle}</div>
-                        <div class="sens-nutri-food-meta" style="margin-top: 2px;">${grams}g</div>
-                    </div>
-                    <div class="sens-nutri-food-right" style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-                        <div class="sens-nutri-kcal-badge" style="font-variant-numeric: tabular-nums;">${macros.calories} kcal</div>
-                        <button type="button" class="sens-btn-quick-log ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-is-custom="${item.isCustom ? '1' : '0'}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
+                <div class="sens-ex-compact-card sens-nutri-food-card ${isLogged ? 'is-logged completed' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
+                    <img src="${imgUrl}" alt="${foodTitle}" loading="lazy" class="sens-ex-compact-video" style="object-fit: cover; width: 100%; height: 100%;" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                    <div class="sens-ex-compact-overlay"></div>
+                    <div class="sens-ex-compact-top">
+                        <span class="ex-compact-sets-badge sens-nutri-kcal-badge" style="font-variant-numeric: tabular-nums;">${macros.calories} kcal</span>
+                        <button type="button" class="sens-btn-quick-log ex-compact-check-btn ${isLogged ? 'is-logged completed' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-is-custom="${item.isCustom ? '1' : '0'}" title="${isLogged ? 'Desmarcar ingesta' : 'Registrar como consumido'}" style="border: ${isLogged ? 'none' : '1.5px solid rgba(255,255,255,0.55)'}; background: ${isLogged ? '#10B981' : 'rgba(18,18,20,0.45)'}; color: #FFFFFF; cursor: pointer;">
+                            ✓
                         </button>
+                    </div>
+                    <div class="sens-ex-compact-bottom">
+                        <div class="ex-compact-title" title="${foodTitle}">${foodTitle}</div>
+                        <div class="ex-compact-meta">${grams}g</div>
+                        <div class="ex-compact-cue">Ver detalle &amp; porción →</div>
                     </div>
                 </div>
             `;
         }).join('');
 
         const subtotalMeta = slotConsumedCount > 0
-            ? `${slotConsumedKcal.toLocaleString('es-AR')} / ${slotKcal.toLocaleString('es-AR')} kcal • ${slotConsumedCount}/${slotFoods.length} consumidos`
-            : (slotFoods.length > 0 ? `${slotKcal.toLocaleString('es-AR')} kcal • ${slotFoods.length} items` : `0 kcal • Sin registrar`);
+            ? `${slotConsumedKcal.toLocaleString('es-AR')} / ${slotKcal.toLocaleString('es-AR')} kcal • ${slotConsumedCount}/${slotFoods.length}`
+            : (slotFoods.length > 0 ? `${slotKcal.toLocaleString('es-AR')} kcal • ${slotFoods.length} items` : `Sin registrar`);
 
         subsectionsHtml += `
-            <div class="sens-meal-subsection-block" data-meal-slot="${mKey}">
-                <div class="sens-meal-subsection-header">
-                    <div class="sens-meal-header-left">
-                        <div class="sens-meal-header-title-row">
-                            <span class="sens-meal-badge-dot"></span>
-                            <h4 class="sens-meal-title">${mealLabels[mKey]}</h4>
-                        </div>
-                        <span class="sens-meal-subtotal-meta">${subtotalMeta}</span>
+            <div class="sens-workout-muscle-group-block" data-meal-slot="${mKey}">
+                <div class="sens-workout-muscle-label-row">
+                    <div class="sens-workout-muscle-label-info">
+                        <span class="sens-workout-muscle-label">${mealLabels[mKey]}</span>
+                        <span class="sens-workout-muscle-count">${subtotalMeta}</span>
                     </div>
-                    <button type="button" class="btn-quick-add-to-meal" data-meal-slot="${mKey}" title="Agregar alimento a ${mealLabels[mKey]}">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        <span>Agregar</span>
-                    </button>
+                    <div class="sens-carousel-nav-controls">
+                        <button type="button" class="btn-quick-add-to-meal sens-carousel-hint-pill" data-meal-slot="${mKey}" title="Agregar alimento a ${mealLabels[mKey]}" style="border: none; cursor: pointer;">+ Agregar</button>
+                        ${slotFoods.length > 1 ? `
+                            <button type="button" class="sens-carousel-arrow-btn" aria-label="Anterior" onclick="scrollWorkoutCarousel(this, -1)" title="Anterior">‹</button>
+                            <button type="button" class="sens-carousel-arrow-btn" aria-label="Siguiente" onclick="scrollWorkoutCarousel(this, 1)" title="Siguiente">›</button>
+                        ` : ''}
+                    </div>
                 </div>
-                <div class="sens-meal-foods-grid">
-                    ${cardsHtml || `<div style="padding: 14px 16px; font-size: 11.5px; color: #575659; background: #FAF9F6; border-radius: 12px; border: 1px dashed rgba(18, 18, 20, 0.12);">Sin alimentos en ${mealLabels[mKey]}. Usá <strong>+ Agregar</strong> arriba para sumar.</div>`}
-                </div>
+                ${slotFoods.length > 0 ? `
+                    <div class="sens-carousel-wrap">
+                        <div class="sens-workout-carousel">
+                            ${cardsHtml}
+                        </div>
+                    </div>
+                ` : `
+                    <div style="padding: 12px 14px; font-size: 12px; color: #6E6E73; background: #FFFFFF; border-radius: 16px; border: 1px dashed rgba(18, 18, 20, 0.12);">Sin alimentos en ${mealLabels[mKey]}. Tocá <strong>+ Agregar</strong> para sumar.</div>
+                `}
             </div>
         `;
     });
 
+    const nutriDomainHtml = `
+        <div class="sens-workout-type-section" data-type="nutricion">
+            <div class="sens-workout-type-header">
+                <div class="sens-workout-type-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                    <span>PLAN NUTRICIONAL</span>
+                </div>
+                <span class="sens-workout-type-badge">${totalPlanDayKcal.toLocaleString('es-AR')} kcal</span>
+            </div>
+            ${subsectionsHtml}
+        </div>
+    `;
+
     if (foodListEl) {
-        foodListEl.innerHTML = subsectionsHtml;
+        foodListEl.innerHTML = nutriDomainHtml;
 
         // Listener: + Agregar en cabecera de subsección
         foodListEl.querySelectorAll('.btn-quick-add-to-meal').forEach(btn => {
