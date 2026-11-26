@@ -8510,7 +8510,36 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         groupedHtml += `</div>`;
     });
 
-    container.innerHTML = missedRecoveryHtml + groupedHtml;
+    let workoutBurnMiniHtml = '';
+    if (typeof getDailyMetabolicMetrics === 'function') {
+        const dayMet = getDailyMetabolicMetrics(effectiveDate);
+        const doneKcal = Math.round(dayMet?.workoutBurn || 0);
+        const totalKcal = Math.round(dayMet?.plannedWorkoutBurn || 0);
+        const doneEx = dayMet?.completedExCount || 0;
+        const totalEx = dayMet?.totalExCount || exercisesToShow.length;
+        if (totalEx > 0) {
+            const allDone = doneEx >= totalEx && totalEx > 0;
+            workoutBurnMiniHtml = `
+                <div id="workoutDailyBurnMiniCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
+                    <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                        <div style="width: 34px; height: 34px; border-radius: 50%; background: #FAF7F2; color: #9E7D4B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                        </div>
+                        <div style="min-width: 0;">
+                            <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em;">Gasto aproximado</div>
+                            <div style="font-size: 12.5px; font-weight: 600; color: #6E6E73; margin-top: 1px;">${doneEx} de ${totalEx} ejercicios</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; flex-shrink: 0;">
+                        <div style="font-size: 17px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; line-height: 1.15;">~${doneKcal.toLocaleString('es-AR')} kcal</div>
+                        <div style="font-size: 11px; font-weight: 700; color: ${allDone ? '#059669' : '#6E6E73'}; margin-top: 2px;">${allDone ? 'Sesión completa ✓' : `Meta sesión: ~${totalKcal.toLocaleString('es-AR')} kcal`}</div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    container.innerHTML = missedRecoveryHtml + workoutBurnMiniHtml + groupedHtml;
     if (window.SensBatteryPerfGovernor && typeof window.SensBatteryPerfGovernor.observeVideosInContainer === 'function') {
         window.SensBatteryPerfGovernor.observeVideosInContainer(container);
     }
@@ -23027,10 +23056,10 @@ const SensDailyStreakManager = {
         const execution = getAthleteWorkoutExecution(id, sDate);
         const workoutData = (typeof getCoachAthleteWorkoutData === 'function') ? getCoachAthleteWorkoutData(id) : null;
         let dayWorkout = null;
-        if (workoutData && workoutData[dayKey]) {
-            dayWorkout = workoutData[dayKey];
-        } else if (workoutData && workoutData.calendar_schedule && workoutData.calendar_schedule[dateIso]) {
+        if (workoutData && workoutData.calendar_schedule && workoutData.calendar_schedule[dateIso]) {
             dayWorkout = workoutData.calendar_schedule[dateIso];
+        } else if (workoutData && workoutData[dayKey]) {
+            dayWorkout = workoutData[dayKey];
         } else if (isMockAthlete && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
             dayWorkout = WORKOUT_DAYS_DATA[dayKey];
         }
@@ -24065,13 +24094,13 @@ function getDailyMetabolicMetrics(targetDate) {
     const dayKey = getDayKeyFromDate(targetDate);
     const data = getCoachAthleteWorkoutData(athId);
     const isMockAthlete = String(athId).startsWith('mock_') || athId === 'usr-vip-001' || isDemo;
-    let dayData = (data && data[dayKey]) ? data[dayKey] : {};
-    if (!dayData || !dayData.exercises) {
-        if (data && data.calendar_schedule && data.calendar_schedule[dateKey]) {
-            dayData = data.calendar_schedule[dateKey];
-        } else if (isMockAthlete && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
-            dayData = WORKOUT_DAYS_DATA[dayKey];
-        }
+    let dayData = {};
+    if (data && data.calendar_schedule && data.calendar_schedule[dateKey]) {
+        dayData = data.calendar_schedule[dateKey];
+    } else if (data && data[dayKey]) {
+        dayData = data[dayKey];
+    } else if (isMockAthlete && typeof WORKOUT_DAYS_DATA !== 'undefined' && WORKOUT_DAYS_DATA[dayKey]) {
+        dayData = WORKOUT_DAYS_DATA[dayKey];
     }
 
     const hasWorkout = Boolean(dayData.exercises && dayData.exercises.length > 0 && dayData.modality !== 'descanso');
@@ -24079,6 +24108,7 @@ function getDailyMetabolicMetrics(targetDate) {
 
     // Gasto por entrenamiento de fuerza REAL (calculado por cada ejercicio completado o sesión completa)
     let workoutBurn = 0;
+    let plannedWorkoutBurn = 0;
     let completedExCount = 0;
     let totalExCount = 0;
 
@@ -24118,6 +24148,7 @@ function getDailyMetabolicMetrics(targetDate) {
             }
         });
 
+        plannedWorkoutBurn = dayTotalWorkoutKcal;
         if (isWorkoutDone) {
             workoutBurn = Math.max(dayTotalWorkoutKcal, dayDoneWorkoutKcal);
             completedExCount = totalExCount;
@@ -24169,6 +24200,7 @@ function getDailyMetabolicMetrics(targetDate) {
         cardioRate,
         cardioBurn,
         workoutBurn,
+        plannedWorkoutBurn,
         hasWorkout,
         isWorkoutDone,
         completedExCount,
