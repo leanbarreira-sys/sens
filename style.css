@@ -37250,3 +37250,207 @@ body.in-portal .sens-tracking-segmented-bar.sens-tracking-segmented-2col,
         font-size: 12px;
     }
 }
+
+/* =============================================================================
+   UNIFICACIÓN QUIET LUXURY EN INICIO (#dashView): PILLS, HEROES, TRACKING & BALANCE
+   ============================================================================= */
+
+/* 1. Hero Cards hermanadas: Pills sobre fotografía en vidrio oscuro */
+body.in-portal #dashWorkoutSummaryCard .sens-modality-pill,
+body.in-portal #dashNutriSummaryCard .sens-modality-pill {
+    background: rgba(18, 18, 20, 0.64) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(229, 203, 167, 0.34) !important;
+    color: #E5CBA7 !important;
+    -webkit-text-fill-color: #E5CBA7 !important;
+}
+
+body.in-portal #dashWorkoutSummaryCard .sens-card-streak-pill,
+body.in-portal #dashNutriSummaryCard .sens-card-streak-pill {
+    background: rgba(18, 18, 20, 0.68) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+body.in-portal #dashWorkoutSummaryCard .sens-card-streak-pill.done .streak-pill-dot {
+    background: #22C55E !important;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22) !important;
+}
+
+body.in-portal #dashWorkoutSummaryCard .sens-btn-swap-day {
+    background: rgba(18, 18, 20, 0.62) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #FFFFFF !important;
+}
+
+/* 2. Hero Nutrición: 5 tiles oscuros translúcidos (igual a Hero Entrenamiento) */
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip .chip-icon,
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip .chip-name {
+    color: rgba(255, 255, 255, 0.68) !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip .chip-val,
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip strong {
+    color: #FFFFFF !important;
+    font-variant-numeric: tabular-nums;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight {
+    background: rgba(229, 203, 167, 0.15) !important;
+    border-color: rgba(229, 203, 167, 0.45) !important;
+}
+
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight .chip-icon,
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight .chip-name,
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight .chip-val,
+body.in-portal #dashNutriSummaryCard .sens-5cals-chip.highlight strong {
+    color: #E5CBA7 !important;
+}
+
+/* 3. Registro Diario: Segmented iOS, Pills borderless, sin micro-pills repetidas, CTA Onyx */
+body.in-portal #dashWeightAndActivityCard .sens-btn-quick-log-weight {
+    background: #F4F2EE !important;
+    color: #575659 !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-tracking-segmented-bar {
+    background: #F4F3F1 !important;
+    border: none !important;
+    padding: 4px !important;
+    border-radius: 12px !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-tracking-seg-pill {
+    background: transparent !important;
+    color: #6F6E73 !important;
+    border: none !important;
+    border-radius: 9px !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #dashWeightAndActivityCard .sens-tracking-seg-pill.active {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.08) !important;
+}
+
+body.in-portal #sensActivityLoggerPanel #dashActiveBurnBadge {
+    background: #F4F2EE !important;
+    color: #575659 !important;
+    border: none !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #sensActivityLoggerPanel #dashStepsSubBurn,
+body.in-portal #sensActivityLoggerPanel #dashCardioSubBurn {
+    display: none !important;
+}
+
+body.in-portal #sensActivityLoggerPanel .sens-act-quick-chip,
+body.in-portal #sensActivityLoggerPanel .sens-cardio-type-btn {
+    background: #F4F2EE !important;
+    color: #575659 !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal #sensActivityLoggerPanel .sens-act-quick-chip.active,
+body.in-portal #sensActivityLoggerPanel .sens-cardio-type-btn.active {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #sensActivityLoggerPanel .sens-btn-save-activity,
+body.in-portal #btnSaveActivityLog {
+    background: #121214 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px !important;
+    text-transform: none !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    box-shadow: none !important;
+}
+
+/* 4. Balance Calórico: Paleta Onyx & Warm Stone sin verdes pastel/neón */
+body.in-portal #dashWeeklyBalanceCard #dashObjectiveGoalPill {
+    background: #F4F2EE !important;
+    color: #575659 !important;
+    border: none !important;
+    font-weight: 600 !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-cals-pillar-tile,
+body.in-portal #dashWeeklyBalanceCard .sens-cals-pillar-tile.is-plus {
+    background: #F4F2EE !important;
+    border: none !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-cals-pillar-tile .pillar-lbl {
+    color: #6F6E73 !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-cals-pillar-tile .pillar-val,
+body.in-portal #dashWeeklyBalanceCard .sens-cals-pillar-tile.is-plus .pillar-val {
+    color: #121214 !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary,
+body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary.is-good,
+body.in-portal #dashWeeklyBalanceCard .sens-cals-net-summary.is-warn {
+    background: #FAF7F2 !important;
+    color: #705B3E !important;
+    border: none !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals {
+    border-top: 1px solid rgba(18, 18, 20, 0.06) !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col {
+    background: #F4F2EE !important;
+    border: none !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col .week-tot-val,
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col .week-tot-val.is-plus {
+    color: #121214 !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.is-net {
+    background: #121214 !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.is-net .week-tot-lbl {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
+
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.is-net .week-tot-val,
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.is-net .week-tot-val.is-deficit,
+body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.is-net .week-tot-val.is-surplus {
+    color: #E5CBA7 !important;
+}

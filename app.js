@@ -35025,8 +35025,8 @@ window.renderTrackingCalsBars = function() {
 
     if (goalLabel) {
         goalLabel.textContent = isMaintenance
-            ? `${goalText} · Comida igual a gasto total`
-            : `${goalText} · Comida menos gasto total del día`;
+            ? 'Comida igual a gasto total'
+            : 'Comida menos gasto total del día';
     }
 
     const daysData = [];
