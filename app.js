@@ -22719,7 +22719,7 @@ function initDashNutriCarousel() {
         const safeConsumed = Math.max(0, Number(consumed) || 0);
         const realPct = Math.round((safeConsumed / safeTarget) * 100);
         const barWidth = Math.min(100, realPct);
-        const minOpt = Math.round(safeTarget * 0.80);
+        const minOpt = Math.round(safeTarget * 0.90);
         const maxOpt = Math.round(safeTarget * 1.10);
         const isExceeded = safeConsumed > maxOpt;
         const isInRange = safeConsumed >= minOpt && safeConsumed <= maxOpt;
@@ -23277,13 +23277,19 @@ const SensDailyStreakManager = {
         let cardioType = 'caminata';
 
         const actLog = (typeof getAthleteActivityLog === 'function') ? getAthleteActivityLog(id, dateIso) : null;
+        let stepsBurn = 0;
+        let cardioBurn = 0;
         if (actLog) {
             steps = Number(actLog.steps) || 0;
             cardioMinutes = Number(actLog.cardioMinutes) || 0;
             cardioType = actLog.cardioType || 'caminata';
         }
-
-        if (steps >= 10000 || (cardioType === 'caminata' && cardioMinutes >= 90) || (cardioType !== 'caminata' && cardioMinutes >= 30)) {
+        const weightKg = (typeof getAthleteWeightKg === 'function' ? getAthleteWeightKg(id) : 0) || Number(AppState?.profile?.weight) || 75;
+        const targetBurn = Math.max(250, Math.round(10000 * (weightKg * 0.00052)));
+        stepsBurn = Math.round(steps * (weightKg * 0.00052));
+        const cRate = cardioType === 'running' ? 11.0 : (cardioType === 'ciclismo' ? 8.5 : (cardioType === 'otro' ? 7.5 : 6.5));
+        cardioBurn = Math.round(cardioMinutes * cRate);
+        if ((stepsBurn + cardioBurn) >= targetBurn) {
             cardioDone = true;
         }
         const cardioMetric = `${steps.toLocaleString('es-AR')} pasos • ${cardioMinutes}m ${cardioType}`;
@@ -24164,8 +24170,9 @@ window.saveActivityChanges = function(isExplicitSave = false) {
             }, 2400);
         }
 
-        // Evaluar si califica para racha de pasos & cardio (10.000 pasos ó 90m caminata ó 30m otro cardio)
-        const qualifies = (steps >= 10000 || (cardioType === 'caminata' && cardioMinutes >= 90) || (cardioType !== 'caminata' && cardioMinutes >= 30));
+        // Evaluar si califica para racha de movimiento (equivalente en calorías a 10.000 pasos o más)
+        const targetBurn = Math.max(250, Math.round(10000 * (weight * 0.00052)));
+        const qualifies = (stepsBurn + cardioBurn) >= targetBurn;
 
         if (qualifies) {
             const streakDays = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.calculateStreak(athId) : 1;
@@ -24666,16 +24673,14 @@ function updateObjectiveCardData(selectedDate = null, isDraftLiveUpdate = false)
     const cardioPctEl = document.getElementById('dashCardioActivePctText');
     const cardioRemEl = document.getElementById('dashCardioActiveRemainingText');
     const cardioFillEl = document.getElementById('dashCardioActiveProgressFill');
-    const targetSteps = 10000;
-    const eqSteps = (Number(liveSteps) || 0) + ((Number(liveCardioMins) || 0) * 120);
-    const cPct = Math.min(100, Math.round((eqSteps / targetSteps) * 100));
-    const remSteps = Math.max(0, targetSteps - eqSteps);
+    const cPct = Math.min(100, Math.round((livePanelBurn / targetBurn) * 100));
+    const remBurn = Math.max(0, targetBurn - livePanelBurn);
     if (cardioPctEl) cardioPctEl.textContent = `${cPct}% de tu meta`;
     if (cardioRemEl) {
         if (cPct >= 100) {
             cardioRemEl.innerHTML = '<strong>Meta diaria cumplida</strong>';
         } else {
-            cardioRemEl.innerHTML = `Restan <strong>${remSteps.toLocaleString('es-AR')} pasos</strong>`;
+            cardioRemEl.innerHTML = `Restan <strong>${remBurn.toLocaleString('es-AR')} cal</strong>`;
         }
     }
     if (cardioFillEl) {
