@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '195.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '195.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '196.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '196.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3300,13 +3300,6 @@
                                 <button type="button" class="sens-cardio-type-btn" data-type="ciclismo" data-rate="8.5" onclick="setCardioType('ciclismo', 8.5, this)"><span>Bici</span></button>
                                 <button type="button" class="sens-cardio-type-btn" data-type="otro" data-rate="7.5" onclick="setCardioType('otro', 7.5, this)"><span>Otro</span></button>
                             </div>
-                        </div>
-
-                        <div class="sens-act-save-wrap">
-                            <button type="button" class="btn btn-primary sens-btn-save-activity" id="btnSaveActivityLog" onclick="window.saveActivityChanges(true)">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                                <span id="btnSaveActivityText">Guardar Movimiento</span>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -9069,7 +9062,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=131.0"></script>
+    <script defer src="app.js?v=132.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

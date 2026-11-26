@@ -24073,6 +24073,22 @@ function updateHomeCardsStreakPills(targetDate = null, athId = null) {
 }
 window.updateHomeCardsStreakPills = updateHomeCardsStreakPills;
 
+let _sensActivityAutoSaveTimer = null;
+function scheduleAutoSaveActivity(immediate = false) {
+    if (_sensActivityAutoSaveTimer) {
+        clearTimeout(_sensActivityAutoSaveTimer);
+        _sensActivityAutoSaveTimer = null;
+    }
+    if (immediate) {
+        window.saveActivityChanges(true, true);
+    } else {
+        _sensActivityAutoSaveTimer = setTimeout(() => {
+            _sensActivityAutoSaveTimer = null;
+            window.saveActivityChanges(true, true);
+        }, 250);
+    }
+}
+
 window.stepDailySteps = function(delta) {
     const input = document.getElementById('dashStepsInput');
     if (!input) return;
@@ -24083,7 +24099,7 @@ window.stepDailySteps = function(delta) {
         const chipVal = parseInt(c.textContent.replace('.', '').replace(',', ''), 10) || 0;
         c.classList.toggle('active', chipVal > 0 && chipVal === nextVal);
     });
-    window.handleStepsInputChange(nextVal);
+    window.handleStepsInputChange(nextVal, true);
 };
 
 window.quickSetDailySteps = function(steps) {
@@ -24093,10 +24109,10 @@ window.quickSetDailySteps = function(steps) {
         const chipVal = parseInt(c.textContent.replace('.', '').replace(',', ''), 10) || 0;
         c.classList.toggle('active', chipVal > 0 && chipVal === steps);
     });
-    window.handleStepsInputChange(steps);
+    window.handleStepsInputChange(steps, true);
 };
 
-window.handleStepsInputChange = function(val) {
+window.handleStepsInputChange = function(val, immediate = false) {
     const steps = Math.max(0, parseInt(val, 10) || 0);
     document.querySelectorAll('.sens-act-quick-chip').forEach(c => {
         const chipVal = parseInt(c.textContent.replace('.', '').replace(',', ''), 10) || 0;
@@ -24105,11 +24121,7 @@ window.handleStepsInputChange = function(val) {
 
     const targetDate = AppState.selectedDate || new Date();
     updateObjectiveCardData(targetDate, true);
-
-    const saveBtnText = document.getElementById('btnSaveActivityText');
-    if (saveBtnText && saveBtnText.textContent !== '✓ Actividad Guardada') {
-        saveBtnText.textContent = 'Guardar Actividad & Balance';
-    }
+    scheduleAutoSaveActivity(immediate);
 };
 
 window.stepDailyCardio = function(delta) {
@@ -24118,17 +24130,13 @@ window.stepDailyCardio = function(delta) {
     const current = parseInt(input.value, 10) || 0;
     const nextVal = Math.max(0, current + delta);
     input.value = nextVal;
-    window.handleCardioInputChange(nextVal);
+    window.handleCardioInputChange(nextVal, true);
 };
 
-window.handleCardioInputChange = function(val) {
+window.handleCardioInputChange = function(val, immediate = false) {
     const targetDate = AppState.selectedDate || new Date();
     updateObjectiveCardData(targetDate, true);
-
-    const saveBtnText = document.getElementById('btnSaveActivityText');
-    if (saveBtnText && saveBtnText.textContent !== '✓ Actividad Guardada') {
-        saveBtnText.textContent = 'Guardar Actividad & Balance';
-    }
+    scheduleAutoSaveActivity(immediate);
 };
 
 window.setCardioType = function(type, rate, btn) {
@@ -24142,17 +24150,13 @@ window.setCardioType = function(type, rate, btn) {
     
     const targetDate = AppState.selectedDate || new Date();
     updateObjectiveCardData(targetDate, true);
-
-    const saveBtnText = document.getElementById('btnSaveActivityText');
-    if (saveBtnText && saveBtnText.textContent !== '✓ Actividad Guardada') {
-        saveBtnText.textContent = 'Guardar Actividad & Balance';
-    }
+    scheduleAutoSaveActivity(true);
 };
 
-window.saveActivityChanges = function(isExplicitSave = false) {
+window.saveActivityChanges = function(isExplicitSave = false, isAutoSave = false) {
     const targetDate = AppState.selectedDate || new Date();
     if (isExplicitSave && isFutureDate(targetDate)) {
-        if (typeof showSensToast === 'function') {
+        if (!isAutoSave && typeof showSensToast === 'function') {
             showSensToast('No es posible registrar actividad de fechas futuras.', 'champagne', 2500);
         }
         return;
@@ -24219,7 +24223,7 @@ window.saveActivityChanges = function(isExplicitSave = false) {
         const totalBurn = stepsBurn + cardioBurn;
         const qualifies = totalBurn >= targetBurn;
 
-        if (qualifies) {
+        if (qualifies && (!isAutoSave || !wasCardioDone)) {
             const evalResult = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.evaluateDay(targetDate, athId) : null;
             const isAllThreeDone = (evalResult?.current?.completedCount === 3);
 
@@ -24231,7 +24235,7 @@ window.saveActivityChanges = function(isExplicitSave = false) {
                         : `${totalBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} cal de movimiento diario`
                 );
             }
-        } else {
+        } else if (!isAutoSave && !qualifies) {
             if (wasCardioDone) {
                 if (typeof showSensToast === 'function') {
                     showSensToast(`Movimiento debajo de la meta (${totalBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} cal).`, 'warning', 4200);
